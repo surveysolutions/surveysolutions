@@ -4,6 +4,7 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Verifier;
 using WB.Core.GenericSubdomains.Portable;
@@ -13,21 +14,22 @@ namespace WB.Core.BoundedContexts.Designer.Comments
 {
     public class CommentsService : ICommentsService
     {
-        private readonly IPlainStorageAccessor<CommentInstance> comments;
+        private readonly DesignerDbContext dbContext;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
 
         public CommentsService(
-            IPlainStorageAccessor<CommentInstance> comments, 
+            DesignerDbContext dbContex, 
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage)
         {
-            this.comments = comments;
+            this.dbContext = dbContex;
             this.questionnaireStorage = questionnaireStorage;
         }
 
         public List<CommentView> LoadCommentsForEntity(Guid questionnaireId, Guid entityId)
         {
-            var commentForEntity = this.comments
-                .Query(_ => _.Where(x => x.QuestionnaireId == questionnaireId && x.EntityId == entityId).OrderBy(x => x.Date).ToList())
+            var commentForEntity = this.dbContext.CommentInstances
+                .Where(x => x.QuestionnaireId == questionnaireId && x.EntityId == entityId).OrderBy(x => x.Date)
+                .ToList()
                 .Select(CreateCommentView)
                 .ToList();
 
@@ -60,44 +62,54 @@ namespace WB.Core.BoundedContexts.Designer.Comments
                 UserName = userName,
                 UserEmail = userEmail
             };
-            this.comments.Store(commentInstanse, commentId);
+            this.dbContext.CommentInstances.Add(commentInstanse);
+            this.dbContext.SaveChanges();
         }
 
         public void RemoveAllCommentsByEntity(Guid questionnaireId, Guid entityId)
         {
-            var commentsForEntity = this.comments.Query(_ => _
+            var commentsForEntity = this.dbContext.CommentInstances
                 .Where(x => x.QuestionnaireId == questionnaireId && x.EntityId == entityId)
-                .ToList());
+                .ToList();
 
-            this.comments.Remove(commentsForEntity);
+            this.dbContext.CommentInstances.RemoveRange(commentsForEntity);
+            this.dbContext.SaveChanges();
         }
 
         public void DeleteAllByQuestionnaireId(Guid questionnaireId)
         {
-            var commentsForEntity = this.comments.Query(_ => _
+            var commentsForEntity = this.dbContext.CommentInstances
                 .Where(x => x.QuestionnaireId == questionnaireId)
-                .ToList());
+                .ToList();
 
-            this.comments.Remove(commentsForEntity);
+            this.dbContext.CommentInstances.RemoveRange(commentsForEntity);
+            this.dbContext.SaveChanges();
         }
 
         public void DeleteComment(Guid id)
         {
-            this.comments.Remove(id);
+            var commentInstance = this.dbContext.CommentInstances.Find(id);
+
+            if (commentInstance != null)
+            {
+                this.dbContext.CommentInstances.Remove(commentInstance);
+                this.dbContext.SaveChanges();
+            }
         }
 
         public void ResolveComment(Guid commentdId)
         {
-            var comment = this.comments.GetById(commentdId);
+            var comment = this.dbContext.CommentInstances.Find(commentdId);
             comment.ResolveDate = DateTime.UtcNow;
-            this.comments.Store(comment, commentdId);
+            this.dbContext.CommentInstances.Update(comment);
+            this.dbContext.SaveChanges();
         }
 
         public List<CommentThread> LoadCommentThreads(Guid questionnaireId)
         {
             ReadOnlyQuestionnaireDocument questionnaire = questionnaireStorage.GetById(questionnaireId.FormatGuid()).AsReadOnly();
-            var commentForEntity = this.comments
-                .Query(_ => _.Where(x => x.QuestionnaireId == questionnaireId).GroupBy(x => x.EntityId).ToList())
+            var commentForEntity = this.dbContext.CommentInstances
+                .Where(x => x.QuestionnaireId == questionnaireId).GroupBy(x => x.EntityId).ToList()
                 .Select(x => new CommentThread(
                     comments: x.Select(CreateCommentView).OrderByDescending(c => c.Date).ToArray(), 
                     referenceEntity: CreateCommentedEntity(questionnaire, x.Key)))

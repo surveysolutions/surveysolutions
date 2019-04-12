@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
+using WB.UI.Designer.Controllers.Api.Designer;
 
 namespace WB.UI.Designer.Api
 {
