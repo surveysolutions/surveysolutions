@@ -8,22 +8,22 @@
 {
     if (questionnaire.IsQuestion(child))
     {
-        Html.RenderPartial("_RenderQuestion", child);
+        @await Html.PartialAsync("_RenderQuestion", child);
     }
     else if (questionnaire.IsRoster(child))
     {
-        Html.RenderPartial("_RenderRoster", child);
+        @await Html.PartialAsync("_RenderRoster", child);
     }
     else if (questionnaire.IsGroup(child))
     {
-        Html.RenderPartial("_RenderGroup", child);
+        @await Html.PartialAsync("_RenderGroup", child);
     }
     else if (questionnaire.IsStaticText(child))
     {
-        Html.RenderPartial("_RenderStaticText", child);
+        @await Html.PartialAsync("_RenderStaticText", child);
     }
     else if (questionnaire.IsVariable(child))
     {
-        Html.RenderPartial("_RenderVariable", child);
+        @await Html.PartialAsync("_RenderVariable", child);
     }
 }
