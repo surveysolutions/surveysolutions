@@ -10,9 +10,9 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group
     {
         public UpdateGroup(Guid questionnaireId, Guid groupId, Guid responsibleId,
             string title, string variableName, Guid? rosterSizeQuestionId, string condition, bool hideIfDisabled, bool isRoster,
-            RosterSizeSourceType rosterSizeSource, FixedRosterTitleItem[] fixedRosterTitles, Guid? rosterTitleQuestionId, bool isPlainMode)
+            RosterSizeSourceType rosterSizeSource, FixedRosterTitleItem[] fixedRosterTitles, Guid? rosterTitleQuestionId, bool isFlatMode)
             : base(
                 questionnaireId, groupId, responsibleId, title, variableName, rosterSizeQuestionId, condition, hideIfDisabled, isRoster, rosterSizeSource,
-                fixedRosterTitles, rosterTitleQuestionId, isPlainMode) {}
+                fixedRosterTitles, rosterTitleQuestionId, isFlatMode) {}
     }
 }

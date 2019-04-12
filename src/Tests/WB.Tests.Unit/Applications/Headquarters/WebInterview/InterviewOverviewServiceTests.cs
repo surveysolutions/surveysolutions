@@ -125,7 +125,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
 
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(sectionId, new IComposite[]
             {
-                Create.Entity.FixedRoster(rosterId, isPlainMode: true, fixedTitles: new FixedRosterTitle[]
+                Create.Entity.FixedRoster(rosterId, isFlatMode: true, fixedTitles: new FixedRosterTitle[]
                     {
                         Create.Entity.FixedTitle(1, "1"),
                         Create.Entity.FixedTitle(2, "2"),

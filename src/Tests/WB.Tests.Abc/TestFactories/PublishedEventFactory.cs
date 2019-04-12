@@ -9,6 +9,15 @@ namespace WB.Tests.Abc.TestFactories
 {
     internal class PublishedEventFactory
     {
+        public IPublishedEvent<GeoLocationQuestionAnswered> GeoLocationQuestionAnswered(Guid? interviewId = null,
+            Guid? userId = null, Guid? questionId = null, DateTimeOffset? originDate = null, double? latitude = null,
+            double? longitude = null, double? accuracy = null, double? altitude = null,
+            DateTimeOffset? timestamp = null)
+            => new GeoLocationQuestionAnswered(userId ?? Guid.NewGuid(), questionId ?? Guid.NewGuid(), new decimal[0],
+                    originDate ?? default(DateTimeOffset), latitude ?? 1, longitude ?? 2, accuracy ?? 3, altitude ?? 4,
+                    timestamp ?? DateTimeOffset.UtcNow)
+                .ToPublishedEvent(eventSourceId: interviewId);
+
         public IPublishedEvent<InterviewApprovedByHQ> InterviewApprovedByHQ(
             Guid? interviewId = null, string userId = null, string comment = null, DateTimeOffset? originDate = null)
             => new InterviewApprovedByHQ(

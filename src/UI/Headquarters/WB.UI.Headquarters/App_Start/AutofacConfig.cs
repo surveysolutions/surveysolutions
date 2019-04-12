@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Web.Hosting;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
+using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
@@ -17,6 +18,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
@@ -174,6 +176,16 @@ namespace WB.UI.Headquarters
                 };
             }
 
+            var fileSystemEmailServiceSettings =
+                new FileSystemEmailServiceSettings(
+                    settingsProvider.AppSettings["EmailSettings.FileSystem.IsEnabled"].ToBoolOrDefault(false),
+                    settingsProvider.AppSettings["EmailSettings.FileSystem.EmailFolder"],
+                    settingsProvider.AppSettings["EmailSettings.FileSystem.SenderAddress"],
+                    settingsProvider.AppSettings["EmailSettings.FileSystem.SenderName"],
+                    settingsProvider.AppSettings["EmailSettings.FileSystem.ReplyAddress"],
+                    settingsProvider.AppSettings["EmailSettings.FileSystem.Address"]
+                );
+
             //for assembly relocation during migration
             var legacyAssemblySettings = new LegacyAssemblySettings()
             {
@@ -215,21 +227,14 @@ namespace WB.UI.Headquarters
                     synchronizationSettings,
                     trackingSettings,
                     interviewCountLimit,
-                    externalStoragesSettings: externalStoragesSettings
+                    externalStoragesSettings: externalStoragesSettings,
+                    fileSystemEmailServiceSettings: fileSystemEmailServiceSettings
                     )
 
                 );
 
             autofacKernel.Load(new HeadquartersUIModule(),
                                new MainModule(settingsProvider, applicationSecuritySection, legacyAssemblySettings));
-
-            
-/*
-
-            autofacKernel.ContainerBuilder.RegisterAssemblyTypes(typeof(UpgradeAssignmentJob).Assembly)
-                .Where(type => !type.IsAbstract && typeof(IJob).IsAssignableFrom(type))
-                .AsSelf().InstancePerLifetimeScope();
-*/
 
             return autofacKernel;
         }
