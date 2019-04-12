@@ -240,6 +240,7 @@
 
 
   <ItemGroup>
+    <Folder Include="Areas\Pdf\Content\" />
     <Folder Include="wwwroot\css\" />
   </ItemGroup>
 

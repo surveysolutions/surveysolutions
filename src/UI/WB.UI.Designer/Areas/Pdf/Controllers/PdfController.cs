@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.Globalization;
@@ -13,25 +14,22 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Internal;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using Shark.PdfConvert;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.UI.Designer.BootstrapSupport;
-using WB.UI.Designer.Code;
 using WB.UI.Designer.Resources;
 using WB.UI.Designer1.Extensions;
 using ActionDescriptor = Microsoft.AspNetCore.Mvc.Abstractions.ActionDescriptor;
 using ActionResult = Microsoft.AspNetCore.Mvc.ActionResult;
 using Controller = Microsoft.AspNetCore.Mvc.Controller;
-using ControllerContext = Microsoft.AspNetCore.Mvc.ControllerContext;
 using EmptyModelMetadataProvider = Microsoft.AspNetCore.Mvc.ModelBinding.EmptyModelMetadataProvider;
 using ITempDataProvider = Microsoft.AspNetCore.Mvc.ViewFeatures.ITempDataProvider;
 using JsonResult = Microsoft.AspNetCore.Mvc.JsonResult;
@@ -91,7 +89,6 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
         private readonly IRazorViewEngine razorViewEngine;
         private readonly IServiceProvider serviceProvider;
         private readonly ITempDataProvider tempDataProvider;
-        private readonly IHostingEnvironment hostingEnvironment;
 
         public PdfController(
             IPdfFactory pdfFactory, 
@@ -100,8 +97,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
             IRazorViewEngine razorViewEngine,
             IServiceProvider serviceProvider,
             ITempDataProvider tempDataProvider,
-            IOptions<PdfSettings> pdfOptions,
-            IHostingEnvironment hostingEnvironment)
+            IOptions<PdfSettings> pdfOptions)
         {
             this.pdfFactory = pdfFactory;
             this.pdfSettings = pdfOptions.Value;
@@ -110,12 +106,9 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
             this.razorViewEngine = razorViewEngine;
             this.serviceProvider = serviceProvider;
             this.tempDataProvider = tempDataProvider;
-            this.hostingEnvironment = hostingEnvironment;
         }
 
-        [ServiceFilter(typeof(LocalOrDevelopmentAccessOnlyAttribute))]
-        [AllowAnonymous]
-        public IActionResult RenderQuestionnaire(Guid id, Guid requestedByUserId, string requestedByUserName, Guid? translation, string cultureCode, int timezoneOffsetMinutes)
+        protected IActionResult RenderQuestionnaire(Guid id, Guid requestedByUserId, string requestedByUserName, Guid? translation, string cultureCode, int timezoneOffsetMinutes)
         {
             if (!string.IsNullOrWhiteSpace(cultureCode))
             {
@@ -133,6 +126,8 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
         }
 
         [AllowAnonymous]
+        [HttpGet]
+        [Route("questionnairefooter", Name = "QuestionnaireFooter")]
         public ActionResult RenderQuestionnaireFooter()
         {
             return this.View("RenderQuestionnaireFooter");
@@ -141,7 +136,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
         [Route("printpreview/{id}")]
         public IActionResult PrintPreview(Guid id, Guid? translation)
         {
-            PdfQuestionnaireModel questionnaire = this.LoadQuestionnaire(id, User.GetId(), User.GetName(), translation: translation, useDefaultTranslation: true);
+            PdfQuestionnaireModel questionnaire = this.LoadQuestionnaire(id, User.GetId(), User.GetUserName(), translation: translation, useDefaultTranslation: true);
             if (questionnaire == null)
             {
                 return StatusCode((int)HttpStatusCode.NotFound);
@@ -150,6 +145,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
         }
 
         [ResponseCache(Duration = 0, NoStore = true)]
+        [Route("download/{id}")]
         public IActionResult Download(Guid id, Guid? translation)
         {
             var pdfKey = id.ToString() + translation;
@@ -174,6 +170,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
 
         [ResponseCache (Duration = 0, NoStore = true)]
         [Microsoft.AspNetCore.Mvc.HttpGet]
+        [Route("status/{id}")]
         public JsonResult Status(Guid id, Guid? translation, int? timezoneOffsetMinutes)
         {
             var pdfKey = id.ToString() + translation;
@@ -181,14 +178,14 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
             PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(id, translation, cultureCode, timezoneOffsetMinutes));
 
             if (pdfGenerationProgress.IsFailed)
-                return this.Json(PdfStatus.Failed(PdfMessages.FailedToGenerate)/*,  JsonRequestBehavior.AllowGet*/);
+                return this.Json(PdfStatus.Failed(PdfMessages.FailedToGenerate));
 
             long sizeInKb = this.GetFileSizeInKb(pdfGenerationProgress.FilePath);
 
             if (sizeInKb == 0)
                 return pdfGenerationProgress.IsFinished 
-                    ? this.Json(PdfStatus.Failed(PdfMessages.FailedToGenerate)/*, JsonRequestBehavior.AllowGet*/)
-                    : this.Json(PdfStatus.InProgress(PdfMessages.PreparingToGenerate)/*, JsonRequestBehavior.AllowGet*/);
+                    ? this.Json(PdfStatus.Failed(PdfMessages.FailedToGenerate))
+                    : this.Json(PdfStatus.InProgress(PdfMessages.PreparingToGenerate));
 
             return this.Json(
                 pdfGenerationProgress.IsFinished
@@ -196,11 +193,11 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
                         pdfGenerationProgress.TimeSinceFinished.TotalMinutes < 1
                             ? string.Format(PdfMessages.GenerateLessMinute, sizeInKb)
                             : string.Format(PdfMessages.Generate, (int)pdfGenerationProgress.TimeSinceFinished.TotalMinutes, sizeInKb))
-                    : PdfStatus.InProgress(string.Format(PdfMessages.GeneratingSuccess, sizeInKb))/*,
-                JsonRequestBehavior.AllowGet*/);
+                    : PdfStatus.InProgress(string.Format(PdfMessages.GeneratingSuccess, sizeInKb)));
         }
 
         [Microsoft.AspNetCore.Mvc.HttpPost]
+        [Route("retry/{id}")]
         public ActionResult Retry(Guid id, Guid? translation, int? timezoneOffsetMinutes)
         {
             var pdfKey = id.ToString() + translation;
@@ -225,22 +222,17 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
         {
             var pathToWkHtmlToPdfExecutable = this.GetPathToWKHtmlToPdfExecutableOrThrow();
 
-            /*var renderQuestionnaireResult = RenderQuestionnaire(id: id,
-                requestedByUserId: User.GetId(),
-                requestedByUserName: User.GetName(),
-                translation: translation,
-                cultureCode: cultureCode,
-                timezoneOffsetMinutes: timezoneOffsetMinutes);
-            var questionnaireHtml = await RenderActionResultToString(renderQuestionnaireResult);*/
-            PdfQuestionnaireModel questionnaire = this.LoadQuestionnaire(id, User.GetId(), User.GetName(), translation, false);
+            PdfQuestionnaireModel questionnaire = this.LoadQuestionnaire(id, User.GetId(), User.GetUserName(), translation, false);
             if (questionnaire == null)
             {
                 throw new ArgumentException();
             }
             questionnaire.TimezoneOffsetMinutes = timezoneOffsetMinutes;
 
-            var questionnaireHtml = RenderActionResultToString("RenderQuestionnaire", questionnaire).Result;
-            //var pageFooterUrl = GlobalHelper.GenerateUrl(nameof(RenderQuestionnaireFooter), "Pdf", new { });
+            var questionnaireHtml = RenderActionResultToString(nameof(RenderQuestionnaire), questionnaire).Result;
+
+            ControllerContext.RouteData.Routers.Add(AttributeRouting.CreateAttributeMegaRoute(serviceProvider));
+            var pageFooterUrl = new UrlHelper(ControllerContext).Link("QuestionnaireFooter", new { });
 
             Task.Factory.StartNew(() =>
             {
@@ -249,7 +241,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
                     PdfConvert.Convert(new PdfConversionSettings
                     {
                         Content = questionnaireHtml,
-                        //PageFooterUrl = pageFooterUrl,
+                        PageFooterUrl = pageFooterUrl,
                         OutputPath = generationProgress.FilePath,
                         WkHtmlToPdfExeName = pathToWkHtmlToPdfExecutable,
                         ExecutionTimeout = this.pdfSettings.PdfGenerationTimeoutInMilliseconds,
@@ -270,13 +262,28 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
 
         private async Task<string> RenderActionResultToString(string viewName, object model)
         {
-            var httpContext = new DefaultHttpContext { RequestServices = serviceProvider };
-            var actionContext = new ActionContext(httpContext, new RouteData(), new ActionDescriptor());
+            var httpContext = new DefaultHttpContext
+            {
+                RequestServices = serviceProvider, 
+                Request =
+                {
+                    Host = this.Request.Host,
+                    IsHttps = this.Request.IsHttps,
+                    Scheme = this.Request.Scheme,
+                },
+            };
+
+            
+            var routeData = new RouteData();
+            routeData.Values.Add("area", "Pdf");
+            routeData.Values.Add("controller", "Pdf");
+            routeData.Routers.Add(AttributeRouting.CreateAttributeMegaRoute(serviceProvider));
+            
+            var actionContext = new ActionContext(httpContext, routeData, new ActionDescriptor() { RouteValues = new Dictionary<string, string>{{"area", "Pdf"}}});
 
             using (var sw = new StringWriter())
             {
                 var viewResult = razorViewEngine.FindView(actionContext, viewName, false);
-
                 if (viewResult.View == null)
                 {
                     throw new ArgumentNullException($"{viewName} does not match any available view");
@@ -300,41 +307,11 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
 
                 return sw.ToString();
             }
-
-
-
-
-            /*var viewContext = new ViewContext(actionContext,
-                viewResult.View,
-                viewDictionary,
-                new TempDataDictionary(actionContext.HttpContext, _tempDataProvider),
-                sw,
-                new HtmlHelperOptions()
-            );
-
-            await viewResult.View.RenderAsync(viewContext);
-
-            return sw.ToString();*/
-
-            /*var sb = new StringBuilder();
-            using (var memWriter = new StringWriter(sb))
-            {
-                var fakeResponse = new HttpResponse(memWriter);
-                var fakeContext = new HttpContext(System.Web.HttpContext.Current.Request, fakeResponse);
-                var fakeControllerContext = new ControllerContext(new HttpContextWrapper(fakeContext), this.ControllerContext.RouteData, this.ControllerContext.Controller);
-
-                result.ExecuteResult(fakeControllerContext);
-
-                memWriter.Flush();
-            }
-            return sb.ToString();*/
         }
 
         private string GetPathToWKHtmlToPdfExecutableOrThrow()
         {
-            string path = Path.GetFullPath(Path.Combine(
-                hostingEnvironment.WebRootPath,
-                pdfSettings.WKHtmlToPdfExecutablePath));
+            string path = Path.GetFullPath(pdfSettings.WKHtmlToPdfExecutablePath);
 
             if (!System.IO.File.Exists(path))
                 throw new ConfigurationErrorsException(string.Format("Path to wkhtmltopdf.exe is incorrect ({0}). Please install wkhtmltopdf.exe and/or update server configuration.", path));
