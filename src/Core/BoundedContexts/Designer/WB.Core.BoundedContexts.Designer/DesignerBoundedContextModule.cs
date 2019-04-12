@@ -101,6 +101,7 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind<IIdentityService, IdentityService>();
             registry.Bind<HistoryPostProcessor, HistoryPostProcessor>();
             registry.Bind<SearchPostProcessors, SearchPostProcessors>();
+            registry.Bind<ResourcesPreProcessor, ResourcesPreProcessor>();
         }
 
         public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status)
