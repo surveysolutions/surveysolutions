@@ -18,16 +18,16 @@ namespace WB.Core.BoundedContexts.Designer.Comments
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
 
         public CommentsService(
-            DesignerDbContext dbContex, 
+            DesignerDbContext dbContex,
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage)
         {
-            this.dbContext = dbContex;
+            dbContext = dbContex;
             this.questionnaireStorage = questionnaireStorage;
         }
 
         public List<CommentView> LoadCommentsForEntity(Guid questionnaireId, Guid entityId)
         {
-            var commentForEntity = this.dbContext.CommentInstances
+            var commentForEntity = dbContext.CommentInstances
                 .Where(x => x.QuestionnaireId == questionnaireId && x.EntityId == entityId).OrderBy(x => x.Date)
                 .ToList()
                 .Select(CreateCommentView)
@@ -36,20 +36,8 @@ namespace WB.Core.BoundedContexts.Designer.Comments
             return commentForEntity;
         }
 
-        private static CommentView CreateCommentView(CommentInstance x)
-        {
-            return new CommentView
-            {
-                Id = x.Id.FormatGuid(),
-                UserName = x.UserName,
-                UserEmail = x.UserEmail,
-                Date =x.Date,
-                Comment = x.Comment,
-                ResolveDate = x.ResolveDate
-            };
-        }
-
-        public void PostComment(Guid commentId, Guid questionnaireId, Guid entityId, string commentComment, string userName, string userEmail)
+        public void PostComment(Guid commentId, Guid questionnaireId, Guid entityId, string commentComment,
+            string userName, string userEmail)
         {
             var commentInstanse = new CommentInstance
             {
@@ -62,70 +50,76 @@ namespace WB.Core.BoundedContexts.Designer.Comments
                 UserName = userName,
                 UserEmail = userEmail
             };
-            this.dbContext.CommentInstances.Add(commentInstanse);
-            this.dbContext.SaveChanges();
+            dbContext.CommentInstances.Add(commentInstanse);
         }
 
         public void RemoveAllCommentsByEntity(Guid questionnaireId, Guid entityId)
         {
-            var commentsForEntity = this.dbContext.CommentInstances
+            var commentsForEntity = dbContext.CommentInstances
                 .Where(x => x.QuestionnaireId == questionnaireId && x.EntityId == entityId)
                 .ToList();
 
-            this.dbContext.CommentInstances.RemoveRange(commentsForEntity);
-            this.dbContext.SaveChanges();
+            dbContext.CommentInstances.RemoveRange(commentsForEntity);
         }
 
         public void DeleteAllByQuestionnaireId(Guid questionnaireId)
         {
-            var commentsForEntity = this.dbContext.CommentInstances
+            var commentsForEntity = dbContext.CommentInstances
                 .Where(x => x.QuestionnaireId == questionnaireId)
                 .ToList();
 
-            this.dbContext.CommentInstances.RemoveRange(commentsForEntity);
-            this.dbContext.SaveChanges();
+            dbContext.CommentInstances.RemoveRange(commentsForEntity);
         }
 
         public void DeleteComment(Guid id)
         {
-            var commentInstance = this.dbContext.CommentInstances.Find(id);
+            var commentInstance = dbContext.CommentInstances.Find(id);
 
-            if (commentInstance != null)
-            {
-                this.dbContext.CommentInstances.Remove(commentInstance);
-                this.dbContext.SaveChanges();
-            }
+            if (commentInstance != null) dbContext.CommentInstances.Remove(commentInstance);
         }
 
         public void ResolveComment(Guid commentdId)
         {
-            var comment = this.dbContext.CommentInstances.Find(commentdId);
+            var comment = dbContext.CommentInstances.Find(commentdId);
             comment.ResolveDate = DateTime.UtcNow;
-            this.dbContext.CommentInstances.Update(comment);
-            this.dbContext.SaveChanges();
+            dbContext.CommentInstances.Update(comment);
         }
 
         public List<CommentThread> LoadCommentThreads(Guid questionnaireId)
         {
-            ReadOnlyQuestionnaireDocument questionnaire = questionnaireStorage.GetById(questionnaireId.FormatGuid()).AsReadOnly();
-            var commentForEntity = this.dbContext.CommentInstances
+            var questionnaire = questionnaireStorage.GetById(questionnaireId.FormatGuid()).AsReadOnly();
+            var commentForEntity = dbContext.CommentInstances
                 .Where(x => x.QuestionnaireId == questionnaireId).GroupBy(x => x.EntityId).ToList()
                 .Select(x => new CommentThread(
-                    comments: x.Select(CreateCommentView).OrderByDescending(c => c.Date).ToArray(), 
-                    referenceEntity: CreateCommentedEntity(questionnaire, x.Key)))
+                    x.Select(CreateCommentView).OrderByDescending(c => c.Date).ToArray(),
+                    CreateCommentedEntity(questionnaire, x.Key)))
                 .Where(y => y.Entity != null)
                 .ToList();
 
             return commentForEntity.OrderByDescending(x => x.IndexOfLastUnresolvedComment).ToList();
         }
 
-        private QuestionnaireEntityExtendedReference CreateCommentedEntity(ReadOnlyQuestionnaireDocument questionnaire, Guid itemId)
+        private QuestionnaireEntityExtendedReference CreateCommentedEntity(ReadOnlyQuestionnaireDocument questionnaire,
+            Guid itemId)
         {
             var entity = questionnaire.Find<IComposite>(itemId);
             if (entity == null)
                 return null;
             var reference = QuestionnaireEntityReference.CreateFrom(entity)?.ExtendedReference(questionnaire);
             return reference;
+        }
+
+        private static CommentView CreateCommentView(CommentInstance x)
+        {
+            return new CommentView
+            {
+                Id = x.Id.FormatGuid(),
+                UserName = x.UserName,
+                UserEmail = x.UserEmail,
+                Date = x.Date,
+                Comment = x.Comment,
+                ResolveDate = x.ResolveDate
+            };
         }
     }
 }
