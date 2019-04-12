@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
@@ -25,8 +26,19 @@ namespace WB.UI.Designer.Code
 
         private static string ConvertToAbsoluteUrl(this IUrlHelper urlHelper, string path)
         {
-            var url = new Uri(new Uri(urlHelper.ActionContext.HttpContext.Request.GetDisplayUrl()), path);
-            return url.AbsoluteUri;
+            HttpRequest request = urlHelper.ActionContext.HttpContext.Request;
+            var uri = new Uri(new Uri(request.Scheme + "://" + request.Host.Value), urlHelper.Content(path));
+            return uri.ToString();
+        }
+
+        public static string AbsoluteAction(
+            this IUrlHelper url,
+            string actionName, 
+            string controllerName, 
+            object routeValues = null)
+        {
+            string scheme = url.ActionContext.HttpContext.Request.Scheme;
+            return url.Action(actionName, controllerName, routeValues, scheme);
         }
     }
 }

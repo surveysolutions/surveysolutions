@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json.Serialization;
 using reCAPTCHA.AspNetCore;
 using WB.Core.BoundedContexts.Designer;
@@ -159,6 +161,12 @@ namespace WB.UI.Designer
             app.UseCookiePolicy();
             app.UseSession();
             app.UseAuthentication();
+
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Areas", "Pdf", "Content")),
+                RequestPath = new PathString("/pdf/content")
+            });
 
             app.UseRequestLocalization(opt =>
             {
