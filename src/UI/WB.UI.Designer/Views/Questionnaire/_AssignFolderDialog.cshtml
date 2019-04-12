@@ -5,18 +5,18 @@
 <script type="text/javascript">
     $(function () {
         var localization = {
-            CreateSubFolder: "@QuestionnaireController.CreateSubFolder",
-            Edit: '@QuestionnaireController.Rename',
-            Delete: "@QuestionnaireController.Delete",
-            DeleteConfirmation: "@QuestionnaireController.DeleteFolderConfirmation",
-            NewFolderName: "@QuestionnaireController.NewFolder",
+            CreateSubFolder: "@Html.Raw(QuestionnaireController.CreateSubFolder)",
+            Edit: '@Html.Raw(QuestionnaireController.Rename)',
+            Delete: "@Html.Raw(QuestionnaireController.Delete)",
+            DeleteConfirmation: "@Html.Raw(QuestionnaireController.DeleteFolderConfirmation)",
+            NewFolderName: "@Html.Raw(QuestionnaireController.NewFolder)",
         };
-        var subFoldersUrl   = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "PublicFolders", action = "GetFolders" })';
-        var rootFoldersUrl  = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "PublicFolders", action = "GetRootFolders" })';
-        var addNodeUrl      = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "PublicFolders", action = "CreateFolder" })';
-        var renameNodeUrl   = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "PublicFolders", action = "RenameFolder" })';
+        var subFoldersUrl  = "@Url.Action("GetFolders", "PublicFolders", new { area = "Admin"})";
+        var rootFoldersUrl = "@Url.Action("GetRootFolders", "PublicFolders", new { area = "Admin"})";
+        var addNodeUrl     = "@Url.Action("CreateFolder", "PublicFolders", new { area = "Admin"})";
+        var renameNodeUrl  = "@Url.Action("RenameFolder", "PublicFolders", new { area = "Admin"})";
         var removeNodeUrl   = null;
-        var assignFolderUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "PublicFolders", action = "AssignFolderToQuestionnaire" })';
+        var assignFolderUrl = "@Url.Action("AssignFolderToQuestionnaire", "PublicFolders", new { area = "Admin"})";
         var supportRadioButton = true;
         var selectFolderCallback = function (folderId) {
             $('#assign-folder-modal-folder-id').val(folderId);
