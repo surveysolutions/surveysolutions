@@ -1,0 +1,32 @@
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.UI.Designer1.Extensions;
+
+namespace WB.UI.Designer.Controllers.Api.Designer
+{
+    public class UsersController : ControllerBase
+    {
+        private readonly UserManager<DesignerIdentityUser> users;
+
+        public UsersController(UserManager<DesignerIdentityUser> users)
+        {
+            this.users = users;
+        }
+
+        [Authorize]
+        [Route("api/users/CurrentLogin")]
+        public async Task<IActionResult> CurrentLogin()
+        {
+            var user = await this.users.GetUserAsync(User);
+            var response = new
+            {
+                UserName = User.GetUserName(),
+                Email = user.Email
+            };
+            return Ok(response);
+        }
+    }
+}

@@ -1,4 +1,4 @@
-namespace WB.UI.Designer.Implementation.Services
+namespace WB.UI.Designer.Services
 {
     public class WebTesterSettings
     {

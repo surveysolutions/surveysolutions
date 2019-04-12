@@ -2,7 +2,7 @@
 
 namespace WB.UI.Designer.Code
 {
-    public class CompilerSettings: ICompilerSettings
+    public class CompilerSettings
     {
         public bool EnableDump { get; set; }
 

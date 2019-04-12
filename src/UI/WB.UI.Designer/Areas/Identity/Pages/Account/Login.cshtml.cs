@@ -101,6 +101,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
                         Input.Password,
                         Input.RememberMe,
                         lockoutOnFailure: false);
+
                     if (result.Succeeded)
                     {
                         this.captchaService.RegisterFailedLogin(Input.Email);
@@ -119,6 +120,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
                         logger.LogWarning("User account locked out.");
                         return RedirectToPage("./Lockout");
                     }
+
 
                     this.captchaService.RegisterFailedLogin(Input.Email);
                     this.ErrorMessage = AccountResources.InvalidPassword;
