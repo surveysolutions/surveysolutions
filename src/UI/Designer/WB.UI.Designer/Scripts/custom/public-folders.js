@@ -125,16 +125,6 @@
             success: callback,
             dataType: 'json'
         });
-    }
-
-    self.getSelectedFolderId = function() {
-        return element.fancytree('getTree').getSelectedNodes();
-    }
-
-    self.setSelectedFolderId = function(folderId) {
-        var tree = element.fancytree('getTree');
-        var node = tree.getNodeByKey(folderId);
-        node.setSelected(true);
-    }
+    };
 }
 

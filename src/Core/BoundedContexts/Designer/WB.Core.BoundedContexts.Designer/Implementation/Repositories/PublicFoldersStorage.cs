@@ -73,6 +73,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
         {
             var folder = dbContext.QuestionnaireFolders.Find(id);
             dbContext.Remove(folder);
+            dbContext.SaveChanges();
         }
 
         public void AssignFolderToQuestionnaire(Guid questionnaireId, Guid? folderId)
