@@ -1,4 +1,4 @@
-﻿@using WB.UI.Shared.Web.Extensions
+﻿@using WB.UI.Designer.Extensions
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -6,22 +6,26 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@(!string.IsNullOrEmpty(ViewBag.Title) ? ViewBag.Title : "Designer")</title>
-    @*@this.GenerateFavicon(Url.Content("~/favicon.ico"))
+    @Html.GenerateFavicon(Url.Content("~/favicon.ico"))
 
-    <script src="~/Content/plugins/jquery.min.js"></script>
-    <link href="~/questionnaire/content/designer-start/bootstrap-custom.css" rel="stylesheet" />
-    <script src="~/Content/plugins/bootstrap.min.js"></script>
-    <link href="~/questionnaire/content/designer-start/designer-start.css" rel="stylesheet" />*@
+    <!-- logon:css -->
+    <link rel="stylesheet" href="/css/logon.css">
+    <!-- endinject -->
+    @RenderSection("Styles", required: false)
+    <!-- simplepage:js -->
+    <script src="/js/simplepage.js"></script>
+    <!-- endinject -->
+
+    @RenderSection("Scripts", required: false)
 
     <script type="text/javascript">
         function FrameCheck() {
             if (top != self)
                 top.location.replace(self.location.href);
         }
-    </script>
 
-    @RenderSection("Styles", required: false)
-    @RenderSection("Scripts", required: false)
+
+/**/</script>
 </head>
 <body onload="FrameCheck();">
     <header>
@@ -54,7 +58,7 @@
     </section>
 
     <footer>
-        @Html.Partial("_commonFooter")
+        <partial name="_commonFooter"/>
     </footer>
 </body>
 </html>
