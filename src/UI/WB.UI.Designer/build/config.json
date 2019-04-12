@@ -25,7 +25,8 @@
     "Views/Shared/Layout.cshtml",
     "Views/Shared/_ValidationScriptsPartial.cshtml",
     "Views/Questionnaire/EditCascadingOptions.cshtml",
-    "Views/Questionnaire/EditOptions.cshtml"
+    "Views/Questionnaire/EditOptions.cshtml",
+    "Views/Classifications/Index.cshtml"
   ],
   "vendor": {
     "favicons": ["Content/identity/favicon-*.png"],
@@ -150,7 +151,7 @@
       "inputFiles": [
         "node_modules/jquery.fancytree/dist/jquery.fancytree-all-deps.min.js",
         "questionnaire/external/jquery.fancytree.contextMenu.js",
-        "Content/plugins/jquery.contextMenu.min.js",
+        "node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.js",
         "Content/plugins/bootbox.min.js",
         "Scripts/custom/public-folders.js",
         "node_modules/jquery.fancytree/dist/skin-bootstrap/ui.fancytree.min.css",
@@ -166,8 +167,22 @@
       ]
     },
     {
+      "name": "vue",
+      "inputFiles": [
+        "node_modules/es6-promise/dist/es6-promise.auto.js",
+        "node_modules/vue/dist/vue.js",
+        "node_modules/vuex/dist/vuex.js",
+        "node_modules/vee-validate/dist/vee-validate.minimal.js",
+        "node_modules/axios/dist/axios.js",
+        "node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.js",
+        "node_modules/jquery.ui.position/jquery-ui.js",
+        "node_modules/lodash/lodash.js"
+      ]
+    },
+    {
       "name": "classifications",
       "inputFiles": [
+        "node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.css",
         "Content/classifications.css",
         "Scripts/classifications/components/CategoriesEditor.js",
         "Scripts/classifications/components/ClassificationEditor.js",
