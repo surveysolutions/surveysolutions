@@ -1,4 +1,4 @@
-﻿@*@using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership
+@using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership
 @using WB.UI.Designer.Resources
 
 @{
@@ -7,19 +7,23 @@
 }
 
 @section Styles{
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.css">
-    @Styles.Render("~/classifications-css")
+    <!-- classifications:css -->
+    <link rel="stylesheet" href="/css/classifications.css">
+    <!-- endinject -->
 }
 @section Scripts {
-    @Scripts.Render("~/list")
-    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
-    <script src="https://unpkg.com/vuex"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vee-validate@latest/dist/vee-validate.js"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.ui.position.js"></script>
-    <script src=" https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js"></script>
+
+    <!-- list:js -->
+    <script src="/js/list.js"></script>
+    <!-- endinject -->
+   
+    <!-- vue:js -->
+    <script src="/js/vue.js"></script>
+    <!-- endinject -->
+
+    <!-- classifications:js -->
+    <script src="/js/classifications.js"></script>
+    <!-- endinject -->
 
     <script type="text/javascript">
         var ClassificationsConfig = {};
@@ -36,7 +40,6 @@
             });
     </script>
 
-    @Scripts.Render("~/classifications-js")
 }
 <div class="slider" v-if="isLoading"><div class="line"></div><div class="subline inc"></div><div class="subline dec"></div></div>
 <div class="classifications-wrapper">
@@ -167,5 +170,5 @@
             </div>
         </div>
     </script>
-}*@
+}
 
