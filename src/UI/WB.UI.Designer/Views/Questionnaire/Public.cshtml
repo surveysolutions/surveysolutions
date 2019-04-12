@@ -4,27 +4,28 @@
 @{
     ViewBag.Title = QuestionnaireController.PublicQuestionnaires;
     ViewBag.TableCssClass = "page-with-breadcrumbs";
+    Layout = "Layout";
 
     bool isSupportAssignFolders = Model.IsSupportAssignFolders;
 }
 @section Scripts {
-    @Scripts.Render("~/list")
+    @*@Scripts.Render("~/list")
 
     @if (isSupportAssignFolders)
     {
-        @Styles.Render("~/Content/plugins/folders-skin")
-        @Scripts.Render("~/folders")
-    }
-    
+    @Styles.Render("~/Content/plugins/folders-skin")
+    @Scripts.Render("~/folders")
+    }*@
+
     <script type="text/javascript">
-        var ajusteHeight = function(){
+        var ajusteHeight = function () {
             var height = $(".public-questionnaires-breadcrumb").outerHeight();
-            $( ".wrapper-questionnaire-table #table-content-holder" ).css("bottom", height);
+            $(".wrapper-questionnaire-table #table-content-holder").css("bottom", height);
         };
-        $(document).ready(function () { 
+        $(document).ready(function () {
             ajusteHeight();
         });
-        $( window ).resize(function() {
+        $(window).resize(function () {
             ajusteHeight();
         });
     </script>
@@ -35,37 +36,40 @@
     {
         if (folder.FolderId.HasValue && folder.FolderId != Guid.Empty)
         {
-             <li>@Html.ActionLink(folder.Title, "Public", "Questionnaire", new {id = folder.FolderId}, null)</li>
+    <li>@Html.ActionLink(folder.Title, "Public", "Questionnaire", new {id = folder.FolderId}, null)</li>
         }
         else if (folder.FolderId == Model.CurrentFolderId)
         {
-            <li class="active">@folder.Title</li>
+    <li class="active">@folder.Title</li>
         }
-        else 
+        else
         {
-            <li>@Html.ActionLink(folder.Title, "Public", "Questionnaire", new { }, null)</li>
+    <li>@Html.ActionLink(folder.Title, "Public", "Questionnaire", new { }, null)</li>
         }
     }
 </ol>
 
-@Html.Partial("QuestionnairesList", Model.Questionnaires)
+@Html.Partial("_QuestionnairesList", Model.Questionnaires)
 
 @section Modal
 {
     <div>
-        @Html.Partial("DeleteModalDialog")
+        <partial name="_IE11Modal" />
+    </div>
+
+    <div>
+        <partial name="_DeleteModalDialog" />
     </div>
     <div>
-        @Html.Partial("ExportPdfModalDialog")
+        <partial name="_ExportPdfModalDialog" />
     </div>
     <div>
-        @Html.Partial("ExportHtmlModalDialog")
+        <partial name="_ExportHtmlModalDialog" />
     </div>
-    
     @if (isSupportAssignFolders)
     {
         <div>
-            @Html.Partial("AssignFolderDialog")
+            <partial name="AssignFolderDialog" />
         </div>
     }
 }
