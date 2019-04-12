@@ -9,7 +9,7 @@
                 <p>@Html.Raw(string.Format(QuestionnaireController.DeleteConfirmationText, "<strong id=\"delete-modal-questionnaire-title\"></strong>"))</p>
             </div>
             <div class="modal-footer">
-                <form asp-action="Delete" method="post">
+                <form asp-action="Delete" asp-controller="Questionnaire" method="post">
                     @Html.AntiForgeryToken()
                     <input name="id" id="delete-modal-questionnaire-id" type="hidden" />
                     <button class="btn" data-dismiss="modal" aria-hidden="true">@QuestionnaireController.Cancel</button>
@@ -17,6 +17,7 @@
                         @QuestionnaireController.Delete
                     </button>
                 </form>
+            </div>
         </div>
     </div>
 </div>

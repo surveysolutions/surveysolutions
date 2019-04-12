@@ -16,7 +16,7 @@
     <AssemblyName>WB.UI.Designer</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -271,7 +271,6 @@
     <Compile Include="Code\CustomWebApiAuthorizeFilter.cs" />
     <Compile Include="Code\DesignerOldCompatibilityBinder.cs" />
     <Compile Include="Code\UrlExtensions.cs" />
-    <Compile Include="Controllers\ClassificationsController.cs" />
     <Compile Include="Controllers\DeskController.cs" />
     <Compile Include="Code\ConfigurationManager\PdfConfigSection.cs" />
     <Compile Include="Code\JsonFormatter.cs" />
@@ -316,7 +315,6 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Code\DesignerRegistry.cs" />
     <Compile Include="Controllers\CommandController.cs" />
-    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\PdfController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -461,7 +459,6 @@
     <Content Include="Scripts\lib\Placeholders.js" />
     <Content Include="Scripts\lib\sammy.js" />
     <Content Include="Scripts\lib\sammy.title.js" />
-    <Content Include="Views\Error\Layout.Error.cshtml" />
     <Content Include="Views\ControlPanel\Settings.cshtml" />
     <Content Include="Views\ControlPanel\Versions.cshtml" />
     <Content Include="Views\Pdf\_RenderQuestion.cshtml" />
@@ -478,13 +475,9 @@
     <Content Include="Views\ControlPanel\CompilationVersionsViews\CompilationVersions.cshtml" />
     <Content Include="Views\ControlPanel\CompilationVersionsViews\AddCompilationVersion.cshtml" />
     <Content Include="Views\ControlPanel\CompilationVersionsViews\EditCompilationVersion.cshtml" />
-    <Content Include="Views\Shared\AssignFolderDialog.cshtml" />
     <Content Include="Views\Shared\_alerts.cshtml" />
     <Content Include="Views\UnderConstruction\Index.cshtml" />
-    <Content Include="Views\Classifications\Index.cshtml" />
     <Content Include="Views\Questionnaire\ExpressionGeneration.cshtml" />
-    <Content Include="Views\Questionnaire\Public.cshtml" />
-    <Content Include="Views\Questionnaire\Shared.cshtml" />
     <Content Include="Views\Questionnaire\QuestionnaireHistory.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
@@ -499,17 +492,12 @@
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Web.config" />
-    <Content Include="Views\Error\AccessDenied.cshtml" />
-    <Content Include="Views\Error\Index.cshtml" />
-    <Content Include="Views\Error\NotFound.cshtml" />
     <Content Include="Views\Pdf\RenderQuestionnaire.cshtml" />
-    <Content Include="Views\Error\Forbidden.cshtml" />
     <Content Include="Views\Shared\_trackers.cshtml" />
     <Content Include="Views\ControlPanel\NConfig.cshtml" />
     <Content Include="Views\Shared\_commonFooter.cshtml" />
     <Content Include="Views\ControlPanel\Index.cshtml" />
     <Content Include="Views\ControlPanel\Layout.ControlPanel.cshtml" />
-    <Content Include="Views\Error\RequestLengthExceeded.cshtml" />
     <Content Include="Views\ControlPanel\MakeAdmin.cshtml" />
     <Content Include="Content\plugins\**\*" />
   </ItemGroup>

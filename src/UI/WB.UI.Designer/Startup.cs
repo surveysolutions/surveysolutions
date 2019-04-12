@@ -146,7 +146,7 @@ namespace WB.UI.Designer
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
@@ -182,14 +182,14 @@ namespace WB.UI.Designer
             {
                 routes.MapRoute(
                     name: "areas",
-                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                    template: "{area:exists}/{controller=Questionnaire}/{action=My}/{id?}"
                 );
 
                 routes.MapWebApiRoute("DefaultApi", "api/{controller}/{id?}");
 
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Questionnaire}/{action=My}/{id?}");
             });
 
             var initTask = aspCoreKernel.InitAsync(serviceProvider);

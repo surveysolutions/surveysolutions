@@ -1,4 +1,4 @@
-﻿@using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership
+﻿@*@using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership
 @using WB.UI.Designer.Resources
 
 @{
@@ -96,7 +96,7 @@
                     <div v-else class="categories-holder-body">
                         <div class="options-editor" v-if="optionsMode">
                             <div class="option-line" v-for="(category, index) in categories" :key="category.id">
-                                <div class="input-group" >
+                                <div class="input-group">
                                     <div class="option-cell" :class="{'has-error': errors.has('value'+category.id)}">
                                         <input :name="'value'+category.id" v-on:keyup.enter="moveFocus" v-validate="'required|integer'" key="value" type="number" v-model="category.value" class="form-control" placeholder="@QuestionnaireEditor.OptionsUploadValue">
                                     </div>
@@ -167,5 +167,5 @@
             </div>
         </div>
     </script>
-}
+}*@
 
