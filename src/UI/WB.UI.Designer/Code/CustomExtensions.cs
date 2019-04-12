@@ -2,9 +2,8 @@
 using System.Globalization;
 using System.IO;
 using System.Text;
-using Ionic.Zip;
+using ICSharpCode.SharpZipLib.Zip;
 using WB.UI.Designer.Code;
-using WB.UI.Designer.Resources;
 
 namespace WB.UI.Designer.Extensions
 {
@@ -21,8 +20,8 @@ namespace WB.UI.Designer.Extensions
 
         public static void PutFileEntry(this ZipOutputStream stream, string filename, byte[] content)
         {
-            var entry = new ZipEntry() {AlternateEncoding = Encoding.Unicode};
-            stream.PutNextEntry(filename);
+            var entry = new ZipEntry(filename) {IsUnicodeText = true};
+            stream.PutNextEntry(entry);
             stream.Write(content, 0, content.Length);
         }
 

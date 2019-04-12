@@ -146,78 +146,7 @@ namespace WB.UI.Designer.Controllers
             };
         }
 
-        [HttpGet]
-        public FileStreamResult BackupQuestionnaire(Guid id)
-        {
-            var questionnaireView = questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
-            if (questionnaireView == null)
-                return null;
-
-            var questionnaireDocument = questionnaireView.Source;
-
-            string questionnaireJson = this.serializer.Serialize(questionnaireDocument);
-
-            var output = new MemoryStream();
-
-            ZipOutputStream zipStream = new ZipOutputStream(output);
-
-            string questionnaireFolderName = $"{questionnaireView.Title.ToValidFileName()} ({id.FormatGuid()})";
-
-            zipStream.PutTextFileEntry($"{questionnaireFolderName}/{questionnaireView.Title.ToValidFileName()}.json", questionnaireJson);
-
-            for (int attachmentIndex = 0; attachmentIndex < questionnaireDocument.Attachments.Count; attachmentIndex++)
-            {
-                try
-                {
-                    Attachment attachmentReference = questionnaireDocument.Attachments[attachmentIndex];
-                    
-                    var attachmentContent = this.attachmentService.GetContent(attachmentReference.ContentId);
-
-                    if (attachmentContent?.Content != null)
-                    {
-                        var attachmentMeta = this.attachmentService.GetAttachmentMeta(attachmentReference.AttachmentId);
-
-                        zipStream.PutFileEntry($"{questionnaireFolderName}/Attachments/{attachmentReference.AttachmentId.FormatGuid()}/{attachmentMeta?.FileName ?? "unknown-file-name"}", attachmentContent.Content);
-                        zipStream.PutTextFileEntry($"{questionnaireFolderName}/Attachments/{attachmentReference.AttachmentId.FormatGuid()}/Content-Type.txt", attachmentContent.ContentType);
-                    }
-                    else
-                    {
-                        zipStream.PutTextFileEntry(
-                            $"{questionnaireFolderName}/Attachments/Invalid/missing attachment #{attachmentIndex + 1} ({attachmentReference.AttachmentId.FormatGuid()}).txt",
-                            $"Attachment '{attachmentReference.Name}' is missing.");
-                    }
-                }
-                catch (Exception exception)
-                {
-                    this.logger.Warn($"Failed to backup attachment #{attachmentIndex + 1} from questionnaire '{questionnaireView.Title}' ({questionnaireFolderName}).", exception);
-                    zipStream.PutTextFileEntry(
-                        $"{questionnaireFolderName}/Attachments/Invalid/broken attachment #{attachmentIndex + 1}.txt",
-                        $"Failed to backup attachment. See error below.{Environment.NewLine}{exception}");
-                }
-            }
-
-            Dictionary<Guid, string> lookupTables = this.lookupTableService.GetQuestionnairesLookupTables(id);
-
-            foreach (KeyValuePair<Guid, string> lookupTable in lookupTables)
-            {
-                zipStream.PutTextFileEntry($"{questionnaireFolderName}/Lookup Tables/{lookupTable.Key.FormatGuid()}.txt", lookupTable.Value);
-            }
-
-            foreach (var translation in questionnaireDocument.Translations)
-            {
-                TranslationFile excelFile = this.translationsService.GetAsExcelFile(id, translation.Id);
-                zipStream.PutFileEntry($"{questionnaireFolderName}/Translations/{translation.Id.FormatGuid()}.xlsx", excelFile.ContentAsExcelFile);
-            }
-
-            zipStream.Finish();
-
-            output.Seek(0, SeekOrigin.Begin);
-
-            return new FileStreamResult(output, "application/zip")
-            {
-                FileDownloadName = $"{questionnaireView.Title.ToValidFileName()}.zip"
-            };
-        }
+        
 
         public ActionResult Create()
         {
