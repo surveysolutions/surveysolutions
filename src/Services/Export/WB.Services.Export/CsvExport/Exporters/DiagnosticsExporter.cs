@@ -34,13 +34,13 @@ namespace WB.Services.Export.CsvExport.Exporters
                     .Cast<InterviewStatus>().
                     Select(x => new VariableValueLabel(((int)x).ToString(), x.ToString())).ToArray()),
             new DoExportFileHeader("responsible", "Last responsible person", ExportValueType.String),
-            new DoExportFileHeader("interviewers", "Number of interviewers who worked on this interview", ExportValueType.String),
-            new DoExportFileHeader("rejections__sup", "How many times this interview was rejected by supervisors", ExportValueType.String),
-            new DoExportFileHeader("rejections__hq", "How many times this interview was rejected by HQ", ExportValueType.String),
+            new DoExportFileHeader("interviewers", "Number of interviewers who worked on this interview", ExportValueType.NumericInt),
+            new DoExportFileHeader("rejections__sup", "How many times this interview was rejected by supervisors", ExportValueType.NumericInt),
+            new DoExportFileHeader("rejections__hq", "How many times this interview was rejected by HQ", ExportValueType.NumericInt),
             //new DoExportFileHeader("n_questions_valid", "Number of valid questions"),
-            new DoExportFileHeader("entities__errors", "Number of questions and static texts with errors", ExportValueType.String),
+            new DoExportFileHeader("entities__errors", "Number of questions and static texts with errors", ExportValueType.NumericInt),
             //new DoExportFileHeader("n_questions_unanswered", "Number of unanswered questions"),
-            new DoExportFileHeader("questions__comments", "Number of questions with comments", ExportValueType.String),
+            new DoExportFileHeader("questions__comments", "Number of questions with comments", ExportValueType.NumericInt),
             new DoExportFileHeader("interview__duration", "Active time it took to complete the interview, DD.HH:MM:SS", ExportValueType.String),
         };
 

@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         private void BecauseOf() =>
                 questionnaire.UpdateGroup(groupId: groupId, responsibleId: responsibleId, title: "title", variableName: null, rosterSizeQuestionId: rosterSizeQuestionId,
                     description: null, condition: null, hideIfDisabled: false, isRoster: true, rosterSizeSource: RosterSizeSourceType.Question,
-                    rosterFixedTitles: null, rosterTitleQuestionId: null, isPlainMode: true);
+                    rosterFixedTitles: null, rosterTitleQuestionId: null, isFlatMode: true);
 
         [NUnit.Framework.Test] public void should_contains_group () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).Should().NotBeNull();
@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
         [NUnit.Framework.Test] public void should_contains_group_with_IsPlainMode_specified() =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
-                .IsPlainMode.Should().BeTrue();
+                .IsFlatMode.Should().BeTrue();
 
         private static Questionnaire questionnaire;
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
