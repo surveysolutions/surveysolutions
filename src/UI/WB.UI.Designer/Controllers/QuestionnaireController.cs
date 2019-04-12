@@ -20,11 +20,14 @@ using WB.Core.BoundedContexts.Designer.Verifier;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
+using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Extensions;
+using WB.UI.Designer.Models;
 using WB.UI.Designer.Resources;
 using WB.UI.Designer1.Extensions;
 
@@ -45,6 +48,8 @@ namespace WB.UI.Designer.Controllers
         private readonly IHttpContextAccessor contextAccessor;
         private readonly ICategoricalOptionsImportService categoricalOptionsImportService;
         private readonly DesignerDbContext dbContext;
+        private readonly IQuestionnaireHelper questionnaireHelper;
+        private readonly IPublicFoldersStorage publicFoldersStorage;
 
         public QuestionnaireController(
             IQuestionnaireViewFactory questionnaireViewFactory,
@@ -57,7 +62,9 @@ namespace WB.UI.Designer.Controllers
             IHttpContextAccessor contextAccessor,
             ICategoricalOptionsImportService categoricalOptionsImportService,
             ICommandService commandService,
-            DesignerDbContext dbContext)
+            DesignerDbContext dbContext,
+            IQuestionnaireHelper questionnaireHelper, 
+            IPublicFoldersStorage publicFoldersStorage)
         {
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -70,6 +77,8 @@ namespace WB.UI.Designer.Controllers
             this.categoricalOptionsImportService = categoricalOptionsImportService;
             this.commandService = commandService;
             this.dbContext = dbContext;
+            this.questionnaireHelper = questionnaireHelper;
+            this.publicFoldersStorage = publicFoldersStorage;
         }
 
         
@@ -211,7 +220,7 @@ namespace WB.UI.Designer.Controllers
                     this.Success(string.Format(Resources.QuestionnaireController.SuccessDeleteMessage, model.Title));
                 }
             }
-            return this.RedirectToAction("Index", "Home");
+            return this.RedirectToAction("My", "Home");
         }
 
         [HttpPost]
@@ -223,7 +232,7 @@ namespace WB.UI.Designer.Controllers
             if (!hasAccess)
             {
                 this.Error(Resources.QuestionnaireController.ForbiddenRevert);
-                return this.RedirectToAction("Index", "Home");
+                return this.RedirectToAction("My", "Home");
             }
 
             var command = new RevertVersionQuestionnaire(id, historyReferenceId, this.User.GetId());
@@ -246,7 +255,7 @@ namespace WB.UI.Designer.Controllers
             if (!hasAccess)
             {
                 this.Error(ErrorMessages.NoAccessToQuestionnaire);
-                return this.RedirectToAction("Index", "Home");
+                return this.RedirectToAction("My");
             }
             var questionnaireInfoView = this.questionnaireInfoViewFactory.Load(id.FormatGuid(), this.User.GetId());
 
@@ -473,7 +482,7 @@ namespace WB.UI.Designer.Controllers
         public IActionResult LackOfPermits()
         {
             this.Error(Resources.QuestionnaireController.Forbidden);
-            return this.RedirectToAction("Index");
+            return this.RedirectToAction("My");
         }
 
         private class ComboItem
@@ -504,6 +513,65 @@ namespace WB.UI.Designer.Controllers
 
             string referer = Request.Headers["Referer"].ToString();
             return this.Redirect(referer);
+        }
+
+        public ActionResult My(int? p, string sb, int? so, string f)
+            => this.View(this.GetQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f, type: QuestionnairesType.My, folderId: null));
+
+        public ActionResult Public(int? p, string sb, int? so, string f, Guid? id)
+        {
+            var questionnaires = this.GetQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f,
+                type: QuestionnairesType.Public, folderId: id);
+
+            var folderPath = publicFoldersStorage.GetFoldersPath(folderId: id);
+            var breadcrumbs = folderPath.Select(folder => new FolderBreadcrumbsModel()
+            {
+                FolderId = folder.PublicId,
+                Title = folder.Title
+            }).ToArray();
+
+            var model = new QuestionnaireListModel()
+            {
+                IsSupportAssignFolders = User.IsAdmin(),
+                CurrentFolderId = id,
+                Breadcrumbs = breadcrumbs,
+                Questionnaires = questionnaires
+            };
+
+            return this.View(model);
+        }
+
+        public ActionResult Shared(int? p, string sb, int? so, string f)
+            => this.View(this.GetQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f, type: QuestionnairesType.Shared, folderId: null));
+
+
+        private IPagedList<QuestionnaireListViewModel> GetQuestionnaires(int? pageIndex, string sortBy, int? sortOrder, string searchFor, QuestionnairesType type, Guid? folderId)
+        {
+            this.SaveRequest(pageIndex: pageIndex, sortBy: ref sortBy, sortOrder: sortOrder, searchFor: searchFor, folderId: folderId);
+
+            return this.questionnaireHelper.GetQuestionnaires(
+                pageIndex: pageIndex,
+                sortBy: sortBy,
+                sortOrder: sortOrder,
+                searchFor: searchFor,
+                folderId: folderId,
+                viewerId: User.GetId().FormatGuid(),
+                isAdmin: User.IsAdmin(),
+                type: type);
+        }
+
+        private void SaveRequest(int? pageIndex, ref string sortBy, int? sortOrder, string searchFor, Guid? folderId)
+        {
+            this.ViewBag.PageIndex = pageIndex;
+            this.ViewBag.SortBy = sortBy;
+            this.ViewBag.Filter = searchFor;
+            this.ViewBag.SortOrder = sortOrder;
+            this.ViewBag.FolderId = folderId;
+
+            if (sortOrder.ToBool())
+            {
+                sortBy = $"{sortBy} Desc";
+            }
         }
     }
 }
