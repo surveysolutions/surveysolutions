@@ -82,6 +82,7 @@ namespace WB.UI.Designer.Controllers
         }
 
         
+        [Route("questionnaire/details/{id}/nosection/{entityType}/{entityId}")]
         public IActionResult DetailsNoSection(Guid id, Guid? chapterId, string entityType, Guid? entityid)
         {
             if (User.IsAdmin() || this.UserHasAccessToEditOrViewQuestionnaire(id))
@@ -97,6 +98,8 @@ namespace WB.UI.Designer.Controllers
             return this.LackOfPermits();
         }
 
+        [Route("questionnaire/details/{id}")]
+        [Route("questionnaire/details/{id}/chapter/{chapterId}/{entityType}/{entityId}")]
         public IActionResult Details(Guid id, Guid? chapterId, string entityType, Guid? entityid)
         {
             return (User.IsAdmin() || this.UserHasAccessToEditOrViewQuestionnaire(id)) 
