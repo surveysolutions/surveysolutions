@@ -2403,7 +2403,7 @@ namespace WB.Tests.Abc.TestFactories
             var created = interviewSummary.InterviewCommentedStatuses.FirstOrDefault(s =>
                 s.Status == InterviewExportedAction.Created);
 
-            return new SpeedReportInterviewItem()
+            return new SpeedReportInterviewItem(interviewSummary)
             {
                 InterviewId = interviewSummary.SummaryId,
                 QuestionnaireId = interviewSummary.QuestionnaireId,
@@ -2414,9 +2414,7 @@ namespace WB.Tests.Abc.TestFactories
                 InterviewerName = firstAnswerSet?.InterviewerName,
                 InterviewerId = firstAnswerSet?.InterviewerId,
                 SupervisorName = firstAnswerSet?.SupervisorName,
-                SupervisorId = firstAnswerSet?.SupervisorId,
-
-                InterviewSummary = interviewSummary
+                SupervisorId = firstAnswerSet?.SupervisorId
             };
         }
 
