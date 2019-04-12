@@ -42,7 +42,6 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             TranslationType.SpecialValue
         };
         
-        //private readonly IPlainStorageAccessor<TranslationInstance> translations;
         private readonly DesignerDbContext dbContext;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
         private readonly ITranslationsExportService translationsExportService;
@@ -141,6 +140,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
                                 var translationInstance = new TranslationInstance
                                 {
+                                    Id = Guid.NewGuid(),
                                     QuestionnaireId = questionnaireId,
                                     TranslationId = translationId,
                                     QuestionnaireEntityId = questionnaireEntityId,
@@ -159,21 +159,10 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
                         foreach (var translationInstance in uniqueTranslationInstances)
                         {
-                            var existing = this.dbContext.TranslationInstances.Find(translationInstance.Id);
-                            if (existing == null)
-                            {
-                                this.dbContext.TranslationInstances.Add(translationInstance);
-                            }
-                            else
-                            {
-                                existing.QuestionnaireId = translationInstance.QuestionnaireId;
-                                existing.Value = translationInstance.Value;
-                                existing.QuestionnaireEntityId = translationInstance.QuestionnaireEntityId;
-                                existing.TranslationId = translationInstance.TranslationId;
-                                existing.TranslationIndex = translationInstance.TranslationIndex;
-                                existing.Type = translationInstance.Type;
-                            }
+                            this.dbContext.TranslationInstances.Add(translationInstance);
                         }
+
+                        this.dbContext.SaveChanges();
                     }
                 }
                 catch (NullReferenceException e)

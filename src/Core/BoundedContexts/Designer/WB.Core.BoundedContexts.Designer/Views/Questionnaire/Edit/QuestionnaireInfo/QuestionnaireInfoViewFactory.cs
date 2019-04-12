@@ -101,7 +101,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             if (questionnaireDocument.CreatedBy.HasValue &&
                 sharedPersons.All(x => x.UserId != questionnaireDocument.CreatedBy))
             {
-                var owner = this.membershipUserService.GetById(questionnaireDocument.CreatedBy.Value.FormatGuid());
+                var owner = this.membershipUserService.GetById(questionnaireDocument.CreatedBy.Value.ToString());
                 if (owner != null)
                 {
                     sharedPersons.Add(new SharedPersonView

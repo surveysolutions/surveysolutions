@@ -171,8 +171,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             questionnaireListViewItem.Title = title;
             questionnaireListViewItem.IsPublic = isPublic;
             questionnaireListViewItem.LastEntryDate = DateTime.UtcNow;
-
-            this.dbContext.Questionnaires.Add(questionnaireListViewItem);
         }
 
         private void Delete(string questionnaireId)
@@ -182,8 +180,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
             questionnaireListViewItem.IsDeleted = true;
             questionnaireListViewItem.LastEntryDate = DateTime.UtcNow;
-
-            this.dbContext.Questionnaires.Add(questionnaireListViewItem);
         }
 
         private void RemoveSharedPerson(string questionnaireId, Guid responsibleId, string personId, string personEmail)
