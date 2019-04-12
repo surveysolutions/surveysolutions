@@ -284,7 +284,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsSignature(Guid entityIdentityId);
         bool IsRosterTriggeredByOrderedMultiQuestion(Guid rosterId);
         DateTime? GetDefaultDateForDateQuestion(Guid dateQuestionId);
-        bool IsPlainRoster(Guid groupId);
+        bool IsFlatRoster(Guid groupId);
 
         bool ShowCascadingAsList(Guid id);
         int? GetCascadingAsListThreshold(Guid id);

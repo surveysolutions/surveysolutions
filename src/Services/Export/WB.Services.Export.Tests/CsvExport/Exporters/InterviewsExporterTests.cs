@@ -553,7 +553,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             // assert
             InterviewDataExportLevelView first = result.Levels.First();
             var exportedQuestion = first.Records.First().GetPlainAnswers().First();
-            Assert.That(exportedQuestion[0], Is.EqualTo("[5|0]"));
+            Assert.That(exportedQuestion[0], Is.EqualTo("5,0"));
         }
 
         [Test]
@@ -591,7 +591,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             // assert
             InterviewDataExportLevelView first = result.Levels.First();
             var exportedQuestion = first.Records.First().GetPlainAnswers().First();
-            Assert.That(exportedQuestion[0], Is.EqualTo("[5|0]"));
+            Assert.That(exportedQuestion[0], Is.EqualTo("5,0"));
         }
 
         public static InterviewDataExportLevelView GetLevel(InterviewDataExportView interviewDataExportView, Guid[] levelVector)

@@ -90,6 +90,7 @@ namespace WB.Core.BoundedContexts.Headquarters
         private readonly int? interviewLimitCount;
         private readonly string syncDirectoryName;
         private readonly ExternalStoragesSettings externalStoragesSettings;
+        private readonly FileSystemEmailServiceSettings fileSystemEmailServiceSettings;
         private readonly UserPreloadingSettings userPreloadingSettings;
         private readonly ExportSettings exportSettings;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
@@ -107,7 +108,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             TrackingSettings trackingSettings, 
             int? interviewLimitCount = null,
             string syncDirectoryName = "SYNC",
-            ExternalStoragesSettings externalStoragesSettings = null)
+            ExternalStoragesSettings externalStoragesSettings = null,
+            FileSystemEmailServiceSettings fileSystemEmailServiceSettings = null)
         {
             this.userPreloadingSettings = userPreloadingSettings;
             this.exportSettings = exportSettings;
@@ -119,6 +121,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.syncSettings = syncSettings;
             this.syncDirectoryName = syncDirectoryName;
             this.externalStoragesSettings = externalStoragesSettings;
+            this.fileSystemEmailServiceSettings = fileSystemEmailServiceSettings;
             this.trackingSettings = trackingSettings;
         }
 
@@ -289,7 +292,11 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAssignmentPasswordGenerator, AssignmentPasswordGenerator>();
             registry.Bind<IInterviewReportDataRepository, InterviewReportDataRepository>();
             
-            registry.Bind<IEmailService, EmailService>();
+            if (fileSystemEmailServiceSettings?.IsEnabled ?? false)
+                registry.Bind<IEmailService, FileSystemEmailService>(new ConstructorArgument("settings", _ => fileSystemEmailServiceSettings));
+            else
+                registry.Bind<IEmailService, EmailService>();
+
             registry.Bind<IInvitationService, InvitationService>();
             registry.BindAsSingleton<ITokenGenerator,TokenGenerator>();
             registry.Bind<IInvitationMailingService, InvitationMailingService>();

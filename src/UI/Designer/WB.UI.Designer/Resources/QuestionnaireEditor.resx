@@ -538,7 +538,7 @@
   <data name="HideIfDisabled" xml:space="preserve">
     <value>Hide if disabled</value>
   </data>
-  <data name="PlainRoster" xml:space="preserve">
+  <data name="FlatRoster" xml:space="preserve">
     <value>Flat mode</value>
   </data>
   <data name="AddValidationRule" xml:space="preserve">
@@ -853,7 +853,7 @@
   <data name="HelpHideIfDisabled" xml:space="preserve">
     <value>By default, a disabled item is greyed-out. Checking this option will hide a disabled question or section on a tablet.</value>
   </data>
-  <data name="HelpPlainRoster" xml:space="preserve">
+  <data name="HelpFlatRoster" xml:space="preserve">
     <value>If unchecked, the questions of the roster are shown behind the buttons corresponding to roster instances. If checked, the questions of the roster are shown in the same level separated by headers corresponding to roster instances.</value>
   </data>
   <data name="HelpHideInstructions" xml:space="preserve">
