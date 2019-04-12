@@ -2,7 +2,9 @@
 
 namespace WB.Persistence.Headquarters.Migrations.ReadSide
 {
-    public class M201904011135_Speedreportinterviewitems_Interview_Id : Migration {
+    [Migration(201904011135)]
+    public class M201904011135_Speedreportinterviewitems_Interview_Id : Migration
+    {
         public override void Up()
         {
             Execute.Sql(@"ALTER TABLE readside.speedreportinterviewitems ADD interview_id int4 NULL;
@@ -14,7 +16,9 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
 
                 ALTER TABLE readside.speedreportinterviewitems ALTER COLUMN interview_id SET NOT NULL;
 
-                CREATE INDEX speedreportinterviewitems_interviewid_idx ON readside.speedreportinterviewitems (interview_id);");
+                CREATE INDEX speedreportinterviewitems_interviewid_idx ON readside.speedreportinterviewitems (interview_id);
+                ALTER TABLE readside.speedreportinterviewitems DROP COLUMN interviewid;
+            ");
         }
 
         public override void Down()
