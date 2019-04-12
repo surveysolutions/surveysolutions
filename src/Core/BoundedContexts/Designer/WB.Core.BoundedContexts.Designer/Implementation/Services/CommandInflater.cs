@@ -1,6 +1,6 @@
-using Main.Core.Documents;
 using System;
 using System.Linq;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Identity;
 using WB.Core.BoundedContexts.Designer.Classifications;
@@ -8,30 +8,32 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.UI.Designer.Code;
+using WB.UI.Designer.Code.Implementation;
 
-namespace WB.UI.Designer.Code.Implementation
+namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
     public class CommandInflater : ICommandInflater
     {
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
-        private readonly IPlainStorageAccessor<QuestionnaireListViewItem> questionnairesList;
+        private readonly DesignerDbContext dbContext;
         private readonly IClassificationsStorage classificationsStorage;
         private readonly ILoggedInUser user;
         private readonly IIdentityService identityService;
 
         public CommandInflater(
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
-            IPlainStorageAccessor<QuestionnaireListViewItem> questionnairesList,
+            DesignerDbContext dbContext,
+            UserManager<DesignerIdentityUser> userManager,
             IClassificationsStorage classificationsStorage,
             ILoggedInUser user,
             IIdentityService identityService)
         {
             this.questionnaireDocumentReader = questionnaireDocumentReader;
-            this.questionnairesList = questionnairesList;
+            this.dbContext = dbContext;
             this.classificationsStorage = classificationsStorage;
             this.user = user ?? throw new ArgumentNullException(nameof(user));
             this.identityService = identityService;
@@ -88,7 +90,7 @@ namespace WB.UI.Designer.Code.Implementation
                 this.user.IsAdmin)
                 return questionnaire;
 
-            var questionnaireListItem = this.questionnairesList.GetById(id.FormatGuid());
+            var questionnaireListItem = this.dbContext.Questionnaires.Find(id.FormatGuid());
             if (questionnaireListItem == null ||
                 questionnaireListItem.SharedPersons.All(x => x.UserId != this.user.Id))
             {

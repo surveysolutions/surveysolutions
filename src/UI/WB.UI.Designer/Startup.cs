@@ -109,6 +109,7 @@ namespace WB.UI.Designer
             services.AddTransient<IEmailSender, MailSender>();
             services.AddTransient<IViewRenderingService, ViewRenderingService>();
             services.AddTransient<IQuestionnaireHelper, QuestionnaireHelper>();
+            services.AddScoped<ILoggedInUser, LoggedInUser>();
 
             services.Configure<CompilerSettings>(Configuration.GetSection("CompilerSettings"));
             services.Configure<PdfSettings>(Configuration.GetSection("Pdf"));
