@@ -3,14 +3,14 @@
     ViewBag.Title = QuestionnaireController.QuestionnaireTreeFolders;
 }
 
-<link href="~/plugins/ui.fancytree.min.css" rel="stylesheet" />
-<link href="~/plugins/jquery.contextMenu.min.css" rel="stylesheet" />
+<!-- folders:css -->
+<link rel="stylesheet" href="/css/folders.css">
+<!-- endinject -->
 
-<script src="~/plugins/jquery.fancytree-all-deps.min.js"></script>
+<!-- folders:js -->
+<script src="/js/folders.js"></script>
+<!-- endinject -->
 
-<script src="~/plugins/jquery.fancytree.contextMenu.js"></script>
-<script src="~/plugins/jquery.contextMenu.min.js"></script>
-<script src="~/plugins/bootbox.min.js"></script>
 <script>
     function FoldersModel(element, localization, rootNodesUrl, subNodesUrl, addNodeUrl, renameNodeUrl, removeNodeUrl, supportRadioButton, selectFolderCallback) {
         var self = this;

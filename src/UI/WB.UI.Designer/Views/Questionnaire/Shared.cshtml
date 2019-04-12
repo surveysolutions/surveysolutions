@@ -3,7 +3,15 @@
     Layout = "Layout";
 }
 
-    <partial name="_QuestionnairesList" />
+@section Scripts {
+    <!-- list:css -->
+    <link rel="stylesheet" href="/css/list.css">
+    <!-- endinject -->
+    <!-- list:js -->
+    <script src="/js/list.js"></script>
+    <!-- endinject -->
+}
+<partial name="_QuestionnairesList" />
 
 
 @section Modal

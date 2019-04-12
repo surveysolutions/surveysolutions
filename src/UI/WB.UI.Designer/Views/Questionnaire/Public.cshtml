@@ -9,13 +9,23 @@
     bool isSupportAssignFolders = Model.IsSupportAssignFolders;
 }
 @section Scripts {
-    @*@Scripts.Render("~/list")
+    <!-- list:css -->
+    <link rel="stylesheet" href="/css/list.css">
+    <!-- endinject -->
+    <!-- list:js -->
+    <script src="/js/list.js"></script>
+    <!-- endinject -->
 
     @if (isSupportAssignFolders)
     {
-    @Styles.Render("~/Content/plugins/folders-skin")
-    @Scripts.Render("~/folders")
-    }*@
+        <!-- folders:css -->
+        <link rel="stylesheet" href="/css/folders.css">
+        <!-- endinject -->
+
+        <!-- folders:js -->
+        <script src="/js/folders.js"></script>
+        <!-- endinject -->
+    }
 
     <script type="text/javascript">
         var ajusteHeight = function () {
@@ -68,8 +78,8 @@
     </div>
     @if (isSupportAssignFolders)
     {
-        <div>
-            <partial name="AssignFolderDialog" />
-        </div>
+    <div>
+        <partial name="AssignFolderDialog" />
+    </div>
     }
 }
