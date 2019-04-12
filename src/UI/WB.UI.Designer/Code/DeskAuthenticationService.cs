@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.GenericSubdomains.Portable;
+using WB.UI.Designer.Services;
 
-namespace WB.UI.Designer.Services
+namespace WB.UI.Designer.Code
 {
     internal class DeskAuthenticationService : IDeskAuthenticationService
     {
-        private readonly DeskSettings deskSettings;
+        private readonly IOptions<DeskSettings> deskSettings;
 
-        public DeskAuthenticationService(DeskSettings deskSettings)
+        public DeskAuthenticationService(IOptions<DeskSettings> deskSettings)
         {
             this.deskSettings = deskSettings;
         }
@@ -44,7 +46,7 @@ namespace WB.UI.Designer.Services
                 multipass = Uri.EscapeDataString(multipass);
                 signature = Uri.EscapeDataString(signature);
 
-                deskReturnUrl = string.Format(this.deskSettings.ReturnUrlFormat, this.deskSettings.SiteKey, multipass, signature);
+                deskReturnUrl = string.Format(this.deskSettings.Value.ReturnUrlFormat, this.deskSettings.Value.SiteKey, multipass, signature);
             }
 
             return deskReturnUrl;
@@ -84,7 +86,7 @@ namespace WB.UI.Designer.Services
         private byte[] GenerateEncryptionKey()
         {
             byte[] key;
-            byte[] salt = Encoding.UTF8.GetBytes(this.deskSettings.MultipassKey + this.deskSettings.SiteKey);
+            byte[] salt = Encoding.UTF8.GetBytes(this.deskSettings.Value.MultipassKey + this.deskSettings.Value.SiteKey);
 
             using (SHA1 sha1 = new SHA1CryptoServiceProvider())
             {
@@ -99,7 +101,7 @@ namespace WB.UI.Designer.Services
         {
             byte[] signature;
 
-            using (HMACSHA1 hmac = new HMACSHA1(Encoding.UTF8.GetBytes(this.deskSettings.MultipassKey)))
+            using (HMACSHA1 hmac = new HMACSHA1(Encoding.UTF8.GetBytes(this.deskSettings.Value.MultipassKey)))
             {
                 using (MemoryStream msHmac = new MemoryStream(Encoding.UTF8.GetBytes(unsignedMultipass)))
                 {
