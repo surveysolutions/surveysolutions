@@ -9,11 +9,10 @@ using WB.Core.BoundedContexts.Designer.Comments;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
-using WB.UI.Designer.Controllers.Api.Designer;
 using WB.UI.Designer.Models;
 using WB.UI.Designer1.Extensions;
 
-namespace WB.UI.Designer.Api.Designer
+namespace WB.UI.Designer.Controllers.Api.Designer
 {
     [Authorize]
     [QuestionnairePermissions]
@@ -23,15 +22,18 @@ namespace WB.UI.Designer.Api.Designer
     {
         private readonly ICommentsService commentsService;
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
+        private readonly DesignerDbContext dbContext;
         private readonly UserManager<DesignerIdentityUser> users;
 
         public CommentsController(
             ICommentsService commentsService, 
             IQuestionnaireViewFactory questionnaireViewFactory,
+            DesignerDbContext dbContext,
             UserManager<DesignerIdentityUser> users)
         {
             this.commentsService = commentsService;
             this.questionnaireViewFactory = questionnaireViewFactory;
+            this.dbContext = dbContext;
             this.users = users;
         }
 
@@ -55,7 +57,7 @@ namespace WB.UI.Designer.Api.Designer
 
         [HttpPost]
         [Route("entity/addComment")]
-        public async Task<IActionResult> PostComment(Guid id, AddCommentModel commentModel)
+        public async Task<IActionResult> PostComment(Guid id, [FromBody]AddCommentModel commentModel)
         {
             if (!ModelState.IsValid)
             {
@@ -81,22 +83,26 @@ namespace WB.UI.Designer.Api.Designer
                 commentModel.Comment, 
                 user.UserName,
                 user.Email);
+
+            await dbContext.SaveChangesAsync();
             return Ok();
         }
 
         [HttpPatch]
-        [Route("commentModel/resolve/{commentdId:Guid}")]
-        public IActionResult ResolveComment(Guid id, Guid commentdId)
+        [Route("comment/resolve/{commentId:Guid}")]
+        public async Task<IActionResult> ResolveComment(Guid id, Guid commentId)
         {
-            commentsService.ResolveComment(commentdId);
+            commentsService.ResolveComment(commentId);
+            await dbContext.SaveChangesAsync();
             return Ok();
         }
 
         [HttpDelete]
-        [Route("commentModel/{commentId:Guid}")]
-        public IActionResult DeleteComment(Guid id, Guid commentId)
+        [Route("comment/{commentId:Guid}")]
+        public async Task<IActionResult> DeleteComment(Guid id, Guid commentId)
         {
             commentsService.DeleteComment(commentId);
+            await dbContext.SaveChangesAsync();
             return Ok();
         }
     }
