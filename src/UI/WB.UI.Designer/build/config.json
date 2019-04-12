@@ -13,11 +13,9 @@
       "./Resources/QuestionnaireEditor.*.resx"
     ]
   },
-  "styles": {
-    "designer": [
-      "questionnaire/content/designer-start/bootstrap-custom.less",
-      "questionnaire/content/designer-start/designer-start.less"
-    ]
+  "assets": {
+    "images": ["Content/images/*"],
+    "fonts": ["Content/fonts/*"]
   },
   "injectTargets": [
     "Areas/Identity/Pages/Layout.Account.cshtml",
