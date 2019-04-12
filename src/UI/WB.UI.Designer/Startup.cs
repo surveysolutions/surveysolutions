@@ -30,6 +30,7 @@ using WB.UI.Designer.DependencyInjection;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Modules;
+using WB.UI.Designer.Services;
 using WB.UI.Shared.Web.Versions;
 
 namespace WB.UI.Designer
@@ -113,6 +114,7 @@ namespace WB.UI.Designer
             services.Configure<PdfSettings>(Configuration.GetSection("Pdf"));
             services.Configure<DeskSettings>(Configuration.GetSection("Desk"));
             services.Configure<QuestionnaireHistorySettings>(Configuration.GetSection("QuestionnaireHistorySettings"));
+            services.Configure<WebTesterSettings>(Configuration.GetSection("WebTester"));
 
             aspCoreKernel = new AspCoreKernel(services);
 

@@ -1,19 +1,18 @@
 using System;
 using System.Runtime.Caching;
-using WB.UI.Designer.Services;
+using Microsoft.Extensions.Options;
+using WB.UI.Designer.Implementation.Services;
 
-namespace WB.UI.Designer.Implementation.Services
+namespace WB.UI.Designer.Services
 {
     class WebTesterService : IWebTesterService
     {
-        private readonly CacheItemPolicy cacheItemPolicy;
+        private readonly IOptions<WebTesterSettings> settings;
 
-        public WebTesterService(WebTesterSettings settings)
+        public WebTesterService(IOptions<WebTesterSettings> settings)
         {
-            cacheItemPolicy = new CacheItemPolicy
-            {
-                SlidingExpiration = TimeSpan.FromMinutes(settings.ExpirationAmountMinutes)
-            };
+            this.settings = settings;
+            
         }
 
         private MemoryCache Cache { get; } = new MemoryCache("WebTester");
@@ -30,6 +29,10 @@ namespace WB.UI.Designer.Implementation.Services
 
         private void AddToCache(string token, Guid questionnaireId)
         {
+            var cacheItemPolicy = new CacheItemPolicy
+            {
+                SlidingExpiration = TimeSpan.FromMinutes(settings.Value.ExpirationAmountMinutes)
+            };
             Cache.Add(cacheKey(token), questionnaireId.ToString(), cacheItemPolicy);
         }
 

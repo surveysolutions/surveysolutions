@@ -263,7 +263,6 @@
   <ItemGroup>
     <Compile Include="Api\Attributes\ApiBasicAuthAttribute.cs" />
     <Compile Include="Api\Attributes\IncludeOnlyPublicApiDocumentFilter.cs" />
-    <Compile Include="Api\Designer\UsersController.cs" />
     <Compile Include="App_Start\AutofacWebCommonModule.cs" />
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="Code\CamelCaseAttribute.cs" />
