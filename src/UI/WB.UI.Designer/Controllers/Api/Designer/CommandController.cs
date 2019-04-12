@@ -120,6 +120,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                     contentId: command.AttachmentContentId,
                     questionnaireId: command.QuestionnaireId,
                     fileName: model.File?.FileName ?? model.FileName);
+
+                await dbContext.SaveChangesAsync();
             }
             catch (FormatException e)
             {
@@ -193,6 +195,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                         updateLookupTableCommand.LookupTableId,
                         fileStreamContent);
                 }
+
+                await dbContext.SaveChangesAsync();
             }
             catch (FormatException)
             {
@@ -241,7 +245,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             AddOrUpdateTranslation command;
             try
             {
-                command = (AddOrUpdateTranslation)this.Deserialize(commandType, model.Command);
+                command = (AddOrUpdateTranslation) this.Deserialize(commandType, model.Command);
                 if (model.File != null)
                 {
                     byte[] postedFile;
@@ -274,13 +278,19 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             var commandResponse = this.ProcessCommand(command, commandType);
 
             if (commandResponse.HasErrors || model.File == null)
+            {
+                await dbContext.SaveChangesAsync();
                 return commandResponse.Response;
+            }
 
             var storedTranslationsCount =
                 this.translationsService.Count(command.QuestionnaireId, command.TranslationId);
             var resultMessage = storedTranslationsCount == 1
                 ? string.Format(QuestionnaireEditor.TranslationsObtained, storedTranslationsCount)
                 : string.Format(QuestionnaireEditor.TranslationsObtained_plural, storedTranslationsCount);
+
+            await dbContext.SaveChangesAsync();
+
             return Ok(resultMessage);
         }
 

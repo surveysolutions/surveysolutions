@@ -293,7 +293,6 @@
     <Compile Include="Code\MessageHandlers\HttpsVerifier.cs" />
     <Compile Include="Code\DesignerMembershipProvider.cs" />
     <Compile Include="Code\Exceptions\CustomHandleErrorFilter.cs" />
-    <Compile Include="CommandDeserialization\DesignerCommandDeserializationModule.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
@@ -306,11 +305,9 @@
     <Compile Include="Code\Helpers\Routes\AreaRegistrationContextExtensions.cs" />
     <Compile Include="Code\Helpers\Routes\LowercaseRoute.cs" />
     <Compile Include="Code\Helpers\Routes\RouteCollectionExtensions.cs" />
-    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Code\DesignerRegistry.cs" />
-    <Compile Include="Controllers\CommandController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -471,6 +468,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="CommandDeserialization\" />
     <Folder Include="Resources\" />
     <Folder Include="Views\Admin\" />
     <Folder Include="Views\Comments\" />
