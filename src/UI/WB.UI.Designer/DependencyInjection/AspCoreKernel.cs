@@ -39,9 +39,6 @@ namespace WB.UI.Designer.DependencyInjection
             var status = new UnderConstructionInfo();
             this.services.AddSingleton(typeof(UnderConstructionInfo), sp => status);
             
-//            var serviceLocatorAdapter = new DotNetCoreServiceLocatorAdapter(serviceProvider);
-//            ServiceLocator.SetLocatorProvider(() => serviceLocatorAdapter);
-
             var initTask = Task.Run(async () => await InitModules(status, serviceProvider));
             return initTask;
         }
