@@ -16,7 +16,7 @@
     <AssemblyName>WB.UI.Designer</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -314,7 +314,6 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Code\DesignerRegistry.cs" />
     <Compile Include="Controllers\CommandController.cs" />
-    <Compile Include="Controllers\PdfController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -329,14 +328,6 @@
     <Compile Include="Models\DeleteQuestionnaireModel.cs" />
     <Compile Include="Models\DeleteAccountModel.cs" />
     <Compile Include="Models\ManageAccountModel.cs" />
-    <Compile Include="Pdf\OSUtil.cs" />
-    <Compile Include="Pdf\PdfConvert.cs" />
-    <Compile Include="Pdf\PdfConvertEnvironment.cs" />
-    <Compile Include="Pdf\PdfConvertException.cs" />
-    <Compile Include="Pdf\PdfConvertTimeoutException.cs" />
-    <Compile Include="Pdf\PdfDocument.cs" />
-    <Compile Include="Pdf\PdfOutput.cs" />
-    <Compile Include="Pdf\TitlePageDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IAuthenticationService.cs" />
     <Compile Include="Services\IDeskAuthenticationService.cs" />
@@ -373,15 +364,6 @@
     <Content Include="Content\images\DR-2017-folders-icons-G2-color.png" />
     <Content Include="Content\images\DR-2017-folders-icons.png" />
     <Content Include="Content\images\logo_under_constraction.jpg" />
-    <Content Include="Content\images\pdf-question-legend.png" />
-    <Content Include="Content\images\pdf-roster-legend.png" />
-    <Content Include="Content\images\pdf_logo.png" />
-    <Content Include="Content\pdf.css">
-      <DependentUpon>pdf.less</DependentUpon>
-    </Content>
-    <Content Include="Content\pdf.min.css">
-      <DependentUpon>pdf.css</DependentUpon>
-    </Content>
     <Content Include="RecaptchaNet.Readme.txt" />
     <Content Include="Scripts\classifications\components\CategoriesEditor.js" />
     <Content Include="Scripts\classifications\components\ClassificationEditor.js" />
@@ -396,7 +378,6 @@
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
-    <Content Include="Content\pdf.less" />
     <Content Include="Configuration\vgl.Designer.Web.config" />
     <Content Include="Content\designer-list.css" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
@@ -430,7 +411,6 @@
     <Content Include="Content\images\loader.gif" />
     <Content Include="Content\images\wb_logo.png" />
     <Content Include="Content\jquery.pnotify.css" />
-    <Content Include="Content\pdf-title-page.css" />
     <Content Include="Global.asax" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -460,13 +440,6 @@
     <Content Include="Scripts\lib\sammy.title.js" />
     <Content Include="Views\ControlPanel\Settings.cshtml" />
     <Content Include="Views\ControlPanel\Versions.cshtml" />
-    <Content Include="Views\Pdf\_RenderQuestion.cshtml" />
-    <Content Include="Views\Pdf\_RenderGroup.cshtml" />
-    <Content Include="Views\Pdf\_RenderRoster.cshtml" />
-    <Content Include="Views\Pdf\_RenderChildren.cshtml" />
-    <Content Include="Views\Pdf\_RenderStaticText.cshtml" />
-    <Content Include="Views\Pdf\RenderQuestionnaireFooter.cshtml" />
-    <Content Include="Views\Pdf\_RenderVariable.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\ControlPanel\AllowesAddresses.cshtml" />
     <Content Include="Views\ControlPanel\EditAllowesAddress.cshtml" />
@@ -491,7 +464,6 @@
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Web.config" />
-    <Content Include="Views\Pdf\RenderQuestionnaire.cshtml" />
     <Content Include="Views\Shared\_trackers.cshtml" />
     <Content Include="Views\ControlPanel\NConfig.cshtml" />
     <Content Include="Views\Shared\_commonFooter.cshtml" />
