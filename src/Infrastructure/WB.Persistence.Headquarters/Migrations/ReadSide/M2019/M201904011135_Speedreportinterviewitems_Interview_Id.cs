@@ -17,7 +17,6 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
                 ALTER TABLE readside.speedreportinterviewitems ALTER COLUMN interview_id SET NOT NULL;
 
                 CREATE INDEX speedreportinterviewitems_interviewid_idx ON readside.speedreportinterviewitems (interview_id);
-                ALTER TABLE readside.speedreportinterviewitems DROP COLUMN interviewid;
             ");
         }
 
