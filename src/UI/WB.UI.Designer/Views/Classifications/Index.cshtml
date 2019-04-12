@@ -1,9 +1,7 @@
-@using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership
-@using WB.UI.Designer.Resources
+@using WB.UI.Designer1.Extensions
 
 @{
     ViewBag.Title = QuestionnaireController.MyQuestionnaires;
-    IMembershipUserService userHelper = ViewBag.UserHelper;
 }
 
 @section Styles{
@@ -29,8 +27,8 @@
 
         Vue.use(ClassificationsConfig,
             {
-                isAdmin: @Json.Encode(userHelper.WebUser.IsAdmin),
-                userId: '@userHelper.WebUser.UserId',
+                isAdmin: @User.IsAdmin(),
+                userId: '@User.GetUserName()',
                 optionsParseRegex: new RegExp(/^(.+?)[\…\.\s]+([-+]?\d+)\s*$/)
             });
     </script>

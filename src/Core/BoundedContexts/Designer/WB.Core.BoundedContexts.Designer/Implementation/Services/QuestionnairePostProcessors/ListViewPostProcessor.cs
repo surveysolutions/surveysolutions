@@ -86,14 +86,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             this.emailNotifier = emailNotifier;
         }
 
-        //private IIdentityService accountStorage
-        //    => ServiceLocator.Current.GetInstance<IIdentityService>();
-
-        //private IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage
-        //    => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<QuestionnaireListViewItem>>();
-
-        //private IRecipientNotifier emailNotifier => ServiceLocator.Current.GetInstance<IRecipientNotifier>();
-
         private void Create(QuestionnaireDocument document, bool shouldPreserveSharedPersons, 
             Guid? questionnaireId = null, string questionnaireTitle = null, Guid? createdBy = null,
             bool? isPublic = null, DateTime? creationDate = null)
@@ -169,7 +161,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             if (questionnaireListViewItem == null) return;
 
             questionnaireListViewItem.LastEntryDate = DateTime.UtcNow;
-            this.dbContext.Questionnaires.Add(questionnaireListViewItem);
         }
 
         private void Update(string questionnaireId, string title, bool isPublic)

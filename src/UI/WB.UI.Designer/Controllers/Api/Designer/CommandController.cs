@@ -23,6 +23,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
 using WB.Core.BoundedContexts.Designer.Exceptions;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
@@ -45,6 +46,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         }
 
         private readonly ICommandService commandService;
+        private readonly DesignerDbContext dbContext;
         private readonly ILogger<CommandController> logger;
         private readonly ICommandInflater commandInflater;
 
@@ -58,6 +60,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         public CommandController(
             ICommandService commandService,
+            DesignerDbContext dbContext,
             ILogger<CommandController> logger,
             ICommandInflater commandPreprocessor,
             ILookupTableService lookupTableService,
@@ -67,6 +70,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             this.logger = logger;
             this.commandInflater = commandPreprocessor;
             this.commandService = commandService;
+            this.dbContext = dbContext;
             this.lookupTableService = lookupTableService;
             this.attachmentService = attachmentService;
             this.translationsService = translationsService;
@@ -205,16 +209,19 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         }
 
         [Route("~/api/command")]
-        public IActionResult Post(CommandExecutionModel model)
+        public async Task<IActionResult> Post([FromBody]CommandExecutionModel model)
         {
             try
             {
                 var concreteCommand = this.Deserialize(model.Type, model.Command);
-                return this.ProcessCommand(concreteCommand, model.Type).Response;
+                IActionResult actionResult = this.ProcessCommand(concreteCommand, model.Type).Response;
+                await dbContext.SaveChangesAsync();
+
+                return actionResult;
             }
             catch (Exception e)
             {
-                this.logger.LogError(e, string.Format("Error on command of type ({0}) handling ", model.Type));
+                this.logger.LogError(e, $"Error on command of type ({model.Type}) handling ");
                 throw;
             }
         }
