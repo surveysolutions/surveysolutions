@@ -3,10 +3,11 @@ import { src, dest, lastRun, parallel } from "gulp";
 import autoprefixer from "autoprefixer";
 import cache from "gulp-cache";
 import cleanCss from "gulp-clean-css";
+import merge from "merge2";
 import concat from "gulp-concat";
 import filter from "gulp-filter";
 import gulpif from "gulp-if";
-import imagemin from 'gulp-imagemin'
+import imagemin from "gulp-imagemin";
 import postcss from "gulp-postcss";
 import rev from "gulp-rev";
 import sourcemaps from "gulp-sourcemaps";
@@ -42,8 +43,17 @@ export const bowerImages = () =>
     .pipe(gulpif(PRODUCTION, rev()))
     .pipe(dest(join(config.dist, "images")));
 
-export const favicons = () => src(config.vendor.favicons)
-.pipe(cache(imagemin()))
-.pipe(dest(config.dist));
+export const favicons = () =>
+  src(config.vendor.favicons)
+    .pipe(cache(imagemin()))
+    .pipe(dest(config.dist));
 
-export default parallel(bowerJs, favicons, bowerCss, bowerImages);
+export const assets = () =>
+  merge(
+    src(config.assets.images)
+      .pipe(cache(imagemin()))
+      .pipe(dest(join(config.dist, "images"))),
+    src(config.assets.fonts).pipe(dest(join(config.dist, "fonts")))
+  );
+
+export default parallel(bowerJs, favicons, bowerCss, bowerImages, assets);
