@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Linq;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer.Resources;
 
-namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
+namespace WB.UI.Designer.Code
 {
     public static class HistoryExtensions
     {
-        public static MvcHtmlString FormatQuestionnaireHistoricalRecord(this HtmlHelper helper, UrlHelper urlHelper,
+        public static HtmlString FormatQuestionnaireHistoricalRecord(this IHtmlHelper helper, IUrlHelper urlHelper,
             Guid questionnaireId, QuestionnaireChangeHistoricalRecord record)
         {
             var recordLink = BuildQuestionnaireItemLink(helper, urlHelper, questionnaireId, record.TargetId,
@@ -94,33 +98,33 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
                     }
                     break;
             }
-            return MvcHtmlString.Create(text);
+            return new HtmlString(text);
         }
 
-        private static string ToMoveMessage(HtmlHelper helper, UrlHelper urlHelper, Guid questionnaireId,
-            QuestionnaireChangeHistoricalRecord record, MvcHtmlString recordLink)
+        private static string ToMoveMessage(IHtmlHelper helper, IUrlHelper urlHelper, Guid questionnaireId,
+            QuestionnaireChangeHistoricalRecord record, HtmlString recordLink)
         {
             var historicalRecordReference = record.HistoricalRecordReferences.FirstOrDefault();
             var targetType = historicalRecordReference?.Type.ToString() ?? "Section";
             return string.Format(
                 QuestionnaireHistoryResources.ResourceManager.GetString($"{record.TargetType}_{record.ActionType}_To_{targetType}"),
                 recordLink,
-                historicalRecordReference == null ? MvcHtmlString.Empty :
+                historicalRecordReference == null ? HtmlString.Empty :
                 BuildQuestionnaireItemLink(helper, urlHelper, questionnaireId,
                     historicalRecordReference.Id, historicalRecordReference.ParentId,
                     historicalRecordReference.Title, historicalRecordReference.IsExist,
                     historicalRecordReference.Type));
         }
 
-        private static string  ToCloneMessage(HtmlHelper helper, UrlHelper urlHelper, Guid questionnaireId,
-            QuestionnaireChangeHistoricalRecord record, MvcHtmlString recordLink)
+        private static string  ToCloneMessage(IHtmlHelper helper, IUrlHelper urlHelper, Guid questionnaireId,
+            QuestionnaireChangeHistoricalRecord record, HtmlString recordLink)
         {
             var historicalRecordReference = record.HistoricalRecordReferences.FirstOrDefault();
 
             return string.Format(
                 QuestionnaireHistoryResources.ResourceManager.GetString($"{record.TargetType}_{record.ActionType}"),
                 recordLink,
-                historicalRecordReference == null ? MvcHtmlString.Empty :
+                historicalRecordReference == null ? HtmlString.Empty :
                 BuildQuestionnaireItemLink(helper, urlHelper, questionnaireId,
                     historicalRecordReference.Id, historicalRecordReference.ParentId,
                     historicalRecordReference.Title, historicalRecordReference.IsExist,
@@ -136,7 +140,7 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
                 : string.Format(QuestionnaireHistoryResources.reverted, questionnireTitle);
         }
 
-        private static MvcHtmlString BuildQuestionnaireItemLink(HtmlHelper helper, UrlHelper urlHelper,
+        private static HtmlString BuildQuestionnaireItemLink(IHtmlHelper helper, IUrlHelper urlHelper,
             Guid questionnaireId, Guid itemId, Guid? chapterId, string title, bool isExist, QuestionnaireItemType type)
         {
             title = title?.Replace("Empty macro added", "")?.Replace("Empty lookup table added", "");
@@ -146,19 +150,19 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
                 : $"\"{title}\"");
 
             if (!isExist)
-                return MvcHtmlString.Create(entityTitle);
+                return new HtmlString(entityTitle);
 
             if (type == QuestionnaireItemType.Questionnaire)
-                return MvcHtmlString.Create($"<a href='{urlHelper.Content($"~/questionnaire/details/{itemId.FormatGuid()}")}'>{entityTitle}</a>");
+                return new HtmlString($"<a href='{urlHelper.Content($"~/questionnaire/details/{itemId.FormatGuid()}")}'>{entityTitle}</a>");
 
             if (type == QuestionnaireItemType.Person || !chapterId.HasValue)
-                return MvcHtmlString.Create(entityTitle);
+                return new HtmlString(entityTitle);
 
             var url = urlHelper.Content(string.Format("~/questionnaire/details/{0}/chapter/{1}/{3}/{2}",
                 questionnaireId.FormatGuid(), chapterId.FormatGuid(), itemId.FormatGuid(),
                 GetNavigationItemType(type)));
 
-            return MvcHtmlString.Create($"<a href='{url}'>{entityTitle}</a>");
+            return new HtmlString($"<a href='{url}'>{entityTitle}</a>");
         }
 
         private static string GetNavigationItemType(QuestionnaireItemType type)

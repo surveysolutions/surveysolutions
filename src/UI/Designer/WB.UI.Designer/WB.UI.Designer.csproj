@@ -273,7 +273,6 @@
     <Compile Include="Controllers\DeskController.cs" />
     <Compile Include="Code\ConfigurationManager\PdfConfigSection.cs" />
     <Compile Include="Code\JsonFormatter.cs" />
-    <Compile Include="BootstrapSupport\HtmlHelpers\HistoryExtensions.cs" />
     <Compile Include="DesignerSettingsProvider.cs" />
     <Compile Include="Filters\ShowNotesToUserFilter.cs" />
     <Compile Include="Implementation\Services\AuthenticationService.cs" />
