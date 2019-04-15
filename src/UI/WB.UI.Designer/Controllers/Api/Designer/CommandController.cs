@@ -117,11 +117,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
                 this.attachmentService.SaveMeta(
                     attachmentId: command.AttachmentId,
-                    contentId: command.AttachmentContentId,
                     questionnaireId: command.QuestionnaireId,
-                    fileName: model.File?.FileName ?? model.FileName);
-
-                await dbContext.SaveChangesAsync();
+                    contentId: command.AttachmentContentId, fileName: model.File?.FileName ?? model.FileName);
             }
             catch (FormatException e)
             {
@@ -133,7 +130,9 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 return StatusCode((int)HttpStatusCode.NotAcceptable, e.Message);
             }
 
-            return this.ProcessCommand(command, commandType).Response;
+            var updateAttachment = this.ProcessCommand(command, commandType).Response;
+            await dbContext.SaveChangesAsync();
+            return updateAttachment;
         }
 
         [Route("~/api/command/updateLookupTable")]
@@ -141,8 +140,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         public async Task<IActionResult> UpdateLookupTable()
         {
             var commandType = "UpdateLookupTable";
-            const string fileParameterName = "file";
-            const string commandParameterName = "command";
+            const string fileParameterName = "name=\"file\"";
 
             if (!MultipartRequestHelper.IsMultipartContentType(Request.ContentType))
             {
@@ -163,14 +161,16 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 while (section != null)
                 {
                     Dictionary<string, StringValues> sectionHeaders = section.Headers;
-                    switch (sectionHeaders["Content-Disposition"].ToString().Replace("\"", string.Empty))
+                    //form-data; name="file"; filename="Book1.txt"
+                    var header = sectionHeaders["Content-Disposition"].ToString();
+                    if (header.Contains(fileParameterName, StringComparison.InvariantCultureIgnoreCase))
                     {
-                        case fileParameterName:
-                            fileStreamContent = await section.ReadAsStringAsync();
-                            break;
-                        case commandParameterName:
-                            commandContent = await section.ReadAsStringAsync();
-                            break;
+                        fileStreamContent = await section.ReadAsStringAsync();
+                    }
+                    else
+                    {
+                        commandContent = await section.ReadAsStringAsync();
+
                     }
 
                     section = await reader.ReadNextSectionAsync();
@@ -196,7 +196,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                         fileStreamContent);
                 }
 
-                await dbContext.SaveChangesAsync();
             }
             catch (FormatException)
             {
@@ -209,7 +208,11 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 return StatusCode((int) HttpStatusCode.NotAcceptable, e.Message);
             }
 
-            return this.ProcessCommand(updateLookupTableCommand, commandType).Response;
+            var updateLookupTable = this.ProcessCommand(updateLookupTableCommand, commandType).Response;
+
+            await dbContext.SaveChangesAsync();
+
+            return updateLookupTable;
         }
 
         [Route("~/api/command")]
