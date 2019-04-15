@@ -176,13 +176,7 @@ namespace WB.UI.Designer
             app.UseCookiePolicy();
             app.UseSession();
             app.UseAuthentication();
-
-            app.UseStaticFiles(new StaticFileOptions()
-            {
-                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Areas", "Pdf", "Content")),
-                RequestPath = new PathString("/pdf/content")
-            });
-
+            
             app.UseRequestLocalization(opt =>
             {
                 opt.DefaultRequestCulture = new RequestCulture("en-US");
