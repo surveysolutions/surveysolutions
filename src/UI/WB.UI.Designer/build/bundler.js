@@ -19,27 +19,40 @@ const PRODUCTION = yargs.argv.production;
 const bundler = () => {
   return merge(
     config.bundle.map(bundle => {
+      const assets = bundle.assets;
+
       return merge(
-        src(bundle.inputFiles)
-          .pipe(filter("**/*.js"))
-          .pipe(gulpif(PRODUCTION, ngAnnotate()))
-          .pipe(gulpif(PRODUCTION, cache(terser({mangle: true, compress: true}))))
-          .pipe(concat(bundle.name + ".js"))
-          .pipe(gulpif(PRODUCTION, rev()))
-          .pipe(dest(join(config.dist, "js"))),
-        src(bundle.inputFiles)
-          .pipe(filter(["**/*.css", "**/*.less"]))
-          .pipe(less())
-          .pipe(concat(bundle.name + ".css"))
-          .pipe(gulpif(PRODUCTION, rev()))
-          .pipe(dest(join(config.dist, "css")))
+        [
+          src(bundle.inputFiles)
+            .pipe(filter("**/*.js"))
+            .pipe(gulpif(PRODUCTION, ngAnnotate()))
+            .pipe(gulpif(PRODUCTION,cache(terser({ mangle: true, compress: true }))))
+            .pipe(concat(bundle.name + ".js"))
+            .pipe(gulpif(PRODUCTION, rev()))
+            .pipe(dest(join(config.dist, "js"))),
+          src(bundle.inputFiles)
+            .pipe(filter(["**/*.css", "**/*.less"]))
+            .pipe(less())
+            .pipe(concat(bundle.name + ".css"))
+            .pipe(gulpif(PRODUCTION, rev()))
+            .pipe(dest(join(config.dist, "css"))),
+          assets == null
+            ? null
+            : merge(
+                assets.map(asset =>
+                  src(asset.glob)
+                    .pipe(dest(join(config.dist, asset.prefix)))
+                )
+              )
+        ].filter(x => x != null)
       );
     })
   );
 };
 
 const inject = () =>
-  injectSections(src(config.injectTargets), config.dist)
-    .pipe(dest(f => f.base));
+  injectSections(src(config.injectTargets), config.dist).pipe(
+    dest(f => f.base)
+  );
 
 export default series(bundler, inject);
