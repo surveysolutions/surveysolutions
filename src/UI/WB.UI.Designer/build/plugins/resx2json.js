@@ -1,7 +1,7 @@
-import PluginError from "plugin-error";
-import xmldoc from "xmldoc";
-import through2 from "through2";
-import { Buffer } from "buffer";
+const PluginError = require("plugin-error");
+const xmldoc = require("xmldoc");
+const through2 = require("through2");
+const Buffer = require("buffer").Buffer;
 
 const PLUGIN_NAME = "gulp-resx2json";
 

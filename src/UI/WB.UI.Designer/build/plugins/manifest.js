@@ -1,7 +1,7 @@
-import through2 from "through2";
-import Vinyl from "vinyl";
-import vinylFile from "vinyl-file";
-import path from "path";
+const through2 = require("through2");
+const Vinyl = require("vinyl");
+const vinylFile = require("vinyl-file");
+const path = require("path");
 
 const getManifestFile = opts =>
   vinylFile.read(opts.path, opts).catch(error => {
@@ -41,4 +41,4 @@ function manifest({ base }) {
   );
 }
 
-export default manifest;
+module.exports = manifest;

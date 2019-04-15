@@ -1,17 +1,19 @@
-import { join } from "path";
-import { src, dest, series } from "gulp";
-import cache from "gulp-cache";
-import concat from "gulp-concat";
-import filter from "gulp-filter";
-import gulpif from "gulp-if";
-import less from "gulp-less";
-import merge from "merge2";
-import rev from "gulp-rev";
-import terser from "gulp-terser";
-import config from "./config.json";
-import ngAnnotate from "gulp-ng-annotate";
+const join = require("path").join;
+const src = require("gulp").src;
+const dest = require("gulp").dest;
+const series = require("gulp").series;
+const cache = require("gulp-cache");
+const concat = require("gulp-concat");
+const filter = require("gulp-filter");
+const gulpif = require("gulp-if");
+const less = require("gulp-less");
+const merge = require("merge2");
+const rev = require("gulp-rev");
+const terser = require("gulp-terser");
+const config = require("./config.json");
+const ngAnnotate = require("gulp-ng-annotate");
 
-import { injectSections, PRODUCTION } from "./plugins/helpers";
+const { injectSections, PRODUCTION } = require("./plugins/helpers");
 
 const bundler = () =>
   merge(
@@ -55,4 +57,7 @@ const inject = () =>
     dest(f => f.base)
   );
 
-export default series(bundler, inject);
+module.exports = { 
+  default: series(bundler, inject),
+  inject, bundler
+}

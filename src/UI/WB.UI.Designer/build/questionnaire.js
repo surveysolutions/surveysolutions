@@ -1,34 +1,39 @@
-import { join } from "path";
-import { src, dest, parallel, series } from "gulp";
-import appendPrepend from "gulp-append-prepend";
-import cache from "gulp-cache";
-import concat from "gulp-concat";
-import gulpif from "gulp-if";
-import debug from "gulp-debug";
-import htmlmin from "gulp-htmlmin";
-import imagemin from "gulp-imagemin";
-import less from "gulp-less";
-import ngAnnotate from "gulp-ng-annotate";
-import gulpInject from "gulp-inject";
-import rename from "gulp-rename";
-import rev from "gulp-rev";
-import templateCache from "gulp-angular-templatecache";
-import terser from "gulp-terser";
+const join = require("path").join;
+const src = require("gulp").src;
+const dest = require("gulp").dest;
+const parallel = require("gulp").parallel;
+const series = require("gulp").series;
+const appendPrepend = require("gulp-append-prepend");
+const cache = require("gulp-cache");
+const concat = require("gulp-concat");
+const gulpif = require("gulp-if");
+const debug = require("gulp-debug");
+const htmlmin = require("gulp-htmlmin");
+const imagemin = require("gulp-imagemin");
+const less = require("gulp-less");
+const ngAnnotate = require("gulp-ng-annotate");
+const gulpInject = require("gulp-inject");
+const rename = require("gulp-rename");
+const rev = require("gulp-rev");
+const templateCache = require("gulp-angular-templatecache");
+const terser = require("gulp-terser");
 
-import manifest from "./plugins/manifest";
-import resx2json from "./plugins/resx2json";
+const manifest = require("./plugins/manifest");
+const resx2json = require("./plugins/resx2json");
 
-import { questionnaire, dist } from "./config.json";
-import { injectSections, PRODUCTION } from "./plugins/helpers";
+const questionnaire = require("./config.json").questionnaire;
+const dist = require("./config.json").dist;
+const injectSections = require("./plugins/helpers").injectSections;
+const PRODUCTION = require("./plugins/helpers").PRODUCTION;
 
-export const templates = () =>
+const templates = () =>
   src(questionnaire.htmls)
     .pipe(cache(htmlmin({ collapseWhitespace: false })))
     .pipe(templateCache({ root: "views" }))
     .pipe(gulpif(PRODUCTION, rev()))
     .pipe(dest(join(dist, "js")));
 
-export const ResourcesFromResx = () =>
+const ResourcesFromResx = () =>
   src(questionnaire.resources)
     .pipe(resx2json())
     .pipe(
@@ -44,19 +49,19 @@ export const ResourcesFromResx = () =>
     .pipe(manifest({ base: "/resx/" }))
     .pipe(dest("node_modules/.cache"));
 
-export const styles = () =>
+const styles = () =>
   src(questionnaire.markup)
     .pipe(appendPrepend.appendText('@icon-font-path: "/fonts/";'))
     .pipe(cache(less({ relativeUrls: true, rootpath: "/" })))
     .pipe(gulpif(PRODUCTION, rev()))
     .pipe(dest(join(dist, "css")));
 
-export const staticContent = () =>
+const staticContent = () =>
   src(questionnaire.static, { base: "questionnaire/content" })
     .pipe(gulpif(f => f.extname == ".png", cache(imagemin())))
     .pipe(dest(dist));
 
-export const scripts = () =>
+const scripts = () =>
   src(questionnaire.scripts)
     .pipe(gulpif(PRODUCTION, ngAnnotate()))
     .pipe(gulpif(PRODUCTION, cache(terser())))
@@ -64,24 +69,26 @@ export const scripts = () =>
     .pipe(gulpif(PRODUCTION, rev()))
     .pipe(dest(join(dist, "js")));
 
-export const inject = () =>
+const inject = () =>
   injectSections(src("questionnaire/index.cshtml"), dist, { quiet: true })
-  .pipe(
-    gulpInject(src("node_modules/.cache/rev-manifest.json"), {
-      name: "manifest",
-      transform(_, file) {
-        return (
-          "<script>window.localization = " +
-          file.contents.toString("utf8") +
-          "</script>"
-        );
-      }
-    })
-  )
-  .pipe(dest(f => f.base));
+    .pipe(
+      gulpInject(src("node_modules/.cache/rev-manifest.json"), {
+        name: "manifest",
+        transform(_, file) {
+          return (
+            "<script>window.localization = " +
+            file.contents.toString("utf8") +
+            "</script>"
+          );
+        }
+      })
+    )
+    .pipe(dest(f => f.base));
 
-export default series(
-  parallel(templates, styles, scripts, staticContent, ResourcesFromResx),
-  inject//,
-  //inject_manifest
-);
+module.exports = {
+  templates, styles, scripts, staticContent, ResourcesFromResx, inject,
+  default: series(
+    parallel(templates, styles, scripts, staticContent, ResourcesFromResx),
+    inject
+  )
+};
