@@ -3,7 +3,6 @@ using System.Linq;
 using FluentAssertions;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
 using WB.Core.Infrastructure.CommandBus;
-using WB.UI.Shared.Web.CommandDeserialization;
 
 namespace WB.Tests.Unit.Designer.Applications.CommandDeserializerTests
 {

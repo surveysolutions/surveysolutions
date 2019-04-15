@@ -5,7 +5,6 @@ using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
@@ -18,10 +17,6 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             request = Create.DownloadQuestionnaireRequest(questionnaireId);
-
-            var membershipUserService = Mock.Of<IMembershipUserService>(
-                _ => _.WebUser == Mock.Of<IMembershipWebUser>(u => u.UserId == userId));
-
             var questionnaireViewFactory = Mock.Of<IQuestionnaireViewFactory>(
                 _ => _.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) == Create.QuestionnaireView(userId));
 
@@ -33,7 +28,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
                 _ => _.CheckForErrors(Moq.It.IsAny<QuestionnaireView>()) ==
                      new[] {Create.VerificationError("code", "message") });
 
-            importController = CreateImportController(membershipUserService: membershipUserService,
+            importController = CreateImportController(
                 questionnaireViewFactory: questionnaireViewFactory,
                 engineVersionService: expressionsEngineVersionService,
                 questionnaireVerifier: questionnaireVerifier);

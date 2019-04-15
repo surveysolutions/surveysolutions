@@ -1,22 +1,19 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
-using System.Reflection;
-using Humanizer;
+using AutoFixture;
+using AutoFixture.AutoMoq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Moq;
 using Ncqrs;
-using NHibernate;
-using NHibernate.Cfg;
-using NHibernate.Cfg.MappingSchema;
-using NHibernate.Mapping.ByCode;
-using NHibernate.Tool.hbm2ddl;
-using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Classifications;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
@@ -31,15 +28,14 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
 using WB.Core.BoundedContexts.Designer.Implementation.Repositories;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V10.Templates;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Designer.Services.Accounts;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -67,11 +63,8 @@ using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
-using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 using WB.UI.Designer.Code;
-using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Models;
-using WB.UI.Designer.Services;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using Questionnaire = WB.Core.BoundedContexts.Designer.Aggregates.Questionnaire;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
@@ -84,10 +77,10 @@ namespace WB.Tests.Unit.Designer
 {
     internal static partial class Create
     {
-        public static User AccountDocument(string userName = "", Guid? userId = null)
-            => new User
+        public static DesignerIdentityUser AccountDocument(string userName = "", Guid? userId = null)
+            => new DesignerIdentityUser
             {
-                ProviderUserKey = userId ?? Guid.NewGuid(),
+                Id = userId ?? Guid.NewGuid(),
                 UserName = userName,
             };
 
@@ -163,7 +156,7 @@ namespace WB.Tests.Unit.Designer
 
         public static Group Chapter(string title = "Chapter X", Guid? chapterId = null, bool hideIfDisabled = false, IEnumerable<IComposite> children = null)
         {
-            return Abc.Create.Entity.Group(groupId: chapterId, title: title, hideIfDisabled: hideIfDisabled, children: children);
+            return Create.Group(groupId: chapterId, title: title, hideIfDisabled: hideIfDisabled, children: children);
         }
 
         public static Group Section(string title = "Section X", Guid? sectionId = null, IEnumerable<IComposite> children = null)
@@ -214,7 +207,7 @@ namespace WB.Tests.Unit.Designer
                 expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
                 lookupTableService ?? ServiceLocator.Current.GetInstance<ILookupTableService>(),
                 Mock.Of<IFileSystemAccessor>(),
-                Mock.Of<ICompilerSettings>());
+                Mock.Of<IOptions<CompilerSettings>>());
         }
 
         public static CodeGeneratorV2 CodeGeneratorV2()
@@ -599,7 +592,6 @@ namespace WB.Tests.Unit.Designer
         public static Questionnaire Questionnaire(IExpressionProcessor expressionProcessor = null, IQuestionnaireHistoryVersionsService historyVersionsService = null)
         {
             return new Questionnaire(
-                Mock.Of<ILogger>(),
                 Mock.Of<IClock>(),
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IAttachmentService>(),
@@ -634,7 +626,7 @@ namespace WB.Tests.Unit.Designer
                 ActionType = action ?? QuestionnaireActionType.Add,
                 TargetItemId = targetId ?? Guid.NewGuid(),
                 TargetItemType = targetType ?? QuestionnaireItemType.Section,
-                References = reference.ToHashSet(),
+                References = reference.ToImmutableHashSet(),
                 Sequence = sequence ?? 1,
                 ResultingQuestionnaireDocument = resultingQuestionnaireDocument,
                 Patch = diffWithPreviousVersion
@@ -1393,7 +1385,7 @@ namespace WB.Tests.Unit.Designer
             SharedPerson[] sharedPersons = null)
         {
             return new QuestionnaireListViewItem() {
-                CreatedBy = createdBy,
+                CreatedBy = createdBy.GetValueOrDefault(),
                 IsPublic = isPublic,
                 PublicId = id,
                 SharedPersons = new HashSet<SharedPerson>(sharedPersons ?? Enumerable.Empty<SharedPerson>())
@@ -1405,11 +1397,6 @@ namespace WB.Tests.Unit.Designer
 
         public static HistoryPostProcessor HistoryPostProcessor() => 
             new HistoryPostProcessor();
-
-        public static CustomWebApiAuthorizeFilter CustomWebApiAuthorizeFilter()
-        {
-            return new CustomWebApiAuthorizeFilter();
-        }
 
         public static DynamicCompilerSettingsProvider DynamicCompilerSettingsProvider()
         {
@@ -1473,11 +1460,6 @@ namespace WB.Tests.Unit.Designer
             return new QuestionTypeToCSharpTypeMapper();
         }
 
-        public static JsonFormatter JsonFormatter(Version hqVersion)
-        {
-            return new JsonFormatter(new Func<Version>(() => hqVersion));
-        }
-
         private static string GetNameForEntity(string prefix, Guid entityId)
         {
             var name = prefix + "_" + entityId.ToString("N");
@@ -1485,11 +1467,6 @@ namespace WB.Tests.Unit.Designer
                 return name.Substring(0, 32);
 
             return name;
-        }
-
-        public static IAccountRepository AccountRepository()
-        {
-            return Mock.Of<IAccountRepository>();
         }
 
         public static IPatchGenerator PatchGenerator()
@@ -1517,13 +1494,6 @@ namespace WB.Tests.Unit.Designer
                 unitOfWork ?? Mock.Of<IUnitOfWork>());
         }
 
-        public static IMembershipUserService MembershipUserService(Guid userId, bool isAdmin = false)
-        {
-            return Mock.Of<IMembershipUserService>(
-                _ => _.WebUser == Mock.Of<IMembershipWebUser>(u => u.UserId == userId && u.IsAdmin == isAdmin)
-                     && _.WebServiceUser == Mock.Of<IMembershipWebServiceUser>(u => u.UserId == userId && u.IsAdmin == isAdmin));
-        }
-
         public static IPlainStorageAccessor<ClassificationEntity> ClassificationsAccessor(params ClassificationEntity[] entities)
         {
             var storage = new TestPlainStorage<ClassificationEntity>();
@@ -1533,12 +1503,12 @@ namespace WB.Tests.Unit.Designer
 
         public static PublicFoldersStorage PublicFoldersStorage(IPlainStorageAccessor<QuestionnaireListViewFolder> folderStorage = null,
             IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireStorage = null,
-            IPlainStorageAccessor<User> accountStorage = null)
+            IPlainStorageAccessor<DesignerIdentityUser> accountStorage = null)
         {
             return new PublicFoldersStorage(
                 folderStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireListViewFolder>>(),
                 questionnaireStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireListViewItem> >(),
-                accountStorage ?? Mock.Of<IPlainStorageAccessor<User>>()
+                accountStorage ?? Mock.Of<IPlainStorageAccessor<DesignerIdentityUser>>()
                 );
         }
 
@@ -1550,6 +1520,23 @@ namespace WB.Tests.Unit.Designer
                 PublicId = id ?? Guid.NewGuid(),
                 Title = title
             };
+        }
+
+        public static Fixture AutoFixture()
+        {
+            var autoFixture = new Fixture();
+            autoFixture.Customize(new AutoMoqCustomization());
+            return autoFixture;
+        }
+
+        public static DesignerDbContext InMemoryDbContext()
+        {
+            var options = new DbContextOptionsBuilder<DesignerDbContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString("N"))
+                .Options;
+            var dbContext = new DesignerDbContext(options);
+
+            return dbContext;
         }
     }
 }

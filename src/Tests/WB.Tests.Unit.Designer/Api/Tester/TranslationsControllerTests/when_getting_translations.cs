@@ -10,8 +10,7 @@ using WB.Core.Infrastructure.Implementation;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
-using WB.Tests.Abc;
-using WB.UI.Designer.Api.Tester;
+using WB.UI.Designer.Controllers.Api.Tester;
 
 namespace WB.Tests.Unit.Designer.Api.Tester.TranslationsControllerTests
 {

@@ -27,7 +27,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public CommandInflater(
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
             DesignerDbContext dbContext,
-            UserManager<DesignerIdentityUser> userManager,
             IClassificationsStorage classificationsStorage,
             ILoggedInUser user,
             IIdentityService identityService)

@@ -3,6 +3,7 @@ using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.UI.Designer.Api.Tester;
+using WB.UI.Designer.Controllers.Api.Tester;
 
 namespace WB.Tests.Unit.Designer.Api.Tester.TranslationsControllerTests
 {
