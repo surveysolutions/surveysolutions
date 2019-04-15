@@ -1,6 +1,5 @@
 ﻿using Moq;
 using NSubstitute;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -15,7 +14,6 @@ namespace WB.Tests.Unit.Designer.Api.Headquarters.QuestionnairesControllerTests
     {
         protected static HQQuestionnairesController CreateQuestionnairesController(
             IQuestionnaireViewFactory questionnaireViewFactory = null,
-            IMembershipUserService membershipUserService = null,
             IDesignerEngineVersionService engineVersionService = null,
             IQuestionnaireVerifier questionnaireVerifier = null,
             IExpressionProcessorGenerator expressionProcessorGenerator=null,
@@ -26,7 +24,6 @@ namespace WB.Tests.Unit.Designer.Api.Headquarters.QuestionnairesControllerTests
             IQuestionnaireCompilationVersionService questionnaireCompilationVersionService = null)
         {
             return new HQQuestionnairesController(
-                userHelper: membershipUserService ?? Mock.Of<IMembershipUserService>(),
                 questionnaireViewFactory: questionnaireViewFactory ?? Mock.Of<IQuestionnaireViewFactory>(),
                 viewFactory: Mock.Of<IQuestionnaireListViewFactory>(),
                 questionnaireVerifier: questionnaireVerifier ?? Mock.Of<IQuestionnaireVerifier>(),

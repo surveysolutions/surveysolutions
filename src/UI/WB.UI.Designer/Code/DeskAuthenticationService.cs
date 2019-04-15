@@ -11,7 +11,7 @@ using WB.UI.Designer.Services;
 
 namespace WB.UI.Designer.Code
 {
-    internal class DeskAuthenticationService : IDeskAuthenticationService
+    public class DeskAuthenticationService : IDeskAuthenticationService
     {
         private readonly IOptions<DeskSettings> deskSettings;
 

@@ -3,27 +3,26 @@ using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Classifications;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.UI.Designer.Code.Implementation;
 
 namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
 {
     internal class CommandInflaterTestsContext
     {
         protected static CommandInflater CreateCommandInflater(
-            IMembershipUserService userHelper = null,
             IPlainKeyValueStorage<QuestionnaireDocument> storage = null,
             IPlainStorageAccessor<QuestionnaireListViewItem> listViewItems = null,
-            IClassificationsStorage classificationsStorage = null)
+            IClassificationsStorage classificationsStorage = null,
+            DesignerDbContext dbContext = null)
         {
             return new CommandInflater(
-                userHelper ?? Mock.Of<IMembershipUserService>(),
                 storage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(),
-                listViewItems ?? Mock.Of<IPlainStorageAccessor<QuestionnaireListViewItem>>(),
-                Create.AccountRepository(),
-                classificationsStorage ?? Mock.Of<IClassificationsStorage>());
+                dbContext ?? Create.InMemoryDbContext(),
+                classificationsStorage ?? Mock.Of<IClassificationsStorage>(),
+                Mock.Of<ILoggedInUser>(),
+                Mock.Of<IIdentityService>());
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocument(Guid questoinnaireId, string title, Guid creator, bool isPublic = true)

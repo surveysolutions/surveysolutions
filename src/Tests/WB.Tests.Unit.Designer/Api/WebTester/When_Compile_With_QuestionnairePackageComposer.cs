@@ -14,6 +14,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.Tests.Abc;
 using WB.UI.Designer.Api.WebTester;
+using WB.UI.Designer.Controllers.Api.WebTester;
 
 namespace WB.Tests.Unit.Designer.Api.WebTester
 {
@@ -30,7 +31,7 @@ namespace WB.Tests.Unit.Designer.Api.WebTester
         [SetUp]
         public void Arrange()
         {
-            fixture = Abc.Create.Other.AutoFixture();
+            fixture = Create.AutoFixture();
             document = Create.QuestionnaireDocumentWithOneChapter(Id.gA, Create.NumericIntegerQuestion());
             questionnaireView = Create.QuestionnaireView(document);
 
