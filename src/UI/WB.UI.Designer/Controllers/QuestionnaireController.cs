@@ -251,7 +251,7 @@ namespace WB.UI.Designer.Controllers
                     this.Success(string.Format(Resources.QuestionnaireController.SuccessDeleteMessage, model.Title));
                 }
             }
-            return this.RedirectToAction("My");
+            return this.RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -263,7 +263,7 @@ namespace WB.UI.Designer.Controllers
             if (!hasAccess)
             {
                 this.Error(Resources.QuestionnaireController.ForbiddenRevert);
-                return this.RedirectToAction("My");
+                return this.RedirectToAction("Index");
             }
 
             var command = new RevertVersionQuestionnaire(id, historyReferenceId, this.User.GetId());
@@ -286,7 +286,7 @@ namespace WB.UI.Designer.Controllers
             if (!hasAccess)
             {
                 this.Error(ErrorMessages.NoAccessToQuestionnaire);
-                return this.RedirectToAction("My");
+                return this.RedirectToAction("Index");
             }
             var questionnaireInfoView = this.questionnaireInfoViewFactory.Load(id.FormatGuid(), this.User.GetId());
 
@@ -307,7 +307,7 @@ namespace WB.UI.Designer.Controllers
         public IActionResult LackOfPermits()
         {
             this.Error(Resources.QuestionnaireController.Forbidden);
-            return this.RedirectToAction("My");
+            return this.RedirectToAction("Index");
         }
 
         [HttpPost]

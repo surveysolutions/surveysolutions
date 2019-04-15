@@ -1,4 +1,4 @@
-@using System.Globalization
+﻿@using System.Globalization
 @using Microsoft.Extensions.Options
 @using WB.UI.Designer.Areas.Admin.Pages
 @using WB.UI.Designer.Code
@@ -60,12 +60,12 @@
                         <img src="~/i/logo.png" alt="Survey Solutions" class="pull-left">
                         <span class="pull-left">Survey<br>Solutions</span>
                     </a>
-                    @Html.ActionLink(QuestionnaireController.Designer, "My", "Questionnaire", null, new { @class = "navbar-text" })
+                    @Html.ActionLink(QuestionnaireController.Designer, "Index", "Questionnaire", null, new { @class = "navbar-text" })
                 </div>
 
                 <ul class="nav nav-tabs">
 
-                    @Html.MenuActionLink(ViewContext, QuestionnaireController.MyQuestionnaires, "My", "Questionnaire", "presentation")
+                    @Html.MenuActionLink(ViewContext, QuestionnaireController.MyQuestionnaires, "Index", "Questionnaire", "presentation")
                     @Html.MenuActionLink(ViewContext, QuestionnaireController.SharedQuestionnaires, "Shared", "Questionnaire", "presentation")
                     @Html.MenuActionLink(ViewContext, QuestionnaireController.PublicQuestionnaires, "Public", "Questionnaire", "presentation")
                     @Html.MenuActionLink(ViewContext, QuestionnaireController.Classifications, "Index", "Classifications", "presentation")

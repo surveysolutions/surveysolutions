@@ -2,7 +2,6 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
-using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
@@ -12,7 +11,7 @@ namespace WB.UI.Designer.Controllers
 {
     public partial class QuestionnaireController
     {
-        public ActionResult My(int? p, string sb, int? so, string f)
+        public ActionResult Index(int? p, string sb, int? so, string f)
             => this.View(this.GetQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f, type: QuestionnairesType.My, folderId: null));
 
         public ActionResult Public(int? p, string sb, int? so, string f, Guid? id)

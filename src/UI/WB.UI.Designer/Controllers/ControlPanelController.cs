@@ -2,50 +2,53 @@
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using System.Web.Mvc;
-using System.Web.Security;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using StackExchange.Exceptional;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.AllowedAddresses;
-using WB.UI.Designer.Models;
+using WB.UI.Designer.Code;
+using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models.ControlPanel;
-using WB.UI.Shared.Web.Filters;
-using WB.UI.Shared.Web.Settings;
 
 namespace WB.UI.Designer.Controllers
 {
-    [ControlPanelAccess]
-    public class ControlPanelController : BaseController
+    [Authorize(Roles = "Administrator")]
+    [ServiceFilter(typeof(LocalOrDevelopmentAccessOnlyAttribute))]
+    public class ControlPanelController : Controller
     {
-        readonly ISettingsProvider settingsProvider;
+        private readonly UserManager<DesignerIdentityUser> users;
+        private readonly IConfiguration configuration;
         private readonly IAllowedAddressService allowedAddressService;
         private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersionService;
 
         public ControlPanelController(
-            IMembershipUserService userHelper, 
-            ISettingsProvider settingsProvider, 
+            UserManager<DesignerIdentityUser> users,
+            IConfiguration configuration, 
             IAllowedAddressService allowedAddressService, 
             IQuestionnaireCompilationVersionService questionnaireCompilationVersionService)
-            : base(userHelper)
         {
-            this.settingsProvider = settingsProvider;
+            this.users = users;
+            this.configuration = configuration;
             this.allowedAddressService = allowedAddressService;
             this.questionnaireCompilationVersionService = questionnaireCompilationVersionService;
         }
 
-        public ActionResult Settings() => this.View(this.settingsProvider.GetSettings().OrderBy(setting => setting.Name));
+        public ActionResult Settings()
+            => this.View(this.configuration.AsEnumerable().OrderBy(setting => setting.Key));
 
         public ActionResult Index() => this.View();
-
-        public ActionResult NConfig() => this.View();
 
         public ActionResult Versions() => this.View();
 
         public ActionResult MakeAdmin() => this.View();
 
-        public ActionResult CompilationVersions() => this.View("CompilationVersionsViews/CompilationVersions", this.questionnaireCompilationVersionService.GetCompilationVersions());
+        public ActionResult CompilationVersions() 
+            => this.View("CompilationVersionsViews/CompilationVersions", this.questionnaireCompilationVersionService.GetCompilationVersions());
 
         [HttpPost]
         public ActionResult RemoveCompilationVersion(Guid questionnaireId)
@@ -54,10 +57,7 @@ namespace WB.UI.Designer.Controllers
             return RedirectToAction("CompilationVersions");
         }
 
-        public ActionResult AddCompilationVersion()
-        {
-            return this.View("CompilationVersionsViews/AddCompilationVersion", new CompilationVersionModel());
-        }
+        public ActionResult AddCompilationVersion() => this.View("CompilationVersionsViews/AddCompilationVersion", new CompilationVersionModel());
 
         [HttpPost]
         public ActionResult AddCompilationVersion(CompilationVersionModel model)
@@ -102,98 +102,96 @@ namespace WB.UI.Designer.Controllers
             return this.View("CompilationVersionsViews/EditCompilationVersion", model);
         }
 
-        public ActionResult AllowesAddresses() => this.View(this.allowedAddressService.GetAddresses());
+        public ActionResult AllowedAddresses() => this.View(this.allowedAddressService.GetAddresses());
 
 
         [HttpPost]
-        public ActionResult RemoveAllowesAddress(int id)
+        public ActionResult RemoveAllowedAddress(int id)
         {
             this.allowedAddressService.Remove(id);
-            return RedirectToAction("AllowesAddresses");
+            return RedirectToAction("AllowedAddresses");
         }
 
-        public ActionResult AddAllowesAddress()
+        public ActionResult AddAllowedAddress()
         {
             return this.View(new AllowedAddressModel());
         }
 
         [HttpPost]
-        public ActionResult AddAllowesAddress(AllowedAddressModel model)
+        public ActionResult AddAllowedAddress(AllowedAddressModel model)
         {
             if (ModelState.IsValid)
             {
+                // just check if ip address
+                var ip = IPAddress.Parse(model.Address);
                 this.allowedAddressService.Add(new AllowedAddress
                 {
                     Description = model.Description,
-                    Address = IPAddress.Parse(model.Address)
+                    Address = ip.ToString()
                 });
-                return RedirectToAction("AllowesAddresses");
+                return RedirectToAction("AllowedAddresses");
             }
             return this.View(model);
         }
 
-        public ActionResult EditAllowesAddress(int id)
+        public ActionResult EditAllowedAddress(int id)
         {
             var address = this.allowedAddressService.GetAddressById(id);
             return this.View(new AllowedAddressModel
             {
                 Id = address.Id,
                 Description = address.Description,
-                Address = address.Address.ToString()
+                Address = address.Address
             });
         }
 
         [HttpPost]
-        public ActionResult EditAllowesAddress(AllowedAddressModel model)
+        public ActionResult EditAllowedAddress(AllowedAddressModel model)
         {
             if (ModelState.IsValid)
             {
+                // just check if ip address
+                var ip = IPAddress.Parse(model.Address);
                 this.allowedAddressService.Update(new AllowedAddress
                 {
                     Id = model.Id,
                     Description = model.Description,
-                    Address = IPAddress.Parse(model.Address)
+                    Address = ip.ToString()
                 });
-                return RedirectToAction("AllowesAddresses");
+                return RedirectToAction("AllowedAddresses");
             }
             return this.View(model);
         }
 
 
         [HttpPost]
-        public ActionResult MakeAdmin(MakeAdminViewModel model)
+        public async Task<IActionResult> MakeAdmin(MakeAdminViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var account = Membership.GetUser(model.Login);
+                var account = await users.FindByLoginAsync(null, model.Login);
                 if (account == null)
-                {
-                    this.Error(string.Format("Account '{0}' does not exists", model.Login));
-                }
+                    this.Error($"Account '{model.Login}' does not exists");
                 else
                 {
                     if (model.IsAdmin)
                     {
-                        if (Roles.IsUserInRole(model.Login, UserHelper.ADMINROLENAME))
-                        {
-                            this.Error(string.Format("Account '{0}' has administrator role", model.Login));
-                        }
+                        if (!await users.IsInRoleAsync(account, "Administrator"))
+                            this.Error($"Account '{model.Login}' has administrator role");
                         else
                         {
-                            Roles.AddUserToRole(account.ProviderUserKey.ToString(), UserHelper.ADMINROLENAME);
-                            this.Success(string.Format("Administrator role for '{0}' successfully added", model.Login));   
+                            await users.AddToRoleAsync(account, "Administrator");
+                            this.Success($"Administrator role for '{model.Login}' successfully added");   
                         }
                     }
                     else
                     {
-                        if (!Roles.IsUserInRole(model.Login, UserHelper.ADMINROLENAME))
-                        {
-                            this.Error(string.Format("Account '{0}' is not in administrator role", model.Login));
-                        }
+                        if (!await users.IsInRoleAsync(account, "Administrator"))
+                            this.Error($"Account '{model.Login}' is not in administrator role");
                         else
                         {
-                            Roles.RemoveUserFromRole(model.Login, UserHelper.ADMINROLENAME);
-                            this.Success(string.Format("Administrator role for '{0}' successfully removed", model.Login));    
+                            await users.RemoveFromRoleAsync(account, "Administrator");
+                            this.Success($"Administrator role for '{model.Login}' successfully removed");    
                         }
                     }
                 }
@@ -202,6 +200,6 @@ namespace WB.UI.Designer.Controllers
             return this.View();
         }
 
-        public Task Exceptions() => ExceptionalModule.HandleRequestAsync(System.Web.HttpContext.Current);
+        public async Task Exceptions() => await ExceptionalMiddleware.HandleRequestAsync(HttpContext);
     }
 }
