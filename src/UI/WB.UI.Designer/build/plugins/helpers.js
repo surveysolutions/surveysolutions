@@ -1,10 +1,11 @@
-import glob from "glob";
-import { basename, extname } from "path";
-import gulpInject from "gulp-inject";
-import { src } from "gulp";
-import yargs from "yargs";
+const glob = require("glob");
+const basename = require("path").basename;
+const extname = require("path").extname;
+const gulpInject = require("gulp-inject");
+const src = require("gulp").src;
+const yargs = require("yargs");
 
-function flattenObject(ob) {
+function flattenObject(ob, delimiter = ".", defaultAsRoot = false) {
   var toReturn = {};
 
   for (var i in ob) {
@@ -15,7 +16,11 @@ function flattenObject(ob) {
       for (var x in flatObject) {
         if (!flatObject.hasOwnProperty(x)) continue;
 
-        toReturn[i + "." + x] = flatObject[x];
+        if (defaultAsRoot && x == 'default') {
+          toReturn[i] = flatObject[x];
+        } else {
+          toReturn[i + delimiter + x] = flatObject[x];
+        }
       }
     } else {
       toReturn[i] = ob[i];
@@ -39,7 +44,7 @@ const doInject = function(name, distFolder, options) {
   return gulpInject(src(source, { read: false }), opts);
 };
 
-export const injectSections = (pipe, distFolder, options = {}) => {
+exports.injectSections = (pipe, distFolder, options = {}) => {
   getSectionsList(distFolder).forEach(section => {
     pipe = pipe.pipe(doInject(section, distFolder, options));
   });
@@ -47,7 +52,7 @@ export const injectSections = (pipe, distFolder, options = {}) => {
   return pipe;
 };
 
-export const PRODUCTION = yargs.argv.production;
+exports.PRODUCTION = yargs.argv.production;
 
 function getSectionsList(distFolder) {
   const items = glob.sync(distFolder + "/**/*.{js,css}");
@@ -66,4 +71,4 @@ function getSectionsList(distFolder) {
   return Array.from(set);
 }
 
-export const flatten = flattenObject; //(obj) => Object.values(flattenObject(obj));
+exports.flatten = flattenObject; //(obj) => Object.values(flattenObject(obj));

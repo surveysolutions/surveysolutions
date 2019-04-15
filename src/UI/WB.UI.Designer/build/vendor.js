@@ -1,22 +1,23 @@
-import { join } from "path";
-import { src, dest, parallel } from "gulp";
-import autoprefixer from "autoprefixer";
-import cache from "gulp-cache";
-import cleanCss from "gulp-clean-css";
-import merge from "merge2";
-import concat from "gulp-concat";
-import filter from "gulp-filter";
-import gulpif from "gulp-if";
-import imagemin from "gulp-imagemin";
-import postcss from "gulp-postcss";
-import rev from "gulp-rev";
-import sourcemaps from "gulp-sourcemaps";
-import terser from "gulp-terser";
+const join = require("path").join;
+const src = require("gulp").src;
+const dest = require("gulp").dest;
+const parallel = require("gulp").parallel;
+const autoprefixer = require("autoprefixer");
+const cache = require("gulp-cache");
+const cleanCss = require("gulp-clean-css");
+const merge = require("merge2");
+const concat = require("gulp-concat");
+const filter = require("gulp-filter");
+const gulpif = require("gulp-if");
+const imagemin = require("gulp-imagemin");
+const postcss = require("gulp-postcss");
+const rev = require("gulp-rev");
+const sourcemaps = require("gulp-sourcemaps");
+const terser = require("gulp-terser");
+const config = require("./config.json");
+const PRODUCTION = require("./plugins/helpers").PRODUCTION;
 
-import config from "./config.json";
-import { PRODUCTION } from "./plugins/helpers"
-
-export const bowerCss = () =>
+const bowerCss = () =>
   src(config.vendor.files)
     .pipe(filter(["**/*.css"]))
     .pipe(gulpif(!PRODUCTION, sourcemaps.init()))
@@ -27,7 +28,7 @@ export const bowerCss = () =>
     .pipe(gulpif(PRODUCTION, rev()))
     .pipe(dest(join(config.dist, "css")));
 
-export const bowerJs = () =>
+const bowerJs = () =>
   src(config.vendor.files)
     .pipe(filter(["**/*.js"]))
     .pipe(gulpif(PRODUCTION, cache(terser())))
@@ -35,18 +36,18 @@ export const bowerJs = () =>
     .pipe(gulpif(PRODUCTION, rev()))
     .pipe(dest(join(config.dist, "js")));
 
-export const bowerImages = () =>
+const bowerImages = () =>
   src(config.vendor.files)
     .pipe(filter(["**/*.png"]))
     .pipe(gulpif(PRODUCTION, rev()))
     .pipe(dest(join(config.dist, "images")));
 
-export const favicons = () =>
+const favicons = () =>
   src(config.vendor.favicons)
     .pipe(cache(imagemin()))
     .pipe(dest(config.dist));
 
-export const assets = () =>
+const assets = () =>
   merge(
     src(config.assets.images)
       .pipe(cache(imagemin()))
@@ -54,4 +55,14 @@ export const assets = () =>
     src(config.assets.fonts).pipe(dest(join(config.dist, "fonts")))
   );
 
-export default parallel(bowerJs, favicons, bowerCss, bowerImages, assets);
+module.exports = {
+  
+  assets, favicons, bowerCss, bowerImages, bowerJs, assets,
+  default:  parallel(
+    bowerJs,
+    favicons,
+    bowerCss,
+    bowerImages,
+    assets
+  )
+}
