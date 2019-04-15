@@ -10,7 +10,7 @@
     <!-- endinject -->
 }
 @section Scripts {
-
+    
     <!-- list:js -->
     <script src="/js/list.js"></script>
     <!-- endinject -->
@@ -27,7 +27,7 @@
 
         Vue.use(ClassificationsConfig,
             {
-                isAdmin: @User.IsAdmin(),
+                isAdmin: @User.IsAdmin().ToString().ToLower(),
                 userId: '@User.GetUserName()',
                 optionsParseRegex: new RegExp(/^(.+?)[\…\.\s]+([-+]?\d+)\s*$/)
             });

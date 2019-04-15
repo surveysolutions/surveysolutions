@@ -29,7 +29,7 @@ namespace WB.UI.Designer.Api.Designer
 
     [ResponseCache(NoStore = true)]
     [Authorize]
-    [Route("api")]
+    [Route("classifications/api")]
     [ClassificationsExceptionFilter]
     public class ClassificationsController : Controller
     {
@@ -64,56 +64,56 @@ namespace WB.UI.Designer.Api.Designer
 
         [HttpGet]
         [Route("classification/{id}/categories")]
-        public Task<List<Category>> Categories([FromQueryAttribute] Guid id)
+        public Task<List<Category>> Categories(Guid id)
         {
             return classificationsStorage.GetCategories(id);
         }
 
         [HttpPatch]
         [Route("classification/{id}")]
-        public Task UpdateClassification(Classification classification)
+        public Task UpdateClassification([FromBody] Classification classification)
         {
             return classificationsStorage.UpdateClassification(classification, User.GetId(), User.IsAdmin());
         }
 
         [HttpPost]
         [Route("classification")]
-        public Task CreateClassification(Classification classification)
+        public Task CreateClassification([FromBody] Classification classification)
         {
             return classificationsStorage.CreateClassification(classification, User.GetId());
         }
 
         [HttpDelete]
         [Route("classification/{id}")]
-        public Task DeleteClassification([FromQueryAttribute] Guid id)
+        public Task DeleteClassification(Guid id)
         {
             return classificationsStorage.DeleteClassification(id, User.GetId(), User.IsAdmin());
         }
 
         [HttpPatch]
         [Route("group/{id}")]
-        public Task UpdateClassificationGroup([FromQueryAttribute] Guid id, ClassificationGroup group)
+        public Task UpdateClassificationGroup(Guid id, [FromBody] ClassificationGroup group)
         {
             return classificationsStorage.UpdateClassificationGroup(group, User.IsAdmin());
         }
 
         [HttpPost]
         [Route("group")]
-        public Task CreateClassificationGroup(ClassificationGroup group)
+        public Task CreateClassificationGroup([FromBody] ClassificationGroup group)
         {
             return classificationsStorage.CreateClassificationGroup(group, User.IsAdmin());
         }
 
         [HttpDelete]
         [Route("group/{id}")]
-        public Task DeleteClassificationGroup([FromQueryAttribute] Guid id)
+        public Task DeleteClassificationGroup(Guid id)
         {
             return classificationsStorage.DeleteClassificationGroup(id, User.IsAdmin());
         }
 
         [HttpPost]
         [Route("classification/{id}/categories")]
-        public Task UpdateCategories([FromQueryAttribute] Guid id, Category[] categories)
+        public Task UpdateCategories(Guid id, [FromBody] Category[] categories)
         {
             return classificationsStorage.UpdateCategories(id, categories, User.GetId(), User.IsAdmin());
         }
