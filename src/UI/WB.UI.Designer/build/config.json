@@ -134,23 +134,23 @@
         "node_modules/jquery-validation/dist/jquery.validate.js",
         "Scripts/custom/jquery.validate.unobtrusive-custom-for-bootstrap.js",
         "Scripts/custom/bootstrap3-unobtrusive-hack.js",
-        "node_modules/bootstrap-select/dist/js/bootstrap-select.min.js",
+        "node_modules/bootstrap-select/dist/js/bootstrap-select.js",
         "node_modules/bootstrap-select/dist/css/bootstrap-select.min.css"
       ]
     },
     {
       "name": "simplepage",
       "inputFiles": [
-        "node_modules/jquery/dist/jquery.min.js",
-        "node_modules/bootstrap/dist/js/bootstrap.min.js"
+        "node_modules/jquery/dist/jquery.js",
+        "node_modules/bootstrap/dist/js/bootstrap.js"
       ]
     },
     {
       "name": "folders",
       "inputFiles": [
-        "node_modules/jquery.fancytree/dist/jquery.fancytree-all-deps.min.js",
+        "node_modules/jquery.fancytree/dist/jquery.fancytree-all-deps.js",
         "questionnaire/external/jquery.fancytree.contextMenu.js",
-        "node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.js",
+        "node_modules/jquery-contextmenu/dist/jquery.contextMenu.js",
         "Content/plugins/bootbox.min.js",
         "Scripts/custom/public-folders.js",
         "node_modules/jquery.fancytree/dist/skin-bootstrap/ui.fancytree.min.css",
@@ -171,9 +171,9 @@
         "node_modules/es6-promise/dist/es6-promise.auto.js",
         "node_modules/vue/dist/vue.js",
         "node_modules/vuex/dist/vuex.js",
-        "node_modules/vee-validate/dist/vee-validate.minimal.js",
+        "node_modules/vee-validate/dist/vee-validate.js",
         "node_modules/axios/dist/axios.js",
-        "node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.js",
+        "node_modules/jquery-contextmenu/dist/jquery.contextMenu.js",
         "node_modules/jquery.ui.position/jquery-ui.js",
         "node_modules/lodash/lodash.js"
       ]
