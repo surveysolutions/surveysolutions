@@ -885,7 +885,7 @@ table.table-header.page-with-breadcrumbs {
     cursor: pointer;
     width: 24px;
     height: 18px;
-    background: transparent url("images/chekboxes2k.png") no-repeat;
+    background: transparent url("../images/chekboxes2k.png") no-repeat;
     background-size: 68px 350px;
     background-position: 0 0px;
 }
