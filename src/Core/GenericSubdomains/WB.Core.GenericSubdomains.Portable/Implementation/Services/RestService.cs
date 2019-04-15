@@ -92,10 +92,6 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
             var fullUrl = new Url(this.restServiceSettings.Endpoint, url, queryString);
 
-            //var httpMessageHandler = httpClientFactory.CreateMessageHandler();
-            //HttpClient httpClient = httpClientFactory.CreateClient(httpMessageHandler, httpStatistician);
-            //httpClient.Timeout = this.restServiceSettings.Timeout;
-
             var request = new HttpRequestMessage()
             {
                 RequestUri = new Uri(fullUrl.ToString()),
@@ -111,7 +107,17 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             {
                 if (customHeaders != null && customHeaders.TryGetValue("If-None-Match", out var etag))
                 {
-                    request.Headers.IfNoneMatch.Add(new EntityTagHeaderValue($@"""{etag}"""));
+                    string tag;
+                    if (etag.Length > 0 && etag[0] == '"' && etag[etag.Length - 1] == '"')
+                    {
+                        tag = etag;
+                    }
+                    else
+                    {
+                        tag = $@"""{etag}""";
+                    }
+
+                    request.Headers.IfNoneMatch.Add(new EntityTagHeaderValue(tag));
                     customHeaders.Remove("If-None-Match");
                 }
 
