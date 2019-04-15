@@ -22,6 +22,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         }
 
         [HttpGet]
+        [Route("api/findReplace/findAll")]
         public IActionResult FindAll(Guid id, string searchFor, bool matchCase, bool matchWholeWord, bool useRegex)
         {
             if (searchFor?.Length > SearchForAllowedLength)
