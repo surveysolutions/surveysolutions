@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.AllowedAddresses;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 
 namespace WB.Core.BoundedContexts.Designer.MembershipProvider
 {
@@ -40,6 +41,8 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
         public DbSet<ClassificationEntity> ClassificationEntities { get; set; }
 
         public DbSet<QuestionnaireChangeRecord> QuestionnaireChangeRecords { get; set; }
+
+        public DbSet<SharedPerson> SharedPersons { get; set; }
 
         public DbSet<QuestionnaireCompilationVersion> QuestionnaireCompilationVersions { get; set; }
 
