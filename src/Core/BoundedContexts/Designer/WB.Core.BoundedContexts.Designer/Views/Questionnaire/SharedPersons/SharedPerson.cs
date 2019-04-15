@@ -9,7 +9,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons
         public int Id { get; set; }
 
         public virtual string QuestionnaireId { get; set; }
-        public virtual string UserId { get; set; }
+        public virtual Guid UserId { get; set; }
         public virtual string Email { get; set; }
         public virtual ShareType ShareType { set; get; }
         public virtual bool IsOwner { get; set; }

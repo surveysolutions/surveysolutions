@@ -42,7 +42,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         public List<CommentThread> commentThreads(Guid id)
         {
             bool hasAccess = User.IsAdmin() || 
-                             this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id, this.User.GetId().FormatGuid());
+                             this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id, this.User.GetId());
 
             return hasAccess ? this.commentsService.LoadCommentThreads(id) : new List<CommentThread>();
         }
@@ -51,7 +51,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         [Route("entity/{itemId:Guid}/comments")]
         public List<CommentView> Get(Guid id, Guid itemId)
         {
-            bool hasAccess = User.IsAdmin() || this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id, User.GetId().FormatGuid());
+            bool hasAccess = User.IsAdmin() || this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id, User.GetId());
             return hasAccess ? this.commentsService.LoadCommentsForEntity(id, itemId) : new List<CommentView>();
         }
 
@@ -66,7 +66,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                     Error = string.Join(", ", ModelState.SelectMany(x => x.Value.Errors).Select(x => x.ErrorMessage))
                 });
             }
-            bool hasAccess = User.IsAdmin() || this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id, User.GetId().FormatGuid());
+            bool hasAccess = User.IsAdmin() || this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id, User.GetId());
             if (!hasAccess)
             {
                 return Json(new

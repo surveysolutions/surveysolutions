@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Extensions;
@@ -70,11 +71,11 @@ namespace WB.UI.Designer.Areas.Admin.Pages
 
         public AccountViewModel Account { get; private set; }
 
-        public async Task<IActionResult> OnGetAsync(string id)
+        public async Task<IActionResult> OnGetAsync(Guid id)
         {
             this.Account = new AccountViewModel();
             
-            var account = await this.users.FindByIdAsync(id);
+            var account = await this.users.FindByIdAsync(id.FormatGuid());
             if (account == null) return NotFound();
 
             var ownedQuestionnaires = this.questionnaireHelper.GetMyQuestionnairesByViewerId(viewerId: id,
@@ -100,7 +101,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
 
             var accountViewModel = new AccountViewModel
             {
-                Id = account.Id.AsGuid(),
+                Id = account.Id,
                 CreationDate = account.CreatedAtUtc.ToUIString(),
                 Email = account.Email,
                 IsApproved = account.EmailConfirmed,

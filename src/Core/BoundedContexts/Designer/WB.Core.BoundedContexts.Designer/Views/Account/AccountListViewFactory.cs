@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.MembershipProvider.Roles;
@@ -14,6 +16,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
 
     static class AccountQueries
     {
+        private static readonly Dictionary<string, Guid> RoleIds = new Dictionary<string, Guid>
+        {
+            {nameof(SimpleRoleEnum.Administrator), Guid.Parse("11111111111111111111111111111111")},
+            {nameof(SimpleRoleEnum.Administrator), Guid.Parse("22222222222222222222222222222222")}
+        };
+
         public static IQueryable<DesignerIdentityUser> FilterAccounts(this DesignerDbContext dbContext, AccountListViewInputModel input)
         {
             var result = from u in dbContext.Users
@@ -22,15 +30,17 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             bool hasName = !string.IsNullOrEmpty(input.Name);
             bool hasEmail = !string.IsNullOrEmpty(input.Email);
             bool hasRole = input.Role != SimpleRoleEnum.Undefined;
-            string intRoleInput = input.Role.ToString("D");
 
             if (hasRole && hasName)
             {
-                result = result.Where(x => x.Role.RoleId == intRoleInput && x.User.UserName == input.Name);
+                Guid roleId = RoleIds[input.Role.ToString()];
+
+                result = result.Where(x => x.Role.RoleId == roleId && x.User.UserName == input.Name);
             }
             else if (hasRole)
             {
-                result = result.Where(x => x.Role.RoleId == intRoleInput );
+                Guid roleId = RoleIds[input.Role.ToString()];
+                result = result.Where(x => x.Role.RoleId == roleId);
             }
             else if (input.IsNewOnly)
             {

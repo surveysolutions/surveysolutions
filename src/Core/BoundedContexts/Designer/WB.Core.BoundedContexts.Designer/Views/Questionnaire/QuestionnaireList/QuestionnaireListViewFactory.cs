@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
         }
 
         public IReadOnlyCollection<QuestionnaireListViewItem> GetUserQuestionnaires(
-            string userId, bool isAdmin, int pageIndex = 1, int pageSize = 128)
+            Guid userId, bool isAdmin, int pageIndex = 1, int pageSize = 128)
         {
             return FilterByQuestionnaires(this.dbContext.Questionnaires.AsQueryable(), userId, isAdmin)
                 .OrderBy(x => x.Title)
@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
         }
 
         private static IQueryable<QuestionnaireListViewItem> FilterByQuestionnaires(
-            IQueryable<QuestionnaireListViewItem> queryable, string userId, bool isAdmin)
+            IQueryable<QuestionnaireListViewItem> queryable, Guid userId, bool isAdmin)
         {
             var notDeletedQuestionnaires = queryable.Where(x => x.IsDeleted == false);
 

@@ -137,7 +137,7 @@ namespace WB.UI.Designer.Controllers
 
         private bool UserHasAccessToEditOrViewQuestionnaire(Guid id)
         {
-            return this.questionnaireViewFactory.HasUserAccessToQuestionnaire(id, User.GetId().FormatGuid());
+            return this.questionnaireViewFactory.HasUserAccessToQuestionnaire(id, User.GetId());
         }
 
         public IActionResult Clone(Guid id)
@@ -259,7 +259,7 @@ namespace WB.UI.Designer.Controllers
         {
             var historyReferenceId = commandId;
 
-            bool hasAccess = this.User.IsAdmin() || this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id, this.User.GetId().FormatGuid());
+            bool hasAccess = this.User.IsAdmin() || this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id, this.User.GetId());
             if (!hasAccess)
             {
                 this.Error(Resources.QuestionnaireController.ForbiddenRevert);
@@ -282,7 +282,7 @@ namespace WB.UI.Designer.Controllers
 
         public IActionResult QuestionnaireHistory(Guid id, int? page)
         {
-            bool hasAccess = this.User.IsAdmin() || this.questionnaireViewFactory.HasUserAccessToQuestionnaire(id, this.User.GetId().FormatGuid());
+            bool hasAccess = this.User.IsAdmin() || this.questionnaireViewFactory.HasUserAccessToQuestionnaire(id, this.User.GetId());
             if (!hasAccess)
             {
                 this.Error(ErrorMessages.NoAccessToQuestionnaire);

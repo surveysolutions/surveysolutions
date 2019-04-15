@@ -8,7 +8,7 @@ namespace WB.UI.Designer.Code
     public interface IQuestionnaireHelper
     {
         IPagedList<QuestionnaireListViewModel> GetQuestionnaires(
-            string viewerId,
+            Guid viewerId,
             bool isAdmin,
             QuestionnairesType type,
             Guid? folderId,
@@ -17,8 +17,8 @@ namespace WB.UI.Designer.Code
             int? sortOrder = null, 
             string searchFor = null);
 
-        IPagedList<QuestionnaireListViewModel> GetMyQuestionnairesByViewerId(string viewerId, bool isAdmin, Guid? folderId);
+        IPagedList<QuestionnaireListViewModel> GetMyQuestionnairesByViewerId(Guid viewerId, bool isAdmin, Guid? folderId);
 
-        IPagedList<QuestionnaireListViewModel> GetSharedQuestionnairesByViewerId(string viewerId, bool isAdmin, Guid? folderId);
+        IPagedList<QuestionnaireListViewModel> GetSharedQuestionnairesByViewerId(Guid viewerId, bool isAdmin, Guid? folderId);
     }
 }

@@ -52,7 +52,7 @@ namespace WB.UI.Designer.Controllers
                 sortOrder: sortOrder,
                 searchFor: searchFor,
                 folderId: folderId,
-                viewerId: User.GetId().FormatGuid(),
+                viewerId: User.GetId(),
                 isAdmin: User.IsAdmin(),
                 type: type);
         }

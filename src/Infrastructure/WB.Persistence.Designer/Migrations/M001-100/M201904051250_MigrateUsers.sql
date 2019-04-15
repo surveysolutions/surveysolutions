@@ -16,7 +16,7 @@
 		"CanImportOnHq" ,
 		"PhoneNumberConfirmed",
 		"CreatedAtUtc") select
-			u.id,
+			u.id::uuid,
 			u.email,
 			upper(trim(both ' ' from u.email)),
 			u.isconfirmed as "EmailConfirmed",
@@ -43,21 +43,21 @@ insert
 		"ConcurrencyStamp",
 		"Name",
 		"NormalizedName")
-	values('1',
+	values('11111111111111111111111111111111',
 	null,
 	'Administrator',
 	'ADMINISTRATOR'),
-	('2',
+	('22222222222222222222222222222222',
 	null,
 	'User',
 	'USER');
 
 insert
 	into
-		plainstore."AspNetUserRoles" ("UserId" ,
-		"RoleId") select
-			userid,
-			simpleroleid::text
+		plainstore."AspNetUserRoles" ("UserId" , "RoleId") 
+        select
+			userid::uuid,
+			case when simpleroleid = '1' then '11111111111111111111111111111111'::uuid else '22222222222222222222222222222222'::uuid end
 		from
 			plainstore.simpleroles;
 
@@ -68,7 +68,7 @@ insert
 		"UserId") select
 			'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name' as "ClaimType",
 			u.fullname as "ClaimValue",
-			id as "UserId"
+			id::uuid as "UserId"
 		from
 			plainstore.users u
 		where

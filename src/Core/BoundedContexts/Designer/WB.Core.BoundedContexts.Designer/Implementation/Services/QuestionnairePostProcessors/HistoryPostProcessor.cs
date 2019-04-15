@@ -199,11 +199,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         #region Shared persons
         public void Process(Questionnaire aggregate, AddSharedPersonToQuestionnaire command)
             => this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Add,
-                QuestionnaireItemType.Person, command.PersonId.ParseGuid().Value, this.GetUserEmail(command.PersonId.ParseGuid()), null);
+                QuestionnaireItemType.Person, command.PersonId, this.GetUserEmail(command.PersonId), null);
 
         public void Process(Questionnaire aggregate, RemoveSharedPersonFromQuestionnaire command)
             => this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Delete,
-                QuestionnaireItemType.Person, command.PersonId.ParseGuid().Value, this.GetUserEmail(command.PersonId.ParseGuid()), null);
+                QuestionnaireItemType.Person, command.PersonId, this.GetUserEmail(command.PersonId), null);
 
         #endregion
 
@@ -719,7 +719,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         {
             if (userId.HasValue)
             {
-                var creator = this.accountStorage.GetById(userId.Value.FormatGuid());
+                var creator = this.accountStorage.GetById(userId.Value);
                 if (creator != null)
                     return creator.UserName;
             }
@@ -730,7 +730,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         {
             if (userId.HasValue)
             {
-                var creator = this.accountStorage.GetById(userId.Value.FormatGuid());
+                var creator = this.accountStorage.GetById(userId.Value);
                 if (creator != null)
                     return creator.Email;
             }
