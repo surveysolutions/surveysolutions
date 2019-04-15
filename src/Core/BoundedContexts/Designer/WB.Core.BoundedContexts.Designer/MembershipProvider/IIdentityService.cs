@@ -1,10 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace WB.Core.BoundedContexts.Designer.MembershipProvider
 {
     public interface IIdentityService
     {
-        IIdentityUser GetById(string id);
+        IIdentityUser GetById(Guid id);
         IIdentityUser GetByNameOrEmail(string id);
         // todo remove it and replace with GetById
         string GetUserNameByEmail(string email);
@@ -19,7 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
             this.users = users;
         }
 
-        public IIdentityUser GetById(string id)
+        public IIdentityUser GetById(Guid id)
         {
             return this.users.Users.Find(id);
         }
@@ -46,6 +47,6 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
     {
         string UserName { get; }
         string Email { get; }
-        string Id { get; }
+        Guid Id { get; }
     }
 }

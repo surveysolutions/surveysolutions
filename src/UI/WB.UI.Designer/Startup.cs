@@ -90,7 +90,7 @@ namespace WB.UI.Designer
 
             services.AddScoped<IPasswordHasher<DesignerIdentityUser>, PasswordHasher>();
             services.AddDefaultIdentity<DesignerIdentityUser>()
-                .AddRoles<IdentityRole>()
+                .AddRoles<DesignerIdentityRole>()
                 .AddEntityFrameworkStores<DesignerDbContext>();
             services.AddRouting(options => options.LowercaseUrls = true);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)

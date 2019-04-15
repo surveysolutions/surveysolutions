@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using System;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Classifications;
@@ -14,7 +15,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 
 namespace WB.Core.BoundedContexts.Designer.MembershipProvider
 {
-    public class DesignerDbContext : IdentityDbContext<DesignerIdentityUser>
+    public class DesignerDbContext : IdentityDbContext<DesignerIdentityUser, DesignerIdentityRole, Guid>
     {
         public DesignerDbContext(DbContextOptions options) : base(options)
         {

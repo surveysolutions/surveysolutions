@@ -4,7 +4,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
 {
     public interface ILoggedInUser
     {
-        string Id { get; }
+        Guid Id { get; }
         string Login { get; }
         bool IsAdmin { get; }
     }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System;
+using Microsoft.AspNetCore.Http;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer1.Extensions;
@@ -14,7 +15,7 @@ namespace WB.UI.Designer.Code
             this.httpContextAccessor = httpContextAccessor;
         }
 
-        public string Id => httpContextAccessor.HttpContext.User.GetId().FormatGuid();
+        public Guid Id => httpContextAccessor.HttpContext.User.GetId();
         public string Login => httpContextAccessor.HttpContext.User.GetUserName();
         public bool IsAdmin => httpContextAccessor.HttpContext.User.IsAdmin();
     }

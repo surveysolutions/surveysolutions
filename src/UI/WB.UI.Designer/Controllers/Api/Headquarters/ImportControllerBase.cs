@@ -135,7 +135,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
                 new QuestionnaireListInputModel
                 {
 
-                    ViewerId = User.GetId().FormatGuid(),
+                    ViewerId = User.GetId(),
                     IsAdminMode = User.IsAdmin(),
                     Page = request.PageIndex,
                     PageSize = request.PageSize,
