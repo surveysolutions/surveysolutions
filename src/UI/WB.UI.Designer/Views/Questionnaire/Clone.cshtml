@@ -24,8 +24,8 @@
         @Html.HiddenFor(x => x.Id)
         <div class="form-actions">
             <input type="submit" class="btn btn-success btn-lg" value="@QuestionnaireController.Copy" id="inputCloneQuestionnaire" />
-            @Html.ActionLink(QuestionnaireController.Cancel, "My", "Questionnaire", null, new { @class = "btn " })
-            @Html.ActionLink(QuestionnaireController.BackToList, "My", "Questionnaire", null, new { @class = "btn " })
+            @Html.ActionLink(QuestionnaireController.Cancel, "Index", "Questionnaire", null, new { @class = "btn " })
+            @Html.ActionLink(QuestionnaireController.BackToList, "Index", "Questionnaire", null, new { @class = "btn " })
         </div>
     </form>
 </div>
