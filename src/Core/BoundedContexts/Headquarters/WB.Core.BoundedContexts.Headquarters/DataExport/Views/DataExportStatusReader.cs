@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             IExportFileNameService exportFileNameService,
             IQuestionnaireStorage questionnaireStorage,
             IAssignmentsService assignmentsService,
-            ISlackApiClient slackApiClient, 
+            ISlackApiClient slackApiClient,
             ILoggerProvider loggerProvider)
         {
             this.exportServiceApi = exportServiceApi;
@@ -80,8 +80,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
 
                 var binaryExport = result.DataExports.Where(x => x.DataExportFormat == DataExportFormat.Binary);
                 var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
-                var hasAssignmentWithAudioRecordingEnabled =
-                    assignmentsService.HasAssignmentWithAudioRecordingEnabled(questionnaireIdentity);
+
+                if (questionnaire == null)
+                {
+                    return new DataExportStatusView() { Success = false };
+                }
+
+                var hasAssignmentWithAudioRecordingEnabled = assignmentsService.HasAssignmentWithAudioRecordingEnabled(questionnaireIdentity);
+
                 foreach (var dataExportView in binaryExport)
                 {
                     if (!questionnaire.HasAnyMultimediaQuestion() &&
