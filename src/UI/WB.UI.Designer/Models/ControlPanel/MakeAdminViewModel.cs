@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WB.UI.Designer.Models
+namespace WB.UI.Designer.Models.ControlPanel
 {
     public class MakeAdminViewModel
     {

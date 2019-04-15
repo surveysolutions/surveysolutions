@@ -103,7 +103,7 @@ namespace WB.UI.Designer.Api.Portal
             this.allowedAddressService.Add(new AllowedAddress
             {
                 Description = description,
-                Address = IPAddress.Parse(ipAddress)
+                Address = ipAddress
             });
 
             return Ok();
@@ -113,8 +113,7 @@ namespace WB.UI.Designer.Api.Portal
         [HttpPost]
         public IActionResult DeleteServer(string ipAddress)
         {
-            var parsedAddress = IPAddress.Parse(ipAddress);
-            var address = this.allowedAddressService.GetAddresses().FirstOrDefault(x => Equals(x.Address, parsedAddress));
+            var address = this.allowedAddressService.GetAddresses().FirstOrDefault(x => Equals(x.Address, ipAddress));
             if (address != null)
                 this.allowedAddressService.Remove(address.Id);
             return Ok();
@@ -125,7 +124,7 @@ namespace WB.UI.Designer.Api.Portal
             {
                 Id = address.Id,
                 Description = address.Description,
-                Address = address.Address.ToString()
+                Address = address.Address
             };
 
         public class ServerAddress

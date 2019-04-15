@@ -211,8 +211,10 @@ namespace WB.UI.Designer
 
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Questionnaire}/{action=My}/{id?}");
+                    template: "{controller=Questionnaire}/{action=Index}/{id?}");
             });
+
+            app.UseExceptional();
 
             var initTask = aspCoreKernel.InitAsync(serviceProvider);
             if (env.IsDevelopment())
