@@ -14,19 +14,16 @@ import rename from "gulp-rename";
 import rev from "gulp-rev";
 import templateCache from "gulp-angular-templatecache";
 import terser from "gulp-terser";
-import yargs from "yargs";
 
 import manifest from "./plugins/manifest";
 import resx2json from "./plugins/resx2json";
 
 import { questionnaire, dist } from "./config.json";
-import { injectSections } from "./plugins/helpers";
-
-const PRODUCTION = yargs.argv.production;
+import { injectSections, PRODUCTION } from "./plugins/helpers";
 
 export const templates = () =>
   src(questionnaire.htmls)
-    .pipe(htmlmin({ collapseWhitespace: false }))
+    .pipe(cache(htmlmin({ collapseWhitespace: false })))
     .pipe(templateCache({ root: "views" }))
     .pipe(gulpif(PRODUCTION, rev()))
     .pipe(dest(join(dist, "js")));
@@ -50,7 +47,7 @@ export const ResourcesFromResx = () =>
 export const styles = () =>
   src(questionnaire.markup)
     .pipe(appendPrepend.appendText('@icon-font-path: "/fonts/";'))
-    .pipe(less({ relativeUrls: true, rootpath: "/" }))
+    .pipe(cache(less({ relativeUrls: true, rootpath: "/" })))
     .pipe(gulpif(PRODUCTION, rev()))
     .pipe(dest(join(dist, "css")));
 

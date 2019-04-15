@@ -1,5 +1,5 @@
 import { join } from "path";
-import { src, dest, lastRun, parallel } from "gulp";
+import { src, dest, parallel } from "gulp";
 import autoprefixer from "autoprefixer";
 import cache from "gulp-cache";
 import cleanCss from "gulp-clean-css";
@@ -12,11 +12,9 @@ import postcss from "gulp-postcss";
 import rev from "gulp-rev";
 import sourcemaps from "gulp-sourcemaps";
 import terser from "gulp-terser";
-import yargs from "yargs";
 
 import config from "./config.json";
-
-const PRODUCTION = yargs.argv.production;
+import { PRODUCTION } from "./plugins/helpers"
 
 export const bowerCss = () =>
   src(config.vendor.files)
