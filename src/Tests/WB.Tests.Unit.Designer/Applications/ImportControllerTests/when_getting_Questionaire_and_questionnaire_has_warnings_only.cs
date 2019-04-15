@@ -15,10 +15,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             request = Create.DownloadQuestionnaireRequest(questionnaireId);
-
-            var membershipUserService = Mock.Of<IMembershipUserService>(
-                _ => _.WebUser == Mock.Of<IMembershipWebUser>(
-                    u => u.UserId == userId));
+            var dbContext = Create.InMemoryDbContext();
+            dbContext.AddUserWithId(userId);
 
             var questionnaireViewFactory = Mock.Of<IQuestionnaireViewFactory>(
                 _ => _.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) == Create.QuestionnaireView(userId));
@@ -35,11 +33,12 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
                     _.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<int>(),
                         out generatedAssembly) == Create.GenerationResult(true));
 
-            importController = CreateImportController(membershipUserService: membershipUserService,
+            importController = CreateImportController(
                 questionnaireViewFactory: questionnaireViewFactory,
                 engineVersionService: expressionsEngineVersionService,
                 questionnaireVerifier: questionnaireVerifier,
                 expressionProcessorGenerator: expressionProcessorGenerator);
+
             BecauseOf();
         }
 
