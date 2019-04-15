@@ -1,7 +1,8 @@
 import glob from "glob";
-import { join, resolve, basename, extname } from "path";
+import { basename, extname } from "path";
 import gulpInject from "gulp-inject";
 import { src } from "gulp";
+import yargs from "yargs";
 
 function flattenObject(ob) {
   var toReturn = {};
@@ -45,6 +46,8 @@ export const injectSections = (pipe, distFolder, options = {}) => {
 
   return pipe;
 };
+
+export const PRODUCTION = yargs.argv.production;
 
 function getSectionsList(distFolder) {
   const items = glob.sync(distFolder + "/**/*.{js,css}");
