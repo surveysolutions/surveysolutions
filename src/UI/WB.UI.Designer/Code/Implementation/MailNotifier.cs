@@ -2,6 +2,9 @@
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views;
 using WB.Core.GenericSubdomains.Portable;
@@ -15,12 +18,18 @@ namespace WB.UI.Designer.Code.Implementation
     {
         private readonly IEmailSender mailer;
         private readonly IViewRenderingService renderingService;
+        private readonly IActionContextAccessor contextAccessor;
+        private readonly IUrlHelperFactory urlHelperFactory;
 
         public MailNotifier(IEmailSender mailer,
-            IViewRenderingService renderingService)
+            IViewRenderingService renderingService,
+            IActionContextAccessor contextAccessor,
+            IUrlHelperFactory urlHelperFactory)
         {
             this.mailer = mailer;
             this.renderingService = renderingService;
+            this.contextAccessor = contextAccessor;
+            this.urlHelperFactory = urlHelperFactory;
         }
 
         public void NotifyTargetPersonAboutShareChange(ShareChangeType shareChangeType,
@@ -31,7 +40,7 @@ namespace WB.UI.Designer.Code.Implementation
             ShareType shareType,
             string actionPersonEmail)
         {
-            //@Html.ActionLink(Model.QuestionnaireDisplayTitle, "Details", "Questionnaire", "https", null, null, new { id = Model.QuestionnaireId }, null)
+            IUrlHelper urlHelper = urlHelperFactory.GetUrlHelper(contextAccessor.ActionContext);
 
             var sharingNotificationModel = new SharingNotificationModel
             {
@@ -41,7 +50,8 @@ namespace WB.UI.Designer.Code.Implementation
                 QuestionnaireId = questionnaireId,
                 QuestionnaireDisplayTitle = String.IsNullOrWhiteSpace(questionnaireTitle) ? NotificationResources.MailNotifier_NotifyTargetPersonAboutShareChange_link : questionnaireTitle,
                 ShareTypeName = shareType == ShareType.Edit ? NotificationResources.MailNotifier_NotifyTargetPersonAboutShareChange_edit : NotificationResources.MailNotifier_NotifyOwnerAboutShareChange_view,
-                ActionPersonCallName = String.IsNullOrWhiteSpace(actionPersonEmail) ? NotificationResources.MailNotifier_NotifyTargetPersonAboutShareChange_user : actionPersonEmail
+                ActionPersonCallName = String.IsNullOrWhiteSpace(actionPersonEmail) ? NotificationResources.MailNotifier_NotifyTargetPersonAboutShareChange_user : actionPersonEmail,
+                QuestionnaireLink = urlHelper.Action("Details", "Questionnaire", new { id = questionnaireId }, "https")
             };
             var message = this.GetShareChangeNotificationEmail(
                                 sharingNotificationModel);
@@ -55,6 +65,7 @@ namespace WB.UI.Designer.Code.Implementation
 
         public void NotifyOwnerAboutShareChange(ShareChangeType shareChangeType, string email, string userName, string questionnaireId, string questionnaireTitle, ShareType shareType, string actionPersonEmail, string sharedWithPersonEmail)
         {
+            IUrlHelper urlHelper = urlHelperFactory.GetUrlHelper(contextAccessor.ActionContext);
             var sharingNotificationModel = new SharingNotificationModel
             {
                 ShareChangeType = shareChangeType,
@@ -64,7 +75,8 @@ namespace WB.UI.Designer.Code.Implementation
                 QuestionnaireDisplayTitle = String.IsNullOrWhiteSpace(questionnaireTitle) ? NotificationResources.MailNotifier_NotifyTargetPersonAboutShareChange_link : questionnaireTitle,
                 ShareTypeName = shareType == ShareType.Edit ? NotificationResources.MailNotifier_NotifyTargetPersonAboutShareChange_edit : NotificationResources.MailNotifier_NotifyOwnerAboutShareChange_view,
                 ActionPersonCallName = String.IsNullOrWhiteSpace(actionPersonEmail) ? NotificationResources.MailNotifier_NotifyTargetPersonAboutShareChange_user : actionPersonEmail,
-                SharedWithPersonEmail = String.IsNullOrWhiteSpace(sharedWithPersonEmail) ? NotificationResources.MailNotifier_NotifyTargetPersonAboutShareChange_user : sharedWithPersonEmail
+                SharedWithPersonEmail = String.IsNullOrWhiteSpace(sharedWithPersonEmail) ? NotificationResources.MailNotifier_NotifyTargetPersonAboutShareChange_user : sharedWithPersonEmail,
+                QuestionnaireLink = urlHelper.Action("Details", "Questionnaire", new { id = questionnaireId }, "https")
 
             };
             var message = this.GetOwnerShareChangeNotificationEmail(
@@ -82,8 +94,8 @@ namespace WB.UI.Designer.Code.Implementation
         {
             var view = await this.renderingService.RenderToStringAsync(
                 model.ShareChangeType == ShareChangeType.Share
-                    ? "TargetPersonShareNotification"
-                    : "TargetPersonStopShareNotification",
+                    ? "Emails/TargetPersonShareNotification"
+                    : "Emails/TargetPersonStopShareNotification",
                 model);
             return view;
         }
@@ -92,8 +104,8 @@ namespace WB.UI.Designer.Code.Implementation
         {
             var view = await this.renderingService.RenderToStringAsync(
                 model.ShareChangeType == ShareChangeType.Share
-                    ? "OwnerShareNotification"
-                    : "OwnerStopShareNotification", model);
+                    ? "Emails/OwnerShareNotification"
+                    : "Emails/OwnerStopShareNotification", model);
             return view;
         }
     }

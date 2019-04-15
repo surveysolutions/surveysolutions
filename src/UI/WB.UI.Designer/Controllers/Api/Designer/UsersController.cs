@@ -28,5 +28,23 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             };
             return Ok(response);
         }
+
+        [HttpPost]
+        [Authorize]
+        [Route("api/users/findbyemail")]
+        public async Task<IActionResult> Get([FromQuery]string q)
+        {
+            if (string.IsNullOrWhiteSpace(q)) return NotFound();
+
+            var account = await this.users.FindByNameAsync(q) ?? 
+                          await this.users.FindByEmailAsync(q);
+            return Ok(new
+            {
+                doesUserExist = !string.IsNullOrEmpty(account?.UserName),
+                userName = account?.UserName,
+                email = account?.Email,
+                id = account?.Id
+            });
+        }
     }
 }

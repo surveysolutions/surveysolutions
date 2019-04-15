@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -108,6 +109,7 @@ namespace WB.UI.Designer
             services.Configure<CaptchaConfig>(Configuration.GetSection("Captcha"));
             services.AddTransient<IRecaptchaService, RecaptchaService>();
             services.AddTransient<IRecipientNotifier, MailNotifier>();
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.Configure<UiConfig>(Configuration.GetSection("UI"));
 
             var membershipSection = this.Configuration.GetSection("Membership");

@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
             if (string.IsNullOrWhiteSpace(nameOrEmail)) return null;
             var normalized = nameOrEmail.Trim().ToUpper();
             var user = users.Users.FirstOrDefault(x => x.NormalizedUserName == normalized)
-                       ?? users.Users.FirstOrDefault(x => x.NormalizedEmail == nameOrEmail);
+                       ?? users.Users.FirstOrDefault(x => x.NormalizedEmail == normalized);
             return user;
         }
 

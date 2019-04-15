@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Main.Core.Documents;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Ncqrs;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -35,7 +36,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
             if (questionnaireDocument == null)
                 return null;
 
-            var questionnaireListItem = this.dbContext.Questionnaires.Find(aggregateId.FormatGuid());
+            var questionnaireListItem = this.dbContext.Questionnaires.Include(x => x.SharedPersons).FirstOrDefault(x => x.QuestionnaireId == aggregateId.FormatGuid());
+
             var personsCollection = questionnaireListItem?.SharedPersons ?? Enumerable.Empty<SharedPerson>();
             var questionnaire = locator.GetRequiredService<Questionnaire>();
             questionnaire.Initialize(aggregateId, questionnaireDocument, personsCollection);

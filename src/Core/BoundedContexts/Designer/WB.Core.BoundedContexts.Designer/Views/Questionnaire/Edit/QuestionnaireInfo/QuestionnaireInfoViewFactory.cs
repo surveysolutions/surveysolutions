@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
@@ -86,7 +87,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             questionnaireInfoView.GroupsCount = groupsCount;
             questionnaireInfoView.RostersCount = rostersCount;
 
-            var listItem = this.dbContext.Questionnaires.Find(questionnaireId);
+            var listItem = this.dbContext.Questionnaires.Include(x => x.SharedPersons).FirstOrDefault(x => x.QuestionnaireId == questionnaireId);
             var sharedPersons = listItem.SharedPersons.GroupBy(x => x.Email).Select(g => g.First())
                 .Select(x => new SharedPersonView
                 {

@@ -81,8 +81,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         private List<SharedPersonView> GetSharedPersons(Guid questionnaireId)
         {
-            var listViewItem = this.dbContext.Questionnaires.Find(questionnaireId.FormatGuid());
-            var sharedPersons = listViewItem.SharedPersons
+            var listViewItem = this.dbContext.SharedPersons.Where(x => x.QuestionnaireId == questionnaireId.FormatGuid()).ToList();
+            var sharedPersons = listViewItem
                 .Select(x => new SharedPersonView
                 {
                     Email = x.Email,
