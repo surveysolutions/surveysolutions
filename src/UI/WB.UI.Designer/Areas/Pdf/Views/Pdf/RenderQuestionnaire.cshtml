@@ -1,4 +1,4 @@
-﻿@using System.Collections.Generic
+@using System.Collections.Generic
 @using System.Linq
 @using Main.Core.Entities.SubEntities
 @using WB.Core.BoundedContexts.Designer.Implementation.Services
@@ -18,7 +18,9 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>@questionnaire.Title</title>
-    <link href='@Url.ContentAbsolute("~/pdf/content/pdf.css")' rel="stylesheet" />
+    <!-- pdf:css -->
+    <link rel="stylesheet" href="/css/pdf.css">
+    <!-- endinject -->
 </head>
 <body>
 	<header>
@@ -72,7 +74,7 @@
 		</div>
 		<div class="column_header">
 			<a href="https://solutions.worldbank.org/" target="_blank" class="logo">
-				<img src="@Url.ContentAbsolute("~/pdf/content/images/pdf_logo.png")" alt="Survey Solutions" />
+				<img src="@Url.ContentAbsolute("~/images/pdf_logo.png")" alt="Survey Solutions" />
 			</a>
 		</div>
 
@@ -545,8 +547,8 @@
 		<h2 id="legend_appendix">@PdfStrings.Legend</h2>
 		<section>
 			<h3>@PdfStrings.PdfLegend</h3>
-			<img src="@Url.ContentAbsolute("~/pdf/content/images/pdf-question-legend.png")" />
-			<img src="@Url.ContentAbsolute("~/pdf/content/images/pdf-roster-legend.png")" />
+			<img src="@Url.ContentAbsolute("~/images/pdf-question-legend.png")" />
+			<img src="@Url.ContentAbsolute("~/images/pdf-roster-legend.png")" />
 		</section>
 	</article>
 </body>

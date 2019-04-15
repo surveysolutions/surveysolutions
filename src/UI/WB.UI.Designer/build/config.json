@@ -24,7 +24,8 @@
     "Views/Shared/_ValidationScriptsPartial.cshtml",
     "Views/Questionnaire/EditCascadingOptions.cshtml",
     "Views/Questionnaire/EditOptions.cshtml",
-    "Views/Classifications/Index.cshtml"
+    "Views/Classifications/Index.cshtml",
+    "Areas/Pdf/Views/Pdf/RenderQuestionnaire.cshtml"
   ],
   "vendor": {
     "favicons": ["Content/identity/favicon-*.png"],
@@ -196,6 +197,15 @@
         "node_modules",
         "node_modules/jquery-validation/dist/jquery.validate.js",
         "node_modules/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js"
+      ]
+    },
+    {
+      "name":"pdf",
+      "inputFiles": [
+        "Areas/Pdf/Content/pdf.less"
+      ],
+      "assets": [
+        { "glob": "Areas/Pdf/Content/images/**", "prefix": "images" }
       ]
     }
   ]
