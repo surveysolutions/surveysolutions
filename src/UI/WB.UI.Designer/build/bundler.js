@@ -12,6 +12,7 @@ const rev = require("gulp-rev");
 const terser = require("gulp-terser");
 const config = require("./config.json");
 const ngAnnotate = require("gulp-ng-annotate");
+const minified = require("./plugins/preferminified")
 
 const { injectSections, PRODUCTION } = require("./plugins/helpers");
 
@@ -22,13 +23,10 @@ const bundler = () =>
         [
           src(bundle.inputFiles)
             .pipe(filter("**/*.js"))
+            .pipe(gulpif(PRODUCTION, minified()))
             .pipe(gulpif(PRODUCTION, cache(ngAnnotate())))
-            .pipe(
-              gulpif(
-                PRODUCTION,
-                cache(terser({ mangle: true, compress: true }))
-              )
-            )
+            .pipe(gulpif(PRODUCTION,cache(terser({ mangle: true, compress: true }))))
+
             .pipe(concat(bundle.name + ".js"))
             .pipe(gulpif(PRODUCTION, rev()))
             .pipe(dest(join(config.dist, "js"))),
@@ -57,7 +55,8 @@ const inject = () =>
     dest(f => f.base)
   );
 
-module.exports = { 
+module.exports = {
   default: series(bundler, inject),
-  inject, bundler
-}
+  inject,
+  bundler
+};
