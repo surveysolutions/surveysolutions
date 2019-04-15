@@ -71,7 +71,7 @@ namespace WB.UI.Designer.Api.Headquarters
         {
             var questionnaireListView = this.viewFactory.Load(new QuestionnaireListInputModel
             {
-                ViewerId = User.GetId().FormatGuid(),
+                ViewerId = User.GetId(),
                 IsAdminMode = User.IsAdmin(),
                 Page = pageIndex,
                 PageSize = pageSize,

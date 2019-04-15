@@ -86,7 +86,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     "Source questionnaire was not found and might be deleted.");
             }
 
-            if (questionnaire.IsPublic || questionnaire.CreatedBy == this.user.Id.ParseGuid() ||
+            if (questionnaire.IsPublic || questionnaire.CreatedBy == this.user.Id ||
                 this.user.IsAdmin)
                 return questionnaire;
 
@@ -105,7 +105,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             if (!(command is QuestionnaireCommandBase currentCommand)) return;
 
-            currentCommand.ResponsibleId = this.user.Id.ParseGuid().Value;
+            currentCommand.ResponsibleId = this.user.Id;
             currentCommand.IsResponsibleAdmin = this.user.IsAdmin;
         }
 

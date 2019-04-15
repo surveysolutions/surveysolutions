@@ -43,8 +43,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
         private List<SharedPerson> sharedPersons = new List<SharedPerson>();
-        private IEnumerable<string> ReadOnlyUsersIds => sharedPersons.Where(p => p.ShareType == ShareType.View).Select(p => p.UserId);
-        private IEnumerable<string> SharedUsersIds => sharedPersons.Select(p => p.UserId);
+        private IEnumerable<Guid> ReadOnlyUsersIds => sharedPersons.Where(p => p.ShareType == ShareType.View).Select(p => p.UserId);
+        private IEnumerable<Guid> SharedUsersIds => sharedPersons.Select(p => p.UserId);
 
         public QuestionnaireDocument QuestionnaireDocument => this.innerDocument;
         public IEnumerable<SharedPerson> SharedPersons => this.sharedPersons;
@@ -361,7 +361,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void ReplaceTexts(ReplaceTextsCommand command)
         {
-            ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId.FormatGuid());
+            ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
 
             var allEntries = this.innerDocument.Children.TreeToEnumerable(x => x.Children);
             this.affectedByReplaceEntries = 0;
@@ -514,7 +514,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void AddMacro(AddMacro command)
         {
-            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId.FormatGuid());
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
             this.ThrowDomainExceptionIfMacroAlreadyExist(command.MacroId);
 
             this.innerDocument.Macros[command.MacroId] = new Macro();
@@ -1639,7 +1639,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void UpdateStaticText(UpdateStaticText command)
         {
-            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId.FormatGuid());
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
 
             ThrowDomainExceptionIfEntityDoesNotExists(this.innerDocument, command.EntityId);
 
@@ -1656,7 +1656,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void DeleteStaticText(Guid entityId, Guid responsibleId)
         {
-            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId.FormatGuid());
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             ThrowDomainExceptionIfEntityDoesNotExists(this.innerDocument, entityId);
 
             this.innerDocument.RemoveEntity(entityId);
@@ -1736,11 +1736,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #region Shared Person command handlers
 
-        public void AddSharedPerson(string personId, string emailOrLogin, ShareType shareType, Guid responsibleId)
+        public void AddSharedPerson(Guid personId, string emailOrLogin, ShareType shareType, Guid responsibleId)
         {
-            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId.FormatGuid());
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
 
-            if (this.innerDocument.CreatedBy.FormatGuid() == personId)
+            if (this.innerDocument.CreatedBy == personId)
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.OwnerCannotBeInShareList,
@@ -1762,9 +1762,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
-        public void RemoveSharedPerson(string personId, string email, Guid responsibleId)
+        public void RemoveSharedPerson(Guid personId, string email, Guid responsibleId)
         {
-            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsToUnsharePersonForQuestionnaire(personId, responsibleId.FormatGuid());
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsToUnsharePersonForQuestionnaire(personId, responsibleId);
 
             if (!this.SharedUsersIds.Contains(personId))
             {
@@ -2103,14 +2103,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(Guid viewerId)
+        private void ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(Guid viewerId) 
         {
-            ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(viewerId.FormatGuid());
-        }
-
-        private void ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(string viewerId) 
-        {
-            if (this.innerDocument.CreatedBy != viewerId.ParseGuid() && !this.SharedUsersIds.Contains(viewerId))
+            if (this.innerDocument.CreatedBy != viewerId && !this.SharedUsersIds.Contains(viewerId))
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.DoesNotHavePermissionsForEdit, ExceptionMessages.NoPremissionsToEditQuestionnaire);
@@ -2122,9 +2117,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowDomainExceptionIfViewerDoesNotHavePermissionsToUnsharePersonForQuestionnaire(string personId, string viewerId)
+        private void ThrowDomainExceptionIfViewerDoesNotHavePermissionsToUnsharePersonForQuestionnaire(Guid personId, Guid viewerId)
         {
-            if (this.innerDocument.CreatedBy != viewerId.ParseGuid() && !this.SharedUsersIds.Contains(viewerId))
+            if (this.innerDocument.CreatedBy != viewerId && !this.SharedUsersIds.Contains(viewerId))
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.DoesNotHavePermissionsForEdit, ExceptionMessages.NoPremissionsToEditQuestionnaire);
@@ -2444,7 +2439,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void RevertVersion(RevertVersionQuestionnaire command)
         {
-            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId.FormatGuid());
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
 
             var historyReferanceId = command.HistoryReferenceId;
             var questionnire = questionnaireHistoryVersionsService.GetByHistoryVersion(historyReferanceId);
@@ -2456,7 +2451,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void UpdateMetaInfo(UpdateMetadata command)
         {
-            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId.FormatGuid());
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
             this.ThrowDomainExceptionIfQuestionnaireTitleIsEmpty(command.Title);
 
             this.innerDocument.Title = command.Title;

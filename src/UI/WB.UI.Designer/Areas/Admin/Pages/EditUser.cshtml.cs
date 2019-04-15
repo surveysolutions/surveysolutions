@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using NHibernate.Linq;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Resources;
@@ -32,7 +34,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
         public class InputModel
         {
             [Key]
-            public string Id { get; set; }
+            public Guid Id { get; set; }
 
             [Required]
             [EmailAddress]
@@ -55,9 +57,9 @@ namespace WB.UI.Designer.Areas.Admin.Pages
             public string FullName { get; set; }
         }
 
-        public async Task<IActionResult> OnGetAsync(string id)
+        public async Task<IActionResult> OnGetAsync(Guid id)
         {
-            var user = await this.userManager.FindByIdAsync(id);
+            var user = await this.userManager.FindByIdAsync(id.FormatGuid());
             if (user == null) return NotFound();
 
             this.Input = new InputModel

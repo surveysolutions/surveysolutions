@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
         public int Page { get; set; }
         public int PageSize { get; set; }
         public bool IsAdminMode { get; set; }
-        public string ViewerId { get; set; }
+        public Guid ViewerId { get; set; }
         public QuestionnairesType Type { get; set; }
         public string SearchFor { get; set; }
         public Guid? FolderId { get; set; }

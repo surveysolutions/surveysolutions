@@ -21,7 +21,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             {
                 var viewFactory = context.HttpContext.RequestServices.GetService<IQuestionnaireViewFactory>();
                 bool hasAccess = context.HttpContext.User.IsAdmin() || 
-                                 viewFactory.HasUserAccessToQuestionnaire(parsedId, context.HttpContext.User.GetId().FormatGuid());
+                                 viewFactory.HasUserAccessToQuestionnaire(parsedId, context.HttpContext.User.GetId());
                 if (!hasAccess)
                 {
                     context.Result = new ForbidResult();

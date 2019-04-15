@@ -96,16 +96,16 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             {
                 UserId = questionnaire.CreatedBy ?? Guid.Empty,
                 Name = questionnaire.CreatedBy.HasValue
-                    ? this.accountsStorage.GetById(questionnaire.CreatedBy.Value.FormatGuid())?.UserName
+                    ? this.accountsStorage.GetById(questionnaire.CreatedBy.Value)?.UserName
                     : string.Empty,
                 Date = questionnaire.CreationDate
             };
             var lastModified = modificationStatisticsByUsers.OrderByDescending(x => x.Date).FirstOrDefault();
             var statisticsByUsers = sharedPersons.Select(person => new PdfQuestionnaireModel.ModificationStatisticsByUser
             {
-                UserId = person.UserId.ParseGuid().Value,
+                UserId = person.UserId,
                 Name = this.accountsStorage.GetById(person.UserId)?.UserName,
-                Date = modificationStatisticsByUsers.FirstOrDefault(x => x.UserId.FormatGuid() == person.UserId)?.Date
+                Date = modificationStatisticsByUsers.FirstOrDefault(x => x.UserId == person.UserId)?.Date
             });
 
             if (questionnaire.CreatedBy == requestedByUserId)

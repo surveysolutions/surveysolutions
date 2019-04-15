@@ -6,14 +6,14 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
     [Serializable]
     public class RemoveSharedPersonFromQuestionnaire : QuestionnaireCommand
     {
-        public RemoveSharedPersonFromQuestionnaire(Guid questionnaireId, string personId, string email, Guid responsibleId)
+        public RemoveSharedPersonFromQuestionnaire(Guid questionnaireId, Guid personId, string email, Guid responsibleId)
             : base(questionnaireId, responsibleId)
         {
             this.Email = email;
             this.PersonId = personId;
         }
 
-        public string PersonId { get; set; }
+        public Guid PersonId { get; set; }
         public string Email { get; set; }
     }
 }

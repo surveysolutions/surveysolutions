@@ -116,7 +116,7 @@ namespace WB.UI.Designer.Controllers.Api.Tester
             var isAdmin = User.IsAdmin();
             var userName = User.GetUserName();
             
-            var questionnaireViews = this.viewFactory.GetUserQuestionnaires(userId.FormatGuid(), isAdmin, pageIndex, pageSize);
+            var questionnaireViews = this.viewFactory.GetUserQuestionnaires(userId, isAdmin, pageIndex, pageSize);
 
             var questionnaires = questionnaireViews.Select(questionnaire => new TesterQuestionnaireListItem
             {
@@ -126,7 +126,7 @@ namespace WB.UI.Designer.Controllers.Api.Tester
                 Owner = questionnaire.CreatorName,
                 IsOwner = questionnaire.CreatorName == userName,
                 IsPublic = questionnaire.IsPublic || isAdmin,
-                IsShared = questionnaire.SharedPersons.Any(sharedPerson => sharedPerson.UserId == userId.FormatGuid())
+                IsShared = questionnaire.SharedPersons.Any(sharedPerson => sharedPerson.UserId == userId)
             });
 
             return Ok(questionnaires);

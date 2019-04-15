@@ -108,7 +108,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
         public string FullName { get; set; }
 
         [Key]
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         [Display(Name = "Approved?", Order = 5)]
         public bool IsApproved { get; set; }

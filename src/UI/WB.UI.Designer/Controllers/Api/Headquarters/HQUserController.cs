@@ -22,7 +22,7 @@ namespace WB.UI.Designer.Api.Headquarters
         {
             return Ok(new PortalUserModel
             {
-                Id = User.GetId().FormatGuid(),
+                Id = User.GetId(),
                 Login = User.Identity.Name,
                 Roles = User.Claims.Where(x => x.Type == ClaimTypes.Role).Select(x => x.Value).ToArray(),
                 Email = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value

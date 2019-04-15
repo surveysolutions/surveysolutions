@@ -92,7 +92,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 {
                     Email = x.Email,
                     Login = this.membershipUserService.GetById(x.UserId).UserName,
-                    UserId = x.UserId.ParseGuid().Value,
+                    UserId = x.UserId,
                     IsOwner = x.IsOwner,
                     ShareType = x.ShareType
                 })
@@ -101,7 +101,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             if (questionnaireDocument.CreatedBy.HasValue &&
                 sharedPersons.All(x => x.UserId != questionnaireDocument.CreatedBy))
             {
-                var owner = this.membershipUserService.GetById(questionnaireDocument.CreatedBy.Value.ToString());
+                var owner = this.membershipUserService.GetById(questionnaireDocument.CreatedBy.Value);
                 if (owner != null)
                 {
                     sharedPersons.Add(new SharedPersonView
