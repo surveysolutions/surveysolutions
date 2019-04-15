@@ -189,6 +189,9 @@
         "Scripts/classifications/routes.js",
         "Scripts/classifications/store.js",
         "Scripts/classifications/main.js"
+      ],
+      "assets": [
+        { "glob": "node_modules/jquery-contextmenu/dist/font/**", "prefix": "css/font"}
       ]
     },
     {
