@@ -124,8 +124,8 @@
         "Scripts/custom/common.js",
         "node_modules/moment/min/moment-with-locales.js",
         "node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.css",
-        "Content/designer-list.css",
-        "questionnaire/content/designer-start/bootstrap-custom.less"
+        "questionnaire/content/designer-start/bootstrap-custom.less",
+        "Content/designer-list.css"
       ]
     },
     {
