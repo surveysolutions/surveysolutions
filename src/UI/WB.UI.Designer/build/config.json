@@ -18,14 +18,16 @@
     "fonts": ["Content/fonts/*"]
   },
   "injectTargets": [
-    "Areas/Identity/Pages/Layout.Account.cshtml",
+    "Areas/Admin/Views/PublicFolders/Index.cshtml",
     "Areas/Identity/Pages/_ValidationScriptsPartial.cshtml",
-    "Views/Shared/Layout.cshtml",
-    "Views/Shared/_ValidationScriptsPartial.cshtml",
+    "Areas/Identity/Pages/Layout.Account.cshtml",
+    "Areas/Pdf/Views/Pdf/RenderQuestionnaire.cshtml",
+    "Views/Classifications/Index.cshtml",
     "Views/Questionnaire/EditCascadingOptions.cshtml",
     "Views/Questionnaire/EditOptions.cshtml",
-    "Views/Classifications/Index.cshtml",
-    "Areas/Pdf/Views/Pdf/RenderQuestionnaire.cshtml"
+    "Views/Questionnaire/Public.cshtml",
+    "Views/Shared/_ValidationScriptsPartial.cshtml",
+    "Views/Shared/Layout.cshtml"
   ],
   "vendor": {
     "favicons": ["Content/identity/favicon-*.png"],
