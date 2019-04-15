@@ -8,47 +8,47 @@ import less from "gulp-less";
 import merge from "merge2";
 import rev from "gulp-rev";
 import terser from "gulp-terser";
-import yargs from "yargs";
 import config from "./config.json";
 import ngAnnotate from "gulp-ng-annotate";
 
-import { injectSections } from "./plugins/helpers";
+import { injectSections, PRODUCTION } from "./plugins/helpers";
 
-const PRODUCTION = yargs.argv.production;
-
-const bundler = () => {
-  return merge(
-    config.bundle.map(bundle => {
-      const assets = bundle.assets;
-
-      return merge(
+const bundler = () =>
+  merge(
+    config.bundle.map(bundle =>
+      merge(
         [
           src(bundle.inputFiles)
             .pipe(filter("**/*.js"))
-            .pipe(gulpif(PRODUCTION, ngAnnotate()))
-            .pipe(gulpif(PRODUCTION,cache(terser({ mangle: true, compress: true }))))
+            .pipe(gulpif(PRODUCTION, cache(ngAnnotate())))
+            .pipe(
+              gulpif(
+                PRODUCTION,
+                cache(terser({ mangle: true, compress: true }))
+              )
+            )
             .pipe(concat(bundle.name + ".js"))
             .pipe(gulpif(PRODUCTION, rev()))
             .pipe(dest(join(config.dist, "js"))),
+
           src(bundle.inputFiles)
             .pipe(filter(["**/*.css", "**/*.less"]))
-            .pipe(less())
+            .pipe(cache(less()))
             .pipe(concat(bundle.name + ".css"))
             .pipe(gulpif(PRODUCTION, rev()))
             .pipe(dest(join(config.dist, "css"))),
-          assets == null
+
+          bundle.assets == null
             ? null
             : merge(
-                assets.map(asset =>
-                  src(asset.glob)
-                    .pipe(dest(join(config.dist, asset.prefix)))
+                bundle.assets.map(asset =>
+                  src(asset.glob).pipe(dest(join(config.dist, asset.prefix)))
                 )
               )
         ].filter(x => x != null)
-      );
-    })
+      )
+    )
   );
-};
 
 const inject = () =>
   injectSections(src(config.injectTargets), config.dist).pipe(

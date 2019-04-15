@@ -1,14 +1,14 @@
-import { series, src, parallel } from "gulp";
-import clean from "gulp-clean";
+import { series, parallel } from "gulp";
+import path from "path"
 
 import vendor from "./build/vendor";
 import questionnaire from "./build/questionnaire";
 import bundle from "./build/bundler";
 import config from "./build/config"
-
-export const cleanup = () => src(config.dist, { allowEmpty: true }).pipe(clean());
+import rimraf from "rimraf"
 
 export const questionnaires = questionnaire;
 export const bundler = bundle;
 
+export const cleanup = (done) => rimraf(path.join(config.dist, "**/*"), done)
 export default series(cleanup, parallel(vendor, bundler), questionnaire);
