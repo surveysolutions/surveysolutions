@@ -193,7 +193,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             }
 
             questionnaireListViewItem.LastEntryDate = DateTime.UtcNow;
-            this.dbContext.Questionnaires.Add(questionnaireListViewItem);
+            this.dbContext.Questionnaires.Update(questionnaireListViewItem);
 
             var questionnaireOwnerId = questionnaireListViewItem.CreatedBy;
             this.SendEmailNotifications(questionnaireListViewItem.Title, questionnaireOwnerId, responsibleId,
@@ -220,7 +220,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             questionnaireListViewItem.SharedPersons.Add(sharedPerson);
 
             questionnaireListViewItem.LastEntryDate = DateTime.UtcNow;
-            this.dbContext.Questionnaires.Add(questionnaireListViewItem);
+            this.dbContext.Questionnaires.Update(questionnaireListViewItem);
 
             this.SendEmailNotifications(questionnaireListViewItem.Title, questionnaireListViewItem.CreatedBy, responsibleId,
                 ShareChangeType.Share, personEmail, questionnaireListViewItem.QuestionnaireId, shareType);
