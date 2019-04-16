@@ -21,7 +21,7 @@ namespace WB.UI.Designer.Controllers
         #region [Edit options]
         private const string OptionsSessionParameterName = "options";
 
-        private EditOptionsViewModel questionWithOptionsViewModel
+        public EditOptionsViewModel questionWithOptionsViewModel
         {
             get
             {
@@ -95,6 +95,7 @@ namespace WB.UI.Designer.Controllers
         [HttpPost]
         public IActionResult EditOptions(IFormFile csvFile)
         {
+            var withOptionsViewModel = this.questionWithOptionsViewModel;
             if (csvFile == null)
                 this.Error(Resources.QuestionnaireController.SelectTabFile);
             else
@@ -103,11 +104,11 @@ namespace WB.UI.Designer.Controllers
                 {
                     var importResult = this.categoricalOptionsImportService.ImportOptions(
                         csvFile.OpenReadStream(),
-                        this.questionWithOptionsViewModel.QuestionnaireId,
-                        this.questionWithOptionsViewModel.QuestionId);
+                        withOptionsViewModel.QuestionnaireId,
+                        withOptionsViewModel.QuestionId);
 
                     if (importResult.Succeeded)
-                        this.questionWithOptionsViewModel.Options = importResult.ImportedOptions.ToArray();
+                        withOptionsViewModel.Options = importResult.ImportedOptions.ToArray();
                     else
                     {
                         foreach (var importError in importResult.Errors)
@@ -121,7 +122,9 @@ namespace WB.UI.Designer.Controllers
                 }
             }
 
-            return this.View(this.questionWithOptionsViewModel.Options);
+            this.questionWithOptionsViewModel = questionWithOptionsViewModel;
+
+            return this.View(withOptionsViewModel.Options);
         }
 
         [HttpPost]
