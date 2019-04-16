@@ -1360,10 +1360,10 @@ bootstrap-select@^1.13.9:
   resolved "https://registry.yarnpkg.com/bootstrap-select/-/bootstrap-select-1.13.9.tgz#c3c812f862785f642413c8ca6988606ca30dda3d"
   integrity sha512-5k+FQP2BmV/Sde4eLZa0LWARXAfC/bAO6cRByiSEpVr7BEMzc6FzC4ca5d28Y00Vmu2a+3kGqMweGz0Hm8/47w==
 
-bootstrap@3.3.7:
-  version "3.3.7"
-  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-3.3.7.tgz#5a389394549f23330875a3b150656574f8a9eb71"
-  integrity sha1-WjiTlFSfIzMIdaOxUGVldPip63E=
+bootstrap@3.4.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-3.4.0.tgz#f8d77540dd3062283d2ae7687e21c1e691961640"
+  integrity sha512-F1yTDO9OHKH0xjl03DsOe8Nu1OWBIeAugGMhy3UTIYDdbbIPesQIhCEbj+HEr6wqlwweGAlP8F3OBC6kEuhFuw==
 
 bootstrap@^3.3.6:
   version "3.4.1"

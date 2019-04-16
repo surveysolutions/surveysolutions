@@ -17,7 +17,7 @@ const rename = require("gulp-rename");
 const rev = require("gulp-rev");
 const templateCache = require("gulp-angular-templatecache");
 const terser = require("gulp-terser");
-
+const cleanCss = require("gulp-clean-css");
 const manifest = require("./plugins/manifest");
 const resx2json = require("./plugins/resx2json");
 
@@ -53,6 +53,7 @@ const styles = () =>
   src(questionnaire.markup)
     .pipe(appendPrepend.appendText('@icon-font-path: "/fonts/";'))
     .pipe(cache(less({ relativeUrls: true, rootpath: "/" })))
+    .pipe(cache(cleanCss()))
     .pipe(gulpif(PRODUCTION, rev()))
     .pipe(dest(join(dist, "css")));
 
@@ -69,16 +70,29 @@ const scripts = () =>
     .pipe(gulpif(PRODUCTION, rev()))
     .pipe(dest(join(dist, "js")));
 
+
+
 const inject = () =>
-  injectSections(src("questionnaire/index.cshtml"), dist, { quiet: true })
+  injectSections(src("questionnaire/index.cshtml"), dist, {
+    quiet: true,
+    transform(filepath, file) {
+      if (filepath.endsWith(".js") && filepath.indexOf("libs") < 0) {
+        return '<script defer src="' + filepath + '"></script>';
+      }
+
+      return gulpInject.transform.apply(gulpInject.transform, arguments);
+    }
+  })
     .pipe(
       gulpInject(src("node_modules/.cache/rev-manifest.json"), {
         name: "manifest",
         transform(_, file) {
+          const json = file.contents.toString("utf8").replace(/\"/g, '""');
+          const razor = '@{ var locales_json = @"'+ json +'"; }'
           return (
             "<script>window.localization = " +
             file.contents.toString("utf8") +
-            "</script>"
+            "</script>" + razor
           );
         }
       })
@@ -86,7 +100,12 @@ const inject = () =>
     .pipe(dest(f => f.base));
 
 module.exports = {
-  templates, styles, scripts, staticContent, ResourcesFromResx, inject,
+  templates,
+  styles,
+  scripts,
+  staticContent,
+  ResourcesFromResx,
+  inject,
   default: series(
     parallel(templates, styles, scripts, staticContent, ResourcesFromResx),
     inject
