@@ -22,6 +22,7 @@ namespace WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersion
         public void Update(QuestionnaireCompilationVersion version)
         {
             this.dbContext.QuestionnaireCompilationVersions.Update(version);
+            this.dbContext.SaveChanges();
         }
 
         public void Remove(Guid questionnaireId)
@@ -30,12 +31,14 @@ namespace WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersion
             if (questionnaireCompilationVersion != null)
             {
                 this.dbContext.Remove(questionnaireCompilationVersion);
+                this.dbContext.SaveChanges();
             }
         }
 
         public void Add(QuestionnaireCompilationVersion version)
         {
             this.dbContext.QuestionnaireCompilationVersions.Add(version);
+            this.dbContext.SaveChanges();
         }
 
         public QuestionnaireCompilationVersion GetById(Guid id)
