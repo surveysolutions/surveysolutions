@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                 fileStream = memoryStream.ToArray();
             }
 
-            var plainStorageAccessor = new TestPlainStorage<TranslationInstance>();
+            var plainStorageAccessor = Create.InMemoryDbContext();
 
             var questionnaire = Create.QuestionnaireDocument(Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"), children: new IComposite[]
             {
@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             service.Store(questionnaireId, translationId, fileStream);
 
             //assert
-            Assert.That(plainStorageAccessor.Query(_ => _.FirstOrDefault()).Value, Is.EqualTo("Текст секции"));
+            Assert.That(plainStorageAccessor.TranslationInstances.First().Value, Is.EqualTo("Текст секции"));
         }
 
         [Test]
@@ -78,7 +78,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                 fileStream = memoryStream.ToArray();
             }
 
-            var plainStorageAccessor = new TestPlainStorage<TranslationInstance>();
+            var plainStorageAccessor = Create.InMemoryDbContext();
 
             var questionnaire = Create.QuestionnaireDocument(questionnaireId, children: new IComposite[]
             {
@@ -106,39 +106,39 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             service.Store(questionnaireId, translationId, fileStream);
 
             //assert
-            Assert.That(plainStorageAccessor.Query(_ => _.Count()).Equals(13));
+            Assert.That(plainStorageAccessor.TranslationInstances.Count(), Is.EqualTo(13));
 
-            Assert.That(plainStorageAccessor.Query(_ => _.Single(x=> x.QuestionnaireEntityId == sectionId && x.Type == TranslationType.Title)).Value, Is.EqualTo("Section title"));
+            Assert.That(plainStorageAccessor.TranslationInstances.Single(x=> x.QuestionnaireEntityId == sectionId && x.Type == TranslationType.Title).Value, Is.EqualTo("Section title"));
 
-            Assert.That(plainStorageAccessor.Query(_ => _.Single(x => x.QuestionnaireEntityId == Question1Id && x.Type == TranslationType.Title)).Value, Is.EqualTo("<b>Question title</b>"));
-            Assert.That(plainStorageAccessor.Query(_ => _.Single(x => x.QuestionnaireEntityId == Question1Id && 
+            Assert.That(plainStorageAccessor.TranslationInstances.Single(x => x.QuestionnaireEntityId == Question1Id && x.Type == TranslationType.Title).Value, Is.EqualTo("<b>Question title</b>"));
+            Assert.That(plainStorageAccessor.TranslationInstances.Single(x => x.QuestionnaireEntityId == Question1Id && 
                                                                       x.Type == TranslationType.ValidationMessage && 
-                                                                      x.TranslationIndex == "1")).Value, Is.EqualTo("Question validation"));
+                                                                      x.TranslationIndex == "1").Value, Is.EqualTo("Question validation"));
 
-            Assert.That(plainStorageAccessor.Query(_ => _.Single(x => x.QuestionnaireEntityId == Question1Id && 
+            Assert.That(plainStorageAccessor.TranslationInstances.Single(x => x.QuestionnaireEntityId == Question1Id && 
                                                                       x.Type == TranslationType.SpecialValue && 
-                                                                      x.TranslationIndex == "1")).Value, Is.EqualTo("Special value"));
+                                                                      x.TranslationIndex == "1").Value, Is.EqualTo("Special value"));
 
-            Assert.That(plainStorageAccessor.Query(_ => _.Single(x => x.QuestionnaireEntityId == StaticText2Id && 
-                                                                      x.Type == TranslationType.Title)).Value, Is.EqualTo("<b>Static text title</b>"));
+            Assert.That(plainStorageAccessor.TranslationInstances.Single(x => x.QuestionnaireEntityId == StaticText2Id && 
+                                                                      x.Type == TranslationType.Title).Value, Is.EqualTo("<b>Static text title</b>"));
 
-            Assert.That(plainStorageAccessor.Query(_ => _.Single(x => x.QuestionnaireEntityId == StaticText2Id &&
+            Assert.That(plainStorageAccessor.TranslationInstances.Single(x => x.QuestionnaireEntityId == StaticText2Id &&
                                                                       x.Type == TranslationType.ValidationMessage &&
-                                                                      x.TranslationIndex == "1")).Value, Is.EqualTo("Static text validation"));
+                                                                      x.TranslationIndex == "1").Value, Is.EqualTo("Static text validation"));
 
-            Assert.That(plainStorageAccessor.Query(_ => _.Single(x => x.QuestionnaireEntityId == Roster1Id && 
-                                                                      x.Type == TranslationType.Title)).Value, Is.EqualTo("Test"));
+            Assert.That(plainStorageAccessor.TranslationInstances.Single(x => x.QuestionnaireEntityId == Roster1Id && 
+                                                                      x.Type == TranslationType.Title).Value, Is.EqualTo("Test"));
 
-            Assert.That(plainStorageAccessor.Query(_ => _.Single(x => x.QuestionnaireEntityId == Roster1Id &&
+            Assert.That(plainStorageAccessor.TranslationInstances.Single(x => x.QuestionnaireEntityId == Roster1Id &&
                                                                       x.Type == TranslationType.FixedRosterTitle &&
-                                                                      x.TranslationIndex == "1")).Value, Is.EqualTo("Test1"));
+                                                                      x.TranslationIndex == "1").Value, Is.EqualTo("Test1"));
 
-            Assert.That(plainStorageAccessor.Query(_ => _.Single(x => x.QuestionnaireEntityId == Question3Id && 
+            Assert.That(plainStorageAccessor.TranslationInstances.Single(x => x.QuestionnaireEntityId == Question3Id && 
                                                                       x.Type == TranslationType.OptionTitle &&
-                                                                      x.TranslationIndex == "1")).Value, Is.EqualTo("Option1"));
+                                                                      x.TranslationIndex == "1").Value, Is.EqualTo("Option1"));
 
-            Assert.That(plainStorageAccessor.Query(_ => _.Single(x => x.QuestionnaireEntityId == Question3Id &&
-                                                                      x.Type == TranslationType.Instruction)).Value, Is.EqualTo("<b>Instruction</b>"));
+            Assert.That(plainStorageAccessor.TranslationInstances.Single(x => x.QuestionnaireEntityId == Question3Id &&
+                                                                      x.Type == TranslationType.Instruction).Value, Is.EqualTo("<b>Instruction</b>"));
 
         }
 
@@ -153,7 +153,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 
             byte[] fileStream = GetEmbendedFileContent("testTranslationsWithoutVariableColumn.xlsx");
 
-            var plainStorageAccessor = new TestPlainStorage<TranslationInstance>();
+            var plainStorageAccessor = Create.InMemoryDbContext();
 
             var questionnaire = Create.QuestionnaireDocument(questionnaireId, children: new IComposite[]
             {
@@ -169,9 +169,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             service.Store(questionnaireId, translationId, fileStream);
 
             //assert
-            Assert.That(plainStorageAccessor.Query(_ => _.Count()).Equals(1));
+            Assert.That(plainStorageAccessor.TranslationInstances.Count().Equals(1));
 
-            var translationInstance = plainStorageAccessor.Query(_ => _.Single());
+            var translationInstance = plainStorageAccessor.TranslationInstances.First();
             Assert.That(translationInstance.Value, Is.EqualTo("title"));
             Assert.That(translationInstance.QuestionnaireEntityId, Is.EqualTo(sectionId));
             Assert.That(translationInstance.Type, Is.EqualTo(TranslationType.Title));
@@ -189,7 +189,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 
             byte[] fileStream = GetEmbendedFileContent("testTranslationsWithRandomOrderColumns.xlsx");
 
-            var plainStorageAccessor = new TestPlainStorage<TranslationInstance>();
+            var plainStorageAccessor = Create.InMemoryDbContext();
 
             var questionnaire = Create.QuestionnaireDocument(questionnaireId, children: new IComposite[]
             {
@@ -205,9 +205,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             service.Store(questionnaireId, translationId, fileStream);
 
             //assert
-            Assert.That(plainStorageAccessor.Query(_ => _.Count()).Equals(1));
+            Assert.That(plainStorageAccessor.TranslationInstances.Count(), Is.EqualTo(1));
 
-            var translationInstance = plainStorageAccessor.Query(_ => _.Single());
+            var translationInstance = plainStorageAccessor.TranslationInstances.First();
             Assert.That(translationInstance.Value, Is.EqualTo("title"));
             Assert.That(translationInstance.QuestionnaireEntityId, Is.EqualTo(sectionId));
             Assert.That(translationInstance.Type, Is.EqualTo(TranslationType.Title));
@@ -226,7 +226,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 
             byte[] fileStream = GetEmbendedFileContent("testTranslationsWithoutEntityIdColumn.xlsx");
 
-            var plainStorageAccessor = new TestPlainStorage<TranslationInstance>();
+            var plainStorageAccessor = Create.InMemoryDbContext();
 
             var questionnaire = Create.QuestionnaireDocument(questionnaireId, children: new IComposite[]
             {

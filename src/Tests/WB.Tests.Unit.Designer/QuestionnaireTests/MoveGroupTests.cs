@@ -8,12 +8,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
     [TestFixture]
     internal class MoveGroupTests : QuestionnaireTestsContext
     {
-        [SetUp]
-        public void SetUp()
-        {
-            AssemblyContext.SetupServiceLocator();
-        }
-
         [Test]
         public void MoveGroup_When_target_group_is_regular_Then_rised_QuestionnaireItemMoved_event_s()
         {

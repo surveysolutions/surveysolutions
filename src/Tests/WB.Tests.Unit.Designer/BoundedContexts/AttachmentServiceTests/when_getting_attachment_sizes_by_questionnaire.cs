@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
             allAttachments.ForEach(attachment => attachmentMetaStorage.Store(attachment, attachment.AttachmentId));
             allContents.ForEach(content=>attachmentContentStorage.Store(content, content.ContentId));
 
-            attachmentService = Create.AttachmentService(attachmentMetaStorage: attachmentMetaStorage, attachmentContentStorage: attachmentContentStorage);
+            attachmentService = Create.AttachmentService();
             BecauseOf();
         }
 

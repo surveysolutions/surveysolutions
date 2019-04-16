@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -88,7 +89,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
         }
 
         private void BecauseOf() =>
-            result = controller.Verify(questionnaireId);
+            result = (VerificationResult) (controller.Verify(questionnaireId) as OkObjectResult).Value;
 
         [NUnit.Framework.Test] public void should_call_verifier_once () =>
             verifierMock.Verify(x => x.Verify(questionnaireView), Times.Once);
