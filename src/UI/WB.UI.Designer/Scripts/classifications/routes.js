@@ -1,18 +1,24 @@
-﻿var routes = {
-    groups: './api/groups',
-    createGroup: './api/group',
-    updateGroup: './api/group/{0}',
-    deleteGroup: './api/group/{0}',
-    classifications: './api/classifications',
-    createClassification: './api/classification',
-    updateClassification: './api/classification/{0}',
-    deleteClassification: './api/classification/{0}',
-    categories: './api/classification/{0}/categories',
-    updateCategories: './api/classification/{0}/categories'
+﻿var base = "./api/classifications/"
+
+var routes = {
+    groups: 'groups',
+    createGroup: 'group',
+    updateGroup: 'group/{0}',
+    deleteGroup: 'group/{0}',
+    classifications: 'classifications',
+    createClassification: 'classification',
+    updateClassification: 'classification/{0}',
+    deleteClassification: 'classification/{0}',
+    categories: 'classification/{0}/categories',
+    updateCategories: 'classification/{0}/categories'
 }
 
+var $http = axios.create({
+    baseURL: "./api/classifications"
+})
+
 // Add a request interceptor
-axios.interceptors.request.use(function(config) {
+$http.interceptors.request.use(function(config) {
         store.commit('start_loading');
         return config;
     },
@@ -23,7 +29,7 @@ axios.interceptors.request.use(function(config) {
     });
 
 // Add a response interceptor
-axios.interceptors.response.use(function(response) {
+$http.interceptors.response.use(function(response) {
         store.commit('finish_loading');
         return response;
     },
