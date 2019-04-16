@@ -201,14 +201,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (this.Answer == null)
             {
-                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
+                await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
                     .Interview_Question_Integer_EmptyValueError);
                 return;
             }
 
             if (this.Answer > int.MaxValue || this.Answer < int.MinValue)
             {
-                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
+                await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
                     .Interview_Question_Integer_ParsingError);
                 return;
             }
@@ -237,7 +237,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 var message = string.Format(UIResources.Interview_Questions_Integer_ProtectedValue,
                     ProtectedAnswer);
-                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(message);
+                await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(message);
                 return;
             }
 
@@ -247,7 +247,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     var message = string.Format(UIResources.Interview_Question_Integer_NegativeRosterSizeAnswer,
                         answeredOrSelectedValue);
-                    this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(message);
+                    await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(message);
                     return;
                 }
 
@@ -255,7 +255,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     var message = string.Format(UIResources.Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue,
                         answeredOrSelectedValue, this.answerMaxValue);
-                    this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(message);
+                    await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(message);
                     return;
                 }
 

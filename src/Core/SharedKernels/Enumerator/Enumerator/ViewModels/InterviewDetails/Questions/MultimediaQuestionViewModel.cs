@@ -209,15 +209,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     switch (mpe.Permission)
                     {
                         case Permission.Camera:
-                            this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
+                            await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
                                 .MissingPermissions_Camera);
                             break;
                         case Permission.Storage:
-                            this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
+                            await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
                                 .MissingPermissions_Storage);
                             break;
                         default:
-                            this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(mpe.Message);
+                            await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(mpe.Message);
                             break;
                     }
                 }
