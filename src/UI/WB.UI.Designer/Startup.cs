@@ -74,15 +74,9 @@ namespace WB.UI.Designer
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.Configure<BrotliCompressionProviderOptions>(options =>
-            {
-                options.Level = CompressionLevel.Optimal;
-            });
-
             services.AddResponseCompression(options =>
             {
                 options.EnableForHttps = true;
-                options.Providers.Add<BrotliCompressionProvider>();
             });
 
             services.AddDbContext<DesignerDbContext>(options =>
