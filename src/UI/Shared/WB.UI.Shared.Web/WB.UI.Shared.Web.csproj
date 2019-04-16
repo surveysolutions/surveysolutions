@@ -181,6 +181,7 @@
   <ItemGroup>
     <Compile Include="Compression\CompressionHandler.cs" />
     <Compile Include="Configuration\ExternalStoragesConfigSection.cs" />
+    <Compile Include="Filters\ControlPanelAccessAttribute.cs" />
     <Compile Include="Slack\ChannelsCollection.cs" />
     <Compile Include="Slack\ISlackMessageThrottler.cs" />
     <Compile Include="Slack\SlackApiClient.cs" />
