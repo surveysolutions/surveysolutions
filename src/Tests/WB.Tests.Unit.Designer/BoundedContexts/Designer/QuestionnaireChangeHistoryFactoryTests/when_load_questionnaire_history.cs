@@ -37,13 +37,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
                     targetType: QuestionnaireItemType.Question,
                     action: QuestionnaireActionType.Update,
                     targetId: questionId));
-            
+            questionnaireChangeRecordStorage.SaveChanges();
+
             questionnaireChangeHistoryFactory =
                 CreateQuestionnaireChangeHistoryFactory(
                     questionnaireChangeRecordStorage,
                     questionnaireDocumentStorage:
                         Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(
                             _ => _.GetById(Moq.It.IsAny<string>()) == questionnaireDocument));
+            
             BecauseOf();
         }
 

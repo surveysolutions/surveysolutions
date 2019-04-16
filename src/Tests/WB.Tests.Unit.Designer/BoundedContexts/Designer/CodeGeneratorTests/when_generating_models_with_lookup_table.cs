@@ -27,8 +27,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
                 .Setup(x => x.GetLookupTableContent(questionnaireId, lookupId))
                 .Returns(lookupTableContent);
 
-            Setup.InstanceToMockedServiceLocator<ILookupTableService>(lookupTableServiceMock.Object);
-
             var assetsTitles = new[]
             {
                 Create.FixedRosterTitle(1, "TV"),
@@ -51,7 +49,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
 
             questionnaire.LookupTables.Add(lookupId, Create.LookupTable("price"));
 
-            templateModelFactory = Create.QuestionnaireExecutorTemplateModelFactory();
+            templateModelFactory = Create.QuestionnaireExecutorTemplateModelFactory(lookupTableService: lookupTableServiceMock.Object);
             BecauseOf();
         }
 
