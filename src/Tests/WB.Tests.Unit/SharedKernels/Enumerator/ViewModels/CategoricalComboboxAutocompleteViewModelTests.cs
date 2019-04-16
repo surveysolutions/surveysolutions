@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using Moq;
 using MvvmCross.Tests;
 using NUnit.Framework;
@@ -87,7 +86,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             var interview = SetUp.StatefulInterview(questionnaire);
             var filteredViewModel = Create.ViewModel.FilteredOptionsViewModel(Identity.Create(autocompleteQuestionId, RosterVector.Empty), questionnaire, interview);
 
-            var mockOfOnAddEvent = new Mock<Func<object, int, Task>>();
+            var mockOfOnAddEvent = new Mock<EventHandler<int>>();
             var vm = Create.ViewModel.CategoricalComboboxAutocompleteViewModel(filteredViewModel);
             
             vm.OnItemSelected += mockOfOnAddEvent.Object;
