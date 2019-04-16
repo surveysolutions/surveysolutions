@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -87,8 +86,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.UpdateViewModelsByAnsweredOptionsInMainThread(@event.SelectedValues?.Select(Convert.ToInt32)?.ToArray());
         }
 
-        private async Task FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs e)
-            => await this.UpdateViewModelsInMainThread();
+        private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs e)
+            => this.UpdateViewModelsInMainThread();
 
         public override void Dispose()
         {

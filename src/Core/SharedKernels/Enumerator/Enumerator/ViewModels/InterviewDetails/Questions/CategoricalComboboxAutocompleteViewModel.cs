@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
@@ -16,9 +15,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ICompositeQuestion,
         IDisposable
     {
-        public virtual event Func<object, int, Task> OnItemSelected;
-        public virtual event Func<object, EventArgs, Task> OnAnswerRemoved;
-        public virtual event Func<object, EventArgs, Task> OnShowErrorIfNoAnswer;
+        public virtual event EventHandler<int> OnItemSelected;
+        public virtual event EventHandler OnAnswerRemoved;
+        public virtual event EventHandler OnShowErrorIfNoAnswer;
         private readonly FilteredOptionsViewModel filteredOptionsViewModel;
         private readonly bool displaySelectedValue;
 
@@ -49,68 +48,52 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             set => this.RaiseAndSetIfChanged(ref this.autoCompleteSuggestions, value);
         }
 
-        public IMvxCommand<string> FilterCommand => new MvxAsyncCommand<string>(this.UpdateFilter);
-        public IMvxCommand RemoveAnswerCommand => new MvxAsyncCommand(async () =>
+        public IMvxCommand<string> FilterCommand => new MvxCommand<string>(this.UpdateFilter);
+        public IMvxCommand RemoveAnswerCommand => new MvxCommand(() =>
         {
-            await this.UpdateFilter(null);
-            if (this.OnAnswerRemoved == null)
-                return;
-
-            await InvokeAllHandlers<EventArgs>(this.OnAnswerRemoved, EventArgs.Empty);
+            this.UpdateFilter(null);
+            this.OnAnswerRemoved?.Invoke(this, null);
         });
 
-     
-        public IMvxCommand<OptionWithSearchTerm> SaveAnswerBySelectedOptionCommand => new MvxAsyncCommand<OptionWithSearchTerm>(this.SaveAnswerBySelectedOption);
-        public IMvxCommand ShowErrorIfNoAnswerCommand => new MvxAsyncCommand(this.ShowErrorIfNoAnswer);
+        public IMvxCommand<OptionWithSearchTerm> SaveAnswerBySelectedOptionCommand => new MvxCommand<OptionWithSearchTerm>(this.SaveAnswerBySelectedOption);
+        public IMvxCommand ShowErrorIfNoAnswerCommand => new MvxCommand(this.ShowErrorIfNoAnswer);
 
-        private async Task ShowErrorIfNoAnswer()
+        private void ShowErrorIfNoAnswer()
         {
-            await InvokeAllHandlers<EventArgs>(this.OnShowErrorIfNoAnswer, EventArgs.Empty);
+            this.OnShowErrorIfNoAnswer?.Invoke(this, EventArgs.Empty);
 
             if (string.IsNullOrEmpty(this.FilterText)) return;
 
             var selectedOption = this.filteredOptionsViewModel.GetOptions(this.FilterText).FirstOrDefault(x => !this.excludedOptions.Contains(x.Value));
 
             if (selectedOption?.Title.Equals(this.FilterText, StringComparison.CurrentCultureIgnoreCase) == true)
-                await this.SaveAnswerBySelectedOption(ToOptionWithSearchTerm(string.Empty, selectedOption));
+                this.SaveAnswerBySelectedOption(ToOptionWithSearchTerm(string.Empty, selectedOption));
             else
             {
                 var errorMessage = UIResources.Interview_Question_Filter_MatchError.FormatString(this.FilterText);
-                await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(errorMessage);
+                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(errorMessage);
             }
         }
 
-        private async Task SaveAnswerBySelectedOption(OptionWithSearchTerm option)
+
+        private void SaveAnswerBySelectedOption(OptionWithSearchTerm option)
         {
-            await InvokeAllHandlers<int>(this.OnItemSelected, option.Value);
-            await this.UpdateFilter(displaySelectedValue ? option.Title : null);
+            this.OnItemSelected?.Invoke(this, option.Value);
+            this.UpdateFilter(displaySelectedValue ? option.Title : null);
         }
 
-        private async Task InvokeAllHandlers<T>(Func<object, T, Task> handler, T value)
-        {
-            Delegate[] invocationList = handler.GetInvocationList();
-            Task[] handlerTasks = new Task[invocationList.Length];
-
-            for (int i = 0; i < invocationList.Length; i++)
-            {
-                handlerTasks[i] = ((Func<object, T, Task>) invocationList[i])(this, value);
-            }
-
-            await Task.WhenAll(handlerTasks);
-        }
-
-        public async Task UpdateFilter(string filter) => await this.InvokeOnMainThreadAsync(async () =>
+        public void UpdateFilter(string filter) => this.InvokeOnMainThread(() =>
         {
             this.AutoCompleteSuggestions = this.GetSuggestions(filter).ToList();
             this.FilterText = filter;
-            await this.RaisePropertyChanged(() => this.FilterText);
+            this.RaisePropertyChanged(() => this.FilterText);
         });
 
         private IEnumerable<OptionWithSearchTerm> GetSuggestions(string filter)
         {
-            List<CategoricalOption> filteredOptions = this.filteredOptionsViewModel.GetOptions(filter);
+            var filteredOptions = this.filteredOptionsViewModel.GetOptions(filter).ToArray();
 
-            foreach (var model in filteredOptions.Count == 1 && displaySelectedValue
+            foreach (var model in filteredOptions.Length == 1 && displaySelectedValue
                 ? filteredOptions
                 : filteredOptions.Where(x => !this.excludedOptions.Contains(x.Value)))
             {

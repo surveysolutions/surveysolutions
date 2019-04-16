@@ -91,11 +91,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.eventRegistry.Subscribe(this, interviewId);
         }
 
-        protected async Task SetAnswerAndUpdateFilter()
+        protected void SetAnswerAndUpdateFilter()
         {
             this.Answer = this.interview.GetSingleOptionQuestion(this.Identity).GetAnswer()?.SelectedValue;
 
-            await this.comboboxViewModel.UpdateFilter(!this.Answer.HasValue
+            this.comboboxViewModel.UpdateFilter(!this.Answer.HasValue
                 ? null
                 : this.filteredOptionsViewModel.GetAnsweredOption(this.Answer.Value)?.Title ?? null);
         }
@@ -135,20 +135,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         
-        protected async Task ComboboxInstantViewModel_OnItemSelected(object sender, int selectedOptionCode)
+        protected async void ComboboxInstantViewModel_OnItemSelected(object sender, int selectedOptionCode)
         {
             await SaveAnswerAsync(selectedOptionCode);
         }
 
-        protected async Task ComboboxInstantViewModel_OnAnswerRemoved(object sender, EventArgs e)
+        protected async void ComboboxInstantViewModel_OnAnswerRemoved(object sender, EventArgs e)
         {
             await RemoveAnswerAsync();
         }
 
-        private async Task ComboboxViewModel_OnShowErrorIfNoAnswer(object sender, EventArgs e)
+        private void ComboboxViewModel_OnShowErrorIfNoAnswer(object sender, EventArgs e)
         {
             if (this.comboboxViewModel.FilterText == string.Empty && this.questionState.IsAnswered)
-                await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(string.Format(UIResources.Interview_Question_Filter_MatchError, string.Empty));
+                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(string.Format(UIResources.Interview_Question_Filter_MatchError, string.Empty));
         }
 
         protected async Task RemoveAnswerAsync()
