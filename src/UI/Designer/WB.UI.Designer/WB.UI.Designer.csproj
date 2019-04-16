@@ -16,7 +16,7 @@
     <AssemblyName>WB.UI.Designer</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -322,7 +322,6 @@
     <Compile Include="Services\IAuthenticationService.cs" />
     <Compile Include="Services\IDeskAuthenticationService.cs" />
     <Compile Include="Services\IRecaptchaService.cs" />
-    <Compile Include="Services\QuestionnaireDowngradeService.cs" />
     <Compile Include="Utils\Pdf.cs" />
     <Compile Include="WebServices\Questionnaire\QuestionnaireListRequest.cs" />
     <Compile Include="WebServices\Questionnaire\QuestionnaireListViewItemMessage.cs" />

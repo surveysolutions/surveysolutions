@@ -1,19 +1,18 @@
 using System.IO;
 using System.Reflection;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Routing;
-using System.Web.SessionState;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Logging;
 using Moq;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Controllers;
 
@@ -23,51 +22,31 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
     {
         internal static QuestionnaireController CreateQuestionnaireController(
             ICommandService commandService = null,
-            IMembershipUserService userHelper = null,
             IQuestionnaireVerifier questionnaireVerifier = null,
             IQuestionnaireHelper questionnaireHelper = null,
             IQuestionnaireViewFactory questionnaireViewFactory = null,
-            ILogger logger = null,
+            ILogger<QuestionnaireController> logger = null,
             IQuestionnaireInfoFactory questionnaireInfoFactory = null,
-            ICategoricalOptionsImportService categoricalOptionsImportService = null)
+            ICategoricalOptionsImportService categoricalOptionsImportService = null,
+            DesignerDbContext dbContext = null)
         {
-            return new QuestionnaireController(commandService ?? Mock.Of<ICommandService>(),
-                userHelper ?? Mock.Of<IMembershipUserService>(),
-                questionnaireHelper ?? Mock.Of<IQuestionnaireHelper>(),
+            return new QuestionnaireController(
                 questionnaireViewFactory ?? Mock.Of<IQuestionnaireViewFactory>(),
                 Mock.Of<IFileSystemAccessor>(),
-                logger ?? Mock.Of<ILogger>(),
+                logger ?? Mock.Of<ILogger<QuestionnaireController>>(),
                 questionnaireInfoFactory ?? Mock.Of<IQuestionnaireInfoFactory>(),
                 Mock.Of<IQuestionnaireChangeHistoryFactory>(),
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IQuestionnaireInfoViewFactory>(),
-                Mock.Of<IPublicFoldersStorage>(), 
-                categoricalOptionsImportService ?? Mock.Of<ICategoricalOptionsImportService>());
-        }
-
-        protected static void SetControllerContextWithSession(Controller controller, string key, object value)
-        {
-            var httpRequest = new HttpRequest("", "http://localhost/", "");
-            var httpResponce = new HttpResponse(new StringWriter());
-            var context = new HttpContext(httpRequest, httpResponce);
-
-            var sessionContainer = new HttpSessionStateContainer("options", new SessionStateItemCollection(),
-                new HttpStaticObjectsCollection(), 10, true,
-                HttpCookieMode.AutoDetect,
-                SessionStateMode.InProc, false);
-
-            context.Items["AspSession"]=(typeof(HttpSessionState).GetConstructor(
-                BindingFlags.NonPublic | BindingFlags.Instance,
-                null, CallingConventions.Standard,
-                new[] { typeof(HttpSessionStateContainer) },
-                null)
-                .Invoke(new object[] { sessionContainer }));
-
-            HttpContext.Current = context;
-
-            controller.ControllerContext = new ControllerContext(new HttpContextWrapper(context), new RouteData(), controller);
-
-            controller.Session[key] = value;
+                Mock.Of<IHttpContextAccessor>(),
+                categoricalOptionsImportService ?? Mock.Of<ICategoricalOptionsImportService>(),
+                commandService ?? Mock.Of<ICommandService>(),
+                dbContext ?? Create.InMemoryDbContext(),
+                questionnaireHelper ?? Mock.Of<IQuestionnaireHelper>(),
+                Mock.Of<IPublicFoldersStorage>(),
+                Mock.Of<IAttachmentService>(),
+                Mock.Of<ITranslationsService>()
+                );
         }
 
         protected static Stream GenerateStreamFromString(string s)

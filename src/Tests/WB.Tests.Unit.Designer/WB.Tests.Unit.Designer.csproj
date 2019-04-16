@@ -19,8 +19,11 @@
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Applications\AttributesTests\**" />
     <Compile Remove="BoundedContexts\Designer\UpdateNumericQuestionHandlerTests\**" />
+    <EmbeddedResource Remove="Applications\AttributesTests\**" />
     <EmbeddedResource Remove="BoundedContexts\Designer\UpdateNumericQuestionHandlerTests\**" />
+    <None Remove="Applications\AttributesTests\**" />
     <None Remove="BoundedContexts\Designer\UpdateNumericQuestionHandlerTests\**" />
   </ItemGroup>
   <ItemGroup>
@@ -76,9 +79,10 @@
     <PackageReference Include="NUnit" Version="3.10.1" />
     <PackageReference Include="NUnit.Extension.TeamCityEventListener" Version="1.0.4" />
     <PackageReference Include="NUnit.Extension.VSProjectLoader" Version="3.8.0" />
-    <PackageReference Include="Quartz" Version="2.6.1" />
     <PackageReference Include="RhinoMocks" Version="3.6.1" />
     <PackageReference Include="T4Scaffolding.Core" Version="1.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.2.4" />
+
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
