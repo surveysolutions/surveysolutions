@@ -176,14 +176,14 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var account = await users.FindByLoginAsync(null, model.Login);
+                var account = await users.FindByNameAsync(model.Login);
                 if (account == null)
                     this.Error($"Account '{model.Login}' does not exists");
                 else
                 {
                     if (model.IsAdmin)
                     {
-                        if (!await users.IsInRoleAsync(account, "Administrator"))
+                        if (await users.IsInRoleAsync(account, "Administrator"))
                             this.Error($"Account '{model.Login}' has administrator role");
                         else
                         {
