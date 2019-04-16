@@ -2,10 +2,8 @@ using System;
 using System.Diagnostics;
 using System.Reflection;
 using WB.Core.Infrastructure.Versions;
-using WB.UI.Designer;
-using WB.UI.Designer1;
 
-namespace WB.UI.Shared.Web.Versions
+namespace WB.UI.Designer.CommonWeb
 {
     public class ProductVersion : IProductVersion
     {

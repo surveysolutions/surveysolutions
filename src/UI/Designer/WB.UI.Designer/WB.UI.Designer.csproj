@@ -438,7 +438,6 @@
     <Content Include="Views\ControlPanel\CompilationVersionsViews\EditCompilationVersion.cshtml" />
     <Content Include="Views\Shared\_alerts.cshtml" />
     <Content Include="Views\UnderConstruction\Index.cshtml" />
-    <Content Include="Views\Questionnaire\ExpressionGeneration.cshtml" />
     <Content Include="Views\Questionnaire\QuestionnaireHistory.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">

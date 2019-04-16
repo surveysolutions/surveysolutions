@@ -36,7 +36,6 @@ using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Modules;
 using WB.UI.Designer.Services;
-using WB.UI.Shared.Web.Versions;
 
 namespace WB.UI.Designer
 {
@@ -99,6 +98,7 @@ namespace WB.UI.Designer
             services.AddTransient<ICaptchaService, WebCacheBasedCaptchaService>();
             services.AddTransient<ICaptchaProtectedAuthenticationService, CaptchaProtectedAuthenticationService>();
             services.AddSingleton<IProductVersion, ProductVersion>();
+            services.AddTransient<IProductVersionHistory, ProductVersionHistory>();
 
             services.Configure<CaptchaConfig>(Configuration.GetSection("Captcha"));
             services.AddTransient<IRecaptchaService, RecaptchaService>();
@@ -143,7 +143,6 @@ namespace WB.UI.Designer
                 new QuestionnaireVerificationModule(),
                 //new MembershipModule(),
                 new FileInfrastructureModule(),
-                //new ProductVersionModule(typeof(Startup).Assembly),
                 new DesignerRegistry(),
                 new DesignerWebModule(),
                 new WebCommonModule()

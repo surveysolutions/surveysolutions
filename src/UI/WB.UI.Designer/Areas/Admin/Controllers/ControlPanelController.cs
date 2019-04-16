@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -11,31 +12,37 @@ using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.AllowedAddresses;
-using WB.UI.Designer.Code;
+using WB.Core.Infrastructure.Versions;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models.ControlPanel;
 
-namespace WB.UI.Designer.Controllers
+namespace WB.UI.Designer.Areas.Admin.Controllers
 {
     [Authorize(Roles = "Administrator")]
-    [ServiceFilter(typeof(LocalOrDevelopmentAccessOnlyAttribute))]
+    [Area("Admin")]
     public class ControlPanelController : Controller
     {
         private readonly UserManager<DesignerIdentityUser> users;
         private readonly IConfiguration configuration;
         private readonly IAllowedAddressService allowedAddressService;
         private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersionService;
+        private readonly IProductVersion productVersion;
+        private readonly IProductVersionHistory productVersionHistory;
 
         public ControlPanelController(
             UserManager<DesignerIdentityUser> users,
             IConfiguration configuration, 
             IAllowedAddressService allowedAddressService, 
-            IQuestionnaireCompilationVersionService questionnaireCompilationVersionService)
+            IQuestionnaireCompilationVersionService questionnaireCompilationVersionService,
+            IProductVersion productVersion,
+            IProductVersionHistory productVersionHistory)
         {
             this.users = users;
             this.configuration = configuration;
             this.allowedAddressService = allowedAddressService;
             this.questionnaireCompilationVersionService = questionnaireCompilationVersionService;
+            this.productVersion = productVersion;
+            this.productVersionHistory = productVersionHistory;
         }
 
         public ActionResult Settings()
@@ -201,5 +208,30 @@ namespace WB.UI.Designer.Controllers
         }
 
         public async Task Exceptions() => await ExceptionalMiddleware.HandleRequestAsync(HttpContext);
+
+        public IActionResult ExpressionGeneration(Guid? id)
+        {
+            ViewBag.QuestionnaireId = id ?? Guid.Empty;
+            return this.View();
+        }
+
+        public JsonResult GetVersions() =>
+            this.Json(new VersionsInfo(
+                this.productVersion.ToString(),
+                this.productVersionHistory.GetHistory().ToDictionary(
+                    change => change.UpdateTimeUtc,
+                    change => change.ProductVersion)));
+
+        public class VersionsInfo
+        {
+            public VersionsInfo(string product, Dictionary<DateTime, string> history)
+            {
+                this.Product = product;
+                this.History = history;
+            }
+
+            public string Product { get; }
+            public Dictionary<DateTime, string> History { get; }
+        }
     }
 }
