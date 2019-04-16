@@ -152,11 +152,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        protected virtual void UpdateViewModelsInMainThread()
+        protected virtual async Task UpdateViewModelsInMainThread()
         {
             var interview = this.interviewRepository.Get(this.interviewId.FormatGuid());
 
-            this.InvokeOnMainThread(() => this.Options.SynchronizeWith(this.GetOptions(interview).ToList(), (s, t) => s.Value.Equals(t.Value) && s.Title == t.Title));
+            await this.InvokeOnMainThreadAsync(async () => this.Options.SynchronizeWith(this.GetOptions(interview).ToList(), (s, t) => s.Value.Equals(t.Value) && s.Title == t.Title));
 
             this.UpdateOptionsFromInterviewInMainThread();
         }
