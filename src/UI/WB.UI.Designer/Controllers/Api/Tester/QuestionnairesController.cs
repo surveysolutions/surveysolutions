@@ -13,11 +13,12 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
+using WB.UI.Designer.Code.Attributes;
 using WB.UI.Designer1.Extensions;
 
 namespace WB.UI.Designer.Controllers.Api.Tester
 {
-    //[ApiBasicAuth]
+    [ApiBasicAuth]
     [Route("api/questionnaires")]
     public class QuestionnairesController : ControllerBase
     {

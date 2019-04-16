@@ -9,10 +9,11 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
+using WB.UI.Designer.Code.Attributes;
 
 namespace WB.UI.Designer.Controllers.Api.Tester
 {
-    //[ApiBasicAuth]
+    [ApiBasicAuth]
     [Route("api/translation")]
     public class TranslationController : ApiController
     {

@@ -1,10 +1,11 @@
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
+using WB.UI.Designer.Code.Attributes;
 
 namespace WB.UI.Designer.Api.Tester
 {
-    //[ApiBasicAuth]
+    [ApiBasicAuth]
     [Route("api/user")]
     public class UserController : ControllerBase
     {
