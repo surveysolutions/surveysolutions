@@ -1506,10 +1506,14 @@ namespace WB.Tests.Unit.Designer
                 dbContext ?? Create.InMemoryDbContext());
         }
 
-        public static IPlainStorageAccessor<ClassificationEntity> ClassificationsAccessor(params ClassificationEntity[] entities)
+        public static DesignerDbContext ClassificationsAccessor(params ClassificationEntity[] entities)
         {
-            var storage = new TestPlainStorage<ClassificationEntity>();
-            storage.Store(entities.Select(x => new Tuple<ClassificationEntity, object>(x, x.Id)));
+            var storage = Create.InMemoryDbContext();
+            foreach (var classificationEntity in entities)
+            {
+                storage.Add(classificationEntity);
+            }
+            storage.SaveChanges();
             return storage;
         }
 

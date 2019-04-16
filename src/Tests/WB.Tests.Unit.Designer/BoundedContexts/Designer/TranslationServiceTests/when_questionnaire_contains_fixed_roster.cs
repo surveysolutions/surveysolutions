@@ -40,11 +40,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                        )
                 });
 
-            var translationsStorage = new TestPlainStorage<TranslationInstance>();
-            foreach (var translationInstance in storedTranslations)
-            {
-                translationsStorage.Store(translationInstance, translationInstance);
-            }
+            var translationsStorage = Create.InMemoryDbContext();
+            translationsStorage.TranslationInstances.AddRange(storedTranslations);
+            translationsStorage.SaveChanges();
 
             var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
             questionnaires.SetReturnsDefault(questionnaire);

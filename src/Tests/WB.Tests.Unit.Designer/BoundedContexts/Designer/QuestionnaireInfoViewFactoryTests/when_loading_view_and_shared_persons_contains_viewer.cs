@@ -3,6 +3,7 @@ using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
@@ -29,12 +30,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
             });
             questionnaireListViewItemStorage.Store(questionnaireListViewItem, questionnaireId);
 
-            var accountDocument = new User { Email = userEmail };
-            var accountDocumentRepository = Mock.Of<IPlainStorageAccessor<User>>(
-                x => x.GetById(userId.FormatGuid()) == accountDocument);
+            var dbContext = Create.InMemoryDbContext();
+            dbContext.Users.Add(new DesignerIdentityUser() { Id = userId, Email = userEmail });
+            dbContext.SaveChanges();
 
             factory = CreateQuestionnaireInfoViewFactory(repository: questionnaireInfoViewRepository,
-                questionnaireListViewItemStorage: questionnaireListViewItemStorage, accountsDocumentReader: accountDocumentRepository);
+                dbContext);
             BecauseOf();
         }
 

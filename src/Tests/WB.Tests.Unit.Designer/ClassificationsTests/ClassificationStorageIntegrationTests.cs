@@ -6,8 +6,6 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Classifications;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Tests.Abc;
-using WB.Tests.Integration.QuestionnaireSearchStorageTests;
-using Entity = WB.Tests.Abc.Entity;
 
 namespace WB.Tests.Integration.ClassificationsTests
 {

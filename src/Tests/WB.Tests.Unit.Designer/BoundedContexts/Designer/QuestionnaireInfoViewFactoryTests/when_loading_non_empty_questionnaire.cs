@@ -6,6 +6,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
@@ -45,11 +46,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
                 .Setup(x => x.GetById(questionnaireId))
                 .Returns(questionnaire);
 
-            var userRepositoryMock =
-                Mock.Of<IPlainStorageAccessor<User>>(
-                    x => x.GetById(userId.FormatGuid()) == new User() {Email = ownerEmail});
+            var dbContext = Create.InMemoryDbContext();
+            dbContext.Users.Add(new DesignerIdentityUser() {Id = userId, Email = ownerEmail});
+            dbContext.SaveChanges();
+
             factory = CreateQuestionnaireInfoViewFactory(repository: repositoryMock.Object,
-                accountsDocumentReader: userRepositoryMock);
+                dbContext);
             BecauseOf();
         }
 

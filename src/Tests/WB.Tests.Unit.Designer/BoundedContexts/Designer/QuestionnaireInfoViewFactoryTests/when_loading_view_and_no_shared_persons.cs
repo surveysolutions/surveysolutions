@@ -3,6 +3,7 @@ using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
@@ -19,12 +20,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
             var questionnaireInfoViewRepository = Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(
                 x => x.GetById(questionnaireId) == questionnaireDocument);
 
-            var accountDocument = new User { Email = userEmail };
-            var accountDocumentRepository = Mock.Of<IPlainStorageAccessor<User>>(
-                x => x.GetById(userId.FormatGuid()) == accountDocument);
+            var dbContext = Create.InMemoryDbContext();
+            dbContext.Users.Add(new DesignerIdentityUser() { Id = userId, Email = userEmail });
+            dbContext.SaveChanges();
 
             factory = CreateQuestionnaireInfoViewFactory(repository: questionnaireInfoViewRepository,
-                accountsDocumentReader: accountDocumentRepository);
+                dbContext);
             BecauseOf();
         }
 
