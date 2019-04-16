@@ -25,8 +25,7 @@ namespace WB.UI.Designer.Services
             if (this.GetLastRegisteredVersion() == this.CurrentVersion)
                 return;
 
-            this.dbContext.ProductVersionChanges.Add(new ProductVersionChange
-                {ProductVersion = this.CurrentVersion, UpdateTimeUtc = DateTime.UtcNow});
+            this.dbContext.ProductVersionChanges.Add(new ProductVersionChange(this.CurrentVersion, DateTime.UtcNow));
 
             this.dbContext.SaveChanges();
         }
