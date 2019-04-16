@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         {
             excelFile = service.GetAsExcelFile(questionnaireId, translationId);
             workbook = new ExcelPackage(new MemoryStream(excelFile.ContentAsExcelFile)).Workbook;
-            cells = workbook.Worksheets[1].Cells;
+            cells = workbook.Worksheets[0].Cells;
         }
 
         [NUnit.Framework.Test] public void should_output_roster_title_translation () 
