@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public event EventHandler SpecialValueChanged;
         public event EventHandler SpecialValueRemoved;
 
-        private async Task SpecialValueSelected(object sender, EventArgs eventArgs)
+        private void SpecialValueSelected(object sender, EventArgs eventArgs)
         {
             var selectedSpecialValue = (SingleOptionQuestionOptionViewModel) sender;
             var previousOption =
@@ -97,7 +97,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private async Task RemoveAnswerHandler(object sender, EventArgs e)
+        private void RemoveAnswerHandler(object sender, EventArgs e)
         {
             this.SpecialValueRemoved?.Invoke(sender, EventArgs.Empty);
         }

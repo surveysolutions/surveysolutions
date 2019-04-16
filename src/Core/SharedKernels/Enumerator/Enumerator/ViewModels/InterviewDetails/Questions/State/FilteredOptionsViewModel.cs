@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -20,7 +19,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private string Filter { get; set; } = String.Empty;
         public int Count { get; protected set; } = 200;
 
-        public virtual event Func<object, EventArgs, Task> OptionsChanged;
+        public virtual event EventHandler OptionsChanged;
 
         public int? ParentValue { set; get; }
 
