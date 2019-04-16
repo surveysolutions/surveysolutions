@@ -19,20 +19,17 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         private readonly DesignerDbContext dbContext;
         private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersion;
         private readonly IAttachmentService attachmentService;
-        private readonly IIdentityService membershipUserService;
 
         public QuestionnaireInfoViewFactory(
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
             DesignerDbContext dbContext,
             IQuestionnaireCompilationVersionService questionnaireCompilationVersion,
-            IAttachmentService attachmentService,
-            IIdentityService membershipUserService)
+            IAttachmentService attachmentService)
         {
             this.questionnaireDocumentReader = questionnaireDocumentReader;
             this.dbContext = dbContext;
             this.questionnaireCompilationVersion = questionnaireCompilationVersion;
             this.attachmentService = attachmentService;
-            this.membershipUserService = membershipUserService;
         }
 
         public QuestionnaireInfoView Load(string questionnaireId, Guid viewerId)
@@ -92,7 +89,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 .Select(x => new SharedPersonView
                 {
                     Email = x.Email,
-                    Login = this.membershipUserService.GetById(x.UserId).UserName,
+                    Login = this.dbContext.Users.Find(x.UserId).UserName,
                     UserId = x.UserId,
                     IsOwner = x.IsOwner,
                     ShareType = x.ShareType
@@ -102,7 +99,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             if (questionnaireDocument.CreatedBy.HasValue &&
                 sharedPersons.All(x => x.UserId != questionnaireDocument.CreatedBy))
             {
-                var owner = this.membershipUserService.GetById(questionnaireDocument.CreatedBy.Value);
+                var owner = this.dbContext.Users.Find(questionnaireDocument.CreatedBy.Value);
                 if (owner != null)
                 {
                     sharedPersons.Add(new SharedPersonView
