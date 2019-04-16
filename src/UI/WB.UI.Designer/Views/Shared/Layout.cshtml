@@ -1,4 +1,4 @@
-@using System.Globalization
+﻿@using System.Globalization
 @using Microsoft.Extensions.Options
 @using WB.UI.Designer.Areas.Admin.Pages
 @using WB.UI.Designer.Code
@@ -69,21 +69,6 @@
                     @Html.MenuActionLink(ViewContext, QuestionnaireController.SharedQuestionnaires, "Shared", "Questionnaire", "presentation")
                     @Html.MenuActionLink(ViewContext, QuestionnaireController.PublicQuestionnaires, "Public", "Questionnaire", "presentation")
                     @Html.MenuActionLink(ViewContext, QuestionnaireController.Classifications, "Index", "Classifications", "presentation")
-                    @if (User.IsAdmin())
-                    {
-                        <li class="@(ViewContext.CurrentController() == "PublicFolders" ? "active" : "")" role="presentation">
-                            <a asp-action="Index" asp-controller="PublicFolders" asp-area="Admin" 
-                               >
-                                @QuestionnaireController.QuestionnaireTreeFolders
-                            </a>
-                        </li>
-
-                        <li role="presentation" class="@(Model is UsersModel ? "active" : "")">
-                            <a asp-page="/Users" asp-area="Admin" >
-                                @QuestionnaireController.ManageUsers
-                            </a>
-                        </li>
-                    }
                     <li role="presentation" class="create">
                         @Html.ActionLink(QuestionnaireController.CreateNew, "Create", "Questionnaire", null, new { @class = "btn" })
                     </li>
@@ -93,13 +78,9 @@
                        href="@UiConfig.Value.DesignerHelpUrl">@AccountResources.Help</a>
                     @if (User.IsAdmin())
                     {
-                <a class="btn btn-default"
-                   asp-action="Index" asp-controller="ControlPanel" asp-area="Admin">
-                    @QuestionnaireController.ControlPanel
-                </a>
                         <a class="btn btn-default"
-                           asp-page="/RestoreQuestionnaire" asp-area="Admin">
-                            @QuestionnaireController.RestoreQuestionnaire
+                           asp-action="Index" asp-controller="ControlPanel" asp-area="Admin">
+                            @QuestionnaireController.ControlPanel
                         </a>
                     }
                     <div class="btn-group">

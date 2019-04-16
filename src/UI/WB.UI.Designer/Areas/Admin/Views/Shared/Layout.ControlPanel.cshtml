@@ -1,3 +1,4 @@
+@using WB.UI.Designer.Resources
 @{
     Layout = "Layout";
 }
@@ -14,6 +15,9 @@
         <div class="col-sm-3 col-md-2 sidebar">
 
             <ul class="nav nav-sidebar">
+                <li><a href="@Url.Page("/RestoreQuestionnaire")">@QuestionnaireController.RestoreQuestionnaire</a></li>
+                <li><a href="@Url.Action("Index", "PublicFolders")">@QuestionnaireController.QuestionnaireTreeFolders</a></li>
+                <li><a href="@Url.Page("/Users")">@QuestionnaireController.ManageUsers</a></li>
                 <li><a href="@Url.Action("Versions", "ControlPanel")">Versions</a></li>
                 <li><a href="@Url.Action("ExpressionGeneration", "ControlPanel")">Expression Generation</a></li>
                 <li><a href="@Url.Action("MakeAdmin", "ControlPanel")">Make the user an administrator</a></li>
