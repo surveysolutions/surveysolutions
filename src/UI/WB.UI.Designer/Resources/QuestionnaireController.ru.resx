@@ -338,4 +338,8 @@
   <data name="Classifications" xml:space="preserve">
     <value>Классификации</value>
   </data>
+  <data name="ControlPanel" xml:space="preserve">
+      <value>Панель управления</value>
+      <comment>Панель управления</comment>
+  </data>
 </root>

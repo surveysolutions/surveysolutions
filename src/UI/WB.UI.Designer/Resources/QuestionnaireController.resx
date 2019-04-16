@@ -255,6 +255,9 @@
   <data name="MyQuestionnaires" xml:space="preserve">
     <value>My Questionnaires</value>
   </data>
+  <data name="ControlPanel" xml:space="preserve">
+    <value>Control panel</value>
+  </data>
   <data name="Hello" xml:space="preserve">
     <value>Hi, {0}</value>
   </data>
