@@ -31,7 +31,7 @@ namespace WB.UI.Designer.Controllers
                 var model = this.contextAccessor.HttpContext.Session.Get(OptionsSessionParameterName);
                 if (model != null)
                 {
-                    JsonConvert.DeserializeObject<EditOptionsViewModel>(Encoding.UTF8.GetString(model));
+                    return JsonConvert.DeserializeObject<EditOptionsViewModel>(Encoding.UTF8.GetString(model));
                 }
 
                 return null;
