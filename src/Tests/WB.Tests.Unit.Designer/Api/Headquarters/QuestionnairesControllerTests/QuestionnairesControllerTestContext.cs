@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using System;
+using Moq;
 using NSubstitute;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
@@ -23,7 +24,7 @@ namespace WB.Tests.Unit.Designer.Api.Headquarters.QuestionnairesControllerTests
             IExpressionsPlayOrderProvider expressionsPlayOrderProvider = null,
             IQuestionnaireCompilationVersionService questionnaireCompilationVersionService = null)
         {
-            return new HQQuestionnairesController(
+            var hqQuestionnairesController = new HQQuestionnairesController(
                 questionnaireViewFactory: questionnaireViewFactory ?? Mock.Of<IQuestionnaireViewFactory>(),
                 viewFactory: Mock.Of<IQuestionnaireListViewFactory>(),
                 questionnaireVerifier: questionnaireVerifier ?? Mock.Of<IQuestionnaireVerifier>(),
@@ -34,6 +35,8 @@ namespace WB.Tests.Unit.Designer.Api.Headquarters.QuestionnairesControllerTests
                 listItemStorage: new TestPlainStorage<QuestionnaireListViewItem>(),
                 expressionsPlayOrderProvider: expressionsPlayOrderProvider ?? Substitute.For<IExpressionsPlayOrderProvider>(),
                 questionnaireCompilationVersionService: questionnaireCompilationVersionService ?? Mock.Of<IQuestionnaireCompilationVersionService>());
+
+            return hqQuestionnairesController;
         }
     }
 }
