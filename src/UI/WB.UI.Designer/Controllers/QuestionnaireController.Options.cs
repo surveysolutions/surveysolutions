@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using System.Dynamic;
 using System.Linq;
 using System.Text;
@@ -11,10 +10,8 @@ using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.BoundedContexts.Designer.Verifier;
 using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer.Extensions;
-using WB.UI.Designer.Resources;
 using WB.UI.Designer1.Extensions;
 
 namespace WB.UI.Designer.Controllers
@@ -28,7 +25,7 @@ namespace WB.UI.Designer.Controllers
         {
             get
             {
-                var model = this.contextAccessor.HttpContext.Session.Get(OptionsSessionParameterName);
+                var model = this.HttpContext.Session.Get(OptionsSessionParameterName);
                 if (model != null)
                 {
                     return JsonConvert.DeserializeObject<EditOptionsViewModel>(Encoding.UTF8.GetString(model));
@@ -40,7 +37,7 @@ namespace WB.UI.Designer.Controllers
             {
                 string data = JsonConvert.SerializeObject(value);
 
-                this.contextAccessor.HttpContext.Session.Set(OptionsSessionParameterName, Encoding.UTF8.GetBytes(data));
+                this.HttpContext.Session.Set(OptionsSessionParameterName, Encoding.UTF8.GetBytes(data));
             }
         }
 

@@ -44,6 +44,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
                 expressionProcessorGenerator: expressionProcessorGenerator,
                 serializer: serializer,
                 zipUtils: stringCompressorMock);
+            importController.SetupLoggedInUser(userId);
             BecauseOf();
         }
 

@@ -184,7 +184,13 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         [Route("Verify/{id:guid}")]
         public IActionResult Verify(Guid id)
         {
-            var questionnaireView = this.GetQuestionnaire(id);
+            var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
+
+            if (questionnaireView == null)
+            {
+                return NotFound();
+            }
+
             QuestionnaireVerificationMessage[] verificationMessagesAndWarning = this.questionnaireVerifier.Verify(questionnaireView).ToArray();
             
             var verificationErrors = verificationMessagesAndWarning
@@ -228,18 +234,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         public List<DropdownEntityView> GetQuestionsEligibleForNumericRosterTitle(string id, Guid rosterId, Guid rosterSizeQuestionId)
         {
             return this.questionnaireInfoFactory.GetQuestionsEligibleForNumericRosterTitle(id, rosterId, rosterSizeQuestionId);
-        }
-
-        private QuestionnaireView GetQuestionnaire(Guid id)
-        {
-            var questionnaire = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
-
-            if (questionnaire == null)
-            {
-                throw new Exception("Not found");
-            }
-
-            return questionnaire;
         }
     }
 }
