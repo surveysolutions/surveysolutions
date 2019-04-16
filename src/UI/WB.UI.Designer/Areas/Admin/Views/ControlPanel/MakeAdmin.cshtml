@@ -17,13 +17,14 @@
         Make the user an administrator
     </h3>
 </div>
+
 @if (TempData.ContainsKey(Alerts.SUCCESS))
 {
-    <div class="alert alert-success header">@Html.Raw(@TempData[Alerts.SUCCESS])</div>
+<pre class="alert alert-success">@Html.Raw(@TempData[Alerts.SUCCESS])</pre>
 }
 @if (TempData.ContainsKey(Alerts.ERROR))
 {
-    <p class="note has-error">@Html.Raw(TempData[Alerts.ERROR])</p>
+<pre class="alert alert-danger">@Html.Raw(TempData[Alerts.ERROR])</pre>
 }
 <form method="post">
     @Html.AntiForgeryToken()

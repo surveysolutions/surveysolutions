@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
                 Parent = parentId,
                 CreateDate = DateTime.UtcNow,
                 CreatedBy = userId,
-                CreatorName = dbContext.Users.Find(userId.FormatGuid())?.UserName,
+                CreatorName = dbContext.Users.Find(userId)?.UserName,
                 Depth = depth,
                 Path = path
             };
