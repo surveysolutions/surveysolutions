@@ -38,12 +38,6 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             controller = CreateQuestionnaireController(
                 categoricalOptionsImportService: Create.CategoricalOptionsImportService(questionnaire));
 
-            SetControllerContextWithSession(controller, "options", new QuestionnaireController.EditOptionsViewModel
-            {
-                QuestionnaireId = questionnaireId.FormatGuid(),
-                QuestionId = questionId
-            });
-
             stream = GenerateStreamFromString("1\tStreet 1\t2");
 
             stream.Position = 0;

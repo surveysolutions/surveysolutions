@@ -1,9 +1,6 @@
 ﻿using System;
 using Main.Core.Documents;
 using Moq;
-using NSubstitute;
-using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;

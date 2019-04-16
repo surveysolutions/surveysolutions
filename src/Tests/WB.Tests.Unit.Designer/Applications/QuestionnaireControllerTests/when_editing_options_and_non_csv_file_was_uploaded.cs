@@ -17,7 +17,6 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             controller = CreateQuestionnaireController();
-            SetControllerContextWithSession(controller, "options", new QuestionnaireController.EditOptionsViewModel());
 
             var stream = new MemoryStream();
 
