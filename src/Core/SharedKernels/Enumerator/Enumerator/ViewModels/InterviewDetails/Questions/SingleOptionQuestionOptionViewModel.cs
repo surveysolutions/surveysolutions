@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -9,8 +10,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class SingleOptionQuestionOptionViewModel : MvxNotifyPropertyChanged,
         ICompositeEntity
     {
-        public event EventHandler BeforeSelected;
-        public event EventHandler AnswerRemoved;
+        public event Func<object, EventArgs, Task> BeforeSelected;
+        public event Func<object, EventArgs, Task> AnswerRemoved;
         public EnablementViewModel Enablement { get; set; }
 
         public int Value { get; set; }
