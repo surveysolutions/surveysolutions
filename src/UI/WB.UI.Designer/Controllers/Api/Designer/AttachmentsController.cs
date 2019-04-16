@@ -77,13 +77,13 @@ namespace WB.UI.Designer.Api
 
                     if (attachmentContent.IsAudio())
                     {
-                        thumbBytes = System.IO.File.ReadAllBytes(environment.MapPath("Content/images/icons-files-audio.png"));
+                        thumbBytes = System.IO.File.ReadAllBytes(environment.MapPath("images/icons-files-audio.png"));
                         contentType = @"image/png";
                     }
 
                     if (attachmentContent.IsPdf())
                     {
-                        thumbBytes = System.IO.File.ReadAllBytes(environment.MapPath(@"~/Content/images/icons-files-pdf.png"));
+                        thumbBytes = System.IO.File.ReadAllBytes(environment.MapPath(@"images/icons-files-pdf.png"));
                         contentType = @"image/png";
                     }
                 }
