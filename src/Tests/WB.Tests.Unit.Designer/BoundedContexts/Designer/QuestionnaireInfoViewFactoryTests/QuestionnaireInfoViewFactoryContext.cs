@@ -19,18 +19,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
 
         protected static QuestionnaireInfoViewFactory CreateQuestionnaireInfoViewFactory(
             IPlainKeyValueStorage<QuestionnaireDocument> repository = null,
-            DesignerDbContext accountsDocumentReader = null)
+            DesignerDbContext dbContext = null)
         {
             var doc = new QuestionnaireDocument();
-            var mockedListStorage = new Mock<IPlainStorageAccessor<QuestionnaireListViewItem>>();
-            mockedListStorage.SetReturnsDefault(Create.QuestionnaireListViewItem());
 
             return
                 new QuestionnaireInfoViewFactory(repository ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(x => x.GetById(It.IsAny<string>()) == doc),
-                                                accountsDocumentReader ?? Create.InMemoryDbContext(),
+                                                dbContext ?? Create.InMemoryDbContext(),
                                                 Mock.Of<IQuestionnaireCompilationVersionService>(), 
-                                                Mock.Of<IAttachmentService>(),
-                                                Mock.Of<IIdentityService>());
+                                                Mock.Of<IAttachmentService>());
         }
     }
 }

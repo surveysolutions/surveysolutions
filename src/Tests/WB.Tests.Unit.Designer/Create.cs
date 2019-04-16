@@ -205,17 +205,17 @@ namespace WB.Tests.Unit.Designer
         {
             return new CodeGenerator(
                 macrosSubstitutionService ?? Create.DefaultMacrosSubstitutionService(),
-                expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
-                lookupTableService ?? ServiceLocator.Current.GetInstance<ILookupTableService>(),
+                expressionProcessor ?? Create.RoslynExpressionProcessor(),
+                lookupTableService ?? Create.LookupTableService(),
                 Mock.Of<IFileSystemAccessor>(),
-                Mock.Of<IOptions<CompilerSettings>>());
+                Mock.Of<IOptions<CompilerSettings>>(x => x.Value == new CompilerSettings()));
         }
 
         public static CodeGeneratorV2 CodeGeneratorV2()
         {
             return new CodeGeneratorV2(new CodeGenerationModelsFactory(
                 DefaultMacrosSubstitutionService(),
-                ServiceLocator.Current.GetInstance<ILookupTableService>(), 
+                Create.LookupTableService(), 
                 new QuestionTypeToCSharpTypeMapper()));
         }
 
@@ -736,8 +736,8 @@ namespace WB.Tests.Unit.Designer
         {
             return new QuestionnaireExpressionStateModelFactory(
                 macrosSubstitutionService ?? Create.DefaultMacrosSubstitutionService(),
-                expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
-                lookupTableService ?? ServiceLocator.Current.GetInstance<ILookupTableService>());
+                expressionProcessor ?? Create.RoslynExpressionProcessor(),
+                lookupTableService ?? Create.LookupTableService());
         }
 
         public static QuestionnaireStateTracker QuestionnaireStateTacker()
