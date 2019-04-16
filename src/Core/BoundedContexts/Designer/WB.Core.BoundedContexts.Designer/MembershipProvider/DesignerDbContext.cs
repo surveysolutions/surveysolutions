@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Designer.Views.AllowedAddresses;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
+using WB.Core.Infrastructure.Versions;
 
 namespace WB.Core.BoundedContexts.Designer.MembershipProvider
 {
@@ -55,6 +56,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
         public DbSet<StoredQuestionnaireDocument> QuestionnaireDocuments { get; set; }
 
         public DbSet<StoredQuestionnaireStateTracker> QuestionnaireStateTrackers { get; set; }
+        public DbSet<ProductVersionChange> ProductVersionChanges { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -77,6 +79,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
             builder.ApplyConfiguration(new AllowedAddressTypeConfig());
             builder.ApplyConfiguration(new CommentInstanceTypeConfig());
             builder.ApplyConfiguration(new ClassificationEntityTypeConfig());
+            builder.ApplyConfiguration(new ProductVersionChangeTypeConfig());
 
             // Key value
             builder.ApplyConfiguration(new KeyValueTableTypeConfig<StoredLookupTable>("lookuptablecontents"));

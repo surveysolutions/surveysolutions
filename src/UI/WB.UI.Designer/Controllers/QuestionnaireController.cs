@@ -273,13 +273,6 @@ namespace WB.UI.Designer.Controllers
             return this.RedirectToAction("Details", new {id =  sid});
         }
 
-        [AllowAnonymous]
-        public IActionResult ExpressionGeneration(Guid? id)
-        {
-            ViewBag.QuestionnaireId = id ?? Guid.Empty;
-            return this.View();
-        }
-
         public IActionResult QuestionnaireHistory(Guid id, int? page)
         {
             bool hasAccess = this.User.IsAdmin() || this.questionnaireViewFactory.HasUserAccessToQuestionnaire(id, this.User.GetId());
