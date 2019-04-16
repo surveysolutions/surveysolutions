@@ -6,6 +6,7 @@ const autoprefixer = require("autoprefixer");
 const cache = require("gulp-cache");
 const cleanCss = require("gulp-clean-css");
 const merge = require("merge2");
+
 const concat = require("gulp-concat");
 const filter = require("gulp-filter");
 const gulpif = require("gulp-if");
@@ -52,17 +53,16 @@ const assets = () =>
     src(config.assets.images)
       .pipe(cache(imagemin()))
       .pipe(dest(join(config.dist, "images"))),
-    src(config.assets.fonts).pipe(dest(join(config.dist, "fonts")))
+    src(config.assets.fonts).pipe(dest(join(config.dist, "fonts"))),
+    src(config.assets.qbank)
+      .pipe(dest(join(config.dist, "qbank")))
   );
 
 module.exports = {
-  
-  assets, favicons, bowerCss, bowerImages, bowerJs, assets,
-  default:  parallel(
-    bowerJs,
-    favicons,
-    bowerCss,
-    bowerImages,
-    assets
-  )
-}
+  assets,
+  favicons,
+  bowerCss,
+  bowerImages,
+  bowerJs,
+  default: parallel(bowerJs, favicons, bowerCss, bowerImages, assets)
+};
