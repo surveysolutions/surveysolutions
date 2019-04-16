@@ -9,6 +9,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             controller = CreateQuestionnaireController();
+            controller.questionWithOptionsViewModel = new QuestionnaireController.EditOptionsViewModel();
             BecauseOf();
         }
 

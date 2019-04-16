@@ -15,6 +15,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInf
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Tests.Unit.Designer.Services;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Controllers;
 
@@ -53,7 +54,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             {
                 HttpContext = new DefaultHttpContext
                 {
-                    Session = Mock.Of<ISession>()
+                    Session = new MockHttpSession()
                 }
             };
 
