@@ -42,6 +42,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
                 engineVersionService: expressionsEngineVersionService,
                 expressionProcessorGenerator: expressionProcessorGenerator.Object,
                 questionnaireVerifier: questionnaireVerifier);
+            importController.SetupLoggedInUser(userId);
             BecauseOf();
         }
 

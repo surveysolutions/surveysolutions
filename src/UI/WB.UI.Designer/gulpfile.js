@@ -1,4 +1,3 @@
-/// <binding BeforeBuild='default' />
 const { series, parallel, watch } = require("gulp");
 const path = require("path");
 

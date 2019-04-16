@@ -22,6 +22,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
 
             importController = CreateImportController(
                 questionnaireViewFactory: questionnaireViewFactory);
+            importController.SetupLoggedInUser(userId);
             BecauseOf();
         }
 

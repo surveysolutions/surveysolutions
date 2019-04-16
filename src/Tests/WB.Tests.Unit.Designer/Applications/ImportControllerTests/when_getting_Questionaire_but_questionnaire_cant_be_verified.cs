@@ -32,6 +32,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
                 questionnaireViewFactory: questionnaireViewFactory,
                 engineVersionService: expressionsEngineVersionService,
                 questionnaireVerifier: questionnaireVerifier);
+            importController.SetupLoggedInUser(userId);
             BecauseOf();
         }
 
