@@ -11,7 +11,8 @@ namespace WB.UI.Designer.Controllers
 {
     public partial class QuestionnaireController
     {
-        public ActionResult Index(int? p, string sb, int? so, string f)
+        public IActionResult Index() => this.RedirectToAction("My");
+        public ActionResult My(int? p, string sb, int? so, string f)
             => this.View(this.GetQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f, type: QuestionnairesType.My, folderId: null));
 
         public ActionResult Public(int? p, string sb, int? so, string f, Guid? id)
