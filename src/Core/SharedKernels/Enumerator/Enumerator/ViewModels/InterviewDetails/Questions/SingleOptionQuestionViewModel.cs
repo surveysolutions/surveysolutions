@@ -119,7 +119,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             singleOptionQuestionOptionViewModels.ForEach(x => this.Options.Add(x));
         }
 
-        private async Task FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs)
+        private async void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs)
         {
             await this.mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(()=>
             {
@@ -182,7 +182,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 : null;
         }
 
-        private async Task OptionSelected(object sender, EventArgs eventArgs)
+        private async void OptionSelected(object sender, EventArgs eventArgs)
         {
             var selectedOption = (SingleOptionQuestionOptionViewModel)sender;
             selectedOptionToSave = selectedOption.Value;
@@ -208,7 +208,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             return optionViewModel;
         }
 
-        private async Task RemoveAnswer(object sender, EventArgs e)
+        private async void RemoveAnswer(object sender, EventArgs e)
         {
             try
             {

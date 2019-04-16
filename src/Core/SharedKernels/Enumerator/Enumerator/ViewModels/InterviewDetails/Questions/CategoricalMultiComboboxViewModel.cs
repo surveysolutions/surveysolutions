@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
@@ -74,7 +73,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             });
         }
 
-        private async Task ComboboxInstantViewModel_OnItemSelected(object sender, int selectedOptionCode)
+        private async void ComboboxInstantViewModel_OnItemSelected(object sender, int selectedOptionCode)
         {
             var interview = this.interviewRepository.Get(this.interviewId);
 
