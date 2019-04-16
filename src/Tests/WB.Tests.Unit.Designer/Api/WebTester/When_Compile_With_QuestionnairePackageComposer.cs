@@ -2,13 +2,16 @@
 using System.Linq;
 using System.Web.Http;
 using AutoFixture;
+using AutoFixture.Kernel;
 using Main.Core.Documents;
 using Microsoft.CodeAnalysis;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.Tests.Abc;
@@ -30,7 +33,7 @@ namespace WB.Tests.Unit.Designer.Api.WebTester
         public void Arrange()
         {
             fixture = Create.AutoFixture();
-            document = Create.QuestionnaireDocumentWithOneChapter(Id.gA, Create.NumericIntegerQuestion());
+            document = Create.QuestionnaireDocumentWithOneChapter(questionnaireId: Id.gA, children: Create.NumericIntegerQuestion());
             questionnaireView = Create.QuestionnaireView(document);
 
             // will make provided type singleton
@@ -38,8 +41,15 @@ namespace WB.Tests.Unit.Designer.Api.WebTester
                 .Setup(q => q.Load(It.IsAny<QuestionnaireViewInputModel>()))
                 .Returns(questionnaireView);
 
-            fixture.Freeze<Mock<IPlainStorageAccessor<QuestionnaireChangeRecord>>>()
-                .Setup(q => q.Query(It.IsAny<Func<IQueryable<QuestionnaireChangeRecord>, int?>>())).Returns(1);
+            fixture.Register<DesignerDbContext>(() =>
+            {
+                var inMemoryDbContext = Create.InMemoryDbContext();
+                var questionnaireChangeRecord = Create.QuestionnaireChangeRecord(questionnaireId: document.PublicKey.FormatGuid(), sequence: 1);
+                inMemoryDbContext.QuestionnaireChangeRecords.Add(
+                    questionnaireChangeRecord);
+                inMemoryDbContext.SaveChanges();
+                return inMemoryDbContext;
+            });
 
             // ReSharper disable once RedundantAssignment - value will be used in GenerateProcessorStateAssembly usage
             string assembly = fixture.Create<string>();
