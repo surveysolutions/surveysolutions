@@ -54,15 +54,16 @@ namespace WB.UI.Designer.Code.Attributes
                 return;
             }
 
-            if (!await this.Authorize(credentials.Username, credentials.Password))
+            var user = await this.userManager.FindByNameAsync(credentials.Username)
+                    ?? await this.userManager.FindByEmailAsync(credentials.Username);
+
+            if (!await this.Authorize(user, credentials.Username, credentials.Password))
             {
                 this.ThrowUnathorizedException(context, ErrorMessages.User_Not_authorized);
                 return;
             }
 
-            var account = await this.userManager.FindByNameAsync(credentials.Username)
-                       ?? await this.userManager.FindByEmailAsync(credentials.Username);
-            var identity = new GenericIdentity(account.UserName, "Basic");
+            var identity = new GenericIdentity(user.UserName, "Basic");
             var principal = new GenericPrincipal(identity, null);
 
             Thread.CurrentPrincipal = principal;
@@ -71,21 +72,21 @@ namespace WB.UI.Designer.Code.Attributes
                 context.HttpContext.User = principal;
             }
 
-            if (IsAccountLockedOut(account))
+            if (IsAccountLockedOut(user))
             {
                 this.ThrowLockedOutException(context);
                 return;
             }
 
-            if (this.IsAccountNotApproved(account))
+            if (this.IsAccountNotApproved(user))
             {
-                this.ThrowNotApprovedException(context, account.Email);
+                this.ThrowNotApprovedException(context, user.Email);
                 return;
             }
 
             if (this.onlyAllowedAddresses)
             {
-                if (!account.CanImportOnHq)
+                if (!user.CanImportOnHq)
                 {
                     var clientIpAddress = ipAddressProvider.GetClientIpAddress();
                     if (!this.allowedAddressService.IsAllowedAddress(clientIpAddress))
@@ -165,12 +166,9 @@ namespace WB.UI.Designer.Code.Attributes
             };
         }
 
-        private async Task<bool> Authorize(string username, string password)
+        private async Task<bool> Authorize(DesignerIdentityUser user, string username, string password)
         {
-            var user = await this.userManager.FindByNameAsync(username)
-                    ?? await this.userManager.FindByEmailAsync(username);
-            if (user == null)
-                return false;
+            if (user == null) return false;
 
             var signInResult = await signInManager.CheckPasswordSignInAsync(user, password, lockoutOnFailure: false);
             return signInResult.Succeeded;
