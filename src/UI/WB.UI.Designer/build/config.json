@@ -16,7 +16,8 @@
   },
   "assets": {
     "images": ["Content/images/*"],
-    "fonts": ["Content/fonts/*"]
+    "fonts": ["Content/fonts/*"],
+    "qbank": ["Content/qbank/**/*" ]
   },
   "injectTargets": [
     "Areas/Admin/Views/PublicFolders/Index.cshtml",

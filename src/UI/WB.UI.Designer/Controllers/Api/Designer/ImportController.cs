@@ -299,7 +299,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         private MysqlClassificationEntity[] ReadAndParseClassifications()
         {
-            var json = System.IO.File.ReadAllText(this.hostingEnvironment.MapPath("Content/QbankClassifications.json"));
+            var json = System.IO.File.ReadAllText(this.hostingEnvironment.MapPath("Content/qbank/QbankClassifications.json"));
             var entities = JsonConvert.DeserializeObject<MysqlClassificationEntity[]>(json);
             return entities;
         }
