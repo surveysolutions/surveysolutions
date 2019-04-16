@@ -38,6 +38,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
                 questionnaireVerifier: questionnaireVerifier,
                 expressionProcessorGenerator: expressionProcessorGenerator);
 
+            importController.SetupLoggedInUser(userId);
             BecauseOf();
         }
 

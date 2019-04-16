@@ -2,7 +2,9 @@ using System.IO;
 using System.Reflection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Session;
 using Microsoft.Extensions.Logging;
 using Moq;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
@@ -30,7 +32,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             ICategoricalOptionsImportService categoricalOptionsImportService = null,
             DesignerDbContext dbContext = null)
         {
-            return new QuestionnaireController(
+            var questionnaireController = new QuestionnaireController(
                 questionnaireViewFactory ?? Mock.Of<IQuestionnaireViewFactory>(),
                 Mock.Of<IFileSystemAccessor>(),
                 logger ?? Mock.Of<ILogger<QuestionnaireController>>(),
@@ -46,7 +48,17 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                 Mock.Of<IPublicFoldersStorage>(),
                 Mock.Of<IAttachmentService>(),
                 Mock.Of<ITranslationsService>()
-                );
+            );
+            questionnaireController.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext
+                {
+                    Session = Mock.Of<ISession>()
+                }
+            };
+
+            questionnaireController.TempData = new TempDataDictionary(questionnaireController.ControllerContext.HttpContext, Mock.Of<ITempDataProvider>());
+            return questionnaireController;
         }
 
         protected static Stream GenerateStreamFromString(string s)

@@ -13,8 +13,8 @@ namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
 {
     internal class when_PasteIntoCommand_is_inflating_with_shared_non_public_questionnaire_but_shared : CommandInflaterTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp]
-        public void context()
+        [NUnit.Framework.Test]
+        public void should_questionnaire_id_as_provided()
         {
             var dbContext = Create.InMemoryDbContext();
             dbContext.Users.Add(new DesignerIdentityUser
@@ -22,6 +22,8 @@ namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
                 Id = actionUserId,
                 Email = actionUserEmail
             });
+            var loggedInUser = Mock.Of<ILoggedInUser>(x => x.Id == actionUserId);
+
             var questionnaireListViewItem = Create.QuestionnaireListViewItem();
             questionnaireListViewItem.SharedPersons.Add(Create.SharedPerson(actionUserId));
             questionnaireListViewItem.QuestionnaireId = questionnaireId.FormatGuid();
@@ -36,20 +38,16 @@ namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
 
             command = new PasteInto(questionnaireId, entityId, questionnaireId, pasteAfterId, entityId, actionUserId);
 
-            commandInflater = CreateCommandInflater(dbContext: dbContext, storage: documentStorage);
+            commandInflater = CreateCommandInflater(dbContext: dbContext, storage: documentStorage, loggedInUser: loggedInUser);
             BecauseOf();
+
+            command.SourceDocument.Should().NotBeNull();
+            command.SourceDocument.PublicKey.Should().Be(questionnaireId);
+
         }
 
         private void BecauseOf() =>
             commandInflater.PrepareDeserializedCommandForExecution(command);
-
-        [NUnit.Framework.Test]
-        public void should_not_be_null() =>
-           command.SourceDocument.Should().NotBeNull();
-
-        [NUnit.Framework.Test]
-        public void should_questionnarie_id_as_provided() =>
-            command.SourceDocument.PublicKey.Should().Be(questionnaireId);
 
         private static CommandInflater commandInflater;
         private static PasteInto command;

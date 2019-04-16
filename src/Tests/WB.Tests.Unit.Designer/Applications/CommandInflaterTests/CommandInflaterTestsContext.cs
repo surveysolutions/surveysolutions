@@ -15,14 +15,16 @@ namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
             IPlainKeyValueStorage<QuestionnaireDocument> storage = null,
             IPlainStorageAccessor<QuestionnaireListViewItem> listViewItems = null,
             IClassificationsStorage classificationsStorage = null,
-            DesignerDbContext dbContext = null)
+            DesignerDbContext dbContext = null,
+            ILoggedInUser loggedInUser = null,
+            IIdentityService identityService = null)
         {
             return new CommandInflater(
                 storage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(),
                 dbContext ?? Create.InMemoryDbContext(),
                 classificationsStorage ?? Mock.Of<IClassificationsStorage>(),
-                Mock.Of<ILoggedInUser>(),
-                Mock.Of<IIdentityService>());
+                loggedInUser ?? Mock.Of<ILoggedInUser>(),
+                identityService ?? Mock.Of<IIdentityService>());
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocument(Guid questoinnaireId, string title, Guid creator, bool isPublic = true)
