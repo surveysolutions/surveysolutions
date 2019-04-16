@@ -5,7 +5,8 @@
     "scripts": ["questionnaire/scripts/**/*.js"],
     "static": [
       "questionnaire/content/fonts/**/*",
-      "questionnaire/content/i/**/*"
+      "questionnaire/content/i/**/*",
+      "questionnaire/content/lib/i/**/*"
     ],
     "markup": "questionnaire/content/markup.less",
     "resources": [
