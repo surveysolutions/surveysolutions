@@ -1,6 +1,6 @@
 ﻿@{
-    this.Layout = "~/Views/ControlPanel/Layout.ControlPanel.cshtml";
-    this.ViewBag.Title = "Control Panel: Versions";
+    Layout = "Layout.ControlPanel";
+    ViewBag.Title = "Control Panel: Versions";
 }
 
 <h1 class="page-header">Versions</h1>
@@ -14,7 +14,7 @@ Please wait while data is being loaded from server...
     <script type="text/javascript">
         $(function() {
 
-            var versionsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "ControlPanelApi", action = "GetVersions"})';
+            var versionsUrl = '@Url.Action("GetVersions","ControlPanel")';
 
             var writeLine = function(line) {
                 $(".raw").text($(".raw").text() + line + "\n");
