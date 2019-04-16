@@ -28,7 +28,8 @@
     "Views/Questionnaire/EditOptions.cshtml",
     "Views/Questionnaire/Public.cshtml",
     "Views/Shared/_ValidationScriptsPartial.cshtml",
-    "Views/Shared/Layout.cshtml"
+    "Views/Shared/Layout.cshtml",
+    "Areas/Admin/Views/ControlPanel/Layout.ControlPanel.cshtml"
   ],
   "vendor": {
     "favicons": ["Content/identity/favicon-*.png"],
@@ -194,7 +195,10 @@
         "Scripts/classifications/main.js"
       ],
       "assets": [
-        { "glob": "node_modules/jquery-contextmenu/dist/font/**", "prefix": "css/font"}
+        {
+          "glob": "node_modules/jquery-contextmenu/dist/font/**",
+          "prefix": "css/font"
+        }
       ]
     },
     {
@@ -206,12 +210,21 @@
       ]
     },
     {
-      "name":"pdf",
+      "name": "pdf",
       "inputFiles": [
         "Areas/Pdf/Content/pdf.less"
       ],
       "assets": [
-        { "glob": "Areas/Pdf/Content/images/**", "prefix": "images" }
+        {
+          "glob": "Areas/Pdf/Content/images/**",
+          "prefix": "images"
+        }
+      ]
+    },
+    {
+      "name": "admin",
+      "inputFiles": [
+        "Content/admin.css"
       ]
     }
   ]

@@ -60,7 +60,7 @@ pre.wrap {
             $('#getPartial').click(function() {
                 performPrettyAjaxRequest($('#outputResult'), {
                     type: 'GET',
-                    url: '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ExpressionGeneration", action = "GetAllClassesForLatestVersion" })',
+                    url: '@Url.Action("GetAllClassesForLatestVersion", "ExpressionGeneration")',
                     data: { id: $('#questionnaireId').val(), version: $('#version').val() },
                 });
             });
@@ -68,14 +68,14 @@ pre.wrap {
             $('#getAssembly').click(function() {
                 $('#outputResult').text("sending request...");
                 editor.setValue("");
-                downloadURL('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ExpressionGeneration", action = "GetLatestVersionAssembly" })' + '?id=' + $('#questionnaireId').val() + "&version=" + $('#version').val())
+                downloadURL('@Url.Action("GetLatestVersionAssembly", "ExpressionGeneration")' + '?id=' + $('#questionnaireId').val() + "&version=" + $('#version').val())
             });
 
             $('#getCompilationResult').click(function () {
                 editor.setValue("");
                 performPrettyAjaxRequest($('#outputResult'), {
                     type: 'GET',
-                    url: '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ExpressionGeneration", action = "GetCompilationResultForLatestVersion" })',
+                    url: '@Url.Action("GetCompilationResultForLatestVersion", "ExpressionGeneration")',
                     data: { id: $('#questionnaireId').val(), version: $('#version').val() },
                 }, function(response) {
                     var errors = response.responseJSON;
