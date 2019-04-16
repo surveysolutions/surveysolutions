@@ -1,4 +1,5 @@
-﻿@model WB.UI.Designer.Models.ControlPanel.MakeAdminViewModel
+﻿@using WB.UI.Shared.Web.Extensions
+@model WB.UI.Designer.Models.ControlPanel.MakeAdminViewModel
 @{
     Layout = "Layout.ControlPanel";
     ViewBag.Title = "Control Panel: Make the user an administrator";
@@ -16,7 +17,14 @@
         Make the user an administrator
     </h3>
 </div>
-@*@Html.Partial("_alerts")*@
+@if (TempData.ContainsKey(Alerts.SUCCESS))
+{
+    <div class="alert alert-success header">@Html.Raw(@TempData[Alerts.SUCCESS])</div>
+}
+@if (TempData.ContainsKey(Alerts.ERROR))
+{
+    <p class="note has-error">@Html.Raw(TempData[Alerts.ERROR])</p>
+}
 <form method="post">
     @Html.AntiForgeryToken()
     <fieldset class="form-horizontal">
