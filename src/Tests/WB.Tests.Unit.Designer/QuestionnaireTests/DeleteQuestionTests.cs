@@ -9,12 +9,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
     [TestFixture]
     internal class DeleteQuestionTests : QuestionnaireTestsContext
     {
-        [SetUp]
-        public void SetUp()
-        {
-            AssemblyContext.SetupServiceLocator();
-        }
-
         [Test]
         public void DeleteQuestion_When_question_id_specified_Then_raised_QuestionDeleted_event_with_same_question_id()
         {

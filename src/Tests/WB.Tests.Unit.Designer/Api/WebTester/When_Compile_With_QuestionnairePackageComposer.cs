@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Web;
 using System.Web.Http;
 using AutoFixture;
 using Main.Core.Documents;
@@ -13,7 +12,6 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.Tests.Abc;
-using WB.UI.Designer.Api.WebTester;
 using WB.UI.Designer.Controllers.Api.WebTester;
 
 namespace WB.Tests.Unit.Designer.Api.WebTester
@@ -35,7 +33,7 @@ namespace WB.Tests.Unit.Designer.Api.WebTester
             document = Create.QuestionnaireDocumentWithOneChapter(Id.gA, Create.NumericIntegerQuestion());
             questionnaireView = Create.QuestionnaireView(document);
 
-            // will make provided type singletone
+            // will make provided type singleton
             fixture.Freeze<Mock<IQuestionnaireViewFactory>>()
                 .Setup(q => q.Load(It.IsAny<QuestionnaireViewInputModel>()))
                 .Returns(questionnaireView);
@@ -108,7 +106,7 @@ namespace WB.Tests.Unit.Designer.Api.WebTester
             fixture.Freeze<Mock<IPlainStorageAccessor<QuestionnaireChangeRecord>>>()
                 .Setup(q => q.Query(It.IsAny<Func<IQueryable<QuestionnaireChangeRecord>, int?>>())).Returns(2);
 
-            assemblyGeneratorMock.ResetCalls();
+            assemblyGeneratorMock.Invocations.Clear();
             subj.ComposeQuestionnaire(Id.gA);
             subj.ComposeQuestionnaire(Id.gA);
 
@@ -123,14 +121,14 @@ namespace WB.Tests.Unit.Designer.Api.WebTester
 
             assemblyGeneratorMock
                 .Setup(m => m.GenerateProcessorStateAssembly(document, It.IsAny<int>(), out assembly))
-                .Throws<HttpException>();
+                .Throws<Exception>();
 
             // Act
             Assert.Throws<HttpResponseException>(() => result = subj.ComposeQuestionnaire(Id.gA));
 
             // ensure that generate processor were called
             assemblyGeneratorMock.Verify(m => m.GenerateProcessorStateAssembly(document, It.IsAny<int>(), out assembly), Times.Once);
-            assemblyGeneratorMock.ResetCalls();
+            assemblyGeneratorMock.Invocations.Clear();
 
             // should not cache error, and throw again and try to generate assembly
             Assert.Throws<HttpResponseException>(() => result = subj.ComposeQuestionnaire(Id.gA));

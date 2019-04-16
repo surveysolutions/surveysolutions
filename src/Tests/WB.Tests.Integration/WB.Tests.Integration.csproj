@@ -82,4 +82,7 @@
     <Reference Include="System.Windows" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ClassificationsTests\" />
+  </ItemGroup>
 </Project>

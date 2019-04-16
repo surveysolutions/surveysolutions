@@ -78,7 +78,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
             questionnaires.SetReturnsDefault(questionnaire);
 
-            service = Create.TranslationsService(translationsStorage, questionnaires.Object);
+            service = Create.TranslationsService(questionnaireStorage: questionnaires.Object);
             BecauseOf();
         }
 

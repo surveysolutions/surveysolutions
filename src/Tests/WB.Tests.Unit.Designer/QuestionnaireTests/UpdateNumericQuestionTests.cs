@@ -10,12 +10,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireTests
     [TestFixture]
     class UpdateNumericQuestionTests
     {
-        [SetUp]
-        public void SetUp()
-        {
-            AssemblyContext.SetupServiceLocator();
-        }
-
         [Test]
         public void When_update_numeric_int_question_without_special_values_with_special_values()
         {

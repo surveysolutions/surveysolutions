@@ -5,7 +5,7 @@ using WB.UI.Designer.Implementation.Services;
 
 namespace WB.UI.Designer.Services
 {
-    class WebTesterService : IWebTesterService
+    public class WebTesterService : IWebTesterService
     {
         private readonly IOptions<WebTesterSettings> settings;
 

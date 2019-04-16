@@ -1,8 +1,8 @@
 using System;
 using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.UI.Designer.Api;
 using WB.UI.Designer.Controllers.Api.Designer;
 
 
@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
         }
 
         private void BecauseOf() =>
-            result = controller.EditQuestion(questionnaireId, questionId);
+            result = (controller.EditQuestion(questionnaireId, questionId) as OkObjectResult).Value as NewEditQuestionView;
 
         [NUnit.Framework.Test] public void should_return_edit_question_details () =>
             result.Should().NotBeNull();

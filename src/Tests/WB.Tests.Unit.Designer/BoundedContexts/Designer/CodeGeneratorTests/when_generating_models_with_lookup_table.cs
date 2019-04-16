@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
     internal class when_generating_models_with_lookup_table : CodeGeneratorTestsContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
-            AssemblyContext.SetupServiceLocator();
+            
 
             var lookupTableContent = Create.LookupTableContent(new[] { "min", "max" },
                 Create.LookupTableRow(1, new decimal?[] { 1.15m, 10 }),
