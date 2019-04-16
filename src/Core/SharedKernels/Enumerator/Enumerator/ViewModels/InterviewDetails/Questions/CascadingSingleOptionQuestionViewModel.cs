@@ -137,7 +137,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public CovariantObservableCollection<SingleOptionQuestionOptionViewModel> Options { get; private set; }
 
-        private void UpdateOptions()
+        private async Task UpdateOptions()
         {
             this.Options.ForEach(x => x.BeforeSelected -= this.OptionSelected);
             this.Options.ForEach(x => x.AnswerRemoved -= this.RemoveAnswer);
@@ -145,7 +145,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Options.ForEach(x => x.DisposeIfDisposable());
             this.Options.Clear();
 
-            this.comboboxViewModel.UpdateFilter(null);
+            await this.comboboxViewModel.UpdateFilter(null);
             this.comboboxCollection.Remove(this.comboboxViewModel);
 
             if (!RenderAsComboBox)
@@ -178,7 +178,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             return optionViewModel;
         }
 
-        private async void OptionSelected(object sender, EventArgs eventArgs)
+        private async Task OptionSelected(object sender, EventArgs eventArgs)
         {
             var selectedOption = (SingleOptionQuestionOptionViewModel)sender;
             selectedOptionToSave = selectedOption.Value;
@@ -188,7 +188,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             await this.throttlingModel.ExecuteActionIfNeeded();
         }
 
-        private async void RemoveAnswer(object sender, EventArgs e)
+        private async Task RemoveAnswer(object sender, EventArgs e)
         {
             try
             {
