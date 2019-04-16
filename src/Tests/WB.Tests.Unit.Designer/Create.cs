@@ -427,10 +427,13 @@ namespace WB.Tests.Unit.Designer
         }
 
         public static MultyOptionsQuestion MultyOptionsQuestion(Guid? id = null,
-            IEnumerable<Answer> options = null, Guid? linkedToQuestionId = null, string variable = null, bool yesNoView = false,
+            IEnumerable<Answer> options = null, Guid? linkedToQuestionId = null, 
+            string variable = null, 
+            bool yesNoView = false,
             string enablementCondition = null, string validationExpression = null, Guid? linkedToRosterId = null, string optionsFilterExpression = null,
             int? maxAllowedAnswers = null, string title = "test", bool featured = false,
-            bool? filteredCombobox = null)
+            bool? filteredCombobox = null,
+            string linkedFilterExpression = null)
         {
             return new MultyOptionsQuestion
             {
@@ -447,6 +450,7 @@ namespace WB.Tests.Unit.Designer
                 MaxAllowedAnswers = maxAllowedAnswers,
                 Featured = featured,
                 IsFilteredCombobox = filteredCombobox,
+                LinkedFilterExpression = linkedFilterExpression,
                 Properties = new QuestionProperties(false, true)
                 {
                     OptionsFilterExpression = optionsFilterExpression
@@ -1263,23 +1267,22 @@ namespace WB.Tests.Unit.Designer
         }
 
         public static AttachmentService AttachmentService(
-            IPlainStorageAccessor<AttachmentContent> attachmentContentStorage = null,
-            IPlainStorageAccessor<AttachmentMeta> attachmentMetaStorage = null)
+            DesignerDbContext dbContext = null)
         {
-            return new AttachmentService(attachmentContentStorage: attachmentContentStorage,
-                attachmentMetaStorage: attachmentMetaStorage, videoConverter: Mock.Of<IVideoConverter>());
+            return new AttachmentService(
+                dbContext ?? Create.InMemoryDbContext(), videoConverter: Mock.Of<IVideoConverter>());
         }
 
         public static QuestionnaireHistoryVersionsService QuestionnireHistoryVersionsService(
-            IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeItemStorage = null,
+            DesignerDbContext dbContext = null,
             IEntitySerializer<QuestionnaireDocument> entitySerializer = null,
             IPatchApplier patchApplier = null,
-            QuestionnaireHistorySettings questionnaireHistorySettings = null)
+            IOptions<QuestionnaireHistorySettings> questionnaireHistorySettings = null)
         {
             return new QuestionnaireHistoryVersionsService(
-                questionnaireChangeItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireChangeRecord>>(),
+                dbContext ?? Create.InMemoryDbContext(),
                 entitySerializer ?? new EntitySerializer<QuestionnaireDocument>(),
-                questionnaireHistorySettings ?? new QuestionnaireHistorySettings(15), 
+                questionnaireHistorySettings ?? Mock.Of<IOptions<QuestionnaireHistorySettings>>(), 
                 patchApplier ?? Create.PatchApplier(),
                 Create.PatchGenerator());
         }
@@ -1361,10 +1364,10 @@ namespace WB.Tests.Unit.Designer
         }
 
         public static TranslationsService TranslationsService(
-            IPlainStorageAccessor<TranslationInstance> traslationsStorage = null,
+            DesignerDbContext dbContext = null,
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage = null)
             => new TranslationsService(
-                traslationsStorage ?? new TestPlainStorage<TranslationInstance>(),
+                dbContext ?? Create.InMemoryDbContext(),
                 questionnaireStorage ?? Stub<IPlainKeyValueStorage<QuestionnaireDocument>>.Returning(Create.QuestionnaireDocument()),
                 new TranslationsExportService()
             );
@@ -1372,7 +1375,7 @@ namespace WB.Tests.Unit.Designer
 
         public static DeskAuthenticationService DeskAuthenticationService(string multipassKey, string returnUrlFormat, string siteKey)
         {
-            return new DeskAuthenticationService(new DeskSettings(multipassKey, returnUrlFormat, siteKey));
+            return new DeskAuthenticationService(Mock.Of<IOptions<DeskSettings>>(x => x.Value == new DeskSettings(multipassKey, returnUrlFormat, siteKey)));
         }
 
         public static UpdateQuestionnaire UpdateQuestionnaire(string title, bool isPublic, Guid responsibleId, bool isResponsibleAdmin = false, string variable = "questionnaire")
@@ -1395,8 +1398,19 @@ namespace WB.Tests.Unit.Designer
         public static QuestionnaireListView QuestionnaireListView(params QuestionnaireListViewItem[] items)
             => new QuestionnaireListView(1, 10, items.Length, items, string.Empty);
 
-        public static HistoryPostProcessor HistoryPostProcessor() => 
-            new HistoryPostProcessor();
+        public static HistoryPostProcessor HistoryPostProcessor(
+            DesignerDbContext dbContext = null,
+            IIdentityService accountStorage = null,
+            IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService = null,
+            IPlainKeyValueStorage<QuestionnaireStateTracker> questionnaireStateTrackerStorage = null) =>
+            new HistoryPostProcessor(
+                dbContext ?? Create.InMemoryDbContext(),
+                accountStorage ??Mock.Of<IIdentityService>(),
+                questionnaireHistoryVersionsService ?? Mock.Of<IQuestionnaireHistoryVersionsService>(),
+                questionnaireStateTrackerStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireStateTracker>>()
+                );
+
+
 
         public static DynamicCompilerSettingsProvider DynamicCompilerSettingsProvider()
         {
@@ -1486,12 +1500,10 @@ namespace WB.Tests.Unit.Designer
                     }));
 
         public static ClassificationsStorage ClassificationStorage(
-            IPlainStorageAccessor<ClassificationEntity> classificationsAccessor = null,
-            IUnitOfWork unitOfWork = null)
+            DesignerDbContext dbContext)
         {
             return new ClassificationsStorage(
-                classificationsAccessor ??  new TestPlainStorage<ClassificationEntity>(), 
-                unitOfWork ?? Mock.Of<IUnitOfWork>());
+                dbContext ?? Create.InMemoryDbContext());
         }
 
         public static IPlainStorageAccessor<ClassificationEntity> ClassificationsAccessor(params ClassificationEntity[] entities)
@@ -1501,14 +1513,10 @@ namespace WB.Tests.Unit.Designer
             return storage;
         }
 
-        public static PublicFoldersStorage PublicFoldersStorage(IPlainStorageAccessor<QuestionnaireListViewFolder> folderStorage = null,
-            IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireStorage = null,
-            IPlainStorageAccessor<DesignerIdentityUser> accountStorage = null)
+        public static PublicFoldersStorage PublicFoldersStorage(DesignerDbContext dbContext = null)
         {
             return new PublicFoldersStorage(
-                folderStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireListViewFolder>>(),
-                questionnaireStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireListViewItem> >(),
-                accountStorage ?? Mock.Of<IPlainStorageAccessor<DesignerIdentityUser>>()
+                dbContext ?? Create.InMemoryDbContext()
                 );
         }
 
@@ -1537,6 +1545,16 @@ namespace WB.Tests.Unit.Designer
             var dbContext = new DesignerDbContext(options);
 
             return dbContext;
+        }
+
+        public static ExpressionsPlayOrderProvider ExpressionsPlayOrderProvider(
+            IExpressionProcessor expressionProcessor = null,
+            IMacrosSubstitutionService macrosSubstitutionService = null)
+        {
+            return new ExpressionsPlayOrderProvider(
+                new ExpressionsGraphProvider(
+                    expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
+                    macrosSubstitutionService ?? new MacrosSubstitutionService()));
         }
     }
 }
