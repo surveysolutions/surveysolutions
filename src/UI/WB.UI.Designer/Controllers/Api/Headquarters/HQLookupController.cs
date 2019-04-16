@@ -3,10 +3,11 @@ using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.UI.Designer.Code.Attributes;
 
 namespace WB.UI.Designer.Api.Headquarters
 {
-    //[ApiBasicAuth(onlyAllowedAddresses: true)]
+    [ApiBasicAuth(onlyAllowedAddresses: true)]
     [Route("api/hq/lookup")]
     public class HQLookupController : ControllerBase
     {

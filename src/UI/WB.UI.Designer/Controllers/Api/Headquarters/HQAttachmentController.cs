@@ -1,10 +1,11 @@
 using System;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.UI.Designer.Code.Attributes;
 
 namespace WB.UI.Designer.Api.Headquarters
 {
-    //[ApiBasicAuth(onlyAllowedAddresses: true)]
+    [ApiBasicAuth(onlyAllowedAddresses: true)]
     [Route("api/hq/attachment")]
     public class HQAttachmentController : ControllerBase
     {
