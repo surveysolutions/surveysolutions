@@ -85,7 +85,7 @@
             context.commit('addCategory', category);
         },
         updateCategories(context, classificationId) {
-            axios.post(routes.updateCategories.format(classificationId), context.state.categories)
+            $http.post(routes.updateCategories.format(classificationId), context.state.categories)
                 .then(function() {
                     context.commit('updateCategories');
                 });
@@ -95,8 +95,8 @@
         },
         updateGroup(context, group) {
             (group.isNew
-                    ? axios.post(routes.createGroup, group)
-                    : axios.patch(routes.updateGroup.format(group.id), group))
+                    ? $http.post(routes.createGroup, group)
+                    : $http.patch(routes.updateGroup.format(group.id), group))
                 .then(function() {
                     context.commit('updateGroup', group);
                 });
@@ -107,7 +107,7 @@
                 context.commit('deleteGroup', index);
                 context.dispatch('selectGroup', 0);
             } else {
-                axios.delete(routes.deleteGroup.format(group.id))
+                $http.delete(routes.deleteGroup.format(group.id))
                     .then(function() {
                         context.commit('deleteGroup', index);
                         context.dispatch('selectGroup', 0);
@@ -123,8 +123,8 @@
         },
         updateClassification(context, classification) {
             (classification.isNew
-                    ? axios.post(routes.createClassification, classification)
-                    : axios.patch(routes.updateClassification.format(classification.id), classification))
+                    ? $http.post(routes.createClassification, classification)
+                    : $http.patch(routes.updateClassification.format(classification.id), classification))
                 .then(function() {
                     context.commit('updateClassification', classification);
                 });
@@ -135,7 +135,7 @@
                 context.commit('deleteClassification', index);
                 context.dispatch('selectClassification', 0);
             } else {
-                axios.delete(routes.deleteClassification.format(classification.id))
+                $http.delete(routes.deleteClassification.format(classification.id))
                     .then(function() {
                         context.commit('deleteClassification', index);
                         context.dispatch('selectClassification', 0);
@@ -149,7 +149,7 @@
 
         loadGroups: function(context) {
             var url = routes.groups;
-            return axios.get(url, {})
+            return $http.get(url, {})
                 .then(function(response) {
                     context.commit('groups_loaded', response.data);
                     if (context.state.groups.length > 0) {
@@ -160,7 +160,7 @@
         loadClassifications: function(context, groupId) {
             var url = routes.classifications;
 
-            return axios.get(url, { params: { groupId: groupId } })
+            return $http.get(url, { params: { groupId: groupId } })
                 .then(function(response) {
                     context.commit('classifications_loaded', response.data);
                     if (context.state.classifications.length > 0) {
@@ -170,7 +170,7 @@
         },
         loadCategories: function(context, classificationId) {
             var url = routes.categories.format(classificationId);
-            return axios.get(url, {})
+            return $http.get(url, {})
                 .then(function(response) {
                     var categories = response.data;
                     context.commit('categories_loaded', categories);
