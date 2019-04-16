@@ -8,10 +8,11 @@ using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.UI.Designer.Code.Attributes;
 
 namespace WB.UI.Designer.Api.Headquarters
 {
-    //[ApiBasicAuth(onlyAllowedAddresses: true)]
+    [ApiBasicAuth(onlyAllowedAddresses: true)]
     [Route("api/hq/translations")]
     public class HQTranslationsController : ApiController
     {

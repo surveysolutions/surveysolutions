@@ -8,12 +8,13 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
+using WB.UI.Designer.Code.Attributes;
 using WB.UI.Designer.Controllers.Api.Headquarters;
 
 namespace WB.UI.Designer.Api.Headquarters
 {
     [Obsolete("Since v5.11")]
-    //[ApiBasicAuth(onlyAllowedAddresses: true)]
+    [ApiBasicAuth(onlyAllowedAddresses: true)]
     [Route("api/v2/import")]
     public class ImportV2Controller : ImportControllerBase
     {
