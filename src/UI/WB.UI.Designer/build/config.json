@@ -30,7 +30,7 @@
     "Views/Questionnaire/Public.cshtml",
     "Views/Shared/_ValidationScriptsPartial.cshtml",
     "Views/Shared/Layout.cshtml",
-    "Areas/Admin/Views/ControlPanel/Layout.ControlPanel.cshtml"
+    "Areas/Admin/Views/Shared/Layout.ControlPanel.cshtml"
   ],
   "vendor": {
     "favicons": ["Content/identity/favicon-*.png"],

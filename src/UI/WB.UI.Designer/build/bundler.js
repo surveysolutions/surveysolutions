@@ -1,7 +1,5 @@
 const join = require("path").join;
-const src = require("gulp").src;
-const dest = require("gulp").dest;
-const series = require("gulp").series;
+const { src, dest, series } = require("gulp");
 const cache = require("gulp-cache");
 const concat = require("gulp-concat");
 const filter = require("gulp-filter");
@@ -25,7 +23,7 @@ const bundler = () =>
             .pipe(filter("**/*.js"))
             .pipe(gulpif(PRODUCTION, minified()))
             .pipe(gulpif(PRODUCTION, cache(ngAnnotate())))
-            .pipe(gulpif(PRODUCTION,cache(terser({ mangle: true, compress: true }))))
+            .pipe(gulpif(PRODUCTION, cache(terser({ mangle: true, compress: true }))))
 
             .pipe(concat(bundle.name + ".js"))
             .pipe(gulpif(PRODUCTION, rev()))

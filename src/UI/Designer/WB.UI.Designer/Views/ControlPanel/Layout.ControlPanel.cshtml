@@ -4,7 +4,7 @@
 <head>
     <title>@ViewBag.Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    @this.GenerateFavicon(Url.Content("~/Content/identity/favicon-designer"))
+    @Html.GenerateFavicon(Url.Content("~/favicon-designer"))
     <link href="~/questionnaire/content/designer-start/bootstrap-custom.css" rel="stylesheet" />
     <link rel="stylesheet" href="@Url.Content("~/Content/admin.css")"/>
     @Scripts.Render("~/simplepage")
