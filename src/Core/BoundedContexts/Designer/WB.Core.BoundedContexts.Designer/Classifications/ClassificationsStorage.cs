@@ -250,15 +250,17 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
                 DeleteClassification(classificationEntity);
             }
 
-            this.dbContext.Remove(groupId);
+            var classification = this.dbContext.ClassificationEntities.Find(groupId);
+            this.dbContext.ClassificationEntities.Remove(classification);
+
             await this.dbContext.SaveChangesAsync();
         }
 
         private void DeleteClassification(ClassificationEntity classificationEntity)
         {
             var categories = this.dbContext.ClassificationEntities.Where(x => x.Parent == classificationEntity.Id).ToList();
-            this.dbContext.Remove(categories);
-            this.dbContext.Remove(classificationEntity.Id);
+            this.dbContext.ClassificationEntities.RemoveRange(categories);
+            this.dbContext.Remove(classificationEntity);
         }
 
         public async Task UpdateCategories(Guid classificationId, Category[] categories, Guid userId, bool isAdmin)

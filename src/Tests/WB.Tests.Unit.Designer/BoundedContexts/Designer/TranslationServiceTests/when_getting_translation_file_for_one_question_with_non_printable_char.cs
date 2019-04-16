@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         private void BecauseOf()
         {
             var excelFile = service.GetAsExcelFile(questionnaireId, translationId);
-            cells = new ExcelPackage(new MemoryStream(excelFile.ContentAsExcelFile)).Workbook.Worksheets[1].Cells;
+            cells = new ExcelPackage(new MemoryStream(excelFile.ContentAsExcelFile)).Workbook.Worksheets[0].Cells;
         }
 
         static TranslationsService service;
