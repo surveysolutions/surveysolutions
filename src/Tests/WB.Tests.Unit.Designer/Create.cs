@@ -11,6 +11,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Options;
 using Moq;
 using Ncqrs;
@@ -1545,7 +1546,9 @@ namespace WB.Tests.Unit.Designer
         {
             var options = new DbContextOptionsBuilder<DesignerDbContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString("N"))
+                .ConfigureWarnings(w => w.Ignore(InMemoryEventId.TransactionIgnoredWarning))
                 .Options;
+            
             var dbContext = new DesignerDbContext(options);
 
             return dbContext;

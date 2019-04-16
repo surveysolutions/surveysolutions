@@ -8,7 +8,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
     internal class when_cloning_attachment : AttachmentServiceTestContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
-            dbContext.AttachmentContents.Add(Create.AttachmentContent(content: fileContent, contentType: contentType));
+            dbContext.AttachmentContents.Add(Create.AttachmentContent(contentId: attachmentContentId, content: fileContent, contentType: contentType));
             dbContext.AttachmentMetas.Add(Create.AttachmentMeta(attachmentId, attachmentContentId, questionnaireId: questionnaireId, fileName: fileName));
 
             dbContext.SaveChanges();

@@ -25,21 +25,26 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
 
         public void DeleteAllByQuestionnaireId(Guid questionnaireId)
         {
-            var questionnaireAttachments = this.dbContext.AttachmentMetas.Where(meta => meta.QuestionnaireId == questionnaireId).ToList();
-            foreach (var questionnaireAttachment in questionnaireAttachments)
+            using (var transaction = dbContext.Database.BeginTransaction())
             {
-                this.dbContext.AttachmentMetas.Remove(questionnaireAttachment);
-
-                var countOfAttachmentContentReferences = this.dbContext.AttachmentMetas.Count(meta => meta.ContentId == questionnaireAttachment.ContentId);
-                if (countOfAttachmentContentReferences == 0)
+                var questionnaireAttachments = this.dbContext.AttachmentMetas.Where(meta => meta.QuestionnaireId == questionnaireId).ToList();
+                foreach (var questionnaireAttachment in questionnaireAttachments)
                 {
-                    this.dbContext.AttachmentContents.Remove(
-                        new AttachmentContent
-                        {
-                            ContentId = questionnaireAttachment.ContentId
-                        }
-                    );
+                    this.dbContext.AttachmentMetas.Remove(questionnaireAttachment);
+                    this.dbContext.SaveChanges();
+                    var countOfAttachmentContentReferences = this.dbContext.AttachmentMetas.Count(meta => meta.ContentId == questionnaireAttachment.ContentId);
+                    if (countOfAttachmentContentReferences == 0)
+                    {
+                        this.dbContext.AttachmentContents.Remove(
+                            new AttachmentContent
+                            {
+                                ContentId = questionnaireAttachment.ContentId
+                            }
+                        );
+                    }
+                    this.dbContext.SaveChanges();
                 }
+                transaction.Commit();
             }
         }
 

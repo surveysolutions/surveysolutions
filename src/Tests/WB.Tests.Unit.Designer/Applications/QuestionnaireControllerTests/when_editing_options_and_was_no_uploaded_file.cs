@@ -1,4 +1,5 @@
 using FluentAssertions;
+using WB.UI.Designer.Controllers;
 using WB.UI.Shared.Web.Extensions;
 
 
@@ -10,7 +11,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
         public void should_add_error_message_to_temp_data()
         {
             var controller = CreateQuestionnaireController();
-
+            controller.questionWithOptionsViewModel = new QuestionnaireController.EditOptionsViewModel();
             controller.EditOptions(null);
 
             controller.TempData[Alerts.ERROR].Should().Be("Choose tab-separated values file to upload, please");

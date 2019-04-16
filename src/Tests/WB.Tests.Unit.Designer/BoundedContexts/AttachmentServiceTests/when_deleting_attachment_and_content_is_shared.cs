@@ -1,6 +1,7 @@
 using System;
 using FluentAssertions;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
@@ -8,10 +9,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
     internal class when_deleting_attachment_and_content_is_shared : AttachmentServiceTestContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
-            attachmentContentStorage.Store(Create.AttachmentContent(), contentHash);
+            attachmentContentStorage.Add(Create.AttachmentContent(contentId: contentHash));
 
-            attachmentMetaStorage.Store(Create.AttachmentMeta(attachmentId, contentHash, questionnaireId: questionnaireId), attachmentId);
-            attachmentMetaStorage.Store(Create.AttachmentMeta(otherAttachmentId, contentHash, otherQuestionnaireId), otherAttachmentId);
+            attachmentContentStorage.Add(Create.AttachmentMeta(attachmentId, contentHash, questionnaireId: questionnaireId));
+            attachmentContentStorage.Add(Create.AttachmentMeta(otherAttachmentId, contentHash, otherQuestionnaireId));
 
             attachmentService = Create.AttachmentService();
             BecauseOf();
@@ -21,10 +22,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
             attachmentService.DeleteAllByQuestionnaireId(questionnaireId);
 
         [NUnit.Framework.Test] public void should_delete_attachment_meta () =>
-            attachmentMetaStorage.GetById(attachmentId).Should().BeNull();
+            attachmentContentStorage.AttachmentMetas.Find(attachmentId).Should().BeNull();
 
         [NUnit.Framework.Test] public void should_not_delete_attachment_content () =>
-            attachmentContentStorage.GetById(contentHash).Should().NotBeNull();
+            attachmentContentStorage.AttachmentContents.Find(contentHash).Should().NotBeNull();
 
         private static AttachmentService attachmentService;
         private static readonly string contentHash = "prev_hash";
@@ -32,7 +33,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
         private static readonly Guid otherQuestionnaireId = Guid.Parse("21111111111111111111111111111111");
         private static readonly Guid otherAttachmentId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         private static readonly Guid attachmentId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        private static readonly TestPlainStorage<AttachmentContent> attachmentContentStorage = new TestPlainStorage<AttachmentContent>();
-        private static readonly TestPlainStorage<AttachmentMeta> attachmentMetaStorage = new TestPlainStorage<AttachmentMeta>();
+        private static readonly DesignerDbContext attachmentContentStorage = Create.InMemoryDbContext();
     }
 }
