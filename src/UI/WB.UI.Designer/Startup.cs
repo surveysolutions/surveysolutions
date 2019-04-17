@@ -73,6 +73,11 @@ namespace WB.UI.Designer
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.Configure<IISServerOptions>(options =>
+            {
+                options.AutomaticAuthentication = false;
+            });
+
             services.AddResponseCompression(options =>
             {
                 options.EnableForHttps = true;
