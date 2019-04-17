@@ -11,7 +11,5 @@ namespace WB.UI.Designer.Controllers
         public ActionResult AccessDenied() => View();
 
         public ActionResult Forbidden() => this.View();
-
-        public ActionResult RequestLengthExceeded() => this.View();
     }
 }

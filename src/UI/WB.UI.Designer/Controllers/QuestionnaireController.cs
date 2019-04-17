@@ -285,6 +285,7 @@ namespace WB.UI.Designer.Controllers
                 return this.RedirectToAction("Index");
             }
             var questionnaireInfoView = this.questionnaireInfoViewFactory.Load(id.FormatGuid(), this.User.GetId());
+            if (questionnaireInfoView == null) return NotFound();
 
             QuestionnaireChangeHistory questionnairePublicListViewModels = questionnaireChangeHistoryFactory.Load(id, page ?? 1, GlobalHelper.GridPageItemsCount);
             questionnairePublicListViewModels.ReadonlyMode = questionnaireInfoView.IsReadOnlyForUser;
