@@ -10,6 +10,11 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="QuestionnaireSearchStorageTests\**" />
+    <EmbeddedResource Remove="QuestionnaireSearchStorageTests\**" />
+    <None Remove="QuestionnaireSearchStorageTests\**" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj" />
     <ProjectReference Include="..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj" />
     <ProjectReference Include="..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj" />
