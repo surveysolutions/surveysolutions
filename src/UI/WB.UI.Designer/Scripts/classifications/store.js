@@ -36,15 +36,19 @@
         },
         selectGroup: function(state, index) {
             state.activeGroup.isActive = false;
-            state.activeGroup = state.groups[index];
-            state.activeGroup.isActive = true;
-            state.activeClassification.isActive = false;
-            state.activeClassification = {};
+            if (state.groups.length > 0) {
+                state.activeGroup = state.groups[index];
+                state.activeGroup.isActive = true;
+                state.activeClassification.isActive = false;
+                state.activeClassification = {};
+            } else state.activeGroup = {};
         },
         selectClassification: function(state, index) {
             state.activeClassification.isActive = false;
-            state.activeClassification = state.classifications[index];
-            state.activeClassification.isActive = true;
+            if (state.classifications.length > 0) {
+                state.activeClassification = state.classifications[index];
+                state.activeClassification.isActive = true;
+            } else state.activeClassification = {};
         },
         addClassification: function(state, classification) {
             state.classifications.push(classification);

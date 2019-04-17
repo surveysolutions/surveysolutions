@@ -98,10 +98,10 @@
                             <div class="option-line" v-for="(category, index) in categories" :key="category.id">
                                 <div class="input-group">
                                     <div class="option-cell" :class="{'has-error': errors.has('value'+category.id)}">
-                                        <input :name="'value'+category.id" v-on:keyup.enter="moveFocus" v-validate="'required|integer'" key="value" type="number" v-model="category.value" class="form-control" placeholder="@QuestionnaireEditor.OptionsUploadValue">
+                                        <input :name="'value'+category.id" v-on:keyup.enter="moveFocus" v-validate="'required|integer'" key="value" type="number" v-model="category.value" class="form-control" placeholder="@Html.Raw(QuestionnaireEditor.OptionsUploadValue)">
                                     </div>
                                     <div class="option-cell" :class="{'has-error': errors.has('title'+category.id)}">
-                                        <input :name="'title'+category.id" v-on:keyup.enter="moveFocus" v-validate="'required'" key="title" type="text" v-model="category.title" class="form-control" placeholder="@QuestionnaireEditor.OptionsUploadTitle">
+                                        <input :name="'title'+category.id" v-on:keyup.enter="moveFocus" v-validate="'required'" key="title" type="text" v-model="category.title" class="form-control" placeholder="@Html.Raw(QuestionnaireEditor.OptionsUploadTitle)">
                                     </div>
                                     <div class="input-group-btn">
                                         <button @@click="deleteCategory(index)" type="button" class="btn btn-link btn-delete">
@@ -115,7 +115,7 @@
                             </div>
                         </div>
                         <div v-else class="form-group" :class="{'has-error': errors.has('stringifiedOptions')}">
-                            <textarea name="stringifiedOptions" v-elastic v-model="stringifiedOptions" v-validate="'stringOptions'" key="stringifiedOptions" class="form-control js-elasticArea" placeholder="@QuestionnaireEditor.ClassificationsStringOptionsEditorPlaceholder"></textarea>
+                            <textarea name="stringifiedOptions" v-elastic v-model="stringifiedOptions" v-validate="'stringOptions'" key="stringifiedOptions" class="form-control js-elasticArea" placeholder="@Html.Raw(QuestionnaireEditor.ClassificationsStringOptionsEditorPlaceholder)"></textarea>
                             <p v-if="errors.has('stringifiedOptions')" class="text-danger">{{ errors.first('stringifiedOptions')}}</p>
                         </div>
                     </div>
@@ -137,7 +137,7 @@
             <div v-if="isEditMode" class="edit-classification-group-name">
                 <form>
                     <div class="form-group" :class="{'has-error': errors.has('title')}">
-                        <textarea v-elastic name="title" type="text" v-validate="'required'" required v-model="title" class="form-control" placeholder="@QuestionnaireEditor.ClassificationGroupTitle"></textarea>
+                        <textarea v-elastic name="title" type="text" v-validate="'required'" required v-model="title" class="form-control" placeholder="@Html.Raw(QuestionnaireEditor.ClassificationGroupTitle)"></textarea>
                         <span class="help-block" v-show="errors.has('title')">{{ errors.first('title') }}</span>
                     </div>
                     <button type="button" :disabled="!isFormDirty" @@click="save" class="btn btn-success">@QuestionnaireEditor.Save</button>
@@ -155,7 +155,7 @@
             <div v-if="isEditMode" class="edit-classification-group-name">
                 <form>
                     <div class="form-group">
-                        <textarea v-elastic name="title" type="text" v-validate="'required'" required v-model="title" class="form-control" placeholder="@QuestionnaireEditor.ClassificationTitle"></textarea>
+                        <textarea v-elastic name="title" type="text" v-validate="'required'" required v-model="title" class="form-control" placeholder="@Html.Raw(QuestionnaireEditor.ClassificationTitle)"></textarea>
                     </div>
                     <button type="button" :disabled="!isFormDirty" @@click="save" class="btn btn-success">@QuestionnaireEditor.Save</button>
                     <button type="button" @@click="cancel()" class="btn btn-link">@QuestionnaireEditor.Cancel</button>
