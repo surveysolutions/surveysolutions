@@ -50,6 +50,8 @@ namespace WB.UI.Designer.Areas.Admin.Pages
 
         public void OnGet()
         {
+            this.Error = null;
+            this.Success = null;
         }
 
         [BindProperty]
