@@ -280,6 +280,19 @@ function AddArtifacts($Project, $BuildConfiguration, $folder) {
     MoveArtifacts $zipfile, $cmdfile $folder
 }
 
+function AddNetCoreArtifacts($Project, $BuildConfiguration, $folder) {
+    $csproj = gci $Project
+    $name = csproj.BaseName
+    Push-Location $csproj.Directory
+    $archive = 
+    try {
+        dotnet publish -c $BuildConfiguration -r win-x64 --self-contained -o $folder\$name
+        Compress-Archive -Path $folder\$name -DestinationPath $folder
+    } finally {
+        Pop-Location
+    }
+}
+
 function MoveArtifacts([string[]] $items, $folder) {
     $artifactsFolder = "Artifacts"
     If (Test-Path "$artifactsFolder") {

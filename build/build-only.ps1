@@ -66,7 +66,6 @@ try {
         Remove-Item -Path "$artifactsFolder\coverage" -Recurse -Force -ErrorAction SilentlyContinue
 
         Log-Block "Run configuration transformations" {
-            RunConfigTransform $ProjectDesigner $BuildConfiguration
             RunConfigTransform $ProjectHeadquarters $BuildConfiguration
             RunConfigTransform $ProjectWebTester $BuildConfiguration
         }
@@ -123,7 +122,7 @@ try {
             BuildAndDeploySupportTool $SupportToolSolution $BuildConfiguration | % { if (-not $_) { Exit } }
         }
 
-        AddArtifacts $ProjectDesigner $BuildConfiguration -folder "Designer"
+        AddNetCoreArtifacts $ProjectDesigner $BuildConfiguration -folder "Designer"
         AddArtifacts $ProjectHeadquarters $BuildConfiguration -folder "Headquarters"
         AddArtifacts $ProjectWebTester $BuildConfiguration -folder "WebTester"
 
