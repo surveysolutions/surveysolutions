@@ -11,6 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
                 Create.AttachmentContent(content: fileContent, contentType: contentType, contentId: attachmentContentId,
                     size: fileContent.Length, details: contentDetails));
 
+            attachmentContentStorage.SaveChanges();
             attachmentService = Create.AttachmentService(attachmentContentStorage);
 
             BecauseOf();

@@ -7,27 +7,23 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
 {
     internal class when_getting_attachment_meta : AttachmentServiceTestContext
     {
-        [NUnit.Framework.OneTimeSetUp]
-        public void context()
+        [NUnit.Framework.Test]
+        public void should_return_attachment_meta_with_specified_properties()
         {
             attachmentMetaStorage.Add(Create.AttachmentMeta(attachmentId, attachmentContentId, questionnaireId: questionnaireId, fileName: fileName));
             attachmentMetaStorage.SaveChanges();
 
-            attachmentService = Create.AttachmentService();
+            attachmentService = Create.AttachmentService(attachmentMetaStorage);
             BecauseOf();
-        }
 
-        private void BecauseOf() =>
-            attachment = attachmentService.GetAttachmentMeta(attachmentId);
-
-        [NUnit.Framework.Test]
-        public void should_return_attachment_meta_with_specified_properties()
-        {
             attachment.FileName.Should().Be(fileName);
             attachment.AttachmentId.Should().Be(attachmentId);
             attachment.ContentId.Should().Be(attachmentContentId);
             attachment.QuestionnaireId.Should().Be(questionnaireId);
         }
+
+        private void BecauseOf() =>
+            attachment = attachmentService.GetAttachmentMeta(attachmentId);
 
         private static AttachmentMeta attachment;
         private static AttachmentService attachmentService;
