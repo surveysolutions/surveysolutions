@@ -66,7 +66,7 @@ if($ENV:NUGET_EXE -eq $null) {
     $nuget = "$nuget\tools\nuget.exe"
 }
 
-function GetPathToConfigTransformator() {    
+function GetPathToConfigTransformator() {
     $path = ".\packages\WebConfigTransformRunner.1.0.0.1\Tools\WebConfigTransformRunner.exe"
 
     if(Test-Path $path) {
@@ -167,9 +167,7 @@ function CleanBinAndObjFolders() {
     Log-Block "Cleaning folders" {
         CleanFolders 'bin'
         CleanFolders 'obj'
-        CleanFolders 'src\UI\Designer\WB.UI.Designer\questionnaire\build'
         CleanFolders 'src\UI\Headquarters\WB.UI.Headquarters\InterviewApp'
-        CleanFolders 'src\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.Interview\node_modules'
     }
 }
 
