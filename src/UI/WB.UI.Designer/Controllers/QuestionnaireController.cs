@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -155,7 +156,7 @@ namespace WB.UI.Designer.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Clone(QuestionnaireCloneModel model)
+        public async Task<IActionResult> Clone(QuestionnaireCloneModel model)
         {
             if (this.ModelState.IsValid)
             {
@@ -171,6 +172,8 @@ namespace WB.UI.Designer.Controllers
                         false, sourceModel.Source);
 
                     this.commandService.Execute(command);
+
+                    await dbContext.SaveChangesAsync();
 
                     return this.RedirectToAction("Details", "Questionnaire", new { id = questionnaireId.FormatGuid() });
                 }

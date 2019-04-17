@@ -236,6 +236,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             foreach (var storedTranslation in storedTranslations)
             {
                 var translationCopy = storedTranslation.Clone();
+                translationCopy.Id = Guid.NewGuid();
                 translationCopy.TranslationId = newTranslationId;
                 translationCopy.QuestionnaireId = newQuestionnaireId;
                 this.dbContext.TranslationInstances.Add(translationCopy);
