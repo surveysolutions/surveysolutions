@@ -60,7 +60,9 @@ function GetPathToMSBuild() {
 }
 
 function GetPathToConfigTransformator() {
-    nuget install WebConfigTransformRunner -Version 1.0.0.1
+    $nuget = $ENV:NUGET_EXE
+    $nuget = "$nuget\tools\nuget.exe"
+    & $nuget install WebConfigTransformRunner -Version 1.0.0.1
     return ".\packages\WebConfigTransformRunner.1.0.0.1\Tools\WebConfigTransformRunner"
 }
 
