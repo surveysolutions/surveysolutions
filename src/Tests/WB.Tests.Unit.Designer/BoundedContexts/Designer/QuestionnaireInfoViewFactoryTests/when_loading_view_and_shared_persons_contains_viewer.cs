@@ -2,12 +2,10 @@ using System;
 using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
-using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 
@@ -22,22 +20,22 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
             var questionnaireInfoViewRepository = Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(
                 x => x.GetById(questionnaireId) == CreateQuestionnaireDocument(questionnaireId, questionnaireTitle));
 
-            var questionnaireListViewItemStorage = new InMemoryPlainStorageAccessor<QuestionnaireListViewItem>();
-            var questionnaireListViewItem = Create.QuestionnaireListViewItem();
+            var dbContext = Create.InMemoryDbContext();
+            var questionnaireListViewItem = Create.QuestionnaireListViewItem(id: Guid.Parse(questionnaireId));
             questionnaireListViewItem.SharedPersons.Add(new SharedPerson
             {
                 UserId = userId,
                 Email = userEmail,
                 IsOwner = false
             });
-            questionnaireListViewItemStorage.Store(questionnaireListViewItem, questionnaireId);
+            dbContext.Questionnaires.Add(questionnaireListViewItem);
 
-            var dbContext = Create.InMemoryDbContext();
-            dbContext.Users.Add(new DesignerIdentityUser() { Id = userId, Email = userEmail });
+            dbContext.Users.Add(new DesignerIdentityUser { Id = userId, Email = userEmail });
             dbContext.SaveChanges();
 
             factory = CreateQuestionnaireInfoViewFactory(repository: questionnaireInfoViewRepository,
                 dbContext);
+
             BecauseOf();
 
             view.SharedPersons.Count.Should().Be(1);
