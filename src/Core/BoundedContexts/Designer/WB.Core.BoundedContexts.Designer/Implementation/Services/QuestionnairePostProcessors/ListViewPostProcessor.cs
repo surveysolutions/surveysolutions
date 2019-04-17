@@ -107,7 +107,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             questionnaireListViewItem.IsDeleted = false;
 
             if (creatorId.HasValue)
-                questionnaireListViewItem.CreatorName = this.identityService.GetById(creatorId.Value)?.UserName;
+                questionnaireListViewItem.CreatorName = this.dbContext.Users.Find(creatorId.Value)?.UserName;
 
             if (!shouldPreserveSharedPersons)
             {
@@ -149,7 +149,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 LastEntryDate = DateTime.UtcNow,
                 CreatedBy = command.ResponsibleId,
                 IsPublic = command.IsPublic,
-                CreatorName = this.identityService.GetById(command.ResponsibleId)?.UserName
+                CreatorName = this.dbContext.Users.Find(command.ResponsibleId)?.UserName
             };
             this.dbContext.Questionnaires.Add(questionnaireListViewItem);
         }
@@ -234,15 +234,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             string questionnaireId, 
             ShareType shareType)
         {
-            string mailFrom = this.identityService.GetById(responsibleId)?.Email;
-            string mailToUserName = this.identityService.GetUserNameByEmail(mailTo);
+            string mailFrom = this.dbContext.Users.Find(responsibleId)?.Email;
+            string mailToUserName = this.dbContext.Users.FirstOrDefault(x => x.NormalizedEmail == mailTo.ToUpper())?.UserName;
 
             this.emailNotifier.NotifyTargetPersonAboutShareChange(shareChangeType, mailTo, mailToUserName, questionnaireId,
                 questionnaireTitle, shareType, mailFrom);
 
             if (!questionnaireOwnerId.HasValue || questionnaireOwnerId.Value == responsibleId) return;
 
-            var questionnaireOwner = this.identityService.GetById(questionnaireOwnerId.Value);
+            var questionnaireOwner = this.dbContext.Users.Find(questionnaireOwnerId.Value);
             if (questionnaireOwner != null)
             {
                 this.emailNotifier.NotifyOwnerAboutShareChange(shareChangeType, questionnaireOwner.Email, questionnaireOwner.UserName,

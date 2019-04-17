@@ -1383,15 +1383,19 @@ namespace WB.Tests.Unit.Designer
             => new UpdateQuestionnaire(Guid.NewGuid(), title, variable, false, isPublic, responsibleId, isResponsibleAdmin);
 
         public static QuestionnaireListViewItem QuestionnaireListViewItem(Guid? id = null, bool isPublic = false, SharedPerson[] sharedPersons = null)
-            => QuestionnaireListViewItem(id ?? Guid.Empty, isPublic, null, sharedPersons);
+            => QuestionnaireListViewItem(id ?? Guid.Empty, isPublic, null, null, sharedPersons);
 
-        public static QuestionnaireListViewItem QuestionnaireListViewItem(Guid id, bool isPublic = false, Guid? createdBy = null,
+        public static QuestionnaireListViewItem QuestionnaireListViewItem(Guid id, 
+            bool isPublic = false, 
+            string title = null,
+            Guid? createdBy = null,
             SharedPerson[] sharedPersons = null)
         {
             return new QuestionnaireListViewItem() {
                 CreatedBy = createdBy.GetValueOrDefault(),
                 IsPublic = isPublic,
                 PublicId = id,
+                Title = title,
                 SharedPersons = new HashSet<SharedPerson>(sharedPersons ?? Enumerable.Empty<SharedPerson>())
             };
         }
@@ -1562,6 +1566,15 @@ namespace WB.Tests.Unit.Designer
                 new ExpressionsGraphProvider(
                     expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
                     macrosSubstitutionService ?? new MacrosSubstitutionService()));
+        }
+
+        public static ListViewPostProcessor ListViewPostProcessor(DesignerDbContext dbContext = null,
+            IIdentityService identityService = null, 
+            IRecipientNotifier emailNotifier = null)
+        {
+            return new ListViewPostProcessor(identityService ?? Mock.Of<IIdentityService>(),
+                dbContext ?? Create.InMemoryDbContext(),
+                emailNotifier ?? Mock.Of<IRecipientNotifier>());
         }
     }
 }
