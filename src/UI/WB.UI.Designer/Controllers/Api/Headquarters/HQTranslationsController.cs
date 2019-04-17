@@ -4,22 +4,21 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Microsoft.AspNetCore.Mvc;
-using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Designer.Code.Attributes;
 
-namespace WB.UI.Designer.Api.Headquarters
+namespace WB.UI.Designer.Controllers.Api.Headquarters
 {
     [ApiBasicAuth(onlyAllowedAddresses: true)]
     [Route("api/hq/translations")]
     public class HQTranslationsController : ApiController
     {
-        private readonly IPlainStorageAccessor<TranslationInstance> translations;
+        private readonly DesignerDbContext translations;
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
 
-        public HQTranslationsController(IPlainStorageAccessor<TranslationInstance> translations,
+        public HQTranslationsController(DesignerDbContext translations,
             IQuestionnaireViewFactory questionnaireViewFactory)
         {
             this.translations = translations;
@@ -36,8 +35,8 @@ namespace WB.UI.Designer.Api.Headquarters
 
             //Cast<TranslationDto> preserves TranslationInstance type that used during serialization
             //consumer has no idea about that type
-            var translationInstances = this.translations.Query(_ 
-                    => _.Where(x => x.QuestionnaireId == questionnaireId && translationsIds.Contains(x.TranslationId)).ToList())
+            var translationInstances = this.translations.TranslationInstances
+                .Where(x => x.QuestionnaireId == questionnaireId && translationsIds.Contains(x.TranslationId)).ToList()
                 .Select(x => new TranslationDto()
                 {
                     Value = x.Value,
