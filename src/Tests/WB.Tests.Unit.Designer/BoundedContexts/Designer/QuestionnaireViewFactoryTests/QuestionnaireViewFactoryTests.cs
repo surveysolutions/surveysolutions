@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireViewFacto
             Guid questionnaireId = Guid.NewGuid();
             Guid userId = Guid.NewGuid();
             var questionnaireDocument = Create.QuestionnaireDocument();
-            var listItem = Create.QuestionnaireListViewItem(isPublic: true);
+            var listItem = Create.QuestionnaireListViewItem(isPublic: true, id: questionnaireId);
 
             var questionnaireStorage = Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(q =>
                 q.GetById(questionnaireId.FormatGuid()) == questionnaireDocument);
