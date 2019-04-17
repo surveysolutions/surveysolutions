@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Security.Claims;
 using System.Security.Principal;
 using System.Text;
 using System.Threading;
@@ -64,13 +66,14 @@ namespace WB.UI.Designer.Code.Attributes
             }
 
             var identity = new GenericIdentity(user.UserName, "Basic");
-            var principal = new GenericPrincipal(identity, null);
+            identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
 
-            Thread.CurrentPrincipal = principal;
-            if (context.HttpContext != null)
-            {
-                context.HttpContext.User = principal;
-            }
+            var roles = await userManager.GetRolesAsync(user);
+            identity.AddClaims(roles.Select(x => new Claim(ClaimTypes.Role, x)));
+
+            var principal = new ClaimsPrincipal(identity);
+
+            context.HttpContext.User = principal;
 
             if (IsAccountLockedOut(user))
             {
