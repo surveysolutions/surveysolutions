@@ -101,6 +101,7 @@ namespace WB.UI.Designer
             services.AddTransient<IProductVersionHistory, ProductVersionHistory>();
 
             services.Configure<CaptchaConfig>(Configuration.GetSection("Captcha"));
+            services.Configure<RecaptchaSettings>(Configuration.GetSection("Captcha"));
             services.AddTransient<IRecaptchaService, RecaptchaService>();
             services.AddTransient<IRecipientNotifier, MailNotifier>();
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
