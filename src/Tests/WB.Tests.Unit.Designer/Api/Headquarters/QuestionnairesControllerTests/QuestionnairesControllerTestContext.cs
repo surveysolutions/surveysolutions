@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.Designer.Api.Headquarters.QuestionnairesControllerTests
                 engineVersionService: engineVersionService ?? Mock.Of<IDesignerEngineVersionService>(),
                 serializer: serializer??Mock.Of<ISerializer>(),
                 zipUtils: zipUtils ?? Mock.Of<IStringCompressor>(),
-                listItemStorage: new TestPlainStorage<QuestionnaireListViewItem>(),
+                listItemStorage: Create.InMemoryDbContext(),
                 expressionsPlayOrderProvider: expressionsPlayOrderProvider ?? Substitute.For<IExpressionsPlayOrderProvider>(),
                 questionnaireCompilationVersionService: questionnaireCompilationVersionService ?? Mock.Of<IQuestionnaireCompilationVersionService>());
 
