@@ -87,9 +87,9 @@
 		        for (var i = 0; i < result.length; i++) {
 		            var translationItem = result[i];
 		            typeaheadCtrl.append('<li><a href="javascript:void(0)" value="' +
-		                translationItem.Value +
+		                translationItem.value +
 		                '">' +
-		                translationItem.Name +
+		                translationItem.name +
 		                '</a></li>');
 		        }
 
@@ -126,12 +126,12 @@
             url: self.pdfStatusUrl + '?timezoneOffsetMinutes=' + new Date().getTimezoneOffset() + '&translation=' + translationId,
             cache: false
         }).done(function (result) {
-            if (result.Message != null) {
-                self.setPdfMessage(result.Message);
+            if (result.message != null) {
+                self.setPdfMessage(result.message);
             } else {
                 self.setPdfMessage("Unexpected server response.\r\nPlease contact support@mysurvey.solutions if problem persists.");
             }
-            if (result.ReadyForDownload == true) {
+            if (result.readyForDownload == true) {
                 $('#pdfDownloadButton').unbind('click');
                 $('#pdfDownloadButton').click(function () {
                     self.pdfStatusUrl = '';
@@ -140,7 +140,7 @@
                 });
                 $('#pdfDownloadButton').show();
             }
-            if (result.CanRetry) {
+            if (result.canRetry) {
                 $('#pdfRetryGenerate').show();
             } else {
                 $('#pdfRetryGenerate').hide();
@@ -192,7 +192,7 @@
 
         for (var i = 0; i < translationList.length; i++) {
             var translationItem = translationList[i];
-            typeaheadCtrl.append('<li><a href="javascript:void(0)" value="' + translationItem.Value + '">' + translationItem.Name + '</a></li>');
+            typeaheadCtrl.append('<li><a href="javascript:void(0)" value="' + translationItem.value + '">' + translationItem.name + '</a></li>');
         }
 
         typeaheadCtrl.unbind('click');
