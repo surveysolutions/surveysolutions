@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Web.Http;
 using AutoFixture;
-using AutoFixture.Kernel;
 using Main.Core.Documents;
 using Microsoft.CodeAnalysis;
 using Moq;
@@ -15,6 +14,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.Tests.Abc;
+using WB.UI.Designer.Api.WebTester;
 using WB.UI.Designer.Controllers.Api.WebTester;
 
 namespace WB.Tests.Unit.Designer.Api.WebTester
@@ -28,6 +28,7 @@ namespace WB.Tests.Unit.Designer.Api.WebTester
         private QuestionnaireDocument document;
         private QuestionnaireView questionnaireView;
         private Mock<IExpressionProcessorGenerator> assemblyGeneratorMock;
+        private DesignerDbContext dbContext;
 
         [SetUp]
         public void Arrange()
@@ -41,6 +42,8 @@ namespace WB.Tests.Unit.Designer.Api.WebTester
                 .Setup(q => q.Load(It.IsAny<QuestionnaireViewInputModel>()))
                 .Returns(questionnaireView);
 
+            fixture.Register<IQuestionnaireCacheStorage>(() => new QuestionnaireCacheStorage());
+
             fixture.Register<DesignerDbContext>(() =>
             {
                 var inMemoryDbContext = Create.InMemoryDbContext();
@@ -51,6 +54,7 @@ namespace WB.Tests.Unit.Designer.Api.WebTester
                 return inMemoryDbContext;
             });
 
+            dbContext = fixture.Freeze<DesignerDbContext>();
             // ReSharper disable once RedundantAssignment - value will be used in GenerateProcessorStateAssembly usage
             string assembly = fixture.Create<string>();
 
@@ -112,11 +116,14 @@ namespace WB.Tests.Unit.Designer.Api.WebTester
             // should still generate assembly only once
             assemblyGeneratorMock
                 .Verify(m => m.GenerateProcessorStateAssembly(document, It.IsAny<int>(), out assembly), Times.Once);
-
-            fixture.Freeze<Mock<IPlainStorageAccessor<QuestionnaireChangeRecord>>>()
-                .Setup(q => q.Query(It.IsAny<Func<IQueryable<QuestionnaireChangeRecord>, int?>>())).Returns(2);
+           
+            // Change questionnaire to invalidate cache
+            var questionnaireChangeRecord = Create.QuestionnaireChangeRecord(questionnaireId: document.PublicKey.FormatGuid(), sequence: 2);
+            dbContext.QuestionnaireChangeRecords.Add(questionnaireChangeRecord);
+            dbContext.SaveChanges();
 
             assemblyGeneratorMock.Invocations.Clear();
+
             subj.ComposeQuestionnaire(Id.gA);
             subj.ComposeQuestionnaire(Id.gA);
 
@@ -134,14 +141,14 @@ namespace WB.Tests.Unit.Designer.Api.WebTester
                 .Throws<Exception>();
 
             // Act
-            Assert.Throws<HttpResponseException>(() => result = subj.ComposeQuestionnaire(Id.gA));
+            Assert.Throws<ComposeException>(() => result = subj.ComposeQuestionnaire(Id.gA));
 
             // ensure that generate processor were called
             assemblyGeneratorMock.Verify(m => m.GenerateProcessorStateAssembly(document, It.IsAny<int>(), out assembly), Times.Once);
             assemblyGeneratorMock.Invocations.Clear();
 
             // should not cache error, and throw again and try to generate assembly
-            Assert.Throws<HttpResponseException>(() => result = subj.ComposeQuestionnaire(Id.gA));
+            Assert.Throws<ComposeException>(() => result = subj.ComposeQuestionnaire(Id.gA));
             assemblyGeneratorMock.Verify(m => m.GenerateProcessorStateAssembly(document, It.IsAny<int>(), out assembly), Times.Once);
         }
     }
