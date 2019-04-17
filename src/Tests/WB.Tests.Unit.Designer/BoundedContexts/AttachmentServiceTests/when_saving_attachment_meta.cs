@@ -16,8 +16,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
             BecauseOf();
         }
 
-        private void BecauseOf() =>
+        private void BecauseOf()
+        {
             attachmentService.SaveMeta(attachmentId, questionnaireId, attachmentContentId, fileName);
+            attachmentMetaStorage.SaveChanges();
+        }
 
         [NUnit.Framework.Test] public void should_save_meta_storage () =>
             attachmentMetaStorage.AttachmentMetas.Count().Should().Be(1);
