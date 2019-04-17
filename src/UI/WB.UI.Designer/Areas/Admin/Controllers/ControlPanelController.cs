@@ -209,12 +209,6 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
 
         public async Task Exceptions() => await ExceptionalMiddleware.HandleRequestAsync(HttpContext);
 
-        public IActionResult ExpressionGeneration(Guid? id)
-        {
-            ViewBag.QuestionnaireId = id ?? Guid.Empty;
-            return this.View();
-        }
-
         public JsonResult GetVersions() =>
             this.Json(new VersionsInfo(
                 this.productVersion.ToString(),
