@@ -102,7 +102,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #region Dependencies
 
-        private readonly ILogger logger;
         private readonly IClock clock;
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
