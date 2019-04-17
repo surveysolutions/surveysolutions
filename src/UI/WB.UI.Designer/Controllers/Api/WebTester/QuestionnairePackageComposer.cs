@@ -123,7 +123,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
         }
     }
 
-    internal class ComposeException : Exception
+    public class ComposeException : Exception
     {
     }
 }
