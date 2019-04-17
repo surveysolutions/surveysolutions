@@ -60,7 +60,8 @@ function GetPathToMSBuild() {
 }
 
 function GetPathToConfigTransformator() {
-    return "packages\WebConfigTransformRunner.1.0.0.1\Tools\WebConfigTransformRunner"
+    nuget install WebConfigTransformRunner -Version 1.0.0.1
+    return ".\packages\WebConfigTransformRunner.1.0.0.1\Tools\WebConfigTransformRunner"
 }
 
 function GetMainSolutionPath() {
