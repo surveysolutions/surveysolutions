@@ -59,11 +59,22 @@ function GetPathToMSBuild() {
     return 'C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe'
 }
 
-function GetPathToConfigTransformator() {
+if($ENV:NUGET_EXE -eq $null) {
+    $nuget = "D:\tools\nuget.exe"
+} else {
     $nuget = $ENV:NUGET_EXE
     $nuget = "$nuget\tools\nuget.exe"
-    & $nuget install WebConfigTransformRunner -Version 1.0.0.1
-    return ".\packages\WebConfigTransformRunner.1.0.0.1\Tools\WebConfigTransformRunner"
+}
+
+function GetPathToConfigTransformator() {    
+    $path = ".\packages\WebConfigTransformRunner.1.0.0.1\Tools\WebConfigTransformRunner.exe"
+
+    if(Test-Path $path) {
+        return $path
+    } else {    
+        & $nuget install WebConfigTransformRunner -Version 1.0.0.1
+        return $path
+    }
 }
 
 function GetMainSolutionPath() {
@@ -284,18 +295,23 @@ function AddArtifacts($Project, $BuildConfiguration, $folder) {
 }
 
 function AddNetCoreArtifacts($Project, $BuildConfiguration, $folder) {
-    $csproj = gci $Project
-    $name = csproj.BaseName
-    Push-Location $csproj.Directory
-    $archive = 
+    $folder = ".\Artifacts\$folder"
+    Remove-Item $folder -Recurse -Force  -ErrorAction SilentlyContinue | Out-Null
+    New-Item $folder -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
+    $folder = Resolve-Path $folder
+    
+    $csproj = Get-ChildItem $Project;
+    $name = $csproj.BaseName;
+    Push-Location $csproj.Directory;
+    
     try {
         dotnet publish -c $BuildConfiguration -r win-x64 --self-contained -o $folder\$name
-        Compress-Archive -Path $folder\$name -DestinationPath $folder
+        Compress-Archive -Path $folder\$name -DestinationPath $folder\$name.zip
+        Remove-Item $folder\$name -Recurse -Force  -ErrorAction SilentlyContinue | Out-Null
     } finally {
         Pop-Location
     }
 }
-
 function MoveArtifacts([string[]] $items, $folder) {
     $artifactsFolder = "Artifacts"
     If (Test-Path "$artifactsFolder") {
