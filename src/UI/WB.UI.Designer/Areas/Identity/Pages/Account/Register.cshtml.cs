@@ -38,7 +38,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
             IRecaptchaService recaptchaService,
             IOptions<CaptchaConfig> captchaOptions)
         {
-            CaptchaOptions = captchaOptions;
+            this.CaptchaOptions = captchaOptions;
             this.userManager = userManager;
             this.viewRenderingService = viewRenderingService;
             this.logger = logger;
@@ -86,7 +86,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                if (CaptchaOptions.Value.IsReCaptchaEnabled)
+                if (this.CaptchaOptions.Value.IsReCaptchaEnabled)
                 {
                     var recaptcha = await this.recaptchaService.Validate(Request);
                     if (!recaptcha.success)

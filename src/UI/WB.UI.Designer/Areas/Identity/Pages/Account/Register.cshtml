@@ -1,6 +1,9 @@
 ﻿@page
+@using Microsoft.Extensions.Options
 @using reCAPTCHA.AspNetCore
+@using WB.UI.Designer.Models
 @model RegisterModel
+@inject IOptions<CaptchaConfig> CaptchaConfig;
 @{
     ViewData["Title"] = AccountResources.Register;
 }
@@ -39,8 +42,8 @@
 
     @if (Model.CaptchaOptions.Value.IsReCaptchaEnabled)
     {
-        <div style="line-height: 0">
-            @Html.Recaptcha(Model.CaptchaOptions.Value)
+        <div class="recaptcha">
+            @Html.Recaptcha(CaptchaConfig.Value)
         </div>
     }
 

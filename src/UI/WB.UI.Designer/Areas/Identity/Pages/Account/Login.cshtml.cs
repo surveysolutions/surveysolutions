@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -78,14 +79,21 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
         {
             returnUrl = returnUrl ?? Url.Content("~/");
 
+            this.ShouldShowCaptcha = this.captchaService.ShouldShowCaptcha(Input.Email);
             if (ModelState.IsValid)
             {
-                this.ShouldShowCaptcha = this.captchaService.ShouldShowCaptcha(Input.Email);
-
                 if (this.ShouldShowCaptcha)
                 {
-                    var recaptcha = await this.recaptchaService.Validate(Request);
-                    if (!recaptcha.success)
+                    try
+                    {
+                        var recaptcha = await this.recaptchaService.Validate(Request);
+                        if (!recaptcha.success)
+                        {
+                            this.ErrorMessage = ErrorMessages.You_did_not_type_the_verification_word_correctly;
+                            return Page();
+                        }
+                    }
+                    catch (ValidationException)
                     {
                         this.ErrorMessage = ErrorMessages.You_did_not_type_the_verification_word_correctly;
                         return Page();
