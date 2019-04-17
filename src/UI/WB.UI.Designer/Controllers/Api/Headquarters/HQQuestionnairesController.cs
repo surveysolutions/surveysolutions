@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -31,7 +32,7 @@ namespace WB.UI.Designer.Api.Headquarters
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IQuestionnaireListViewFactory viewFactory;
-        private readonly IPlainStorageAccessor<QuestionnaireListViewItem> listItemStorage;
+        private readonly DesignerDbContext listItemStorage;
         private readonly IDesignerEngineVersionService engineVersionService;
         private readonly ISerializer serializer;
         private readonly IStringCompressor zipUtils;
@@ -47,7 +48,7 @@ namespace WB.UI.Designer.Api.Headquarters
             IDesignerEngineVersionService engineVersionService,
             ISerializer serializer,
             IStringCompressor zipUtils,
-            IPlainStorageAccessor<QuestionnaireListViewItem> listItemStorage,
+            DesignerDbContext listItemStorage,
             IExpressionsPlayOrderProvider expressionsPlayOrderProvider,
             IQuestionnaireCompilationVersionService questionnaireCompilationVersionService)
         {
@@ -164,7 +165,7 @@ namespace WB.UI.Designer.Api.Headquarters
                 });
             }
 
-            var listItem = this.listItemStorage.GetById(id.FormatGuid());
+            var listItem = this.listItemStorage.Questionnaires.Find(id.FormatGuid());
 
             QuestionnaireInfo result = new QuestionnaireInfo
             {

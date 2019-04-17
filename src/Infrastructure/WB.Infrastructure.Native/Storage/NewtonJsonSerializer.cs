@@ -11,7 +11,7 @@ namespace WB.Infrastructure.Native.Storage
         {
             this.jsonSerializerSettings = new JsonSerializerSettings
             {
-                TypeNameHandling = TypeNameHandling.Objects,
+                TypeNameHandling = TypeNameHandling.Auto,
                 NullValueHandling = NullValueHandling.Ignore,
                 FloatParseHandling = FloatParseHandling.Decimal,
                 Formatting = Formatting.Indented,
