@@ -6,26 +6,24 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
 {
     internal class when_getting_attachment_content_details : AttachmentServiceTestContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.Test] public void should_return_attachment_content_with_specified_properties() {
             attachmentContentStorage.Add(
                 Create.AttachmentContent(content: fileContent, contentType: contentType, contentId: attachmentContentId,
                     size: fileContent.Length, details: contentDetails));
 
             attachmentService = Create.AttachmentService(attachmentContentStorage);
+
             BecauseOf();
-        }
 
-        private void BecauseOf() =>
-            attachmentContent = attachmentService.GetContentDetails(attachmentContentId);
-
-        [NUnit.Framework.Test] public void should_return_attachment_content_with_specified_properties () 
-        {
             attachmentContent.ContentId.Should().Be(attachmentContentId);
             attachmentContent.ContentType.Should().Be(contentType);
             attachmentContent.Size.Should().Be(fileContent.Length);
             attachmentContent.Details.Height.Should().Be(contentDetails.Height);
             attachmentContent.Details.Width.Should().Be(contentDetails.Width);
         }
+
+        private void BecauseOf() =>
+            attachmentContent = attachmentService.GetContentDetails(attachmentContentId);
 
         private static AttachmentContent attachmentContent;
         private static AttachmentService attachmentService;

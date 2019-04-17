@@ -35,12 +35,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
                     var countOfAttachmentContentReferences = this.dbContext.AttachmentMetas.Count(meta => meta.ContentId == questionnaireAttachment.ContentId);
                     if (countOfAttachmentContentReferences == 0)
                     {
-                        this.dbContext.AttachmentContents.Remove(
-                            new AttachmentContent
-                            {
-                                ContentId = questionnaireAttachment.ContentId
-                            }
-                        );
+                        var content = this.dbContext.AttachmentContents.Find(questionnaireAttachment.ContentId);
+                        if (content != null)
+                        {
+                            this.dbContext.AttachmentContents.Remove(content);
+                        }
                     }
                     this.dbContext.SaveChanges();
                 }

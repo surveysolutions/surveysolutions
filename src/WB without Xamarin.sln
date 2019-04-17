@@ -76,7 +76,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Persistence.Headquarters", "Infrastructure\WB.Persistence.Headquarters\WB.Persistence.Headquarters.csproj", "{2F99741B-8182-4814-A726-8CFEB3781E31}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.UI.Designer1", "UI\WB.UI.Designer\WB.UI.Designer1.csproj", "{BB5BAACB-897D-428A-8EAF-3C0F436EBC5A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.UI.Designer", "UI\WB.UI.Designer\WB.UI.Designer.csproj", "{BB5BAACB-897D-428A-8EAF-3C0F436EBC5A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Persistence.Designer", "Infrastructure\WB.Persistence.Designer\WB.Persistence.Designer.csproj", "{67827DB6-ADFE-405D-BD06-95729B76AABF}"
 EndProject
