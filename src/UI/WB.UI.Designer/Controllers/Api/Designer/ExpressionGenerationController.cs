@@ -5,31 +5,26 @@ using System.Net;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.UI.Designer.Controllers.Api.Designer;
 
-namespace WB.UI.Designer.Api
+namespace WB.UI.Designer.Controllers.Api.Designer
 {
     [Authorize]
     [QuestionnairePermissions]
-    public class ExpressionGenerationController : Controller
+    public class ExpressionGenerationController : ControllerBase
     {
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
-        private readonly ILogger<ExpressionGenerationController> logger;
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IDesignerEngineVersionService engineVersionService;
         private IQuestionnaireCompilationVersionService questionnaireCompilationVersionService;
 
-        public ExpressionGenerationController(ILogger<ExpressionGenerationController> logger, 
-            IExpressionProcessorGenerator expressionProcessorGenerator, 
+        public ExpressionGenerationController(IExpressionProcessorGenerator expressionProcessorGenerator, 
             IQuestionnaireViewFactory questionnaireViewFactory, 
             IDesignerEngineVersionService engineVersionService, 
             IQuestionnaireCompilationVersionService questionnaireCompilationVersionService)
         {
-            this.logger = logger;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.engineVersionService = engineVersionService;
