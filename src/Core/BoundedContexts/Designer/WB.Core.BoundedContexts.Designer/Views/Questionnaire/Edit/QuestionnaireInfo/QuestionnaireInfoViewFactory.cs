@@ -36,6 +36,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         {
             QuestionnaireDocument questionnaireDocument = this.questionnaireDocumentReader.GetById(questionnaireId);
 
+            if (questionnaireDocument == null) return null;
+
             var questionnaireInfoView = new QuestionnaireInfoView
             {
                 QuestionnaireId = questionnaireId,
