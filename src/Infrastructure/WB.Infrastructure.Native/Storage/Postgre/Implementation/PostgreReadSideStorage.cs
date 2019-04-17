@@ -1,16 +1,22 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Impl;
 using NHibernate.Loader.Criteria;
+using NHibernate.Mapping.ByCode;
+using NHibernate.Mapping.ByCode.Conformist;
+using NHibernate.Mapping.ByCode.Impl;
 using NHibernate.Persister.Entity;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
+using Expression = System.Linq.Expressions.Expression;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
@@ -19,8 +25,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             INativeReadSideStorage<TEntity>
         where TEntity : class, IReadSideRepositoryEntity
     {
-        
-
         public PostgreReadSideStorage(
             IUnitOfWork unitOfWork, 
             ILogger logger,
@@ -35,7 +39,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly ILogger logger;
-        private IServiceLocator serviceLocator;
+        private readonly IServiceLocator serviceLocator;
 
         public PostgreReadSideStorage(IUnitOfWork unitOfWork, 
             ILogger logger,
@@ -53,6 +57,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public virtual TEntity GetById(TKey id)
         {
+            if (ReadSideStorageMapping.IsPrimaryKeyAlias<TEntity, TKey>())
+            {
+                return this.unitOfWork.Session.Query<TEntity>()
+                    .GetByPrimaryKeyAlias(id);
+            }
+
             return this.unitOfWork.Session.Get<TEntity>(id);
         }
 
@@ -60,7 +70,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         {
             var session = this.unitOfWork.Session;
 
-            var entity = session.Get<TEntity>(id);
+            var entity = GetById(id);
 
             if (entity == null)
                 return;
@@ -72,7 +82,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         {
             ISession session = this.unitOfWork.Session;
 
-            var storedEntity = session.Get<TEntity>(id);
+            var storedEntity = GetById(id);
             if (!object.ReferenceEquals(storedEntity, entity) && storedEntity != null)
             {
                 session.Merge(entity);
@@ -125,16 +135,16 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
             if (loader.Translator.ProjectedColumnAliases.Length != 1)
             {
-                throw new InvalidOperationException("Recursive index is avalible only for single coulmn query");
+                throw new InvalidOperationException("Recursive index is available only for single column query");
             }
 
-            var alliasName = loader.Translator.ProjectedColumnAliases[0];
+            var aliasName = loader.Translator.ProjectedColumnAliases[0];
             var propertyProjection = (PropertyProjection)criteriaImpl.Projection;
             var columnName = propertyProjection.PropertyName;
 
             var result = session.CreateSQLQuery($"WITH RECURSIVE t AS ( ({loader.SqlString} ORDER BY {columnName} LIMIT 1) " +
-                                                $"UNION ALL SELECT({loader.SqlString} and {columnName} > t.{alliasName} ORDER BY {columnName} LIMIT 1) FROM t WHERE t.{alliasName} IS NOT NULL)" +
-                                                $"SELECT count(*) FROM t WHERE {alliasName} IS NOT NULL; ");
+                                                $"UNION ALL SELECT({loader.SqlString} and {columnName} > t.{aliasName} ORDER BY {columnName} LIMIT 1) FROM t WHERE t.{aliasName} IS NOT NULL)" +
+                                                $"SELECT count(*) FROM t WHERE {aliasName} IS NOT NULL; ");
             int position = 0;
             foreach (var collectedParameter in loader.Translator.CollectedParameters)
             {
@@ -215,5 +225,58 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 transaction.Commit();
             }
         }
+    }
+
+    public static class ReadSideStorageMapping 
+    {
+        static readonly Dictionary<(Type, Type), object> aliases = new Dictionary<(Type, Type), object>();
+
+        public static void PropertyKeyAlias<TProperty, TEntity>(this ClassMapping<TEntity> map, 
+            Expression<Func<TEntity, TProperty>> property) where TEntity : class
+        {
+            var memberInfo = NHibernate.Mapping.ByCode.TypeExtensions.DecodeMemberAccessExpressionOf(property);
+            map.Property(property);
+
+            var key = (memberInfo.DeclaringType, memberInfo.GetPropertyOrFieldType());
+
+            if (!aliases.ContainsKey(key))
+            {
+                aliases.Add(key, property);
+            }
+        }
+
+        public static bool IsPrimaryKeyAlias<TEntity, TKey>() //where TEntity : class, IReadSideRepositoryEntity
+        {
+            return aliases.ContainsKey((typeof(TEntity), typeof(TKey)));
+        }
+
+        public static TEntity GetByPrimaryKeyAlias<TEntity, TKey>(this IQueryable<TEntity> query, TKey id) //where TEntity : class, IReadSideRepositoryEntity
+        {
+            if (aliases.TryGetValue((typeof(TEntity), typeof(TKey)), out var prop))
+            {
+                var property = (Expression<Func<TEntity, TKey>>)prop;
+                var memberInfo = NHibernate.Mapping.ByCode.TypeExtensions.DecodeMemberAccessExpressionOf(property);
+
+                //x =>
+                var param = Expression.Parameter(typeof(TEntity), "x");
+                //val ("Curry")
+                var valExpression = Expression.Constant(id, memberInfo.GetPropertyOrFieldType());
+                //x.LastName == "Curry"
+                MemberExpression member = Expression.Property(param, memberInfo.Name);
+                Expression body = Expression.Equal(member, valExpression);
+                //x => x.LastName == "Curry"
+                var final = Expression.Lambda<Func<TEntity, bool>>(body: body, parameters: param);
+                //compiles the expression tree to a func delegate
+                return query.SingleOrDefault(final);
+            }
+
+            throw new NotSupportedException();
+        }
+    }
+
+
+    [AttributeUsage(AttributeTargets.Property)]
+    public class PrimaryKeyAliasAttribute : Attribute
+    {
     }
 }
