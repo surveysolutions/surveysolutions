@@ -1,5 +1,4 @@
 ﻿@{
-    this.Layout = "Layout.ControlPanel";
     this.ViewBag.Title = "Control Panel: Expression Generation";
 }
 <style type="text/css">
@@ -10,32 +9,32 @@ pre.wrap {
     white-space: -o-pre-wrap;    
 }
 </style>
+<div id="edit-form" >
+    <h3>Questionnaire Expression Generation</h3>
 
-<h3>Questionnaire Expression Generation</h3>
+    <div class="well">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label for="questionnaireId" class="col-xs-3 control-label">Questionnaire identifier</label>
+                <div class="col-xs-7">
+                    <input id="questionnaireId" type="text" class="form-control" value="@ViewBag.QuestionnaireId"/>
+                </div>
+                <div class="col-xs-2">
+                    <input id="version" type="text" class="form-control" value=""/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-offset-3 col-xs-9">
+                    <button id="getPartial" type="button" class="btn ">Get a list</button>
+                    <button id="getCompilationResult" type="button" class="btn ">Get compilation result</button>
+                    <button id="getAssembly" type="button" class="btn ">Get Assembly</button>
+                </div>
+            </div>
+            <pre id="outputResult" class="help-block"></pre>
+        </form>
+    </div>
 
-<div class="well">
-    <form class="form-horizontal">
-        <div class="form-group">
-            <label for="questionnaireId" class="col-xs-3 control-label">Questionnaire identifier</label>
-            <div class="col-xs-7">
-                <input id="questionnaireId" type="text" class="form-control" value="@ViewBag.QuestionnaireId"/>
-            </div>
-            <div class="col-xs-2">
-                <input id="version" type="text" class="form-control" value="" />
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-xs-offset-3 col-xs-9">
-                <button id="getPartial" type="button" class="btn ">Get a list</button>
-                <button id="getCompilationResult" type="button" class="btn ">Get compilation result</button>
-                <button id="getAssembly" type="button" class="btn ">Get Assembly</button>
-            </div>
-        </div>
-        <pre id="outputResult" class="help-block"></pre>
-    </form>
-</div>
-
-<pre id="resultArea" class="wrap" style="height: 800px; overflow-y: scroll;"></pre>
+    <pre id="resultArea" class="wrap" style="height: 800px; overflow-y: scroll;"></pre></div>
 
 @section scripts
 {

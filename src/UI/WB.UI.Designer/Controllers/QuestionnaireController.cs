@@ -293,7 +293,11 @@ namespace WB.UI.Designer.Controllers
             return this.View(questionnairePublicListViewModels);
         }
 
-        
+        public IActionResult ExpressionGeneration(Guid? id)
+        {
+            ViewBag.QuestionnaireId = id ?? Guid.Empty;
+            return this.View();
+        }
 
         private QuestionnaireView GetQuestionnaire(Guid id)
         {
