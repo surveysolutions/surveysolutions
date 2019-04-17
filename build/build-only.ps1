@@ -39,7 +39,7 @@ try {
 
         New-Item "$artifactsFolder\stats" -Type Directory -Force | Out-Null
 
-        BuildStaticContent "Designer Questionnaire" "src\UI\Designer\WB.UI.Designer\questionnaire" | % { if (-not $_) { 
+        BuildStaticContent "Designer Questionnaire" "src\UI\WB.UI.Designer" | % { if (-not $_) { 
             Log-Error 'Unexpected error occurred in BuildStaticContent while build static content for Designer'
             Exit 
         }}
