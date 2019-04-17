@@ -24,9 +24,8 @@
                 <a href="@Url.Action("EditAllowedAddress", "ControlPanel", new {id = address.Id})" class="btn btn-link">Edit</a>
             </td>
             <td>
-                <form asp-action="RemoveAllowedAddress" asp-controller="ControlPanel" method="post">
+                <form asp-action="RemoveAllowedAddress" asp-controller="ControlPanel" asp-route-id="@address.Id" method="post">
                     @Html.AntiForgeryToken()
-                    @Html.Hidden("Id", address.Id)
                     <button type="submit" class="btn btn-link">Remove</button>
                 </form>
             </td>
