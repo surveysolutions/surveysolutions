@@ -138,6 +138,9 @@ namespace Main.Core.Documents
         public Dictionary<Guid, Guid[]> DependencyGraph { get; set; }
         public Dictionary<Guid, Guid[]> ValidationDependencyGraph { get; set; }
 
+        // Map of question id to database stored 'questionnaire_entities'.id
+        public Dictionary<Guid, int> EntitiesIdMap { get; set; }
+
         public void Insert(int index, IComposite c, Guid? parentId)
         {
             if (!parentId.HasValue || this.PublicKey == parentId)
@@ -501,6 +504,9 @@ namespace Main.Core.Documents
 
             doc.Translations = new List<Translation>();
             this.Translations.ForEach(x => doc.Translations.Add(x.Clone()));
+
+            if(this.EntitiesIdMap != null)
+            doc.EntitiesIdMap = new Dictionary<Guid, int>(this.EntitiesIdMap);
 
             return doc;
         }
