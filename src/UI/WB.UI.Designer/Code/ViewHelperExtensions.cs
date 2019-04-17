@@ -69,6 +69,13 @@ namespace WB.UI.Designer.BootstrapSupport
             return v;
         }
 
+        public static RouteValueDictionary AddArea(this RouteValueDictionary dic, string area)
+        {
+            var v = new RouteValueDictionary(dic);
+            v.Add("area", area);
+            return v;
+        }
+
         private static object GetId(this object model)
         {
             return model.GetType().GetProperty(model.IdentifierPropertyName()).GetValue(model, new object[0]);
