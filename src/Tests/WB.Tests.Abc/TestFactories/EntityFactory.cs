@@ -376,7 +376,8 @@ namespace WB.Tests.Abc.TestFactories
             Guid? interviewerId = null, 
             Guid? supervisorId = null, 
             DateTime? timestamp = null, 
-            TimeSpan? timeSpanWithPreviousStatus = null)
+            TimeSpan? timeSpanWithPreviousStatus = null,
+            InterviewSummary interviewSummary = null)
             => new InterviewCommentedStatus
             {
                 Id = statusId ?? Guid.NewGuid(),
@@ -388,7 +389,8 @@ namespace WB.Tests.Abc.TestFactories
                 StatusChangeOriginatorName = originatorName,
                 InterviewerName = "inter",
                 SupervisorName = "supervisor",
-                TimeSpanWithPreviousStatus = timeSpanWithPreviousStatus
+                TimeSpanWithPreviousStatus = timeSpanWithPreviousStatus,
+                InterviewSummary = interviewSummary
             };
 
         public InterviewData InterviewData(
@@ -2073,8 +2075,6 @@ namespace WB.Tests.Abc.TestFactories
             };
         }
 
-        public InterviewState InterviewState(Guid interviewId) => new InterviewState {Id = interviewId};
-
         public PreloadedFile PreloadedFile(string questionnaireOrRosterName = null, params PreloadingRow[] rows)
             => this.PreloadedFile(null, questionnaireOrRosterName, rows);
 
@@ -2403,7 +2403,7 @@ namespace WB.Tests.Abc.TestFactories
             var created = interviewSummary.InterviewCommentedStatuses.FirstOrDefault(s =>
                 s.Status == InterviewExportedAction.Created);
 
-            return new SpeedReportInterviewItem()
+            return new SpeedReportInterviewItem(interviewSummary)
             {
                 InterviewId = interviewSummary.SummaryId,
                 QuestionnaireId = interviewSummary.QuestionnaireId,
@@ -2414,9 +2414,7 @@ namespace WB.Tests.Abc.TestFactories
                 InterviewerName = firstAnswerSet?.InterviewerName,
                 InterviewerId = firstAnswerSet?.InterviewerId,
                 SupervisorName = firstAnswerSet?.SupervisorName,
-                SupervisorId = firstAnswerSet?.SupervisorId,
-
-                InterviewSummary = interviewSummary
+                SupervisorId = firstAnswerSet?.SupervisorId
             };
         }
 
