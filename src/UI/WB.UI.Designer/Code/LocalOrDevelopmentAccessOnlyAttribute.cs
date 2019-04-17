@@ -8,11 +8,19 @@ using ActionFilterAttribute = Microsoft.AspNetCore.Mvc.Filters.ActionFilterAttri
 
 namespace WB.UI.Designer.Code
 {
-    public class LocalOrDevelopmentAccessOnlyAttribute: ActionFilterAttribute
+    public class LocalOrDevelopmentAccessOnlyAttribute: TypeFilterAttribute
+    {
+        public LocalOrDevelopmentAccessOnlyAttribute() : base(typeof(LocalOrDevelopmentAccessOnlyFilter))
+        {
+            Arguments = new object[] { };
+        }
+    }
+
+    public class LocalOrDevelopmentAccessOnlyFilter: ActionFilterAttribute
     {
         private readonly IHostingEnvironment env;
 
-        public LocalOrDevelopmentAccessOnlyAttribute(IHostingEnvironment env)
+        public LocalOrDevelopmentAccessOnlyFilter(IHostingEnvironment env)
         {
             this.env = env;
         }
