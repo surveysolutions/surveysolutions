@@ -16,7 +16,6 @@
   <ItemGroup>
     <Compile Remove="Api\CustomWebApiAuthorizeFilterTests.cs" />
     <Compile Remove="BoundedContexts\Designer\QuestionnaireHistoryPostProcessorTests.cs" />
-    <Compile Remove="BoundedContexts\Designer\QuestionnaireListViewPostProcessorTests.cs" />
     <Compile Remove="ClassificationsTests\ClassificationStorageIntegrationTests.cs" />
   </ItemGroup>
   <ItemGroup>
