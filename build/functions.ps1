@@ -72,7 +72,7 @@ function GetPathToConfigTransformator() {
     if(Test-Path $path) {
         return $path
     } else {    
-        & $nuget install WebConfigTransformRunner -Version 1.0.0.1
+        & $nuget install WebConfigTransformRunner -Version 1.0.0.1 | Out-Null
         return $path
     }
 }
