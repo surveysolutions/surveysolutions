@@ -102,6 +102,7 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind<HistoryPostProcessor, HistoryPostProcessor>();
             registry.Bind<SearchPostProcessors, SearchPostProcessors>();
             registry.Bind<ResourcesPreProcessor, ResourcesPreProcessor>();
+            registry.Bind<ResourcesPostProcessor, ResourcesPostProcessor>();
         }
 
         public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status)
