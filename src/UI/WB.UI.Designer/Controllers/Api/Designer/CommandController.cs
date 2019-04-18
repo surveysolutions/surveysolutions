@@ -156,7 +156,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                     defaultFormOptions.MultipartBoundaryLengthLimit);
                 var reader = new MultipartReader(boundary.ToString(), HttpContext.Request.Body);
 
-
                 string fileStreamContent = string.Empty;
                 string commandContent = string.Empty;
                 var section = await reader.ReadNextSectionAsync();
@@ -222,11 +221,15 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         {
             try
             {
-                var concreteCommand = this.Deserialize(model.Type, model.Command);
-                IActionResult actionResult = this.ProcessCommand(concreteCommand, model.Type).Response;
-                await dbContext.SaveChangesAsync();
+                using (var transaction = await dbContext.Database.BeginTransactionAsync())
+                {
+                    var concreteCommand = this.Deserialize(model.Type, model.Command);
+                    IActionResult actionResult = this.ProcessCommand(concreteCommand, model.Type).Response;
+                    await dbContext.SaveChangesAsync();
 
-                return actionResult;
+                    transaction.Commit();
+                    return actionResult;
+                }
             }
             catch (Exception e)
             {
