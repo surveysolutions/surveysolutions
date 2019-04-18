@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireViewFacto
             inMemoryDbContext.Questionnaires.Add(listItem);
             inMemoryDbContext.SaveChanges();
 
-            var factory = new QuestionnaireViewFactory(questionnaireStorage, inMemoryDbContext, Mock.Of<IIdentityService>());
+            var factory = new QuestionnaireViewFactory(questionnaireStorage, inMemoryDbContext);
 
             var result = factory.HasUserAccessToQuestionnaire(questionnaireId, userId);
 

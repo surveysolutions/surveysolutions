@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WB.Core.BoundedContexts.Designer.Exceptions
+namespace WB.Core.BoundedContexts.Designer.Classifications
 {
     public class ClassificationException : Exception
     {
