@@ -45,6 +45,7 @@ const doInject = function(name, distFolder, options) {
 };
 
 exports.injectSections = (pipe, distFolder, options = {}) => {
+
   getSectionsList(distFolder).forEach(section => {
     pipe = pipe.pipe(doInject(section, distFolder, options));
   });
