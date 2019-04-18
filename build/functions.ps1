@@ -378,6 +378,12 @@ function Execute-MSBuild($ProjectFile, $Configuration, $buildArgs = $null) {
     return $wasBuildSuccessfull
 }
 
+function BuildAspNetCoreWebPackage($Project, $BuildConfiguration, $BuildNumber) {
+    return Log-Block "Building asp.net core package for project $Project" {
+        dotnet publish $Project /p:PublishProfile=WebDeployPackage /p:VersionPrefix=$BuildNumber
+    }
+}
+
 function BuildWebPackage($Project, $BuildConfiguration) {
     Write-Host "##teamcity[blockOpened name='Building web package for project $Project']"
     Write-Host "##teamcity[progressStart 'Building web package for project $Project']"

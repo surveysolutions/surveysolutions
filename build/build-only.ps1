@@ -118,11 +118,12 @@ try {
         Log-Block "Building web packages and support tool" {
             BuildWebPackage $ProjectHeadquarters $BuildConfiguration | % { if (-not $_) { Exit } }
             BuildWebPackage $ProjectWebTester $BuildConfiguration | % { if (-not $_) { Exit } }
+            BuildAspNetCoreWebPackage $ProjectDesigner $BuildConfiguration | % { if (-not $_) { Exit } }
             BuildAndDeploySupportTool $SupportToolSolution $BuildConfiguration | % { if (-not $_) { Exit } }
         }
 
         Log-Block "Collecting/building artifacts" {
-            AddNetCoreArtifacts $ProjectDesigner $BuildConfiguration -folder "Designer"
+            AddArtifacts $ProjectDesigner $BuildConfiguration -folder "Designer"
             AddArtifacts $ProjectHeadquarters $BuildConfiguration -folder "Headquarters"
             AddArtifacts $ProjectWebTester $BuildConfiguration -folder "WebTester"
         }
