@@ -337,10 +337,10 @@ export default {
             this.$http.post(this.$config.model.api.updateSettings, settings)
                 .then(function (response) {
                     self.$validator.reset('settings');
-                    self.providerSettingsResult = "Email service configuration was saved succeessfully."
+                    self.providerSettingsResult = self.$t("Settings.EmailProvider_SettingsSavedSuccessfully");
                     if (settings.provider!="none")
                     {
-                        self.providerSettingsResult +=" Send yourself a test email message to verify that the bulk email service is functional and to get a preview of what the respondents will receive."
+                        self.providerSettingsResult +=" " + self.$t("Settings.EmailProvider_SendTestEmailMessage");
                     }
                 })
                 .catch(function (error) {

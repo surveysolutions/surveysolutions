@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using System.Web.ModelBinding;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -12,8 +10,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Headquarters.API.Filters;
 using WB.UI.Shared.Web.Filters;
 
@@ -22,54 +18,20 @@ namespace WB.UI.Headquarters.API.Export
     public class InterviewsExportApiController : ApiController
     {
         private readonly IInterviewsToExportViewFactory viewFactory;
-        private readonly IInterviewFactory interviewFactory;
         private readonly IInterviewDiagnosticsFactory interviewDiagnosticsFactory;
         private readonly IInterviewHistoryFactory interviewHistoryFactory;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses;
 
         public InterviewsExportApiController(
             IInterviewsToExportViewFactory viewFactory,
-            IInterviewFactory interviewFactory,
             IInterviewDiagnosticsFactory interviewDiagnosticsFactory,
             IInterviewHistoryFactory interviewHistoryFactory,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses)
         {
             this.viewFactory = viewFactory ?? throw new ArgumentNullException(nameof(viewFactory));
-            this.interviewFactory = interviewFactory ?? throw new ArgumentNullException(nameof(interviewFactory));
             this.interviewDiagnosticsFactory = interviewDiagnosticsFactory ?? throw new ArgumentNullException(nameof(interviewDiagnosticsFactory));
             this.interviewHistoryFactory = interviewHistoryFactory ?? throw new ArgumentNullException(nameof(interviewHistoryFactory));
             this.interviewStatuses = interviewStatuses ?? throw new ArgumentNullException(nameof(interviewStatuses));
-
-            
-        }
-
-        public class GetInterviewsArgs
-        {
-            public InterviewStatus? status { get; set; }
-            public DateTime? fromDate { get; set; }
-            public DateTime? toDate { get; set; }
-        }
-
-        [Route("api/export/v1/interview/{id:guid}")]
-        [ServiceApiKeyAuthorization]
-        [HttpGet]
-        [ApiNoCache]
-        public HttpResponseMessage GetInterview(Guid id, [FromUri] Guid[] entityId = null)
-        {
-            List<InterviewEntity> entities = this.interviewFactory.GetInterviewEntities(id);
-
-            return Request.CreateResponse(HttpStatusCode.OK, entities);
-        }
-
-        [Route("api/export/v1/interviews")]
-        [ServiceApiKeyAuthorization]
-        [HttpGet]
-        [ApiNoCache]
-        public HttpResponseMessage GetInterviews([FromUri]Guid[] id, [FromUri] Guid[] entityId = null)
-        {
-            var entities = this.interviewFactory.GetInterviewEntities(id, entityId).ToList();
-
-            return Request.CreateResponse(HttpStatusCode.OK, entities);
         }
 
         [Route("api/export/v1/interview/batch/commentaries")]

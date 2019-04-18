@@ -13,41 +13,41 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
 {
     public interface ISynchronizationService
     {
-        Task<string> LoginAsync(LogonInfo logonInfo, RestCredentials credentials, CancellationToken? token = null);
-        Task<bool> HasCurrentUserDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null);
+        Task<string> LoginAsync(LogonInfo logonInfo, RestCredentials credentials, CancellationToken token = default);
+        Task<bool> HasCurrentUserDeviceAsync(RestCredentials credentials = null, CancellationToken token = default);
 
-        Task CanSynchronizeAsync(RestCredentials credentials = null, CancellationToken? token = null);
-        Task SendDeviceInfoAsync(DeviceInfoApiView info, CancellationToken? token = null);
-        Task LinkCurrentUserToDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null);
+        Task CanSynchronizeAsync(RestCredentials credentials = null, CancellationToken token = default);
+        Task SendDeviceInfoAsync(DeviceInfoApiView info, CancellationToken token = default);
+        Task LinkCurrentUserToDeviceAsync(RestCredentials credentials = null, CancellationToken token = default);
 
-        Task<byte[]> GetQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaire, IProgress<TransferProgress> transferProgress, CancellationToken token);
-        Task<QuestionnaireApiView> GetQuestionnaireAsync(QuestionnaireIdentity questionnaire, IProgress<TransferProgress> transferProgress, CancellationToken token);
+        Task<byte[]> GetQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaire, IProgress<TransferProgress> transferProgress, CancellationToken token = default);
+        Task<QuestionnaireApiView> GetQuestionnaireAsync(QuestionnaireIdentity questionnaire, IProgress<TransferProgress> transferProgress, CancellationToken token = default);
         Task LogQuestionnaireAsSuccessfullyHandledAsync(QuestionnaireIdentity questionnaire);
         Task LogQuestionnaireAssemblyAsSuccessfullyHandledAsync(QuestionnaireIdentity questionnaire);
 
-        Task<byte[]> GetApplicationAsync(CancellationToken token, IProgress<TransferProgress> transferProgress = null);
-        Task<byte[]> GetApplicationPatchAsync(CancellationToken token, IProgress<TransferProgress> transferProgress = null);
-        Task<int?> GetLatestApplicationVersionAsync(CancellationToken token);
+        Task<byte[]> GetApplicationAsync(IProgress<TransferProgress> transferProgress = null, CancellationToken token = default);
+        Task<byte[]> GetApplicationPatchAsync(IProgress<TransferProgress> transferProgress = null, CancellationToken token = default);
+        Task<int?> GetLatestApplicationVersionAsync(CancellationToken token = default);
 
-        Task<List<InterviewApiView>> GetInterviewsAsync(CancellationToken token);
+        Task<List<InterviewApiView>> GetInterviewsAsync(CancellationToken token = default);
 
         Task LogInterviewAsSuccessfullyHandledAsync(Guid interviewId);
 
-        Task<List<CommittedEvent>> GetInterviewDetailsAsync(Guid interviewId, IProgress<TransferProgress> transferProgress, CancellationToken token);
-        Task<InterviewUploadState> GetInterviewUploadState(Guid interviewId, EventStreamSignatureTag eventStreamSignatureTag, CancellationToken cancellationToken);
-        Task UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview, IProgress<TransferProgress> transferProgress, CancellationToken token);
-        Task UploadInterviewImageAsync(Guid interviewId, string fileName, byte[] fileData, IProgress<TransferProgress> transferProgress, CancellationToken token);
-        Task UploadInterviewAudioAsync(Guid interviewId, string fileName, string contentType, byte[] fileData, IProgress<TransferProgress> transferProgressd, CancellationToken token);
-        Task UploadInterviewAudioAuditAsync(Guid interviewId, string fileName, string contentType, byte[] fileData, IProgress<TransferProgress> transferProgress, CancellationToken token);
-        Task<List<string>> GetAttachmentContentsAsync(QuestionnaireIdentity questionnaire, IProgress<TransferProgress> transferProgress, CancellationToken token);
-        Task<AttachmentContent> GetAttachmentContentAsync(string contentId, IProgress<TransferProgress> transferProgress, CancellationToken token);
-        Task<List<QuestionnaireIdentity>> GetServerQuestionnairesAsync(CancellationToken cancellationToken);
-        Task<List<TranslationDto>> GetQuestionnaireTranslationAsync(QuestionnaireIdentity questionnaireIdentity, CancellationToken cancellationToken);
+        Task<List<CommittedEvent>> GetInterviewDetailsAsync(Guid interviewId, IProgress<TransferProgress> transferProgress, CancellationToken token = default);
+        Task<InterviewUploadState> GetInterviewUploadState(Guid interviewId, EventStreamSignatureTag eventStreamSignatureTag, CancellationToken token = default);
+        Task UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview, IProgress<TransferProgress> transferProgress, CancellationToken token = default);
+        Task UploadInterviewImageAsync(Guid interviewId, string fileName, byte[] fileData, IProgress<TransferProgress> transferProgress, CancellationToken token = default);
+        Task UploadInterviewAudioAsync(Guid interviewId, string fileName, string contentType, byte[] fileData, IProgress<TransferProgress> transferProgressd, CancellationToken token = default);
+        Task UploadInterviewAudioAuditAsync(Guid interviewId, string fileName, string contentType, byte[] fileData, IProgress<TransferProgress> transferProgress, CancellationToken token = default);
+        Task<List<string>> GetAttachmentContentsAsync(QuestionnaireIdentity questionnaire, IProgress<TransferProgress> transferProgress, CancellationToken token = default);
+        Task<AttachmentContent> GetAttachmentContentAsync(string contentId, IProgress<TransferProgress> transferProgress, CancellationToken token = default);
+        Task<List<QuestionnaireIdentity>> GetServerQuestionnairesAsync(CancellationToken token = default);
+        Task<List<TranslationDto>> GetQuestionnaireTranslationAsync(QuestionnaireIdentity questionnaireIdentity, CancellationToken token = default);
 
         Task<CompanyLogoInfo> GetCompanyLogo(string storedClientEtag, CancellationToken cancellationToken);
-        Task<long?> SendSyncStatisticsAsync(SyncStatisticsApiView statistics, CancellationToken token, RestCredentials credentials);
+        Task<long?> SendSyncStatisticsAsync(SyncStatisticsApiView statistics, RestCredentials credentials, CancellationToken token = default);
         Task SendUnexpectedExceptionAsync(UnexpectedExceptionApiView exception, CancellationToken token);
-        
+
         Task<List<MapView>> GetMapList(CancellationToken cancellationToken);
         Task<RestStreamResult> GetMapContentStream(string mapName, CancellationToken cancellationToken);
 

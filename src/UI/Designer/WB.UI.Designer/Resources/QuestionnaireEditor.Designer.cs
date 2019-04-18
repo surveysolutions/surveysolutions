@@ -772,6 +772,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Flat mode.
+        /// </summary>
+        public static string FlatRoster {
+            get {
+                return ResourceManager.GetString("FlatRoster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Geometry type.
         /// </summary>
         public static string GeometryType {
@@ -853,6 +862,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If unchecked, the questions of the roster are shown behind the buttons corresponding to roster instances. If checked, the questions of the roster are shown in the same level separated by headers corresponding to roster instances..
+        /// </summary>
+        public static string HelpFlatRoster {
+            get {
+                return ResourceManager.GetString("HelpFlatRoster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to By default, a disabled item is greyed-out. Checking this option will hide a disabled question or section on a tablet..
         /// </summary>
         public static string HelpHideIfDisabled {
@@ -903,15 +921,6 @@ namespace WB.UI.Designer.Resources {
         public static string HelpNewComment {
             get {
                 return ResourceManager.GetString("HelpNewComment", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to If unchecked, the questions of the roster are shown behind the buttons corresponding to roster instances. If checked, the questions of the roster are shown in the same level separated by headers corresponding to roster instances..
-        /// </summary>
-        public static string HelpPlainRoster {
-            get {
-                return ResourceManager.GetString("HelpPlainRoster", resourceCulture);
             }
         }
         
@@ -1434,15 +1443,6 @@ namespace WB.UI.Designer.Resources {
         public static string PasteAfter {
             get {
                 return ResourceManager.GetString("PasteAfter", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Flat mode.
-        /// </summary>
-        public static string PlainRoster {
-            get {
-                return ResourceManager.GetString("PlainRoster", resourceCulture);
             }
         }
         

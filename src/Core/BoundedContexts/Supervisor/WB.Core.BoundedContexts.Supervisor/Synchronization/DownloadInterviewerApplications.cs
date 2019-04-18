@@ -45,6 +45,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
             if (!this.supervisorSettings.DownloadUpdatesForInterviewerApp) return;
 
             var latestVersionOfSupervisorApp = await this.supervisorSynchronizationService.GetLatestApplicationVersionAsync(Context.CancellationToken);
+
             if (latestVersionOfSupervisorApp != this.supervisorSettings.GetApplicationVersionCode()) return;
 
             Context.Progress.Report(new SyncProgressInfo
@@ -98,24 +99,25 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
                 var interviewerAppFilePath = this.fileSystemAccessor.CombinePath(interviewerApksDirectory, "interviewer.apk");
                 var interviewerWithMapsAppFilePath = this.fileSystemAccessor.CombinePath(interviewerApksDirectory, "interviewer.maps.apk");
 
-                if (!this.fileSystemAccessor.IsFileExists(interviewerAppFilePath))
-                {
-                    var interviewerApk = await this.supervisorSynchronizationService.GetInterviewerApplicationAsync(Context.CancellationToken,
-                        new Progress<TransferProgress>(downloadProgress => { UpdateProgress(downloadProgress, ref sw); }));
+                var interviewerApk = await this.supervisorSynchronizationService
+                    .GetInterviewerApplicationAsync(this.fileSystemAccessor.ReadHash(interviewerAppFilePath),
+                        new Progress<TransferProgress>(downloadProgress => { UpdateProgress(downloadProgress, ref sw); }), Context.CancellationToken);
 
-                    if (interviewerApk != null)
-                        this.fileSystemAccessor.WriteAllBytes(interviewerAppFilePath, interviewerApk);
+                if (interviewerApk != null)
+                {
+                    this.fileSystemAccessor.WriteAllBytes(interviewerAppFilePath, interviewerApk);
                 }
 
                 sw = null;
 
-                if (!this.fileSystemAccessor.IsFileExists(interviewerWithMapsAppFilePath))
-                {
-                    var interviewerWithMapsApk = await this.supervisorSynchronizationService.GetInterviewerApplicationWithMapsAsync(Context.CancellationToken,
-                            new Progress<TransferProgress>(downloadProgress => { UpdateProgress(downloadProgress, ref sw); }));
+                var interviewerWithMapsApk = await this.supervisorSynchronizationService
+                    .GetInterviewerApplicationWithMapsAsync(this.fileSystemAccessor.ReadHash(interviewerWithMapsAppFilePath),
+                        new Progress<TransferProgress>(downloadProgress => { UpdateProgress(downloadProgress, ref sw); }),
+                        Context.CancellationToken);
 
-                    if (interviewerWithMapsApk != null)
-                        this.fileSystemAccessor.WriteAllBytes(interviewerWithMapsAppFilePath, interviewerWithMapsApk);
+                if (interviewerWithMapsApk != null)
+                {
+                    this.fileSystemAccessor.WriteAllBytes(interviewerWithMapsAppFilePath, interviewerWithMapsApk);
                 }
             }
             catch (Exception exc)
@@ -140,7 +142,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
                     receivedKilobytes.Humanize("0.00"),
                     totalKilobytes.Humanize("0.00"),
                     receivedKilobytes.Per(stopWatch.Elapsed).Humanize("0.00"),
-                    (int) downloadProgress.ProgressPercentage),
+                    (int)downloadProgress.ProgressPercentage),
                 Status = SynchronizationStatus.Download,
                 Stage = SyncStage.DownloadApplication,
                 StageExtraInfo = new Dictionary<string, string>()

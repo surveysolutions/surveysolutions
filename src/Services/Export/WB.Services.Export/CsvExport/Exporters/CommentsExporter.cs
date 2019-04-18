@@ -10,7 +10,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
-using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services;
 using WB.Services.Infrastructure.Tenant;
@@ -38,7 +37,9 @@ namespace WB.Services.Export.CsvExport.Exporters
             CommonHeaderItems.Id4,
             new DoExportFileHeader("order", "Sequential order of the comment", ExportValueType.NumericInt),
             new DoExportFileHeader("originator", "Login name of the person leaving the comment", ExportValueType.String),
-            new DoExportFileHeader("role", "System role of the person leaving the comment", ExportValueType.String),
+            new DoExportFileHeader("role", "System role of the person leaving the comment", ExportValueType.NumericInt,
+                ExportHelper.RolesMap
+                    .Select(x => new VariableValueLabel(x.Key.ToString(CultureInfo.InvariantCulture), x.Value)).ToArray()),
             new DoExportFileHeader("date", "Date when the comment was left", ExportValueType.String),
             new DoExportFileHeader("time", "Time when the comment was left", ExportValueType.String),
             new DoExportFileHeader("variable", "Variable name for the commented question", ExportValueType.String),
@@ -118,10 +119,10 @@ namespace WB.Services.Export.CsvExport.Exporters
                 
                 resultRow.Add(comment.Variable);
                 resultRow.Add(comment.CommentSequence.ToString());
-                resultRow.Add(comment.Timestamp.ToString("d", CultureInfo.InvariantCulture));
+                resultRow.Add(comment.Timestamp.ToString(ExportFormatSettings.ExportDateFormat, CultureInfo.InvariantCulture));
                 resultRow.Add(comment.Timestamp.ToString("T", CultureInfo.InvariantCulture));
                 resultRow.Add(comment.OriginatorName);
-                resultRow.Add(this.GetUserRole(comment.OriginatorRole));
+                resultRow.Add(ExportHelper.GetUserRoleDisplayValue(comment.OriginatorRole));
                 resultRow.Add(comment.Comment);
 
                 result.Add(resultRow.ToArray());
@@ -191,24 +192,5 @@ namespace WB.Services.Export.CsvExport.Exporters
             commentsHeader.Add("comment");
             return commentsHeader;
         }
-
-        private string GetUserRole(UserRoles userRole)
-        {
-            switch (userRole)
-            {
-                case UserRoles.Interviewer:
-                    return FileBasedDataExportRepositoryWriterMessages.Interviewer;
-                case UserRoles.Supervisor:
-                    return FileBasedDataExportRepositoryWriterMessages.Supervisor;
-                case UserRoles.Headquarter:
-                    return FileBasedDataExportRepositoryWriterMessages.Headquarter;
-                case UserRoles.Administrator:
-                    return FileBasedDataExportRepositoryWriterMessages.Administrator;
-                case UserRoles.ApiUser:
-                    return FileBasedDataExportRepositoryWriterMessages.ApiUser;
-            }
-            return FileBasedDataExportRepositoryWriterMessages.UnknownRole;
-        }
-
     }
 }
