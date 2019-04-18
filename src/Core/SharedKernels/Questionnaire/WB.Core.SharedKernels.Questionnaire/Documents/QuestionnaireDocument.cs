@@ -108,7 +108,7 @@ namespace Main.Core.Documents
 
         public bool IsRoster => false;
 
-        public bool IsPlainMode => false;
+        public bool IsFlatMode => false;
 
         public Guid? RosterSizeQuestionId => null;
 
@@ -137,6 +137,9 @@ namespace Main.Core.Documents
 
         public Dictionary<Guid, Guid[]> DependencyGraph { get; set; }
         public Dictionary<Guid, Guid[]> ValidationDependencyGraph { get; set; }
+
+        // Map of question id to database stored 'questionnaire_entities'.id
+        public Dictionary<Guid, int> EntitiesIdMap { get; set; }
 
         public void Insert(int index, IComposite c, Guid? parentId)
         {
@@ -235,7 +238,7 @@ namespace Main.Core.Documents
             this.LastEntryDate = DateTime.UtcNow;
         }
 
-        public void UpdateGroup(Guid groupId, string title, string variableName, string description, string conditionExpression, bool hideIfDisabled, bool IsPlainMode)
+        public void UpdateGroup(Guid groupId, string title, string variableName, string description, string conditionExpression, bool hideIfDisabled, bool isFlatMode)
         {
             this.UpdateGroup(groupId, group =>
             {
@@ -244,7 +247,7 @@ namespace Main.Core.Documents
                 @group.Description = description;
                 @group.VariableName = variableName;
                 @group.Update(title);
-                @group.IsPlainMode = IsPlainMode;
+                @group.IsFlatMode = isFlatMode;
             });
         }
 
@@ -501,6 +504,9 @@ namespace Main.Core.Documents
 
             doc.Translations = new List<Translation>();
             this.Translations.ForEach(x => doc.Translations.Add(x.Clone()));
+
+            if(this.EntitiesIdMap != null)
+            doc.EntitiesIdMap = new Dictionary<Guid, int>(this.EntitiesIdMap);
 
             return doc;
         }

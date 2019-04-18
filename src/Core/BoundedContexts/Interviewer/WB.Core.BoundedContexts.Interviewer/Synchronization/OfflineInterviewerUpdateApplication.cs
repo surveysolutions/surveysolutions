@@ -66,7 +66,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
                 try
                 {
                     var apkBytes = await this.synchronizationService.GetApplicationAsync(
-                        Context.CancellationToken, new Progress<TransferProgress>(downloadProgress =>
+                        new Progress<TransferProgress>(downloadProgress =>
                         {
 
                             var receivedKilobytes = downloadProgress.BytesReceived.Bytes();
@@ -92,7 +92,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
                                     {"progressPercentage",((int) downloadProgress.ProgressPercentage).ToString()}
                                 }
                             });
-                        }));
+                        }), Context.CancellationToken);
 
                     Context.CancellationToken.ThrowIfCancellationRequested();
 

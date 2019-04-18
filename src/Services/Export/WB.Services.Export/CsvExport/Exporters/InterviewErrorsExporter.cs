@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using WB.Services.Export.Infrastructure;
@@ -26,7 +27,10 @@ namespace WB.Services.Export.CsvExport.Exporters
             CommonHeaderItems.Id3,
             CommonHeaderItems.Id4,
             new DoExportFileHeader("variable", "Variable name for the question, where validation error occurred", ExportValueType.String),
-            new DoExportFileHeader("type", "Type of the variable where the validation error occurred", ExportValueType.String),
+            new DoExportFileHeader("type", "Type of the variable where the validation error occurred", ExportValueType.NumericInt,
+                Enum.GetValues(typeof(EntityType))
+                    .Cast<EntityType>()
+                    .Select(x => new VariableValueLabel(((int)x).ToString(), x.ToString())).ToArray()),
             new DoExportFileHeader("message__number", "Numeric index of the validation rule that has fired", ExportValueType.NumericInt),
             new DoExportFileHeader("message", "Text of the error message", ExportValueType.String)
         };
@@ -92,7 +96,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             exportRow.Add(error.EntityType == EntityType.Question
                 ? questionnaire.GetQuestionVariableName(error.Identity.Id)
                 : "");
-            exportRow.Add(error.EntityType.ToString());
+            exportRow.Add(((int)error.EntityType).ToString(CultureInfo.InvariantCulture));
 
             exportRow.Add((failedValidationConditionIndex + 1).ToString());
             exportRow.Add(questionnaire.GetValidationMessage(error.Identity.Id, failedValidationConditionIndex).RemoveHtmlTags());

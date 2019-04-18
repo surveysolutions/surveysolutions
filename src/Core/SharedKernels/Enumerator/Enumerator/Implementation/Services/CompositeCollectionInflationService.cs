@@ -36,9 +36,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 {
                     allVisibleGroupItems.AddCollection(rosterViewModel.RosterInstances);
                 }
-                else if (interviewEntityViewModel is PlainRosterViewModel plainRosterViewModel)
+                else if (interviewEntityViewModel is FlatRosterViewModel flatRosterViewModel)
                 {
-                    allVisibleGroupItems.AddCollection(plainRosterViewModel.RosterInstances);
+                    allVisibleGroupItems.AddCollection(flatRosterViewModel.RosterInstances);
                 }
                 else
                 {

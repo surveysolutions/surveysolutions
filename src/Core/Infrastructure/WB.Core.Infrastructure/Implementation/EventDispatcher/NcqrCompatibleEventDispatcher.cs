@@ -25,7 +25,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
         
         private readonly EventBusSettings eventBusSettings;
         private readonly ILogger logger;
-        private IServiceLocator serviceLocator;
+        private readonly IServiceLocator serviceLocator;
         private readonly IEventStore eventStore;
         private readonly IInMemoryEventStore inMemoryEventStore;
 
@@ -103,7 +103,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
             {
                 foreach (var functionalEventHandler in functionalHandlers)
                 {
-                var handler = (IFunctionalEventHandler)this.serviceLocator.GetInstance(functionalEventHandler.Handler);
+                    var handler = (IFunctionalEventHandler)this.serviceLocator.GetInstance(functionalEventHandler.Handler);
 
                     functionalEventHandler.Bus.OnCatchingNonCriticalEventHandlerException +=
                         this.OnCatchingNonCriticalEventHandlerException;
@@ -230,13 +230,18 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
             stopwatch.Stop();
         }
 
+        static readonly ConcurrentDictionary<Type, List<Type>> ieventHandlersCache = new ConcurrentDictionary<Type, List<Type>>();
+
         public void Register(IEventHandler handler)
         {
             if (handlersToIgnore.Any(h => h.GetTypeInfo().IsInstanceOfType(handler)))
                 return;
 
             var inProcessBus = this.getInProcessEventBus();
-            IEnumerable<Type> ieventHandlers = handler.GetType().GetTypeInfo().ImplementedInterfaces.Where(IsIEventHandlerInterface);
+
+            var ieventHandlers = ieventHandlersCache.GetOrAdd(handler.GetType(),
+                type => type.GetTypeInfo().ImplementedInterfaces.Where(IsIEventHandlerInterface).ToList());
+            
             foreach (Type ieventHandler in ieventHandlers)
             {
                 inProcessBus.RegisterHandler(handler, ieventHandler.GenericTypeArguments[0]);

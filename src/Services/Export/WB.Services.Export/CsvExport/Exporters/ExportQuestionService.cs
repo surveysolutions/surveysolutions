@@ -97,13 +97,14 @@ namespace WB.Services.Export.CsvExport.Exporters
                             return GetCategoricalMultiAnswers(question.AsIntArray, header, header.ColumnHeaders.Count).ToArray();
                         case QuestionSubtype.MultyOption_Combobox:
                             return GetMultiLinkedToListAnswers(question.AsIntArray, header, header.ColumnHeaders.Count).ToArray();
-                        case QuestionSubtype.MultyOption_Ordered:
+                        case QuestionSubtype.MultiOptionOrdered:
                             return GetCategoricalMultiOrderedAnswers(question.AsIntArray, header, header.ColumnHeaders.Count).ToArray();
-                        case QuestionSubtype.MultyOption_YesNo:
+                        case QuestionSubtype.MultiOptionYesNo:
                             return GetYesNoAnswers(question.AsYesNo, header, header.ColumnHeaders.Count, false).ToArray();
-                        case QuestionSubtype.MultyOption_YesNoOrdered:
+                        case QuestionSubtype.MultiOptionYesNoOrdered:
                             return GetYesNoAnswers(question.AsYesNo, header, header.ColumnHeaders.Count, true).ToArray();
-                        case QuestionSubtype.MultyOption_Linked:
+                        case QuestionSubtype.MultiOptionLinkedFirstLevel:
+                        case QuestionSubtype.MultiOptionLinkedNestedLevel:
                         {
                             if (question.AsIntMatrix != null)
                                 return GetMultiLinkedToRosterAnswers(question.AsIntMatrix, header, header.ColumnHeaders.Count).ToArray();
@@ -112,13 +113,13 @@ namespace WB.Services.Export.CsvExport.Exporters
                         }
                             break;
                     }
-
                     return BuildAnswerListForQuestionByHeader(question.AsObject(), header);
-
                 }
                 case QuestionType.SingleOption:
                 {
-                    return header.QuestionSubType == QuestionSubtype.SingleOption_Linked && question.AsIntArray != null
+                    return (header.QuestionSubType == QuestionSubtype.SingleOptionLinkedFirstLevel 
+                            || header.QuestionSubType == QuestionSubtype.SingleOptionLinkedNestedLevel) 
+                           && question.AsIntArray != null
                         ? GetSingleLinkedToRosterAnswer(question.AsIntArray, header).ToArray()
                         : new[] {this.ConvertAnswerToStringValue(question.AsInt, header)};
                 }
@@ -187,7 +188,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                             : this.ConvertAnswerToString(shrinkedArrayOfAnswers[0], header.QuestionType, header.QuestionSubType);
                     }
 
-                    return string.Format("[{0}]", string.Join(ExportFormatSettings.DefaultDelimiter, shrinkedArrayOfAnswers.Select(x => this.ConvertAnswerToString(x, header.QuestionType, header.QuestionSubType)).ToArray()));
+                    return string.Join(ExportFormatSettings.DefaultDelimiter, shrinkedArrayOfAnswers.Select(x => this.ConvertAnswerToString(x, header.QuestionType, header.QuestionSubType)).ToArray());
                 }
                 return string.Join(ExportFormatSettings.DefaultDelimiter, arrayOfObject.Select(x => this.ConvertAnswerToString(x, header.QuestionType, header.QuestionSubType)).ToArray());
             }
@@ -331,7 +332,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             if (obj is IFormattable formattable)
             {
                 var isDateTimeQuestion = questionType == QuestionType.DateTime;
-                var isTimestampQuestion = isDateTimeQuestion && questionSubType.HasValue && questionSubType == QuestionSubtype.DateTime_Timestamp;
+                var isTimestampQuestion = isDateTimeQuestion && questionSubType.HasValue && questionSubType == QuestionSubtype.DateTimeTimestamp;
 
                 return formattable.ToString(isTimestampQuestion ? ExportFormatSettings.ExportDateTimeFormat : isDateTimeQuestion ? ExportFormatSettings.ExportDateFormat : null, ExportCulture);
             }

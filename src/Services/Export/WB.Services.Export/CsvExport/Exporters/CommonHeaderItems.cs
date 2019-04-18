@@ -14,15 +14,15 @@ namespace WB.Services.Export.CsvExport.Exporters
             new DoExportFileHeader("roster", "Name of the roster containing the variable", ExportValueType.String);
 
         public static readonly DoExportFileHeader Id1 =
-            new DoExportFileHeader("id1", "Roster ID of the 1st level of nesting", ExportValueType.String, true);
+            new DoExportFileHeader("id1", "Roster ID of the 1st level of nesting", ExportValueType.NumericInt, true);
 
         public static readonly DoExportFileHeader Id2 =
-            new DoExportFileHeader("id2", "Roster ID of the 2nd level of nesting", ExportValueType.String, true);
+            new DoExportFileHeader("id2", "Roster ID of the 2nd level of nesting", ExportValueType.NumericInt, true);
 
         public static readonly DoExportFileHeader Id3 =
-            new DoExportFileHeader("id3", "Roster ID of the 3rd level of nesting", ExportValueType.String, true);
+            new DoExportFileHeader("id3", "Roster ID of the 3rd level of nesting", ExportValueType.NumericInt, true);
 
         public static readonly DoExportFileHeader Id4 =
-            new DoExportFileHeader("id4", "Roster ID of the 4th level of nesting", ExportValueType.String, true);
+            new DoExportFileHeader("id4", "Roster ID of the 4th level of nesting", ExportValueType.NumericInt, true);
     }
 }
