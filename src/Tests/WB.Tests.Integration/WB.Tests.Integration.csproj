@@ -60,7 +60,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
     <PackageReference Include="NHibernate" Version="5.2.4" />
     <PackageReference Include="Npgsql" Version="4.0.5" />
-    <PackageReference Include="NUnit" Version="3.11.0" />
+    <PackageReference Include="NUnit" Version="3.10.1" />
     <PackageReference Include="Remotion.Linq" Version="2.2.0" />
     <PackageReference Include="Remotion.Linq.EagerFetching" Version="2.2.0" />
     <PackageReference Include="sqlite-net-pcl" Version="1.5.231" />
