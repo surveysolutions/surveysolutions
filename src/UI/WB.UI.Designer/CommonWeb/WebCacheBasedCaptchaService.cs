@@ -107,13 +107,7 @@ namespace WB.UI.Designer.CommonWeb
         {
             cache.Remove(GetCacheKey(username));
 
-            if (this.httpContextAccessor.HttpContext != null)
-            {
-                this.httpContextAccessor.HttpContext.Response.Cookies.Append(ShouldShowCaptchaCookieName, string.Empty, new CookieOptions
-                {
-                    Expires = DateTime.MinValue
-                });
-            }
+            httpContextAccessor.HttpContext?.Response.Cookies.Delete(ShouldShowCaptchaCookieName);
         }
     }
 }
