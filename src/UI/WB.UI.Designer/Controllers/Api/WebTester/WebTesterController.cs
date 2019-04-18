@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
@@ -19,7 +20,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
 
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IAttachmentService attachmentService;
-        private readonly IPlainStorageAccessor<TranslationInstance> translations;
+        private readonly DesignerDbContext designerDbContext;
         private readonly IWebTesterService webTesterService;
 
 
@@ -27,13 +28,13 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             IQuestionnairePackageComposer questionnairePackageComposer,
             IQuestionnaireViewFactory questionnaireViewFactory,
             IAttachmentService attachmentService,
-            IPlainStorageAccessor<TranslationInstance> translations,
+            DesignerDbContext designerDbContext,
             IWebTesterService webTesterService)
         {
             this.questionnairePackageComposer = questionnairePackageComposer;
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.attachmentService = attachmentService;
-            this.translations = translations;
+            this.designerDbContext = designerDbContext;
             this.webTesterService = webTesterService;
         }
 
@@ -119,8 +120,8 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
 
             var actualTranslations = questionnaireView.Source.Translations.Select(x => x.Id).ToList();
 
-            return Ok(this.translations
-                .Query(_ => _.Where(x => x.QuestionnaireId == questionnaireId && actualTranslations.Contains(x.TranslationId)).ToList())
+            return Ok(this.designerDbContext.TranslationInstances
+                .Where(x => x.QuestionnaireId == questionnaireId && actualTranslations.Contains(x.TranslationId))
                 .Select(x => new TranslationDto
                 {
                     Value = x.Value,
