@@ -121,9 +121,11 @@ try {
             BuildAndDeploySupportTool $SupportToolSolution $BuildConfiguration | % { if (-not $_) { Exit } }
         }
 
-        AddNetCoreArtifacts $ProjectDesigner $BuildConfiguration -folder "Designer"
-        AddArtifacts $ProjectHeadquarters $BuildConfiguration -folder "Headquarters"
-        AddArtifacts $ProjectWebTester $BuildConfiguration -folder "WebTester"
+        Log-Block "Collecting/building artifacts" {
+            AddNetCoreArtifacts $ProjectDesigner $BuildConfiguration -folder "Designer"
+            AddArtifacts $ProjectHeadquarters $BuildConfiguration -folder "Headquarters"
+            AddArtifacts $ProjectWebTester $BuildConfiguration -folder "WebTester"
+        }
 
         Write-Host "##teamcity[publishArtifacts '$artifactsFolder']"
     }
