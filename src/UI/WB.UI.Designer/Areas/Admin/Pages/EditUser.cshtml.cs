@@ -83,7 +83,9 @@ namespace WB.UI.Designer.Areas.Admin.Pages
 
                 user.Email = Input.Email;
                 user.EmailConfirmed = Input.IsApproved;
+
                 user.LockoutEnabled = Input.IsLockedOut;
+                user.LockoutEnd = Input.IsLockedOut ? DateTimeOffset.MaxValue : (DateTimeOffset?)null;
                 user.CanImportOnHq = Input.CanImportOnHq;
 
                 var claims = await userManager.GetClaimsAsync(user);
@@ -111,6 +113,9 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                 this.Message = "Account updated";
 
                 await this.userManager.UpdateAsync(user);
+
+                if (Input.IsLockedOut)
+                    await userManager.UpdateSecurityStampAsync(user);
             }
 
             return Page();
