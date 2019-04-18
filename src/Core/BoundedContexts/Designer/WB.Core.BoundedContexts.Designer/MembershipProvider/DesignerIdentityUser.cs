@@ -5,11 +5,11 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
 {
     public class DesignerIdentityUser : IdentityUser<Guid>
     {
-        public string PasswordSalt { get; set; }
+        public virtual string PasswordSalt { get; set; }
 
-        public bool CanImportOnHq { get; set; }
+        public virtual bool CanImportOnHq { get; set; }
 
-        public DateTime CreatedAtUtc { get; set; }
+        public virtual DateTime CreatedAtUtc { get; set; }
     }
 
     public class DesignerIdentityRole : IdentityRole<Guid>
