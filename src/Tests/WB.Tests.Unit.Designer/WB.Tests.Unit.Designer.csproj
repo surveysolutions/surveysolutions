@@ -23,7 +23,6 @@
     <None Remove="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithHtml.xlsx" />
     <None Remove="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithMissingTranslations.xlsx" />
     <None Remove="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithoutEntityIdColumn.xlsx" />
-    <None Remove="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithoutVariableColumn - Copy.xlsx" />
     <None Remove="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithoutVariableColumn.xlsx" />
     <None Remove="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithPermittedTags.xlsx" />
     <None Remove="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithRandomOrderColumns.xlsx" />
