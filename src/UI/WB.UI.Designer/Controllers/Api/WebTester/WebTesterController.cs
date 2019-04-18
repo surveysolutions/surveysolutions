@@ -5,6 +5,7 @@ using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.Core.SharedKernels.Questionnaire.Translations;
@@ -22,6 +23,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
         private readonly IAttachmentService attachmentService;
         private readonly DesignerDbContext designerDbContext;
         private readonly IWebTesterService webTesterService;
+        private readonly ISerializer serializer;
 
 
         public WebTesterController(
@@ -29,13 +31,16 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             IQuestionnaireViewFactory questionnaireViewFactory,
             IAttachmentService attachmentService,
             DesignerDbContext designerDbContext,
-            IWebTesterService webTesterService)
+            IWebTesterService webTesterService,
+            ISerializer serializer
+            )
         {
             this.questionnairePackageComposer = questionnairePackageComposer;
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.attachmentService = attachmentService;
             this.designerDbContext = designerDbContext;
             this.webTesterService = webTesterService;
+            this.serializer = serializer;
         }
 
         [Route("{token:Guid}/info")]
@@ -71,7 +76,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             try
             {
                 var composeQuestionnaire = this.questionnairePackageComposer.ComposeQuestionnaire(questionnaireId.Value);
-                return Ok(composeQuestionnaire);
+                return Ok(this.serializer.Serialize(composeQuestionnaire));
             }
             catch (ComposeException )
             {
