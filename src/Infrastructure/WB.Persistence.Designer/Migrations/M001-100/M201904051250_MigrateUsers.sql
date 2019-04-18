@@ -25,7 +25,7 @@
 			--throws an exception http://stackoverflow.com/a/23354148/150342
  uuid_in(md5(random()::text || clock_timestamp()::text)::cstring) as "SecurityStamp",
 			false as "TwoFactorEnabled",
-			null as "LockoutEndDateUtc",
+            case when u.islockedout = true then '2030-01-01'::date else null end,
 			u.islockedout as "LockoutEnabled",
 			0 as "AccessFailedCount",
 			u.username as "UserName",
