@@ -33,10 +33,13 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
                 questionnaireId: questionnaireId,
                 questionnaireVersion: questionnaireVersion);
             interview.SummaryId = interviewId.FormatGuid();
-            var interviewCommentedStatus = Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.FirstAnswerSet,
+
+            var interviewCommentedStatus = Create.Entity.InterviewCommentedStatus(
+                status: InterviewExportedAction.FirstAnswerSet,
                 timestamp: dateTime.AddMinutes(1),
                 timeSpanWithPreviousStatus: TimeSpan.FromMinutes(1),
-                supervisorId: supervisorId);
+                supervisorId: supervisorId,
+                interviewSummary: interview);
             interviewCommentedStatus.InterviewSummary = interview;
             interview.InterviewCommentedStatuses.Add(interviewCommentedStatus);
             return interview;

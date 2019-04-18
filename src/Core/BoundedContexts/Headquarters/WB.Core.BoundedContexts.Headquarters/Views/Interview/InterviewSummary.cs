@@ -4,6 +4,7 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
@@ -37,7 +38,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public override Guid InterviewId
         {
-            get { return base.InterviewId; }
+            get => base.InterviewId;
             set
             {
                 this.SummaryId = value.FormatGuid();
@@ -49,8 +50,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public virtual string Key { get; set; }
 
+        public virtual int Id { get; set; }
         public virtual string ClientKey { get; set; }
-        
+
+        [PrimaryKeyAlias]
         public virtual string SummaryId { get; set; }
         public virtual string QuestionnaireTitle { get; set; }
         public virtual string ResponsibleName { get; set; }
@@ -83,6 +86,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual IList<InterviewCommentedStatus> InterviewCommentedStatuses { get; set; }
 
         public virtual ISet<TimeSpanBetweenStatuses> TimeSpansBetweenStatuses { get; set; }
+        public virtual ISet<InterviewStatisticsReportRow> StatisticsReport { get; set; } = new HashSet<InterviewStatisticsReportRow>();
 
         public virtual int CommentedEntitiesCount { get; set; }
         

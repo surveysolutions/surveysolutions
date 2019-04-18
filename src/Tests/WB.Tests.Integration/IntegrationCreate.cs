@@ -373,6 +373,7 @@ namespace WB.Tests.Integration
                 cfg.SetProperty(NHibernate.Cfg.Environment.DefaultSchema, schemaName);
             }
 
+            cfg.SetProperty(NHibernate.Cfg.Environment.DefaultFlushMode, FlushMode.Always.ToString());
             return cfg.BuildSessionFactory();
         }
 
