@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Services;
@@ -15,11 +16,12 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IWebTesterService webTesterService;
 
-        public WebTesterReloadController(WebTesterSettings webTesterSettings, 
+        public WebTesterReloadController(
+            IOptions<WebTesterSettings> webTesterSettings, 
             IQuestionnaireViewFactory questionnaireViewFactory,
             IWebTesterService webTesterService)
         {
-            this.webTesterSettings = webTesterSettings;
+            this.webTesterSettings = webTesterSettings.Value;
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.webTesterService = webTesterService;
         }
