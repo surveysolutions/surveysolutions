@@ -112,7 +112,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
 
                     if (result.Succeeded)
                     {
-                        this.captchaService.RegisterFailedLogin(Input.Email);
+                        this.captchaService.ResetFailedLogin(Input.Email);
                         logger.LogInformation("User logged in.");
                         return LocalRedirect(returnUrl);
                     }
