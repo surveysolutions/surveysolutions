@@ -380,7 +380,19 @@ function Execute-MSBuild($ProjectFile, $Configuration, $buildArgs = $null) {
 
 function BuildAspNetCoreWebPackage($Project, $BuildConfiguration, $BuildNumber) {
     return Log-Block "Building asp.net core package for project $Project" {
-        dotnet publish $Project /p:PublishProfile=WebDeployPackage /p:VersionPrefix=$BuildNumber
+        try {
+            $result = dotnet publish $Project -c $BuildConfiguration -v q /p:PublishProfile=WebDeployPackage /p:BuildNumber=$BuildNumber 
+
+            $ok =  $LASTEXITCODE -eq 0
+
+            if($ok -eq $False) {
+                $result | Out-Host
+            }
+
+            return $ok
+        } catch {
+            return $false
+        }
     }
 }
 

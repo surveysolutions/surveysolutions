@@ -6,6 +6,7 @@
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <RootNamespace>WB.UI.Designer</RootNamespace>   
     <AspNetCoreModuleName>AspNetCoreModuleV2</AspNetCoreModuleName>
+    <VersionPrefix Condition="'$(VersionPrefix)' == ''">18.10.0-development-$(COMPUTERNAME)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>
