@@ -1,17 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
-using System.Web.Http;
-using System.Web.Http.Controllers;
-using System.Web.Http.Routing;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Primitives;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Designer.Services.Accounts;
 
 namespace WB.Tests.Unit.Designer.Applications.AttributesTests
 {
@@ -21,97 +26,114 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
         [SetUp]
         public void SetUp()
         {
-            AssemblyContext.SetupServiceLocator();
+            userMock.Setup(s => s.UserName).Returns(userName);
+            userMock.Setup(s => s.EmailConfirmed).Returns(true);
+            userMock.Setup(s => s.Email).Returns(userEmail);
 
-            var membershipUserServiceMock = new Mock<IMembershipUserService>();
-            var membershipWebUserMock = new Mock<IMembershipWebUser>();
-            membershipUserMock.Setup(x => x.IsApproved).Returns(true);
-            membershipUserMock.Setup(x => x.Email).Returns(userEmail);
-            membershipWebUserMock.Setup(x => x.MembershipUser).Returns(membershipUserMock.Object);
-            membershipUserServiceMock.Setup(_ => _.WebUser).Returns(membershipWebUserMock.Object);
+            var emailStore = new Mock<IUserEmailStore<DesignerIdentityUser>>();
+            var passwordStore = emailStore.As<IUserPasswordStore<DesignerIdentityUser>>();
+            passwordStore.Setup(s => s.GetPasswordHashAsync(userMock.Object, It.IsAny<CancellationToken>()))
+                .ReturnsAsync("hash");
+            var userRoleStore = passwordStore.As<IUserRoleStore<DesignerIdentityUser>>();
+            userRoleStore.Setup(s => s.GetRolesAsync(userMock.Object, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<string>());
+            userStoreMock = userRoleStore.As<IUserStore<DesignerIdentityUser>>();
+            userStoreMock.Setup(r => r.FindByNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(userMock.Object);
 
             allowedAddressServiceMock = new Mock<IAllowedAddressService>();
             ipAddressProviderMock = new Mock<IIpAddressProvider>();
 
-            var requestMessage = new HttpRequestMessage();
-            requestMessage.RequestUri = new Uri("http://www.example.com");
-            requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Basic", EncodeToBase64($"{userName}:{"password"}"));
-
-            var context = new Mock<HttpConfiguration>();
-            var actionDescriptor = new Mock<HttpActionDescriptor>();
-            var controllerContext = new HttpControllerContext(context.Object, new HttpRouteData(new HttpRoute()), requestMessage);
-            actionContext = new HttpActionContext(controllerContext, actionDescriptor.Object);
-
-            Setup.InstanceToMockedServiceLocator<IIpAddressProvider>(ipAddressProviderMock.Object);
-            Setup.InstanceToMockedServiceLocator<IMembershipUserService>(membershipUserServiceMock.Object);
-            Setup.InstanceToMockedServiceLocator<IAllowedAddressService>(allowedAddressServiceMock.Object);
-            Setup.InstanceToMockedServiceLocator<IAccountRepository>(
-                Mock.Of<IAccountRepository>(x => x.GetByNameOrEmail(userName) == Mock.Of<IMembershipAccount>(a => a.UserName == userName)));
+            var authHeader = new StringValues("Basic " + EncodeToBase64($"{userName}:{"password"}"));
+            IHeaderDictionary headers = Mock.Of<IHeaderDictionary>(h => h["Authorization"] == authHeader);
+            HttpRequest request = Mock.Of<HttpRequest>(r => r.Headers == headers);
+            IHeaderDictionary responseHeaders = Mock.Of<IHeaderDictionary>();
+            HttpResponse response = Mock.Of<HttpResponse>(r => r.Headers == responseHeaders);
+            HttpContext httpContext = Mock.Of<HttpContext>(c => c.Request == request && c.Response == response);
+            ActionDescriptor actionDescriptor = Mock.Of<ActionDescriptor>();
+            RouteData routeData = Mock.Of<RouteData>();
+            ActionContext actionContext = Mock.Of<ActionContext>(ac => 
+                ac.HttpContext == httpContext
+                && ac.ActionDescriptor == actionDescriptor
+                && ac.RouteData == routeData
+            );
+            IList<IFilterMetadata> filters = Mock.Of<IList<IFilterMetadata>>();
+            filterContext = new AuthorizationFilterContext(actionContext, filters); 
         }
 
         [Test]
-        public void When_authorizing_and_user_can_import_questionnaires_on_HQ()
+        public async Task When_authorizing_and_user_can_import_questionnaires_on_HQ()
         {
-            membershipUserMock.Setup(x => x.CanImportOnHq).Returns(true);
+            userMock.Setup(s => s.CanImportOnHq).Returns(true);
 
-            var attribute = CreateApiBasicAuthAttribute((s, s1) => true, true);
+            var attribute = CreateApiBasicAuthFilter(true, userStore: userStoreMock.Object);
 
-            attribute.OnAuthorization(actionContext);
+            await attribute.OnAuthorizationAsync(filterContext);
 
-            Assert.That(Thread.CurrentPrincipal.Identity.Name, Is.EqualTo(userName));
+            Assert.That(filterContext.HttpContext.User.Identity.Name, Is.EqualTo(userName));
         }
 
         [Test]
-        public void When_authorizing_and_user_cannot_import_questionnaires_and_ip_is_unknown()
+        public async Task When_authorizing_and_user_cannot_import_questionnaires_and_ip_is_unknown()
         {
-            membershipUserMock.Setup(x => x.CanImportOnHq).Returns(false);
+            userMock.Setup(s => s.CanImportOnHq).Returns(false);
             ipAddressProviderMock.Setup(x => x.GetClientIpAddress()).Returns((IPAddress)null);
             allowedAddressServiceMock.Setup(x => x.IsAllowedAddress(null)).Returns(false);
 
-            var attribute = CreateApiBasicAuthAttribute((s, s1) => true, true);
+            var attribute = CreateApiBasicAuthFilter(true, 
+                userStore: userStoreMock.Object, 
+                ipAddressProvider: ipAddressProviderMock.Object,
+                allowedAddressService: allowedAddressServiceMock.Object);
 
-            attribute.OnAuthorization(actionContext);
+            await attribute.OnAuthorizationAsync(filterContext);
 
-            Assert.AreEqual(HttpStatusCode.Forbidden, actionContext.Response.StatusCode);
+            Assert.AreEqual(StatusCodes.Status403Forbidden, ((ContentResult)filterContext.Result).StatusCode);
         }
 
         [Test]
-        public void When_authorizing_and_user_cannot_import_questionnaires_and_ip_is_allowed()
+        public async Task When_authorizing_and_user_cannot_import_questionnaires_and_ip_is_allowed()
         {
             var ipAddress = IPAddress.Parse("65.87.163.24");
 
-            membershipUserMock.Setup(x => x.CanImportOnHq).Returns(false);
+            userMock.Setup(s => s.CanImportOnHq).Returns(false);
             ipAddressProviderMock.Setup(x => x.GetClientIpAddress()).Returns(ipAddress);
             allowedAddressServiceMock.Setup(x => x.IsAllowedAddress(ipAddress)).Returns(true);
 
-            var attribute = CreateApiBasicAuthAttribute((s, s1) => true, true);
+            var attribute = CreateApiBasicAuthFilter(true, 
+                userStore: userStoreMock.Object, 
+                ipAddressProvider: ipAddressProviderMock.Object,
+                allowedAddressService: allowedAddressServiceMock.Object);
 
-            attribute.OnAuthorization(actionContext);
+            await attribute.OnAuthorizationAsync(filterContext);
 
-            Assert.AreEqual(userName, Thread.CurrentPrincipal.Identity.Name);
+            Assert.AreEqual(userName, filterContext.HttpContext.User.Identity.Name);
         }
 
         [Test]
-        public void When_authorizing_and_user_cannot_import_questionnaires_and_ip_is_not_allowed()
+        public async Task When_authorizing_and_user_cannot_import_questionnaires_and_ip_is_not_allowed()
         {
             var ipAddress = IPAddress.Parse("65.87.163.24");
 
-            membershipUserMock.Setup(x => x.CanImportOnHq).Returns(false);
+            userMock.Setup(s => s.CanImportOnHq).Returns(false);
             ipAddressProviderMock.Setup(x => x.GetClientIpAddress()).Returns(ipAddress);
             allowedAddressServiceMock.Setup(x => x.IsAllowedAddress(ipAddress)).Returns(false);
 
-            var attribute = CreateApiBasicAuthAttribute((s, s1) => true, true);
+            var attribute = CreateApiBasicAuthFilter(true, 
+                userStore: userStoreMock.Object, 
+                ipAddressProvider: ipAddressProviderMock.Object,
+                allowedAddressService: allowedAddressServiceMock.Object);
 
-            attribute.OnAuthorization(actionContext);
+            await attribute.OnAuthorizationAsync(filterContext);
 
-            Assert.AreEqual(HttpStatusCode.Forbidden, actionContext.Response.StatusCode);
+            Assert.AreEqual(StatusCodes.Status403Forbidden, ((ContentResult)filterContext.Result).StatusCode);
         }
 
         private static string userName = "name";
         private static string userEmail = "user@mail";
-        private static readonly Mock<DesignerMembershipUser> membershipUserMock = new Mock<DesignerMembershipUser>();
-        private static HttpActionContext actionContext;
+        private static Mock<DesignerIdentityUser> userMock = new Mock<DesignerIdentityUser>();
+        private static AuthorizationFilterContext filterContext;
         private static Mock<IIpAddressProvider> ipAddressProviderMock;
         private static Mock<IAllowedAddressService> allowedAddressServiceMock;
+        private static Mock<IUserStore<DesignerIdentityUser>> userStoreMock;
     }
 }
