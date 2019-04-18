@@ -153,6 +153,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             this.RemoveOldQuestionnaireHistory(sQuestionnaireId, 
                 maxSequenceByQuestionnaire, 
                 historySettings.Value.QuestionnaireChangeHistoryLimit);
+            this.dbContext.SaveChanges();
         }
 
         public string GetDiffWithLastStoredVersion(QuestionnaireDocument questionnaire)
