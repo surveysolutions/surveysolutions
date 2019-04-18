@@ -46,13 +46,13 @@ const ResourcesFromResx = () =>
     )
     .pipe(rev())
     .pipe(dest(join(dist, "resx")))
-    .pipe(manifest({ base: "/resx/" }))
+    .pipe(manifest({ base: "../../resx/" }))
     .pipe(dest("node_modules/.cache"));
 
 const styles = () =>
   src(questionnaire.markup)
     .pipe(appendPrepend.appendText('@icon-font-path: "/fonts/";'))
-    .pipe(cache(less({ relativeUrls: true, rootpath: "/" })))
+    .pipe(cache(less({ relativeUrls: true, rootpath: "../" }), {name: "less"}))
     .pipe(cache(cleanCss()))
     .pipe(gulpif(PRODUCTION, rev()))
     .pipe(dest(join(dist, "css")));
@@ -69,8 +69,6 @@ const scripts = () =>
     .pipe(concat("app.js"))
     .pipe(gulpif(PRODUCTION, rev()))
     .pipe(dest(join(dist, "js")));
-
-
 
 const inject = () =>
   injectSections(src("questionnaire/index.cshtml"), dist, {

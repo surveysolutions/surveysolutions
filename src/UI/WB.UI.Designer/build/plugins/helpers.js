@@ -34,6 +34,8 @@ const doInject = function(name, distFolder, options) {
     {
       name,
       quiet: true,
+      addRootSlash: false,
+      addPrefix: "~",
       ignorePath: "wwwroot"
     },
     options
