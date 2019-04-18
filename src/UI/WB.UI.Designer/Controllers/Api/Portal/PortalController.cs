@@ -41,15 +41,12 @@ namespace WB.UI.Designer.Api.Portal
             if (string.IsNullOrWhiteSpace(userId))
                 return BadRequest(new {ReasonPhrase = $"Param {nameof(userId)} is empty or missing"});
 
-            var user = await this.accountRepository.FindByNameAsync(userId) ??
-                       await this.accountRepository.FindByEmailAsync(userId);
+            var user = await this.accountRepository.FindByIdAsync(userId);
 
             if (user == null)
                 return NotFound();
 
             var roles = await this.accountRepository.GetRolesAsync(user);
-
-
             var fullName = await this.accountRepository.GetFullName(user.Id);
             return Ok(new PortalUserModel
             {
@@ -67,8 +64,7 @@ namespace WB.UI.Designer.Api.Portal
         {
             if (string.IsNullOrWhiteSpace(userId)) throw new ArgumentNullException(nameof(userId));
 
-            var account = await this.accountRepository.FindByNameAsync(userId) ??
-                          await this.accountRepository.FindByEmailAsync(userId);
+            var account = await this.accountRepository.FindByIdAsync(userId);
 
             var questionnaires = questionnaireHelper.GetQuestionnaires(
                 viewerId: account.Id,
