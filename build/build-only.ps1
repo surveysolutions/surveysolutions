@@ -118,7 +118,7 @@ try {
         Log-Block "Building web packages and support tool" {
             BuildWebPackage $ProjectHeadquarters $BuildConfiguration | % { if (-not $_) { Exit } }
             BuildWebPackage $ProjectWebTester $BuildConfiguration | % { if (-not $_) { Exit } }
-            BuildAspNetCoreWebPackage $ProjectDesigner $BuildConfiguration | % { if (-not $_) { Exit } }
+            BuildAspNetCoreWebPackage $ProjectDesigner $BuildConfiguration $BuildNumber | % { if (-not $_) { Exit } }
             BuildAndDeploySupportTool $SupportToolSolution $BuildConfiguration | % { if (-not $_) { Exit } }
         }
 
