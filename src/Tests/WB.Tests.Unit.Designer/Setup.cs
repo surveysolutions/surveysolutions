@@ -22,14 +22,6 @@ namespace WB.Tests.Unit.Designer
             return attachmentServiceMock.Object;
         }
 
-
-        public static void InstanceToMockedServiceLocator<TInstance>(TInstance instance)
-        {
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<TInstance>())
-                .Returns(instance);
-        }
-
         public static IDesignerEngineVersionService DesignerEngineVersionService(bool isClientVersionSupported = true, bool isQuestionnaireVersionSupported = true, int questionnaireContentVersion = 9)
         {
             return Mock.Of<IDesignerEngineVersionService>(_ 

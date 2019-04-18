@@ -1283,7 +1283,10 @@ namespace WB.Tests.Unit.Designer
             return new QuestionnaireHistoryVersionsService(
                 dbContext ?? Create.InMemoryDbContext(),
                 entitySerializer ?? new EntitySerializer<QuestionnaireDocument>(),
-                questionnaireHistorySettings ?? Mock.Of<IOptions<QuestionnaireHistorySettings>>(), 
+                questionnaireHistorySettings ?? Mock.Of<IOptions<QuestionnaireHistorySettings>>(o => o.Value == new QuestionnaireHistorySettings
+                {
+                    QuestionnaireChangeHistoryLimit = 10
+                }), 
                 patchApplier ?? Create.PatchApplier(),
                 Create.PatchGenerator());
         }
@@ -1572,6 +1575,14 @@ namespace WB.Tests.Unit.Designer
             return new ListViewPostProcessor(
                 dbContext ?? Create.InMemoryDbContext(),
                 emailNotifier ?? Mock.Of<IRecipientNotifier>());
+        }
+
+        public static IPlainKeyValueStorage<T> MockedKeyValueStorage<T>()
+        {
+            var result = new Mock<IPlainKeyValueStorage<T>>();
+            result.DefaultValue = DefaultValue.Mock;
+
+            return result.Object;
         }
     }
 }
