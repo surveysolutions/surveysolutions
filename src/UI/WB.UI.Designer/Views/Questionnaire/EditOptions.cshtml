@@ -1,4 +1,4 @@
-@using System.Linq
+﻿@using System.Linq
 @using System.Web
 @using WB.UI.Designer.Extensions
 @using WB.UI.Shared.Web.Extensions
@@ -57,8 +57,7 @@
     @Html.GenerateFavicon(Url.Content("~/favicon.ico"))
 </head>
 <body>
-    @using (Html.BeginForm("EditOptions", "Questionnaire", FormMethod.Post, new { enctype = "multipart/form-data" }))
-    {
+    <form asp-action="EditOptions" asp-controller="Questionnaire" method="post" enctype="multipart/form-data">
         <nav id="topNav" class="navbar navbar-default navbar-fixed-top" role="navigation">
             <div class="container">
                 <div id="uploadForm" class="navbar-form navbar-left">
@@ -67,72 +66,72 @@
                 </div>
                 <div class="pull-right">
                     <a class="btn btn-default navbar-btn" href="@Url.Action("ExportOptions", "Questionnaire")">@QuestionnaireEditor.Export</a>
-                   
+
                 </div>
             </div>
         </nav>
-    }
-        <div id="content" class="container">
-            <div id="applyOptionsError" class="alert alert-danger">
-                <div id="applyOptionsErrorContent"></div>
-            </div>
-            @foreach (string key in Alerts.ALL)
-            {
-                if (TempData.ContainsKey(key))
-                {
-                    <div class="alert alert-danger">
-                        @foreach (var errorMessage in ((string) TempData[key]).Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries))
-                        {
-                            @Html.Raw(errorMessage)
-                            <br/>
-                        }
-                    </div>
-                }
-            }
-            @if (Model != null && Model.Any())
-            {
-                <table class="table table-bordered table-hover table-condensed">
-                    <thead>
-                        <tr class="active">
-                            <td>@QuestionnaireEditor.OptionsUploadValue</td>
-                            <td>@QuestionnaireEditor.OptionsUploadTitle</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var option in Model)
-                        {
-                            <tr>
-                                <td>@option.Value</td>
-                                <td>@option.Title</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            }
-            else
-            {
-                <table class="table table-bordered table-hover table-condensed">
-                    <thead>
-                        <tr class="active">
-                            <td>@QuestionnaireEditor.OptionsUploadValue</td>
-                            <td>@QuestionnaireEditor.OptionsUploadTitle</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <p><text>@string.Format(QuestionnaireEditor.OptionsUploadLimit, 15000)</text></p>
-            }
+    </form>
+    <div id="content" class="container">
+        <div id="applyOptionsError" class="alert alert-danger">
+            <div id="applyOptionsErrorContent"></div>
         </div>
+        @foreach (string key in Alerts.ALL)
+        {
+            if (TempData.ContainsKey(key))
+            {
+                <div class="alert alert-danger">
+                    @foreach (var errorMessage in ((string)TempData[key]).Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        @Html.Raw(errorMessage)
+                        <br />
+                    }
+                </div>
+            }
+        }
+        @if (Model != null && Model.Any())
+        {
+            <table class="table table-bordered table-hover table-condensed">
+                <thead>
+                    <tr class="active">
+                        <td>@QuestionnaireEditor.OptionsUploadValue</td>
+                        <td>@QuestionnaireEditor.OptionsUploadTitle</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var option in Model)
+                    {
+                        <tr>
+                            <td>@option.Value</td>
+                            <td>@option.Title</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <table class="table table-bordered table-hover table-condensed">
+                <thead>
+                    <tr class="active">
+                        <td>@QuestionnaireEditor.OptionsUploadValue</td>
+                        <td>@QuestionnaireEditor.OptionsUploadTitle</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p><text>@string.Format(QuestionnaireEditor.OptionsUploadLimit, 15000)</text></p>
+        }
+    </div>
     <nav id="bottomNav" class="navbar navbar-default navbar-fixed-bottom" role="navigation">
         <div class="container">
             <a class="btn btn-success navbar-btn" href="javascript:apply();">@QuestionnaireEditor.OptionsUploadApply</a>
-            <a class="btn btn-link navbar-btn" href="@Url.Action("ResetOptions", "Questionnaire")">@QuestionnaireEditor.Cancel</a>
+            <a class="btn btn-link navbar-btn" asp-action="ResetOptions" asp-controller="Questionnaire">@QuestionnaireEditor.Cancel</a>
             <a class="btn btn-link navbar-btn pull-right" href="javascript:close_window();">@QuestionnaireEditor.Close</a>
         </div>
     </nav>
