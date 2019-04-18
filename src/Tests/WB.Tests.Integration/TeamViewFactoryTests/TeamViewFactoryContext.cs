@@ -56,6 +56,7 @@ namespace WB.Tests.Integration.TeamViewFactoryTests
                     typeof(InterviewSummaryMap),
                     typeof(QuestionnaireCompositeItemMap),
                     typeof(QuestionAnswerMap),
+                    typeof(InterviewStatisticsReportRowMap),
                     typeof(TimeSpanBetweenStatusesMap),
                     typeof(CumulativeReportStatusChangeMap),
                     typeof(InterviewCommentedStatusMap)
@@ -91,15 +92,12 @@ namespace WB.Tests.Integration.TeamViewFactoryTests
 
         protected void StoreInterviewSummary(InterviewSummary interviewSummary, QuestionnaireIdentity questionnaireIdentity)
         {
-            using (var unitOfWork = IntegrationCreate.UnitOfWork(sessionFactory))
-            {
-                interviewSummary.QuestionnaireIdentity = questionnaireIdentity.ToString();
-                interviewSummary.SummaryId = interviewSummary.InterviewId.FormatGuid();
+            interviewSummary.QuestionnaireIdentity = questionnaireIdentity.ToString();
+            interviewSummary.SummaryId = interviewSummary.InterviewId.FormatGuid();
 
-                var repository = new PostgreReadSideStorage<InterviewSummary>(unitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
-                repository.Store(interviewSummary, interviewSummary.SummaryId);
-                unitOfWork.AcceptChanges();
-            }
+            var repository = new PostgreReadSideStorage<InterviewSummary>(UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
+            repository.Store(interviewSummary, interviewSummary.SummaryId);
+            UnitOfWork.Session.Flush();
         }
 
         protected ITeamViewFactory CreateTeamViewFactory(IUserRepository userRepository)

@@ -1,6 +1,5 @@
 ﻿using System;
 using Main.Core.Entities.SubEntities;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
 {

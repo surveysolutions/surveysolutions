@@ -51,6 +51,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             if (reportInterviewItem.FirstAnswerDate.HasValue)
                 return interviewSummary;
 
+            reportInterviewItem.InterviewSummary = interviewSummary;
             reportInterviewItem.FirstAnswerDate = answerTime;
             reportInterviewItem.SupervisorId = interviewSummary.TeamLeadId;
             reportInterviewItem.SupervisorName = interviewSummary.TeamLeadName;
@@ -59,10 +60,10 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             return interviewSummary;
         }
 
-        private void RecordInterviewCreated(DateTime createdTime, Guid interviewId, Guid questionnaireId,
+        private void RecordInterviewCreated(InterviewSummary summary, DateTime createdTime, Guid interviewId, Guid questionnaireId,
             long questionnaireVersion)
         {
-            var state = new SpeedReportInterviewItem();
+            var state = new SpeedReportInterviewItem(summary);
             state.CreatedDate = createdTime;
             state.InterviewId = interviewId.FormatGuid();
             state.QuestionnaireId = questionnaireId;
@@ -77,7 +78,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewOnClientCreated> @event)
         {
-            RecordInterviewCreated(
+            RecordInterviewCreated(state,
                 createdTime: @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp,
                 interviewId: state.InterviewId, 
                 questionnaireId: state.QuestionnaireId, 
@@ -87,7 +88,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewCreated> @event)
         {
-            RecordInterviewCreated(
+            RecordInterviewCreated(state,
                 createdTime: @event.Payload.CreationTime ?? @event.EventTimeStamp,
                 interviewId: state.InterviewId,
                 questionnaireId: state.QuestionnaireId,
@@ -97,7 +98,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewFromPreloadedDataCreated> @event)
         {
-            RecordInterviewCreated(
+            RecordInterviewCreated(state,
                 createdTime: @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp,
                 interviewId: state.InterviewId,
                 questionnaireId: state.QuestionnaireId,
@@ -127,7 +128,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             if (@event.Origin == Constants.HeadquartersSynchronizationOrigin)
                 return state;
 
-            var reportInterviewItem = new SpeedReportInterviewItem();
+            var reportInterviewItem = new SpeedReportInterviewItem(state);
             var createdStatusRecord = state.InterviewCommentedStatuses.First(s => s.Status == InterviewExportedAction.Created);
             reportInterviewItem.InterviewId = state.SummaryId;
             reportInterviewItem.CreatedDate = createdStatusRecord.Timestamp;
@@ -135,6 +136,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             var firstAnswerSetStatusRecord = state.InterviewCommentedStatuses.FirstOrDefault(s => s.Status == InterviewExportedAction.FirstAnswerSet);
             if (firstAnswerSetStatusRecord != null)
             {
+                
                 reportInterviewItem.FirstAnswerDate = firstAnswerSetStatusRecord.Timestamp;
                 reportInterviewItem.SupervisorId = firstAnswerSetStatusRecord.SupervisorId;
                 reportInterviewItem.SupervisorName = firstAnswerSetStatusRecord.SupervisorName;
