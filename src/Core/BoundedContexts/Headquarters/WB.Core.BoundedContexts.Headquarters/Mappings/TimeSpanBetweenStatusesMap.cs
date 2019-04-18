@@ -9,6 +9,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
         public TimeSpanBetweenStatusesMap()
         {
             Id(x => x.Id, Idmap => Idmap.Generator(Generators.HighLow));
+
             Property(x => x.SupervisorId);
             Property(x => x.SupervisorName);
             Property(x => x.InterviewerId);
@@ -16,16 +17,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.BeginStatus);
             Property(x => x.EndStatus);
             Property(x => x.EndStatusTimestamp);
-            Property(x => x.TimeSpanLong, clm =>
-            {
-                clm.Column("TimeSpan");
-            });
-            ManyToOne(x => x.InterviewSummary, mto =>
-            {
-                mto.Column("InterviewId");
-                mto.Cascade(Cascade.None);
-                mto.ForeignKey("FK_InterviewSummary_TimeSpansBetweenStatuses");
-            });
+            Property(x => x.TimeSpanLong, clm => clm.Column("TimeSpan"));
+            
+            ManyToOne(x => x.InterviewSummary, mto => mto.Column("interview_id"));
+
+            DynamicUpdate(true);
         }
     }
 }

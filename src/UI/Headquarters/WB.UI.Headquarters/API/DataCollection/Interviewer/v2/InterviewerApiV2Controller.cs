@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.FileSystem;
 using WB.UI.Headquarters.Resources;
+using WB.UI.Headquarters.Utils;
 using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
@@ -41,14 +42,23 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
         [HttpGet]
         public HttpResponseMessage Get()
         {
-            string pathToInterviewerApp = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(PHYSICALPATHTOAPPLICATION), PHYSICALAPPLICATIONFILENAME);
+            string pathToInterviewerApp = this.fileSystemAccessor.CombinePath(
+                HostingEnvironment.MapPath(PHYSICALPATHTOAPPLICATION), PHYSICALAPPLICATIONFILENAME);
 
             if (!this.fileSystemAccessor.IsFileExists(pathToInterviewerApp))
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, TabletSyncMessages.FileWasNotFound);
 
+            var fileHash = this.fileSystemAccessor.ReadHash(pathToInterviewerApp);
+
+            if (this.RequestHasMatchingFileHash(fileHash))
+            {
+                return Request.CreateResponse(HttpStatusCode.NotModified);
+            }
+
             return this.AsProgressiveDownload(this.fileSystemAccessor.ReadFile(pathToInterviewerApp),
                 @"application/vnd.android.package-archive",
-                RESPONSEAPPLICATIONFILENAME);
+                RESPONSEAPPLICATIONFILENAME, 
+                fileHash);
         }
 
         [HttpGet]
@@ -62,7 +72,6 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
                 ? null
                 : this.androidPackageReader.Read(pathToInterviewerApp).Version;
         }
-
 
         [HttpPost]
         public async Task<HttpResponseMessage> PostTabletInformationAsFile()

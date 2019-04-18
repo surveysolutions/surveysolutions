@@ -29,12 +29,16 @@ namespace WB.Services.Export.CsvExport.Exporters
             new DoExportFileHeader("time", "Time when the action was taken", ExportValueType.String),
             new DoExportFileHeader("action", "Type of action taken", ExportValueType.NumericInt, 
                 Enum.GetValues(typeof(InterviewExportedAction))
-                .Cast<InterviewExportedAction>().
-                    Select(x => new VariableValueLabel(((int)x).ToString(), x.ToString())).ToArray()),
+                    .Cast<InterviewExportedAction>()
+                    .Select(x => new VariableValueLabel(((int)x).ToString(), x.ToString())).ToArray()),
             new DoExportFileHeader("originator", "Login name of the person performing the action", ExportValueType.String),
-            new DoExportFileHeader("role", "System role of the person performing the action", ExportValueType.String),
+            new DoExportFileHeader("role", "System role of the person performing the action", ExportValueType.NumericInt,
+                ExportHelper.RolesMap
+                    .Select(x => new VariableValueLabel(x.Key.ToString(CultureInfo.InvariantCulture), x.Value)).ToArray()),
             new DoExportFileHeader("responsible__name", "Login name of the person now responsible for the interview", ExportValueType.String),
-            new DoExportFileHeader("responsible__role", "System role of the person now responsible for the interview", ExportValueType.String)
+            new DoExportFileHeader("responsible__role", "System role of the person now responsible for the interview", ExportValueType.NumericInt,
+                ExportHelper.RolesMap
+                    .Select(x => new VariableValueLabel(x.Key.ToString(CultureInfo.InvariantCulture), x.Value)).ToArray())
         };
 
         private readonly string dataFileExtension = "tab";
@@ -106,7 +110,6 @@ namespace WB.Services.Export.CsvExport.Exporters
         private async Task<List<string[]>> QueryActionsChunkFromReadSide(IHeadquartersApi api, Guid[] interviewIds)
         {
             var interviews = await api.GetInterviewSummariesBatchAsync(interviewIds);
-
             var result = new List<string[]>();
 
             foreach (var interview in interviews)
@@ -117,9 +120,9 @@ namespace WB.Services.Export.CsvExport.Exporters
                     interview.InterviewId.FormatGuid(),
                     interview.Timestamp.ToString(ExportFormatSettings.ExportDateFormat, CultureInfo.InvariantCulture),
                     interview.Timestamp.ToString("T", CultureInfo.InvariantCulture),
-                    ((int)interview.Status).ToString(),
+                    ((int)interview.Status).ToString(CultureInfo.InvariantCulture),
                     interview.StatusChangeOriginatorName,
-                    this.GetUserRole(interview.StatusChangeOriginatorRole),
+                    ExportHelper.GetUserRoleDisplayValue(interview.StatusChangeOriginatorRole),
                     this.GetResponsibleName(interview.Status, interview.InterviewerName, interview.SupervisorName, interview.StatusChangeOriginatorName),
                     this.GetResponsibleRole(interview.Status, interview.StatusChangeOriginatorRole, interview.InterviewerName)
                 };
@@ -142,7 +145,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                 case InterviewExportedAction.ApprovedBySupervisor:
                     return "any headquarters";
                 case InterviewExportedAction.ApprovedByHeadquarter:
-                    return String.Empty;
+                    return string.Empty;
             }
 
             return interviewerName;
@@ -154,44 +157,25 @@ namespace WB.Services.Export.CsvExport.Exporters
             {
                 case InterviewExportedAction.Created:
                 case InterviewExportedAction.TranslationSwitched:
-                    return GetUserRole(statusChangeOriginatorRole);
+                    return ExportHelper.GetUserRoleDisplayValue(statusChangeOriginatorRole);
                 case InterviewExportedAction.SupervisorAssigned:
                 case InterviewExportedAction.Completed:
                 case InterviewExportedAction.RejectedByHeadquarter:
                 case InterviewExportedAction.UnapprovedByHeadquarter:
                 case InterviewExportedAction.OpenedBySupervisor:
                 case InterviewExportedAction.ClosedBySupervisor:
-                    return FileBasedDataExportRepositoryWriterMessages.Supervisor;
+                    return ExportHelper.Supervisor.ToString(CultureInfo.InvariantCulture);
                 case InterviewExportedAction.ApprovedBySupervisor:
-                    return FileBasedDataExportRepositoryWriterMessages.Headquarter;
+                    return ExportHelper.Headquarter.ToString(CultureInfo.InvariantCulture);
                 case InterviewExportedAction.ApprovedByHeadquarter:
-                    return String.Empty;
+                    return ExportHelper.NoRole;
                 case InterviewExportedAction.InterviewerAssigned:
                     if (string.IsNullOrWhiteSpace(interviewerName))
-                        return string.Empty;
+                        return ExportHelper.NoRole;
                     break;
             }
 
-            return FileBasedDataExportRepositoryWriterMessages.Interviewer;
-        }
-
-        private string GetUserRole(UserRoles userRole)
-        {
-            switch (userRole)
-            {
-                case UserRoles.Interviewer:
-                    return FileBasedDataExportRepositoryWriterMessages.Interviewer;
-                case UserRoles.Supervisor:
-                    return FileBasedDataExportRepositoryWriterMessages.Supervisor;
-                case UserRoles.Headquarter:
-                    return FileBasedDataExportRepositoryWriterMessages.Headquarter;
-                case UserRoles.Administrator:
-                    return FileBasedDataExportRepositoryWriterMessages.Administrator;
-                case UserRoles.ApiUser:
-                    return FileBasedDataExportRepositoryWriterMessages.ApiUser;
-
-            }
-            return FileBasedDataExportRepositoryWriterMessages.UnknownRole;
+            return ExportHelper.Interviewer.ToString(CultureInfo.InvariantCulture);
         }
     }
 }

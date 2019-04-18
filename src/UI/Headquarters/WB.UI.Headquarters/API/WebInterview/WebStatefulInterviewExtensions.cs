@@ -11,7 +11,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         {
             foreach (var node in nodeParents.Parents)
             {
-                if (questionnaire.IsPlainRoster(node.Identity.Id))
+                if (questionnaire.IsFlatRoster(node.Identity.Id))
                     continue;
 
                 var link = new Link { Target = node.Identity.ToString() };
@@ -42,7 +42,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         public static IInterviewTreeNode GetParent(this IInterviewTreeNode node, IQuestionnaire questionnaire)
         {
             var parent = node.Parent;
-            while (parent != null && questionnaire.IsPlainRoster(parent.Identity.Id))
+            while (parent != null && questionnaire.IsFlatRoster(parent.Identity.Id))
             {
                 parent = parent.Parent;
             }

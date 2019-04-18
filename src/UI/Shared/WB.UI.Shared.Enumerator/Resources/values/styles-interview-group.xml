@@ -37,7 +37,7 @@
     <item name="android:layout_marginLeft">@dimen/Interview_Question_InputButton_margin_LeftRight</item>
   </style>
 
-    <style name="Interview_Group_Plain_Roster">
+    <style name="Interview_Group_Flat_Roster">
         <item name="android:textColor">@color/group_plain_roster_text</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>

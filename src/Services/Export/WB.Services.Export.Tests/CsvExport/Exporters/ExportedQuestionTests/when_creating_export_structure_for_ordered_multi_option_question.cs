@@ -13,9 +13,9 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests
 
         public void BecauseOf() 
         {
-            filledQuestion = CreateFilledExportedQuestion(QuestionType.MultyOption, 3, new [] {2, 0}, QuestionSubtype.MultyOption_Ordered);
-            disabledQuestion = CreateDisabledExportedQuestion(QuestionType.MultyOption, QuestionSubtype.MultyOption_Ordered, columnsCount: 3);
-            missingQuestion = CreateMissingValueExportedQuestion(QuestionType.MultyOption, QuestionSubtype.MultyOption_Ordered, columnsCount: 3);
+            filledQuestion = CreateFilledExportedQuestion(QuestionType.MultyOption, 3, new [] {2, 0}, QuestionSubtype.MultiOptionOrdered);
+            disabledQuestion = CreateDisabledExportedQuestion(QuestionType.MultyOption, QuestionSubtype.MultiOptionOrdered, columnsCount: 3);
+            missingQuestion = CreateMissingValueExportedQuestion(QuestionType.MultyOption, QuestionSubtype.MultiOptionOrdered, columnsCount: 3);
         }
 
         [NUnit.Framework.Test] public void should_return_correct_filled_answer () =>

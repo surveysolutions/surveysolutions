@@ -58,7 +58,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.OfflineSync
                 interviewerPrincipal: principal, deviceSettings: deviceSettings);
 
             // act
-            await service.CanSynchronizeAsync(null, null);
+            await service.CanSynchronizeAsync(null);
 
             // assert
             mockOfOfflineSyncClient.Verify(x => x.SendAsync<CanSynchronizeRequest, CanSynchronizeResponse>(

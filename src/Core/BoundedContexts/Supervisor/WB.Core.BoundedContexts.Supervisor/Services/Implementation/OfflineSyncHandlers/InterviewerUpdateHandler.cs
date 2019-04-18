@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
@@ -40,13 +42,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                 result.Total = 0;
                 return Task.FromResult(result);
             }
-
+            
             result.Content = this.fileSystemAccessor.ReadAllBytes(patchFilePath, request.Skip, request.Maximum);
             result.Total = this.fileSystemAccessor.GetFileSize(patchFilePath);
             result.Skipped = request.Skip;
             result.Length = result.Content.Length;
-            
+            result.ContentMD5 = this.fileSystemAccessor.ReadHash(patchFilePath);
+
             return Task.FromResult(result);
         }
+
+        private static readonly object hashGeneratorLock = new object();
     }
 }

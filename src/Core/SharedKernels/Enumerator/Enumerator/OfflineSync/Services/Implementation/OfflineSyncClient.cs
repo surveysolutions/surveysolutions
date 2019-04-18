@@ -1,11 +1,12 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
+using System.Net;
+using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
-using Humanizer;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
@@ -14,11 +15,14 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
     {
         private readonly INearbyCommunicator communicator;
         private readonly INearbyConnection nearbyConnection;
-
-        public OfflineSyncClient(INearbyCommunicator communicator, INearbyConnection nearbyConnection)
+        private readonly IFileSystemAccessor fileSystemAccessor;
+        public OfflineSyncClient(INearbyCommunicator communicator, INearbyConnection nearbyConnection,
+            IFileSystemAccessor fileSystemAccessor)
         {
             this.communicator = communicator;
             this.nearbyConnection = nearbyConnection;
+            this.fileSystemAccessor = fileSystemAccessor;
+
             this.nearbyConnection.RemoteEndpoints.CollectionChanged += (sender, args) =>
             {
                 Endpoint = this.nearbyConnection.RemoteEndpoints.FirstOrDefault()?.Enpoint;
@@ -44,8 +48,8 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 cancellationToken);
         }
 
-        public async Task<TResponse> SendChunkedAsync<TRequest, TResponse>(IChunkedByteArrayRequest request, CancellationToken cancellationToken,
-            IProgress<TransferProgress> progress = null)
+        public async Task<TResponse> SendChunkedAsync<TRequest, TResponse>(IChunkedByteArrayRequest request,
+            CancellationToken cancellationToken, IProgress<TransferProgress> progress = null)
             where TRequest : IChunkedByteArrayRequest
             where TResponse : class, IChunkedByteArrayResponse
         {
@@ -54,20 +58,14 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
             byte[] content = null;
             TResponse response = null;
-
-            var eta = new EtaTransferRate(averageWindow: 20);
-
+            byte[] responseHash = null;
             // reporting back full data, not chunks info
             IProgress<TransferProgress> overallProgress = new Progress<TransferProgress>(t =>
             {
                 t.TotalBytesToReceive = response?.Total;
-
-                eta.AddProgress(t.BytesReceived, t.TotalBytesToReceive);
-                t.Speed = eta.AverageSpeed;
-                t.Eta = eta.ETA;
                 
                 t.BytesReceived = request.Skip + t.BytesReceived;
-                
+
                 if (t.TotalBytesToReceive != null)
                 {
                     t.ProgressPercentage = t.BytesReceived.PercentOf(t.TotalBytesToReceive.Value);
@@ -78,31 +76,36 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
             do
             {
-                response = await this.communicator.SendAsync<TRequest, TResponse>(this.nearbyConnection, 
-                        Endpoint, (TRequest)request, overallProgress, cancellationToken);
+                response = await this.communicator.SendAsync<TRequest, TResponse>(
+                    this.nearbyConnection, Endpoint, (TRequest)request, overallProgress, cancellationToken);
 
                 if (response.Content == null)
                 {
                     return response;
                 }
 
+                responseHash = response.ContentMD5;
                 content = content ?? new byte[response.Total];
-                
+
                 Array.Copy(response.Content, 0, content, response.Skipped, response.Length);
 
                 request.Skip = response.Skipped + response.Length;
-
-                overallProgress.Report(new TransferProgress
-                {
-                    BytesReceived = response.Length,
-                    TotalBytesToReceive = response.Total,
-                    ProgressPercentage = request.Skip.PercentOf(response.Total)
-                });
-
             } while (request.Skip < response.Total);
-            
+
+            progress?.Report(new TransferProgress
+            {
+                BytesReceived = response.Total,
+                TotalBytesToReceive = response.Total,
+                ProgressPercentage = 100
+            });
+
+            if (!fileSystemAccessor.IsHashValid(content, responseHash))
+            {
+                throw new RestException("Received data checksum failed", HttpStatusCode.BadRequest);
+            }
+
             response.Content = content;
-           
+
             return response;
         }
     }

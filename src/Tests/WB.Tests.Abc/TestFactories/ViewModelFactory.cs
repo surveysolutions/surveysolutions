@@ -564,12 +564,12 @@ namespace WB.Tests.Abc.TestFactories
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>());
         }
 
-        public PlainRosterViewModel PlainRosterViewModel(IStatefulInterviewRepository interviewRepository = null,
+        public FlatRosterViewModel FlatRosterViewModel(IStatefulInterviewRepository interviewRepository = null,
             IInterviewViewModelFactory viewModelFactory = null,
             ILiteEventRegistry eventRegistry = null,
             ICompositeCollectionInflationService compositeCollectionInflationService = null)
         {
-            return new PlainRosterViewModel(
+            return new FlatRosterViewModel(
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 viewModelFactory?? Mock.Of<IInterviewViewModelFactory>(),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
@@ -577,10 +577,10 @@ namespace WB.Tests.Abc.TestFactories
                 );
         }
 
-        public PlainRosterTitleViewModel PlainRosterTitleViewModel(IStatefulInterviewRepository statefulInterviewRepository,
+        public FlatRosterTitleViewModel FlatRosterTitleViewModel(IStatefulInterviewRepository statefulInterviewRepository,
             IQuestionnaireStorage questionnaireStorage)
         {
-            return new PlainRosterTitleViewModel(Create.ViewModel.DynamicTextViewModel(interviewRepository: statefulInterviewRepository),
+            return new FlatRosterTitleViewModel(Create.ViewModel.DynamicTextViewModel(interviewRepository: statefulInterviewRepository),
                 Create.ViewModel.EnablementViewModel(statefulInterviewRepository, questionnaireRepository: questionnaireStorage));
         }
 
@@ -615,6 +615,25 @@ namespace WB.Tests.Abc.TestFactories
                 questionStateViewModel ?? Create.ViewModel.QuestionState<SingleOptionQuestionAnswered>(interviewRepository: interviewRepository),
                 answering ?? Create.ViewModel.AnsweringViewModel(),
                 instructionViewModel ?? Create.ViewModel.QuestionInstructionViewModel());
+        }
+
+        public TimestampQuestionViewModel TimestampQuestionViewModel(
+            IStatefulInterview interview,
+            AnsweringViewModel answering = null)
+        {
+            var answeringViewModel = answering ?? Create.ViewModel.AnsweringViewModel();
+            var statefulInterviewRepository = new Mock<IStatefulInterviewRepository>();
+            statefulInterviewRepository.Setup(x => x.Get(It.IsAny<string>()))
+                .Returns(interview);
+
+
+            var principal = Mock.Of<IPrincipal>(x => x.CurrentUserIdentity == Mock.Of<IUserIdentity>(u => u.Id == Id.gA.ToString()));
+            return new TimestampQuestionViewModel(principal,
+                statefulInterviewRepository.Object,
+                Create.ViewModel.QuestionState<DateTimeQuestionAnswered>(interviewRepository: statefulInterviewRepository.Object),
+                Create.ViewModel.QuestionInstructionViewModel(),
+                answeringViewModel,
+                Create.Service.LiteEventRegistry());
         }
     }
 }

@@ -49,7 +49,6 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
-using WB.Core.BoundedContexts.Headquarters.Diag;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog;
@@ -91,6 +90,7 @@ namespace WB.Core.BoundedContexts.Headquarters
         private readonly int? interviewLimitCount;
         private readonly string syncDirectoryName;
         private readonly ExternalStoragesSettings externalStoragesSettings;
+        private readonly FileSystemEmailServiceSettings fileSystemEmailServiceSettings;
         private readonly UserPreloadingSettings userPreloadingSettings;
         private readonly ExportSettings exportSettings;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
@@ -108,7 +108,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             TrackingSettings trackingSettings, 
             int? interviewLimitCount = null,
             string syncDirectoryName = "SYNC",
-            ExternalStoragesSettings externalStoragesSettings = null)
+            ExternalStoragesSettings externalStoragesSettings = null,
+            FileSystemEmailServiceSettings fileSystemEmailServiceSettings = null)
         {
             this.userPreloadingSettings = userPreloadingSettings;
             this.exportSettings = exportSettings;
@@ -120,6 +121,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.syncSettings = syncSettings;
             this.syncDirectoryName = syncDirectoryName;
             this.externalStoragesSettings = externalStoragesSettings;
+            this.fileSystemEmailServiceSettings = fileSystemEmailServiceSettings;
             this.trackingSettings = trackingSettings;
         }
 
@@ -167,6 +169,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             //registry.BindToMethod<Func<IInterviewsToDeleteFactory>>(context => () => context.Get<IInterviewsToDeleteFactory>());
             registry.Bind<IInterviewHistoryFactory, InterviewHistoryFactory>();
             registry.Bind<ISpeedReportDenormalizerFunctional, SpeedReportDenormalizerFunctional>();
+            registry.Bind<IInterviewStatisticsReportDenormalizer, InterviewStatisticsReportDenormalizer>();
             registry.Bind<IInterviewInformationFactory, InterviewerInterviewsFactory>();
             registry.Bind<IDatasetWriterFactory, DatasetWriterFactory>();
             registry.Bind<IQuestionnaireLabelFactory, QuestionnaireLabelFactory>();
@@ -227,7 +230,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.RegisterDenormalizer<InterviewSummaryCompositeDenormalizer>();
             registry.RegisterDenormalizer<InterviewLifecycleEventHandler>();
             registry.RegisterDenormalizer<InterviewExportedCommentariesDenormalizer>();
-            registry.RegisterDenormalizer<InterviewDenormalizer>();
             registry.RegisterDenormalizer<CumulativeChartDenormalizer>();
 
             registry.Bind<IInterviewPackagesService, IInterviewBrokenPackagesService, InterviewPackagesService>();
@@ -289,10 +291,12 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAssignmentFactory, AssignmentFactory>();
             registry.Bind<IAssignmentPasswordGenerator, AssignmentPasswordGenerator>();
             registry.Bind<IInterviewReportDataRepository, InterviewReportDataRepository>();
+            
+            if (fileSystemEmailServiceSettings?.IsEnabled ?? false)
+                registry.Bind<IEmailService, FileSystemEmailService>(new ConstructorArgument("settings", _ => fileSystemEmailServiceSettings));
+            else
+                registry.Bind<IEmailService, EmailService>();
 
-            registry.Bind<IInterviewStateFixer, InterviewStateFixer>();
-
-            registry.Bind<IEmailService, EmailService>();
             registry.Bind<IInvitationService, InvitationService>();
             registry.BindAsSingleton<ITokenGenerator,TokenGenerator>();
             registry.Bind<IInvitationMailingService, InvitationMailingService>();

@@ -85,7 +85,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                 string filePath = Path.Combine(basePath, fileName);
 
                 List<string> interviewLevelHeader = new List<string>();
-                //Interview Key in all files does first
+                //Interview Key in all files goes first
                 interviewLevelHeader.Add(ServiceColumns.InterviewKey.VariableExportColumnName);
                 //Parent Ids if exists go as second part
                 //starting from root
@@ -427,8 +427,8 @@ namespace WB.Services.Export.CsvExport.Exporters
                             }
                         }
 
-                        InsertOrSetAt(ServiceVariableType.HasAnyError, interviewDataExportView.ErrorsCount.ToString());
-                        InsertOrSetAt(ServiceVariableType.InterviewStatus, ((int)interviewId.Status).ToString());
+                        InsertOrSetAt(ServiceVariableType.HasAnyError, interviewDataExportView.ErrorsCount.ToString(CultureInfo.InvariantCulture));
+                        InsertOrSetAt(ServiceVariableType.InterviewStatus, ((int)interviewId.Status).ToString(CultureInfo.InvariantCulture));
                     }
 
                     parametersToConcatenate.AddRange(systemVariableValues);

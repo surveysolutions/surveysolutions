@@ -322,6 +322,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Send yourself a test email message to verify that the bulk email service is functional and to get a preview of what the respondents will receive..
+        /// </summary>
+        internal static string EmailProvider_SendTestEmailMessage {
+            get {
+                return ResourceManager.GetString("EmailProvider_SendTestEmailMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An example of invitation email was sent successfully.
         /// </summary>
         internal static string EmailProvider_SendTestEmailResult {
@@ -336,6 +345,15 @@ namespace Resources {
         internal static string EmailProvider_ServiceProvideHeader {
             get {
                 return ResourceManager.GetString("EmailProvider_ServiceProvideHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email service configuration was saved succeessfully..
+        /// </summary>
+        internal static string EmailProvider_SettingsSavedSuccessfully {
+            get {
+                return ResourceManager.GetString("EmailProvider_SettingsSavedSuccessfully", resourceCulture);
             }
         }
         

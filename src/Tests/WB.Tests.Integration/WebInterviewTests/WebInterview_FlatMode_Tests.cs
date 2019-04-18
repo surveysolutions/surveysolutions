@@ -21,10 +21,10 @@ using WB.UI.Headquarters.API.WebInterview;
 namespace WB.Tests.Integration.WebInterviewTests
 {
     [TestOf(typeof(WebInterviewHub))]
-    public class WebInterview_PlainMode_Tests : InterviewTestsContext
+    public class WebInterview_FlatMode_Tests : InterviewTestsContext
     {
         [Test]
-        public void GetCompleteInfo_for_entities_with_errors_placed_in_plain_roster_shoud_return_correct_parent_link()
+        public void GetCompleteInfo_for_entities_with_errors_placed_in_plain_roster_should_return_correct_parent_link()
         {
             var sectionId = Guid.NewGuid();
             var groupId = Guid.NewGuid();
@@ -42,7 +42,7 @@ namespace WB.Tests.Integration.WebInterviewTests
                     {
                         Create.Entity.Group(groupId, children: new IComposite[]
                         {
-                            Create.Entity.FixedRoster(isPlainMode: true, fixedTitles: new FixedRosterTitle[]
+                            Create.Entity.FixedRoster(isFlatMode: true, fixedTitles: new FixedRosterTitle[]
                             {
                                 Create.Entity.FixedTitle(1, "1"),
                                 Create.Entity.FixedTitle(2, "2"),
