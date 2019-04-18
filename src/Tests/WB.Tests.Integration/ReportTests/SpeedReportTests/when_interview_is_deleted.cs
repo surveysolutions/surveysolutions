@@ -50,6 +50,7 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
                 new StatusChangeHistoryDenormalizerFunctional(userViewFactory),
                 new InterviewStatusTimeSpanDenormalizer(),
                 new SpeedReportDenormalizerFunctional(speedReportItems),
+                Mock.Of<IInterviewStatisticsReportDenormalizer>(), 
                 new InterviewGeoLocationAnswersDenormalizer(null, questionnaireStorage));
         }
 
@@ -63,7 +64,7 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
             speedReportItemsStorage.Store(Create.Entity.SpeedReportInterviewItem(interviewSummary), interviewSummary.InterviewId.FormatGuid());
             interviewSummaryStorage.Store(interviewSummary, interviewSummary.InterviewId.FormatGuid());
 
-            UnitOfWork.AcceptChanges();
+            UnitOfWork.Session.Flush();
         }
     }
 }

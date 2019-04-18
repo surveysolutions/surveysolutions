@@ -166,7 +166,6 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
         [OneTimeTearDown]
         public void TearDown()
         {
-            UnitOfWork.AcceptChanges();
             UnitOfWork.Dispose();
             DatabaseTestInitializer.DropDb(connectionString);
         }

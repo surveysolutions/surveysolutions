@@ -1,4 +1,5 @@
-﻿using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+﻿using System;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
@@ -13,6 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             StatusChangeHistoryDenormalizerFunctional historyDenormalizerFunctional,
             InterviewStatusTimeSpanDenormalizer statusTimeSpanDenormalizer,
             ISpeedReportDenormalizerFunctional speedReportDenormalizerFunctional,
+            IInterviewStatisticsReportDenormalizer statisticsReportDenormalizer, 
             InterviewGeoLocationAnswersDenormalizer geoLocationAnswersDenormalizer) : base(readSideStorage)
         {
             Handlers = new ICompositeFunctionalPartEventHandler<InterviewSummary, IReadSideRepositoryWriter<InterviewSummary>>[]
@@ -21,7 +23,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 historyDenormalizerFunctional,
                 statusTimeSpanDenormalizer,
                 speedReportDenormalizerFunctional,
-                geoLocationAnswersDenormalizer
+                geoLocationAnswersDenormalizer,
+                statisticsReportDenormalizer
             };
         }
 
@@ -30,7 +33,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             get;
         }
 
-        public override object[] Readers => new object[0];
-
+        public override object[] Readers { get; } = Array.Empty<object>();
     }
 }
