@@ -8,24 +8,24 @@
 <div id="edit-form">
     @if (TempData.ContainsKey(Alerts.SUCCESS))
     {
-    <div class="alert alert-success header">@Html.Raw(@TempData[Alerts.SUCCESS])</div>
+        <div class="alert alert-success header">@Html.Raw(@TempData[Alerts.SUCCESS])</div>
     }
     <form method="post">
-        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Id"/>
         <h1>@QuestionnaireController.CopyQuestionnaire</h1>
         @if (TempData.ContainsKey(Alerts.ERROR))
         {
-        <p class="note has-error">@Html.Raw(TempData[Alerts.ERROR])</p>
+            <p class="note has-error">@Html.Raw(TempData[Alerts.ERROR])</p>
         }
         <div class="form-group">
-            @Html.TextBoxFor(x => x.Title, new { @class = "form-control", placeholder = QuestionnaireController.QuestionnaireTitle })
-            @Html.ValidationMessageFor(x => x.Title, null, new { @class = "help-inline" })
+            <input type="text" asp-for="Title" class="form-control" placeholder="@QuestionnaireController.QuestionnaireTitle"/>
+            <span asp-validation-for="Title" class="text-danger header-line"></span>
         </div>
-        @Html.HiddenFor(x => x.Id)
         <div class="form-actions">
             <input type="submit" class="btn btn-success btn-lg" value="@QuestionnaireController.Copy" id="inputCloneQuestionnaire" />
-            @Html.ActionLink(QuestionnaireController.Cancel, "Index", "Questionnaire", null, new { @class = "btn " })
-            @Html.ActionLink(QuestionnaireController.BackToList, "Index", "Questionnaire", null, new { @class = "btn " })
+            <a asp-action="Index" class="btn btn-link">
+                @QuestionnaireController.Cancel
+            </a>
         </div>
     </form>
 </div>
