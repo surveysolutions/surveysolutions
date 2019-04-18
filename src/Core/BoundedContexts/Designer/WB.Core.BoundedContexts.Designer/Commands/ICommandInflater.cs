@@ -1,7 +1,6 @@
-using System;
 using WB.Core.Infrastructure.CommandBus;
 
-namespace WB.UI.Designer.Code
+namespace WB.Core.BoundedContexts.Designer.Commands
 {
     public interface ICommandInflater
     {

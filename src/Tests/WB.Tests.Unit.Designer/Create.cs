@@ -1405,12 +1405,10 @@ namespace WB.Tests.Unit.Designer
 
         public static HistoryPostProcessor HistoryPostProcessor(
             DesignerDbContext dbContext = null,
-            IIdentityService accountStorage = null,
             IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService = null,
             IPlainKeyValueStorage<QuestionnaireStateTracker> questionnaireStateTrackerStorage = null) =>
             new HistoryPostProcessor(
                 dbContext ?? Create.InMemoryDbContext(),
-                accountStorage ??Mock.Of<IIdentityService>(),
                 questionnaireHistoryVersionsService ?? Mock.Of<IQuestionnaireHistoryVersionsService>(),
                 questionnaireStateTrackerStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireStateTracker>>()
                 );
@@ -1569,10 +1567,9 @@ namespace WB.Tests.Unit.Designer
         }
 
         public static ListViewPostProcessor ListViewPostProcessor(DesignerDbContext dbContext = null,
-            IIdentityService identityService = null, 
             IRecipientNotifier emailNotifier = null)
         {
-            return new ListViewPostProcessor(identityService ?? Mock.Of<IIdentityService>(),
+            return new ListViewPostProcessor(
                 dbContext ?? Create.InMemoryDbContext(),
                 emailNotifier ?? Mock.Of<IRecipientNotifier>());
         }

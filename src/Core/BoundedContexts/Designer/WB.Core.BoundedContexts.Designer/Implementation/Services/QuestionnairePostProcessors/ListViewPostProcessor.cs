@@ -75,13 +75,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, UpdateAudioQuestion>,
         ICommandPostProcessor<Questionnaire, UpdateMetadata>
     {
-        private readonly IIdentityService identityService;
         private readonly DesignerDbContext dbContext;
         private readonly IRecipientNotifier emailNotifier;
 
-        public ListViewPostProcessor(IIdentityService identityService, DesignerDbContext dbContext, IRecipientNotifier emailNotifier)
+        public ListViewPostProcessor(DesignerDbContext dbContext, IRecipientNotifier emailNotifier)
         {
-            this.identityService = identityService;
             this.dbContext = dbContext;
             this.emailNotifier = emailNotifier;
         }

@@ -3,7 +3,6 @@ using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Classifications;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
-using WB.Core.BoundedContexts.Designer.Commands.Account;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
@@ -79,7 +78,6 @@ namespace WB.Core.BoundedContexts.Designer
 
             registry.BindAsSingleton<IStringCompressor, JsonCompressor>();
             registry.Bind<ISerializer, NewtonJsonSerializer>();
-            registry.BindAsScoped<OriginalQuestionnaireStorage, OriginalQuestionnaireStorage>();
 
             registry.BindAsSingleton<IExpressionProcessor, RoslynExpressionProcessor>();
             registry.Bind<IDynamicCompilerSettingsProvider, DynamicCompilerSettingsProvider>();
@@ -98,7 +96,6 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind(typeof(IPlainAggregateRootRepository), typeof(QuestionnaireRepository));
             registry.Bind<Questionnaire, Questionnaire>();
             registry.Bind<ListViewPostProcessor, ListViewPostProcessor>();
-            registry.Bind<IIdentityService, IdentityService>();
             registry.Bind<HistoryPostProcessor, HistoryPostProcessor>();
             registry.Bind<SearchPostProcessors, SearchPostProcessors>();
             registry.Bind<ResourcesPreProcessor, ResourcesPreProcessor>();
