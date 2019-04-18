@@ -1,4 +1,4 @@
-﻿namespace WB.Core.BoundedContexts.Designer.Exceptions
+﻿namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
     public enum DomainExceptionType
     {

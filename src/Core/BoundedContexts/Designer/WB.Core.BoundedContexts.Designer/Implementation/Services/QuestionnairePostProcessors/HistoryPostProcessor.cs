@@ -78,32 +78,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, UpdateMetadata>
     {
         private readonly DesignerDbContext dbContext;
-        private readonly IIdentityService accountStorage;
         private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
         private readonly IPlainKeyValueStorage<QuestionnaireStateTracker> questionnaireStateTrackerStorage;
 
         public HistoryPostProcessor(DesignerDbContext dbContext, 
-            IIdentityService accountStorage,
             IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService,
             IPlainKeyValueStorage<QuestionnaireStateTracker> questionnaireStateTrackerStorage)
         {
             this.dbContext = dbContext;
-            this.accountStorage = accountStorage;
             this.questionnaireHistoryVersionsService = questionnaireHistoryVersionsService;
             this.questionnaireStateTrackerStorage = questionnaireStateTrackerStorage;
         }
-
-        //private IIdentityService accountStorage
-        //    => ServiceLocator.Current.GetInstance<IIdentityService>();
-
-        //private IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeItemStorage
-        //    => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<QuestionnaireChangeRecord>>();
-
-        //private IPlainKeyValueStorage<QuestionnaireStateTracker> questionnaireStateTrackerStorage
-        //    => ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<QuestionnaireStateTracker>>();
-
-        //private IQuestionnaireHistoryVersionsService QuestionnaireHistoryVersionsService 
-        //    => ServiceLocator.Current.GetInstance<IQuestionnaireHistoryVersionsService>();
 
         #region Questionnaire
 
@@ -719,7 +704,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         {
             if (userId.HasValue)
             {
-                var creator = this.accountStorage.GetById(userId.Value);
+                var creator = this.dbContext.Users.Find(userId.Value);
                 if (creator != null)
                     return creator.UserName;
             }
@@ -730,7 +715,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         {
             if (userId.HasValue)
             {
-                var creator = this.accountStorage.GetById(userId.Value);
+                var creator = this.dbContext.Users.Find(userId.Value);
                 if (creator != null)
                     return creator.Email;
             }

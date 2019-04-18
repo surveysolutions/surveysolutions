@@ -25,21 +25,18 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
     {
         private readonly ITranslationsService translationService;
         private readonly DesignerDbContext dbContext;
-        private readonly IIdentityService accountsStorage;
         private readonly PdfSettings pdfSettings;
         private readonly IQuestionnaireTranslator questionnaireTranslator;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
 
         public PdfFactory(
             DesignerDbContext dbContext, 
-            IIdentityService accountsStorage,
             ITranslationsService translationService,
             IOptions<PdfSettings> pdfSettings,
             IQuestionnaireTranslator questionnaireTranslator,
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage)
         {
             this.dbContext = dbContext;
-            this.accountsStorage = accountsStorage;
             this.translationService = translationService;
             this.pdfSettings = pdfSettings.Value;
             this.questionnaireTranslator = questionnaireTranslator;
@@ -96,7 +93,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             {
                 UserId = questionnaire.CreatedBy ?? Guid.Empty,
                 Name = questionnaire.CreatedBy.HasValue
-                    ? this.accountsStorage.GetById(questionnaire.CreatedBy.Value)?.UserName
+                    ? this.dbContext.Users.Find(questionnaire.CreatedBy.Value)?.UserName
                     : string.Empty,
                 Date = questionnaire.CreationDate
             };
@@ -104,7 +101,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             var statisticsByUsers = sharedPersons.Select(person => new PdfQuestionnaireModel.ModificationStatisticsByUser
             {
                 UserId = person.UserId,
-                Name = this.accountsStorage.GetById(person.UserId)?.UserName,
+                Name = this.dbContext.Users.Find(person.UserId)?.UserName,
                 Date = modificationStatisticsByUsers.FirstOrDefault(x => x.UserId == person.UserId)?.Date
             });
 

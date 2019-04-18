@@ -23,16 +23,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
     {
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
         private readonly DesignerDbContext dbContext;
-        private readonly IIdentityService accountRepository;
 
         public QuestionnaireViewFactory(
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
-            DesignerDbContext dbContext,
-            IIdentityService accountRepository)
+            DesignerDbContext dbContext)
         {
             this.questionnaireStorage = questionnaireStorage;
             this.dbContext = dbContext;
-            this.accountRepository = accountRepository;
         }
 
         public QuestionnaireView Load(QuestionnaireViewInputModel input)
@@ -87,7 +84,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 {
                     Email = x.Email,
                     IsOwner = x.IsOwner,
-                    Login = accountRepository.GetById(x.UserId)?.UserName ?? string.Empty,
+                    Login = this.dbContext.Users.Find(x.UserId)?.UserName ?? string.Empty,
                     ShareType = x.ShareType,
                     UserId = x.UserId
                 });

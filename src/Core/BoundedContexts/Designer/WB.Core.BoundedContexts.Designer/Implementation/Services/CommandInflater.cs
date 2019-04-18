@@ -2,8 +2,8 @@ using System;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Microsoft.AspNetCore.Identity;
 using WB.Core.BoundedContexts.Designer.Classifications;
+using WB.Core.BoundedContexts.Designer.Commands;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
@@ -11,7 +11,6 @@ using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Implementation;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
@@ -22,20 +21,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private readonly DesignerDbContext dbContext;
         private readonly IClassificationsStorage classificationsStorage;
         private readonly ILoggedInUser user;
-        private readonly IIdentityService identityService;
 
         public CommandInflater(
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
             DesignerDbContext dbContext,
             IClassificationsStorage classificationsStorage,
-            ILoggedInUser user,
-            IIdentityService identityService)
+            ILoggedInUser user)
         {
             this.questionnaireDocumentReader = questionnaireDocumentReader;
             this.dbContext = dbContext;
             this.classificationsStorage = classificationsStorage;
             this.user = user ?? throw new ArgumentNullException(nameof(user));
-            this.identityService = identityService;
         }
 
         public void PrepareDeserializedCommandForExecution(ICommand command)
@@ -113,10 +109,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (!(command is AddSharedPersonToQuestionnaire addSharedPersonCommand)) 
                 return;
 
-            var user = identityService.GetByNameOrEmail(addSharedPersonCommand.EmailOrLogin);
+            var sharedWith = this.dbContext.Users.FindByNameOrEmail(addSharedPersonCommand.EmailOrLogin);
 
-            addSharedPersonCommand.PersonId = user.Id;
-            addSharedPersonCommand.EmailOrLogin = user.Email;
+            if (sharedWith != null)
+            {
+                addSharedPersonCommand.PersonId = sharedWith.Id;
+                addSharedPersonCommand.EmailOrLogin = sharedWith.Email;
+            }
         }
 
         private void ValidateRemoveSharedPersonCommand(ICommand command)
@@ -124,9 +123,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (!(command is RemoveSharedPersonFromQuestionnaire removeSharedPersonCommand)) 
                 return;
 
-            var user = identityService.GetByNameOrEmail(removeSharedPersonCommand.Email);
-            removeSharedPersonCommand.PersonId = user.Id;
-            removeSharedPersonCommand.Email = user.Email;
+            var unshareWith = this.dbContext.Users.FindByNameOrEmail(removeSharedPersonCommand.Email);
+            if (unshareWith != null)
+            {
+                removeSharedPersonCommand.PersonId = unshareWith.Id;
+                removeSharedPersonCommand.Email = unshareWith.Email;
+            }
         }
     }
 }
