@@ -44,6 +44,8 @@ try {
             Exit 
         }}
         
+        BuildAspNetCoreWebPackage $ProjectDesigner -BuildConfiguration $BuildConfiguration -BuildNumber $BuildNumber -branch $branch | % { if (-not $_) { Exit } }
+
         BuildStaticContent "Hq Deps" "src\UI\Headquarters\WB.UI.Headquarters\Dependencies" | % { if (-not $_) {
             Log-Error 'Unexpected error occurred in BuildStaticContent while build static content for HQ Deps'
             Exit 
@@ -116,9 +118,9 @@ try {
             -ExcludeExtra $false | % { if (-not $_) { Exit } }
 
         Log-Block "Building web packages and support tool" {
+            
             BuildWebPackage $ProjectHeadquarters $BuildConfiguration | % { if (-not $_) { Exit } }
             BuildWebPackage $ProjectWebTester $BuildConfiguration | % { if (-not $_) { Exit } }
-            BuildAspNetCoreWebPackage $ProjectDesigner $BuildConfiguration $BuildNumber $branch | % { if (-not $_) { Exit } }
             BuildAndDeploySupportTool $SupportToolSolution $BuildConfiguration | % { if (-not $_) { Exit } }
         }
 
