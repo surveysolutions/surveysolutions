@@ -12,11 +12,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Api\CustomWebApiAuthorizeFilterTests.cs" />
-    <Compile Remove="Applications\AttributesTests\when_api_basic_auth_attribute_handles_on_authorization_and_user_not_approved.cs" />
-    <Compile Remove="Applications\AttributesTests\when_api_basic_auth_attribute_handles_on_authorization_with_correct_credentials.cs" />
-    <Compile Remove="Applications\AttributesTests\when_api_basic_auth_attribute_handles_on_authorization_with_incorrect_credentials.cs" />
-    <Compile Remove="Applications\AttributesTests\when_api_basic_auth_attribute_handles_on_authorization_with_IP_not_in_list.cs" />
-    <Compile Remove="Applications\AttributesTests\when_api_basic_auth_attribute_handles_on_authorization_with_no_passed_value.cs" />
     <Compile Remove="ClassificationsTests\ClassificationStorageIntegrationTests.cs" />
   </ItemGroup>
   <ItemGroup>

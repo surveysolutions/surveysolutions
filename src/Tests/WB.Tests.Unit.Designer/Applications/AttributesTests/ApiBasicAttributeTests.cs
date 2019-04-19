@@ -26,39 +26,16 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
         [SetUp]
         public void SetUp()
         {
+            userMock = new Mock<DesignerIdentityUser>();
             userMock.Setup(s => s.UserName).Returns(userName);
             userMock.Setup(s => s.EmailConfirmed).Returns(true);
             userMock.Setup(s => s.Email).Returns(userEmail);
 
-            var emailStore = new Mock<IUserEmailStore<DesignerIdentityUser>>();
-            var passwordStore = emailStore.As<IUserPasswordStore<DesignerIdentityUser>>();
-            passwordStore.Setup(s => s.GetPasswordHashAsync(userMock.Object, It.IsAny<CancellationToken>()))
-                .ReturnsAsync("hash");
-            var userRoleStore = passwordStore.As<IUserRoleStore<DesignerIdentityUser>>();
-            userRoleStore.Setup(s => s.GetRolesAsync(userMock.Object, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new List<string>());
-            userStoreMock = userRoleStore.As<IUserStore<DesignerIdentityUser>>();
-            userStoreMock.Setup(r => r.FindByNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(userMock.Object);
-
             allowedAddressServiceMock = new Mock<IAllowedAddressService>();
             ipAddressProviderMock = new Mock<IIpAddressProvider>();
 
-            var authHeader = new StringValues("Basic " + EncodeToBase64($"{userName}:{"password"}"));
-            IHeaderDictionary headers = Mock.Of<IHeaderDictionary>(h => h["Authorization"] == authHeader);
-            HttpRequest request = Mock.Of<HttpRequest>(r => r.Headers == headers);
-            IHeaderDictionary responseHeaders = Mock.Of<IHeaderDictionary>();
-            HttpResponse response = Mock.Of<HttpResponse>(r => r.Headers == responseHeaders);
-            HttpContext httpContext = Mock.Of<HttpContext>(c => c.Request == request && c.Response == response);
-            ActionDescriptor actionDescriptor = Mock.Of<ActionDescriptor>();
-            RouteData routeData = Mock.Of<RouteData>();
-            ActionContext actionContext = Mock.Of<ActionContext>(ac => 
-                ac.HttpContext == httpContext
-                && ac.ActionDescriptor == actionDescriptor
-                && ac.RouteData == routeData
-            );
-            IList<IFilterMetadata> filters = Mock.Of<IList<IFilterMetadata>>();
-            filterContext = new AuthorizationFilterContext(actionContext, filters); 
+            userStore = CreateAndSetupUserStore(userMock.Object);
+            filterContext = CreateAndSetupActionFilterContext(userName);
         }
 
         [Test]
@@ -66,7 +43,7 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
         {
             userMock.Setup(s => s.CanImportOnHq).Returns(true);
 
-            var attribute = CreateApiBasicAuthFilter(true, userStore: userStoreMock.Object);
+            var attribute = CreateApiBasicAuthFilter(onlyAllowedAddresses: true, userStore: userStore);
 
             await attribute.OnAuthorizationAsync(filterContext);
 
@@ -80,8 +57,8 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
             ipAddressProviderMock.Setup(x => x.GetClientIpAddress()).Returns((IPAddress)null);
             allowedAddressServiceMock.Setup(x => x.IsAllowedAddress(null)).Returns(false);
 
-            var attribute = CreateApiBasicAuthFilter(true, 
-                userStore: userStoreMock.Object, 
+            var attribute = CreateApiBasicAuthFilter(onlyAllowedAddresses: true, 
+                userStore: userStore, 
                 ipAddressProvider: ipAddressProviderMock.Object,
                 allowedAddressService: allowedAddressServiceMock.Object);
 
@@ -99,8 +76,8 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
             ipAddressProviderMock.Setup(x => x.GetClientIpAddress()).Returns(ipAddress);
             allowedAddressServiceMock.Setup(x => x.IsAllowedAddress(ipAddress)).Returns(true);
 
-            var attribute = CreateApiBasicAuthFilter(true, 
-                userStore: userStoreMock.Object, 
+            var attribute = CreateApiBasicAuthFilter(onlyAllowedAddresses: true, 
+                userStore: userStore, 
                 ipAddressProvider: ipAddressProviderMock.Object,
                 allowedAddressService: allowedAddressServiceMock.Object);
 
@@ -118,8 +95,8 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
             ipAddressProviderMock.Setup(x => x.GetClientIpAddress()).Returns(ipAddress);
             allowedAddressServiceMock.Setup(x => x.IsAllowedAddress(ipAddress)).Returns(false);
 
-            var attribute = CreateApiBasicAuthFilter(true, 
-                userStore: userStoreMock.Object, 
+            var attribute = CreateApiBasicAuthFilter(onlyAllowedAddresses: true, 
+                userStore: userStore, 
                 ipAddressProvider: ipAddressProviderMock.Object,
                 allowedAddressService: allowedAddressServiceMock.Object);
 
@@ -130,10 +107,10 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
 
         private static string userName = "name";
         private static string userEmail = "user@mail";
-        private static Mock<DesignerIdentityUser> userMock = new Mock<DesignerIdentityUser>();
+        private static Mock<DesignerIdentityUser> userMock;
         private static AuthorizationFilterContext filterContext;
         private static Mock<IIpAddressProvider> ipAddressProviderMock;
         private static Mock<IAllowedAddressService> allowedAddressServiceMock;
-        private static Mock<IUserStore<DesignerIdentityUser>> userStoreMock;
+        private static IUserStore<DesignerIdentityUser> userStore;
     }
 }
