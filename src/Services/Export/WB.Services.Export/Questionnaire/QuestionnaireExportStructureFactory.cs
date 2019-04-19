@@ -158,7 +158,7 @@ namespace WB.Services.Export.Questionnaire
                 {
                     exportedHeaderItem.QuestionSubType = QuestionSubtype.MultiOptionOrdered;
                 }
-                else if (multioptionQuestion.IsFilteredCombobox ?? false)
+                else if (multiOptionQuestion.IsFilteredCombobox ?? false)
                     exportedHeaderItem.QuestionSubType = QuestionSubtype.MultyOption_Combobox;
             }
 
@@ -268,7 +268,7 @@ namespace WB.Services.Export.Questionnaire
             var asCategorical = question as MultyOptionsQuestion;
             var isMultiCombobox = asCategorical?.IsFilteredCombobox ?? false;
 
-            var exportedHeaderItem = this.CreateExportedQuestionHeaderItem(question, lengthOfRosterVectorWhichNeedToBeExported);
+            var exportedHeaderItem = this.CreateExportedQuestionHeaderItem(question, questionnaire, lengthOfRosterVectorWhichNeedToBeExported);
             this.ThrowIfQuestionIsNotMultiSelectOrTextList(question);
 
             exportedHeaderItem.ColumnValues = new int[columnCount];
