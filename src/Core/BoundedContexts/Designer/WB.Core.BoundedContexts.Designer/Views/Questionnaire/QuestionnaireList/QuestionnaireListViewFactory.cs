@@ -98,7 +98,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
                 questionnairesSkipCount = questionnairesSkipCount < 0 ? 0 : questionnairesSkipCount;
                 var questionnairesTakeCount = input.PageSize - folders.Count;
 
-                var sortOrder = input.Order.IsNullOrEmpty() ? $"{nameof(QuestionnaireListViewItem.CreationDate)}  Desc" : input.Order;
+                var sortOrder = input.Order.IsNullOrEmpty() ? $"{nameof(QuestionnaireListViewItem.LastEntryDate)}  Desc" : input.Order;
 
                 var questionnaireListViewItems = FilterQuestionnaires(this.dbContext.Questionnaires, input, isSupportFolders: isSupportFolders)
                     
