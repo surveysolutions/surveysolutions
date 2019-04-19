@@ -381,9 +381,19 @@ function Execute-MSBuild($ProjectFile, $Configuration, $buildArgs = $null) {
 function BuildAspNetCoreWebPackage($Project, $BuildConfiguration, $BuildNumber, $branch) {
     return Log-Block "Building Asp.Net Core package for project $Project" {
         try {
-            $result = dotnet publish $Project -c $BuildConfiguration --version-suffix $branch -v q /p:PublishProfile=WebDeployPackage /p:BuildNumber=$BuildNumber 
+            $arg = @(
+                "publish $Project"
+                "-c $BuildConfiguration"
+                "--version-suffix $branch"
+                "-v q"
+                "/p:PublishProfile=WebDeployPackage"
+                "/p:BuildNumber=$BuildNumber"
+            )
 
-            $ok =  $LASTEXITCODE -eq 0
+            "dotnet $arg" | Out-Host
+            $result = & "dotnet" $arg 
+            
+            $ok = $LASTEXITCODE -eq 0
 
             if($ok -eq $False) {
                 $result | Out-Host

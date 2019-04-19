@@ -39,6 +39,8 @@ try {
 
         New-Item "$artifactsFolder\stats" -Type Directory -Force | Out-Null
 
+        BuildAspNetCoreWebPackage $ProjectDesigner $BuildConfiguration $BuildNumber $branch | % { if (-not $_) { Exit } }
+
         BuildStaticContent "Designer Questionnaire" "src\UI\WB.UI.Designer" | % { if (-not $_) { 
             Log-Error 'Unexpected error occurred in BuildStaticContent while build static content for Designer'
             Exit 
@@ -118,7 +120,7 @@ try {
         Log-Block "Building web packages and support tool" {
             BuildWebPackage $ProjectHeadquarters $BuildConfiguration | % { if (-not $_) { Exit } }
             BuildWebPackage $ProjectWebTester $BuildConfiguration | % { if (-not $_) { Exit } }
-            BuildAspNetCoreWebPackage $ProjectDesigner $BuildConfiguration $BuildNumber $branch | % { if (-not $_) { Exit } }
+            #BuildAspNetCoreWebPackage $ProjectDesigner $BuildConfiguration $BuildNumber $branch | % { if (-not $_) { Exit } }
             BuildAndDeploySupportTool $SupportToolSolution $BuildConfiguration | % { if (-not $_) { Exit } }
         }
 
