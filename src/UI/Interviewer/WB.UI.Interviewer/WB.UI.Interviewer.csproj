@@ -128,7 +128,6 @@
     <Compile Include="InterviewerAppStart.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
     <Compile Include="Migrations\AddTitleToOptionViewForSearching.cs" />
-    <Compile Include="Migrations\CheckAndProcessAudit.cs" />
     <Compile Include="Migrations\UpdateAssignmentsWithInterviewsCount.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="ServiceLocation\InterviewerLoggingModule.cs" />
