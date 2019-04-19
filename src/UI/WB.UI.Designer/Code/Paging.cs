@@ -99,9 +99,10 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
                 MakeDisabledPagingItem(htmlTitle: Paging.Last.ToUpper(), root: pager);
             }
 
-            nav.InnerHtml.AppendHtml(pagination.ToString() + pager);
+            nav.InnerHtml.AppendHtml(pagination);
+            nav.InnerHtml.AppendHtml(pager);
 
-            return new HtmlString(nav.ToString());
+            return nav;
         }
 
         private static void MakeDisabledPagingItem(string htmlTitle, TagBuilder root, string additionalClass = null)
@@ -117,7 +118,7 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             a.InnerHtml.AppendHtml(htmlTitle);
             a.AddCssClass("disabledPage");
 
-            li.InnerHtml.AppendHtml(a.ToString());
+            li.InnerHtml.AppendHtml(a);
             root.InnerHtml.AppendHtml(li);
         }
 
