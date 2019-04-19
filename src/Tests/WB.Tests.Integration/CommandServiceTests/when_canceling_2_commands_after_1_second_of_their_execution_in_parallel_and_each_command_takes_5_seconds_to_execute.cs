@@ -8,35 +8,49 @@ using NUnit.Framework;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
+using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.CommandServiceTests
 {
     internal class when_canceling_2_commands_after_1_second_of_their_execution_in_parallel_and_each_command_takes_5_seconds_to_execute
     {
+        private static readonly object LockObject = new object();
+
         private class SaveNameFor5Seconds : ICommand
         {
-            public SaveNameFor5Seconds(string name)
+            public Task IsExecuted { get; }
+
+            public SaveNameFor5Seconds(Task isExecuted, string name, Guid rootId)
             {
+                this.IsExecuted = isExecuted;
                 this.Name = name;
+                this.AggregateId = rootId;
             }
 
-            public Guid CommandIdentifier { get; private set; }
-            public string Name { get; private set; }
-            public Guid AggregateId { get; } = Guid.NewGuid();
+            public Guid CommandIdentifier { get; }
+            public string Name { get; }
+            public Guid AggregateId { get; } 
+            
+            public TaskCompletionSource<bool> IsStarted { get; } = new TaskCompletionSource<bool>();
+
         }
 
         private class Aggregate : EventSourcedAggregateRoot
         {
             public void SaveNameFor5Seconds(SaveNameFor5Seconds command)
             {
-                Task.Delay(5000).Wait();
-                executedCommands.Add(command.Name);
+                command.IsStarted.SetResult(true);
+                command.IsExecuted.Wait();
+                lock (LockObject)
+                {
+                    executedCommands.Add(command.Name);
+                }
             }
         }
 
         [Test]
-        public async Task should_execute_all_2_commands()
+        public async Task should_execute_all_2_commands_for_2_different_aggregate_root()
         {
             // arrange 
             CommandRegistry
@@ -46,26 +60,39 @@ namespace WB.Tests.Integration.CommandServiceTests
             var repository = Mock.Of<IEventSourcedAggregateRootRepository>(_
                 => _.GetLatest(typeof(Aggregate), Moq.It.IsAny<Guid>()) == new Aggregate());
 
-            commandService = Create.Service.CommandService(repository: repository);
+            commandService = Create.Service.CommandService(repository: repository, aggregateLock: new AggregateLock());
 
             // act
             try
             {
                 var cancellationTokenSource = new CancellationTokenSource();
 
-                var t1 = commandService.ExecuteAsync(new SaveNameFor5Seconds("first"), null, cancellationTokenSource.Token);
-                await Task.Delay(5);
-                var t2 = commandService.ExecuteAsync(new SaveNameFor5Seconds("second"), null, cancellationTokenSource.Token);
+                var t1Source = new TaskCompletionSource<object>();
+                var c1 = new SaveNameFor5Seconds(t1Source.Task, "first", Id.g1);
+                var t1 = commandService.ExecuteAsync(c1, null, cancellationTokenSource.Token);
 
-                await Task.Delay(1000);
+                var t2Source = new TaskCompletionSource<object>();
+                var c2 = new SaveNameFor5Seconds(t2Source.Task, "second", Id.g2);
+                var t2 = commandService.ExecuteAsync(c2, null, cancellationTokenSource.Token);
+
+                await Task.WhenAny(c1.IsStarted.Task, c2.IsStarted.Task); // wait for both command to start execution
+
                 cancellationTokenSource.Cancel();
 
+                // Complete both commands execution
+                t1Source.SetResult(new object());
+                t2Source.SetResult(new object());
+
+                // Wait for both commands to complete
                 await Task.WhenAll(t1, t2);
             }
             catch (AggregateException) { }
 
             // Assert
-            Assert.That(executedCommands, Is.EquivalentTo(new []{"first", "second"}));
+            lock (LockObject)
+            {
+                Assert.That(executedCommands, Is.EquivalentTo(new []{"first", "second"}));
+            }
         }
 
         private static readonly List<string> executedCommands = new List<string>();
