@@ -70,10 +70,6 @@ try {
             RunConfigTransform $ProjectWebTester $BuildConfiguration
         }
 
-        Log-Block "DEBUG: Building web packages and support tool" {
-            BuildAspNetCoreWebPackage $ProjectDesigner $BuildConfiguration $BuildNumber | % { if (-not $_) { Exit } }
-        }
-
         $PackageName = 'WBCapi.apk'
         . "$scriptFolder\build-android-package.ps1" `
             -VersionName $versionString `
@@ -122,7 +118,7 @@ try {
         Log-Block "Building web packages and support tool" {
             BuildWebPackage $ProjectHeadquarters $BuildConfiguration | % { if (-not $_) { Exit } }
             BuildWebPackage $ProjectWebTester $BuildConfiguration | % { if (-not $_) { Exit } }
-           # BuildAspNetCoreWebPackage $ProjectDesigner $BuildConfiguration $BuildNumber | % { if (-not $_) { Exit } }
+            BuildAspNetCoreWebPackage $ProjectDesigner $BuildConfiguration $BuildNumber | % { if (-not $_) { Exit } }
             BuildAndDeploySupportTool $SupportToolSolution $BuildConfiguration | % { if (-not $_) { Exit } }
         }
 
