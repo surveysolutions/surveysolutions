@@ -1,4 +1,4 @@
-@using System.Collections.Generic
+﻿@using System.Collections.Generic
 @using System.Linq
 @using Main.Core.Entities.SubEntities
 @using WB.Core.BoundedContexts.Designer.Implementation.Services
@@ -19,7 +19,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>@questionnaire.Title</title>
     <!-- pdf:css -->
-    <link rel="stylesheet" href="~/css/pdf.css">
+    <link rel="stylesheet" href="@Url.ContentAbsolute("~/css/pdf.css")">
     <!-- endinject -->
 </head>
 <body>
