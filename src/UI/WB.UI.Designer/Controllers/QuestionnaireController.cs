@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
@@ -68,7 +67,6 @@ namespace WB.UI.Designer.Controllers
         private readonly IQuestionnaireInfoFactory questionnaireInfoFactory;
         private readonly ILogger<QuestionnaireController> logger;
         private readonly IQuestionnaireInfoViewFactory questionnaireInfoViewFactory;
-        private readonly IHttpContextAccessor contextAccessor;
         private readonly ICategoricalOptionsImportService categoricalOptionsImportService;
         private readonly DesignerDbContext dbContext;
         private readonly IQuestionnaireHelper questionnaireHelper;
@@ -84,7 +82,6 @@ namespace WB.UI.Designer.Controllers
             IQuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory, 
             ILookupTableService lookupTableService, 
             IQuestionnaireInfoViewFactory questionnaireInfoViewFactory,
-            IHttpContextAccessor contextAccessor,
             ICategoricalOptionsImportService categoricalOptionsImportService,
             ICommandService commandService,
             DesignerDbContext dbContext,
@@ -100,7 +97,6 @@ namespace WB.UI.Designer.Controllers
             this.questionnaireChangeHistoryFactory = questionnaireChangeHistoryFactory;
             this.lookupTableService = lookupTableService;
             this.questionnaireInfoViewFactory = questionnaireInfoViewFactory;
-            this.contextAccessor = contextAccessor;
             this.categoricalOptionsImportService = categoricalOptionsImportService;
             this.commandService = commandService;
             this.dbContext = dbContext;

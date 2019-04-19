@@ -41,7 +41,6 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                 Mock.Of<IQuestionnaireChangeHistoryFactory>(),
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IQuestionnaireInfoViewFactory>(),
-                Mock.Of<IHttpContextAccessor>(),
                 categoricalOptionsImportService ?? Mock.Of<ICategoricalOptionsImportService>(),
                 commandService ?? Mock.Of<ICommandService>(),
                 dbContext ?? Create.InMemoryDbContext(),
