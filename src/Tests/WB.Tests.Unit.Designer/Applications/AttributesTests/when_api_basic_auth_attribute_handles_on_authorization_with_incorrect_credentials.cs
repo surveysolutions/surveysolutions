@@ -1,49 +1,27 @@
-﻿using System;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Web.Http;
-using System.Web.Http.Controllers;
-using System.Web.Http.Routing;
-using FluentAssertions;
-using Moq;
-using WB.UI.Designer.Api.Attributes;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using NUnit.Framework;
 
 
 namespace WB.Tests.Unit.Designer.Applications.AttributesTests
 {
     internal class when_api_basic_auth_attribute_handles_on_authorization_with_incorrect_credentials : AttributesTestContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [Test]
+        public async Task context()
+        {
             var userName = "name";
 
-            var context = new Mock<HttpConfiguration>();
+            var userStore = CreateAndSetupEmptyUserStore();
+            var filterContext = CreateAndSetupActionFilterContext(userName);
+            var filter = CreateApiBasicAuthFilter(userStore);
 
-            var requestMessage = new HttpRequestMessage();
-            requestMessage.RequestUri = new Uri("http://www.example.com");
+            // Act
+            await filter.OnAuthorizationAsync(filterContext);
 
-            requestMessage.Headers.Authorization = new AuthenticationHeaderValue(
-                "Basic", EncodeToBase64(string.Format("{0}:{1}", userName, "password")));
-
-
-            var actionDescriptor = new Mock<HttpActionDescriptor>();
-
-            var controllerContext = new HttpControllerContext(context.Object, new HttpRouteData(new HttpRoute()), requestMessage);
-            filterContext = new HttpActionContext(controllerContext, actionDescriptor.Object);
-
-            Func<string, string, bool> validateUserCredentials = (s, s1) => false;
-
-            attribute = CreateApiBasicAuthAttribute(validateUserCredentials);
-            BecauseOf();
+            // should_return_unauthorized_status_code () =>
+            Assert.AreEqual(StatusCodes.Status401Unauthorized, ((ContentResult)filterContext.Result).StatusCode);
         }
-
-        private void BecauseOf() =>
-            attribute.OnAuthorization(filterContext);
-
-        [NUnit.Framework.Test] public void should_return_unauthorized_status_code () =>
-            filterContext.Response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
-
-        private static ApiBasicAuthAttribute attribute;
-        private static HttpActionContext filterContext;
     }
 }
