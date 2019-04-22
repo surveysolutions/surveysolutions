@@ -1,2 +1,13 @@
 ﻿@page
+@using WB.UI.Shared.Web.Extensions
 @model ConfirmEmailModel
+
+<form>
+    <h1></h1>
+    <p class="note text-danger">
+        @TempData[Alerts.ERROR]
+    </p>
+    <div class="form-actions">
+        <a class="btn btn-success btn-lg" asp-page="./Login">@AccountResources.BackToLogin</a>
+    </div>
+</form>
