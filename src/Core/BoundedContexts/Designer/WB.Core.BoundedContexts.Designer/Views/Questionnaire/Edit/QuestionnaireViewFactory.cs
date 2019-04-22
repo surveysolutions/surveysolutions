@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
@@ -48,7 +49,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             if (questionnaire.CreatedBy == userId)
                 return true;
 
-            var questionnaireListItem = this.dbContext.Questionnaires.Find(questionnaireId.FormatGuid());
+            var questionnaireListItem = this.dbContext.Questionnaires.Where(x => x.QuestionnaireId == questionnaireId.FormatGuid())
+                .Include(x => x.SharedPersons).FirstOrDefault();
+
+            if (questionnaireListItem == null)
+                return false;
+
             if (questionnaireListItem.IsPublic)
                 return true;
 
