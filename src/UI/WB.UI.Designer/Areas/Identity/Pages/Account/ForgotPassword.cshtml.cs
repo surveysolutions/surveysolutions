@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -58,10 +60,13 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
                     pageHandler: null,
                     values: new { code },
                     protocol: Request.Scheme);
+                
+                var claims = await userManager.GetClaimsAsync(user);
+                var existingFullName = claims.FirstOrDefault(x => x.Type == ClaimTypes.Name);
 
                 EmailConfirmationModel emailModel = new EmailConfirmationModel();
                 emailModel.ConfirmationLink = callbackUrl;
-                emailModel.UserName = user.UserName;
+                emailModel.UserName = !string.IsNullOrEmpty(existingFullName?.Value) ? existingFullName?.Value : user.UserName;
                 string body = await this.viewRenderingService.RenderToStringAsync("Emails/ResetPasswordEmail", emailModel);
                 
                 await emailSender.SendEmailAsync(
