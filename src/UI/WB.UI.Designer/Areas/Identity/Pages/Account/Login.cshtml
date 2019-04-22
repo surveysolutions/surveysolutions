@@ -25,8 +25,21 @@
 
         @if (Model.ErrorMessage != null)
         {
-            <p class="note has-error">@Html.Raw(Model.ErrorMessage)</p>
+            <p class="note has-error">
+                @Html.Raw(Model.ErrorMessage)
+
+                @if (Model.ShowActivationLink)
+                {
+                    <a asp-page="./ResendConfirmationLink" asp-route-id="@Model.Input.Email">
+                        @ErrorMessages.RequestAnotherEmail
+                    </a>
+                }
+
+            </p>
+           
         }
+        
+        
 
         <div asp-validation-summary="All" class="text-danger"></div>
 
