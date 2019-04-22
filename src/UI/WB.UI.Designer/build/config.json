@@ -30,6 +30,7 @@
     "Views/Questionnaire/Public.cshtml",
     "Views/Shared/_ValidationScriptsPartial.cshtml",
     "Views/Shared/Layout.cshtml",
+    "Views/Error/Layout.Error.cshtml",
     "Areas/Admin/Views/Shared/Layout.ControlPanel.cshtml"
   ],
   "vendor": {
