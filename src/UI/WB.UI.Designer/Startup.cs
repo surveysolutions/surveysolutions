@@ -19,6 +19,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json.Serialization;
 using reCAPTCHA.AspNetCore;
+using StackExchange.Exceptional;
+using StackExchange.Exceptional.Stores;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -106,11 +108,21 @@ namespace WB.UI.Designer
             var AntiforgeryCookieName = ".AspNetCore.Antiforgery.Hk6odrgm3oE";
             services.AddAntiforgery(options => options.Cookie.Name = AntiforgeryCookieName);
 
+            // this code need to load KnownStoreTypes
+            if (!ErrorStore.KnownStoreTypes.Contains(typeof(PostgreSqlErrorStore)))
+                ErrorStore.KnownStoreTypes.Add(typeof(PostgreSqlErrorStore));
+
             services.AddExceptional(Configuration.GetSection("Exceptional"), config =>
+            {
+                config.UseExceptionalPageOnThrow = hostingEnvironment.IsDevelopment();
+                config.LogFilters.Cookie.Add(AntiforgeryCookieName, "***");
+
+                if (config.Store.Type == "PostgreSql")
                 {
-                    config.UseExceptionalPageOnThrow = hostingEnvironment.IsDevelopment();
-                    config.LogFilters.Cookie.Add(AntiforgeryCookieName, "***");
-                });
+                    config.Store.TableName = @"""public"".""Errors""";
+                    config.Store.ConnectionString = Configuration.GetConnectionString("DefaultConnection");
+                }
+            });
 
             services.AddTransient<ICaptchaService, WebCacheBasedCaptchaService>();
             services.AddTransient<ICaptchaProtectedAuthenticationService, CaptchaProtectedAuthenticationService>();
@@ -166,15 +178,10 @@ namespace WB.UI.Designer
         {
             app.UseExceptional();
 
-            /*if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
-            }
-            else
-            {
-                app.UseStatusCodePagesWithReExecute("/error/{0}");
-            }*/
+//            if (!env.IsDevelopment())
+//            {
+//                app.UseStatusCodePagesWithReExecute("/error/{0}");
+//            }
 
             app.UseHttpsRedirection();
             app.UseResponseCompression();
