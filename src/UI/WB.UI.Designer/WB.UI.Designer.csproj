@@ -39,6 +39,9 @@
     <None Update="appsettings.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Errors\" />
   </ItemGroup> 
   
 </Project>
