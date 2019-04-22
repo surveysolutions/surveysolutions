@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -32,9 +34,12 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
 
             if (user != null)
             {
+                var claims = await this.users.GetClaimsAsync(user);
+                var existingFullName = claims.FirstOrDefault(x => x.Type == ClaimTypes.Name);
+
                 var code = await this.users.GenerateEmailConfirmationTokenAsync(user);
                 var model = new EmailConfirmationModel();
-                model.UserName = user.UserName;
+                model.UserName = !string.IsNullOrEmpty(existingFullName?.Value) ? existingFullName?.Value: user.UserName;
                 model.ConfirmationLink = Url.Page(
                     "/Account/ConfirmEmail",
                     pageHandler: null,
