@@ -117,7 +117,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
                     await userManager.AddToRoleAsync(user, SimpleRoleEnum.User.ToString());
 
                     var model = new EmailConfirmationModel();
-                    model.UserName = Input.Login;
+                    model.UserName = !string.IsNullOrWhiteSpace(Input.FullName) ? Input.FullName : Input.Login;
                     model.ConfirmationLink = Url.Page(
                         "/Account/ConfirmEmail",
                         pageHandler: null,
