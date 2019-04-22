@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -36,7 +37,9 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
             var result = await _userManager.ConfirmEmailAsync(user, code);
             if (!result.Succeeded)
             {
-                throw new InvalidOperationException($"Error confirming email for user with ID '{userId}':");
+                var error = result.Errors.First();
+                TempData[Alerts.ERROR] = error.Description;
+                return Page();
             }
 
             TempData[Alerts.SUCCESS] = ErrorMessages.Your_email_is_verified;

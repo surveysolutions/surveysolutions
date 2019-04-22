@@ -57,6 +57,8 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                 return await this.userManager.IsInRoleAsync(user, SimpleRoleEnum.Administrator.ToString());
             }
 
+            
+
             List<AccountListViewItemModel> retVal = new List<AccountListViewItemModel>();
 
             foreach (var identityUser in users.Items)
@@ -70,7 +72,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                     Email = identityUser.Email,
                     CreationDate = identityUser.CreatedAtUtc,
                     IsApproved = identityUser.EmailConfirmed,
-                    IsLockedOut = identityUser.LockoutEnabled,
+                    IsLockedOut = identityUser.LockoutEnabled && (identityUser.LockoutEnd.HasValue),
                     CanEdit = canEdit,
                     CanOpen = false,
                     CanDelete = false,
