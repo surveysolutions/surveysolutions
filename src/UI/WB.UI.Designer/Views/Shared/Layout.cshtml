@@ -1,7 +1,5 @@
-@using System.Globalization
+﻿@using System.Globalization
 @using Microsoft.Extensions.Options
-@using WB.UI.Designer.Areas.Admin.Pages
-@using WB.UI.Designer.Code
 @using WB.UI.Designer.Extensions
 @using WB.UI.Designer1.Extensions
 @inject IOptions<UiConfig> UiConfig
@@ -54,7 +52,6 @@
         <div class="header-wb-list">
             <header>
 
-
                 <div class="questionnaire-logo">
                     <a class="logo" href="https://mysurvey.solutions/" target="_blank">
                         <img src="~/i/logo.png" alt="Survey Solutions" class="pull-left">
@@ -64,24 +61,22 @@
                 </div>
 
                 <ul class="nav nav-tabs">
-
-                    @Html.MenuActionLink(ViewContext, QuestionnaireController.MyQuestionnaires, "My", "Questionnaire", "presentation")
-                    @Html.MenuActionLink(ViewContext, QuestionnaireController.SharedQuestionnaires, "Shared", "Questionnaire", "presentation")
-                    @Html.MenuActionLink(ViewContext, QuestionnaireController.PublicQuestionnaires, "Public", "Questionnaire", "presentation")
-                    @Html.MenuActionLink(ViewContext, QuestionnaireController.Classifications, "Index", "Classifications", "presentation")
-                    <li role="presentation" class="create">
-                        @Html.ActionLink(QuestionnaireController.CreateNew, "Create", "Questionnaire", null, new { @class = "btn" })
-                    </li>
+                    <menu-item asp-controller="Questionnaire"  asp-action="My">@QuestionnaireController.MyQuestionnaires</menu-item>
+                    <menu-item asp-controller="Questionnaire"  asp-action="Shared">@QuestionnaireController.SharedQuestionnaires</menu-item>
+                    <menu-item asp-controller="Questionnaire"  asp-action="Public">@QuestionnaireController.PublicQuestionnaires</menu-item>
+                    <menu-item asp-controller="Classifications"  asp-action="Index">@QuestionnaireController.Classifications</menu-item>
+                    <menu-item asp-area="Admin" asp-page="/Users" asp-if="@User.IsAdmin()" >@QuestionnaireController.ManageUsers</menu-item>
+                    <menu-item asp-controller="Questionnaire" asp-action="Create" class="create">@QuestionnaireController.CreateNew</menu-item>
                 </ul>
                 <nav>
                     <a class="btn btn-default" target="_blank"
                        href="@UiConfig.Value.DesignerHelpUrl">@AccountResources.Help</a>
                     @if (User.IsAdmin())
                     {
-                        <a class="btn btn-default"
-                           asp-action="Index" asp-controller="ControlPanel" asp-area="Admin">
-                            @QuestionnaireController.ControlPanel
-                        </a>
+                    <a class="btn btn-default"
+                       asp-action="Index" asp-controller="ControlPanel" asp-area="Admin">
+                        @QuestionnaireController.ControlPanel
+                    </a>
                     }
                     <div class="btn-group">
                         <a class="btn btn-default">@string.Format(QuestionnaireController.Hello, User.Identity.Name)</a>
