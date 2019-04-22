@@ -265,9 +265,9 @@ function TeamCityEncode([string]$value) {
     $result
 }
 
-function BuildSolution($Solution, $BuildConfiguration) {
+function BuildSolution($Solution, $BuildConfiguration, $BuildArgs) {
     return Log-Block "Building solution $Solution in configuration '$BuildConfiguration'" {
-        return Execute-MSBuild $Solution $BuildConfiguration
+        return Execute-MSBuild $Solution $BuildConfiguration $BuildArgs
     }
 }
 
@@ -382,6 +382,7 @@ function BuildAspNetCoreWebPackage($Project, $BuildConfiguration, $BuildNumber, 
     return Log-Block "Building Asp.Net Core package for project $Project" {
         try {
             $arg = @("publish", $Project,  "-c", $BuildConfiguration,
+                "--no-build",
                 "--version-suffix", $branch, "-v", "q"
                 "/p:PublishProfile=WebDeployPackage"
                 "/p:BuildNumber=$BuildNumber"

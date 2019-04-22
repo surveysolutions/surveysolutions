@@ -34,7 +34,10 @@ If (Test-Path "$artifactsFolder") {
 New-Item $artifactsFolder -Type Directory -Force | Out-Null
 
 try {
-    $buildSuccessful = BuildSolution -Solution $MainSolution -BuildConfiguration $BuildConfiguration
+
+    $buildArgs = @("/p:BuildNumber=$BuildNumber", "/p:VersionSuffix=$branch")
+
+    $buildSuccessful = BuildSolution -Solution $MainSolution -BuildConfiguration $BuildConfiguration -BuildArgs $buildArgs
     if ($buildSuccessful) { 
 
         New-Item "$artifactsFolder\stats" -Type Directory -Force | Out-Null
