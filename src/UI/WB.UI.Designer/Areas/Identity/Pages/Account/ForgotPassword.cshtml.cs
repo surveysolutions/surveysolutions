@@ -41,8 +41,8 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
         {
             if (ModelState.IsValid)
             {
-                var user = await userManager.FindByEmailAsync(Input.Email)
-                    ?? await userManager.FindByNameAsync(Input.Email);
+                var user = await userManager.FindByNameAsync(Input.Email)
+                    ?? await userManager.FindByEmailAsync(Input.Email);
 
                 if (user == null || !(await userManager.IsEmailConfirmedAsync(user)))
                 {
@@ -65,7 +65,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
                 string body = await this.viewRenderingService.RenderToStringAsync("Emails/ResetPasswordEmail", emailModel);
                 
                 await emailSender.SendEmailAsync(
-                    Input.Email,
+                    user.Email,
                     AccountResources.PasswordReset,
                     body);
 
