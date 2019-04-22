@@ -34,9 +34,7 @@
                         @ErrorMessages.RequestAnotherEmail
                     </a>
                 }
-
             </p>
-           
         }
         
         
@@ -62,7 +60,7 @@
         <div class="form-group">
             <input asp-for="Input.RememberMe" class="wb-checkbox" placeholder="@AccountResources.StaySignedIn" />
 
-            <label for="StaySignedIn">
+            <label asp-for="Input.RememberMe">
                 <span></span>@AccountResources.StaySignedIn
             </label>
 
