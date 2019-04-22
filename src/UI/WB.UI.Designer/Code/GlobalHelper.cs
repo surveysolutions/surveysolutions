@@ -20,5 +20,8 @@ namespace WB.UI.Designer.Code
         {
             return (string) viewContext.RouteData.Values["Controller"];
         }
+
+        public static string CurrentArea(this ViewContext viewContext) => (string) viewContext.RouteData.Values["Area"];
+        public static string CurrentPage(this ViewContext viewContext) => (string)viewContext.RouteData.Values["Page"];
     }
 }
