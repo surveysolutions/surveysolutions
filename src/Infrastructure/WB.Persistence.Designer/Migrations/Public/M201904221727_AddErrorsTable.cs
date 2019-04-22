@@ -1,6 +1,6 @@
 ﻿using FluentMigrator;
 
-namespace WB.UI.Designer.Migrations.PlainStore
+namespace WB.UI.Designer.Migrations.Public
 {
     [Migration(201904221727)]
     public class M201904221727_AddErrorsTable : Migration
