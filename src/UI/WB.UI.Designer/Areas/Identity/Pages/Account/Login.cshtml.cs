@@ -47,6 +47,8 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
 
         public bool ShouldShowCaptcha { get; set; }
 
+        public bool ShowActivationLink { get; set; }
+
         public class InputModel
         {
             [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.Email_required))]
@@ -100,11 +102,17 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
                     }
                 }
 
-                var user = await userManager.FindByNameAsync(Input.Email) ??
-                           await userManager.FindByEmailAsync(Input.Email);
+                var user = await userManager.FindByNameOrEmailAsync(Input.Email);
 
                 if (user != null)
                 {
+                    if (!user.EmailConfirmed)
+                    {
+                        this.ShowActivationLink = true;
+                        this.ErrorMessage = string.Format(ErrorMessages.ConfirmAccount, user.Email);
+                        return Page();
+                    }
+
                     var result = await signInManager.PasswordSignInAsync(user, 
                         Input.Password,
                         Input.RememberMe,
@@ -143,5 +151,6 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
             // If we got this far, something failed, redisplay form
             return Page();
         }
+
     }
 }
