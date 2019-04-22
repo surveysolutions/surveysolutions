@@ -8,6 +8,7 @@ using Serilog;
 using Serilog.Events;
 using WB.Core.Infrastructure.Versions;
 using WB.UI.Designer.Migrations.PlainStore;
+using WB.UI.Designer.Migrations.Public;
 using WB.UI.Designer1.Extensions;
 
 namespace WB.UI.Designer
@@ -37,6 +38,7 @@ namespace WB.UI.Designer
 
                 webHost
                     .RunMigrations(typeof(M001_Init), "plainstore")
+                    .RunMigrations(typeof(M201904221727_AddErrorsTable), "public")
                     .Run();
             }
             catch (Exception ex)
