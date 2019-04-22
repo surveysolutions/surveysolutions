@@ -41,8 +41,11 @@ namespace WB.UI.Designer
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly IHostingEnvironment hostingEnvironment;
+
+        public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
+            this.hostingEnvironment = hostingEnvironment;
             Configuration = configuration;
         }
 
@@ -100,6 +103,15 @@ namespace WB.UI.Designer
                     options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
                 });
 
+            var AntiforgeryCookieName = ".AspNetCore.Antiforgery.Hk6odrgm3oE";
+            services.AddAntiforgery(options => options.Cookie.Name = AntiforgeryCookieName);
+
+            services.AddExceptional(Configuration.GetSection("Exceptional"), config =>
+                {
+                    config.UseExceptionalPageOnThrow = hostingEnvironment.IsDevelopment();
+                    config.LogFilters.Cookie.Add(AntiforgeryCookieName, "***");
+                });
+
             services.AddTransient<ICaptchaService, WebCacheBasedCaptchaService>();
             services.AddTransient<ICaptchaProtectedAuthenticationService, CaptchaProtectedAuthenticationService>();
             services.AddSingleton<IProductVersion, ProductVersion>();
@@ -152,7 +164,9 @@ namespace WB.UI.Designer
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
-            if (env.IsDevelopment())
+            app.UseExceptional();
+
+            /*if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
@@ -160,7 +174,7 @@ namespace WB.UI.Designer
             else
             {
                 app.UseStatusCodePagesWithReExecute("/error/{0}");
-            }
+            }*/
 
             app.UseHttpsRedirection();
             app.UseResponseCompression();
@@ -213,8 +227,6 @@ namespace WB.UI.Designer
                     name: "default",
                     template: "{controller=Questionnaire}/{action=Index}/{id?}");
             });
-
-            app.UseExceptional();
 
             var initTask = aspCoreKernel.InitAsync(serviceProvider);
             if (env.IsDevelopment())
