@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             this.Identity = entityIdentity;
-            this.UpdateFilter(null);
+            this.AutoCompleteSuggestions = this.GetSuggestions(null).ToList();
         }
 
         private int[] excludedOptions = Array.Empty<int>();
@@ -103,7 +103,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             await Task.WhenAll(handlerTasks);
         }
 
-        private string filterToUpdate = "";
+        private string filterToUpdate = null;
         private async Task UpdateFilterThrottled()
         {
             var suggestions = this.GetSuggestions(filterToUpdate).ToList();
@@ -118,6 +118,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public async Task UpdateFilter(string filter)
         {
+            if (this.filterToUpdate == filter)
+                return;
+
             this.filterToUpdate = filter;
 
             await this.throttlingModel.ExecuteActionIfNeeded();
