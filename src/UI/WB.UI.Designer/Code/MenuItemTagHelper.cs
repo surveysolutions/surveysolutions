@@ -59,7 +59,7 @@ namespace WB.UI.Designer.Code
             }
             else
             {
-                href = url.GetUrlHelper(ViewContext).Action(Action, Controller, string.IsNullOrWhiteSpace(Area) ? null : new {area = Area});
+                href = url.GetUrlHelper(ViewContext).Action(Action, Controller, new {area = Area, id = (Guid?) null});
             }
             anchor.Attributes.Add("href", href);
 
