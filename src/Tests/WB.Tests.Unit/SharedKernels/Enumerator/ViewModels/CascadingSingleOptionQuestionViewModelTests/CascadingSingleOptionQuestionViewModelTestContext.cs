@@ -34,6 +34,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
             Ioc.RegisterSingleton<IMvxViewDispatcher>(dispatcher);
             Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
+
+            Ioc.RegisterType<ThrottlingViewModel>(() => Create.ViewModel.ThrottlingViewModel());
         }
 
         protected static CascadingSingleOptionQuestionViewModel CreateCascadingSingleOptionQuestionViewModel(
