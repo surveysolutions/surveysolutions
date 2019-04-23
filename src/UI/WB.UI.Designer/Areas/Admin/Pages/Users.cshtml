@@ -110,10 +110,10 @@
         <table id="user-table-content" class="table table-content">
             <tbody>
                 @foreach (var user in Model.List)
-                    {
+                {
                 <tr>
                     <td class="search-value">
-                        <a asp-page="./Details" asp-id="user.Id">
+                        <a asp-page="./UserDetails" asp-route-id="@user.Id">
                             @user.UserName
                         </a>
                     </td>
