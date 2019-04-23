@@ -6,7 +6,7 @@
 
             shareService.findUserByEmailOrLogin = function(emailOrLogin) {
                 var baseUrl = '../../api/users/findbyemail';
-                return $http.post(baseUrl + '?q=' + emailOrLogin);
+                return $http.post(baseUrl, { query: emailOrLogin });
             };
 
             shareService.shareWith = function(emailOrLogin, questionnaireId, shareType) {
