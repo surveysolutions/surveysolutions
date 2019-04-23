@@ -15,17 +15,16 @@
         <div class="col-sm-3 col-md-2 sidebar">
 
             <ul class="nav nav-sidebar">
-                <li><a href="@Url.Page("/RestoreQuestionnaire")">@QuestionnaireController.RestoreQuestionnaire</a></li>
-                <li><a href="@Url.Action("Index", "PublicFolders")">@QuestionnaireController.QuestionnaireTreeFolders</a></li>
-                <li><a href="@Url.Action("Versions", "ControlPanel")">Versions</a></li>
-                <li><a href="@Url.Action("ExpressionGeneration", "ControlPanel")">Expression Generation</a></li>
-                <li><a href="@Url.Action("MakeAdmin", "ControlPanel")">Make the user an administrator</a></li>
-                <li><a href="@Url.Action("AllowedAddresses", "ControlPanel")">Allowed addresses</a></li>
-                <li><a href="@Url.Action("CompilationVersions", "ControlPanel")">Compilation versions</a></li>
-                <li><a href="@Url.Action("Exceptions", "ControlPanel")">Exceptions</a></li>
+                <menu-item asp-area="Admin" asp-page="/RestoreQuestionnaire">@QuestionnaireController.RestoreQuestionnaire</menu-item>
+                <menu-item asp-area="Admin" asp-action="Index" asp-controller="PublicFolders">@QuestionnaireController.QuestionnaireTreeFolders</menu-item>
+                <menu-item asp-area="Admin" asp-action="Versions" asp-controller="ControlPanel">Versions</menu-item>
+                <menu-item asp-area="Admin" asp-action="MakeAdmin" asp-controller="ControlPanel">Make the user an administrator</menu-item>
+                <menu-item asp-area="Admin" asp-action="AllowedAddresses" asp-controller="ControlPanel">Allowed addresses</menu-item>
+                <menu-item asp-area="Admin" asp-action="CompilationVersions" asp-controller="ControlPanel">Compilation versions</menu-item>
+                <menu-item asp-area="Admin" asp-action="Exceptions" asp-controller="ControlPanel">Exceptions</menu-item>
             </ul>
         </div>
-    
+
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
             @RenderBody()
         </div>
