@@ -209,7 +209,7 @@ function BuildStaticContent($blockName, $targetLocation, $runTests = $false) {
         Log-Block $blockName {
             Log-Message "yarn install"
             #install node js dependencies
-            &npm ci | Write-Host
+            &yarn | Write-Host
             
             $wasBuildSuccessfull = $LASTEXITCODE -eq 0
             if (-not $wasBuildSuccessfull) {
