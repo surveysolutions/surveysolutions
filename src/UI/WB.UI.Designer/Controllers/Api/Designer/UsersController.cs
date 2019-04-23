@@ -32,12 +32,11 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         [HttpPost]
         [Authorize]
         [Route("api/users/findbyemail")]
-        public async Task<IActionResult> Get([FromQuery]string q)
+        public async Task<IActionResult> Get([FromBody]FindByEmailRequest content)
         {
-            if (string.IsNullOrWhiteSpace(q)) return NotFound();
+            if (string.IsNullOrWhiteSpace(content.Query)) return NotFound();
 
-            var account = await this.users.FindByNameAsync(q) ?? 
-                          await this.users.FindByEmailAsync(q);
+            var account = await this.users.FindByNameOrEmailAsync(content.Query);
             return Ok(new
             {
                 doesUserExist = !string.IsNullOrEmpty(account?.UserName),
@@ -45,6 +44,11 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 email = account?.Email,
                 id = account?.Id
             });
+        }
+
+        public class FindByEmailRequest
+        {
+            public string Query { get; set; }
         }
     }
 }
