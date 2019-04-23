@@ -11,7 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         [SetUp]
         public void SetUp()
         {
-            AssemblyContext.SetupServiceLocator();
+            
         }
 
         [Test]

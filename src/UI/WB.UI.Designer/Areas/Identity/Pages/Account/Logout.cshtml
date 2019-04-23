@@ -1,0 +1,15 @@
+﻿@page
+@model LogoutModel
+@{
+    ViewData["Title"] = AccountResources.Logout;
+}
+
+<form>
+    <h1>@AccountResources.ThankYou</h1>
+    <p class="note">
+        @AccountResources.LogoutText
+    </p>
+    <div class="form-actions">
+        <a class="btn btn-success btn-lg" asp-page="./Login">@AccountResources.BackToLogin</a>
+    </div>
+</form>

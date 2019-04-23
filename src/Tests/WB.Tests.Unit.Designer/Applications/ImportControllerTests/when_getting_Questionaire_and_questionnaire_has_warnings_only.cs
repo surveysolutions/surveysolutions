@@ -2,7 +2,6 @@ using System;
 using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
@@ -15,10 +14,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             request = Create.DownloadQuestionnaireRequest(questionnaireId);
-
-            var membershipUserService = Mock.Of<IMembershipUserService>(
-                _ => _.WebUser == Mock.Of<IMembershipWebUser>(
-                    u => u.UserId == userId));
+            var dbContext = Create.InMemoryDbContext();
+            dbContext.AddUserWithId(userId);
 
             var questionnaireViewFactory = Mock.Of<IQuestionnaireViewFactory>(
                 _ => _.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) == Create.QuestionnaireView(userId));
@@ -35,11 +32,13 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
                     _.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<int>(),
                         out generatedAssembly) == Create.GenerationResult(true));
 
-            importController = CreateImportController(membershipUserService: membershipUserService,
+            importController = CreateImportController(
                 questionnaireViewFactory: questionnaireViewFactory,
                 engineVersionService: expressionsEngineVersionService,
                 questionnaireVerifier: questionnaireVerifier,
                 expressionProcessorGenerator: expressionProcessorGenerator);
+
+            importController.SetupLoggedInUser(userId);
             BecauseOf();
         }
 

@@ -11,7 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
     internal class when_generating_classes_with_multiple_validations : CodeGeneratorTestsContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
-            AssemblyContext.SetupServiceLocator();
+            
 
             questionnaire = Create.QuestionnaireDocument(questionnaireId, children: new IComposite[]
             {

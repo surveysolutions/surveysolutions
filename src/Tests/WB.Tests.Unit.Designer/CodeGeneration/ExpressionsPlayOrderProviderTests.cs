@@ -8,7 +8,6 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.Infrastructure.TopologicalSorter;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
-using WB.Tests.Abc.TestFactories;
 
 namespace WB.Tests.Unit.Designer.CodeGeneration
 {
@@ -27,7 +26,7 @@ namespace WB.Tests.Unit.Designer.CodeGeneration
                 Create.Variable(variableId, variableName: "v", expression: "i"));
 
             var expressionProcessor = Create.RoslynExpressionProcessor();
-            var expressionsPlayOrderProvider = new ServiceFactory().ExpressionsPlayOrderProvider(expressionProcessor);
+            var expressionsPlayOrderProvider = Create.ExpressionsPlayOrderProvider(expressionProcessor);
 
             var expressionsPlayOrder = expressionsPlayOrderProvider.GetExpressionsPlayOrder(questionnaireDocument.AsReadOnly());
 
@@ -49,7 +48,7 @@ namespace WB.Tests.Unit.Designer.CodeGeneration
                 Create.TextQuestion(textQuestionId, enablementCondition: "v < 10"));
 
             var expressionProcessor = Create.RoslynExpressionProcessor();
-            var expressionsPlayOrderProvider = new ServiceFactory().ExpressionsPlayOrderProvider(expressionProcessor);
+            var expressionsPlayOrderProvider = Create.ExpressionsPlayOrderProvider(expressionProcessor);
 
             var expressionsPlayOrder = expressionsPlayOrderProvider.GetExpressionsPlayOrder(questionnaireDocument.AsReadOnly());
 
@@ -71,7 +70,7 @@ namespace WB.Tests.Unit.Designer.CodeGeneration
                 Create.TextQuestion(textQuestionId));
 
             var expressionProcessor = Create.RoslynExpressionProcessor();
-            var expressionsPlayOrderProvider = new ServiceFactory().ExpressionsPlayOrderProvider(expressionProcessor);
+            var expressionsPlayOrderProvider = Create.ExpressionsPlayOrderProvider(expressionProcessor);
 
             var expressionsPlayOrder = expressionsPlayOrderProvider.GetExpressionsPlayOrder(questionnaireDocument.AsReadOnly());
 
@@ -92,7 +91,7 @@ namespace WB.Tests.Unit.Designer.CodeGeneration
                 Create.TextQuestion(textQuestionId, enablementCondition: "v < 10"));
 
             var expressionProcessor = Create.RoslynExpressionProcessor();
-            var expressionsPlayOrderProvider = new ServiceFactory().ExpressionsPlayOrderProvider(expressionProcessor);
+            var expressionsPlayOrderProvider = Create.ExpressionsPlayOrderProvider(expressionProcessor);
 
             var expressionsPlayOrder = expressionsPlayOrderProvider.GetValidationDependencyGraph(questionnaireDocument.AsReadOnly());
 
@@ -109,14 +108,14 @@ namespace WB.Tests.Unit.Designer.CodeGeneration
             var chapterId = Guid.NewGuid();
 
             var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(chapterId,
-                Create.NumericIntegerQuestion(intQuestionId, variable: "i", validationConditions: new[] {new ValidationCondition("v > 5", "error"),}),
-                Create.NumericIntegerQuestion(int2QuestionId, variable: "i2", validationConditions: new[] {new ValidationCondition("i2 > 5 && v> 5", "error"),}),
+                Create.NumericIntegerQuestion(intQuestionId, variable: "i", validationConditions: new[] { new ValidationCondition("v > 5", "error"), }),
+                Create.NumericIntegerQuestion(int2QuestionId, variable: "i2", validationConditions: new[] { new ValidationCondition("i2 > 5 && v> 5", "error"), }),
                 Create.Variable(variableId, variableName: "v", expression: "i"),
-                Create.TextQuestion(textQuestionId, variable: "t", enablementCondition: "v < 10", validationConditions: new[] {new ValidationCondition("t == \"\"", "error"),})
+                Create.TextQuestion(textQuestionId, variable: "t", enablementCondition: "v < 10", validationConditions: new[] { new ValidationCondition("t == \"\"", "error"), })
             );
 
             var expressionProcessor = Create.RoslynExpressionProcessor();
-            var expressionsPlayOrderProvider = new ServiceFactory().ExpressionsPlayOrderProvider(expressionProcessor);
+            var expressionsPlayOrderProvider = Create.ExpressionsPlayOrderProvider(expressionProcessor);
 
             var expressionsPlayOrder = expressionsPlayOrderProvider.GetValidationDependencyGraph(questionnaireDocument.AsReadOnly());
 
@@ -136,7 +135,7 @@ namespace WB.Tests.Unit.Designer.CodeGeneration
 
             var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(chapterId,
                 Create.NumericIntegerQuestion(rosterTrigerId, variable: "rt"),
-                Create.Roster(rosterId, variable:"r", rosterSizeQuestionId: rosterTrigerId, children: new []
+                Create.Roster(rosterId, variable: "r", rosterSizeQuestionId: rosterTrigerId, children: new[]
                 {
                     Create.NumericIntegerQuestion(intQuestionId, variable: "i", validationConditions: new[] { new ValidationCondition("r.Count > 5", "error"), }),
                     Create.NumericIntegerQuestion(int2QuestionId, variable: "i2", validationConditions: new[] { new ValidationCondition("rt > 5", "error"), }),
@@ -144,7 +143,7 @@ namespace WB.Tests.Unit.Designer.CodeGeneration
             );
 
             var expressionProcessor = Create.RoslynExpressionProcessor();
-            var expressionsPlayOrderProvider = new ServiceFactory().ExpressionsPlayOrderProvider(expressionProcessor);
+            var expressionsPlayOrderProvider = Create.ExpressionsPlayOrderProvider(expressionProcessor);
 
             var expressionsPlayOrder = expressionsPlayOrderProvider.GetValidationDependencyGraph(questionnaireDocument.AsReadOnly());
 
@@ -160,14 +159,14 @@ namespace WB.Tests.Unit.Designer.CodeGeneration
             var chapterId = Guid.NewGuid();
 
             var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(chapterId,
-                Create.NumericIntegerQuestion(intQuestionId, validationConditions: new []{ new ValidationCondition("$valid", "error"), })
+                Create.NumericIntegerQuestion(intQuestionId, validationConditions: new[] { new ValidationCondition("$valid", "error"), })
             );
-            questionnaireDocument.Macros = new Dictionary<Guid, Macro> {{macrosId, Create.Macro("valid", "self > 10")}};
+            questionnaireDocument.Macros = new Dictionary<Guid, Macro> { { macrosId, Create.Macro("valid", "self > 10") } };
 
 
             var expressionProcessor = Create.RoslynExpressionProcessor();
             var macrosesService = Create.MacrosSubstitutionService();
-            var expressionsPlayOrderProvider = new ServiceFactory().ExpressionsPlayOrderProvider(expressionProcessor, macrosesService);
+            var expressionsPlayOrderProvider = Create.ExpressionsPlayOrderProvider(expressionProcessor, macrosesService);
 
             var expressionsPlayOrder = expressionsPlayOrderProvider.GetValidationDependencyGraph(questionnaireDocument.AsReadOnly());
 
@@ -185,17 +184,20 @@ namespace WB.Tests.Unit.Designer.CodeGeneration
             Guid q4Id = Guid.Parse("44444444444444444444444444444444");
             Guid q5Id = Guid.Parse("55555555555555555555555555555555");
 
-            var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
+            var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
             {
-                Abc.Create.Entity.MultyOptionsQuestion(q2Id, variable: "q2"),
-                Abc.Create.Entity.Roster(rosterId, variable:"r", rosterSizeQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
+                Create.MultyOptionsQuestion(q2Id, variable: "q2"),
+                Create.Roster(rosterId, variable:"r",
+                    rosterSizeQuestionId: q2Id,
+                    children: new IComposite[]
                 {
-                    Abc.Create.Entity.NumericIntegerQuestion(q3Id, variable: "age")
+                    Create.NumericIntegerQuestion(q3Id, variable: "age")
                 }),
-                Abc.Create.Entity.Roster(roster1Id, variable:"r1", fixedTitles: new[] { "1", "2"}, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, children: new IComposite[]
+                Create.Roster(roster1Id, variable:"r1", fixedTitles: new[] { "1", "2"}, 
+                    children: new IComposite[]
                 {
-                    Abc.Create.Entity.NumericIntegerQuestion(q5Id, variable: "ageFilter"),
-                    Abc.Create.Entity.SingleQuestion(q4Id, variable: "q4", linkedToQuestionId: q3Id, linkedFilter: "age > current.ageFilter")
+                    Create.NumericIntegerQuestion(q5Id, variable: "ageFilter"),
+                    Create.SingleQuestion(q4Id, variable: "q4", linkedToQuestionId: q3Id, linkedFilter: "age > current.ageFilter")
                 })
             });
 
@@ -215,18 +217,18 @@ namespace WB.Tests.Unit.Designer.CodeGeneration
             Guid q4Id = Guid.Parse("44444444444444444444444444444444");
             Guid q5Id = Guid.Parse("55555555555555555555555555555555");
 
-            var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
+            var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
             {
-                Abc.Create.Entity.MultyOptionsQuestion(q2Id, variable: "mo_start"),
-                Abc.Create.Entity.NumericIntegerQuestion(q5Id, "ie"),
-                Abc.Create.Entity.Roster(rosterId, variable:"r", rosterSizeQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
+                Create.MultyOptionsQuestion(q2Id, variable: "mo_start"),
+                Create.NumericIntegerQuestion(q5Id, "ie"),
+                Create.Roster(rosterId, variable:"r", rosterSizeQuestionId: q2Id, children: new IComposite[]
                 {
-                    Abc.Create.Entity.NumericIntegerQuestion(q3Id, variable: "ii")
+                    Create.NumericIntegerQuestion(q3Id, variable: "ii")
                 }),
-                Abc.Create.Entity.Group(groupId, variable:"gr", children: new IComposite[]
+                Create.Group(groupId, variable:"gr", children: new IComposite[]
                 {
-                    Abc.Create.Entity.MultyOptionsQuestion(q4Id, variable: "mo", linkedToRosterId: rosterId, 
-                        linkedFilter: "ii > 10", enablementCondition: "ie == 1")
+                    Create.MultyOptionsQuestion(q4Id, variable: "mo", linkedToRosterId: rosterId,
+                        linkedFilterExpression: "ii > 10", enablementCondition: "ie == 1")
                 })
             });
 
@@ -244,12 +246,12 @@ namespace WB.Tests.Unit.Designer.CodeGeneration
             Guid q3Id = Guid.Parse("33333333333333333333333333333333");
             Guid q4Id = Guid.Parse("44444444444444444444444444444444");
 
-            var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
+            var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
             {
-                Abc.Create.Entity.MultyOptionsQuestion(q1Id, variable: "mo_start"),
-                Abc.Create.Entity.NumericIntegerQuestion(q2Id, "n1", enablementCondition: "mo_start.Contains(1)"),
-                Abc.Create.Entity.NumericIntegerQuestion(q3Id, "n2", enablementCondition: "mo_start.Contains(2)"),
-                Abc.Create.Entity.MultyOptionsQuestion(q4Id, variable: "mo_end", enablementCondition: "n1>0 || n2>0"),
+                Create.MultyOptionsQuestion(q1Id, variable: "mo_start"),
+                Create.NumericIntegerQuestion(q2Id, "n1", enablementCondition: "mo_start.Contains(1)"),
+                Create.NumericIntegerQuestion(q3Id, "n2", enablementCondition: "mo_start.Contains(2)"),
+                Create.MultyOptionsQuestion(q4Id, variable: "mo_end", enablementCondition: "n1>0 || n2>0"),
             });
 
             var dependensies = GetDependensies(questionnaireDocument, q1Id);
@@ -263,7 +265,7 @@ namespace WB.Tests.Unit.Designer.CodeGeneration
         {
             var expressionProcessor = Create.RoslynExpressionProcessor();
             var macrosesService = Create.MacrosSubstitutionService();
-            var expressionsPlayOrderProvider = new ServiceFactory().ExpressionsPlayOrderProvider(expressionProcessor, macrosesService);
+            var expressionsPlayOrderProvider = Create.ExpressionsPlayOrderProvider(expressionProcessor, macrosesService);
 
             var expressionsPlayOrder = expressionsPlayOrderProvider.GetDependencyGraph(questionnaireDocument.AsReadOnly());
             var dependensies = new TopologicalSorter<Guid>().Sort(expressionsPlayOrder, entityId);

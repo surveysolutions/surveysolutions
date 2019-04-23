@@ -10,7 +10,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
     {
         [Test]
         public void should_not_throw_agrument_exception() {
-            AssemblyContext.SetupServiceLocator();
+            
 
             var questionnaire = Create.QuestionnaireDocument(children: new[]
             {
