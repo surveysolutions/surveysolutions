@@ -209,16 +209,16 @@ function BuildStaticContent($blockName, $targetLocation, $runTests = $false) {
         Log-Block $blockName {
             Log-Message "yarn install"
             #install node js dependencies
-            &yarn install --no-optional | Write-Host
+            &npm ci | Write-Host
             
             $wasBuildSuccessfull = $LASTEXITCODE -eq 0
             if (-not $wasBuildSuccessfull) {
-                Log-Error "Failed to run yarn"
+                Log-Error "Failed to run npm"
                 return $wasBuildSuccessfull
             }
     
             Log-Message "Running gulp --production"
-            &node_modules\.bin\gulp --production | Write-Host
+            &yarn gulp --production | Write-Host
     
             $wasBuildSuccessfull = $LASTEXITCODE -eq 0
             if (-not $wasBuildSuccessfull) {
