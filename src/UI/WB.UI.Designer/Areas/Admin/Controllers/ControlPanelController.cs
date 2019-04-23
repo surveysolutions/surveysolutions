@@ -54,8 +54,11 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
 
         public ActionResult MakeAdmin() => this.View();
 
-        public ActionResult ThrowException(string message = "Test Exception") =>
+        public ActionResult ThrowException(string message = "Use query argument 'message' to display custom message") =>
             throw new ArgumentException(message);
+
+        public ActionResult HttpStatusCode(int? statusCode, string message = "Use query argument 'statusCode' and 'message' to display custom response") =>
+            this.StatusCode(statusCode ?? 404, message);
 
 
         public ActionResult CompilationVersions() 
