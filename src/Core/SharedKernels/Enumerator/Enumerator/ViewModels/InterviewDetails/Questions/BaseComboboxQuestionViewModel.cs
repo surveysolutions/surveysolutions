@@ -95,9 +95,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.Answer = this.interview.GetSingleOptionQuestion(this.Identity).GetAnswer()?.SelectedValue;
 
-            await this.comboboxViewModel.UpdateFilter(!this.Answer.HasValue
-                ? null
-                : this.filteredOptionsViewModel.GetAnsweredOption(this.Answer.Value)?.Title ?? null);
+            if (this.Answer.HasValue)
+            {
+                await this.comboboxViewModel.UpdateFilter(this.filteredOptionsViewModel.GetAnsweredOption(this.Answer.Value)?.Title ?? null);
+            }
         }
 
 
