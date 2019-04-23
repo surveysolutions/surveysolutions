@@ -105,23 +105,16 @@ namespace WB.UI.Designer
                     options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
                 });
 
-            var AntiforgeryCookieName = ".AspNetCore.Antiforgery.Hk6odrgm3oE";
-            services.AddAntiforgery(options => options.Cookie.Name = AntiforgeryCookieName);
-
-            // this code need to load KnownStoreTypes
+            // this code need to run lazy load KnownStoreTypes property
             if (!ErrorStore.KnownStoreTypes.Contains(typeof(PostgreSqlErrorStore)))
                 ErrorStore.KnownStoreTypes.Add(typeof(PostgreSqlErrorStore));
 
             services.AddExceptional(Configuration.GetSection("Exceptional"), config =>
             {
                 config.UseExceptionalPageOnThrow = hostingEnvironment.IsDevelopment();
-                config.LogFilters.Cookie.Add(AntiforgeryCookieName, "***");
 
                 if (config.Store.Type == "PostgreSql")
-                {
-                    config.Store.TableName = @"""public"".""Errors""";
                     config.Store.ConnectionString = Configuration.GetConnectionString("DefaultConnection");
-                }
             });
 
             services.AddTransient<ICaptchaService, WebCacheBasedCaptchaService>();
@@ -178,10 +171,10 @@ namespace WB.UI.Designer
         {
             app.UseExceptional();
 
-//            if (!env.IsDevelopment())
-//            {
-//                app.UseStatusCodePagesWithReExecute("/error/{0}");
-//            }
+            if (!env.IsDevelopment())
+            {
+                app.UseStatusCodePagesWithReExecute("/error/{0}");
+            }
 
             app.UseHttpsRedirection();
             app.UseResponseCompression();
