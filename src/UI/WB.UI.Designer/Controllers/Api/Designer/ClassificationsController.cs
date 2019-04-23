@@ -29,7 +29,7 @@ namespace WB.UI.Designer.Api.Designer
 
     [ResponseCache(NoStore = true)]
     [Authorize]
-    [Route("api/classifications")]
+    [Route("api")]
     [ClassificationsExceptionFilter]
     public class ClassificationsController : Controller
     {
