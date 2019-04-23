@@ -58,8 +58,11 @@ namespace WB.UI.Shared.Web.Compression
         {
             // Check if response should be compressed
             // NOTE: This must be done _after_ the response has been created, otherwise the EnableCompression property is not set
+
+            bool isRangeRequest = response.Headers.AcceptRanges?.Count > 0 || request.Headers.Range != null;
+
             var process = request.Headers.AcceptEncoding.Any(y => y.Value == "gzip" || y.Value == "deflate") &&
-                          (response.Headers.AcceptRanges == null && request.Headers.Range == null);
+                          !isRangeRequest;
 
             // Compress content if it should processed
             if (process && response.Content != null)
