@@ -54,6 +54,10 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
 
         public ActionResult MakeAdmin() => this.View();
 
+        public ActionResult ThrowException(string message = "Test Exception") =>
+            throw new ArgumentException(message);
+
+
         public ActionResult CompilationVersions() 
             => this.View("CompilationVersionsViews/CompilationVersions", this.questionnaireCompilationVersionService.GetCompilationVersions());
 
