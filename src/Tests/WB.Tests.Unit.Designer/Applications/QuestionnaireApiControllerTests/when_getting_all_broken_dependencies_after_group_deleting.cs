@@ -5,6 +5,7 @@ using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer.Api;
+using WB.UI.Designer.Controllers.Api.Designer;
 
 
 namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
@@ -35,7 +36,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
         [NUnit.Framework.Test] public void should_return_list_of_links_returned_by_factory () =>
             result.Should().BeEquivalentTo(brokenLinks);
 
-        private static QuestionnaireController controller;
+        private static QuestionnaireApiController controller;
         private static List<QuestionnaireItemLink> result;
         private static string questionnaireId = Guid.Parse("22222222222222222222222222222222").FormatGuid();
         private static Guid groupId = Guid.Parse("33333333333333333333333333333333");

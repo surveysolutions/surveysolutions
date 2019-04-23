@@ -1,6 +1,6 @@
 ﻿using NSubstitute;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.UI.Designer.Api.Tester;
+using WB.UI.Designer.Controllers.Api.Tester;
 
 namespace WB.Tests.Unit.Designer.Api.Tester.AttachmentsControllerTests
 {

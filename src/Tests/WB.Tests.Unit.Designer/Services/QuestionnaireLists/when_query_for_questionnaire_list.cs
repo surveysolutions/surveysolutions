@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Tests.Abc;
@@ -8,27 +9,27 @@ namespace WB.Tests.Unit.Designer.Services.QuestionnaireLists
 {
     public class when_query_for_questionnaire_list
     {
-        private IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage;
-        private IPlainStorageAccessor<QuestionnaireListViewFolder> publicFoldersStorage;
+        private DesignerDbContext dbContext;
 
         [SetUp]
         public void Context()
         {
-            this.questionnaireListViewItemStorage = Abc.Create.Storage.InMemoryPlainStorage<QuestionnaireListViewItem>();
-            this.publicFoldersStorage = Abc.Create.Storage.InMemoryPlainStorage<QuestionnaireListViewFolder>();
+            this.dbContext = Create.InMemoryDbContext();
 
-            this.Subject = new QuestionnaireListViewFactory(this.questionnaireListViewItemStorage, this.publicFoldersStorage);
+            this.Subject = new QuestionnaireListViewFactory(dbContext: dbContext);
 
             // my
-            this.questionnaireListViewItemStorage.Store(Create.QuestionnaireListViewItem(Id.gA, isPublic: false, createdBy: Id.g1), Id.gA);
+            this.dbContext.Add(Create.QuestionnaireListViewItem(Id.gA, isPublic: false, createdBy: Id.g1));
 
             // shared questionnaires
-            this.questionnaireListViewItemStorage.Store(Create.QuestionnaireListViewItem(Id.gB, isPublic: false,
+            this.dbContext.Add(Create.QuestionnaireListViewItem(Id.gB, isPublic: false,
                 createdBy: Id.g2,
-                sharedPersons: new[] {Create.SharedPerson(Id.g1)}), Id.gB);
+                sharedPersons: new[] {Create.SharedPerson(Id.g1)}));
 
             // public
-            this.questionnaireListViewItemStorage.Store(Create.QuestionnaireListViewItem(Id.gC, isPublic: true, createdBy: Id.g3), Id.gC);
+            this.dbContext.Add(Create.QuestionnaireListViewItem(Id.gC, isPublic: true, createdBy: Id.g3));
+
+            this.dbContext.SaveChanges();
         }
 
         private QuestionnaireListViewFactory Subject { get; set; }

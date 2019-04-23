@@ -7,17 +7,14 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
 {
     internal class when_editing_options_and_was_no_uploaded_file : QuestionnaireControllerTestContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
-            controller = CreateQuestionnaireController();
-            SetControllerContextWithSession(controller, "options", new QuestionnaireController.EditOptionsViewModel());
-            BecauseOf();
-        }
+        [NUnit.Framework.Test]
+        public void should_add_error_message_to_temp_data()
+        {
+            var controller = CreateQuestionnaireController();
+            controller.questionWithOptionsViewModel = new QuestionnaireController.EditOptionsViewModel();
+            controller.EditOptions(null);
 
-        private void BecauseOf() => controller.EditOptions(null);
-
-        [NUnit.Framework.Test] public void should_add_error_message_to_temp_data () =>
             controller.TempData[Alerts.ERROR].Should().Be("Choose tab-separated values file to upload, please");
-
-        private static QuestionnaireController controller;
+        }
     }
 }

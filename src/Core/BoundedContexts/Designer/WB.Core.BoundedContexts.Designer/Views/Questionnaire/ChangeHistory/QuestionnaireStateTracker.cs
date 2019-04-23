@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 {
+    [StoredIn(typeof(StoredQuestionnaireStateTracker))]
     public class QuestionnaireStateTracker
     {
         public Dictionary<Guid, Guid?> Parents { get; set; } = new Dictionary<Guid, Guid?>();

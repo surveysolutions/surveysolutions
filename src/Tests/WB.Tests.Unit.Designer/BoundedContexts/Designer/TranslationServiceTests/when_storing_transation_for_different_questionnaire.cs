@@ -5,6 +5,7 @@ using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Moq;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.Infrastructure.PlainStorage;
 
@@ -32,7 +33,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                 }
             }
 
-            plainStorageAccessor = new TestPlainStorage<TranslationInstance>();
+            plainStorageAccessor = Create.InMemoryDbContext();
 
             var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
             questionnaires.SetReturnsDefault(questionnaire);
@@ -43,10 +44,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 
         private void BecauseOf() => service.Store(Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"), translationId, fileStream);
 
-        [NUnit.Framework.Test] public void should_not_store_entities_from_other_questionnare () => plainStorageAccessor.Query(_ => _.Count()).Should().Be(0);
+        [NUnit.Framework.Test] public void should_not_store_entities_from_other_questionnare () => plainStorageAccessor.TranslationInstances.Count().Should().Be(0);
 
         static byte[] fileStream;
-        static TestPlainStorage<TranslationInstance> plainStorageAccessor;
+        static DesignerDbContext plainStorageAccessor;
         static TranslationsService service;
         static Guid translationId;
     }

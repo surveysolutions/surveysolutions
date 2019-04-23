@@ -3,59 +3,63 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
 using System.Security.Cryptography;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService
 {
     public class AttachmentService : IAttachmentService
     {
-        private readonly IPlainStorageAccessor<AttachmentContent> attachmentContentStorage;
-        private readonly IPlainStorageAccessor<AttachmentMeta> attachmentMetaStorage;
+        private readonly DesignerDbContext dbContext;
         private readonly IVideoConverter videoConverter;
 
         public AttachmentService(
-            IPlainStorageAccessor<AttachmentContent> attachmentContentStorage,
-            IPlainStorageAccessor<AttachmentMeta> attachmentMetaStorage,
+            DesignerDbContext dbContext,
             IVideoConverter videoConverter)
         {
-            this.attachmentContentStorage = attachmentContentStorage;
-            this.attachmentMetaStorage = attachmentMetaStorage;
+            this.dbContext = dbContext;
             this.videoConverter = videoConverter;
         }
-        
+
         public void DeleteAllByQuestionnaireId(Guid questionnaireId)
         {
-            var questionnaireAttachments = this.attachmentMetaStorage.Query(metas => metas.Where(meta => meta.QuestionnaireId == questionnaireId)).ToList();
-            foreach (var questionnaireAttachment in questionnaireAttachments)
+            using (var transaction = dbContext.Database.BeginTransaction())
             {
-                this.attachmentMetaStorage.Remove(questionnaireAttachment.AttachmentId);
-
-                var countOfAttachmentContentReferences = this.attachmentMetaStorage.Query(metas => metas.Count(meta => meta.ContentId == questionnaireAttachment.ContentId));
-                if (countOfAttachmentContentReferences == 0)
+                var questionnaireAttachments = this.dbContext.AttachmentMetas.Where(meta => meta.QuestionnaireId == questionnaireId).ToList();
+                foreach (var questionnaireAttachment in questionnaireAttachments)
                 {
-                    this.attachmentContentStorage.Remove(questionnaireAttachment.ContentId);
+                    this.dbContext.AttachmentMetas.Remove(questionnaireAttachment);
+                    this.dbContext.SaveChanges();
+                    var countOfAttachmentContentReferences = this.dbContext.AttachmentMetas.Count(meta => meta.ContentId == questionnaireAttachment.ContentId);
+                    if (countOfAttachmentContentReferences == 0)
+                    {
+                        var content = this.dbContext.AttachmentContents.Find(questionnaireAttachment.ContentId);
+                        if (content != null)
+                        {
+                            this.dbContext.AttachmentContents.Remove(content);
+                        }
+                    }
+                    this.dbContext.SaveChanges();
                 }
+                transaction.Commit();
             }
         }
 
         public List<AttachmentMeta> GetAttachmentsByQuestionnaire(Guid questionnaireId)
         {
-            return this.attachmentMetaStorage.Query(
-                attachments => attachments.Where(attachment => attachment.QuestionnaireId == questionnaireId).ToList());
+            return this.dbContext.AttachmentMetas.Where(attachment => attachment.QuestionnaireId == questionnaireId).ToList();
         }
 
         public AttachmentMeta GetAttachmentMeta(Guid attachmentId)
         {
-            return this.attachmentMetaStorage.GetById(attachmentId);
+            return this.dbContext.AttachmentMetas.Find(attachmentId);
         }
 
         public AttachmentContent GetContent(string contentId)
         {
-            return this.attachmentContentStorage.GetById(contentId);
+            return this.dbContext.AttachmentContents.Find(contentId);
         }
 
         public List<AttachmentSize> GetAttachmentSizesByQuestionnaire(Guid questionnaireId)
@@ -66,9 +70,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
 
             var attachmentContentIds = attachmentIdentifiers.Select(ai => ai.ContentId).ToList();
 
-            var attachmentSizeByContent = this.attachmentContentStorage.Query(
-                contents => contents.Select(content => new {ContentId = content.ContentId, Size = content.Size })
-                    .Where(content => attachmentContentIds.Contains(content.ContentId)).ToList());
+            var attachmentSizeByContent = this.dbContext.AttachmentContents
+                    .Select(content => new { ContentId = content.ContentId, Size = content.Size })
+                    .Where(content => attachmentContentIds.Contains(content.ContentId)).ToList();
 
             return attachmentIdentifiers.Select(ai => new AttachmentSize()
             {
@@ -80,7 +84,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
 
         public string GetAttachmentContentId(Guid attachmentId)
         {
-            return this.attachmentMetaStorage.GetById(attachmentId)?.ContentId;
+            return this.dbContext.AttachmentMetas.Find(attachmentId)?.ContentId;
         }
 
         public string CreateAttachmentContentId(byte[] binaryContent)
@@ -93,30 +97,29 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
 
         public void SaveContent(string contentId, string contentType, byte[] binaryContent)
         {
-            var isContentExists = this.attachmentContentStorage.Query(
-                contents => contents.Select(content => content.ContentId).Any(content => content == contentId));
+            var isContentExists = this.dbContext.AttachmentContents.Select(content => content.ContentId).Any(content => content == contentId);
 
             if (isContentExists) return;
 
             AttachmentDetails details = GetAttachmentDetails(binaryContent, contentType);
 
-            this.attachmentContentStorage.Store(new AttachmentContent
+            this.dbContext.AttachmentContents.Add(new AttachmentContent
             {
                 ContentId = contentId,
                 ContentType = contentType,
                 Size = binaryContent.Length,
                 Details = details,
                 Content = binaryContent
-            }, contentId);
+            });
         }
 
         public void SaveMeta(Guid attachmentId, Guid questionnaireId, string attachmentContentId, string fileName)
         {
-            var attachment = this.attachmentMetaStorage.GetById(attachmentId);
+            var attachment = this.dbContext.AttachmentMetas.Find(attachmentId);
 
             if (attachment == null)
             {
-               attachment = new AttachmentMeta
+                attachment = new AttachmentMeta
                 {
                     AttachmentId = attachmentId,
                     QuestionnaireId = questionnaireId,
@@ -124,31 +127,31 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
                     FileName = fileName,
                     LastUpdateDate = DateTime.UtcNow
                 };
+                this.dbContext.AttachmentMetas.Add(attachment);
             }
             else
             {
                 attachment.FileName = fileName;
                 attachment.LastUpdateDate = DateTime.UtcNow;
                 attachment.ContentId = attachmentContentId ?? attachment.ContentId;
-
+                this.dbContext.AttachmentMetas.Update(attachment);
             }
-            this.attachmentMetaStorage.Store(attachment, attachment.AttachmentId);
         }
 
         public AttachmentContent GetContentDetails(string attachmentContentId)
         {
-            return this.attachmentContentStorage.Query(contents=>contents.Select(content=>new AttachmentContent
+            return this.dbContext.AttachmentContents.Select(content => new AttachmentContent
             {
                 ContentId = content.ContentId,
                 ContentType = content.ContentType,
                 Size = content.Size,
                 Details = content.Details
-            }).FirstOrDefault(content=>content.ContentId == attachmentContentId));
+            }).FirstOrDefault(content => content.ContentId == attachmentContentId);
         }
 
         public void CloneMeta(Guid sourceAttachmentId, Guid newAttachmentId, Guid newQuestionnaireId)
         {
-            var storedAttachmentMeta = this.attachmentMetaStorage.GetById(sourceAttachmentId);
+            var storedAttachmentMeta = this.dbContext.AttachmentMetas.Find(sourceAttachmentId);
             if (storedAttachmentMeta == null)
             {
                 throw new ArgumentException(string.Format(ExceptionMessages.AttachmentIdIsMissing, sourceAttachmentId), nameof(sourceAttachmentId));
@@ -162,7 +165,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
                 LastUpdateDate = storedAttachmentMeta.LastUpdateDate,
                 ContentId = storedAttachmentMeta.ContentId,
             };
-            this.attachmentMetaStorage.Store(clonedAttachmentMeta, newAttachmentId);
+            this.dbContext.AttachmentMetas.Add(clonedAttachmentMeta);
         }
 
         private AttachmentDetails GetAttachmentDetails(byte[] binaryContent, string contentType)

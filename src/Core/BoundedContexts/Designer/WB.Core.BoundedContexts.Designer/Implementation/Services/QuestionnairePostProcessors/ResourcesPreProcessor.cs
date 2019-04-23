@@ -20,7 +20,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPreProcessor<Questionnaire, DeleteVariable>,
         ICommandPreProcessor<Questionnaire, DeleteStaticText>
     {
-        private ICommentsService commentsService => ServiceLocator.Current.GetInstance<ICommentsService>();
+        private readonly ICommentsService commentsService;
+
+        public ResourcesPreProcessor(ICommentsService commentsService)
+        {
+            this.commentsService = commentsService;
+        }
 
         public void Process(Questionnaire aggregate, DeleteQuestion command)
         {
