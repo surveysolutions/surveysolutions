@@ -7,6 +7,7 @@ const gulpif = require("gulp-if");
 const less = require("gulp-less");
 const merge = require("merge2");
 const rev = require("gulp-rev");
+const gulpInject = require("gulp-inject")
 const terser = require("gulp-terser");
 const config = require("./config.json");
 const ngAnnotate = require("gulp-ng-annotate");
@@ -30,7 +31,6 @@ const bundler = () =>
                 cache(terser({ mangle: true, compress: true }))
               )
             )
-
             .pipe(concat(bundle.name + ".js"))
             .pipe(gulpif(PRODUCTION, rev()))
             .pipe(dest(join(config.dist, "js"))),
@@ -55,7 +55,17 @@ const bundler = () =>
   );
 
 const inject = () =>
-  injectSections(src(config.injectTargets), config.dist)
+  injectSections(src(config.injectTargets), config.dist, {
+    transform(filepath, file) {
+      
+      if (filepath.endsWith(".css") && filepath.indexOf("pdf") > 0) {
+        const href= filepath = '@Url.ContentAbsolute("' + filepath + '")'
+        return "<link rel='stylesheet' href='" + href + "'>"
+      }
+
+      return gulpInject.transform.apply(gulpInject.transform,arguments);
+    }
+  })
     .pipe(changed(f => f.base))
     .pipe(dest(f => f.base));
 
