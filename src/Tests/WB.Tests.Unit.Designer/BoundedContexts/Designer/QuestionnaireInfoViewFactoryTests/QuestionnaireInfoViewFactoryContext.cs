@@ -1,9 +1,7 @@
 ﻿using System;
 using Main.Core.Documents;
 using Moq;
-using NSubstitute;
-using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
@@ -21,19 +19,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
 
         protected static QuestionnaireInfoViewFactory CreateQuestionnaireInfoViewFactory(
             IPlainKeyValueStorage<QuestionnaireDocument> repository = null,
-            IPlainStorageAccessor<User> accountsDocumentReader = null,
-            IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage = null)
+            DesignerDbContext dbContext = null)
         {
             var doc = new QuestionnaireDocument();
-            var mockedListStorage = new Mock<IPlainStorageAccessor<QuestionnaireListViewItem>>();
-            mockedListStorage.SetReturnsDefault(Create.QuestionnaireListViewItem());
 
             return
                 new QuestionnaireInfoViewFactory(repository ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(x => x.GetById(It.IsAny<string>()) == doc),
-                                                questionnaireListViewItemStorage ?? mockedListStorage.Object, 
-                                                Mock.Of<IQuestionnaireCompilationVersionService>(),
-                                                accountsDocumentReader ?? Mock.Of<IPlainStorageAccessor<User>>(),
-                                                Mock.Of<IAttachmentService>(), Mock.Of<IMembershipUserService>(x=>x.WebUser == Substitute.For<IMembershipWebUser>()));
+                                                dbContext ?? Create.InMemoryDbContext(),
+                                                Mock.Of<IQuestionnaireCompilationVersionService>(), 
+                                                Mock.Of<IAttachmentService>());
         }
     }
 }

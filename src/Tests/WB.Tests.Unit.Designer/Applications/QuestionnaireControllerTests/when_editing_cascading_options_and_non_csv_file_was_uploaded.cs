@@ -2,9 +2,8 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Text;
-using System.Web;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Moq;
 using WB.UI.Designer.Controllers;
 using WB.UI.Shared.Web.Extensions;
@@ -16,7 +15,6 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             controller = CreateQuestionnaireController();
-            SetControllerContextWithSession(controller, "options", new QuestionnaireController.EditOptionsViewModel());
 
             var stream = new MemoryStream();
 
@@ -25,7 +23,8 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             Image.FromStream(imageStream).Save(stream, ImageFormat.Jpeg);
 
             stream.Position = 0;
-            postedFile = Mock.Of<HttpPostedFileBase>(pf => pf.InputStream == stream);
+            postedFile = Mock.Of<IFormFile>(pf => pf.OpenReadStream() == stream);
+            controller.questionWithOptionsViewModel = new QuestionnaireController.EditOptionsViewModel();
             BecauseOf();
         }
 
@@ -35,6 +34,6 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             controller.TempData[Alerts.ERROR].Should().Be("Only tab-separated values files are accepted");
 
         private static QuestionnaireController controller;
-        private static HttpPostedFileBase postedFile;
+        private static IFormFile postedFile;
     }
 }

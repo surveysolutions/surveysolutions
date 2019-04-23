@@ -2,7 +2,6 @@ using System;
 using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
@@ -17,10 +16,6 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             request = Create.DownloadQuestionnaireRequest(questionnaireId);
-
-            var membershipUserService = Mock.Of<IMembershipUserService>(
-                _ => _.WebUser == Mock.Of<IMembershipWebUser>(
-                    u => u.UserId == userId));
 
             var questionnaireViewFactory = Mock.Of<IQuestionnaireViewFactory>(
                 _ => _.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) == Create.QuestionnaireView(userId));
@@ -42,13 +37,14 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
                 Mock.Of<IStringCompressor>(
                     x => x.CompressString(serializedQuestionnaire) == compressedSerializedQuestionnaire);
 
-            importController = CreateImportController(membershipUserService: membershipUserService,
+            importController = CreateImportController(
                 questionnaireViewFactory: questionnaireViewFactory,
                 engineVersionService: expressionsEngineVersionService,
                 questionnaireVerifier: questionnaireVerifier,
                 expressionProcessorGenerator: expressionProcessorGenerator,
                 serializer: serializer,
                 zipUtils: stringCompressorMock);
+            importController.SetupLoggedInUser(userId);
             BecauseOf();
         }
 
@@ -64,14 +60,6 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
         [NUnit.Framework.Test] public void should_return_compressed_serialized_questionnaire () =>
             questionnaireCommunicationPackage.Questionnaire.Should().Be(compressedSerializedQuestionnaire);
 
-        /*[NUnit.Framework.Test] public void should_serialize_questionnaire_with_empty_Macros_SharedPersons_and_LookupTables () =>
-        {
-            questionniareToSerialize.Macros.Should().BeNull();
-            questionniareToSerialize.SharedPersons.Should().BeNull();
-            questionniareToSerialize.LookupTables.Should().BeNull();
-        }*/
-
-        //private static QuestionnaireDocument questionniareToSerialize;
         private static ImportV2Controller importController;
         private static DownloadQuestionnaireRequest request;
         private static Guid questionnaireId = Guid.Parse("22222222222222222222222222222222");

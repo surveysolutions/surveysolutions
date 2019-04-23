@@ -1,8 +1,10 @@
 using System;
 using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.UI.Designer.Api;
+using WB.UI.Designer.Controllers.Api.Designer;
 
 
 namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
@@ -21,7 +23,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
         }
 
         private void BecauseOf() =>
-            result = controller.EditQuestion(questionnaireId, questionId);
+            result = (NewEditQuestionView) (controller.EditQuestion(questionnaireId, questionId) as OkObjectResult)?.Value;
 
         [NUnit.Framework.Test] public void should_return_edit_question_details () =>
             result.Should().NotBeNull();
@@ -29,7 +31,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
         [NUnit.Framework.Test] public void should_return_edit_question_details_with_25_options () =>
             result.Options.Length.Should().Be(25);
 
-        private static QuestionnaireController controller;
+        private static QuestionnaireApiController controller;
         private static string questionnaireId = "22222222222222222222222222222222";
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static Mock<IQuestionnaireInfoFactory> questionnaireInfoViewFactoryMock;

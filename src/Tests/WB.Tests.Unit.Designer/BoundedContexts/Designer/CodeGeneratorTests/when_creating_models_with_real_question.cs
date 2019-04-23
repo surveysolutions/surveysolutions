@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
     internal class when_creating_models_with_real_question : CodeGeneratorTestsContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
-            AssemblyContext.SetupServiceLocator();
+            
 
             questionnaire = Create.QuestionnaireDocument(questionnaireId, children: new[]
             {

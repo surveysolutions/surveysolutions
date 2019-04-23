@@ -1,0 +1,59 @@
+﻿@page
+@using Microsoft.Extensions.Options
+@using reCAPTCHA.AspNetCore
+@using WB.UI.Designer.Models
+@model RegisterModel
+@inject IOptions<CaptchaConfig> CaptchaConfig;
+@{
+    ViewData["Title"] = AccountResources.Register;
+}
+
+<form method="post" id="start-register" autocomplete="off" asp-route-returnUrl="@Model.ReturnUrl">
+    @Html.AntiForgeryToken()
+    <h1>@AccountResources.Register</h1>
+
+    @if (Model.ErrorMessage != null)
+    {
+        <p class="note has-error">@Html.Raw(Model.ErrorMessage)</p>
+    }
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="form-group">
+        <input asp-for="Input.Login" class="form-control" placeholder="@AccountResources.LoginName" />
+        <span asp-validation-for="Input.Login" class="text-danger help-inline"></span>
+    </div>
+    <div class="form-group">
+        <input asp-for="Input.FullName" class="form-control" placeholder="@AccountResources.FullName" />
+        <span asp-validation-for="Input.FullName" class="text-danger help-inline"></span>
+    </div>
+    <div class="form-group">
+        <input asp-for="Input.Email" class="form-control" placeholder="@AccountResources.Email" />
+        <span asp-validation-for="Input.Email" class="text-danger help-inline"></span>
+    </div>
+    <div class="form-group">
+        <input asp-for="Input.Password" class="form-control" placeholder="@AccountResources.PasswordWatermark" />
+        <span asp-validation-for="Input.Password" class="text-danger help-inline"></span>
+    </div>
+    <div class="form-group">
+        <input asp-for="Input.ConfirmPassword" class="form-control" placeholder="@AccountResources.RepeatPassword" />
+        <span asp-validation-for="Input.ConfirmPassword" class="text-danger help-inline"></span>
+    </div>
+
+    @if (Model.CaptchaOptions.Value.IsReCaptchaEnabled)
+    {
+        <div class="recaptcha">
+            @Html.Recaptcha(CaptchaConfig.Value)
+        </div>
+    }
+
+    <div class="form-actions">
+        <input type="submit" class="btn btn-success btn-lg" value="@AccountResources.Register" />
+        <a class="btn btn-link" asp-page="./Login">@AccountResources.Login</a>
+        <a class="btn btn-link" asp-page="./ResetPassword">@AccountResources.ForgotPassword</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

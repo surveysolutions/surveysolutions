@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Account
 {
     public class AccountListView
     {
-        public AccountListView(int page, int pageSize, int totalCount, IEnumerable<IAccountView> items, string order)
+        public AccountListView(int page, int pageSize, int totalCount, IEnumerable<DesignerIdentityUser> items, string order)
         {
             this.Page = page;
             this.TotalCount = totalCount;
@@ -13,7 +15,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             this.Order = order;
         }
 
-        public IEnumerable<IAccountView> Items { get; private set; }
+        public IEnumerable<DesignerIdentityUser> Items { get; private set; }
         public string Order { get; private set; }
         public int Page { get; private set; }
         public int PageSize { get; private set; }

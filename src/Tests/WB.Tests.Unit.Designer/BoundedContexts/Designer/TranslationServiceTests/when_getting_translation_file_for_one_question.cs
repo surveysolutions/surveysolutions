@@ -68,17 +68,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                             Create.ValidationCondition(message: "non translated validation 1")
                         })
                 });
-            
-            var translationsStorage = new TestPlainStorage<TranslationInstance>();
-            foreach (var translationInstance in storedTranslations)
-            {
-                translationsStorage.Store(translationInstance, translationInstance);
-            }
+
+            var translationsStorage = Create.InMemoryDbContext();
+            translationsStorage.AddRange(storedTranslations);
+            translationsStorage.SaveChanges();
 
             var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
             questionnaires.SetReturnsDefault(questionnaire);
 
-            service = Create.TranslationsService(translationsStorage, questionnaires.Object);
+            service = Create.TranslationsService(translationsStorage, questionnaireStorage: questionnaires.Object);
             BecauseOf();
         }
 
@@ -86,7 +84,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         {
             excelFile = service.GetAsExcelFile(questionnaireId, translationId);
             workbook = new ExcelPackage(new MemoryStream(excelFile.ContentAsExcelFile)).Workbook;
-            cells = workbook.Worksheets[1].Cells;
+            cells = workbook.Worksheets[0].Cells;
         }
 
         [NUnit.Framework.Test] public void should_output_question_title_translation ()

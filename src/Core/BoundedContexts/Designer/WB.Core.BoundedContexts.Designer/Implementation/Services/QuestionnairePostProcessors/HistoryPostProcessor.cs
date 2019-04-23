@@ -15,6 +15,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
@@ -76,17 +77,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, UpdateAudioQuestion>,
         ICommandPostProcessor<Questionnaire, UpdateMetadata>
     {
-        private IPlainStorageAccessor<User> accountStorage
-            => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<User>>();
+        private readonly DesignerDbContext dbContext;
+        private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
+        private readonly IPlainKeyValueStorage<QuestionnaireStateTracker> questionnaireStateTrackerStorage;
 
-        private IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeItemStorage
-            => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<QuestionnaireChangeRecord>>();
-
-        private IPlainKeyValueStorage<QuestionnaireStateTracker> questionnaireStateTrackerStorage
-            => ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<QuestionnaireStateTracker>>();
-
-        private IQuestionnaireHistoryVersionsService QuestionnaireHistoryVersionsService 
-            => ServiceLocator.Current.GetInstance<IQuestionnaireHistoryVersionsService>();
+        public HistoryPostProcessor(DesignerDbContext dbContext, 
+            IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService,
+            IPlainKeyValueStorage<QuestionnaireStateTracker> questionnaireStateTrackerStorage)
+        {
+            this.dbContext = dbContext;
+            this.questionnaireHistoryVersionsService = questionnaireHistoryVersionsService;
+            this.questionnaireStateTrackerStorage = questionnaireStateTrackerStorage;
+        }
 
         #region Questionnaire
 
@@ -684,7 +686,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             QuestionnaireDocument questionnaireDocument,
             QuestionnaireChangeReference reference = null)
         {
-            this.QuestionnaireHistoryVersionsService.AddQuestionnaireChangeItem(questionnaireId, 
+            this.questionnaireHistoryVersionsService.AddQuestionnaireChangeItem(questionnaireId, 
                 responsibleId, 
                 GetUserName(responsibleId),
                 actionType,
@@ -702,7 +704,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         {
             if (userId.HasValue)
             {
-                var creator = this.accountStorage.GetById(userId.Value.FormatGuid());
+                var creator = this.dbContext.Users.Find(userId.Value);
                 if (creator != null)
                     return creator.UserName;
             }
@@ -713,7 +715,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         {
             if (userId.HasValue)
             {
-                var creator = this.accountStorage.GetById(userId.Value.FormatGuid());
+                var creator = this.dbContext.Users.Find(userId.Value);
                 if (creator != null)
                     return creator.Email;
             }
@@ -869,7 +871,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             var creatorId = aggregate.QuestionnaireDocument.CreatedBy ?? Guid.Empty;
             UpdateFullQuestionnaireState(aggregate.QuestionnaireDocument, command.QuestionnaireId, creatorId);
 
-            var itemToRevert = this.questionnaireChangeItemStorage.GetById(command.HistoryReferenceId.FormatGuid());
+            var itemToRevert = this.dbContext.QuestionnaireChangeRecords.Find(command.HistoryReferenceId.FormatGuid());
 
             AddQuestionnaireChangeItem(command.QuestionnaireId,
                 command.ResponsibleId,

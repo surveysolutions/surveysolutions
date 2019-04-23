@@ -2,6 +2,7 @@
 using System.Linq;
 using FluentAssertions;
 using Main.Core.Documents;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Translations;
@@ -11,7 +12,7 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Abc;
-using WB.UI.Designer.Api.Tester;
+using WB.UI.Designer.Controllers.Api.Tester;
 
 namespace WB.Tests.Unit.Designer.Api.Tester.TranslationsControllerTests
 {
@@ -35,7 +36,7 @@ namespace WB.Tests.Unit.Designer.Api.Tester.TranslationsControllerTests
             BecauseOf();
         }
 
-        private void BecauseOf() => expectedTranslations = controller.Get(questionnaireId, version: ApiVersion.CurrentTesterProtocolVersion);
+        private void BecauseOf() => expectedTranslations = (TranslationDto[]) (controller.Get(questionnaireId, version: ApiVersion.CurrentTesterProtocolVersion) as OkObjectResult).Value;
 
         [Test]
         public void should_return_only_1_translation_by_specified_questionnaire() =>
