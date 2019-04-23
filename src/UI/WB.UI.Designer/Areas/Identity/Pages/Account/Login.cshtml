@@ -10,8 +10,6 @@
 }
 
     <form method="post" id="start-log-in" autocomplete="off">
-
-        @Html.AntiForgeryToken()
         <h1>
             @AccountResources.Welcome<br />
             @AccountResources.AppName
@@ -37,8 +35,6 @@
             </p>
         }
         
-        
-
         <div asp-validation-summary="All" class="text-danger"></div>
 
         <div class="form-group">
