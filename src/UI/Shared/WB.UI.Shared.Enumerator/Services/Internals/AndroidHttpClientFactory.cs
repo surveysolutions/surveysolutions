@@ -49,7 +49,7 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             {
                 var messageHandler = new Xamarin.Android.Net.AndroidClientHandler
                 {
-                    AutomaticDecompression = DecompressionMethods.None,
+                    AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
                     AllowAutoRedirect = true,
                     Proxy = WebRequest.GetSystemWebProxy()
                 };
