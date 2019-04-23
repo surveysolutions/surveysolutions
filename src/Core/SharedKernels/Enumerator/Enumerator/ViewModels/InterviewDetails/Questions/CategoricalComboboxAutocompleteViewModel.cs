@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MvvmCross;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
@@ -21,6 +22,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public virtual event Func<object, EventArgs, Task> OnShowErrorIfNoAnswer;
         private readonly FilteredOptionsViewModel filteredOptionsViewModel;
         private readonly bool displaySelectedValue;
+        private readonly ThrottlingViewModel throttlingModel;
 
         public CategoricalComboboxAutocompleteViewModel(IQuestionStateViewModel questionState,
             FilteredOptionsViewModel filteredOptionsViewModel,
@@ -29,6 +31,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.QuestionState = questionState;
             this.filteredOptionsViewModel = filteredOptionsViewModel;
             this.displaySelectedValue = displaySelectedValue;
+            this.throttlingModel = Mvx.IoCProvider.Create<ThrottlingViewModel>();;
+            this.throttlingModel.Init(UpdateFilterThrottled);
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -99,12 +103,25 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             await Task.WhenAll(handlerTasks);
         }
 
-        public async Task UpdateFilter(string filter) => await this.InvokeOnMainThreadAsync(async () =>
+        private string filterToUpdate = "";
+        private async Task UpdateFilterThrottled()
         {
-            this.AutoCompleteSuggestions = this.GetSuggestions(filter).ToList();
-            this.FilterText = filter;
-            await this.RaisePropertyChanged(() => this.FilterText);
-        });
+            var suggestions = this.GetSuggestions(filterToUpdate).ToList();
+
+            await this.InvokeOnMainThreadAsync(async () =>
+            {
+                this.AutoCompleteSuggestions = suggestions;
+                this.FilterText = filterToUpdate;
+                await this.RaisePropertyChanged(() => this.FilterText);
+            });
+        }
+
+        public async Task UpdateFilter(string filter)
+        {
+            this.filterToUpdate = filter;
+
+            await this.throttlingModel.ExecuteActionIfNeeded();
+        }
 
         private IEnumerable<OptionWithSearchTerm> GetSuggestions(string filter)
         {
@@ -130,7 +147,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void ExcludeOptions(int[] optionsToExclude) => this.excludedOptions = optionsToExclude ?? Array.Empty<int>();
 
-        public void Dispose() { }
+        public void Dispose()
+        {
+            this.throttlingModel.Dispose();
+        }
 
         public QuestionInstructionViewModel InstructionViewModel => null;
         public IQuestionStateViewModel QuestionState { get; protected set; }
