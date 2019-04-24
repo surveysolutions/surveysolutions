@@ -1,6 +1,4 @@
-﻿var base = "./api/classifications/"
-
-var routes = {
+﻿var routes = {
     groups: 'groups',
     createGroup: 'group',
     updateGroup: 'group/{0}',
