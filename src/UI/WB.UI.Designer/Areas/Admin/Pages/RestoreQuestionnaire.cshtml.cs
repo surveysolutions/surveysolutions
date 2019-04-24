@@ -101,7 +101,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                     this.Error += $"Attachment '{attachmentId.FormatGuid()}' was not restored because there are not enough data for it in it's folder.";
                 }
 
-                this.Success = $"Restore finished. Restored {state.RestoredEntitiesCount} entitites. See messages above for details.";
+                this.Success = $"Restore finished. Restored {state.RestoredEntitiesCount} entities.";
 
                 return Page();
             }
