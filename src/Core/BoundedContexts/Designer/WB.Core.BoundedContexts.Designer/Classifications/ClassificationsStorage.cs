@@ -143,7 +143,6 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
 
         public void Store(ClassificationEntity[] classifications)
         {
-            var enumerable = classifications.Select(x => new Tuple<ClassificationEntity, object>(x, x.Id)).ToArray();
             foreach (var classificationEntity in classifications)
             {
                 dbContext.ClassificationEntities.Add(classificationEntity);
@@ -270,10 +269,10 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
             ThrowIfUserDoesNotHaveAccessToPublicEntity(classification, isAdmin);
             ThrowIfUserDoesNotHaveAccessToPrivate(classification, userId);
 
-            var a = categories.Select(x => x.Id).ToList();
+            var categoryIds = categories.Select(x => x.Id).ToList();
 
             var categoriesInClassification = await this.dbContext.ClassificationEntities
-                .Where(x => x.Parent == classificationId && !a.Contains(x.Id))
+                .Where(x => x.Parent == classificationId && !categoryIds.Contains(x.Id))
                 .ToListAsync();
 
             var categoryEntities = categories.Select((x, index) => new ClassificationEntity
@@ -290,12 +289,17 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
 
             var categoriesToDelete = categoriesInClassification.Where(x => categories.All(c => c.Id != x.Id)).ToList();
 
-            Store(categoryEntities);
-
-            if (categoriesToDelete.Any())
+            foreach (var classificationEntity in categoryEntities)
             {
-                this.dbContext.Remove(categoriesToDelete);
+                var entity = dbContext.Find<ClassificationEntity>(classificationEntity.Id);
+                if (entity != null)
+                    dbContext.Remove(entity);
+
+                dbContext.ClassificationEntities.Add(classificationEntity);
             }
+
+            foreach (var classificationEntity in categoriesToDelete)
+                this.dbContext.Remove(classificationEntity);
 
             await this.dbContext.SaveChangesAsync();
         }
