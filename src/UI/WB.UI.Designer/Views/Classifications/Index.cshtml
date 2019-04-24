@@ -28,7 +28,7 @@
         Vue.use(ClassificationsConfig,
             {
                 isAdmin: @User.IsAdmin().ToString().ToLower(),
-                userId: '@User.GetUserName()',
+                userId: '@User.GetId()',
                 optionsParseRegex: new RegExp(/^(.+?)[\…\.\s]+([-+]?\d+)\s*$/)
             });
     </script>
