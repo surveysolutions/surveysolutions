@@ -53,7 +53,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             set => this.RaiseAndSetIfChanged(ref this.autoCompleteSuggestions, value);
         }
 
-        public IMvxCommand<string> FilterCommand => new MvxAsyncCommand<string>(this.UpdateFilter);
+        public IMvxCommand<string> FilterCommand => new MvxAsyncCommand<string>(x => this.UpdateFilter(x));
         public IMvxCommand RemoveAnswerCommand => new MvxAsyncCommand(async () =>
         {
             await this.UpdateFilter(null);
@@ -116,10 +116,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             });
         }
 
-        public async Task UpdateFilter(string filter)
+        public async Task UpdateFilter(string filter, bool forced = false)
         {
-            if (this.filterToUpdate == filter)
+            if (this.filterToUpdate == filter && !forced)
+            {
                 return;
+            }
 
             this.filterToUpdate = filter;
 
