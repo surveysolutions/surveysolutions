@@ -9,6 +9,11 @@
     {
         <div class="alert alert-success header">@Html.Raw(Model.StatusMessage)</div>
     }
+    @if (Model.ErrorMessage != null)
+    {
+        <div class="alert alert-danger header">@Html.Raw(Model.ErrorMessage)</div>
+  
+    }
 
     <form method="post" class="form-signin" autocomplete="off">
         @Html.AntiForgeryToken()
