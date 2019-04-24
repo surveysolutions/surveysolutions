@@ -36,7 +36,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         private async Task FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs) => 
-            await comboboxViewModel.UpdateFilter(comboboxViewModel.FilterText);
+            await comboboxViewModel.UpdateFilter(comboboxViewModel.FilterText, true);
 
         
         public override void Dispose()
