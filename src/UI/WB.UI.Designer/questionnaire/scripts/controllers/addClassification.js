@@ -19,7 +19,7 @@
             {
                 return $http({
                         method: 'GET',
-                        url: baseUrl + '/groups',
+                        url: baseUrl + '/classifications/groups',
                         params: {}
                     })
                     .then(function(response) {
@@ -36,7 +36,7 @@
                     });
                 return $http({
                         method: 'GET',
-                        url: baseUrl + '/classification/'+ classification.id + '/categories',
+                        url: baseUrl + '/classifications/classification/'+ classification.id + '/categories',
                         params: {}
                     })
                     .then(function(response) {
@@ -49,7 +49,7 @@
                     var searchText = $scope.searchText.toLowerCase();
                     return $http({
                             method: 'GET',
-                            url: baseUrl + '/classifications/search',
+                            url: baseUrl + '/classifications/classifications/search',
                             params: {
                                 query: searchText,
                                 groupId: $scope.selectedGroup.id,
