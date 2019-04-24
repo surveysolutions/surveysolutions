@@ -44,8 +44,9 @@ namespace WB.UI.Designer.Code
                 return;
             }
 
-            var childContent = output.Content.IsModified ? output.Content.GetContent() :
-                (await output.GetChildContentAsync()).GetContent();
+            var childContent = output.Content.IsModified 
+                ? output.Content.GetContent(NullHtmlEncoder.Default) 
+                : (await output.GetChildContentAsync(NullHtmlEncoder.Default)).GetContent(NullHtmlEncoder.Default);
 
             output.TagName = "li";
             output.Attributes.Add(new TagHelperAttribute("role", "presentation"));
