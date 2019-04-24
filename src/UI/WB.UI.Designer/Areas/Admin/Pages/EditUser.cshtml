@@ -8,6 +8,11 @@
     {
       <div class="alert alert-success header">@Html.Raw(Model.Message)</div>
     }
+    
+    @if (Model.ErrorMessage != null)
+    {
+        <div class="alert alert-danger header">@Model.ErrorMessage</div>
+    }
 
     <form method="post">
 

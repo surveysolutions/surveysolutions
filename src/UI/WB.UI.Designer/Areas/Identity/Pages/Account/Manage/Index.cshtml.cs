@@ -28,6 +28,9 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account.Manage
         [TempData]
         public string StatusMessage { get; set; }
 
+        [TempData]
+        public string ErrorMessage { get; set; }
+
         [BindProperty]
         public InputModel Input { get; set; }
 
@@ -80,9 +83,8 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account.Manage
                 var setEmailResult = await userManager.SetEmailAsync(user, Input.Email);
                 if (!setEmailResult.Succeeded)
                 {
-                    var userId = await userManager.GetUserIdAsync(user);
-                    throw new InvalidOperationException(
-                        $"Unexpected error occurred setting email for user with ID '{userId}'.");
+                    this.ErrorMessage = setEmailResult.Errors.First().Description;
+                    return RedirectToPage();
                 }
             }
 

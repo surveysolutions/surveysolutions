@@ -25,6 +25,8 @@ namespace WB.UI.Designer.Areas.Admin.Pages
 
         [TempData]
         public string Message { get; set; }
+        [TempData]
+        public string ErrorMessage { get; set; }
 
         [BindProperty]
         public InputModel Input { get; set; }
@@ -81,7 +83,16 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                 var user = await this.userManager.FindByIdAsync(id);
                 if (user == null) return NotFound();
 
-                user.Email = Input.Email;
+                if (!user.Email.Equals(Input.Email, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    var emailChanged = await userManager.SetEmailAsync(user, Input.Email);
+                    if (!emailChanged.Succeeded)
+                    {
+                        this.ErrorMessage = emailChanged.Errors.First().Description;
+                        return RedirectToPage(new {id = id});
+                    }
+                }
+
                 user.EmailConfirmed = Input.IsApproved;
 
                 user.LockoutEnabled = Input.IsLockedOut;
@@ -118,7 +129,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                     await userManager.UpdateSecurityStampAsync(user);
             }
 
-            return Page();
+            return RedirectToPage(new { id = id });
         }
     }
 }
