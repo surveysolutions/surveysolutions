@@ -50,14 +50,22 @@ namespace Main.Core.Entities.SubEntities
 
         public bool HideIfDisabled { get; set; }
 
-        public bool IsFlatMode { get; set; }
+        [Obsolete("Use DisplayMode property")]
+        public bool IsFlatMode        
+        {
+            // need to support deserialize old questionnaires
+            set => DisplayMode = RosterDisplayMode.Flat;
+        }
+
 
         [Obsolete("Use IsFlatMode property")]
         public bool IsPlainMode
         {
-            //get => IsFlatMode;
+            // need to support deserialize old questionnaires
             set => IsFlatMode = value;
         }
+
+        public RosterDisplayMode DisplayMode { get; set; }
 
         public bool Enabled { get; set; }
 
@@ -167,7 +175,7 @@ namespace Main.Core.Entities.SubEntities
                 VariableName = this.VariableName,
                 IsRoster = this.IsRoster,
                 HideIfDisabled = this.HideIfDisabled,
-                IsFlatMode = this.IsFlatMode,
+                DisplayMode = this.DisplayMode,
                 RosterSizeQuestionId = this.RosterSizeQuestionId,
                 RosterSizeSource = this.RosterSizeSource,
                 RosterTitleQuestionId = this.RosterTitleQuestionId,

@@ -1009,7 +1009,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public bool IsFlatRoster(Guid entityId)
         {
-            return this.GetGroup(entityId)?.IsFlatMode ?? false;
+            return (this.GetGroup(entityId)?.DisplayMode ?? RosterDisplayMode.Default) == RosterDisplayMode.Flat;
         }
 
         public bool ShowCascadingAsList(Guid questionId)

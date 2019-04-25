@@ -181,10 +181,15 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             => group.Children.OfType<IQuestion>().Count() > MaxQuestionsCountInSection;
 
         private static bool FlatModeGroupHasMoreThanAllowedEntities(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
-            => group.IsFlatMode && group.Children.Count() > MaxEntitiesInPlainModeGroup;
+            => group.DisplayMode == RosterDisplayMode.Flat && group.Children.Count() > MaxEntitiesInPlainModeGroup;
 
         private static bool FlatModeGroupContainsNestedGroup(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
-            => group.IsFlatMode && group.Children.Any(e => ((e as IGroup)?.IsFlatMode ?? false) || ((e as IGroup)?.IsRoster ?? false));
+            => group.DisplayMode == RosterDisplayMode.Flat && group.Children.Any(composite =>
+            {
+                if (composite is IGroup childGroup)
+                    return childGroup.DisplayMode == RosterDisplayMode.Flat || childGroup.IsRoster;
+                return false;
+            });
 
         private static bool FirstChapterHasEnablingCondition(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
         {
