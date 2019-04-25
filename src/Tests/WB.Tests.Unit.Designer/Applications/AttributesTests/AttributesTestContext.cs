@@ -31,6 +31,7 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
                 Mock.Of<IPasswordHasher<DesignerIdentityUser>>(ph => ph.VerifyHashedPassword(It.IsAny<DesignerIdentityUser>(), It.IsAny<string>(), It.IsAny<string>()) == PasswordVerificationResult.Success)
                 , null, null, null, null, null, 
                 Mock.Of<ILogger<UserManager<DesignerIdentityUser>>>());
+
             var signInManager = new SignInManager<DesignerIdentityUser>(
                 userManager, 
                 Mock.Of<IHttpContextAccessor>(), 
@@ -63,6 +64,8 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
         public static IUserStore<DesignerIdentityUser> CreateAndSetupUserStore(DesignerIdentityUser user)
         {
             var emailStore = new Mock<IUserEmailStore<DesignerIdentityUser>>();
+            emailStore.Setup(s => s.GetEmailAsync(user, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(user.Email);
             var passwordStore = emailStore.As<IUserPasswordStore<DesignerIdentityUser>>();
             passwordStore.Setup(s => s.GetPasswordHashAsync(user, It.IsAny<CancellationToken>()))
                 .ReturnsAsync("hash");
