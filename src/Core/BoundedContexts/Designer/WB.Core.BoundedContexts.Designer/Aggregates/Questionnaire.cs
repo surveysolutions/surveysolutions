@@ -715,7 +715,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void UpdateGroup(Guid groupId, Guid responsibleId,
             string title,string variableName, Guid? rosterSizeQuestionId, string description, string condition, bool hideIfDisabled, 
             bool isRoster, RosterSizeSourceType rosterSizeSource, FixedRosterTitleItem[] rosterFixedTitles, Guid? rosterTitleQuestionId,
-            bool isFlatMode)
+            RosterDisplayMode displayMode)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -738,7 +738,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 description,
                 condition,
                 hideIfDisabled,
-                isFlatMode);
+                displayMode);
 
             if (isRoster)
             {

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
@@ -10,7 +11,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public string Title { get; set; }
         public string EnablementCondition { get; set; }
         public bool HideIfDisabled { get; set; }
-        public bool IsFlatMode { get; set; }
+        public RosterDisplayMode DisplayMode { get; set; }
         public string VariableName { get; set; }
 
         public RosterType Type { get; set; }
