@@ -19,17 +19,20 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         private readonly DesignerDbContext dbContext;
         private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersion;
         private readonly IAttachmentService attachmentService;
+        private readonly ILoggedInUser loggedInUser;
 
         public QuestionnaireInfoViewFactory(
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
             DesignerDbContext dbContext,
             IQuestionnaireCompilationVersionService questionnaireCompilationVersion,
-            IAttachmentService attachmentService)
+            IAttachmentService attachmentService,
+            ILoggedInUser loggedInUser)
         {
             this.questionnaireDocumentReader = questionnaireDocumentReader;
             this.dbContext = dbContext;
             this.questionnaireCompilationVersion = questionnaireCompilationVersion;
             this.attachmentService = attachmentService;
+            this.loggedInUser = loggedInUser;
         }
 
         public QuestionnaireInfoView Load(string questionnaireId, Guid viewerId)
@@ -120,6 +123,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             questionnaireInfoView.IsReadOnlyForUser = person == null || (!person.IsOwner && person.ShareType != ShareType.Edit);
             questionnaireInfoView.IsSharedWithUser = person != null;
             questionnaireInfoView.WebTestAvailable = this.questionnaireCompilationVersion.GetById(listItem.PublicId)?.Version == null;
+            questionnaireInfoView.HasViewerAdminRights = this.loggedInUser.IsAdmin;
 
             questionnaireInfoView.Macros = questionnaireDocument
                 .Macros
