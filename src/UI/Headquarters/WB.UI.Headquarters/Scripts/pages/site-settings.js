@@ -9,6 +9,7 @@
 
     self.isEnabled = ko.observable(false);
     self.isInterviewerAutomaticUpdatesEnabled = ko.observable(true);
+    self.isDeviceNotificationsEnabled = ko.observable(true);
 
     self.password = ko.observable('');
     self.message = ko.observable('');
@@ -27,7 +28,7 @@
 
                 self.message(data.GlobalNotice);
             }, true, true);
-
+        
         self.loadAutoUpdateSettings();
     };
 
@@ -38,15 +39,16 @@
                 if (!data) return;
 
                 self.isInterviewerAutomaticUpdatesEnabled(data.InterviewerAutoUpdatesEnabled);
+                self.isDeviceNotificationsEnabled(data.NotificationsEnabled);
             }, true, true);
     };
 
     self.changeState = (function () {
-        var confirmChangeSstateHtml = self.getBindedHtmlTemplate("#confirm-change-state-password");
+        var confirmChangeStateHtml = self.getBindedHtmlTemplate("#confirm-change-state-password");
         var newCheckState = self.isEnabled();
         bootbox.dialog({
             closeButton: false,
-            message: confirmChangeSstateHtml,
+            message: confirmChangeStateHtml,
             buttons: {
                 cancel: {
                     label: "No",
@@ -82,24 +84,25 @@
             });
     };
 
-    self.updateHowManyMajorReleaseDontNeedUpdate = function (obj, event) {
+    self.updateHowManyMajorReleaseDontNeedUpdate = function(obj, event) {
         if (event.originalEvent) { //user changed
             self.updateAutoUpdateSettings();
-        } 
-    }
+        }
+    };
 
-    self.updateIsInterviewerAutomaticUpdatesEnabled = function (obj, event) {
+    self.updateDeviceSettings = function(obj, event) {
         self.updateAutoUpdateSettings();
         return true;
-    }
+    };
 
     self.updateAutoUpdateSettings = function() {
         ajax.sendRequest($autoUpdateSettingsUrl, "POST",
             {
                 interviewerAutoUpdatesEnabled: self.isInterviewerAutomaticUpdatesEnabled(),
+                notificationsEnabled: self.isDeviceNotificationsEnabled()
             }, false,
             //onSuccess
-            function() {
+            function () {
                 //self.loadAutoUpdateSettings();
             });
     };
