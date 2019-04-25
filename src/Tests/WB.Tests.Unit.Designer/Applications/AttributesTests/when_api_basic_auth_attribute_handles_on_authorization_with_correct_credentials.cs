@@ -12,6 +12,7 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
         {
             var userMock = new Mock<DesignerIdentityUser>();
             userMock.Setup(s => s.UserName).Returns(userName);
+            userMock.Setup(s => s.Email).Returns("user@user.com");
             userMock.Setup(s => s.EmailConfirmed).Returns(true);
             userMock.Setup(s => s.LockoutEnabled).Returns(false);
 
