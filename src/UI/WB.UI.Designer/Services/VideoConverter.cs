@@ -14,13 +14,11 @@ namespace WB.UI.Designer.Services
 
             using (var stream = new MemoryStream())
             {
-                throw new NotImplementedException("Need implement video convert, uncomment strings below");
-
-                //var ffMpeg = new NReco.VideoConverter.FFMpegConverter();
+                var ffMpeg = new NReco.VideoConverter.FFMpegConverter();
 
                 try
                 {
-                    //ffMpeg.GetVideoThumbnail(tempVideoFile, stream);
+                    ffMpeg.GetVideoThumbnail(tempVideoFile, stream);
 
                     return stream.ToArray();
                 }
