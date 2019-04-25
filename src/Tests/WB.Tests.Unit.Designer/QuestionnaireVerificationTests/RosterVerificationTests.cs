@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Tests.Abc;
 
@@ -84,7 +85,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         {
             Create.QuestionnaireDocumentWithOneChapter(
                 Create.NumericIntegerQuestion(id: Id.g1),
-                Create.NumericRoster(rosterId: Id.g2, rosterSizeQuestionId: Id.g1, isPlainMode: true, 
+                Create.NumericRoster(rosterId: Id.g2, rosterSizeQuestionId: Id.g1, displayMode: RosterDisplayMode.Flat, 
                     children: new IComposite[]
                     {
                         Create.Question(),
@@ -108,7 +109,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         {
             Create.QuestionnaireDocumentWithOneChapter(
                 Create.NumericIntegerQuestion(id: Id.g1),
-                Create.NumericRoster(rosterId: Id.g2, rosterSizeQuestionId: Id.g1, isPlainMode: true, 
+                Create.NumericRoster(rosterId: Id.g2, rosterSizeQuestionId: Id.g1, displayMode: RosterDisplayMode.Flat, 
                     children: new IComposite[]
                     {
                         Create.Question(),

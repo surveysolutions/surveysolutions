@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -28,7 +29,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
                         Create.Entity.FixedTitle(0, "Test"),
                         Create.Entity.FixedTitle(1, "Test2")
                     },
-                    isFlatMode:true)
+                    displayMode: RosterDisplayMode.Flat)
             );
         }
 
