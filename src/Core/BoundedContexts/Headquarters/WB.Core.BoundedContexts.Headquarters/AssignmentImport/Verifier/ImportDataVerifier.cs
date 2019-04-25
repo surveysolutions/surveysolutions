@@ -404,7 +404,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
             foreach (var rosterRow in allInterviewsIdsFromFirstLevelRoster)
             {
-                if (!allInterviewIdsFromMainFile.Contains(rosterRow.InterviewIdValue.Value))
+                //Non empty interview Id
+                //Empty ones are handled in another check
+                if (!string.IsNullOrEmpty(rosterRow.InterviewIdValue.Value) && !allInterviewIdsFromMainFile.Contains(rosterRow.InterviewIdValue.Value))
                     yield return new InterviewImportReference(rosterRow.InterviewIdValue.Column,
                         rosterRow.Row,
                         PreloadedDataVerificationReferenceType.Cell,
@@ -436,9 +438,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                     /*for nested rosters only, because first level roster has parent with empty roster vector*/
                     if (rowsByRosterInstance.Key.Length == 1) continue;
 
-                    var parentRosterVactor = new RosterVector(rowsByRosterInstance.Key.Shrink());
+                    var parentRosterVector = new RosterVector(rowsByRosterInstance.Key.Shrink());
 
-                    if (!allRosterVectorsInInterview.Contains(parentRosterVactor))
+                    if (!allRosterVectorsInInterview.Contains(parentRosterVector))
                     {
                         foreach (var groupedRow in rowsByRosterInstance)
                         {
@@ -446,7 +448,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
                             yield return new InterviewImportReference(rosterInstanceColumns,
                                 groupedRow.row.Row, PreloadedDataVerificationReferenceType.Cell,
-                                string.Join(", ", parentRosterVactor.Select(x => x.ToString())),
+                                string.Join(", ", parentRosterVector.Select(x => x.ToString())),
                                 groupedRow.row.FileName);
                         }
                     }
