@@ -23,10 +23,10 @@ namespace WB.UI.Headquarters.API
             public string GlobalNotice { get; set; }
         }
 
-        public class AutoUpdateModel
+        public class InterviewerSettingsModel
         {
             public bool InterviewerAutoUpdatesEnabled { get; set; }
-            public int? HowManyMajorReleaseDontNeedUpdate { get; set; }
+            public bool NotificationsEnabled { get; set; }
         }
 
         public class TestEmailModel
@@ -37,6 +37,7 @@ namespace WB.UI.Headquarters.API
         private readonly IPlainKeyValueStorage<GlobalNotice> appSettingsStorage;
         private readonly IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage;
         private readonly IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage;
+        
         private readonly IEmailService emailService;
         private readonly IAuditLog auditLog;
         private readonly IWebInterviewEmailRenderer emailRenderer;
@@ -44,7 +45,8 @@ namespace WB.UI.Headquarters.API
         public AdminSettingsController(
             IPlainKeyValueStorage<GlobalNotice> appSettingsStorage,
             IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage, 
-            IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage, IEmailService emailService, IAuditLog auditLog, 
+            IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage,
+            IEmailService emailService, IAuditLog auditLog, 
             IWebInterviewEmailRenderer emailRenderer)
         {
             this.appSettingsStorage = appSettingsStorage ?? throw new ArgumentNullException(nameof(appSettingsStorage));
@@ -53,7 +55,7 @@ namespace WB.UI.Headquarters.API
             this.emailService = emailService;
             this.auditLog = auditLog;
             this.emailRenderer = emailRenderer;
-            ;
+            
         }
 
         [HttpGet]
@@ -83,22 +85,25 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpGet]
-        public HttpResponseMessage AutoUpdateSettings()
-     {
+        public HttpResponseMessage InterviewerSettings()
+        {
             var interviewerSettings = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings);
-            return Request.CreateResponse(new AutoUpdateModel
+
+            return Request.CreateResponse(new InterviewerSettingsModel
             {
-                InterviewerAutoUpdatesEnabled = interviewerSettings.IsAutoUpdateEnabled()
+                InterviewerAutoUpdatesEnabled = interviewerSettings.IsAutoUpdateEnabled(),
+                NotificationsEnabled = interviewerSettings.IsDeviceNotificationsEnabled()
             });
         }
 
         [HttpPost]
-        public HttpResponseMessage AutoUpdateSettings([FromBody] AutoUpdateModel message)
+        public HttpResponseMessage InterviewerSettings([FromBody] InterviewerSettingsModel message)
         {
             this.interviewerSettingsStorage.Store(
                 new InterviewerSettings
                 {
                     AutoUpdateEnabled = message.InterviewerAutoUpdatesEnabled,
+                    DeviceNotificationsEnabled = message.NotificationsEnabled
                 },
                 AppSetting.InterviewerSettings);
 

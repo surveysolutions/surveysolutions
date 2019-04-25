@@ -19,7 +19,7 @@ namespace Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option or rebuild the Visual Studio project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Web.Application.StronglyTypedResourceProxyBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Web.Application.StronglyTypedResourceProxyBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Settings {
@@ -84,6 +84,24 @@ namespace Resources {
         internal static string CurrentLogo {
             get {
                 return ResourceManager.GetString("CurrentLogo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable notifications on device.
+        /// </summary>
+        internal static string DeviceNotifications {
+            get {
+                return ResourceManager.GetString("DeviceNotifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When enabled devices will notify owners about changes and actions to be taken.
+        /// </summary>
+        internal static string DeviceNotificationsDescription {
+            get {
+                return ResourceManager.GetString("DeviceNotificationsDescription", resourceCulture);
             }
         }
         
@@ -286,7 +304,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can find it on API Keys page under Sendgrid settings menu item.
+        ///   Looks up a localized string similar to You can find it on API Keys page under SendGrid settings menu item.
         /// </summary>
         internal static string EmailProvider_SendGridApiKeyHelp {
             get {
@@ -349,7 +367,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Email service configuration was saved succeessfully..
+        ///   Looks up a localized string similar to Email service configuration was saved successfully..
         /// </summary>
         internal static string EmailProvider_SettingsSavedSuccessfully {
             get {
