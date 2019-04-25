@@ -114,7 +114,10 @@ namespace WB.UI.Designer
                 config.UseExceptionalPageOnThrow = hostingEnvironment.IsDevelopment();
 
                 if (config.Store.Type == "PostgreSql")
+                {
+                    config.Store.TableName = "\"logs\".\"Errors\"";
                     config.Store.ConnectionString = Configuration.GetConnectionString("DefaultConnection");
+                }
             });
 
             services.AddTransient<ICaptchaService, WebCacheBasedCaptchaService>();

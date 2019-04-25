@@ -71,6 +71,9 @@ namespace WB.UI.Designer.Code.Attributes
             var roles = await userManager.GetRolesAsync(user);
             identity.AddClaims(roles.Select(x => new Claim(ClaimTypes.Role, x)));
 
+            var email = await userManager.GetEmailAsync(user);
+            identity.AddClaim(new Claim(ClaimTypes.Email, email));
+
             var principal = new ClaimsPrincipal(identity);
 
             context.HttpContext.User = principal;
