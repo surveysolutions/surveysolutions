@@ -506,7 +506,7 @@
                     if (confirmResult === 'ok') {
                         commandService.deleteStaticText($state.params.questionnaireId, itemIdToDelete)
                             .then(function (result) {
-                                if (result.data.IsSuccess) {
+                                if (result.status === 200) {
                                     questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
                                     $scope.resetSelection();
                                     $rootScope.$emit('statictextDeleted', itemIdToDelete);
@@ -629,7 +629,7 @@
 
                 commandService.addQuestion($state.params.questionnaireId, parent.itemId, emptyQuestion.itemId, index)
                     .then(function (result) {
-                        if (!result.data.IsSuccess) return;
+                        if (result.status !== 200) return;
                         parent.items.splice(index, 0, emptyQuestion);
                         emitAddedItemState("question", emptyQuestion.itemId);
                     });
