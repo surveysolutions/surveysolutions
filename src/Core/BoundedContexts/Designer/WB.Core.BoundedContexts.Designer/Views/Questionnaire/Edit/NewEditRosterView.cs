@@ -12,6 +12,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public string EnablementCondition { get; set; }
         public bool HideIfDisabled { get; set; }
         public RosterDisplayMode DisplayMode { get; set; }
+        public RosterDisplayMode[] DisplayModes { get; set; }
         public string VariableName { get; set; }
 
         public RosterType Type { get; set; }

@@ -66,7 +66,7 @@
         </div>
     </div>
 
-    <script type="text/ng-template" id="List-template.html">
+<script type="text/ng-template" id="List-template.html">
 
         <div class="dropdown-with-breadcrumbs-and-icons">
             <label>{{'RosterSourceQuestion' | i18next}} </label>
@@ -107,6 +107,25 @@
         <div class="form-group">
             <input id="cb-plainRoster" type="checkbox" class="wb-checkbox" ng-model="activeRoster.displayMode" />
             <label for="cb-plainRoster"><span title=""></span>{{'FlatRoster'| i18next}} <help key="flatRoster" /></label>
+
+            <div class="checkbox checkbox-in-column">
+                <label for="cb-categorical-kind">{{'RosterDispalyMode' | i18next }}&nbsp;</label>
+
+                <div class="btn-group dropup " uib-dropdown>
+                    <button class="btn dropdown-toggle" id="cb-roster-dispaly-mode" uib-dropdown-toggle type="button">
+                        {{ $i18next.t('RosterDisplayMode-' +  activeRoster.displayMode) }}
+                        <span class="dropdown-arrow"></span>
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="cb-roster-dispaly-mode">
+                        <li role="presentation" ng-repeat="displayMode in activeRoster.displayModes">
+                            <a role="menuitem" tabindex="-1" ng-click="changeDisplayMode(activeRoster, displayMode)">
+                                {{ $i18next.t('RosterDisplayMode-' +  displayMode) }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
 
     </script>
@@ -283,8 +302,29 @@
             </div>
         </div>
         <div class="form-group">
-            <input id="cb-plainRoster" type="checkbox" class="wb-checkbox" ng-model="activeRoster.displayMode" />
-            <label for="cb-plainRoster"><span title=""></span>{{'FlatRoster'| i18next}} <help key="flatRoster" /></label>
+            <!--input id="cb-plainRoster" type="checkbox" class="wb-checkbox" ng-model="activeRoster.displayMode" />
+            <label for="cb-plainRoster"><span title=""></span>{{'FlatRoster'| i18next}} <help key="flatRoster" /></label-->
+
+
+            <div class="checkbox checkbox-in-column">
+                <label for="cb-categorical-kind">{{'RosterDispalyMode' | i18next }}&nbsp;</label>
+
+                <div class="btn-group dropup " uib-dropdown>
+                    <button class="btn dropdown-toggle" id="cb-roster-dispaly-mode" uib-dropdown-toggle type="button">
+                        {{ $i18next.t('RosterDisplayMode-' +  activeRoster.displayMode) }}
+                        <span class="dropdown-arrow"></span>
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="cb-roster-dispaly-mode">
+                        <li role="presentation" ng-repeat="displayMode in activeRoster.displayModes">
+                            <a role="menuitem" tabindex="-1" ng-click="changeDisplayMode(activeRoster, displayMode)">
+                                {{ $i18next.t('RosterDisplayMode-' +  displayMode) }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
         </div>
 
     </script>
