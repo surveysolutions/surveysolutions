@@ -1254,4 +1254,16 @@
     <value>Вид</value>
     <comment>Вид</comment>
   </data>
+  <data name="RosterDisplayMode_Default" xml:space="preserve">
+    <value>По умолчанию</value>
+  </data>
+  <data name="RosterDisplayMode_Flat" xml:space="preserve">
+    <value>Плоский</value>
+  </data>
+  <data name="RosterDisplayMode_Table" xml:space="preserve">
+    <value>Табличный</value>
+  </data>
+  <data name="RosterDisplayMode" xml:space="preserve">
+    <value>Режим отображения:</value>
+  </data>
 </root>

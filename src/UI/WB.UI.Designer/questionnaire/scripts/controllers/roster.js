@@ -241,8 +241,9 @@
                     dataBind(temp);
                 };
 
-                $scope.changeDisplayMode = function(currentRoster, displayMode) {
-                    currentRoster.displayMode = displayMode;
+                $scope.changeDisplayMode = function(displayMode) {
+                    $scope.activeRoster.displayMode = displayMode;
+                    $scope.editRosterForm.$setDirty();
                 };
 
                 $rootScope.$on('groupMoved', function (event, data) {
