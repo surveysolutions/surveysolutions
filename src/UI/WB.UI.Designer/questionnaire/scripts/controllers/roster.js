@@ -241,6 +241,10 @@
                     dataBind(temp);
                 };
 
+                $scope.changeDisplayMode = function(currentRoster, displayMode) {
+                    currentRoster.displayMode = displayMode;
+                };
+
                 $rootScope.$on('groupMoved', function (event, data) {
                     if (data === $state.params.itemId && !_.isUndefined($scope.editRosterForm)) {
                         questionnaireService.getRosterDetailsById($state.params.questionnaireId, $state.params.itemId).then(function (result) {
