@@ -71,7 +71,7 @@
         };
 
         $scope.revokeAccess = function (personInfo) {
-            var revokeRequest = shareService.revokeAccess(personInfo.email, $scope.questionnaire.questionnaireId);
+            var revokeRequest = shareService.revokeAccess(personInfo.userId, personInfo.email, $scope.questionnaire.questionnaireId);
 
             revokeRequest.then(function () {
                 $scope.questionnaire.sharedPersons = _.without($scope.questionnaire.sharedPersons,
