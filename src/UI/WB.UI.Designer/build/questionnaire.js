@@ -59,7 +59,7 @@ const styles = () =>
 
 const staticContent = () =>
   src(questionnaire.static, { base: "questionnaire/content" })
-    .pipe(gulpif(f => f.extname == ".png", cache(imagemin())))
+    //.pipe(gulpif(f => f.extname == ".png", cache(imagemin())))
     .pipe(dest(dist));
 
 const scripts = () =>
