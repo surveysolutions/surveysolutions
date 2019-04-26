@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
 using Main.Core.Documents;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Caching.Memory;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Implementation;
@@ -26,54 +29,56 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
 
         public T GetById(string id)
         {
-            return memoryCache.GetOrCreate(CacheKey(id), entry =>
+            return memoryCache.GetOrCreate(CacheKey(id), cache =>
             {
-                var storedInAttribute = GetTypeToQuery();
+                cache.SetSlidingExpiration(TimeSpan.FromMinutes(5));
 
-                var byId = (KeyValueEntity)this.dbContext.Find(storedInAttribute, id);
-                if (byId != null)
+                var entry = FindEntry(id);
+
+                if (entry != null)
                 {
-                    return this.serializer.Deserialize(byId.Value);
+                    if (entry.State == EntityState.Deleted)
+                    {
+                        return null;
+                    }
+
+                    return this.serializer.Deserialize(entry.Entity.Value);
                 }
-                entry.SetSlidingExpiration(TimeSpan.FromMinutes(5));
-                
+
                 return null;
             });            
         }
 
-        private string CacheKey(string id) => GetTypeToQuery().FullName + id;
-
-        private static Type GetTypeToQuery()
-        {
-            if (typeof(T) == typeof(QuestionnaireDocument)) return typeof(StoredQuestionnaireDocument);
-            StoredInAttribute storedInAttribute =
-                (StoredInAttribute) Attribute.GetCustomAttribute(typeof(T), typeof(StoredInAttribute));
-            return storedInAttribute.StoredIn;
-        }
-
         public void Remove(string id)
         {
-            var byId = (KeyValueEntity)this.dbContext.Find(GetTypeToQuery(), id);
-            if (byId != null)
+            var entity = FindEntry(id);
+
+            if(entity != null && entity.State != EntityState.Deleted)
             {
                 this.memoryCache.Remove(CacheKey(id));
-                this.dbContext.Remove(byId);                
+                this.dbContext.Remove(entity.Entity);
             }
+        }
+
+        private EntityEntry<KeyValueEntity> FindEntry(string id)
+        {
+            var entity = this.dbContext.Find(QueryType, id) as KeyValueEntity;            
+            return entity == null ? null : this.dbContext.Entry(entity);
         }
 
         public void Store(T entity, string id)
         {
+            var key = CacheKey(id);
             memoryCache.Remove(CacheKey(id));
-            var typeToQuery = GetTypeToQuery();
-
-            var byId = (KeyValueEntity)this.dbContext.Find(typeToQuery, id);
-            if (byId != null)
+            var entry = FindEntry(id);
+            
+            if (entry != null && entry.State != EntityState.Deleted)
             {
-                byId.Value = this.serializer.Serialize(entity);
+                entry.Entity.Value = this.serializer.Serialize(entity);
             }
             else
             {
-                var instance = Activator.CreateInstance(typeToQuery);
+                var instance = Activator.CreateInstance(QueryType);
                 var store = (KeyValueEntity)instance;
                 store.Id = id;
                 store.Value = this.serializer.Serialize(entity);
@@ -81,5 +86,26 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
                 dbContext.Add(instance);
             }
         }
+
+        private string CacheKey(string id) => QueryType.Name + id;
+
+        private static Type _queryType = null;
+        private static Type QueryType
+        {
+            get
+            {
+                if (_queryType == null)
+                {
+                    if (typeof(T) == typeof(QuestionnaireDocument)) return typeof(StoredQuestionnaireDocument);
+                    StoredInAttribute storedInAttribute =
+                        (StoredInAttribute)Attribute.GetCustomAttribute(typeof(T), typeof(StoredInAttribute));
+
+                    _queryType = storedInAttribute.StoredIn;
+                }
+
+                return _queryType;
+            }
+        }
+
     }
 }
