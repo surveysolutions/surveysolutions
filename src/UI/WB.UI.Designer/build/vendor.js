@@ -45,13 +45,13 @@ const bowerImages = () =>
 
 const favicons = () =>
   src(config.vendor.favicons)
-    .pipe(cache(imagemin()))
+    //.pipe(cache(imagemin()))
     .pipe(dest(config.dist));
 
 const assets = () =>
   merge(
     src(config.assets.images)
-      .pipe(cache(imagemin()))
+      //.pipe(cache(imagemin()))
       .pipe(dest(join(config.dist, "images"))),
     src(config.assets.fonts).pipe(dest(join(config.dist, "fonts"))),
     src(config.assets.qbank)
