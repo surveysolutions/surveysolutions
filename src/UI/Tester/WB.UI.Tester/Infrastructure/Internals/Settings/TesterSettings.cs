@@ -18,7 +18,7 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
         private const string GpsReceiveTimeoutSecParameterName = "GpsReceiveTimeoutSec";
         private const string GpsDesiredAccuracyParameterName = "GpsDesiredAccuracy";
         internal const string VibrateOnErrorParameterName = "VibrateOnError";
-        internal const string ShowVariablesParamterName = "ShowVariables";
+        internal const string ShowVariablesParameterName = "ShowVariables";
         internal const string ShowLocationOnMapParamName = "ShowLocationOnMap";
         internal const string ShowAnsweringTimeName = "ShowAnsweringTime";
 
@@ -122,7 +122,7 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
         }
         public int EventChunkSize => 1000;
 
-        public bool ShowVariables => SharedPreferences.GetBoolean(ShowVariablesParamterName, false);
+        public bool ShowVariables => SharedPreferences.GetBoolean(ShowVariablesParameterName, false);
 
         public bool ShowLocationOnMap => SharedPreferences.GetBoolean(ShowLocationOnMapParamName, true);
 
@@ -141,5 +141,10 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
         }
 
         public bool IsSupportedWebViewer => Build.VERSION.SdkInt > BuildVersionCodes.Kitkat;
+        public bool NotificationsEnabled => false;
+        public void SetNotifications(bool notificationsEnabled)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

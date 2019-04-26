@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Supervisor
             registry.BindWithConstructorArgument<ISynchronizationStep, DownloadDeletedQuestionnairesList>("sortOrder", 50);
             registry.BindWithConstructorArgument<ISynchronizationStep, RemoveObsoleteQuestionnaires>("sortOrder", 60);
             registry.BindWithConstructorArgument<ISynchronizationStep, SupervisorDownloadInterviews>("sortOrder", 70);
-            registry.BindWithConstructorArgument<ISynchronizationStep, SychronizeTechnicalInformation>("sortOrder", 80);
+            registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeTechnicalInformation>("sortOrder", 80);
             registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeLogo>("sortOrder", 90);
             registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeAuditLog>("sortOrder", 100);
             registry.BindWithConstructorArgument<ISynchronizationStep, IUpdateApplicationSynchronizationStep, SupervisorUpdateApplication>("sortOrder", 110);
