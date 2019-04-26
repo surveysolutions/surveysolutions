@@ -27,6 +27,8 @@ namespace WB.UI.Designer.Services
                 {
                     var files = Directory.GetFiles(hostingEnvironment.ContentRootPath, "ffmpeg.exe", SearchOption.AllDirectories);
                     ffmpegPath = files.FirstOrDefault();
+                    if (ffmpegPath == null)
+                        throw new ArgumentNullException("Can't found ffmpeg.exe");
                 }
                 return ffmpegPath;
             }
