@@ -20,6 +20,7 @@ const terser = require("gulp-terser");
 const cleanCss = require("gulp-clean-css");
 const manifest = require("./plugins/manifest");
 const resx2json = require("./plugins/resx2json");
+const sourcemaps = require('gulp-sourcemaps');
 
 const questionnaire = require("./config.json").questionnaire;
 const dist = require("./config.json").dist;
@@ -66,13 +67,19 @@ const scripts = () =>
   src(questionnaire.scripts)
     .pipe(gulpif(PRODUCTION, ngAnnotate()))
     .pipe(gulpif(PRODUCTION, cache(terser())))
-    .pipe(concat("app.js"))
+    .pipe(gulpif(PRODUCTION, concat("app.js")))
     .pipe(gulpif(PRODUCTION, rev()))
-    .pipe(dest(join(dist, "js")));
+    .pipe(
+      dest(
+          join(dist, PRODUCTION ? "js" : "js/app")
+        )
+    );
 
 const inject = () =>
   injectSections(src("questionnaire/index.cshtml"), dist, {
     quiet: true,
+    
+    //addPrefix: PRODUCTION ? "~" : "~/src",
     transform(filepath, file) {
       if (filepath.endsWith(".js") && filepath.indexOf("libs") < 0) {
         return '<script defer src="' + filepath + '"></script>';
