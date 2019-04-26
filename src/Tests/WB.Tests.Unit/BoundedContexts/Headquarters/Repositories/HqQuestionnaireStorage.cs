@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Infrastructure.Native.Storage;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
 
@@ -41,6 +42,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Repositories
             int id = 0;
             var inmemory = new TestInMemoryWriter<QuestionnaireCompositeItem, int>(i => i == 0 ? ++id : i);
             fixture.Register<IReadSideRepositoryWriter<QuestionnaireCompositeItem, int>>(() => inmemory);
+            fixture.Register<INativeReadSideStorage<QuestionnaireCompositeItem, int>>(() => inmemory);
             var storage = fixture.Create<HqQuestionnaireStorage>();
 
             // act
