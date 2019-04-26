@@ -26,6 +26,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         public override async Task ExecuteAsync()
         {
+             var notificationsSetting = await this.synchronizationService.AreNotificationsEnabledAsync(Context.CancellationToken);
+             UpdateNotificationsSetting(notificationsSetting);
+
              if (!await this.synchronizationService.IsAutoUpdateEnabledAsync(Context.CancellationToken))
                 return;
 
@@ -81,5 +84,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         }
 
         protected abstract int GetApplicationVersionCode();
+
+        protected abstract void UpdateNotificationsSetting(bool notificationsEnabled);
     }
 }

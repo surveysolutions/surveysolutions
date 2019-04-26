@@ -25,5 +25,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
         {
             return interviewerSettings.GetApplicationVersionCode();
         }
+
+        protected override void UpdateNotificationsSetting(bool notificationsEnabled)
+        {
+            interviewerSettings.SetNotifications(notificationsEnabled);
+        }
     }
 }
