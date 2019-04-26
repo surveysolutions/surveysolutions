@@ -26,5 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         bool Encrypted { get; }
         void SetEncrypted(bool encrypted);
         bool IsSupportedWebViewer { get; }
+        bool NotificationsEnabled { get; }
+        void SetNotifications(bool notificationsEnabled);
     }
 }

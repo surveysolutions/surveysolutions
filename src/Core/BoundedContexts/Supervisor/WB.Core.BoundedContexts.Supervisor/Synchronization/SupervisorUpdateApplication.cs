@@ -9,7 +9,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 {
     public class SupervisorUpdateApplication : UpdateApplication
     {
-        private readonly ISupervisorSettings interviewerSettings;
+        private readonly ISupervisorSettings supervisorSettings;
 
         public SupervisorUpdateApplication(int sortOrder, 
             ISynchronizationService synchronizationService, 
@@ -18,12 +18,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
             ITabletDiagnosticService diagnosticService) : 
             base(sortOrder, synchronizationService, diagnosticService, logger)
         {
-            this.interviewerSettings = interviewerSettings ?? throw new ArgumentNullException(nameof(interviewerSettings));
+            this.supervisorSettings = interviewerSettings ?? throw new ArgumentNullException(nameof(interviewerSettings));
         }
 
         protected override int GetApplicationVersionCode()
         {
-            return interviewerSettings.GetApplicationVersionCode();
+            return supervisorSettings.GetApplicationVersionCode();
+        }
+        protected override void UpdateNotificationsSetting(bool notificationsEnabled)
+        {
+            supervisorSettings.SetNotifications(notificationsEnabled);
         }
     }
 }
