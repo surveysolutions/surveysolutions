@@ -597,6 +597,13 @@
                                         </div>
                                     </div>
                                 </li>
+                                <li>
+                                    <h4>{{'SideBarMetadataQuestionnaireAccess' | i18next}}</h4>
+                                    <div class="checkbox">
+                                        <input id="agreeToMakeThisQuestionnairePublic" name="agreeToMakeThisQuestionnairePublic" ng-model="metadata.agreeToMakeThisQuestionnairePublic" type="checkbox" class="checkbox-filter" checked>
+                                        <label for="agreeToMakeThisQuestionnairePublic" class=""><span class="tick"></span>{{'SideBarMetadataAgreeToMakeThisQuestionnairePublic' | i18next}}</label>
+                                    </div>
+                                </li>
                             </ul>
                             <div class="form-buttons-holder" ng-class="{dirty: metadata.form.$dirty }">
                                 <button type="submit" class="btn btn-lg ng-isolate-scope" ng-disabled="metadata.form.$invalid" ng-class="{ 'btn-primary': metadata.form.$dirty }" ng-click="saveMetadata();$event.stopPropagation()" ng-i18next>Save</button>
