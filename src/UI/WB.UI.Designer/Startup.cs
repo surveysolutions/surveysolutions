@@ -203,6 +203,7 @@ namespace WB.UI.Designer
                 {
                     new CultureInfo("en"),
                     new CultureInfo("ru"),
+                    new CultureInfo("fr"),
                     new CultureInfo("es"),
                     new CultureInfo("ar"),
                     new CultureInfo("zh")
@@ -211,6 +212,7 @@ namespace WB.UI.Designer
                 {
                     new CultureInfo("en"),
                     new CultureInfo("ru"),
+                    new CultureInfo("fr"),
                     new CultureInfo("es"),
                     new CultureInfo("ar"),
                     new CultureInfo("zh")
