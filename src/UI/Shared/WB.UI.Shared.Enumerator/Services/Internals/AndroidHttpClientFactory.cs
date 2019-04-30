@@ -1,8 +1,5 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
-using Android.OS;
-using ModernHttpClient;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 
@@ -31,35 +28,17 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
 
         public HttpMessageHandler CreateMessageHandler()
         {
-            if (Build.VERSION.SdkInt < BuildVersionCodes.Lollipop)
+            var messageHandler = new ModernHttpClient.NativeMessageHandler
             {
-                var messageHandler = new NativeMessageHandler
-                {
-                    Timeout = restServiceSettings.Timeout,
-                    EnableUntrustedCertificates = restServiceSettings.AcceptUnsignedSslCertificate,
-                    DisableCaching = true,
-                    AutomaticDecompression = DecompressionMethods.None,
-                    AllowAutoRedirect = true,
-                    Proxy = WebRequest.GetSystemWebProxy()
-                };
+                Timeout = restServiceSettings.Timeout,
+                EnableUntrustedCertificates = restServiceSettings.AcceptUnsignedSslCertificate,
+                DisableCaching = true,
+                AutomaticDecompression = DecompressionMethods.None,
+                AllowAutoRedirect = true,
+                Proxy = WebRequest.GetSystemWebProxy()
+            };
 
-                return messageHandler;
-            }
-            else
-            {
-                var messageHandler = new Xamarin.Android.Net.AndroidClientHandler
-                {
-                    AutomaticDecompression = DecompressionMethods.None,
-                    AllowAutoRedirect = true,
-                    Proxy = WebRequest.GetSystemWebProxy()
-                };
-                if (restServiceSettings.AcceptUnsignedSslCertificate)
-                {
-                    messageHandler.ServerCertificateCustomValidationCallback = (message, certificate2, arg3, arg4) => true;
-                }
-
-                return messageHandler;
-            }
+            return messageHandler;
         }
     }
 }
