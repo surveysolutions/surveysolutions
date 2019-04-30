@@ -56,6 +56,10 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error<IGroup>(FlatModeGroupContainsNestedGroup, "WB0279", VerificationMessages.WB0279_PlainModeGroupContainsNestedGroup),
             Error<IGroup>(FlatModeGroupHasMoreThanAllowedEntities, "WB0278", string.Format(VerificationMessages.WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements, MaxEntitiesInPlainModeGroup)),
             Error<IGroup>(LinksAreProhibitedOnNavigationElements, "WB0057", VerificationMessages.WB0057_LinksAreProhibitedOnNavigationElements),
+            Error<IGroup>(TableRosterContainsNestedGroup, "WB0282", VerificationMessages.WB0282_TableRosterContainsNestedGroup),
+            Error<IGroup>(TableRosterHasMoreThanAllowedEntities, "WB0283", string.Format(VerificationMessages.WB0283_TableRosterAllowedOnlyForGroupWithNoMoreThanElements, MaxEntitiesInTableRoster)),
+            Error<IGroup>(TableRosterCantContainsSupervisorQuestions, "WB0284", VerificationMessages.WB0284_TableRosterCantContainsSupervisorQuestions),
+            Error<IGroup>(TableRosterContainsOnlyAllowedQuestionTypes, "WB0285", VerificationMessages.WB0285_TableRosterContainsOnlyAllowedQuestionTypes),
 
             Warning(LargeNumberOfRosters, "WB0200", VerificationMessages.WB0200_LargeNumberOfRostersIsCreated),
             Warning<IGroup>(TooManyQuestionsInGroup, "WB0201", string.Format(VerificationMessages.WB0201_LargeNumberOfQuestionsInGroup, MaxQuestionsCountInSubSection)),
@@ -68,6 +72,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Warning<IGroup>(NestedRosterDegree3OrMore, "WB0233", VerificationMessages.WB0233_NestedRosterDegree3OrMore),
             Warning<IGroup>(RosterInRosterWithSameSourceQuestion, "WB0234", VerificationMessages.WB0234_RosterInRosterWithSameSourceQuestion),
             Warning<IGroup>(RosterHasPropagationExededLimit, "WB0262", VerificationMessages.WB0262_RosterHasTooBigPropagation),
+            Warning<IGroup>(TableRosterWorksOnlyInWebMode, "WB0286", VerificationMessages.WB0286_TableRosterWorksOnlyInWebMode),
         };
 
         private static readonly HashSet<QuestionType> QuestionTypesValidToBeRosterTitles = new HashSet<QuestionType>
@@ -490,6 +495,43 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
             return false;
         }
+
+        private static bool TableRosterHasMoreThanAllowedEntities(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
+            => group.DisplayMode == RosterDisplayMode.Table && group.Children.Count() > MaxEntitiesInTableRoster;
+
+        private static bool TableRosterContainsNestedGroup(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
+            => group.DisplayMode == RosterDisplayMode.Table && group.Children.Any(composite =>
+            {
+                if (composite is IGroup childGroup)
+                    return true;
+                return false;
+            });
+
+        private static bool TableRosterCantContainsSupervisorQuestions(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
+            => group.DisplayMode == RosterDisplayMode.Table && group.Children.Any(composite =>
+            {
+                if (composite is IQuestion question)
+                    return question.QuestionScope == QuestionScope.Supervisor;
+                return false;
+            });
+
+        private static bool TableRosterContainsOnlyAllowedQuestionTypes(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
+            => group.DisplayMode == RosterDisplayMode.Table && group.Children.Any(composite =>
+            {
+                if (composite is IQuestion question)
+                    switch (question.QuestionType)
+                    {
+                        case QuestionType.Text:
+                        case QuestionType.Numeric:
+                            return false;
+                        default: return true;
+                    }
+                return false;
+            });
+
+        private static bool TableRosterWorksOnlyInWebMode(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
+            => group.DisplayMode == RosterDisplayMode.Table;
+
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Critical<TEntity>(
             Func<TEntity, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
