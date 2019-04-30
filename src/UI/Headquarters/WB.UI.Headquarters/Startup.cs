@@ -133,7 +133,7 @@ namespace WB.UI.Headquarters
             app.UseWebApi(config);
 
             var scheduler = container.Resolve<IScheduler>();
-           // scheduler.Start();
+            scheduler.Start();
 
             InitializeAppShutdown(app, scheduler);
 

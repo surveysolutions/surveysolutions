@@ -17,8 +17,9 @@
                 });
             };
 
-            shareService.revokeAccess = function(email, questionnaireId) {
+            shareService.revokeAccess = function (userId, email, questionnaireId) {
                 return commandService.execute("RemoveSharedPersonFromQuestionnaire", {
+                    personId: userId,
                     email: email,
                     questionnaireId: questionnaireId
                 });

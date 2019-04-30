@@ -557,8 +557,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         public void Process(Questionnaire aggregate, DeleteQuestion command)
         {
             var questionnaire = questionnaireStateTrackerStorage.GetById(command.QuestionnaireId.FormatGuid());
-            string questionTitle;
-            questionnaire.QuestionsState.TryGetValue(command.QuestionId, out questionTitle);
+            
+            questionnaire.QuestionsState.TryGetValue(command.QuestionId, out var questionTitle);
 
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Delete,
                 QuestionnaireItemType.Question, command.QuestionId, questionTitle, aggregate.QuestionnaireDocument);
