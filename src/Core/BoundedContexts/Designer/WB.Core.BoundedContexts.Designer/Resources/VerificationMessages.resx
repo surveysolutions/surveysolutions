@@ -732,4 +732,19 @@
   <data name="WB0281_QuestionnaireExceededEntitiesLimit" xml:space="preserve">
     <value>Total number of elements ({0}) exceeded system limit ({1}). Consider reducing the number of questions, static texts, variables, or items in fixed rosters.</value>
   </data>
+  <data name="WB0282_TableRosterContainsNestedGroup" xml:space="preserve">
+    <value>Table roster mode doesn't allow to use nested groups and rosters.</value>
+  </data>
+  <data name="WB0283_TableRosterAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+    <value>Table mode allowed only for rosters with no more than {0} questions.</value>
+  </data>
+  <data name="WB0284_TableRosterCantContainsSupervisorQuestions" xml:space="preserve">
+    <value>Table roster doesn't allow to use supervisor questions.</value>
+  </data>
+  <data name="WB0285_TableRosterContainsOnlyAllowedQuestionTypes" xml:space="preserve">
+    <value>Table roster allows to use only text and numeric questions.</value>
+  </data>
+  <data name="WB0286_TableRosterWorksOnlyInWebMode" xml:space="preserve">
+    <value>Table roster mode works only in web survey, on tablets it will be default mode.</value>
+  </data>
 </root>
