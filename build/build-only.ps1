@@ -10,7 +10,6 @@ $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 
 . "$scriptFolder\functions.ps1"
 
-$ProjectDesigner = 'src\UI\WB.UI.Designer\WB.UI.Designer.csproj'
 $ProjectHeadquarters = 'src\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj'
 $ProjectWebTester = 'src\UI\WB.UI.WebTester\WB.UI.WebTester.csproj'
 $MainSolution = 'src\WB without Xamarin.sln'
@@ -41,13 +40,6 @@ try {
     if ($buildSuccessful) { 
 
         New-Item "$artifactsFolder\stats" -Type Directory -Force | Out-Null
-
-        BuildStaticContent "Designer Questionnaire" "src\UI\WB.UI.Designer" | % { if (-not $_) { 
-            Log-Error 'Unexpected error occurred in BuildStaticContent while build static content for Designer'
-            Exit 
-        }}
-        
-        BuildAspNetCoreWebPackage $ProjectDesigner -BuildConfiguration $BuildConfiguration -BuildNumber $BuildNumber -branch $branch | % { if (-not $_) { Exit } }
 
         BuildStaticContent "Hq Deps" "src\UI\Headquarters\WB.UI.Headquarters\Dependencies" | % { if (-not $_) {
             Log-Error 'Unexpected error occurred in BuildStaticContent while build static content for HQ Deps'
@@ -128,7 +120,6 @@ try {
         }
 
         Log-Block "Collecting/building artifacts" {
-            AddArtifacts $ProjectDesigner $BuildConfiguration -folder "Designer"
             AddArtifacts $ProjectHeadquarters $BuildConfiguration -folder "Headquarters"
             AddArtifacts $ProjectWebTester $BuildConfiguration -folder "WebTester"
         }

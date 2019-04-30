@@ -3,17 +3,17 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
-using WB.Core.BoundedContexts.Designer.Services;
 using Microsoft.AspNetCore.Http.Headers;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
-using WB.UI.Designer1.Extensions;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
+using WB.Core.BoundedContexts.Designer.Services;
+using WB.UI.Designer.Extensions;
 
-namespace WB.UI.Designer.Api
+namespace WB.UI.Designer.Controllers.Api.Designer
 {
     [Route("attachments")]
     public class AttachmentsController : Controller
