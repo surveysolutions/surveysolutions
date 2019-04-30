@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Net;
 using System.Net.Http;
@@ -55,6 +56,14 @@ namespace WB.UI.Headquarters.API
             this.auditLog = auditLog;
             this.externalStoragesSettings = externalStoragesSettings;
             this.serializer = serializer;
+        }
+
+        [HttpGet]
+        [ObserverNotAllowedApi]
+        [ApiNoCache]
+        public async Task<List<DataExportStatusView>> Status()
+        {
+            return await this.exportServiceApi.GetAllJobsList();
         }
         
         [HttpGet]
