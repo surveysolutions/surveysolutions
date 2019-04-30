@@ -27,7 +27,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
                 new QuestionnaireInfoViewFactory(repository ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(x => x.GetById(It.IsAny<string>()) == doc),
                                                 dbContext ?? Create.InMemoryDbContext(),
                                                 Mock.Of<IQuestionnaireCompilationVersionService>(), 
-                                                Mock.Of<IAttachmentService>());
+                                                Mock.Of<IAttachmentService>(),
+                                                Mock.Of<ILoggedInUser>());
         }
     }
 }

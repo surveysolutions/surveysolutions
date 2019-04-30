@@ -114,7 +114,10 @@ namespace WB.UI.Designer
                 config.UseExceptionalPageOnThrow = hostingEnvironment.IsDevelopment();
 
                 if (config.Store.Type == "PostgreSql")
+                {
+                    config.Store.TableName = "\"logs\".\"Errors\"";
                     config.Store.ConnectionString = Configuration.GetConnectionString("DefaultConnection");
+                }
             });
 
             services.AddTransient<ICaptchaService, WebCacheBasedCaptchaService>();
@@ -200,6 +203,7 @@ namespace WB.UI.Designer
                 {
                     new CultureInfo("en"),
                     new CultureInfo("ru"),
+                    new CultureInfo("fr"),
                     new CultureInfo("es"),
                     new CultureInfo("ar"),
                     new CultureInfo("zh")
@@ -208,6 +212,7 @@ namespace WB.UI.Designer
                 {
                     new CultureInfo("en"),
                     new CultureInfo("ru"),
+                    new CultureInfo("fr"),
                     new CultureInfo("es"),
                     new CultureInfo("ar"),
                     new CultureInfo("zh")
