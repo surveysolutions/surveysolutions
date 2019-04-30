@@ -32,6 +32,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         [Get("/api/v1/job/running")]
         Task<List<string>> GetRunningExportJobs();
 
+        [Get("/api/v1/job/all")]
+        Task<List<DataExportStatusView>> GetAllJobsList();
+
         [Get("/api/v1/job/download")]
         Task<HttpResponseMessage> DownloadArchive(
             [Query] string questionnaireId,

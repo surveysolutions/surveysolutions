@@ -158,5 +158,27 @@ namespace WB.Services.Export.Host.Controllers
                 .Select(j => j.ExportSettings.QuestionnaireId.ToString())
                 .ToList();
         }
+
+        [HttpGet]
+        [Route("api/v1/job/all")]
+        public async Task<List<DataExportStatusView>> GetAllJobsList(TenantInfo tenant)
+        {
+            var jobs = await this.exportProcessesService.GetAllProcesses(tenant);
+
+            var questionnaireIds = jobs
+                .Select(j => j.ExportSettings.QuestionnaireId)
+                .Distinct()
+                .ToList();
+
+            var result = new List<DataExportStatusView>();
+
+            foreach (var questionnaireId in questionnaireIds)
+            {
+                var questionnaireExportStatus = await this.jobsStatusReporting.GetDataExportStatusForQuestionnaireAsync(tenant, questionnaireId);
+                result.Add(questionnaireExportStatus);
+            }
+
+            return result;
+        }
     }
 }

@@ -11,4 +11,10 @@ namespace WB.UI.Headquarters.Models
         public List<InterviewStatus> ExportStatuses { get; set; }
         public ExternalStoragesSettings ExternalStoragesSettings { get; set; }
     }
+
+    public class NewExportModel
+    {
+        public dynamic Api { get; set; }
+        public ComboboxViewItem[] Statuses { get; set; }
+    }
 }

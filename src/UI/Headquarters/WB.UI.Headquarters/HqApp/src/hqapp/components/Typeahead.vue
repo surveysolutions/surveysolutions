@@ -47,6 +47,7 @@
         </div>
         <button v-if="value != null && !noClear"
                 class="btn btn-link btn-clear"
+                type="button"
                 @click="clear">
             <span></span>
         </button>
@@ -77,6 +78,10 @@ export default {
         noClear: Boolean,
         disabled: Boolean,
         fuzzy: {
+            type: Boolean,
+            default: false
+        },
+        selectFirst: {
             type: Boolean,
             default: false
         }
@@ -178,6 +183,10 @@ export default {
                 .then(response => {
                     if(response != null && response.data != null) {
                         this.options = this.setOptions(response.data.options || []);
+                        if (this.selectFirst && this.options.length > 0)
+                        {
+                            this.selectOption(this.options[0].item);
+                        }
                     }
                     this.isLoading = false;
                 })
