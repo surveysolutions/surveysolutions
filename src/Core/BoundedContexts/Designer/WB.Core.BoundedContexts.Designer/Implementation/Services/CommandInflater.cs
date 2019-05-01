@@ -123,11 +123,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (!(command is RemoveSharedPersonFromQuestionnaire removeSharedPersonCommand)) 
                 return;
 
-            var unshareWith = this.dbContext.Users.FindByNameOrEmail(removeSharedPersonCommand.Email);
-            if (unshareWith != null)
+            var unshareWithById = this.dbContext.Users.Find(removeSharedPersonCommand.PersonId);
+            if (unshareWithById != null)
             {
-                removeSharedPersonCommand.PersonId = unshareWith.Id;
-                removeSharedPersonCommand.Email = unshareWith.Email;
+                removeSharedPersonCommand.PersonId = unshareWithById.Id;
+                removeSharedPersonCommand.Email = unshareWithById.Email;
             }
         }
     }
