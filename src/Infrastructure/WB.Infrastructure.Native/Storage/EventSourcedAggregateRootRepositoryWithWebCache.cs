@@ -98,7 +98,8 @@ namespace WB.Infrastructure.Native.Storage
 
             Cache.Add(key, aggregateRoot, new CacheItemPolicy
             {
-                RemovedCallback = OnUpdateCallback
+                RemovedCallback = OnUpdateCallback,
+                SlidingExpiration = Expiration
             });
         }
 
