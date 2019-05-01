@@ -12,6 +12,15 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
         {
             if (user.PasswordSalt == null) return base.VerifyHashedPassword(user, hashedPassword, providedPassword);
 
+            var doubleCheck = base.VerifyHashedPassword(user, hashedPassword, providedPassword);
+
+            // in migration case when user's passwordsalt is still present in db, while new hashes generated
+            if(doubleCheck != PasswordVerificationResult.Failed)
+            {                
+                user.PasswordSalt = null;
+                return doubleCheck;
+            }
+
             var saltAndPwd = String.Concat(providedPassword, user.PasswordSalt);
             var bytes = Encoding.Default.GetBytes(saltAndPwd);
             var sha1 = SHA1.Create();
