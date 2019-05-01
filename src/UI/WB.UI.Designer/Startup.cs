@@ -191,6 +191,19 @@ namespace WB.UI.Designer
                     }
                 }
             });
+
+            if (env.IsDevelopment())
+            {
+                app.UseStaticFiles(new StaticFileOptions
+                {
+                    RequestPath = "/js/app",
+                    FileProvider = new PhysicalFileProvider(env.ContentRootPath + @"\questionnaire\scripts"),
+                    OnPrepareResponse = ctx =>
+                    {
+                        // remove cache
+                    }
+                });
+            }
             
             app.UseCookiePolicy();
             app.UseSession();
@@ -203,6 +216,7 @@ namespace WB.UI.Designer
                 {
                     new CultureInfo("en"),
                     new CultureInfo("ru"),
+                    new CultureInfo("fr"),
                     new CultureInfo("es"),
                     new CultureInfo("ar"),
                     new CultureInfo("zh")
@@ -211,6 +225,7 @@ namespace WB.UI.Designer
                 {
                     new CultureInfo("en"),
                     new CultureInfo("ru"),
+                    new CultureInfo("fr"),
                     new CultureInfo("es"),
                     new CultureInfo("ar"),
                     new CultureInfo("zh")
