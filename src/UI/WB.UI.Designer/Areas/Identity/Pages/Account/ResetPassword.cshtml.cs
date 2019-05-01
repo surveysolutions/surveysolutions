@@ -36,7 +36,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
             public string UserId { get; set; }
         }
 
-        public IActionResult OnGet(string code = null, string userId = null)
+        public async Task<IActionResult> OnGet(string code = null, string userId = null)
         {
             if (code == null || userId == null)
             {
@@ -44,11 +44,16 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
             }
             else
             {
+                var user = await _userManager.FindByIdAsync(userId);
+
+                if (user == null) return BadRequest("Provided user id is invalid");
+
                 Input = new InputModel
                 {
                     Code = code,
                     UserId = userId
                 };
+
                 return Page();
             }
         }
@@ -69,6 +74,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
             }
 
             var result = await _userManager.ResetPasswordAsync(user, Input.Code, Input.Password);
+            user.PasswordSalt = null;
             if (result.Succeeded)
             {
                 return RedirectToPage("./ResetPasswordConfirmation");
