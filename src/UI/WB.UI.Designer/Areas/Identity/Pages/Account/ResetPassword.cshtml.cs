@@ -23,10 +23,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
         public InputModel Input { get; set; }
 
         public class InputModel
-        {
-            [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.EmailOrLogin_required))]
-            public string Email { get; set; }
-
+        {            
             [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.Password_required))]
             [DataType(DataType.Password)]
             public string Password { get; set; }
@@ -36,11 +33,12 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
 
             public string Code { get; set; }
+            public string UserId { get; set; }
         }
 
-        public IActionResult OnGet(string code = null)
+        public IActionResult OnGet(string code = null, string userId = null)
         {
-            if (code == null)
+            if (code == null || userId == null)
             {
                 return BadRequest("A code must be supplied for password reset.");
             }
@@ -48,7 +46,8 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
             {
                 Input = new InputModel
                 {
-                    Code = code
+                    Code = code,
+                    UserId = userId
                 };
                 return Page();
             }
@@ -61,8 +60,8 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
                 return Page();
             }
 
-            var user = await _userManager.FindByNameAsync(Input.Email) ??
-                       await _userManager.FindByEmailAsync(Input.Email);
+            var user = await _userManager.FindByIdAsync(Input.UserId);
+
             if (user == null)
             {
                 // Don't reveal that the user does not exist
@@ -79,6 +78,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
             {
                 ModelState.AddModelError(string.Empty, error.Description);
             }
+
             return Page();
         }
     }
