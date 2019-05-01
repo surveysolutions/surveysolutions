@@ -18,14 +18,17 @@ namespace WB.UI.Designer
         public static void Main(string[] args)
         {
             var appRoot = Path.GetDirectoryName(typeof(Program).Assembly.Location);
-            var logsFileLocation = Path.Combine(appRoot, "..", "logs", "log.txt");
+            var logsFileLocation = Path.Combine(appRoot, "..", "logs", "log.log");
+            var verboseLog = Path.Combine(appRoot, "..", "logs", "verbose.log");
 
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                //.MinimumLevel.Override("Microsoft", LogEventLevel.Information)
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
-                .WriteTo.File(logsFileLocation, rollingInterval: RollingInterval.Day, restrictedToMinimumLevel: LogEventLevel.Warning)
+                .WriteTo.File(logsFileLocation, rollingInterval: RollingInterval.Day, 
+                        restrictedToMinimumLevel: LogEventLevel.Warning)
+                .WriteTo.File(verboseLog, rollingInterval: RollingInterval.Day,
+                        restrictedToMinimumLevel: LogEventLevel.Verbose, retainedFileCountLimit: 2)
                 .CreateLogger();
 
             try
@@ -59,8 +62,9 @@ namespace WB.UI.Designer
                 .ConfigureAppConfiguration((hostingContext, c) =>
                 {
                     c.AddIniFile("appsettings.ini", false, true);
+                    c.AddIniFile("appsettings.cloud.ini", true, true);
                     c.AddIniFile($"appsettings.{Environment.MachineName}.ini", true);
-                    c.AddIniFile($"appsettings.Production.ini", true);
+                    c.AddIniFile("appsettings.Production.ini", true);
                     c.AddCommandLine(args);
 
                     if(hostingContext.HostingEnvironment.IsDevelopment())
