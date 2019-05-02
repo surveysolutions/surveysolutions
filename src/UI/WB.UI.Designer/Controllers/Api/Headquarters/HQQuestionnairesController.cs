@@ -18,7 +18,6 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
-using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Attributes;
 using WB.UI.Designer.Resources;
 using WB.UI.Designer1.Extensions;
@@ -112,7 +111,7 @@ namespace WB.UI.Designer.Api.Headquarters
             }
             catch (HttpResponseException e)
             {
-                return this.Error((int)e.Response.StatusCode, new
+                return StatusCode((int)e.Response.StatusCode, new
                 {
                     e.Response.ReasonPhrase
                 });
@@ -160,7 +159,7 @@ namespace WB.UI.Designer.Api.Headquarters
             }
             catch (HttpResponseException e)
             {
-                return this.Error((int)e.Response.StatusCode, new
+                return StatusCode((int)e.Response.StatusCode, new
                 {
                     e.Response.ReasonPhrase
                 });
