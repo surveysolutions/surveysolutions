@@ -734,4 +734,7 @@
   <data name="WB0281_QuestionnaireExceededEntitiesLimit" xml:space="preserve">
     <value>Общее количество элементов ({0}) превышает системные лимиты ({1}). Рассмотрите возможность уменьшения количества вопросов, статических текстов, переменных или элементов фиксированных ростеров.</value>
   </data>
+  <data name="WB0282_IdentifyingQuestionInSectionWithCondition" xml:space="preserve">
+    <value>Идентифицирующий вопрос не может быть расположен внутри секции с условием.</value>
+  </data>
 </root>
