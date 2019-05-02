@@ -1905,5 +1905,14 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0281_QuestionnaireExceededEntitiesLimit", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Identifying question cannot be placed inside section with enabling condition..
+        /// </summary>
+        public static string WB0282_IdentifyingQuestionInSectionWithCondition {
+            get {
+                return ResourceManager.GetString("WB0282_IdentifyingQuestionInSectionWithCondition", resourceCulture);
+            }
+        }
     }
 }
