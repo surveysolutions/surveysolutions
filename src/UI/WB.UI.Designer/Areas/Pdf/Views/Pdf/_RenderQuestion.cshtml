@@ -57,7 +57,7 @@
             @for (int i = 0; i < questionnaire.GetValidationsCount(question.ValidationConditions); i++)
             {
                 var validation = question.ValidationConditions[i];
-                <div class="validation-expression"><span>@(validation.Severity == ValidationSeverity.Warning ?"W":"E")@(i + 1)</span>@questionnaire.GetExpressionExcerpt(validation.Expression)
+                <div class="validation-expression"><span>@(validation.Severity == ValidationSeverity.Warning ?"W":"V")@(i + 1)</span>@questionnaire.GetExpressionExcerpt(validation.Expression)
                     @if (questionnaire.ExpressionIsTooLong(validation.Expression))
                     {
                         <div class="more">
