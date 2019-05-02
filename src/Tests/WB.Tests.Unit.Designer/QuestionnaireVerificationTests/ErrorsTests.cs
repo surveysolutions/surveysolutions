@@ -47,6 +47,17 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 })
                 .ExpectCritical("WB0026");
 
+        [Test]
+        public void identifying_question_in_section_with_enabling_condition()
+        {
+            Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[] {
+                    Create.Group(Id.gB, enablementCondition: "test not null", children: new IComposite[] {
+                        Create.TextQuestion(Id1, scope: QuestionScope.Headquarter, preFilled: true),
+                    })
+                })
+                .ExpectError("WB0282");
+        }
+
 
         [TestCase("1variable", "WB0123")]
         [TestCase("_variable", "WB0123")]
