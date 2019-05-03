@@ -24,7 +24,7 @@ namespace WB.UI.Shared.Enumerator.Services.Notifications
         private PeriodicWorkRequest GetRequest()
         {
             PeriodicWorkRequest notificationsGenerationRequest =
-                PeriodicWorkRequest.Builder.From<NotificationsGenerationWorker>(TimeSpan.FromMinutes(20))
+                PeriodicWorkRequest.Builder.From<NotificationsGenerationWorker>(TimeSpan.FromMinutes(60))
                     .SetConstraints(Constraints.None)
                     .AddTag(WORKER_TAG)
                     .Build();
