@@ -8666,7 +8666,7 @@ body > .ui-pnotify {
     text-align: right; }
   .table td.editable {
     position: relative; }
-    .table td.editableafter {
+    .table td.editable:after {
       content: "";
       position: absolute;
       top: 0;
