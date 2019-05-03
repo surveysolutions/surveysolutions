@@ -8,12 +8,17 @@
         <p>Data export set will be generated based on selected version of questionaire, timeline and statuses and can contain additional data (DDI structure, paradata, collected binary data)</p>
       </div>
     </div>
-    <div class="row">
+     <div class="row" v-if="exportServiceIsUnavailable">
+        <div class="col-md-12 mb-30">
+          Export service is not available
+        </div>
+    </div>
+    <div class="row" v-else-if="!exportFormIsVisible">
         <div class="col-md-12 mb-30">
           <button  type="button" class="btn btn-success" @click="exportFormIsVisible = true">Generate new export set</button>
         </div>
     </div>
-    <form v-if="exportFormIsVisible">
+    <form v-if="exportFormIsVisible && !exportServiceIsUnavailable">
       <div class="row">
         <div class="col-md-12">
           <h3>Filters</h3>
@@ -99,7 +104,7 @@
           <h3>Data format</h3>
           <div class="structure-block">
             <div class="data-type-row">
-              <input class="radio-row" type="radio" name="dataFormat" id="separated" v-model="dataFormat" value="tabular">
+              <input class="radio-row" type="radio" name="dataFormat" id="separated" v-model="dataFormat" value="Tabular">
               <label for="separated">
                 <span class="tick"></span>
                 <span class="format-data separated-data">Tab separated data</span>
@@ -166,45 +171,20 @@
         </div>
       </div>
     </form>
-    <div class="row">
+    <div class="row" v-if="!exportServiceIsUnavailable">
         <div class="col-md-10">
             <div class="export-sets">
                 <div class="no-sets hidden">No generated sets yet</div>
                 <h3>Previously generated export sets</h3>
-                <p>Every set is a zip archive with all collected interview data and DDI XML structure you an download previously generated reports
-                </p>
-                <div class="gray-block report clearfix">
-                    <button type="button" class="btn btn-link close">
-                        <span class="cancel"></span>
-                    </button>
-                    <div class="wrapper-data clearfix">
-                        <div class="gray-text-row">Quesed on mar 14, 14:55</div>
-                        <div class="format-data stata">Main survey data is Stata 10 format (no Unicode)<br/>
-                            2`324 interviews by 122 teams (430 enumerators):
-                        </div>
-                        <p>Version 12 of "Livestock Field Officer Questionnaire"<br/>
-                            Interviews changed from 00:00, Mar 13, 2017 to 23:59, Mar 15, 2017
-                            with all interview statuses.
-                        </p>
-                    </div>
-                    <div class="wrapper-data clearfix">
-                        <div class="export-row clearfix">
-                            <div class="format-data download-icon clearfix">
-                                <p>Destination: Zip archive for download</p>
-                                <div class="action-block clearfix">
-                                    <div class="allign-left">
-                                        <span class="success-text status">Queued</span>
-                                        <button type="button" class="btn btn-link gray-action-unit">cancel</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <p>Every set is a zip archive with all collected interview data and DDI XML structure you an download previously generated reports</p>
+                <template v-for="result in exportResults" v-key="result.id">
+                   <ExportProcessCard :data="result"></ExportProcessCard>
+                </template>
+
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row" v-if="!exportServiceIsUnavailable">
         <div class="col-md-8">
             <h3>Data export API</h3>
             <p>You can setup automatic export of collected interview data using our API toolset for more information 
@@ -216,12 +196,16 @@
 </template>
 
 <script>
+import Vue from "vue"
+import ExportProcessCard from "./ExportProcessCard"
+
 export default {
     data() {
         return {
+            exportServiceIsUnavailable: true,
             exportFormIsVisible: false,
             dataType: "surveyData",
-            dataFormat: "tabular",
+            dataFormat: "Tabular",
             dataDestination: "zip",
             questionnaireId: null,
             questionnaireVersion: null,
@@ -234,9 +218,19 @@ export default {
         var self = this;
         self.$store.dispatch("showProgress");
 
-        this.$http.get(this.$config.model.api.exportResultsUrl)
+        this.$http.get(this.$config.model.api.statusUrl)
             .then(function (response) {
-                self.exportResults = response.data || [];
+
+              if (response.data)
+                self.exportServiceIsUnavailable = false;
+
+              let exportIds = response.data || [];
+              for(let i = 0;i< exportIds.length;i++)
+              {
+                self.exportResults.push({ 
+                  id: exportIds[i]
+                });
+              }
             })
             .catch(function (error) {
                 Vue.config.errorHandler(error, self);
@@ -262,14 +256,29 @@ export default {
         var validationResult = await this.$validator.validateAll();
         if (validationResult)
         {
+            const dataFormatNum = {  
+              Tabular: 1,
+              STATA: 2,
+              SPSS: 3,
+              Binary: 4,
+              DDI: 5,
+              Paradata: 6
+            }
+
             const exportParams = {
+              id: self.questionnaireId.key,
+              version: self.questionnaireVersion.key,
+              format: 1, //self.dataFormat, 
+              status: null //, self.status
             };
 
             self.$store.dispatch("showProgress");
 
-            this.$http.post(this.$config.model.api.updateSettings, exportParams)
+            this.$http.post(this.$config.model.api.updateSurveyDataUrl, null, { params: exportParams })
                 .then(function (response) {
-                    self.$validator.reset('settings');
+                    self.$validator.reset();
+                    self.exportFormIsVisible = false;
+                    exportResults.push(response.data);
                 })
                 .catch(function (error) {
                     Vue.config.errorHandler(error, self);
@@ -278,7 +287,6 @@ export default {
                     self.$store.dispatch("hideProgress");
                 });
         }else{
-            self.providerSettingsResult = null;
             var fieldName = this.errors.items[0].field;
             const $firstFieldWithError = $("#"+fieldName);
             $firstFieldWithError.focus();
@@ -293,6 +301,7 @@ export default {
         questionnaireVersionSelected(newValue) {
             this.questionnaireVersion = newValue;
         }
-    }
+    },
+    components: {ExportProcessCard}
 };
 </script>

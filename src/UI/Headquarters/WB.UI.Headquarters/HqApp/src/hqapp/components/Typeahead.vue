@@ -1,5 +1,5 @@
 ﻿<template>
-    <div class="combo-box" :title="value == null ? '' : value.value">
+    <div class="combo-box" :title="value == null ? '' : value.value" :id="controlId">
         <div class="btn-group btn-input clearfix">
             <button type="button" :id="buttonId"
                     class="btn dropdown-toggle"

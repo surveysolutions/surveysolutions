@@ -12,5 +12,6 @@ namespace WB.Services.Scheduler.Services
         Task<List<JobItem>> GetAllJobsAsync(TenantInfo tenant, params JobStatus[] statuses);
         Task<JobItem> GetFreeJobAsync(CancellationToken token = default);
         Task<JobItem> GetJobAsync(TenantInfo tenant, string tag, params JobStatus[] statuses);
+        Task<JobItem> GetJobAsync(long id);
     }
 }
