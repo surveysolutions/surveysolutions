@@ -1,17 +1,18 @@
 ﻿using System;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
+using System.Linq;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
+using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Attributes;
-using WB.UI.Designer.Controllers.Api.Headquarters;
+using WB.UI.Designer.Extensions;
+using WB.UI.Designer.Resources;
 
-namespace WB.UI.Designer.Api.Headquarters
+namespace WB.UI.Designer.Controllers.Api.Headquarters
 {
     [Obsolete("Since v5.11")]
     [ApiBasicAuth(onlyAllowedAddresses: true)]
@@ -19,8 +20,10 @@ namespace WB.UI.Designer.Api.Headquarters
     public class ImportV2Controller : ImportControllerBase
     {
         private readonly IStringCompressor zipUtils;
+        private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly ISerializer serializer;
         private readonly IAttachmentService attachmentService;
+        private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
 
         public ImportV2Controller(
             IStringCompressor zipUtils,
@@ -31,10 +34,11 @@ namespace WB.UI.Designer.Api.Headquarters
             IDesignerEngineVersionService engineVersionService,
             ISerializer serializer,
             IAttachmentService attachmentService)
-            : base(viewFactory, questionnaireViewFactory, 
-                questionnaireVerifier, expressionProcessorGenerator, engineVersionService)
+            : base(viewFactory, questionnaireVerifier, engineVersionService)
         {
             this.zipUtils = zipUtils;
+            this.questionnaireViewFactory = questionnaireViewFactory;
+            this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.serializer = serializer;
             this.attachmentService = attachmentService;
         }
@@ -49,48 +53,89 @@ namespace WB.UI.Designer.Api.Headquarters
 
         [HttpPost]
         [Route("Questionnaire")]
-        public QuestionnaireCommunicationPackage Questionnaire(DownloadQuestionnaireRequest request)
+        public IActionResult Questionnaire(DownloadQuestionnaireRequest request)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            var questionnaireView = this.GetQuestionnaireViewOrThrow(request);
+            var questionnaireView1 = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(request.QuestionnaireId));
+            if (questionnaireView1 == null)
+            {
+                return this.Error(StatusCodes.Status404NotFound,
+                    string.Format(ErrorMessages.TemplateNotFound, request.QuestionnaireId));
+            }
 
-            this.CheckInvariantsAndThrowIfInvalid(request.SupportedVersion.Major, questionnaireView);
+            if (!this.ValidateAccessPermissions(questionnaireView1))
+            {
+                return this.Error(StatusCodes.Status403Forbidden, ErrorMessages.User_Not_authorized);
+            }
+
+            var questionnaireView = questionnaireView1;
+
+            var checkResult = this.CheckInvariants(request.SupportedVersion.Major, questionnaireView);
+            if (checkResult != null)
+                return checkResult;
 
             var questionnaireContentVersion = this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source);
 
-            var resultAssembly = this.GetQuestionnaireAssemblyOrThrow(questionnaireView, questionnaireContentVersion);
+            var resultAssembly = this.GetQuestionnaireAssembly(questionnaireView, questionnaireContentVersion);
+
+            if (string.IsNullOrEmpty(resultAssembly))
+            {
+                var message = string.Format(
+                    ErrorMessages.YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate,
+                    questionnaireView.Title, "Unknown");
+                return this.Error(StatusCodes.Status426UpgradeRequired, message);
+            }
 
             var questionnaire = questionnaireView.Source.Clone();
             questionnaire.Macros = null;
             questionnaire.LookupTables = null;
             questionnaire.IsUsingExpressionStorage = questionnaireContentVersion > 19;
 
-            return new QuestionnaireCommunicationPackage
+            var questionnaireCommunicationPackage = new QuestionnaireCommunicationPackage
             {
                 Questionnaire = this.zipUtils.CompressString(this.serializer.Serialize(questionnaire)), // use binder to serialize to the old namespaces and assembly
                 QuestionnaireAssembly = resultAssembly,
                 QuestionnaireContentVersion = questionnaireContentVersion
             };
+            return Ok(questionnaireCommunicationPackage);
+        }
+
+        private string GetQuestionnaireAssembly(QuestionnaireView questionnaireView, int questionnaireContentVersion)
+        {
+            string resultAssembly;
+            try
+            {
+                this.expressionProcessorGenerator.GenerateProcessorStateAssembly(
+                    questionnaireView.Source, questionnaireContentVersion, out resultAssembly);
+            }
+            catch (Exception)
+            {
+                resultAssembly = string.Empty;
+            }
+
+            return resultAssembly;
         }
 
         [HttpGet]
         [Route("attachments/{id}")]
-        public HttpResponseMessage AttachmentContent(string id)
+        public IActionResult AttachmentContent(string id)
         {
             var attachment = this.attachmentService.GetContent(id);
 
-            if (attachment == null) return this.Request.CreateResponse(HttpStatusCode.NotFound);
+            if (attachment == null) return StatusCode(StatusCodes.Status404NotFound);
 
-            var response = new HttpResponseMessage(HttpStatusCode.OK)
-            {
-                Content = new ByteArrayContent(attachment.Content)
-            };
+            return File(attachment.Content, attachment.ContentType, null,
+                new Microsoft.Net.Http.Headers.EntityTagHeaderValue("\"" + attachment.ContentId + "\""));
+        }
 
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue(attachment.ContentType);
-            response.Headers.ETag = new EntityTagHeaderValue("\"" + attachment.ContentId + "\"");
+        private bool ValidateAccessPermissions(QuestionnaireView questionnaireView)
+        {
+            if (questionnaireView.CreatedBy == this.User.GetId())
+                return true;
 
-            return response;
+
+            return questionnaireView.SharedPersons.Any(x => x.UserId == this.User.GetId());
         }
     }
 }
