@@ -214,7 +214,6 @@
     <Compile Include="OfflineSync\Entities\OnPayloadCallback.cs" />
     <Compile Include="Services\Notifications\IEnumeratorWorkerManager.cs" />
     <Compile Include="Services\Notifications\INotificationsCollector.cs" />
-    <Compile Include="Services\Notifications\NotificationBackgroundIntentService.cs" />
     <Compile Include="Services\Notifications\NotificationModel.cs" />
     <Compile Include="Services\Notifications\NotificationPublisher.cs" />
     <Compile Include="Services\Notifications\INotificationPublisher.cs" />
