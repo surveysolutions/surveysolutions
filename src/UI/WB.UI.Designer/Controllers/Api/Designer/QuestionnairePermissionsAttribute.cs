@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
+using WB.UI.Designer.Extensions;
 using WB.UI.Designer1.Extensions;
 
 namespace WB.UI.Designer.Controllers.Api.Designer
