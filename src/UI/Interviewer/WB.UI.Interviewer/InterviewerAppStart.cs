@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Interviewer.Activities;
 using WB.UI.Shared.Enumerator.Services;
+using WB.UI.Shared.Enumerator.Services.Notifications;
 
 namespace WB.UI.Interviewer
 {
@@ -56,8 +57,16 @@ namespace WB.UI.Interviewer
             this.BackwardCompatibility();
 
             this.CheckAndProcessAudit();
+
+            this.SetNotificationsWorker();
            
             return base.ApplicationStartup(hint);
+        }
+
+        private void SetNotificationsWorker()
+        {
+            var workerManager = Mvx.IoCProvider.Resolve<IEnumeratorWorkerManager>();
+            workerManager.SetNotificationsWorker();
         }
 
         protected override async Task NavigateToFirstViewModel(object hint = null)

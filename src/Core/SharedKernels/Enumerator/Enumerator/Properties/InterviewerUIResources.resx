@@ -854,4 +854,23 @@ It will appear on interviewer device after next synchronization</value>
   <data name="SelectResponsible_CancelButtonText" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="Notifications_InterviewsTitle" xml:space="preserve">
+    <value>Interviews</value>
+  </data>
+  <data name="Notifications_CompletedInterviewsText" xml:space="preserve">
+    <value>You have {0} interview that should be synchronize</value>
+  </data>
+  <data name="Notifications_RejectedInterviewsText" xml:space="preserve">
+    <value>You have {0} rejected interview that were not opened</value>
+  </data>
+  <data name="Notifications_SyncTitle" xml:space="preserve">
+    <value>Synchronization</value>
+  </data>
+  <data name="Notifications_SyncTooLongAgoText" xml:space="preserve">
+    <value>Synchronization was not successfully performed lately. Please synchronize.</value>
+  </data>
+  <data name="Notifications_SyncNoRetryTitle" xml:space="preserve">
+    <value>After synchronization was terminated with errors there was no retry. Please try again.</value>
+  </data>
+
 </root>
