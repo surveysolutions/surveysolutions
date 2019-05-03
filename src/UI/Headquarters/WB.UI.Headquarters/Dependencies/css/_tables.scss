@@ -7,7 +7,7 @@
     }
     td.editable{
         position: relative;
-        &after { 
+        &:after { 
             content: "";
             position: absolute;
             top: 0;
