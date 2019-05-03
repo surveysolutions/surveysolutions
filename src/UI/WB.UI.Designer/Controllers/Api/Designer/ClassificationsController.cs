@@ -86,7 +86,7 @@ namespace WB.UI.Designer.Api.Designer
         [Route("classification/{id}")]
         public Task DeleteClassification(Guid id)
         {
-            return classificationsStorage.DeleteClassification(id, User.GetId(), User.IsAdmin());
+            return classificationsStorage.DeleteClassificationAsync(id, User.GetId(), User.IsAdmin());
         }
 
         [HttpPatch]
