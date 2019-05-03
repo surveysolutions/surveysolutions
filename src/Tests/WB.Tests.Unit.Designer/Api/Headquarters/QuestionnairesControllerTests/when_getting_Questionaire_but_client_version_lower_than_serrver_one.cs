@@ -29,10 +29,9 @@ namespace WB.Tests.Unit.Designer.Api.Headquarters.QuestionnairesControllerTests
                 engineVersionService: expressionsEngineVersionService);
 
             questionnairesController.SetupLoggedInUser(userId);
-            var result = questionnairesController.Get(questionnaireId, 12, null) as ObjectResult;
+            var result = questionnairesController.Get(questionnaireId, 12, null) as JsonResult;
 
             Assert.That(result.StatusCode, Is.EqualTo(StatusCodes.Status417ExpectationFailed));
-            Assert.That(result.Value, Is.EqualTo("Your questionnaire \"\" contains new functionality: \"variables\". New feature(s) is not supported by your installation. Please update."));
         }
 
         private static HQQuestionnairesController questionnairesController;
