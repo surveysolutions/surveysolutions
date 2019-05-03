@@ -88,7 +88,7 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
                 .GroupBy(x => x.Parent)
                 .Select(x => new {Id = x.Key, Count = x.Count()});
 
-            var categoriesCounts = items.ToList().ToDictionary(x => x.Id, x => x.Count); ;
+            var categoriesCounts = items.ToList().ToDictionary(x => x.Id, x => x.Count);
 
             var groups = dbEntities.Where(x => x.Type == ClassificationEntityType.Group).ToDictionary(x => x.Id, x =>
                 new ClassificationGroup
@@ -202,13 +202,13 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
             await this.dbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteClassification(Guid classificationId, Guid userId, bool isAdmin)
+        public async Task DeleteClassificationAsync(Guid classificationId, Guid userId, bool isAdmin)
         {
             var classification = await this.dbContext.ClassificationEntities.FindAsync(classificationId);
             ThrowIfUserDoesNotHaveAccessToPublicEntity(classification, isAdmin);
             ThrowIfUserDoesNotHaveAccessToPrivate(classification, userId);
             
-            this.DeleteClassification(classification);
+            await this.DeleteClassificationAsync(classification);
             await dbContext.SaveChangesAsync();
         }
 
@@ -245,18 +245,18 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
             var classificationsToDelete = await this.dbContext.ClassificationEntities.Where(x => x.Parent == groupId).ToListAsync();
             foreach (var classificationEntity in classificationsToDelete)
             {
-                DeleteClassification(classificationEntity);
+                await DeleteClassificationAsync(classificationEntity);
             }
 
-            var classification = this.dbContext.ClassificationEntities.Find(groupId);
+            var classification = await this.dbContext.ClassificationEntities.FindAsync(groupId);
             this.dbContext.ClassificationEntities.Remove(classification);
 
             await this.dbContext.SaveChangesAsync();
         }
 
-        private void DeleteClassification(ClassificationEntity classificationEntity)
+        private async Task DeleteClassificationAsync(ClassificationEntity classificationEntity)
         {
-            var categories = this.dbContext.ClassificationEntities.Where(x => x.Parent == classificationEntity.Id).ToList();
+            var categories = await this.dbContext.ClassificationEntities.Where(x => x.Parent == classificationEntity.Id).ToListAsync();
             this.dbContext.ClassificationEntities.RemoveRange(categories);
             this.dbContext.Remove(classificationEntity);
         }
@@ -284,7 +284,7 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
                 Type = ClassificationEntityType.Category,
                 Index = index,
                 UserId = classification.UserId
-            }).ToArray();
+            });
 
             var categoriesToDelete = categoriesInClassification.Where(x => categories.All(c => c.Id != x.Id)).ToList();
 
@@ -294,7 +294,7 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
                 if (entity != null)
                     dbContext.Remove(entity);
 
-                dbContext.ClassificationEntities.Add(classificationEntity);
+                await dbContext.ClassificationEntities.AddAsync(classificationEntity);
             }
 
             foreach (var classificationEntity in categoriesToDelete)
