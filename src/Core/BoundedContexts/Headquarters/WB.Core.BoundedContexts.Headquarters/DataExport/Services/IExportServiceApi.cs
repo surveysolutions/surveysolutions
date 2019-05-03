@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         Task<List<string>> GetRunningExportJobs();
 
         [Get("/api/v1/job/all")]
-        Task<List<DataExportStatusView>> GetAllJobsList();
+        Task<List<long>> GetAllJobsList();
 
         [Get("/api/v1/job/download")]
         Task<HttpResponseMessage> DownloadArchive(
@@ -43,6 +43,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             [Query] InterviewStatus? status,
             [Query] DateTime? fromDate,
             [Query] DateTime? toDate);
+
+        [Get("/api/v1/job")]
+        Task<RunningDataExportProcessView> GetJobsStatus([Query] long processId);
 
         [Delete("/api/v1/job")]
         Task DeleteProcess([Query] string processId);

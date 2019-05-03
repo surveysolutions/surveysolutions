@@ -19,6 +19,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.Filters;
 
@@ -61,9 +62,32 @@ namespace WB.UI.Headquarters.API
         [HttpGet]
         [ObserverNotAllowedApi]
         [ApiNoCache]
-        public async Task<List<DataExportStatusView>> Status()
+        public async Task<List<long>> Status()
         {
-            return await this.exportServiceApi.GetAllJobsList();
+            try
+            {
+                return await this.exportServiceApi.GetAllJobsList();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        [HttpGet]
+        [ObserverNotAllowedApi]
+        [ApiNoCache]
+        [CamelCase]
+        public async Task<HttpResponseMessage> Status(long id)
+        {
+            var processView = await this.exportServiceApi.GetJobsStatus(id);
+            var questionnaire = this.questionnaireBrowseViewFactory.GetById(processView.QuestionnaireIdentity);
+            if (questionnaire == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+            processView.QuestionnaireTitle = questionnaire.Title;
+            return Request.CreateResponse(processView);
         }
         
         [HttpGet]
@@ -124,7 +148,7 @@ namespace WB.UI.Headquarters.API
         [HttpPost]
         [ObserverNotAllowedApi]
         public async Task<HttpResponseMessage> RequestUpdate(Guid id, long version,
-            DataExportFormat format, InterviewStatus? status, DateTime? from = null, DateTime? to = null)
+            DataExportFormat format, InterviewStatus? status = null, DateTime? from = null, DateTime? to = null)
         {
             var questionnaireIdentity = new QuestionnaireIdentity(id, version);
 
