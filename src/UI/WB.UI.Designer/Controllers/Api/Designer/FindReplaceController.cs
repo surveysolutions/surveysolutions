@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.UI.Designer.Api;
+using WB.UI.Designer.Code;
 using WB.UI.Designer.Resources;
 
 namespace WB.UI.Designer.Controllers.Api.Designer
@@ -28,12 +29,12 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             if (searchFor?.Length > SearchForAllowedLength)
             {
                 var message = string.Format(FindReplaceResources.SearchForTooLong, SearchForAllowedLength);
-                return StatusCode((int) HttpStatusCode.BadRequest, message);
+                return this.Error((int) HttpStatusCode.BadRequest, message);
             }
 
             if (useRegex && !IsValidRegex(searchFor))
             {
-                return StatusCode((int) HttpStatusCode.BadRequest, FindReplaceResources.SearchForRegexNotValid);
+                return this.Error((int) HttpStatusCode.BadRequest, FindReplaceResources.SearchForRegexNotValid);
             }
 
             return Ok(this.replaceService.FindAll(id, searchFor, matchCase, matchWholeWord, useRegex));

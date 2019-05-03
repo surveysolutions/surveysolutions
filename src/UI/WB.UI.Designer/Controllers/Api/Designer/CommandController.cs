@@ -32,6 +32,7 @@ using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.UI.Designer.BootstrapSupport;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Implementation;
 using QuestionnaireEditor = WB.UI.Designer.Resources.QuestionnaireEditor;
@@ -124,12 +125,12 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             }
             catch (FormatException e)
             {
-                return StatusCode((int)HttpStatusCode.NotAcceptable, e.Message);
+                return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
             }
             catch (ArgumentException e)
             {
                 this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
-                return StatusCode((int)HttpStatusCode.NotAcceptable, e.Message);
+                return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
             }
 
             var updateAttachment = this.ProcessCommand(command, commandType).Response;
@@ -146,7 +147,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
             if (!MultipartRequestHelper.IsMultipartContentType(Request.ContentType))
             {
-                return this.StatusCode((int)HttpStatusCode.UnsupportedMediaType);
+                return this.Error((int)HttpStatusCode.UnsupportedMediaType, string.Empty);
             }
 
             UpdateLookupTable updateLookupTableCommand;
@@ -200,13 +201,13 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             }
             catch (FormatException)
             {
-                return StatusCode((int)HttpStatusCode.NotAcceptable,
+                return this.Error((int)HttpStatusCode.NotAcceptable,
                     Resources.QuestionnaireController.SelectTabFile);
             }
             catch (ArgumentException e)
             {
                 this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
-                return StatusCode((int)HttpStatusCode.NotAcceptable, e.Message);
+                return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
             }
 
             var updateLookupTable = this.ProcessCommand(updateLookupTableCommand, commandType).Response;
@@ -280,17 +281,17 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             }
             catch (FormatException e)
             {
-                return StatusCode((int)HttpStatusCode.NotAcceptable, e.Message);
+                return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
             }
             catch (ArgumentException e)
             {
                 this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
-                return StatusCode((int)HttpStatusCode.NotAcceptable, e.Message);
+                return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
             }
             catch (InvalidExcelFileException e)
             {
                 this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
-                return StatusCode((int)HttpStatusCode.NotAcceptable, e.Message);
+                return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
             }
 
             var commandResponse = this.ProcessCommand(command, commandType);
@@ -409,17 +410,15 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             {
                 if (exc.ExceptionType == CommandInflatingExceptionType.Forbidden)
                 {
-                    return new CommandProcessResult(StatusCode(StatusCodes.Status403Forbidden, new { exc.Message }));
+                    return new CommandProcessResult(this.Error(StatusCodes.Status403Forbidden, exc.Message));
                 }
 
                 if (exc.ExceptionType == CommandInflatingExceptionType.EntityNotFound)
                 {
-                    return new CommandProcessResult(StatusCode(StatusCodes.Status404NotFound,
-                        new { exc.Message }));
+                    return new CommandProcessResult(this.Error(StatusCodes.Status404NotFound, exc.Message));
                 }
 
-                return new CommandProcessResult(StatusCode(StatusCodes.Status406NotAcceptable,
-                    new { exc.Message }));
+                return new CommandProcessResult(this.Error(StatusCodes.Status406NotAcceptable, exc.Message));
             }
             catch (Exception e)
             {
@@ -432,12 +431,10 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
                 if (domainEx.ErrorType == DomainExceptionType.DoesNotHavePermissionsForEdit)
                 {
-                    return new CommandProcessResult(StatusCode(StatusCodes.Status403Forbidden,
-                        new { domainEx.Message }));
+                    return new CommandProcessResult(this.Error(StatusCodes.Status403Forbidden, domainEx.Message));
                 }
 
-                return new CommandProcessResult(StatusCode(StatusCodes.Status406NotAcceptable,
-                    new { domainEx.Message }));
+                return new CommandProcessResult(this.Error(StatusCodes.Status406NotAcceptable, domainEx.Message));
             }
 
             return new CommandProcessResult(Ok(), false);
