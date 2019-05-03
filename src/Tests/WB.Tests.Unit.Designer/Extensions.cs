@@ -31,18 +31,5 @@ namespace WB.Tests.Unit.Designer
                 HttpContext = new DefaultHttpContext() { User = user }
             };
         }
-
-        public static void SetupLoggedInUser(this ApiController controller, Guid userId)
-        {
-            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
-            {
-                new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
-            }));
-
-            controller.ControllerContext = new ControllerContext
-            {
-                HttpContext = new DefaultHttpContext() { User = user }
-            };
-        }
     }
 }

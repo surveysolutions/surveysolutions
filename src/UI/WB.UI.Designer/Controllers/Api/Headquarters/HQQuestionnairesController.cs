@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
@@ -16,13 +13,13 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
+using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Attributes;
+using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Resources;
-using WB.UI.Designer1.Extensions;
 
-namespace WB.UI.Designer.Api.Headquarters
+namespace WB.UI.Designer.Controllers.Api.Headquarters
 {
     [ApiBasicAuth(onlyAllowedAddresses: true)]
     [Route("api/hq/v3/questionnaires")]
@@ -104,17 +101,40 @@ namespace WB.UI.Designer.Api.Headquarters
         public IActionResult Get(Guid id, int clientQuestionnaireContentVersion, [FromQuery]int? minSupportedQuestionnaireVersion = null)
         {
             QuestionnaireView questionnaireView;
-            try
+
+            var questionnaireView1 = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
+            if (questionnaireView1 == null)
             {
-                questionnaireView = this.GetQuestionnaireViewOrThrow(id);
-                this.CheckInvariantsAndThrowIfInvalid(clientQuestionnaireContentVersion, questionnaireView);
+                return this.Error(StatusCodes.Status404NotFound, string.Format(ErrorMessages.TemplateNotFound, id));
             }
-            catch (HttpResponseException e)
+
+            if (!this.ValidateAccessPermissions(questionnaireView1))
             {
-                return StatusCode((int)e.Response.StatusCode, new
-                {
-                    e.Response.ReasonPhrase
-                });
+                return this.Error(StatusCodes.Status403Forbidden, ErrorMessages.NoAccessToQuestionnaire);
+            }
+
+            questionnaireView = questionnaireView1;
+            if (!this.engineVersionService.IsClientVersionSupported(clientQuestionnaireContentVersion))
+            {
+                return this.Error(StatusCodes.Status426UpgradeRequired,
+                    string.Format(ErrorMessages.OldClientPleaseUpdate, clientQuestionnaireContentVersion));
+            }
+
+            var listOfNewFeaturesForClient = this.engineVersionService.GetListOfNewFeaturesForClient(questionnaireView.Source, clientQuestionnaireContentVersion).ToList();
+            if (listOfNewFeaturesForClient.Any())
+            {
+                var reasonPhrase = string.Format(ErrorMessages.YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate,
+                    questionnaireView.Title,
+                    string.Join(", ", listOfNewFeaturesForClient.Select(featureDescription => $"\"{featureDescription}\"")));
+                return this.Error(StatusCodes.Status417ExpectationFailed, reasonPhrase);
+            }
+
+            var questionnaireErrors = this.questionnaireVerifier.CheckForErrors(questionnaireView).ToArray();
+
+            if (questionnaireErrors.Any(x => x.MessageLevel > VerificationMessageLevel.Warning))
+            {
+                return this.Error(StatusCodes.Status412PreconditionFailed,
+                    ErrorMessages.Questionnaire_verification_failed);
             }
 
             var specifiedCompilationVersion = this.questionnaireCompilationVersionService.GetById(id)?.Version;
@@ -132,6 +152,15 @@ namespace WB.UI.Designer.Api.Headquarters
             }
 
             var resultAssembly = this.GetQuestionnaireAssemblyOrThrow(questionnaireView, versionToCompileAssembly);
+
+            if (string.IsNullOrEmpty(resultAssembly))
+            {
+                var message = string.Format(
+                    ErrorMessages
+                        .YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate,
+                    questionnaireView.Title);
+                return this.Error(StatusCodes.Status426UpgradeRequired, message);
+            }
 
             var questionnaire = questionnaireView.Source.Clone();
             questionnaire.IsUsingExpressionStorage = versionToCompileAssembly > 19;
@@ -152,18 +181,18 @@ namespace WB.UI.Designer.Api.Headquarters
         [Route("info/{id:guid}")]
         public IActionResult Info(Guid id)
         {
-            QuestionnaireView questionnaire;
-            try
+            var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
+            if (questionnaireView == null)
             {
-                questionnaire = this.GetQuestionnaireViewOrThrow(id);
+                return this.Error(StatusCodes.Status404NotFound, string.Format(ErrorMessages.TemplateNotFound, id));
             }
-            catch (HttpResponseException e)
+
+            if (!this.ValidateAccessPermissions(questionnaireView))
             {
-                return StatusCode((int)e.Response.StatusCode, new
-                {
-                    e.Response.ReasonPhrase
-                });
+                return this.Error(StatusCodes.Status403Forbidden, ErrorMessages.NoAccessToQuestionnaire);
             }
+
+            var questionnaire = questionnaireView;
 
             var listItem = this.listItemStorage.Questionnaires.Find(id.FormatGuid());
 
@@ -208,94 +237,19 @@ namespace WB.UI.Designer.Api.Headquarters
             return Ok(result);
         }
 
-        private void CheckInvariantsAndThrowIfInvalid(int clientVersion, QuestionnaireView questionnaireView)
-        {
-            if (!this.engineVersionService.IsClientVersionSupported(clientVersion))
-            {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired)
-                {
-                    ReasonPhrase = string.Format(ErrorMessages.OldClientPleaseUpdate, clientVersion)
-                });
-            }
-
-            var listOfNewFeaturesForClient = this.engineVersionService.GetListOfNewFeaturesForClient(questionnaireView.Source, clientVersion).ToList();
-            if (listOfNewFeaturesForClient.Any())
-            {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.ExpectationFailed)
-                {
-                    ReasonPhrase = string.Format(ErrorMessages.YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate,
-                            questionnaireView.Title,
-                            string.Join(", ", listOfNewFeaturesForClient.Select(featureDescription => $"\"{featureDescription}\"")))
-                });
-            }
-
-            var questionnaireErrors = this.questionnaireVerifier.CheckForErrors(questionnaireView).ToArray();
-
-            if (questionnaireErrors.Any(x => x.MessageLevel > VerificationMessageLevel.Warning))
-            {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed)
-                {
-                    ReasonPhrase = ErrorMessages.Questionnaire_verification_failed
-                });
-            }
-        }
-
-        private QuestionnaireView GetQuestionnaireViewOrThrow(Guid questionnaireId)
-        {
-            var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireId));
-            if (questionnaireView == null)
-            {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound)
-                {
-                    ReasonPhrase = string.Format(ErrorMessages.TemplateNotFound, questionnaireId)
-                });
-            }
-
-            if (!this.ValidateAccessPermissions(questionnaireView))
-            {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden)
-                {
-                    ReasonPhrase = ErrorMessages.NoAccessToQuestionnaire
-                });
-            }
-            return questionnaireView;
-        }
-
         private string GetQuestionnaireAssemblyOrThrow(QuestionnaireView questionnaireView, int questionnaireContentVersion)
         {
-            GenerationResult generationResult;
             string resultAssembly;
             try
             {
-                generationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(
+                this.expressionProcessorGenerator.GenerateProcessorStateAssembly(
                         questionnaireView.Source, questionnaireContentVersion, out resultAssembly);
             }
             catch (Exception)
             {
-                generationResult = new GenerationResult()
-                {
-                    Success = false,
-                    Diagnostics =
-                        new List<GenerationDiagnostic>()
-                        {
-                            new GenerationDiagnostic("Common verifier error", "unknown",
-                                GenerationDiagnosticSeverity.Error)
-                        }
-                };
                 resultAssembly = string.Empty;
             }
 
-            if (!generationResult.Success || String.IsNullOrWhiteSpace(resultAssembly))
-            {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired)
-                {
-                    ReasonPhrase =
-                        string.Format(
-                            ErrorMessages
-                                .YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate,
-                            questionnaireView.Title)
-                });
-            }
             return resultAssembly;
         }
 

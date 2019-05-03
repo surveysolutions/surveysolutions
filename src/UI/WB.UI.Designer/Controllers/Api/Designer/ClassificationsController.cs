@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using WB.Core.BoundedContexts.Designer.Classifications;
+using WB.UI.Designer.Extensions;
 using WB.UI.Designer1.Extensions;
 
 namespace WB.UI.Designer.Api.Designer
