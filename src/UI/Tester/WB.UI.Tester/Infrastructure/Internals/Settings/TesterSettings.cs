@@ -146,5 +146,10 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
         {
             throw new NotImplementedException();
         }
+
+        public void MarkSyncStart(){}
+
+        public void MarkSyncSucceeded(){}
+
     }
 }

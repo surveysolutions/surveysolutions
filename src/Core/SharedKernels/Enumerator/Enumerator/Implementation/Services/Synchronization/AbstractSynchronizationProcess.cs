@@ -204,6 +204,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             var statistics = new SynchronizationStatistics();
             try
             {
+                this.enumeratorSettings.MarkSyncStart();
+
                 this.WriteToAuditLogStartSyncMessage();
 
                 var stopwatch = new Stopwatch();
@@ -232,7 +234,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     {
                         Username = this.RestCredentials.Login,
                         Password = this.RestCredentials.Password
-                    }, this.RestCredentials);
+                    }, this.RestCredentials, cancellationToken);
 
                     this.RestCredentials.Password = this.RestCredentials.Password;
                     this.RestCredentials.Token = token;
@@ -281,13 +283,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
                         this.enumeratorSettings.SetLastHqSyncTimestamp(hqTimestamp);
 
-                        OnSuccesfullSynchronization();
+                        OnSuccessfulSynchronization();
                     }
                     catch (Exception e)
                     {
                         await this.TrySendUnexpectedExceptionToServerAsync(e);
                     }
                 }
+
+                this.enumeratorSettings.MarkSyncSucceeded();
 
                 progress.Report(new SyncProgressInfo
                 {
@@ -482,7 +486,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         }
 
 
-        protected virtual void OnSuccesfullSynchronization() { }
+        protected virtual void OnSuccessfulSynchronization() { }
 
         protected abstract Task CheckAfterStartSynchronization(CancellationToken cancellationToken);
 
@@ -499,9 +503,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 cancelButton: InterviewerUIResources.Synchronization_Cancel,
                 isTextInputPassword: true);
         }
-
         protected virtual void WriteToAuditLogStartSyncMessage()
-            => this.auditLogService.Write(new SynchronizationStartedAuditLogEntity(SynchronizationType.Online));
+        {
+            this.auditLogService.Write(new SynchronizationStartedAuditLogEntity(SynchronizationType.Online));
+        }
+
+        protected virtual void WriteToAuditLog(IAuditLogEntity entry)
+        {
+            this.auditLogService.Write(entry);
+        }
 
         protected virtual bool SendStatistics => true;
         protected virtual string SuccessDescription => InterviewerUIResources.Synchronization_Success_Description;
