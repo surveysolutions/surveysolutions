@@ -9,6 +9,8 @@ namespace WB.Services.Export.Jobs
 {
     public interface IJobsStatusReporting
     {
+        Task<RunningDataExportProcessView> GetDataExportStatusAsync(long processId);
+
         Task<DataExportStatusView> GetDataExportStatusForQuestionnaireAsync(
             TenantInfo tenant,
             QuestionnaireId questionnaireIdentity,

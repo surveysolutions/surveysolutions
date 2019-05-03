@@ -134,6 +134,14 @@ namespace WB.Services.Export.Host.Controllers
             return Ok();
         }
 
+        [HttpGet]
+        [Route("api/v1/job")]
+        public async Task<RunningDataExportProcessView> GetDataExportStatus(long processId, TenantInfo tenant)
+        {
+            var exportStatus = await this.jobsStatusReporting.GetDataExportStatusAsync(processId);
+            return exportStatus;
+        }
+
         [HttpDelete]
         [Route("api/v1/job")]
         public async Task<ActionResult> DeleteDataExportProcess(string processId, TenantInfo tenant)
@@ -161,23 +169,15 @@ namespace WB.Services.Export.Host.Controllers
 
         [HttpGet]
         [Route("api/v1/job/all")]
-        public async Task<List<DataExportStatusView>> GetAllJobsList(TenantInfo tenant)
+        public async Task<List<long>> GetAllJobsList(TenantInfo tenant)
         {
-            var jobs = await this.exportProcessesService.GetAllProcesses(tenant);
+            var jobs = await this.exportProcessesService.GetAllProcesses(tenant, runningOnly: false);
 
-            var questionnaireIds = jobs
-                .Select(j => j.ExportSettings.QuestionnaireId)
-                .Distinct()
+            List<long> result = jobs
+                .GroupBy(x => x.NaturalId)
+                .Select(x => x.Max(s => s.ProcessId))
                 .ToList();
-
-            var result = new List<DataExportStatusView>();
-
-            foreach (var questionnaireId in questionnaireIds)
-            {
-                var questionnaireExportStatus = await this.jobsStatusReporting.GetDataExportStatusForQuestionnaireAsync(tenant, questionnaireId);
-                result.Add(questionnaireExportStatus);
-            }
-
+         
             return result;
         }
     }

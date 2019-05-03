@@ -23,5 +23,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
         public DataExportStatus ProcessStatus { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
+
+        public string QuestionnaireTitle { get; set; }
     }
 }
