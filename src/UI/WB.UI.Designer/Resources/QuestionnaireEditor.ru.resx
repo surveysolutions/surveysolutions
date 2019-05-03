@@ -371,7 +371,7 @@
     <value>Инфо</value>
   </data>
   <data name="MoveToAnotherSubSection" xml:space="preserve">
-    <value>Переместить в другую подсекцию:</value>
+    <value>Переместить в другую секцию:</value>
   </data>
   <data name="FindReplaceBackToSearch" xml:space="preserve">
     <value>Назад к поиску</value>
