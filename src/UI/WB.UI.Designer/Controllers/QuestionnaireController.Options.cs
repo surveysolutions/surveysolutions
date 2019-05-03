@@ -2,6 +2,7 @@
 using System.Dynamic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -109,7 +110,9 @@ namespace WB.UI.Designer.Controllers
                         withOptionsViewModel.QuestionId);
 
                     if (importResult.Succeeded)
+                    {
                         withOptionsViewModel.Options = importResult.ImportedOptions.ToArray();
+                    }
                     else
                     {
                         foreach (var importError in importResult.Errors)
@@ -123,7 +126,7 @@ namespace WB.UI.Designer.Controllers
                 }
             }
 
-            this.questionWithOptionsViewModel = questionWithOptionsViewModel;
+            this.questionWithOptionsViewModel = withOptionsViewModel;
 
             return this.View(withOptionsViewModel.Options);
         }
@@ -132,21 +135,24 @@ namespace WB.UI.Designer.Controllers
         public IActionResult EditCascadingOptions(IFormFile csvFile)
             => this.EditOptions(csvFile);
 
-        public IActionResult ApplyOptions()
+        [HttpPost]
+        public async Task<IActionResult> ApplyOptions()
         {
-            var commandResult = this.ExecuteCommand(
+            var questionnaireCategoricalOptions = this.questionWithOptionsViewModel.Options.ToArray();
+            var commandResult = await this.ExecuteCommand(
                 new UpdateFilteredComboboxOptions(
                         Guid.Parse(this.questionWithOptionsViewModel.QuestionnaireId),
                         this.questionWithOptionsViewModel.QuestionId,
                         this.User.GetId(),
-                        this.questionWithOptionsViewModel.Options.ToArray()));
+                        questionnaireCategoricalOptions));
 
             return Json(commandResult);
         }
 
-        public IActionResult ApplyCascadingOptions()
+        [HttpPost]
+        public async Task<IActionResult> ApplyCascadingOptions()
         {
-            var commandResult = this.ExecuteCommand(
+            var commandResult = await this.ExecuteCommand(
                 new UpdateCascadingComboboxOptions(
                         Guid.Parse(this.questionWithOptionsViewModel.QuestionnaireId),
                         this.questionWithOptionsViewModel.QuestionId,
@@ -156,25 +162,26 @@ namespace WB.UI.Designer.Controllers
             return Json(commandResult);
         }
 
-        private object ExecuteCommand(QuestionCommand command)
+        private async Task<object> ExecuteCommand(QuestionCommand command)
         {
             dynamic commandResult = new ExpandoObject();
             commandResult.IsSuccess = true;
             try
             {
                 this.commandService.Execute(command);
+                await this.dbContext.SaveChangesAsync();
             }
             catch (Exception e)
             {
                 var domainEx = e.GetSelfOrInnerAs<QuestionnaireException>();
                 if (domainEx == null)
                 {
-                    this.logger.LogError(e, $"Error on command of type ({command.GetType()}) handling ");
+                    this.logger.LogError(e, "Error on command of type {type} handling", command.GetType());
                 }
 
                 commandResult = new ExpandoObject();
                 commandResult.IsSuccess = false;
-                commandResult.HasPermissions = domainEx != null && (domainEx.ErrorType != DomainExceptionType.DoesNotHavePermissionsForEdit);
+                commandResult.HasPermissions = domainEx != null && domainEx.ErrorType != DomainExceptionType.DoesNotHavePermissionsForEdit;
                 commandResult.Error = domainEx != null ? domainEx.Message : "Something goes wrong";
             }
             return commandResult;
