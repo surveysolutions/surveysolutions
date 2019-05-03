@@ -37,7 +37,7 @@ namespace WB.UI.Interviewer.Activities
 
             private void SetupPreferences()
             {
-                var interviewerSettings = Mvx.Resolve<IInterviewerSettings>();
+                var interviewerSettings = Mvx.IoCProvider.Resolve<IInterviewerSettings>();
 
                 this.SetPreferenceTitleAndSummary("interview_settings_category", InterviewerUIResources.Prefs_InterviewSettings, string.Empty);
                 this.SetPreferenceTitleAndSummary("about_category", InterviewerUIResources.Prefs_AboutApplication, string.Empty);
@@ -110,7 +110,7 @@ namespace WB.UI.Interviewer.Activities
 
             private void UpdateSettings()
             {
-                var interviewerSettings = Mvx.Resolve<IInterviewerSettings>();
+                var interviewerSettings = Mvx.IoCProvider.Resolve<IInterviewerSettings>();
 
                 this.SetPreferenceTitleAndSummary(SettingsNames.Endpoint, InterviewerUIResources.Prefs_EndpointTitle,
                     interviewerSettings.Endpoint, interviewerSettings.Endpoint);

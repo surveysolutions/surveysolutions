@@ -70,7 +70,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         {
             if (this.EditText == null)
                 return;
-            IMvxAndroidCurrentTopActivity topActivity = Mvx.Resolve<IMvxAndroidCurrentTopActivity>();
+            IMvxAndroidCurrentTopActivity topActivity = Mvx.IoCProvider.Resolve<IMvxAndroidCurrentTopActivity>();
             var currentTopActivity = topActivity.Activity;
 
             currentTopActivity.HideKeyboard(Target.WindowToken);
