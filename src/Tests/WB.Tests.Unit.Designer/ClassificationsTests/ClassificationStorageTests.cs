@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Classifications;
-using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Verifier;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Abc;

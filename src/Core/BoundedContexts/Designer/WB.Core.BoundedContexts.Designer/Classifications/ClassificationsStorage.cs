@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
