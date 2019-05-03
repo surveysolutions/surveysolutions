@@ -1,7 +1,6 @@
 ﻿using System;
-using WB.Core.BoundedContexts.Designer.Aggregates;
 
-namespace WB.Core.BoundedContexts.Designer.Exceptions
+namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
     public class QuestionnaireException : Exception
     {
