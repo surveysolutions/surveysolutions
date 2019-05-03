@@ -49,10 +49,10 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         [HttpGet]
         [Route("entity/{itemId:Guid}/comments")]
-        public List<CommentView> Get(Guid id, Guid itemId)
+        public async Task<List<CommentView>> Get(Guid id, Guid itemId)
         {
             bool hasAccess = User.IsAdmin() || this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id, User.GetId());
-            return hasAccess ? this.commentsService.LoadCommentsForEntity(id, itemId) : new List<CommentView>();
+            return hasAccess ? await this.commentsService.LoadCommentsForEntity(id, itemId) : new List<CommentView>();
         }
 
         [HttpPost]
@@ -92,7 +92,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         [Route("comment/resolve/{commentId:Guid}")]
         public async Task<IActionResult> ResolveComment(Guid id, Guid commentId)
         {
-            commentsService.ResolveComment(commentId);
+            await commentsService.ResolveCommentAsync(commentId);
             await dbContext.SaveChangesAsync();
             return Ok();
         }
@@ -101,7 +101,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         [Route("comment/{commentId:Guid}")]
         public async Task<IActionResult> DeleteComment(Guid id, Guid commentId)
         {
-            commentsService.DeleteComment(commentId);
+            await commentsService.DeleteCommentAsync(commentId);
             await dbContext.SaveChangesAsync();
             return Ok();
         }
