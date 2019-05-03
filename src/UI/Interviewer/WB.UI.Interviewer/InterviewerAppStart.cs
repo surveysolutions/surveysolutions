@@ -23,10 +23,12 @@ namespace WB.UI.Interviewer
         private readonly IAuditLogService auditLogService;
         private readonly IServiceLocator serviceLocator;
         private readonly IApplicationCypher applicationCypher;
+        private IEnumeratorSettings enumeratorSettings;
 
         public InterviewerAppStart(IMvxApplication application, 
             IMvxNavigationService navigationService,
             IAuditLogService auditLogService,
+            IEnumeratorSettings enumeratorSettings, 
             IServiceLocator serviceLocator,
             IApplicationCypher applicationCypher,
             ILogger logger) : base(application, navigationService)
@@ -35,6 +37,7 @@ namespace WB.UI.Interviewer
             this.serviceLocator = serviceLocator;
             this.applicationCypher = applicationCypher;
             this.logger = logger;
+            this.enumeratorSettings = enumeratorSettings;
         }
 
         public override void ResetStart()
@@ -58,15 +61,19 @@ namespace WB.UI.Interviewer
 
             this.CheckAndProcessAudit();
 
-            this.SetNotificationsWorker();
+            this.UpdateNotificationsWorker();
            
             return base.ApplicationStartup(hint);
         }
 
-        private void SetNotificationsWorker()
+        private void UpdateNotificationsWorker()
         {
             var workerManager = Mvx.IoCProvider.Resolve<IEnumeratorWorkerManager>();
-            workerManager.SetNotificationsWorker();
+
+            if(enumeratorSettings.NotificationsEnabled)
+                workerManager.SetNotificationsWorker();
+            else
+                workerManager.CancelNotificationsWorker();
         }
 
         protected override async Task NavigateToFirstViewModel(object hint = null)
