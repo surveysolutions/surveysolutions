@@ -33,6 +33,12 @@ namespace WB.Services.Export.Tests.InterviewDataExport
     [TestOf(typeof(InterviewDataDenormalizer))]
     public class InterviewDataDenormalizerTests
     {
+        [SetUp]
+        public void Setup()
+        {
+            
+        }
+
         [Test]
         public async Task when_get_interview_created_event_should_raise_interview_add_command()
         {
