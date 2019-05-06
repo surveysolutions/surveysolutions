@@ -5,7 +5,7 @@ using ApprovalTests.Namers.StackTraceParsers;
 using NUnit.Framework;
 using System.IO;
 
-namespace WB.Services.Export.Tests.InterviewDataExport
+namespace WB.Services.Export.Tests
 {
     [SetUpFixture]
     public class ApprovalsSetup
