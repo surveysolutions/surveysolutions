@@ -5,6 +5,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Quartz.Collection;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.EventBus;
@@ -124,7 +125,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 QuestionnaireTitle = questionnaire.Title,
                 ResponsibleId = userId, // Creator is responsible
                 ResponsibleName = responsible != null ? responsible.UserName : "<UNKNOWN USER>",
-                ResponsibleRole = responsible.Roles.First(),
+                ResponsibleRole = responsible?.Roles.First() ?? UserRoles.Interviewer,
                 AssignmentId = assignmentId,
                 LastResumeEventUtcTimestamp = creationTime
             };

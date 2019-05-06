@@ -1,5 +1,4 @@
 ﻿using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using System;

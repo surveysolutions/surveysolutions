@@ -732,6 +732,9 @@
   <data name="WB0281_QuestionnaireExceededEntitiesLimit" xml:space="preserve">
     <value>Total number of elements ({0}) exceeded system limit ({1}). Consider reducing the number of questions, static texts, variables, or items in fixed rosters.</value>
   </data>
+  <data name="WB0282_IdentifyingQuestionInSectionWithCondition" xml:space="preserve">
+    <value>Identifying question cannot be placed inside section with enabling condition.</value>
+  </data>
   <data name="WB0282_TableRosterContainsNestedGroup" xml:space="preserve">
     <value>Table roster mode doesn't allow to use nested groups and rosters.</value>
   </data>

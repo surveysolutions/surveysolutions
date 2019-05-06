@@ -1,9 +1,11 @@
 using System;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
+using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.GenericSubdomains.Portable;
+using WB.UI.Designer.Extensions;
 using WB.UI.Designer1.Extensions;
 
 namespace WB.UI.Designer.Controllers.Api.Designer
@@ -24,9 +26,12 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                                  viewFactory.HasUserAccessToQuestionnaire(parsedId, context.HttpContext.User.GetId());
                 if (!hasAccess)
                 {
-                    context.Result = new ForbidResult();
+                    context.Result = new JsonResult(new { message = ExceptionMessages.NoPremissionsToEditQuestionnaire })
+                    {
+                        StatusCode = StatusCodes.Status403Forbidden
+                    };                                        
                 }
             }
-        }
+        }        
     }
 }
