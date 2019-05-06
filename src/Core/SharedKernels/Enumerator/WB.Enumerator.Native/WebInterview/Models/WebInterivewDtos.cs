@@ -242,6 +242,22 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public Validity Validity { get; set; } = new Validity();
     }
     
+    public class TableRoster : InterviewEntity
+    {
+        public Validity Validity { get; set; } = new Validity();
+
+        public TableRosterInstance[] Instances { get; set; }
+    }
+
+    public class TableRosterInstance
+    {
+        public string Id { get; set; }
+        public string RosterTitle { get; set; }
+        public bool IsDisabled { get; set; }
+        public GroupStatus Status { get; set; }
+        public Validity Validity { get; set; } = new Validity();
+    }
+    
 
     public class Sidebar
     {
