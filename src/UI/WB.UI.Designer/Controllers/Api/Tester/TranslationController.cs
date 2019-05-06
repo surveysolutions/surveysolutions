@@ -14,7 +14,7 @@ using WB.UI.Designer.Code.Attributes;
 namespace WB.UI.Designer.Controllers.Api.Tester
 {
     [ApiBasicAuth]
-    [Route("api/translation")]
+    [Route("api/v{version:int}/translation")]
     public class TranslationController : ApiController
     {
         private readonly IPlainStorageAccessor<TranslationInstance> translations;
