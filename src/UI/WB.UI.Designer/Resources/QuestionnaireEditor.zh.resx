@@ -474,9 +474,6 @@
   <data name="MoveTo" xml:space="preserve">
     <value>移动到</value>
   </data>
-  <data name="MoveToAnotherSubSection" xml:space="preserve">
-    <value>移动到另外一个问卷子块。</value>
-  </data>
   <data name="MultipleDependencies" xml:space="preserve">
     <value>一个或多个问题/子问卷模块基于</value>
   </data>

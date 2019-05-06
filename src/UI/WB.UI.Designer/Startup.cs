@@ -98,7 +98,6 @@ namespace WB.UI.Designer
                 .AddEntityFrameworkStores<DesignerDbContext>();
             services.AddRouting(options => options.LowercaseUrls = true);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-                .AddWebApiConventions()
                 .AddJsonOptions(options =>
                 {
                     options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
@@ -191,6 +190,19 @@ namespace WB.UI.Designer
                     }
                 }
             });
+
+            if (env.IsDevelopment())
+            {
+                app.UseStaticFiles(new StaticFileOptions
+                {
+                    RequestPath = "/js/app",
+                    FileProvider = new PhysicalFileProvider(env.ContentRootPath + @"\questionnaire\scripts"),
+                    OnPrepareResponse = ctx =>
+                    {
+                        // remove cache
+                    }
+                });
+            }
             
             app.UseCookiePolicy();
             app.UseSession();
@@ -225,8 +237,6 @@ namespace WB.UI.Designer
                     name: "areas",
                     template: "{area:exists}/{controller=Questionnaire}/{action=My}/{id?}"
                 );
-
-                routes.MapWebApiRoute("DefaultApi", "api/{controller}/{id?}");
 
                 routes.MapRoute(
                     name: "default",

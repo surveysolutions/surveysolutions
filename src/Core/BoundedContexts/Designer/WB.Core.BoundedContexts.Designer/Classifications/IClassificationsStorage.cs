@@ -13,7 +13,7 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
         Task<List<Category>> GetCategories(Guid classificationId);
         Task CreateClassification(Classification classification, Guid userId);
         Task UpdateClassification(Classification classification, Guid userId, bool isAdmin);
-        Task DeleteClassification(Guid classificationId, Guid userId, bool isAdmin);
+        Task DeleteClassificationAsync(Guid classificationId, Guid userId, bool isAdmin);
         Task CreateClassificationGroup(ClassificationGroup group, bool isAdmin);
         Task UpdateClassificationGroup(ClassificationGroup group, bool isAdmin);
         Task DeleteClassificationGroup(Guid groupId, bool isAdmin);

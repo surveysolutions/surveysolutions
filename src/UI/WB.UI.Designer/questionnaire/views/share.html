@@ -9,9 +9,11 @@
 
     <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="active">
-            <a role="tab" href="#questionnaireSettingsTab" data-toggle="tab">{{'QuestionnaireSettings' | i18next }}</a>
+            <a role="tab" data-toggle="tab" href="#questionnaireSettingsTab">{{'QuestionnaireSettings' | i18next }}</a>
         </li>
-        <li role="presentation"><a href="#shareTab" role="tab" data-toggle="tab" ng-if="!questionnaire.isReadOnlyForUser">{{'CollaboratorsSettings' | i18next }}</a></li>
+        <li role="presentation">
+            <a role="tab" data-toggle="tab" href="#shareTab" ng-if="!questionnaire.isReadOnlyForUser || questionnaire.hasViewerAdminRights">{{'CollaboratorsSettings' | i18next }}</a>
+        </li>
     </ul>
 
     <!-- Tab panes -->
@@ -26,7 +28,7 @@
                                   ng-model="questionnaire.editedTitle"></textarea>
                     </div>
                 
-                    <div class="form-group input-variable-name">
+                    <div class="form-group input-variable-name"> 
                         <label class="control-label" for="questionnaireTitle">{{'SettingsQuestionnaireVariable' | i18next }}
                             <help key="questionnaireVariableName" />
                         </label>

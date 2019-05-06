@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Classifications;
-using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Verifier;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Abc;
@@ -172,7 +171,7 @@ namespace WB.Tests.Unit.Designer.ClassificationsTests
             var classificationStorage = Create.ClassificationStorage(
                  storage);
 
-            await classificationStorage.DeleteClassification(Id.g2, userId:Id.gA, isAdmin: true);
+            await classificationStorage.DeleteClassificationAsync(Id.g2, userId:Id.gA, isAdmin: true);
 
             CollectionAssert.AreEqual(new []{ Id.g1, Id.g3, Id.g4}, storage.ClassificationEntities.Select(x => x.Id).ToArray());
         }
@@ -187,7 +186,7 @@ namespace WB.Tests.Unit.Designer.ClassificationsTests
             var classificationStorage = Create.ClassificationStorage(
                  storage);
 
-            Assert.ThrowsAsync<ClassificationException>(async () => await classificationStorage.DeleteClassification(Id.g2, userId:Id.gA, isAdmin: false));
+            Assert.ThrowsAsync<ClassificationException>(async () => await classificationStorage.DeleteClassificationAsync(Id.g2, userId:Id.gA, isAdmin: false));
         }
 
 

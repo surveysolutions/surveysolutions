@@ -1907,6 +1907,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Identifying question cannot be placed inside section with enabling condition..
+        /// </summary>
+        public static string WB0282_IdentifyingQuestionInSectionWithCondition {
+            get {
+                return ResourceManager.GetString("WB0282_IdentifyingQuestionInSectionWithCondition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Table roster mode doesn&apos;t allow to use nested groups and rosters..
         /// </summary>
         public static string WB0282_TableRosterContainsNestedGroup {

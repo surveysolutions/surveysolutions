@@ -1,9 +1,9 @@
 ﻿@page
-@using WB.UI.Designer.BootstrapSupport
 @using WB.UI.Designer.Utils
 @model WB.UI.Designer.Areas.Admin.Pages.UserDetailsModel
 
 @{
+    ViewBag.Title = "User details: "  + this.Model.Account.UserName;
 }
 <div id="edit-form">
     <h1>
@@ -19,19 +19,19 @@
         <b>Full name:</b> @Model.Account.FullName
     </div>
     <div class="form-group">
-        <input type="checkbox" asp-for="Account.IsApproved" id="is-approved" class="wb-checkbox" />
+        <input type="checkbox" asp-for="Account.IsApproved" id="is-approved" disabled class="wb-checkbox" />
         <label for="is-approved">
             <span></span>Is Approved
         </label><br />
     </div>
     <div class="form-group">
-        <input type="checkbox" asp-for="Account.IsLockedOut" id="is-locked" class="wb-checkbox" />
+        <input type="checkbox" asp-for="Account.IsLockedOut" id="is-locked" disabled class="wb-checkbox" />
         <label for="is-locked">
             <span></span>Is Locked Out
         </label><br />
     </div>
     <div class="form-group">
-        <input type="checkbox" asp-for="Account.CanImportOnHq" id="can-import" class="wb-checkbox" />
+        <input type="checkbox" asp-for="Account.CanImportOnHq" id="can-import" disabled class="wb-checkbox" />
         <label for="is-locked">
             <span></span>Can import on HQ
         </label><br />
