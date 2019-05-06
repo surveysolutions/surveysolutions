@@ -37,7 +37,7 @@ const pages = {
             "WebInterviewSetup",
             "WebInterviewSettings",
             "MapReport",
-			"Settings"
+            "Settings"
         ]
     },
     webinterview: {
