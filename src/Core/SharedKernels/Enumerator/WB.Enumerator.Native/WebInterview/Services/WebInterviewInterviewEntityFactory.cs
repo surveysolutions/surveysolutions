@@ -347,7 +347,6 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 {
                     Id = id,
                     Title = questionnaire.GetGroupTitle(identity.Id),
-                    IsRoster = true,
                     Instances = tableRosterInstances
                         .Select(ri => GetRosterInstanceEntity(callerInterview, questionnaire, isReviewMode, ri, ri.Identity))
                         .ToArray()
