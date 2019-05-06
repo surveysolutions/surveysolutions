@@ -246,7 +246,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
     {
         public Validity Validity { get; set; } = new Validity();
 
-        public TableRosterInstance[] Instances { get; set; }
+        public InterviewGroupOrRosterInstance[] Instances { get; set; }
     }
 
     public class TableRosterInstance
