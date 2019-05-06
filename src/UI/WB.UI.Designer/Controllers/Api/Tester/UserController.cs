@@ -6,7 +6,7 @@ using WB.UI.Designer.Code.Attributes;
 namespace WB.UI.Designer.Api.Tester
 {
     [ApiBasicAuth]
-    [Route("api/user")]
+    [Route("api/v{version:int}/user")]
     public class UserController : ControllerBase
     {
         [HttpGet]

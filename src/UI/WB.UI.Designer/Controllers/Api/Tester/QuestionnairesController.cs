@@ -19,7 +19,7 @@ using WB.UI.Designer1.Extensions;
 namespace WB.UI.Designer.Controllers.Api.Tester
 {
     [ApiBasicAuth]
-    [Route("api/questionnaires")]
+    [Route("api/v{version:int}/questionnaires")]
     public class QuestionnairesController : ControllerBase
     {
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;

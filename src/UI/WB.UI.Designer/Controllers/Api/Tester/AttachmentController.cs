@@ -9,7 +9,7 @@ using WB.UI.Designer.Code.Attributes;
 namespace WB.UI.Designer.Controllers.Api.Tester
 {
     [ApiBasicAuth]
-    [Route("api/attachment")]
+    [Route("api/v{version:int}/attachment")]
     public class AttachmentController : ControllerBase
     {
         private readonly IAttachmentService attachmentService;
