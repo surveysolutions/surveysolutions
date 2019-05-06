@@ -1,7 +1,4 @@
 using System;
-using NHibernate.Mapping.ByCode;
-using NHibernate.Mapping.ByCode.Conformist;
-using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService
 {

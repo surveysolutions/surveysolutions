@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Protocols;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Services;
 using WB.UI.Designer1.Extensions;
 

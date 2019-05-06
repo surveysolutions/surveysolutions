@@ -58,7 +58,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
                 var callbackUrl = Url.Page(
                     "/Account/ResetPassword",
                     pageHandler: null,
-                    values: new { code },
+                    values: new { code, userId = user.Id },
                     protocol: Request.Scheme);
                 
                 var claims = await userManager.GetClaimsAsync(user);

@@ -488,7 +488,7 @@
     <value>Info</value>
   </data>
   <data name="MoveToAnotherSubSection" xml:space="preserve">
-    <value>Move to another sub-section:</value>
+    <value>Move to another section:</value>
   </data>
   <data name="FindReplaceReplaceAllConfirm" xml:space="preserve">
     <value>Replace all </value>
