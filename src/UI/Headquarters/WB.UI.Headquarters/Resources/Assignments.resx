@@ -369,4 +369,7 @@
   <data name="DuplicatePasswordByWebModeWithQuantity1" xml:space="preserve">
     <value>Password by assignment for web mode with quantity 1 should be unique</value>
   </data>
+  <data name="QuestionnaireVersion" xml:space="preserve">
+    <value>ver. {{version}}</value>
+  </data>
 </root>
