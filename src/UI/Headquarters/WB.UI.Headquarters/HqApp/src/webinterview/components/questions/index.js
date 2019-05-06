@@ -23,6 +23,7 @@ Vue.component("StaticText",         () => import(/* webpackChunkName: "questions
 Vue.component("TextList",           () => import(/* webpackChunkName: "questions" */"./TextList"))
 Vue.component("TextQuestion",       () => import(/* webpackChunkName: "questions" */"./TextQuestion"))
 Vue.component("Area",               () => import(/* webpackChunkName: "questions" */"./Area"))
+Vue.component("TableRoster",        () => import(/* webpackChunkName: "questions" */"./TableRoster"))
 Vue.component("Unsupported",        () => import(/* webpackChunkName: "questions" */"./Unsupported"))
 
 Vue.component("wb-question",        () => import( /* webpackChunkName: "questions" */ "./Question"))

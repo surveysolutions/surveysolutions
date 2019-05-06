@@ -60,7 +60,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     : interview.GetGroup(Identity.Parse(parentId))?.Children
                         .OfType<InterviewTreeGroup>().Where(g => !g.IsDisabled());
 
-                children = children.Where(e => !questionnaire.IsFlatRoster(e.Identity.Id));
+                children = children.Where(e => !questionnaire.IsFlatRoster(e.Identity.Id) && !questionnaire.IsTableRoster(e.Identity.Id));
 
                 foreach (var child in children ?? Array.Empty<InterviewTreeGroup>())
                 {
@@ -77,7 +77,11 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         this.ApplyValidity(sidebarPanel.Validity, sidebarPanel.Status);
                         sidebarPanel.Collapsed = !visibleSections.Contains(g.Identity);
                         sidebarPanel.Current = visibleSections.Contains(g.Identity);
-                        sidebarPanel.HasChildren = g.Children.OfType<InterviewTreeGroup>().Any(c => !c.IsDisabled() && !questionnaire.IsFlatRoster(c.Identity.Id));
+                        sidebarPanel.HasChildren = g.Children.OfType<InterviewTreeGroup>().Any(c => 
+                            !c.IsDisabled() 
+                            && !questionnaire.IsFlatRoster(c.Identity.Id)
+                            && !questionnaire.IsTableRoster(c.Identity.Id)
+                            );
                     });
                 }
             }
@@ -328,15 +332,41 @@ namespace WB.Enumerator.Native.WebInterview.Services
             InterviewTreeRoster roster = callerInterview.GetRoster(identity);
             if (roster != null)
             {
-                var result = this.autoMapper.Map<InterviewGroupOrRosterInstance>(roster);
+                return GetRosterInstanceEntity(callerInterview, questionnaire, isReviewMode, roster, identity);
+            }
 
-                this.ApplyDisablement(result, identity, questionnaire);
-                this.ApplyGroupStateData(result, roster, callerInterview, isReviewMode, questionnaire);
-                this.ApplyValidity(result.Validity, result.Status);
+            if (questionnaire.IsTableRoster(identity.Id))
+            {
+                var parentGroupId = questionnaire.GetParentGroup(identity.Id);
+                var parentGroup = callerInterview.GetGroup(new Identity(parentGroupId.Value, identity.RosterVector));
+                var tableRosterInstances = parentGroup.Children
+                    .Where(c => c.Identity.Id == identity.Id)
+                    .Cast<InterviewTreeRoster>();
+
+                var result = new TableRoster()
+                {
+                    Id = id,
+                    Title = questionnaire.GetGroupTitle(identity.Id),
+                    IsRoster = true,
+                    Instances = tableRosterInstances
+                        .Select(ri => GetRosterInstanceEntity(callerInterview, questionnaire, isReviewMode, ri, ri.Identity))
+                        .ToArray()
+                };
                 return result;
             }
 
             return null;
+        }
+
+        private InterviewGroupOrRosterInstance GetRosterInstanceEntity(IStatefulInterview callerInterview, IQuestionnaire questionnaire,
+            bool isReviewMode, InterviewTreeRoster roster, Identity identity)
+        {
+            var result = this.autoMapper.Map<InterviewGroupOrRosterInstance>(roster);
+
+            this.ApplyDisablement(result, identity, questionnaire);
+            this.ApplyGroupStateData(result, roster, callerInterview, isReviewMode, questionnaire);
+            this.ApplyValidity(result.Validity, result.Status);
+            return result;
         }
 
         private T Map<T>(InterviewTreeQuestion question, Action<T> afterMap = null)
@@ -459,10 +489,10 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 : interview.CountActiveAnsweredQuestionsInInterview();
         }
 
-        public Identity GetParentWithoutPlainModeFlag(IStatefulInterview interview, IQuestionnaire questionnaire, Identity identity)
+        public Identity GetWebUIParent(IStatefulInterview interview, IQuestionnaire questionnaire, Identity identity)
         {
             var parent = interview.GetParentGroup(identity);
-            while (parent != null && questionnaire.IsFlatRoster(parent.Id))
+            while (parent != null && (questionnaire.IsFlatRoster(parent.Id) || questionnaire.IsTableRoster(parent.Id)))
             {
                 parent = interview.GetParentGroup(parent);
             }
