@@ -4,7 +4,6 @@ using System.Web.Http;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Designer.Api.Headquarters;
@@ -17,16 +16,13 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
         [NUnit.Framework.OneTimeSetUp] public void context () {
             request = Create.DownloadQuestionnaireRequest(questionnaireId);
 
-            var membershipUserService = Mock.Of<IMembershipUserService>(
-                _ => _.WebUser == Mock.Of<IMembershipWebUser>(
-                    u => u.UserId == userId));
-
             var questionnaireViewFactory = Mock.Of<IQuestionnaireViewFactory>(
                 _ => _.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) ==
                      Create.QuestionnaireView(questionnaireOwnerId));
 
-            importController = CreateImportController(membershipUserService: membershipUserService,
+            importController = CreateImportController(
                 questionnaireViewFactory: questionnaireViewFactory);
+            importController.SetupLoggedInUser(userId);
             BecauseOf();
         }
 

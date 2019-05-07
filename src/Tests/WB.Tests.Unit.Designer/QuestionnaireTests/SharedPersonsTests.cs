@@ -9,13 +9,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     [TestFixture]
     internal class SharedPersonsTests : QuestionnaireTestsContext
-    {
-        [SetUp]
-        public void SetUp()
-        {
-            AssemblyContext.SetupServiceLocator();
-        }
-
+    { 
         [Test]
         public void AddSharedPerson_When_shared_personid_is_not_empty_Then_raised_SharedPersonToQuestionnaireAdded_event_with_specified_person_key()
         {

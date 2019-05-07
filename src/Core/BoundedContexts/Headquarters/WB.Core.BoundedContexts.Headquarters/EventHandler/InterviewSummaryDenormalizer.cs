@@ -112,9 +112,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             DateTime? creationTime)
         {
             var responsible = this.users.GetUser(new UserViewInputModel(userId));
-            var questionnarie = this.GetQuestionnaire(questionnaireId, questionnaireVersion);
+            var questionnaire = this.GetQuestionnaire(questionnaireId, questionnaireVersion);
 
-            var interviewSummary = new InterviewSummary(questionnarie)
+            var interviewSummary = new InterviewSummary(questionnaire)
             {
                 InterviewId = eventSourceId,
                 WasCreatedOnClient = wasCreatedOnClient,
@@ -122,7 +122,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 QuestionnaireId = questionnaireId,
                 QuestionnaireVersion = questionnaireVersion,
                 QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion).ToString(),
-                QuestionnaireTitle = questionnarie.Title,
+                QuestionnaireTitle = questionnaire.Title,
                 ResponsibleId = userId, // Creator is responsible
                 ResponsibleName = responsible != null ? responsible.UserName : "<UNKNOWN USER>",
                 ResponsibleRole = responsible?.Roles.First() ?? UserRoles.Interviewer,

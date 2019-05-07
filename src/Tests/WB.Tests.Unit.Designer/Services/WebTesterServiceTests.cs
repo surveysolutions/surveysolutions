@@ -1,6 +1,8 @@
-﻿using NUnit.Framework;
+﻿using Microsoft.Extensions.Options;
+using Moq;
+using NUnit.Framework;
 using WB.Tests.Abc;
-using WB.UI.Designer.Implementation.Services;
+using WB.UI.Designer.Services;
 
 namespace WB.Tests.Unit.Designer.Services
 {
@@ -9,7 +11,8 @@ namespace WB.Tests.Unit.Designer.Services
         [Test]
         public void should_create_token_linked_to_questionnaire()
         {
-            var subj = new WebTesterService( new WebTesterSettings {ExpirationAmountMinutes = 1});
+            var subj = new WebTesterService(Mock.Of<IOptions<WebTesterSettings>>(
+                x => x.Value == new WebTesterSettings {ExpirationAmountMinutes = 1}));
 
             var token = subj.CreateTestQuestionnaire(Id.g1);
 

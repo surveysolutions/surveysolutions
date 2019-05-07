@@ -37,7 +37,8 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
             }
             else
             {
-                variableLabels.Add(new DataExportVariable(level.LevelIdColumnName, "Roster instance identifier", null, levelVariableValueLabel, ExportValueType.NumericInt));
+                variableLabels.Add(new DataExportVariable(level.LevelIdColumnName, $"Id in {level.LevelName}", null, levelVariableValueLabel, ExportValueType.NumericInt));
+
                 variableLabels.Add(new DataExportVariable(ServiceColumns.Key, "Interview key (identifier in XX-XX-XX-XX format)", null, Array.Empty<VariableValueLabel>(), ExportValueType.String));
             }
 
@@ -68,7 +69,7 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
             {
                 variableLabels.AddRange(
                     level.ReferencedNames.Select(
-                        name => new DataExportVariable(name, string.Empty, null, Array.Empty<VariableValueLabel>(), ExportValueType.String)));
+                        name => new DataExportVariable(name, "Roster list question", null, Array.Empty<VariableValueLabel>(), ExportValueType.String)));
             }
 
             for (int i = 0; i < levelRosterVector.Length; i++)

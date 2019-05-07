@@ -9,6 +9,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public string EnablementCondition { get; set; }
         public bool HideIfDisabled { get; set; }
         public string VariableName { get; set; }
-        public bool IsPlainMode { get; set; }
+        public bool IsFlatMode { get; set; }
     }
 }

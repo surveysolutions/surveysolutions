@@ -2,9 +2,9 @@ using System;
 using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 
 
@@ -21,29 +21,31 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
                 })
             });
 
-            questionnaireChangeRecordStorage=new InMemoryPlainStorageAccessor<QuestionnaireChangeRecord>();
+            questionnaireChangeRecordStorage= Create.InMemoryDbContext();
 
-            questionnaireChangeRecordStorage.Store(
-                Create.QuestionnaireChangeRecord(questionnaireId: questionnaireId.FormatGuid(),
+            questionnaireChangeRecordStorage.Add(
+                Create.QuestionnaireChangeRecord(
+                    questionnaireId: questionnaireId.FormatGuid(),
                     targetId: questionId,
                     targetType: QuestionnaireItemType.Question,
                     action: QuestionnaireActionType.Clone,
-                    reference: new[] {Create.QuestionnaireChangeReference()}), "a");
+                    reference: new[] {Create.QuestionnaireChangeReference()}));
 
-            questionnaireChangeRecordStorage.Store(
+            questionnaireChangeRecordStorage.Add(
                 Create.QuestionnaireChangeRecord(
                     questionnaireId: questionnaireId.FormatGuid(),
                     targetType: QuestionnaireItemType.Question,
                     action: QuestionnaireActionType.Update,
-                    targetId: questionId),
-                "b");
-            
+                    targetId: questionId));
+            questionnaireChangeRecordStorage.SaveChanges();
+
             questionnaireChangeHistoryFactory =
                 CreateQuestionnaireChangeHistoryFactory(
-                    questionnaireChangeHistoryStorage: questionnaireChangeRecordStorage,
+                    questionnaireChangeRecordStorage,
                     questionnaireDocumentStorage:
                         Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(
                             _ => _.GetById(Moq.It.IsAny<string>()) == questionnaireDocument));
+            
             BecauseOf();
         }
 
@@ -66,7 +68,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
            result.ChangeHistory[1].ActionType.Should().Be(QuestionnaireActionType.Update);
 
         private static QuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory;
-        private static InMemoryPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeRecordStorage;
+        private static DesignerDbContext questionnaireChangeRecordStorage;
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static QuestionnaireChangeHistory result;

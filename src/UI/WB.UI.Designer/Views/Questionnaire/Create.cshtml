@@ -1,0 +1,55 @@
+@using WB.UI.Shared.Web.Extensions
+
+@model WB.UI.Designer.Controllers.QuestionnaireController.QuestionnaireViewModel
+
+@{
+    ViewBag.Title = QuestionnaireController.CreateNew;
+}
+
+<div id="edit-form">
+    @if (TempData.ContainsKey(Alerts.SUCCESS))
+    {
+        <div class="alert alert-success header">@Html.Raw(@TempData[Alerts.SUCCESS])</div>
+    }
+    <form method="post">
+        <h1>@QuestionnaireController.CreateNewQuestionnaire</h1>
+        @if (TempData.ContainsKey(Alerts.ERROR))
+        {
+            <p class="note has-error">@Html.Raw(@TempData[Alerts.ERROR])</p>
+        }
+        <div class="form-group">
+            <label asp-for="Title">
+                @QuestionnaireController.QuestionnaireTitle
+            </label>
+            <input type="text" asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger header-line"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Variable">
+                @QuestionnaireEditor.SettingsQuestionnaireVariable
+            </label>
+            <input type="text" asp-for="Variable" class="form-control" />
+            <span asp-validation-for="Variable" class="text-danger header-line"></span>
+        </div>
+
+        <div class="form-actions">
+            <input type="submit" class="btn btn-success btn-lg" value="@QuestionnaireController.Create" id="inputSubmitQuestionnaire" />
+            <a asp-action="Index" class="btn btn-link">
+                @QuestionnaireController.Cancel
+            </a>
+        </div>
+    </form>
+</div>
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(function () {
+            $('#edit-form').submit(function () {
+                $('#inputSubmitQuestionnaire').attr("disabled", true);
+                return true;
+            });
+        });</script>
+}

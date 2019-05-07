@@ -273,7 +273,7 @@ namespace WB.Tests.Abc.TestFactories
             IEnumerable<IComposite> children = null,
             string variable = "roster_var",
             string title = "Roster X",
-            bool isPlainMode = false,
+            bool isFlatMode = false,
             FixedRosterTitle[] fixedTitles = null) => Create.Entity.Roster(
                         rosterId: rosterId,
                         children: children,
@@ -281,7 +281,7 @@ namespace WB.Tests.Abc.TestFactories
                         variable: variable,
                         enablementCondition: enablementCondition,
                         fixedRosterTitles: fixedTitles,
-                        isPlainMode: isPlainMode,
+                        isFlatMode: isFlatMode,
                         fixedTitles: obsoleteFixedTitles?.ToArray() ?? new[] { "Fixed Roster 1", "Fixed Roster 2", "Fixed Roster 3" });
 
 
@@ -376,7 +376,8 @@ namespace WB.Tests.Abc.TestFactories
             Guid? interviewerId = null, 
             Guid? supervisorId = null, 
             DateTime? timestamp = null, 
-            TimeSpan? timeSpanWithPreviousStatus = null)
+            TimeSpan? timeSpanWithPreviousStatus = null,
+            InterviewSummary interviewSummary = null)
             => new InterviewCommentedStatus
             {
                 Id = statusId ?? Guid.NewGuid(),
@@ -388,7 +389,8 @@ namespace WB.Tests.Abc.TestFactories
                 StatusChangeOriginatorName = originatorName,
                 InterviewerName = "inter",
                 SupervisorName = "supervisor",
-                TimeSpanWithPreviousStatus = timeSpanWithPreviousStatus
+                TimeSpanWithPreviousStatus = timeSpanWithPreviousStatus,
+                InterviewSummary = interviewSummary
             };
 
         public InterviewData InterviewData(
@@ -1070,7 +1072,7 @@ namespace WB.Tests.Abc.TestFactories
                 children: children);
 
             group.IsRoster = true;
-            group.IsPlainMode = isPlainMode;
+            group.IsFlatMode = isPlainMode;
             group.RosterSizeSource = RosterSizeSourceType.Question;
             group.RosterSizeQuestionId = rosterSizeQuestionId;
             group.RosterTitleQuestionId = rosterTitleQuestionId;
@@ -1090,7 +1092,7 @@ namespace WB.Tests.Abc.TestFactories
             Guid? rosterSizeQuestionId = null,
             Guid? rosterTitleQuestionId = null,
             FixedRosterTitle[] fixedRosterTitles = null,
-            bool isPlainMode = false,
+            bool isFlatMode = false,
             bool hideIfDisabled = false)
         {
             Group group = Create.Entity.Group(
@@ -1099,7 +1101,7 @@ namespace WB.Tests.Abc.TestFactories
                 variable: variable ?? "rost_" + rostersCounter++,
                 enablementCondition: enablementCondition,
                 children: children);
-            group.IsPlainMode = isPlainMode;
+            group.IsFlatMode = isFlatMode;
             group.IsRoster = true;
             group.RosterSizeSource = rosterSizeSourceType ?? (rosterSizeQuestionId.HasValue ? RosterSizeSourceType.Question : RosterSizeSourceType.FixedTitles);
             group.HideIfDisabled = hideIfDisabled;
@@ -2073,8 +2075,6 @@ namespace WB.Tests.Abc.TestFactories
             };
         }
 
-        public InterviewState InterviewState(Guid interviewId) => new InterviewState {Id = interviewId};
-
         public PreloadedFile PreloadedFile(string questionnaireOrRosterName = null, params PreloadingRow[] rows)
             => this.PreloadedFile(null, questionnaireOrRosterName, rows);
 
@@ -2403,7 +2403,7 @@ namespace WB.Tests.Abc.TestFactories
             var created = interviewSummary.InterviewCommentedStatuses.FirstOrDefault(s =>
                 s.Status == InterviewExportedAction.Created);
 
-            return new SpeedReportInterviewItem()
+            return new SpeedReportInterviewItem(interviewSummary)
             {
                 InterviewId = interviewSummary.SummaryId,
                 QuestionnaireId = interviewSummary.QuestionnaireId,
@@ -2414,9 +2414,7 @@ namespace WB.Tests.Abc.TestFactories
                 InterviewerName = firstAnswerSet?.InterviewerName,
                 InterviewerId = firstAnswerSet?.InterviewerId,
                 SupervisorName = firstAnswerSet?.SupervisorName,
-                SupervisorId = firstAnswerSet?.SupervisorId,
-
-                InterviewSummary = interviewSummary
+                SupervisorId = firstAnswerSet?.SupervisorId
             };
         }
 

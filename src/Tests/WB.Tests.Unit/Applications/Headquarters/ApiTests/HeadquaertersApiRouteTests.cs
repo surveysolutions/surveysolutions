@@ -17,7 +17,6 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.UI.Headquarters;
-using WB.UI.Headquarters.Filters;
 
 namespace WB.Tests.Unit.Applications.Headquarters.ApiTests
 {
@@ -123,7 +122,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiTests
         }
 
         [Test]
-        [Ignore("Infrastructure changes needed")]
         public void all_urls_used_in_Supervisor_SynchronizationService_should_be_declared_in_routes()
         {
             var restService = new DummyRestSeviceForCollectUrls();

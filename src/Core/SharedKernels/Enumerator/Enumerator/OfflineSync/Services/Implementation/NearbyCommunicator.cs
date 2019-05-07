@@ -115,14 +115,14 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 var tsc = new TaskCompletionSourceWithProgress(payload, progress, logger, cancellationToken);
                 pending.TryAdd(payload.CorrelationId, tsc);
 
-                logger.Verbose(
-                    $"[{connection.GetEndpointName(endpoint) ?? endpoint}] #{payload.CorrelationId} - {typeof(TRequest).Name} => {typeof(TResponse).Name}");
+                //logger.Verbose(
+                //    $"[{connection.GetEndpointName(endpoint) ?? endpoint}] #{payload.CorrelationId} - {typeof(TRequest).Name} => {typeof(TResponse).Name}");
 
                 await SendOverWireAsync(connection, endpoint, payload);
                 var response = await tsc.Task.ConfigureAwait(false);
 
-                logger.Verbose(
-                    $"[{connection.GetEndpointName(endpoint) ?? endpoint}] #{payload.CorrelationId} - {typeof(TRequest).Name} => {response.GetType().Name}");
+                //logger.Verbose(
+                //    $"[{connection.GetEndpointName(endpoint) ?? endpoint}] #{payload.CorrelationId} - {typeof(TRequest).Name} => {response.GetType().Name}");
 
                 switch (response)
                 {
@@ -145,7 +145,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             }
             catch (Exception inner)
             {
-                this.logger.Verbose("Got exception. " + inner);
+                this.logger.Error("Got exception. " + inner);
                 if (payload != null)
                 {
                     pending.TryRemove(payload.CorrelationId, out _);
@@ -225,8 +225,8 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                         var bytes = await payload.BytesFromStream;
                         var payloadContent = await payloadSerializer.FromPayloadAsync<PayloadContent>(bytes);
                         await HandlePayloadContent(connection, endpoint, payloadContent);
-                        logger.Verbose(
-                            $"[{connection.GetEndpointName(endpoint) ?? endpoint}] #{payloadContent.CorrelationId} Incoming message - {payloadContent.Payload.GetType()}");
+                        //logger.Verbose(
+                        //    $"[{connection.GetEndpointName(endpoint) ?? endpoint}] #{payloadContent.CorrelationId} Incoming message - {payloadContent.Payload.GetType()}");
 
                         if (headers.TryGetValue(update.Id, out header))
                         {
@@ -464,7 +464,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 CancellationToken cancellationToken) : this()
             {
                 this.logger = logger;
-                TaskCompletionSource = new TaskCompletionSource<ICommunicationMessage>();
+                TaskCompletionSource = new TaskCompletionSource<ICommunicationMessage>(TaskCreationOptions.RunContinuationsAsynchronously);
                 Payload = payload;
                 Progress = progress;
                 ProgressData = new TransferProgress();
@@ -482,7 +482,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 //timer?.Dispose();
                 //timer = new Timer(SetCanceled, null, (int) MessageAwaitingTimeout.TotalMilliseconds,
                 //    Timeout.Infinite);
-                logger.Verbose($"Payload: {Payload.Comment}");
+              //  logger.Verbose($"Payload: {Payload.Comment}");
             }
 
             //private void SetCanceled(object state)

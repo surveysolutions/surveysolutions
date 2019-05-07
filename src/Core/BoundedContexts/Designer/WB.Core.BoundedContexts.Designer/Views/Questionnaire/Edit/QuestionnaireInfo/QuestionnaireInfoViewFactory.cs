@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
-using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 
@@ -18,31 +16,30 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
     public class QuestionnaireInfoViewFactory : IQuestionnaireInfoViewFactory
     {
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
-        private readonly IPlainStorageAccessor<QuestionnaireListViewItem> questionnaires;
+        private readonly DesignerDbContext dbContext;
         private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersion;
-        private readonly IPlainStorageAccessor<Aggregates.User> accountsStorage;
         private readonly IAttachmentService attachmentService;
-        private readonly IMembershipUserService membershipUserService;
+        private readonly ILoggedInUser loggedInUser;
 
         public QuestionnaireInfoViewFactory(
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
-            IPlainStorageAccessor<QuestionnaireListViewItem> questionnaires,
+            DesignerDbContext dbContext,
             IQuestionnaireCompilationVersionService questionnaireCompilationVersion,
-            IPlainStorageAccessor<Aggregates.User> accountsStorage,
             IAttachmentService attachmentService,
-            IMembershipUserService membershipUserService)
+            ILoggedInUser loggedInUser)
         {
             this.questionnaireDocumentReader = questionnaireDocumentReader;
-            this.questionnaires = questionnaires;
+            this.dbContext = dbContext;
             this.questionnaireCompilationVersion = questionnaireCompilationVersion;
-            this.accountsStorage = accountsStorage;
             this.attachmentService = attachmentService;
-            this.membershipUserService = membershipUserService;
+            this.loggedInUser = loggedInUser;
         }
 
         public QuestionnaireInfoView Load(string questionnaireId, Guid viewerId)
         {
             QuestionnaireDocument questionnaireDocument = this.questionnaireDocumentReader.GetById(questionnaireId);
+
+            if (questionnaireDocument == null) return null;
 
             var questionnaireInfoView = new QuestionnaireInfoView
             {
@@ -92,12 +89,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             questionnaireInfoView.GroupsCount = groupsCount;
             questionnaireInfoView.RostersCount = rostersCount;
 
-            var listItem = this.questionnaires.GetById(questionnaireId);
+            var listItem = this.dbContext.Questionnaires.Include(x => x.SharedPersons).FirstOrDefault(x => x.QuestionnaireId == questionnaireId);
             var sharedPersons = listItem.SharedPersons.GroupBy(x => x.Email).Select(g => g.First())
                 .Select(x => new SharedPersonView
                 {
                     Email = x.Email,
-                    Login = this.accountsStorage.GetById(x.UserId.FormatGuid()).UserName,
+                    Login = this.dbContext.Users.Find(x.UserId).UserName,
                     UserId = x.UserId,
                     IsOwner = x.IsOwner,
                     ShareType = x.ShareType
@@ -107,7 +104,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             if (questionnaireDocument.CreatedBy.HasValue &&
                 sharedPersons.All(x => x.UserId != questionnaireDocument.CreatedBy))
             {
-                var owner = this.accountsStorage.GetById(questionnaireDocument.CreatedBy.Value.FormatGuid());
+                var owner = this.dbContext.Users.Find(questionnaireDocument.CreatedBy.Value);
                 if (owner != null)
                 {
                     sharedPersons.Add(new SharedPersonView
@@ -125,8 +122,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             questionnaireInfoView.SharedPersons = sharedPersons;
             questionnaireInfoView.IsReadOnlyForUser = person == null || (!person.IsOwner && person.ShareType != ShareType.Edit);
             questionnaireInfoView.IsSharedWithUser = person != null;
-            questionnaireInfoView.HasViewerAdminRights = this.membershipUserService.WebUser.IsAdmin;
             questionnaireInfoView.WebTestAvailable = this.questionnaireCompilationVersion.GetById(listItem.PublicId)?.Version == null;
+            questionnaireInfoView.HasViewerAdminRights = this.loggedInUser.IsAdmin;
 
             questionnaireInfoView.Macros = questionnaireDocument
                 .Macros

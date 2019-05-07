@@ -46,11 +46,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
         public int PageSize = 20;
 
         /// <summary>
-        /// Get online accounts only
-        /// </summary>
-        public bool IsOnlineOnly = false;
-
-        /// <summary>
         /// Get new accounts only
         /// </summary>
         public bool IsNewOnly = false;

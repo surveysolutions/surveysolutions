@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         }
 
         private void BecauseOf() => questionnaire.UpdateGroup(groupId, responsibleId, "title",null, rosterSizeQuestionId, null, null, hideIfDisabled: false, isRoster: true,
-                    rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null, isPlainMode: false);
+                    rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null, isFlatMode: false);
 
 
         [NUnit.Framework.Test] public void should_contains_group () =>

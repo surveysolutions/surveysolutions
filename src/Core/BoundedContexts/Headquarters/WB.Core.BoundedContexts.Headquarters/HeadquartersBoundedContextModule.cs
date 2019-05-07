@@ -49,13 +49,13 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
-using WB.Core.BoundedContexts.Headquarters.Diag;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services.Internal;
+using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
@@ -76,6 +76,7 @@ using WB.Enumerator.Native.Questionnaire.Impl;
 using WB.Enumerator.Native.WebInterview;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
@@ -91,6 +92,7 @@ namespace WB.Core.BoundedContexts.Headquarters
         private readonly int? interviewLimitCount;
         private readonly string syncDirectoryName;
         private readonly ExternalStoragesSettings externalStoragesSettings;
+        private readonly FileSystemEmailServiceSettings fileSystemEmailServiceSettings;
         private readonly UserPreloadingSettings userPreloadingSettings;
         private readonly ExportSettings exportSettings;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
@@ -108,7 +110,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             TrackingSettings trackingSettings, 
             int? interviewLimitCount = null,
             string syncDirectoryName = "SYNC",
-            ExternalStoragesSettings externalStoragesSettings = null)
+            ExternalStoragesSettings externalStoragesSettings = null,
+            FileSystemEmailServiceSettings fileSystemEmailServiceSettings = null)
         {
             this.userPreloadingSettings = userPreloadingSettings;
             this.exportSettings = exportSettings;
@@ -120,6 +123,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.syncSettings = syncSettings;
             this.syncDirectoryName = syncDirectoryName;
             this.externalStoragesSettings = externalStoragesSettings;
+            this.fileSystemEmailServiceSettings = fileSystemEmailServiceSettings;
             this.trackingSettings = trackingSettings;
         }
 
@@ -167,6 +171,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             //registry.BindToMethod<Func<IInterviewsToDeleteFactory>>(context => () => context.Get<IInterviewsToDeleteFactory>());
             registry.Bind<IInterviewHistoryFactory, InterviewHistoryFactory>();
             registry.Bind<ISpeedReportDenormalizerFunctional, SpeedReportDenormalizerFunctional>();
+            registry.Bind<IInterviewStatisticsReportDenormalizer, InterviewStatisticsReportDenormalizer>();
             registry.Bind<IInterviewInformationFactory, InterviewerInterviewsFactory>();
             registry.Bind<IDatasetWriterFactory, DatasetWriterFactory>();
             registry.Bind<IQuestionnaireLabelFactory, QuestionnaireLabelFactory>();
@@ -227,7 +232,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.RegisterDenormalizer<InterviewSummaryCompositeDenormalizer>();
             registry.RegisterDenormalizer<InterviewLifecycleEventHandler>();
             registry.RegisterDenormalizer<InterviewExportedCommentariesDenormalizer>();
-            registry.RegisterDenormalizer<InterviewDenormalizer>();
             registry.RegisterDenormalizer<CumulativeChartDenormalizer>();
 
             registry.Bind<IInterviewPackagesService, IInterviewBrokenPackagesService, InterviewPackagesService>();
@@ -290,9 +294,16 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAssignmentPasswordGenerator, AssignmentPasswordGenerator>();
             registry.Bind<IInterviewReportDataRepository, InterviewReportDataRepository>();
 
-            registry.Bind<IInterviewStateFixer, InterviewStateFixer>();
+            if (fileSystemEmailServiceSettings?.IsEnabled ?? false)
+            {
+                registry.Bind<IEmailService, FileSystemEmailService>(new ConstructorArgument("settings", _ => fileSystemEmailServiceSettings));
+                registry.Bind<IPlainKeyValueStorage<EmailProviderSettings>, FileSystemEmailProviderSettingsStorage>(new ConstructorArgument("settings", _ => fileSystemEmailServiceSettings));
+            }
+            else
+            {
+                registry.Bind<IEmailService, EmailService>();
+            }
 
-            registry.Bind<IEmailService, EmailService>();
             registry.Bind<IInvitationService, InvitationService>();
             registry.BindAsSingleton<ITokenGenerator,TokenGenerator>();
             registry.Bind<IInvitationMailingService, InvitationMailingService>();

@@ -1,54 +1,49 @@
 ﻿using System;
 using System.Linq;
-using FluentAssertions;
+using System.Threading.Tasks;
 using Main.Core.Documents;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.Infrastructure.Implementation;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Abc;
-using WB.UI.Designer.Api.Tester;
 
 namespace WB.Tests.Unit.Designer.Api.Tester.TranslationsControllerTests
 {
     public class when_getting_translations : TranslationsControllerTestsContext
     {
-        [OneTimeSetUp]
-        public void context()
+        [Test]
+        public async Task should_return_only_1_translation_by_specified_questionnaire()
         {
-            var translationsStorage = new InMemoryPlainStorageAccessor<TranslationInstance>();
-            translationsStorage.Store(storedTranslations.Select(x => Tuple.Create<TranslationInstance, object>(x, x.Id)));
+            var translationsStorage = Create.InMemoryDbContext();
+            translationsStorage.TranslationInstances.AddRange(storedTranslations);
+            translationsStorage.SaveChanges();
 
             var questionnaireDocument = new QuestionnaireDocument();
 
-            questionnaireDocument.Translations = new[] {new Translation {Id = translationId, Name = translationName}}.ToList();
+            questionnaireDocument.Translations = new[] {new Translation {Id = translationId, Name = "translation"}}.ToList();
                 
 
             var questionnaireView = Create.QuestionnaireView(questionnaireDocument);
             var questionnaireViewFactory = Mock.Of<IQuestionnaireViewFactory>(x => x.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) == questionnaireView);
 
-            controller = CreateTranslationsController(translations: translationsStorage, questionnaireViewFactory: questionnaireViewFactory);
-            BecauseOf();
+            var controller = CreateTranslationsController(dbContext: translationsStorage, questionnaireViewFactory: questionnaireViewFactory);
+
+            // Act
+            expectedTranslations = (TranslationDto[]) (await controller.Get(questionnaireId, version: ApiVersion.CurrentTesterProtocolVersion) as OkObjectResult)?.Value;
+
+            // Assert
+            Assert.That(expectedTranslations, Has.Length.EqualTo(1));
         }
-
-        private void BecauseOf() => expectedTranslations = controller.Get(questionnaireId, version: ApiVersion.CurrentTesterProtocolVersion);
-
-        [Test]
-        public void should_return_only_1_translation_by_specified_questionnaire() =>
-            expectedTranslations.Should().HaveCount(1);
-
-        private static TranslationController controller;
 
         private static readonly Guid questionnaireId = Id.g1;
         private static readonly Guid translationId = Id.g2;
-        private static readonly string translationName = "translation";
 
-
-        private static TranslationDto[] expectedTranslations;
+        private TranslationDto[] expectedTranslations;
 
         private static readonly TranslationInstance[] storedTranslations =
         {

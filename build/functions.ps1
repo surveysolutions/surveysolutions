@@ -59,8 +59,22 @@ function GetPathToMSBuild() {
     return 'C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe'
 }
 
+if($ENV:NUGET_EXE -eq $null) {
+    $nuget = "D:\tools\nuget.exe"
+} else {
+    $nuget = $ENV:NUGET_EXE
+    $nuget = "$nuget\tools\nuget.exe"
+}
+
 function GetPathToConfigTransformator() {
-    return "packages\WebConfigTransformRunner.1.0.0.1\Tools\WebConfigTransformRunner"
+    $path = ".\packages\WebConfigTransformRunner.1.0.0.1\Tools\WebConfigTransformRunner.exe"
+
+    if(Test-Path $path) {
+        return $path
+    } else {    
+        & $nuget install WebConfigTransformRunner -Version 1.0.0.1 | Out-Null
+        return $path
+    }
 }
 
 function GetMainSolutionPath() {
@@ -153,9 +167,7 @@ function CleanBinAndObjFolders() {
     Log-Block "Cleaning folders" {
         CleanFolders 'bin'
         CleanFolders 'obj'
-        CleanFolders 'src\UI\Designer\WB.UI.Designer\questionnaire\build'
         CleanFolders 'src\UI\Headquarters\WB.UI.Headquarters\InterviewApp'
-        CleanFolders 'src\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.Interview\node_modules'
     }
 }
 
@@ -197,16 +209,16 @@ function BuildStaticContent($blockName, $targetLocation, $runTests = $false) {
         Log-Block $blockName {
             Log-Message "yarn install"
             #install node js dependencies
-            &yarn install --no-optional | Write-Host
+            &yarn | Write-Host
             
             $wasBuildSuccessfull = $LASTEXITCODE -eq 0
             if (-not $wasBuildSuccessfull) {
-                Log-Error "Failed to run yarn"
+                Log-Error "Failed to run npm"
                 return $wasBuildSuccessfull
             }
     
             Log-Message "Running gulp --production"
-            &node_modules\.bin\gulp --production | Write-Host
+            &yarn gulp --production | Write-Host
     
             $wasBuildSuccessfull = $LASTEXITCODE -eq 0
             if (-not $wasBuildSuccessfull) {
@@ -253,9 +265,9 @@ function TeamCityEncode([string]$value) {
     $result
 }
 
-function BuildSolution($Solution, $BuildConfiguration) {
+function BuildSolution($Solution, $BuildConfiguration, $BuildArgs) {
     return Log-Block "Building solution $Solution in configuration '$BuildConfiguration'" {
-        return Execute-MSBuild $Solution $BuildConfiguration
+        return Execute-MSBuild $Solution $BuildConfiguration $BuildArgs
     }
 }
 
@@ -280,6 +292,24 @@ function AddArtifacts($Project, $BuildConfiguration, $folder) {
     MoveArtifacts $zipfile, $cmdfile $folder
 }
 
+function AddNetCoreArtifacts($Project, $BuildConfiguration, $folder) {
+    $folder = ".\Artifacts\$folder"
+    Remove-Item $folder -Recurse -Force  -ErrorAction SilentlyContinue | Out-Null
+    New-Item $folder -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
+    $folder = Resolve-Path $folder
+    
+    $csproj = Get-ChildItem $Project;
+    $name = $csproj.BaseName;
+    Push-Location $csproj.Directory;
+    
+    try {
+        dotnet publish -c $BuildConfiguration -r win-x64 --self-contained -o $folder\$name
+        Compress-Archive -Path $folder\$name -DestinationPath $folder\$name.zip
+        Remove-Item $folder\$name -Recurse -Force  -ErrorAction SilentlyContinue | Out-Null
+    } finally {
+        Pop-Location
+    }
+}
 function MoveArtifacts([string[]] $items, $folder) {
     $artifactsFolder = "Artifacts"
     If (Test-Path "$artifactsFolder") {
@@ -348,10 +378,32 @@ function Execute-MSBuild($ProjectFile, $Configuration, $buildArgs = $null) {
     return $wasBuildSuccessfull
 }
 
-function BuildWebPackage($Project, $BuildConfiguration) {
-    Write-Host "##teamcity[blockOpened name='Building web package for project $Project']"
-    Write-Host "##teamcity[progressStart 'Building web package for project $Project']"
+function BuildAspNetCoreWebPackage($Project, $BuildConfiguration, $BuildNumber, $branch) {
+    return Log-Block "Building Asp.Net Core package for project $Project" {
+        try {
+            $arg = @("publish", $Project,  "-c", $BuildConfiguration,
+                "--version-suffix", $branch, "-v", "q"
+                "/p:PublishProfile=WebDeployPackage"
+                "/p:BuildNumber=$BuildNumber"
+            )
 
+            "dotnet $arg" | Out-Host
+            $result = & "dotnet" $arg 
+            
+            $ok = $LASTEXITCODE -eq 0
+
+            if($ok -eq $False) {
+                Log-Error $result
+            }
+
+            return $ok
+        } catch {
+            return $false
+        }
+    }
+}
+
+function BuildWebPackage($Project, $BuildConfiguration) {
     return Log-Block "Building web package for project $Project" {
         return Execute-MSBuild $Project $BuildConfiguration '/t:Package'
     }

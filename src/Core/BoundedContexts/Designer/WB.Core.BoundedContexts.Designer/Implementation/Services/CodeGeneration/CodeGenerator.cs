@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using Main.Core.Documents;
+using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Templates;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V10.Templates;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V5.Templates;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.Infrastructure.FileSystem;
+using WB.UI.Designer.Code;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
@@ -29,14 +30,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         private readonly QuestionnaireExpressionStateModelFactory expressionStateModelFactory;
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly ICompilerSettings settings;
+        private readonly IOptions<CompilerSettings> settings;
 
         public CodeGenerator(
             IMacrosSubstitutionService macrosSubstitutionService, 
             IExpressionProcessor expressionProcessor,
             ILookupTableService lookupTableService,
             IFileSystemAccessor fileSystemAccessor,
-            ICompilerSettings settings)
+            IOptions<CompilerSettings> settings)
         {
             this.expressionStateModelFactory = new QuestionnaireExpressionStateModelFactory(
                 macrosSubstitutionService, 
@@ -97,16 +98,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         private void DumpCodeIfNeeded(Dictionary<string, string> generatedClasses)
         {
-            if (!this.settings.EnableDump)
+            if (!this.settings.Value.EnableDump)
                 return;
 
-            if (!this.fileSystemAccessor.IsDirectoryExists(this.settings.DumpFolder))
+            if (!this.fileSystemAccessor.IsDirectoryExists(this.settings.Value.DumpFolder))
             {
-                this.fileSystemAccessor.CreateDirectory(this.settings.DumpFolder);
+                this.fileSystemAccessor.CreateDirectory(this.settings.Value.DumpFolder);
             }
             else
             {
-                foreach (var filename in this.fileSystemAccessor.GetFilesInDirectory(this.settings.DumpFolder))
+                foreach (var filename in this.fileSystemAccessor.GetFilesInDirectory(this.settings.Value.DumpFolder))
                 {
                     try
                     {
@@ -122,7 +123,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             foreach (var generatedClass in generatedClasses)
             {
                 string fileName = this.fileSystemAccessor.MakeStataCompatibleFileName($"{generatedClass.Key}.cs");
-                string filePath = this.fileSystemAccessor.CombinePath(this.settings.DumpFolder, fileName);
+                string filePath = this.fileSystemAccessor.CombinePath(this.settings.Value.DumpFolder, fileName);
 
                 this.fileSystemAccessor.WriteAllText(filePath, generatedClass.Value);
             }

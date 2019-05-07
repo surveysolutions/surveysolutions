@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Dapper;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities.Question;
 using NUnit.Framework;
@@ -8,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
@@ -183,7 +185,7 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
             var interviewId = Guid.NewGuid();
             var questionnaire = Questionnaires[version];
 
-            StoreInterviewSummary(new InterviewSummary(questionnaire)
+            var summary = new InterviewSummary(questionnaire)
             {
                 InterviewId = interviewId,
                 Status = InterviewStatus.Completed,
@@ -191,9 +193,9 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
                 ResponsibleId = Id.gC,
                 TeamLeadId = Id.gE,
                 TeamLeadName = teamLeadName
-            }, new QuestionnaireIdentity(questionnaire.PublicKey, version));
+            };
+            StoreInterviewSummary(summary, new QuestionnaireIdentity(questionnaire.PublicKey, version));
 
-            var state = Create.Entity.InterviewState(interviewId);
 
             SetIntAnswer(dwellingQuestion, (int)dwelling);
 
@@ -205,13 +207,19 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
                 SetIntAnswer(sexQuestion, (int)member.sex, vector);
             }
 
-            factory.Save(state);
 
             void SetIntAnswer(Guid questionId, int answer, params int[] rosterVector)
             {
-                var question = InterviewStateIdentity.Create(questionId, rosterVector);
-                state.Enablement[question] = true;
-                state.Answers[question] = new InterviewStateAnswer { AsInt = answer };
+                this.UnitOfWork.Session.Connection.Execute(
+                    "INSERT INTO readside.report_statistics(interview_id, entity_id, rostervector, answer, \"type\", " +
+                    "is_enabled) VALUES(@interviewId, @entityId, @rosterVector, @answer, 0, @enabled); ", new
+                    {
+                        interviewId = summary.Id,
+                        rosterVector = new RosterVector(rosterVector).AsString(),
+                        answer = new[] { answer },
+                        enabled = true,
+                        entityId = questionnaire.EntitiesIdMap[questionId]
+                    });
             }
         }
     }

@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
     internal class when_generating_classes_with_lookup_table : CodeGeneratorTestsContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
-            AssemblyContext.SetupServiceLocator();
+            
 
             var lookupTableContent = Create.LookupTableContent(new[] { "min", "max" },
                 Create.LookupTableRow(1, new decimal?[] { 1.15m, 10 }),
@@ -26,8 +26,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
             lookupTableServiceMock
                 .Setup(x => x.GetLookupTableContent(questionnaireId, lookupId))
                 .Returns(lookupTableContent);
-
-            Setup.InstanceToMockedServiceLocator<ILookupTableService>(lookupTableServiceMock.Object);
 
             var assetsTitles = new[]
             {
@@ -51,7 +49,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
 
             questionnaire.LookupTables.Add(lookupId, Create.LookupTable("price"));
 
-            generator = Create.CodeGenerator();
+            generator = Create.CodeGenerator(lookupTableService: lookupTableServiceMock.Object);
             BecauseOf();
         }
 

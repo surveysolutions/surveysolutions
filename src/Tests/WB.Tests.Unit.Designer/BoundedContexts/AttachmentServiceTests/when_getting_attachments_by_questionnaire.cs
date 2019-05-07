@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
@@ -11,9 +12,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
 
-            allAttachments.ForEach(attachment => attachmentMetaStorage.Store(attachment, attachment.AttachmentId));
+            allAttachments.ForEach(attachment => attachmentMetaStorage.AttachmentMetas.Add(attachment));
+            attachmentMetaStorage.SaveChanges();
 
-            attachmentService = Create.AttachmentService(attachmentMetaStorage: attachmentMetaStorage);
+            attachmentService = Create.AttachmentService(attachmentMetaStorage);
             BecauseOf();
         }
 
@@ -37,6 +39,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
             Create.AttachmentMeta(Guid.NewGuid(), "", questionnaireId)
         };
         
-        private static readonly TestPlainStorage<AttachmentMeta> attachmentMetaStorage = new TestPlainStorage<AttachmentMeta>();
+        private static readonly DesignerDbContext attachmentMetaStorage = Create.InMemoryDbContext();
     }
 }

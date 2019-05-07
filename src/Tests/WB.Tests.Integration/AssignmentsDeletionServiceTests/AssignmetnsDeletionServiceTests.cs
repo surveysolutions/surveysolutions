@@ -35,6 +35,7 @@ namespace WB.Tests.Integration.AssignmentsDeletionServiceTests
                     typeof(ReadonlyUserMap),
                     typeof(AssignmentMap),
                     typeof(QuestionnaireLiteViewItemMap),
+                    typeof(InterviewStatisticsReportRowMap),
                     typeof(InterviewSummaryMap),
                     typeof(QuestionAnswerMap),
                     typeof(InterviewCommentedStatusMap),

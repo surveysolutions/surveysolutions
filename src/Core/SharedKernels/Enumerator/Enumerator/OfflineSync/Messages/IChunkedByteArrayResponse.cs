@@ -6,5 +6,6 @@
         long Skipped { get; set; }
         int Length { get; set; }
         long Total { get; set; }
+        byte[] ContentMD5 { get; set; }
     }
 }
