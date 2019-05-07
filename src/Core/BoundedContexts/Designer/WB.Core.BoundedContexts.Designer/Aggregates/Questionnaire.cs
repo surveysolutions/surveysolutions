@@ -4,7 +4,6 @@ using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Main.Core.Documents;
@@ -12,7 +11,6 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -80,8 +78,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         newGroup.PublicKey,
                         parentId,
                         this.innerDocument.PublicKey);
-
-                    logger.Error(errorMessage);
                 }
             }
 
@@ -104,7 +100,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #region Dependencies
 
-        private readonly ILogger logger;
         private readonly IClock clock;
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
@@ -115,14 +110,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         #endregion
 
         public Questionnaire(
-            ILogger logger, 
             IClock clock, 
             ILookupTableService lookupTableService, 
             IAttachmentService attachmentService,
             ITranslationsService translationService,
             IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService)
         {
-            this.logger = logger;
             this.clock = clock;
             this.lookupTableService = lookupTableService;
             this.attachmentService = attachmentService;
@@ -722,7 +715,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void UpdateGroup(Guid groupId, Guid responsibleId,
             string title,string variableName, Guid? rosterSizeQuestionId, string description, string condition, bool hideIfDisabled, 
             bool isRoster, RosterSizeSourceType rosterSizeSource, FixedRosterTitleItem[] rosterFixedTitles, Guid? rosterTitleQuestionId,
-            bool isPlainMode)
+            bool isFlatMode)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -745,7 +738,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 description,
                 condition,
                 hideIfDisabled,
-                isPlainMode);
+                isFlatMode);
 
             if (isRoster)
             {

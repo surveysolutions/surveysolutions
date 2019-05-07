@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Designer.Services.Accounts;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
+using Microsoft.EntityFrameworkCore;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 
@@ -24,17 +23,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
     public class QuestionnaireViewFactory : IQuestionnaireViewFactory
     {
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
-        private readonly IPlainStorageAccessor<QuestionnaireListViewItem> listItemStorage;
-        private readonly IAccountRepository accountRepository;
+        private readonly DesignerDbContext dbContext;
 
         public QuestionnaireViewFactory(
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
-            IPlainStorageAccessor<QuestionnaireListViewItem> listItemStorage, 
-            IAccountRepository accountRepository)
+            DesignerDbContext dbContext)
         {
             this.questionnaireStorage = questionnaireStorage;
-            this.listItemStorage = listItemStorage;
-            this.accountRepository = accountRepository;
+            this.dbContext = dbContext;
         }
 
         public QuestionnaireView Load(QuestionnaireViewInputModel input)
@@ -53,7 +49,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             if (questionnaire.CreatedBy == userId)
                 return true;
 
-            var questionnaireListItem = this.listItemStorage.GetById(questionnaireId.FormatGuid());
+            var questionnaireListItem = this.dbContext.Questionnaires.Where(x => x.QuestionnaireId == questionnaireId.FormatGuid())
+                .Include(x => x.SharedPersons).FirstOrDefault();
+
+            if (questionnaireListItem == null)
+                return false;
+
             if (questionnaireListItem.IsPublic)
                 return true;
 
@@ -72,7 +73,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             if (questionnaire.CreatedBy == userId)
                 return true;
 
-            var listViewItem = this.listItemStorage.GetById(questionnaireId.FormatGuid());
+            var listViewItem = this.dbContext.Questionnaires.Find(questionnaireId.FormatGuid());
 
             var sharedPersons = listViewItem.SharedPersons;
             if (sharedPersons.Any(x => x.UserId == userId && x.ShareType == ShareType.Edit))
@@ -83,13 +84,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         private List<SharedPersonView> GetSharedPersons(Guid questionnaireId)
         {
-            var listViewItem = this.listItemStorage.GetById(questionnaireId.FormatGuid());
-            var sharedPersons = listViewItem.SharedPersons
+            var listViewItem = this.dbContext.SharedPersons.Where(x => x.QuestionnaireId == questionnaireId.FormatGuid()).ToList();
+            var sharedPersons = listViewItem
                 .Select(x => new SharedPersonView
                 {
                     Email = x.Email,
                     IsOwner = x.IsOwner,
-                    Login = accountRepository.GetByProviderKey(x.UserId)?.UserName ?? string.Empty,
+                    Login = this.dbContext.Users.Find(x.UserId)?.UserName ?? string.Empty,
                     ShareType = x.ShareType,
                     UserId = x.UserId
                 });

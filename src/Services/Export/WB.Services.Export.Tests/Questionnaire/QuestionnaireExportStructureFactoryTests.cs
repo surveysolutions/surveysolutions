@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using FluentAssertions;
 using NUnit.Framework;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Questionnaire;
@@ -15,7 +14,7 @@ namespace WB.Services.Export.Tests.Questionnaire
         public void should_fill_multioption_question_header_title()
         {
             // arrange
-            var multyOptionLinkedQuestionId = Guid.Parse("d7127d06-5668-4fa3-b255-8a2a0aaaa020");
+            var multiOptionLinkedQuestionId = Guid.Parse("d7127d06-5668-4fa3-b255-8a2a0aaaa020");
             var linkedSourceQuestionId = Guid.NewGuid();
 
             var questionnaire = Create.QuestionnaireDocumentWithOneChapter(
@@ -26,7 +25,7 @@ namespace WB.Services.Export.Tests.Questionnaire
                     {
                         Create.TextQuestion(id: linkedSourceQuestionId, variable: "varTxt")
                     }),
-                Create.MultyOptionsQuestion(id: multyOptionLinkedQuestionId,
+                Create.MultyOptionsQuestion(id: multiOptionLinkedQuestionId,
                     variable: "mult",
                     linkedToQuestionId: linkedSourceQuestionId));
 
@@ -34,19 +33,19 @@ namespace WB.Services.Export.Tests.Questionnaire
 
 
             // act
-            var questionnaaireExportStructure = QuestionnaireExportStructureFactory.CreateQuestionnaireExportStructure(questionnaire);
+            var questionnaireExportStructure = QuestionnaireExportStructureFactory.CreateQuestionnaireExportStructure(questionnaire);
 
             // assert
-            HeaderStructureForLevel headerStructureForLevel = questionnaaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()];
-            ExportedQuestionHeaderItem exportedQuestionHeaderItem = headerStructureForLevel.HeaderItems[multyOptionLinkedQuestionId] as ExportedQuestionHeaderItem;
+            HeaderStructureForLevel headerStructureForLevel = questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()];
+            ExportedQuestionHeaderItem exportedQuestionHeaderItem = headerStructureForLevel.HeaderItems[multiOptionLinkedQuestionId] as ExportedQuestionHeaderItem;
 
             Assert.That(exportedQuestionHeaderItem.ColumnHeaders.Count, Is.EqualTo(2));
             Assert.That(exportedQuestionHeaderItem.ColumnHeaders.Select(x => x.Name).ToArray(), Is.EquivalentTo(new[] { "mult__0", "mult__1" }));
 
-            Assert.That(exportedQuestionHeaderItem.ColumnHeaders[0].ExportType, Is.EqualTo(ExportValueType.String));
-            Assert.That(exportedQuestionHeaderItem.ColumnHeaders[1].ExportType, Is.EqualTo(ExportValueType.String));
+            Assert.That(exportedQuestionHeaderItem.ColumnHeaders[0].ExportType, Is.EqualTo(ExportValueType.NumericInt));
+            Assert.That(exportedQuestionHeaderItem.ColumnHeaders[1].ExportType, Is.EqualTo(ExportValueType.NumericInt));
 
-            Assert.That(exportedQuestionHeaderItem.QuestionSubType, Is.EqualTo(QuestionSubtype.MultyOption_Linked));
+            Assert.That(exportedQuestionHeaderItem.QuestionSubType, Is.EqualTo(QuestionSubtype.MultiOptionLinkedFirstLevel));
             Assert.That(exportedQuestionHeaderItem.QuestionType, Is.EqualTo(QuestionType.MultyOption));
         }
 
@@ -89,7 +88,7 @@ namespace WB.Services.Export.Tests.Questionnaire
             Assert.That(exportedQuestionHeaderItem.ColumnHeaders[2].ExportType, Is.EqualTo(ExportValueType.String));
             Assert.That(exportedQuestionHeaderItem.ColumnHeaders[3].ExportType, Is.EqualTo(ExportValueType.String));
 
-            Assert.That(exportedQuestionHeaderItem.QuestionSubType, Is.EqualTo(QuestionSubtype.MultyOption_Linked));
+            Assert.That(exportedQuestionHeaderItem.QuestionSubType, Is.EqualTo(QuestionSubtype.MultiOptionLinkedNestedLevel));
             Assert.That(exportedQuestionHeaderItem.QuestionType, Is.EqualTo(QuestionType.MultyOption));
         }     
         
@@ -137,7 +136,7 @@ namespace WB.Services.Export.Tests.Questionnaire
             Assert.That(exportedQuestionHeaderItem.ColumnHeaders[2].ExportType, Is.EqualTo(ExportValueType.String));
             Assert.That(exportedQuestionHeaderItem.ColumnHeaders[3].ExportType, Is.EqualTo(ExportValueType.String));
 
-            Assert.That(exportedQuestionHeaderItem.QuestionSubType, Is.EqualTo(QuestionSubtype.MultyOption_Linked));
+            Assert.That(exportedQuestionHeaderItem.QuestionSubType, Is.EqualTo(QuestionSubtype.MultiOptionLinkedNestedLevel));
             Assert.That(exportedQuestionHeaderItem.QuestionType, Is.EqualTo(QuestionType.MultyOption));
         }      
         
@@ -180,8 +179,8 @@ namespace WB.Services.Export.Tests.Questionnaire
 
             Assert.That(exportedQuestionHeaderItem.ColumnHeaders.Count, Is.EqualTo(60));
             Assert.That(exportedQuestionHeaderItem.ColumnHeaders.Select(x => x.Name), Is.EqualTo(Enumerable.Range(0, 60).Select(value => "multi__" + value)));
-            Assert.That(exportedQuestionHeaderItem.ColumnHeaders.Select(x => x.ExportType), Is.EqualTo(Enumerable.Range(0, 60).Select(_ => ExportValueType.String)));
-            Assert.That(exportedQuestionHeaderItem.QuestionSubType, Is.EqualTo(QuestionSubtype.MultyOption_Linked));
+            Assert.That(exportedQuestionHeaderItem.ColumnHeaders.Select(x => x.ExportType), Is.EqualTo(Enumerable.Range(0, 60).Select(_ => ExportValueType.NumericInt)));
+            Assert.That(exportedQuestionHeaderItem.QuestionSubType, Is.EqualTo(QuestionSubtype.MultiOptionLinkedFirstLevel));
             Assert.That(exportedQuestionHeaderItem.QuestionType, Is.EqualTo(QuestionType.MultyOption));
         }
     }

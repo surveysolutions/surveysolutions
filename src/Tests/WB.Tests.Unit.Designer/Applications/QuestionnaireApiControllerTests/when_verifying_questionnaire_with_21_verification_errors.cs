@@ -5,6 +5,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -12,6 +13,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer.Api;
 using WB.UI.Designer.Code;
+using WB.UI.Designer.Controllers.Api.Designer;
 using WB.UI.Designer.Models;
 
 
@@ -45,16 +47,16 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
         }
 
         private void BecauseOf() =>
-            result = controller.Verify(questionnaireId);
+            result = (VerificationResult) (controller.Verify(questionnaireId) as OkObjectResult)?.Value;
 
         [NUnit.Framework.Test] public void should_returned_errors_contains_specified_errors_count () =>
-            result.Errors.Sum(error => error.Errors.SelectMany(e => e.References).Count()).Should().Be(QuestionnaireController.MaxVerificationErrors);
+            result.Errors.Sum(error => error.Errors.SelectMany(e => e.References).Count()).Should().Be(QuestionnaireApiController.MaxVerificationErrors);
 
         private static QuestionnaireDocument questionnaireDocument;
         private static QuestionnaireView questionnaireView;
         private static Mock<IQuestionnaireVerifier> verifierMock ;
         private static QuestionnaireVerificationMessage[] verificationMessages;
-        private static QuestionnaireController controller;
+        private static QuestionnaireApiController controller;
         private static VerificationResult result;
         private static Guid questionnaireId = Guid.Parse("22222222222222222222222222222222");
     }

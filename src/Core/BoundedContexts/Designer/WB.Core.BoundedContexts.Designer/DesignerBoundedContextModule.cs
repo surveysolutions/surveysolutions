@@ -3,7 +3,6 @@ using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Classifications;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
-using WB.Core.BoundedContexts.Designer.Commands.Account;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
@@ -32,8 +31,8 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
-using WB.Core.BoundedContexts.Designer.Services.Accounts;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.Aggregates;
@@ -42,32 +41,25 @@ using WB.Core.Infrastructure.TopologicalSorter;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Infrastructure.Native.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.DependencyInjection;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Infrastructure.Native.Storage;
 
 namespace WB.Core.BoundedContexts.Designer
 {
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-    public class DesignerBoundedContextModule : IModule
+    public class DesignerBoundedContextModule : IAppModule
     {
-        private readonly ICompilerSettings compilerSettings;
-
-        public DesignerBoundedContextModule(ICompilerSettings compilerSettings)
+        public void Load(IDependencyRegistry registry)
         {
-            this.compilerSettings = compilerSettings;
-        }
-
-        public void Load(IIocRegistry registry)
-        {
-            registry.BindToConstant<IEventTypeResolver>(() => new EventTypeResolver(typeof(DesignerBoundedContextModule).Assembly));
+            registry.BindAsSingleton<IEventTypeResolver, EventTypeResolver>(new EventTypeResolver(typeof(DesignerBoundedContextModule).Assembly));
 
             registry.Bind<IKeywordsProvider, KeywordsProvider>();
             registry.Bind<ISubstitutionService, SubstitutionService>();
 
-            registry.Bind<IPlainAggregateRootRepository<User>, UserRepository>();
             registry.Bind<IPatchGenerator, JsonPatchService>();
             registry.Bind<IPatchApplier, JsonPatchService>();
             registry.Bind<IPlainAggregateRootRepository<Questionnaire>, QuestionnaireRepository>();
-            registry.BindToMethod<IFindReplaceService>(c => new FindReplaceService(c.Get<IPlainAggregateRootRepository<Questionnaire>>()));
+            registry.Bind<IFindReplaceService, FindReplaceService>();
 
             registry.Bind<IQuestionnaireListViewFactory, QuestionnaireListViewFactory>();
             registry.Bind<IPublicFoldersStorage, PublicFoldersStorage>();
@@ -77,21 +69,17 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind<IChapterInfoViewFactory, ChapterInfoViewFactory>();
             registry.Bind<IQuestionnaireInfoViewFactory, QuestionnaireInfoViewFactory>();
             registry.Bind<IAccountListViewFactory, AccountListViewFactory>();
-            registry.Bind<IAccountViewFactory, AccountViewFactory>();
             registry.Bind<IAllowedAddressService, AllowedAddressService>();
             registry.Bind<IQuestionnaireCompilationVersionService, QuestionnaireCompilationVersionService>();
             registry.Bind<IIpAddressProvider, IpAddressProvider>();
             registry.Bind<ITranslationsService, TranslationsService>();
             registry.Bind<ITranslationsExportService, TranslationsExportService>();
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
-            registry.Bind<IAccountRepository, DesignerAccountRepository>();
 
             registry.BindAsSingleton<IStringCompressor, JsonCompressor>();
             registry.Bind<ISerializer, NewtonJsonSerializer>();
-            registry.BindInPerLifetimeScope<OriginalQuestionnaireStorage, OriginalQuestionnaireStorage>();
 
             registry.BindAsSingleton<IExpressionProcessor, RoslynExpressionProcessor>();
-            registry.BindToConstant<ICompilerSettings>(() => this.compilerSettings);
             registry.Bind<IDynamicCompilerSettingsProvider, DynamicCompilerSettingsProvider>();
             registry.Bind<ILookupTableService, LookupTableService>();
             registry.Bind<IAttachmentService, AttachmentService>();
@@ -102,27 +90,20 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind<IQuestionTypeToCSharpTypeMapper, QuestionTypeToCSharpTypeMapper>();
             registry.Bind<ICodeGenerationModelsFactory, CodeGenerationModelsFactory>();
             registry.Bind(typeof(ITopologicalSorter<>), typeof(TopologicalSorter<>));
+
+            registry.Bind(typeof(IPlainKeyValueStorage<>), typeof(DesignerKeyValueStorage<>));
+            registry.Bind(typeof(IEntitySerializer<>), typeof(EntitySerializer<>));
+            registry.Bind(typeof(IPlainAggregateRootRepository), typeof(QuestionnaireRepository));
+            registry.Bind<Questionnaire, Questionnaire>();
+            registry.Bind<ListViewPostProcessor, ListViewPostProcessor>();
+            registry.Bind<HistoryPostProcessor, HistoryPostProcessor>();
+            registry.Bind<SearchPostProcessors, SearchPostProcessors>();
+            registry.Bind<ResourcesPreProcessor, ResourcesPreProcessor>();
+            registry.Bind<ResourcesPostProcessor, ResourcesPostProcessor>();
         }
 
-        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
+        public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
-            CommandRegistry
-                .Setup<User>()
-                .ResolvesIdFrom<UserCommand>(command => command.UserId)
-                .InitializesWith<RegisterUser>((command, aggregate) => aggregate.Register(command.ApplicationName, command.UserName, command.Email, command.UserId, command.Password, command.PasswordSalt, command.IsConfirmed, command.ConfirmationToken, command.FullName))
-                .Handles<AssignUserRole>((command, aggregate) => aggregate.AddRole(command.Role))
-                .Handles<ChangeUserPassword>((command, aggregate) => aggregate.ChangePassword(command.Password))
-                .Handles<ChangeSecurityQuestion>((command, aggregate) => aggregate.ChangePasswordQuestionAndAnswer(command.PasswordQuestion, command.PasswordAnswer))
-                .Handles<SetPasswordResetToken>((command, aggregate) => aggregate.ChangePasswordResetToken(command.PasswordResetToken, command.PasswordResetExpirationDate))
-                .Handles<ConfirmUserAccount>((command, aggregate) => aggregate.Confirm())
-                .Handles<DeleteUserAccount>((command, aggregate) => aggregate.Delete())
-                .Handles<LockUserAccount>((command, aggregate) => aggregate.Lock())
-                .Handles<RegisterFailedLogin>((command, aggregate) => aggregate.LoginFailed())
-                .Handles<RemoveUserRole>((command, aggregate) => aggregate.RemoveRole(command.Role))
-                .Handles<ResetUserPassword>((command, aggregate) => aggregate.ResetPassword(command.Password, command.PasswordSalt))
-                .Handles<UnlockUserAccount>((command, aggregate) => aggregate.Unlock())
-                .Handles<UpdateUserAccount>((command, aggregate) => aggregate.Update(command.UserName, command.IsLockedOut, command.PasswordQuestion, command.Email, command.IsConfirmed, command.Comment, command.CanImportOnHq, command.FullName));
-
             CommandRegistry
                 .Setup<Questionnaire>()
                 .ResolvesIdFrom<QuestionnaireCommand>(command => command.QuestionnaireId)
@@ -152,7 +133,7 @@ namespace WB.Core.BoundedContexts.Designer
                 .Handles<AddGroup>((command, aggregate) => aggregate.AddGroupAndMoveIfNeeded(command.GroupId, command.ResponsibleId, command.Title, command.VariableName, command.RosterSizeQuestionId, command.Description, command.Condition, command.HideIfDisabled, command.ParentGroupId, command.IsRoster, command.RosterSizeSource, command.FixedRosterTitles, command.RosterTitleQuestionId, command.Index), config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>().PostProcessBy<SearchPostProcessors>())
                 .Handles<DeleteGroup>((command, aggregate) => aggregate.DeleteGroup(command.GroupId, command.ResponsibleId), config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>().PreProcessBy<ResourcesPreProcessor>().PostProcessBy<SearchPostProcessors>())
                 .Handles<MoveGroup>((command, aggregate) => aggregate.MoveGroup(command.GroupId, command.TargetGroupId, command.TargetIndex, command.ResponsibleId), config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())
-                .Handles<UpdateGroup>((command, aggregate) => aggregate.UpdateGroup(command.GroupId, command.ResponsibleId, command.Title, command.VariableName, command.RosterSizeQuestionId, command.Description, command.Condition, command.HideIfDisabled, command.IsRoster, command.RosterSizeSource, command.FixedRosterTitles, command.RosterTitleQuestionId, command.IsPlainMode), config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>().PostProcessBy<SearchPostProcessors>())
+                .Handles<UpdateGroup>((command, aggregate) => aggregate.UpdateGroup(command.GroupId, command.ResponsibleId, command.Title, command.VariableName, command.RosterSizeQuestionId, command.Description, command.Condition, command.HideIfDisabled, command.IsRoster, command.RosterSizeSource, command.FixedRosterTitles, command.RosterTitleQuestionId, command.IsFlatMode), config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>().PostProcessBy<SearchPostProcessors>())
                 // Questions
                 .Handles<MoveQuestion>((command, aggregate) => aggregate.MoveQuestion(command.QuestionId, command.TargetGroupId, command.TargetIndex, command.ResponsibleId), config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())
                 .Handles<AddDefaultTypeQuestion>((command, aggregate) => aggregate.AddDefaultTypeQuestionAdnMoveIfNeeded(command), config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>().PostProcessBy<SearchPostProcessors>())

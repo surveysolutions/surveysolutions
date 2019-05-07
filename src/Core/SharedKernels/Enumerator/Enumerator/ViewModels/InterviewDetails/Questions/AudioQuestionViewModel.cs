@@ -214,25 +214,25 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
             catch (MissingPermissionsException e) when (e.Permission == Permission.Microphone)
             {
-                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
+                await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
                     .MissingPermissions_Microphone);
             }
             catch (MissingPermissionsException e) when (e.Permission == Permission.Storage)
             {
-                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
+                await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
                     .MissingPermissions_Storage);
             }
             catch (MissingPermissionsException e)
             {
-                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(e.Message);
+                await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(e.Message);
             }
             catch (AudioException e) when (e.Type == AudioExceptionType.Io)
             {
-                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Audio_Io_Exception_Message);
+                await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Audio_Io_Exception_Message);
             }
             catch (AudioException e) when (e.Type == AudioExceptionType.Unhandled)
             {
-                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Audio_Unhandled_Exception_Message);
+                await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Audio_Unhandled_Exception_Message);
             }
         }
 

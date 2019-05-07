@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 {
@@ -19,6 +20,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
         public virtual int Depth { get; set; }
 
         public virtual string Path { get; set; }
+
+        public virtual ICollection<QuestionnaireListViewItem> Questionnaires { get; set; } 
 
         protected bool Equals(QuestionnaireListViewFolder other)
         {

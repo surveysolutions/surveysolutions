@@ -77,10 +77,10 @@ namespace WB.Tests.Unit.Designer.QuestionnaireTests.CascadingOptions
         {
             var questionId = Id.g1;
             var questionnaireDocument =
-                Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(
-                    Abc.Create.Entity.SingleOptionQuestion(
+                Create.QuestionnaireDocumentWithOneChapter(
+                    Create.SingleOptionQuestion(
                         questionId: questionId,
-                        isFilteredCombobox: true
+                        isComboBox: true
                     ));
 
             var questionnaire = Create.Questionnaire(Id.gA, questionnaireDocument);

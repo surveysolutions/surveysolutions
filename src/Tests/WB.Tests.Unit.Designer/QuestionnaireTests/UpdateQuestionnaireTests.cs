@@ -8,12 +8,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
     [TestFixture]
     internal class UpdateQuestionnaireTests : QuestionnaireTestsContext
     {
-        [SetUp]
-        public void SetUp()
-        {
-            AssemblyContext.SetupServiceLocator();
-        }
-
         [TestCase("")]
         [TestCase("   ")]
         [TestCase("\t")]

@@ -51,7 +51,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
             var trafficUsage = this.dbContext.DeviceSyncInfo.Where(x => interviewersIds.Contains(x.InterviewerId))
                 .Select(x => new {x.InterviewerId, Traffic = x.Statistics.TotalDownloadedBytes + x.Statistics.TotalUploadedBytes})
                 .GroupBy(x => x.InterviewerId)
-                .Select(x => new {InterviewerId = x.Key, Traffic = x.Sum(s => s.Traffic)})
+                .Select(x => new {InterviewerId = x.Key, Traffic = x.Sum(s => (long?)s.Traffic) ?? 0})
                 .ToList();
 
             return trafficUsage.ToDictionary(x => x.InterviewerId, x => x.Traffic);

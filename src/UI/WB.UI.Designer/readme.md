@@ -1,0 +1,1 @@
+﻿- Logs file location ..\logs\

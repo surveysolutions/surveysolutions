@@ -28,19 +28,30 @@
         var $migrateAssignmentsUrl = '@Url.Action("UpgradeAssignments", "SurveySetup")';
         var $cloneQuestionnaireUrl = '@Url.Action("CloneQuestionnaire", "HQ")';
         var $exportQuestionnaireUrl = '@Url.Action("ExportQuestionnaire", "HQ")';
-        var $deleteQuestionnaireUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "DeleteQuestionnaire"})';
+        var $deleteQuestionnaireUrl =
+            '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "DeleteQuestionnaire"})';
         var $webInterviewUrl = '@Url.Action("Settings", "WebInterviewSetup")';
         var $sendInvitationsUrl = '@Url.Action("SendInvitations", "WebInterviewSetup")';
-        var $downloadLinksUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "LinksExport", action = "Download"})';
+        var $downloadLinksUrl =
+            '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "LinksExport", action = "Download"})';
         var $questionnairesApiEndpoint = '@Url.Content("~/api/v1/questionnaires")';
 
         var notifier = new Notifier();
         var ajax = new Ajax(notifier);
 
         $(function() {
-            var model = new Supervisor.VM.Questionnaires(questionnaireListUrl, notifier, ajax,
-                $newInterviewUrl, $batchUploadUrl, $cloneQuestionnaireUrl,
-                $deleteQuestionnaireUrl, $webInterviewUrl, $exportQuestionnaireUrl, $migrateAssignmentsUrl, $questionnairesApiEndpoint, $sendInvitationsUrl);
+            var model = new Supervisor.VM.Questionnaires(questionnaireListUrl,
+                notifier,
+                ajax,
+                $newInterviewUrl,
+                $batchUploadUrl,
+                $cloneQuestionnaireUrl,
+                $deleteQuestionnaireUrl,
+                $webInterviewUrl,
+                $exportQuestionnaireUrl,
+                $migrateAssignmentsUrl,
+                $questionnairesApiEndpoint,
+                $sendInvitationsUrl);
             model.toLocalDate = function(data) {
                 if (data === null || data === undefined || data === "") return "";
 
@@ -51,7 +62,8 @@
                 return [
                     {
                         data: "title",
-                        name: "Title", // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                        name:
+                            "Title", // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
                         "class": "title",
                         render: function(data, type, row) {
                             return (row.allowCensusMode === true ? "<span class='census-icon'></span>" : "") + data;
@@ -59,39 +71,41 @@
                     },
                     {
                         data: "version",
-                        name: "Version",// case-sensitive! 
+                        name: "Version", // case-sensitive! 
                         "class": "parameters"
                     },
                     {
                         data: "importDate",
-                        name: "ImportDate",// case-sensitive! 
+                        name: "ImportDate", // case-sensitive! 
                         "class": "date",
-                        render: function (data, type, row) {
+                        render: function(data, type, row) {
                             return model.toLocalDate(data);
                         }
                     },
                     {
                         data: "lastEntryDate",
-                        name: "LastEntryDate",// case-sensitive! should be DB name here from Designer questionnairelistviewitems? to sort column
+                        name:
+                            "LastEntryDate", // case-sensitive! should be DB name here from Designer questionnairelistviewitems? to sort column
                         "class": "date",
-                        render: function (data, type, row) {
+                        render: function(data, type, row) {
                             return model.toLocalDate(data);
                         }
                     },
                     {
                         data: "creationDate",
-                        name: "CreationDate",// case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                        name:
+                            "CreationDate", // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
                         "class": "date",
-                        render: function (data, type, row) {
+                        render: function(data, type, row) {
                             return model.toLocalDate(data);
                         }
                     },
                     {
                         data: "webModeEnabled",
-                        name: "WebModeEnabled",// case-sensitive! 
+                        name: "WebModeEnabled", // case-sensitive! 
                         "class": "parameters",
                         "orderable": false,
-                        render: function (data, type, row) {
+                        render: function(data, type, row) {
                             return (data === true ? '@Common.Yes' : '@Common.No');
                         }
                     }
@@ -111,7 +125,7 @@
                     .prop('checked', item.selected);
             };
 
-            model.onTableInitCompleteExtra = function () {
+            model.onTableInitCompleteExtra = function() {
 
                 var buildMenuItem = function(selectedRow) {
                     var items = {}
@@ -148,32 +162,32 @@
                     @if (ApplicationSettings.WebInterviewEnabled && !isObserver)
                     {
                         <text>
-                        if (!selectedRow.isDisabled) {
-                            items["webSetup"] = {
-                                name: "@Html.ToSafeJavascriptMessage(Dashboard.WebInterviewSetup)",
-                                callback: model.webInterviewSetup
+                            if (!selectedRow.isDisabled) {
+                                items["webSetup"] = {
+                                    name: "@Html.ToSafeJavascriptMessage(Dashboard.WebInterviewSetup)",
+                                    callback: model.webInterviewSetup
+                                }
                             }
-                        }
-                        if (!selectedRow.isDisabled) {
-                            items["downloadLinks"] = {
-                                name: "@Html.ToSafeJavascriptMessage(Dashboard.DownloadLinks)",
-                                callback: model.downloadLinks
+                            if (!selectedRow.isDisabled) {
+                                items["downloadLinks"] = {
+                                    name: "@Html.ToSafeJavascriptMessage(Dashboard.DownloadLinks)",
+                                    callback: model.downloadLinks
+                                }
                             }
-                        }
-                        if (!selectedRow.isDisabled) {
-                            items["sendInvitations"] = {
-                                name: "@Html.ToSafeJavascriptMessage(Dashboard.SendInvitations)",
-                                callback: model.sendInvitations
+                            if (!selectedRow.isDisabled) {
+                                items["sendInvitations"] = {
+                                    name: "@Html.ToSafeJavascriptMessage(Dashboard.SendInvitations)",
+                                    callback: model.sendInvitations
+                                }
                             }
-                        }
-                        if (!selectedRow.isDisabled) {
-                            items["recordAudio"] = {
-                                name: "RecordAudio",
-                                type: 'wbCheckbox',
-                                selected: selectedRow.isAudioRecordingEnabled,
-                                callback: model.recordAudio
-                            };
-                        }
+                            if (!selectedRow.isDisabled) {
+                                items["recordAudio"] = {
+                                    name: "RecordAudio",
+                                    type: 'wbCheckbox',
+                                    selected: selectedRow.isAudioRecordingEnabled,
+                                    callback: model.recordAudio
+                                };
+                            }
 
                         </text>
                     }
@@ -182,23 +196,23 @@
                     @if (isAdmin)
                     {
                         <text>
-                        items["clone"] =
-                        {
-                            name: "@Html.ToSafeJavascriptMessage(Dashboard.CloneQuestionnaire)",
-                            callback: model.cloneQuestionnaire,
-                            disabled: selectedRow.isDisabled
-                        };
-                        items["delete"] =
-                        {
-                            name: "@Html.ToSafeJavascriptMessage(Dashboard.DeleteQuestionnaire)",
-                            callback: model.deleteQuestionnaire
-                            /*,disabled: selectedRow.isDisabled*/
-                        };
-                        items["export"] = {
-                            name: "@Html.ToSafeJavascriptMessage(Dashboard.ExportQuestionnaire)",
-                            callback: model.exportQuestionnaire,
-                            disabled: selectedRow.isDisabled
-                        }
+                            items["clone"] =
+                            {
+                                name: "@Html.ToSafeJavascriptMessage(Dashboard.CloneQuestionnaire)",
+                                callback: model.cloneQuestionnaire,
+                                disabled: selectedRow.isDisabled
+                            };
+                            items["delete"] =
+                            {
+                                name: "@Html.ToSafeJavascriptMessage(Dashboard.DeleteQuestionnaire)",
+                                callback: model.deleteQuestionnaire
+                                /*,disabled: selectedRow.isDisabled*/
+                            };
+                            items["export"] = {
+                                name: "@Html.ToSafeJavascriptMessage(Dashboard.ExportQuestionnaire)",
+                                callback: model.exportQuestionnaire,
+                                disabled: selectedRow.isDisabled
+                            }
                         </text>
                     }
                     return items;
@@ -207,12 +221,13 @@
                 var contextMenuOptions = {
                     selector: "table#data_holder .with-context-menu",
                     autoHide: false,
-                    build: function ($trigger, e) {
+                    build: function($trigger, e) {
                         var selectedRow = model.selectRowAndGetData($trigger);
                         var items = buildMenuItem(selectedRow);
                         return { items: items };
                     },
-                    trigger: 'left'
+                    trigger: 'left',
+                    zIndex: 1050
                 };
 
                 $.contextMenu(contextMenuOptions);

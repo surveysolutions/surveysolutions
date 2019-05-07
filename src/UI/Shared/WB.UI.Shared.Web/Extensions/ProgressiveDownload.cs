@@ -27,7 +27,7 @@ namespace WB.UI.Shared.Web.Extensions
             return response;
         }
 
-        public HttpResponseMessage ResultMessage(Stream stream, string mediaType, string fileName = null)
+        public HttpResponseMessage ResultMessage(Stream stream, string mediaType, string fileName = null, byte[] hash = null)
         {
             var rangeHeader = this.request.Headers.Range?.Ranges.FirstOrDefault();
             if (rangeHeader != null)
@@ -80,6 +80,11 @@ namespace WB.UI.Shared.Web.Extensions
                     };
                 }
 
+                if (hash != null)
+                {
+                    partialResponse.Content.Headers.ContentMD5 = hash;
+                }
+
                 partialResponse.Content.Headers.ContentType = byteRange.Headers.ContentType;
                 partialResponse.Content.Headers.ContentLength = byteRange.Headers.ContentLength;
                 partialResponse.Content.Headers.ContentRange = byteRange.Headers.ContentRange;
@@ -90,6 +95,12 @@ namespace WB.UI.Shared.Web.Extensions
             var nonPartialResponse = this.request.CreateResponse(HttpStatusCode.OK);
 
             nonPartialResponse.Content = new StreamContent(stream);
+
+            if (hash != null)
+            {
+                nonPartialResponse.Content.Headers.ContentMD5 = hash;
+            }
+
             nonPartialResponse.Content.Headers.ContentType = new MediaTypeHeaderValue(mediaType);
             nonPartialResponse.Headers.AcceptRanges.Add("bytes");
 

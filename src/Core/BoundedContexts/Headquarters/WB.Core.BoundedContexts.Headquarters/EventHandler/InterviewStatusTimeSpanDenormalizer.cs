@@ -37,7 +37,10 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     InterviewExportedAction.Completed,
                     completeTime, timeSpan,
                     lastAssignOfRejectStatus.SupervisorName,
-                    lastAssignOfRejectStatus.InterviewerName));
+                    lastAssignOfRejectStatus.InterviewerName)
+                {
+                    InterviewSummary = interviewSummary
+                });
         }
 
         private void ReplaceLastCompleteStatus(InterviewSummary interviewSummary, InterviewCommentedStatus lastAssignOfRejectStatus, DateTime completeTime, TimeSpan timeSpan)
@@ -92,7 +95,10 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     evnt.EventTimeStamp, 
                     timeSpan, 
                     lastAssignOfRejectStatus.SupervisorName,
-                    lastAssignOfRejectStatus.InterviewerName));
+                    lastAssignOfRejectStatus.InterviewerName)
+                {
+                    InterviewSummary = state
+                });
 
             return state;
         }

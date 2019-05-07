@@ -5,6 +5,7 @@ using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Moq;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.Infrastructure.PlainStorage;
 
@@ -23,7 +24,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                 fileStream = memoryStream.ToArray();
             }
 
-            plainStorageAccessor = new TestPlainStorage<TranslationInstance>();
+            plainStorageAccessor = Create.InMemoryDbContext(); 
 
             var questionnaire = Create.QuestionnaireDocument(Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"), children: new IComposite[]
             {
@@ -41,10 +42,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         private void BecauseOf() => service.Store(questionnaireId, translationId, fileStream);
 
         [NUnit.Framework.Test] public void should_store_4_entities () =>
-            plainStorageAccessor.Query(_ => _.Count()).Should().Be(4);
+            plainStorageAccessor.TranslationInstances.Count().Should().Be(4);
 
         private static TranslationsService service;
-        private static TestPlainStorage<TranslationInstance> plainStorageAccessor;
+        private static DesignerDbContext plainStorageAccessor;
         private static byte[] fileStream;
         private static Guid questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         private static Guid entityId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");

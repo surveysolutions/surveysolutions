@@ -1,9 +1,9 @@
 ﻿select status, Days, COUNT(*) as InterviewsCount from (
 	SELECT isum.status, 
 		DATE_PART('day', (now() at time zone 'utc')::timestamp - timestamp::timestamp) + 1 as Days, 
-		row_number() over (partition by ics."interviewid" order by position desc) rnk
+		row_number() over (partition by ics."interview_id" order by position desc) rnk
 	FROM readside.interviewcommentedstatuses ics
-		INNER JOIN readside.interviewsummaries isum ON CAST(ics.interviewid as uuid) = isum.interviewid
+		INNER JOIN readside.interviewsummaries isum ON ics.interview_id = isum.id
 	WHERE 
 		(
 		   (isum.status = 100 /*Completed*/ AND ics.status = 3 /*Completed*/ )

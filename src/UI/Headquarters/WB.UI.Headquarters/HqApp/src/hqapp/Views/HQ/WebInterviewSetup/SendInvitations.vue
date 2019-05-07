@@ -89,7 +89,7 @@ export default {
                 self.totalInvitationsCount = invitationsInfo.totalInvitationsCount || 0,
                 self.notSentInvitationsCount = invitationsInfo.notSentInvitationsCount || 0,
                 self.sentInvitationsCount =  invitationsInfo.sentInvitationsCount || 0;
-                self.emailProvider = (invitationsInfo.emailProvider || "").toLocaleLowerCase()
+                self.emailProvider = ((invitationsInfo.emailProvider || "") + "").toLocaleLowerCase()
             })
             .catch(function (error) { 
                 Vue.config.errorHandler(error, self);

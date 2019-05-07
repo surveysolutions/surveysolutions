@@ -12,7 +12,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
     {
         private readonly IPlainAggregateRootRepository<Questionnaire> questionnaires;
 
-        internal FindReplaceService(IPlainAggregateRootRepository<Questionnaire> questionnaires)
+        public FindReplaceService(IPlainAggregateRootRepository<Questionnaire> questionnaires)
         {
             this.questionnaires = questionnaires;
         }
