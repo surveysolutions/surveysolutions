@@ -147,9 +147,11 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
             throw new NotImplementedException();
         }
 
+        public DateTime? LastSync { get; }
+        public bool? LastSyncSucceeded { get; }
+
         public void MarkSyncStart(){}
 
         public void MarkSyncSucceeded(){}
-
     }
 }

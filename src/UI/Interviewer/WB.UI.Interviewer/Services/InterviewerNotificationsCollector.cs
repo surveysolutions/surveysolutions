@@ -24,7 +24,6 @@ namespace WB.UI.Interviewer.Services
 
         public List<NotificationModel> CollectAllNotifications()
         {
-
             //collect all notifications
             //Sync was not performed for 3 (orange) or 5 (red) days
             //Sync with errors was not retry in 6 hours
@@ -33,7 +32,7 @@ namespace WB.UI.Interviewer.Services
             //Rejected interview was not opened more that 1,2,3,4,.. days  
 
             var notifications = new List<NotificationModel>();
-            
+
             //test
             /*notifications.Add(new NotificationModel()
             {
@@ -86,7 +85,6 @@ namespace WB.UI.Interviewer.Services
                 {
                     if (this.enumeratorSettings.LastSync.Value <= DateTime.Now.Date.AddHours(-6))
                     {
-                        //for testing purposes
                         notifications.Add(new NotificationModel()
                         {
                             NotificationId = (int)NotificationType.NoRetryAfterFailedSync,
@@ -96,14 +94,12 @@ namespace WB.UI.Interviewer.Services
                             IconId = Resource.Drawable.icon,
                             Intent = GetPendingIntent()
                         });
-
                     }
                 }
                 else
                 {
                     if (this.enumeratorSettings.LastSync.Value <= DateTime.Now.Date.AddHours(-6))
                     {
-                        //for testing purposes
                         notifications.Add(new NotificationModel()
                         {
                             NotificationId = (int)NotificationType.LastSyncTooLongAgo,

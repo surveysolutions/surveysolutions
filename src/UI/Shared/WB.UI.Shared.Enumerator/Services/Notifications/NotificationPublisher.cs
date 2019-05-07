@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -11,10 +13,8 @@ namespace WB.UI.Shared.Enumerator.Services.Notifications
         static readonly string CHANNEL_ID = "interviewer_notification";
         static readonly string CHANNEL_NAME = "General notifications";
         static readonly string CHANNEL_DESCRIPTION = "Main channel for notifications";
-
-        static readonly string GROUP_NAME = "Interviewer";
-
-        private static readonly Random GetRandom = new Random();
+        static readonly string GROUP_NAME = "Interviewer_group";
+        private static readonly int SUMMARY_ID = 1000001;
 
         public void Init(Context context)
         {
@@ -23,29 +23,59 @@ namespace WB.UI.Shared.Enumerator.Services.Notifications
 
         public void Notify(Context context, NotificationModel notificationModel)
         {
-            // Instantiate the builder and set notification elements:
-            NotificationCompat.Builder builder = 
-                    new NotificationCompat.Builder(context, CHANNEL_ID) // check is API < 25
-                    .SetAutoCancel(notificationModel.AutoCancel)
-                    .SetContentIntent(notificationModel.Intent)
-                    .SetContentTitle(notificationModel.ContentTitle)
-                    .SetContentText(notificationModel.ContentText)
-                    .SetGroup(GROUP_NAME)
-                    .SetSmallIcon(notificationModel.IconId) //replace this icon
-                                                               //there are difference if android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
-                                                               //icon should be transparent
-                ;
-
             // Build the notification:
-            Notification notification = builder.Build();
+            Notification notification = this.GetNotification(context, notificationModel);
 
             // Get the notification manager:
             NotificationManager notificationManager = context.GetSystemService(Context.NotificationService) as NotificationManager;
+            notificationManager?.Notify(notificationModel.NotificationId, notification);
+        }
 
-            // Publish the notification:
-            int notificationId = notificationModel.NotificationId ?? GetRandom.Next(0, 1000000);
+        private Notification GetNotification(Context context, NotificationModel notificationModel)
+        {
+            // Instantiate the builder and set notification elements:
+            NotificationCompat.Builder builder =
+                    new NotificationCompat.Builder(context, CHANNEL_ID)
+                        .SetAutoCancel(notificationModel.AutoCancel)
 
-            notificationManager?.Notify(notificationId, notification);
+                        .SetContentIntent(notificationModel.Intent)
+                        .SetContentTitle(notificationModel.ContentTitle)
+                        .SetContentText(notificationModel.ContentText)
+                        .SetGroup(GROUP_NAME)
+                        .SetSmallIcon(notificationModel.IconId) //replace this icon
+                //there are difference if android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+                //icon should be transparent
+                ;
+
+            // Build the notification:
+            return builder.Build();
+        }
+
+        public void Notify(Context context, List<NotificationModel> notificationModels, bool renderSummary)
+        {
+            foreach (var notificationModel in notificationModels)
+            {
+                this.Notify(context, notificationModel);
+            }
+            
+            if (notificationModels.Count > 1 && renderSummary)
+            {
+                NotificationCompat.Builder builder =
+                        new NotificationCompat.Builder(context, CHANNEL_ID)
+                            
+                            .SetContentTitle("Summary")
+                            .SetContentText("{notificationModels.Count} notifications")
+
+                            .SetGroup(GROUP_NAME)
+                            .SetGroupSummary(true)
+                            .SetSmallIcon(notificationModels.First().IconId);
+
+                // Build the notification:
+                var summary =  builder.Build();
+
+                NotificationManager notificationManager = context.GetSystemService(Context.NotificationService) as NotificationManager;
+                notificationManager?.Notify(SUMMARY_ID, summary);
+            }
         }
 
         public void CreateNotificationChannel(Context context)

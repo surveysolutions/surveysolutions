@@ -10,11 +10,13 @@ namespace WB.UI.Shared.Enumerator.Services.Notifications
 {
     public class NotificationsGenerationWorker : Worker
     {
-        public NotificationsGenerationWorker(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
+        public NotificationsGenerationWorker(IntPtr javaReference, JniHandleOwnership transfer) 
+            : base(javaReference, transfer)
         {
         }
 
-        public NotificationsGenerationWorker(Context context, WorkerParameters workerParams) : base(context, workerParams)
+        public NotificationsGenerationWorker(Context context, WorkerParameters workerParams) 
+            : base(context, workerParams)
         {
         }
 
@@ -32,12 +34,8 @@ namespace WB.UI.Shared.Enumerator.Services.Notifications
                 var context = this.ApplicationContext;
 
                 publisher.Init(context);
-
-                foreach (var notificationModel in notificationsToSend)
-                {
-                    publisher.Notify(context, notificationModel);
-                }
-
+                publisher.Notify(context, notificationsToSend, true);
+                
                 return Result.InvokeSuccess();
             }
             catch (InterruptedException e)

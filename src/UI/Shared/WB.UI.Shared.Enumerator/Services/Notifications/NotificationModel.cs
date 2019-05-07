@@ -8,7 +8,7 @@ namespace WB.UI.Shared.Enumerator.Services.Notifications
         public string ContentText { set; get; }
         public bool AutoCancel { set; get; } = true;
 
-        public int? NotificationId { set; get; }
+        public int NotificationId { set; get; }
 
 
         public int IconId { set; get; }
