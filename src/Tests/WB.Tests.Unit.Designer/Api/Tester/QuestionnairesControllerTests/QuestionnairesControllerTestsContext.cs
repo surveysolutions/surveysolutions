@@ -5,7 +5,7 @@ using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
-using WB.UI.Designer.Api.Tester;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Designer.Controllers.Api.Tester;
 
 namespace WB.Tests.Unit.Designer.Api.Tester.QuestionnairesControllerTests
@@ -28,8 +28,8 @@ namespace WB.Tests.Unit.Designer.Api.Tester.QuestionnairesControllerTests
                 viewFactory: viewFactory ?? Substitute.For<IQuestionnaireListViewFactory>(),
                 engineVersionService: engineVersionService ?? Substitute.For<IDesignerEngineVersionService>(),
                 expressionsPlayOrderProvider: expressionsPlayOrderProvider ?? Substitute.For<IExpressionsPlayOrderProvider>(),
-                
-                questionnaireCompilationVersionService: questionnaireCompilationVersionService ?? Mock.Of<IQuestionnaireCompilationVersionService>());
+                questionnaireCompilationVersionService: questionnaireCompilationVersionService ?? Mock.Of<IQuestionnaireCompilationVersionService>(),
+                serializer: Mock.Of<ISerializer>());
         }
     }
 }
