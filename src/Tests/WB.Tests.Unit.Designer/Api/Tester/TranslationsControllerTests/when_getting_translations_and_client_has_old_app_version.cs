@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
@@ -9,11 +10,11 @@ namespace WB.Tests.Unit.Designer.Api.Tester.TranslationsControllerTests
     public class when_getting_translations_and_client_has_old_app_version : TranslationsControllerTestsContext
     {
         [Test]
-        public void should_response_code_be_UpgradeRequired()
+        public async Task should_response_code_be_UpgradeRequired()
         {
             var controller = CreateTranslationsController();
             var statusCodeResult = 
-                controller.Get(Id.g1, version: ApiVersion.CurrentTesterProtocolVersion - 1);
+                await controller.Get(Id.g1, version: ApiVersion.CurrentTesterProtocolVersion - 1);
 
             Assert.That(statusCodeResult,
                 Has.Property(nameof(StatusCodeResult.StatusCode))

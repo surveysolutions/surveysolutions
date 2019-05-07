@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Infrastructure.Native.Utils;
@@ -19,7 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
         public IReadOnlyCollection<QuestionnaireListViewItem> GetUserQuestionnaires(
             Guid userId, bool isAdmin, int pageIndex = 1, int pageSize = 128)
         {
-            return FilterByQuestionnaires(this.dbContext.Questionnaires.AsQueryable(), userId, isAdmin)
+            return FilterByQuestionnaires(this.dbContext.Questionnaires.Include(x => x.SharedPersons).AsQueryable(), userId, isAdmin)
                 .OrderBy(x => x.Title)
                 .Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
