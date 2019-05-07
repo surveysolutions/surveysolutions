@@ -5,9 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.UI.Designer.Extensions;
-using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Services;
-using WB.UI.Designer1.Extensions;
 
 namespace WB.UI.Designer.Controllers.Api.WebTester
 {
