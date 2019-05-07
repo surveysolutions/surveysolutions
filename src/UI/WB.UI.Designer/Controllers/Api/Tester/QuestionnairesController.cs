@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Net;
 using Microsoft.AspNetCore.Http;
+using System.Net.Mime;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
@@ -18,7 +20,7 @@ namespace WB.UI.Designer.Controllers.Api.Tester
 {
     [ApiBasicAuth]
     [Route("api/v{version:int}/questionnaires")]
-    public class QuestionnairesController : ControllerBase
+    public class QuestionnairesController : Controller
     {
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
@@ -103,7 +105,7 @@ namespace WB.UI.Designer.Controllers.Api.Tester
             {
                 Document = questionnaire,
                 Assembly = resultAssembly
-            });
+            });            
         }
 
         [HttpGet]
