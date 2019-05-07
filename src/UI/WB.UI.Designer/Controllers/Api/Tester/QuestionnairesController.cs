@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.UI.Designer.Code.Attributes;
 using WB.UI.Designer1.Extensions;
@@ -29,6 +30,7 @@ namespace WB.UI.Designer.Controllers.Api.Tester
         private readonly IDesignerEngineVersionService engineVersionService;
         private readonly IExpressionsPlayOrderProvider expressionsPlayOrderProvider;
         private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersionService;
+        private readonly ISerializer serializer;
 
         public QuestionnairesController(
             IQuestionnaireViewFactory questionnaireViewFactory,
@@ -37,7 +39,8 @@ namespace WB.UI.Designer.Controllers.Api.Tester
             IQuestionnaireListViewFactory viewFactory, 
             IDesignerEngineVersionService engineVersionService, 
             IExpressionsPlayOrderProvider expressionsPlayOrderProvider, 
-            IQuestionnaireCompilationVersionService questionnaireCompilationVersionService)
+            IQuestionnaireCompilationVersionService questionnaireCompilationVersionService, 
+            ISerializer serializer)
         {
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.questionnaireVerifier = questionnaireVerifier;
@@ -46,6 +49,7 @@ namespace WB.UI.Designer.Controllers.Api.Tester
             this.engineVersionService = engineVersionService;
             this.expressionsPlayOrderProvider = expressionsPlayOrderProvider;
             this.questionnaireCompilationVersionService = questionnaireCompilationVersionService;
+            this.serializer = serializer;
         }
 
         [HttpGet]
