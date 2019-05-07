@@ -13,7 +13,6 @@ using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
-using WB.UI.Designer1.Extensions;
 
 namespace WB.UI.Designer.Areas.Admin.Pages
 {
