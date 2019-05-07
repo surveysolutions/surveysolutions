@@ -31,7 +31,7 @@
 
         function apply() {
             $.post("@Url.Action("ApplyCascadingOptions", "Questionnaire")", function(response) {
-                if (response.IsSuccess) {
+                if (response.IsSuccess || response.isSuccess) {
                     close();
                 } else {
                     $(document).scrollTop(0);
