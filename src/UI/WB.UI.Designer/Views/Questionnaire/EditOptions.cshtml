@@ -30,7 +30,7 @@
 
         function apply() {
             $.post("@Url.Action("ApplyOptions", "Questionnaire")", function(response) {
-                if (response.isSuccess) {
+                if (response.isSuccess || response.IsSuccess) {
                     close();
                 } else {
                     $(document).scrollTop(0);
