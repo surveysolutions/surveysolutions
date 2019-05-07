@@ -168,7 +168,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             var interview = this.interviewRepository.Get(this.InterviewId);
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
-            if (navigationIdentity.TargetGroup != null && questionnaire.IsPlainRoster(navigationIdentity.TargetGroup.Id))
+            if (navigationIdentity.TargetGroup != null && questionnaire.IsFlatRoster(navigationIdentity.TargetGroup.Id))
             {
                 navigationIdentity.TargetGroup = interview.GetParentGroup(navigationIdentity.TargetGroup);
             };

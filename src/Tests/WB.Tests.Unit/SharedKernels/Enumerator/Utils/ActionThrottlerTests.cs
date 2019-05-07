@@ -59,20 +59,5 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Utils
 
             Assert.False(isPass);
         }
-
-        [Test, Ignore("Too flacky test")]
-        public void should_run_action_once_within_delay_no_matter_how_many_times_run_called()
-        {
-            var delay = new ActionThrottler();
-            var calls = 0;
-
-            delay.RunDelayed(() => calls++, TimeSpan.FromMilliseconds(500)).ConfigureAwait(false);
-            delay.RunDelayed(() => calls++, TimeSpan.FromMilliseconds(500)).ConfigureAwait(false);
-            delay.RunDelayed(() => calls++, TimeSpan.FromMilliseconds(500)).ConfigureAwait(false);
-            
-            Thread.Sleep(750);
-
-            Assert.That(calls, Is.EqualTo(1));
-        }
     }
 }

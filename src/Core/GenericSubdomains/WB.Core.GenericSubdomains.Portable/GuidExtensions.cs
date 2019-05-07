@@ -24,6 +24,13 @@ namespace WB.Core.GenericSubdomains.Portable
 
         public static Guid? NullIfEmpty(this Guid? value) => value == Guid.Empty ? null as Guid? : value;
 
+        public static Guid? ParseGuid(this string value)
+        {
+            if (string.IsNullOrWhiteSpace(value)) return null;
+
+            return Guid.Parse(value);
+        }
+
         public static Guid ToGuid(this string value)
         {
             if (string.IsNullOrWhiteSpace(value)) 

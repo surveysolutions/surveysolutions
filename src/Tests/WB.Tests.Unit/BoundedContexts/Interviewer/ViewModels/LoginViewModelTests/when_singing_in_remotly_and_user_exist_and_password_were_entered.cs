@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
             synchronizationServiceMock
               .Setup(x => x.LoginAsync(
                   Moq.It.IsAny<LogonInfo>(),
-                  Moq.It.IsAny<RestCredentials>(), null))
+                  Moq.It.IsAny<RestCredentials>(), default))
               .Returns(Task.FromResult(userToken));
 
             viewModel = CreateLoginViewModel(
@@ -63,7 +63,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
         [NUnit.Framework.Test]
         public void should_login_remotly() =>
             synchronizationServiceMock.Verify(x => x.LoginAsync(Moq.It.Is<LogonInfo>(li =>
-                    li.Username == userName && li.Password == newUserPassword), Moq.It.IsAny<RestCredentials>(), null), Times.Once);
+                    li.Username == userName && li.Password == newUserPassword), Moq.It.IsAny<RestCredentials>(), default), Times.Once);
 
         static LoginViewModel viewModel;
         private static readonly string userName = "Vasya";

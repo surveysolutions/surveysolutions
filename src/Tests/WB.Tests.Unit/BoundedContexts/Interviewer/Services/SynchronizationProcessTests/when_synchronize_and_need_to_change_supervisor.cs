@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             PrincipalMock = Mock.Get(SetUp.InterviewerPrincipal(interviewerIdentity));
           
             SynchronizationServiceMock
-                .Setup(x => x.GetCurrentSupervisor(It.IsAny<CancellationToken>(), It.IsAny<RestCredentials>()))
+                .Setup(x => x.GetCurrentSupervisor(It.IsAny<RestCredentials>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(Id.gA);
 
             InterviewerStorageMock.Setup(x => x.FirstOrDefault()).Returns(interviewerIdentity);

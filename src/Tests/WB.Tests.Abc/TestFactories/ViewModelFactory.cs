@@ -564,12 +564,12 @@ namespace WB.Tests.Abc.TestFactories
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>());
         }
 
-        public PlainRosterViewModel PlainRosterViewModel(IStatefulInterviewRepository interviewRepository = null,
+        public FlatRosterViewModel FlatRosterViewModel(IStatefulInterviewRepository interviewRepository = null,
             IInterviewViewModelFactory viewModelFactory = null,
             ILiteEventRegistry eventRegistry = null,
             ICompositeCollectionInflationService compositeCollectionInflationService = null)
         {
-            return new PlainRosterViewModel(
+            return new FlatRosterViewModel(
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 viewModelFactory?? Mock.Of<IInterviewViewModelFactory>(),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
@@ -577,10 +577,10 @@ namespace WB.Tests.Abc.TestFactories
                 );
         }
 
-        public PlainRosterTitleViewModel PlainRosterTitleViewModel(IStatefulInterviewRepository statefulInterviewRepository,
+        public FlatRosterTitleViewModel FlatRosterTitleViewModel(IStatefulInterviewRepository statefulInterviewRepository,
             IQuestionnaireStorage questionnaireStorage)
         {
-            return new PlainRosterTitleViewModel(Create.ViewModel.DynamicTextViewModel(interviewRepository: statefulInterviewRepository),
+            return new FlatRosterTitleViewModel(Create.ViewModel.DynamicTextViewModel(interviewRepository: statefulInterviewRepository),
                 Create.ViewModel.EnablementViewModel(statefulInterviewRepository, questionnaireRepository: questionnaireStorage));
         }
 

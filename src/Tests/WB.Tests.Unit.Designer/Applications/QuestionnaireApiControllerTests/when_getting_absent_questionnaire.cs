@@ -1,5 +1,6 @@
 using System;
 using System.Web.Http;
+using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
 
 
@@ -11,7 +12,8 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
         public void should_throw_HttpResponseException_exception()
         {
             var controller = CreateQuestionnaireController();
-            Assert.Throws<HttpResponseException>(() => controller.EditQuestion(questionnaireId, questionId));
+            var actionResult = controller.EditQuestion(questionnaireId, questionId);
+            Assert.That(actionResult, Is.InstanceOf(typeof(NotFoundResult)));
         }
 
         private static string questionnaireId = "22222222222222222222222222222222";

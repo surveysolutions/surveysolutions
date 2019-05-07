@@ -35,7 +35,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             )
         {
             var questAr = new Questionnaire(
-                Mock.Of<ILogger>(),
                 Mock.Of<IClock>(),
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IAttachmentService>(),

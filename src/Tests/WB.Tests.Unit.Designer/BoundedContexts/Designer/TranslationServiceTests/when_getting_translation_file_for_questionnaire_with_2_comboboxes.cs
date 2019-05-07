@@ -40,8 +40,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                 Create.SingleQuestion(id: cascadingQustionId, variable:$"{questionName}2", cascadeFromQuestionId: comboboxId, options: new List<Answer> {Create.Option("1", "Cascading Option", "1")})
             });
 
-            var translationsStorage = new TestPlainStorage<TranslationInstance>();
-            storedTranslations.ForEach(x => translationsStorage.Store(x, x));
+            var translationsStorage = Create.InMemoryDbContext();
+            translationsStorage.TranslationInstances.AddRange(storedTranslations);
+            translationsStorage.SaveChanges();
 
             var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
             questionnaires.SetReturnsDefault(questionnaire);

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using MvvmCross;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
@@ -15,11 +17,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ICompositeQuestion,
         IDisposable
     {
-        public virtual event EventHandler<int> OnItemSelected;
-        public virtual event EventHandler OnAnswerRemoved;
-        public virtual event EventHandler OnShowErrorIfNoAnswer;
+        public virtual event Func<object, int, Task> OnItemSelected;
+        public virtual event Func<object, EventArgs, Task> OnAnswerRemoved;
+        public virtual event Func<object, EventArgs, Task> OnShowErrorIfNoAnswer;
         private readonly FilteredOptionsViewModel filteredOptionsViewModel;
         private readonly bool displaySelectedValue;
+        private readonly ThrottlingViewModel throttlingModel;
 
         public CategoricalComboboxAutocompleteViewModel(IQuestionStateViewModel questionState,
             FilteredOptionsViewModel filteredOptionsViewModel,
@@ -28,12 +31,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.QuestionState = questionState;
             this.filteredOptionsViewModel = filteredOptionsViewModel;
             this.displaySelectedValue = displaySelectedValue;
+            this.throttlingModel = Mvx.IoCProvider.Create<ThrottlingViewModel>();;
+            this.throttlingModel.Init(UpdateFilterThrottled);
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             this.Identity = entityIdentity;
-            this.UpdateFilter(null);
+            this.AutoCompleteSuggestions = this.GetSuggestions(null).ToList();
         }
 
         private int[] excludedOptions = Array.Empty<int>();
@@ -48,52 +53,86 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             set => this.RaiseAndSetIfChanged(ref this.autoCompleteSuggestions, value);
         }
 
-        public IMvxCommand<string> FilterCommand => new MvxCommand<string>(this.UpdateFilter);
-        public IMvxCommand RemoveAnswerCommand => new MvxCommand(() =>
+        public IMvxCommand<string> FilterCommand => new MvxAsyncCommand<string>(x => this.UpdateFilter(x));
+        public IMvxCommand RemoveAnswerCommand => new MvxAsyncCommand(async () =>
         {
-            this.UpdateFilter(null);
-            this.OnAnswerRemoved?.Invoke(this, null);
+            await this.UpdateFilter(null);
+            if (this.OnAnswerRemoved == null)
+                return;
+
+            await InvokeAllHandlers<EventArgs>(this.OnAnswerRemoved, EventArgs.Empty);
         });
 
-        public IMvxCommand<OptionWithSearchTerm> SaveAnswerBySelectedOptionCommand => new MvxCommand<OptionWithSearchTerm>(this.SaveAnswerBySelectedOption);
-        public IMvxCommand ShowErrorIfNoAnswerCommand => new MvxCommand(this.ShowErrorIfNoAnswer);
+     
+        public IMvxCommand<OptionWithSearchTerm> SaveAnswerBySelectedOptionCommand => new MvxAsyncCommand<OptionWithSearchTerm>(this.SaveAnswerBySelectedOption);
+        public IMvxCommand ShowErrorIfNoAnswerCommand => new MvxAsyncCommand(this.ShowErrorIfNoAnswer);
 
-        private void ShowErrorIfNoAnswer()
+        private async Task ShowErrorIfNoAnswer()
         {
-            this.OnShowErrorIfNoAnswer?.Invoke(this, EventArgs.Empty);
+            await InvokeAllHandlers<EventArgs>(this.OnShowErrorIfNoAnswer, EventArgs.Empty);
 
             if (string.IsNullOrEmpty(this.FilterText)) return;
 
             var selectedOption = this.filteredOptionsViewModel.GetOptions(this.FilterText).FirstOrDefault(x => !this.excludedOptions.Contains(x.Value));
 
             if (selectedOption?.Title.Equals(this.FilterText, StringComparison.CurrentCultureIgnoreCase) == true)
-                this.SaveAnswerBySelectedOption(ToOptionWithSearchTerm(string.Empty, selectedOption));
+                await this.SaveAnswerBySelectedOption(ToOptionWithSearchTerm(string.Empty, selectedOption));
             else
             {
                 var errorMessage = UIResources.Interview_Question_Filter_MatchError.FormatString(this.FilterText);
-                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(errorMessage);
+                await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(errorMessage);
             }
         }
 
-
-        private void SaveAnswerBySelectedOption(OptionWithSearchTerm option)
+        private async Task SaveAnswerBySelectedOption(OptionWithSearchTerm option)
         {
-            this.OnItemSelected?.Invoke(this, option.Value);
-            this.UpdateFilter(displaySelectedValue ? option.Title : null);
+            await InvokeAllHandlers<int>(this.OnItemSelected, option.Value);
+            await this.UpdateFilter(displaySelectedValue ? option.Title : null);
         }
 
-        public void UpdateFilter(string filter) => this.InvokeOnMainThread(() =>
+        private async Task InvokeAllHandlers<T>(Func<object, T, Task> handler, T value)
         {
-            this.AutoCompleteSuggestions = this.GetSuggestions(filter).ToList();
-            this.FilterText = filter;
-            this.RaisePropertyChanged(() => this.FilterText);
-        });
+            Delegate[] invocationList = handler.GetInvocationList();
+            Task[] handlerTasks = new Task[invocationList.Length];
+
+            for (int i = 0; i < invocationList.Length; i++)
+            {
+                handlerTasks[i] = ((Func<object, T, Task>) invocationList[i])(this, value);
+            }
+
+            await Task.WhenAll(handlerTasks);
+        }
+
+        private string filterToUpdate = null;
+        private async Task UpdateFilterThrottled()
+        {
+            var suggestions = this.GetSuggestions(filterToUpdate).ToList();
+
+            await this.InvokeOnMainThreadAsync(async () =>
+            {
+                this.AutoCompleteSuggestions = suggestions;
+                this.FilterText = filterToUpdate;
+                await this.RaisePropertyChanged(() => this.FilterText);
+            });
+        }
+
+        public async Task UpdateFilter(string filter, bool forced = false)
+        {
+            if (this.filterToUpdate == filter && !forced)
+            {
+                return;
+            }
+
+            this.filterToUpdate = filter;
+
+            await this.throttlingModel.ExecuteActionIfNeeded();
+        }
 
         private IEnumerable<OptionWithSearchTerm> GetSuggestions(string filter)
         {
-            var filteredOptions = this.filteredOptionsViewModel.GetOptions(filter).ToArray();
+            List<CategoricalOption> filteredOptions = this.filteredOptionsViewModel.GetOptions(filter);
 
-            foreach (var model in filteredOptions.Length == 1 && displaySelectedValue
+            foreach (var model in filteredOptions.Count == 1 && displaySelectedValue
                 ? filteredOptions
                 : filteredOptions.Where(x => !this.excludedOptions.Contains(x.Value)))
             {
@@ -113,7 +152,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void ExcludeOptions(int[] optionsToExclude) => this.excludedOptions = optionsToExclude ?? Array.Empty<int>();
 
-        public void Dispose() { }
+        public void Dispose()
+        {
+            this.throttlingModel.Dispose();
+        }
 
         public QuestionInstructionViewModel InstructionViewModel => null;
         public IQuestionStateViewModel QuestionState { get; protected set; }

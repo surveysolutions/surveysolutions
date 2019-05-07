@@ -58,7 +58,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             StaticTextModel = 300,
             VariableModel = 400,
             ReadOnlyQuestion = 500,
-            PlainRoster = 600
+            FlatRoster = 600
         }
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -127,7 +127,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                         {InterviewEntityType.ReadOnlyQuestion, Load<ReadOnlyQuestionViewModel>},
                         {InterviewEntityType.AreaQuestionModel, Load<AreaQuestionViewModel>},
                         {InterviewEntityType.AudioQuestionModel, Load<AudioQuestionViewModel>},
-                        {InterviewEntityType.PlainRoster, Load<PlainRosterViewModel>},
+                        {InterviewEntityType.FlatRoster, Load<FlatRosterViewModel>},
                     };
                 }
 
@@ -206,7 +206,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             if (questionnaire.HasGroup(entityId))
             {
                 if (questionnaire.IsRosterGroup(entityId))
-                    return questionnaire.IsPlainRoster(entityId) ? InterviewEntityType.PlainRoster : InterviewEntityType.RosterModel;
+                    return questionnaire.IsFlatRoster(entityId) ? InterviewEntityType.FlatRoster : InterviewEntityType.RosterModel;
                 else
                     return InterviewEntityType.GroupModel;
             }

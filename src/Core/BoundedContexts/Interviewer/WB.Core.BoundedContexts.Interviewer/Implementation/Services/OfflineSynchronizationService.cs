@@ -46,19 +46,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.deviceSettings = deviceSettings;
         }
 
-        public async Task<InterviewUploadState> GetInterviewUploadState(Guid interviewId, EventStreamSignatureTag eventStreamSignatureTag, CancellationToken cancellationToken)
+        public async Task<InterviewUploadState> GetInterviewUploadState(Guid interviewId, EventStreamSignatureTag eventStreamSignatureTag, CancellationToken token = default)
         {
             var result = await this.syncClient.SendAsync<GetInterviewUploadStateRequest, GetInterviewUploadStateResponse>(new GetInterviewUploadStateRequest
             {
                 InterviewId = interviewId,
                 Check = eventStreamSignatureTag
-            }, cancellationToken);
+            }, token);
 
             return result.UploadState;
         }
 
         public Task UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview,
-            IProgress<TransferProgress> transferProgress, CancellationToken token)
+            IProgress<TransferProgress> transferProgress, CancellationToken token = default)
         {
             var interviewKey = this.interviews.GetById(interviewId.FormatGuid())?.InterviewKey;
             return this.syncClient.SendAsync(new UploadInterviewRequest
@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public Task UploadInterviewImageAsync(Guid interviewId, string fileName, byte[] fileData,
             IProgress<TransferProgress> transferProgress,
-            CancellationToken token)
+            CancellationToken token = default)
         {
             return this.syncClient.SendAsync(new UploadInterviewImageRequest
             {
@@ -84,7 +84,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         }
 
         public Task UploadInterviewAudioAsync(Guid interviewId, string fileName, string contentType, byte[] fileData,
-            IProgress<TransferProgress> transferProgress, CancellationToken token)
+            IProgress<TransferProgress> transferProgress, CancellationToken token = default)
         {
             return this.syncClient.SendAsync(new UploadInterviewAudioRequest
             {
@@ -99,7 +99,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         }
 
         public Task UploadInterviewAudioAuditAsync(Guid interviewId, string fileName, string contentType, byte[] fileData,
-            IProgress<TransferProgress> transferProgress, CancellationToken token)
+            IProgress<TransferProgress> transferProgress, CancellationToken token = default)
         {
             return this.syncClient.SendAsync(new UploadInterviewAudioAuditRequest
             {
@@ -115,7 +115,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public async Task<List<string>> GetAttachmentContentsAsync(QuestionnaireIdentity questionnaire,
             IProgress<TransferProgress> transferProgress,
-            CancellationToken token)
+            CancellationToken token = default)
         {
             var response = await syncClient.SendAsync<GetAttachmentContentsRequest, GetAttachmentContentsResponse>(
                 new GetAttachmentContentsRequest {QuestionnaireIdentity = questionnaire}, token, transferProgress);
@@ -124,7 +124,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         }
 
         public async Task<AttachmentContent> GetAttachmentContentAsync(string contentId,
-            IProgress<TransferProgress> transferProgress, CancellationToken token)
+            IProgress<TransferProgress> transferProgress, CancellationToken token = default)
         {
             var response = await syncClient.SendAsync<GetAttachmentContentRequest, GetAttachmentContentResponse>(
                 new GetAttachmentContentRequest { ContentId = contentId }, token, transferProgress);
@@ -132,7 +132,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return response.Content;
         }
 
-        public async Task<List<QuestionnaireIdentity>> GetServerQuestionnairesAsync(CancellationToken cancellationToken)
+        public async Task<List<QuestionnaireIdentity>> GetServerQuestionnairesAsync(CancellationToken token = default)
         {
             var localQuestionnaires = questionnaireAccessor.GetAllQuestionnaireIdentities();
 
@@ -140,138 +140,135 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 new GetQuestionnaireListRequest
                 {
                     Questionnaires = localQuestionnaires
-                }, cancellationToken);
+                }, token);
 
             return response.Questionnaires;
         }
 
         public async Task<List<TranslationDto>> GetQuestionnaireTranslationAsync(
-            QuestionnaireIdentity questionnaireIdentity, CancellationToken cancellationToken)
+            QuestionnaireIdentity questionnaireIdentity, CancellationToken token = default)
         {
             var response = await this.syncClient
                 .SendAsync<GetQuestionnaireTranslationRequest, GetQuestionnaireTranslationResponse>(
                     new GetQuestionnaireTranslationRequest
                     {
                         QuestionnaireIdentity = questionnaireIdentity
-                    }, cancellationToken);
+                    }, token);
 
             return response.Translations;
         }
 
-        public async Task<CompanyLogoInfo> GetCompanyLogo(string storedClientEtag, CancellationToken cancellationToken)
+        public async Task<CompanyLogoInfo> GetCompanyLogo(string storedClientEtag, CancellationToken token = default)
         {
             var response = await syncClient.SendAsync<GetCompanyLogoRequest, GetCompanyLogoResponse>(
                 new GetCompanyLogoRequest
                 {
                     Etag = storedClientEtag
-                }, cancellationToken);
+                }, token);
             return response.LogoInfo;
         }
 
-        public async Task<long?> SendSyncStatisticsAsync(SyncStatisticsApiView statistics,
-            CancellationToken token,
-            RestCredentials credentials)
+        public async Task<long?> SendSyncStatisticsAsync(SyncStatisticsApiView statistics, RestCredentials credentials, CancellationToken token = default)
         {
-            await this.syncClient.SendAsync(new SyncStatisticsRequest(statistics, this.principal.CurrentUserIdentity.UserId),
-                token);
+            await this.syncClient.SendAsync(
+                new SyncStatisticsRequest(statistics, this.principal.CurrentUserIdentity.UserId), token);
 
             return this.settings.LastHqSyncTimestamp;
         }
 
-        public Task SendUnexpectedExceptionAsync(UnexpectedExceptionApiView exception, CancellationToken token)
+        public Task SendUnexpectedExceptionAsync(UnexpectedExceptionApiView exception, CancellationToken token = default)
         {
-            return this.syncClient.SendAsync(new SendUnexpectedExceptionRequest(exception, this.principal.CurrentUserIdentity.UserId), token);
+            return this.syncClient.SendAsync(
+                new SendUnexpectedExceptionRequest(exception, this.principal.CurrentUserIdentity.UserId), token);
         }
 
-        public Task<List<MapView>> GetMapList(CancellationToken cancellationToken)
+        public Task<List<MapView>> GetMapList(CancellationToken token = default)
         {
             return Task.FromResult(new List<MapView>());
         }
 
-        public Task<RestStreamResult> GetMapContentStream(string mapName, CancellationToken cancellationToken)
+        public Task<RestStreamResult> GetMapContentStream(string mapName, CancellationToken token = default)
         {
             return Task.FromResult<RestStreamResult>(null);
         }
 
-        public Task<InterviewerApiView> GetInterviewerAsync(RestCredentials credentials = null, CancellationToken? token = null)
+        public Task<InterviewerApiView> GetInterviewerAsync(RestCredentials credentials = null, CancellationToken token = default)
         {
             throw new NotSupportedException("Offline mode is not support this method");
         }
 
-        public async Task<Guid> GetCurrentSupervisor(CancellationToken cancellationToken, RestCredentials credentials)
+        public async Task<Guid> GetCurrentSupervisor(RestCredentials credentials, CancellationToken token = default)
         {
             var response = await this.syncClient.SendAsync<SupervisorIdRequest, SupervisorIdResponse>(
-                new SupervisorIdRequest(), cancellationToken);
+                new SupervisorIdRequest(), token);
 
             return response.SupervisorId;
         }
 
-        public Task<bool> IsAutoUpdateEnabledAsync(CancellationToken token) => Task.FromResult(true);
+        public Task<bool> IsAutoUpdateEnabledAsync(CancellationToken token = default) => Task.FromResult(true);
 
-        public Task UploadAuditLogEntityAsync(AuditLogEntitiesApiView auditLogEntity, CancellationToken cancellationToken)
+        public Task UploadAuditLogEntityAsync(AuditLogEntitiesApiView auditLogEntity, CancellationToken token = default)
         {
             return this.syncClient.SendAsync(new UploadAuditLogEntityRequest
             {
                 AuditLogEntity = auditLogEntity
-            }, cancellationToken);
+            }, token);
         }
 
-        public Task<List<Guid>> CheckObsoleteInterviewsAsync(List<ObsoletePackageCheck> checks,
-            CancellationToken cancellationToken)
+        public Task<List<Guid>> CheckObsoleteInterviewsAsync(List<ObsoletePackageCheck> checks, CancellationToken token = default)
         {
             return Task.FromResult(new List<Guid>());
         }
 
-        public async Task<AssignmentApiDocument> GetAssignmentAsync(int id, CancellationToken cancellationToken)
+        public async Task<AssignmentApiDocument> GetAssignmentAsync(int id, CancellationToken token = default)
         {
             var response = await
                 syncClient.SendAsync<GetAssignmentRequest, GetAssignmentResponse>(new GetAssignmentRequest { Id = id },
-                    cancellationToken);
+                    token);
 
             return response.Assignment;
         }
 
-        public Task LogAssignmentAsHandledAsync(int id, CancellationToken cancellationToken)
+        public Task LogAssignmentAsHandledAsync(int id, CancellationToken token = default)
         {
-            return syncClient.SendAsync(new LogAssignmentAsHandledRequest { Id = id }, cancellationToken);
+            return syncClient.SendAsync(new LogAssignmentAsHandledRequest { Id = id }, token);
         }
 
-        public async Task<string> GetPublicKeyForEncryptionAsync(CancellationToken cancellationToken)
+        public async Task<string> GetPublicKeyForEncryptionAsync(CancellationToken token = default)
         {
             var response = await syncClient.SendAsync<GetPublicKeyForEncryptionRequest, GetPublicKeyForEncryptionResponse>(
-                new GetPublicKeyForEncryptionRequest(), cancellationToken);
+                new GetPublicKeyForEncryptionRequest(), token);
 
             return response.PublicKey;
         }
 
-        public async Task<List<AssignmentApiView>> GetAssignmentsAsync(CancellationToken cancellationToken)
+        public async Task<List<AssignmentApiView>> GetAssignmentsAsync(CancellationToken token = default)
         {
             var response = await
                 syncClient.SendAsync<GetAssignmentsRequest, GetAssignmentsResponse>(new GetAssignmentsRequest { UserId = principal.CurrentUserIdentity.UserId },
-                    cancellationToken);
+                    token);
 
             return response.Assignments;
         }
 
-        public Task<string> LoginAsync(LogonInfo logonInfo, RestCredentials credentials, CancellationToken? token = null)
+        public Task<string> LoginAsync(LogonInfo logonInfo, RestCredentials credentials, CancellationToken token = default)
         {
             return Task.FromResult("offline sync token");
         }
 
-        public Task<bool> HasCurrentUserDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null)
+        public Task<bool> HasCurrentUserDeviceAsync(RestCredentials credentials = null, CancellationToken token = default)
         {
             return Task.FromResult(true);
         }
 
-        public async Task CanSynchronizeAsync(RestCredentials credentials = null, CancellationToken? token = null)
+        public async Task CanSynchronizeAsync(RestCredentials credentials = null, CancellationToken token = default)
         {
             var request = new CanSynchronizeRequest(this.deviceSettings.GetApplicationVersionCode(), 
                 this.principal.CurrentUserIdentity.UserId,
                 this.principal.CurrentUserIdentity.SecurityStamp,
                 settings.LastHqSyncTimestamp);
 
-            var response = await this.syncClient.SendAsync<CanSynchronizeRequest, CanSynchronizeResponse>(request, 
-                token ?? CancellationToken.None);
+            var response = await this.syncClient.SendAsync<CanSynchronizeRequest, CanSynchronizeResponse>(request,  token);
 
             if (!response.CanSyncronize)
             {
@@ -293,22 +290,22 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             }
         }
 
-        public Task SendDeviceInfoAsync(DeviceInfoApiView info, CancellationToken? token = null)
+        public Task SendDeviceInfoAsync(DeviceInfoApiView info, CancellationToken token = default)
         {
             return this.syncClient.SendAsync(new UploadDeviceInfoRequest
             {
                 UserId = principal.CurrentUserIdentity.UserId,
                 DeviceInfo = info
-            },token ?? CancellationToken.None);
+            },token);
         }
 
-        public Task LinkCurrentUserToDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null)
+        public Task LinkCurrentUserToDeviceAsync(RestCredentials credentials = null, CancellationToken token = default)
         {
             return Task.CompletedTask;
         }
 
         public async Task<byte[]> GetQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaire, IProgress<TransferProgress> transferProgress,
-            CancellationToken token)
+            CancellationToken token = default)
         {
             var response = await this.syncClient.SendAsync<GetQuestionnaireAssemblyRequest, GetQuestionnaireAssemblyResponse>(
                 new GetQuestionnaireAssemblyRequest(questionnaire), token, transferProgress);
@@ -316,7 +313,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         }
 
         public async Task<QuestionnaireApiView> GetQuestionnaireAsync(QuestionnaireIdentity questionnaire, IProgress<TransferProgress> transferProgress,
-            CancellationToken token)
+            CancellationToken token = default)
         {
             var response = await this.syncClient.SendAsync<GetQuestionnaireRequest, GetQuestionnaireResponse>(
                 new GetQuestionnaireRequest(questionnaire), token, transferProgress);
@@ -326,7 +323,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             };
         }
 
-        public Task<List<QuestionnaireIdentity>> GetCensusQuestionnairesAsync(CancellationToken token)
+        public Task<List<QuestionnaireIdentity>> GetCensusQuestionnairesAsync(CancellationToken token = default)
         {
             return Task.FromResult(new List<QuestionnaireIdentity>());
         }
@@ -341,7 +338,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return Task.CompletedTask;
         }
 
-        public async Task<byte[]> GetApplicationAsync(CancellationToken token, IProgress<TransferProgress> transferProgress = null)
+        public async Task<byte[]> GetApplicationAsync(IProgress<TransferProgress> transferProgress = null, CancellationToken token = default)
         {
             var response = await this.syncClient.SendChunkedAsync<GetInterviewerAppRequest, GetInterviewerAppResponse>(
                 new GetInterviewerAppRequest(this.deviceSettings.GetApplicationVersionCode(), this.settings.ApplicationType), 
@@ -350,17 +347,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return response.Content;
         }
 
-        public Task<byte[]> GetApplicationPatchAsync(CancellationToken token, IProgress<TransferProgress> transferProgress = null) 
+        public Task<byte[]> GetApplicationPatchAsync(IProgress<TransferProgress> transferProgress = null, CancellationToken token = default) 
             => Task.FromResult<byte[]>(null);
 
-        public async Task<int?> GetLatestApplicationVersionAsync(CancellationToken token)
+        public async Task<int?> GetLatestApplicationVersionAsync(CancellationToken token = default)
         {
             var response = await this.syncClient.SendAsync<GetLatestApplicationVersionRequest, GetLatestApplicationVersionResponse>(
                 new GetLatestApplicationVersionRequest(), token);
             return response.InterviewerApplicationVersion;
         }
 
-        public async Task<List<InterviewApiView>> GetInterviewsAsync(CancellationToken token)
+        public async Task<List<InterviewApiView>> GetInterviewsAsync(CancellationToken token = default)
         {
             var response = await this.syncClient.SendAsync<GetInterviewsRequest, GetInterviewsResponse>(
                 new GetInterviewsRequest(this.principal.CurrentUserIdentity.UserId), token);
@@ -372,7 +369,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return this.syncClient.SendAsync(new LogInterviewAsSuccessfullyHandledRequest(interviewId), CancellationToken.None);
         }
 
-        public async Task<List<CommittedEvent>> GetInterviewDetailsAsync(Guid interviewId, IProgress<TransferProgress> transferProgress, CancellationToken token)
+        public async Task<List<CommittedEvent>> GetInterviewDetailsAsync(Guid interviewId, IProgress<TransferProgress> transferProgress, CancellationToken token = default)
         {
             var response = await this.syncClient.SendAsync<GetInterviewDetailsRequest, GetInterviewDetailsResponse>(
                 new GetInterviewDetailsRequest(interviewId), token, transferProgress);

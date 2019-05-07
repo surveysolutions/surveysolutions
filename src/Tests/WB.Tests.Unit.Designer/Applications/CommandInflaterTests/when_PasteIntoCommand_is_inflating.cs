@@ -3,29 +3,31 @@ using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.UI.Designer.Code.Implementation;
-
-using it = Moq.It;
 
 namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
 {
     internal class when_PasteIntoCommand_is_inflating : CommandInflaterTestsContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
-            var membershipUserService = Mock.Of<IMembershipUserService>(
-                _ => _.WebUser == Mock.Of<IMembershipWebUser>(
-                    u => u.UserId == actionUserId && u.MembershipUser.Email == actionUserEmail));
+            var dbContext = Create.InMemoryDbContext();
+            dbContext.Users.Add(new DesignerIdentityUser
+            {
+                Id = actionUserId,
+                Email = actionUserEmail
+            });
+            dbContext.SaveChanges();
 
             var questionnaire = CreateQuestionnaireDocument(questoinnaireId, questionnaiteTitle, ownerId);
 
             var documentStorage = Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(storage
-                    => storage.GetById(it.IsAny<string>()) == questionnaire);
+                    => storage.GetById(It.IsAny<string>()) == questionnaire);
 
             command = new PasteInto(questoinnaireId, entityId, pasteAfterId, questoinnaireId, entityId, ownerId);
 
-            commandInflater = CreateCommandInflater(membershipUserService, documentStorage);
+            commandInflater = CreateCommandInflater(dbContext: dbContext, storage: documentStorage);
             BecauseOf();
         }
 

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Moq;
 using MvvmCross.Tests;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Tests.Abc;
 
@@ -14,7 +16,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
     public class CategoricalComboboxAutocompleteViewModelTests : MvxIoCSupportingTest
     {
 
-        public CategoricalComboboxAutocompleteViewModelTests() => base.Setup();
+        public CategoricalComboboxAutocompleteViewModelTests()
+        {
+            base.Setup();
+            Ioc.RegisterType<ThrottlingViewModel>(() => Create.ViewModel.ThrottlingViewModel());
+        }
 
         [Test]
         public void when_FilterCommand_then_AutoCompleteSuggestions_should_contains_filtered_options_only()
@@ -86,7 +92,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             var interview = SetUp.StatefulInterview(questionnaire);
             var filteredViewModel = Create.ViewModel.FilteredOptionsViewModel(Identity.Create(autocompleteQuestionId, RosterVector.Empty), questionnaire, interview);
 
-            var mockOfOnAddEvent = new Mock<EventHandler<int>>();
+            var mockOfOnAddEvent = new Mock<Func<object, int, Task>>();
             var vm = Create.ViewModel.CategoricalComboboxAutocompleteViewModel(filteredViewModel);
             
             vm.OnItemSelected += mockOfOnAddEvent.Object;
