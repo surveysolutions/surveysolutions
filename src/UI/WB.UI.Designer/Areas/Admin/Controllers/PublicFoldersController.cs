@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.UI.Designer.Extensions;
-using WB.UI.Designer1.Extensions;
 
 namespace WB.UI.Designer.Areas.Admin.Controllers
 {
