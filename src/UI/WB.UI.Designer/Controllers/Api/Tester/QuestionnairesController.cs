@@ -2,16 +2,16 @@
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
+using System.Net.Mime;
 using System.Web.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.UI.Designer.Code.Attributes;
@@ -21,7 +21,7 @@ namespace WB.UI.Designer.Controllers.Api.Tester
 {
     [ApiBasicAuth]
     [Route("api/v{version:int}/questionnaires")]
-    public class QuestionnairesController : ControllerBase
+    public class QuestionnairesController : Controller
     {
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
@@ -39,7 +39,7 @@ namespace WB.UI.Designer.Controllers.Api.Tester
             IQuestionnaireListViewFactory viewFactory, 
             IDesignerEngineVersionService engineVersionService, 
             IExpressionsPlayOrderProvider expressionsPlayOrderProvider, 
-            IQuestionnaireCompilationVersionService questionnaireCompilationVersionService, 
+            IQuestionnaireCompilationVersionService questionnaireCompilationVersionService,
             ISerializer serializer)
         {
             this.questionnaireViewFactory = questionnaireViewFactory;
@@ -54,7 +54,7 @@ namespace WB.UI.Designer.Controllers.Api.Tester
 
         [HttpGet]
         [Route("{id:Guid}")]
-        public Questionnaire Get(Guid id, int version)
+        public IActionResult Get(Guid id, int version)
         {
             if(version < ApiVersion.CurrentTesterProtocolVersion)
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired));
@@ -102,11 +102,13 @@ namespace WB.UI.Designer.Controllers.Api.Tester
             questionnaire.Macros = null;
             questionnaire.IsUsingExpressionStorage = versionToCompileAssembly > 19;
 
-            return new Questionnaire
+            var response = this.serializer.Serialize(new Questionnaire
             {
                 Document = questionnaire,
                 Assembly = resultAssembly
-            };
+            });
+
+            return Content(response, MediaTypeNames.Application.Json);
         }
 
         [HttpGet]
