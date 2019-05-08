@@ -101,11 +101,13 @@ namespace WB.UI.Designer.Controllers.Api.Tester
             questionnaire.Macros = null;
             questionnaire.IsUsingExpressionStorage = versionToCompileAssembly > 19;
 
-            return Ok(new Questionnaire
+            var response = this.serializer.Serialize(new Questionnaire
             {
                 Document = questionnaire,
                 Assembly = resultAssembly
-            });            
+            });
+
+            return Content(response, MediaTypeNames.Application.Json);
         }
 
         [HttpGet]
