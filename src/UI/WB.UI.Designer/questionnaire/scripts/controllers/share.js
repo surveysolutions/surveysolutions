@@ -45,6 +45,7 @@
                                  userId: data.id,
                                  shareType: $scope.viewModel.shareType
                             });
+                            $scope.sortSharedPersons();
                         }
 
                         $scope.viewModel.shareWith = '';
@@ -76,6 +77,7 @@
             revokeRequest.then(function () {
                 $scope.questionnaire.sharedPersons = _.without($scope.questionnaire.sharedPersons,
                     _.findWhere($scope.questionnaire.sharedPersons, { email: personInfo.email }));
+                $scope.sortSharedPersons();
             });
         };
 
@@ -92,5 +94,14 @@
         $scope.changeShareType = function (shareType) {
             $scope.viewModel.shareType = shareType;
         };
+
+        $scope.sortSharedPersons = function () {
+            var owner = _.findWhere($scope.questionnaire.sharedPersons, { isOwner: true });
+            var sharedPersons = _.sortBy(_.without($scope.questionnaire.sharedPersons, owner), ['email']);
+
+            $scope.questionnaire.sharedPersons = [owner].concat(sharedPersons);
+        };
+
+        $scope.sortSharedPersons();
     }
 );
