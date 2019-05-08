@@ -1771,6 +1771,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.sharedPersons.RemoveAll(sp => sp.UserId == personId);
         }
 
+        public void PassOwnership(Guid ownerId, Guid newOwnerId, string ownerEmail, string newOwnerEmail)
+        {
+            this.ThrowDomainExceptionIfViewerOsNotOwnerOfQuestionnaire(ownerId);
+
+            this.RemoveSharedPerson(newOwnerId, newOwnerEmail, ownerId);
+            
+            this.QuestionnaireDocument.CreatedBy = newOwnerId;
+
+            this.AddSharedPerson(ownerId, ownerEmail, ShareType.Edit, newOwnerId);
+        }
+
         #endregion
 
         #region CopyPaste command handler
@@ -2110,6 +2121,15 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(
                    DomainExceptionType.DoesNotHavePermissionsForEdit, ExceptionMessages.NoPremissionsToEditQuestionnaire);
+            }
+        }
+
+        private void ThrowDomainExceptionIfViewerOsNotOwnerOfQuestionnaire(Guid viewerId)
+        {
+            if (this.innerDocument.CreatedBy != viewerId)
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.DoesNotHavePermissionsForEdit, ExceptionMessages.NoPremissionsToEditQuestionnaire);
             }
         }
 

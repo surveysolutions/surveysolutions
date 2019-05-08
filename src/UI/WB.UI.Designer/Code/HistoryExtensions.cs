@@ -93,6 +93,11 @@ namespace WB.UI.Designer.Code
                             case QuestionnaireItemType.StaticText:
                                 text = ToMoveMessage(helper, urlHelper, questionnaireId, record, recordLink);
                                 break;
+                            case QuestionnaireItemType.Questionnaire:
+                                text = GetResource(record.TargetType, record.ActionType).FormatString(
+                                    record.TargetTitle
+                                );
+                                break;
                         }
 
                     }
@@ -116,13 +121,16 @@ namespace WB.UI.Designer.Code
                     historicalRecordReference.Type));
         }
 
+        private static string GetResource(QuestionnaireItemType itemType, QuestionnaireActionType actionType) =>
+            QuestionnaireHistoryResources.ResourceManager.GetString($"{itemType}_{actionType}");
+
         private static string  ToCloneMessage(IHtmlHelper helper, IUrlHelper urlHelper, Guid questionnaireId,
             QuestionnaireChangeHistoricalRecord record, HtmlString recordLink)
         {
             var historicalRecordReference = record.HistoricalRecordReferences.FirstOrDefault();
 
             return string.Format(
-                QuestionnaireHistoryResources.ResourceManager.GetString($"{record.TargetType}_{record.ActionType}"),
+                GetResource(record.TargetType, record.ActionType),
                 recordLink,
                 historicalRecordReference == null ? HtmlString.Empty :
                 BuildQuestionnaireItemLink(helper, urlHelper, questionnaireId,
