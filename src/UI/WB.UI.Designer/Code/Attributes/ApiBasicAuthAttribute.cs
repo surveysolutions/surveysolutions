@@ -3,9 +3,9 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -16,7 +16,7 @@ using WB.UI.Designer.Resources;
 namespace WB.UI.Designer.Code.Attributes
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false)]
-    public class ApiBasicAuthAttribute: TypeFilterAttribute
+    public class ApiBasicAuthAttribute : TypeFilterAttribute
     {
         public ApiBasicAuthAttribute(bool onlyAllowedAddresses = false) : base(typeof(ApiBasicAuthFilter))
         {
@@ -32,10 +32,9 @@ namespace WB.UI.Designer.Code.Attributes
         private readonly SignInManager<DesignerIdentityUser> signInManager;
         private readonly bool onlyAllowedAddresses;
 
-
         public ApiBasicAuthFilter(
             bool onlyAllowedAddresses,
-            IIpAddressProvider ipAddressProvider, 
+            IIpAddressProvider ipAddressProvider,
             IAllowedAddressService allowedAddressService,
             UserManager<DesignerIdentityUser> userManager,
             SignInManager<DesignerIdentityUser> signInManager)
@@ -121,7 +120,7 @@ namespace WB.UI.Designer.Code.Attributes
                     };
                 }
             }
-            catch {}
+            catch { }
 
             return null;
         }
@@ -134,42 +133,47 @@ namespace WB.UI.Designer.Code.Attributes
 
         private void ThrowUnathorizedException(AuthorizationFilterContext actionContext, string errorMessage)
         {
-            var host = actionContext.HttpContext.Request.Host;
-            actionContext.Result = new ContentResult()
-            {
-                StatusCode = StatusCodes.Status401Unauthorized,
-                Content = errorMessage
-            };
+            ThrowException(actionContext,
+               StatusCodes.Status401Unauthorized,
+               errorMessage);
+
+            var host = actionContext.HttpContext.Request.Host;            
             actionContext.HttpContext.Response.Headers.Add("WWW-Authenticate", $"Basic realm=\"{host}\"");
         }
 
         private void ThrowForbiddenException(AuthorizationFilterContext actionContext, string errorMessage)
         {
+            ThrowException(actionContext,
+                StatusCodes.Status403Forbidden,
+                errorMessage);
+
             var host = actionContext.HttpContext.Request.Host;
-            actionContext.Result = new ContentResult()
-            {
-                StatusCode = StatusCodes.Status403Forbidden,
-                Content = errorMessage
-            };
             actionContext.HttpContext.Response.Headers.Add("WWW-Authenticate", $"Basic realm=\"{host}\"");
         }
 
         private void ThrowLockedOutException(AuthorizationFilterContext actionContext)
         {
-            actionContext.Result = new ContentResult()
-            {
-                StatusCode = StatusCodes.Status401Unauthorized,
-                Content = ErrorMessages.UserLockedOut
-            };
+            ThrowException(actionContext,
+                StatusCodes.Status401Unauthorized,
+                ErrorMessages.UserLockedOut);
         }
 
         private void ThrowNotApprovedException(AuthorizationFilterContext actionContext, string email)
         {
+            ThrowException(actionContext,
+                StatusCodes.Status401Unauthorized,
+                string.Format(ErrorMessages.UserNotApproved, email));
+        }
+
+        private void ThrowException(AuthorizationFilterContext actionContext, int statusCode, string message)
+        {
             actionContext.Result = new ContentResult()
             {
-                StatusCode = StatusCodes.Status401Unauthorized,
-                Content = string.Format(ErrorMessages.UserNotApproved, email)
+                StatusCode = statusCode,
+                Content = message
             };
+
+            actionContext.HttpContext.Response.HttpContext.Features.Get<IHttpResponseFeature>().ReasonPhrase = message;
         }
 
         private async Task<bool> Authorize(DesignerIdentityUser user, string username, string password)
