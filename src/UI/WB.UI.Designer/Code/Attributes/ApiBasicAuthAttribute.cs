@@ -51,7 +51,7 @@ namespace WB.UI.Designer.Code.Attributes
             var credentials = ParseCredentials(context);
             if (credentials == null)
             {
-                this.ThrowUnathorizedException(context, ErrorMessages.User_Not_authorized);
+                this.ThrowUnauthorizedException(context, ErrorMessages.User_Not_authorized);
                 return;
             }
 
@@ -60,7 +60,7 @@ namespace WB.UI.Designer.Code.Attributes
 
             if (!await this.Authorize(user, credentials.Username, credentials.Password))
             {
-                this.ThrowUnathorizedException(context, ErrorMessages.User_Not_authorized);
+                this.ThrowUnauthorizedException(context, ErrorMessages.User_Not_authorized);
                 return;
             }
 
@@ -131,7 +131,7 @@ namespace WB.UI.Designer.Code.Attributes
             public string Password { get; set; }
         }
 
-        private void ThrowUnathorizedException(AuthorizationFilterContext actionContext, string errorMessage)
+        private void ThrowUnauthorizedException(AuthorizationFilterContext actionContext, string errorMessage)
         {
             ThrowException(actionContext,
                StatusCodes.Status401Unauthorized,
@@ -173,7 +173,9 @@ namespace WB.UI.Designer.Code.Attributes
                 Content = message
             };
 
-            actionContext.HttpContext.Response.HttpContext.Features.Get<IHttpResponseFeature>().ReasonPhrase = message;
+            var feature = actionContext.HttpContext.Response.HttpContext?.Features?.Get<IHttpResponseFeature>();
+            if (feature != null)
+                feature.ReasonPhrase = message;
         }
 
         private async Task<bool> Authorize(DesignerIdentityUser user, string username, string password)
