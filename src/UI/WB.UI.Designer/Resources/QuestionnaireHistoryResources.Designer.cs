@@ -19,7 +19,7 @@ namespace WB.UI.Designer.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class QuestionnaireHistoryResources {
@@ -291,6 +291,15 @@ namespace WB.UI.Designer.Resources {
         public static string Questionnaire_Import {
             get {
                 return ResourceManager.GetString("Questionnaire_Import", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire ownership transferred to user with email &quot;{0}&quot;.
+        /// </summary>
+        public static string Questionnaire_Move {
+            get {
+                return ResourceManager.GetString("Questionnaire_Move", resourceCulture);
             }
         }
         
