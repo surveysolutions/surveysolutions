@@ -123,16 +123,18 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 }
             }
 
-            foreach (var rosterError in this.verifier.VerifyRosters(assignmentRows, questionnaire))
-            {
-                hasErrors = true;
-                yield return rosterError;
-            }
-
             foreach (var passwordError in this.verifier.VerifyWebPasswords(assignmentRows, questionnaire))
             {
                 hasErrors = true;
                 yield return passwordError;
+            }
+
+            if (hasErrors) yield break;
+
+            foreach (var rosterError in this.verifier.VerifyRosters(assignmentRows, questionnaire))
+            {
+                hasErrors = true;
+                yield return rosterError;
             }
 
             if (hasErrors) yield break;

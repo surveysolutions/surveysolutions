@@ -21,7 +21,6 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Resources;
-using WB.UI.Designer1.Extensions;
 
 namespace WB.UI.Designer.Controllers
 {

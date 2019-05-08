@@ -10,7 +10,8 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
     {
         private readonly IHttpStatistician statistician;
 
-        public ExtendedMessageHandler(HttpMessageHandler innerHandler, IHttpStatistician statistician) : base(innerHandler)
+        public ExtendedMessageHandler(HttpMessageHandler innerHandler, IHttpStatistician statistician) 
+            : base(innerHandler)
         {
             this.statistician = statistician;
         }
@@ -22,7 +23,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
             call.StartedUtc = DateTime.UtcNow;
             try
             {
-                call.Response = await InnerSendAsync(call, request, cancellationToken, times: 3).ConfigureAwait(false);
+                call.Response = await InnerSendAsync(call, request, cancellationToken, times: 3);
                 call.Response.RequestMessage = request;
                 if (call.IsSucceeded)
                     return call.Response;
@@ -41,11 +42,12 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
             }
         }
 
-        private async Task<HttpResponseMessage> InnerSendAsync(HttpCall call, HttpRequestMessage request, CancellationToken cancellationToken, int times)
+        private async Task<HttpResponseMessage> InnerSendAsync(HttpCall call, 
+            HttpRequestMessage request, CancellationToken cancellationToken, int times)
         {
             try
             {
-                return await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
+                return await base.SendAsync(request, cancellationToken);
             }
             catch (Exception ex)
             {

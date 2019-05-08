@@ -178,7 +178,11 @@ namespace WB.UI.Designer
                 app.UseStatusCodePagesWithReExecute("/error/{0}");
             }
 
-            app.UseHttpsRedirection();
+            if (!env.IsDevelopment())
+            {
+                app.UseHttpsRedirection();
+            }
+
             app.UseResponseCompression();
             app.UseStaticFiles(new StaticFileOptions
             {
