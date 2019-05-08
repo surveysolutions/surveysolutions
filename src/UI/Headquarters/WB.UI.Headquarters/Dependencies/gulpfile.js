@@ -1,4 +1,4 @@
-﻿
+
 const source = require("vinyl-source-stream");
 
 const gulp = require('gulp'),
@@ -161,7 +161,9 @@ config.sourceFiles = [
     'node_modules/flatpickr/dist/flatpickr.js',
     'node_modules/flatpickr/dist/flatpickr.css',
     'node_modules/datatables.net-responsive/js/dataTables.responsive.js',
-    'vendor/jquery.validate.unobtrusive.bootstrap/jquery.validate.unobtrusive.bootstrap.js'
+    'vendor/jquery.validate.unobtrusive.bootstrap/jquery.validate.unobtrusive.bootstrap.js',
+    'node_modules/ag-grid-community/dist/styles/ag-grid.css',
+    'node_modules/ag-grid-community/dist/styles/ag-theme-bootstrap.css'
 ];
 
 function compressJs(error) {
