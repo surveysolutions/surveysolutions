@@ -1240,4 +1240,16 @@
   <data name="QuestionShowListLimit" xml:space="preserve">
     <value>If not more than</value>
   </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>Are You sure?</value>
+  </data>
+  <data name="PassOwnershipConfirmationMessage" xml:space="preserve">
+    <value>If you transfer ownership, the new owner will be notified. You may no longer be able to change ownership settings, and the new ownwer may also remove you access.</value>
+  </data>
+  <data name="SettingsPassOwnership" xml:space="preserve">
+    <value>Pass ownership</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
 </root>

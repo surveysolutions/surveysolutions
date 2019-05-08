@@ -107,7 +107,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 var owner = this.dbContext.Users.Find(questionnaireDocument.CreatedBy.Value);
                 if (owner != null)
                 {
-                    sharedPersons.Add(new SharedPersonView
+                    sharedPersons.Insert(0, new SharedPersonView
                     {
                         Email = owner.Email,
                         Login = owner.UserName,

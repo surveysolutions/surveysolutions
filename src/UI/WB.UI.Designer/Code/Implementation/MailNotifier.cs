@@ -48,13 +48,20 @@ namespace WB.UI.Designer.Code.Implementation
                 Email = email.ToWBEmailAddress(),
                 UserCallName = String.IsNullOrWhiteSpace(userName) ? email : userName,
                 QuestionnaireId = questionnaireId,
-                QuestionnaireDisplayTitle = String.IsNullOrWhiteSpace(questionnaireTitle) ? NotificationResources.MailNotifier_NotifyTargetPersonAboutShareChange_link : questionnaireTitle,
-                ShareTypeName = shareType == ShareType.Edit ? NotificationResources.MailNotifier_NotifyTargetPersonAboutShareChange_edit : NotificationResources.MailNotifier_NotifyOwnerAboutShareChange_view,
-                ActionPersonCallName = String.IsNullOrWhiteSpace(actionPersonEmail) ? NotificationResources.MailNotifier_NotifyTargetPersonAboutShareChange_user : actionPersonEmail,
+                QuestionnaireDisplayTitle = String.IsNullOrWhiteSpace(questionnaireTitle) 
+                    ? NotificationResources.MailNotifier_NotifyTargetPersonAboutShareChange_link 
+                    : questionnaireTitle,
+                ShareTypeName = shareType == ShareType.Edit 
+                    ? NotificationResources.MailNotifier_NotifyTargetPersonAboutShareChange_edit 
+                    : NotificationResources.MailNotifier_NotifyOwnerAboutShareChange_view,
+                ActionPersonCallName = String.IsNullOrWhiteSpace(actionPersonEmail) 
+                    ? NotificationResources.MailNotifier_NotifyTargetPersonAboutShareChange_user 
+                    : actionPersonEmail,
                 QuestionnaireLink = urlHelper.Action("Details", "Questionnaire", new { id = questionnaireId }, "https")
             };
-            var message = this.GetShareChangeNotificationEmail(
-                                sharingNotificationModel);
+
+            var message = this.GetShareChangeNotificationEmail(sharingNotificationModel);
+
             message.ContinueWith(s =>
             {
                 this.mailer.SendEmailAsync(email,
@@ -92,11 +99,16 @@ namespace WB.UI.Designer.Code.Implementation
 
         public async Task<string> GetShareChangeNotificationEmail(SharingNotificationModel model)
         {
-            var view = await this.renderingService.RenderToStringAsync(
-                model.ShareChangeType == ShareChangeType.Share
-                    ? "Emails/TargetPersonShareNotification"
-                    : "Emails/TargetPersonStopShareNotification",
-                model);
+            string email = null;
+
+            switch (model.ShareChangeType)
+            {
+                case ShareChangeType.Share: email = "Emails/TargetPersonShareNotification"; break;
+                case ShareChangeType.StopShare: email = "Emails/TargetPersonStopShareNotification"; break;
+                case ShareChangeType.PassOwnership: email = "Emails/PassOwnershipNotification"; break;
+            }
+
+            var view = await this.renderingService.RenderToStringAsync(email, model);
             return view;
         }
 
