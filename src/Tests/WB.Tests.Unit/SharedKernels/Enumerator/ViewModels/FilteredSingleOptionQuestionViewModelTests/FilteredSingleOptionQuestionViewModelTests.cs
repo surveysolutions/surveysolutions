@@ -224,7 +224,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
         }
 
         [Test]
-        public void when_execute_FilterCommand_and_single_question_answered_and_filter_is_empty_and_focus_out_should_validity_have_not_saved_state_with_message()
+        public async Task when_execute_FilterCommand_and_single_question_answered_and_filter_is_empty_and_focus_out_should_validity_have_not_saved_state_with_message()
         {
             // arrange
             var questionId = Identity.Create(Guid.Parse("11111111111111111111111111111111"), RosterVector.Empty);
@@ -242,7 +242,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             var combobox = vm.Children.OfType<CategoricalComboboxAutocompleteViewModel>().First();
             combobox.FilterCommand.Execute(string.Empty);
             // act
-            combobox.ShowErrorIfNoAnswerCommand.Execute();
+            await combobox.ShowErrorIfNoAnswerCommand.ExecuteAsync();
             // assert
             Assert.That(vm.QuestionState.Validity.Error.ValidationErrors, Has.One.Items);
         }
