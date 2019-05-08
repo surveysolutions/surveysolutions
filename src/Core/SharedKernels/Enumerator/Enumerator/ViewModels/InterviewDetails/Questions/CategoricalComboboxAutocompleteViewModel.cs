@@ -65,7 +65,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
      
         public IMvxCommand<OptionWithSearchTerm> SaveAnswerBySelectedOptionCommand => new MvxAsyncCommand<OptionWithSearchTerm>(this.SaveAnswerBySelectedOption);
-        public IMvxCommand ShowErrorIfNoAnswerCommand => new MvxAsyncCommand(this.ShowErrorIfNoAnswer);
+        public IMvxAsyncCommand ShowErrorIfNoAnswerCommand => new MvxAsyncCommand(this.ShowErrorIfNoAnswer);
 
         private async Task ShowErrorIfNoAnswer()
         {
@@ -92,15 +92,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task InvokeAllHandlers<T>(Func<object, T, Task> handler, T value)
         {
-            Delegate[] invocationList = handler.GetInvocationList();
-            Task[] handlerTasks = new Task[invocationList.Length];
+            if (handler == null) return;
 
-            for (int i = 0; i < invocationList.Length; i++)
-            {
-                handlerTasks[i] = ((Func<object, T, Task>) invocationList[i])(this, value);
-            }
-
-            await Task.WhenAll(handlerTasks);
+            var invocationList = handler.GetInvocationList().Cast<Func<object, T, Task>>();
+            var enumerable = invocationList.Select(x => Task.Run(() => x(this, value)));
+            await Task.WhenAll(enumerable);
         }
 
         private string filterToUpdate = null;
