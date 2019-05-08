@@ -64,7 +64,7 @@ namespace WB.UI.Designer.Api.Portal
         {
             if (string.IsNullOrWhiteSpace(userId)) throw new ArgumentNullException(nameof(userId));
 
-            var account = await this.accountRepository.FindByIdAsync(userId);
+            var account = await this.accountRepository.FindByNameAsync(userId);
 
             var questionnaires = questionnaireHelper.GetQuestionnaires(
                 viewerId: account.Id,
