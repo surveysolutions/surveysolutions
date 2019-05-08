@@ -2,13 +2,16 @@
 using System.Linq;
 using System.Net;
 using Microsoft.AspNetCore.Http;
+using System.Net.Mime;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.UI.Designer.Code.Attributes;
 using WB.UI.Designer.Extensions;
@@ -16,8 +19,8 @@ using WB.UI.Designer.Extensions;
 namespace WB.UI.Designer.Controllers.Api.Tester
 {
     [ApiBasicAuth]
-    [Route("api/questionnaires")]
-    public class QuestionnairesController : ControllerBase
+    [Route("api/v{version:int}/questionnaires")]
+    public class QuestionnairesController : Controller
     {
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
@@ -26,6 +29,7 @@ namespace WB.UI.Designer.Controllers.Api.Tester
         private readonly IDesignerEngineVersionService engineVersionService;
         private readonly IExpressionsPlayOrderProvider expressionsPlayOrderProvider;
         private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersionService;
+        private readonly ISerializer serializer;
 
         public QuestionnairesController(
             IQuestionnaireViewFactory questionnaireViewFactory,
@@ -34,7 +38,8 @@ namespace WB.UI.Designer.Controllers.Api.Tester
             IQuestionnaireListViewFactory viewFactory, 
             IDesignerEngineVersionService engineVersionService, 
             IExpressionsPlayOrderProvider expressionsPlayOrderProvider, 
-            IQuestionnaireCompilationVersionService questionnaireCompilationVersionService)
+            IQuestionnaireCompilationVersionService questionnaireCompilationVersionService, 
+            ISerializer serializer)
         {
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.questionnaireVerifier = questionnaireVerifier;
@@ -43,6 +48,7 @@ namespace WB.UI.Designer.Controllers.Api.Tester
             this.engineVersionService = engineVersionService;
             this.expressionsPlayOrderProvider = expressionsPlayOrderProvider;
             this.questionnaireCompilationVersionService = questionnaireCompilationVersionService;
+            this.serializer = serializer;
         }
 
         [HttpGet]
@@ -95,11 +101,13 @@ namespace WB.UI.Designer.Controllers.Api.Tester
             questionnaire.Macros = null;
             questionnaire.IsUsingExpressionStorage = versionToCompileAssembly > 19;
 
-            return Ok(new Questionnaire
+            var response = this.serializer.Serialize(new Questionnaire
             {
                 Document = questionnaire,
                 Assembly = resultAssembly
             });
+
+            return Content(response, MediaTypeNames.Application.Json);
         }
 
         [HttpGet]
