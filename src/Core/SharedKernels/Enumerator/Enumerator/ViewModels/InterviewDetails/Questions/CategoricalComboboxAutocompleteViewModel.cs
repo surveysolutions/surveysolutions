@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.QuestionState = questionState;
             this.filteredOptionsViewModel = filteredOptionsViewModel;
             this.displaySelectedValue = displaySelectedValue;
-            this.throttlingModel = Mvx.IoCProvider.Create<ThrottlingViewModel>();;
+            this.throttlingModel = Mvx.IoCProvider.Create<ThrottlingViewModel>();
             this.throttlingModel.Init(UpdateFilterThrottled);
         }
 
@@ -52,8 +52,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             get => this.autoCompleteSuggestions;
             set => this.RaiseAndSetIfChanged(ref this.autoCompleteSuggestions, value);
         }
-
-        public IMvxCommand<string> FilterCommand => new MvxAsyncCommand<string>(x => this.UpdateFilter(x));
+        
         public IMvxCommand RemoveAnswerCommand => new MvxAsyncCommand(async () =>
         {
             await this.UpdateFilter(null);
@@ -63,8 +62,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             await InvokeAllHandlers<EventArgs>(this.OnAnswerRemoved, EventArgs.Empty);
         });
 
-     
-        public IMvxCommand<OptionWithSearchTerm> SaveAnswerBySelectedOptionCommand => new MvxAsyncCommand<OptionWithSearchTerm>(this.SaveAnswerBySelectedOption);
+        public IMvxAsyncCommand<string> FilterCommand => new MvxAsyncCommand<string>(x => this.UpdateFilter(x));
+        public IMvxCommand<OptionWithSearchTerm> SaveAnswerBySelectedOptionCommand => new MvxCommand<OptionWithSearchTerm>(this.SaveAnswerBySelectedOption);
         public IMvxAsyncCommand ShowErrorIfNoAnswerCommand => new MvxAsyncCommand(this.ShowErrorIfNoAnswer);
 
         private async Task ShowErrorIfNoAnswer()
@@ -76,7 +75,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var selectedOption = this.filteredOptionsViewModel.GetOptions(this.FilterText).FirstOrDefault(x => !this.excludedOptions.Contains(x.Value));
 
             if (selectedOption?.Title.Equals(this.FilterText, StringComparison.CurrentCultureIgnoreCase) == true)
-                await this.SaveAnswerBySelectedOption(ToOptionWithSearchTerm(string.Empty, selectedOption));
+            {
+                await InvokeAllHandlers<int>(this.OnItemSelected, selectedOption.Value);
+                await this.UpdateFilter(displaySelectedValue ? selectedOption.Title : null);
+            }
             else
             {
                 var errorMessage = UIResources.Interview_Question_Filter_MatchError.FormatString(this.FilterText);
@@ -84,10 +86,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private async Task SaveAnswerBySelectedOption(OptionWithSearchTerm option)
+        private void SaveAnswerBySelectedOption(OptionWithSearchTerm option)
         {
-            await InvokeAllHandlers<int>(this.OnItemSelected, option.Value);
-            await this.UpdateFilter(displaySelectedValue ? option.Title : null);
+            // When options is selected, FocusOut will be always fired after. 
+            // We change filter text and we safe answer on focus out event
+            this.FilterText = option.Title;
         }
 
         private async Task InvokeAllHandlers<T>(Func<object, T, Task> handler, T value)
