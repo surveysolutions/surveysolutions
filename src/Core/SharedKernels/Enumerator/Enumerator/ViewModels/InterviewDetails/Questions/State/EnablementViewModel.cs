@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using MvvmCross.ViewModels;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -74,6 +75,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var interview = this.interviewRepository.Get(this.interviewId);
 
             this.Enabled = interview.IsEnabled(this.entityIdentity);
+            Debug.WriteLine($"###Enablement: {entityIdentity}: {Enabled}");
         }
 
         public void Handle(GroupsEnabled @event)
