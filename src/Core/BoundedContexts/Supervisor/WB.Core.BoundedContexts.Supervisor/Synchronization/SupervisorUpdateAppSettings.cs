@@ -7,23 +7,23 @@ using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 
 namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 {
-    public class SupervisorUpdateApplication : UpdateApplication
+    public class SupervisorUpdateAppSettings : UpdateAppSettings
     {
         private readonly ISupervisorSettings supervisorSettings;
 
-        public SupervisorUpdateApplication(int sortOrder, 
+        public SupervisorUpdateAppSettings(int sortOrder, 
             ISynchronizationService synchronizationService, 
             ILogger logger, 
             ISupervisorSettings interviewerSettings,
             ITabletDiagnosticService diagnosticService) : 
-            base(sortOrder, synchronizationService, diagnosticService, logger)
+            base(synchronizationService, logger, sortOrder)
         {
             this.supervisorSettings = interviewerSettings ?? throw new ArgumentNullException(nameof(interviewerSettings));
         }
 
-        protected override int GetApplicationVersionCode()
+        protected override void UpdateNotificationsSetting(bool notificationsEnabled)
         {
-            return supervisorSettings.GetApplicationVersionCode();
+            supervisorSettings.SetNotifications(notificationsEnabled);
         }
     }
 }

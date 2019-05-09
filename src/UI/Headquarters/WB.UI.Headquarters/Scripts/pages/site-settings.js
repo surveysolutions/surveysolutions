@@ -1,4 +1,4 @@
-﻿Supervisor.VM.SiteSettings = function (ajax, notifier, $dataUrl, $changeStateUrl, $regenPasswordUrl, $globalNoticeSettingsUrl, $autoUpdateSettingsUrl) {
+﻿Supervisor.VM.SiteSettings = function (ajax, notifier, $dataUrl, $changeStateUrl, $regenPasswordUrl, $globalNoticeSettingsUrl, $interviewerSettingsUrl) {
     Supervisor.VM.SiteSettings.superclass.constructor.apply(this, arguments);
 
     var self = this;
@@ -33,7 +33,7 @@
     };
 
     self.loadAutoUpdateSettings = function() {
-        self.SendRequest($autoUpdateSettingsUrl,
+        self.SendRequest($interviewerSettingsUrl,
             {},
             function (data) {
                 if (!data) return;
@@ -96,7 +96,7 @@
     };
 
     self.updateAutoUpdateSettings = function() {
-        ajax.sendRequest($autoUpdateSettingsUrl, "POST",
+        ajax.sendRequest($interviewerSettingsUrl, "POST",
             {
                 interviewerAutoUpdatesEnabled: self.isInterviewerAutomaticUpdatesEnabled(),
                 notificationsEnabled: self.isDeviceNotificationsEnabled()
