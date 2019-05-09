@@ -7,23 +7,23 @@ using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 
 namespace WB.Core.BoundedContexts.Interviewer.Synchronization
 {
-    public class InterviewerUpdateApplication : UpdateApplication
-    {
+    public class InterviewerUpdateAppSettings : UpdateAppSettings
+    { 
         private readonly IInterviewerSettings interviewerSettings;
 
-        public InterviewerUpdateApplication(int sortOrder, 
+        public InterviewerUpdateAppSettings(int sortOrder, 
             ISynchronizationService synchronizationService,
             ILogger logger, 
             IInterviewerSettings interviewerSettings,
-            ITabletDiagnosticService diagnosticService) : base(sortOrder, synchronizationService, diagnosticService,
-            logger)
+            ITabletDiagnosticService diagnosticService) : base(synchronizationService, 
+            logger, sortOrder)
         {
             this.interviewerSettings = interviewerSettings ?? throw new ArgumentNullException(nameof(interviewerSettings));
         }
-
-        protected override int GetApplicationVersionCode()
+        
+        protected override void UpdateNotificationsSetting(bool notificationsEnabled)
         {
-            return interviewerSettings.GetApplicationVersionCode();
+            interviewerSettings.SetNotifications(notificationsEnabled);
         }
     }
 }
