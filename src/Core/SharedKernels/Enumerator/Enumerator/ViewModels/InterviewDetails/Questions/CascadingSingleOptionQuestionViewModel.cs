@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Base;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -102,11 +102,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.answerOnParentQuestion = parentSingleOptionQuestion.GetAnswer().SelectedValue;
             this.filteredOptionsViewModel.ParentValue = this.answerOnParentQuestion;
 
-            this.RaisePropertyChanged(() => RenderAsComboBox);
-            this.UpdateOptions();
+            this.InvokeOnMainThreadAsync(async () =>
+            {
+                await this.RaisePropertyChanged(() => RenderAsComboBox);
+                await this.UpdateOptions(forced: true);
 
-            this.RaisePropertyChanged(() => Options);
-            this.RaisePropertyChanged(() => Children);
+                await this.RaisePropertyChanged(() => Options);
+                await this.RaisePropertyChanged(() => Children);
+            }).WaitAndUnwrapException();
+            
         }
 
         public bool RenderAsComboBox
@@ -137,7 +141,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public CovariantObservableCollection<SingleOptionQuestionOptionViewModel> Options { get; private set; }
 
-        private async Task UpdateOptions()
+        private async Task UpdateOptions(bool forced = false)
         {
             this.Options.ForEach(x => x.BeforeSelected -= this.OptionSelected);
             this.Options.ForEach(x => x.AnswerRemoved -= this.RemoveAnswer);
@@ -145,7 +149,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Options.ForEach(x => x.DisposeIfDisposable());
             this.Options.Clear();
 
-            await this.comboboxViewModel.UpdateFilter(null);
+            await this.comboboxViewModel.UpdateFilter(null, forced);
             this.comboboxCollection.Remove(this.comboboxViewModel);
 
             if (!RenderAsComboBox)

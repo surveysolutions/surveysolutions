@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -50,12 +51,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             var answeredOptions = this.GetAnsweredOptionsFromInterview(interview);
 
-            this.UpdateComboboxInMainThread(answeredOptions);
+            this.UpdateComboboxInMainThread(answeredOptions).WaitAndUnwrapException();
         }
 
-        private void UpdateComboboxInMainThread(int[] answeredOptions)
+        private async Task UpdateComboboxInMainThread(int[] answeredOptions)
         {
-            this.InvokeOnMainThread(() =>
+            await this.InvokeOnMainThreadAsync(async () =>
             {
                 answeredOptions = answeredOptions ?? Array.Empty<int>();
 
@@ -70,7 +71,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 else if (!hasNoOptionsForAnswers && !this.comboboxCollection.Contains(this.comboboxViewModel))
                     this.comboboxCollection.Add(this.comboboxViewModel);
 
-                comboboxViewModel.UpdateFilter(comboboxViewModel.FilterText);
+                await comboboxViewModel.UpdateFilter(comboboxViewModel.FilterText);
             });
         }
 
