@@ -38,7 +38,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             this.Identity = entityIdentity;
-            this.AutoCompleteSuggestions = this.GetSuggestions(null).ToList();
+        }
+
+        public void InitFilter(string initialFilter = null)
+        {
+            this.AutoCompleteSuggestions = this.GetSuggestions(initialFilter).ToList();
+            this.FilterText = initialFilter;
+            this.RaisePropertyChanged(() => this.FilterText);
         }
 
         private int[] excludedOptions = Array.Empty<int>();
@@ -55,7 +61,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         
         public IMvxCommand RemoveAnswerCommand => new MvxAsyncCommand(async () =>
         {
-            await this.UpdateFilter(null);
+            this.ResetFilterAndOptions();
+
             if (this.OnAnswerRemoved == null)
                 return;
 
@@ -77,7 +84,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (selectedOption?.Title.Equals(this.FilterText, StringComparison.CurrentCultureIgnoreCase) == true)
             {
                 await InvokeAllHandlers<int>(this.OnItemSelected, selectedOption.Value);
-                await this.UpdateFilter(displaySelectedValue ? selectedOption.Title : null);
+                if (displaySelectedValue)
+                {
+                    await this.UpdateFilter(displaySelectedValue ? selectedOption.Title : null);
+                }
+                else
+                {
+                    this.ResetFilterAndOptions();    
+                }
             }
             else
             {
@@ -110,21 +124,37 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             await this.InvokeOnMainThreadAsync(async () =>
             {
                 this.AutoCompleteSuggestions = suggestions;
-                this.FilterText = filterToUpdate;
-                await this.RaisePropertyChanged(() => this.FilterText);
             });
         }
 
         public async Task UpdateFilter(string filter, bool forced = false)
         {
+            this.FilterText = filter;
+            await this.InvokeOnMainThreadAsync(async () =>
+            {
+                await this.RaisePropertyChanged(() => this.FilterText);
+            });
+
             if (this.filterToUpdate == filter && !forced)
             {
                 return;
             }
 
             this.filterToUpdate = filter;
-
             await this.throttlingModel.ExecuteActionIfNeeded();
+        }
+
+        public void ResetFilterAndOptions()
+        {
+            this.FilterText = null;
+            
+            var suggestions = this.GetSuggestions(null).ToList();
+
+            this.InvokeOnMainThread(() =>
+            {
+                this.AutoCompleteSuggestions = suggestions;
+                this.RaisePropertyChanged(() => this.FilterText);
+            });
         }
 
         private IEnumerable<OptionWithSearchTerm> GetSuggestions(string filter)

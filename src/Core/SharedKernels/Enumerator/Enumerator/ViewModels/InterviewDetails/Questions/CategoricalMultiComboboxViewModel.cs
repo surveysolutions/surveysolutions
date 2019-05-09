@@ -42,6 +42,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             base.Init(interviewId, entityIdentity, navigationState);
 
             this.comboboxViewModel.Init(interviewId, entityIdentity, navigationState);
+            this.comboboxViewModel.InitFilter(null);
             this.comboboxViewModel.OnItemSelected += ComboboxInstantViewModel_OnItemSelected;
         }
 
