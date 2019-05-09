@@ -75,7 +75,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var interview = this.interviewRepository.Get(this.interviewId);
 
             this.Enabled = interview.IsEnabled(this.entityIdentity);
-            Debug.WriteLine($"###Enablement: {entityIdentity}: {Enabled}");
         }
 
         public void Handle(GroupsEnabled @event)
