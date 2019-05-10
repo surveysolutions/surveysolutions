@@ -259,7 +259,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
             // notify new owner that he is now has owner of questionnaire
             this.SendEmailNotifications(questionnaireListViewItem.Title, questionnaireListViewItem.CreatedBy, newOwner.Id,
-               ShareChangeType.PassOwnership, command.OwnerEmail, questionnaireListViewItem.QuestionnaireId, ShareType.Edit);
+               ShareChangeType.PassOwnership, command.NewOwnerEmail, questionnaireListViewItem.QuestionnaireId, ShareType.Edit);
         }
 
         private void SendEmailNotifications(string questionnaireTitle,
