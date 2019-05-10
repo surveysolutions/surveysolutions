@@ -191,18 +191,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                             {
                                 var title = composite.GetTitle();
                                 const string selfSubstitution = "%self%";
-                                if (title.Contains(selfSubstitution))
+                                if (title != null && title.Contains(selfSubstitution))
                                 {
                                     return true;
                                 }
 
-                                var validatable = composite as IValidatable;
-                                if (validatable != null)
+                                if (composite is IValidatable validatable)
                                 {
                                     foreach (var validationMessage in validatable.ValidationConditions.Select(x =>
                                         x.Message))
                                     {
-                                        if (validationMessage.Contains(selfSubstitution))
+                                        if (validationMessage != null && validationMessage.Contains(selfSubstitution))
                                         {
                                             return true;
                                         }
