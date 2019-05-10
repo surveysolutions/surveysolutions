@@ -6,7 +6,6 @@ using Dropbox.Api.Files;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.Infrastructure;
-using WB.Services.Export.Interview;
 using WB.Services.Export.Services.Processing;
 
 namespace WB.Services.Export.ExportProcessHandlers.Externals
@@ -49,6 +48,19 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
             logger.LogTrace("Uploading file: {folder}/{fileName} - {length}bytes", folder, fileName, fileContent.Length);
             await this.client.Files.UploadAsync(new CommitInfo($"{folder}/{fileName}"), new MemoryStream(fileContent));
             logger.LogTrace("Done Uploading file: {folder}/{fileName} - {length}bytes", folder, fileName, fileContent.Length);
+        }
+
+        protected override async Task<long?> GetFreeSpaceAsync()
+        {
+            var storageInfo = await this.client.Users.GetSpaceUsageAsync();
+            if (storageInfo == null) return null;
+
+            var allocated = storageInfo.Allocation?.AsIndividual?.Value?.Allocated ??
+                            storageInfo.Allocation?.AsTeam?.Value?.Allocated;
+
+            if (allocated == null) return null;
+
+            return (long) (allocated - storageInfo.Used);
         }
     }
 }
