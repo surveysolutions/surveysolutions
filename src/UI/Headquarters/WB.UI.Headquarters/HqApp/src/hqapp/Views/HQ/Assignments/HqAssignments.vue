@@ -377,6 +377,16 @@ export default {
                     render(data) {
                         return data != null ? self.$t("Common.Yes") : self.$t("Common.No");
                     }
+                },
+                {
+                    data: "webMode",
+                    name: "WebMode",                    
+                    title: this.$t("Assignments.WebMode"),
+                    tooltip: this.$t("Assignments.Tooltip_Table_WebMode"),
+                    searchable: false,
+                    render(data) {
+                        return data ? self.$t("Common.Yes") : self.$t("Common.No");
+                    }
                 }
             ];
         },
