@@ -394,7 +394,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
 
         [Test]
-        public void when_invoking_ValueChangeCommand_and_there_is_match_in_options_list()
+        public void when_selecting_an_option_from_dropdown()
         {
 
             CascadingSingleOptionQuestionViewModel cascadingModel;
@@ -438,10 +438,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
             combo.FilterCommand.Execute("o");
 
-            combo.SaveAnswerBySelectedOptionCommand.Execute(Create.Entity.OptionWithSearchTerm(3));
+            combo.SaveAnswerBySelectedOptionCommand.Execute(Create.Entity.OptionWithSearchTerm(3, title: "option 3"));
 
-            AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerSingleOptionQuestionCommand>()), Times.Exactly(1));
-
+            AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerSingleOptionQuestionCommand>()), Times.Exactly(0));
+            Assert.That(combo.FilterText, Is.EqualTo("option 3"));
         }
 
         [Test]
