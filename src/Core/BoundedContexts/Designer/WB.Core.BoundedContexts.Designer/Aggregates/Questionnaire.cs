@@ -1773,7 +1773,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void PassOwnership(Guid ownerId, Guid newOwnerId, string ownerEmail, string newOwnerEmail)
         {
-            this.ThrowDomainExceptionIfViewerOsNotOwnerOfQuestionnaire(ownerId);
+            this.ThrowDomainExceptionIfViewerIsNotOwnerOfQuestionnaire(ownerId);
 
             this.RemoveSharedPerson(newOwnerId, newOwnerEmail, ownerId);
             
@@ -2124,7 +2124,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowDomainExceptionIfViewerOsNotOwnerOfQuestionnaire(Guid viewerId)
+        private void ThrowDomainExceptionIfViewerIsNotOwnerOfQuestionnaire(Guid viewerId)
         {
             if (this.innerDocument.CreatedBy != viewerId)
             {
