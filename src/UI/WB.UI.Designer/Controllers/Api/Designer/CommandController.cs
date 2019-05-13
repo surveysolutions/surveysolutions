@@ -387,6 +387,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
              { "SetDefaultTranslation", typeof (SetDefaultTranslation) },
              // Metadata
              { "UpdateMetadata", typeof (UpdateMetadata) },
+             { nameof(PassOwnershipFromQuestionnaire), typeof(PassOwnershipFromQuestionnaire) },
          };
 
         private Type GetTypeOfResultCommandOrThrowArgumentException(string commandType)
