@@ -19,7 +19,7 @@ namespace WB.UI.Designer.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class NotificationResources {
@@ -133,6 +133,15 @@ namespace WB.UI.Designer.Resources {
             get {
                 return ResourceManager.GetString("OwnerStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_revoked_" +
                         "access_for__2__to_your_questionnaire___3_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hello {0}, &lt;br&gt; {1} has transferred ownership of the questionnaire {2} to You.
+        /// </summary>
+        public static string PassOwnershipNotification {
+            get {
+                return ResourceManager.GetString("PassOwnershipNotification", resourceCulture);
             }
         }
         

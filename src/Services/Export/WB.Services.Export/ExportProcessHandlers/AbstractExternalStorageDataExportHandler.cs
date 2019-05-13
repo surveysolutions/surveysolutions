@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
@@ -58,6 +59,11 @@ namespace WB.Services.Export.ExportProcessHandlers
                     async binaryDataAction =>
                     {
                         var folderPath = await GetOrCreateFolderByType(binaryDataAction.Type, binaryDataAction.InterviewId);
+
+                        var storageSize = await GetFreeSpaceAsync();
+                        if (storageSize.HasValue && storageSize.Value < binaryDataAction.Content.Length)
+                            throw new IOException("There is not enough space on the disk", 0x70);
+
                         await this.UploadFileAsync(folderPath, binaryDataAction.Content, binaryDataAction.FileName);
                     }, 
                     progress, cancellationToken);
@@ -77,5 +83,12 @@ namespace WB.Services.Export.ExportProcessHandlers
         protected abstract Task<string> CreateFolderAsync(string applicationFolder, string folderName);
 
         protected abstract Task UploadFileAsync(string folder, byte[] fileContent, string fileName);
+
+
+        /// <summary>
+        /// Get free space of external storage
+        /// </summary>
+        /// <returns>Return null if unlimited storage, otherwise return free space of storage in bytes</returns>
+        protected abstract Task<long?> GetFreeSpaceAsync();
     }
 }
