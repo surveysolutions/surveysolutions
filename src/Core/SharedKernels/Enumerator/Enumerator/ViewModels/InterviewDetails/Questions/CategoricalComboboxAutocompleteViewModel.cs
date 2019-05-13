@@ -149,6 +149,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.FilterText = null;
             
             var suggestions = this.GetSuggestions(null).ToList();
+            this.QuestionState.Validity.ExecutedWithoutExceptions();
 
             this.InvokeOnMainThread(() =>
             {
