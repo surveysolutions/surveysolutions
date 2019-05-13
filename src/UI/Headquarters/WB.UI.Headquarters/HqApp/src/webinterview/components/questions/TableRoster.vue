@@ -1,8 +1,8 @@
 <template>
-    <wb-question :question="$me" :questionCssClassName="statusClass" noTitle="true" noValidation="true" noInstructions="true" noComments="true" noFlag="true">
-     <link rel="stylesheet" href="https://unpkg.com/ag-grid-community@20.2.0/dist/styles/ag-grid.css">
-    <link rel="stylesheet" href="https://unpkg.com/ag-grid-community@20.2.0/dist/styles/ag-theme-bootstrap.css">
-    
+
+    <div class="question table-view scroller" :id="hash">
+
+
         <ag-grid-vue 
             class="ag-theme-customStyles"
             :defaultColDef="defaultColDef"
@@ -18,7 +18,7 @@
             >
         </ag-grid-vue>
 
-    </wb-question>
+    </div>
 </template>
 
 <script lang="js">
