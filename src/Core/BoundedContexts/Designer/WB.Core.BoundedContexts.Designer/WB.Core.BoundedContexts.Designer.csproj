@@ -31,9 +31,9 @@
     <EmbeddedResource Include="ReferencedAssemblies\System.Text.RegularExpressions.dll" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="CsvHelper" Version="6.1.0" />
+    <PackageReference Include="CsvHelper" Version="12.1.2" />
     <PackageReference Include="Dapper" Version="1.60.6" />
-    <PackageReference Include="EPPlus" Version="4.5.2.1" />
+    <PackageReference Include="EPPlus" Version="4.5.3.1" />
     <PackageReference Include="HtmlSanitizer" Version="4.0.187" />
     <PackageReference Include="JsonDiffPatch.Net" Version="2.1.0" />
     <PackageReference Include="Markdig" Version="0.16.0" />

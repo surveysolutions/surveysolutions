@@ -25,6 +25,13 @@
                 });
             };
 
+            shareService.passOwnership = function (ownerEmail, newOwnerId, newOwnerEmail, questionnaireId) {
+                return commandService.execute("PassOwnershipFromQuestionnaire", {
+                    ownerEmail, newOwnerId, newOwnerEmail,
+                    questionnaireId: questionnaireId
+                });
+            };
+
             shareService.udpateQuestionnaire = function(questionnaireId, title, variable, hideifDisabled, isPublic) {
                 return commandService.execute("UpdateQuestionnaire", {
                     title: title,
