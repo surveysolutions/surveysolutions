@@ -77,6 +77,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.answerNotifier.Init(interviewId);
                 this.answerNotifier.QuestionAnswered += AnswerNotifierOnQuestionAnswered;
             }
+
+            if (questionnaire.IsQuestionCascading(entityIdentity.Id))
+            {
+                var cascadingQuestionParentId = questionnaire.GetCascadingQuestionParentId(entityIdentity.Id);
+                if (!cascadingQuestionParentId.HasValue) throw new NullReferenceException($"Parent of cascading question {entityIdentity} is missing");
+            
+                var parentRosterVector = entityIdentity.RosterVector.Take(questionnaire.GetRosterLevelForEntity(cascadingQuestionParentId.Value)).ToArray();
+
+                var parentQuestionIdentity = new Identity(cascadingQuestionParentId.Value, parentRosterVector);
+
+                var parentSingleOptionQuestion = interview.GetSingleOptionQuestion(parentQuestionIdentity);
+                if (parentSingleOptionQuestion.IsAnswered())
+                {
+                    this.ParentValue = parentSingleOptionQuestion.GetAnswer().SelectedValue;
+                }
+            }
         }
 
         public virtual List<CategoricalOption> GetOptions(string filter = "")
