@@ -105,7 +105,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                 CreationDate = account.CreatedAtUtc.ToUIString(),
                 Email = account.Email,
                 IsApproved = account.EmailConfirmed,
-                IsLockedOut = account.LockoutEnabled,
+                IsLockedOut = account.LockoutEnabled && account.LockoutEnd.HasValue,
                 CanImportOnHq = account.CanImportOnHq,
                 UserName = account.UserName,
                 OwnedQuestionnaires = ownedQuestionnaires,
