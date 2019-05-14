@@ -105,6 +105,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             // When options is selected, FocusOut will be always fired after. 
             // We change filter text and we safe answer on focus out event
             this.FilterText = option.Title;
+            this.RaisePropertyChanged(() => this.FilterText);
         }
 
         private async Task InvokeAllHandlers<T>(Func<object, T, Task> handler, T value)
