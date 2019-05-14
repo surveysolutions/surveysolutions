@@ -7,11 +7,9 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
     {
         public override void Up()
         {
-            Execute.Sql(@"ALTER TABLE readside.timespanbetweenstatuses ADD interview_id int4 NULL;
-
-                CREATE INDEX timespanbetweenstatuses_interview_idx ON readside.timespanbetweenstatuses (interviewid);
-
-                with mapped as (select t.id, replace(e.eventsourceid::text, '-', '') as eventsourceid
+            if (Schema.Table("events.events").Exists() && Schema.Table("readside.timespanbetweenstatuses").Exists())
+            {
+                Execute.Sql(@"  with mapped as (select t.id, replace(e.eventsourceid::text, '-', '') as eventsourceid
                  from 
  	                readside.timespanbetweenstatuses as t inner join events.events as e 
  		                on date_trunc('seconds', t.endstatustimestamp) = date_trunc('seconds', (value ->> 'completeTime')::timestamp)
@@ -20,7 +18,12 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
 
                 update  readside.timespanbetweenstatuses s
                 set interviewid = eventsourceid
-                from mapped m where m.id = s.id;
+                from mapped m where m.id = s.id;");
+            }
+
+            Execute.Sql(@"ALTER TABLE readside.timespanbetweenstatuses ADD interview_id int4 NULL;
+
+                CREATE INDEX timespanbetweenstatuses_interview_idx ON readside.timespanbetweenstatuses (interviewid);
 
                 update readside.timespanbetweenstatuses c 
 	                set interview_id = s.id
