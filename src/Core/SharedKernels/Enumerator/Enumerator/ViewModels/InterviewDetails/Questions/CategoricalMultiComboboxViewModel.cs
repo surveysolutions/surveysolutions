@@ -72,7 +72,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 else if (!hasNoOptionsForAnswers && !this.comboboxCollection.Contains(this.comboboxViewModel))
                     this.comboboxCollection.Add(this.comboboxViewModel);
 
-                await comboboxViewModel.UpdateFilter(comboboxViewModel.FilterText);
+                await comboboxViewModel.UpdateFilter(comboboxViewModel.FilterText, true);
             });
         }
 
