@@ -5,6 +5,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
+using WB.Persistence.Headquarters.Migrations.Events;
 using WB.Persistence.Headquarters.Migrations.PlainStore;
 using WB.Persistence.Headquarters.Migrations.ReadSide;
 
@@ -54,6 +55,9 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
 
                 DatabaseManagement.InitDatabase(connectionStringBuilder.ConnectionString, schemaName);
                 DatabaseManagement.InitDatabase(connectionStringBuilder.ConnectionString, "users");
+                DatabaseManagement.InitDatabase(connectionStringBuilder.ConnectionString, "events");
+                DbMigrationsRunner.MigrateToLatest(connectionStringBuilder.ConnectionString, "events",
+                    new DbUpgradeSettings(typeof(M201812181520_AddedGlobalSequenceSequence).Assembly, typeof(M201812181520_AddedGlobalSequenceSequence).Namespace));
 
                 switch (db)
                 {
