@@ -65,7 +65,7 @@
                 </tbody>
             </table>
             
-            @Html.Pager(Model.PageIndex, Model.TotalCount, 
+            @Html.Pager(rows.PageIndex + 1, rows.TotalPages , 
                 x => Url.Action(ViewContext.CurrentAction(), ViewContext.CurrentController(), new
             {
                 p = x,
