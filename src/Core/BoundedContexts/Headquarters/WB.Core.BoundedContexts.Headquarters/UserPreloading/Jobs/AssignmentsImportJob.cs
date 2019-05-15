@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
             this.assignmentsImportService = assignmentsImportService;
         }
         
-        public void Execute(IJobExecutionContext context)
+        public Task Execute(IJobExecutionContext context)
         {
             try
             {
@@ -35,12 +35,12 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
 
                 AssignmentsImportStatus importProcessStatus = assignmentsImportService.GetImportStatus();
                 if (importProcessStatus?.ProcessStatus != AssignmentsImportProcessStatus.Import)
-                    return;
+                    return Task.CompletedTask;
 
                 var allAssignmentIds = assignmentsImportService.GetAllAssignmentIdsToImport();
                 
                 if (importProcessStatus?.ProcessStatus != AssignmentsImportProcessStatus.Import)
-                    return;
+                    return Task.CompletedTask;
 
                 this.logger.Debug("Assignments import job: Started");
                 var sw = new Stopwatch();
@@ -75,6 +75,8 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
             {
                 this.logger.Error($"Assignments import job: FAILED. Reason: {ex.Message} ", ex);
             }
+
+            return Task.CompletedTask;
         }
     }
 }

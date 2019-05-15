@@ -28,17 +28,17 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
             this.sampleImportSettings = sampleImportSettings;
         }
 
-        public void Execute(IJobExecutionContext context)
+        public Task Execute(IJobExecutionContext context)
         {
             try
             {
                 var importProcess = assignmentsImportService.GetImportStatus();
 
-                if (importProcess?.ProcessStatus != AssignmentsImportProcessStatus.Verification) return;
+                if (importProcess?.ProcessStatus != AssignmentsImportProcessStatus.Verification) return Task.CompletedTask; 
 
                 var allAssignmentIds = assignmentsImportService.GetAllAssignmentIdsToVerify();
                     
-                if (importProcess?.ProcessStatus != AssignmentsImportProcessStatus.Verification) return;
+                if (importProcess?.ProcessStatus != AssignmentsImportProcessStatus.Verification) return Task.CompletedTask; 
 
                 this.logger.Debug("Assignments verification job: Started");
 
@@ -81,9 +81,9 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
 
                 assignmentsImportService.SetImportProcessStatus(AssignmentsImportProcessStatus.Import);
 
-                InScopeExecutor.Current.ExecuteActionInScope((serviceLocatorLocal) =>
+                InScopeExecutor.Current.ExecuteActionInScope(serviceLocatorLocal =>
                 {
-                     serviceLocatorLocal.GetInstance<AssignmentsImportTask>().Run();
+                     serviceLocatorLocal.GetInstance<AssignmentsImportTask>().Run().Wait();
                 });
 
                 sw.Stop();
@@ -93,6 +93,8 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
             {
                 this.logger.Error($"Assignments verification job: FAILED. Reason: {ex.Message} ", ex);
             }
+
+            return Task.CompletedTask;
         }
     }
 }
