@@ -12,15 +12,13 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Designer.Services.Accounts;
 using WB.Core.BoundedContexts.Designer.Views;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors
 {
@@ -75,17 +73,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, RevertVersionQuestionnaire>,
         ICommandPostProcessor<Questionnaire, UpdateAreaQuestion>,
         ICommandPostProcessor<Questionnaire, UpdateAudioQuestion>,
-        ICommandPostProcessor<Questionnaire, UpdateMetadata>
+        ICommandPostProcessor<Questionnaire, UpdateMetadata>,
+        ICommandPostProcessor<Questionnaire, PassOwnershipFromQuestionnaire>
     {
-        private IPlainStorageAccessor<User> accountStorage
-            => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<User>>();
+        private readonly DesignerDbContext dbContext;
+        private readonly IRecipientNotifier emailNotifier;
 
-        private IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage
-            => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<QuestionnaireListViewItem>>();
-
-        private IRecipientNotifier emailNotifier => ServiceLocator.Current.GetInstance<IRecipientNotifier>();
-
-        private IAccountRepository accountRepository => ServiceLocator.Current.GetInstance<IAccountRepository>();
+        public ListViewPostProcessor(DesignerDbContext dbContext, IRecipientNotifier emailNotifier)
+        {
+            this.dbContext = dbContext;
+            this.emailNotifier = emailNotifier;
+        }
 
         private void Create(QuestionnaireDocument document, bool shouldPreserveSharedPersons, 
             Guid? questionnaireId = null, string questionnaireTitle = null, Guid? createdBy = null,
@@ -93,22 +91,22 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         {
             var questionnaireIdValue = questionnaireId ?? document.PublicKey;
 
-            var creatorId = createdBy ?? document.CreatedBy;
+            Guid? creatorId = createdBy ?? document.CreatedBy;
 
-            var sourceQuestionnaireListViewItem = this.questionnaireListViewItemStorage.GetById(questionnaireIdValue.FormatGuid());
+            var sourceQuestionnaireListViewItem = this.dbContext.Questionnaires.Find(questionnaireIdValue.FormatGuid());
             var questionnaireListViewItem = sourceQuestionnaireListViewItem ?? new QuestionnaireListViewItem();
             questionnaireListViewItem.PublicId = questionnaireIdValue;
             questionnaireListViewItem.Title = questionnaireTitle ?? document.Title;
             questionnaireListViewItem.CreationDate = creationDate ?? document.CreationDate;
             questionnaireListViewItem.LastEntryDate = DateTime.UtcNow;
-            questionnaireListViewItem.CreatedBy = creatorId;
+            questionnaireListViewItem.CreatedBy = creatorId.GetValueOrDefault();
             questionnaireListViewItem.IsPublic = isPublic ?? document.IsPublic;
             questionnaireListViewItem.Owner = null;
             questionnaireListViewItem.CreatorName = null;
             questionnaireListViewItem.IsDeleted = false;
 
             if (creatorId.HasValue)
-                questionnaireListViewItem.CreatorName = this.accountStorage.GetById(creatorId.Value.FormatGuid())?.UserName;
+                questionnaireListViewItem.CreatorName = this.dbContext.Users.Find(creatorId.Value)?.UserName;
 
             if (!shouldPreserveSharedPersons)
             {
@@ -128,7 +126,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 }
             }
 
-            this.questionnaireListViewItemStorage.Store(questionnaireListViewItem, questionnaireListViewItem.QuestionnaireId);
+            bool existing =
+                this.dbContext.Questionnaires.Any(x => x.QuestionnaireId == questionnaireListViewItem.QuestionnaireId);
+            if (existing)
+            {
+                this.dbContext.Questionnaires.Update(questionnaireListViewItem);
+            }
+            else
+            {
+                this.dbContext.Questionnaires.Add(questionnaireListViewItem);
+            }
         }
 
         private void Create(CreateQuestionnaire command)
@@ -141,46 +148,41 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 LastEntryDate = DateTime.UtcNow,
                 CreatedBy = command.ResponsibleId,
                 IsPublic = command.IsPublic,
-                CreatorName = this.accountStorage.GetById(command.ResponsibleId.FormatGuid())?.UserName
+                CreatorName = this.dbContext.Users.Find(command.ResponsibleId)?.UserName
             };
-            this.questionnaireListViewItemStorage.Store(questionnaireListViewItem, questionnaireListViewItem.QuestionnaireId);
+            this.dbContext.Questionnaires.Add(questionnaireListViewItem);
         }
 
         private void Update(string questionnaireId)
         {
-            var questionnaireListViewItem = this.questionnaireListViewItemStorage.GetById(questionnaireId);
+            var questionnaireListViewItem = this.dbContext.Questionnaires.Find(questionnaireId);
             if (questionnaireListViewItem == null) return;
 
             questionnaireListViewItem.LastEntryDate = DateTime.UtcNow;
-            this.questionnaireListViewItemStorage.Store(questionnaireListViewItem, questionnaireId);
         }
 
         private void Update(string questionnaireId, string title, bool isPublic)
         {
-            var questionnaireListViewItem = this.questionnaireListViewItemStorage.GetById(questionnaireId);
+            var questionnaireListViewItem = this.dbContext.Questionnaires.Find(questionnaireId);
             if (questionnaireListViewItem == null) return;
 
             questionnaireListViewItem.Title = title;
             questionnaireListViewItem.IsPublic = isPublic;
             questionnaireListViewItem.LastEntryDate = DateTime.UtcNow;
-
-            this.questionnaireListViewItemStorage.Store(questionnaireListViewItem, questionnaireId);
         }
 
         private void Delete(string questionnaireId)
         {
-            var questionnaireListViewItem = this.questionnaireListViewItemStorage.GetById(questionnaireId);
+            var questionnaireListViewItem = this.dbContext.Questionnaires.Find(questionnaireId);
             if (questionnaireListViewItem == null) return;
 
             questionnaireListViewItem.IsDeleted = true;
             questionnaireListViewItem.LastEntryDate = DateTime.UtcNow;
-
-            this.questionnaireListViewItemStorage.Store(questionnaireListViewItem, questionnaireId);
         }
 
         private void RemoveSharedPerson(string questionnaireId, Guid responsibleId, Guid personId, string personEmail)
         {
-            var questionnaireListViewItem = this.questionnaireListViewItemStorage.GetById(questionnaireId);
+            var questionnaireListViewItem = this.dbContext.Questionnaires.Find(questionnaireId);
             if (questionnaireListViewItem == null) return;
 
             if (questionnaireListViewItem.SharedPersons.Any(x => x.UserId == personId))
@@ -190,15 +192,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             }
 
             questionnaireListViewItem.LastEntryDate = DateTime.UtcNow;
-            this.questionnaireListViewItemStorage.Store(questionnaireListViewItem, questionnaireId);
+            this.dbContext.Questionnaires.Update(questionnaireListViewItem);
 
-            this.SendEmailNotifications(questionnaireListViewItem.Title, questionnaireListViewItem.CreatedBy, responsibleId,
+            var questionnaireOwnerId = questionnaireListViewItem.CreatedBy;
+            this.SendEmailNotifications(questionnaireListViewItem.Title, questionnaireOwnerId, responsibleId,
                 ShareChangeType.StopShare, personEmail, questionnaireListViewItem.QuestionnaireId, ShareType.Edit);
         }
-
+        
         private void AddSharedPerson(string questionnaireId, Guid responsibleId, Guid personId, string personEmail, ShareType shareType)
         {
-            var questionnaireListViewItem = this.questionnaireListViewItemStorage.GetById(questionnaireId);
+            var questionnaireListViewItem = this.dbContext.Questionnaires.Find(questionnaireId);
             if (questionnaireListViewItem == null) return;
 
             if (questionnaireListViewItem.SharedPersons.Any(x => x.UserId == personId))
@@ -216,24 +219,66 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             questionnaireListViewItem.SharedPersons.Add(sharedPerson);
 
             questionnaireListViewItem.LastEntryDate = DateTime.UtcNow;
-            this.questionnaireListViewItemStorage.Store(questionnaireListViewItem, questionnaireId);
+            this.dbContext.Questionnaires.Update(questionnaireListViewItem);
 
             this.SendEmailNotifications(questionnaireListViewItem.Title, questionnaireListViewItem.CreatedBy, responsibleId,
                 ShareChangeType.Share, personEmail, questionnaireListViewItem.QuestionnaireId, shareType);
         }
-
-        private void SendEmailNotifications(string questionnaireTitle, Guid? questionnaireOwnerId, Guid responsibleId,
-            ShareChangeType shareChangeType, string mailTo, string questionnaireId, ShareType shareType)
+               
+        public void Process(Questionnaire aggregate, PassOwnershipFromQuestionnaire command)
         {
-            string mailFrom = this.accountStorage.GetById(responsibleId.FormatGuid())?.Email;
-            string mailToUserName = this.accountRepository.GetUserNameByEmail(mailTo);
+            var questionnaireListViewItem = this.dbContext.Questionnaires.Find(command.QuestionnaireId.FormatGuid());
+            if (questionnaireListViewItem == null) return;
+
+            var newOwner = this.dbContext.Users.SingleOrDefault(u => u.Id == command.NewOwnerId);
+                        
+            questionnaireListViewItem.Owner = newOwner.UserName;
+            questionnaireListViewItem.CreatedBy = newOwner.Id;
+
+            if (questionnaireListViewItem.SharedPersons.Any(x => x.UserId == newOwner.Id))
+            {
+                var toRemove = questionnaireListViewItem.SharedPersons.Where(x => x.UserId == newOwner.Id).ToList();
+                toRemove.ForEach(x => questionnaireListViewItem.SharedPersons.Remove(x));
+            }
+
+            var sharedPerson = new SharedPerson
+            {
+                UserId = command.ResponsibleId,
+                Email = command.OwnerEmail,
+                ShareType = ShareType.Edit
+            };
+
+            questionnaireListViewItem.SharedPersons.Add(sharedPerson);
+
+            questionnaireListViewItem.LastEntryDate = DateTime.UtcNow;
+            this.dbContext.Questionnaires.Update(questionnaireListViewItem);
+
+            // notify old owner that he is now has Edit permissions
+            this.SendEmailNotifications(questionnaireListViewItem.Title, questionnaireListViewItem.CreatedBy, newOwner.Id,
+               ShareChangeType.Share, command.OwnerEmail, questionnaireListViewItem.QuestionnaireId, ShareType.Edit);
+
+            // notify new owner that he is now has owner of questionnaire
+            this.SendEmailNotifications(questionnaireListViewItem.Title, questionnaireListViewItem.CreatedBy, newOwner.Id,
+               ShareChangeType.PassOwnership, command.NewOwnerEmail, questionnaireListViewItem.QuestionnaireId, ShareType.Edit);
+        }
+
+        private void SendEmailNotifications(string questionnaireTitle,
+            Guid? questionnaireOwnerId,
+            Guid responsibleId,
+            ShareChangeType shareChangeType, 
+            string mailTo, 
+            string questionnaireId, 
+            ShareType shareType)
+        {
+            string mailFrom = this.dbContext.Users.Find(responsibleId)?.Email;
+            string mailToUserName = this.dbContext.Users.FirstOrDefault(x => x.NormalizedEmail == mailTo.ToUpper())?.UserName;
 
             this.emailNotifier.NotifyTargetPersonAboutShareChange(shareChangeType, mailTo, mailToUserName, questionnaireId,
                 questionnaireTitle, shareType, mailFrom);
 
             if (!questionnaireOwnerId.HasValue || questionnaireOwnerId.Value == responsibleId) return;
 
-            var questionnaireOwner = this.accountStorage.GetById(questionnaireOwnerId.Value.FormatGuid());
+            var questionnaireOwner = this.dbContext.Users.Find(questionnaireOwnerId.Value);
             if (questionnaireOwner != null)
             {
                 this.emailNotifier.NotifyOwnerAboutShareChange(shareChangeType, questionnaireOwner.Email, questionnaireOwner.UserName,
@@ -309,5 +354,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
         public void Process(Questionnaire aggregate, UpdateMetadata command)
             => this.Update(command.QuestionnaireId.FormatGuid(), command.Title, aggregate.QuestionnaireDocument.IsPublic);
+
+        
     }
 }

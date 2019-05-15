@@ -10,7 +10,6 @@ $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 
 . "$scriptFolder\functions.ps1"
 
-$ProjectDesigner = 'src\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj'
 $ProjectHeadquarters = 'src\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj'
 $ProjectWebTester = 'src\UI\WB.UI.WebTester\WB.UI.WebTester.csproj'
 $MainSolution = 'src\WB without Xamarin.sln'
@@ -34,16 +33,14 @@ If (Test-Path "$artifactsFolder") {
 New-Item $artifactsFolder -Type Directory -Force | Out-Null
 
 try {
-    $buildSuccessful = BuildSolution -Solution $MainSolution -BuildConfiguration $BuildConfiguration
+
+    $buildArgs = @("/p:BuildNumber=$BuildNumber", "/p:VersionSuffix=$branch")
+
+    $buildSuccessful = BuildSolution -Solution $MainSolution -BuildConfiguration $BuildConfiguration -BuildArgs $buildArgs
     if ($buildSuccessful) { 
 
         New-Item "$artifactsFolder\stats" -Type Directory -Force | Out-Null
 
-        BuildStaticContent "Designer Questionnaire" "src\UI\Designer\WB.UI.Designer\questionnaire" | % { if (-not $_) { 
-            Log-Error 'Unexpected error occurred in BuildStaticContent while build static content for Designer'
-            Exit 
-        }}
-        
         BuildStaticContent "Hq Deps" "src\UI\Headquarters\WB.UI.Headquarters\Dependencies" | % { if (-not $_) {
             Log-Error 'Unexpected error occurred in BuildStaticContent while build static content for HQ Deps'
             Exit 
@@ -66,7 +63,6 @@ try {
         Remove-Item -Path "$artifactsFolder\coverage" -Recurse -Force -ErrorAction SilentlyContinue
 
         Log-Block "Run configuration transformations" {
-            RunConfigTransform $ProjectDesigner $BuildConfiguration
             RunConfigTransform $ProjectHeadquarters $BuildConfiguration
             RunConfigTransform $ProjectWebTester $BuildConfiguration
         }
@@ -117,15 +113,16 @@ try {
             -ExcludeExtra $false | % { if (-not $_) { Exit } }
 
         Log-Block "Building web packages and support tool" {
+            
             BuildWebPackage $ProjectHeadquarters $BuildConfiguration | % { if (-not $_) { Exit } }
-            BuildWebPackage $ProjectDesigner $BuildConfiguration | % { if (-not $_) { Exit } }
             BuildWebPackage $ProjectWebTester $BuildConfiguration | % { if (-not $_) { Exit } }
             BuildAndDeploySupportTool $SupportToolSolution $BuildConfiguration | % { if (-not $_) { Exit } }
         }
 
-        AddArtifacts $ProjectDesigner $BuildConfiguration -folder "Designer"
-        AddArtifacts $ProjectHeadquarters $BuildConfiguration -folder "Headquarters"
-        AddArtifacts $ProjectWebTester $BuildConfiguration -folder "WebTester"
+        Log-Block "Collecting/building artifacts" {
+            AddArtifacts $ProjectHeadquarters $BuildConfiguration -folder "Headquarters"
+            AddArtifacts $ProjectWebTester $BuildConfiguration -folder "WebTester"
+        }
 
         Write-Host "##teamcity[publishArtifacts '$artifactsFolder']"
     }

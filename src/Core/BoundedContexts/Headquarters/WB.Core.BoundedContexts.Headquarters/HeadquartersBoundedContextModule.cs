@@ -55,6 +55,7 @@ using WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services.Internal;
+using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
@@ -75,6 +76,7 @@ using WB.Enumerator.Native.Questionnaire.Impl;
 using WB.Enumerator.Native.WebInterview;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
@@ -291,11 +293,16 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAssignmentFactory, AssignmentFactory>();
             registry.Bind<IAssignmentPasswordGenerator, AssignmentPasswordGenerator>();
             registry.Bind<IInterviewReportDataRepository, InterviewReportDataRepository>();
-            
+
             if (fileSystemEmailServiceSettings?.IsEnabled ?? false)
+            {
                 registry.Bind<IEmailService, FileSystemEmailService>(new ConstructorArgument("settings", _ => fileSystemEmailServiceSettings));
+                registry.Bind<IPlainKeyValueStorage<EmailProviderSettings>, FileSystemEmailProviderSettingsStorage>(new ConstructorArgument("settings", _ => fileSystemEmailServiceSettings));
+            }
             else
+            {
                 registry.Bind<IEmailService, EmailService>();
+            }
 
             registry.Bind<IInvitationService, InvitationService>();
             registry.BindAsSingleton<ITokenGenerator,TokenGenerator>();

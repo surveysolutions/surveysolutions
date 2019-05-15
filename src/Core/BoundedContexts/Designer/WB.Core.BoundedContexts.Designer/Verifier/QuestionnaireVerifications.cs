@@ -374,7 +374,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private IEnumerable<QuestionnaireVerificationMessage> GetErrorsBySubstitutionsInVariableLabel(MultiLanguageQuestionnaireDocument.TranslatedEntity<IComposite> translatedEntity, string variableLabel, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            string[] substitutionReferences = this.substitutionService.GetAllSubstitutionVariableNames(variableLabel);
+            string[] substitutionReferences = this.substitutionService.GetAllSubstitutionVariableNames(variableLabel, 
+                translatedEntity.Entity.VariableName);
 
             if (substitutionReferences.Any())
             {
@@ -388,7 +389,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private IEnumerable<QuestionnaireVerificationMessage> GetErrorsBySubstitutionsInValidationCondition(MultiLanguageQuestionnaireDocument.TranslatedEntity<IComposite> translatedEntity, string validationCondition, int validationConditionIndex, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            string[] substitutionReferences = this.substitutionService.GetAllSubstitutionVariableNames(validationCondition);
+            string[] substitutionReferences = this.substitutionService.GetAllSubstitutionVariableNames(validationCondition, translatedEntity.Entity.VariableName);
 
             if (!substitutionReferences.Any())
                 return Enumerable.Empty<QuestionnaireVerificationMessage>();
@@ -405,7 +406,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private IEnumerable<QuestionnaireVerificationMessage> GetErrorsBySubstitutionsInEntityTitleOrInstructions(MultiLanguageQuestionnaireDocument.TranslatedEntity<IComposite> translatedEntity, string title, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            string[] substitutionReferences = this.substitutionService.GetAllSubstitutionVariableNames(title);
+            string[] substitutionReferences = this.substitutionService.GetAllSubstitutionVariableNames(title, translatedEntity.Entity.VariableName);
 
             if (!substitutionReferences.Any())
                 return Enumerable.Empty<QuestionnaireVerificationMessage>();
@@ -431,16 +432,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             RosterScope vectorOfRosterQuestionsByEntityWithSubstitutions,
             MultiLanguageQuestionnaireDocument questionnaire)
         {
-            bool isTitleOrInstructions = validationConditionIndex == null;
             var referenceToEntityWithSubstitution = CreateReference(traslatedEntityWithSubstitution.Entity, validationConditionIndex);
-
-            if (traslatedEntityWithSubstitution.Entity is IQuestion question && isTitleOrInstructions && substitutionReference == question.StataExportCaption)
-            {
-                return QuestionnaireVerificationMessage.Error("WB0016",
-                    VerificationMessages.WB0016_QuestionWithTitleSubstitutionCantReferenceSelf,
-                    traslatedEntityWithSubstitution.TranslationName,
-                    referenceToEntityWithSubstitution);
-            }
 
             if (substitutionReference == this.substitutionService.RosterTitleSubstitutionReference)
             {

@@ -2,11 +2,10 @@ using System;
 using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
-using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 
@@ -15,36 +14,35 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
 {
     internal class when_loading_view_and_shared_persons_contains_viewer : QuestionnaireInfoViewFactoryContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.Test]
+        public void should_be_only_1_specified_shared_person()
+        {
             var questionnaireInfoViewRepository = Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(
                 x => x.GetById(questionnaireId) == CreateQuestionnaireDocument(questionnaireId, questionnaireTitle));
 
-            var questionnaireListViewItemStorage = new InMemoryPlainStorageAccessor<QuestionnaireListViewItem>();
-            var questionnaireListViewItem = Create.QuestionnaireListViewItem();
+            var dbContext = Create.InMemoryDbContext();
+            var questionnaireListViewItem = Create.QuestionnaireListViewItem(id: Guid.Parse(questionnaireId));
             questionnaireListViewItem.SharedPersons.Add(new SharedPerson
             {
                 UserId = userId,
                 Email = userEmail,
                 IsOwner = false
             });
-            questionnaireListViewItemStorage.Store(questionnaireListViewItem, questionnaireId);
+            dbContext.Questionnaires.Add(questionnaireListViewItem);
 
-            var accountDocument = new User { Email = userEmail };
-            var accountDocumentRepository = Mock.Of<IPlainStorageAccessor<User>>(
-                x => x.GetById(userId.FormatGuid()) == accountDocument);
+            dbContext.Users.Add(new DesignerIdentityUser { Id = userId, Email = userEmail });
+            dbContext.SaveChanges();
 
             factory = CreateQuestionnaireInfoViewFactory(repository: questionnaireInfoViewRepository,
-                questionnaireListViewItemStorage: questionnaireListViewItemStorage, accountsDocumentReader: accountDocumentRepository);
+                dbContext);
+
             BecauseOf();
-        }
 
-        private void BecauseOf() => view = factory.Load(questionnaireId, userId);
-
-        [NUnit.Framework.Test] public void should_be_only_1_specified_shared_person ()
-        {
             view.SharedPersons.Count.Should().Be(1);
             view.SharedPersons[0].Email.Should().Be(userEmail);
         }
+
+        private void BecauseOf() => view = factory.Load(questionnaireId, userId);
 
         private static QuestionnaireInfoView view;
         private static QuestionnaireInfoViewFactory factory;

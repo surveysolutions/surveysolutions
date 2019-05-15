@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         [SetUp]
         public void SetUp()
         {
-            AssemblyContext.SetupServiceLocator();
+            
         }
 
         [Test]
@@ -55,7 +55,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             denormalizer.UpdateTextQuestion(command);
 
             // Assert
-            #warning: updated question is a new entity, that's why we should search for it by it's id
             var question = innerDocument.Find<IQuestion>(questionId);
 
             Assert.That(command.Title, Is.EqualTo(question.QuestionText));
@@ -71,7 +70,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             IExpressionProcessor expressionProcessor = null)
         {
             var questionnaireAr = new Questionnaire(
-                Mock.Of<ILogger>(),
                 Mock.Of<IClock>(),
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IAttachmentService>(),

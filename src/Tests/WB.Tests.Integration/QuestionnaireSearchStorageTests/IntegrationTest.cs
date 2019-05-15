@@ -8,7 +8,6 @@ using NHibernate;
 using Npgsql;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer;
-using WB.Core.BoundedContexts.Designer.Mappings;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Infrastructure.Native.Logging;
@@ -72,9 +71,7 @@ namespace WB.Tests.Integration.QuestionnaireSearchStorageTests
 
             var autofacKernel = new AutofacWebKernel();
             autofacKernel.Load(
-                new OrmModule(ormSettings),
-                new NLogLoggingModule(),
-                new DesignerWebModule()
+                new NLogLoggingModule()
             );
             await autofacKernel.InitAsync();
 
@@ -85,8 +82,8 @@ namespace WB.Tests.Integration.QuestionnaireSearchStorageTests
             sessionFactory = IntegrationCreate.SessionFactory(this.connectionString,
                 new List<Type>
                 {
-                    typeof(QuestionnaireListViewItemMap),
-                    typeof(QuestionnaireListViewFolderMap),
+                    //typeof(QuestionnaireListViewItemMap),
+                    //typeof(QuestionnaireListViewFolderMap),
                 },
                 true,
                 plainStorageSchemaName);

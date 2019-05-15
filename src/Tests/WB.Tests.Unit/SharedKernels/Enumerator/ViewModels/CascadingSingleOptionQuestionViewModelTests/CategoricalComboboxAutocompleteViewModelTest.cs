@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             interview.Setup(x => x.GetTopFilteredOptionsForQuestion(Moq.It.IsAny<Identity>(), Moq.It.IsAny<int?>(),
                     Moq.It.IsAny<string>(), Moq.It.IsAny<int>()))
                 .Returns((Identity identity, int? value, string filter, int count) => Options.Where(x =>
-                        x.ParentValue == 1 && x.Title.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0)
+                        x.ParentValue == 1 && x.Title.IndexOf(filter ?? string.Empty, StringComparison.OrdinalIgnoreCase) >= 0)
                     .ToList());
 
             var interviewRepository =

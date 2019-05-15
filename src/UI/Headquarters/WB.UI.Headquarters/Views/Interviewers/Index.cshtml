@@ -68,13 +68,24 @@
                     {
                         data: "userName",
                         name: "UserName", // case-sensitive!
-                        render: function(data, type, row) {
-                            return !row.isArchived ? "<a href='@Url.Action("Profile", "Interviewer")/" +
+                        render: function (data, type, row, meta) {
+                            var tdHtml = !row.isArchived ? "<a class='interviewer' href='@Url.Action("Profile", "Interviewer")/" +
                                 row.userId +
                                 "'>" +
                                 data +
                                 "</a>"
                                 : data;
+
+                            if (row.isLocked) {
+                                tdHtml += "<span class='lock' title='@Users.Locked'></span>";
+
+                                var api = new $.fn.dataTable.Api(meta.settings);
+                                var cell = api.cell(meta.col, meta.row);
+                                var jqCell = $(cell.node());
+                                jqCell.addClass("locked-user");
+                            }
+                            
+                            return tdHtml;
                         }
                     },
                     {
@@ -186,7 +197,8 @@
                                 var items = buildMenuItem(selectedRow);
                                 return { items: items };
                             },
-                            trigger: 'left'
+                            trigger: 'left',
+                            zIndex:1050
                         };
 
                         $.contextMenu(contextMenuOptions);

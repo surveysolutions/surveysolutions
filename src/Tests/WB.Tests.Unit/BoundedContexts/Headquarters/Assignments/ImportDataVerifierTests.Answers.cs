@@ -395,6 +395,29 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
+        public void when_verify_answers_and_integer_roster_size_question_has_0_value_return_no_errors()
+        {
+            // arrange
+            var fileName = "mainfile.tab";
+            string variableName = "rsq";
+            int answer = 0;
+
+            var rosterSizeQuestionId = Guid.Parse("11111111111111111111111111111111");
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.NumericIntegerQuestion(variable: variableName, id: rosterSizeQuestionId),
+                Create.Entity.NumericRoster(rosterSizeQuestionId: rosterSizeQuestionId)));
+
+            var preloadingRow = Create.Entity.PreloadingAssignmentRow(fileName, answers: new[] { Create.Entity.AssignmentIntegerAnswer(variableName, answer) });
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors, Is.Empty);
+        }
+
+        [Test]
         public void when_verify_answers_and_integer_long_roster_size_question_has_value_more_than_max_answers_count_return_PL0029_error()
         {
             // arrange

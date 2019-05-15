@@ -75,7 +75,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
             };
 
             if (ignoreCameCase)
-                configuration.PrepareHeaderForMatch = s => s.ToLower();
+                configuration.PrepareHeaderForMatch = (s, index) => s.ToLower();
 
             return configuration;
         }

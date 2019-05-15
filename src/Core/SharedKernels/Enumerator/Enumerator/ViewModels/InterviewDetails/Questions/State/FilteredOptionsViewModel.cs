@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -19,7 +20,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private string Filter { get; set; } = String.Empty;
         public int Count { get; protected set; } = 50;
 
-        public virtual event EventHandler OptionsChanged;
+        public virtual event Func<object, EventArgs, Task> OptionsChanged;
 
         public int? ParentValue { set; get; }
 
@@ -75,6 +76,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 this.answerNotifier.Init(interviewId);
                 this.answerNotifier.QuestionAnswered += AnswerNotifierOnQuestionAnswered;
+            }
+
+            if (questionnaire.IsQuestionCascading(entityIdentity.Id))
+            {
+                var cascadingQuestionParentId = questionnaire.GetCascadingQuestionParentId(entityIdentity.Id);
+                if (!cascadingQuestionParentId.HasValue) throw new NullReferenceException($"Parent of cascading question {entityIdentity} is missing");
+            
+                var parentRosterVector = entityIdentity.RosterVector.Take(questionnaire.GetRosterLevelForEntity(cascadingQuestionParentId.Value)).ToArray();
+
+                var parentQuestionIdentity = new Identity(cascadingQuestionParentId.Value, parentRosterVector);
+
+                var parentSingleOptionQuestion = interview.GetSingleOptionQuestion(parentQuestionIdentity);
+                if (parentSingleOptionQuestion.IsAnswered())
+                {
+                    this.ParentValue = parentSingleOptionQuestion.GetAnswer().SelectedValue;
+                }
             }
         }
 

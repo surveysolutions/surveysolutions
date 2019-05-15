@@ -93,7 +93,7 @@ namespace WB.UI.Shared.Enumerator.Services
 
         private void EncryptEvents()
         {
-            foreach (var interviewFile in this.fileSystemAccessor.GetFilesInDirectory(databaseSettings.PathToInterviewsDirectory))
+            foreach (var interviewFile in this.fileSystemAccessor.GetFilesInDirectory(databaseSettings.PathToInterviewsDirectory, "*.sqlite3"))
             {
                 var sqConnection = new SQLiteConnectionString(interviewFile, true, null);
                 var connection = new SQLiteConnectionWithLock(sqConnection,

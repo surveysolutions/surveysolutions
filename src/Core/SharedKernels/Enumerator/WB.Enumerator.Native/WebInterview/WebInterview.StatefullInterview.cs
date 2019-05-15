@@ -54,6 +54,7 @@ namespace WB.Enumerator.Native.WebInterview
                     ? string.Format(Resources.WebInterview.QuestionnaireNameFormat, questionnaire.Title, questionnaire.Version) 
                     : questionnaire.Title,
                 FirstSectionId = questionnaire.GetFirstSectionId().FormatGuid(),
+                QuestionnaireVersion = questionnaire.Version,
                 InterviewKey = statefulInterview.GetInterviewKey().ToString(),
                 InterviewCannotBeChanged = statefulInterview.ReceivedByInterviewer || this.IsCurrentUserObserving,
                 ReceivedByInterviewer = statefulInterview.ReceivedByInterviewer,

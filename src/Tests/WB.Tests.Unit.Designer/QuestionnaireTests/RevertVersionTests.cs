@@ -4,7 +4,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Designer.Exceptions;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;

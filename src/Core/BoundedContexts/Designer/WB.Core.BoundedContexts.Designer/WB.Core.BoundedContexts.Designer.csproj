@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net471</TargetFramework>
+    <TargetFramework>netstandard2</TargetFramework>
     <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
@@ -31,14 +31,17 @@
     <EmbeddedResource Include="ReferencedAssemblies\System.Text.RegularExpressions.dll" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="CsvHelper" Version="6.1.0" />
-    <PackageReference Include="EPPlus" Version="4.5.2.1" />
+    <PackageReference Include="CsvHelper" Version="12.1.2" />
+    <PackageReference Include="Dapper" Version="1.60.6" />
+    <PackageReference Include="EPPlus" Version="4.5.3.1" />
     <PackageReference Include="HtmlSanitizer" Version="4.0.187" />
     <PackageReference Include="JsonDiffPatch.Net" Version="2.1.0" />
     <PackageReference Include="Markdig" Version="0.16.0" />
-    <PackageReference Include="Microsoft.AspNet.WebPages.Data" Version="3.2.3" />
-    <PackageReference Include="Microsoft.AspNet.WebPages.WebData" Version="3.2.3" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.9.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.2.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.2.0" />
+    <PackageReference Include="System.CodeDom" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj" />
@@ -46,12 +49,6 @@
     <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj" />
     <ProjectReference Include="..\..\..\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj" />
     <ProjectReference Include="..\..\..\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Web.ApplicationServices" />
   </ItemGroup>
   <ItemGroup>
     <None Update="CodeGenerationV2\CodeTemplates\ConditionMethodTemplate.tt">
@@ -78,9 +75,6 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>OptionsFilterMethodTemplate.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="CodeGenerationV2\CodeTemplates\ConditionMethodTemplate.cs">
@@ -286,5 +280,8 @@
     <EmbeddedResource Update="Resources\VerificationMessages.zh.resx">
       <DependentUpon>VerificationMessages.resx</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Services\WebTester\" />
   </ItemGroup>
 </Project>
