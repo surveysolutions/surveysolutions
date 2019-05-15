@@ -1,7 +1,5 @@
 <template>
-    <div class="ag-input-text-wrapper">
-        <input :ref="'input'" class="ag-cell-edit-input" type="text" v-model="$me.answer" v-blurOnEnterKey />
-    </div>
+    <input :ref="'input'" class="ag-cell-edit-input" type="text" :value="$me.answer" v-blurOnEnterKey />
 </template>
 
 <script lang="js">
@@ -9,12 +7,12 @@
     import { entityDetails } from "../mixins"
 
     export default {
-        name: 'TableRoster_Text',
+        name: 'TableRoster_TextQuestion',
         mixins: [entityDetails],
         
         data() {
             return {
-                $me: null
+                
             }
         }, 
         methods: {
@@ -23,6 +21,9 @@
             },
             isCancelAfterEnd() {
                 this.answerTextQuestion();
+            },
+            saveAnswer() {
+                this.answerTextQuestion()
             },
             answerTextQuestion() {
                 const target = $(this.$refs.input)
@@ -39,10 +40,6 @@
                     this.$store.dispatch('answerTextQuestion', { identity: this.id, text: answer })
                 }
             }
-        },
-        created() {
-            this.$me = this.params.value;
-            this.$store = this.params.store;
         },
         mounted() {
             Vue.nextTick(() => {

@@ -26,6 +26,13 @@ Vue.component("Area",               () => import(/* webpackChunkName: "questions
 Vue.component("TableRoster",        () => import(/* webpackChunkName: "questions" */"./TableRoster"))
 Vue.component("Unsupported",        () => import(/* webpackChunkName: "questions" */"./Unsupported"))
 
+
+Vue.component("TableRoster_TextQuestion",   () => import(/* webpackChunkName: "questions" */"./TableRoster.TextQuestion"))
+Vue.component("TableRoster_Integer",        () => import(/* webpackChunkName: "questions" */"./TableRoster.Integer"))
+Vue.component("TableRoster_Double",         () => import(/* webpackChunkName: "questions" */"./TableRoster.Double"))
+Vue.component("TableRoster_Unsupported",    () => import(/* webpackChunkName: "questions" */"./TableRoster.Unsupported"))
+
+
 Vue.component("wb-question",        () => import( /* webpackChunkName: "questions" */ "./Question"))
 Vue.component("wb-humburger",       () => import( /* webpackChunkName: "questions" */ "./ui/humburger"))
 Vue.component("wb-typeahead",       () => import( /* webpackChunkName: "questions" */ "./ui/typeahead"))

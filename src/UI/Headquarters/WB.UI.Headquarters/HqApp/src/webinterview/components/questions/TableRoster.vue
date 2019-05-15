@@ -5,7 +5,6 @@
             :defaultColDef="defaultColDef"
             :columnDefs="columnDefs"
             :rowData="rowData"
-            :frameworkComponents="questionEditors"
 
             rowHeight="40"
             domLayout='autoHeight'
@@ -24,9 +23,8 @@
     import { debounce, every, some } from "lodash"
     import { AgGridVue } from "ag-grid-vue";
 
+    import TableRoster_QuestionEditor from "./TableRoster.QuestionEditor";
     import TableRoster_ViewAnswer from "./TableRoster.ViewAnswer";
-    import TableRoster_Text from "./TableRoster.Text";
-    import TableRoster_Numeric from "./TableRoster.Numeric";
     
     export default {
         name: 'TableRoster',
@@ -46,8 +44,7 @@
         components: {
             AgGridVue,
             TableRoster_ViewAnswer,
-            TableRoster_Text,
-            TableRoster_Numeric,
+            TableRoster_QuestionEditor,
         },
 
         beforeMount() {
@@ -57,11 +54,6 @@
                 height: 76,
                 resizable: true,
                 editable: true // make every column editable
-            };
-
-            this.questionEditors = {
-                text: TableRoster_Text,
-                numeric: TableRoster_Numeric,
             };
 
             this.initQuestionAsColumns()
@@ -100,12 +92,14 @@
                             cellRendererFramework: 'TableRoster_ViewAnswer',
                             cellRendererParams: {
                                 id: question.id,
-                                value: question
+                                questionInfo: question,
+                                store: self.$store
                             },
-                            cellEditorFramework: 'TableRoster_Text',
+                            cellEditorFramework: 'TableRoster_QuestionEditor', //'TableRoster_Text',
                             cellEditorParams: {
                                 id: question.id,
                                 value: question,
+                                question: question,
                                 store: self.$store
                             },
                             //cellEditor: ParamsComponent // columnType
@@ -129,7 +123,12 @@
                         var entityDetails = self.$store.state.webinterview.entityDetails;
                         self.$me.questions.forEach(question => {
                             var questionIdentity = question.id + instance.rosterVector
-                            instanceAsRow[question.id] = entityDetails[questionIdentity];
+                            //instanceAsRow[question.id] = entityDetails[questionIdentity];
+                            instanceAsRow[question.id] = {
+                                identity : questionIdentity,
+                                question : entityDetails[questionIdentity],
+                                type     : question.entityType
+                            }
                         });
                         
                         return instanceAsRow;
@@ -163,7 +162,7 @@
             },
 
             questionStyle(params) {
-                var question = params.value
+                /*var question = params.value
 
                 if (question.isDisabled) {
                     return 'disabled-question';
@@ -171,12 +170,12 @@
                 if (!question.validity.isValid) {
                     return 'has-error';
                 }
-                if (question.validity.warnings.length > 0) {
+                if (question.validity.warnings && question.validity.warnings.length > 0) {
                     return 'has-warnings';
                 }
                 if (question.isLocked) {
                     return 'not-applicable';
-                }
+                }*/
                 return '';
             },
 
