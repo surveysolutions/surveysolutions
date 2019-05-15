@@ -4,7 +4,7 @@
             :key="question.identity" 
             v-bind:is="'TableRoster_' + question.entityType" 
             v-bind:id="question.identity" 
-            v-bind:editorParams="params" 
+            :editorParams="params" 
             fetchOnMount>
         </component>
     </div>
