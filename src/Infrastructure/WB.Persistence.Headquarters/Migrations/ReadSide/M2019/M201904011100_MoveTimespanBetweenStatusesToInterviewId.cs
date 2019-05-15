@@ -7,7 +7,10 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
     {
         public override void Up()
         {
-            Execute.Sql(@"ALTER TABLE readside.timespanbetweenstatuses ADD interview_id int4 NULL;
+            Execute.Sql(@"
+                DELETE FROM readside.timespanbetweenstatuses where interviewid IS NULL;
+        
+                ALTER TABLE readside.timespanbetweenstatuses ADD interview_id int4 NULL;
 
                 CREATE INDEX timespanbetweenstatuses_interview_idx ON readside.timespanbetweenstatuses (interviewid);
 
@@ -25,7 +28,6 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
 
         public override void Down()
         {
-            throw new System.NotImplementedException();
         }
     }
 }
