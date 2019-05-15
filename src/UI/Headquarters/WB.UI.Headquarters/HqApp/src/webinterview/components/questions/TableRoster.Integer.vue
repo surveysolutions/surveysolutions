@@ -10,11 +10,11 @@
 
 <script lang="js">
     import Vue from 'vue'
-    import { entityDetails } from "../mixins"
+    import { entityDetails, tableCellEditor } from "../mixins"
     
     export default {
         name: 'TableRoster_Integer',
-        mixins: [entityDetails],
+        mixins: [entityDetails, tableCellEditor],
         
         data() {
             return {
@@ -44,7 +44,7 @@
                     ? parseInt(answerString)
                     : null;
 
-                this.saveAnswer(answer);
+                this.saveIntegerAnswer(answer);
             },
 
             saveIntegerAnswer(answer){
@@ -146,7 +146,7 @@
         },
         created() {
             // only start edit if key pressed is a number, not a letter
-            this.cancelBeforeStart = this.params.charPress && ('1234567890'.indexOf(this.params.charPress) < 0);
+            this.cancelBeforeStart = this.editorParams.charPress && ('1234567890'.indexOf(this.editorParams.charPress) < 0);
         },
         mounted() {
             Vue.nextTick(() => {
