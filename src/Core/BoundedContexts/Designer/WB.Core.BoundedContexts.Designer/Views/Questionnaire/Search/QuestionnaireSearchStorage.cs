@@ -1,26 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Dapper;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Microsoft.EntityFrameworkCore;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
-using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
 {
     public class QuestionnaireSearchStorage : IQuestionnaireSearchStorage
     {
+        private readonly DesignerDbContext dbContext;
         public const string TableName = "questionnairesearchentities";
         public const string TableNameWithSchema = "plainstore." + TableName;
 
-        private readonly IUnitOfWork unitOfWork;
 
-        public QuestionnaireSearchStorage(IUnitOfWork unitOfWork)
+        public QuestionnaireSearchStorage(DesignerDbContext dbContext)
         {
-            this.unitOfWork = unitOfWork;
+            this.dbContext = dbContext;
         }
 
         public void AddOrUpdateEntity(Guid questionnaireId, IComposite composite)
@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
                       $"    entitytype      = @entityType," +
                       $"    searchtext      = to_tsvector(@searchText)";
 
-            unitOfWork.Session.Connection.Execute(sql, new
+            dbContext.Database.GetDbConnection().Execute(sql, new
             {
                 title = GetTitle(composite),
                 questionnaireId = questionnaireId,
@@ -98,7 +98,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
                       $"WHERE s.questionnaireid = @questionnaireId " +
                       $"  AND s.entityid        = @entityId";
 
-            unitOfWork.Session.Connection.Execute(sql, new
+            dbContext.Database.GetDbConnection().Execute(sql, new
             {
                 questionnaireId = questionnaireId,
                 entityId = entityId,
@@ -109,7 +109,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
         {
             var sql = $"DELETE from {TableNameWithSchema} s " +
                       $"WHERE s.questionnaireid = @questionnaireId ";
-            unitOfWork.Session.Connection.Execute(sql, new
+            dbContext.Database.GetDbConnection().Execute(sql, new
             {
                 questionnaireId = questionnaireId,
             });
@@ -131,7 +131,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
                       $" LIMIT @pageSize" +
                       $" OFFSET @offset ";
 
-            var searchResultEntities = unitOfWork.Session.Connection.Query<SearchResultEntity>(sqlSelect, new
+            var searchResultEntities = dbContext.Database.GetDbConnection().Query<SearchResultEntity>(sqlSelect, new
             {
                 query = textSearchQuery,
                 folderid = input.FolderId,
@@ -146,7 +146,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
                       $"     LEFT JOIN plainstore.questionnairelistviewfolders f ON f.id = li.folderid" +
                       $" WHERE (@query IS NULL OR s.searchtext @@ to_tsquery(@query))" +
                       $"   AND (@folderid IS NULL OR li.folderid = @folderid OR f.path like @folderpathquery) ";
-            var count = unitOfWork.Session.Connection.ExecuteScalar<int>(sqlCount, new
+            var count = dbContext.Database.GetDbConnection().ExecuteScalar<int>(sqlCount, new
             {
                 query = textSearchQuery,
                 folderid = input.FolderId,

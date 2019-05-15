@@ -2,7 +2,6 @@
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Exceptions;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
@@ -12,7 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         [SetUp]
         public void SetUp()
         {
-            AssemblyContext.SetupServiceLocator();
+            
         }
 
         [Test]

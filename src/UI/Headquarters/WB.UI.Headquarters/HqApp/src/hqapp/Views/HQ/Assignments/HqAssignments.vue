@@ -370,6 +370,15 @@ export default {
                     searchable: false
                 },
                 {
+                    data: "receivedByTabletAtUtc",
+                    name: "ReceivedByTabletAtUtc",                    
+                    title: this.$t("Assignments.ReceivedByTablet"),
+                    searchable: false,
+                    render(data) {
+                        return data != null ? self.$t("Common.Yes") : self.$t("Common.No");
+                    }
+                },
+                {
                     data: "webMode",
                     name: "WebMode",                    
                     title: this.$t("Assignments.WebMode"),

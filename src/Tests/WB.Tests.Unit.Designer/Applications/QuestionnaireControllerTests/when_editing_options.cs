@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer.Controllers;
@@ -28,20 +28,19 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             controller = CreateQuestionnaireController(
                 categoricalOptionsImportService: Create.CategoricalOptionsImportService(questionnaire));
 
-            SetControllerContextWithSession(controller, "options", new QuestionnaireController.EditOptionsViewModel
-            {
-                QuestionnaireId = questionnaireId.FormatGuid(),
-                QuestionId = questionId
-            });
-
             stream = GenerateStreamFromString("1\tStreet 1");
 
             stream.Position = 0;
-            postedFile = Mock.Of<HttpPostedFileBase>(pf => pf.InputStream == stream && pf.FileName == "data.csv");
+            postedFile = Mock.Of<IFormFile>(pf => pf.OpenReadStream() == stream && pf.FileName == "data.csv");
+            controller.questionWithOptionsViewModel = new QuestionnaireController.EditOptionsViewModel
+            {
+                QuestionnaireId = questionnaireId.FormatGuid(),
+                QuestionId = questionId
+            };
             BecauseOf();
         }
 
-        private void BecauseOf() => view = controller.EditOptions(postedFile);
+        private void BecauseOf() => view = controller.EditOptions(postedFile) as ViewResult;
 
         [NUnit.Framework.Test] public void should_return_list_with_1_option () =>
             ((IEnumerable<QuestionnaireCategoricalOption>)view.Model).Count().Should().Be(1);
@@ -59,7 +58,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
         }
 
         private static QuestionnaireController controller;
-        private static HttpPostedFileBase postedFile;
+        private static IFormFile postedFile;
         private static Stream stream = new MemoryStream();
         private static ViewResult view;
     }

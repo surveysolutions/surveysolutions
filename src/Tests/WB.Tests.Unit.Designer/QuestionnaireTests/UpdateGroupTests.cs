@@ -3,7 +3,6 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Services;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
@@ -11,12 +10,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
     [TestFixture]
     internal class UpdateGroupTests : QuestionnaireTestsContext
     {
-        [SetUp]
-        public void SetUp()
-        {
-            AssemblyContext.SetupServiceLocator();
-        }
-
         [Test]
         public void NewUpdateGroup_When_groups_new_title_is_not_empty_Then_raised_GroupUpdated_event_contains_the_same_group_title()
         {

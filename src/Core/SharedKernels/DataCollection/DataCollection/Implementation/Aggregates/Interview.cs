@@ -1975,7 +1975,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 if (!(command.SynchronizedEvents.FirstOrDefault() is InterviewCreated))
                 {
-                    throw new InterviewException("Create interview must be first event");
+                    // Version 19.02 still generates InterviewOnClientCreated created event
+                    // throw new InterviewException("Create interview must be the first event");
                 }
             }
             else

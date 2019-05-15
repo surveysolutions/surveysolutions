@@ -1,0 +1,59 @@
+﻿@page
+@model WB.UI.Designer.Areas.Admin.Pages.EditUserModel
+@{
+   ViewBag.Title = "Edit user: "  + this.Model.Input.UserName;
+}
+
+<div id="edit-form">
+    @if (Model.Message != null)
+    {
+      <div class="alert alert-success header">@Html.Raw(Model.Message)</div>
+    }
+    
+    @if (Model.ErrorMessage != null)
+    {
+        <div class="alert alert-danger header">@Model.ErrorMessage</div>
+    }
+
+    <form method="post">
+
+        <h1>Update Account: @Model.Input.UserName</h1>
+        <input type="hidden" asp-for="Input.Id" />
+
+        <div class="form-group">
+            <input type="text" asp-for="Input.FullName" class="form-control" placeholder="Full Name" />
+            <span asp-validation-for="Input.FullName" class="text-danger help-inline"></span>
+        </div>
+        <div class="form-group">
+            <input type="text" asp-for="Input.Email" class="form-control" placeholder="E-mail" />
+            <span asp-validation-for="Input.Email" class="text-danger help-inline"></span>
+        </div>
+        <div class="form-group">
+            <input type="checkbox" asp-for="Input.IsApproved" id="is-approved" class="wb-checkbox" />
+            <label for="is-approved">
+                <span></span>Is Approved
+            </label><br />
+        </div>
+        <div class="form-group">
+            <input type="checkbox" asp-for="Input.IsLockedOut" id="is-locked" class="wb-checkbox" />
+            <label for="is-locked">
+                <span></span>Is Locked Out
+            </label><br />
+        </div>
+        <div class="form-group">
+            <input type="checkbox" asp-for="Input.CanImportOnHq" id="can-import" class="wb-checkbox" />
+            <label for="can-import">
+                <span></span>Can import on HQ
+            </label><br />
+        </div>
+        <div class="form-actions">
+            <input type="submit" class="btn btn-success btn-lg" value="Update" />
+            <a asp-page="./Users" class="btn">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

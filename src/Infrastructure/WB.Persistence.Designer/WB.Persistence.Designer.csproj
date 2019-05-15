@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Migrations\Logs\M201904221727_AddErrorsTable.sql" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\M001-100\M201904051250_MigrateUsers.sql" />
+    <EmbeddedResource Include="Migrations\Logs\M201904221727_AddErrorsTable.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentMigrator" Version="3.1.3" />
+    <PackageReference Include="FluentMigrator.Runner" Version="3.1.3" />
+    <PackageReference Include="FluentMigrator.Runner.Core" Version="3.1.3" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
+  </ItemGroup>
+
+</Project>

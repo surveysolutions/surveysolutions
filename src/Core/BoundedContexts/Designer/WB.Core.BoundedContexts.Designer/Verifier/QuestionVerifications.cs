@@ -56,6 +56,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error<IMultyOptionsQuestion>("WB0082", RosterSizeMultiOptionQuestionShouldBeLimited, VerificationMessages.WB0082_RosterSizeMultiOptionQuestionShouldBeLimited),
             Error<IQuestion, IComposite>("WB0084", CascadingComboboxOptionsHasNoParentOptions, VerificationMessages.WB0084_CascadingOptionsShouldHaveParent),
             Error<IQuestion, IComposite>("WB0085", ParentShouldNotHaveDeeperRosterLevelThanCascadingQuestion, VerificationMessages.WB0085_CascadingQuestionWrongParentLevel),
+            Error<IQuestion>("WB0282", IdentifyingQuestionInSectionWithEnablingCondition, VerificationMessages.WB0282_IdentifyingQuestionInSectionWithCondition),
             ErrorForTranslation<IQuestion>("WB0072", OptionTitlesMustBeUniqueForCategoricalQuestion, VerificationMessages.WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion),
             ErrorForTranslation<IQuestion>("WB0045", QuestionHasOptionsWithEmptyValue, VerificationMessages.WB0045_QuestionHasOptionsWithEmptyValue),
             ErrorForTranslation<IQuestion>("WB0259", QuestionTitleIsTooLong, string.Format(VerificationMessages.WB0259_QuestionTitleIsTooLong, MaxTitleLength)),
@@ -89,6 +90,17 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             WarningForCollection(SameTitle, "WB0266", VerificationMessages.WB0266_SameTitle),
             Warning(NoPrefilledQuestions, "WB0216", VerificationMessages.WB0216_NoPrefilledQuestions),
         };
+
+        private bool IdentifyingQuestionInSectionWithEnablingCondition(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            if (Prefilled(question))
+            {
+                var parentSections = question.GetParent().UnwrapReferences(x => x.GetParent()).OfType<IConditional>();
+                return parentSections.Any(x => !string.IsNullOrEmpty(x.ConditionExpression));
+            }
+
+            return false;
+        }
 
         private bool ComboboxShouldNotHaveParentValue(SingleQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using Moq;
 using MvvmCross.Plugin.Messenger;
+using NUnit.Framework;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -20,7 +21,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
 {
     internal class when_changed_answer_for_filtered_question_with_filter_on_options : FilteredSingleOptionQuestionViewModelTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [OneTimeSetUp] 
+        public void context () {
             var interviewId = "interviewId";
             var singleOptionAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.GetAnswer() == Create.Entity.SingleOptionAnswer(3));
             
@@ -39,6 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             var answerViewModel = new AnsweringViewModel(Mock.Of<ICommandService>(), Mock.Of<IUserInterfaceStateService>(), Mock.Of<IMvxMessenger>());
 
             filteredOptionsViewModel = new Mock<FilteredOptionsViewModel>();
+            filteredOptionsViewModel.Setup(x => x.GetAnsweredOption(3)).Returns(new CategoricalOption() { Title = "3", Value = 3, ParentValue = null });
             filteredOptionsViewModel.Setup(x => x.GetOptions(Moq.It.IsAny<string>())).Returns((string filter) => 
                 interview.Object.GetTopFilteredOptionsForQuestion(questionIdentity, null, filter, 15));
 
@@ -60,7 +63,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             Thread.Sleep(1000);
         }
 
-        [NUnit.Framework.Test] public void should_update_suggestions_list () =>
+        [Test] 
+        public void should_update_suggestions_list () =>
             filteredOptionsViewModel.Verify(_ => _.GetOptions(Moq.It.IsAny<string>()), Times.Once);
 
         private static FilteredSingleOptionQuestionViewModel viewModel;

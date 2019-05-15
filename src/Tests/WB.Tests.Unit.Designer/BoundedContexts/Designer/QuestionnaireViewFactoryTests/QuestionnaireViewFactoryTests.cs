@@ -2,6 +2,7 @@
 using Main.Core.Documents;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable;
@@ -18,14 +19,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireViewFacto
             Guid questionnaireId = Guid.NewGuid();
             Guid userId = Guid.NewGuid();
             var questionnaireDocument = Create.QuestionnaireDocument();
-            var listItem = Create.QuestionnaireListViewItem(isPublic: true);
+            var listItem = Create.QuestionnaireListViewItem(isPublic: true, id: questionnaireId);
 
             var questionnaireStorage = Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(q =>
                 q.GetById(questionnaireId.FormatGuid()) == questionnaireDocument);
 
-            var listItemStorage = Mock.Of<IPlainStorageAccessor<QuestionnaireListViewItem>>(i =>
-                i.GetById(questionnaireId.FormatGuid()) == listItem);
-            var factory = new QuestionnaireViewFactory(questionnaireStorage, listItemStorage, Create.AccountRepository());
+            var inMemoryDbContext = Create.InMemoryDbContext();
+            inMemoryDbContext.Questionnaires.Add(listItem);
+            inMemoryDbContext.SaveChanges();
+
+            var factory = new QuestionnaireViewFactory(questionnaireStorage, inMemoryDbContext);
 
             var result = factory.HasUserAccessToQuestionnaire(questionnaireId, userId);
 

@@ -68,11 +68,14 @@ const scriptIncludedPromise = new Promise(resolve =>
                 xhr() {
                     const xhr = $.ajaxSettings.xhr()
                     xhr.upload.onprogress = (e) => {
-                        store.dispatch("uploadProgress", {
-                            id,
-                            now: e.loaded,
-                            total: e.total
-                        })
+                        var entity = store.state.webinterview.entityDetails[id];
+                        if (entity != undefined) {
+                            store.dispatch("uploadProgress", {
+                                id,
+                                now: e.loaded,
+                                total: e.total
+                            })
+                        }
                     }
                     return xhr
                 },

@@ -6,6 +6,7 @@ using Humanizer;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events;
+using Microsoft.Extensions.Options;
 using Moq;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
@@ -48,6 +49,7 @@ using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 using WB.Tests.Abc;
+using WB.UI.Designer.Code;
 using Configuration = NHibernate.Cfg.Configuration;
 using Environment = System.Environment;
 
@@ -113,12 +115,8 @@ namespace WB.Tests.Integration
                 macrosSubstitutionService ?? DefaultMacrosSubstitutionService()));
         }
 
-        private static ICompilerSettings GetCompilerSettingsStub()
-            => System.Environment.MachineName.ToLower() == "powerglide" // TLK's :)
-                ? Mock.Of<ICompilerSettings>(settings
-                    => settings.EnableDump == false
-                    && settings.DumpFolder == "C:/Projects/Data/Tests/CodeDump")
-                : Mock.Of<ICompilerSettings>();
+        private static IOptions<CompilerSettings> GetCompilerSettingsStub()
+            => Mock.Of<IOptions<CompilerSettings>>(x => x.Value == new CompilerSettings());
 
         public static IMacrosSubstitutionService DefaultMacrosSubstitutionService()
         {

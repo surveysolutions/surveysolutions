@@ -42,7 +42,9 @@
                                 return getLinkToInterviews(model, data, row);
                             }
                             else {
-                                return '<a href="' + $selfUrl + '?questionnaireId=' + row.questionnaireId + '">' + data + '</a>';
+                                var responsible = model.Url.query['responsible'];
+                                var responsibleFilter = (!_.isUndefined(responsible)) ? '&responsible=' + responsible : '';
+                                return '<a href="' + $selfUrl + '?questionnaireId=' + row.questionnaireId + responsibleFilter + '">' + data + '</a>';
                             }
                         }
                     },
