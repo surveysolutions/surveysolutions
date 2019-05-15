@@ -16,6 +16,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     public class SubstitutionText
     {
         private readonly Identity identity;
+        private readonly string selfVariable;
         private readonly ISubstitutionService substitutionService;
         private readonly IVariableToUIStringService variableToUiStringService;
         private readonly List<SubstitutionVariable> substitutionVariables;
@@ -28,6 +29,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public SubstitutionText(
             Identity identity,
             string text,
+            string selfVariable,
             List<SubstitutionVariable> variables,
             ISubstitutionService substitutionService,
             IVariableToUIStringService variableToUiStringService)
@@ -38,6 +40,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.BrowserReadyText = markdownReplacedText;
             this.originalText = markdownReplacedText;
             this.identity = identity;
+            this.selfVariable = selfVariable;
             this.substitutionService = substitutionService;
             this.variableToUiStringService = variableToUiStringService;
             this.substitutionVariables = variables;
@@ -98,13 +101,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                                 substitutionResult = asDateTime.IsTimestamp 
                                     ? $"<time datetime=\"{dateTime:O}\">{dateTime.ToString(asDateTime.UiFormatString)}</time>" 
                                     : $"<time date=\"{dateTime:yyyy-MM-dd}\">{dateTime.ToString(asDateTime.UiFormatString)}</time>";
-                        }
-                        else
-                        {
-                            substitutionResult = shouldAddBrowserTags ? WebUtility.HtmlEncode(answerString ?? string.Empty) : answerString;
-                        }
+                            }
+                            else
+                            {
+                                substitutionResult = shouldAddBrowserTags ? WebUtility.HtmlEncode(answerString ?? string.Empty) : answerString;
+                            }
                         
-                        break;
+                            break;
                     }
                 }
                 substitutionResult = shouldAddBrowserTags && shouldEncode 
@@ -116,7 +119,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     : substitutionResult;
 
                 textWithReplacedSubstitutions = this.substitutionService.ReplaceSubstitutionVariable(
-                        textWithReplacedSubstitutions, substitution.Name, substitutionResult);
+                        textWithReplacedSubstitutions, this.selfVariable, substitution.Name, substitutionResult);
             }
 
             return textWithReplacedSubstitutions;

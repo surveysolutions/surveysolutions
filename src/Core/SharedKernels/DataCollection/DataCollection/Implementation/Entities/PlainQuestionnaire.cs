@@ -893,6 +893,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public string GetVariableLabel(Guid variableId) => this.GetVariable(variableId).Label;
 
         public string GetVariableName(Guid variableId) => this.GetVariable(variableId).Name;
+
         public string GetRosterVariableName(Guid id) => this.GetGroupOrThrow(id).VariableName;
 
         public IReadOnlyCollection<int> GetValidationWarningsIndexes(Guid entityId)
@@ -1414,13 +1415,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             var referenceOccurences = new Dictionary<string, HashSet<Guid>>();
             foreach (IComposite entity in entities)
             {
-                var substitutedVariableNames = this.SubstitutionService.GetAllSubstitutionVariableNames(entity.GetTitle()).ToList();
+                var substitutedVariableNames = this.SubstitutionService.GetAllSubstitutionVariableNames(entity.GetTitle(), entity.VariableName).ToList();
                 var validateable = entity as IValidatable;
                 if (validateable != null)
                 {
                     foreach (ValidationCondition validationCondition in validateable.ValidationConditions)
                     {
-                        var substitutedVariablesInValidation = this.SubstitutionService.GetAllSubstitutionVariableNames(validationCondition.Message);
+                        var substitutedVariablesInValidation = this.SubstitutionService.GetAllSubstitutionVariableNames(validationCondition.Message, entity.VariableName);
                         substitutedVariableNames.AddRange(substitutedVariablesInValidation);
                     }
                 }
@@ -1845,6 +1846,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             }
 
             return hasAnyMultimediaQuestion.Value;
+        }
+
+        public string GetEntityVariableOrThrow(Guid id)
+        {
+            var entity = this.GetEntityOrThrow(id);
+            return entity.VariableName;
         }
     }
 }

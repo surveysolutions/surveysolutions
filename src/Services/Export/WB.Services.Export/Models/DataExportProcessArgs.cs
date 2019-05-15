@@ -3,6 +3,11 @@ using WB.Services.Export.Services.Processing;
 
 namespace WB.Services.Export.Models
 {
+    public class DateExportProcessError
+    {
+        public DataExportError Type { get; set; }
+        public string Message { get; set; }
+    }
     public class DataExportProcessStatus
     {
         public DateTime? BeginDate { get; set; }
@@ -11,6 +16,7 @@ namespace WB.Services.Export.Models
         public int ProgressInPercents { get; set; }
         public bool IsRunning { get; set; }
         public TimeSpan? TimeEstimation { get; set; }
+        public DateExportProcessError Error { get; set; }
     }
 
     public class DataExportProcessArgs

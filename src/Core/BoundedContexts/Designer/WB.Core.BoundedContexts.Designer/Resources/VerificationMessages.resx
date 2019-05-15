@@ -147,9 +147,6 @@
   <data name="WB0015_QuestionWithTitleSubstitutionCantBePrefilled" xml:space="preserve">
     <value>Question with title or instructions substitution cannot be marked as identifying.</value>
   </data>
-  <data name="WB0016_QuestionWithTitleSubstitutionCantReferenceSelf" xml:space="preserve">
-    <value>Question with title or instructions substitution cannot reference itself.</value>
-  </data>
   <data name="WB0017_SubstitutionReferencesNotExistingQuestionOrVariable" xml:space="preserve">
     <value>Substitution references a nonexistent question or variable.</value>
   </data>
