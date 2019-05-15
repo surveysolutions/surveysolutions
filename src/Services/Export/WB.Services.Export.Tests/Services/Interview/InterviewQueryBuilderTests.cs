@@ -123,6 +123,7 @@ namespace WB.Services.Export.Tests.Services.Interview
                 VariableName = "mult1",
                 PublicKey = Id.gC
             };
+
             Create.QuestionnaireDocumentWithOneChapter(
                 variable: "questionnaire",
                 chapterId: Id.gA,

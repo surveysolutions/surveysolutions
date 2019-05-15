@@ -19,7 +19,7 @@ namespace WB.UI.Designer.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class QuestionnaireEditor {
@@ -147,6 +147,15 @@ namespace WB.UI.Designer.Resources {
         public static string AllFolders {
             get {
                 return ResourceManager.GetString("AllFolders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are You sure?.
+        /// </summary>
+        public static string AreYouSure {
+            get {
+                return ResourceManager.GetString("AreYouSure", resourceCulture);
             }
         }
         
@@ -1267,7 +1276,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Move to another sub-section:.
+        ///   Looks up a localized string similar to Move to another section:.
         /// </summary>
         public static string MoveToAnotherSubSection {
             get {
@@ -1425,6 +1434,15 @@ namespace WB.UI.Designer.Resources {
         public static string OptionsWindowTitle {
             get {
                 return ResourceManager.GetString("OptionsWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If you transfer ownership, the new owner will be notified. You may no longer be able to change ownership settings, and the new ownwer may also remove you access..
+        /// </summary>
+        public static string PassOwnershipConfirmationMessage {
+            get {
+                return ResourceManager.GetString("PassOwnershipConfirmationMessage", resourceCulture);
             }
         }
         
@@ -2172,6 +2190,15 @@ namespace WB.UI.Designer.Resources {
         public static string SettingsOwner {
             get {
                 return ResourceManager.GetString("SettingsOwner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pass ownership.
+        /// </summary>
+        public static string SettingsPassOwnership {
+            get {
+                return ResourceManager.GetString("SettingsPassOwnership", resourceCulture);
             }
         }
         
@@ -3423,6 +3450,15 @@ namespace WB.UI.Designer.Resources {
         public static string WarningsCounter_plural {
             get {
                 return ResourceManager.GetString("WarningsCounter_plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string Yes {
+            get {
+                return ResourceManager.GetString("Yes", resourceCulture);
             }
         }
     }

@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private bool IsNotSupportSubstitution(IVariable variable, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            return substitutionService.GetAllSubstitutionVariableNames(variable.Label).Length > 0;
+            return substitutionService.GetAllSubstitutionVariableNames(variable.Label, variable.VariableName).Length > 0;
         }
 
         private bool VariableHasInvalidName(IVariable variable, MultiLanguageQuestionnaireDocument questionnaire)

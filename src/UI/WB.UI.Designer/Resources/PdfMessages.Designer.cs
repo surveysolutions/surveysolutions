@@ -19,10 +19,10 @@ namespace WB.UI.Designer.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class PdfMessages {
+    public class PdfMessages {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace WB.UI.Designer.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.UI.Designer.Resources.PdfMessages", typeof(PdfMessages).Assembly);
@@ -51,7 +51,7 @@ namespace WB.UI.Designer.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -64,7 +64,7 @@ namespace WB.UI.Designer.Resources {
         ///   Looks up a localized string similar to Failed to generate PDF.
         ///Please reload the page and try again or contact support@mysurvey.solutions.
         /// </summary>
-        internal static string FailedToGenerate {
+        public static string FailedToGenerate {
             get {
                 return ResourceManager.GetString("FailedToGenerate", resourceCulture);
             }
@@ -74,7 +74,7 @@ namespace WB.UI.Designer.Resources {
         ///   Looks up a localized string similar to PDF document generated {0} minute(s) ago.
         ///Size: {1}Kb.
         /// </summary>
-        internal static string Generate {
+        public static string Generate {
             get {
                 return ResourceManager.GetString("Generate", resourceCulture);
             }
@@ -84,7 +84,7 @@ namespace WB.UI.Designer.Resources {
         ///   Looks up a localized string similar to PDF document generated less than a minute ago.
         ///Size: {0}Kb.
         /// </summary>
-        internal static string GenerateLessMinute {
+        public static string GenerateLessMinute {
             get {
                 return ResourceManager.GetString("GenerateLessMinute", resourceCulture);
             }
@@ -94,7 +94,7 @@ namespace WB.UI.Designer.Resources {
         ///   Looks up a localized string similar to Your PDF is being generated.
         ///Size: {0}Kb.
         /// </summary>
-        internal static string GeneratingSuccess {
+        public static string GeneratingSuccess {
             get {
                 return ResourceManager.GetString("GeneratingSuccess", resourceCulture);
             }
@@ -104,7 +104,7 @@ namespace WB.UI.Designer.Resources {
         ///   Looks up a localized string similar to Preparing to generate your PDF.
         ///Please wait....
         /// </summary>
-        internal static string PreparingToGenerate {
+        public static string PreparingToGenerate {
             get {
                 return ResourceManager.GetString("PreparingToGenerate", resourceCulture);
             }
@@ -113,7 +113,7 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Retring export as PDF..
         /// </summary>
-        internal static string Retry {
+        public static string Retry {
             get {
                 return ResourceManager.GetString("Retry", resourceCulture);
             }

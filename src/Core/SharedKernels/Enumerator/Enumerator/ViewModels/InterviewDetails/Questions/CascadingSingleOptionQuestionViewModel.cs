@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Base;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -77,11 +77,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 this.answerOnParentQuestion = parentSingleOptionQuestion.GetAnswer().SelectedValue;
             }
-            
-            this.filteredOptionsViewModel.ParentValue = this.answerOnParentQuestion;
-            SetAnswerAndUpdateFilter();
 
-            UpdateOptions();
+            if (RenderAsComboBox) return;
+            var singleOptionQuestionOptionViewModels = filteredOptionsViewModel.GetOptions()
+                .Select(model => this.ToViewModel(model, isSelected: Answer.HasValue && model.Value == Answer.Value))
+                .ToList();
+
+            singleOptionQuestionOptionViewModels.ForEach(x => this.Options.Add(x));
         }
 
         public override async Task SaveAnswerAsync(int optionValue)
@@ -102,8 +104,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.answerOnParentQuestion = parentSingleOptionQuestion.GetAnswer().SelectedValue;
             this.filteredOptionsViewModel.ParentValue = this.answerOnParentQuestion;
 
+           
             this.RaisePropertyChanged(() => RenderAsComboBox);
-            this.UpdateOptions();
+             
+            this.UpdateOptions(forced: true);
 
             this.RaisePropertyChanged(() => Options);
             this.RaisePropertyChanged(() => Children);
@@ -137,7 +141,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public CovariantObservableCollection<SingleOptionQuestionOptionViewModel> Options { get; private set; }
 
-        private async Task UpdateOptions()
+        private void UpdateOptions(bool forced = false)
         {
             this.Options.ForEach(x => x.BeforeSelected -= this.OptionSelected);
             this.Options.ForEach(x => x.AnswerRemoved -= this.RemoveAnswer);
@@ -145,7 +149,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Options.ForEach(x => x.DisposeIfDisposable());
             this.Options.Clear();
 
-            await this.comboboxViewModel.UpdateFilter(null);
+            this.comboboxViewModel.ResetFilterAndOptions();
+
             this.comboboxCollection.Remove(this.comboboxViewModel);
 
             if (!RenderAsComboBox)

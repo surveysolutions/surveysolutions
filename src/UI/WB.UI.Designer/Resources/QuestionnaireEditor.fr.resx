@@ -415,7 +415,7 @@
     <value>Passer à</value>
   </data>
   <data name="MoveToAnotherSubSection" xml:space="preserve">
-    <value>Passer à une autre sous-section:</value>
+    <value>Passer à une autre section:</value>
   </data>
   <data name="MultipleDependencies" xml:space="preserve">
     <value>Une ou plusieurs questions / sous-sections dépendent de</value>

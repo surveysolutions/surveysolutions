@@ -27,7 +27,7 @@
       },
       "ancmHostingModel": "InProcess"
     },
-    "WB.UI.Designer1": {
+    "WB.UI.Designer": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

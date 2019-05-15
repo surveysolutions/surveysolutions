@@ -1980,6 +1980,25 @@ td.errors {
     margin: 0 auto 30px;
     float: none; } }
 
+.table td.locked-user {
+  position: relative;
+  padding-right: 35px; }
+  .table td.locked-user:hover a,
+  .table td.locked-user:focus a {
+    text-decoration: none; }
+  .table td.locked-user .interviewer {
+    font-style: italic;
+    color: #a6a8a9;
+    text-decoration: underline; }
+    .table td.locked-user .interviewer:before {
+      opacity: 0.3;
+      filter: alpha(opacity=30); }
+  .table td.locked-user .lock {
+    display: block; }
+
+.lock {
+  right: 5px; }
+
 .servers-error {
   width: 350px; }
 

@@ -289,5 +289,11 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool ShowCascadingAsList(Guid id);
         int? GetCascadingAsListThreshold(Guid id);
         bool HasAnyMultimediaQuestion();
+
+        /// <summary>
+        ///  Gets variable name for any entity in questionnaire
+        /// </summary>
+        /// <param name="id">Entity Id</param>
+        string GetEntityVariableOrThrow(Guid id);
     }
 }

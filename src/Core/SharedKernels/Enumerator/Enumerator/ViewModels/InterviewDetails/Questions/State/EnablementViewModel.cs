@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using MvvmCross.ViewModels;
 using WB.Core.Infrastructure.EventBus.Lite;
