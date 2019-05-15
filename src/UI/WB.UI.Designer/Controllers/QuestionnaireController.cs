@@ -271,7 +271,7 @@ namespace WB.UI.Designer.Controllers
             return this.RedirectToAction("Details", new {id =  sid});
         }
 
-        public IActionResult QuestionnaireHistory(Guid id, int? page)
+        public IActionResult QuestionnaireHistory(Guid id, int? p)
         {
             bool hasAccess = this.User.IsAdmin() || this.questionnaireViewFactory.HasUserAccessToQuestionnaire(id, this.User.GetId());
             if (!hasAccess)
@@ -282,7 +282,7 @@ namespace WB.UI.Designer.Controllers
             var questionnaireInfoView = this.questionnaireInfoViewFactory.Load(id.FormatGuid(), this.User.GetId());
             if (questionnaireInfoView == null) return NotFound();
 
-            QuestionnaireChangeHistory questionnairePublicListViewModels = questionnaireChangeHistoryFactory.Load(id, page ?? 1, GlobalHelper.GridPageItemsCount);
+            QuestionnaireChangeHistory questionnairePublicListViewModels = questionnaireChangeHistoryFactory.Load(id, p ?? 1, GlobalHelper.GridPageItemsCount);
             questionnairePublicListViewModels.ReadonlyMode = questionnaireInfoView.IsReadOnlyForUser;
 
             return this.View(questionnairePublicListViewModels);

@@ -188,7 +188,7 @@ namespace WB.UI.Designer.Code.Attributes
 
         private bool IsAccountLockedOut(DesignerIdentityUser user)
         {
-            return user.LockoutEnabled;
+            return user.LockoutEnabled && user.LockoutEnd.HasValue;
         }
 
         private bool IsAccountNotApproved(DesignerIdentityUser user)
