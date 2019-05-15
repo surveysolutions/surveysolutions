@@ -1,0 +1,137 @@
+﻿@{
+    this.ViewBag.Title = "Control Panel: Expression Generation";
+}
+<style type="text/css">
+pre.wrap {
+    white-space: pre-wrap;       
+    white-space: -moz-pre-wrap;  
+    white-space: -pre-wrap;      
+    white-space: -o-pre-wrap;    
+}
+</style>
+<div id="edit-form" >
+    <h3>Questionnaire Expression Generation</h3>
+
+    <div class="well">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label for="questionnaireId" class="col-xs-3 control-label">Questionnaire identifier</label>
+                <div class="col-xs-7">
+                    <input id="questionnaireId" type="text" class="form-control" value="@ViewBag.QuestionnaireId"/>
+                </div>
+                <div class="col-xs-2">
+                    <input id="version" type="text" class="form-control" value=""/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-offset-3 col-xs-9">
+                    <button id="getPartial" type="button" class="btn ">Get a list</button>
+                    <button id="getCompilationResult" type="button" class="btn ">Get compilation result</button>
+                    <button id="getAssembly" type="button" class="btn ">Get Assembly</button>
+                </div>
+            </div>
+            <pre id="outputResult" class="help-block"></pre>
+        </form>
+    </div>
+
+    <pre id="resultArea" class="wrap" style="height: 800px; overflow-y: scroll;"></pre></div>
+
+@section scripts
+{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.2/ace.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.2/ace.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.2/theme-github.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.2/ext-searchbox.js"></script>
+
+    <script type="text/javascript">
+
+        $(function () {
+
+            var editor = ace.edit("resultArea");
+            editor.setTheme("ace/theme/github");
+            editor.getSession().setMode("ace/mode/csharp");
+            editor.setOptions({
+                readOnly: true,
+                highlightActiveLine: false,
+                highlightGutterLine: false
+            });
+
+            $('#getPartial').click(function() {
+                performPrettyAjaxRequest($('#outputResult'), {
+                    type: 'GET',
+                    url: '@Url.Action("GetAllClassesForLatestVersion", "ExpressionGeneration")',
+                    data: { id: $('#questionnaireId').val(), version: $('#version').val() },
+                });
+            });
+
+            $('#getAssembly').click(function() {
+                $('#outputResult').text("sending request...");
+                editor.setValue("");
+                downloadURL('@Url.Action("GetLatestVersionAssembly", "ExpressionGeneration")' + '?id=' + $('#questionnaireId').val() + "&version=" + $('#version').val())
+            });
+
+            $('#getCompilationResult').click(function () {
+                editor.setValue("");
+                performPrettyAjaxRequest($('#outputResult'), {
+                    type: 'GET',
+                    url: '@Url.Action("GetCompilationResultForLatestVersion", "ExpressionGeneration")',
+                    data: { id: $('#questionnaireId').val(), version: $('#version').val() },
+                }, function(response) {
+                    var errors = response.responseJSON;
+                    var errorList = "";
+                    $.each(errors, function(i) {
+                        errorList += errors[i] + "\n";
+                    });
+
+                    editor.setValue("");
+                    editor.setValue(errorList);
+                });
+            });
+
+            function performPrettyAjaxRequest($output, ajaxSettings, faildRequestProcessor) {
+                $('button').attr('disabled', 'disabled');
+                $output.text("sending request...");
+
+                $.ajax(ajaxSettings
+                ).done(function (result) {
+                    editor.setValue(result);
+                    $output.text("done");
+                }).fail(function(xhr, status, error) {
+                    $output.text("failed: " + error + "\r\n" + getExceptionDetails(xhr));
+                    if (faildRequestProcessor !== undefined) {
+                        try {
+                            faildRequestProcessor(xhr);
+                        } catch (err) {
+                        }
+                    }
+                }).always(function() {
+                    $('button').removeAttr('disabled');
+                });
+            }
+
+            function getExceptionDetails(xhr) {
+                try {
+                    return xhr.responseJSON.Message;
+                } catch (e1) {
+                    return xhr.responseText;
+                }
+            }
+
+            var downloadURL = function downloadURL(url) {
+                var hiddenIFrameID = 'hiddenDownloader',
+                    iframe = document.getElementById(hiddenIFrameID);
+                if (iframe === null) {
+                    iframe = document.createElement('iframe');
+                    iframe.id = hiddenIFrameID;
+                    iframe.style.display = 'none';
+                    document.body.appendChild(iframe);
+                }
+                iframe.src = url;
+            };
+
+
+        });
+
+    </script>
+}
+

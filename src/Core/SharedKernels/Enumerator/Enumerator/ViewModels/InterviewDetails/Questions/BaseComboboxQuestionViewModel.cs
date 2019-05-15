@@ -81,25 +81,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.filteredOptionsViewModel.Init(interviewId, entityIdentity, SuggestionsMaxCount);
 
+            this.Answer = this.interview.GetSingleOptionQuestion(this.Identity).GetAnswer()?.SelectedValue;
+            var initialFilter = this.Answer.HasValue ? this.filteredOptionsViewModel.GetAnsweredOption(this.Answer.Value)?.Title ?? null : null;
+
             this.comboboxViewModel.Init(interviewId, entityIdentity, navigationState);
+            this.comboboxViewModel.InitFilter(initialFilter);
             this.comboboxViewModel.OnItemSelected += ComboboxInstantViewModel_OnItemSelected;
             this.comboboxViewModel.OnAnswerRemoved += ComboboxInstantViewModel_OnAnswerRemoved;
             this.comboboxViewModel.OnShowErrorIfNoAnswer += ComboboxViewModel_OnShowErrorIfNoAnswer;
 
             comboboxCollection.Add(comboboxViewModel);
 
+           
+
             this.eventRegistry.Subscribe(this, interviewId);
         }
-
-        protected void SetAnswerAndUpdateFilter()
-        {
-            this.Answer = this.interview.GetSingleOptionQuestion(this.Identity).GetAnswer()?.SelectedValue;
-
-            this.comboboxViewModel.UpdateFilter(!this.Answer.HasValue
-                ? null
-                : this.filteredOptionsViewModel.GetAnsweredOption(this.Answer.Value)?.Title ?? null);
-        }
-
 
         public virtual async Task SaveAnswerAsync(int optionValue)
         {
@@ -135,20 +131,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         
-        protected async void ComboboxInstantViewModel_OnItemSelected(object sender, int selectedOptionCode)
+        protected async Task ComboboxInstantViewModel_OnItemSelected(object sender, int selectedOptionCode)
         {
             await SaveAnswerAsync(selectedOptionCode);
         }
 
-        protected async void ComboboxInstantViewModel_OnAnswerRemoved(object sender, EventArgs e)
+        protected async Task ComboboxInstantViewModel_OnAnswerRemoved(object sender, EventArgs e)
         {
             await RemoveAnswerAsync();
         }
 
-        private void ComboboxViewModel_OnShowErrorIfNoAnswer(object sender, EventArgs e)
+        private async Task ComboboxViewModel_OnShowErrorIfNoAnswer(object sender, EventArgs e)
         {
             if (this.comboboxViewModel.FilterText == string.Empty && this.questionState.IsAnswered)
-                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(string.Format(UIResources.Interview_Question_Filter_MatchError, string.Empty));
+                await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(string.Format(UIResources.Interview_Question_Filter_MatchError, string.Empty));
         }
 
         protected async Task RemoveAnswerAsync()
@@ -174,7 +170,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.Answer = null;
 
-            comboboxViewModel?.UpdateFilter(null);
+            comboboxViewModel?.ResetFilterAndOptions();
         }
 
         public virtual void Dispose()

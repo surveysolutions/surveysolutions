@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
+using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Verifier;
 using WB.Core.GenericSubdomains.Portable;
@@ -13,43 +16,33 @@ namespace WB.Core.BoundedContexts.Designer.Comments
 {
     public class CommentsService : ICommentsService
     {
-        private readonly IPlainStorageAccessor<CommentInstance> comments;
+        private readonly DesignerDbContext dbContext;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
 
         public CommentsService(
-            IPlainStorageAccessor<CommentInstance> comments, 
+            DesignerDbContext dbContext,
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage)
         {
-            this.comments = comments;
+            this.dbContext = dbContext;
             this.questionnaireStorage = questionnaireStorage;
         }
 
-        public List<CommentView> LoadCommentsForEntity(Guid questionnaireId, Guid entityId)
+        public async Task<List<CommentView>> LoadCommentsForEntity(Guid questionnaireId, Guid entityId)
         {
-            var commentForEntity = this.comments
-                .Query(_ => _.Where(x => x.QuestionnaireId == questionnaireId && x.EntityId == entityId).OrderBy(x => x.Date).ToList())
+            var dbInstances = await dbContext.CommentInstances
+                .Where(x => x.QuestionnaireId == questionnaireId && x.EntityId == entityId).OrderBy(x => x.Date)
+                .ToListAsync();
+            var commentForEntity = dbInstances
                 .Select(CreateCommentView)
                 .ToList();
 
             return commentForEntity;
         }
 
-        private static CommentView CreateCommentView(CommentInstance x)
+        public void PostComment(Guid commentId, Guid questionnaireId, Guid entityId, string commentComment,
+            string userName, string userEmail)
         {
-            return new CommentView
-            {
-                Id = x.Id.FormatGuid(),
-                UserName = x.UserName,
-                UserEmail = x.UserEmail,
-                Date =x.Date,
-                Comment = x.Comment,
-                ResolveDate = x.ResolveDate
-            };
-        }
-
-        public void PostComment(Guid commentId, Guid questionnaireId, Guid entityId, string commentComment, string userName, string userEmail)
-        {
-            var commentInstanse = new CommentInstance
+            var commentInstance = new CommentInstance
             {
                 Id = commentId,
                 QuestionnaireId = questionnaireId,
@@ -60,60 +53,76 @@ namespace WB.Core.BoundedContexts.Designer.Comments
                 UserName = userName,
                 UserEmail = userEmail
             };
-            this.comments.Store(commentInstanse, commentId);
+            dbContext.CommentInstances.Add(commentInstance);
         }
 
         public void RemoveAllCommentsByEntity(Guid questionnaireId, Guid entityId)
         {
-            var commentsForEntity = this.comments.Query(_ => _
+            var commentsForEntity = dbContext.CommentInstances
                 .Where(x => x.QuestionnaireId == questionnaireId && x.EntityId == entityId)
-                .ToList());
+                .ToList();
 
-            this.comments.Remove(commentsForEntity);
+            dbContext.CommentInstances.RemoveRange(commentsForEntity);
         }
 
         public void DeleteAllByQuestionnaireId(Guid questionnaireId)
         {
-            var commentsForEntity = this.comments.Query(_ => _
+            var commentsForEntity = dbContext.CommentInstances
                 .Where(x => x.QuestionnaireId == questionnaireId)
-                .ToList());
+                .ToList();
 
-            this.comments.Remove(commentsForEntity);
+            dbContext.CommentInstances.RemoveRange(commentsForEntity);
         }
 
-        public void DeleteComment(Guid id)
+        public async Task DeleteCommentAsync(Guid id)
         {
-            this.comments.Remove(id);
+            var commentInstance = await dbContext.CommentInstances.FindAsync(id);
+
+            if (commentInstance != null) dbContext.CommentInstances.Remove(commentInstance);
         }
 
-        public void ResolveComment(Guid commentdId)
+        public async Task ResolveCommentAsync(Guid commentId)
         {
-            var comment = this.comments.GetById(commentdId);
+            var comment = await dbContext.CommentInstances.FindAsync(commentId);
             comment.ResolveDate = DateTime.UtcNow;
-            this.comments.Store(comment, commentdId);
+            dbContext.CommentInstances.Update(comment);
         }
 
         public List<CommentThread> LoadCommentThreads(Guid questionnaireId)
         {
-            ReadOnlyQuestionnaireDocument questionnaire = questionnaireStorage.GetById(questionnaireId.FormatGuid()).AsReadOnly();
-            var commentForEntity = this.comments
-                .Query(_ => _.Where(x => x.QuestionnaireId == questionnaireId).GroupBy(x => x.EntityId).ToList())
+            var questionnaire = questionnaireStorage.GetById(questionnaireId.FormatGuid()).AsReadOnly();
+            var commentForEntity = dbContext.CommentInstances
+                .Where(x => x.QuestionnaireId == questionnaireId).GroupBy(x => x.EntityId).ToList()
                 .Select(x => new CommentThread(
-                    comments: x.Select(CreateCommentView).OrderByDescending(c => c.Date).ToArray(), 
-                    referenceEntity: CreateCommentedEntity(questionnaire, x.Key)))
+                    x.Select(CreateCommentView).OrderByDescending(c => c.Date).ToArray(),
+                    CreateCommentedEntity(questionnaire, x.Key)))
                 .Where(y => y.Entity != null)
                 .ToList();
 
             return commentForEntity.OrderByDescending(x => x.IndexOfLastUnresolvedComment).ToList();
         }
 
-        private QuestionnaireEntityExtendedReference CreateCommentedEntity(ReadOnlyQuestionnaireDocument questionnaire, Guid itemId)
+        private QuestionnaireEntityExtendedReference CreateCommentedEntity(ReadOnlyQuestionnaireDocument questionnaire,
+            Guid itemId)
         {
             var entity = questionnaire.Find<IComposite>(itemId);
             if (entity == null)
                 return null;
             var reference = QuestionnaireEntityReference.CreateFrom(entity)?.ExtendedReference(questionnaire);
             return reference;
+        }
+
+        private static CommentView CreateCommentView(CommentInstance x)
+        {
+            return new CommentView
+            {
+                Id = x.Id.FormatGuid(),
+                UserName = x.UserName,
+                UserEmail = x.UserEmail,
+                Date = x.Date,
+                Comment = x.Comment,
+                ResolveDate = x.ResolveDate
+            };
         }
     }
 }

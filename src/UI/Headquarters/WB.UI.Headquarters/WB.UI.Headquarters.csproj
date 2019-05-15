@@ -86,8 +86,8 @@
     <Reference Include="Autofac.Integration.WebApi.Owin, Version=4.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Autofac.WebApi2.Owin.4.0.0\lib\net45\Autofac.Integration.WebApi.Owin.dll</HintPath>
     </Reference>
-    <Reference Include="AutoMapper, Version=7.0.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\AutoMapper.7.0.1\lib\net45\AutoMapper.dll</HintPath>
+    <Reference Include="AutoMapper, Version=8.1.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\AutoMapper.8.1.0\lib\net461\AutoMapper.dll</HintPath>
     </Reference>
     <Reference Include="CaptchaMvc, Version=2.5.0.0, Culture=neutral, PublicKeyToken=fe46ad421dd3b0e6, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\CaptchaMvc.Mvc5.1.5.0\lib\net45-full\CaptchaMvc.dll</HintPath>
@@ -107,11 +107,11 @@
     <Reference Include="CSCore, Version=1.2.1.2, Culture=neutral, PublicKeyToken=5a08f2b6f4415dea, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\CSCore.1.2.1.2\lib\net35-client\CSCore.dll</HintPath>
     </Reference>
-    <Reference Include="CsvHelper, Version=6.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\CsvHelper.6.1.0\lib\net45\CsvHelper.dll</HintPath>
+    <Reference Include="CsvHelper, Version=12.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\CsvHelper.12.1.2\lib\net45\CsvHelper.dll</HintPath>
     </Reference>
     <Reference Include="Dapper, Version=1.60.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Dapper.1.60.1\lib\net451\Dapper.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Dapper.1.60.6\lib\net451\Dapper.dll</HintPath>
     </Reference>
     <Reference Include="DotNetZip, Version=1.13.3.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\DotNetZip.1.13.3\lib\net40\DotNetZip.dll</HintPath>
@@ -130,9 +130,6 @@
     </Reference>
     <Reference Include="GeoJSON.Net, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\GeoJSON.Net.1.1.70\lib\net45\GeoJSON.Net.dll</HintPath>
-    </Reference>
-    <Reference Include="HibernatingRhinos.Profiler.Appender">
-      <HintPath>..\..\..\..\..\..\Users\Victo\Downloads\NHibernate.Profiler-v5.0-Build-5033\Appender\net46\HibernatingRhinos.Profiler.Appender.dll</HintPath>
     </Reference>
     <Reference Include="HtmlSanitizationLibrary, Version=4.3.0.0, Culture=neutral, PublicKeyToken=d127efab8a9c114f, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\AntiXSS.4.3.0\lib\net40\HtmlSanitizationLibrary.dll</HintPath>
@@ -229,8 +226,8 @@
     <Reference Include="NLog.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\NLog.Web.4.5.3\lib\net35\NLog.Web.dll</HintPath>
     </Reference>
-    <Reference Include="Npgsql, Version=4.0.5.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Npgsql.4.0.5\lib\net451\Npgsql.dll</HintPath>
+    <Reference Include="Npgsql, Version=4.0.6.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Npgsql.4.0.6\lib\net451\Npgsql.dll</HintPath>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
@@ -248,7 +245,7 @@
       <HintPath>..\..\..\..\packages\RecaptchaNet.2.1.0\lib\net451\Recaptcha.Web.dll</HintPath>
     </Reference>
     <Reference Include="Refit, Version=4.6.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Refit.4.6.90\lib\net461\Refit.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Refit.4.6.107\lib\net461\Refit.dll</HintPath>
     </Reference>
     <Reference Include="Remotion.Linq, Version=2.2.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Remotion.Linq.2.2.0\lib\net45\Remotion.Linq.dll</HintPath>
@@ -2646,12 +2643,12 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.2.1\build\net452\Esri.ArcGISRuntime.WPF.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.2.1\build\net452\Esri.ArcGISRuntime.WPF.targets'))" />
     <Error Condition="!Exists('..\..\..\..\packages\RazorGenerator.MsBuild.2.5.0\build\RazorGenerator.MsBuild.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\RazorGenerator.MsBuild.2.5.0\build\RazorGenerator.MsBuild.targets'))" />
-    <Error Condition="!Exists('..\..\..\..\packages\Refit.4.6.90\build\net461\refit.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Refit.4.6.90\build\net461\refit.targets'))" />
     <Error Condition="!Exists('..\..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\..\..\..\packages\Refit.4.6.107\build\net461\refit.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Refit.4.6.107\build\net461\refit.targets'))" />
   </Target>
   <Import Project="..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.2.1\build\net452\Esri.ArcGISRuntime.WPF.targets" Condition="Exists('..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.2.1\build\net452\Esri.ArcGISRuntime.WPF.targets')" />
   <Import Project="..\..\..\..\packages\RazorGenerator.MsBuild.2.5.0\build\RazorGenerator.MsBuild.targets" Condition="Exists('..\..\..\..\packages\RazorGenerator.MsBuild.2.5.0\build\RazorGenerator.MsBuild.targets')" />
-  <Import Project="..\..\..\..\packages\Refit.4.6.90\build\net461\refit.targets" Condition="Exists('..\..\..\..\packages\Refit.4.6.90\build\net461\refit.targets')" />
+  <Import Project="..\..\..\..\packages\Refit.4.6.107\build\net461\refit.targets" Condition="Exists('..\..\..\..\packages\Refit.4.6.107\build\net461\refit.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

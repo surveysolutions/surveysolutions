@@ -1,0 +1,29 @@
+﻿@using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
+@model System.Guid
+@{
+    PdfQuestionnaireModel questionnaire = ViewBag.Questionnaire;
+    var groupId = Model;
+}
+@foreach (var child in questionnaire.GetChildren(groupId))
+{
+    if (questionnaire.IsQuestion(child))
+    {
+        @await Html.PartialAsync("_RenderQuestion", child);
+    }
+    else if (questionnaire.IsRoster(child))
+    {
+        @await Html.PartialAsync("_RenderRoster", child);
+    }
+    else if (questionnaire.IsGroup(child))
+    {
+        @await Html.PartialAsync("_RenderGroup", child);
+    }
+    else if (questionnaire.IsStaticText(child))
+    {
+        @await Html.PartialAsync("_RenderStaticText", child);
+    }
+    else if (questionnaire.IsVariable(child))
+    {
+        @await Html.PartialAsync("_RenderVariable", child);
+    }
+}

@@ -3,52 +3,46 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 {
     [TestOf(typeof(ListViewPostProcessor))]
-    [TestFixture]
     public class QuestionnaireListViewPostProcessorTests
     {
         [Test]
         public void When_CloneQuestionnaire_command()
         {
             // arrange
-            AssemblyContext.SetupServiceLocator();
-            var listViewItemsStorage = new TestPlainStorage<QuestionnaireListViewItem>();
-            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<QuestionnaireListViewItem>>(listViewItemsStorage);
-
-
             Guid questionnaireId = Guid.NewGuid();
             Guid creatorId = Guid.NewGuid();
-            Guid? clonnerId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            Guid clonnerId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             string userName = "testname";
 
-            var accountStorage = new TestPlainStorage<User>();
-            accountStorage.Store(new User {UserName = userName}, clonnerId.FormatGuid());
-            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(accountStorage);
+            var dbContext = Create.InMemoryDbContext();
+            dbContext.Users.Add(new DesignerIdentityUser { Id = clonnerId, UserName = userName});
+            dbContext.SaveChanges();
 
             var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId);
             questionnaire.CreatedBy = creatorId;
 
-            var command = new CloneQuestionnaire(questionnaireId, "title", clonnerId.Value, true,
+            var command = new CloneQuestionnaire(questionnaireId, "title", clonnerId, true,
                 questionnaire);
             
-            var listViewPostProcessor = CreateListViewPostProcessor();
+            var listViewPostProcessor = Create.ListViewPostProcessor(dbContext);
             // act
             listViewPostProcessor.Process(null, command);
+            dbContext.SaveChanges();
 
             // assert
-            var questionnaireListViewItem = listViewItemsStorage.GetById(questionnaireId.FormatGuid());
+            var questionnaireListViewItem = dbContext.Questionnaires.Find(questionnaireId.FormatGuid());
             Assert.That(questionnaireListViewItem, Is.Not.Null);
             Assert.That(questionnaireListViewItem.Title, Is.EqualTo(command.Title));
             Assert.That(questionnaireListViewItem.IsPublic, Is.EqualTo(command.IsPublic));
@@ -60,19 +54,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         public void When_CreateQuestionnaire_command()
         {
             // arrange
-            AssemblyContext.SetupServiceLocator();
-            var listViewItemsStorage = new TestPlainStorage<QuestionnaireListViewItem>();
-            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<QuestionnaireListViewItem>>(listViewItemsStorage);
+            var listViewItemsStorage = Create.InMemoryDbContext();
 
             Guid questionnaireId = Guid.NewGuid();
             var command = Create.Command.CreateQuestionnaire(questionnaireId, "title", Guid.NewGuid(), true);
 
-            var listViewPostProcessor = CreateListViewPostProcessor();
+            var listViewPostProcessor = Create.ListViewPostProcessor(listViewItemsStorage);
             // act
             listViewPostProcessor.Process(null, command);
+            listViewItemsStorage.SaveChanges();
 
             // assert
-            var questionnaireListViewItem = listViewItemsStorage.GetById(questionnaireId.FormatGuid());
+            var questionnaireListViewItem = listViewItemsStorage.Questionnaires.Find(questionnaireId.FormatGuid());
             Assert.That(questionnaireListViewItem, Is.Not.Null);
             Assert.That(questionnaireListViewItem.Title, Is.EqualTo(command.Title));
             Assert.That(questionnaireListViewItem.IsPublic, Is.EqualTo(command.IsPublic));
@@ -86,17 +79,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Guid questionnaireId = Guid.NewGuid();
             var command = new UpdateQuestionnaire(questionnaireId, "title", "questionnaire", false, true, Guid.NewGuid(), false);
 
-            AssemblyContext.SetupServiceLocator();
-            var listViewItemsStorage = new TestPlainStorage<QuestionnaireListViewItem>();
-            listViewItemsStorage.Store(new QuestionnaireListViewItem { QuestionnaireId = questionnaireId.FormatGuid() }, questionnaireId.FormatGuid());
-            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<QuestionnaireListViewItem>>(listViewItemsStorage);
+            var listViewItemsStorage = Create.InMemoryDbContext();
+            listViewItemsStorage.Add(Create.QuestionnaireListViewItem(questionnaireId));
+            listViewItemsStorage.SaveChanges();
 
-            var listViewPostProcessor = CreateListViewPostProcessor();
+            var listViewPostProcessor = Create.ListViewPostProcessor(listViewItemsStorage);
             // act
             listViewPostProcessor.Process(null, command);
 
             // assert
-            var questionnaireListViewItem = listViewItemsStorage.GetById(questionnaireId.FormatGuid());
+            var questionnaireListViewItem = listViewItemsStorage.Questionnaires.Find(questionnaireId.FormatGuid());
             Assert.That(questionnaireListViewItem, Is.Not.Null);
             Assert.That(questionnaireListViewItem.Title, Is.EqualTo(command.Title));
             Assert.That(questionnaireListViewItem.IsPublic, Is.EqualTo(command.IsPublic));
@@ -106,21 +98,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         public void When_DeleteQuestionnaire_command()
         {
             // arrange
-            AssemblyContext.SetupServiceLocator();
 
             Guid questionnaireId = Guid.NewGuid();
             var command = new DeleteQuestionnaire(questionnaireId, Guid.NewGuid());
 
-            var listViewItemsStorage = new TestPlainStorage<QuestionnaireListViewItem>();
-            listViewItemsStorage.Store(new QuestionnaireListViewItem {QuestionnaireId = questionnaireId.FormatGuid()}, questionnaireId.FormatGuid());
-            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<QuestionnaireListViewItem>>(listViewItemsStorage);
+            var listViewItemsStorage = Create.InMemoryDbContext();
+            listViewItemsStorage.Add(Create.QuestionnaireListViewItem(id: questionnaireId));
             
-            var listViewPostProcessor = CreateListViewPostProcessor();
+            var listViewPostProcessor = Create.ListViewPostProcessor(listViewItemsStorage);
             // act
             listViewPostProcessor.Process(null, command);
 
             // assert
-            var questionnaireListViewItem = listViewItemsStorage.GetById(questionnaireId.FormatGuid());
+            var questionnaireListViewItem = listViewItemsStorage.Questionnaires.Find(questionnaireId.FormatGuid());
             Assert.That(questionnaireListViewItem.IsDeleted, Is.EqualTo(true));
         }
 
@@ -128,38 +118,59 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         public void When_AddSharedPerson_command()
         {
             // arrange
-            AssemblyContext.SetupServiceLocator();
 
             Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
             Guid responsibleId = Guid.Parse("22222222222222222222222222222222");
             Guid questionnaireOwnerId = Guid.Parse("44444444444444444444444444444444");
             Guid sharedWithUserId = Guid.Parse("33333333333333333333333333333333");
-            var questionnaireOwner = new User { UserName = "questionnaire owner name", Email = "questionnaire owner email" };
+            var responsible = new DesignerIdentityUser
+            {
+                Id = responsibleId,
+                UserName = "responsible",
+                Email = "resp@te.com"
+            };
+
+            var questionnaireOwner = new DesignerIdentityUser
+            {
+                Id = questionnaireOwnerId,
+                UserName = "questionnaire owner name",
+                Email = "questionnaire owner email"
+            };
+        
             var questionnaireIdFormatted = questionnaireId.FormatGuid();
             var sharedWithEmail = "test@test.com";
             var shareType = ShareType.View;
+
+            var sharedWith = new DesignerIdentityUser
+            {
+                Id = sharedWithUserId,
+                UserName = "share with",
+                Email = sharedWithEmail,
+                NormalizedEmail = sharedWithEmail.ToUpper()
+            };
+
             var command = new AddSharedPersonToQuestionnaire(questionnaireId, sharedWithUserId, sharedWithEmail, shareType, responsibleId);
 
-            var listViewItemsStorage = new TestPlainStorage<QuestionnaireListViewItem>();
-            
-            var listViewItem = new QuestionnaireListViewItem { QuestionnaireId = questionnaireIdFormatted, Title = "title", CreatedBy = questionnaireOwnerId};
-            listViewItemsStorage.Store(listViewItem, questionnaireIdFormatted);
-            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<QuestionnaireListViewItem>>(listViewItemsStorage);
+            var listViewItemsStorage = Create.InMemoryDbContext();
 
-            var accountStorage = new TestPlainStorage<User>();
-            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(accountStorage);
+            var listViewItem =
+                Create.QuestionnaireListViewItem(id: questionnaireId, title: "title", createdBy: questionnaireOwnerId);
             
-            accountStorage.Store(questionnaireOwner, questionnaireOwnerId.FormatGuid());
+            listViewItemsStorage.Questionnaires.Add(listViewItem);
+            listViewItemsStorage.Users.Add(questionnaireOwner);
+            listViewItemsStorage.Users.Add(sharedWith);
+            listViewItemsStorage.Users.Add(responsible);
+            listViewItemsStorage.SaveChanges();
 
             var mockOfEmailNotifier = new Mock<IRecipientNotifier>();
-            Setup.InstanceToMockedServiceLocator(mockOfEmailNotifier.Object);
 
-            var listViewPostProcessor = CreateListViewPostProcessor();
+            var listViewPostProcessor = Create.ListViewPostProcessor(listViewItemsStorage, 
+                emailNotifier: mockOfEmailNotifier.Object);
             // act
             listViewPostProcessor.Process(null, command);
 
             // assert
-            var questionnaireListViewItem = listViewItemsStorage.GetById(questionnaireIdFormatted);
+            var questionnaireListViewItem = listViewItemsStorage.Questionnaires.Find(questionnaireIdFormatted);
             Assert.That(questionnaireListViewItem.SharedPersons, Is.Not.Null);
             Assert.That(questionnaireListViewItem.SharedPersons.First().UserId, Is.EqualTo(sharedWithUserId));
             Assert.That(questionnaireListViewItem.SharedPersons.First().Email, Is.EqualTo(sharedWithEmail));
@@ -176,39 +187,123 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         }
 
         [Test]
-        public void When_RemoveSharedPerson_command()
+        public void When_PassOwnership_Command()
         {
             // arrange
-            AssemblyContext.SetupServiceLocator();
 
             Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
             Guid responsibleId = Guid.Parse("22222222222222222222222222222222");
             Guid questionnaireOwnerId = Guid.Parse("44444444444444444444444444444444");
             Guid sharedWithUserId = Guid.Parse("33333333333333333333333333333333");
-            var questionnaireOwner = new User { UserName = "questionnaire owner name", Email = "questionnaire owner email" };
+            var sharedWithEmail = "test@test.com";
+
+            var responsible = new DesignerIdentityUser
+            {
+                Id = responsibleId,
+                UserName = "responsible",
+                Email = "resp@te.com"
+            };
+            var questionnaireOwner = new DesignerIdentityUser
+            {
+                Id = questionnaireOwnerId,
+                UserName = "questionnaire owner name",
+                Email = "questionnaire owner email"
+            };
+            var sharedWith = new DesignerIdentityUser
+            {
+                Id = sharedWithUserId,
+                UserName = "share with",
+                Email = sharedWithEmail,
+                NormalizedEmail = sharedWithEmail.ToUpper()
+            };
             var questionnaireIdFormatted = questionnaireId.FormatGuid();
-            var command = new RemoveSharedPersonFromQuestionnaire(questionnaireId, sharedWithUserId, "test@test.com", responsibleId);
+            var command = new PassOwnershipFromQuestionnaire(questionnaireId, questionnaireOwner.Id, 
+                sharedWithUserId, questionnaireOwner.Email, sharedWith.Email);
+            
+            var dbContext = Create.InMemoryDbContext();
 
-            var listViewItemsStorage = new TestPlainStorage<QuestionnaireListViewItem>();
-
-            var listViewItem = new QuestionnaireListViewItem { QuestionnaireId = questionnaireIdFormatted, Title = "title", CreatedBy = questionnaireOwnerId };
-            listViewItemsStorage.Store(listViewItem, questionnaireIdFormatted);
-            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<QuestionnaireListViewItem>>(listViewItemsStorage);
-
-            var accountStorage = new TestPlainStorage<User>();
-            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(accountStorage);
-
-            accountStorage.Store(questionnaireOwner, questionnaireOwnerId.FormatGuid());
+            var listViewItem =
+                Create.QuestionnaireListViewItem(id: questionnaireId, title: "title", createdBy: questionnaireOwnerId);
+            dbContext.Questionnaires.Add(listViewItem);
+            dbContext.Users.Add(questionnaireOwner);
+            dbContext.Users.Add(responsible);
+            dbContext.Users.Add(sharedWith);
+            dbContext.SaveChanges();
 
             var mockOfEmailNotifier = new Mock<IRecipientNotifier>();
-            Setup.InstanceToMockedServiceLocator(mockOfEmailNotifier.Object);
 
-            var listViewPostProcessor = CreateListViewPostProcessor();
+            var listViewPostProcessor = Create.ListViewPostProcessor(dbContext, emailNotifier: mockOfEmailNotifier.Object);
             // act
             listViewPostProcessor.Process(null, command);
 
             // assert
-            var questionnaireListViewItem = listViewItemsStorage.GetById(questionnaireIdFormatted);
+            var questionnaireListViewItem = dbContext.Questionnaires.Find(questionnaireIdFormatted);
+
+            Assert.That(questionnaireListViewItem.CreatedBy, Is.EqualTo(sharedWith.Id));
+
+            Assert.That(questionnaireListViewItem.SharedPersons.Single(), Has.Property(nameof(SharedPerson.UserId)).EqualTo(questionnaireOwner.Id));
+            Assert.That(questionnaireListViewItem.SharedPersons.Single(), Has.Property(nameof(SharedPerson.ShareType)).EqualTo(ShareType.Edit));
+
+            mockOfEmailNotifier.Verify(
+                x => x.NotifyTargetPersonAboutShareChange(ShareChangeType.PassOwnership, command.NewOwnerEmail, It.IsAny<string>(),
+                    questionnaireIdFormatted, listViewItem.Title, ShareType.Edit, It.IsAny<string>()), Times.Once);
+
+            mockOfEmailNotifier.Verify(
+                x => x.NotifyTargetPersonAboutShareChange(ShareChangeType.Share, questionnaireOwner.Email, It.IsAny<string>(),
+                    questionnaireIdFormatted, listViewItem.Title, ShareType.Edit, It.IsAny<string>()), Times.Once);
+        }
+
+        [Test]
+        public void When_RemoveSharedPerson_command()
+        {
+            // arrange
+
+            Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
+            Guid responsibleId = Guid.Parse("22222222222222222222222222222222");
+            Guid questionnaireOwnerId = Guid.Parse("44444444444444444444444444444444");
+            Guid sharedWithUserId = Guid.Parse("33333333333333333333333333333333");
+            var sharedWithEmail = "test@test.com";
+
+            var responsible = new DesignerIdentityUser
+            {
+                Id = responsibleId,
+                UserName = "responsible",
+                Email = "resp@te.com"
+            };
+            var questionnaireOwner = new DesignerIdentityUser
+            {
+                Id = questionnaireOwnerId,
+                UserName = "questionnaire owner name",
+                Email = "questionnaire owner email"
+            };
+            var sharedWith = new DesignerIdentityUser
+            {
+                Id = sharedWithUserId,
+                UserName = "share with",
+                Email = sharedWithEmail,
+                NormalizedEmail = sharedWithEmail.ToUpper()
+            };
+            var questionnaireIdFormatted = questionnaireId.FormatGuid();
+            var command = new RemoveSharedPersonFromQuestionnaire(questionnaireId, sharedWithUserId, sharedWithEmail, responsibleId);
+
+            var dbContext = Create.InMemoryDbContext();
+
+            var listViewItem =
+                Create.QuestionnaireListViewItem(id: questionnaireId, title: "title", createdBy: questionnaireOwnerId);
+            dbContext.Questionnaires.Add(listViewItem);
+            dbContext.Users.Add(questionnaireOwner);
+            dbContext.Users.Add(responsible);
+            dbContext.Users.Add(sharedWith);
+            dbContext.SaveChanges();
+
+            var mockOfEmailNotifier = new Mock<IRecipientNotifier>();
+
+            var listViewPostProcessor = Create.ListViewPostProcessor(dbContext, emailNotifier: mockOfEmailNotifier.Object);
+            // act
+            listViewPostProcessor.Process(null, command);
+
+            // assert
+            var questionnaireListViewItem = dbContext.Questionnaires.Find(questionnaireIdFormatted);
             Assert.That(questionnaireListViewItem.SharedPersons, Is.Empty);
 
             mockOfEmailNotifier.Verify(
@@ -229,26 +324,25 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Guid responsibleId      = Guid.Parse("33333333333333333333333333333333");
             var command = Create.Command.RevertVersionQuestionnaire(questionnaireId, historyReferanceId, responsibleId);
 
-            AssemblyContext.SetupServiceLocator();
-            var listViewItemsStorage = new TestPlainStorage<QuestionnaireListViewItem>();
-            listViewItemsStorage.Store(new QuestionnaireListViewItem
+            var listViewItemsStorage = Create.InMemoryDbContext();
+            listViewItemsStorage.Questionnaires.Add(new QuestionnaireListViewItem
             {
+                PublicId = questionnaireId,
                 QuestionnaireId = questionnaireId.FormatGuid(),
                 Title = "old title",
                 IsPublic = true
-            }, questionnaireId.FormatGuid());
-            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<QuestionnaireListViewItem>>(listViewItemsStorage);
+            });
 
             var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId, "reverted title");
             questionnaireDocument.IsPublic = false;
             var questionnaire = Create.Questionnaire(responsibleId, questionnaireDocument);
 
-            var listViewPostProcessor = CreateListViewPostProcessor();
+            var listViewPostProcessor = Create.ListViewPostProcessor(listViewItemsStorage);
             // act
             listViewPostProcessor.Process(questionnaire, command);
 
             // assert
-            var questionnaireListViewItem = listViewItemsStorage.GetById(questionnaireId.FormatGuid());
+            var questionnaireListViewItem = listViewItemsStorage.Questionnaires.Find(questionnaireId.FormatGuid());
             Assert.That(questionnaireListViewItem, Is.Not.Null);
             Assert.That(questionnaireListViewItem.Title, Is.EqualTo("reverted title"));
             Assert.That(questionnaireListViewItem.IsPublic, Is.False);
@@ -258,47 +352,43 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         public void When_ImportQuestionnaire_command_for_existed_questionnaire()
         {
             // arrange
-            AssemblyContext.SetupServiceLocator();
-            var listViewItemsStorage = new TestPlainStorage<QuestionnaireListViewItem>();
-            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<QuestionnaireListViewItem>>(listViewItemsStorage);
-
-
             Guid questionnaireId = Guid.NewGuid();
-            Guid? userId1 = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            Guid? userId2 = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            Guid userId1 = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            Guid userId2 = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             string userName1 = "first_owner";
             string userName2 = "second_importer";
 
-            var accountStorage = new TestPlainStorage<User>();
-            accountStorage.Store(new User { UserName = userName1 }, userId1.FormatGuid());
-            accountStorage.Store(new User { UserName = userName2 }, userId2.FormatGuid());
-            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(accountStorage);
+            var dbContext = Create.InMemoryDbContext();
+            dbContext.Users.Add(new DesignerIdentityUser { Id = userId1, UserName = userName1 });
+            dbContext.Users.Add(new DesignerIdentityUser { Id = userId2, UserName = userName2 });
 
-            var listViewPostProcessor = CreateListViewPostProcessor();
             var listViewItem = Create.QuestionnaireListViewItem(id: questionnaireId, sharedPersons: new[]
             {
-                new SharedPerson() {UserId = userId1.Value, IsOwner = true, ShareType = ShareType.Edit},
-                new SharedPerson() {UserId = userId2.Value, IsOwner = false, ShareType = ShareType.View},
+                new SharedPerson() {UserId = userId1, IsOwner = true, ShareType = ShareType.Edit},
+                new SharedPerson() {UserId = userId2, IsOwner = false, ShareType = ShareType.View},
             });
-            listViewItemsStorage.Store(listViewItem, questionnaireId.FormatGuid());
+            dbContext.Questionnaires.Add(listViewItem);
+            dbContext.SaveChanges();
+
             var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId: questionnaireId);
             questionnaire.CreatedBy = userId2;
 
-            var command = new ImportQuestionnaire(userId2.Value, questionnaire);
+            var command = new ImportQuestionnaire(userId2, questionnaire);
+            var listViewPostProcessor = Create.ListViewPostProcessor(dbContext);
 
             // act
             listViewPostProcessor.Process(null, command);
 
             // assert
-            var questionnaireListViewItem = listViewItemsStorage.GetById(questionnaireId.FormatGuid());
+            var questionnaireListViewItem = dbContext.Questionnaires.Find(questionnaireId.FormatGuid());
             Assert.That(questionnaireListViewItem, Is.Not.Null);
             Assert.That(questionnaireListViewItem.CreatedBy, Is.EqualTo(command.ResponsibleId));
             Assert.That(questionnaireListViewItem.CreatorName, Is.EqualTo(userName2));
             Assert.That(questionnaireListViewItem.SharedPersons.Count(p => p.IsOwner), Is.EqualTo(1));
-            Assert.That(questionnaireListViewItem.SharedPersons.Single(p => p.IsOwner).UserId, Is.EqualTo(userId2.Value));
+            Assert.That(questionnaireListViewItem.SharedPersons.Single(p => p.IsOwner).UserId, Is.EqualTo(userId2));
             Assert.That(questionnaireListViewItem.SharedPersons.Single(p => p.IsOwner).ShareType, Is.EqualTo(ShareType.Edit));
         }
 
-        private static ListViewPostProcessor CreateListViewPostProcessor() => new ListViewPostProcessor();
+        private static ListViewPostProcessor CreateListViewPostProcessor() => Create.ListViewPostProcessor();
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading.Tasks;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -30,14 +32,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.filteredOptionsViewModel.Init(interviewId, entityIdentity, SuggestionsMaxCount);
             this.filteredOptionsViewModel.OptionsChanged += FilteredOptionsViewModelOnOptionsChanged;
-
-            SetAnswerAndUpdateFilter();
         }
 
-        private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs) => 
-            comboboxViewModel.UpdateFilter(comboboxViewModel.FilterText);
+        private async Task FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs)
+        {
+            await comboboxViewModel.UpdateFilter(comboboxViewModel.FilterText, true);
+        }
 
-        
+
         public override void Dispose()
         {
             base.Dispose();

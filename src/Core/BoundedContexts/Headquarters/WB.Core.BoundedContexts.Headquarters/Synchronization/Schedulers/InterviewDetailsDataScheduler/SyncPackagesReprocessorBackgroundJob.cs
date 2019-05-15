@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
                 
                 if (packageIds == null || !packageIds.Any()) return;
 
-                logger.Debug($"Interview reprocess packages job: Received {packageIds.Count} packages for re-procession. Took {stopwatch.Elapsed:g}.");
+                logger.Info($"Interview reprocess packages job: Received {packageIds.Count} packages for re-procession. Took {stopwatch.Elapsed:g}.");
                 stopwatch.Restart();
 
                 Parallel.ForEach(packageIds,
@@ -54,7 +54,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
                         });
                     });
 
-                logger.Info($"Interview packages job: Processed {packageIds.Count} packages. Took {stopwatch.Elapsed:g}.");
+                logger.Info($"Interview reprocess job: Processed {packageIds.Count} packages. Took {stopwatch.Elapsed:g}.");
                 stopwatch.Stop();
             }
             catch (Exception ex)

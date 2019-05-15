@@ -148,9 +148,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.throttlingModel.Dispose();
         }
 
-        private async void OptionSelected(object sender, EventArgs eventArgs) => await this.OptionSelectedAsync(sender);
+        private async Task OptionSelected(object sender, EventArgs eventArgs) => await this.OptionSelectedAsync(sender);
 
-        private async void RemoveAnswer(object sender, EventArgs e)
+        private async Task RemoveAnswer(object sender, EventArgs e)
         {
             try
             {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
@@ -46,7 +47,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private ICommand saveAnswerCommand;
         public ICommand SaveAnswerCommand
         {
-            get { return this.saveAnswerCommand ?? (this.saveAnswerCommand = new MvxCommand(this.SaveAnswer, () => !this.IsInProgress)); }
+            get { return this.saveAnswerCommand ?? (this.saveAnswerCommand = new MvxAsyncCommand(this.SaveAnswer, () => !this.IsInProgress)); }
         }
 
         private readonly Guid userId;
@@ -101,7 +102,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.eventRegistry.Subscribe(this, interviewId);
         }
 
-        private async void SaveAnswer()
+        private async Task SaveAnswer()
         {
             this.IsInProgress = true;
 
@@ -129,7 +130,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
             catch (MissingPermissionsException)
             {
-                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.MissingPermissions_Camera);
+                await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.MissingPermissions_Camera);
             }
             finally
             {

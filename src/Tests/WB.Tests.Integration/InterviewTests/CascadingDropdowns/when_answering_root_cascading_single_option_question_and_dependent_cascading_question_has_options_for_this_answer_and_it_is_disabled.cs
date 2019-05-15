@@ -39,11 +39,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                     Create.Entity.Option("1.2", "child 2 for parent option 1", "1")
                 }));
 
-                var interview = SetupInterview(questionnaire, new object[]
-                {
-                    Create.Event.SingleOptionQuestionAnswered(parentSingleOptionQuestionId, RosterVector.Empty, 2),
-                    Create.Event.QuestionsDisabled(new [] { Create.Identity(childCascadedComboboxId) })
-                });
+                var interview = SetupInterview(questionnaire);
 
                 using (var eventContext = new EventContext())
                 {

@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class VerificationMessages {
@@ -187,20 +187,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question with title or instrustions substitution cannot be marked as identifying..
+        ///   Looks up a localized string similar to Question with title or instructions substitution cannot be marked as identifying..
         /// </summary>
         public static string WB0015_QuestionWithTitleSubstitutionCantBePrefilled {
             get {
                 return ResourceManager.GetString("WB0015_QuestionWithTitleSubstitutionCantBePrefilled", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Question with title or instrustions substitution cannot reference itself..
-        /// </summary>
-        public static string WB0016_QuestionWithTitleSubstitutionCantReferenceSelf {
-            get {
-                return ResourceManager.GetString("WB0016_QuestionWithTitleSubstitutionCantReferenceSelf", resourceCulture);
             }
         }
         
@@ -1903,6 +1894,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string WB0281_QuestionnaireExceededEntitiesLimit {
             get {
                 return ResourceManager.GetString("WB0281_QuestionnaireExceededEntitiesLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Identifying question cannot be placed inside section with enabling condition..
+        /// </summary>
+        public static string WB0282_IdentifyingQuestionInSectionWithCondition {
+            get {
+                return ResourceManager.GetString("WB0282_IdentifyingQuestionInSectionWithCondition", resourceCulture);
             }
         }
     }

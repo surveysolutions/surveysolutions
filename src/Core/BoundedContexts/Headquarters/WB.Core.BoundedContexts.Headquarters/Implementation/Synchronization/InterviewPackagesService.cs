@@ -386,6 +386,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             if (supervisorAssigned == null)
                 return false;
             HqUser interviewer = userRepositoryLocal.FindByIdAsync(responsibleId).Result;
+            if (interviewer == null)
+                return false;
             newSupervisorId = interviewer.Profile.SupervisorId;
             return newSupervisorId != supervisorAssigned.SupervisorId;
         }

@@ -1,14 +1,14 @@
 using System;
 using System.Linq;
 using FluentAssertions;
-using Main.Core.Documents;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.UI.Designer.Api;
 using WB.UI.Designer.Code;
+using WB.UI.Designer.Controllers.Api.Designer;
 using WB.UI.Designer.Models;
 
 
@@ -89,7 +89,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
         }
 
         private void BecauseOf() =>
-            result = controller.Verify(questionnaireId);
+            result = (VerificationResult) (controller.Verify(questionnaireId) as OkObjectResult).Value;
 
         [NUnit.Framework.Test] public void should_call_verifier_once () =>
             verifierMock.Verify(x => x.Verify(questionnaireView), Times.Once);
@@ -109,7 +109,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
         private static Mock<IVerificationErrorsMapper> errorsMapperMock;
         private static QuestionnaireVerificationMessage[] verificationMessages;
         private static QuestionnaireVerificationMessage[] verificationWarnings;
-        private static QuestionnaireController controller;
+        private static QuestionnaireApiController controller;
         private static VerificationMessage[] mappedAndEnrichedVerificationErrors;
         private static VerificationMessage[] mappedAndEnrichedVerificationWarnings;
         private static VerificationResult result;
