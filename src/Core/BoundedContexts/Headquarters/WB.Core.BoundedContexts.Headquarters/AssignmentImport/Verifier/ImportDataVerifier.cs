@@ -875,7 +875,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             var questionId = questionnaire.GetQuestionIdByVariable(answer.VariableName);
             if (!questionId.HasValue) return false;
 
-            return questionnaire.IsRosterSizeQuestion(questionId.Value) && answer.Answer.HasValue && answer.Answer < Constants.MinLongRosterRowCount;
+            return questionnaire.IsRosterSizeQuestion(questionId.Value) && answer.Answer.HasValue && answer.Answer < 0;
         }
 
         private bool Responsible_HasInvalidRole(AssignmentResponsible responsible) 
