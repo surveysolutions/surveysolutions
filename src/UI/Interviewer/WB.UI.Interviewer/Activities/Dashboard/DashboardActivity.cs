@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using Android.App;
 using Android.Bluetooth;
 using Android.Content;
@@ -22,6 +24,7 @@ using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.OfflineSync.Activities;
 using WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation;
 using WB.UI.Shared.Enumerator.Services;
+using WB.UI.Shared.Enumerator.Services.Notifications;
 using MvxFragmentStatePagerAdapter = WB.UI.Interviewer.CustomControls.MvxFragmentStatePagerAdapter;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
 
@@ -39,6 +42,8 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         GoogleApiClient.IConnectionCallbacks, 
         GoogleApiClient.IOnConnectionFailedListener
     {
+        private static Random rnd = new Random();
+
         protected override int ViewResourceId => Resource.Layout.dashboard;
 
         public ServiceBinder<SyncBgService> Binder { get; set; }
@@ -61,7 +66,17 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
+            var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             this.SetSupportActionBar(this.FindViewById<Toolbar>(Resource.Id.toolbar));
+
+            var notificationsCollector = Mvx.IoCProvider.Resolve<INotificationsCollector>();
+            List<SimpleNotification> notifications = notificationsCollector.CollectInAppNotifications();
+
+            if (notifications.Count > 0)
+            {
+                Snackbar snack = Snackbar.Make(toolbar, notifications[rnd.Next(notifications.Count)].ContentText,5000);
+                snack.Show();
+            }
         }
 
         private void RemoveFragments()

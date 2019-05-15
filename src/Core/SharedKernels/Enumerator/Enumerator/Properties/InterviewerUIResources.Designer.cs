@@ -1267,6 +1267,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Too many completed interviews. Sync..
+        /// </summary>
+        public static string Notifications_ManyCompletedInterviews {
+            get {
+                return ResourceManager.GetString("Notifications_ManyCompletedInterviews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You&apos;ve started too many interviews. Complete them..
+        /// </summary>
+        public static string Notifications_ManyStartedInterviews {
+            get {
+                return ResourceManager.GetString("Notifications_ManyStartedInterviews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You have {0} rejected interview that were not opened.
         /// </summary>
         public static string Notifications_RejectedInterviewsText {
