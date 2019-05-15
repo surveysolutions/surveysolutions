@@ -260,9 +260,11 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public Validity Validity { get; set; } = new Validity();
     }
 
-    public class TableRosterQuestionReference : QuestionReference
+    public class TableRosterQuestionReference 
     {
-        public string Variable { get; set; }
+        public string Id { get; set; }
+        public string Title { get; set; }
+        public string EntityType { get; set; }
     }
     
 

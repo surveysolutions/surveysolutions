@@ -7,7 +7,7 @@
     import { entityDetails } from "../mixins"
     
     export default {
-        name: 'TableRoster_Numeric',
+        name: 'TableRoster_Double',
         mixins: [entityDetails],
         
         data() {

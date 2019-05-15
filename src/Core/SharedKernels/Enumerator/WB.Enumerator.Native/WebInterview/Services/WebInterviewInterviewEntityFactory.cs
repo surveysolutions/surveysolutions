@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using AutoMapper;
+using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -362,10 +363,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     .Select(questionId => new TableRosterQuestionReference()
                     {
                         Id = questionId.FormatGuid(),
-                        Title = questionnaire.GetQuestionTitle(questionId) + "dhgsbdg sdgh sjdg gsjg ssjddg sdgs dssdg dsjg dsdjg s",
-                        Variable = questionnaire.GetQuestionVariableName(questionId),
-                        IsPrefilled = questionnaire.IsPrefilled(questionId),
-                        ParentId = identity.Id.ToString(),
+                        Title = questionnaire.GetQuestionTitle(questionId),
+                        EntityType = GetEntityTypeInTableRoster(questionId, questionnaire).ToString(),
                     })
                     .ToArray();
 
@@ -380,6 +379,21 @@ namespace WB.Enumerator.Native.WebInterview.Services
             }
 
             return null;
+        }
+
+        private static InterviewEntityType GetEntityTypeInTableRoster(Guid entityId, IQuestionnaire callerQuestionnaire)
+        {
+            switch (callerQuestionnaire.GetQuestionType(entityId))
+            {
+                case QuestionType.Numeric:
+                    return callerQuestionnaire.IsQuestionInteger(entityId)
+                        ? InterviewEntityType.Integer
+                        : InterviewEntityType.Double;
+                case QuestionType.Text:
+                    return InterviewEntityType.TextQuestion;
+                default:
+                    return InterviewEntityType.Unsupported;
+            }
         }
 
         private InterviewGroupOrRosterInstance GetRosterInstanceEntity(IStatefulInterview callerInterview, IQuestionnaire questionnaire,
