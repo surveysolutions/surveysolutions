@@ -55,7 +55,7 @@ namespace Main.Core.Entities.SubEntities
         [Obsolete("Use IsFlatMode property")]
         public bool IsPlainMode
         {
-            //get => IsFlatMode;
+            get => IsFlatMode;
             set => IsFlatMode = value;
         }
 
