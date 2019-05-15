@@ -16,6 +16,7 @@ namespace WB.Infrastructure.Native.Storage
     public class EventSourcedAggregateRootRepositoryWithWebCache : EventSourcedAggregateRootRepository,
         IAggregateRootCacheCleaner, IAggregateRootCacheFiller
     {
+        private readonly IEventStore eventStore;
         private readonly IInMemoryEventStore inMemoryEventStore;
         private readonly EventBusSettings eventBusSettings;
         private readonly IServiceLocator serviceLocator;
@@ -31,6 +32,7 @@ namespace WB.Infrastructure.Native.Storage
             IAggregateLock aggregateLock)
             : base(eventStore, repository)
         {
+            this.eventStore = eventStore;
             this.inMemoryEventStore = inMemoryEventStore;
             this.eventBusSettings = eventBusSettings;
             this.serviceLocator = serviceLocator;
@@ -71,7 +73,7 @@ namespace WB.Infrastructure.Native.Storage
         {
             if (!(Cache.Get(Key(aggregateId)) is IEventSourcedAggregateRoot cachedAggregate)) return null;
 
-            bool isDirty = cachedAggregate.HasUncommittedChanges();
+            bool isDirty = cachedAggregate.HasUncommittedChanges() || eventStore.GetLastEventSequence(aggregateId) != cachedAggregate.Version; 
 
             if (isDirty)
             {
@@ -83,7 +85,6 @@ namespace WB.Infrastructure.Native.Storage
 
             return cachedAggregate;
         }
-
 
         static MemoryCache Cache = new MemoryCache("AR memory cache");
 
