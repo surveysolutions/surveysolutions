@@ -51,14 +51,18 @@ namespace Main.Core.Entities.SubEntities
         public bool HideIfDisabled { get; set; }
 
         [Obsolete("Use DisplayMode property")]
-        public bool IsFlatMode        
+        public bool IsFlatMode
         {
             get => DisplayMode == RosterDisplayMode.Flat;
-            set => DisplayMode = RosterDisplayMode.Flat;
+            set
+            {
+                if (value) 
+                    DisplayMode = RosterDisplayMode.Flat;  
+            } 
         }
 
 
-        [Obsolete("Use IsFlatMode property")]
+        [Obsolete("Use DisplayMode property")]
         public bool IsPlainMode
         {
             // need to support deserialize old questionnaires
