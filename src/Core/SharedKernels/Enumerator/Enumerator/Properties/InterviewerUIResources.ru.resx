@@ -896,4 +896,10 @@
   <data name="Notifications_SyncNoRetryTitle" xml:space="preserve">
     <value>После прерваной синхронизации не было попытки повторить. Пожалуйста, повторите снова.</value>
   </data>
+  <data name="Notifications_ManyStartedInterviews" xml:space="preserve">
+    <value>Вы начали много интервью.Закончите их.</value>
+  </data>
+  <data name="Notifications_ManyCompletedInterviews" xml:space="preserve">
+    <value>Много готовых интервь. Синхронизируйтесь.</value>
+  </data>
 </root>
