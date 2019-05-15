@@ -53,7 +53,7 @@ namespace Main.Core.Entities.SubEntities
         [Obsolete("Use DisplayMode property")]
         public bool IsFlatMode        
         {
-            // need to support deserialize old questionnaires
+            get => DisplayMode == RosterDisplayMode.Flat;
             set => DisplayMode = RosterDisplayMode.Flat;
         }
 
@@ -62,6 +62,7 @@ namespace Main.Core.Entities.SubEntities
         public bool IsPlainMode
         {
             // need to support deserialize old questionnaires
+            get => IsFlatMode;
             set => IsFlatMode = value;
         }
 

@@ -386,12 +386,33 @@ namespace WB.Enumerator.Native.WebInterview
             if (callerInterview == null) return null;
 
             var questionnaire = this.GetCallerQuestionnaire();
-            var interviewEntities = ids.Select(id => 
-                    id == @"NavigationButton"
-                        ? this.GetNavigationButtonState(id, questionnaire)
-                        : this.interviewEntityFactory.GetEntityDetails(id, callerInterview, questionnaire, IsReviewMode))
-                .ToArray();
-            return interviewEntities;
+            var interviewEntities = new List<InterviewEntity>();
+
+            foreach (var id in ids)
+            {
+                if (id == @"NavigationButton")
+                {
+                    interviewEntities.Add(this.GetNavigationButtonState(id, questionnaire));
+                    continue;
+                }
+
+                var interviewEntity = this.interviewEntityFactory.GetEntityDetails(id, callerInterview, questionnaire, IsReviewMode);
+                interviewEntities.Add(interviewEntity);
+
+                if (interviewEntity is TableRoster tableRoster)
+                {
+                    foreach (var tableRosterInstance in tableRoster.Instances)
+                    {
+                        var childQuestions = callerInterview.GetChildQuestions(Identity.Parse(tableRosterInstance.Id));
+                        foreach (var childQuestion in childQuestions)
+                        {
+                            var question = this.interviewEntityFactory.GetEntityDetails(childQuestion.ToString(), callerInterview, questionnaire, IsReviewMode);
+                            interviewEntities.Add(question);
+                        }
+                    }
+                }
+            }
+            return interviewEntities.ToArray();
         }
 
         private static readonly Regex HtmlRemovalRegex = new Regex(Constants.HtmlRemovalPattern, RegexOptions.Compiled);
