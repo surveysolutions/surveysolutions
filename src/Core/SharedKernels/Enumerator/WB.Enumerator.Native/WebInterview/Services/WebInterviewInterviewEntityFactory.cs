@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using AutoMapper;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -10,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.WebInterview.Models;
+using WebGrease.Css.Extensions;
 
 namespace WB.Enumerator.Native.WebInterview.Services
 {
@@ -341,15 +343,38 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 var parentGroup = callerInterview.GetGroup(new Identity(parentGroupId.Value, identity.RosterVector));
                 var tableRosterInstances = parentGroup.Children
                     .Where(c => c.Identity.Id == identity.Id)
-                    .Cast<InterviewTreeRoster>();
+                    .Cast<InterviewTreeRoster>()
+                    .Select(ri => new TableRosterInstance()
+                    {
+                        Id = ri.Identity.ToString(),
+                        RosterVector = ri.Identity.RosterVector.ToString(),
+                        RosterTitle = ri.RosterTitle,
+                        Status = this.CalculateSimpleStatus(ri, isReviewMode, callerInterview, questionnaire),
+                    }).ToArray();
+
+                ListExtensions.ForEach(tableRosterInstances, rosterInstance =>
+                {
+                    this.ApplyDisablement(rosterInstance, identity, questionnaire);
+                    this.ApplyValidity(rosterInstance.Validity, rosterInstance.Status);
+                });
+
+                var questions = questionnaire.GetChildQuestions(identity.Id)
+                    .Select(questionId => new TableRosterQuestionReference()
+                    {
+                        Id = questionId.FormatGuid(),
+                        Title = questionnaire.GetQuestionTitle(questionId) + "dhgsbdg sdgh sjdg gsjg ssjddg sdgs dssdg dsjg dsdjg s",
+                        Variable = questionnaire.GetQuestionVariableName(questionId),
+                        IsPrefilled = questionnaire.IsPrefilled(questionId),
+                        ParentId = identity.Id.ToString(),
+                    })
+                    .ToArray();
 
                 var result = new TableRoster()
                 {
                     Id = id,
                     Title = questionnaire.GetGroupTitle(identity.Id),
+                    Questions = questions,
                     Instances = tableRosterInstances
-                        .Select(ri => GetRosterInstanceEntity(callerInterview, questionnaire, isReviewMode, ri, ri.Identity))
-                        .ToArray()
                 };
                 return result;
             }

@@ -1,32 +1,33 @@
 <template>
-
     <div class="question table-view scroller" :id="hash">
-
-
         <ag-grid-vue 
             class="ag-theme-customStyles"
             :defaultColDef="defaultColDef"
             :columnDefs="columnDefs"
             :rowData="rowData"
+            :frameworkComponents="questionEditors"
 
             rowHeight="40"
             domLayout='autoHeight'
             headerHeight="50"
 
             @grid-ready="onGridReady"
-            @onCellEditingStopped="endCellEditting"
-            >
+            @onCellEditingStopped="endCellEditting">
         </ag-grid-vue>
-
     </div>
 </template>
 
 <script lang="js">
+    import Vue from 'vue'
     import { entityDetails } from "../mixins"
     import { GroupStatus } from "./index"
     import { debounce, every, some } from "lodash"
     import { AgGridVue } from "ag-grid-vue";
 
+    import TableRoster_ViewAnswer from "./TableRoster.ViewAnswer";
+    import TableRoster_Text from "./TableRoster.Text";
+    import TableRoster_Numeric from "./TableRoster.Numeric";
+    
     export default {
         name: 'TableRoster',
         mixins: [entityDetails],
@@ -34,6 +35,7 @@
         data() {
             return {
                 defaultColDef: null,
+                questionEditors: null,
                 columnDefs: null,
                 rowData: null,
                 gridApi: null,
@@ -42,52 +44,28 @@
         },
 
         components: {
-            AgGridVue
+            AgGridVue,
+            TableRoster_ViewAnswer,
+            TableRoster_Text,
+            TableRoster_Numeric,
         },
 
         beforeMount() {
-            this.columnDefs = [
-                {headerName: "Flip", field: "rosterTitle", pinned: true, editable: false},
-                {headerName: "In which month of [...] did this enterprise begin operations?", field: "month", cellClass: function(params) { return (params.value==='04 - April' || params.value =='' ? '' :'has-warnings'); }},
-                {headerName: "Which country/countrise operate in (i.e. have sales in)?", 
-                    field: 'country',
-                    cellEditor: 'agSelectCellEditor',
-                    cellEditorParams: {
-                        values: ['Ukraine', 'Latvia', 'Macedonia', 'Romania', '(other)']
-                    },
-                    cellClass: function(params) { return (params.value==='Romania' ? 'disabled-question' :''); }
-                },
-                {headerName: "In which country/countries does this enterprise have registered entities?", field: "registration", cellClass: function(params) { return (params.value==='Latvia' || params.value =='' ? '' :'has-error'); }},
-                {headerName: "Is one or more of the enterprise founders from the region in which you operate?", field: "enterprise", cellClass: function(params) { return (params.value == null ? 'not-applicable' :''); }},
-                {headerName: "When your enterprise became an NGO?", 
-                    field: "NGO", 
-                    editable: true, 
-                    cellEditor: 'datePicker'
-                }
-            ];
 
             this.defaultColDef = {
-                // set every column width
-                width: 220,
-                height: 38,
+                width: 220, // set every column width
+                height: 76,
                 resizable: true,
-                // make every column editable
-                editable: true
+                editable: true // make every column editable
             };
-            
-            this.rowData = [
-                {rosterTitle: 'Banchee', month: "04 - April", country: "Ukraine", registration: "Latvia", enterprise: "Yes", NGO: "24/08/2008"},
-                {rosterTitle: 'Banchee', month: "", country: "Ukraine", registration: "Latvia", enterprise: "Yes", NGO: "24/08/2008"},
-                {rosterTitle: 'Banchee', month: "04 - April", country: "Ukraine", registration: "Latvia", enterprise: "Yes", NGO: "24/08/2008"},
-                {rosterTitle: 'Banchee', month: "04 - April", country: "Romania", registration: "Latvia", enterprise: "Yes", NGO: "24/08/2008"},
-                {rosterTitle: 'Banchee', month: "04 - April", country: "Ukraine", registration: "Latvia", enterprise: "Yes", NGO: "24/08/2008"},
-                {rosterTitle: 'Banchee', month: "06 - April", country: "Ukraine", registration: "Latvia", enterprise: "Yes", NGO: "24/08/2008"},
-                {rosterTitle: 'Banchee', month: "04 - April", country: "Ukraine", registration: "Macedonia", enterprise: "Yes", NGO: "24/08/2008"},
-                {rosterTitle: 'Banchee', month: "04 - April", country: "Ukraine", registration: "Latvia", enterprise: "Yes", NGO: "24/08/2008"},
-                {rosterTitle: 'Banchee', month: "04 - April", country: "", registration: "Latvia", enterprise: "Yes", NGO: "24/08/2008"},
-                {rosterTitle: 'Banchee', month: "04 - April", country: 'Ukraine', registration: "Latvia", NGO: "24/08/2008"},
-                {rosterTitle: 'Banchee', month: "04 - April", country: "Ukraine", registration: "Latvia", enterprise: "Yes", NGO: "24/08/2008"}
-            ];
+
+            this.questionEditors = {
+                text: TableRoster_Text,
+                numeric: TableRoster_Numeric,
+            };
+
+            this.initQuestionAsColumns()
+            this.initQuestionsInRows()
         },
 
         watch: {
@@ -101,18 +79,78 @@
         },
 
         computed: {
-            statusClass() {
-                return ['table-view scroller', 'scroller']
-            }           
+                      
         },
         methods : {
+            initQuestionAsColumns() {
+                var self = this;
+                var columnsFromQuestions = _.map(
+                    this.$me.questions,
+                    (question, key) => {
+                        var columnType = null;
+                        switch (question.type) {
+                            case 'Text': columnType = 'text'; break;
+                            case 'Numeric': columnType = 'numeric'; break;
+                            default: columnType = 'text'; break;
+                        }
+                        return {
+                            headerName: question.title, 
+                            field: question.id, 
+                            cellClass: self.questionStyle,
+                            cellRendererFramework: 'TableRoster_ViewAnswer',
+                            cellRendererParams: {
+                                id: question.id,
+                                value: question
+                            },
+                            cellEditorFramework: 'TableRoster_Text',
+                            cellEditorParams: {
+                                id: question.id,
+                                value: question,
+                                store: self.$store
+                            },
+                            //cellEditor: ParamsComponent // columnType
+                        };
+                    }
+                );
+                columnsFromQuestions.unshift({headerName: "", field: "rosterTitle", pinned: true, editable: false});
+                this.columnDefs = columnsFromQuestions
+            },
+
+            initQuestionsInRows() {
+                var self = this;
+
+                var rosterInstancesWithQuestionsAsRows = _.map(
+                    this.$me.instances,
+                    (instance, key) => {
+                        var instanceAsRow = {
+                            rosterVector: instance.rosterVector,
+                            rosterTitle: instance.rosterTitle, 
+                        };
+                        var entityDetails = self.$store.state.webinterview.entityDetails;
+                        self.$me.questions.forEach(question => {
+                            var questionIdentity = question.id + instance.rosterVector
+                            instanceAsRow[question.id] = entityDetails[questionIdentity];
+                        });
+                        
+                        return instanceAsRow;
+                    }
+                )
+                this.rowData = rosterInstancesWithQuestionsAsRows
+            },
+
             onGridReady(params) {
+                //params.api.sizeColumnsToFit(220);
+                //var $this = $(this);
+                //var height = $this.find('.ag-cell-label-container').height();
+                //params.api.setHeaderHeight(height);
+                //setHeaderHeight
+
                 this.gridApi = params.api;
                 this.columnApi = params.columnApi;
             },
 
             doScroll: debounce(function() {
-                if(this.$store.getters.scrollState ==  this.id){
+                if(this.$store.getters.scrollState == this.id){
                     window.scroll({ top: this.$el.offsetTop, behavior: "smooth" })
                     this.$store.dispatch("resetScroll")
                 }
@@ -122,6 +160,24 @@
                 if(this.$store && this.$store.state.route.hash === "#" + this.id) {
                     this.doScroll(); 
                 }
+            },
+
+            questionStyle(params) {
+                var question = params.value
+
+                if (question.isDisabled) {
+                    return 'disabled-question';
+                }
+                if (!question.validity.isValid) {
+                    return 'has-error';
+                }
+                if (question.validity.warnings.length > 0) {
+                    return 'has-warnings';
+                }
+                if (question.isLocked) {
+                    return 'not-applicable';
+                }
+                return '';
             },
 
             endCellEditting(event) {
