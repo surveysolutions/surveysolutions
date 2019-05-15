@@ -105,6 +105,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             // When options is selected, FocusOut will be always fired after. 
             // We change filter text and we safe answer on focus out event
             this.FilterText = option.Title;
+            this.RaisePropertyChanged(() => this.FilterText);
         }
 
         private async Task InvokeAllHandlers<T>(Func<object, T, Task> handler, T value)
@@ -121,7 +122,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var suggestions = this.GetSuggestions(filterToUpdate).ToList();
 
-            await this.InvokeOnMainThreadAsync(async () =>
+            await this.InvokeOnMainThreadAsync(() =>
             {
                 this.AutoCompleteSuggestions = suggestions;
             });
@@ -129,11 +130,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public async Task UpdateFilter(string filter, bool forced = false)
         {
+            var oldFilterText = this.FilterText;
             this.FilterText = filter;
-            await this.InvokeOnMainThreadAsync(async () =>
+
+            if (this.FilterText != oldFilterText)
             {
-                await this.RaisePropertyChanged(() => this.FilterText);
-            });
+                await this.RaisePropertyChanged(nameof(FilterText));
+            }
 
             if (this.filterToUpdate == filter && !forced)
             {
@@ -149,6 +152,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.FilterText = null;
             
             var suggestions = this.GetSuggestions(null).ToList();
+            this.QuestionState.Validity.ExecutedWithoutExceptions();
 
             this.InvokeOnMainThread(() =>
             {
