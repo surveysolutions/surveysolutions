@@ -371,7 +371,7 @@
     <value>Инфо</value>
   </data>
   <data name="MoveToAnotherSubSection" xml:space="preserve">
-    <value>Переместить в другую подсекцию:</value>
+    <value>Переместить в другую секцию:</value>
   </data>
   <data name="FindReplaceBackToSearch" xml:space="preserve">
     <value>Назад к поиску</value>
@@ -1253,5 +1253,17 @@
   <data name="QuestionKind" xml:space="preserve">
     <value>Вид</value>
     <comment>Вид</comment>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>Вы уверены?</value>
+  </data>
+  <data name="PassOwnershipConfirmationMessage" xml:space="preserve">
+    <value>Если вы передадите владение опросником, новый владелец получит уведомление. Вы больше не сможете управлять настройками как владелец опросника, а новый владелец сможет забрать у Вас права на редактирование этого опросника</value>    
+  </data>
+  <data name="SettingsPassOwnership" xml:space="preserve">
+    <value>Передать ответственность</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Да</value>
   </data>
 </root>

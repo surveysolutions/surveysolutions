@@ -477,6 +477,12 @@ angular.module('designerApp')
                     windowClass: 'share-window',
                     resolve:
                     {
+                        currentUser: function() {
+                            return {
+                                name: $scope.currentUserName,
+                                email: $scope.currentUserEmail,
+                            }
+                        },
                         questionnaire: function () {
                             return $scope.questionnaire;
                         }

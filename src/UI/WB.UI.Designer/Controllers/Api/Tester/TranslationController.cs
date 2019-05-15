@@ -1,12 +1,13 @@
 using System;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WB.Core.BoundedContexts.Designer.Translations;
+using Microsoft.EntityFrameworkCore;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.UI.Designer.Code.Attributes;
@@ -14,31 +15,32 @@ using WB.UI.Designer.Code.Attributes;
 namespace WB.UI.Designer.Controllers.Api.Tester
 {
     [ApiBasicAuth]
-    [Route("api/translation")]
-    public class TranslationController : ApiController
+    [Route("api/v{version:int}/translation")]
+    public class TranslationController : ControllerBase
     {
-        private readonly IPlainStorageAccessor<TranslationInstance> translations;
+        private readonly DesignerDbContext dbContext;
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
 
-        public TranslationController(IPlainStorageAccessor<TranslationInstance> translations, IQuestionnaireViewFactory questionnaireViewFactory)
+        public TranslationController(DesignerDbContext dbContext, IQuestionnaireViewFactory questionnaireViewFactory)
         {
-            this.translations = translations;
+            this.dbContext = dbContext;
             this.questionnaireViewFactory = questionnaireViewFactory;
         }
 
         [HttpGet]
         [Route("{id:Guid}")]
-        public IActionResult Get(Guid id, int version)
+        public async Task<IActionResult> Get(Guid id, int version)
         {
             if (version < ApiVersion.CurrentTesterProtocolVersion)
-                return StatusCode(HttpStatusCode.UpgradeRequired);
+                return StatusCode(StatusCodes.Status426UpgradeRequired);
 
             var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
             var translationsIds = questionnaireView.Source.Translations.Select(x => x.Id).ToList();
 
-
-            var result = this.translations.Query(_ => _.Where(x => x.QuestionnaireId == id && translationsIds.Contains(x.TranslationId)).ToList())
-                .Select(x => new TranslationDto()
+            var translationInstances = await this.dbContext.TranslationInstances.Where(x => x.QuestionnaireId == id && translationsIds.Contains(x.TranslationId))
+                                                     .ToListAsync();
+            var result = translationInstances
+                .Select(x => new TranslationDto
             {
                 Value = x.Value,
                 Type = x.Type,

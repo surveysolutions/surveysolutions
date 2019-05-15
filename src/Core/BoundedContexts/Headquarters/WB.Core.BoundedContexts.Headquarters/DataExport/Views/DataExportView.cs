@@ -35,5 +35,20 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                 return Report.TimeLeft + ": " + TimeEstimation.Value.Humanize(2, minUnit: TimeUnit.Second);
             }
         }
+
+        public DataExportErrorView Error { get; set; }
+    }
+
+    public class DataExportErrorView
+    {
+        public DataExportError Type { get; set; }
+        public string Message { get; set; }
+    }
+
+    public enum DataExportError
+    {
+        Unexpected = 1,
+        NotEnoughExternalStorageSpace = 2,
+        Canceled = 3
     }
 }

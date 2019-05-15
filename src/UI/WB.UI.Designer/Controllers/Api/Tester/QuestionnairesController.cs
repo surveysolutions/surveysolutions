@@ -1,26 +1,26 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Web.Http;
+using Microsoft.AspNetCore.Http;
+using System.Net.Mime;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
-using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.UI.Designer.Code.Attributes;
-using WB.UI.Designer1.Extensions;
+using WB.UI.Designer.Extensions;
 
 namespace WB.UI.Designer.Controllers.Api.Tester
 {
     [ApiBasicAuth]
-    [Route("api/questionnaires")]
-    public class QuestionnairesController : ControllerBase
+    [Route("api/v{version:int}/questionnaires")]
+    public class QuestionnairesController : Controller
     {
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
@@ -29,6 +29,7 @@ namespace WB.UI.Designer.Controllers.Api.Tester
         private readonly IDesignerEngineVersionService engineVersionService;
         private readonly IExpressionsPlayOrderProvider expressionsPlayOrderProvider;
         private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersionService;
+        private readonly ISerializer serializer;
 
         public QuestionnairesController(
             IQuestionnaireViewFactory questionnaireViewFactory,
@@ -37,7 +38,8 @@ namespace WB.UI.Designer.Controllers.Api.Tester
             IQuestionnaireListViewFactory viewFactory, 
             IDesignerEngineVersionService engineVersionService, 
             IExpressionsPlayOrderProvider expressionsPlayOrderProvider, 
-            IQuestionnaireCompilationVersionService questionnaireCompilationVersionService)
+            IQuestionnaireCompilationVersionService questionnaireCompilationVersionService, 
+            ISerializer serializer)
         {
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.questionnaireVerifier = questionnaireVerifier;
@@ -46,29 +48,30 @@ namespace WB.UI.Designer.Controllers.Api.Tester
             this.engineVersionService = engineVersionService;
             this.expressionsPlayOrderProvider = expressionsPlayOrderProvider;
             this.questionnaireCompilationVersionService = questionnaireCompilationVersionService;
+            this.serializer = serializer;
         }
 
         [HttpGet]
         [Route("{id:Guid}")]
-        public Questionnaire Get(Guid id, int version)
+        public IActionResult Get(Guid id, int version)
         {
             if(version < ApiVersion.CurrentTesterProtocolVersion)
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired));
+                return StatusCode(StatusCodes.Status426UpgradeRequired);
 
             var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
             if (questionnaireView == null)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+                return StatusCode(StatusCodes.Status404NotFound);
             }
 
             if (!this.ValidateAccessPermissions(questionnaireView))
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+                return StatusCode(StatusCodes.Status403Forbidden);
             }
 
             if (this.questionnaireVerifier.CheckForErrors(questionnaireView).Any())
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed));
+                return StatusCode(StatusCodes.Status412PreconditionFailed);
             }
 
             var specifiedCompilationVersion = this.questionnaireCompilationVersionService.GetById(id)?.Version;
@@ -83,11 +86,11 @@ namespace WB.UI.Designer.Controllers.Api.Tester
                     versionToCompileAssembly, 
                     out resultAssembly);
                 if(!generationResult.Success)
-                    throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed));
+                    return StatusCode(StatusCodes.Status412PreconditionFailed);
             }
             catch (Exception)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed));
+                return StatusCode(StatusCodes.Status412PreconditionFailed);
             }
 
             var questionnaire = questionnaireView.Source.Clone();
@@ -98,20 +101,22 @@ namespace WB.UI.Designer.Controllers.Api.Tester
             questionnaire.Macros = null;
             questionnaire.IsUsingExpressionStorage = versionToCompileAssembly > 19;
 
-            return new Questionnaire
+            var response = this.serializer.Serialize(new Questionnaire
             {
                 Document = questionnaire,
                 Assembly = resultAssembly
-            };
+            });
+
+            return Content(response, MediaTypeNames.Application.Json);
         }
 
         [HttpGet]
         [Route("")] 
         [ResponseCache(NoStore = true)]
-        public IActionResult Get(int version, [FromUri]int pageIndex = 1, [FromUri]int pageSize = 128)
+        public IActionResult Get(int version, [FromQuery]int pageIndex = 1, [FromQuery]int pageSize = 128)
         {
             if (version < ApiVersion.CurrentTesterProtocolVersion)
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired));
+                return StatusCode((int) HttpStatusCode.UpgradeRequired);
 
             var userId = User.GetId();
             var isAdmin = User.IsAdmin();

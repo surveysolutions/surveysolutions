@@ -1,10 +1,9 @@
 ﻿using System.Linq;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
-using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer.Code.Attributes;
+using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
-using WB.UI.Designer1.Extensions;
 
 namespace WB.UI.Designer.Api.Headquarters
 {

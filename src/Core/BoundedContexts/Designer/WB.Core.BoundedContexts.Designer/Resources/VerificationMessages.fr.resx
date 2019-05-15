@@ -162,9 +162,6 @@
   <data name="WB0015_QuestionWithTitleSubstitutionCantBePrefilled" xml:space="preserve">
     <value>Une question avec substitution de titre ne peut pas être marquée comme question d'identification.</value>
   </data>
-  <data name="WB0016_QuestionWithTitleSubstitutionCantReferenceSelf" xml:space="preserve">
-    <value>La question avec substitution de titre ne peut pas se référencer à elle-même.</value>
-  </data>
   <data name="WB0017_SubstitutionReferencesNotExistingQuestionOrVariable" xml:space="preserve">
     <value>La substitution fait référence à une question ou une variable inexistante.</value>
   </data>

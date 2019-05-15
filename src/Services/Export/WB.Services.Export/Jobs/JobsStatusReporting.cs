@@ -59,7 +59,7 @@ namespace WB.Services.Export.Jobs
             DateTime? toDate = null)
         {
             var allProcesses = (await this.dataExportProcessesService.GetAllProcesses(tenant))
-                .Select(CreateRunningDataExportProcessView).ToArray();
+                .Select(ToDataExportProcessView).ToArray();
 
             var exports = new List<DataExportView>();
 
@@ -86,10 +86,8 @@ namespace WB.Services.Export.Jobs
                 runningDataExportProcesses: allProcesses.Where(p => p.IsRunning).ToArray());
         }
 
-        private static RunningDataExportProcessView CreateRunningDataExportProcessView(
-            DataExportProcessArgs dataExportProcessDetails)
-        {
-            return new RunningDataExportProcessView
+        private static DataExportProcessView ToDataExportProcessView(DataExportProcessArgs dataExportProcessDetails) =>
+            new DataExportProcessView
             {
                 IsRunning = dataExportProcessDetails.Status.IsRunning,
                 DataExportProcessId = dataExportProcessDetails.NaturalId,
@@ -105,14 +103,18 @@ namespace WB.Services.Export.Jobs
                 QuestionnaireId = dataExportProcessDetails.ExportSettings.QuestionnaireId.ToString(),
                 InterviewStatus = dataExportProcessDetails.ExportSettings.Status,
                 FromDate = dataExportProcessDetails.ExportSettings.FromDate,
-                ToDate = dataExportProcessDetails.ExportSettings.ToDate
+                ToDate = dataExportProcessDetails.ExportSettings.ToDate,
+                Error =  dataExportProcessDetails.Status.Error == null ? null : new DataExportErrorView
+                {
+                    Type = dataExportProcessDetails.Status.Error.Type,
+                    Message = dataExportProcessDetails.Status.Error.Message
+                }
             };
-        }
 
         private async Task<DataExportView> CreateDataExportView(
             ExportSettings exportSettings,
             DataExportType dataType,
-            RunningDataExportProcessView[] allProcesses)
+            DataExportProcessView[] allProcesses)
         {
             DataExportView dataExportView = new DataExportView
             {
@@ -125,7 +127,6 @@ namespace WB.Services.Export.Jobs
             };
 
             var process = allProcesses.FirstOrDefault(p =>
-                p.IsRunning &&
                 p.Format == exportSettings.ExportFormat &&
                 p.Type == dataType &&
                 p.InterviewStatus == exportSettings.Status &&
@@ -133,7 +134,7 @@ namespace WB.Services.Export.Jobs
                 p.ToDate == exportSettings.ToDate &&
                 (p.QuestionnaireId == null || p.QuestionnaireId == exportSettings.QuestionnaireId.ToString()));
 
-            dataExportView.CanRefreshBeRequested = process == null;
+            dataExportView.CanRefreshBeRequested = process?.IsRunning != true;
             dataExportView.DataExportProcessId = process?.DataExportProcessId;
             dataExportView.ProgressInPercents = process?.Progress ?? 0;
             dataExportView.TimeEstimation = process?.TimeEstimation;
@@ -159,11 +160,13 @@ namespace WB.Services.Export.Jobs
                 dataExportView.HasDataToExport = true;
             }
 
+            dataExportView.Error = process?.Error;
+
             return dataExportView;
         }
 
         private static DataExportStatus GetStatusOfExportProcess(DataExportType dataType, DataExportFormat dataFormat,
-            QuestionnaireId questionnaireIdentity, RunningDataExportProcessView[] allProcesses)
+            QuestionnaireId questionnaireIdentity, DataExportProcessView[] allProcesses)
         {
             var matchingProcess = allProcesses.FirstOrDefault(x =>
                 (x.QuestionnaireId == null || x.QuestionnaireId == questionnaireIdentity.ToString())

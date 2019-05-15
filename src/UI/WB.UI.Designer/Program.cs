@@ -7,9 +7,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Events;
 using WB.Core.Infrastructure.Versions;
+using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Migrations.Logs;
 using WB.UI.Designer.Migrations.PlainStore;
-using WB.UI.Designer1.Extensions;
 
 namespace WB.UI.Designer
 {

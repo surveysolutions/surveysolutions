@@ -171,4 +171,7 @@
   <data name="SystemMailer_ResetPasswordEmail_Complete_Password_Reset" xml:space="preserve">
     <value>Завершение восстановления пароля</value>
   </data>
+  <data name="PassOwnershipNotification" xml:space="preserve">
+    <value>Здравствуйте, {0}, &lt;br&gt; Пользователь {1} передал Вам опросник {2}</value>
+    </data>
 </root>

@@ -1,11 +1,13 @@
 using System;
 using FluentAssertions;
 using Main.Core.Documents;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Designer.Api.Headquarters;
+using WB.UI.Designer.Controllers.Api.Headquarters;
 
 
 namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
@@ -45,13 +47,13 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
         private void BecauseOf() =>
             questionnaireCommunicationPackage = importController.Questionnaire(request);
 
-        [NUnit.Framework.Test] public void should_return_not_null_responce () =>
+        [NUnit.Framework.Test] public void should_return_not_null_response () =>
             questionnaireCommunicationPackage.Should().NotBeNull();
 
         private static ImportV2Controller importController;
         private static DownloadQuestionnaireRequest request;
         private static readonly Guid questionnaireId = Guid.Parse("22222222222222222222222222222222");
         private static readonly Guid userId = Guid.Parse("33333333333333333333333333333333");
-        private static QuestionnaireCommunicationPackage questionnaireCommunicationPackage;
+        private static IActionResult questionnaireCommunicationPackage;
     }
 }
