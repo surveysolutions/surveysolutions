@@ -9,7 +9,6 @@ using Google.Apis.Drive.v3;
 using Google.Apis.Services;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.Infrastructure;
-using WB.Services.Export.Interview;
 using WB.Services.Export.Services.Processing;
 using File = Google.Apis.Drive.v3.Data.File;
 
@@ -95,6 +94,17 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
                 fileMetadata, new MemoryStream(fileContent), "application/octet-stream");
 
             await request.UploadAsync();
+        }
+        
+        protected override async Task<long?> GetFreeSpaceAsync()
+        {
+            var storageInfoRequest = driveService.About.Get();
+            storageInfoRequest.Fields = "storageQuota";
+
+            var storageInfo = await storageInfoRequest.ExecuteAsync();
+            if (storageInfo?.StorageQuota?.Limit == null) return null;
+
+            return storageInfo.StorageQuota.Limit - storageInfo.StorageQuota.Usage ?? 0;
         }
 
         private Task<string> GetFileIdAsync(string filename, string parentFolderId = null)

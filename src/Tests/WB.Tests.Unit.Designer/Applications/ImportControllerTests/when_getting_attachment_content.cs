@@ -1,38 +1,35 @@
-using System.Linq;
-using System.Net.Http;
-using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.UI.Designer.Api.Headquarters;
+using WB.UI.Designer.Controllers.Api.Headquarters;
 
 
 namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
 {
     internal class when_getting_attachment_content : ImportControllerTestContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [Test]
+        public void should_return_specified_http_response()
+        {
+            Mock<IAttachmentService> mockOfAttachmentService = new Mock<IAttachmentService>();
             mockOfAttachmentService.Setup(x => x.GetContent(attachmentContentId)).Returns(expectedAttachmentContent);
 
             importController = CreateImportController(attachmentService: mockOfAttachmentService.Object);
-            BecauseOf();
+            var response = BecauseOf();
+
+            var result = (FileContentResult)response;
+            Assert.That(result.FileContents, Is.EquivalentTo(expectedAttachmentContent.Content));
+            Assert.That(result.ContentType, Is.EqualTo(expectedAttachmentContent.ContentType));
+            Assert.That(result.EntityTag.ToString(), Is.EqualTo($"\"{expectedAttachmentContent.ContentId}\""));
         }
 
-        private void BecauseOf() =>
-            response = importController.AttachmentContent(attachmentContentId);
+        private IActionResult BecauseOf() =>
+             importController.AttachmentContent(attachmentContentId);
 
-        [NUnit.Framework.Test] public void should_return_specified_http_response ()
-        {
-            response.Content.ReadAsByteArrayAsync().Result.SequenceEqual(expectedAttachmentContent.Content);
-            response.Content.Headers.ContentType.MediaType.Should().Be(expectedAttachmentContent.ContentType);
-            response.Headers.ETag.Tag.Should().Be($"\"{expectedAttachmentContent.ContentId}\"");
-        }
-
-        private static ImportV2Controller importController;
+        private ImportV2Controller importController;
         private static string attachmentContentId = "Attahcment Content Id";
-        private static readonly Mock<IAttachmentService> mockOfAttachmentService = new Mock<IAttachmentService>();
-        private static HttpResponseMessage response;
-
         private static readonly AttachmentContent expectedAttachmentContent = new AttachmentContent
         {
             ContentId = attachmentContentId,

@@ -3,7 +3,7 @@ using WB.Services.Export.Interview;
 
 namespace WB.Services.Export.Services.Processing
 {
-    public class RunningDataExportProcessView
+    public class DataExportProcessView
     {
         public string DataExportProcessId { get; set; }
         public DateTime BeginDate { get; set; }
@@ -18,5 +18,6 @@ namespace WB.Services.Export.Services.Processing
         public DateTime? ToDate { get; set; }
         public bool IsRunning { get; set; }
         public TimeSpan? TimeEstimation { get; set; }
+        public DataExportErrorView Error { get; set; }
     }
 }

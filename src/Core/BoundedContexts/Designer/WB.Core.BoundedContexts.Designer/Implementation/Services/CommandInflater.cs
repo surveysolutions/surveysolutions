@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Designer.Classifications;
 using WB.Core.BoundedContexts.Designer.Commands;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
@@ -85,7 +86,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 this.user.IsAdmin)
                 return questionnaire;
 
-            var questionnaireListItem = this.dbContext.Questionnaires.Find(id.FormatGuid());
+            var questionnaireListItem = this.dbContext.Questionnaires.Include(x => x.SharedPersons).FirstOrDefault(x => x.QuestionnaireId == id.FormatGuid());
             if (questionnaireListItem == null ||
                 questionnaireListItem.SharedPersons.All(x => x.UserId != this.user.Id))
             {

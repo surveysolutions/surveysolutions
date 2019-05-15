@@ -23,7 +23,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
 
         public SubstitutionText CreateText(Identity identity, string text, IQuestionnaire questionnaire)
         {
-            string[] variableNames = this.substitutionService.GetAllSubstitutionVariableNames(text);
+            var entityVariable = questionnaire.GetEntityVariableOrThrow(identity.Id);
+            string[] variableNames = this.substitutionService.GetAllSubstitutionVariableNames(text, entityVariable);
 
             var substitutionVariables = new List<SubstitutionVariable>();
 
@@ -57,7 +58,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
                 });
             }
 
-            return new SubstitutionText(identity, text, substitutionVariables, this.substitutionService, this.variableToUiStringService);
+            return new SubstitutionText(identity, 
+                text, 
+                entityVariable,
+                substitutionVariables, 
+                this.substitutionService, 
+                this.variableToUiStringService);
         }
     }
 }

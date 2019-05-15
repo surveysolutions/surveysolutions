@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
-using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Verifier;
@@ -21,7 +21,6 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Resources;
-using WB.UI.Designer1.Extensions;
 
 namespace WB.UI.Designer.Controllers
 {
@@ -272,7 +271,7 @@ namespace WB.UI.Designer.Controllers
             return this.RedirectToAction("Details", new {id =  sid});
         }
 
-        public IActionResult QuestionnaireHistory(Guid id, int? page)
+        public IActionResult QuestionnaireHistory(Guid id, int? p)
         {
             bool hasAccess = this.User.IsAdmin() || this.questionnaireViewFactory.HasUserAccessToQuestionnaire(id, this.User.GetId());
             if (!hasAccess)
@@ -283,7 +282,7 @@ namespace WB.UI.Designer.Controllers
             var questionnaireInfoView = this.questionnaireInfoViewFactory.Load(id.FormatGuid(), this.User.GetId());
             if (questionnaireInfoView == null) return NotFound();
 
-            QuestionnaireChangeHistory questionnairePublicListViewModels = questionnaireChangeHistoryFactory.Load(id, page ?? 1, GlobalHelper.GridPageItemsCount);
+            QuestionnaireChangeHistory questionnairePublicListViewModels = questionnaireChangeHistoryFactory.Load(id, p ?? 1, GlobalHelper.GridPageItemsCount);
             questionnairePublicListViewModels.ReadonlyMode = questionnaireInfoView.IsReadOnlyForUser;
 
             return this.View(questionnairePublicListViewModels);

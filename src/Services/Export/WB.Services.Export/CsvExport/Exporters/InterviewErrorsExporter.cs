@@ -130,7 +130,15 @@ namespace WB.Services.Export.CsvExport.Exporters
                     if (exportFileHeader.AddCaption)
                         doContent.AppendCaptionLabelToVariableMatching(exportFileHeader.Title, exportFileHeader.Description);
                     else
+                    {
+                        if (exportFileHeader.VariableValueLabels.Any())
+                        {
+                            doContent.AppendLabel(exportFileHeader.Title, exportFileHeader.VariableValueLabels);
+                            doContent.AppendLabelToValuesMatching(exportFileHeader.Title, exportFileHeader.Title);
+                        }
+
                         doContent.AppendLabelToVariableMatching(exportFileHeader.Title, exportFileHeader.Description);
+                    }
                 }
                 else
                 {

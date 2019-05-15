@@ -399,9 +399,6 @@
   <data name="MoveTo" xml:space="preserve">
     <value>الانتقال إلى</value>
   </data>
-  <data name="MoveToAnotherSubSection" xml:space="preserve">
-    <value>الانتقال إلى قسم فرعي آخر:</value>
-  </data>
   <data name="MultipleDependencies" xml:space="preserve">
     <value>يعتمد واحد أو أكثر من الأسئلة / الأقسام الفرعية على</value>
   </data>
