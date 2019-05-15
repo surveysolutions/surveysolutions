@@ -30,6 +30,7 @@ using WB.Infrastructure.Native.Logging;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Persistence.Headquarters.Migrations.Events;
 using WB.Persistence.Headquarters.Migrations.PlainStore;
+using WB.Persistence.Headquarters.Migrations.Quartz;
 using WB.Persistence.Headquarters.Migrations.ReadSide;
 using WB.Persistence.Headquarters.Migrations.Users;
 using WB.UI.Headquarters.API.WebInterview;
@@ -213,7 +214,7 @@ namespace WB.UI.Headquarters
                 eventStoreModule,
                 new DataCollectionSharedKernelModule(),
                 new FileStorageModule(basePath),
-                new QuartzModule(),
+                new QuartzModule(typeof(M201905151013_AddQuartzTables).Assembly, typeof(M201905151013_AddQuartzTables).Namespace),
                 new WebInterviewModule(),
                 new HqWebInterviewModule(),
                 owinSecurityModule,
