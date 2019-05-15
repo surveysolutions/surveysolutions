@@ -247,16 +247,22 @@ namespace WB.Enumerator.Native.WebInterview.Models
     {
         public Validity Validity { get; set; } = new Validity();
 
-        public InterviewGroupOrRosterInstance[] Instances { get; set; }
+        public TableRosterQuestionReference[] Questions { get; set; }
+
+        public TableRosterInstance[] Instances { get; set; }
     }
 
-    public class TableRosterInstance
+    public class TableRosterInstance : InterviewEntity
     {
-        public string Id { get; set; }
+        public string RosterVector { get; set; }
         public string RosterTitle { get; set; }
-        public bool IsDisabled { get; set; }
         public GroupStatus Status { get; set; }
         public Validity Validity { get; set; } = new Validity();
+    }
+
+    public class TableRosterQuestionReference : QuestionReference
+    {
+        public string Variable { get; set; }
     }
     
 
