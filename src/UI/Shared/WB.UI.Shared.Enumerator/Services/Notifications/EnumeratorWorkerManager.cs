@@ -5,7 +5,7 @@ namespace WB.UI.Shared.Enumerator.Services.Notifications
 {
     public class EnumeratorWorkerManager : IEnumeratorWorkerManager
     {
-        private const string WORKER_TAG = "Intervier";
+        private const string WORKER_TAG = "Interviewr";
         public void SetNotificationsWorker()
         {
             var workerRequest = GetRequest();
