@@ -258,8 +258,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                ShareChangeType.Share, command.OwnerEmail, questionnaireListViewItem.QuestionnaireId, ShareType.Edit);
 
             // notify new owner that he is now has owner of questionnaire
-            this.SendEmailNotifications(questionnaireListViewItem.Title, questionnaireListViewItem.CreatedBy, newOwner.Id,
-               ShareChangeType.PassOwnership, command.NewOwnerEmail, questionnaireListViewItem.QuestionnaireId, ShareType.Edit);
+            this.SendEmailNotifications(questionnaireListViewItem.Title, questionnaireListViewItem.CreatedBy, command.ResponsibleId,
+               ShareChangeType.TransferOwnership, command.NewOwnerEmail, questionnaireListViewItem.QuestionnaireId, ShareType.Edit);
         }
 
         private void SendEmailNotifications(string questionnaireTitle,
@@ -273,13 +273,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             string mailFrom = this.dbContext.Users.Find(responsibleId)?.Email;
             string mailToUserName = this.dbContext.Users.FirstOrDefault(x => x.NormalizedEmail == mailTo.ToUpper())?.UserName;
 
-            this.emailNotifier.NotifyTargetPersonAboutShareChange(shareChangeType, mailTo, mailToUserName, questionnaireId,
+            this.emailNotifier.NotifyTargetPersonAboutShareChange(
+                shareChangeType, 
+                mailTo, 
+                mailToUserName, 
+                questionnaireId,
                 questionnaireTitle, shareType, mailFrom);
 
             if (!questionnaireOwnerId.HasValue || questionnaireOwnerId.Value == responsibleId) return;
 
             var questionnaireOwner = this.dbContext.Users.Find(questionnaireOwnerId.Value);
-            if (questionnaireOwner != null)
+            if (questionnaireOwner != null && shareChangeType != ShareChangeType.TransferOwnership)
             {
                 this.emailNotifier.NotifyOwnerAboutShareChange(shareChangeType, questionnaireOwner.Email, questionnaireOwner.UserName,
                     questionnaireId, questionnaireTitle, shareType, mailFrom, mailTo);

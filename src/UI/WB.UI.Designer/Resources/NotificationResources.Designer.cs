@@ -139,9 +139,9 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Hello {0}, &lt;br&gt; {1} has transferred ownership of the questionnaire {2} to You.
         /// </summary>
-        public static string PassOwnershipNotification {
+        public static string TranfserOwnershipNotification {
             get {
-                return ResourceManager.GetString("PassOwnershipNotification", resourceCulture);
+                return ResourceManager.GetString("TranfserOwnershipNotification", resourceCulture);
             }
         }
         
