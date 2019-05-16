@@ -69,14 +69,17 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             this.SetSupportActionBar(this.FindViewById<Toolbar>(Resource.Id.toolbar));
 
+            var enumeratorSettings = Mvx.IoCProvider.Resolve<IEnumeratorSettings>();
+            if (!enumeratorSettings.NotificationsEnabled) return;
+
             var notificationsCollector = Mvx.IoCProvider.Resolve<INotificationsCollector>();
             List<SimpleNotification> notifications = notificationsCollector.CollectInAppNotifications();
 
-            if (notifications.Count > 0)
-            {
-                Snackbar snack = Snackbar.Make(toolbar, notifications[rnd.Next(notifications.Count)].ContentText,5000);
-                snack.Show();
-            }
+            if (notifications.Count <= 0) return;
+
+            Snackbar snack = Snackbar.Make(toolbar, notifications[rnd.Next(notifications.Count)].ContentText,
+                5000);
+            snack.Show();
         }
 
         private void RemoveFragments()
