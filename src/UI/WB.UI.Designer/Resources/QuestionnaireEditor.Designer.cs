@@ -1231,6 +1231,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If you transfer ownership, the new owner will be notified. You may no longer be able to change ownership settings, and the new owner may also remove your access..
+        /// </summary>
+        public static string MakeOwnerConfirmationMessage {
+            get {
+                return ResourceManager.GetString("MakeOwnerConfirmationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mark as default language.
         /// </summary>
         public static string MarkAsDefault {
@@ -1434,15 +1443,6 @@ namespace WB.UI.Designer.Resources {
         public static string OptionsWindowTitle {
             get {
                 return ResourceManager.GetString("OptionsWindowTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to If you transfer ownership, the new owner will be notified. You may no longer be able to change ownership settings, and the new ownwer may also remove you access..
-        /// </summary>
-        public static string PassOwnershipConfirmationMessage {
-            get {
-                return ResourceManager.GetString("PassOwnershipConfirmationMessage", resourceCulture);
             }
         }
         
@@ -2185,20 +2185,20 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Make owner.
+        /// </summary>
+        public static string SettingsMakeOwner {
+            get {
+                return ResourceManager.GetString("SettingsMakeOwner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to owner.
         /// </summary>
         public static string SettingsOwner {
             get {
                 return ResourceManager.GetString("SettingsOwner", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Pass ownership.
-        /// </summary>
-        public static string SettingsPassOwnership {
-            get {
-                return ResourceManager.GetString("SettingsPassOwnership", resourceCulture);
             }
         }
         
