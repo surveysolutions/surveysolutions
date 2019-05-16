@@ -9225,9 +9225,6 @@ table.dataTable.fixedHeader-locked {
   line-height: 16px; }
   .table-view .ag-theme-customStyles .ag-horizontal-left-spacer {
     height: 0; }
-  .table-view .ag-theme-customStyles .ag-body-horizontal-scroll-viewport {
-    max-height: 8px !important;
-    min-height: 8px !important; }
   .table-view .ag-theme-customStyles .ag-header-cell {
     border: 1px solid #E5E5E5;
     border-bottom-color: rgba(0, 0, 0, 0.3); }
@@ -9238,21 +9235,9 @@ table.dataTable.fixedHeader-locked {
       padding: 11px 15px; }
   .table-view .ag-theme-customStyles .ag-pinned-left-header .ag-header-cell {
     border-right-color: rgba(0, 0, 0, 0.3); }
-  .table-view .ag-theme-customStyles .ag-pinned-left-header .ag-header-cell-label {
-    color: #2D9CDB;
-    padding-left: 40px;
-    background-image: url("../img/flip.svg");
-    background-repeat: no-repeat;
-    background-position: 7px; }
   .table-view .ag-theme-customStyles .ag-pinned-left-cols-container .ag-cell {
     background-color: transparent;
     border-right-color: rgba(0, 0, 0, 0.3); }
-  .table-view .ag-theme-customStyles .ag-row-hover .ag-cell {
-    -webkit-box-shadow: inset 300px 0 rgba(236, 240, 241, 0.5);
-            box-shadow: inset 300px 0 rgba(236, 240, 241, 0.5); }
-    .table-view .ag-theme-customStyles .ag-row-hover .ag-cell.ag-column-hover {
-      -webkit-box-shadow: none;
-              box-shadow: none; }
   .table-view .ag-theme-customStyles .ag-cell {
     padding: 11px 15px;
     background: #FFFFFF;
@@ -9265,30 +9250,25 @@ table.dataTable.fixedHeader-locked {
             align-items: center; }
     .table-view .ag-theme-customStyles .ag-cell.ag-cell-focus {
       border-color: #000 !important; }
-    .table-view .ag-theme-customStyles .ag-cell.ag-column-hover {
-      -webkit-box-shadow: inset 300px 0 rgba(236, 240, 241, 0.5);
-              box-shadow: inset 300px 0 rgba(236, 240, 241, 0.5); }
     .table-view .ag-theme-customStyles .ag-cell.not-applicable {
       background-color: transparent;
       background-image: linear-gradient(-45deg, #dbdfe2 15%, transparent 15%, transparent 50%, #dbdfe2 50%, #dbdfe2 65%, transparent 65%, transparent);
       background-size: 8px 8px; }
     .table-view .ag-theme-customStyles .ag-cell.disabled-question {
-      background-image: url("../img/padlock-1dp.png");
+      background-image: url("../img/locked.svg");
       background-color: #E5E5E5;
       background-repeat: no-repeat;
-      background-position: 96% 50%;
-      padding-right: 35px; }
+      border-color: #a0a0a0;
+      background-position: 0 0; }
     .table-view .ag-theme-customStyles .ag-cell.has-warnings {
-      background-image: url("../img/warning.svg");
+      background-image: url("../img/warning2.svg");
       background-repeat: no-repeat;
-      background-position: 96% 50%;
-      padding-right: 35px;
+      background-position: 0 0;
       background-color: rgba(240, 173, 0, 0.4);
       border-color: #F0AD00; }
       .table-view .ag-theme-customStyles .ag-cell.has-warnings .ag-cell-edit-input {
         -webkit-box-shadow: inset 6px 6px 10px rgba(240, 173, 0, 0.4), inset -6px -6px 10px rgba(240, 173, 0, 0.4);
                 box-shadow: inset 6px 6px 10px rgba(240, 173, 0, 0.4), inset -6px -6px 10px rgba(240, 173, 0, 0.4);
-        padding-right: 15px;
         background-image: none; }
     .table-view .ag-theme-customStyles .ag-cell.for-supervisor {
       background-color: #C1D9EB;
@@ -9297,16 +9277,14 @@ table.dataTable.fixedHeader-locked {
         -webkit-box-shadow: inset 6px 6px 10px #C1D9EB, inset -6px -6px 10px #C1D9EB;
                 box-shadow: inset 6px 6px 10px #C1D9EB, inset -6px -6px 10px #C1D9EB; }
     .table-view .ag-theme-customStyles .ag-cell.has-error {
-      background-image: url("../img/error.svg");
+      background-image: url("../img/error2.svg");
       background-repeat: no-repeat;
-      background-position: 96% 50%;
-      padding-right: 35px;
+      background-position: 0 0;
       background-color: rgba(255, 46, 0, 0.2);
       border-color: #FF2E00; }
       .table-view .ag-theme-customStyles .ag-cell.has-error .ag-cell-edit-input {
         -webkit-box-shadow: inset 6px 6px 10px #f6d6d0, inset -6px -6px 10px #f6d6d0;
                 box-shadow: inset 6px 6px 10px #f6d6d0, inset -6px -6px 10px #f6d6d0;
-        padding-right: 15px;
         background-image: none; }
     .table-view .ag-theme-customStyles .ag-cell.ag-cell-inline-editing {
       padding: 0; }
