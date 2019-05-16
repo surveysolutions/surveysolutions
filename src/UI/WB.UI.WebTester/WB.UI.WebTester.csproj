@@ -318,6 +318,7 @@
     <Compile Include="Services\Implementation\InMemoryCacheStorage.cs" />
     <Compile Include="Services\Implementation\TranslationStorage.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Infrastructure\WebTesterEventStore.cs" />
     <Compile Include="WebTesterModule.cs" />
   </ItemGroup>
   <ItemGroup>
