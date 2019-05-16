@@ -23,4 +23,9 @@ namespace WB.Services.Export.Services.Processing
         public List<DataExportView> DataExports { get; set; }
         public DataExportProcessView[] RunningDataExportProcesses { get; set; }
     }
+
+    public class DataExportUpdateRequestResult
+    {
+        public long JobId { get; set; }
+    }
 }

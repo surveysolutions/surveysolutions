@@ -26,4 +26,15 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
 
         public bool Success { get; set; }
     }
+
+    public class ExportDataAvailabilityView
+    {
+        public bool HasInterviews { get; set; }
+        public bool HasBinaryData { get; set; }
+    }
+
+    public class DataExportUpdateRequestResult
+    {
+        public long JobId { get; set; }
+    }
 }

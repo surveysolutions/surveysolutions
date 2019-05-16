@@ -45,10 +45,10 @@ namespace WB.Services.Export.Jobs
             this.exportFileAccessor = exportFileAccessor;
         }
 
-        public async Task<RunningDataExportProcessView> GetDataExportStatusAsync(long processId)
+        public async Task<DataExportProcessView> GetDataExportStatusAsync(long processId)
         {
-            var process = await this.dataExportProcessesService.GetProcessAsync(processId);
-            return CreateRunningDataExportProcessView(process);
+            DataExportProcessArgs process = await this.dataExportProcessesService.GetProcessAsync(processId);
+            return ToDataExportProcessView(process);
         }
 
         public async Task<DataExportStatusView> GetDataExportStatusForQuestionnaireAsync(

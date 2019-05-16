@@ -36,7 +36,7 @@ namespace WB.Services.Export.Host.Controllers
 
         [HttpPut]
         [Route("api/v1/job/generate")]
-        public async Task<ActionResult> RequestUpdate(
+        public async Task<DataExportUpdateRequestResult> RequestUpdate(
             string questionnaireId,
             DataExportFormat format,
             InterviewStatus? status,
@@ -63,9 +63,12 @@ namespace WB.Services.Export.Host.Controllers
                 StorageType = storageType
             };
 
-            await exportProcessesService.AddDataExport(args);
+            var jobId = await exportProcessesService.AddDataExport(args);
 
-            return Ok();
+            return new DataExportUpdateRequestResult
+            {
+                JobId = jobId
+            };
         }
 
         [HttpGet]
@@ -136,7 +139,7 @@ namespace WB.Services.Export.Host.Controllers
 
         [HttpGet]
         [Route("api/v1/job")]
-        public async Task<RunningDataExportProcessView> GetDataExportStatus(long processId, TenantInfo tenant)
+        public async Task<DataExportProcessView> GetDataExportStatus(long processId, TenantInfo tenant)
         {
             var exportStatus = await this.jobsStatusReporting.GetDataExportStatusAsync(processId);
             return exportStatus;

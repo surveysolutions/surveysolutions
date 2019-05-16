@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
+
 import { sync } from "vuex-router-sync";
 Vue.use(Vuex);
 
