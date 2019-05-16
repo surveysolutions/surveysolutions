@@ -3,7 +3,6 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using WB.UI.Shared.Web.Settings;
 
 namespace WB.UI.Shared.Web.Filters
@@ -12,7 +11,7 @@ namespace WB.UI.Shared.Web.Filters
     {
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            if (!HttpContext.Current.Request.IsSecureConnection && CoreSettings.IsHttpsRequired)
+            if (request.RequestUri.Scheme != Uri.UriSchemeHttps && CoreSettings.IsHttpsRequired)
             {
                 var response = new HttpResponseMessage(HttpStatusCode.Forbidden)
                 {
