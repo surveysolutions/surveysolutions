@@ -1294,6 +1294,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Some assignments were not updated last 3 days.
+        /// </summary>
+        public static string Notifications_StaleAssignments {
+            get {
+                return ResourceManager.GetString("Notifications_StaleAssignments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to After synchronization was terminated with errors there was no retry. Please try again..
         /// </summary>
         public static string Notifications_SyncNoRetryTitle {
