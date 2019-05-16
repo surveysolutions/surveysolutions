@@ -179,7 +179,7 @@ namespace WB.Core.BoundedContexts.Designer
                     config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())
 
                 .Handles<PassOwnershipFromQuestionnaire>(
-                    (command, aggregate) => aggregate.PassOwnership(command.ResponsibleId, command.NewOwnerId, command.OwnerEmail, command.NewOwnerEmail),
+                    (command, aggregate) => aggregate.TransferOwnership(command.ResponsibleId, command.NewOwnerId, command.OwnerEmail, command.NewOwnerEmail),
                     config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>());
 
             return Task.CompletedTask;

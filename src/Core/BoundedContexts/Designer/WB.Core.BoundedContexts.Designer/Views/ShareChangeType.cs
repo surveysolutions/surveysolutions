@@ -4,6 +4,6 @@ namespace WB.Core.BoundedContexts.Designer.Views
     {
         Share = 0,
         StopShare = 1,
-        PassOwnership = 2
+        TransferOwnership = 2
     }
 }
