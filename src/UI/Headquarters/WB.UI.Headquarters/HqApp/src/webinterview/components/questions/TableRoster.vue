@@ -63,6 +63,9 @@
         watch: {
             ["$store.getters.scrollState"]() {
                  this.scroll();
+            },
+            ["$me.instances"]() {
+                this.initQuestionsInRows()
             }
         },
 

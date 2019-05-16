@@ -1,24 +1,114 @@
 <template>
-    <input :ref="'input'" @keydown="onKeyDown($event)" v-model="value"/>
+    <!--input :ref="'input'" @keydown="onKeyDown($event)" v-model="value"/-->
+
+    <input type="text" autocomplete="off" inputmode="numeric" class="field-to-fill"
+        ref="inputDouble"
+        :placeholder="noAnswerWatermark" 
+        :title="noAnswerWatermark"
+        :value="$me.answer" 
+        v-blurOnEnterKey 
+        @blur="answerDoubleQuestion"
+        :disabled="!$me.acceptAnswer"
+        v-numericFormatting="{
+                minimumValue:'-99999999999999.99999999999999',
+                maximumValue:'99999999999999.99999999999999',
+                digitGroupSeparator: groupSeparator,
+                decimalCharacter:decimalSeparator, 
+                decimalPlaces: decimalPlacesCount, 
+                allowDecimalPadding: false
+            }"
+        />
+
 </template>
 
 <script lang="js">
     import Vue from 'vue'
-    import { entityDetails } from "../mixins"
+    import { entityDetails, tableCellEditor } from "../mixins"
     
     export default {
         name: 'TableRoster_Double',
-        mixins: [entityDetails],
+        mixins: [entityDetails, tableCellEditor],
         
         data() {
             return {
-                value: '',
+                autoNumericElement: null,
                 cancelBeforeStart: true
             }
         },
+        computed: {
+            noAnswerWatermark() {
+                return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') : this.$t('WebInterviewUI.DecimalEnter')
+            },
+            groupSeparator() {
+
+                var defaultSeparator = ''
+
+                if (this.$me.useFormatting) {                    
+                    var etalon = 1111
+                    var localizedNumber = etalon.toLocaleString()
+                    var separator = localizedNumber.substring(1, localizedNumber.length - 3)
+                
+                    return (separator == null || separator == undefined)
+                        ? defaultSeparator
+                        : separator  
+                }
+
+                return defaultSeparator
+            },
+            decimalSeparator() {
+
+                var defaultSeparator = '.'
+
+                if (this.$me.useFormatting) {
+                    
+                    var etalon = 1.111
+                    var localizedNumber = etalon.toLocaleString()
+                    var separator = localizedNumber.substring(1, localizedNumber.length - 3)
+
+                    return (separator == null || separator == undefined)
+                        ? defaultSeparator
+                        : separator
+                }
+
+                return defaultSeparator
+            },
+            decimalPlacesCount(){
+                if (this.$me.countOfDecimalPlaces == null || this.$me.countOfDecimalPlaces == undefined)
+                    return 15;
+                
+                return this.$me.countOfDecimalPlaces    
+            }
+        },
         methods: {
-            getValue() {
-                return this.value;
+            saveAnswer() {
+                this.answerDoubleQuestion()
+            },
+
+            answerDoubleQuestion(evnt) {
+                const answerString = this.autoNumericElement.getNumericString();
+                if (answerString.replace(/[^0-9]/g, "").length > 15) {
+                    this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.DecimalTooBig"))
+                    return
+                }
+
+                const answer = answerString != undefined && answerString != ''
+                    ? parseFloat(answerString)
+                    : null;
+
+                this.saveAnswerValue(answer);
+            },
+            saveAnswerValue(answer){
+                this.sendAnswer(() => {
+                    if(this.handleEmptyAnswer(answer)) {
+                        return
+                    }
+                    if (answer > 999999999999999 || answer < -999999999999999) {
+                        this.markAnswerAsNotSavedWithMessage($t("WebInterviewUI.DecimalCannotParse"))
+                        return
+                    }
+
+                    this.$store.dispatch('answerDoubleQuestion', { identity: this.id, answer: answer })
+                });
             },
 
             isCancelBeforeStart() {
@@ -50,22 +140,27 @@
                 const charCode = this.getCharCodeFromEvent(event);
                 const charStr = String.fromCharCode(charCode);
                 return this.isCharNumeric(charStr);
+            },
+            destroy() {
+                if (this.autoNumericElement) {
+                    this.autoNumericElement.remove()
+                }
             }
         },
         created() {
-            this.value = this.params.value;
-
             // only start edit if key pressed is a number, not a letter
-            this.cancelBeforeStart = this.params.charPress && ('1234567890'.indexOf(this.params.charPress) < 0);
+            this.cancelBeforeStart = this.editorParams.charPress && ('1234567890'.indexOf(this.editorParams.charPress) < 0);
         },
         mounted() {
             Vue.nextTick(() => {
-                // need to check if the input reference is still valid - if the edit was cancelled before it started there
-                // wont be an editor component anymore
-                if (this.$refs.input) {
-                    this.$refs.input.focus();
+                if (this.$refs.inputDouble) {
+                    this.$refs.inputDouble.select();
+                    this.$refs.inputDouble.focus();
                 }
             });
+        },
+        beforeDestroy () {
+            this.destroy()
         }
     }
 </script>
