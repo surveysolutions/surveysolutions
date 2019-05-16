@@ -73,7 +73,7 @@ namespace WB.UI.Interviewer.Services
                     NotificationId = (int)NotificationType.RejectedInterviewNotOpened,
                     AutoCancel = true,
                     ContentTitle = InterviewerUIResources.Notifications_InterviewsTitle,
-                    ContentText = InterviewerUIResources.Notifications_CompletedInterviewsText.FormatString(completedLateCount),
+                    ContentText = InterviewerUIResources.Notifications_CompletedInterviewsText.FormatString(rejectedNotOpenedCount),
                     IconId = Resource.Drawable.icon,
                     Intent = GetPendingIntent()
                 });
@@ -122,8 +122,8 @@ namespace WB.UI.Interviewer.Services
             var notifications = new List<SimpleNotification>();
 
             // Assignment has not been touched for more than 3 days (no new interviews started from that assignment);
-            //More than 5 started interviews.
-            //More than 10 completed interviews.
+            // More than 5 started interviews.
+            // More than 10 completed interviews.
 
             //vague condition
             //skipping for now
