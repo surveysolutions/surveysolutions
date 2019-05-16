@@ -13,6 +13,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.SessionState;
+using System.Web.WebPages;
 using Autofac;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.SignalR;
@@ -30,6 +31,7 @@ using NLog;
 using NLog.Targets;
 using Owin;
 using Quartz;
+using RazorGenerator.Mvc;
 using StackExchange.Exceptional;
 using StackExchange.Exceptional.Stores;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
@@ -304,6 +306,8 @@ namespace WB.UI.Headquarters
 
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
+            RazorGeneratorMvcStart.Start();
+
             ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
         }
 
