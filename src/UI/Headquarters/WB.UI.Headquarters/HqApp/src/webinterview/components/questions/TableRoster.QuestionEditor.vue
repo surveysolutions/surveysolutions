@@ -25,9 +25,20 @@
             getValue() {
                 return this.question;
             },
+            isCancelBeforeStart() {
+                //if (this.$refs.editQuestionComponent.isCancelBeforeStart)
+                //    return this.$refs.editQuestionComponent.isCancelBeforeStart()
+                return false
+            },
             isCancelAfterEnd() {
+                if (this.$refs.editQuestionComponent.isCancelBeforeStart) {
+                    var isNeedCancel = this.$refs.editQuestionComponent.isCancelBeforeStart()
+                    if (isNeedCancel) return true
+                }
+
                 if (this.$refs.editQuestionComponent.saveAnswer)
                     this.$refs.editQuestionComponent.saveAnswer()
+
                 return false
             },
             destroy() {
