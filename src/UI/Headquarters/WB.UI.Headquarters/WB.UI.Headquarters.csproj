@@ -259,6 +259,9 @@
     <Reference Include="StackExchange.Exceptional, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\StackExchange.Exceptional.2.0.0\lib\net461\StackExchange.Exceptional.dll</HintPath>
     </Reference>
+    <Reference Include="StackExchange.Exceptional.PostgreSql, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\StackExchange.Exceptional.PostgreSql.2.0.0\lib\net461\StackExchange.Exceptional.PostgreSql.dll</HintPath>
+    </Reference>
     <Reference Include="StackExchange.Exceptional.Shared, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\StackExchange.Exceptional.Shared.2.0.0\lib\net461\StackExchange.Exceptional.Shared.dll</HintPath>
     </Reference>
