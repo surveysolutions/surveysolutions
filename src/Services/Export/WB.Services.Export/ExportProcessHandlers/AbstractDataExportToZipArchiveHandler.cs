@@ -50,6 +50,8 @@ namespace WB.Services.Export.ExportProcessHandlers
 
                 await this.dataExportFileAccessor.PublishArchiveToExternalStorageAsync(processArgs.ExportSettings.Tenant, archiveName, exportProgress);
 
+                this.dataExportProcessesService.ChangeStatusType(processArgs.ProcessId, DataExportStatus.Finished);
+
                 cancellationToken.ThrowIfCancellationRequested();
             }
             finally

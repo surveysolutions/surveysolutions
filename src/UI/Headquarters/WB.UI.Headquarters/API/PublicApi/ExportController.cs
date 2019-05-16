@@ -68,6 +68,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             InterviewStatus? status = null,
             DateTime? from = null, DateTime? to = null)
         {
+            long jobId = 0;
             switch (exportType)
             {
                 case DataExportFormat.DDI:
@@ -80,8 +81,10 @@ namespace WB.UI.Headquarters.API.PublicApi
                     if (questionnaireBrowseItem == null)
                         return this.Content(HttpStatusCode.NotFound, @"Questionnaire not found");
 
-                    await this.exportServiceApi.RequestUpdate(questionnaireIdentity.ToString(),
+                    var result = await this.exportServiceApi.RequestUpdate(questionnaireIdentity.ToString(),
                         exportType, status, from, to, GetPasswordFromSettings(), null, null);
+
+                    jobId = result.JobId;
 
                     this.auditLog.ExportStared(
                         $@"{questionnaireBrowseItem.Title} v{questionnaireBrowseItem.Version} {status?.ToString() ?? ""}",
@@ -90,7 +93,10 @@ namespace WB.UI.Headquarters.API.PublicApi
                     break;
             }
 
-            return this.Ok();
+            return this.Ok(new StartNewExportResult
+            {
+                JobId = jobId
+            });
         }
 
         private string GetPasswordFromSettings()
@@ -235,6 +241,10 @@ namespace WB.UI.Headquarters.API.PublicApi
             return new ProgressiveDownload(Request).ResultMessage(result.Data, "application/zip");
         }
 
+        public class StartNewExportResult
+        {
+            public long JobId { get; set; }
+        }
 
         public class ExportDetails
         {

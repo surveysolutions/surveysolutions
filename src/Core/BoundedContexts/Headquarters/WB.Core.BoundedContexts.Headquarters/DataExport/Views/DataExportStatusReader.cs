@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -65,6 +64,20 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                 FileName = result.Content.Headers.ContentDisposition.FileName,
                 Data = await result.Content.ReadAsStreamAsync()
             };
+        }
+
+        public Task<ExportDataAvailabilityView> DataAvailabilityAsync(QuestionnaireIdentity questionnaireIdentity)
+        {
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
+            if (questionnaire == null)
+                return null;
+
+            var hasAssignmentWithAudioRecordingEnabled = assignmentsService.HasAssignmentWithAudioRecordingEnabled(questionnaireIdentity);
+            return Task.FromResult(new ExportDataAvailabilityView
+            {
+                HasBinaryData = questionnaire.HasAnyMultimediaQuestion() || hasAssignmentWithAudioRecordingEnabled,
+                HasInterviews = true
+            });
         }
 
         public async Task<DataExportStatusView> GetDataExportStatusForQuestionnaireAsync(
