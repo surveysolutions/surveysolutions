@@ -253,6 +253,31 @@ namespace WB.UI.WebTester.Services.Implementation
                 {new StringEnumConverter(), new IdentityJsonConverter(), new RosterVectorConverter()}
         };
 
+        public int? GetLastEventSequence()
+        {
+            lock (this.context)
+            {
+                if (state == State.Teardown) throw new InterviewException("Interview deleted", InterviewDomainExceptionType.InterviewHardDeleted);
+
+                var invokeResult = RemoteFunc.Invoke(context.Domain, new object(), jsonArg =>
+                {
+                    try
+                    {
+                        
+                        var interview = CurrentInterview.Instance;
+                        return interview.Version.ToString();
+                    }
+                    catch
+                    {
+                        return "[]";
+                    }
+                });
+
+                return int.Parse(invokeResult);
+            }
+        }
+
+
         public void Flush()
         {
             lock (this.context)
