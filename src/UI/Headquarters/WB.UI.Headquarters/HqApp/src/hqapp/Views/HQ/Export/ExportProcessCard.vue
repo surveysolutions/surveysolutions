@@ -5,7 +5,7 @@
                 <div class="gray-text-row">Queued on {{beginDate}}</div>
                 <div class="format-data stata">
                     <h3>{{questionnaireTitle}} (ver. {{questionnaireIdentity.version}}) </h3>
-                    <p>STATA format. Interviews in <b>all statuses</b>.</p>
+                    <p>{{format}} format. Interviews in <b>{{interviewStatus}}</b>.</p>
                 </div>
             </div>
             <div class="wrapper-data clearfix">
@@ -29,8 +29,10 @@
 import Vue from "vue"
 import { DateFormats } from "~/shared/helpers";
 import modal from "~/webinterview/components/modal"
+import {mixin as VueTimers} from 'vue-timers'
 
 export default {
+    mixins: [VueTimers],
     props: {
         data: { 
             type: Object, 
@@ -54,7 +56,15 @@ export default {
             type: null
         };
     },
-    created() {
+    timers: {
+      updateStatus: { time: 1000, autostart: true, repeat: true }
+    },
+    computed: {
+      
+    },
+    watch: {},
+    methods: {
+      updateStatus(){
         var self = this;
         this.$http.get(this.$config.model.api.statusUrl, {  params: { id: this.data.id }  })
             .then(function (response) {
@@ -72,17 +82,17 @@ export default {
                 self.questionnaireIdentity = info.questionnaireIdentity;
                 self.questionnaireTitle = info.questionnaireTitle;
                 self.toDate = info.toDate;
-                self.type = info.type;          
+                self.type = info.type;
+
+                if (self.processStatus == "Compressing")
+                {
+                    self.$timer.stop("updateStatus");
+                }
             })
             .catch(function (error) {
                 Vue.config.errorHandler(error, self);
             });
-    },
-    computed: {
-      
-    },
-    watch: {},
-    methods: {
+      },
       formatDate(data){
            return moment.utc(data).local().format(DateFormats.dateTimeInList);
       },

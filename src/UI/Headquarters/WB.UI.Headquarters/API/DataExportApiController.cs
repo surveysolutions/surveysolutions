@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -89,6 +90,20 @@ namespace WB.UI.Headquarters.API
             processView.QuestionnaireTitle = questionnaire.Title;
             return Request.CreateResponse(processView);
         }
+
+        [HttpGet]
+        [ObserverNotAllowedApi]
+        [ApiNoCache]
+        [CamelCase]
+        public async Task<HttpResponseMessage> DataAvailability(Guid id, long version)
+        {
+            var result = await dataExportStatusReader.DataAvailabilityAsync(new QuestionnaireIdentity(id, version));
+            if (result == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, result);
+        }
         
         [HttpGet]
         [ObserverNotAllowedApi]
@@ -164,12 +179,15 @@ namespace WB.UI.Headquarters.API
             DateTime? @from,
             DateTime? to, string accessToken = null, ExternalStorageType? externalStorageType = null)
         {
+            long jobId = 0;
             try
             {
-                await this.exportServiceApi.RequestUpdate(questionnaireBrowseItem.Id,
+                var result = await this.exportServiceApi.RequestUpdate(questionnaireBrowseItem.Id,
                     format, status,
                     @from?.ToUniversalTime(),
                     to?.ToUniversalTime(), GetPasswordFromSettings(), accessToken, externalStorageType);
+
+                jobId = result?.JobId ?? 0;
 
                 this.auditLog.ExportStared(
                     $@"{questionnaireBrowseItem.Title} v{questionnaireBrowseItem.Version} {status?.ToString() ?? ""}",
@@ -180,7 +198,9 @@ namespace WB.UI.Headquarters.API
                 return this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
             }
 
-            return Request.CreateResponse(true);
+            return Request.CreateResponse(new {
+                JobId = jobId
+            });
         }
 
         [HttpPost]

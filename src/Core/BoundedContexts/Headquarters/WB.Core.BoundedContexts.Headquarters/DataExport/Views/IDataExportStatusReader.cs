@@ -23,5 +23,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
         Task<DataExportArchive> GetDataArchive(
             QuestionnaireIdentity questionnaireIdentity, DataExportFormat format,
             InterviewStatus? status = null, DateTime? from = null, DateTime? to = null);
+
+        Task<ExportDataAvailabilityView> DataAvailabilityAsync(QuestionnaireIdentity questionnaireIdentity);
     }
 }

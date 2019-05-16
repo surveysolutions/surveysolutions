@@ -68,14 +68,14 @@
         <div class="col-md-10">
           <h3>Data type</h3>
           <div class="structure-block">
-            <div class="data-type-row">
+            <div class="data-type-row" v-if="hasInterviews">
               <input class="radio-row" type="radio"  name="dataType" id="surveyData" v-model="dataType" value="surveyData">
               <label for="surveyData" class="" >
                 <span class="tick"></span>
                 <span class="format-data zip">{{$t('DataExport.MainSurveyDataTitle')}}. {{$t('DataExport.ZipArchiveDescription')}}</span>
               </label>
             </div>
-            <div class="data-type-row">
+            <div class="data-type-row" v-if="hasInterviews && hasBinaryData">
               <input class="radio-row" type="radio" name="dataType" id="binaryData"  v-model="dataType" value="binaryData">
               <label for="binaryData">
                 <span class="tick"></span>
@@ -89,7 +89,7 @@
                 <span class="format-data format-data">DDI. Data Documentation Initiative XML data</span>
               </label>
             </div>
-            <div class="data-type-row">
+            <div class="data-type-row"  v-if="hasInterviews">
               <input class="radio-row" type="radio" name="dataType" id="paraData" v-model="dataType" value="paraData">
               <label for="paraData">
                 <span class="tick"></span>
@@ -111,15 +111,15 @@
               </label>
             </div>
             <div class="data-type-row">
-              <input class="radio-row" type="radio" name="dataFormat" id="Stata"  v-model="dataFormat" value="stata">
+              <input class="radio-row" type="radio" name="dataFormat" id="Stata"  v-model="dataFormat" value="Stata">
               <label for="Stata" class="">
                 <span class="tick"></span>
                 <span class="format-data stata">Stata 10 format (no Unicode)</span>
               </label>
             </div>
             <div class="data-type-row">
-              <input class="radio-row" type="radio" name="dataFormat" id="spss" v-model="dataFormat" value="spss">
-              <label for="spss">
+              <input class="radio-row" type="radio" name="dataFormat" id="Spss" v-model="dataFormat" value="Spss">
+              <label for="Spss">
                 <span class="tick"></span>
                 <span class="format-data spss">SPSS format</span>
               </label>
@@ -198,21 +198,29 @@
 <script>
 import Vue from "vue"
 import ExportProcessCard from "./ExportProcessCard"
+import {mixin as VueTimers} from 'vue-timers'
 
 export default {
+    mixins: [VueTimers],
     data() {
         return {
             exportServiceIsUnavailable: true,
             exportFormIsVisible: false,
-            dataType: "surveyData",
+            dataType: null,
             dataFormat: "Tabular",
             dataDestination: "zip",
             questionnaireId: null,
             questionnaireVersion: null,
             status: null,
             statuses: this.$config.model.statuses,
-            exportResults: []
+            exportResults: [],
+            isUpdatingDataAvailability: false,
+            hasInterviews: false,
+            hasBinaryData: false
         };
+    },
+    timers: {
+      updateExportCards: { time: 5000, autostart: true, repeat: true }
     },
     created() {
         var self = this;
@@ -251,26 +259,61 @@ export default {
     },
     watch: {},
     methods: {
+      updateExportCards(){
+        var self = this;
+        this.$http.get(this.$config.model.api.statusUrl)
+            .then(function (response) {
+
+              self.exportServiceIsUnavailable = response.data == null;
+
+              let exportIds = response.data || [];
+              if (exportIds.length > 0)
+              {
+                var existingJobIndex = 0;
+                var incomingJobIndex = 0;
+                while(incomingJobIndex < exportIds.length && existingJobIndex < self.exportResults.length)
+                {
+                  if (self.exportResults[existingJobIndex].id == exportIds[incomingJobIndex])
+                  {
+                    existingJobIndex++;
+                    incomingJobIndex++;
+                  }
+                  else if (self.exportResults[existingJobIndex].id < exportIds[incomingJobIndex])
+                  {
+                    self.exportResults.splice(existingJobIndex, 0, { id: exportIds[incomingJobIndex]})
+                    existingJobIndex++;
+                    incomingJobIndex++;
+                  }
+                  else{
+                    existingJobIndex++;
+                  }
+                }
+                for(let i=incomingJobIndex;i<exportIds.length;i++)
+                {
+                  self.exportResults.push({ id: exportIds[incomingJobIndex]});
+                }
+              }
+            })
+            .catch(function (error) {
+                Vue.config.errorHandler(error, self);
+            })
+            .then(function () {
+                self.$store.dispatch("hideProgress");
+            });
+      },
       async queueExport(){
         var self = this;
         var validationResult = await this.$validator.validateAll();
         if (validationResult)
         {
-            const dataFormatNum = {  
-              Tabular: 1,
-              STATA: 2,
-              SPSS: 3,
-              Binary: 4,
-              DDI: 5,
-              Paradata: 6
-            }
-
-            const exportParams = {
-              id: self.questionnaireId.key,
-              version: self.questionnaireVersion.key,
-              format: 1, //self.dataFormat, 
-              status: null //, self.status
-            };
+            const exportParams = self.getExportParams(
+              self.questionnaireId.key,
+              self.questionnaireVersion.key,
+              self.dataType,
+              self.dataFormat,
+              self.dataDestination,
+              (self.status || { value: null}).value
+            );
 
             self.$store.dispatch("showProgress");
 
@@ -278,7 +321,10 @@ export default {
                 .then(function (response) {
                     self.$validator.reset();
                     self.exportFormIsVisible = false;
-                    exportResults.push(response.data);
+                    const jobId = (response.data || { JobId: 0 }).JobId;
+                    self.exportResults.splice(0, 0,{ 
+                      id: jobId
+                    });
                 })
                 .catch(function (error) {
                     Vue.config.errorHandler(error, self);
@@ -292,6 +338,31 @@ export default {
             $firstFieldWithError.focus();
         }        
       },
+      getExportParams(questionnaireId, questionnaireVersion, dataType, dataFormat, dataDestination, status){
+        const dataFormatNum = {  
+          Tabular: 1,
+          Stata: 2,
+          Spss: 3,
+          Binary: 4,
+          Ddi: 5,
+          Paradata: 6
+        }
+        var result = dataFormatNum.Tabular;
+        switch(dataType)
+        {
+          case "surveyData": result = dataFormatNum[dataFormat]; break;
+          case "binaryData": result = dataFormatNum.Binary; break;
+          case "ddiData": result = dataFormatNum.Ddi; break;
+          case "paraData":  result = dataFormatNum.Paradata; break;
+        }
+
+        return {
+              id: questionnaireId,
+              version: questionnaireVersion,
+              format: dataFormat, 
+              status: status
+            };
+      },
         statusSelected(newValue) {
             this.status = newValue;
         },
@@ -300,6 +371,27 @@ export default {
         },
         questionnaireVersionSelected(newValue) {
             this.questionnaireVersion = newValue;
+            if (this.questionnaireVersion)
+              this.updateDataAvalability();
+        },
+        updateDataAvalability(){
+          this.isUpdatingDataAvailability = true;
+          
+          this.$http.get(this.$config.model.api.dataAvailabilityUrl, { params: {
+            id: this.questionnaireId.key,
+            version: this.questionnaireVersion.key
+          } })
+            .then((response) => {
+              this.hasInterviews = response.data.hasInterviews;
+              this.hasBinaryData = response.data.hasBinaryData;
+              this.dataType = this.hasInterviews ? "surveyData" : "ddi";
+            })
+            .catch((error) => {
+                Vue.config.errorHandler(error, self);
+            })
+            .then(() => {
+                this.isUpdatingDataAvailability = false;
+            });
         }
     },
     components: {ExportProcessCard}

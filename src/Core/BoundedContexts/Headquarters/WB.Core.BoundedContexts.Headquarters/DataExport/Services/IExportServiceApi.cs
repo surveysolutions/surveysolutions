@@ -12,7 +12,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
     public interface IExportServiceApi
     {
         [Put("/api/v1/job/generate")]
-        Task RequestUpdate(
+        Task<DataExportUpdateRequestResult> RequestUpdate(
             string questionnaireId,
             DataExportFormat format,
             InterviewStatus? status,

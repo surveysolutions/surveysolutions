@@ -10680,6 +10680,11 @@ vue-textarea-autosize@^1.0.4:
   resolved "https://registry.yarnpkg.com/vue-textarea-autosize/-/vue-textarea-autosize-1.0.4.tgz#671e4f9b69d278be9b94ea304a3032bcabb54135"
   integrity sha512-24ivBeHvivkJdtUMSi7Pv8OBqzTnIRr/eTlDlbg0W3umpERY8Fq67FlAK3CrhCNHAlXOxgUOQtVKlslYN1/MTg==
 
+vue-timers@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/vue-timers/-/vue-timers-2.0.2.tgz#0a4f0900a6fa907e518d2fed1678dece2e8e2430"
+  integrity sha512-R5B2iQZwRqOPNKU5pobJHSqkNFTSik2pRVgD9/Ki2OrFAOiEmD/MqJ82WH+bxk9tcmqoQCs4Ha3MrZG4f58IKg==
+
 vue2-editor@^2.6.6:
   version "2.6.6"
   resolved "https://registry.yarnpkg.com/vue2-editor/-/vue2-editor-2.6.6.tgz#567f7c2aabdd10d465756da7aebf568ee34ebbc5"
