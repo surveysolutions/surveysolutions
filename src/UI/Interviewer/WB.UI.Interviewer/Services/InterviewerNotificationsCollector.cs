@@ -16,11 +16,15 @@ namespace WB.UI.Interviewer.Services
     {
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IEnumeratorSettings enumeratorSettings;
+        private readonly IAssignmentDocumentsStorage assignmentsRepository;
+
         public InterviewerNotificationsCollector(IPlainStorage<InterviewView> interviewViewRepository,
+            IAssignmentDocumentsStorage assignmentsRepository,
             IEnumeratorSettings enumeratorSettings)
         {
             this.interviewViewRepository = interviewViewRepository;
             this.enumeratorSettings = enumeratorSettings;
+            this.assignmentsRepository = assignmentsRepository;
         }
 
         public List<NotificationModel> CollectAllNotifications()
@@ -157,7 +161,16 @@ namespace WB.UI.Interviewer.Services
                 });
             }
 
-            //var fiveDaysBeforeNow = DateTime.Now.Date.AddHours(-24 * 5);
+            var threeDaysBeforeNow = DateTime.Now.Date.AddHours(-24 * 3);
+
+            var untouchedAssignmentsCount = this.assignmentsRepository.Count(x => x.LastUpdated != null && x.LastUpdated < threeDaysBeforeNow);
+            if (untouchedAssignmentsCount > 0)
+            {
+                notifications.Add(new SimpleNotification()
+                {
+                    ContentText = InterviewerUIResources.Notifications_StaleAssignments
+                });
+            }
 
             return notifications;
         }

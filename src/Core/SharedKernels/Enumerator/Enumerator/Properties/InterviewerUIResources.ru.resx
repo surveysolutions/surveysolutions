@@ -902,4 +902,8 @@
   <data name="Notifications_ManyCompletedInterviews" xml:space="preserve">
     <value>Много готовых интервь. Синхронизируйтесь.</value>
   </data>
+  <data name="Notifications_StaleAssignments" xml:space="preserve">
+    <value>Есть назначения, которые не обрабатывались последние 3 дня</value>
+  </data>
+
 </root>
