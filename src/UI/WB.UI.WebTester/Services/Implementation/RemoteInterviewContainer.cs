@@ -259,33 +259,18 @@ namespace WB.UI.WebTester.Services.Implementation
             {
                 if (state == State.Teardown) throw new InterviewException("Interview deleted", InterviewDomainExceptionType.InterviewHardDeleted);
 
-                var invokeResult = RemoteFunc.Invoke(context.Domain, new object(), jsonArg =>
-                {
-                    try
-                    {
-                        
-                        var interview = CurrentInterview.Instance;
-                        return interview.Version.ToString();
-                    }
-                    catch
-                    {
-                        return "[]";
-                    }
-                });
+                var invokeResult = RemoteFunc.Invoke(context.Domain, () => CurrentInterview.Instance.Version);
 
-                return int.Parse(invokeResult);
+                return invokeResult;
             }
         }
-
 
         public void Flush()
         {
             lock (this.context)
             {
                 RemoteAction.Invoke(context.Domain, () => CurrentInterview.Instance = null);
-            }
-
-            
+            }            
         }
     }
 }
