@@ -123,7 +123,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaire(responsibleId: newOwnerId);
 
             // act
-            TestDelegate act = () => questionnaire.PassOwnership(ownerId, newOwnerId, string.Empty, string.Empty);
+            TestDelegate act = () => questionnaire.TransferOwnership(ownerId, newOwnerId, string.Empty, string.Empty);
 
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);
@@ -141,7 +141,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddSharedPerson(newOwnerId, "some@email", ShareType.Edit, ownerId);
 
             // act
-            TestDelegate act = () => questionnaire.PassOwnership(newOwnerId, ownerId, string.Empty, string.Empty);
+            TestDelegate act = () => questionnaire.TransferOwnership(newOwnerId, ownerId, string.Empty, string.Empty);
 
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);
@@ -157,7 +157,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaire(responsibleId: ownerId);
             
             // act
-            TestDelegate act = () => questionnaire.PassOwnership(ownerId, newOwnerId, string.Empty, string.Empty);
+            TestDelegate act = () => questionnaire.TransferOwnership(ownerId, newOwnerId, string.Empty, string.Empty);
 
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);
@@ -174,7 +174,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddSharedPerson(newOwnerId, "newly@email", ShareType.Edit, ownerId);
 
             // act
-            questionnaire.PassOwnership(ownerId, newOwnerId, "oldy@email", "newly@email");
+            questionnaire.TransferOwnership(ownerId, newOwnerId, "oldy@email", "newly@email");
 
             // assert            
             Assert.That(questionnaire.QuestionnaireDocument.CreatedBy, Is.EqualTo(newOwnerId),
