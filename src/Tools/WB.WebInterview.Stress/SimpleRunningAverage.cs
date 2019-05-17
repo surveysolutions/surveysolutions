@@ -1,0 +1,47 @@
+﻿using System;
+
+namespace WB.WebInterview.Stress
+{
+    public class SimpleRunningAverage
+    {
+        readonly int size;
+        readonly double[] values;
+        readonly object locker = new object();
+
+        int valuesIndex;
+        int valueCount;
+        double sum;
+
+        public SimpleRunningAverage(int size)
+        {
+            this.size = Math.Max(size, 1);
+            values = new double[this.size];
+            valuesIndex = 0;
+            valueCount = 0;
+            sum = 0;
+        }
+
+        public double Average { get; private set; }
+
+        public double Add(double newValue)
+        {
+            lock (locker)
+            {
+                // calculate new value to add to sum by subtracting the 
+                // value that is replaced from the new value; 
+                var temp = newValue - values[valuesIndex];
+                values[valuesIndex] = newValue;
+                sum += temp;
+
+                valuesIndex++;
+                valuesIndex %= size;
+
+                if (valueCount < size)
+                    valueCount++;
+
+                Average = sum / valueCount;
+                return Average;
+            }
+        }
+    }
+}
