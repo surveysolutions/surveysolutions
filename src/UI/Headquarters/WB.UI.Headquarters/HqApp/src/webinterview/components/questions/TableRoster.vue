@@ -82,30 +82,18 @@
                 var columnsFromQuestions = _.map(
                     this.$me.questions,
                     (question, key) => {
-                        var columnType = null;
-                        switch (question.type) {
-                            case 'Text': columnType = 'text'; break;
-                            case 'Numeric': columnType = 'numeric'; break;
-                            default: columnType = 'text'; break;
-                        }
                         return {
                             headerName: question.title, 
                             field: question.id, 
-                            cellClass: self.questionStyle,
                             cellRendererFramework: 'TableRoster_ViewAnswer',
                             cellRendererParams: {
                                 id: question.id,
-                                questionInfo: question,
-                                store: self.$store
                             },
-                            cellEditorFramework: 'TableRoster_QuestionEditor', //'TableRoster_Text',
+                            cellEditorFramework: 'TableRoster_QuestionEditor', 
                             cellEditorParams: {
                                 id: question.id,
                                 value: question,
-                                question: question,
-                                store: self.$store
                             },
-                            //cellEditor: ParamsComponent // columnType
                         };
                     }
                 );
@@ -123,13 +111,10 @@
                             rosterVector: instance.rosterVector,
                             rosterTitle: instance.rosterTitle, 
                         };
-                        var entityDetails = self.$store.state.webinterview.entityDetails;
                         self.$me.questions.forEach(question => {
                             var questionIdentity = question.id + instance.rosterVector
-                            //instanceAsRow[question.id] = entityDetails[questionIdentity];
                             instanceAsRow[question.id] = {
                                 identity : questionIdentity,
-                                question : entityDetails[questionIdentity],
                                 type     : question.entityType
                             }
                         });
@@ -162,24 +147,6 @@
                 if(this.$store && this.$store.state.route.hash === "#" + this.id) {
                     this.doScroll(); 
                 }
-            },
-
-            questionStyle(params) {
-                /*var question = params.value
-
-                if (question.isDisabled) {
-                    return 'disabled-question';
-                }
-                if (!question.validity.isValid) {
-                    return 'has-error';
-                }
-                if (question.validity.warnings && question.validity.warnings.length > 0) {
-                    return 'has-warnings';
-                }
-                if (question.isLocked) {
-                    return 'not-applicable';
-                }*/
-                return '';
             },
 
             endCellEditting(event) {

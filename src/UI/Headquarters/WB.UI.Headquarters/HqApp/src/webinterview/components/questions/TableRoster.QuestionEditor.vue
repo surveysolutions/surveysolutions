@@ -21,13 +21,18 @@
                 question: null
             }
         }, 
+        computed: {
+            $me() {
+                return this.$store.state.webinterview.entityDetails[this.question.identity] 
+            }
+        },
         methods: {
             getValue() {
                 return this.question;
             },
             isCancelBeforeStart() {
-                //if (this.$refs.editQuestionComponent.isCancelBeforeStart)
-                //    return this.$refs.editQuestionComponent.isCancelBeforeStart()
+                if (this.$me.isDisabled || this.$me.isLocked || !this.$me.acceptAnswer)
+                    return true
                 return false
             },
             isCancelAfterEnd() {
