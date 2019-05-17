@@ -1771,7 +1771,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.sharedPersons.RemoveAll(sp => sp.UserId == personId);
         }
 
-        public void PassOwnership(Guid ownerId, Guid newOwnerId, string ownerEmail, string newOwnerEmail)
+        public void TransferOwnership(Guid ownerId, Guid newOwnerId, string ownerEmail, string newOwnerEmail)
         {
             this.ThrowDomainExceptionIfViewerIsNotOwnerOfQuestionnaire(ownerId);
 

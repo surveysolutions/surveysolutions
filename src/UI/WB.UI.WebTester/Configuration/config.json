@@ -3,5 +3,5 @@
   "DesignerAddress": "https://localhost:5001",
   "GoogleMapApiKey": "AIzaSyCCjRxNDmcjr8iVl9g-FNIAYqOrTGnqsEA",
   "Metrics.Gateway": "http://localhost:9091/metrics",
-  "Cache.Expiration" : 10 
+  "Cache.Expiration": 10
 }

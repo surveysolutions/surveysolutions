@@ -245,7 +245,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireListViewItem.SharedPersons.Single(), Has.Property(nameof(SharedPerson.ShareType)).EqualTo(ShareType.Edit));
 
             mockOfEmailNotifier.Verify(
-                x => x.NotifyTargetPersonAboutShareChange(ShareChangeType.PassOwnership, command.NewOwnerEmail, It.IsAny<string>(),
+                x => x.NotifyTargetPersonAboutShareChange(ShareChangeType.TransferOwnership, command.NewOwnerEmail, It.IsAny<string>(),
                     questionnaireIdFormatted, listViewItem.Title, ShareType.Edit, It.IsAny<string>()), Times.Once);
 
             mockOfEmailNotifier.Verify(

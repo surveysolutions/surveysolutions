@@ -26,18 +26,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             protected set => this.RaiseAndSetIfChanged( ref this.itemsCount, value);
         }
 
-        public Task UpdateUiItemsAsync() => Task.Run(() =>
+        public Task UpdateUiItemsAsync() => Task.Run(async () =>
         {
             this.IsItemsLoaded = false;
 
             try
             {
                 var newItems = this.GetUiItems();
-                lock (this.UiItems)
+
+                await this.InvokeOnMainThreadAsync(() =>
                 {
                     this.UiItems.ToList().ForEach(uiItem => uiItem.DisposeIfDisposable());
                     this.UiItems.ReplaceWith(newItems);
-                }
+
+                }, false);
             }
             finally
             {
