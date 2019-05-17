@@ -855,6 +855,7 @@ table.dataTable.fixedHeader-locked {
             .ag-cell{
                 background-color: transparent;
                 border-right-color: rgba(0, 0, 0, 0.3);
+                padding: 11px 15px;
             }
         }
         // .ag-row-hover{
@@ -867,18 +868,84 @@ table.dataTable.fixedHeader-locked {
             
 
         // }
+
+        // .ag-center-cols-viewport{
+        //     overflow: visible;
+        // }
         .ag-cell{
-            padding: 11px 15px;
-            background: #FFFFFF;
+            white-space: normal !important;
+            & > .ag-input-text-wrapper{
+                width: 100%;
+                .ag-cell-edit-input{
+                    padding: 9px 15px;
+                }
+                
+            }
             border: 1px solid #E5E5E5;
             display: flex;
             align-items: center;
             &.ag-cell-focus{
-                border-color: #000 !important;
+                border-color: rgba(0, 0, 0, 0.75) !important;
             }
-            // &.ag-column-hover{
-            //     box-shadow: inset 300px 0 rgba(236, 240, 241, 0.5);
-            // }
+            &.ag-cell-inline-editing{
+                .ag-input-text-wrapper{
+                    width: 100%;
+                }
+                padding: 0;  
+                
+            }
+            input.ag-cell-edit-input{
+                padding: 10px 15px;
+            }
+            .hasDatepicker{
+                width: 100%;
+                height: 100%;
+                padding: 10px 15px;
+            }
+            select.ag-cell-edit-input{
+                padding: 0 10px;
+                option{
+                    padding: 15px 0;
+                    display: block;
+                }
+            }
+            .ag-cell-edit-input{
+
+                outline: none;   
+                box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), inset 0 0 4px rgba(102, 175, 233, 0.6);    
+            }
+        }
+        .cell-unit{
+            width: 100%;
+            height: 100%;
+            background: #FFFFFF; 
+            .cell-content{
+                display: block;
+                width: 100%;
+                height: 100%;
+                padding: 10px 15px;
+                text-decoration: none;
+                color: inherit;
+            }
+            .popover{
+                width: 100%;
+            }
+            &.syncing{
+                .progress{
+                    visibility: visible;
+                }
+            }
+            .progress{
+                visibility: hidden;
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                margin: 0;
+                border-radius: 0;
+                height: 3px;
+                background: transparent;
+            }
             &.not-applicable{
                 background-color: transparent;
                 background-image: linear-gradient(-45deg, #dbdfe2 15%, transparent 15%, transparent 50%, #dbdfe2 50%, #dbdfe2 65%, transparent 65%, transparent);
@@ -899,17 +966,11 @@ table.dataTable.fixedHeader-locked {
                 background-position: 0 0;
                 background-color: rgba(240, 173, 0, 0.4);
                 border-color: #F0AD00;
-                .ag-cell-edit-input{
-                    box-shadow: inset 6px 6px 10px rgba(240, 173, 0, 0.4), inset -6px -6px 10px rgba(240, 173, 0, 0.4); 
-                    background-image: none;     
-                }
+                
             }
             &.for-supervisor{
                 background-color: #C1D9EB;
                 border-color: #adc3d3;
-                .ag-cell-edit-input{
-                    box-shadow: inset 6px 6px 10px #C1D9EB, inset -6px -6px 10px #C1D9EB;    
-                }
             }
             &.has-error{
                 background-image: url('../img/error2.svg');
@@ -917,60 +978,28 @@ table.dataTable.fixedHeader-locked {
                 background-position: 0 0;
                 background-color: rgba(255, 46, 0, 0.2);
                 border-color: #FF2E00;
-                .ag-cell-edit-input{
-                    box-shadow: inset 6px 6px 10px #f6d6d0, inset -6px -6px 10px #f6d6d0;
-                    background-image: none;  
-                }
-            }
-            &.ag-cell-inline-editing{
-                .ag-input-text-wrapper{
-                    width: 100%;
-                }
-                padding: 0;  
                 
             }
-            input.ag-cell-edit-input{
-                padding: 11px 15px;
-            }
-            .hasDatepicker{
-                width: 100%;
-                height: 100%;
-                padding: 11px 15px;
-            }
-            select.ag-cell-edit-input{
-                padding: 0 10px;
-                option{
-                    padding: 15px 0;
-                    display: block;
-                }
-            }
-            .ag-cell-edit-input{
 
-                outline: none;   
-                box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), inset 0 0 8px rgba(102, 175, 233, 0.6);    
-            }
         }
-        .custom-tooltip {
-            position: absolute;
-            width: 150px;
-            height: 70px;
-            border: 1px solid cornflowerblue;
-            overflow: hidden;
-            pointer-events: none;
-            transition: opacity 1s;
+    }
+    .cell-wrap-text {
+        white-space: normal !important;
+    }
+}
+.error-tooltip{
+    &.popover{
+        color: #FF2E00;
+        .popover-title{
+            color: darken($color: #FF2E00, $amount: 20%);
         }
-        
-        .custom-tooltip.ag-tooltip-hiding {
-            opacity: 0;
-        }
-        
-        .custom-tooltip p {
-            margin: 5px;
-            white-space: nowrap;
-        }
-        
-        .custom-tooltip p:first-of-type {
-            font-weight: bold;
+    }
+}
+.warning-tooltip{
+    &.popover{
+        color: rgb(202, 145, 1);
+        .popover-title{
+            color: darken($color: #F0AD00, $amount: 20%);
         }
     }
 }
