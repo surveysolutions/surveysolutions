@@ -77,7 +77,7 @@ namespace WB.UI.Headquarters
         {
             Target.Register<SlackFatalNotificationsTarget>("slack");
             
-            EnsureJsonStorageForErrorsExists();
+            ConfigureExceptionalStore();
             app.Use(RemoveServerNameFromHeaders);
 
             var autofacKernel = AutofacConfig.CreateKernel();
@@ -328,9 +328,14 @@ namespace WB.UI.Headquarters
         {
         }
 
-        private void EnsureJsonStorageForErrorsExists()
+        private void ConfigureExceptionalStore()
         {
-            if (StackExchange.Exceptional.Exceptional.Settings.DefaultStore is JSONErrorStore exceptionalConfig)
+            if (Exceptional.Settings.DefaultStore is PostgreSqlErrorStore postgresStore)
+            {
+                postgresStore.Settings.TableName = @"""logs"".""Errors""";
+            }
+
+            if (Exceptional.Settings.DefaultStore is JSONErrorStore exceptionalConfig)
             {
                 var jsonStorePath = exceptionalConfig.Settings.Path;
                 var jsonStorePathAbsolute = HostingEnvironment.MapPath(jsonStorePath);
