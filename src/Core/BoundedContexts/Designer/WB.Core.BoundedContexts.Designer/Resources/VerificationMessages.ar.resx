@@ -156,9 +156,6 @@
   <data name="WB0015_QuestionWithTitleSubstitutionCantBePrefilled" xml:space="preserve">
     <value>السؤال الذي يحمل عنوان الاستبدال لا يمكن التأشير عليه بمعرف</value>
   </data>
-  <data name="WB0016_QuestionWithTitleSubstitutionCantReferenceSelf" xml:space="preserve">
-    <value>السؤال الذي يحمل عنوان الاستبدال لا يمكن ان يشير الى نفسه</value>
-  </data>
   <data name="WB0017_SubstitutionReferencesNotExistingQuestionOrVariable" xml:space="preserve">
     <value>الاستبدال الذي يشير الى سؤال او متغير غير موجود</value>
   </data>

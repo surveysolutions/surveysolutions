@@ -162,9 +162,6 @@
   <data name="WB0015_QuestionWithTitleSubstitutionCantBePrefilled" xml:space="preserve">
     <value>La pregunta con el reemplazo del titulo no puede ser marcada como identificador</value>
   </data>
-  <data name="WB0016_QuestionWithTitleSubstitutionCantReferenceSelf" xml:space="preserve">
-    <value>La pregunta con el título de sustitución no hacer referencia a si misma</value>
-  </data>
   <data name="WB0017_SubstitutionReferencesNotExistingQuestionOrVariable" xml:space="preserve">
     <value>Reemplazo hace referencia a una pregunta o variable inexistente</value>
   </data>
