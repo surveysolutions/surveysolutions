@@ -1,6 +1,4 @@
 <template>
-    <!--input :ref="'input'" @keydown="onKeyDown($event)" v-model="value"/-->
-
     <input type="text" autocomplete="off" inputmode="numeric" class="ag-cell-edit-input" 
         ref="inputDouble"
         :placeholder="noAnswerWatermark" 
