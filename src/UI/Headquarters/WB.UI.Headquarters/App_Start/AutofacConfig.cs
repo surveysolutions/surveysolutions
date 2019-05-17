@@ -29,6 +29,7 @@ using WB.Infrastructure.Native.Files;
 using WB.Infrastructure.Native.Logging;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Persistence.Headquarters.Migrations.Events;
+using WB.Persistence.Headquarters.Migrations.Logs;
 using WB.Persistence.Headquarters.Migrations.PlainStore;
 using WB.Persistence.Headquarters.Migrations.ReadSide;
 using WB.Persistence.Headquarters.Migrations.Users;
@@ -94,7 +95,8 @@ namespace WB.UI.Headquarters
                     typeof(ProductVersionModule).Assembly,
                 },
                 PlainStoreUpgradeSettings = new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_Init).Namespace),
-                ReadSideUpgradeSettings = new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_InitDb).Namespace)
+                ReadSideUpgradeSettings = new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_InitDb).Namespace),
+                LogsUpgradeSettings = new DbUpgradeSettings(typeof(M201905171139_AddErrorsTable).Assembly, typeof(M201905171139_AddErrorsTable).Namespace)
             };
             
             var eventStoreSettings = new PostgreConnectionSettings
