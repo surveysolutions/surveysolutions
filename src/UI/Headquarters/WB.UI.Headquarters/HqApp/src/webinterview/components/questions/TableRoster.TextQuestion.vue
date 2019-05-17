@@ -1,5 +1,22 @@
 <template>
-    <input :ref="'input'" class="ag-cell-edit-input" type="text" :value="$me.answer" v-blurOnEnterKey />
+    <input v-if="hasMask"
+        ref="inputWithMask"
+        autocomplete="off"
+        type="text"
+        class="ag-cell-edit-input"
+        :placeholder="noAnswerWatermark"
+        :value="$me.answer"
+        :disabled="!$me.acceptAnswer"
+        v-mask="$me.mask"
+        :data-mask-completed="$me.isAnswered" />
+    <input v-else ref="inputWithoutMask"
+        autocomplete="off"
+        type="text"
+        :maxlength="$me.maxLength"
+        class="ag-cell-edit-input"
+        :placeholder="noAnswerWatermark"
+        :value="$me.answer"
+        :disabled="!$me.acceptAnswer" />
 </template>
 
 <script lang="js">
@@ -15,37 +32,77 @@
                 
             }
         }, 
+        computed: {
+            hasMask(){
+                return this.$me.mask!=null;
+            },
+            noAnswerWatermark() {
+                return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') : 
+                    this.$t('WebInterviewUI.TextEnterMasked', {userFriendlyMask: this.userFriendlyMask})
+            },
+            userFriendlyMask() {
+                if (this.$me.mask) {
+                    const resultMask = this.$me.mask.replace(/\*/g, "_").replace(/\#/g, "_").replace(/\~/g, "_")
+                    return ` (${resultMask})`
+                }
+
+                return ""
+            }
+        },
         methods: {
-            getValue() {
-                return this.$me;
-            },
-            isCancelAfterEnd() {
-                this.answerTextQuestion();
-            },
             saveAnswer() {
                 this.answerTextQuestion()
             },
             answerTextQuestion() {
-                const target = $(this.$refs.input)
-                const answer = target.val()
+                this.sendAnswer(() => {
+                    const target = $(this.$refs.inputWithMask || this.$refs.inputWithoutMask)
+                    const answer = target.val()
 
-                if(this.handleEmptyAnswer(answer)) {
-                    return
-                }
+                    if(this.handleEmptyAnswer(answer)) {
+                        return
+                    }
 
-                if (this.$me.mask && !target.data("maskCompleted")) {
-                    this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.TextRequired"))
-                }
-                else {
-                    this.$store.dispatch('answerTextQuestion', { identity: this.id, text: answer })
+                    if (this.$me.mask && !target.data("maskCompleted")) {
+                        this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.TextRequired"))
+                    }
+                    else {
+                        this.$store.dispatch('answerTextQuestion', { identity: this.id, text: answer })
+                    }
+                })
+            }
+        },
+        directives: {
+            mask: {
+                bind(el, binding) {
+                    if (binding.value) {
+                        const input = $(el)
+                        input.mask(binding.value, {
+                            onChange: function () {
+                                input.data("maskCompleted", false);
+                            },
+                            onComplete: function () {
+                                input.data("maskCompleted", true);
+                            },
+                            translation: {
+                                "0": { pattern: /0/, fallback: "0" },
+                                "~": { pattern: /[a-zA-Z]/ },
+                                "#": { pattern: /\d/ },
+                                "*": { pattern: /[a-zA-Z0-9]/ },
+                                "9": { pattern: /9/, fallback: "9" },
+                                'A': { pattern: /A/, fallback: "A" },
+                                'S': { pattern: /S/, fallback: "S" }
+                            }
+                        })
+                    }
                 }
             }
         },
         mounted() {
             Vue.nextTick(() => {
-                if (this.$refs.input) {
-                    this.$refs.input.focus();
-                    this.$refs.input.select();
+                const input = $(this.$refs.inputWithMask || this.$refs.inputWithoutMask)
+                if (input) {
+                    input.focus();
+                    input.select();
                 }
             });
         }
