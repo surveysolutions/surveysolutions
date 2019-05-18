@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewTree BuildInterviewTree(Guid interviewId, IQuestionnaire questionnaire)
         {
             var tree = new InterviewTree(interviewId, questionnaire, this.substitutionTextFactory);
-            var sections = this.BuildInterviewTreeSections(tree, questionnaire, this.substitutionTextFactory).ToArray();
+            var sections = this.BuildInterviewTreeSections(tree, questionnaire, this.substitutionTextFactory);
 
             tree.SetSections(sections);
             return tree;
