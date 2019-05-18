@@ -32,8 +32,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
 
         public static StatusChangeHistoryDenormalizerFunctional CreateStatusChangeHistoryDenormalizerFunctional()
         {
-            var defaultUserView = Create.Entity.UserView(supervisorId: Guid.NewGuid());
-            var userViewFactory = Mock.Of<IUserViewFactory>(_ => _.GetUser(Moq.It.IsAny<UserViewInputModel>()) == defaultUserView);
+            var defaultUserView = Create.Entity.UserViewLite(supervisorId: Guid.NewGuid());
+            var userViewFactory = Mock.Of<IUserViewFactory>(_ => _.GetUser(Moq.It.IsAny<Guid>()) == defaultUserView);
             return new StatusChangeHistoryDenormalizerFunctional(userViewFactory);
         }
     }

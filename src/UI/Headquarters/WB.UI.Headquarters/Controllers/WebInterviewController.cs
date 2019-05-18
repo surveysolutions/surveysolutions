@@ -542,10 +542,8 @@ namespace WB.UI.Headquarters.Controllers
             if (!webInterviewConfig.Started)
                 throw new InvalidOperationException(@"Web interview is not started for this questionnaire");
 
-            var interviewer = this.usersRepository.GetUser(new UserViewInputModel(assignment.ResponsibleId));
-            //if (!interviewer.IsInterviewer())
-            //    throw new InvalidOperationException($"Assignment {assignment.Id} has responsible that is not an interviewer. Interview cannot be created");
-
+            var interviewer = this.usersRepository.GetUser(assignment.ResponsibleId);
+            
             var interviewId = Guid.NewGuid();
 
             var createInterviewCommand = new CreateInterview(

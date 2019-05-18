@@ -111,7 +111,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             int? assignmentId,
             DateTime? creationTime)
         {
-            var responsible = this.users.GetUser(new UserViewInputModel(userId));
+            var responsible = this.users.GetUser(userId);
             var questionnaire = this.GetQuestionnaire(questionnaireId, questionnaireVersion);
 
             var interviewSummary = new InterviewSummary(questionnaire)
@@ -194,7 +194,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
             {
-                var user = this.users.GetUser(new UserViewInputModel(@event.Payload.SupervisorId));
+                var user = this.users.GetUser(@event.Payload.SupervisorId);
                 var supervisorName = user != null ? user.UserName : "<UNKNOWN SUPERVISOR>";
 
                 interview.ResponsibleId = @event.Payload.SupervisorId;
@@ -335,7 +335,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                             }
                         }
                     }
-                    var responsible = this.users.GetUser(new UserViewInputModel(state.ResponsibleId));
+                    var responsible = this.users.GetUser(state.ResponsibleId);
                     if (responsible?.Supervisor != null)
                     {
                         state.TeamLeadId = responsible.Supervisor.Id;
@@ -405,7 +405,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         private string GetResponsibleIdName(Guid responsibleId)
         {
-            var responsible = this.users.GetUser(new UserViewInputModel(responsibleId));
+            var responsible = this.users.GetUser(responsibleId);
             return responsible != null ? responsible.UserName : "<UNKNOWN RESPONSIBLE>";
         }
 
