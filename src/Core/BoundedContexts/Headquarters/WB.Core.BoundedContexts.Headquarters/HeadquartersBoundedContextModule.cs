@@ -1,5 +1,6 @@
 ﻿using Ncqrs.Eventing.Storage;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
@@ -193,7 +194,9 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAllUsersAndQuestionnairesFactory, AllUsersAndQuestionnairesFactory>();
             registry.Bind<IQuestionnairePreloadingDataViewFactory, QuestionnairePreloadingDataViewFactory>();
             registry.Bind<ITeamViewFactory, TeamViewFactory>();
-            registry.BindToMethod<IUserViewFactory>(context => new UserViewFactory(context.Resolve<IUserRepository>()));
+            registry.BindToMethod<IUserViewFactory>(context => 
+                new UserViewFactory(context.Resolve<IUserRepository>(), context.Resolve<IMemoryCache>()));
+
             registry.Bind<ITeamUsersAndQuestionnairesFactory, TeamUsersAndQuestionnairesFactory>();
             registry.Bind<IInterviewFactory, InterviewFactory>();
             registry.Bind<IInterviewSummaryViewFactory, InterviewSummaryViewFactory>();
@@ -308,6 +311,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.BindAsSingleton<ITokenGenerator,TokenGenerator>();
             registry.Bind<IInvitationMailingService, InvitationMailingService>();
             registry.Bind<IInvitationsDeletionService, InvitationsDeletionService>();
+
+            registry.BindAsSingleton<IMemoryCache, MemoryCache>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)

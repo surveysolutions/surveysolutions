@@ -16,8 +16,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.SpeedReport
             IReadSideRepositoryWriter<InterviewSummary> interviewStatuses,
             IReadSideRepositoryWriter<SpeedReportInterviewItem> speedReportItems)
         {
-            var defaultUserView = Create.Entity.UserView(supervisorId: Guid.NewGuid());
-            var userViewFactory = Mock.Of<IUserViewFactory>(_ => _.GetUser(Moq.It.IsAny<UserViewInputModel>()) == defaultUserView);
+            var defaultUserView = Create.Entity.UserViewLite(supervisorId: Guid.NewGuid());
+            var userViewFactory = Mock.Of<IUserViewFactory>(_ => _.GetUser(Moq.It.IsAny<Guid>()) == defaultUserView);
             var questionnaireDocument = Create.Entity.QuestionnaireDocument();
             var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), It.IsAny<long>()) == questionnaireDocument);
             return new InterviewSummaryCompositeDenormalizer(
