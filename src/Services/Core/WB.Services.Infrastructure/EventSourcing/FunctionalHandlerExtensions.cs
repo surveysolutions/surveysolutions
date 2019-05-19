@@ -40,7 +40,7 @@ namespace WB.Services.Infrastructure.EventSourcing
                         where errs.Count() > 1
                         select errs.Key;
 
-                    var message =$"{handler.GetType().Name} handler register same interview event with async and sync handlers:";
+                    var message =$"{h.Name} handler register same interview event with async and sync handlers:";
                     foreach (var error in errors)
                     {
                         message += $"\r\n - '{error.Name}'";
