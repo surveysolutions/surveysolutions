@@ -1853,5 +1853,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             var entity = this.GetEntityOrThrow(id);
             return entity.VariableName;
         }
+
+        readonly ConcurrentDictionary<string, string> markdownTransformationCache = new ConcurrentDictionary<string, string>();
+
+        public string ApplyMarkDownTransformation(string text) => 
+            markdownTransformationCache.GetOrAdd(text, QuestionnaireMarkdown.ToHtml);
     }
 }

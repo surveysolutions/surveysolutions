@@ -220,22 +220,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void SetTitle(SubstitutionText title) 
         {
             this.Title = title;
-            this.Title.SetTree(this.Tree);
         }
         public void SetInstructions(SubstitutionText instructions)
         {
             this.Instructions = instructions;
-            this.Instructions.SetTree(this.Tree);
         }
 
         public void SetValidationMessages(SubstitutionText[] validationMessages)
         {
             this.ValidationMessages = validationMessages ?? throw new ArgumentNullException(nameof(validationMessages));
-
-            foreach (var validationMessage in validationMessages)
-            {
-                validationMessage.SetTree(this.Tree);
-            }
         }
 
         public void MarkInvalid(IEnumerable<FailedValidationCondition> failedValidations)
@@ -770,22 +763,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void ReplaceSubstitutions()
         {
-            this.Title.ReplaceSubstitutions();
-            this.Instructions.ReplaceSubstitutions();
-            foreach (var messagesWithSubstition in this.ValidationMessages)
-            {
-                messagesWithSubstition.ReplaceSubstitutions();
-            }
-        }
+            this.Title.ReplaceSubstitutions(Tree);
+            this.Instructions.ReplaceSubstitutions(Tree);
 
-        public override void SetTree(InterviewTree tree)
-        {
-            base.SetTree(tree);
-            this.Title?.SetTree(tree);
-            this.Instructions?.SetTree(tree);
             foreach (var messagesWithSubstition in this.ValidationMessages)
             {
-                messagesWithSubstition.SetTree(tree);
+                messagesWithSubstition.ReplaceSubstitutions(Tree);
             }
         }
 
