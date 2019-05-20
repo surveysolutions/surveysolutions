@@ -2,7 +2,7 @@
 {
     public enum RosterDisplayMode
     {
-        Default = 0,
+        SubSection = 0,
         Flat = 1,
         Table = 2,
     }

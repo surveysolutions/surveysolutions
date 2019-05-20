@@ -1010,12 +1010,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public bool IsFlatRoster(Guid entityId)
         {
-            return (this.GetGroup(entityId)?.DisplayMode ?? RosterDisplayMode.Default) == RosterDisplayMode.Flat;
+            return (this.GetGroup(entityId)?.DisplayMode ?? RosterDisplayMode.SubSection) == RosterDisplayMode.Flat;
         }
 
         public bool IsTableRoster(Guid entityId)
         {
-            return (this.GetGroup(entityId)?.DisplayMode ?? RosterDisplayMode.Default) == RosterDisplayMode.Table;
+            return (this.GetGroup(entityId)?.DisplayMode ?? RosterDisplayMode.SubSection) == RosterDisplayMode.Table;
         }
 
         public bool ShowCascadingAsList(Guid questionId)
