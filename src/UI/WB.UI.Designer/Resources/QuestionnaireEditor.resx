@@ -854,9 +854,9 @@
     <value>By default, a disabled item is greyed-out. Checking this option will hide a disabled question or section on a tablet.</value>
   </data>
   <data name="HelpRosterDisplayMode" xml:space="preserve">
-    <value>Default - the questions of the roster are shown behind the buttons corresponding to roster instances.
+    <value>Sub-Section - the questions of the roster are shown behind the buttons corresponding to roster instances.
 Flat - the questions of the roster are shown in the same level separated by headers corresponding to roster instances.
-Table - the questions of the roster are shown in the same level as rows and columns of the table. Support only Web survey, on tabled will be 'Default' mode.</value>
+Table - the questions of the roster are shown in the same level as rows and columns of the table. Support only Web survey, on tabled will be 'Sub-Section' mode.</value>
   </data>
   <data name="HelpHideInstructions" xml:space="preserve">
     <value>By default, an instruction text is shown on a tablet. Checking this option will show only the first line of instructions. Tapping on that line will show the complete text.</value>
@@ -1242,8 +1242,8 @@ Table - the questions of the roster are shown in the same level as rows and colu
   <data name="QuestionShowListLimit" xml:space="preserve">
     <value>If not more than</value>
   </data>
-  <data name="RosterDisplayMode_Default" xml:space="preserve">
-    <value>Default</value>
+  <data name="RosterDisplayMode_SubSection" xml:space="preserve">
+    <value>Sub-Section</value>
   </data>
   <data name="RosterDisplayMode_Flat" xml:space="preserve">
     <value>Flat</value>

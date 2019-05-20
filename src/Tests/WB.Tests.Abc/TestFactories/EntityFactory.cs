@@ -273,7 +273,7 @@ namespace WB.Tests.Abc.TestFactories
             IEnumerable<IComposite> children = null,
             string variable = "roster_var",
             string title = "Roster X",
-            RosterDisplayMode displayMode = RosterDisplayMode.Default,
+            RosterDisplayMode displayMode = RosterDisplayMode.SubSection,
             FixedRosterTitle[] fixedTitles = null) => Create.Entity.Roster(
                         rosterId: rosterId,
                         children: children,
@@ -1062,7 +1062,7 @@ namespace WB.Tests.Abc.TestFactories
             Guid? rosterTitleQuestionId = null,
             string enablementCondition = null,
             IEnumerable<IComposite> children = null,
-            RosterDisplayMode displayMode = RosterDisplayMode.Default)
+            RosterDisplayMode displayMode = RosterDisplayMode.SubSection)
         {
             Group group = Create.Entity.Group(
                 groupId: rosterId,
@@ -1092,7 +1092,7 @@ namespace WB.Tests.Abc.TestFactories
             Guid? rosterSizeQuestionId = null,
             Guid? rosterTitleQuestionId = null,
             FixedRosterTitle[] fixedRosterTitles = null,
-            RosterDisplayMode displayMode = RosterDisplayMode.Default,
+            RosterDisplayMode displayMode = RosterDisplayMode.SubSection,
             bool hideIfDisabled = false)
         {
             Group group = Create.Entity.Group(

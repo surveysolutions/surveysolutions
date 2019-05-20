@@ -816,7 +816,7 @@ namespace WB.Tests.Unit.Designer
             IEnumerable<IComposite> children = null,
             Guid? rosterSizeQuestionId = null,
             Guid? rosterTitleQuestionId = null,
-            RosterDisplayMode displayMode = RosterDisplayMode.Default)
+            RosterDisplayMode displayMode = RosterDisplayMode.SubSection)
         {
             Group roster = Create.Group(
                 groupId: rosterId,
@@ -1107,7 +1107,7 @@ namespace WB.Tests.Unit.Designer
                 string title = null, string variableName = null, Guid? rosterSizeQuestionId = null,
                 string condition = null, bool hideIfDisabled = false, bool isRoster = false,
                 RosterSizeSourceType rosterSizeSource = RosterSizeSourceType.Question,
-                FixedRosterTitleItem[] fixedRosterTitles = null, Guid? rosterTitleQuestionId = null, RosterDisplayMode displayMode = RosterDisplayMode.Default)
+                FixedRosterTitleItem[] fixedRosterTitles = null, Guid? rosterTitleQuestionId = null, RosterDisplayMode displayMode = RosterDisplayMode.SubSection)
                 => new UpdateGroup(questionnaireId, groupId, responsibleId ?? Guid.NewGuid(), title, variableName,
                     rosterSizeQuestionId, condition, hideIfDisabled, isRoster,
                     rosterSizeSource, fixedRosterTitles, rosterTitleQuestionId, displayMode);
