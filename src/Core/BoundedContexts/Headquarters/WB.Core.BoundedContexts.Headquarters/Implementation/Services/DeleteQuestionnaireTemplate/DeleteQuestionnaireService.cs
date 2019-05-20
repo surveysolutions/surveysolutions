@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Commands;
@@ -67,7 +68,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             this.invitationsDeletionService = invitationsDeletionService;
         }
 
-        public void DisableQuestionnaire(Guid questionnaireId, long questionnaireVersion, Guid? userId)
+        public async Task DisableQuestionnaire(Guid questionnaireId, long questionnaireVersion, Guid? userId)
         {
             this.logger.Warn($"Questionnaire {questionnaireId}${questionnaireVersion} deletion was triggered by {userId} user");
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
@@ -81,7 +82,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
                 {
                     this.commandService.Execute(new DisableQuestionnaire(questionnaireId, questionnaireVersion,
                         userId));
-                    this.deleteQuestionnaireTask.Run(0);
+                    await this.deleteQuestionnaireTask.Run(0);
                 }
             }
         }

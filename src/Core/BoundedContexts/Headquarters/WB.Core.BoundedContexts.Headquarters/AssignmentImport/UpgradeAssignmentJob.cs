@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
@@ -18,7 +19,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         private readonly IAssignmentsUpgradeService assignmentsUpgradeService;
         private readonly IAssignmentsUpgrader assignmentsUpgrader;
 
-        public void Execute(IJobExecutionContext context)
+        public Task Execute(IJobExecutionContext context)
         {
             var processToRun = assignmentsUpgradeService.DequeueUpgrade();
             if (processToRun != null)
@@ -26,6 +27,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 assignmentsUpgrader.Upgrade(processToRun.ProcessId, processToRun.From, processToRun.To,
                     assignmentsUpgradeService.GetCancellationToken(processToRun.ProcessId));
             }
+
+            return Task.CompletedTask;
         }
     }
 
