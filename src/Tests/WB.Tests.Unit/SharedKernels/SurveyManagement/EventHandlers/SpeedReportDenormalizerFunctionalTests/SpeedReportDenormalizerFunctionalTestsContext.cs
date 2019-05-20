@@ -13,8 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.SpeedReport
     internal class SpeedReportDenormalizerFunctionalTestsContext
     {
         protected static InterviewSummaryCompositeDenormalizer CreateDenormalizer(
-            IReadSideRepositoryWriter<InterviewSummary> interviewStatuses,
-            IReadSideRepositoryWriter<SpeedReportInterviewItem> speedReportItems)
+            IReadSideRepositoryWriter<InterviewSummary> interviewStatuses)
         {
             var defaultUserView = Create.Entity.UserViewLite(supervisorId: Guid.NewGuid());
             var userViewFactory = Mock.Of<IUserViewFactory>(_ => _.GetUser(Moq.It.IsAny<Guid>()) == defaultUserView);
@@ -25,7 +24,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.SpeedReport
                 new InterviewSummaryDenormalizer(userViewFactory, questionnaireStorage),
                 new StatusChangeHistoryDenormalizerFunctional(userViewFactory),
                 new InterviewStatusTimeSpanDenormalizer(),
-                new SpeedReportDenormalizerFunctional(speedReportItems),
                 Mock.Of<IInterviewStatisticsReportDenormalizer>(),
                 new InterviewGeoLocationAnswersDenormalizer(null, questionnaireStorage));
         }
