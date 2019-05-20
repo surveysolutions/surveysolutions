@@ -2407,28 +2407,6 @@ namespace WB.Tests.Abc.TestFactories
             };
         }
 
-        public SpeedReportInterviewItem SpeedReportInterviewItem(InterviewSummary interviewSummary)
-        {
-            var firstAnswerSet = interviewSummary.InterviewCommentedStatuses.FirstOrDefault(s =>
-                s.Status == InterviewExportedAction.FirstAnswerSet);
-            var created = interviewSummary.InterviewCommentedStatuses.FirstOrDefault(s =>
-                s.Status == InterviewExportedAction.Created);
-
-            return new SpeedReportInterviewItem(interviewSummary)
-            {
-                InterviewId = interviewSummary.SummaryId,
-                QuestionnaireId = interviewSummary.QuestionnaireId,
-                QuestionnaireVersion = interviewSummary.QuestionnaireVersion,
-
-                CreatedDate = created?.Timestamp ?? DateTime.UtcNow,
-                FirstAnswerDate = firstAnswerSet?.Timestamp,
-                InterviewerName = firstAnswerSet?.InterviewerName,
-                InterviewerId = firstAnswerSet?.InterviewerId,
-                SupervisorName = firstAnswerSet?.SupervisorName,
-                SupervisorId = firstAnswerSet?.SupervisorId
-            };
-        }
-
         public InterviewGpsAnswerWithTimeStamp InterviewGpsAnswerWithTimeStamp(
             Guid interviewId,
             double latitude,

@@ -13,7 +13,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             InterviewSummaryDenormalizer interviewSummaryDenormalizer,
             StatusChangeHistoryDenormalizerFunctional historyDenormalizerFunctional,
             InterviewStatusTimeSpanDenormalizer statusTimeSpanDenormalizer,
-            ISpeedReportDenormalizerFunctional speedReportDenormalizerFunctional,
             IInterviewStatisticsReportDenormalizer statisticsReportDenormalizer, 
             InterviewGeoLocationAnswersDenormalizer geoLocationAnswersDenormalizer) : base(readSideStorage)
         {
@@ -22,7 +21,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 interviewSummaryDenormalizer,
                 historyDenormalizerFunctional,
                 statusTimeSpanDenormalizer,
-                speedReportDenormalizerFunctional,
                 geoLocationAnswersDenormalizer,
                 statisticsReportDenormalizer
             };
