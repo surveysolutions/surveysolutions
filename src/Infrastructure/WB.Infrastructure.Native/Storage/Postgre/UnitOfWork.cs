@@ -32,7 +32,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         public void AcceptChanges()
         {
             if (isDisposed) throw new ObjectDisposedException(nameof(UnitOfWork));
-
+            this.session?.Flush();
             transaction?.Commit();
         }
 
