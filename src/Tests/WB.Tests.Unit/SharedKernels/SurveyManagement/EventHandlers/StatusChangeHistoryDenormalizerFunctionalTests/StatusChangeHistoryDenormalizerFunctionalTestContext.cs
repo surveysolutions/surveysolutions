@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Extensions.Caching.Memory;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
@@ -8,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
+using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChangeHistoryDenormalizerFunctionalTests
 {
@@ -22,11 +24,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
             var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), It.IsAny<long>()) == questionnaireDocument);
             return new InterviewSummaryCompositeDenormalizer(
                 interviewStatuses ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),
+                new TestInMemoryWriter<InterviewSummary, int>(),
                 new InterviewSummaryDenormalizer(userViewFactory, questionnaireStorage), 
                 new StatusChangeHistoryDenormalizerFunctional(userViewFactory),
                 new InterviewStatusTimeSpanDenormalizer(), 
                 Mock.Of<IInterviewStatisticsReportDenormalizer>(),
-                new InterviewGeoLocationAnswersDenormalizer(null, questionnaireStorage));
+                new InterviewGeoLocationAnswersDenormalizer(null, questionnaireStorage),
+                Mock.Of<IMemoryCache>());
         }
 
         public static StatusChangeHistoryDenormalizerFunctional CreateStatusChangeHistoryDenormalizerFunctional()
