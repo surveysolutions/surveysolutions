@@ -1,4 +1,5 @@
 using System;
+using Microsoft.Extensions.Caching.Memory;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
@@ -42,11 +43,13 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
             var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), It.IsAny<long>()) == questionnaireDocument);
             return new InterviewSummaryCompositeDenormalizer(
                 interviewStatuses,
+                new TestInMemoryWriter<InterviewSummary, int>(), 
                 new InterviewSummaryDenormalizer(userViewFactory, questionnaireStorage),
                 new StatusChangeHistoryDenormalizerFunctional(userViewFactory),
                 new InterviewStatusTimeSpanDenormalizer(),
                 Mock.Of<IInterviewStatisticsReportDenormalizer>(), 
-                new InterviewGeoLocationAnswersDenormalizer(null, questionnaireStorage));
+                new InterviewGeoLocationAnswersDenormalizer(null, questionnaireStorage),
+                Mock.Of<IMemoryCache>());
         }
 
         protected void UseTransactionToSaveSummaryAndSpeedReport(InterviewSummary interviewSummary)
