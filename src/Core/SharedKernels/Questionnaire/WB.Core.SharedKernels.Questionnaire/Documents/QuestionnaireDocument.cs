@@ -108,7 +108,7 @@ namespace Main.Core.Documents
 
         public bool IsRoster => false;
 
-        public RosterDisplayMode DisplayMode => RosterDisplayMode.Default;
+        public RosterDisplayMode DisplayMode => RosterDisplayMode.SubSection;
 
         public Guid? RosterSizeQuestionId => null;
 
