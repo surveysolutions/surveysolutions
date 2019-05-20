@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Quartz;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Jobs
             this.logger = logger;
         }
 
-        public void Execute(IJobExecutionContext context)
+        public Task Execute(IJobExecutionContext context)
         {
             var allCommands = queue.DeQueueForPublish();
 
@@ -42,6 +42,8 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Jobs
                     this.logger.Error($"Failed to log command {interviewCommand.GetType().Name} for interview {interviewCommand.InterviewId}", e);
                 }
             }
+
+            return Task.CompletedTask;
         }
     }
 }

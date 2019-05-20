@@ -589,8 +589,11 @@ namespace WB.Tests.Abc.TestFactories
             IUnitOfWork sessionProvider = null,
             UsersImportTask usersImportTask = null)
         {
-            usersImportTask = usersImportTask ?? new UsersImportTask(Mock.Of<IScheduler>(x =>
-                                  x.GetCurrentlyExecutingJobs() == Array.Empty<IJobExecutionContext>()));
+            var scheduler = new Mock<IScheduler>();
+            scheduler.Setup(x => x.GetCurrentlyExecutingJobs(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(Array.Empty<IJobExecutionContext>());
+
+            usersImportTask = usersImportTask ?? new UsersImportTask(scheduler.Object);
 
             userPreloadingSettings = userPreloadingSettings ?? Create.Entity.UserPreloadingSettings();
             return new UserImportService(

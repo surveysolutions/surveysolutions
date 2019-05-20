@@ -17,10 +17,12 @@
     </ItemGroup>
     <ItemGroup>
       <None Remove="Migrations\Logs\M201904221727_AddErrorsTable.sql" />
+      <None Remove="Migrations\Quartz\M201905151013_AddQuartzTables.sql" />
       <None Remove="Migrations\ReadSide\M001-100\interview_update.sql" />
     </ItemGroup>
     <ItemGroup>
       <EmbeddedResource Include="Migrations\Logs\M201904221727_AddErrorsTable.sql" />
+      <EmbeddedResource Include="Migrations\Quartz\M201905151013_AddQuartzTables.sql" />
     </ItemGroup>
     <ItemGroup>
       <EmbeddedResource Include="Migrations\ReadSide\M001-100\interview_update.sql" />

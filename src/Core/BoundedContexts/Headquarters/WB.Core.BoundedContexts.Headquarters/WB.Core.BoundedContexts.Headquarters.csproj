@@ -65,7 +65,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
     <PackageReference Include="NHibernate" Version="5.2.4" />
     <PackageReference Include="Owin" Version="1.0" />
-    <PackageReference Include="Quartz" Version="2.6.1" />
+    <PackageReference Include="Quartz" Version="3.0.7" />
     <PackageReference Include="refit" Version="4.6.58" />
     <PackageReference Include="Sendgrid" Version="9.10.0" />
     <PackageReference Include="SuperclusterBox" Version="0.1.16" />
