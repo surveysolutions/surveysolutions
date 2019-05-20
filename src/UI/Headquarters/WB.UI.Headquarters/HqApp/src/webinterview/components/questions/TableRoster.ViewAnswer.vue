@@ -1,8 +1,16 @@
 <template>
     <div :class="questionStyle" :id='questionId'>
-        <a class="cell-content has-tooltip" template="" tabindex="0" role="button" data-placement="auto top" data-toggle="popover" data-trigger="focus" :data-content="validationMessage" style="display-block">
+        <a class="cell-content has-tooltip" v-popover.hover-focus="{title:validationTitle, content:validationMessage}" type="primary">
             {{ answer }}
         </a>
+        <!--popover>
+            <div class="popover error-tooltip" role="tooltip">
+                <div class="arrow"></div>
+                <h3 class="popover-title">{{validationTitle}}</h3>
+                <div class="popover-content">{{validationMessage}}</div>
+            </div>
+        </popover-->
+
         <div class="">
 
         </div>
@@ -37,6 +45,13 @@
             },
             isFetchInProgress() {
                 return this.$me.fetching
+            },
+            validationTitle() {
+                if (this.$me.validity.messages && this.$me.validity.messages.length > 0)
+                    return 'Error'
+                if (this.$me.validity.warnings && this.$me.validity.warnings.length > 0)
+                    return 'Warning'
+                return null
             },
             validationMessage() {
                 var message = ''
