@@ -1,17 +1,12 @@
 <template>
     <div :class="questionStyle" :id='questionId'>
-        <a class="cell-content has-tooltip" template="" tabindex="0" role="button" data-placement="auto top" data-toggle="popover" data-trigger="focus" title="Dismissible popover" :data-content="validationMessage" style="display-block">
+        <a class="cell-content has-tooltip" template="" tabindex="0" role="button" data-placement="auto top" data-toggle="popover" data-trigger="focus" :data-content="validationMessage" style="display-block">
             {{ answer }}
         </a>
         <div class="">
 
         </div>
         <wb-progress :visible="isFetchInProgress" :valuenow="valuenow" :valuemax="valuemax" />
-        <!--div class="progress">
-            <div class="progress-bar" role="progressbar" :visible="isFetchInProgress" :valuenow="valuenow" :valuemax="valuemax">
-                <span class="sr-only">60% Complete</span>
-            </div>
-        </div-->
     </div>
 </template>
 
