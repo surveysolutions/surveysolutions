@@ -64,6 +64,7 @@
                     }
 
                     if (!this.$me.isRosterSize) {
+                        this.$me.answer = answer
                         this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
                         return
                     }
@@ -82,6 +83,7 @@
                     const isNeedRemoveRosters = previousAnswer != undefined && answer < previousAnswer
 
                     if (!isNeedRemoveRosters) {
+                        this.$me.answer = answer
                         this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
                         return
                     }
@@ -92,6 +94,7 @@
                     if(amountOfRostersToRemove > 0){
                         modal.confirm(confirmMessage, result => {
                             if (result) {
+                                this.$me.answer = answer
                                 this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })                                
                                 return
                             } else {
@@ -102,6 +105,7 @@
                     }
                     else
                     {
+                        this.$me.answer = answer
                         this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })                        
                         return
                     }
@@ -112,32 +116,6 @@
                 return this.cancelBeforeStart;
             },
 
-            // will reject the number if it greater than 1,000,000
-            // not very practical, but demonstrates the method.
-            isCancelAfterEnd() {
-                return this.value > 1000000;
-            },
-
-            onKeyDown(event) {
-                if (!this.isKeyPressedNumeric(event)) {
-                    if (event.preventDefault) event.preventDefault();
-                }
-            },
-
-            getCharCodeFromEvent(event) {
-                event = event || window.event;
-                return (typeof event.which === "undefined") ? event.keyCode : event.which;
-            },
-
-            isCharNumeric(charStr) {
-                return /\d/.test(charStr);
-            },
-
-            isKeyPressedNumeric(event) {
-                const charCode = this.getCharCodeFromEvent(event);
-                const charStr = String.fromCharCode(charCode);
-                return this.isCharNumeric(charStr);
-            },
             destroy() {
                 if (this.autoNumericElement) {
                     this.autoNumericElement.remove()

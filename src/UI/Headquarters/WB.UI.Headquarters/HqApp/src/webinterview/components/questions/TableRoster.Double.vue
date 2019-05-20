@@ -5,7 +5,6 @@
         :title="noAnswerWatermark"
         :value="$me.answer" 
         v-blurOnEnterKey 
-        @blur="answerDoubleQuestion"
         :disabled="!$me.acceptAnswer"
         v-numericFormatting="{
                 minimumValue:'-99999999999999.99999999999999',
@@ -105,6 +104,7 @@
                         return
                     }
 
+                    this.$me.answer = answer
                     this.$store.dispatch('answerDoubleQuestion', { identity: this.id, answer: answer })
                 });
             },
