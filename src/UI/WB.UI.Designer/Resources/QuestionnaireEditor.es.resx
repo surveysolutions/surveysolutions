@@ -424,7 +424,7 @@
     <value>Mover a</value>
   </data>
   <data name="MoveToAnotherSubSection" xml:space="preserve">
-    <value>Mover a otra subsección</value>
+    <value>Mover a otra sección</value>
   </data>
   <data name="MultipleDependencies" xml:space="preserve">
     <value>Preguntas/subsecciones con dependencia</value>

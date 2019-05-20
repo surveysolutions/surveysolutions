@@ -24,5 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public string Password { get; set; }
 
         public bool? WebMode { get; set; }
+
+        public DateTime? ReceivedByTabletAtUtc { get; set; }
     }
 }

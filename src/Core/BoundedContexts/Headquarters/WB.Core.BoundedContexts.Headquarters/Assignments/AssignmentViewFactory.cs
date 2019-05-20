@@ -103,7 +103,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                         IsAudioRecordingEnabled = x.IsAudioRecordingEnabled,
                         Email = x.Email,
                         Password = x.Password,
-                        WebMode = x.WebMode
+                        WebMode = x.WebMode,
+                        ReceivedByTabletAtUtc = x.ReceivedByTabletAtUtc
                     };
 
                     if (input.ShowQuestionnaireTitle)

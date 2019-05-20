@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
     public class SubstitutionTextTests
     {
         [Test]
-        public void When_ReplaceSubstitutions_for_element_with_referance_on_parent_rosters_Then_should_return_text_with_roster_titles()
+        public void When_ReplaceSubstitutions_for_element_with_reference_on_parent_rosters_Then_should_return_text_with_roster_titles()
         {
             //arrange
             var rosterId1 = Guid.Parse("22222222222222222222222222222222");
@@ -70,6 +70,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             var substitutedVariableId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
             SubstitutionText text = CreateSubstitutionText(targetEntityId, "%rostertitle% %question% %variable%",
+                null,
                 new SubstitutionVariable
                 {
                     Id = substitutedVariableId,
@@ -102,6 +103,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
 
             SubstitutionText text = CreateSubstitutionText(targetEntityId,
                 "%rostertitle% %question% %variable%",
+                null,
                 new SubstitutionVariable
                 {
                     Id = substitutedQuestionId,
@@ -159,6 +161,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
 
             SubstitutionText text = CreateSubstitutionText(Create.Identity(Id.gA),
                 "%date% %dateTime%",
+                null,
                 new SubstitutionVariable
                 {
                     Id = substitutedQuestionId1,
@@ -230,12 +233,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         }
 
         [Test]
-        public void when_substituting_disabled_question_Should_substibute_as_unanswered()
+        public void when_substituting_disabled_question_Should_substitute_as_unanswered()
         {
             var substitutedQuestionId1 = Id.g1;
 
             SubstitutionText text = CreateSubstitutionText(Create.Identity(Id.gA),
                 "%subst%",
+                null,
                 new SubstitutionVariable
                 {
                     Id = substitutedQuestionId1,
@@ -273,13 +277,47 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 Throws.Nothing);
         }
 
+        [Test]
+        public void should_substitute_self_value()
+        {
+            var substitutedQuestionId1 = Id.g1;
+
+            SubstitutionText text = CreateSubstitutionText(Create.Identity(Id.gA),
+                "%self%",
+                "subst",
+                new SubstitutionVariable
+                {
+                    Id = substitutedQuestionId1,
+                    Name = "subst"
+                }
+            );
+
+            var sourceTreeMainSection = Create.Entity.InterviewTreeSection(children: new IInterviewTreeNode[]
+            {
+                Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(substitutedQuestionId1),
+                    answer: "answer")
+            });
+
+            var tree = Create.Entity.InterviewTree(sections: sourceTreeMainSection);
+            text.SetTree(tree);
+
+            // Act
+            text.ReplaceSubstitutions();
+            var browserReadyText = text.BrowserReadyText;
+
+            Assert.That(browserReadyText, Is.EqualTo($"answer"));
+
+        }
+
         private SubstitutionText CreateSubstitutionText(
             Identity id,
             string template,
+            string selfVariableName = "self",
             params SubstitutionVariable[] variables)
         {
             SubstitutionText text = new SubstitutionText(id,
                 template,
+                selfVariableName,
                 variables.ToList(),
                 Create.Service.SubstitutionService(),
                 Create.Service.VariableToUIStringService());

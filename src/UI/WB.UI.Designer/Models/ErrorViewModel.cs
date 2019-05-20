@@ -1,6 +1,4 @@
-using System;
-
-namespace WB.UI.Designer1.Models
+namespace WB.UI.Designer.Models
 {
     public class ErrorViewModel
     {

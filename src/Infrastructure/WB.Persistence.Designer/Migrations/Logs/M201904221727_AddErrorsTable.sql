@@ -5,7 +5,7 @@
     Run this script for creating the exceptions table
     It will also upgrade a V1 schema to V2, just run the full script.
 */
-CREATE TABLE IF NOT EXISTS "public"."Errors" (
+CREATE TABLE IF NOT EXISTS "logs"."Errors" (
     "Id" serial8 NOT NULL,
     "GUID" uuid NOT NULL,
     "ApplicationName" varchar(50) NOT NULL,
@@ -30,16 +30,16 @@ CREATE TABLE IF NOT EXISTS "public"."Errors" (
     PRIMARY KEY ("Id")
 ) WITH (OIDS=FALSE);
 
-CREATE UNIQUE INDEX IF NOT EXISTS "IX_Exceptions_GUID_ApplicationName_DeletionDate_CreationDate" ON "public"."Errors" ("GUID", "ApplicationName", "CreationDate" DESC, "DeletionDate");
+CREATE UNIQUE INDEX IF NOT EXISTS "IX_Exceptions_GUID_ApplicationName_DeletionDate_CreationDate" ON "logs"."Errors" ("GUID", "ApplicationName", "CreationDate" DESC, "DeletionDate");
 
-CREATE INDEX IF NOT EXISTS "IX_Exceptions_ErrorHash_ApplicationName_CreationDate_DeletionDa" ON "public"."Errors" ("ApplicationName", "CreationDate" DESC, "DeletionDate", "ErrorHash");
+CREATE INDEX IF NOT EXISTS "IX_Exceptions_ErrorHash_ApplicationName_CreationDate_DeletionDa" ON "logs"."Errors" ("ApplicationName", "CreationDate" DESC, "DeletionDate", "ErrorHash");
 
-CREATE INDEX IF NOT EXISTS "IX_Exceptions_ApplicationName_DeletionDate_CreationDate_Filtere" ON "public"."Errors" ("ApplicationName", "CreationDate" DESC, "DeletionDate") WHERE "DeletionDate" IS NULL;
+CREATE INDEX IF NOT EXISTS "IX_Exceptions_ApplicationName_DeletionDate_CreationDate_Filtere" ON "logs"."Errors" ("ApplicationName", "CreationDate" DESC, "DeletionDate") WHERE "DeletionDate" IS NULL;
 
 /* Begin V2 Schema changes */
 
-ALTER TABLE "public"."Errors" ADD COLUMN IF NOT EXISTS "LastLogDate" timestamp;
+ALTER TABLE "logs"."Errors" ADD COLUMN IF NOT EXISTS "LastLogDate" timestamp;
 
-ALTER TABLE "public"."Errors" ADD COLUMN IF NOT EXISTS "Category" varchar(100);
+ALTER TABLE "logs"."Errors" ADD COLUMN IF NOT EXISTS "Category" varchar(100);
 
-ALTER TABLE "public"."Errors" DROP COLUMN IF EXISTS "SQL";
+ALTER TABLE "logs"."Errors" DROP COLUMN IF EXISTS "SQL";

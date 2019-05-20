@@ -5,13 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Migrations\Public\M201904221727_AddErrorsTable.sql" />
+    <None Remove="Migrations\Logs\M201904221727_AddErrorsTable.sql" />
   </ItemGroup>
 
 
   <ItemGroup>
     <EmbeddedResource Include="Migrations\M001-100\M201904051250_MigrateUsers.sql" />
-    <EmbeddedResource Include="Migrations\Public\M201904221727_AddErrorsTable.sql" />
+    <EmbeddedResource Include="Migrations\Logs\M201904221727_AddErrorsTable.sql" />
   </ItemGroup>
 
   <ItemGroup>

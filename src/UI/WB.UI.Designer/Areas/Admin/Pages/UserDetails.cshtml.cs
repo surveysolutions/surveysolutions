@@ -13,7 +13,6 @@ using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
-using WB.UI.Designer1.Extensions;
 
 namespace WB.UI.Designer.Areas.Admin.Pages
 {
@@ -105,7 +104,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                 CreationDate = account.CreatedAtUtc.ToUIString(),
                 Email = account.Email,
                 IsApproved = account.EmailConfirmed,
-                IsLockedOut = account.LockoutEnabled,
+                IsLockedOut = account.LockoutEnabled && account.LockoutEnd.HasValue,
                 CanImportOnHq = account.CanImportOnHq,
                 UserName = account.UserName,
                 OwnedQuestionnaires = ownedQuestionnaires,
