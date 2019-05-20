@@ -913,6 +913,12 @@ table.dataTable.fixedHeader-locked {
 
                 outline: none;   
                 box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), inset 0 0 4px rgba(102, 175, 233, 0.6);    
+                &::placeholder{
+                    font: 14px/16px Arial, "Helvetica Neue", Helvetica, sans-serif; 
+                    text-transform: none;
+                    letter-spacing: normal;
+                    font-style: italic;
+                }
             }
         }
         .cell-unit{
@@ -987,14 +993,6 @@ table.dataTable.fixedHeader-locked {
         white-space: normal !important;
     }
 }
-.error-tooltip{
-    &.popover{
-        color: #FF2E00;
-        .popover-title{
-            color: darken($color: #FF2E00, $amount: 20%);
-        }
-    }
-}
 .warning-tooltip{
     &.popover{
         color: rgb(202, 145, 1);
@@ -1003,3 +1001,13 @@ table.dataTable.fixedHeader-locked {
         }
     }
 }
+.error-tooltip{
+    &.popover{
+        color: #FF2E00;
+        .popover-title{
+            color: darken($color: #FF2E00, $amount: 20%);
+        }
+    }
+}
+
+
