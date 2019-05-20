@@ -66,6 +66,7 @@
                         this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.TextRequired"))
                     }
                     else {
+                        this.$me.answer = answer
                         this.$store.dispatch('answerTextQuestion', { identity: this.id, text: answer })
                     }
                 })
