@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,7 +14,6 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.SessionState;
-using System.Web.WebPages;
 using Autofac;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.SignalR;
@@ -31,7 +31,6 @@ using NLog;
 using NLog.Targets;
 using Owin;
 using Quartz;
-using RazorGenerator.Mvc;
 using StackExchange.Exceptional;
 using StackExchange.Exceptional.Stores;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
@@ -199,7 +198,24 @@ namespace WB.UI.Headquarters
                     {
                         if (!IsAjaxRequest(ctx.Request) && !IsApiRequest(ctx.Request) && !IsBasicAuthApiUnAuthRequest(ctx.Response))
                         {
-                            ctx.Response.Redirect(ctx.RedirectUri);
+                            var redirect = ctx.RedirectUri;
+
+                            bool isForwardedFromSecureProto()
+                            {
+                                if (ctx.Request.Headers.TryGetValue(@"X-Forwarded-Proto", out var values))
+                                {
+                                    return values.First().Equals(@"https", StringComparison.OrdinalIgnoreCase);
+                                }
+
+                                return false;
+                            }
+
+                            if (ctx.Request.IsSecure || isForwardedFromSecureProto())
+                            {
+                                redirect = redirect.Replace(@"http://", @"https://");
+                            }
+
+                            ctx.Response.Redirect(redirect);
                         }
                     }
                 },
