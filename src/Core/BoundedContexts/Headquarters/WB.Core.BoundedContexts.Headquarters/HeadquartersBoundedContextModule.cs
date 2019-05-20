@@ -1,6 +1,7 @@
 ﻿using Ncqrs.Eventing.Storage;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
@@ -311,7 +312,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IInvitationMailingService, InvitationMailingService>();
             registry.Bind<IInvitationsDeletionService, InvitationsDeletionService>();
 
-            registry.BindAsSingleton<IMemoryCache, MemoryCache>();
+            registry.BindToConstant<IMemoryCache>(() => new MemoryCache(Options.Create(new MemoryCacheOptions())));
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
