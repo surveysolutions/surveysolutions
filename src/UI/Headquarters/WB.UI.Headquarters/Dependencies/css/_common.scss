@@ -806,3 +806,13 @@ dl{
 		flex-direction: row;
 	}
 }
+.lock{
+	display: none;
+	background: url("#{$assetsPath}/img/padlock-1dp.png") no-repeat;
+	background-size: 27px 27px;
+    @include image-2x("#{$assetsPath}/img/padlock-3dp.png", 27px, 27px);
+	position: absolute;
+	top: calc(50% -  14px);
+	width: 27px;
+	height: 27px;
+}

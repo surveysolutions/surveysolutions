@@ -83,6 +83,30 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 }
             }
 
+            if (this.connectionSettings.LogsUpgradeSettings != null)
+            {
+                try
+                {
+                    status.Message = Modules.InitializingDb;
+                    DatabaseManagement.InitDatabase(this.connectionSettings.ConnectionString,
+                        this.connectionSettings.LogsSchemaName);
+
+                    status.Message = Modules.MigrateDb;
+                    DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString,
+                        this.connectionSettings.LogsSchemaName,
+                        this.connectionSettings.LogsUpgradeSettings);
+
+                    status.ClearMessage();
+                }
+                catch (Exception exc)
+                {
+                    status.Error(Modules.ErrorDuringRunningMigrations);
+
+                    LogManager.GetLogger(nameof(OrmModule)).Fatal(exc, "Error during db initialization.");
+                    throw new InitializationException(Subsystem.Database, null, exc);
+                }
+            }
+
             return Task.CompletedTask;
         }
 
@@ -234,5 +258,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         public IList<Assembly> ReadSideMappingAssemblies { get; set; }
         public DbUpgradeSettings ReadSideUpgradeSettings { get; set; }
         public DbUpgradeSettings PlainStoreUpgradeSettings { get; set; }
+        public DbUpgradeSettings LogsUpgradeSettings { get; set; }
+        public string LogsSchemaName => "logs";
     }
 }

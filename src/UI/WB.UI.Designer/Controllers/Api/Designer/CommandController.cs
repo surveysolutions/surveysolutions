@@ -24,7 +24,6 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
-using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -32,6 +31,7 @@ using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.UI.Designer.BootstrapSupport;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Implementation;
 using QuestionnaireEditor = WB.UI.Designer.Resources.QuestionnaireEditor;
@@ -124,12 +124,12 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             }
             catch (FormatException e)
             {
-                return StatusCode((int)HttpStatusCode.NotAcceptable, e.Message);
+                return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
             }
             catch (ArgumentException e)
             {
                 this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
-                return StatusCode((int)HttpStatusCode.NotAcceptable, e.Message);
+                return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
             }
 
             var updateAttachment = this.ProcessCommand(command, commandType).Response;
@@ -146,7 +146,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
             if (!MultipartRequestHelper.IsMultipartContentType(Request.ContentType))
             {
-                return this.StatusCode((int)HttpStatusCode.UnsupportedMediaType);
+                return this.Error((int)HttpStatusCode.UnsupportedMediaType, string.Empty);
             }
 
             UpdateLookupTable updateLookupTableCommand;
@@ -200,13 +200,13 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             }
             catch (FormatException)
             {
-                return StatusCode((int) HttpStatusCode.NotAcceptable,
+                return this.Error((int)HttpStatusCode.NotAcceptable,
                     Resources.QuestionnaireController.SelectTabFile);
             }
             catch (ArgumentException e)
             {
                 this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
-                return StatusCode((int) HttpStatusCode.NotAcceptable, e.Message);
+                return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
             }
 
             var updateLookupTable = this.ProcessCommand(updateLookupTableCommand, commandType).Response;
@@ -224,10 +224,20 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 using (var transaction = await dbContext.Database.BeginTransactionAsync())
                 {
                     var concreteCommand = this.Deserialize(model.Type, model.Command);
-                    IActionResult actionResult = this.ProcessCommand(concreteCommand, model.Type).Response;
-                    await dbContext.SaveChangesAsync();
+                    var commandProcessResult = this.ProcessCommand(concreteCommand, model.Type);
 
-                    transaction.Commit();
+                    IActionResult actionResult = commandProcessResult.Response;
+
+                    if (!commandProcessResult.HasErrors)
+                    {
+                        await dbContext.SaveChangesAsync();
+                        transaction.Commit();
+                    }
+                    else
+                    {
+                        transaction.Rollback();
+                    }
+
                     return actionResult;
                 }
             }
@@ -253,7 +263,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             AddOrUpdateTranslation command;
             try
             {
-                command = (AddOrUpdateTranslation) this.Deserialize(commandType, model.Command);
+                command = (AddOrUpdateTranslation)this.Deserialize(commandType, model.Command);
                 if (model.File != null)
                 {
                     byte[] postedFile;
@@ -270,17 +280,17 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             }
             catch (FormatException e)
             {
-                return StatusCode((int) HttpStatusCode.NotAcceptable, e.Message);
+                return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
             }
             catch (ArgumentException e)
             {
                 this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
-                return StatusCode((int) HttpStatusCode.NotAcceptable, e.Message);
+                return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
             }
             catch (InvalidExcelFileException e)
             {
                 this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
-                return StatusCode((int) HttpStatusCode.NotAcceptable, e.Message);
+                return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
             }
 
             var commandResponse = this.ProcessCommand(command, commandType);
@@ -377,6 +387,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
              { "SetDefaultTranslation", typeof (SetDefaultTranslation) },
              // Metadata
              { "UpdateMetadata", typeof (UpdateMetadata) },
+             { nameof(PassOwnershipFromQuestionnaire), typeof(PassOwnershipFromQuestionnaire) },
          };
 
         private Type GetTypeOfResultCommandOrThrowArgumentException(string commandType)
@@ -399,18 +410,15 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             {
                 if (exc.ExceptionType == CommandInflatingExceptionType.Forbidden)
                 {
-                    return new CommandProcessResult(StatusCode((int) HttpStatusCode.Forbidden,
-                        exc.Message));
+                    return new CommandProcessResult(this.Error(StatusCodes.Status403Forbidden, exc.Message));
                 }
 
                 if (exc.ExceptionType == CommandInflatingExceptionType.EntityNotFound)
                 {
-                    return new CommandProcessResult(StatusCode((int) HttpStatusCode.NotFound,
-                        exc.Message));
+                    return new CommandProcessResult(this.Error(StatusCodes.Status404NotFound, exc.Message));
                 }
 
-                return new CommandProcessResult(StatusCode((int) HttpStatusCode.NotAcceptable,
-                    exc.Message));
+                return new CommandProcessResult(this.Error(StatusCodes.Status406NotAcceptable, exc.Message));
             }
             catch (Exception e)
             {
@@ -423,12 +431,10 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
                 if (domainEx.ErrorType == DomainExceptionType.DoesNotHavePermissionsForEdit)
                 {
-                    return new CommandProcessResult(StatusCode((int) HttpStatusCode.Forbidden,
-                        domainEx.Message));
+                    return new CommandProcessResult(this.Error(StatusCodes.Status403Forbidden, domainEx.Message));
                 }
 
-                return new CommandProcessResult(StatusCode((int) HttpStatusCode.NotAcceptable,
-                    domainEx.Message));
+                return new CommandProcessResult(this.Error(StatusCodes.Status406NotAcceptable, domainEx.Message));
             }
 
             return new CommandProcessResult(Ok(), false);

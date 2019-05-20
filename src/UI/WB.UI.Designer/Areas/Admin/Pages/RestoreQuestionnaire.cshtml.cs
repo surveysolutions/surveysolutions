@@ -17,7 +17,6 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Designer.Extensions;
-using WB.UI.Designer1.Extensions;
 
 namespace WB.UI.Designer.Areas.Admin.Pages
 {

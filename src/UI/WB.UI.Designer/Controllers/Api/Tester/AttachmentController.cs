@@ -9,7 +9,7 @@ using WB.UI.Designer.Code.Attributes;
 namespace WB.UI.Designer.Controllers.Api.Tester
 {
     [ApiBasicAuth]
-    [Route("api/attachment")]
+    [Route("api/v{version:int}/attachment")]
     public class AttachmentController : ControllerBase
     {
         private readonly IAttachmentService attachmentService;
@@ -23,7 +23,7 @@ namespace WB.UI.Designer.Controllers.Api.Tester
         public IActionResult Get(string id, int version)
         {
             if (version < ApiVersion.CurrentTesterProtocolVersion)
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired));
+                return StatusCode((int) HttpStatusCode.UpgradeRequired);
 
             var attachmentContent = this.attachmentService.GetContent(id);
 

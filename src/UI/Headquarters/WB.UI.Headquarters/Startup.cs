@@ -13,6 +13,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.SessionState;
+using System.Web.WebPages;
 using Autofac;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.SignalR;
@@ -30,6 +31,7 @@ using NLog;
 using NLog.Targets;
 using Owin;
 using Quartz;
+using RazorGenerator.Mvc;
 using StackExchange.Exceptional;
 using StackExchange.Exceptional.Stores;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
@@ -75,7 +77,7 @@ namespace WB.UI.Headquarters
         {
             Target.Register<SlackFatalNotificationsTarget>("slack");
             
-            EnsureJsonStorageForErrorsExists();
+            ConfigureExceptionalStore();
             app.Use(RemoveServerNameFromHeaders);
 
             var autofacKernel = AutofacConfig.CreateKernel();
@@ -133,7 +135,7 @@ namespace WB.UI.Headquarters
             app.UseWebApi(config);
 
             var scheduler = container.Resolve<IScheduler>();
-           // scheduler.Start();
+            scheduler.Start();
 
             InitializeAppShutdown(app, scheduler);
 
@@ -304,6 +306,8 @@ namespace WB.UI.Headquarters
 
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
+            RazorGeneratorMvcStart.Start();
+
             ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
         }
 
@@ -324,9 +328,14 @@ namespace WB.UI.Headquarters
         {
         }
 
-        private void EnsureJsonStorageForErrorsExists()
+        private void ConfigureExceptionalStore()
         {
-            if (StackExchange.Exceptional.Exceptional.Settings.DefaultStore is JSONErrorStore exceptionalConfig)
+            if (Exceptional.Settings.DefaultStore is PostgreSqlErrorStore postgresStore)
+            {
+                postgresStore.Settings.TableName = @"""logs"".""Errors""";
+            }
+
+            if (Exceptional.Settings.DefaultStore is JSONErrorStore exceptionalConfig)
             {
                 var jsonStorePath = exceptionalConfig.Settings.Path;
                 var jsonStorePathAbsolute = HostingEnvironment.MapPath(jsonStorePath);

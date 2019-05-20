@@ -1,4 +1,4 @@
-@using System.Linq
+﻿@using System.Linq
 @using System.Web
 @using WB.UI.Designer.Extensions
 @using WB.UI.Shared.Web.Extensions
@@ -14,7 +14,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    
+    <!-- simplepage:js -->
+    <script src="~/js/simplepage.js"></script>
+    <!-- endinject -->
     <!-- popup:css -->
     <link rel="stylesheet" href="~/css/popup.css">
     <!-- endinject -->
@@ -28,7 +31,7 @@
 
         function apply() {
             $.post("@Url.Action("ApplyCascadingOptions", "Questionnaire")", function(response) {
-                if (response.IsSuccess) {
+                if (response.IsSuccess || response.isSuccess) {
                     close();
                 } else {
                     $(document).scrollTop(0);

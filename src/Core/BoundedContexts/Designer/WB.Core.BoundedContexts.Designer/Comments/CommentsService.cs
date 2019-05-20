@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
+using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -18,18 +20,19 @@ namespace WB.Core.BoundedContexts.Designer.Comments
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
 
         public CommentsService(
-            DesignerDbContext dbContex,
+            DesignerDbContext dbContext,
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage)
         {
-            dbContext = dbContex;
+            this.dbContext = dbContext;
             this.questionnaireStorage = questionnaireStorage;
         }
 
-        public List<CommentView> LoadCommentsForEntity(Guid questionnaireId, Guid entityId)
+        public async Task<List<CommentView>> LoadCommentsForEntity(Guid questionnaireId, Guid entityId)
         {
-            var commentForEntity = dbContext.CommentInstances
+            var dbInstances = await dbContext.CommentInstances
                 .Where(x => x.QuestionnaireId == questionnaireId && x.EntityId == entityId).OrderBy(x => x.Date)
-                .ToList()
+                .ToListAsync();
+            var commentForEntity = dbInstances
                 .Select(CreateCommentView)
                 .ToList();
 
@@ -39,7 +42,7 @@ namespace WB.Core.BoundedContexts.Designer.Comments
         public void PostComment(Guid commentId, Guid questionnaireId, Guid entityId, string commentComment,
             string userName, string userEmail)
         {
-            var commentInstanse = new CommentInstance
+            var commentInstance = new CommentInstance
             {
                 Id = commentId,
                 QuestionnaireId = questionnaireId,
@@ -50,7 +53,7 @@ namespace WB.Core.BoundedContexts.Designer.Comments
                 UserName = userName,
                 UserEmail = userEmail
             };
-            dbContext.CommentInstances.Add(commentInstanse);
+            dbContext.CommentInstances.Add(commentInstance);
         }
 
         public void RemoveAllCommentsByEntity(Guid questionnaireId, Guid entityId)
@@ -71,16 +74,16 @@ namespace WB.Core.BoundedContexts.Designer.Comments
             dbContext.CommentInstances.RemoveRange(commentsForEntity);
         }
 
-        public void DeleteComment(Guid id)
+        public async Task DeleteCommentAsync(Guid id)
         {
-            var commentInstance = dbContext.CommentInstances.Find(id);
+            var commentInstance = await dbContext.CommentInstances.FindAsync(id);
 
             if (commentInstance != null) dbContext.CommentInstances.Remove(commentInstance);
         }
 
-        public void ResolveComment(Guid commentdId)
+        public async Task ResolveCommentAsync(Guid commentId)
         {
-            var comment = dbContext.CommentInstances.Find(commentdId);
+            var comment = await dbContext.CommentInstances.FindAsync(commentId);
             comment.ResolveDate = DateTime.UtcNow;
             dbContext.CommentInstances.Update(comment);
         }

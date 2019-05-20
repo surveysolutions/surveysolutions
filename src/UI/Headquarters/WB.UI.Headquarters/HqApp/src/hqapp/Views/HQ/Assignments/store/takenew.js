@@ -18,8 +18,6 @@ export default {
 
             const data = await Vue.$api.call(api => api.getPrefilledQuestions())
             commit("SET_TAKENEW_RESPONSE", data)
-
-
         }
     },
 
