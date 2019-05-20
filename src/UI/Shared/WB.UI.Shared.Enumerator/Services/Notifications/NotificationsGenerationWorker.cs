@@ -41,14 +41,13 @@ namespace WB.UI.Shared.Enumerator.Services.Notifications
             catch (InterruptedException e)
             {
                 Android.Util.Log.Debug("NotificationsGenerationWorker", $"Error (InterruptedException): {e.Message}");
-
-                return Result.InvokeFailure();
             }
             catch (Exception e)
             {
                 Android.Util.Log.Debug("NotificationsGenerationWorker", $"Error: {e.Message}");
-                return Result.InvokeFailure();
             }
+
+            return Result.InvokeFailure();
         }
     }
 }
