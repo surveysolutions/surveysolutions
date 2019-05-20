@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         protected override InterviewSummary GetViewById(Guid id, IReadSideStorage<InterviewSummary> storage)
         {
 
-            var cachedId = this.memoryCache.Get<int>(id);
+            var cachedId = this.memoryCache.Get<int>("InterviewIdsCache" + id);
             if (cachedId != 0)
             {
                 return this.summaries.GetById(cachedId);
