@@ -59,7 +59,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
             }
             
             return new SubstitutionText(identity, 
-                text == null ? null : questionnaire.ApplyMarkDownTransformation(text), 
+                text == null ? null : questionnaire.ApplyMarkDownTransformation(text) ?? text, 
                 entityVariable,
                 substitutionVariables, 
                 this.substitutionService, 
