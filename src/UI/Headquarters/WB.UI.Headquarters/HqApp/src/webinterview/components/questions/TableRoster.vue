@@ -6,7 +6,7 @@
             :defaultColDef="defaultColDef"
             :columnDefs="columnDefs"
             :rowData="rowData"
-
+            
             rowHeight="40"
             domLayout='autoHeight'
             headerHeight="50"
@@ -96,7 +96,7 @@
                                 id: question.id,
                                 value: question,
                             },
-                            autoHeight: true,
+                            //autoHeight: true,
                         };
                     }
                 );
@@ -175,7 +175,7 @@
             },
 
             endCellEditting(event) {
-                event.api.resetRowHeights();
+                //event.api.resetRowHeights();
 			    //console.log('cellEditingStopped, value:' + event.value);
 		    }
         }
