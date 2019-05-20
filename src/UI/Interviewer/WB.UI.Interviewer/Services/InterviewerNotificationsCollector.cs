@@ -77,12 +77,11 @@ namespace WB.UI.Interviewer.Services
                     NotificationId = (int)NotificationType.RejectedInterviewNotOpened,
                     AutoCancel = true,
                     ContentTitle = InterviewerUIResources.Notifications_InterviewsTitle,
-                    ContentText = InterviewerUIResources.Notifications_CompletedInterviewsText.FormatString(rejectedNotOpenedCount),
+                    ContentText = InterviewerUIResources.Notifications_RejectedInterviewsText.FormatString(rejectedNotOpenedCount),
                     IconId = Resource.Drawable.icon,
                     Intent = GetPendingIntent()
                 });
             }
-
 
             if (this.enumeratorSettings.LastSync.HasValue)
             {
@@ -103,7 +102,7 @@ namespace WB.UI.Interviewer.Services
                 }
                 else
                 {
-                    if (this.enumeratorSettings.LastSync.Value <= DateTime.Now.Date.AddHours(-6))
+                    if (this.enumeratorSettings.LastSync.Value <= DateTime.Now.Date.AddHours(-24 * 4))
                     {
                         notifications.Add(new NotificationModel()
                         {
