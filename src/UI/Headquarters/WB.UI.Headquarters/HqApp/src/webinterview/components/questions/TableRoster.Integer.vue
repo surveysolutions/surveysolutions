@@ -1,10 +1,10 @@
 <template>
-    <!--input :ref="'input'" @keydown="onKeyDown($event)" v-model="value"/-->
-
-
-    <input :ref="'input'" type="text" autocomplete="off" inputmode="numeric" class="ag-cell-edit-input" 
-        :value="$me.answer" v-blurOnEnterKey 
-        @blur="answerIntegerQuestion" 
+    <input :ref="'input'" 
+        type="text" 
+        autocomplete="off" 
+        inputmode="numeric" 
+        class="ag-cell-edit-input" 
+        :value="$me.answer" 
         v-numericFormatting="{digitGroupSeparator: groupSeparator, decimalPlaces: 0, minimumValue: '-2147483648', maximumValue: '2147483647'}" />
 </template>
 
