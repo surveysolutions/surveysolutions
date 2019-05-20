@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -11,10 +11,9 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
 {
     internal class SpeedReportContext : ReportContext
     {
-        protected SpeedReportFactory CreateSpeedReport(IQueryableReadSideRepositoryReader<InterviewSummary> summaries,
-            IQueryableReadSideRepositoryReader<SpeedReportInterviewItem> speedReportStorage)
+        protected SpeedReportFactory CreateSpeedReport(IQueryableReadSideRepositoryReader<InterviewSummary> summaries)
         {
-            return new SpeedReportFactory(summaries, speedReportStorage);
+            return new SpeedReportFactory(summaries);
         }
 
         
@@ -45,9 +44,21 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
             return interview;
         }
 
-        protected static SpeedReportInterviewItem CreateSpeedReportItemForInterview(InterviewSummary interview)
+        public InterviewSummary AppendSpeedReportInfo(InterviewSummary interviewSummary)
         {
-            return Create.Entity.SpeedReportInterviewItem(interview);
+            var firstAnswerSet = interviewSummary.InterviewCommentedStatuses.FirstOrDefault(s =>
+                s.Status == InterviewExportedAction.FirstAnswerSet);
+            var created = interviewSummary.InterviewCommentedStatuses.FirstOrDefault(s =>
+                s.Status == InterviewExportedAction.Created);
+
+            interviewSummary.CreatedDate = created?.Timestamp ?? DateTime.UtcNow;
+            interviewSummary.FirstAnswerDate = firstAnswerSet?.Timestamp;
+            interviewSummary.FirstInterviewerName = firstAnswerSet?.InterviewerName;
+            interviewSummary.FirstInterviewerId = firstAnswerSet?.InterviewerId;
+            interviewSummary.FirstSupervisorName = firstAnswerSet?.SupervisorName;
+            interviewSummary.FirstSupervisorId = firstAnswerSet?.SupervisorId;
+
+            return interviewSummary;
         }
     }
 }

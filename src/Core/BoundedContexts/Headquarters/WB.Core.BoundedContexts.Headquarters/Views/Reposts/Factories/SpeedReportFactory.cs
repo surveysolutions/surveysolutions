@@ -7,11 +7,9 @@ using Humanizer.Localisation;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 {
@@ -29,13 +27,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
     public class SpeedReportFactory : ISpeedReportFactory
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatusesStorage;
-        private readonly IQueryableReadSideRepositoryReader<SpeedReportInterviewItem> speedReportStorage;
 
-        public SpeedReportFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatusesStorage,
-            IQueryableReadSideRepositoryReader<SpeedReportInterviewItem> speedReportStorage)
+        public SpeedReportFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatusesStorage)
         {
             this.interviewStatusesStorage = interviewStatusesStorage;
-            this.speedReportStorage = speedReportStorage;
         }
 
         private class StatusChangeRecord
@@ -137,13 +132,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 total: interviewsForUser.Any() ? Math.Round(interviewsForUser.Select(i => Math.Abs(i.Timespan.TotalMinutes)).Sum(), 2) : (double?)null);
         }
 
-        private IQueryable<SpeedReportInterviewItem> QueryNonEmptyInterviewDurations(
+        private IQueryable<InterviewSummary> QueryNonEmptyInterviewDurations(
             Guid? questionnaireId,
             long? questionnaireVersion,
             DateTime fromDate,
             DateTime to)
         {
-            return this.speedReportStorage.Query(_ =>
+            return this.interviewStatusesStorage.Query(_ =>
             {
                 var query = _;
                 if (questionnaireId.HasValue)
@@ -237,14 +232,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 questionnaireId: input.QuestionnaireId,
                 questionnaireVersion: input.QuestionnaireVersion,
                 query: this.QueryNonEmptyInterviewDurations,
-                selectUser: u => u.InterviewerId.Value,
-                restrictUser: i => i.SupervisorId == input.SupervisorId,
+                selectUser: u => u.FirstInterviewerId.Value,
+                restrictUser: i => i.FirstSupervisorId == input.SupervisorId,
                 userIdSelector: i => new UserAndTimestampAndTimespan
                 {
-                    UserId = i.InterviewerId,
+                    UserId = i.FirstInterviewerId,
                     Timestamp = i.FirstAnswerDate.Value,
-                    Timespan = i.InterviewSummary.InterviewDurationLong ?? 0,
-                    UserName = i.InterviewerName
+                    Timespan = i.InterviewDurationLong ?? 0,
+                    UserName = i.FirstInterviewerName
                 });
 
         }
@@ -265,14 +260,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     questionnaireId: input.QuestionnaireId,
                     questionnaireVersion: input.QuestionnaireVersion,
                     query: this.QueryNonEmptyInterviewDurations,
-                    selectUser: u => u.SupervisorId.Value,
+                    selectUser: u => u.FirstSupervisorId.Value,
                     restrictUser: null,
                     userIdSelector: i => new UserAndTimestampAndTimespan
                     {
-                        UserId = i.SupervisorId,
+                        UserId = i.FirstSupervisorId,
                         Timestamp = i.FirstAnswerDate.Value,
-                        Timespan = i.InterviewSummary.InterviewDurationLong ?? 0,
-                        UserName = i.SupervisorName
+                        Timespan = i.InterviewDurationLong ?? 0,
+                        UserName = i.FirstSupervisorName
                     });
             }
 
