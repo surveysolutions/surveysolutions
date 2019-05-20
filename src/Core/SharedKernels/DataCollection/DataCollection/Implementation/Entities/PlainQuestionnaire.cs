@@ -1857,6 +1857,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         readonly ConcurrentDictionary<string, string> markdownTransformationCache = new ConcurrentDictionary<string, string>();
 
         public string ApplyMarkDownTransformation(string text) => 
-            markdownTransformationCache.GetOrAdd(text, QuestionnaireMarkdown.ToHtml);
+            markdownTransformationCache.GetOrAdd(text, s =>
+            {
+                var transform = QuestionnaireMarkdown.ToHtml(s);
+                if (s.Equals(transform, StringComparison.Ordinal))
+                {
+                    return null;
+                }
+
+                return transform;
+            });
     }
 }
