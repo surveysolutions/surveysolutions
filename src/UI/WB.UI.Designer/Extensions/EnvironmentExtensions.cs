@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Microsoft.AspNetCore.Hosting;
 
-namespace WB.UI.Designer1.Extensions
+namespace WB.UI.Designer.Extensions
 {
     public static class EnvironmentExtensions
     {

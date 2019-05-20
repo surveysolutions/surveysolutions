@@ -162,9 +162,6 @@
   <data name="WB0015_QuestionWithTitleSubstitutionCantBePrefilled" xml:space="preserve">
     <value>Вопрос с подстановкой в тексте или инструкциях не может быть помечен как идентифицирующий</value>
   </data>
-  <data name="WB0016_QuestionWithTitleSubstitutionCantReferenceSelf" xml:space="preserve">
-    <value>Вопрос с подстановкой в тексте или инструкциях не может ссылаться на себя</value>
-  </data>
   <data name="WB0017_SubstitutionReferencesNotExistingQuestionOrVariable" xml:space="preserve">
     <value>Подстановка ссылается на несуществующий вопрос либо переменную</value>
   </data>
@@ -733,5 +730,8 @@
   </data>
   <data name="WB0281_QuestionnaireExceededEntitiesLimit" xml:space="preserve">
     <value>Общее количество элементов ({0}) превышает системные лимиты ({1}). Рассмотрите возможность уменьшения количества вопросов, статических текстов, переменных или элементов фиксированных ростеров.</value>
+  </data>
+  <data name="WB0282_IdentifyingQuestionInSectionWithCondition" xml:space="preserve">
+    <value>Идентифицирующий вопрос не может быть расположен внутри секции с условием.</value>
   </data>
 </root>

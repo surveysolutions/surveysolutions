@@ -81,26 +81,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.filteredOptionsViewModel.Init(interviewId, entityIdentity, SuggestionsMaxCount);
 
+            this.Answer = this.interview.GetSingleOptionQuestion(this.Identity).GetAnswer()?.SelectedValue;
+            var initialFilter = this.Answer.HasValue ? this.filteredOptionsViewModel.GetAnsweredOption(this.Answer.Value)?.Title ?? null : null;
+
             this.comboboxViewModel.Init(interviewId, entityIdentity, navigationState);
+            this.comboboxViewModel.InitFilter(initialFilter);
             this.comboboxViewModel.OnItemSelected += ComboboxInstantViewModel_OnItemSelected;
             this.comboboxViewModel.OnAnswerRemoved += ComboboxInstantViewModel_OnAnswerRemoved;
             this.comboboxViewModel.OnShowErrorIfNoAnswer += ComboboxViewModel_OnShowErrorIfNoAnswer;
 
             comboboxCollection.Add(comboboxViewModel);
 
+           
+
             this.eventRegistry.Subscribe(this, interviewId);
         }
-
-        protected async Task SetAnswerAndUpdateFilter()
-        {
-            this.Answer = this.interview.GetSingleOptionQuestion(this.Identity).GetAnswer()?.SelectedValue;
-
-            if (this.Answer.HasValue)
-            {
-                await this.comboboxViewModel.UpdateFilter(this.filteredOptionsViewModel.GetAnsweredOption(this.Answer.Value)?.Title ?? null);
-            }
-        }
-
 
         public virtual async Task SaveAnswerAsync(int optionValue)
         {
@@ -175,7 +170,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.Answer = null;
 
-            comboboxViewModel?.UpdateFilter(null);
+            comboboxViewModel?.ResetFilterAndOptions();
         }
 
         public virtual void Dispose()

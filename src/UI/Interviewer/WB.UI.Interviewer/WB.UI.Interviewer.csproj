@@ -347,7 +347,7 @@
       <Version>5.0.0</Version>
     </PackageReference>
     <PackageReference Include="Esri.ArcGISRuntime" Condition="'$(ExcludeExtensions)' != 'True'">
-      <Version>100.4.0</Version>
+      <Version>100.5.0</Version>
     </PackageReference>
     <PackageReference Include="HockeySDK.Xamarin">
       <Version>5.1.2</Version>
@@ -434,7 +434,7 @@
       <Version>1.5.231</Version>
     </PackageReference>
     <PackageReference Include="SQLitePCLRaw.bundle_green">
-      <Version>1.1.11</Version>
+      <Version>1.1.13</Version>
     </PackageReference>
     <PackageReference Include="System.Collections.Immutable">
       <Version>1.5.0</Version>

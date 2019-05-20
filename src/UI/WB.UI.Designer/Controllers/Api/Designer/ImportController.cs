@@ -20,7 +20,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Designer.Api.Designer.Qbank;
-using WB.UI.Designer1.Extensions;
+using WB.UI.Designer.Extensions;
 
 namespace WB.UI.Designer.Controllers.Api.Designer
 {

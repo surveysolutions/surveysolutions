@@ -8,14 +8,7 @@
 @{
     ViewBag.Title = QuestionnaireHistoryResources.QuestionnaireChangeHistory;
 }
-@section Scripts {
-    <!-- list:css -->
-    <link rel="stylesheet" href="/css/list.css">
-    <!-- endinject -->
-    <!-- list:js -->
-    <script src="/js/list.js"></script>
-    <!-- endinject -->
-}
+
 <div id="edit-form" style="position: static;">
     <h3 style="margin: 0; white-space: nowrap; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
         @Html.ActionLink(QuestionnaireHistoryResources.Edit, "Details", "Questionnaire", new {id = Model.Id.FormatGuid()}, new {@class = "btn btn-default"}) @Model.Title
@@ -45,35 +38,37 @@
         else
         {
             var rows = Model.ChangeHistory.ToPagedList(page: Model.PageIndex, pageSize: Model.PageSize, totalCount: Model.TotalCount);
-        <table id="questionnaire-table-content" class="table table-content">
-            <tbody>
+            <table id="questionnaire-table-content" class="table table-content">
+                <tbody>
                 @foreach (var listViewModel in rows)
-                    {
+                {
 
-                <tr>
-                    <td class="search-value">
-                        @Html.FormatQuestionnaireHistoricalRecord(Url, Model.Id, listViewModel)
-                    </td>
-                    <td>@(listViewModel.UserName ?? QuestionnaireHistoryResources.UnknownUserName)</td>
-                    <td>
-                        <time time="@listViewModel.Timestamp.ToString("s")Z">@listViewModel.Timestamp.ConvertToLocalAndFormatDate()</time>
-                    </td>
-                    @if (!Model.ReadonlyMode)
-                            {
-                    <td>
-                        @if (listViewModel.HasRevertTo)
-                                    {
-                        <a href="javascript:void(0);" onclick="confirmRevert('@listViewModel.Timestamp.ToString("s")', '@listViewModel.Id')">@QuestionnaireHistoryResources.RevertToThisVersion</a>
-                                    }
-                    </td>
-                            }
-                </tr>
-                    }
-            </tbody>
-        </table>
-            @Html.Pager(rows.PageIndex + 1, rows.TotalPages, x => Url.Action(ViewContext.CurrentAction(), ViewContext.CurrentController(), new
+                    <tr>
+                        <td class="search-value">
+                            @Html.FormatQuestionnaireHistoricalRecord(Url, Model.Id, listViewModel)
+                        </td>
+                        <td>@(listViewModel.UserName ?? QuestionnaireHistoryResources.UnknownUserName)</td>
+                        <td>
+                            <time time="@listViewModel.Timestamp.ToString("s")Z">@listViewModel.Timestamp.ConvertToLocalAndFormatDate()</time>
+                        </td>
+                        @if (!Model.ReadonlyMode)
+                        {
+                            <td>
+                                @if (listViewModel.HasRevertTo)
+                                {
+                                    <a href="javascript:void(0);" onclick="confirmRevert('@listViewModel.Timestamp.ToString("s")', '@listViewModel.Id')">@QuestionnaireHistoryResources.RevertToThisVersion</a>
+                                }
+                            </td>
+                        }
+                    </tr>
+                }
+                </tbody>
+            </table>
+            
+            @Html.Pager(rows.PageIndex + 1, rows.TotalPages , 
+                x => Url.Action(ViewContext.CurrentAction(), ViewContext.CurrentController(), new
             {
-                page = x,
+                p = x,
                 id = Model.Id
             }), 2)
         }

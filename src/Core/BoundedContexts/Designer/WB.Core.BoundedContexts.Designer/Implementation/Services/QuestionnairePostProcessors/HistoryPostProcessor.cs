@@ -75,7 +75,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, RevertVersionQuestionnaire>,
         ICommandPostProcessor<Questionnaire, UpdateAreaQuestion>,
         ICommandPostProcessor<Questionnaire, UpdateAudioQuestion>,
-        ICommandPostProcessor<Questionnaire, UpdateMetadata>
+        ICommandPostProcessor<Questionnaire, UpdateMetadata>,
+        ICommandPostProcessor<Questionnaire, PassOwnershipFromQuestionnaire>
     {
         private readonly DesignerDbContext dbContext;
         private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
@@ -189,6 +190,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         public void Process(Questionnaire aggregate, RemoveSharedPersonFromQuestionnaire command)
             => this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Delete,
                 QuestionnaireItemType.Person, command.PersonId, this.GetUserEmail(command.PersonId), null);
+
+                public void Process(Questionnaire aggregate, PassOwnershipFromQuestionnaire command)
+        {
+            this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Move,
+                QuestionnaireItemType.Questionnaire, command.NewOwnerId, this.GetUserEmail(command.NewOwnerId), null);
+        }
 
         #endregion
 
@@ -557,8 +564,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         public void Process(Questionnaire aggregate, DeleteQuestion command)
         {
             var questionnaire = questionnaireStateTrackerStorage.GetById(command.QuestionnaireId.FormatGuid());
-            string questionTitle;
-            questionnaire.QuestionsState.TryGetValue(command.QuestionId, out questionTitle);
+            
+            questionnaire.QuestionsState.TryGetValue(command.QuestionId, out var questionTitle);
 
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Delete,
                 QuestionnaireItemType.Question, command.QuestionId, questionTitle, aggregate.QuestionnaireDocument);
@@ -885,5 +892,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 aggregate.QuestionnaireDocument
                 );
         }
+
     }
 }

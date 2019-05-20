@@ -17,9 +17,17 @@
                 });
             };
 
-            shareService.revokeAccess = function(email, questionnaireId) {
+            shareService.revokeAccess = function (userId, email, questionnaireId) {
                 return commandService.execute("RemoveSharedPersonFromQuestionnaire", {
+                    personId: userId,
                     email: email,
+                    questionnaireId: questionnaireId
+                });
+            };
+
+            shareService.passOwnership = function (ownerEmail, newOwnerId, newOwnerEmail, questionnaireId) {
+                return commandService.execute("PassOwnershipFromQuestionnaire", {
+                    ownerEmail, newOwnerId, newOwnerEmail,
                     questionnaireId: questionnaireId
                 });
             };

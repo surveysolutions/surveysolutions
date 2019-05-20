@@ -196,15 +196,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question with title or instructions substitution cannot reference itself..
-        /// </summary>
-        public static string WB0016_QuestionWithTitleSubstitutionCantReferenceSelf {
-            get {
-                return ResourceManager.GetString("WB0016_QuestionWithTitleSubstitutionCantReferenceSelf", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Substitution references a nonexistent question or variable..
         /// </summary>
         public static string WB0017_SubstitutionReferencesNotExistingQuestionOrVariable {
@@ -1903,6 +1894,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string WB0281_QuestionnaireExceededEntitiesLimit {
             get {
                 return ResourceManager.GetString("WB0281_QuestionnaireExceededEntitiesLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Identifying question cannot be placed inside section with enabling condition..
+        /// </summary>
+        public static string WB0282_IdentifyingQuestionInSectionWithCondition {
+            get {
+                return ResourceManager.GetString("WB0282_IdentifyingQuestionInSectionWithCondition", resourceCulture);
             }
         }
     }
