@@ -28,6 +28,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             ISubstitutionService substitutionService,
             IVariableToUIStringService variableToUiStringService)
         {
+            // this constructor is one of the most used constructors during interview progress
+            // do not add any cpu/memory intensive operations
             this.Text = text;
             this.BrowserReadyText = text;
             this.originalText = text;
