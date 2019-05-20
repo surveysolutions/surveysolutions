@@ -1,6 +1,7 @@
 <template>
     <div class="question table-view scroller" :id="hash">
         <ag-grid-vue 
+            ref="tableRoster"
             class="ag-theme-customStyles"
             :defaultColDef="defaultColDef"
             :columnDefs="columnDefs"
@@ -11,7 +12,8 @@
             headerHeight="50"
 
             @grid-ready="onGridReady"
-            @onCellEditingStopped="endCellEditting">
+            @column-resized="autosizeHeaders"
+            @cell-editing-stopped="endCellEditting">
         </ag-grid-vue>
     </div>
 </template>
@@ -94,6 +96,7 @@
                                 id: question.id,
                                 value: question,
                             },
+                            autoHeight: true,
                         };
                     }
                 );
@@ -134,6 +137,28 @@
 
                 this.gridApi = params.api;
                 this.columnApi = params.columnApi;
+
+                this.autosizeHeaders(params)
+            },
+
+            autosizeHeaders(event) {
+                if (event.finished !== false) {
+                    const MIN_HEIGHT = 16;
+                    event.api.setHeaderHeight(MIN_HEIGHT);
+                    const headerCells = $(this.$refs.tableRoster.$el).find('.ag-header-cell-label');
+                    let minHeight = MIN_HEIGHT;
+                    for (let index = 0; index < headerCells.length; index++) {
+                        const cell = headerCells[index];
+                        minHeight = Math.max(minHeight, cell.scrollHeight);
+                    }
+
+                    // set header height to calculated height + padding (top: 8px, bottom: 8px)
+                    event.api.setHeaderHeight(minHeight);
+
+                    // set all rows height to auto
+                    event.api.resetRowHeights();
+                    //gridOptions.api.resetRowHeights();
+                }
             },
 
             doScroll: debounce(function() {
@@ -150,7 +175,8 @@
             },
 
             endCellEditting(event) {
-			    console.log('cellEditingStopped, value:' + event.value);
+                event.api.resetRowHeights();
+			    //console.log('cellEditingStopped, value:' + event.value);
 		    }
         }
     }
