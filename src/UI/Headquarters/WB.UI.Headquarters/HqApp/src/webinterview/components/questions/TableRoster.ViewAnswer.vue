@@ -1,15 +1,13 @@
 <template>
     <div :class="questionStyle" :id='questionId'>
-        <a class="cell-content has-tooltip" v-popover.hover-focus="{title:validationTitle, content:validationMessage}" type="primary">
-            {{ answer }}
-        </a>
-        <!--popover>
-            <div class="popover error-tooltip" role="tooltip">
-                <div class="arrow"></div>
-                <h3 class="popover-title">{{validationTitle}}</h3>
-                <div class="popover-content">{{validationMessage}}</div>
-            </div>
-        </popover-->
+        <popover  :title="validationTitle" :enable="doesExistValidationMessage" trigger="hover-focus" append-to="body">
+            <a class="cell-content has-tooltip" type="primary" data-role="trigger">
+                {{ answer }}
+            </a>
+            <template slot="popover">
+                <div class="popover-content error-tooltip" v-html="validationMessage"></div>
+            </template>
+        </popover>
 
         <div class="">
 
@@ -45,6 +43,13 @@
             },
             isFetchInProgress() {
                 return this.$me.fetching
+            },
+            doesExistValidationMessage() {
+                if (this.$me.validity.messages && this.$me.validity.messages.length > 0)
+                    return true
+                if (this.$me.validity.warnings && this.$me.validity.warnings.length > 0)
+                    return true
+                return false
             },
             validationTitle() {
                 if (this.$me.validity.messages && this.$me.validity.messages.length > 0)
