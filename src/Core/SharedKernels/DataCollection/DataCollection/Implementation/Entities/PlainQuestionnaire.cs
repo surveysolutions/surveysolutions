@@ -963,8 +963,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
          
 
         public ReadOnlyCollection<Guid> GetChildInterviewerQuestions(Guid groupId)
-            => this.cacheOfChildInterviewerQuestions.GetOrAdd(groupId, this
-                    .GetGroupOrThrow(groupId)
+            => this.cacheOfChildInterviewerQuestions.GetOrAdd(groupId, id => this
+                    .GetGroupOrThrow(id)
                     .Children.OfType<IQuestion>()
                     .Where(IsInterviewierQuestion)
                     .Select(question => question.PublicKey)
@@ -1288,8 +1288,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public IEnumerable<Guid> GetRostersAffectedByRosterTitleQuestion(Guid questionId)
         {
-            return this.cacheOfRostersAffectedByRosterTitleQuestion.GetOrAdd(questionId,
-                this.GetRostersAffectedByRosterTitleQuestionImpl(questionId));
+            return this.cacheOfRostersAffectedByRosterTitleQuestion.GetOrAdd(questionId, this.GetRostersAffectedByRosterTitleQuestionImpl);
         }
 
         public bool IsRosterTitleQuestionAvailable(Guid rosterId)
