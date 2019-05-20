@@ -7,11 +7,8 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 {
     public class AutofacJobFactory : IJobFactory
     {
-        //private readonly IContainer kernel;
-
-        public AutofacJobFactory(/*IContainer kernel*/)
+        public AutofacJobFactory()
         {
-            //this.kernel = kernel;
         }
 
         /// <summary>
