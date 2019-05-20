@@ -1,5 +1,6 @@
 ﻿using System;
 using AndroidX.Work;
+using Java.Util.Concurrent;
 
 namespace WB.UI.Shared.Enumerator.Services.Notifications
 {
@@ -24,7 +25,7 @@ namespace WB.UI.Shared.Enumerator.Services.Notifications
         private PeriodicWorkRequest GetRequest()
         {
             PeriodicWorkRequest notificationsGenerationRequest =
-                PeriodicWorkRequest.Builder.From<NotificationsGenerationWorker>(TimeSpan.FromMinutes(60))
+                PeriodicWorkRequest.Builder.From<NotificationsGenerationWorker>(60, TimeUnit.Minutes)
                     .SetConstraints(Constraints.None)
                     .AddTag(WORKER_TAG)
                     .Build();
