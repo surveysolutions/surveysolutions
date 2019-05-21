@@ -1,4 +1,7 @@
-﻿using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+﻿using System;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
 {
@@ -36,5 +39,22 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
     public class DataExportUpdateRequestResult
     {
         public long JobId { get; set; }
+    }
+
+    public class ExportProcessStatusView
+    {
+        public string DataExportProcessId { get;  set; }
+        public DateTime BeginDate { get;  set; }
+        public DateTime LastUpdateDate { get;  set; }
+        public int Progress { get;  set; }
+        public DataExportType Type { get;  set; }
+        public DataExportFormat Format { get;  set; }
+        public InterviewStatus? InterviewStatus { get;  set; }
+        public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
+        public DataExportStatus ProcessStatus { get; set; }
+        public string QuestionnaireTitle { get; set; }
+        public bool HasFile { get; set; }
+        public bool IsFinished { get; set; }
+        public string Error { get; set; }
     }
 }
