@@ -858,19 +858,19 @@ It will appear on interviewer device after next synchronization</value>
     <value>Interviews</value>
   </data>
   <data name="Notifications_CompletedInterviewsText" xml:space="preserve">
-    <value>You have {0} interview that should be synchronize</value>
+    <value>You have {0} completed interview(s) that should be synchronized</value>
   </data>
   <data name="Notifications_RejectedInterviewsText" xml:space="preserve">
-    <value>You have {0} rejected interview that were not opened</value>
+    <value>You have {0} rejected interview(s) that were not handled</value>
   </data>
   <data name="Notifications_SyncTitle" xml:space="preserve">
     <value>Synchronization</value>
   </data>
   <data name="Notifications_SyncTooLongAgoText" xml:space="preserve">
-    <value>Synchronization was not successfully performed lately. Please synchronize.</value>
+    <value>Synchronization was not performed lately. Please synchronize</value>
   </data>
   <data name="Notifications_SyncNoRetryTitle" xml:space="preserve">
-    <value>After synchronization was terminated with errors there was no retry. Please try again.</value>
+    <value>After not successful synchronization there was no retry. Please try again</value>
   </data>
   <data name="Notifications_ManyStartedInterviews" xml:space="preserve">
     <value>You've started too many interviews. Complete them.</value>

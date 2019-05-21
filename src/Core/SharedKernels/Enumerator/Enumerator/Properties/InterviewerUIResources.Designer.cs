@@ -1249,7 +1249,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have {0} interview that should be synchronize.
+        ///   Looks up a localized string similar to You have {0} completed interview(s) that should be synchronized.
         /// </summary>
         public static string Notifications_CompletedInterviewsText {
             get {
@@ -1285,7 +1285,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have {0} rejected interview that were not opened.
+        ///   Looks up a localized string similar to You have {0} rejected interview(s) that were not handled.
         /// </summary>
         public static string Notifications_RejectedInterviewsText {
             get {
@@ -1303,7 +1303,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to After synchronization was terminated with errors there was no retry. Please try again..
+        ///   Looks up a localized string similar to After not successful synchronization there was no retry. Please try again.
         /// </summary>
         public static string Notifications_SyncNoRetryTitle {
             get {
@@ -1321,7 +1321,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Synchronization was not successfully performed lately. Please synchronize..
+        ///   Looks up a localized string similar to Synchronization was not performed lately. Please synchronize.
         /// </summary>
         public static string Notifications_SyncTooLongAgoText {
             get {
