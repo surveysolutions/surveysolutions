@@ -870,7 +870,7 @@ It will appear on interviewer device after next synchronization</value>
     <value>Synchronization was not performed lately. Please synchronize</value>
   </data>
   <data name="Notifications_SyncNoRetryTitle" xml:space="preserve">
-    <value>After not successful synchronization there was no retry. Please try again</value>
+    <value>There was no retry after failed synchronization. Please try again</value>
   </data>
   <data name="Notifications_ManyStartedInterviews" xml:space="preserve">
     <value>You've started too many interviews. Complete them.</value>

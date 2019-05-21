@@ -1303,7 +1303,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to After not successful synchronization there was no retry. Please try again.
+        ///   Looks up a localized string similar to There was no retry after failed synchronization. Please try again.
         /// </summary>
         public static string Notifications_SyncNoRetryTitle {
             get {
