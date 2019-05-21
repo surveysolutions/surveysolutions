@@ -9,9 +9,6 @@
             </template>
         </popover>
 
-        <div class="">
-
-        </div>
         <wb-progress :visible="isFetchInProgress" :valuenow="valuenow" :valuemax="valuemax" />
     </div>
 </template>
