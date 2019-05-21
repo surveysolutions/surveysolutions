@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore.ValueGeneration;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 
 namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings
@@ -16,7 +14,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings
 
             builder.Property(e => e.QuestionnaireId).HasColumnName("id").ValueGeneratedNever();
 
-            builder.Ignore(e => e.PublicId);
+            builder.Property(e => e.PublicId).HasColumnName("publicid");
 
             builder.Property(e => e.CreatedBy).HasColumnName("createdby");
 
