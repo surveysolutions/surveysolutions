@@ -1,5 +1,6 @@
 ﻿using System.Collections.Specialized;
 using System.Configuration;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
@@ -20,6 +21,7 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 
         public NameValueCollection GetSettings()
         {
+            var instanceid = ConfigurationManager.AppSettings["Scheduler.InstanceId"];
             var properties = new NameValueCollection
             {
                 ["quartz.jobStore.type"] = "Quartz.Impl.AdoJobStore.JobStoreTX, Quartz",
@@ -29,7 +31,7 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
                 ["quartz.dataSource.default.provider"] = "Npgsql-30",
                 ["quartz.jobStore.tablePrefix"] = "quartz.",
                 ["quartz.serializer.type"] = "binary",
-                ["quartz.scheduler.instanceId"] = "AUTO",
+                ["quartz.scheduler.instanceId"] = instanceid,
                 ["quartz.jobStore.clustered"] = ConfigurationManager.AppSettings["Scheduler.IsClustered"]
             };
 
