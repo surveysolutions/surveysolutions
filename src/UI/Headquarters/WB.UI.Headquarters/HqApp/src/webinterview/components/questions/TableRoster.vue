@@ -1,14 +1,15 @@
 <template>
     <div class="question table-view scroller" :id="hash">
+            <!-- domLayout='autoHeight' -->
         <ag-grid-vue 
             ref="tableRoster"
             class="ag-theme-customStyles"
+            style="height:400px;"
             :defaultColDef="defaultColDef"
             :columnDefs="columnDefs"
             :rowData="rowData"
             
             rowHeight="40"
-            domLayout='autoHeight'
             headerHeight="50"
 
             @grid-ready="onGridReady"
@@ -64,10 +65,11 @@
 
         watch: {
             ["$store.getters.scrollState"]() {
-                 this.scroll();
+                this.scroll();
             },
             ["$me.instances"]() {
                 this.initQuestionsInRows()
+                this.setTableRosterHeight()
             }
         },
 
@@ -139,6 +141,7 @@
                 this.columnApi = params.columnApi;
 
                 this.autosizeHeaders(params)
+                this.setTableRosterHeight()
             },
 
             autosizeHeaders(event) {
@@ -159,6 +162,14 @@
                     event.api.resetRowHeights();
                     //gridOptions.api.resetRowHeights();
                 }
+            },
+
+            setTableRosterHeight() {
+                var headerHeight = parseInt(this.$refs.tableRoster.headerHeight)
+                var rowsCount = this.$me.instances.length
+                var rowHeight = this.$refs.tableRoster.rowHeight * rowsCount
+                var height = headerHeight + (rowHeight > 400 ? 400 : rowHeight) + 5 /* scroll */ 
+                this.$refs.tableRoster.$el.style.height = height + 'px';
             },
 
             doScroll: debounce(function() {
