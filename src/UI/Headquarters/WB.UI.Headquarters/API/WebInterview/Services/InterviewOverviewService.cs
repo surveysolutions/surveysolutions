@@ -26,7 +26,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
         public IEnumerable<OverviewNode> GetOverview(IStatefulInterview interview, IQuestionnaire questionnaire,
             bool isReviewMode)
         {
-            var enabledSectionIds = interview.GetEnabledSections().Select(x => x.Identity).ToHashSet();
+            var enabledSectionIds = Enumerable.ToHashSet(interview.GetEnabledSections().Select(x => x.Identity));
 
             foreach (var enabledSectionId in enabledSectionIds)
             {
