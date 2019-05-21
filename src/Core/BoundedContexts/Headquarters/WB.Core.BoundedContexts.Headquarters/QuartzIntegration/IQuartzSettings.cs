@@ -1,4 +1,5 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Specialized;
 using System.Configuration;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -22,6 +23,12 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
         public NameValueCollection GetSettings()
         {
             var instanceid = ConfigurationManager.AppSettings["Scheduler.InstanceId"];
+            var isAudoMode = instanceid == "AUTO_MachineName";
+            if (isAudoMode)
+            {
+                instanceid = Environment.MachineName;
+            }
+
             var properties = new NameValueCollection
             {
                 ["quartz.jobStore.type"] = "Quartz.Impl.AdoJobStore.JobStoreTX, Quartz",
