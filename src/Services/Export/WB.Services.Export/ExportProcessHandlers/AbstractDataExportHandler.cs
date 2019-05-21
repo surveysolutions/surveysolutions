@@ -40,6 +40,8 @@ namespace WB.Services.Export.ExportProcessHandlers
                 processArgs.ArchivePassword, exportProgress);
 
             await this.dataExportFileAccessor.PublishArchiveToExternalStorageAsync(exportSettings.Tenant, archiveName, exportProgress);
+
+            this.dataExportProcessesService.ChangeStatusType(processArgs.ProcessId, DataExportStatus.Finished);
         }
 
         protected virtual bool CompressExportedData => true;

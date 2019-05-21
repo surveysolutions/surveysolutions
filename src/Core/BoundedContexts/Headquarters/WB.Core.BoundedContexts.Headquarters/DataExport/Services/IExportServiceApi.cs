@@ -11,6 +11,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
     public interface IExportServiceApi
     {
+        [Put("/api/v1/job/regenerate")]
+        Task<DataExportUpdateRequestResult> Regenerate(
+            long processId,
+            string archivePassword,
+            string accessToken);
+
         [Put("/api/v1/job/generate")]
         Task<DataExportUpdateRequestResult> RequestUpdate(
             string questionnaireId,
@@ -44,8 +50,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             [Query] DateTime? fromDate,
             [Query] DateTime? toDate);
 
+        [Get("/api/v1/job/wasExportRecreated")]
+        Task<bool> WasExportRecreated([Query] long processId);
+
         [Get("/api/v1/job")]
-        Task<RunningDataExportProcessView> GetJobsStatus([Query] long processId);
+        Task<DataExportProcessView> GetJobsStatus([Query] long processId);
 
         [Delete("/api/v1/job")]
         Task DeleteProcess([Query] string processId);

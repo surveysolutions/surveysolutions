@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WB.Services.Export.Questionnaire;
 
 namespace WB.Services.Export.Services.Processing
@@ -28,4 +29,12 @@ namespace WB.Services.Export.Services.Processing
     {
         public long JobId { get; set; }
     }
+
+    public class ExportFileInfoView
+    {
+        public DateTime LastUpdateDate { get; set; }
+        public double FileSize { get; set; }
+        public bool HasFile { get; set; }
+    }
+
 }

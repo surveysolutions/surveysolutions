@@ -45,10 +45,34 @@ namespace WB.Services.Export.Jobs
             this.exportFileAccessor = exportFileAccessor;
         }
 
-        public async Task<DataExportProcessView> GetDataExportStatusAsync(long processId)
+        public async Task<DataExportProcessView> GetDataExportStatusAsync(long processId, TenantInfo tenant)
         {
             DataExportProcessArgs process = await this.dataExportProcessesService.GetProcessAsync(processId);
-            return ToDataExportProcessView(process);
+            var dataExportProcessView = ToDataExportProcessView(process);
+
+            var exportSettings = new ExportSettings
+            {
+                Tenant = tenant,
+                QuestionnaireId = new QuestionnaireId(dataExportProcessView.QuestionnaireId),
+                ExportFormat = dataExportProcessView.Format,
+                Status = dataExportProcessView.InterviewStatus,
+                FromDate = dataExportProcessView.FromDate,
+                ToDate = dataExportProcessView.ToDate
+            };
+
+            dataExportProcessView.HasFile = false;
+            
+            var exportFileInfo = await GetExportFileInfo(exportSettings);
+
+            dataExportProcessView.DataFileLastUpdateDate = exportFileInfo.LastUpdateDate;
+            dataExportProcessView.FileSize = exportFileInfo.FileSize;
+            dataExportProcessView.HasFile = exportFileInfo.HasFile;
+
+            dataExportProcessView.DataDestination = process.StorageType.HasValue 
+                ? process.StorageType.Value.ToString() 
+                : "File";
+
+            return dataExportProcessView;
         }
 
         public async Task<DataExportStatusView> GetDataExportStatusForQuestionnaireAsync(
@@ -86,31 +110,6 @@ namespace WB.Services.Export.Jobs
                 runningDataExportProcesses: allProcesses.Where(p => p.IsRunning).ToArray());
         }
 
-        private static DataExportProcessView ToDataExportProcessView(DataExportProcessArgs dataExportProcessDetails) =>
-            new DataExportProcessView
-            {
-                IsRunning = dataExportProcessDetails.Status.IsRunning,
-                DataExportProcessId = dataExportProcessDetails.NaturalId,
-                BeginDate = dataExportProcessDetails.Status.BeginDate ?? DateTime.MinValue,
-                LastUpdateDate = dataExportProcessDetails.Status.LastUpdateDate,
-                Progress = dataExportProcessDetails.Status.ProgressInPercents,
-                TimeEstimation = dataExportProcessDetails.Status.TimeEstimation,
-                Format = dataExportProcessDetails.ExportSettings.ExportFormat,
-                ProcessStatus = dataExportProcessDetails.Status.Status,
-                Type = dataExportProcessDetails.ExportSettings.ExportFormat == DataExportFormat.Paradata
-                    ? DataExportType.ParaData
-                    : DataExportType.Data,
-                QuestionnaireId = dataExportProcessDetails.ExportSettings.QuestionnaireId.ToString(),
-                InterviewStatus = dataExportProcessDetails.ExportSettings.Status,
-                FromDate = dataExportProcessDetails.ExportSettings.FromDate,
-                ToDate = dataExportProcessDetails.ExportSettings.ToDate,
-                Error =  dataExportProcessDetails.Status.Error == null ? null : new DataExportErrorView
-                {
-                    Type = dataExportProcessDetails.Status.Error.Type,
-                    Message = dataExportProcessDetails.Status.Error.Message
-                }
-            };
-
         private async Task<DataExportView> CreateDataExportView(
             ExportSettings exportSettings,
             DataExportType dataType,
@@ -139,26 +138,12 @@ namespace WB.Services.Export.Jobs
             dataExportView.ProgressInPercents = process?.Progress ?? 0;
             dataExportView.TimeEstimation = process?.TimeEstimation;
 
-            string filePath = this.fileBasedExportedDataAccessor.GetArchiveFilePathForExportedData(exportSettings);
 
-            if (this.externalFileStorage.IsEnabled())
-            {
-                var externalStoragePath = this.exportFileAccessor.GetExternalStoragePath(exportSettings.Tenant, Path.GetFileName(filePath));
-                var metadata = await this.externalFileStorage.GetObjectMetadataAsync(externalStoragePath);
+            var exportFileInfo = await GetExportFileInfo(exportSettings);
 
-                if (metadata != null)
-                {
-                    dataExportView.LastUpdateDate = metadata.LastModified;
-                    dataExportView.FileSize = FileSizeUtils.SizeInMegabytes(metadata.Size);
-                    dataExportView.HasDataToExport = true;
-                }
-            }
-            else if (this.fileSystemAccessor.IsFileExists(filePath))
-            {
-                dataExportView.LastUpdateDate = this.fileSystemAccessor.GetModificationTime(filePath);
-                dataExportView.FileSize = FileSizeUtils.SizeInMegabytes(this.fileSystemAccessor.GetFileSize(filePath));
-                dataExportView.HasDataToExport = true;
-            }
+            dataExportView.LastUpdateDate = exportFileInfo.LastUpdateDate;
+            dataExportView.FileSize = exportFileInfo.FileSize;
+            dataExportView.HasDataToExport = exportFileInfo.HasFile;
 
             dataExportView.Error = process?.Error;
 
@@ -174,6 +159,63 @@ namespace WB.Services.Export.Jobs
                 && x.Type == dataType);
 
             return matchingProcess?.ProcessStatus ?? DataExportStatus.NotStarted;
+        }
+
+        private static DataExportProcessView ToDataExportProcessView(DataExportProcessArgs dataExportProcessDetails) =>
+            new DataExportProcessView
+            {
+                IsRunning = dataExportProcessDetails.Status.IsRunning,
+                DataExportProcessId = dataExportProcessDetails.NaturalId,
+                BeginDate = dataExportProcessDetails.Status.BeginDate ?? DateTime.MinValue,
+                LastUpdateDate = dataExportProcessDetails.Status.LastUpdateDate,
+                Progress = dataExportProcessDetails.Status.ProgressInPercents,
+                TimeEstimation = dataExportProcessDetails.Status.TimeEstimation,
+                Format = dataExportProcessDetails.ExportSettings.ExportFormat,
+                ProcessStatus = dataExportProcessDetails.Status.Status,
+                Type = dataExportProcessDetails.ExportSettings.ExportFormat == DataExportFormat.Paradata
+                    ? DataExportType.ParaData
+                    : DataExportType.Data,
+                QuestionnaireId = dataExportProcessDetails.ExportSettings.QuestionnaireId.ToString(),
+                InterviewStatus = dataExportProcessDetails.ExportSettings.Status,
+                FromDate = dataExportProcessDetails.ExportSettings.FromDate,
+                ToDate = dataExportProcessDetails.ExportSettings.ToDate,
+                Error =  dataExportProcessDetails.Status.Error == null ? null : new DataExportErrorView
+                {
+                    Type = dataExportProcessDetails.Status.Error.Type,
+                    Message = dataExportProcessDetails.Status.Error.Message
+                }
+            };
+
+        private async Task<ExportFileInfoView> GetExportFileInfo(ExportSettings exportSettings)
+        {
+            var exportFileInfo = new ExportFileInfoView
+            {
+                HasFile = false,
+                FileSize = 0,
+                LastUpdateDate = DateTime.MinValue
+            };
+
+            string filePath = this.fileBasedExportedDataAccessor.GetArchiveFilePathForExportedData(exportSettings);
+            if (this.externalFileStorage.IsEnabled())
+            {
+                var externalStoragePath = this.exportFileAccessor.GetExternalStoragePath(exportSettings.Tenant, Path.GetFileName(filePath));
+                var metadata = await this.externalFileStorage.GetObjectMetadataAsync(externalStoragePath);
+
+                if (metadata == null) 
+                    return exportFileInfo;
+
+                exportFileInfo.LastUpdateDate = metadata.LastModified;
+                exportFileInfo.FileSize = FileSizeUtils.SizeInMegabytes(metadata.Size);
+                exportFileInfo.HasFile = true;
+            }
+            else if (this.fileSystemAccessor.IsFileExists(filePath))
+            {
+                exportFileInfo.LastUpdateDate = this.fileSystemAccessor.GetModificationTime(filePath);
+                exportFileInfo.FileSize = FileSizeUtils.SizeInMegabytes(this.fileSystemAccessor.GetFileSize(filePath));
+                exportFileInfo.HasFile = true;
+            }
+
+            return exportFileInfo;
         }
     }
 }
