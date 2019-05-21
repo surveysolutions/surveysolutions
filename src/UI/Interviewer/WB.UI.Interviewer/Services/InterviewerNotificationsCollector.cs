@@ -50,8 +50,8 @@ namespace WB.UI.Interviewer.Services
             });*/
 
             var oneDayBeforeNow = DateTime.Now.Date.AddHours(-24);
-            var completedLateCount = this.interviewViewRepository.Count(x => x.CompletedDateTime <= oneDayBeforeNow);
-
+            var completedLateCount = this.interviewViewRepository.Count(x => x.CompletedDateTime <= oneDayBeforeNow 
+                                                                             && x.Status == InterviewStatus.Completed);
             if (completedLateCount > 0)
             {
                 notifications.Add(new NotificationModel()
@@ -67,7 +67,7 @@ namespace WB.UI.Interviewer.Services
 
             var UTCDayBeforeNow = DateTime.UtcNow.Date.AddHours(-24);
             var rejectedNotOpenedCount = 
-                this.interviewViewRepository.Count(x => x.Status == WB.Core.SharedKernels.DataCollection.ValueObjects.Interview.InterviewStatus.RejectedBySupervisor && 
+                this.interviewViewRepository.Count(x => x.Status == InterviewStatus.RejectedBySupervisor && 
                                                         x.FromHqSyncDateTime <= UTCDayBeforeNow);
 
             if (rejectedNotOpenedCount > 0)
