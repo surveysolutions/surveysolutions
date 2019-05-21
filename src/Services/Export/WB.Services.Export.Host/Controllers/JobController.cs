@@ -22,6 +22,7 @@ namespace WB.Services.Export.Host.Controllers
         private readonly IJobsStatusReporting jobsStatusReporting;
         private readonly IExportArchiveHandleService archiveHandleService;
         private readonly IJobService jobService;
+        
 
         public JobController(IDataExportProcessesService exportProcessesService,
             IJobsStatusReporting jobsStatusReporting,
@@ -32,6 +33,39 @@ namespace WB.Services.Export.Host.Controllers
             this.jobsStatusReporting = jobsStatusReporting ?? throw new ArgumentNullException(nameof(jobsStatusReporting));
             this.archiveHandleService = archiveHandleService ?? throw new ArgumentNullException(nameof(archiveHandleService));
             this.jobService = jobService ?? throw new ArgumentNullException(nameof(jobService));
+        }
+
+        [HttpPut]
+        [Route("api/v1/job/regenerate")]
+        public async Task<DataExportUpdateRequestResult> RequestUpdate(
+            long processId,
+            string archivePassword,
+            string accessToken,
+            TenantInfo tenant)
+        {
+            var process = await this.exportProcessesService.GetProcessAsync(processId);
+            var args = new DataExportProcessArgs
+            {
+                ExportSettings = new ExportSettings
+                {
+                    Tenant = tenant,
+                    QuestionnaireId = process.ExportSettings.QuestionnaireId,
+                    ExportFormat = process.ExportSettings.ExportFormat,
+                    FromDate = process.ExportSettings.FromDate,
+                    ToDate = process.ExportSettings.ToDate,
+                    Status = process.ExportSettings.Status
+                },
+                ArchivePassword = archivePassword,
+                AccessToken = accessToken,
+                StorageType = process.StorageType
+            };
+
+            var jobId = await exportProcessesService.AddDataExport(args);
+
+            return new DataExportUpdateRequestResult
+            {
+                JobId = jobId
+            };
         }
 
         [HttpPut]
@@ -138,10 +172,18 @@ namespace WB.Services.Export.Host.Controllers
         }
 
         [HttpGet]
+        [Route("api/v1/job/wasExportRecreated")]
+        public async Task<bool> WasExportFileRecreated(long processId, TenantInfo tenant)
+        {
+            var hasMoreRecentJob = await this.jobService.HasMostRecentFinishedJobIdWithSameTag(processId, tenant);
+            return hasMoreRecentJob;
+        }
+
+        [HttpGet]
         [Route("api/v1/job")]
         public async Task<DataExportProcessView> GetDataExportStatus(long processId, TenantInfo tenant)
         {
-            var exportStatus = await this.jobsStatusReporting.GetDataExportStatusAsync(processId);
+            var exportStatus = await this.jobsStatusReporting.GetDataExportStatusAsync(processId, tenant);
             return exportStatus;
         }
 

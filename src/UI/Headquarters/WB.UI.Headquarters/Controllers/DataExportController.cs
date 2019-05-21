@@ -57,7 +57,6 @@ namespace WB.UI.Headquarters.Controllers
                 Statuses = statuses,
                 Api = new
                 {
-                    AllDataUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "AllData"}),
                     HistoryUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "Paradata"}),
                     DDIUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "DDIMetadata"}),
                     ExportedDataReferencesForQuestionnaireUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "GetExportStatus"}),
@@ -66,9 +65,12 @@ namespace WB.UI.Headquarters.Controllers
 
                     
                     UpdateSurveyDataUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "RequestUpdate"}, Request.Url.Scheme),
+                    RegenerateSurveyDataUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "Regenerate"}, Request.Url.Scheme),
                     QuestionnairesUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesWithVersions"}),
                     StatusUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "Status"}, Request.Url.Scheme),
-                    DataAvailabilityUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "DataAvailability"}, Request.Url.Scheme)
+                    DataAvailabilityUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "DataAvailability"}, Request.Url.Scheme),
+                    WasExportFileRecreatedUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "WasExportFileRecreated"}, Request.Url.Scheme),
+                    DownloadDataUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "DownloadData"}),
                 }
             };
 

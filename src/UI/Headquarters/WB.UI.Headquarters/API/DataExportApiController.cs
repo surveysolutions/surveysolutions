@@ -16,6 +16,7 @@ using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -67,7 +68,8 @@ namespace WB.UI.Headquarters.API
         {
             try
             {
-                return await this.exportServiceApi.GetAllJobsList();
+                var jobs = (await this.exportServiceApi.GetAllJobsList()).OrderByDescending(x => x).ToList();
+                return jobs;
             }
             catch (Exception)
             {
@@ -81,14 +83,12 @@ namespace WB.UI.Headquarters.API
         [CamelCase]
         public async Task<HttpResponseMessage> Status(long id)
         {
-            var processView = await this.exportServiceApi.GetJobsStatus(id);
-            var questionnaire = this.questionnaireBrowseViewFactory.GetById(processView.QuestionnaireIdentity);
-            if (questionnaire == null)
+            var result = await dataExportStatusReader.GetProcessStatus(id);
+            if (result == null)
             {
                 return Request.CreateResponse(HttpStatusCode.NotFound);
             }
-            processView.QuestionnaireTitle = questionnaire.Title;
-            return Request.CreateResponse(processView);
+            return Request.CreateResponse(result);
         }
 
         [HttpGet]
@@ -104,6 +104,36 @@ namespace WB.UI.Headquarters.API
             }
             return Request.CreateResponse(HttpStatusCode.OK, result);
         }
+
+        [HttpGet]
+        [ObserverNotAllowedApi]
+        [ApiNoCache]
+        [CamelCase]
+        public async Task<HttpResponseMessage> WasExportFileRecreated(long id)
+        {
+            var result = await dataExportStatusReader.WasExportFileRecreated(id);
+            return Request.CreateResponse(HttpStatusCode.OK, result);
+        }
+
+        [HttpGet]
+        [ObserverNotAllowedApi]
+        [ApiNoCache]
+        public async Task<HttpResponseMessage> DownloadData(long id)
+        {
+            var processView = await dataExportStatusReader.GetProcessStatus(id);
+            if (processView == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+
+            return await this.AllData(
+                processView.QuestionnaireIdentity.QuestionnaireId, 
+                processView.QuestionnaireIdentity.Version, 
+                processView.Format, 
+                processView.InterviewStatus,
+                processView.FromDate, 
+                processView.ToDate);
+        }
         
         [HttpGet]
         [ObserverNotAllowedApi]
@@ -113,7 +143,7 @@ namespace WB.UI.Headquarters.API
             DateTime? from = null, 
             DateTime? to = null)
         {
-            var result = await this.dataExportStatusReader.GetDataArchive(new QuestionnaireIdentity(id, version), format, status, from , to);
+            DataExportArchive result = await this.dataExportStatusReader.GetDataArchive(new QuestionnaireIdentity(id, version), format, status, from , to);
             if (result == null)
             {
                 return Request.CreateResponse(HttpStatusCode.NotFound);
@@ -158,6 +188,15 @@ namespace WB.UI.Headquarters.API
             };
 
             return response;
+        }
+
+        
+        [HttpPost]
+        [ObserverNotAllowedApi]
+        public async Task<HttpResponseMessage> Regenerate(long id, string accessToken = null)
+        {
+            var result = await this.exportServiceApi.Regenerate(id, GetPasswordFromSettings(), null);
+            return Request.CreateResponse(HttpStatusCode.OK, result);
         }
 
         [HttpPost]

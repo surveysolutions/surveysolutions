@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             InterviewStatus? status = null, DateTime? from = null, DateTime? to = null)
         {
             var archiveFileName = exportFileNameService.GetQuestionnaireTitleWithVersion(questionnaireIdentity);
-            var result = await exportServiceApi.DownloadArchive(questionnaireIdentity.ToString(), archiveFileName,
+            var result = await exportServiceApi.DownloadArchive(questionnaireIdentity.ToString(), archiveFileName, 
                 format, status, from, to);
 
             if (result.StatusCode == HttpStatusCode.NotFound) return null;
@@ -78,6 +78,29 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                 HasBinaryData = questionnaire.HasAnyMultimediaQuestion() || hasAssignmentWithAudioRecordingEnabled,
                 HasInterviews = true
             });
+        }
+
+        public async Task<DataExportProcessView> GetProcessStatus(long id)
+        {
+            DataExportProcessView processView = await this.exportServiceApi.GetJobsStatus(id);
+            if (processView == null)
+            {
+                return null;
+            }
+
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(processView.QuestionnaireIdentity, null);
+            if (questionnaire == null)
+            {
+                return null;
+            }
+
+            processView.Title = questionnaire.Title;
+            return processView;
+        }
+
+        public async Task<bool> WasExportFileRecreated(long processId)
+        {
+            return await exportServiceApi.WasExportRecreated(processId);
         }
 
         public async Task<DataExportStatusView> GetDataExportStatusForQuestionnaireAsync(

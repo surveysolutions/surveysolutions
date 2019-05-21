@@ -82,14 +82,14 @@
                 <span class="format-data zip">Binary Data. Archive with binary data (e.g., pictures, audio)</span>
               </label>
             </div>
-            <div class="data-type-row">
+            <div class="data-type-row" v-if="questionnaireVersion">
               <input class="radio-row" type="radio" name="dataType" id="ddiData" v-model="dataType" value="ddiData">
               <label for="ddiData">
                 <span class="tick"></span>
                 <span class="format-data format-data">DDI. Data Documentation Initiative XML data</span>
               </label>
             </div>
-            <div class="data-type-row"  v-if="hasInterviews">
+            <div class="data-type-row" v-if="hasInterviews">
               <input class="radio-row" type="radio" name="dataType" id="paraData" v-model="dataType" value="paraData">
               <label for="paraData">
                 <span class="tick"></span>
@@ -177,10 +177,7 @@
                 <div class="no-sets hidden">No generated sets yet</div>
                 <h3>Previously generated export sets</h3>
                 <p>Every set is a zip archive with all collected interview data and DDI XML structure you an download previously generated reports</p>
-                <template v-for="result in exportResults" v-key="result.id">
-                   <ExportProcessCard :data="result"></ExportProcessCard>
-                </template>
-
+                <ExportProcessCard  v-for="result in exportResults" v-bind:key="result.id" :data="result"></ExportProcessCard>
             </div>
         </div>
     </div>
@@ -262,7 +259,7 @@ export default {
       updateExportCards(){
         var self = this;
         this.$http.get(this.$config.model.api.statusUrl)
-            .then(function (response) {
+            .then((response) => {
 
               self.exportServiceIsUnavailable = response.data == null;
 
@@ -273,14 +270,16 @@ export default {
                 var incomingJobIndex = 0;
                 while(incomingJobIndex < exportIds.length && existingJobIndex < self.exportResults.length)
                 {
-                  if (self.exportResults[existingJobIndex].id == exportIds[incomingJobIndex])
+                  var existingProcessId = self.exportResults[existingJobIndex].id;
+                  var newProcessId = exportIds[incomingJobIndex];
+                  if (existingProcessId == newProcessId)
                   {
                     existingJobIndex++;
                     incomingJobIndex++;
                   }
-                  else if (self.exportResults[existingJobIndex].id < exportIds[incomingJobIndex])
+                  else if (existingProcessId < newProcessId)
                   {
-                    self.exportResults.splice(existingJobIndex, 0, { id: exportIds[incomingJobIndex]})
+                    self.exportResults.splice(existingJobIndex, 0, { id: newProcessId})
                     existingJobIndex++;
                     incomingJobIndex++;
                   }
@@ -290,7 +289,7 @@ export default {
                 }
                 for(let i=incomingJobIndex;i<exportIds.length;i++)
                 {
-                  self.exportResults.push({ id: exportIds[incomingJobIndex]});
+                  self.exportResults.push({ id: exportIds[i]});
                 }
               }
             })
