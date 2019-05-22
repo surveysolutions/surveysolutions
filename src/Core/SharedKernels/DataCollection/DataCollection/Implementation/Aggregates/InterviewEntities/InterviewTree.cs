@@ -115,18 +115,31 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public IReadOnlyCollection<InterviewTreeNodeDiff> Compare(InterviewTree that)
         {
-            var existingIdentities = this.nodesCache.Keys.Where(thisIdentity => that.nodesCache.ContainsKey(thisIdentity));
-            var removedIdentities = this.nodesCache.Keys.Where(thisIdentity => !that.nodesCache.ContainsKey(thisIdentity));
-            var addedIdentities = that.nodesCache.Keys.Where(thatIdentity => !this.nodesCache.ContainsKey(thatIdentity));
+            IEnumerable<InterviewTreeNodeDiff> GetDiffs()
+            {                
+                foreach (var identity in this.nodesCache.Keys)
+                {
+                    if (that.nodesCache.ContainsKey(identity))
+                    {
+                        yield return InterviewTreeNodeDiff.Create(this.nodesCache[identity], that.nodesCache[identity]);
+                    }
 
-            var diffs =
-                existingIdentities.Select(identity => InterviewTreeNodeDiff.Create(this.nodesCache[identity], that.nodesCache[identity]))
-                    .Concat(
-                removedIdentities.Select(identity => InterviewTreeNodeDiff.Create(this.nodesCache[identity], null)))
-                    .Concat(
-                addedIdentities.Select(identity => InterviewTreeNodeDiff.Create(null, that.nodesCache[identity])));
+                    if (!that.nodesCache.ContainsKey(identity))
+                    {
+                        yield return InterviewTreeNodeDiff.Create(this.nodesCache[identity], null);
+                    }
+                }
 
-            return diffs
+                foreach (var identity in that.nodesCache.Keys)
+                {
+                    if (!this.nodesCache.ContainsKey(identity))
+                    {
+                        yield return InterviewTreeNodeDiff.Create(null, that.nodesCache[identity]);
+                    }
+                }
+            }
+
+            return GetDiffs()
                 .Where(diff =>
                     diff.IsNodeAdded ||
                     diff.IsNodeRemoved ||
@@ -144,7 +157,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     IsLinkedToListOptionsSetChanged(diff as InterviewTreeQuestionDiff) ||
                     IsFailedErrorValidationIndexChanged(diff as InterviewTreeValidateableDiff) ||
                     IsFailedWarningValidationIndexChanged(diff as InterviewTreeValidateableDiff))
-                .ToReadOnlyCollection();
+                .ToList();
         }
 
         private bool IsFailedErrorValidationIndexChanged(InterviewTreeValidateableDiff diff) 

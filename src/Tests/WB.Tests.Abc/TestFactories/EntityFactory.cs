@@ -807,7 +807,7 @@ namespace WB.Tests.Abc.TestFactories
                     document.AsReadOnly().AssignMissingVariables());
             }
             return new PlainQuestionnaire(document, version, questionOptionsRepository ?? Mock.Of<IQuestionOptionsRepository>(), 
-                substitutionService ?? Mock.Of<ISubstitutionService>(), translation);
+                substitutionService ?? Mock.Of<ISubstitutionService>(), translation ?? document.Translations.FirstOrDefault());
         }
 
         public QRBarcodeQuestion QRBarcodeQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,

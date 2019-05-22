@@ -827,7 +827,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         }
 
         public abstract void RemoveAnswer();
-        public abstract bool EqualByAnswer(BaseInterviewQuestion question);
+        public bool EqualByAnswer(BaseInterviewQuestion question)
+        {
+            return Equals(Answer, question?.Answer);
+        }
 
         public void SetAnswerTime(DateTime? answerTimeUtc)
         {
@@ -858,7 +861,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void SetAnswer(GpsAnswer answer) => this.answer = answer;
         public override void RemoveAnswer() => this.answer = null;
 
-        public override bool EqualByAnswer(BaseInterviewQuestion question) => (question as InterviewTreeGpsQuestion)?.answer == this.answer;
         public override AbstractAnswer Answer => this.answer;
 
         public override BaseInterviewQuestion Clone() => (InterviewTreeGpsQuestion) this.MemberwiseClone();
@@ -890,7 +892,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void SetAnswer(AudioAnswer answer) => this.answer = answer;
         public override void RemoveAnswer() => this.answer = null;
 
-        public override bool EqualByAnswer(BaseInterviewQuestion question) => (question as InterviewTreeAudioQuestion)?.answer == this.answer;
         public override AbstractAnswer Answer => this.answer;
 
         public override BaseInterviewQuestion Clone() => (InterviewTreeAudioQuestion)this.MemberwiseClone();
@@ -917,8 +918,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void SetAnswer(MultimediaAnswer answer) => this.answer = answer;
         public override void RemoveAnswer() => this.answer = null;
 
-        public override bool EqualByAnswer(BaseInterviewQuestion question) => (question as InterviewTreeMultimediaQuestion)?.answer == this.answer;
-
         public override BaseInterviewQuestion Clone() => (InterviewTreeMultimediaQuestion) this.MemberwiseClone();
 
         public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
@@ -943,9 +942,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public AreaAnswer GetAnswer() => this.answer;
         public void SetAnswer(AreaAnswer answer) => this.answer = answer;
         public override void RemoveAnswer() => this.answer = null;
-
-        public override bool EqualByAnswer(BaseInterviewQuestion question) => (question as InterviewTreeAreaQuestion)?.answer == this.answer;
-
+        
         public override BaseInterviewQuestion Clone() => (InterviewTreeAreaQuestion)this.MemberwiseClone();
 
         public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
@@ -972,9 +969,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public virtual NumericIntegerAnswer GetAnswer() => this.answer;
         public void SetAnswer(NumericIntegerAnswer answer) => this.answer = answer;
         public override void RemoveAnswer() => this.answer = null;
-
-        public override bool EqualByAnswer(BaseInterviewQuestion question) => (question as InterviewTreeIntegerQuestion)?.answer == this.answer;
-
+        
         public override BaseInterviewQuestion Clone() => (InterviewTreeIntegerQuestion)this.MemberwiseClone();
 
         public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
@@ -1021,8 +1016,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void SetAnswer(NumericRealAnswer answer) => this.answer = answer;
         public override void RemoveAnswer() => this.answer = null;
 
-        public override bool EqualByAnswer(BaseInterviewQuestion question) => (question as InterviewTreeDoubleQuestion)?.answer == this.answer;
-
         public override BaseInterviewQuestion Clone() => (InterviewTreeDoubleQuestion)this.MemberwiseClone();
 
         public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
@@ -1053,8 +1046,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public QRBarcodeAnswer GetAnswer() => this.answer;
         public void SetAnswer(QRBarcodeAnswer answer) => this.answer = answer;
         public override void RemoveAnswer() => this.answer = null;
-        public override bool EqualByAnswer(BaseInterviewQuestion question) => (question as InterviewTreeQRBarcodeQuestion)?.answer == this.answer;
-
+        
         public override BaseInterviewQuestion Clone() => (InterviewTreeQRBarcodeQuestion)this.MemberwiseClone();
 
         public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
@@ -1085,9 +1077,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public TextAnswer GetAnswer() => this.answer;
         public void SetAnswer(TextAnswer answer) => this.answer = answer;
         public override void RemoveAnswer() => this.answer = null;
-
-        public override bool EqualByAnswer(BaseInterviewQuestion question) => (question as InterviewTreeTextQuestion)?.answer == this.answer;
-        
         public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
 
         public override void RunImportInvariants(InterviewQuestionInvariants questionInvariants)
@@ -1117,22 +1106,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void SetAnswer(YesNoAnswer newAnswer) => this.answer = newAnswer;
 
         public override void RemoveAnswer() => this.answer = null;
-
-        public override bool EqualByAnswer(BaseInterviewQuestion question)
-        {
-            var interviewTreeYesNoQuestion = question as InterviewTreeYesNoQuestion;
-            if (interviewTreeYesNoQuestion == null)
-                return false;
-
-            if (interviewTreeYesNoQuestion.answer == null && this.answer == null)
-                return true;
-
-            if (interviewTreeYesNoQuestion.answer != null && this.answer != null)
-                return interviewTreeYesNoQuestion.answer.ToAnsweredYesNoOptions().SequenceEqual(this.answer.ToAnsweredYesNoOptions());
-
-            return false;
-        }
-
+      
         public void ProtectAnswers()
         {
             this.ProtectedAnswer = GetAnswer();
@@ -1183,20 +1157,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public virtual TextListAnswer GetAnswer() => this.answer;
         public void SetAnswer(TextListAnswer answer) => this.answer = answer;
         public override void RemoveAnswer() => this.answer = null;
-
-        public override bool EqualByAnswer(BaseInterviewQuestion question)
-        {
-            var interviewTreeTextListQuestion = question as InterviewTreeTextListQuestion;
-            if (interviewTreeTextListQuestion == null)
-                return false;
-            if (interviewTreeTextListQuestion?.answer == null && this.answer == null)
-                return true;
-
-            if (interviewTreeTextListQuestion?.answer != null && this.answer != null)
-                return interviewTreeTextListQuestion.answer.ToTupleArray().SequenceEqual(this.answer.ToTupleArray());
-
-            return false;
-        }
 
         public string GetTitleByItemCode(decimal code)
         {
@@ -1259,8 +1219,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void SetAnswer(CategoricalFixedSingleOptionAnswer answer) => this.answer = answer;
         public override void RemoveAnswer() => this.answer = null;
 
-        public override bool EqualByAnswer(BaseInterviewQuestion question) => (question as InterviewTreeSingleOptionQuestion)?.answer == this.answer;
-
         public override BaseInterviewQuestion Clone() => (InterviewTreeSingleOptionQuestion) this.MemberwiseClone();
 
         public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
@@ -1292,20 +1250,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public CategoricalFixedMultiOptionAnswer GetAnswer() => this.answer;
         public void SetAnswer(CategoricalFixedMultiOptionAnswer answer) => this.answer = answer;
         public override void RemoveAnswer() => this.answer = null;
-
-        public override bool EqualByAnswer(BaseInterviewQuestion question)
-        {
-            var interviewTreeMultiOptionQuestion = question as InterviewTreeMultiOptionQuestion;
-            if (interviewTreeMultiOptionQuestion == null)
-                return false;
-             if (interviewTreeMultiOptionQuestion.answer == null && this.answer == null)
-                return true;
-
-            if (interviewTreeMultiOptionQuestion.answer != null && this.answer != null)
-                return interviewTreeMultiOptionQuestion.answer.CheckedValues.SequenceEqual(this.answer.CheckedValues);
-
-            return false;
-        }
 
         public override BaseInterviewQuestion Clone() => (InterviewTreeMultiOptionQuestion) this.MemberwiseClone();
 
@@ -1357,8 +1301,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void SetAnswer(CategoricalLinkedSingleOptionAnswer answer) => this.answer = answer;
         public override void RemoveAnswer() => this.answer = null;
 
-        public override bool EqualByAnswer(BaseInterviewQuestion question) => (question as InterviewTreeSingleLinkedToRosterQuestion)?.answer == this.answer;
-
         public override BaseInterviewQuestion Clone()
         {
             var clone = (InterviewTreeSingleLinkedToRosterQuestion) this.MemberwiseClone();
@@ -1387,20 +1329,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void SetAnswer(CategoricalLinkedMultiOptionAnswer answer) => this.answer = answer;
 
         public override void RemoveAnswer() => this.answer = null;
-
-        public override bool EqualByAnswer(BaseInterviewQuestion question)
-        {
-            var interviewTreeMultiLinkedToRosterQuestion = question as InterviewTreeMultiLinkedToRosterQuestion;
-            if (interviewTreeMultiLinkedToRosterQuestion == null)
-                return false;
-            if (interviewTreeMultiLinkedToRosterQuestion?.answer == null && this.answer == null)
-                return true;
-
-            if (interviewTreeMultiLinkedToRosterQuestion?.answer != null && this.answer != null)
-                return interviewTreeMultiLinkedToRosterQuestion.answer.CheckedValues.SelectMany(x => x.Coordinates).SequenceEqual(this.answer.CheckedValues.SelectMany(x => x.Coordinates));
-
-            return false;
-        }
 
         public override BaseInterviewQuestion Clone()
         {
@@ -1477,21 +1405,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public CategoricalFixedMultiOptionAnswer GetAnswer() => this.answer;
         public void SetAnswer(CategoricalFixedMultiOptionAnswer answer) => this.answer = answer;
 
-        public override bool EqualByAnswer(BaseInterviewQuestion question)
-        {
-            var interviewTreeMultiOptionLinkedToListQuestion = question as InterviewTreeMultiOptionLinkedToListQuestion;
-            if (interviewTreeMultiOptionLinkedToListQuestion == null)
-                return false;
-
-            if (interviewTreeMultiOptionLinkedToListQuestion?.answer == null && this.answer == null)
-                return true;
-
-            if (interviewTreeMultiOptionLinkedToListQuestion?.answer != null && this.answer != null)
-                return interviewTreeMultiOptionLinkedToListQuestion.answer.CheckedValues.SequenceEqual(this.answer.CheckedValues);
-
-            return false;
-        }
-
         public override void RemoveAnswer() => this.answer = null;
 
         public override BaseInterviewQuestion Clone()
@@ -1519,7 +1432,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public override bool IsAnswered() => this.answer != null;
         public CategoricalFixedSingleOptionAnswer GetAnswer() => this.answer;
         public void SetAnswer(CategoricalFixedSingleOptionAnswer answer) => this.answer = answer;
-        public override bool EqualByAnswer(BaseInterviewQuestion question) => (question as InterviewTreeSingleOptionLinkedToListQuestion)?.answer == this.answer;
         public override void RemoveAnswer() => this.answer = null;
 
         public override BaseInterviewQuestion Clone()
