@@ -695,4 +695,7 @@
     <value>Отмечено точек: {0}</value>
     <comment>Отмечено точек: {0}</comment>
   </data>
+  <data name="Notifications_SummaryTitle" xml:space="preserve">
+    <value>{0} уведомлений</value>
+  </data>
 </root>

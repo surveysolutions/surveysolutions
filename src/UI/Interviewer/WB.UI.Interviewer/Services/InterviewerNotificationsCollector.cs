@@ -41,10 +41,20 @@ namespace WB.UI.Interviewer.Services
             //test
             /*notifications.Add(new NotificationModel()
             {
-                NotificationId = (int)NotificationType.Unknown,
+                NotificationId = 10021,
                 AutoCancel = true,
                 ContentTitle = "test",
                 ContentText = "test content",
+                IconId = Resource.Drawable.icon,
+                Intent = GetPendingIntent()
+            });
+
+            notifications.Add(new NotificationModel()
+            {
+                NotificationId = 10022,
+                AutoCancel = true,
+                ContentTitle = "test 1",
+                ContentText = "test content 1",
                 IconId = Resource.Drawable.icon,
                 Intent = GetPendingIntent()
             });*/
