@@ -22,6 +22,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             {
                 m.PropertyReference(r => r.SummaryId);
                 m.Access(Accessor.ReadOnly);
+                m.Cascade(Cascade.None);
             });
         }
     }
