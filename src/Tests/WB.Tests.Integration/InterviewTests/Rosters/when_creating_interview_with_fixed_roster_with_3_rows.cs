@@ -36,7 +36,9 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 {
                     var questionnaireIdentity = new QuestionnaireIdentity(questionnaireDocument.PublicKey, 1);
 
-                    var interview = SetupStatefullInterview(questionnaireDocument);
+                    var interview = Create.AggregateRoot.StatefulInterview(interviewId: Guid.Empty,
+                        questionnaire: questionnaireDocument,
+                        shouldBeInitialized: false);
 
                     var command = Create.Command.CreateInterview(Guid.Empty, Guid.NewGuid(), questionnaireIdentity, 
                         Guid.NewGuid(), null, null, null);
