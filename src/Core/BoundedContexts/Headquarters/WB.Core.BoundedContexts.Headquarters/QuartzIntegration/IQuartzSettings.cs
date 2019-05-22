@@ -23,8 +23,8 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
         public NameValueCollection GetSettings()
         {
             var instanceid = ConfigurationManager.AppSettings["Scheduler.InstanceId"];
-            var isAudoMode = instanceid == "AUTO_MachineName";
-            if (isAudoMode)
+            var isAutoMode = instanceid == "AUTO_MachineName";
+            if (isAutoMode)
             {
                 instanceid = Environment.MachineName;
             }
