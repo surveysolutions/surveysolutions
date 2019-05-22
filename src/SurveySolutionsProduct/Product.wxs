@@ -27,8 +27,8 @@
     <!--<PropertyRef Id="WIX_IS_NETFRAMEWORK_471_OR_LATER_INSTALLED" />-->
 
     <PropertyRef Id="NETFRAMEWORK45" />
-    <Condition Message="This application requires .NET Framework 4.7.1 Please install the .NET 4.7.1 Framework then run this installer again.">
-      <![CDATA[Installed OR (NETFRAMEWORK45 AND NETFRAMEWORK45 >= "#461308")]]>
+    <Condition Message="This application requires .NET Framework 4.8 Please install the .NET 4.8 Framework then run this installer again.">
+      <![CDATA[Installed OR (NETFRAMEWORK45 AND NETFRAMEWORK45 >= "#528040")]]>
     </Condition>
 
         <Condition Message="This application only runs in Windows Server 2012 R2 or higher.">
