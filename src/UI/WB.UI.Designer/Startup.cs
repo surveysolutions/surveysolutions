@@ -218,12 +218,7 @@ namespace WB.UI.Designer
                 opt.DefaultRequestCulture = new RequestCulture("en-US");
                 opt.SupportedCultures = new List<CultureInfo>
                 {
-                    new CultureInfo("en"),
-                    new CultureInfo("ru"),
-                    new CultureInfo("fr"),
-                    new CultureInfo("es"),
-                    new CultureInfo("ar"),
-                    new CultureInfo("zh")
+                    new CultureInfo("en")
                 };
                 opt.SupportedUICultures = new List<CultureInfo>
                 {
