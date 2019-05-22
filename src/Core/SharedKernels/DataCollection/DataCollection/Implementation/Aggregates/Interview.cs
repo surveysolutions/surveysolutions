@@ -118,6 +118,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.UsesExpressionStorage = @event.UsesExpressionStorage;
             this.properties.AssignmentId = @event.AssignmentId;
             this.properties.IsAudioRecordingEnabled = @event.IsAudioRecordingEnabled;
+            this.properties.WasCreated = true;
         }
 
         public virtual void Apply(InterviewOnClientCreated @event)
@@ -655,6 +656,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         #region Questionnaire
 
         public string Language { get; private set; }
+
         public QuestionnaireIdentity QuestionnaireIdentity { get; protected set; }
 
         public bool UsesExpressionStorage { get; protected set; } = false;
@@ -1507,6 +1509,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void CreateInterview(CreateInterview command)
         {
+            InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
+            propertiesInvariants.ThrowIfInterviewWasCreated();
+
             this.QuestionnaireIdentity = command.QuestionnaireId;
             InterviewTree changedInterviewTree = this.Tree.Clone();
 
