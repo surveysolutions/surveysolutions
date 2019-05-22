@@ -63,7 +63,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         private void RecordInterviewCreated(InterviewSummary summary, DateTime createdTime, Guid interviewId, Guid questionnaireId,
             long questionnaireVersion)
         {
-            var state = new SpeedReportInterviewItem(summary);
+            // prevent from NH using Merge method since InterviewSummary is not saved at this point https://issues.mysurvey.solutions/youtrack/issue/KP-12857
+            var state = this.speedReportRepository.GetById(interviewId) ?? new SpeedReportInterviewItem(summary);
+
             state.CreatedDate = createdTime;
             state.InterviewId = interviewId.FormatGuid();
             state.QuestionnaireId = questionnaireId;
