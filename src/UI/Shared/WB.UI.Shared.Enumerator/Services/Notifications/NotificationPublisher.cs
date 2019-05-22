@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Support.V4.App;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.Enumerator.Properties;
 
 namespace WB.UI.Shared.Enumerator.Services.Notifications
 {
@@ -62,13 +63,18 @@ namespace WB.UI.Shared.Enumerator.Services.Notifications
             {
                 NotificationCompat.Builder builder =
                         new NotificationCompat.Builder(context, CHANNEL_ID)
-                            
-                            .SetContentTitle("Summary")
-                            .SetContentText("{notificationModels.Count} notifications")
 
+                            .SetContentIntent(notificationModels.First().Intent)
+
+                            .SetContentTitle("Interviewer")
+                            .SetContentText(UIResources.Notifications_SummaryTitle.FormatString(notificationModels.Count))
                             .SetGroup(GROUP_NAME)
                             .SetGroupSummary(true)
                             .SetSmallIcon(notificationModels.First().IconId);
+
+                var style = new NotificationCompat.InboxStyle();
+                notificationModels.ForEach(x=> style.AddLine(x.ContentText));
+                builder.SetStyle(style);
 
                 // Build the notification:
                 var summary =  builder.Build();
