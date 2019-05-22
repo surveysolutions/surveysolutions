@@ -112,7 +112,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var questionIdentity = Create.Identity(questionId);
 
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(question);
-            var interview = SetUp.StatefulInterview(questionnaire);
+            var interview = Create.AggregateRoot.StatefulInterview(Guid.Empty, questionnaire: questionnaire, shouldBeInitialized: false);
 
             var answersToIdentifyingQuestions = new List<InterviewAnswer>
             {
@@ -143,7 +143,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 Create.Entity.TextQuestion(questionId: questionTextId, variable: "text", preFilled: true));
-            var interview = SetUp.StatefulInterview(questionnaire);
+            var interview = Create.AggregateRoot.StatefulInterview(Guid.Empty, questionnaire: questionnaire, shouldBeInitialized: false);
 
             var answersToIdentifyingQuestions = new List<InterviewAnswer>()
             {
@@ -169,7 +169,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             // arrange
             var questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion(questionId, preFilled: true));
-            var interview = SetUp.StatefulInterview(questionnaire);
+            var interview = Create.AggregateRoot.StatefulInterview(Guid.Empty, questionnaire: questionnaire, shouldBeInitialized: false);
             SetupEventContext();
             var answersToIdentifyingQuestions = new List<InterviewAnswer>()
             {
