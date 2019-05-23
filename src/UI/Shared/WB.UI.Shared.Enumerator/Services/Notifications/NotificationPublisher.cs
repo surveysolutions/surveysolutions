@@ -2,6 +2,7 @@
 using System.Linq;
 using Android.App;
 using Android.Content;
+using Android.Graphics;
 using Android.OS;
 using Android.Support.V4.App;
 using WB.Core.GenericSubdomains.Portable;
@@ -42,11 +43,17 @@ namespace WB.UI.Shared.Enumerator.Services.Notifications
                         .SetContentIntent(notificationModel.Intent)
                         .SetContentTitle(notificationModel.ContentTitle)
                         .SetContentText(notificationModel.ContentText)
-                        .SetGroup(GROUP_NAME)
-                        .SetSmallIcon(notificationModel.IconId) //replace this icon
-                //there are difference if android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
-                //icon should be transparent
-                ;
+                        .SetGroup(GROUP_NAME);
+            
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop)
+            {
+                builder.SetSmallIcon(notificationModel.IconId); //transparent Icon would be better
+                builder.SetColor(0x1055DB); 
+            }
+            else
+            {
+                builder.SetSmallIcon(notificationModel.IconId);
+            }
 
             // Build the notification:
             return builder.Build();
@@ -103,5 +110,12 @@ namespace WB.UI.Shared.Enumerator.Services.Notifications
             var notificationManager = (NotificationManager)context.GetSystemService(Context.NotificationService);
             notificationManager.CreateNotificationChannel(channel);
         }
+
+        public void CancelAllNotifications(Context context)
+        {
+            NotificationManager notificationManager = context.GetSystemService(Context.NotificationService) as NotificationManager;
+            notificationManager?.CancelAll();
+        }
+
     }
 }
