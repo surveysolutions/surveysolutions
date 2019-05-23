@@ -269,4 +269,16 @@
       <value>Подготовка</value>
       <comment>Подготовка</comment>
   </data>
+  <data name="DataExport_Destination_Dropbox" xml:space="preserve"> 
+    <value>Экспортный файл будет загружен в Dropbox</value> 
+  </data> 
+  <data name="DataExport_Destination_File" xml:space="preserve"> 
+    <value>Экспортный файл будет доступен для скачивания</value> 
+  </data> 
+  <data name="DataExport_Destination_GoogleDrive" xml:space="preserve"> 
+    <value>Экспортный файл будет загружен в Google Drive</value> 
+  </data> 
+  <data name="DataExport_Destination_OneDrive" xml:space="preserve"> 
+    <value>Экспортный файл будет загружен в OneDrive</value> 
+  </data> 
 </root>
