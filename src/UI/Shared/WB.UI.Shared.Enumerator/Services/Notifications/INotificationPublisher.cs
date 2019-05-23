@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using Android.Content;
-using Android.Gms.Nearby.Messages;
 
 namespace WB.UI.Shared.Enumerator.Services.Notifications
 {
-    interface INotificationPublisher
+    public interface INotificationPublisher
     {
         void Init(Context context);
 
@@ -12,5 +11,7 @@ namespace WB.UI.Shared.Enumerator.Services.Notifications
 
         void Notify(Context context, List<NotificationModel> notificationModels, bool renderSummary);
         void CreateNotificationChannel(Context context);
+
+        void CancelAllNotifications(Context context);
     }
 }
