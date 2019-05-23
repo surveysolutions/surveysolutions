@@ -856,7 +856,7 @@
   <data name="HelpRosterDisplayMode" xml:space="preserve">
     <value>Sub-Section - the questions of the roster are shown behind the buttons corresponding to roster instances.
 Flat - the questions of the roster are shown in the same level separated by headers corresponding to roster instances.
-Table - the questions of the roster are shown in the same level as rows and columns of the table. Support only Web survey, on tabled will be 'Sub-Section' mode.</value>
+Table - the questions of the roster are shown in the same level as rows and columns of the table. Supported only in Web survey, tablet falls back to 'Sub-Section' mode.</value>
   </data>
   <data name="HelpHideInstructions" xml:space="preserve">
     <value>By default, an instruction text is shown on a tablet. Checking this option will show only the first line of instructions. Tapping on that line will show the complete text.</value>
