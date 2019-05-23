@@ -69,12 +69,14 @@
                     if(this.handleEmptyAnswer(answer)) {
                         return
                     }
+                    
+                    this.$me.answer = answer
+
                     if (answer > 999999999999999 || answer < -999999999999999) {
                         this.markAnswerAsNotSavedWithMessage($t("WebInterviewUI.DecimalCannotParse"))
                         return
                     }
 
-                    this.$me.answer = answer
                     this.$store.dispatch('answerDoubleQuestion', { identity: this.id, answer: answer })
                 });
             },
