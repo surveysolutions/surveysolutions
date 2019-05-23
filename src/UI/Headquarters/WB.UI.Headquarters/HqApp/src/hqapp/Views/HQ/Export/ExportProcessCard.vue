@@ -12,7 +12,7 @@
             <div class="wrapper-data clearfix" :class="{'block-contains-error': hasError }">
                 <div class="export-row clearfix">
                     <div class="format-data download-icon clearfix">
-                        <p>Destination: Zip archive for download</p>
+                        <p>Destination: <span>{{$t(`DataExport.DataExport_Destination_${fileDestination}`)}}</span></p>
                         <div class="action-block clearfix" v-if="isRunning">
                             <span class="success-text status pull-left">{{processStatus}}</span>
                             <div class="cancelable-progress">
@@ -25,7 +25,7 @@
                             </div>
                         </div>
                         <div class="action-block clearfix" v-else>
-                            <div v-if="fileDestination == 'file'">
+                            <div v-if="fileDestination == 'File'">
                                 <div class="allign-left" v-if="hasFile">
                                     <a :href="downloadFileUrl" class="btn btn-primary btn-lg download">Download</a>
                                 </div>
@@ -45,6 +45,11 @@ import Vue from "vue"
 import { DateFormats } from "~/shared/helpers";
 import modal from "~/webinterview/components/modal"
 import {mixin as VueTimers} from 'vue-timers'
+
+const ProcessStatus = {
+    Compressing: "Compressing",
+    Finished: "Finished"
+};
 
 export default {
     mixins: [VueTimers],
@@ -128,10 +133,10 @@ export default {
                     this.hasFile = info.hasFile;
                     this.fileSize = info.fileSize;
                     this.dataFileLastUpdateDate = this.formatDate(info.dataFileLastUpdateDate);
-                    this.fileDestination = info.dataDestination.toLowerCase();
+                    this.fileDestination = info.dataDestination;
                     this.error = info.error;
 
-                    if (this.processStatus == "Compressing" || this.processStatus == "Finished")
+                    if (this.processStatus == ProcessStatus.Finished)
                     {
                         this.$timer.stop("updateStatus");
                         if (this.hasFile)

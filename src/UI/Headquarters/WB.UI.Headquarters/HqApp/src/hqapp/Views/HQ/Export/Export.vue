@@ -127,7 +127,7 @@
           </div>
         </div>
       </div>
-      <div class="row" v-if="dataType == 'surveyData' || dataType == 'binaryData'">
+      <div class="row" v-if="canExportExternally">
         <div class="col-md-10">
           <h3>Export file destination</h3>
           <div class="structure-block">
@@ -138,21 +138,21 @@
                 <span class="format-data download-icon">Download</span>
               </label>
             </div>
-            <div class="export-row">
+            <div class="export-row" v-if="isDropboxSetUp">
               <input class="radio-row" type="radio" name="exportDestination" id="onedrive"  v-model="dataDestination" value="oneDrive">
               <label for="onedrive">
                 <span class="tick"></span>
                 <span class="format-data onedrive-icon">Upload to OneDrive</span>
               </label>
             </div>
-            <div class="export-row">
+            <div class="export-row" v-if="isDropboxSetUp">
               <input class="radio-row" type="radio" name="exportDestination" id="dropbox"  v-model="dataDestination" value="dropbox">
               <label for="dropbox">
                 <span class="tick"></span>
                 <span class="format-data dropbox-icon">Upload to Dropbox</span>
               </label>
             </div>
-            <div class="export-row">
+            <div class="export-row" v-if="isGoogleDriveSetUp">
               <input class="radio-row" type="radio" name="exportDestination" id="googleDrive" v-model="dataDestination" value="googleDrive">
               <label for="googleDrive">
                 <span class="tick"></span>
@@ -213,7 +213,8 @@ export default {
             exportResults: [],
             isUpdatingDataAvailability: false,
             hasInterviews: false,
-            hasBinaryData: false
+            hasBinaryData: false,
+            externalStoragesSettings: (this.$config.model.externalStoragesSettings || {}).oAuth2 || {}
         };
     },
     timers: {
@@ -245,6 +246,24 @@ export default {
             });
     },
     computed: {
+        isDropboxSetUp()
+        {
+          var settings = this.externalStoragesSettings["dropbox"] || null;
+          return settings!=null;
+        },
+        isOneDriveSetUp()
+        {
+          var settings = this.externalStoragesSettings["oneDrive"] || null;
+          return settings!=null;
+        },
+        isGoogleDriveSetUp()
+        {
+          var settings = this.externalStoragesSettings["googleDrive"] || null;
+          return settings!=null;
+        },
+        canExportExternally(){
+            return this.$config.model.externalStoragesSettings != null && (this.dataType == 'surveyData' || this.dataType == 'binaryData'); 
+        },
         questionnaireFetchUrl() {
             return this.$config.model.api.questionnairesUrl;
         },
@@ -301,6 +320,13 @@ export default {
             });
       },
       async queueExport(){
+
+        if (this.dataDestination != "zip")
+        {
+          this.redirectToExternalStorage();
+          return;
+        }
+
         var self = this;
         var validationResult = await this.$validator.validateAll();
         if (validationResult)
@@ -337,6 +363,36 @@ export default {
             $firstFieldWithError.focus();
         }        
       },
+      redirectToExternalStorage(){
+
+          const exportParams = self.getExportParams(
+              this.questionnaireId.key,
+              this.questionnaireVersion.key,
+              this.dataType,
+              this.dataFormat,
+              this.dataDestination,
+              (this.status || { value: null}).value
+            );
+
+        var state = {
+          questionnaireIdentity: {
+              questionnaireId: self.selectedTemplateId(),
+              version: self.selectedTemplate().version
+          },
+          interviewStatus: self.selectedStatus().status,
+          type: storages.selectedStorage().type
+        };
+
+        var request = {
+          response_type: storages.response_type,
+          redirect_uri: encodeURIComponent(storages.redirect_uri),
+          client_id: storages.selectedStorage().client_id,
+          state: window.btoa(window.location.href + ";" + $exportToExternalStorageUrl + ";" + JSON.stringify(state)),
+          scope: storages.selectedStorage().scope
+        };
+
+        window.location = storages.selectedStorage().authorization_uri + "?" + decodeURIComponent($.param(request));
+      },
       getExportParams(questionnaireId, questionnaireVersion, dataType, dataFormat, dataDestination, status){
         const dataFormatNum = {  
           Tabular: 1,
@@ -356,11 +412,11 @@ export default {
         }
 
         return {
-              id: questionnaireId,
-              version: questionnaireVersion,
-              format: dataFormat, 
-              status: status
-            };
+          id: questionnaireId,
+          version: questionnaireVersion,
+          format: dataFormat, 
+          status: status
+        };
       },
         statusSelected(newValue) {
             this.status = newValue;
