@@ -73,7 +73,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             if (questionnaire.CreatedBy == userId)
                 return true;
 
-            var listViewItem = this.dbContext.Questionnaires.Find(questionnaireId.FormatGuid());
+            var listViewItem = this.dbContext.Questionnaires.Include(x => x.SharedPersons)
+                .FirstOrDefault(x => x.QuestionnaireId == questionnaireId.FormatGuid());
 
             var sharedPersons = listViewItem.SharedPersons;
             if (sharedPersons.Any(x => x.UserId == userId && x.ShareType == ShareType.Edit))
