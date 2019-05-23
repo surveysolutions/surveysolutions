@@ -16,5 +16,6 @@ namespace WB.UI.Headquarters.Models
     {
         public dynamic Api { get; set; }
         public ComboboxViewItem[] Statuses { get; set; }
+        public ExternalStoragesSettings ExternalStoragesSettings { get; set; }
     }
 }

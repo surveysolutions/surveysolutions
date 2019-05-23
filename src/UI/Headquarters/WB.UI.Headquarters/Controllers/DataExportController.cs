@@ -55,6 +55,9 @@ namespace WB.UI.Headquarters.Controllers
             var export = new NewExportModel
             {
                 Statuses = statuses,
+                ExternalStoragesSettings = this.externalStoragesSettings is FakeExternalStoragesSettings
+                    ? null
+                    : this.externalStoragesSettings,
                 Api = new
                 {
                     HistoryUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "Paradata"}),
