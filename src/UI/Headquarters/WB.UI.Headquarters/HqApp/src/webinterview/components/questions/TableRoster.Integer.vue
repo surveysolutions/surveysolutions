@@ -13,7 +13,7 @@
     import { entityDetails, tableCellEditor } from "../mixins"
     import { getGroupSeparator } from "./question_helpers"
     import modal from "../modal"
-    
+
     export default {
         name: 'TableRoster_Integer',
         mixins: [entityDetails, tableCellEditor],
@@ -50,6 +50,8 @@
                         return
                     }
 
+                    this.$me.answer = answer
+
                     if (answer > 2147483647 || answer < -2147483648 || answer % 1 !== 0) {
                         this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.NumberCannotParse"))
                         return
@@ -61,7 +63,6 @@
                     }
 
                     if (!this.$me.isRosterSize) {
-                        this.$me.answer = answer
                         this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
                         return
                     }
@@ -80,7 +81,6 @@
                     const isNeedRemoveRosters = previousAnswer != undefined && answer < previousAnswer
 
                     if (!isNeedRemoveRosters) {
-                        this.$me.answer = answer
                         this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
                         return
                     }
@@ -91,7 +91,6 @@
                     if(amountOfRostersToRemove > 0){
                         modal.confirm(confirmMessage, result => {
                             if (result) {
-                                this.$me.answer = answer
                                 this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })                                
                                 return
                             } else {
@@ -102,7 +101,6 @@
                     }
                     else
                     {
-                        this.$me.answer = answer
                         this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })                        
                         return
                     }
