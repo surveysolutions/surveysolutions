@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -42,10 +43,10 @@ namespace WB.Core.Infrastructure.EventHandlers
 
         private void Handle(IPublishableEvent evt, IReadSideStorage<TEntity> storage)
         {
-            var eventType = typeof(IPublishedEvent<>).MakeGenericType(evt.Payload.GetType());
-
             if (!this.Handles(evt))
                 return;
+
+            var eventType = typeof(IPublishedEvent<>).MakeGenericType(evt.Payload.GetType());
 
             TEntity currentState = GetViewById(evt.EventSourceId, storage);
 
@@ -63,10 +64,11 @@ namespace WB.Core.Infrastructure.EventHandlers
 
         protected virtual TEntity ApplyEventOnEntity(IPublishableEvent evt, Type eventType, TEntity currentState)
         {
-            var newState = (TEntity) this
-                .GetType()
-                .GetTypeInfo().GetMethod("Update", new[] {typeof(TEntity), eventType})
-                ?.Invoke(this, new object[] {currentState, this.CreatePublishedEvent(evt)});
+            var update = updateMethodsCache.GetOrAdd((this.GetType(), eventType), k =>
+                k.eventHandler.GetMethod("Update", new[] { typeof(TEntity), k.eventType }));
+
+            var newState = (TEntity) update
+                ?.Invoke(this, new object[] { currentState, this.CreatePublishedEvent(evt) });
             return newState;
         }
 
@@ -79,7 +81,7 @@ namespace WB.Core.Infrastructure.EventHandlers
         {
             var handlerMethodNames = new string[] { "Create", "Update", "Delete" };
 
-            var handlers = this.GetType().GetTypeInfo().GetMethods().Where(m => handlerMethodNames.Contains(m.Name)).ToList();
+            var handlers = this.GetType().GetMethods().Where(m => handlerMethodNames.Contains(m.Name)).ToList();
 
             handlers.ForEach((handler) => this.RegisterOldFashionHandler(oldEventBus, handler));
         }
@@ -108,20 +110,30 @@ namespace WB.Core.Infrastructure.EventHandlers
         }
 
         protected PublishedEvent CreatePublishedEvent(IUncommittedEvent evt)
-            {
-                var publishedEventClosedType = typeof(PublishedEvent<>).MakeGenericType(evt.Payload.GetType());
-            return (PublishedEvent)Activator.CreateInstance(publishedEventClosedType, evt);
-        }
-
-        protected virtual bool Handles(IUncommittedEvent evt)
         {
-            Type genericUpgrader = typeof(IUpdateHandler<,>);
-            return genericUpgrader.MakeGenericType(typeof(TEntity), evt.Payload.GetType()).GetTypeInfo().IsInstanceOfType(this);
+            var publishedEventClosedType = typeof(PublishedEvent<>).MakeGenericType(evt.Payload.GetType());
+
+            return (PublishedEvent)Activator.CreateInstance(publishedEventClosedType, evt);
         }
 
         public string Name => this.GetType().Name;
 
         public virtual object[] Writers => new object[] { this.readSideStorage };
-        public virtual object[] Readers => new object[0];
+        public virtual object[] Readers => Array.Empty<object>();
+
+        static readonly ConcurrentDictionary<(Type eventType, Type handler), bool> handleCache =
+            new ConcurrentDictionary<(Type eventType, Type handler), bool>();
+
+        static readonly ConcurrentDictionary<(Type eventHandler, Type eventType), MethodInfo> updateMethodsCache
+            = new ConcurrentDictionary<(Type eventHandler, Type eventType), MethodInfo>();
+
+        protected virtual bool Handles(IUncommittedEvent evt)
+        {
+            return handleCache.GetOrAdd((evt.Payload.GetType(), this.GetType()), key =>
+            {
+                var updateHandler = typeof(IUpdateHandler<,>).MakeGenericType(typeof(TEntity), key.eventType);
+                return updateHandler.IsAssignableFrom(key.handler);
+            });
+        }
     }
 }
