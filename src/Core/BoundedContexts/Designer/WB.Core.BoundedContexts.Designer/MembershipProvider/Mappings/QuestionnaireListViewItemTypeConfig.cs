@@ -14,8 +14,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings
 
             builder.Property(e => e.QuestionnaireId).HasColumnName("id").ValueGeneratedNever();
 
-            builder.Ignore(p => p.PublicId);
-            //builder.Property(e => e.PublicId).HasColumnName("publicid");
+            builder.Property(e => e.PublicId).HasColumnName("publicid");
 
             builder.Property(e => e.CreatedBy).HasColumnName("createdby");
 
