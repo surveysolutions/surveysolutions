@@ -844,7 +844,8 @@ namespace WB.Tests.Unit.Designer
             RosterSizeSourceType rosterType = RosterSizeSourceType.FixedTitles,
             Guid? rosterSizeQuestionId = null,
             Guid? rosterTitleQuestionId = null,
-            FixedRosterTitle[] fixedRosterTitles = null)
+            FixedRosterTitle[] fixedRosterTitles = null,
+            RosterDisplayMode displayMode = RosterDisplayMode.SubSection)
         {
             var id = rosterId ?? Guid.NewGuid();
             Group group = Create.Group(
@@ -856,6 +857,7 @@ namespace WB.Tests.Unit.Designer
 
             group.IsRoster = true;
             group.RosterSizeSource = rosterType;
+            group.DisplayMode = displayMode;
 
             if (rosterType == RosterSizeSourceType.FixedTitles)
             {
