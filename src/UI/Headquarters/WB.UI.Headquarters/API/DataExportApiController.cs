@@ -214,17 +214,26 @@ namespace WB.UI.Headquarters.API
         }
 
         private async Task<HttpResponseMessage> RequestExportUpdateAsync(
-            QuestionnaireBrowseItem questionnaireBrowseItem, DataExportFormat format, InterviewStatus? status,
+            QuestionnaireBrowseItem questionnaireBrowseItem, 
+            DataExportFormat format, 
+            InterviewStatus? status,
             DateTime? @from,
-            DateTime? to, string accessToken = null, ExternalStorageType? externalStorageType = null)
+            DateTime? to, 
+            string accessToken = null, 
+            ExternalStorageType? externalStorageType = null)
         {
             long jobId = 0;
             try
             {
-                var result = await this.exportServiceApi.RequestUpdate(questionnaireBrowseItem.Id,
-                    format, status,
+                var result = await this.exportServiceApi.RequestUpdate(
+                    questionnaireBrowseItem.Id,
+                    format, 
+                    status,
                     @from?.ToUniversalTime(),
-                    to?.ToUniversalTime(), GetPasswordFromSettings(), accessToken, externalStorageType);
+                    to?.ToUniversalTime(), 
+                    GetPasswordFromSettings(), 
+                    accessToken, 
+                    externalStorageType);
 
                 jobId = result?.JobId ?? 0;
 
@@ -293,14 +302,16 @@ namespace WB.UI.Headquarters.API
                 throw new HttpException((int)HttpStatusCode.BadRequest, @"Export parameters not found");
 
             var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(state.QuestionnaireIdentity);
-            if (questionnaireBrowseItem == null)
+            if (questionnaireBrowseItem == null || questionnaireBrowseItem.IsDeleted)
                 throw new HttpException(404, @"Questionnaire not found");
-
-            await RequestExportUpdateAsync(questionnaireBrowseItem, DataExportFormat.Binary, 
-                null,
+            
+            await RequestExportUpdateAsync(questionnaireBrowseItem, 
+                state.Format ?? DataExportFormat.Binary, 
+                state.InterviewStatus,
                 state.FromDate?.ToUniversalTime(),
                 state.ToDate?.ToUniversalTime(),
-                model.Access_token, state.Type);
+                model.Access_token, 
+                state.Type);
 
             return ExportToExternalStorage();
         }
@@ -325,7 +336,7 @@ namespace WB.UI.Headquarters.API
             public InterviewStatus? InterviewStatus { get; set; }
             public DateTime? FromDate { get; set; }
             public DateTime? ToDate { get; set; }
-
+            public  DataExportFormat? Format { get; set; }
         }
     }
 }

@@ -64,7 +64,7 @@ namespace WB.UI.Headquarters.Controllers
                     DDIUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "DDIMetadata"}),
                     ExportedDataReferencesForQuestionnaireUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "GetExportStatus"}),
                     DeleteDataExportProcessUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "DeleteDataExportProcess"}),
-                    ExportToExternalStorageUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "ExportToExternalStorage"}, Request.Url.Scheme),
+                    
 
                     
                     UpdateSurveyDataUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "RequestUpdate"}, Request.Url.Scheme),
@@ -74,6 +74,7 @@ namespace WB.UI.Headquarters.Controllers
                     DataAvailabilityUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "DataAvailability"}, Request.Url.Scheme),
                     WasExportFileRecreatedUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "WasExportFileRecreated"}, Request.Url.Scheme),
                     DownloadDataUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "DownloadData"}),
+                    ExportToExternalStorageUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "ExportToExternalStorage"}, Request.Url.Scheme),
                 }
             };
 
