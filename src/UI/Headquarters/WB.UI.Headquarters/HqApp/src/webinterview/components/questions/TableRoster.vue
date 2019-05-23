@@ -160,7 +160,6 @@
 
                     // set all rows height to auto
                     event.api.resetRowHeights();
-                    //gridOptions.api.resetRowHeights();
                 }
             },
 
