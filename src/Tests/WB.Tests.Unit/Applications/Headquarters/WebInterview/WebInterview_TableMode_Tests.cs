@@ -56,6 +56,38 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             Assert.That(entities[0].Identity, Is.EqualTo(rosterId.FormatGuid()));
             Assert.That(entities[1].EntityType, Is.EqualTo(InterviewEntityType.NavigationButton.ToString()));
         }      
+               
+        [Test]
+        public void GetSectionEntities_for_entities_with_supervisor_questions_in_table_roster_should_return_correct_questions_set()
+        {
+            var sectionId = Guid.NewGuid();
+            var rosterId = Guid.NewGuid();
+            var intQuestionId = Guid.NewGuid();
+
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(sectionId, new IComposite[]
+            {
+                Create.Entity.FixedRoster(rosterId, displayMode: RosterDisplayMode.Table, fixedTitles: new FixedRosterTitle[]
+                {
+                    Create.Entity.FixedTitle(1, "1"),
+                    Create.Entity.FixedTitle(2, "2"),
+                }, children: new IComposite[]
+                {
+                    Create.Entity.NumericIntegerQuestion(intQuestionId),
+                    Create.Entity.TextQuestion(scope: QuestionScope.Supervisor),
+                    Create.Entity.TextQuestion(scope: QuestionScope.Hidden),
+                    Create.Entity.TextQuestion(scope: QuestionScope.Headquarter),
+                })
+            });
+            var statefulInterview = SetUp.StatefulInterview(questionnaireDocument);
+            var webInterview = CreateWebInterview(statefulInterview, questionnaireDocument);
+
+            var entities = webInterview.GetSectionEntities(sectionId.FormatGuid());
+
+            Assert.That(entities.Length, Is.EqualTo(2));
+            Assert.That(entities[0].EntityType, Is.EqualTo(InterviewEntityType.TableRoster.ToString()));
+            Assert.That(entities[0].Identity, Is.EqualTo(rosterId.FormatGuid()));
+            Assert.That(entities[1].EntityType, Is.EqualTo(InterviewEntityType.NavigationButton.ToString()));
+        }      
         
         [Test]
         public void GetEntitiesDetails_for_entities_section_with__table_roster_should_return_correct_entities()
