@@ -39,7 +39,7 @@ namespace WB.UI.Interviewer.Services
             var notifications = new List<NotificationModel>();
 
             //test
-            /*notifications.Add(new NotificationModel()
+            notifications.Add(new NotificationModel()
             {
                 NotificationId = 10021,
                 AutoCancel = true,
@@ -57,7 +57,7 @@ namespace WB.UI.Interviewer.Services
                 ContentText = "test content 1",
                 IconId = Resource.Drawable.icon,
                 Intent = GetPendingIntent()
-            });*/
+            });
 
             var oneDayBeforeNow = DateTime.Now.Date.AddHours(-24);
             var completedLateCount = this.interviewViewRepository.Count(x => x.CompletedDateTime <= oneDayBeforeNow 

@@ -879,6 +879,6 @@ It will appear on interviewer device after next synchronization</value>
     <value>Too many completed interviews. Sync.</value>
   </data>
   <data name="Notifications_StaleAssignments" xml:space="preserve">
-    <value>Some assignments were not updated last 3 days</value>
+    <value>Some assignments were not updated last 3 days.</value>
   </data>
 </root>
