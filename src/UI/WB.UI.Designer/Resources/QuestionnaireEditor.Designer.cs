@@ -1584,6 +1584,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Display mode.
+        /// </summary>
+        public static string QuestionDisplayMode {
+            get {
+                return ResourceManager.GetString("QuestionDisplayMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Filter.
         /// </summary>
         public static string QuestionFilter {
@@ -1634,15 +1643,6 @@ namespace WB.UI.Designer.Resources {
         public static string QuestionIsLinked {
             get {
                 return ResourceManager.GetString("QuestionIsLinked", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Kind.
-        /// </summary>
-        public static string QuestionKind {
-            get {
-                return ResourceManager.GetString("QuestionKind", resourceCulture);
             }
         }
         
