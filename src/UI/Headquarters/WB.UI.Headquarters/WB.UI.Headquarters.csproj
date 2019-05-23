@@ -2229,6 +2229,7 @@
     <Compile Include="Code\MessageHandler\BasicAuthMessageHandler.cs" />
     <Compile Include="Code\QRCodeHelper.cs" />
     <Compile Include="Code\QRCodeBuilder.cs" />
+    <Compile Include="Code\RedirectHelper.cs" />
     <Compile Include="Code\Security\SimpleTokenVerifier.cs" />
     <Compile Include="API\Filters\UnhandledExceptionFilter.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />

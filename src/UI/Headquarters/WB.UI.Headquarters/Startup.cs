@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -40,6 +41,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Versions;
+using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Binding;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Logging.Slack;
@@ -194,30 +196,7 @@ namespace WB.UI.Headquarters
                             regenerateIdentityCallback: (manager, user) => manager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie),
                             getUserIdCallback: (id) => Guid.Parse(id.GetUserId())),
 
-                    OnApplyRedirect = ctx =>
-                    {
-                        if (!IsAjaxRequest(ctx.Request) && !IsApiRequest(ctx.Request) && !IsBasicAuthApiUnAuthRequest(ctx.Response))
-                        {
-                            var redirect = ctx.RedirectUri;
-
-                            bool isForwardedFromSecureProto()
-                            {
-                                if (ctx.Request.Headers.TryGetValue(@"X-Forwarded-Proto", out var values))
-                                {
-                                    return values.First().Equals(@"https", StringComparison.OrdinalIgnoreCase);
-                                }
-
-                                return false;
-                            }
-
-                            if (ctx.Request.IsSecure || isForwardedFromSecureProto())
-                            {
-                                redirect = redirect.Replace(@"http://", @"https://");
-                            }
-
-                            ctx.Response.Redirect(redirect);
-                        }
-                    }
+                    OnApplyRedirect = ctx => ctx.ApplyNonApiRedirect()
                 },
                 ExpireTimeSpan = TimeSpan.FromHours(applicationSecuritySection.CookieSettings.ExpirationTime),
                 SlidingExpiration = applicationSecuritySection.CookieSettings.SlidingExpiration,
@@ -226,29 +205,7 @@ namespace WB.UI.Headquarters
             });
 
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
-        }
-
-        private static bool IsApiRequest(IOwinRequest request)
-        {
-            var userAgent = request.Headers[@"User-Agent"];
-            return (userAgent?.ToLowerInvariant().Contains(@"org.worldbank.solutions.") ?? false) || (userAgent?.Contains(@"okhttp/") ?? false);
-        }
-
-        private static bool IsBasicAuthApiUnAuthRequest(IOwinResponse response)
-        {
-            return response.Headers[ApiBasicAuthAttribute.AuthHeader] != null;
-        }
-
-        private static bool IsAjaxRequest(IOwinRequest request)
-        {
-            IReadableStringCollection query = request.Query;
-            if ((query != null) && (query["X-Requested-With"] == "XMLHttpRequest"))
-            {
-                return true;
-            }
-            IHeaderDictionary headers = request.Headers;
-            return ((headers != null) && (headers["X-Requested-With"] == "XMLHttpRequest"));
-        }
+        }      
 
         private static Task SetSessionStateBehavior(IOwinContext context, Func<Task> next)
         {
