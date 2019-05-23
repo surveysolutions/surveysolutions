@@ -1,39 +1,66 @@
 <template>
-    <div class="export-sets">
-        <div class="gray-block report clearfix">
-            <div class="wrapper-data clearfix">
+    <div class="export-card">
+        <div class="top-row">
+            <div class="format-data" :class="format">
                 <div class="gray-text-row"><b>#{{processId}}</b> Queued on {{beginDate}}</div>
-                <div class="format-data stata">
-                    <button type="button" @click="regenerate" class="pull-right btn btn-default" v-if="!isRunning">regenerate</button>
-                    <h3>{{questionnaireTitle}} (ver. {{questionnaireIdentity.version}}) </h3>
-                    <p><span style="text-transform: uppercase">{{format}}</span> format. Interviews in <span style="text-transform: uppercase">{{interviewStatus}}</span>.</p>
-                </div>
+                <div class="h3 mb-05">{{questionnaireTitle}} (ver. {{questionnaireIdentity.version}})</div>
+                <p class="mb-0 font-regular"><u class="font-bold">{{format}}</u> format. Interviews in <u class="font-bold">{{interviewStatus}}</u>.</p>
             </div>
-            <div class="wrapper-data clearfix" :class="{'block-contains-error': hasError }">
-                <div class="export-row clearfix">
-                    <div class="format-data download-icon clearfix">
-                        <p>Destination: <span>{{$t(`DataExport.DataExport_Destination_${fileDestination}`)}}</span></p>
-                        <div class="action-block clearfix" v-if="isRunning">
-                            <span class="success-text status pull-left">{{processStatus}}</span>
-                            <div class="cancelable-progress">
-                                <div class="progress" v-if="progress > 0">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" v-bind:style="{ width: progress + '%' }">
-                                        <span class="sr-only">{{progress}}%</span>
-                                    </div>
-                                </div>
-                                <button class="btn btn-link gray-action-unit" type="button" @click="cancel">Cancel</button>
-                            </div>
-                        </div>
-                        <div class="action-block clearfix" v-else>
-                            <div v-if="fileDestination == 'File'">
-                                <div class="allign-left" v-if="hasFile">
-                                    <a :href="downloadFileUrl" class="btn btn-primary btn-lg download">Download</a>
-                                </div>
-                                <div v-if="hasFile" class="archive-info">Last updated on {{dataFileLastUpdateDate}}<br />File size: {{fileSize}} MB </div>
-                                <div v-if="!hasFile" class="archive-info">File was regenerated</div>
+        </div>
+        <div class="bottom-row" :class="{'is-failed': isFailed, 'is-successful': isSuccessfull }">
+            <div class="export-destination" :class="fileDestination">
+                <p>Destination: <span>{{$t(`DataExport.DataExport_Destination_${fileDestination}`)}}</span></p>
+                <div class="d-flex ai-center" v-if="isRunning">
+                    <span class="success-text status">{{processStatus}}</span>
+                    <div class="cancelable-progress">
+                        <div class="progress" v-if="progress > 0">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" v-bind:style="{ width: progress + '%' }">
+                                <span class="sr-only">{{progress}}%</span>
                             </div>
                         </div>
                     </div>
+                    <button class="btn btn-link" type="button" @click="cancel">Cancel</button>
+                </div>
+                 <div class="d-flex ai-center" v-else>
+                    <a v-if="!isRunning && hasFile && fileDestination == 'File'" :href="downloadFileUrl" class="btn btn-primary btn-lg">Download</a>
+                    <div v-if="hasFile" class="file-info">Last updated on {{dataFileLastUpdateDate}}<br />File size: {{fileSize}} MB </div>
+                    <div v-if="!hasFile && !isFailed" class="file-info">File was regenerated</div>
+                    <div v-if="isFailed" class="text-danger">{{error}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="dropdown aside-menu" v-if="!isRunning">
+            <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-link">
+                <span></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="#" @click="regenerate">Regenerate<br />Queue export with the same params</a></li>
+            </ul>
+        </div>
+        <div class="card-loading" style="display: block;" v-if="isInitializing">
+            <div class="top-row-loading">
+                <div class="animated-background">
+                    <div class="background-masker mask-top-left"></div>
+                    <div class="background-masker mask-top-right"></div>
+                    <div class="background-masker mask-left"></div>
+                    <div class="background-masker submask-top"></div>
+                    <div class="background-masker submask-top-right"></div>
+                    <div class="background-masker submask-bottom-right"></div>
+                    <div class="background-masker submask-bottom"></div>
+                    <div class="background-masker mask-bottom-left"></div>
+                </div>
+            </div>
+            <div class="bottom-row-loading">
+                <div class="animated-background">
+                    <div class="background-masker mask-top-left"></div>
+                    <div class="background-masker mask-left"></div>
+                    <div class="background-masker mask-top-right"></div>
+                    <div class="background-masker mask-bottom-left"></div>
+                    <div class="background-masker submask-top"></div>
+                    <div class="background-masker submask-left"></div>
+                    <div class="background-masker submask-top-right"></div>
+                    <div class="background-masker submask-bottom"></div>
+                    <div class="background-masker submask-bottom-right"></div>
                 </div>
             </div>
         </div>
@@ -80,7 +107,8 @@ export default {
             dataFileLastUpdateDate: null,
             fileSize: 0,
             fileDestination: null,
-            error: null
+            error: null,
+            isInitializing: true
         };
     },
     timers: {
@@ -93,8 +121,11 @@ export default {
             var url = this.$config.model.api.downloadDataUrl;
             return  `${url}?id=${this.processId}`;
         },
-        hasError(){
-            return this.error!=null;
+        isFailed(){
+            return this.isInitializing == false && this.isRunning == false && this.error!=null;
+        },
+        isSuccessfull(){
+            return this.isInitializing == false && this.isRunning == false && this.error==null;
         }
     },
     watch: {},
@@ -135,6 +166,8 @@ export default {
                     this.dataFileLastUpdateDate = this.formatDate(info.dataFileLastUpdateDate);
                     this.fileDestination = info.dataDestination;
                     this.error = info.error;
+
+                    this.isInitializing = false;
 
                     if (this.processStatus == ProcessStatus.Finished)
                     {

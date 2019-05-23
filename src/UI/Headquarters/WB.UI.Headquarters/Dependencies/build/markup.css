@@ -5828,6 +5828,7 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick, input.radi
   display: inline-block;
   width: 18px;
   height: 18px;
+  min-width: 18px;
   background: transparent url("../img/questionnaire-sprite.png") no-repeat;
   vertical-align: middle;
   background-size: 793px 18px;
@@ -9220,6 +9221,138 @@ table.dataTable.fixedHeader-locked {
   -webkit-box-shadow: inset 0 20px 20px -20px rgba(255, 145, 0, 0.2), inset 0 -20px 20px -20px rgba(255, 145, 0, 0.2);
           box-shadow: inset 0 20px 20px -20px rgba(255, 145, 0, 0.2), inset 0 -20px 20px -20px rgba(255, 145, 0, 0.2); }
 
+.table-view .ag-theme-customStyles {
+  font-family: Arial, sans-serif;
+  line-height: 16px; }
+  .table-view .ag-theme-customStyles .ag-horizontal-left-spacer {
+    height: 0; }
+  .table-view .ag-theme-customStyles .ag-header-cell {
+    border: 1px solid #E5E5E5;
+    border-bottom-color: rgba(0, 0, 0, 0.3); }
+    .table-view .ag-theme-customStyles .ag-header-cell .ag-header-cell-label {
+      text-overflow: clip;
+      overflow: visible;
+      white-space: normal !important;
+      padding: 11px 15px; }
+  .table-view .ag-theme-customStyles .ag-pinned-left-header .ag-header-cell {
+    border-right-color: rgba(0, 0, 0, 0.3); }
+  .table-view .ag-theme-customStyles .ag-pinned-left-cols-container .ag-cell {
+    background-color: transparent;
+    border-right-color: rgba(0, 0, 0, 0.3);
+    padding: 11px 15px; }
+  .table-view .ag-theme-customStyles .ag-cell {
+    white-space: normal !important;
+    border: 1px solid #E5E5E5;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center; }
+    .table-view .ag-theme-customStyles .ag-cell > .ag-input-text-wrapper {
+      width: 100%; }
+      .table-view .ag-theme-customStyles .ag-cell > .ag-input-text-wrapper .ag-cell-edit-input {
+        padding: 9px 15px; }
+    .table-view .ag-theme-customStyles .ag-cell.ag-cell-focus {
+      border-color: rgba(0, 0, 0, 0.75) !important; }
+    .table-view .ag-theme-customStyles .ag-cell.ag-cell-inline-editing {
+      padding: 0; }
+      .table-view .ag-theme-customStyles .ag-cell.ag-cell-inline-editing .ag-input-text-wrapper {
+        width: 100%; }
+    .table-view .ag-theme-customStyles .ag-cell input.ag-cell-edit-input {
+      padding: 10px 15px; }
+    .table-view .ag-theme-customStyles .ag-cell .hasDatepicker {
+      width: 100%;
+      height: 100%;
+      padding: 10px 15px; }
+    .table-view .ag-theme-customStyles .ag-cell select.ag-cell-edit-input {
+      padding: 0 10px; }
+      .table-view .ag-theme-customStyles .ag-cell select.ag-cell-edit-input option {
+        padding: 15px 0;
+        display: block; }
+    .table-view .ag-theme-customStyles .ag-cell .ag-cell-edit-input {
+      outline: none;
+      -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), inset 0 0 4px rgba(102, 175, 233, 0.6);
+              box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), inset 0 0 4px rgba(102, 175, 233, 0.6); }
+      .table-view .ag-theme-customStyles .ag-cell .ag-cell-edit-input::-webkit-input-placeholder {
+        font: 14px/16px Arial, "Helvetica Neue", Helvetica, sans-serif;
+        text-transform: none;
+        letter-spacing: normal;
+        font-style: italic; }
+      .table-view .ag-theme-customStyles .ag-cell .ag-cell-edit-input::-ms-input-placeholder {
+        font: 14px/16px Arial, "Helvetica Neue", Helvetica, sans-serif;
+        text-transform: none;
+        letter-spacing: normal;
+        font-style: italic; }
+      .table-view .ag-theme-customStyles .ag-cell .ag-cell-edit-input::placeholder {
+        font: 14px/16px Arial, "Helvetica Neue", Helvetica, sans-serif;
+        text-transform: none;
+        letter-spacing: normal;
+        font-style: italic; }
+  .table-view .ag-theme-customStyles .cell-unit {
+    width: 100%;
+    height: 100%;
+    background: #FFFFFF;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -ms-flex-line-pack: center;
+        align-content: center; }
+    .table-view .ag-theme-customStyles .cell-unit .cell-content {
+      display: block;
+      width: 100%;
+      padding: 10px 15px;
+      text-decoration: none;
+      color: inherit; }
+    .table-view .ag-theme-customStyles .cell-unit .popover {
+      width: 100%; }
+    .table-view .ag-theme-customStyles .cell-unit.syncing .progress {
+      visibility: visible; }
+    .table-view .ag-theme-customStyles .cell-unit .progress {
+      visibility: hidden;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      margin: 0;
+      border-radius: 0;
+      height: 3px;
+      background: transparent; }
+    .table-view .ag-theme-customStyles .cell-unit.not-applicable {
+      background-color: transparent;
+      background-image: linear-gradient(-45deg, #dbdfe2 15%, transparent 15%, transparent 50%, #dbdfe2 50%, #dbdfe2 65%, transparent 65%, transparent);
+      background-size: 8px 8px; }
+    .table-view .ag-theme-customStyles .cell-unit.disabled-question {
+      background-color: #E5E5E5;
+      border-color: #a0a0a0; }
+    .table-view .ag-theme-customStyles .cell-unit.has-warnings {
+      background-image: url("../img/warning2.svg");
+      background-repeat: no-repeat;
+      background-position: 0 0;
+      background-color: rgba(240, 173, 0, 0.4);
+      border-color: #F0AD00; }
+    .table-view .ag-theme-customStyles .cell-unit.for-supervisor {
+      background-color: #C1D9EB;
+      border-color: #adc3d3; }
+    .table-view .ag-theme-customStyles .cell-unit.has-error {
+      background-image: url("../img/error2.svg");
+      background-repeat: no-repeat;
+      background-position: 0 0;
+      background-color: rgba(255, 46, 0, 0.2);
+      border-color: #FF2E00; }
+
+.table-view .cell-wrap-text {
+  white-space: normal !important; }
+
+.warning-tooltip {
+  color: #ca9101; }
+
+.error-tooltip {
+  color: #FF2E00; }
+
 @font-face {
   font-family: "RobotoRegular";
   src: url("../fonts/RobotoRegular.woff2") format("woff2"), url("../fonts/RobotoRegular.woff") format("woff"), url("../fonts/RobotoRegular.ttf") format("truetype"), url("../fonts/RobotoRegular.svg#RobotoRegular") format("svg"); }
@@ -9957,6 +10090,9 @@ dl dd:after {
 
 .link-underlined {
   text-decoration: underline; }
+
+.font-regular {
+  font-family: "RobotoRegular"; }
 
 @media (min-width: 680px) {
   .w-420 {

@@ -19,7 +19,7 @@ namespace Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option or rebuild the Visual Studio project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Web.Application.StronglyTypedResourceProxyBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Web.Application.StronglyTypedResourceProxyBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class DataExport {
@@ -111,6 +111,42 @@ namespace Resources {
         internal static string ConfirmStop {
             get {
                 return ResourceManager.GetString("ConfirmStop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export file will be uploaded on Dropbox.
+        /// </summary>
+        internal static string DataExport_Destination_Dropbox {
+            get {
+                return ResourceManager.GetString("DataExport_Destination_Dropbox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export file will be avalaible for download.
+        /// </summary>
+        internal static string DataExport_Destination_File {
+            get {
+                return ResourceManager.GetString("DataExport_Destination_File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export file will be uploaded on Google Drive.
+        /// </summary>
+        internal static string DataExport_Destination_GoogleDrive {
+            get {
+                return ResourceManager.GetString("DataExport_Destination_GoogleDrive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export file will be uploaded on OneDrive.
+        /// </summary>
+        internal static string DataExport_Destination_OneDrive {
+            get {
+                return ResourceManager.GetString("DataExport_Destination_OneDrive", resourceCulture);
             }
         }
         
