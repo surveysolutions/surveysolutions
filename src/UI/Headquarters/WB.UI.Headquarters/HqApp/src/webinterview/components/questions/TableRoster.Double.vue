@@ -20,7 +20,8 @@
 <script lang="js">
     import Vue from 'vue'
     import { entityDetails, tableCellEditor } from "../mixins"
-    
+    import { getGroupSeparator, getDecimalSeparator, getDecimalPlacesCount } from "./question_helpers"
+        
     export default {
         name: 'TableRoster_Double',
         mixins: [entityDetails, tableCellEditor],
@@ -36,36 +37,13 @@
                 return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') : this.$t('WebInterviewUI.DecimalEnter')
             },
             groupSeparator() {
-
-                const defaultSeparator = ''
-
-                if (this.$me.useFormatting) {                    
-                    const etalon = 1111
-                    const localizedNumber = etalon.toLocaleString()
-                    const separator = localizedNumber.substring(1, localizedNumber.length - 3)
-                    return separator || defaultSeparator  
-                }
-
-                return defaultSeparator
+                return getGroupSeparator(this.$me)
             },
             decimalSeparator() {
-
-                const defaultSeparator = '.'
-
-                if (this.$me.useFormatting) {
-                    const etalon = 1.111
-                    const localizedNumber = etalon.toLocaleString()
-                    const separator = localizedNumber.substring(1, localizedNumber.length - 3)
-                    return separator || defaultSeparator
-                }
-
-                return defaultSeparator
+                return getDecimalSeparator(this.$me)
             },
-            decimalPlacesCount(){
-                if (this.$me.countOfDecimalPlaces == null || this.$me.countOfDecimalPlaces == undefined)
-                    return 15;
-                
-                return this.$me.countOfDecimalPlaces    
+            decimalPlacesCount() {
+                return getDecimalPlacesCount(this.$me)    
             }
         },
         methods: {
