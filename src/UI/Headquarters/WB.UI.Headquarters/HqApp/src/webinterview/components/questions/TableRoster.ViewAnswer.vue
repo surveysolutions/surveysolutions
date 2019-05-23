@@ -2,7 +2,10 @@
     <div :class="questionStyle" :id='questionId'>
         <popover  :title="validationTitle" :enable="doesExistValidationMessage" trigger="hover-focus" append-to="body">
             <a class="cell-content has-tooltip" type="primary" data-role="trigger">
-                {{ answer }}
+                <span v-if="(questionType == 'Integer' || questionType == 'Double') && $me.useFormatting">
+                    {{$me.answer | formatNumber}}
+                </span>
+                <span v-else>{{$me.answer}}</span>
             </a>
             <template slot="popover">
                 <div class="popover-content error-tooltip" v-html="validationMessage"></div>
@@ -19,16 +22,12 @@
 
         data() {
             return {
-                questionId: null
+                questionId: null,
+                $me: null,
+                questionType: null,
             }
         }, 
         computed: {
-            $me() {
-                return this.$store.state.webinterview.entityDetails[this.questionId] 
-            },
-            answer() {
-                return this.$me.answer
-            },
             questionStyle() {
                 return [{
                     'disabled-question' : this.$me.isDisabled,
@@ -85,7 +84,16 @@
 
         },
         created() {
-            this.questionId = this.params.value.identity;
+            this.questionId = this.params.value.identity
+            this.questionType = this.params.value.type
+            this.$me = this.$store.state.webinterview.entityDetails[this.questionId] 
+        },
+        filters: {
+            formatNumber (value) {
+                if (value)
+                    return value.toLocaleString()
+                return ''
+            }
         }
     }
 </script>
