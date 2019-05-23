@@ -11,6 +11,8 @@
 <script lang="js">
     import Vue from 'vue'
     import { entityDetails, tableCellEditor } from "../mixins"
+    import { getGroupSeparator } from "./question_helpers"
+    import modal from "../modal"
     
     export default {
         name: 'TableRoster_Integer',
@@ -24,12 +26,7 @@
         },
         computed: {
             groupSeparator() {
-                if (this.$me.useFormatting) {
-                    var etalon = 1111
-                    var localizedNumber = etalon.toLocaleString()
-                    return localizedNumber.substring(1, localizedNumber.length - 3)
-                }
-                return ''
+                return getGroupSeparator(this.$me)
             }
         },
         methods: {
