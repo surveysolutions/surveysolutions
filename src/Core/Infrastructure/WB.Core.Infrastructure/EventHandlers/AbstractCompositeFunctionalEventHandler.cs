@@ -27,28 +27,26 @@ namespace WB.Core.Infrastructure.EventHandlers
 
         protected override bool Handles(IUncommittedEvent evt)
         {
-            Type genericUpgrader = typeof(IUpdateHandler<,>);
-            var typeInfo = genericUpgrader.MakeGenericType(typeof(TEntity), evt.Payload.GetType()).GetTypeInfo();
             foreach (var handler in Handlers)
             {
-                if (typeInfo.IsInstanceOfType(handler))
+                if(Handles(evt, handler))
                     return true;
             }
+
             return false;
         }
 
         protected bool Handles(IUncommittedEvent evt, ICompositeFunctionalPartEventHandler<TEntity, TStorage> handler)
         {
-            return handleCache.GetOrAdd((evt, handler), k =>
+            return handleCache.GetOrAdd((evt.Payload.GetType(), handler.GetType()), key =>
             {
-                Type genericUpgrader = typeof(IUpdateHandler<,>);
-                var typeInfo = genericUpgrader.MakeGenericType(typeof(TEntity), evt.Payload.GetType()).GetTypeInfo();
-                return typeInfo.IsAssignableFrom(handler.GetType());
+                var updateHandler = typeof(IUpdateHandler<,>).MakeGenericType(typeof(TEntity), key.eventType);
+                return updateHandler.IsAssignableFrom(key.handler);
             });
         }
 
-        static readonly ConcurrentDictionary<(IUncommittedEvent evnt, ICompositeFunctionalPartEventHandler<TEntity, TStorage>), bool> handleCache
-            = new ConcurrentDictionary<(IUncommittedEvent evnt, ICompositeFunctionalPartEventHandler<TEntity, TStorage>), bool>();
+        static readonly ConcurrentDictionary<(Type eventType, Type handler), bool> handleCache = 
+            new ConcurrentDictionary<(Type eventType, Type handler), bool>();
 
         static readonly ConcurrentDictionary<(Type eventHandler, Type eventType), MethodInfo> updateMethodsCache 
             = new ConcurrentDictionary<(Type eventHandler, Type eventType), MethodInfo>();
@@ -63,7 +61,7 @@ namespace WB.Core.Infrastructure.EventHandlers
                     continue;
                 
                 var update = updateMethodsCache.GetOrAdd((functionalEventHandler.GetType(), eventType), k => 
-                    k.eventHandler.GetTypeInfo().GetMethod("Update", new[] {typeof(TEntity), k.eventType}));
+                    k.eventHandler.GetMethod("Update", new[] {typeof(TEntity), k.eventType}));
 
                 newState = (TEntity) update?.Invoke(functionalEventHandler, new object[] { newState, this.CreatePublishedEvent(evt) });
             }
@@ -79,7 +77,7 @@ namespace WB.Core.Infrastructure.EventHandlers
 
             foreach (var handler in Handlers)
             {
-                handlers.AddRange(handler.GetType().GetTypeInfo().GetMethods().Where(m => handlerMethodNames.Contains(m.Name)));
+                handlers.AddRange(handler.GetType().GetMethods().Where(m => handlerMethodNames.Contains(m.Name)));
             }
 
             handlers.ForEach((handler) => this.RegisterOldFashionHandler(oldEventBus, handler));

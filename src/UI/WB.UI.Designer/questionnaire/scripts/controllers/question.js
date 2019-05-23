@@ -572,6 +572,9 @@
                     if (currentQuestion.type === 'GpsCoordinates')
                         return o.value !== 'Supervisor';
 
+                    if (currentQuestion.type === 'SingleOption')
+                        return o.value !== 'Identifying';
+
                     return o.value !== 'Identifying' && o.value !== 'Supervisor';
                 });
             };
