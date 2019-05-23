@@ -580,8 +580,8 @@
   <data name="QuestionQuestionType" xml:space="preserve">
     <value>Question type</value>
   </data>
-  <data name="QuestionKind" xml:space="preserve">
-    <value>Kind</value>
+  <data name="QuestionDisplayMode" xml:space="preserve">
+    <value>Display mode</value>
   </data>
   <data name="QuestionScope" xml:space="preserve">
     <value>Question scope</value>
