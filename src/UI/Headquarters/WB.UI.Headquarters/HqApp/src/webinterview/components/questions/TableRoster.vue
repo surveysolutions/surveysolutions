@@ -56,7 +56,8 @@
                 width: 220, // set every column width
                 height: 76,
                 resizable: true,
-                editable: true // make every column editable
+                editable: true, // make every column editable
+                autoHeight: true,
             };
 
             this.initQuestionAsColumns()
@@ -98,7 +99,6 @@
                                 id: question.id,
                                 value: question,
                             },
-                            //autoHeight: true,
                         };
                     }
                 );
@@ -185,7 +185,7 @@
             },
 
             endCellEditting(event) {
-                //event.api.resetRowHeights();
+                event.api.resetRowHeights();
 			    //console.log('cellEditingStopped, value:' + event.value);
 		    }
         }
