@@ -1251,7 +1251,7 @@
     <value>Флажки</value>
     <comment>Флажки</comment>
   </data>
-  <data name="QuestionKind" xml:space="preserve">
+  <data name="QuestionDisplayMode" xml:space="preserve">
     <value>Вид</value>
     <comment>Вид</comment>
   </data>
