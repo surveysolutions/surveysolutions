@@ -255,7 +255,7 @@ namespace WB.Enumerator.Native.WebInterview
 
             Identity sectionIdentity = Identity.Parse(sectionId);
 
-            var parent = interviewEntityFactory.GetWebUIParent(statefulInterview, questionnaire, sectionIdentity);
+            var parent = interviewEntityFactory.GetUIParent(statefulInterview, questionnaire, sectionIdentity);
             if (parent != null)
             {
                 var parentGroup = statefulInterview.GetGroup(parent);
@@ -472,7 +472,7 @@ namespace WB.Enumerator.Native.WebInterview
             {
                 var titleText = HtmlRemovalRegex.Replace(interview.GetTitleText(identity), string.Empty);
                 var isPrefilled = interview.IsQuestionPrefilled(identity);
-                var parentId = interviewEntityFactory.GetWebUIParent(interview, questionnaire, identity);
+                var parentId = interviewEntityFactory.GetUIParent(interview, questionnaire, identity);
                 return new EntityWithError
                 {
                     Id = identity.ToString(),
@@ -510,7 +510,7 @@ namespace WB.Enumerator.Native.WebInterview
             {
                 var titleText = HtmlRemovalRegex.Replace(interview.GetTitleText(identity), string.Empty);
                 var isPrefilled = interview.IsQuestionPrefilled(identity);
-                var parentId = interviewEntityFactory.GetWebUIParent(interview, questionnaire, identity);
+                var parentId = interviewEntityFactory.GetUIParent(interview, questionnaire, identity);
                 return new EntityWithComment
                 {
                     Id = identity.ToString(),

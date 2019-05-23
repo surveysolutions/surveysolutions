@@ -56,8 +56,8 @@
                 return null
             },
             validationMessage() {
-                var message = ''
-                var validity = this.$me.validity
+                let message = ''
+                const validity = this.$me.validity
                 for (let index = 0; index < validity.messages.length; index++) {
                     const errorMessage = validity.messages[index];
                     message += errorMessage + '<br />'

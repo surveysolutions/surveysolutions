@@ -527,7 +527,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 : interview.CountActiveAnsweredQuestionsInInterview();
         }
 
-        public Identity GetWebUIParent(IStatefulInterview interview, IQuestionnaire questionnaire, Identity identity)
+        public Identity GetUIParent(IStatefulInterview interview, IQuestionnaire questionnaire, Identity identity)
         {
             var parent = interview.GetParentGroup(identity);
             while (parent != null && (questionnaire.IsFlatRoster(parent.Id) || questionnaire.IsTableRoster(parent.Id)))
