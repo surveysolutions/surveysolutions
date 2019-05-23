@@ -925,10 +925,12 @@ table.dataTable.fixedHeader-locked {
             width: 100%;
             height: 100%;
             background: #FFFFFF; 
+            display: flex;
+            align-items: center;
+            align-content: center;
             .cell-content{
                 display: block;
                 width: 100%;
-                height: 100%;
                 padding: 10px 15px;
                 text-decoration: none;
                 color: inherit;
@@ -959,11 +961,12 @@ table.dataTable.fixedHeader-locked {
                 
             }
             &.disabled-question{
-                background-image: url('../img/locked.svg');
+
+                //background-image: url('../img/locked.svg');
                 background-color: #E5E5E5;
-                background-repeat: no-repeat;
+                //background-repeat: no-repeat;
                 border-color: #a0a0a0;
-                background-position: 0 0;
+                //background-position: 0 0;
                 
             }
             &.has-warnings{
@@ -994,20 +997,10 @@ table.dataTable.fixedHeader-locked {
     }
 }
 .warning-tooltip{
-    &.popover{
-        color: rgb(202, 145, 1);
-        .popover-title{
-            color: darken($color: #F0AD00, $amount: 20%);
-        }
-    }
+    color: rgb(202, 145, 1);
 }
 .error-tooltip{
-    &.popover{
-        color: #FF2E00;
-        .popover-title{
-            color: darken($color: #FF2E00, $amount: 20%);
-        }
-    }
+    color: #FF2E00;
 }
 
 
