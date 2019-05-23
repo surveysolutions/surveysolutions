@@ -37,33 +37,26 @@
             },
             groupSeparator() {
 
-                var defaultSeparator = ''
+                const defaultSeparator = ''
 
                 if (this.$me.useFormatting) {                    
-                    var etalon = 1111
-                    var localizedNumber = etalon.toLocaleString()
-                    var separator = localizedNumber.substring(1, localizedNumber.length - 3)
-                
-                    return (separator == null || separator == undefined)
-                        ? defaultSeparator
-                        : separator  
+                    const etalon = 1111
+                    const localizedNumber = etalon.toLocaleString()
+                    const separator = localizedNumber.substring(1, localizedNumber.length - 3)
+                    return separator || defaultSeparator  
                 }
 
                 return defaultSeparator
             },
             decimalSeparator() {
 
-                var defaultSeparator = '.'
+                const defaultSeparator = '.'
 
                 if (this.$me.useFormatting) {
-                    
-                    var etalon = 1.111
-                    var localizedNumber = etalon.toLocaleString()
-                    var separator = localizedNumber.substring(1, localizedNumber.length - 3)
-
-                    return (separator == null || separator == undefined)
-                        ? defaultSeparator
-                        : separator
+                    const etalon = 1.111
+                    const localizedNumber = etalon.toLocaleString()
+                    const separator = localizedNumber.substring(1, localizedNumber.length - 3)
+                    return separator || defaultSeparator
                 }
 
                 return defaultSeparator

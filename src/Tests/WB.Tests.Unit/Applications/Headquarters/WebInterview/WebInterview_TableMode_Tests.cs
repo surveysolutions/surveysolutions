@@ -1,27 +1,17 @@
 ﻿using System;
-using System.Dynamic;
 using System.Linq;
 using AutoMapper;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Microsoft.AspNet.SignalR.Hosting;
-using Microsoft.AspNet.SignalR.Hubs;
-using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
-using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.Tests.Abc;
-using WB.UI.Headquarters.API.PublicApi;
 using WB.UI.Headquarters.API.WebInterview;
-using WB.UI.Headquarters.Models.Api;
 
 namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
 {
@@ -29,7 +19,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
     public class WebInterview_TableMode_Tests
     {
         [Test]
-        public void GetSectionEntities_for_entities_with_comments_placed_in_table_roster_should_return_correct_parent_link()
+        public void GetSectionEntities_for_section_with_table_roster_should_return_correct_entities_list()
         {
             var sectionId = Guid.NewGuid();
             var rosterId = Guid.NewGuid();
@@ -110,7 +100,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             var questionnaireStorage = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(Create.Entity.PlainQuestionnaire(questionnaireDocument));
             var statefulInterview = SetUp.StatefulInterview(questionnaireDocument);
             var mapper = SetupMapper();
-            var webInterview = CreateWebInterview(statefulInterview, questionnaireStorage, mapper: mapper);
+            var webInterview = Create.Other.WebInterviewHub(statefulInterview, questionnaireStorage, mapper: mapper);
             var ids = Identity.Create(rosterId, RosterVector.Empty).ToString().ToEnumerable().ToArray();
 
             var entities = webInterview.GetEntitiesDetails(ids);
@@ -192,7 +182,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             QuestionnaireDocument questionnaireDocument,
             string sectionId = null)
         {
-            return CreateWebInterview(statefulInterview,  SetUp.QuestionnaireRepositoryWithOneQuestionnaire(Create.Entity.PlainQuestionnaire(questionnaireDocument)), sectionId);
+            return Create.Other.WebInterviewHub(statefulInterview,  SetUp.QuestionnaireRepositoryWithOneQuestionnaire(Create.Entity.PlainQuestionnaire(questionnaireDocument)), sectionId);
         }      
         
         private IMapper SetupMapper()
@@ -201,39 +191,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             {
                 cfg.AddProfile(new WebInterviewAutoMapProfile());
             }).CreateMapper();
-        }
-
-        private WebInterviewHub CreateWebInterview(IStatefulInterview statefulInterview, IQuestionnaireStorage questionnaire, string sectionId = null, IMapper mapper = null)
-        {
-            var statefulInterviewRepository = SetUp.StatefulInterviewRepository(statefulInterview);
-            var questionnaireStorage = questionnaire;
-            var webInterviewInterviewEntityFactory = Create.Service.WebInterviewInterviewEntityFactory(autoMapper: mapper);
-
-            var serviceLocator = Mock.Of<IServiceLocator>(sl =>
-                sl.GetInstance<IStatefulInterviewRepository>() == statefulInterviewRepository
-                && sl.GetInstance<IQuestionnaireStorage>() == questionnaireStorage
-                && sl.GetInstance<IWebInterviewInterviewEntityFactory>() == webInterviewInterviewEntityFactory
-                && sl.GetInstance<IAuthorizedUser>() == Mock.Of<IAuthorizedUser>());
-
-            var webInterviewHub = new WebInterviewHub();
-            webInterviewHub.SetServiceLocator(serviceLocator);
-
-            webInterviewHub.Context = Mock.Of<HubCallerContext>(h =>
-                h.QueryString == Mock.Of<INameValueCollection>(p => 
-                    p["interviewId"] == statefulInterview.Id.FormatGuid()
-                )
-            );
-
-            if (!string.IsNullOrEmpty(sectionId))
-            {
-                dynamic mockCaller = new ExpandoObject();
-                mockCaller.sectionId = sectionId;
-                var mockClients = new Mock<IHubCallerConnectionContext<dynamic>>();
-                mockClients.Setup(m => m.Caller).Returns((ExpandoObject)mockCaller);
-                webInterviewHub.Clients = mockClients.Object;
-            }
-
-            return webInterviewHub;
         }
     }
 }

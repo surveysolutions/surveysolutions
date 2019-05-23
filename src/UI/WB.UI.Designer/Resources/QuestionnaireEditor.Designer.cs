@@ -936,7 +936,7 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Sub-Section - the questions of the roster are shown behind the buttons corresponding to roster instances.
         ///Flat - the questions of the roster are shown in the same level separated by headers corresponding to roster instances.
-        ///Table - the questions of the roster are shown in the same level as rows and columns of the table. Support only Web survey, on tabled will be &apos;Sub-Section&apos; mode..
+        ///Table - the questions of the roster are shown in the same level as rows and columns of the table. Supported only in Web survey, tablet falls back to &apos;Sub-Section&apos; mode..
         /// </summary>
         public static string HelpRosterDisplayMode {
             get {

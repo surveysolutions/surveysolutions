@@ -1,21 +1,15 @@
 ﻿using System;
-using System.Dynamic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Microsoft.AspNet.SignalR.Hosting;
-using Microsoft.AspNet.SignalR.Hubs;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
-using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.API.WebInterview;
@@ -47,7 +41,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             var interview = Create.AggregateRoot.StatefulInterview(userId: Id.gA, questionnaire: questionnaire, optionsRepository: optionsRepository);
             interview.AnswerSingleOptionQuestion(Id.gA, Id.g2, RosterVector.Empty, DateTime.UtcNow, 2);
 
-            var webInterview = CreateWebInterview(interview, interview.ServiceLocatorInstance.GetInstance<IQuestionnaireStorage>());
+            var webInterview = Create.Other.WebInterviewHub(interview, interview.ServiceLocatorInstance.GetInstance<IQuestionnaireStorage>());
             
             //act
             var entities = webInterview.GetSectionEntities(Id.g1.FormatGuid());
@@ -76,7 +70,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             var interview = Create.AggregateRoot.StatefulInterview(userId: Id.gA, questionnaire: questionnaire, optionsRepository: optionsRepository);
             interview.AnswerSingleOptionQuestion(Id.gA, Id.g2, RosterVector.Empty, DateTime.UtcNow, 2);
 
-            var webInterview = CreateWebInterview(interview, interview.ServiceLocatorInstance.GetInstance<IQuestionnaireStorage>());
+            var webInterview = Create.Other.WebInterviewHub(interview, interview.ServiceLocatorInstance.GetInstance<IQuestionnaireStorage>());
             
             //act
             var entities = webInterview.GetSectionEntities(Id.g1.FormatGuid());
@@ -193,40 +187,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             QuestionnaireDocument questionnaireDocument,
             string sectionId = null)
         {
-            return CreateWebInterview(statefulInterview,  SetUp.QuestionnaireRepositoryWithOneQuestionnaire(Create.Entity.PlainQuestionnaire(questionnaireDocument)), sectionId);
-        }
-
-        private WebInterviewHub CreateWebInterview(IStatefulInterview statefulInterview, IQuestionnaireStorage questionnaire, string sectionId = null)
-        {
-            var statefulInterviewRepository = SetUp.StatefulInterviewRepository(statefulInterview);
-            var questionnaireStorage = questionnaire;
-            var webInterviewInterviewEntityFactory = Create.Service.WebInterviewInterviewEntityFactory();
-
-            var serviceLocator = Mock.Of<IServiceLocator>(sl =>
-                sl.GetInstance<IStatefulInterviewRepository>() == statefulInterviewRepository
-                && sl.GetInstance<IQuestionnaireStorage>() == questionnaireStorage
-                && sl.GetInstance<IWebInterviewInterviewEntityFactory>() == webInterviewInterviewEntityFactory
-                && sl.GetInstance<IAuthorizedUser>() == Mock.Of<IAuthorizedUser>());
-
-            var webInterviewHub = new WebInterviewHub();
-            webInterviewHub.SetServiceLocator(serviceLocator);
-
-            webInterviewHub.Context = Mock.Of<HubCallerContext>(h =>
-                h.QueryString == Mock.Of<INameValueCollection>(p => 
-                    p["interviewId"] == statefulInterview.Id.FormatGuid()
-                )
-            );
-
-            if (!string.IsNullOrEmpty(sectionId))
-            {
-                dynamic mockCaller = new ExpandoObject();
-                mockCaller.sectionId = sectionId;
-                var mockClients = new Mock<IHubCallerConnectionContext<dynamic>>();
-                mockClients.Setup(m => m.Caller).Returns((ExpandoObject)mockCaller);
-                webInterviewHub.Clients = mockClients.Object;
-            }
-
-            return webInterviewHub;
+            return Create.Other.WebInterviewHub(statefulInterview,  SetUp.QuestionnaireRepositoryWithOneQuestionnaire(Create.Entity.PlainQuestionnaire(questionnaireDocument)), sectionId);
         }
     }
 }
