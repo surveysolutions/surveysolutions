@@ -157,7 +157,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                         foreach (var variable in lookupTableRow.Variables)
                         {
                             if (variable.HasValue)
-                                csvWriter.WriteField(variable.Value);
+                                csvWriter.WriteField(variable.Value.ToString(CultureInfo.InvariantCulture));
                             else
                                 csvWriter.WriteField(string.Empty);
                         }
