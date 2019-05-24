@@ -46,10 +46,17 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 }
                 
                 var currentEntity = identity;
+                var questionnaire = questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, null);
 
                 while (currentEntity != null)
                 {
                     var parent = this.GetParentIdentity(currentEntity, interview);
+                    if (questionnaire.IsTableRoster(currentEntity.Id))
+                    {
+                        var tableClientRosterIdentity = new Identity(currentEntity.Id, currentEntity.RosterVector.Shrink());
+                        entitiesToRefresh.Add((WebInterview.GetConnectedClientSectionKey(parent, interview.Id), tableClientRosterIdentity));
+                    }
+
                     if (parent != null)
                     {
                         entitiesToRefresh.Add((WebInterview.GetConnectedClientSectionKey(parent, interview.Id), currentEntity));
@@ -63,12 +70,11 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 if (questionsGroupedByParent.Key == null)
                     continue;
 
-                this.webInterviewInvoker.RefreshEntities(
-                    questionsGroupedByParent.Key, 
-                    questionsGroupedByParent.Select(p => p.id.ToString()).Distinct().ToArray());
+                var ids = questionsGroupedByParent.Select(p => p.id.ToString()).Distinct().ToArray();
+                this.webInterviewInvoker.RefreshEntities(questionsGroupedByParent.Key, ids);
             }
 
-            this.webInterviewInvoker.RefreshSection(interviewId);
+            this.webInterviewInvoker.RefreshSectionState(interviewId); 
         }
 
         public void ReloadInterview(Guid interviewId) => this.webInterviewInvoker.ReloadInterview(interviewId);
@@ -101,14 +107,14 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 return;
             }
 
-            var questionnarie = this.questionnaireStorage.GetQuestionnaireDocument(interview.QuestionnaireIdentity);
-            if (questionnarie != null)
+            var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(interview.QuestionnaireIdentity);
+            if (questionnaire != null)
             {
                 var entitiesToRefresh = new List<(string section, Identity identity)>();
 
                 foreach (var entity in entities)
                 {
-                    var composite = questionnarie.Find<IComposite>(entity.Id);
+                    var composite = questionnaire.Find<IComposite>(entity.Id);
                     var parent = composite.GetParent();
                     var entityRosterVector = entity.RosterVector;
                     var childIdentity = entity;
@@ -118,10 +124,17 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         entityRosterVector = entityRosterVector.Shrink(entity.RosterVector.Length - 1);
                         var parentIdentity = new Identity(parent.PublicKey, entityRosterVector);
 
+                        if (composite is IGroup group && group.DisplayMode == RosterDisplayMode.Table)
+                        {
+                            var tableClientRosterIdentity = new Identity(composite.PublicKey, entityRosterVector);
+                            entitiesToRefresh.Add((WebInterview.GetConnectedClientSectionKey(parentIdentity, interview.Id), tableClientRosterIdentity));
+                        }
+
                         var parentIdentityAsString = WebInterview.GetConnectedClientSectionKey(parentIdentity, interview.Id);
                         entitiesToRefresh.Add((parentIdentityAsString, childIdentity));
 
                         childIdentity = parentIdentity;
+                        composite = parent;
                         parent = parent.GetParent();
                     }
                 }
@@ -136,7 +149,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         questionsGroupedByParent.Select(p => p.identity.ToString()).Distinct().ToArray());
                 }
 
-                this.webInterviewInvoker.RefreshSection(interviewId);
+                this.webInterviewInvoker.RefreshSectionState(interviewId);
             }
         }
 
