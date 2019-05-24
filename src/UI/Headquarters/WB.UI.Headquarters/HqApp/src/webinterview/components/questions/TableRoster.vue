@@ -1,5 +1,5 @@
 <template>
-    <div class="question table-view scroller" style="max-height:5000px" :id="hash">
+    <div class="question table-view scroller" :id="hash">
         <ag-grid-vue 
             ref="tableRoster"
             class="ag-theme-customStyles"
