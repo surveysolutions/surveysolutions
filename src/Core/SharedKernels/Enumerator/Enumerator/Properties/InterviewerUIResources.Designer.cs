@@ -1267,7 +1267,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Too many completed interviews. Sync..
+        ///   Looks up a localized string similar to There are a lot of completed interviews. Please synchronize..
         /// </summary>
         public static string Notifications_ManyCompletedInterviews {
             get {
@@ -1276,7 +1276,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You&apos;ve started too many interviews. Complete them..
+        ///   Looks up a localized string similar to You&apos;ve started too many interviews. Please complete them..
         /// </summary>
         public static string Notifications_ManyStartedInterviews {
             get {
