@@ -128,12 +128,15 @@ namespace WB.UI.Supervisor.Activities.Dashboard
 
         private void SelectMenuItem(IMenuItem item)
         {
-            previousMenuItem?.SetChecked(false);
+            this.Activity.RunOnUiThread(() =>
+            {
+                previousMenuItem?.SetChecked(false);
 
-            item.SetCheckable(true);
-            item.SetChecked(true);
+                item.SetCheckable(true);
+                item.SetChecked(true);
 
-            previousMenuItem = item;
+                previousMenuItem = item;
+            });
         }
 
         private async void Navigate(int itemId)
