@@ -41,6 +41,7 @@
                 rowData: null,
                 gridApi: null,
                 columnApi: null,
+                countOfInstances: 0,
             }
         },
 
@@ -51,6 +52,7 @@
         },
 
         beforeMount() {
+            this.countOfInstances = this.$me.instances.length
 
             this.defaultColDef = {
                 width: 220, // set every column width
@@ -69,8 +71,11 @@
                 this.scroll();
             },
             ["$me.instances"]() {
-                this.initQuestionsInRows()
-                this.setTableRosterHeight()
+                if (this.countOfInstances != this.$me.instances.length) {
+                    this.countOfInstances = this.$me.instances.length
+                    this.initQuestionsInRows()
+                    this.setTableRosterHeight()
+                }
             }
         },
 
@@ -131,12 +136,6 @@
             },
 
             onGridReady(params) {
-                //params.api.sizeColumnsToFit(220);
-                //var $this = $(this);
-                //var height = $this.find('.ag-cell-label-container').height();
-                //params.api.setHeaderHeight(height);
-                //setHeaderHeight
-
                 this.gridApi = params.api;
                 this.columnApi = params.columnApi;
 
@@ -186,7 +185,6 @@
 
             endCellEditting(event) {
                 event.api.resetRowHeights();
-			    //console.log('cellEditingStopped, value:' + event.value);
 		    }
         }
     }
