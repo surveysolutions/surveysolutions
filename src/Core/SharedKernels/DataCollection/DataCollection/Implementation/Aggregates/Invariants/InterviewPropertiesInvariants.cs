@@ -70,6 +70,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                 };
         }
 
+        public void ThrowIfInterviewWasCreated()
+        {
+            if (this.InterviewProperties.WasCreated)
+            {
+                throw new InterviewException("Interview was created and can not be created again", InterviewDomainExceptionType.DuplicateCreationCommand)
+                {
+                    Data =
+                    {
+                        {ExceptionKeys.InterviewId, this.InterviewProperties.Id},
+                    }
+                };
+            }
+        }
+
         public void ThrowIfInterviewStatusIsNotOneOfExpected(params InterviewStatus[] expectedStatuses)
         {
             if (!expectedStatuses.Contains(this.InterviewProperties.Status))

@@ -1,6 +1,6 @@
-﻿using MvvmCross.Plugin.Messenger;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.GenericSubdomains.Portable.Tasks;
+﻿using System.Threading.Tasks;
+using MvvmCross.Commands;
+using MvvmCross.Plugin.Messenger;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 
@@ -13,15 +13,23 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         protected RefreshingAfterSyncListViewModel(IMvxMessenger messenger)
         {
             this.messenger = messenger;
+            this.refreshCommand = 
+                new MvxAsyncCommand(UpdateUiItemsAsync);
         }
 
         private MvxSubscriptionToken messengerSubscription;
+        private readonly IMvxAsyncCommand refreshCommand;
+
+        public override async Task Initialize()
+        {
+            await base.Initialize();
+            await this.refreshCommand.ExecuteAsync();
+        }
 
         public override void ViewAppeared()
         {
             base.ViewAppeared();
-            messengerSubscription = messenger.Subscribe<DashboardChangedMsg>(async msg => await this.UpdateUiItemsAsync(), MvxReference.Strong);
-            UpdateUiItemsAsync().WaitAndUnwrapException();
+            messengerSubscription = messenger.Subscribe<DashboardChangedMsg>(msg => this.refreshCommand.Execute());
         }
 
         public override void ViewDisappeared()
