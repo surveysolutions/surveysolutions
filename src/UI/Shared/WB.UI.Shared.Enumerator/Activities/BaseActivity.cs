@@ -65,7 +65,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             try
             {
-                var mvxLogProvider = Mvx.Resolve<IMvxLogProvider>();
+                var mvxLogProvider = Mvx.IoCProvider.Resolve<IMvxLogProvider>();
                 var log = mvxLogProvider.GetLogFor(this.GetType().Name);
                 log.Error(message + System.Environment.NewLine);
                 log.Error($"RAM: {AndroidInformationUtils.GetRAMInformation()} {System.Environment.NewLine}");

@@ -44,7 +44,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         private void HandleClick(object sender, EventArgs e)
         {
-            IMvxAndroidCurrentTopActivity topActivity = Mvx.Resolve<IMvxAndroidCurrentTopActivity>();
+            IMvxAndroidCurrentTopActivity topActivity = Mvx.IoCProvider.Resolve<IMvxAndroidCurrentTopActivity>();
             var activity = topActivity.Activity;
             var view = (View) sender;
 
