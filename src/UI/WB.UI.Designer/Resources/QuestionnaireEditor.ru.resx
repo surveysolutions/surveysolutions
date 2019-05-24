@@ -1165,9 +1165,10 @@
     <value>Режим списка</value>
     <comment>Режим списка</comment>
   </data>
-  <data name="HelpFlatRoster" xml:space="preserve">
-    <value>Если опция не выбрана, все вопросы ростера показываются за кнопкой экземпляра ростера. Если выбрана, вопросы ростера отображаются на том же уровне, разделенные заголовком соответсвующего экземпляра ростера.</value>
-    <comment>По умолчанию,  ростер отображается как группа. Выбирая эту опцию содержимое ростеров будет показываться на уровне ростера.</comment>
+  <data name="HelpRosterDisplayMode" xml:space="preserve">
+    <value>Подсекция - все вопросы ростера показываются за кнопкой экземпляра ростера.
+    Плоский - вопросы ростера отображаются на том же уровне, разделенные заголовком соответсвующего экземпляра ростера.
+    Табличный - вопросы ростера отображаются на том же уровне как строки и столбцы таблицы. Работает только в Web режиме, на планшетах отображается в режиме "Подсекция"</value>
   </data>
   <data name="Add" xml:space="preserve">
     <value>Добавить</value>
@@ -1250,15 +1251,27 @@
     <value>Флажки</value>
     <comment>Флажки</comment>
   </data>
-  <data name="QuestionKind" xml:space="preserve">
+  <data name="QuestionDisplayMode" xml:space="preserve">
     <value>Вид</value>
     <comment>Вид</comment>
+  </data>
+  <data name="RosterDisplayMode_SubSection" xml:space="preserve">
+    <value>Подсекция</value>
+  </data>
+  <data name="RosterDisplayMode_Flat" xml:space="preserve">
+    <value>Плоский</value>
+  </data>
+  <data name="RosterDisplayMode_Table" xml:space="preserve">
+    <value>Табличный</value>
+  </data>
+  <data name="RosterDisplayMode" xml:space="preserve">
+    <value>Режим отображения:</value>
   </data>
   <data name="AreYouSure" xml:space="preserve">
     <value>Вы уверены?</value>
   </data>
   <data name="MakeOwnerConfirmationMessage" xml:space="preserve">
-    <value>Если вы передадите владение опросником, новый владелец получит уведомление. Вы больше не сможете управлять настройками как владелец опросника, а новый владелец сможет забрать у Вас права на редактирование этого опросника</value>    
+    <value>Если вы передадите владение опросником, новый владелец получит уведомление. Вы больше не сможете управлять настройками как владелец опросника, а новый владелец сможет забрать у Вас права на редактирование этого опросника</value>
   </data>
   <data name="SettingsMakeOwner" xml:space="preserve">
     <value>Передать ответственность</value>

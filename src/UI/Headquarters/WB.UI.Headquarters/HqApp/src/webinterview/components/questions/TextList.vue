@@ -66,7 +66,9 @@
                     return
                 }
 
-                modal.confirm(this.$t('WebInterviewUI.ConfirmRosterRemove'), result => {
+                modal.confirm(this.$t('WebInterviewUI.Interview_Questions_RemoveRowFromRosterMessage', {
+                    rosterTitle: this.$me.rows[index].text
+                }), result => {
                     if (result) {
                         this.removeRow(index)
                         return;

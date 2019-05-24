@@ -241,6 +241,11 @@
                     dataBind(temp);
                 };
 
+                $scope.changeDisplayMode = function(displayMode) {
+                    $scope.activeRoster.displayMode = displayMode;
+                    $scope.editRosterForm.$setDirty();
+                };
+
                 $rootScope.$on('groupMoved', function (event, data) {
                     if (data === $state.params.itemId && !_.isUndefined($scope.editRosterForm)) {
                         questionnaireService.getRosterDetailsById($state.params.questionnaireId, $state.params.itemId).then(function (result) {

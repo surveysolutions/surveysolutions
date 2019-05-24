@@ -816,7 +816,7 @@ namespace WB.Tests.Unit.Designer
             IEnumerable<IComposite> children = null,
             Guid? rosterSizeQuestionId = null,
             Guid? rosterTitleQuestionId = null,
-            bool isPlainMode = false)
+            RosterDisplayMode displayMode = RosterDisplayMode.SubSection)
         {
             Group roster = Create.Group(
                 groupId: rosterId,
@@ -826,7 +826,7 @@ namespace WB.Tests.Unit.Designer
                 children: children);
 
             roster.IsRoster = true;
-            roster.IsFlatMode = isPlainMode;
+            roster.DisplayMode = displayMode;
             roster.RosterSizeSource = RosterSizeSourceType.Question;
             roster.RosterSizeQuestionId = rosterSizeQuestionId;
             roster.RosterTitleQuestionId = rosterTitleQuestionId;
@@ -844,7 +844,8 @@ namespace WB.Tests.Unit.Designer
             RosterSizeSourceType rosterType = RosterSizeSourceType.FixedTitles,
             Guid? rosterSizeQuestionId = null,
             Guid? rosterTitleQuestionId = null,
-            FixedRosterTitle[] fixedRosterTitles = null)
+            FixedRosterTitle[] fixedRosterTitles = null,
+            RosterDisplayMode displayMode = RosterDisplayMode.SubSection)
         {
             var id = rosterId ?? Guid.NewGuid();
             Group group = Create.Group(
@@ -856,6 +857,7 @@ namespace WB.Tests.Unit.Designer
 
             group.IsRoster = true;
             group.RosterSizeSource = rosterType;
+            group.DisplayMode = displayMode;
 
             if (rosterType == RosterSizeSourceType.FixedTitles)
             {
@@ -1107,10 +1109,10 @@ namespace WB.Tests.Unit.Designer
                 string title = null, string variableName = null, Guid? rosterSizeQuestionId = null,
                 string condition = null, bool hideIfDisabled = false, bool isRoster = false,
                 RosterSizeSourceType rosterSizeSource = RosterSizeSourceType.Question,
-                FixedRosterTitleItem[] fixedRosterTitles = null, Guid? rosterTitleQuestionId = null, bool isPlainMode = false)
+                FixedRosterTitleItem[] fixedRosterTitles = null, Guid? rosterTitleQuestionId = null, RosterDisplayMode displayMode = RosterDisplayMode.SubSection)
                 => new UpdateGroup(questionnaireId, groupId, responsibleId ?? Guid.NewGuid(), title, variableName,
                     rosterSizeQuestionId, condition, hideIfDisabled, isRoster,
-                    rosterSizeSource, fixedRosterTitles, rosterTitleQuestionId, isPlainMode);
+                    rosterSizeSource, fixedRosterTitles, rosterTitleQuestionId, displayMode);
 
             public static UpdateVariable UpdateVariable(Guid questionnaireId, Guid entityId, VariableType type, string name, string expression, string label = null, Guid? userId = null)
             {

@@ -990,6 +990,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to remove {{amountOfRostersToRemove}} row(s) from each related roster?.
+        /// </summary>
+        public static string Interview_Question_NumberRosterRemoveConfirm {
+            get {
+                return ResourceManager.GetString("Interview_Question_NumberRosterRemoveConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Entered value can not be parsed as decimal value.
         /// </summary>
         public static string Interview_Question_Real_ParsingError {

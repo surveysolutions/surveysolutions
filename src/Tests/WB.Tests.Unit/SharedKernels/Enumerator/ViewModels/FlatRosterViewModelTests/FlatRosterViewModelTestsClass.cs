@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FlatRosterViewModelT
                 Create.Entity.Roster(Id.gA, 
                     rosterSizeQuestionId: Id.g1,
                     rosterSizeSourceType: RosterSizeSourceType.Question,
-                    isFlatMode: true,
+                    displayMode: RosterDisplayMode.Flat,
                     children: new IComposite[]
                     {
                         Create.Entity.TextQuestion(Id.g2)
