@@ -3,8 +3,8 @@
         <ag-grid-vue 
             ref="tableRoster"
             class="ag-theme-customStyles"
-            style="height:100%"
-            domLayout='autoHeight'
+            style="height:500px"
+            domLayout='normal'
             rowHeight="40"
             headerHeight="50"
 
