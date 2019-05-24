@@ -173,13 +173,21 @@ namespace WB.Enumerator.Native.WebInterview
 
             foreach (var elementId in ids)
             {
+                if (questionnaire.IsTableRoster(elementId.Id))
+                {
+                    var tableRosterIdentity = new Identity(elementId.Id, sectionIdentity.RosterVector);
+                    if (!groupIds.Contains(tableRosterIdentity))
+                        groupIds.Add(tableRosterIdentity);
+                    continue;
+                }
+
                 groupIds.Add(elementId);
 
                 if (questionnaire.IsFlatRoster(elementId.Id))
                 {
                     var groupEntitiesIds = GetGroupEntitiesIds(elementId);
                     groupIds.AddRange(groupEntitiesIds);
-                }
+                } 
             }
 
             var entities = groupIds
@@ -247,7 +255,7 @@ namespace WB.Enumerator.Native.WebInterview
 
             Identity sectionIdentity = Identity.Parse(sectionId);
 
-            var parent = interviewEntityFactory.GetParentWithoutPlainModeFlag(statefulInterview, questionnaire, sectionIdentity);
+            var parent = interviewEntityFactory.GetUIParent(statefulInterview, questionnaire, sectionIdentity);
             if (parent != null)
             {
                 var parentGroup = statefulInterview.GetGroup(parent);
@@ -297,7 +305,7 @@ namespace WB.Enumerator.Native.WebInterview
 
             var callerQuestionnaire = this.GetCallerQuestionnaire();
             ReadOnlyCollection<Guid> parentIds = callerQuestionnaire.GetParentsStartingFromTop(groupId.Id)
-                .Except(id => questionnaire.IsFlatRoster(id))
+                .Except(id => questionnaire.IsFlatRoster(id) || questionnaire.IsTableRoster(id))
                 .ToReadOnlyCollection();
 
             var breadCrumbs = new List<Breadcrumb>();
@@ -378,12 +386,33 @@ namespace WB.Enumerator.Native.WebInterview
             if (callerInterview == null) return null;
 
             var questionnaire = this.GetCallerQuestionnaire();
-            var interviewEntities = ids.Select(id => 
-                    id == @"NavigationButton"
-                        ? this.GetNavigationButtonState(id, questionnaire)
-                        : this.interviewEntityFactory.GetEntityDetails(id, callerInterview, questionnaire, IsReviewMode))
-                .ToArray();
-            return interviewEntities;
+            var interviewEntities = new List<InterviewEntity>();
+
+            foreach (var id in ids)
+            {
+                if (id == @"NavigationButton")
+                {
+                    interviewEntities.Add(this.GetNavigationButtonState(id, questionnaire));
+                    continue;
+                }
+
+                var interviewEntity = this.interviewEntityFactory.GetEntityDetails(id, callerInterview, questionnaire, IsReviewMode);
+                interviewEntities.Add(interviewEntity);
+
+                if (interviewEntity is TableRoster tableRoster)
+                {
+                    foreach (var tableRosterInstance in tableRoster.Instances)
+                    {
+                        var childQuestions = callerInterview.GetChildQuestions(Identity.Parse(tableRosterInstance.Id));
+                        foreach (var childQuestion in childQuestions)
+                        {
+                            var question = this.interviewEntityFactory.GetEntityDetails(childQuestion.ToString(), callerInterview, questionnaire, IsReviewMode);
+                            interviewEntities.Add(question);
+                        }
+                    }
+                }
+            }
+            return interviewEntities.ToArray();
         }
 
         private static readonly Regex HtmlRemovalRegex = new Regex(Constants.HtmlRemovalPattern, RegexOptions.Compiled);
@@ -443,7 +472,7 @@ namespace WB.Enumerator.Native.WebInterview
             {
                 var titleText = HtmlRemovalRegex.Replace(interview.GetTitleText(identity), string.Empty);
                 var isPrefilled = interview.IsQuestionPrefilled(identity);
-                var parentId = interviewEntityFactory.GetParentWithoutPlainModeFlag(interview, questionnaire, identity);
+                var parentId = interviewEntityFactory.GetUIParent(interview, questionnaire, identity);
                 return new EntityWithError
                 {
                     Id = identity.ToString(),
@@ -481,7 +510,7 @@ namespace WB.Enumerator.Native.WebInterview
             {
                 var titleText = HtmlRemovalRegex.Replace(interview.GetTitleText(identity), string.Empty);
                 var isPrefilled = interview.IsQuestionPrefilled(identity);
-                var parentId = interviewEntityFactory.GetParentWithoutPlainModeFlag(interview, questionnaire, identity);
+                var parentId = interviewEntityFactory.GetUIParent(interview, questionnaire, identity);
                 return new EntityWithComment
                 {
                     Id = identity.ToString(),
@@ -515,6 +544,8 @@ namespace WB.Enumerator.Native.WebInterview
             {
                 if (callerQuestionnaire.IsFlatRoster(entityId))
                     return InterviewEntityType.GroupTitle;
+                if (callerQuestionnaire.IsTableRoster(entityId))
+                    return InterviewEntityType.TableRoster;
                 return InterviewEntityType.Group;
             }
 

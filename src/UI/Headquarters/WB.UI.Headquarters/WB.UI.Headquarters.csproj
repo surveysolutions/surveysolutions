@@ -854,12 +854,16 @@
     <Content Include="data-export-storages.html" />
     <Content Include="Dependencies\img\back-to-parrent-1-no-animation-4.png" />
     <Content Include="Dependencies\img\designer-left-icons-2-3.png" />
+    <Content Include="Dependencies\img\error.svg" />
+    <Content Include="Dependencies\img\error2.svg" />
     <Content Include="Dependencies\img\Exprt-icons.png" />
+    <Content Include="Dependencies\img\flip.svg" />
     <Content Include="Dependencies\img\HQ-login-supervisor-get-button-logo.png" />
     <Content Include="Dependencies\img\Icon-demo-server.png" />
     <Content Include="Dependencies\img\icon-mic-1x.png" />
     <Content Include="Dependencies\img\icon-mic-2x.png" />
     <Content Include="Dependencies\img\language.png" />
+    <Content Include="Dependencies\img\locked.svg" />
     <Content Include="Dependencies\img\logo.svg" />
     <Content Include="Dependencies\img\logo_under_constraction.jpg" />
     <Content Include="Dependencies\img\padlock-1dp.png" />
@@ -930,6 +934,8 @@
     <Content Include="Dependencies\img\radio.png" />
     <Content Include="Dependencies\img\search.png" />
     <Content Include="Dependencies\img\search2k.png" />
+    <Content Include="Dependencies\img\warning.svg" />
+    <Content Include="Dependencies\img\warning2.svg" />
     <Content Include="Dependencies\img\wb-logo.png" />
     <Content Include="Dependencies\img\WBG_Horizontal-Grayscale-high.png" />
     <Content Include="Dependencies\js\ajax.js" />
