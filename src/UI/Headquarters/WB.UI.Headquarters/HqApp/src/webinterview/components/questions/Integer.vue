@@ -136,7 +136,7 @@
                     if(amountOfRostersToRemove > 0){
                         modal.confirm(confirmMessage, result => {
                             if (result) {
-                                this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })                                
+                                this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
                                 return
                             } else {
                                 this.fetch()
@@ -146,7 +146,7 @@
                     }
                     else
                     {
-                        this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })                        
+                        this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
                         return
                     }
                 });

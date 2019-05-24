@@ -1266,4 +1266,7 @@
   <data name="EmailProvidersTitle" xml:space="preserve">
     <value>Bulk Email Services</value>
   </data>
+  <data name="InterviewerProfile_QrCodeAlt" xml:space="preserve">
+    <value>Qr code that simplifies interviewer application setup</value>
+  </data>
 </root>

@@ -1288,4 +1288,7 @@
   <data name="EmailProvidersTitle" xml:space="preserve">
     <value>Cервисы массовой рассылки</value>
   </data>
+  <data name="InterviewerProfile_QrCodeAlt" xml:space="preserve">
+    <value>Qr code, упрощающий настройку планшета интервьюера</value>
+  </data>
 </root>
