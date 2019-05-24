@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class UIResources {
@@ -986,6 +986,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Interview_Question_List_Empty_Values_Are_Not_Allowed {
             get {
                 return ResourceManager.GetString("Interview_Question_List_Empty_Values_Are_Not_Allowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to remove {{amountOfRostersToRemove}} row(s) from each related roster?.
+        /// </summary>
+        public static string Interview_Question_NumberRosterRemoveConfirm {
+            get {
+                return ResourceManager.GetString("Interview_Question_NumberRosterRemoveConfirm", resourceCulture);
             }
         }
         
