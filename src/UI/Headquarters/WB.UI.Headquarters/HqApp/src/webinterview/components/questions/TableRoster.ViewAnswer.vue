@@ -23,11 +23,14 @@
         data() {
             return {
                 questionId: null,
-                $me: null,
                 questionType: null,
             }
         }, 
         computed: {
+            $me() {
+                return this.$store.state.webinterview.entityDetails[this.questionId] 
+            },
+
             questionStyle() {
                 return [{
                     'disabled-question' : this.$me.isDisabled,
@@ -86,7 +89,6 @@
         created() {
             this.questionId = this.params.value.identity
             this.questionType = this.params.value.type
-            this.$me = this.$store.state.webinterview.entityDetails[this.questionId] 
         },
         filters: {
             formatNumber (value) {
