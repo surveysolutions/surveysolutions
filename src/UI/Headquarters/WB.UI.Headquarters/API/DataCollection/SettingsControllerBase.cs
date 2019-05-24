@@ -50,5 +50,7 @@ namespace WB.UI.Headquarters.API.DataCollection
 
         public virtual string PublicKeyForEncryption() =>
             Convert.ToBase64String(this.secureStorage.Retrieve(RsaEncryptionService.PublicKey));
+
+        public virtual bool NotificationsEnabled() => true;
     }
 }

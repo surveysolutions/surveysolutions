@@ -21,10 +21,11 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Translations;
-using WB.UI.Shared.Enumerator.CustomServices;
+using WB.UI.Interviewer.Services;
 using IPrincipal = WB.Core.SharedKernels.Enumerator.Services.Infrastructure.IPrincipal;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
+using WB.UI.Shared.Enumerator.Services.Notifications;
 
 namespace WB.UI.Interviewer.Infrastructure
 {
@@ -74,6 +75,8 @@ namespace WB.UI.Interviewer.Infrastructure
             registry.BindAsSingleton(typeof(IPlainStorage<>), typeof(SqlitePlainStorage<>));
 
             registry.BindAsSingleton<IPlainStorage<PrefilledQuestionView>, PrefilledQuestionsRepository>();
+
+            registry.Bind<INotificationsCollector, InterviewerNotificationsCollector>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)

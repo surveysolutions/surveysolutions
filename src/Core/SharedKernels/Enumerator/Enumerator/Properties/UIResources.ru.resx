@@ -684,6 +684,9 @@
   <data name="AreaMap_PointsFormat" xml:space="preserve">
     <value>Отмечено точек: {0}</value>
   </data>
+  <data name="Notifications_SummaryTitle" xml:space="preserve">
+    <value>{0} уведомлений</value>
+  </data>
   <data name="Interview_Question_NumberRosterRemoveConfirm" xml:space="preserve">
     <value>Вы уверены, что хотите удалить {{amountOfRostersToRemove}} строк(у) у зависимых списков?</value>
   </data>

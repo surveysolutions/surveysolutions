@@ -42,6 +42,10 @@ namespace WB.UI.Shared.Enumerator.Services
 
         public string Endpoint => this.CurrentSettings.Endpoint;
         public long? LastHqSyncTimestamp => this.CurrentSettings.LastHqSyncTimestamp;
+
+        public DateTime? LastSync => this.CurrentSettings.LastSync;
+
+        public bool? LastSyncSucceeded => this.CurrentSettings.LastSyncSucceeded;
         public abstract bool VibrateOnError { get; }
         public abstract bool ShowLocationOnMap { get; }
         public abstract int GpsReceiveTimeoutSec { get; }
@@ -91,6 +95,23 @@ namespace WB.UI.Shared.Enumerator.Services
         public bool Encrypted => this.CurrentSettings.Encrypted ?? false;
         public void SetEncrypted(bool encrypted) => this.SaveCurrentSettings(s => s.Encrypted = encrypted);
         public bool IsSupportedWebViewer => Build.VERSION.SdkInt > BuildVersionCodes.Kitkat;
+        public bool NotificationsEnabled => this.CurrentSettings.NotificationsEnabled ?? true;
+        public void SetNotifications(bool notificationsEnabled) => this.SaveCurrentSettings(s => s.NotificationsEnabled = notificationsEnabled);
+        public void MarkSyncStart()
+        {
+            this.SaveCurrentSettings(settings => {
+                settings.LastSync = DateTime.Now;
+                settings.LastSyncSucceeded = false;
+            });
+        }
+
+        public void MarkSyncSucceeded()
+        {
+            this.SaveCurrentSettings(settings => {
+                settings.LastSync = DateTime.Now;
+                settings.LastSyncSucceeded = true;
+            });
+        }
 
         public string GetApplicationVersionName() => this.appPackageInfo.VersionName;
 
