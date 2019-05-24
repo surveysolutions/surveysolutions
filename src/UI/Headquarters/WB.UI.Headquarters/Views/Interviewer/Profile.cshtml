@@ -125,8 +125,9 @@
             @if (Model.SupportQRCodeGeneration)
             {
                 <figure class="qrcode-wrapper">
-
-                <img id="download-qr" alt="QR Code" width="250" height="250" src="@Model.QRCodeAsBase64String"/>            
+                    <a target="_blank" title="@Pages.InterviewerProfile_QrCodeAlt" href="https://support.mysurvey.solutions/interviewer/config/set-up-an-interviewer-tablet-by-scanning-a-barcode/">
+                        <img id="download-qr" alt="@Pages.InterviewerProfile_QrCodeAlt"  width="250" height="250" src="@Model.QRCodeAsBase64String" />
+                    </a>
                 </figure>
             }
         </div>
