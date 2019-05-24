@@ -648,6 +648,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to remove related roster {{rosterTitle}}?.
+        /// </summary>
+        internal static string Interview_Questions_RemoveRowFromRosterMessage {
+            get {
+                return ResourceManager.GetString("Interview_Questions_RemoveRowFromRosterMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interview is received by interviewer and cannot be modified.
         /// </summary>
         internal static string InterviewReceivedCantModify {

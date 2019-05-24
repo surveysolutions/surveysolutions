@@ -10,8 +10,11 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="ClassificationsTests\**" />
     <Compile Remove="QuestionnaireSearchStorageTests\**" />
+    <EmbeddedResource Remove="ClassificationsTests\**" />
     <EmbeddedResource Remove="QuestionnaireSearchStorageTests\**" />
+    <None Remove="ClassificationsTests\**" />
     <None Remove="QuestionnaireSearchStorageTests\**" />
   </ItemGroup>
   <ItemGroup>
@@ -87,8 +90,5 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Windows" />
     <Reference Include="WindowsBase" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ClassificationsTests\" />
   </ItemGroup>
 </Project>

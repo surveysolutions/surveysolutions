@@ -1582,6 +1582,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Qr code that simplifies interviewer application setup.
+        /// </summary>
+        public static string InterviewerProfile_QrCodeAlt {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_QrCodeAlt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to rejected again on device.
         /// </summary>
         public static string InterviewerProfile_Rejected {
