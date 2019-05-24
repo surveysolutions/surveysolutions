@@ -110,7 +110,7 @@ namespace WB.UI.Shared.Enumerator.Activities
 
             sectionChangeSubscriptionToken.Dispose();
             interviewCompleteActivityToken.Dispose();
-            Mvx.Resolve<IAudioDialog>()?.StopRecordingAndSaveResult();
+            Mvx.IoCProvider.Resolve<IAudioDialog>()?.StopRecordingAndSaveResult();
         }
 
         protected void Navigate(string navigateTo)

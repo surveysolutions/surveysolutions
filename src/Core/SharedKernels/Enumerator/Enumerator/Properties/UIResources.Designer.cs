@@ -1377,6 +1377,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} notifications.
+        /// </summary>
+        public static string Notifications_SummaryTitle {
+            get {
+                return ResourceManager.GetString("Notifications_SummaryTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Abort.
         /// </summary>
         public static string OfflineSync_Abort {
