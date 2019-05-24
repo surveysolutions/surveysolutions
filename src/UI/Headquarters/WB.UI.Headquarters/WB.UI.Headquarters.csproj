@@ -1311,6 +1311,7 @@
     <EmbeddedResource Include="Resources\WebInterviewUI.ro.resx">
       <DependentUpon>WebInterviewUI.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\WebInterviewUI.uk-UA.resx" />
     <EmbeddedResource Include="Resources\WebInterviewUI.zh.resx">
       <DependentUpon>WebInterviewUI.resx</DependentUpon>
     </EmbeddedResource>
