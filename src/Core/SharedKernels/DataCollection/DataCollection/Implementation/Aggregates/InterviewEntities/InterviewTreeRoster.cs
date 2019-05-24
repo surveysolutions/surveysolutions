@@ -46,8 +46,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public string RosterTitle { get; set; }
         public int SortIndex { get; set; } = 0;
 
-        public bool IsPlain { get; set; }
-
         public InterviewTreeNumericRoster AsNumeric { get; private set; }
         public InterviewTreeListRoster AsList { get; private set; }
         public InterviewTreeYesNoRoster AsYesNo { get; private set; }
