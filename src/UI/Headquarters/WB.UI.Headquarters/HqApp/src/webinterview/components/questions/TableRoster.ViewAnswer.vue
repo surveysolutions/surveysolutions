@@ -44,16 +44,18 @@
                 return this.$me.fetching
             },
             doesExistValidationMessage() {
-                if (this.$me.validity.messages && this.$me.validity.messages.length > 0)
+                const validity = this.$me.validity
+                if (validity.messages && validity.messages.length > 0)
                     return true
-                if (this.$me.validity.warnings && this.$me.validity.warnings.length > 0)
+                if (validity.warnings && validity.warnings.length > 0)
                     return true
                 return false
             },
             validationTitle() {
-                if (this.$me.validity.messages && this.$me.validity.messages.length > 0)
+                const validity = this.$me.validity
+                if (validity.messages && validity.messages.length > 0)
                     return 'Error'
-                if (this.$me.validity.warnings && this.$me.validity.warnings.length > 0)
+                if (validity.warnings && validity.warnings.length > 0)
                     return 'Warning'
                 return null
             },
