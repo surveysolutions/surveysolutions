@@ -243,6 +243,30 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public Validity Validity { get; set; } = new Validity();
     }
     
+    public class TableRoster : InterviewEntity
+    {
+        public Validity Validity { get; set; } = new Validity();
+
+        public TableRosterQuestionReference[] Questions { get; set; }
+
+        public TableRosterInstance[] Instances { get; set; }
+    }
+
+    public class TableRosterInstance : InterviewEntity
+    {
+        public string RosterVector { get; set; }
+        public string RosterTitle { get; set; }
+        public GroupStatus Status { get; set; }
+        public Validity Validity { get; set; } = new Validity();
+    }
+
+    public class TableRosterQuestionReference 
+    {
+        public string Id { get; set; }
+        public string Title { get; set; }
+        public string EntityType { get; set; }
+    }
+    
 
     public class Sidebar
     {

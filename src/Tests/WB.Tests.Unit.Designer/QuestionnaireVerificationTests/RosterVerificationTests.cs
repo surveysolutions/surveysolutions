@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Tests.Abc;
 
@@ -84,7 +85,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         {
             Create.QuestionnaireDocumentWithOneChapter(
                 Create.NumericIntegerQuestion(id: Id.g1),
-                Create.NumericRoster(rosterId: Id.g2, rosterSizeQuestionId: Id.g1, isPlainMode: true, 
+                Create.NumericRoster(rosterId: Id.g2, rosterSizeQuestionId: Id.g1, displayMode: RosterDisplayMode.Flat, 
                     children: new IComposite[]
                     {
                         Create.Question(),
@@ -108,7 +109,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         {
             Create.QuestionnaireDocumentWithOneChapter(
                 Create.NumericIntegerQuestion(id: Id.g1),
-                Create.NumericRoster(rosterId: Id.g2, rosterSizeQuestionId: Id.g1, isPlainMode: true, 
+                Create.NumericRoster(rosterId: Id.g2, rosterSizeQuestionId: Id.g1, displayMode: RosterDisplayMode.Flat, 
                     children: new IComposite[]
                     {
                         Create.Question(),
@@ -116,6 +117,95 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                     })
             ) 
             .ExpectError("WB0279");
+        }
+
+
+        [Test]
+        public void should_doesnt_allow_nested_groups_in_table_roster()
+        {
+            Create.QuestionnaireDocumentWithOneChapter(
+                    Create.NumericIntegerQuestion(id: Id.g1),
+                    Create.NumericRoster(rosterId: Id.g2, rosterSizeQuestionId: Id.g1, displayMode: RosterDisplayMode.Table,
+                        children: new IComposite[]
+                        {
+                            Create.Group(),
+                        })
+                )
+                .ExpectError("WB0282");
+        }
+
+        [Test]
+        public void should_allow_only_10_questions_in_table_roster()
+        {
+            Create.QuestionnaireDocumentWithOneChapter(
+                    Create.NumericIntegerQuestion(id: Id.g1),
+                    Create.NumericRoster(rosterId: Id.g2, rosterSizeQuestionId: Id.g1, displayMode: RosterDisplayMode.Table,
+                        children: new IComposite[]
+                        {
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                        })
+                )
+                .ExpectError("WB0283");
+        }
+
+        [Test]
+        public void should_doesnt_allow_supervisor_questions_in_table_roster()
+        {
+            Create.QuestionnaireDocumentWithOneChapter(
+                    Create.NumericIntegerQuestion(id: Id.g1),
+                    Create.NumericRoster(rosterId: Id.g2, rosterSizeQuestionId: Id.g1, displayMode: RosterDisplayMode.Table,
+                        children: new IComposite[]
+                        {
+                            Create.Question(scope: QuestionScope.Supervisor),
+                        })
+                )
+                .ExpectError("WB0284");
+        }
+
+        [TestCase(QuestionType.Area)]
+        [TestCase(QuestionType.Audio)]
+        [TestCase(QuestionType.DateTime)]
+        [TestCase(QuestionType.GpsCoordinates)]
+        [TestCase(QuestionType.Multimedia)]
+        [TestCase(QuestionType.MultyOption)]
+        [TestCase(QuestionType.QRBarcode)]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.TextList)]
+        public void should_allow_only_text_and_numeric_questions_in_table_roster(QuestionType questionType)
+        {
+            Create.QuestionnaireDocumentWithOneChapter(
+                    Create.NumericIntegerQuestion(id: Id.g1),
+                    Create.NumericRoster(rosterId: Id.g2, rosterSizeQuestionId: Id.g1, displayMode: RosterDisplayMode.Table,
+                        children: new IComposite[]
+                        {
+                            Create.Question(questionType: questionType),
+                        })
+                )
+                .ExpectError("WB0285");
+        }
+
+        [Test]
+        public void should_show_warning_on_table_roster()
+        {
+            Create.QuestionnaireDocumentWithOneChapter(
+                    Create.NumericIntegerQuestion(id: Id.g1),
+                    Create.NumericRoster(rosterId: Id.g2, rosterSizeQuestionId: Id.g1, displayMode: RosterDisplayMode.Table,
+                        children: new IComposite[]
+                        {
+                            Create.Question(),
+                        })
+                )
+                .ExpectWarning("WB0286");
         }
     }
 }

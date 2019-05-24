@@ -219,7 +219,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     EnablementCondition = group.ConditionExpression,
                     HideIfDisabled = group.HideIfDisabled,
                     VariableName = group.VariableName,
-                    IsFlatMode = group.IsFlatMode
+                    DisplayMode = group.DisplayMode
                 },
                 Breadcrumbs = this.GetBreadcrumbs(questionnaire, group)
             };
@@ -249,7 +249,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 EnablementCondition = roster.ConditionExpression,
                 HideIfDisabled = roster.HideIfDisabled,
                 VariableName = roster.VariableName,
-                IsFlatMode = roster.IsFlatMode,
+                DisplayMode = roster.DisplayMode,
+                DisplayModes = Enum.GetValues(typeof(RosterDisplayMode)).Cast<RosterDisplayMode>().ToArray(),
 
                 Type = rosterType,
                 RosterSizeListQuestionId = rosterType == RosterType.List ? roster.RosterSizeQuestionId.FormatGuid() : null,
