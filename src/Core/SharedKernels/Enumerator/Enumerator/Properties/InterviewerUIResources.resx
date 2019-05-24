@@ -873,10 +873,10 @@ It will appear on interviewer device after next synchronization</value>
     <value>There was no retry after failed synchronization. Please try again</value>
   </data>
   <data name="Notifications_ManyStartedInterviews" xml:space="preserve">
-    <value>You've started too many interviews. Complete them.</value>
+    <value>You've started too many interviews. Please complete them.</value>
   </data>
   <data name="Notifications_ManyCompletedInterviews" xml:space="preserve">
-    <value>Too many completed interviews. Sync.</value>
+    <value>There are a lot of completed interviews. Please synchronize.</value>
   </data>
   <data name="Notifications_StaleAssignments" xml:space="preserve">
     <value>Some assignments were not updated last 3 days.</value>
