@@ -73,7 +73,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Translations
                 x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), null) == nonTranslatedPlainQuestionnaire &&
                 x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), targetLanguage) == translatedPlainQuestionnaire);
 
-            interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaires);
+            interview = Create.AggregateRoot.StatefulInterview(questionnaireRepository: questionnaires);
 
             interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), rosterSizeQuestion, RosterVector.Empty, DateTime.Now, 1);
             interview.AnswerSingleOptionQuestion(Guid.NewGuid(), rosterTitleQuestionId, new decimal[] {0}, DateTime.Now, 1);

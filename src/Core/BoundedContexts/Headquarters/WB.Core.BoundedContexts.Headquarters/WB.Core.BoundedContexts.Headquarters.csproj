@@ -38,7 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AWSSDK.S3" Version="3.3.31.20" />
-    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.7.31" />
+    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.100.24" />
     <PackageReference Include="Common.Logging" Version="3.4.1" />
     <PackageReference Include="Common.Logging.Core" Version="3.4.1" />
     <PackageReference Include="CsvHelper" Version="12.1.2" />

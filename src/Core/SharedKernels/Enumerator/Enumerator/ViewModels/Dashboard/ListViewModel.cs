@@ -26,13 +26,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             protected set => this.RaiseAndSetIfChanged( ref this.itemsCount, value);
         }
 
-        public Task UpdateUiItemsAsync() => Task.Run(async () =>
+        public async Task UpdateUiItemsAsync() 
         {
             this.IsItemsLoaded = false;
 
             try
             {
-                var newItems = this.GetUiItems();
+                var newItems = await Task.Run(this.GetUiItems);
 
                 await this.InvokeOnMainThreadAsync(() =>
                 {
@@ -47,6 +47,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             }
             
             this.OnItemsLoaded?.Invoke(this, EventArgs.Empty);
-        });
+        }
     }
 }
