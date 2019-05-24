@@ -1,7 +1,5 @@
 import { browserLanguage } from "~/shared/helpers"
 import "bootstrap";
-import 'flatpickr/dist/flatpickr.css'
-import "toastr/build/toastr.css"
 
 global.jQuery = require("jquery")
 

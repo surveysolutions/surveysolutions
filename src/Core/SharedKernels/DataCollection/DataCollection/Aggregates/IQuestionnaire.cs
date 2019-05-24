@@ -285,6 +285,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsRosterTriggeredByOrderedMultiQuestion(Guid rosterId);
         DateTime? GetDefaultDateForDateQuestion(Guid dateQuestionId);
         bool IsFlatRoster(Guid groupId);
+        bool IsTableRoster(Guid groupId);
 
         bool ShowCascadingAsList(Guid id);
         int? GetCascadingAsListThreshold(Guid id);
