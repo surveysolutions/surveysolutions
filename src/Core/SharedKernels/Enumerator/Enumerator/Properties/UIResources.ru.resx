@@ -675,13 +675,16 @@
   <data name="Interview_ShowPdf" xml:space="preserve">
     <value>Показать PDF</value>
   </data>
-    <data name="Validity_InterviewSizeLimitReached" xml:space="preserve">
+  <data name="Validity_InterviewSizeLimitReached" xml:space="preserve">
     <value>Количество ростеров и вопросов в интервью превысило лимиты.</value>
   </data>
-    <data name="Dashboard_SharedWithMeLinkText" xml:space="preserve">
+  <data name="Dashboard_SharedWithMeLinkText" xml:space="preserve">
     <value>Общие со мной</value>
   </data>
-    <data name="AreaMap_PointsFormat" xml:space="preserve">
+  <data name="AreaMap_PointsFormat" xml:space="preserve">
     <value>Отмечено точек: {0}</value>
+  </data>
+  <data name="Interview_Question_NumberRosterRemoveConfirm" xml:space="preserve">
+    <value>Вы уверены, что хотите удалить {{amountOfRostersToRemove}} строк(у) у зависимых списков?</value>
   </data>
 </root>
