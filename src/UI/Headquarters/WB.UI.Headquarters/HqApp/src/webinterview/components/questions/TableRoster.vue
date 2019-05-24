@@ -1,16 +1,16 @@
 <template>
-    <div class="question table-view scroller" :id="hash">
-            <!-- domLayout='autoHeight' -->
+    <div class="question table-view scroller" style="max-height:5000px" :id="hash">
         <ag-grid-vue 
             ref="tableRoster"
             class="ag-theme-customStyles"
-            style="height:400px;"
+            style="height:100%"
+            domLayout='autoHeight'
+            rowHeight="40"
+            headerHeight="50"
+
             :defaultColDef="defaultColDef"
             :columnDefs="columnDefs"
             :rowData="rowData"
-            
-            rowHeight="40"
-            headerHeight="50"
 
             @grid-ready="onGridReady"
             @column-resized="autosizeHeaders"
@@ -73,8 +73,8 @@
             ["$me.instances"]() {
                 if (this.countOfInstances != this.$me.instances.length) {
                     this.countOfInstances = this.$me.instances.length
-                    this.initQuestionsInRows()
                     this.setTableRosterHeight()
+                    this.initQuestionsInRows()
                 }
             }
         },
@@ -163,11 +163,14 @@
             },
 
             setTableRosterHeight() {
-                var headerHeight = parseInt(this.$refs.tableRoster.headerHeight)
-                var rowsCount = this.$me.instances.length
-                var rowHeight = this.$refs.tableRoster.rowHeight * rowsCount
-                var height = headerHeight + (rowHeight > 400 ? 400 : rowHeight) + 5 /* scroll */ 
-                this.$refs.tableRoster.$el.style.height = height + 'px';
+                if (this.$me.instances.length > 10) {
+                    this.gridApi.setDomLayout('normal')
+                    this.$refs.tableRoster.$el.style.height = '500px';
+                }
+                else {
+                    this.gridApi.setDomLayout('autoHeight');
+                    this.$refs.tableRoster.$el.style.height = '';
+                }
             },
 
             doScroll: debounce(function() {
