@@ -107,7 +107,7 @@
                         };
                     }
                 );
-                columnsFromQuestions.unshift({headerName: "", field: "rosterTitle", pinned: true, editable: false});
+                columnsFromQuestions.unshift({headerName: "", field: "rosterTitle", autoHeight: true, pinned: true, editable: false, cellClass: "cell-content", cellStyle: {minHeight: '40px'}});
                 this.columnDefs = columnsFromQuestions
             },
 
