@@ -28,11 +28,9 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
     {
 #>
     public static class <#= table.TypeName#>_Generator
-    {       
-
+    {
         public static Dictionary<int, <#= table.TypeName#>> GetTable()
-        {
-            
+        {            
             var lookup__table = new Dictionary<int, <#= table.TypeName#>>();
             //to avoid SO
             //generated method is too big
@@ -51,7 +49,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             foreach (var row in table.Rows.Take(1000)) 
             {
 #>
-                lookup__table.Add(<#= row.RowCode #>, new <#= table.TypeName#>(<#= row.RowCode #>, <#= string.Join(",",  row.Variables.Select(x => x == null ? "null" : x.ToString() ) ) #>));
+                lookup__table.Add(<#= row.RowCode #>, new <#= table.TypeName#>(<#= row.RowCode #>, <#= string.Join(",",  row.Variables.Select(x => x == null ? "null" : this.ToStringHelper.ToStringWithCulture(x) ) ) #>));
 <# 
             }
 #>
@@ -63,7 +61,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             foreach (var row in table.Rows.Skip(1000).Take(1000)) 
             {
 #>
-                lookup__table.Add(<#= row.RowCode #>, new <#= table.TypeName#>(<#= row.RowCode #>, <#= string.Join(",",  row.Variables.Select(x => x == null ? "null" : x.ToString() ) ) #>));
+                lookup__table.Add(<#= row.RowCode #>, new <#= table.TypeName#>(<#= row.RowCode #>, <#= string.Join(",",  row.Variables.Select(x => x == null ? "null" : this.ToStringHelper.ToStringWithCulture(x) ) ) #>));
 <# 
             }
 #>
@@ -75,7 +73,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             foreach (var row in table.Rows.Skip(2000).Take(1000)) 
             {
 #>
-                lookup__table.Add(<#= row.RowCode #>, new <#= table.TypeName#>(<#= row.RowCode #>, <#= string.Join(",",  row.Variables.Select(x => x == null ? "null" : x.ToString() ) ) #>));
+                lookup__table.Add(<#= row.RowCode #>, new <#= table.TypeName#>(<#= row.RowCode #>, <#= string.Join(",",  row.Variables.Select(x => x == null ? "null" : this.ToStringHelper.ToStringWithCulture(x) ) ) #>));
 <# 
             }
 #>
@@ -87,7 +85,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             foreach (var row in table.Rows.Skip(3000).Take(1000)) 
             {
 #>
-                lookup__table.Add(<#= row.RowCode #>, new <#= table.TypeName#>(<#= row.RowCode #>, <#= string.Join(",",  row.Variables.Select(x => x == null ? "null" : x.ToString() ) ) #>));
+                lookup__table.Add(<#= row.RowCode #>, new <#= table.TypeName#>(<#= row.RowCode #>, <#= string.Join(",",  row.Variables.Select(x => x == null ? "null" : this.ToStringHelper.ToStringWithCulture(x) ) ) #>));
 <# 
             }
 #>
@@ -99,7 +97,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             foreach (var row in table.Rows.Skip(4000)) 
             {
 #>
-                lookup__table.Add(<#= row.RowCode #>, new <#= table.TypeName#>(<#= row.RowCode #>, <#= string.Join(",",  row.Variables.Select(x => x == null ? "null" : x.ToString() ) ) #>));
+                lookup__table.Add(<#= row.RowCode #>, new <#= table.TypeName#>(<#= row.RowCode #>, <#= string.Join(",",  row.Variables.Select(x => x == null ? "null" : this.ToStringHelper.ToStringWithCulture(x) ) ) #>));
 <# 
             }
 #>

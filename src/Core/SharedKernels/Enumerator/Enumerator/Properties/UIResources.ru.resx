@@ -306,7 +306,7 @@
     <value>Отвеченных</value>
   </data>
   <data name="Interview_Complete_Button" xml:space="preserve">
-    <value>Закончить</value>
+    <value>Завершить</value>
   </data>
   <data name="Interview_Complete_Consequences_Instrunction" xml:space="preserve">
     <value>По закрытию этого интервью оно будет помечено как законченное и будет загружено супервизору во время вашей следующей синхронизации</value>
@@ -555,7 +555,7 @@
     <value>Записать звук</value>
   </data>
   <data name="MissingPermissions_Microphone" xml:space="preserve">
-    <value>Додатку необхідний дозвіл на використання мікрофона для відповіді на дане питання</value>
+    <value>Приложению необходим доступ к микрофону для ответа на данный вопрос</value>
   </data>
   <data name="InterviewKey" xml:space="preserve">
     <value>Идентификатор: {0}</value>
@@ -604,18 +604,15 @@
   </data>
   <data name="Supervisor_ApplicationName" xml:space="preserve">
     <value>Survey Solutions Supervisor</value>
-    <comment>Survey Solutions Supervisor</comment>
   </data>
   <data name="Interview_Overview_NotAnswered" xml:space="preserve">
     <value>Не отвечен</value>
   </data>
   <data name="Interview_Overview" xml:space="preserve">
     <value>Обзор</value>
-    <comment>Обзор</comment>
   </data>
   <data name="Interview_Overview_Name" xml:space="preserve">
     <value>Обзор</value>
-    <comment>Обзор</comment>
   </data>
   <data name="Interview_Overview_AdditionalInfo" xml:space="preserve">
     <value>Дополнительная информация</value>
@@ -649,15 +646,12 @@
   </data>
   <data name="OfflineSync_InstallPlayServices" xml:space="preserve">
     <value>Должны быть установлены Google Play Services.</value>
-    <comment>Должны быть установлены Google Play Services.</comment>
   </data>
   <data name="OfflineSync_DeviceNotSupported" xml:space="preserve">
     <value>Это устройство не поддерживается.</value>
-    <comment>Это устройство не поддерживается.</comment>
   </data>
   <data name="OfflineSync_NetworkInfo" xml:space="preserve">
     <value>Скорость: {0}, Осталось: {1}</value>
-    <comment>Скорость: {0}, Осталось: {1}</comment>
   </data>
   <data name="Synchronization_FoundDevice" xml:space="preserve">
     <value>Найдено устройство интервьюра ({0})</value>
@@ -665,7 +659,6 @@
   </data>
   <data name="OfflineSync_Retry" xml:space="preserve">
     <value>Попробывать еще раз</value>
-    <comment>Попробывать еще раз</comment>
   </data>
   <data name="OfflineSync_Supervisor_Title" xml:space="preserve">
     <value>Синхронизация заданий и интервью</value>
@@ -675,7 +668,6 @@
   </data>
   <data name="Prefs_DownloadUpdatesForInterviewerAppSummary" xml:space="preserve">
     <value>Если у интервьюеров нет доступа к интернету и они работают в оффлайн режиме, то эта настройка должна быть влючена, чтобы при оффлайновой синхронизации с супервизором интервьюер мог обновить свое приложение через приложение супервизора</value>
-    <comment>Если у интервьюеров нет доступа к интернету, то эта настройка должна быть включена, чтобы при оффлайн синхронизации интервьюер мог обновить свое приложение через приложение супервизора</comment>
   </data>
   <data name="Validity_QuestionDoesntExist" xml:space="preserve">
     <value>Текущий ростер удален или выключен. Пожалуйста, перейдите в следующую активную секцию или ростер используя панель навигации.</value>
@@ -683,19 +675,19 @@
   <data name="Interview_ShowPdf" xml:space="preserve">
     <value>Показать PDF</value>
   </data>
-    <data name="Validity_InterviewSizeLimitReached" xml:space="preserve">
+  <data name="Validity_InterviewSizeLimitReached" xml:space="preserve">
     <value>Количество ростеров и вопросов в интервью превысило лимиты.</value>
-    <comment>Количество ростеров и вопросов в интервью превысило лимиты.</comment>
   </data>
-    <data name="Dashboard_SharedWithMeLinkText" xml:space="preserve">
+  <data name="Dashboard_SharedWithMeLinkText" xml:space="preserve">
     <value>Общие со мной</value>
-    <comment>Общие со мной</comment>
   </data>
-    <data name="AreaMap_PointsFormat" xml:space="preserve">
+  <data name="AreaMap_PointsFormat" xml:space="preserve">
     <value>Отмечено точек: {0}</value>
-    <comment>Отмечено точек: {0}</comment>
   </data>
   <data name="Notifications_SummaryTitle" xml:space="preserve">
     <value>{0} уведомлений</value>
+  </data>
+  <data name="Interview_Question_NumberRosterRemoveConfirm" xml:space="preserve">
+    <value>Вы уверены, что хотите удалить {{amountOfRostersToRemove}} строк(у) у зависимых списков?</value>
   </data>
 </root>

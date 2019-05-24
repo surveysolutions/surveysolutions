@@ -407,8 +407,11 @@
     <value>Непередбачена помилка під час початку запису</value>
     <comment>Непередбачена помилка під час початку запису</comment>
   </data>
-    <data name="Dashboard_SharedWithMeLinkText" xml:space="preserve">
+  <data name="Dashboard_SharedWithMeLinkText" xml:space="preserve">
     <value>Спільні зі мною</value>
     <comment>Загальні зі мною</comment>
+  </data>
+  <data name="MissingPermissions_Microphone" xml:space="preserve">
+    <value>Додатку необхідний дозвіл на використання мікрофона для відповіді на дане питання</value>
   </data>
 </root>

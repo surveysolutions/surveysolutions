@@ -15,6 +15,7 @@
         DuplicateSyncPackage,
         PackageIsOudated,
         QuestionIsMissing,
-        InterviewSizeLimitReached
+        InterviewSizeLimitReached,
+        DuplicateCreationCommand
     }
 }

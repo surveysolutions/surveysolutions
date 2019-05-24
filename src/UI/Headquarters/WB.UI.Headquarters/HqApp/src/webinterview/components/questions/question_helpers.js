@@ -10,3 +10,35 @@ export function shouldShowAnsweredOptionsOnlyForSingle(question){
 }
 
 
+export function getGroupSeparator(question) {
+    const defaultSeparator = ''
+
+    if (question.useFormatting) {
+        const etalon = 1111
+        const localizedNumber = etalon.toLocaleString()
+        const separator = localizedNumber.substring(1, localizedNumber.length - 3)
+        return separator || defaultSeparator
+    }
+
+    return defaultSeparator
+}
+
+export function getDecimalSeparator(question) {
+    const defaultSeparator = '.'
+
+    if (question.useFormatting) {
+        const etalon = 1.111
+        const localizedNumber = etalon.toLocaleString()
+        const separator = localizedNumber.substring(1, localizedNumber.length - 3)
+        return separator || defaultSeparator
+    }
+
+    return defaultSeparator
+}
+
+export function getDecimalPlacesCount(question){
+    if (question.countOfDecimalPlaces == null || question.countOfDecimalPlaces == undefined)
+        return 15;
+    
+    return question.countOfDecimalPlaces    
+}

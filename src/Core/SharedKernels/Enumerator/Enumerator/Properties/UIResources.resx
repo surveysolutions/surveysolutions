@@ -684,4 +684,8 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Notifications_SummaryTitle" xml:space="preserve">
     <value>{0} notifications</value>
   </data>
+  <data name="Interview_Question_NumberRosterRemoveConfirm" xml:space="preserve">
+    <value>Are you sure you want to remove {{amountOfRostersToRemove}} row(s) from each related roster?</value>
+    <comment>Do not translate parts inside {{}}: {{amountOfRostersToRemove}}</comment>
+  </data>
 </root>

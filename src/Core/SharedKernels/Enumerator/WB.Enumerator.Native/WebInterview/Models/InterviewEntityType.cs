@@ -25,5 +25,6 @@ namespace WB.Enumerator.Native.WebInterview.Models
         Audio,
         Area,
         GroupTitle,
+        TableRoster,
     }
 }
