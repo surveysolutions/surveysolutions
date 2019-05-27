@@ -170,6 +170,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             return invitationStorage.Query(_ => _
                 .Where(FilteredByQuestionnaire(questionnaireIdentity))
                 .Where(NotArchived())
+                .Where(HasNoInterview())
                 .Where(x => (x.Assignment.Quantity ?? int.MaxValue) - x.Assignment.InterviewSummaries.Count > 0)
                 .ToList());
         }
