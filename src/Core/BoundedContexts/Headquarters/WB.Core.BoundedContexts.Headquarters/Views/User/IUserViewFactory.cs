@@ -20,6 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         UsersView GetAllSupervisors(int pageSize, string searchBy, bool showLocked = false);
 
         UserView GetUser(UserViewInputModel input);
+        UserViewLite GetUser(Guid id);
 
         ResponsibleView GetAllResponsibles(int pageSize, string searchBy, bool showLocked = false, bool showArchived = false);
         

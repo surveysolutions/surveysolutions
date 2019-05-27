@@ -21,25 +21,22 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.SpeedReport
             var firstAnswerDate = new DateTime(2019, 1, 17, 5, 37, 57, DateTimeKind.Utc);
 
             var interviewSummariesStorage = new TestInMemoryWriter<InterviewSummary>();
-            var speedReportItemsStorage = new TestInMemoryWriter<SpeedReportInterviewItem>();
             var statusEventsToPublish = new List<IPublishableEvent>();
 
             statusEventsToPublish.Add(Create.PublishedEvent.InterviewCreated(interviewId: interviewId, originDate: createdDate));
             statusEventsToPublish.Add(Create.PublishedEvent.InterviewerAssigned(interviewId: interviewId));
             statusEventsToPublish.Add(Create.PublishedEvent.TextQuestionAnswered(interviewId: interviewId, originDate: firstAnswerDate));
 
-            var denormalizer = CreateDenormalizer(interviewSummariesStorage, speedReportItemsStorage);
+            var denormalizer = CreateDenormalizer(interviewSummariesStorage);
 
             foreach (var publishableEvent in statusEventsToPublish)
             {
                 denormalizer.Handle(new[] { publishableEvent }, publishableEvent.EventSourceId);
             }
 
-            var speedReportInterviewItem = speedReportItemsStorage.GetById(interviewId.FormatGuid());
-            Assert.That(speedReportInterviewItem.InterviewId, Is.EqualTo(interviewId.FormatGuid()));
-            Assert.That(speedReportInterviewItem.CreatedDate, Is.EqualTo(createdDate));
-            Assert.That(speedReportInterviewItem.FirstAnswerDate.HasValue, Is.True);
-            Assert.That(speedReportInterviewItem.FirstAnswerDate.Value, Is.EqualTo(firstAnswerDate));
+            var summary = interviewSummariesStorage.GetById(interviewId.FormatGuid());
+            Assert.That(summary.CreatedDate, Is.EqualTo(createdDate));
+            Assert.That(summary.FirstAnswerDate, Is.EqualTo(firstAnswerDate));
         }
         
         [Test]
@@ -50,7 +47,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.SpeedReport
             var firstAnswerDate = new DateTime(2019, 1, 17, 5, 37, 57, DateTimeKind.Utc);
 
             var interviewSummariesStorage = new TestInMemoryWriter<InterviewSummary>();
-            var speedReportItemsStorage = new TestInMemoryWriter<SpeedReportInterviewItem>();
             var statusEventsToPublish = new List<IPublishableEvent>();
 
             statusEventsToPublish.Add(Create.PublishedEvent.InterviewCreated(interviewId: interviewId, originDate: createdDate));
@@ -59,21 +55,19 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.SpeedReport
             statusEventsToPublish.Add(Create.PublishedEvent.DateTimeQuestionAnswered(interviewId: interviewId, originDate: firstAnswerDate));
             statusEventsToPublish.Add(Create.PublishedEvent.TextQuestionAnswered(interviewId: interviewId, originDate: DateTimeOffset.Now));
 
-            var denormalizer = CreateDenormalizer(interviewSummariesStorage, speedReportItemsStorage);
+            var denormalizer = CreateDenormalizer(interviewSummariesStorage);
 
             foreach (var publishableEvent in statusEventsToPublish)
             {
                 denormalizer.Handle(new[] { publishableEvent }, publishableEvent.EventSourceId);
             }
 
-            var speedReportInterviewItem = speedReportItemsStorage.GetById(interviewId.FormatGuid());
-            Assert.That(speedReportInterviewItem.InterviewId, Is.EqualTo(interviewId.FormatGuid()));
+            var speedReportInterviewItem = interviewSummariesStorage.GetById(interviewId.FormatGuid());
             Assert.That(speedReportInterviewItem.CreatedDate, Is.EqualTo(createdDate));
-            Assert.That(speedReportInterviewItem.FirstAnswerDate.HasValue, Is.True);
-            Assert.That(speedReportInterviewItem.FirstAnswerDate.Value, Is.EqualTo(firstAnswerDate));
+            Assert.That(speedReportInterviewItem.FirstAnswerDate, Is.EqualTo(firstAnswerDate));
 
-            Assert.That(speedReportInterviewItem.SupervisorName, Is.EqualTo("name"));
-            Assert.That(speedReportInterviewItem.InterviewerName, Is.EqualTo("name"));
+            Assert.That(speedReportInterviewItem.FirstSupervisorName, Is.EqualTo("name"));
+            Assert.That(speedReportInterviewItem.FirstInterviewerName, Is.EqualTo("name"));
         }
     }
 }

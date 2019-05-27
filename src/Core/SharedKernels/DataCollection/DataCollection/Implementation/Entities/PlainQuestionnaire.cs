@@ -963,8 +963,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
          
 
         public ReadOnlyCollection<Guid> GetChildInterviewerQuestions(Guid groupId)
-            => this.cacheOfChildInterviewerQuestions.GetOrAdd(groupId, this
-                    .GetGroupOrThrow(groupId)
+            => this.cacheOfChildInterviewerQuestions.GetOrAdd(groupId, id => this
+                    .GetGroupOrThrow(id)
                     .Children.OfType<IQuestion>()
                     .Where(IsInterviewierQuestion)
                     .Select(question => question.PublicKey)
@@ -1293,8 +1293,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public IEnumerable<Guid> GetRostersAffectedByRosterTitleQuestion(Guid questionId)
         {
-            return this.cacheOfRostersAffectedByRosterTitleQuestion.GetOrAdd(questionId,
-                this.GetRostersAffectedByRosterTitleQuestionImpl(questionId));
+            return this.cacheOfRostersAffectedByRosterTitleQuestion.GetOrAdd(questionId, this.GetRostersAffectedByRosterTitleQuestionImpl);
         }
 
         public bool IsRosterTitleQuestionAvailable(Guid rosterId)
@@ -1858,5 +1857,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             var entity = this.GetEntityOrThrow(id);
             return entity.VariableName;
         }
+
+        readonly ConcurrentDictionary<string, string> markdownTransformationCache = new ConcurrentDictionary<string, string>();
+
+        public string ApplyMarkDownTransformation(string text) => 
+            markdownTransformationCache.GetOrAdd(text, s =>
+            {
+                var transform = QuestionnaireMarkdown.ToHtml(s);
+                if (s.Equals(transform, StringComparison.Ordinal))
+                {
+                    return null;
+                }
+
+                return transform;
+            });
     }
 }

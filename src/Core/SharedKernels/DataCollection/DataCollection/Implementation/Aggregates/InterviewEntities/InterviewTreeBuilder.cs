@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         private InterviewTreeSection BuildInterviewTreeSection(InterviewTree tree, Identity sectionIdentity, IQuestionnaire questionnaire, ISubstitutionTextFactory textFactory)
         {
-            var section = InterviewTree.CreateSection(tree, questionnaire, textFactory, sectionIdentity);
+            var section = InterviewTree.CreateSection(questionnaire, textFactory, sectionIdentity);
 
             section.AddChildren(this.BuildInterviewTreeGroupChildren(tree, sectionIdentity, questionnaire, textFactory).ToList());
 
@@ -48,7 +48,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         private InterviewTreeSubSection BuildInterviewTreeSubSection(InterviewTree tree, Identity groupIdentity, IQuestionnaire questionnaire, ISubstitutionTextFactory textFactory)
         {
-            var subSection = InterviewTree.CreateSubSection(tree, questionnaire, textFactory, groupIdentity);
+            var subSection = InterviewTree.CreateSubSection(questionnaire, textFactory, groupIdentity);
 
             subSection.AddChildren(this.BuildInterviewTreeGroupChildren(tree, groupIdentity, questionnaire, textFactory).ToList());
 
@@ -68,9 +68,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 if (questionnaire.HasGroup(childId))
                     yield return this.BuildInterviewTreeSubSection(tree, entityIdentity, questionnaire, textFactory);
                 else if (questionnaire.HasQuestion(childId))
-                    yield return InterviewTree.CreateQuestion(tree, questionnaire, textFactory, entityIdentity);
+                    yield return InterviewTree.CreateQuestion(questionnaire, textFactory, entityIdentity);
                 else if (questionnaire.IsStaticText(childId))
-                    yield return InterviewTree.CreateStaticText(tree, questionnaire, textFactory, entityIdentity);
+                    yield return InterviewTree.CreateStaticText(questionnaire, textFactory, entityIdentity);
                 else if (questionnaire.IsVariable(childId))
                     yield return InterviewTree.CreateVariable(entityIdentity);
 

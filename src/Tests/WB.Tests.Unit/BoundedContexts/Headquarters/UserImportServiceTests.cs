@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
@@ -60,15 +61,16 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
         public void When_job_by_previous_import_is_not_completed_Then_UserPreloadingException_should_be_thrown()
         {
             //arrange
-            var scheduler = Mock.Of<IScheduler>(x =>
-                x.GetCurrentlyExecutingJobs() == new[]
+            var scheduler = new Mock<IScheduler>();
+            scheduler.Setup(x => x.GetCurrentlyExecutingJobs(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new[]
                 {
                     Mock.Of<IJobExecutionContext>(y =>
                         y.JobDetail ==
                         Mock.Of<IJobDetail>(z => z.Key == new JobKey("Import users job", "Import users")))
                 });
 
-            var usersImportTask = new UsersImportTask(scheduler);
+            var usersImportTask = new UsersImportTask(scheduler.Object);
 
             var userImportService = CreateUserImportServiceWithRepositories(usersImportTask: usersImportTask);
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Diagnostics;
 using System.Threading;
 using NHibernate;
@@ -31,7 +32,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         public void AcceptChanges()
         {
             if (isDisposed) throw new ObjectDisposedException(nameof(UnitOfWork));
-
+            this.session?.Flush();
             transaction?.Commit();
         }
 
@@ -48,7 +49,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 if (this.session == null)
                 {
                     session = sessionFactory.OpenSession();
-                    transaction = session.BeginTransaction();
+                    transaction = session.BeginTransaction(IsolationLevel.ReadCommitted);
                     SessionId = (session as SessionImpl)?.SessionId;
                 }
 
