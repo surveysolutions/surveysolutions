@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Creation
 {
-    internal class when_creating_interview_with_answered_questions
+    [TestOf(typeof(Interview))]
+    internal class CreationTests
     {
         [Test]
         public void should_be_able_to_put_answers_to_questions_to_interview()
@@ -38,6 +41,22 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Creation
             Assert.That(interview.GetTextQuestion(identity).GetAnswer().Value, Is.EqualTo(textQuestionAnswer));
             Assert.That(interview.IsReadOnlyQuestion(identity), Is.False,
                 "Interviewer scoped questions should not be marked as readonly");
+        }
+
+        [Test]
+        public void should_not_allow_create_created_interview()
+        {
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter();
+
+            var interview = SetUp.StatefulInterview(questionnaire, false);
+
+            // Act
+            interview.CreateInterview(Create.Command.CreateInterview(interviewId: Id.gA));
+            void Act() => interview.CreateInterview(Create.Command.CreateInterview(interviewId: Id.gA));
+
+            // Assert
+            Assert.That(Act, Throws.Exception.InstanceOf<InterviewException>()
+                                             .With.Property(nameof(InterviewException.ExceptionType)).EqualTo(InterviewDomainExceptionType.DuplicateCreationCommand));
         }
 
         [Test]

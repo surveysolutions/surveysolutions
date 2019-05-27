@@ -878,4 +878,32 @@
     <value>Это может занять время, 
 не выходите из приложения</value>
   </data>
+  <data name="Notifications_InterviewsTitle" xml:space="preserve">
+    <value>Интервью</value>
+  </data>
+  <data name="Notifications_CompletedInterviewsText" xml:space="preserve">
+    <value>У вас {0} интервью, которые необходимо синхронизировать</value>
+  </data>
+  <data name="Notifications_RejectedInterviewsText" xml:space="preserve">
+    <value>У вас {0} отклоненых супервизором, которые не были открыты</value>
+  </data>
+  <data name="Notifications_SyncTitle" xml:space="preserve">
+    <value>Синхронизация</value>
+  </data>
+  <data name="Notifications_SyncTooLongAgoText" xml:space="preserve">
+    <value>Синхронизация не проводилась в последнее время. Пожалуйста, синхронизируйтесь.</value>
+  </data>
+  <data name="Notifications_SyncNoRetryTitle" xml:space="preserve">
+    <value>После прерваной синхронизации не было попытки повторить. Пожалуйста, повторите снова.</value>
+  </data>
+  <data name="Notifications_ManyStartedInterviews" xml:space="preserve">
+    <value>Вы начали много интервью.Закончите их.</value>
+  </data>
+  <data name="Notifications_ManyCompletedInterviews" xml:space="preserve">
+    <value>Много готовых интервь. Синхронизируйтесь.</value>
+  </data>
+  <data name="Notifications_StaleAssignments" xml:space="preserve">
+    <value>Есть назначения, которые не обрабатывались последние 3 дня</value>
+  </data>
+
 </root>

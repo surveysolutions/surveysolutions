@@ -32,5 +32,9 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
 
         [HttpGet]
         public override string PublicKeyForEncryption() => base.PublicKeyForEncryption();
+
+        [HttpGet]
+        public override bool NotificationsEnabled() =>
+            this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings).IsDeviceNotificationsEnabled();
     }
 }

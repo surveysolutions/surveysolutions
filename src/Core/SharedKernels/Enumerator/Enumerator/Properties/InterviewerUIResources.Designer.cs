@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class InterviewerUIResources {
@@ -570,7 +570,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All collected data will be saved to backup file on this device..
+        ///   Looks up a localized string similar to Save all relevant information to the file on this device..
         /// </summary>
         public static string Diagnostics_Backup_Description {
             get {
@@ -579,7 +579,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Backup all gathered information.
+        ///   Looks up a localized string similar to Generate support package.
         /// </summary>
         public static string Diagnostics_Backup_Title {
             get {
@@ -1245,6 +1245,87 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string NoNetwork {
             get {
                 return ResourceManager.GetString("NoNetwork", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have {0} completed interview(s) that should be synchronized.
+        /// </summary>
+        public static string Notifications_CompletedInterviewsText {
+            get {
+                return ResourceManager.GetString("Notifications_CompletedInterviewsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviews.
+        /// </summary>
+        public static string Notifications_InterviewsTitle {
+            get {
+                return ResourceManager.GetString("Notifications_InterviewsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are a lot of completed interviews. Please synchronize..
+        /// </summary>
+        public static string Notifications_ManyCompletedInterviews {
+            get {
+                return ResourceManager.GetString("Notifications_ManyCompletedInterviews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You&apos;ve started too many interviews. Please complete them..
+        /// </summary>
+        public static string Notifications_ManyStartedInterviews {
+            get {
+                return ResourceManager.GetString("Notifications_ManyStartedInterviews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have {0} rejected interview(s) that were not handled.
+        /// </summary>
+        public static string Notifications_RejectedInterviewsText {
+            get {
+                return ResourceManager.GetString("Notifications_RejectedInterviewsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Some assignments were not updated last 3 days..
+        /// </summary>
+        public static string Notifications_StaleAssignments {
+            get {
+                return ResourceManager.GetString("Notifications_StaleAssignments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There was no retry after failed synchronization. Please try again.
+        /// </summary>
+        public static string Notifications_SyncNoRetryTitle {
+            get {
+                return ResourceManager.GetString("Notifications_SyncNoRetryTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronization.
+        /// </summary>
+        public static string Notifications_SyncTitle {
+            get {
+                return ResourceManager.GetString("Notifications_SyncTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronization was not performed lately. Please synchronize.
+        /// </summary>
+        public static string Notifications_SyncTooLongAgoText {
+            get {
+                return ResourceManager.GetString("Notifications_SyncTooLongAgoText", resourceCulture);
             }
         }
         
