@@ -196,15 +196,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question with title or instructions substitution cannot reference itself..
-        /// </summary>
-        public static string WB0016_QuestionWithTitleSubstitutionCantReferenceSelf {
-            get {
-                return ResourceManager.GetString("WB0016_QuestionWithTitleSubstitutionCantReferenceSelf", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Substitution references a nonexistent question or variable..
         /// </summary>
         public static string WB0017_SubstitutionReferencesNotExistingQuestionOrVariable {
@@ -1912,6 +1903,51 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string WB0282_IdentifyingQuestionInSectionWithCondition {
             get {
                 return ResourceManager.GetString("WB0282_IdentifyingQuestionInSectionWithCondition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Table roster mode doesn&apos;t allow to use nested groups and rosters..
+        /// </summary>
+        public static string WB0282_TableRosterContainsNestedGroup {
+            get {
+                return ResourceManager.GetString("WB0282_TableRosterContainsNestedGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Table mode allowed only for rosters with no more than {0} questions..
+        /// </summary>
+        public static string WB0283_TableRosterAllowedOnlyForGroupWithNoMoreThanElements {
+            get {
+                return ResourceManager.GetString("WB0283_TableRosterAllowedOnlyForGroupWithNoMoreThanElements", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Table roster doesn&apos;t allow to use supervisor questions..
+        /// </summary>
+        public static string WB0284_TableRosterCantContainsSupervisorQuestions {
+            get {
+                return ResourceManager.GetString("WB0284_TableRosterCantContainsSupervisorQuestions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Table roster allows to use only text and numeric questions..
+        /// </summary>
+        public static string WB0285_TableRosterContainsOnlyAllowedQuestionTypes {
+            get {
+                return ResourceManager.GetString("WB0285_TableRosterContainsOnlyAllowedQuestionTypes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Table roster mode works only in web survey, on tablets it will be default mode..
+        /// </summary>
+        public static string WB0286_TableRosterWorksOnlyInWebMode {
+            get {
+                return ResourceManager.GetString("WB0286_TableRosterWorksOnlyInWebMode", resourceCulture);
             }
         }
     }

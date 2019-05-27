@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
@@ -15,7 +16,7 @@ namespace WB.UI.Designer.Controllers.Api.Tester
 {
     [ApiBasicAuth]
     [Route("api/v{version:int}/translation")]
-    public class TranslationController : ApiController
+    public class TranslationController : ControllerBase
     {
         private readonly DesignerDbContext dbContext;
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
@@ -31,7 +32,7 @@ namespace WB.UI.Designer.Controllers.Api.Tester
         public async Task<IActionResult> Get(Guid id, int version)
         {
             if (version < ApiVersion.CurrentTesterProtocolVersion)
-                return StatusCode(HttpStatusCode.UpgradeRequired);
+                return StatusCode(StatusCodes.Status426UpgradeRequired);
 
             var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
             var translationsIds = questionnaireView.Source.Translations.Select(x => x.Id).ToList();

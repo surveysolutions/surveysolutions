@@ -162,9 +162,6 @@
   <data name="WB0015_QuestionWithTitleSubstitutionCantBePrefilled" xml:space="preserve">
     <value>带有标题替代的问题无法被标记为识别型。</value>
   </data>
-  <data name="WB0016_QuestionWithTitleSubstitutionCantReferenceSelf" xml:space="preserve">
-    <value>带有标题替代的问题无法引用本身。</value>
-  </data>
   <data name="WB0017_SubstitutionReferencesNotExistingQuestionOrVariable" xml:space="preserve">
     <value>替代引用了一个不存在的问题或变量。</value>
   </data>

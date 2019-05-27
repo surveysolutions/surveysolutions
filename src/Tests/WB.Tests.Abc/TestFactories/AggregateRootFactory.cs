@@ -64,10 +64,6 @@ namespace WB.Tests.Abc.TestFactories
                 SetUp.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(questionOptionsRepository);
             }
 
-            interview.Apply(Create.Event.InterviewCreated(
-                questionnaireId: questionnaireId?.QuestionnaireId ?? Guid.NewGuid(),
-                questionnaireVersion: questionnaireId?.Version ?? 1));
-
             return interview;
         }
 

@@ -43,6 +43,7 @@
 <script lang="js">
     import { entityDetails } from "../mixins"
     import * as $ from "jquery"
+    import { getGroupSeparator, getDecimalSeparator, getDecimalPlacesCount } from "./question_helpers"
     
     export default {
         data() {
@@ -62,43 +63,13 @@
                 return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') : this.$t('WebInterviewUI.DecimalEnter')
             },
             groupSeparator() {
-
-                var defaultSeparator = ''
-
-                if (this.$me.useFormatting) {                    
-                    var etalon = 1111
-                    var localizedNumber = etalon.toLocaleString()
-                    var separator = localizedNumber.substring(1, localizedNumber.length - 3)
-                
-                    return (separator == null || separator == undefined)
-                        ? defaultSeparator
-                        : separator  
-                }
-
-                return defaultSeparator
+                return getGroupSeparator(this.$me)
             },
             decimalSeparator() {
-
-                var defaultSeparator = '.'
-
-                if (this.$me.useFormatting) {
-                    
-                    var etalon = 1.111
-                    var localizedNumber = etalon.toLocaleString()
-                    var separator = localizedNumber.substring(1, localizedNumber.length - 3)
-
-                    return (separator == null || separator == undefined)
-                        ? defaultSeparator
-                        : separator
-                }
-
-                return defaultSeparator
+                return getDecimalSeparator(this.$me)
             },
-            decimalPlacesCount(){
-                if (this.$me.countOfDecimalPlaces == null || this.$me.countOfDecimalPlaces == undefined)
-                    return 15;
-                
-                return this.$me.countOfDecimalPlaces    
+            decimalPlacesCount() {
+                return getDecimalPlacesCount(this.$me)    
             },
             specialValue: {
                 get() {

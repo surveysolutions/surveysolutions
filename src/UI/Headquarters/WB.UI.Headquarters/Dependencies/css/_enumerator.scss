@@ -610,3 +610,29 @@
     }
 
 }
+.table td.locked-user{
+    position: relative;
+    padding-right: 35px;
+    &:hover a,
+    &:focus a{
+        text-decoration: none;
+    }
+    .interviewer {
+        font-style: italic;
+        color: #a6a8a9;
+        text-decoration: underline;
+        &:before {
+            opacity: 0.3;
+            filter: alpha(opacity=30);
+        }
+       
+    }
+    .lock{
+        display: block;
+    }
+}
+.lock{
+
+	right: 5px;
+
+}

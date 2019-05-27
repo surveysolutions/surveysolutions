@@ -56,7 +56,7 @@ namespace WB.UI.Supervisor.Activities.Dashboard
             ViewModel.MvxNavigationService.AfterNavigate += MenuFragment_AfterNavigate;
         }
 
-        private async void MenuFragment_AfterNavigate(object sender, MvvmCross.Navigation.EventArguments.IMvxNavigateEventArgs e)
+        private void MenuFragment_AfterNavigate(object sender, MvvmCross.Navigation.EventArguments.IMvxNavigateEventArgs e)
         {
             int? menuItemId = null;
             switch (e.ViewModel)
@@ -128,12 +128,15 @@ namespace WB.UI.Supervisor.Activities.Dashboard
 
         private void SelectMenuItem(IMenuItem item)
         {
-            previousMenuItem?.SetChecked(false);
+            this.Activity.RunOnUiThread(() =>
+            {
+                previousMenuItem?.SetChecked(false);
 
-            item.SetCheckable(true);
-            item.SetChecked(true);
+                item.SetCheckable(true);
+                item.SetChecked(true);
 
-            previousMenuItem = item;
+                previousMenuItem = item;
+            });
         }
 
         private async void Navigate(int itemId)

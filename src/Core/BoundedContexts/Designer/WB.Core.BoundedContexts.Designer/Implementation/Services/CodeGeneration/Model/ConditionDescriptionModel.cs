@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using NHibernate.Util;
-using System.Linq;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model
 {

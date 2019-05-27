@@ -3,7 +3,6 @@ using Main.Core.Documents;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Exceptions;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {

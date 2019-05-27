@@ -43,6 +43,7 @@ using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Shared.Enumerator.Services.Internals.FileSystem;
 using WB.UI.Shared.Enumerator.Services.Logging;
+using WB.UI.Shared.Enumerator.Services.Notifications;
 
 namespace WB.UI.Shared.Enumerator
 {
@@ -105,7 +106,10 @@ namespace WB.UI.Shared.Enumerator
             registry.BindAsSingleton<ISecureStorage, SecureStorage>();
 
             registry.Bind<IEncryptionService, AesEncryptionService>();
-
+            
+            registry.Bind<INotificationPublisher, NotificationPublisher>();
+            registry.Bind<IEnumeratorWorkerManager, EnumeratorWorkerManager>();
+            
             SetupLoggingFacility(registry);
         }
 

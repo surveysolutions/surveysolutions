@@ -24,9 +24,13 @@ function GetPathRelativeToCurrectLocation($FullPath) {
 function GetMsBuildFromVsWhere() {
     $path = & $vswhere -latest -products * -requires Microsoft.Component.MSBuild -requires Component.Xamarin -property installationPath
     if ($path) {
-        $path = join-path $path 'MSBuild\15.0\Bin\MSBuild.exe'
-        if (test-path $path) {
-            return $path
+        $result = join-path $path 'MSBuild\15.0\Bin\MSBuild.exe'
+        if (test-path $result) {
+            return $result
+        }
+        $result = join-path $path  'MSBuild\Current\Bin\MSBuild.exe'
+        if(test-path $result) {
+            return $result
         }
     }
 }

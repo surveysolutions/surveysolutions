@@ -324,4 +324,7 @@
   <data name="Metadata_Update" xml:space="preserve">
     <value>Метаданные опросника {0} обновлены</value>
   </data>
+  <data name="Questionnaire_Move" xml:space="preserve">
+    <value>Опросник передан новому владельцу с email "{0}"</value>
+  </data>
 </root>

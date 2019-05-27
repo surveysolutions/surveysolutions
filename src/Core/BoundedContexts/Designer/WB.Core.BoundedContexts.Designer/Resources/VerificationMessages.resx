@@ -147,9 +147,6 @@
   <data name="WB0015_QuestionWithTitleSubstitutionCantBePrefilled" xml:space="preserve">
     <value>Question with title or instructions substitution cannot be marked as identifying.</value>
   </data>
-  <data name="WB0016_QuestionWithTitleSubstitutionCantReferenceSelf" xml:space="preserve">
-    <value>Question with title or instructions substitution cannot reference itself.</value>
-  </data>
   <data name="WB0017_SubstitutionReferencesNotExistingQuestionOrVariable" xml:space="preserve">
     <value>Substitution references a nonexistent question or variable.</value>
   </data>
@@ -734,5 +731,20 @@
   </data>
   <data name="WB0282_IdentifyingQuestionInSectionWithCondition" xml:space="preserve">
     <value>Identifying question cannot be placed inside section with enabling condition.</value>
+  </data>
+  <data name="WB0282_TableRosterContainsNestedGroup" xml:space="preserve">
+    <value>Table roster mode doesn't allow to use nested groups and rosters.</value>
+  </data>
+  <data name="WB0283_TableRosterAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+    <value>Table mode allowed only for rosters with no more than {0} questions.</value>
+  </data>
+  <data name="WB0284_TableRosterCantContainsSupervisorQuestions" xml:space="preserve">
+    <value>Table roster doesn't allow to use supervisor questions.</value>
+  </data>
+  <data name="WB0285_TableRosterContainsOnlyAllowedQuestionTypes" xml:space="preserve">
+    <value>Table roster allows to use only text and numeric questions.</value>
+  </data>
+  <data name="WB0286_TableRosterWorksOnlyInWebMode" xml:space="preserve">
+    <value>Table roster mode works only in web survey, on tablets it will be default mode.</value>
   </data>
 </root>

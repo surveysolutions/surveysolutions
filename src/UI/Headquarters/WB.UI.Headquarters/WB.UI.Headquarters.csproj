@@ -86,8 +86,8 @@
     <Reference Include="Autofac.Integration.WebApi.Owin, Version=4.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Autofac.WebApi2.Owin.4.0.0\lib\net45\Autofac.Integration.WebApi.Owin.dll</HintPath>
     </Reference>
-    <Reference Include="AutoMapper, Version=7.0.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\AutoMapper.7.0.1\lib\net45\AutoMapper.dll</HintPath>
+    <Reference Include="AutoMapper, Version=8.1.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\AutoMapper.8.1.0\lib\net461\AutoMapper.dll</HintPath>
     </Reference>
     <Reference Include="CaptchaMvc, Version=2.5.0.0, Culture=neutral, PublicKeyToken=fe46ad421dd3b0e6, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\CaptchaMvc.Mvc5.1.5.0\lib\net45-full\CaptchaMvc.dll</HintPath>
@@ -107,11 +107,11 @@
     <Reference Include="CSCore, Version=1.2.1.2, Culture=neutral, PublicKeyToken=5a08f2b6f4415dea, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\CSCore.1.2.1.2\lib\net35-client\CSCore.dll</HintPath>
     </Reference>
-    <Reference Include="CsvHelper, Version=6.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\CsvHelper.6.1.0\lib\net45\CsvHelper.dll</HintPath>
+    <Reference Include="CsvHelper, Version=12.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\CsvHelper.12.1.2\lib\net45\CsvHelper.dll</HintPath>
     </Reference>
     <Reference Include="Dapper, Version=1.60.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Dapper.1.60.1\lib\net451\Dapper.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Dapper.1.60.6\lib\net451\Dapper.dll</HintPath>
     </Reference>
     <Reference Include="DotNetZip, Version=1.13.3.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\DotNetZip.1.13.3\lib\net40\DotNetZip.dll</HintPath>
@@ -241,6 +241,9 @@
     <Reference Include="Quartz, Version=2.6.1.0, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Quartz.2.6.1\lib\net40\Quartz.dll</HintPath>
     </Reference>
+    <Reference Include="RazorGenerator.Mvc, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\RazorGenerator.Mvc.2.4.9\lib\net40\RazorGenerator.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="Recaptcha.Web, Version=2.1.0.0, Culture=neutral, PublicKeyToken=171a6ec5fa4b1644, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\RecaptchaNet.2.1.0\lib\net451\Recaptcha.Web.dll</HintPath>
     </Reference>
@@ -258,6 +261,9 @@
     </Reference>
     <Reference Include="StackExchange.Exceptional, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\StackExchange.Exceptional.2.0.0\lib\net461\StackExchange.Exceptional.dll</HintPath>
+    </Reference>
+    <Reference Include="StackExchange.Exceptional.PostgreSql, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\StackExchange.Exceptional.PostgreSql.2.0.0\lib\net461\StackExchange.Exceptional.PostgreSql.dll</HintPath>
     </Reference>
     <Reference Include="StackExchange.Exceptional.Shared, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\StackExchange.Exceptional.Shared.2.0.0\lib\net461\StackExchange.Exceptional.Shared.dll</HintPath>
@@ -848,12 +854,16 @@
     <Content Include="data-export-storages.html" />
     <Content Include="Dependencies\img\back-to-parrent-1-no-animation-4.png" />
     <Content Include="Dependencies\img\designer-left-icons-2-3.png" />
+    <Content Include="Dependencies\img\error.svg" />
+    <Content Include="Dependencies\img\error2.svg" />
     <Content Include="Dependencies\img\Exprt-icons.png" />
+    <Content Include="Dependencies\img\flip.svg" />
     <Content Include="Dependencies\img\HQ-login-supervisor-get-button-logo.png" />
     <Content Include="Dependencies\img\Icon-demo-server.png" />
     <Content Include="Dependencies\img\icon-mic-1x.png" />
     <Content Include="Dependencies\img\icon-mic-2x.png" />
     <Content Include="Dependencies\img\language.png" />
+    <Content Include="Dependencies\img\locked.svg" />
     <Content Include="Dependencies\img\logo.svg" />
     <Content Include="Dependencies\img\logo_under_constraction.jpg" />
     <Content Include="Dependencies\img\padlock-1dp.png" />
@@ -924,6 +934,8 @@
     <Content Include="Dependencies\img\radio.png" />
     <Content Include="Dependencies\img\search.png" />
     <Content Include="Dependencies\img\search2k.png" />
+    <Content Include="Dependencies\img\warning.svg" />
+    <Content Include="Dependencies\img\warning2.svg" />
     <Content Include="Dependencies\img\wb-logo.png" />
     <Content Include="Dependencies\img\WBG_Horizontal-Grayscale-high.png" />
     <Content Include="Dependencies\js\ajax.js" />
@@ -1299,6 +1311,7 @@
     <EmbeddedResource Include="Resources\WebInterviewUI.ro.resx">
       <DependentUpon>WebInterviewUI.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\WebInterviewUI.uk-UA.resx" />
     <EmbeddedResource Include="Resources\WebInterviewUI.zh.resx">
       <DependentUpon>WebInterviewUI.resx</DependentUpon>
     </EmbeddedResource>
@@ -2102,6 +2115,7 @@
     </Compile>
     <Compile Include="App_Start\MainModule.cs" />
     <Compile Include="App_Start\AutofacConfig.cs" />
+    <Compile Include="App_Start\RazorGeneratorMvcStart.cs" />
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="Code\AutoMapperResolutionContextExtensions.cs" />
     <Compile Include="API\PublicApi\BaseApiServiceController.cs" />

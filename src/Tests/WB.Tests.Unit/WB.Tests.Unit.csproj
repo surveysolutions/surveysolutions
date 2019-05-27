@@ -39,14 +39,14 @@
   <ItemGroup>
     <PackageReference Include="Antlr3.Runtime" Version="3.5.1" />
     <PackageReference Include="AppDomainToolkit" Version="1.0.4.3" />
-    <PackageReference Include="AutoMapper" Version="7.0.1" />
+    <PackageReference Include="AutoMapper" Version="8.1.0" />
     <PackageReference Include="Castle.Core" Version="4.3.1" />
     <PackageReference Include="Common.Logging" Version="3.4.1" />
     <PackageReference Include="Common.Logging.Core" Version="3.4.1" />
     <PackageReference Include="CsQuery" Version="1.3.4" />
-    <PackageReference Include="CsvHelper" Version="6.1.0" />
+    <PackageReference Include="CsvHelper" Version="12.1.2" />
     <PackageReference Include="EntityFramework" Version="6.2.0" />
-    <PackageReference Include="FluentAssertions" Version="5.4.1" />
+    <PackageReference Include="FluentAssertions" Version="5.6.0" />
     <PackageReference Include="Humanizer.Core" Version="2.4.2" />
     <PackageReference Include="Iesi.Collections" Version="4.0.4" />
     <PackageReference Include="JsonDiffPatch.Net" Version="2.1.0" />
@@ -76,10 +76,11 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
     <PackageReference Include="NHibernate" Version="5.2.4" />
     <PackageReference Include="NSubstitute" Version="3.1.0" />
-    <PackageReference Include="NUnit" Version="3.11.0" />
+    <PackageReference Include="NUnit" Version="3.12.0" />
     <PackageReference Include="NUnit.Extension.NUnitProjectLoader" Version="3.6.0" />
     <PackageReference Include="NUnit.Extension.TeamCityEventListener" Version="1.0.6" />
     <PackageReference Include="NUnit.Extension.VSProjectLoader" Version="3.8.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
     <PackageReference Include="Owin" Version="1.0" />
     <PackageReference Include="Plugin.Permissions" Version="3.0.0.12" />
     <PackageReference Include="Quartz" Version="2.6.1" />
@@ -89,12 +90,12 @@
     <PackageReference Include="sqlite-net-pcl" Version="1.5.231" />
     <PackageReference Include="SQLitePCL.native.sqlite3.v110_xp" Version="0.9.3" />
     <PackageReference Include="SQLitePCL.plugin.sqlite3.net45" Version="0.9.3" />
-    <PackageReference Include="SQLitePCLRaw.bundle_green" Version="1.1.11" />
-    <PackageReference Include="SQLitePCLRaw.core" Version="1.1.11" />
-    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3.linux" Version="1.1.11" />
-    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3.osx" Version="1.1.11" />
-    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3.v110_xp" Version="1.1.11" />
-    <PackageReference Include="SQLitePCLRaw.provider.e_sqlite3.net45" Version="1.1.11" />
+    <PackageReference Include="SQLitePCLRaw.bundle_green" Version="1.1.13" />
+    <PackageReference Include="SQLitePCLRaw.core" Version="1.1.13" />
+    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3.linux" Version="1.1.13" />
+    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3.osx" Version="1.1.13" />
+    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3.v110_xp" Version="1.1.13" />
+    <PackageReference Include="SQLitePCLRaw.provider.e_sqlite3.net45" Version="1.1.13" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ddidotnet, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
