@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,41 +37,25 @@ namespace WB.Services.Export.Jobs
 
         public async Task ExecuteAsync(DataExportProcessArgs pendingExportProcess, CancellationToken cancellationToken)
         {
+            var handleCriticalErrors = false;
+
             try
             {
                 serviceProvider.SetTenant(pendingExportProcess.ExportSettings.Tenant);
 
                 await processor.HandleNewEvents(pendingExportProcess.ProcessId, cancellationToken);
 
-                try
+                handleCriticalErrors = true;
+
+                if (pendingExportProcess.StorageType.HasValue)
                 {
-                    if (pendingExportProcess.StorageType.HasValue)
-                    {
-                        var handler = this.GetExternalStorageExportHandler(pendingExportProcess.StorageType.Value);
-                        await handler.ExportDataAsync(pendingExportProcess, cancellationToken);
-                    }
-                    else
-                    {
-                        var handler = this.GetExportHandler(pendingExportProcess.ExportSettings.ExportFormat);
-                        await handler.ExportDataAsync(pendingExportProcess, cancellationToken);
-                    }
+                    var handler = this.GetExternalStorageExportHandler(pendingExportProcess.StorageType.Value);
+                    await handler.ExportDataAsync(pendingExportProcess, cancellationToken);
                 }
-                catch (OperationCanceledException)
+                else
                 {
-                    throw;
-                }
-                catch (PostgresException pe) when (pe.SqlState == "57014") // 57014: canceling statement due to user request
-                {
-                    throw;
-                }
-                catch (Exception e) when (e.InnerException is TaskCanceledException)
-                {
-                    throw;
-                }
-                catch (Exception e)
-                {
-                    this.logger.LogCritical(e, "Export job failed");
-                    throw;
+                    var handler = this.GetExportHandler(pendingExportProcess.ExportSettings.ExportFormat);
+                    await handler.ExportDataAsync(pendingExportProcess, cancellationToken);
                 }
             }
             catch (OperationCanceledException)
@@ -85,9 +70,17 @@ namespace WB.Services.Export.Jobs
             {
                 throw;
             }
+            catch (IOException e) when ((e.HResult & 0xFFFF) == 0x70)
+            {
+                throw;
+            }
             catch (Exception e)
             {
-                this.logger.LogError(e, "Export job failed");
+                if (handleCriticalErrors)
+                    this.logger.LogCritical(e, "Export job failed");
+                else
+                    this.logger.LogError(e, "Export job failed");
+
                 throw;
             }
         }

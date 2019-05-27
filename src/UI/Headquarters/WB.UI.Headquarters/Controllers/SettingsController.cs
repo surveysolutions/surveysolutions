@@ -48,7 +48,6 @@ namespace WB.UI.Headquarters.Controllers
                     UpdateSettings = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "AdminSettings", action = "UpdateEmailProviderSettings" }),
                     GetSettings = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "AdminSettings", action = "EmailProviderSettings" }),
                     SendTestEmail = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "AdminSettings", action = "SendTestEmail" }),
-                    
                 }
             });
         }

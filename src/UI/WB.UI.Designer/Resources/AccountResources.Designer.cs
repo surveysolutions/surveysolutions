@@ -286,7 +286,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This account has been locked out, please try again later..
+        ///   Looks up a localized string similar to Your account is locked. Contact the administrator to unlock your account.
         /// </summary>
         public static string LockedOutText {
             get {

@@ -12,7 +12,7 @@ namespace WB.UI.Shared.Enumerator.Services
         {
             get
             {
-                var principal = Mvx.Resolve<IPrincipal>();
+                var principal = Mvx.IoCProvider.Resolve<IPrincipal>();
                 return principal.CurrentUserIdentity?.UserId.ToString();
             }
         }
@@ -21,10 +21,10 @@ namespace WB.UI.Shared.Enumerator.Services
         {
             get
             {
-                var serviceSettings = Mvx.Resolve<IRestServiceSettings>();
+                var serviceSettings = Mvx.IoCProvider.Resolve<IRestServiceSettings>();
                 var endpoint = serviceSettings.Endpoint;
 
-                var principal = Mvx.Resolve<IPrincipal>();
+                var principal = Mvx.IoCProvider.Resolve<IPrincipal>();
                 var userName = principal.CurrentUserIdentity?.Name;
                 return $"Endpoint: {endpoint};{Environment.NewLine}User name: {userName}";
             }

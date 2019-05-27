@@ -38,14 +38,14 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AWSSDK.S3" Version="3.3.31.20" />
-    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.7.31" />
+    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.100.24" />
     <PackageReference Include="Common.Logging" Version="3.4.1" />
     <PackageReference Include="Common.Logging.Core" Version="3.4.1" />
-    <PackageReference Include="CsvHelper" Version="6.1.0" />
-    <PackageReference Include="Dapper" Version="1.60.1" />
+    <PackageReference Include="CsvHelper" Version="12.1.2" />
+    <PackageReference Include="Dapper" Version="1.60.6" />
     <PackageReference Include="Dropbox.Api" Version="4.9.3" />
     <PackageReference Include="EntityFramework" Version="6.2.0" />
-    <PackageReference Include="EPPlus" Version="4.5.2.1" />
+    <PackageReference Include="EPPlus" Version="4.5.3.1" />
     <PackageReference Include="GeoJSON.Net" Version="1.1.70" />
     <PackageReference Include="Google.Apis.Drive.v3" Version="1.38.0.1512" />
     <PackageReference Include="Iesi.Collections" Version="4.0.4" />

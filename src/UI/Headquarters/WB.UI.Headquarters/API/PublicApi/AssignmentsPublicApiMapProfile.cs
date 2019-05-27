@@ -38,13 +38,13 @@ namespace WB.UI.Headquarters.API.PublicApi
 
             this.CreateMap<IdentifyingAnswer, AssignmentIdentifyingDataItem>()
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.Answer))
-                .ForMember(x => x.Variable, opts => opts.ResolveUsing(
+                .ForMember(x => x.Variable, opts => opts.MapFrom(
                     (answer, dest, value, ctx) => GetVariableName(ctx, answer.Identity.Id)))
                 .ForMember(x => x.Identity, opts => opts.MapFrom(x => x.Identity.ToString()));
 
             this.CreateMap<AssignmentIdentifyingQuestionRow, AssignmentIdentifyingDataItem>()
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.Answer))
-                .ForMember(x => x.Variable, opts => opts.ResolveUsing(
+                .ForMember(x => x.Variable, opts => opts.MapFrom(
                     (answer, dest, value, ctx) => GetVariableName(ctx, answer.Identity.Id)))
                 .ForMember(x => x.Identity, opts => opts.MapFrom(x => x.Identity.ToString()));
 

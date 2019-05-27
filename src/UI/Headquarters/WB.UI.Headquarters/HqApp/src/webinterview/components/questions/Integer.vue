@@ -49,7 +49,8 @@
     import { entityDetails } from "../mixins"
     import * as $ from "jquery"
     import modal from "../modal"
-        
+    import { getGroupSeparator } from "./question_helpers"
+
     export default {
         data() {
             return {
@@ -68,13 +69,7 @@
                 return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') : this.$t('WebInterviewUI.NumberEnter')
             },
             groupSeparator() {
-                if (this.$me.useFormatting) {
-                    var etalon = 1111
-                    var localizedNumber = etalon.toLocaleString()
-                    return localizedNumber.substring(1, localizedNumber.length - 3)
-                }
-
-                return ''
+                return getGroupSeparator(this.$me)
             },
             specialValue: {
                 get() {
@@ -141,7 +136,7 @@
                     if(amountOfRostersToRemove > 0){
                         modal.confirm(confirmMessage, result => {
                             if (result) {
-                                this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })                                
+                                this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
                                 return
                             } else {
                                 this.fetch()
@@ -151,7 +146,7 @@
                     }
                     else
                     {
-                        this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })                        
+                        this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
                         return
                     }
                 });

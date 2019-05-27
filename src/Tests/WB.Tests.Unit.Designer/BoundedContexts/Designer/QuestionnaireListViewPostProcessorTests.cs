@@ -187,6 +187,73 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         }
 
         [Test]
+        public void When_PassOwnership_Command()
+        {
+            // arrange
+
+            Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
+            Guid responsibleId = Guid.Parse("22222222222222222222222222222222");
+            Guid questionnaireOwnerId = Guid.Parse("44444444444444444444444444444444");
+            Guid sharedWithUserId = Guid.Parse("33333333333333333333333333333333");
+            var sharedWithEmail = "test@test.com";
+
+            var responsible = new DesignerIdentityUser
+            {
+                Id = responsibleId,
+                UserName = "responsible",
+                Email = "resp@te.com"
+            };
+            var questionnaireOwner = new DesignerIdentityUser
+            {
+                Id = questionnaireOwnerId,
+                UserName = "questionnaire owner name",
+                Email = "questionnaire owner email"
+            };
+            var sharedWith = new DesignerIdentityUser
+            {
+                Id = sharedWithUserId,
+                UserName = "share with",
+                Email = sharedWithEmail,
+                NormalizedEmail = sharedWithEmail.ToUpper()
+            };
+            var questionnaireIdFormatted = questionnaireId.FormatGuid();
+            var command = new PassOwnershipFromQuestionnaire(questionnaireId, questionnaireOwner.Id, 
+                sharedWithUserId, questionnaireOwner.Email, sharedWith.Email);
+            
+            var dbContext = Create.InMemoryDbContext();
+
+            var listViewItem =
+                Create.QuestionnaireListViewItem(id: questionnaireId, title: "title", createdBy: questionnaireOwnerId);
+            dbContext.Questionnaires.Add(listViewItem);
+            dbContext.Users.Add(questionnaireOwner);
+            dbContext.Users.Add(responsible);
+            dbContext.Users.Add(sharedWith);
+            dbContext.SaveChanges();
+
+            var mockOfEmailNotifier = new Mock<IRecipientNotifier>();
+
+            var listViewPostProcessor = Create.ListViewPostProcessor(dbContext, emailNotifier: mockOfEmailNotifier.Object);
+            // act
+            listViewPostProcessor.Process(null, command);
+
+            // assert
+            var questionnaireListViewItem = dbContext.Questionnaires.Find(questionnaireIdFormatted);
+
+            Assert.That(questionnaireListViewItem.CreatedBy, Is.EqualTo(sharedWith.Id));
+
+            Assert.That(questionnaireListViewItem.SharedPersons.Single(), Has.Property(nameof(SharedPerson.UserId)).EqualTo(questionnaireOwner.Id));
+            Assert.That(questionnaireListViewItem.SharedPersons.Single(), Has.Property(nameof(SharedPerson.ShareType)).EqualTo(ShareType.Edit));
+
+            mockOfEmailNotifier.Verify(
+                x => x.NotifyTargetPersonAboutShareChange(ShareChangeType.TransferOwnership, command.NewOwnerEmail, It.IsAny<string>(),
+                    questionnaireIdFormatted, listViewItem.Title, ShareType.Edit, It.IsAny<string>()), Times.Once);
+
+            mockOfEmailNotifier.Verify(
+                x => x.NotifyTargetPersonAboutShareChange(ShareChangeType.Share, questionnaireOwner.Email, It.IsAny<string>(),
+                    questionnaireIdFormatted, listViewItem.Title, ShareType.Edit, It.IsAny<string>()), Times.Once);
+        }
+
+        [Test]
         public void When_RemoveSharedPerson_command()
         {
             // arrange

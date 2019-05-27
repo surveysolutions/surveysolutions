@@ -3,7 +3,7 @@ using System.Security.Claims;
 using System.Security.Principal;
 using WB.Core.BoundedContexts.Designer.MembershipProvider.Roles;
 
-namespace WB.UI.Designer1.Extensions
+namespace WB.UI.Designer.Extensions
 {
     public static class IdentityExtensions
     {

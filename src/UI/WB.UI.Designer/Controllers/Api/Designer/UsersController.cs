@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
-using WB.UI.Designer1.Extensions;
+using WB.UI.Designer.Extensions;
 
 namespace WB.UI.Designer.Controllers.Api.Designer
 {

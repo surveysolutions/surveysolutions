@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Moq;
 using MvvmCross.Tests;
 using NUnit.Framework;
@@ -22,7 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
         }
 
         [Test]
-        public void when_getting_ui_items_and_view_model_has_last_visited_interview_id_then_view_model_should_have_specified_HighLightedItemIndex()
+        public async Task when_getting_ui_items_and_view_model_has_last_visited_interview_id_then_view_model_should_have_specified_HighLightedItemIndex()
         {
             //arrange
             var factory = new Mock<IInterviewViewModelFactory>();
@@ -39,7 +40,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             var viewModel = Create.ViewModel.WaitingForSupervisorActionViewModel(dashboardItemsAccessor, factory.Object);
             viewModel.Prepare(interviewId);
             //act
-            viewModel.ViewAppeared();
+            await viewModel.Initialize();
             //assert
             Assert.That(viewModel.HighLightedItemIndex, Is.EqualTo(2));
         }

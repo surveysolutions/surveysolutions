@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -162,7 +163,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             },
             new QuestionnaireContentVersion
             {
-                Version = ApiVersion.MaxQuestionnaireVersion, // old versions for history and could be removed later
+                Version = 26, 
                 NewFeatures = new []
                 {
                     new QuestionnaireFeature
@@ -176,7 +177,55 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                         Description = "Contains cascading question with show as list option"
                     }
                 }
-            }
+            },
+            new QuestionnaireContentVersion
+            {
+                Version = ApiVersion.MaxQuestionnaireVersion, // old versions for history and could be removed later
+                NewFeatures = new []
+                {
+                    new QuestionnaireFeature
+                    {
+                        HasQuestionnaire = questionnaire =>
+                        {
+                            foreach (var composite in questionnaire.Find<IComposite>())
+                            {
+                                var title = composite.GetTitle();
+                                const string selfSubstitution = "%self%";
+                                if (title != null && title.Contains(selfSubstitution))
+                                {
+                                    return true;
+                                }
+
+                                if (composite is IValidatable validatable)
+                                {
+                                    foreach (var validationMessage in validatable.ValidationConditions.Select(x =>
+                                        x.Message))
+                                    {
+                                        if (validationMessage != null && validationMessage.Contains(selfSubstitution))
+                                        {
+                                            return true;
+                                        }
+                                    }
+                                }
+
+                                var instructions = (composite as IQuestion)?.Instructions;
+
+                                if (instructions != null && instructions.Contains(selfSubstitution))
+                                {
+                                    return true;
+                                }
+                            }
+                            return false;
+                        },
+                        Description = "Contains %self% as substituted text"
+                    },
+                    new QuestionnaireFeature
+                    {
+                        HasQuestionnaire = questionnaire => questionnaire.Find<IGroup>(q => q.DisplayMode == RosterDisplayMode.Table).Any(),
+                        Description = "Contains roster with table display mode"
+                    },
+                }
+            },
         };
 
         private bool IsNonImageAttachment(string contentId) =>
