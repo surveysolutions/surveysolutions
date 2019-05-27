@@ -97,18 +97,18 @@
             <table class="table table-bordered table-hover table-condensed">
                 <thead>
                     <tr class="active">
-                        <td>@QuestionnaireEditor.OptionsUploadValue</td>
+                        <td nowrap>@QuestionnaireEditor.OptionsUploadValue</td>
                         <td>@QuestionnaireEditor.OptionsUploadTitle</td>
-                        <td>@QuestionnaireEditor.OptionsUploadParent</td>
+                        <td nowrap>@QuestionnaireEditor.OptionsUploadParent</td>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var option in Model)
                     {
                         <tr>
-                            <td>@option.Value</td>
+                            <td nowrap>@option.Value</td>
                             <td>@option.Title</td>
-                            <td>@option.ParentValue</td>
+                            <td nowrap>@option.ParentValue</td>
                         </tr>
                     }
                 </tbody>
