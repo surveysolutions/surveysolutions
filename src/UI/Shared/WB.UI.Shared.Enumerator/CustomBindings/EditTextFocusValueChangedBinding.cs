@@ -109,7 +109,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         private void HideKeyboard(object sender)
         {
-            IMvxAndroidCurrentTopActivity topActivity = Mvx.Resolve<IMvxAndroidCurrentTopActivity>();
+            IMvxAndroidCurrentTopActivity topActivity = Mvx.IoCProvider.Resolve<IMvxAndroidCurrentTopActivity>();
             var activity = topActivity.Activity;
             activity.RemoveFocusFromEditText();
 

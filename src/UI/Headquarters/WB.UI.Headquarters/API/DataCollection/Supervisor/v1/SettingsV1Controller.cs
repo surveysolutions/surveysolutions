@@ -24,5 +24,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 
         [HttpGet]
         public override string PublicKeyForEncryption() => base.PublicKeyForEncryption();
+
+        [HttpGet]
+        public override bool NotificationsEnabled() => base.NotificationsEnabled();
     }
 }

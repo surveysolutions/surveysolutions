@@ -51,7 +51,7 @@ namespace WB.UI.Supervisor.Services.Implementation
             EventChunkSize = Application.Context.Resources.GetInteger(Resource.Integer.EventChunkSize),
             CommunicationBufferSize = Application.Context.Resources.GetInteger(Resource.Integer.BufferSize),
             ShowLocationOnMap = Application.Context.Resources.GetBoolean(Resource.Boolean.ShowLocationOnMap),
-            DownloadUpdatesForInterviewerApp = Application.Context.Resources.GetBoolean(Resource.Boolean.DownloadUpdatesForInterviewerApp)
+            DownloadUpdatesForInterviewerApp = Application.Context.Resources.GetBoolean(Resource.Boolean.DownloadUpdatesForInterviewerApp),
         };
 
         protected override EnumeratorSettingsView CurrentSettings => this.currentSettings;
@@ -59,10 +59,14 @@ namespace WB.UI.Supervisor.Services.Implementation
         public override double GpsDesiredAccuracy => throw new NotImplementedException();
         public override bool VibrateOnError => false;
         public override bool ShowLocationOnMap => this.currentSettings.ShowLocationOnMap;
+
         public override int GpsReceiveTimeoutSec => throw new NotImplementedException();
         public void SetGpsResponseTimeout(int timeout) => throw new NotImplementedException();
         public void SetGpsDesiredAccuracy(double value) => throw new NotImplementedException();
         public void SetShowLocationOnMap(bool showLocationOnMap) => this.SaveCurrentSettings(settings => settings.ShowLocationOnMap = showLocationOnMap);
+
+        public void SetNotifications(bool notificationsEnabled) =>
+            this.SaveCurrentSettings(settings => settings.NotificationsEnabled = notificationsEnabled);
 
         public string InterviewerApplicationsDirectory =>
             this.fileSystemAccessor.CombinePath(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "patches");

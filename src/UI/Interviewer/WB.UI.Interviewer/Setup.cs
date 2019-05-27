@@ -70,7 +70,7 @@ namespace WB.UI.Interviewer
 #endif
             };
 
-            var container = Mvx.Resolve<IMvxViewsContainer>();
+            var container = Mvx.IoCProvider.Resolve<IMvxViewsContainer>();
             container.AddAll(viewModelViewLookup);
         }
 
