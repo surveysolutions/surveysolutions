@@ -24,7 +24,6 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
-using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -388,6 +387,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
              { "SetDefaultTranslation", typeof (SetDefaultTranslation) },
              // Metadata
              { "UpdateMetadata", typeof (UpdateMetadata) },
+             { nameof(PassOwnershipFromQuestionnaire), typeof(PassOwnershipFromQuestionnaire) },
          };
 
         private Type GetTypeOfResultCommandOrThrowArgumentException(string commandType)

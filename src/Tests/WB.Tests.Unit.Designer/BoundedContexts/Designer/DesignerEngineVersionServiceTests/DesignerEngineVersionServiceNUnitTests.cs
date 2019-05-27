@@ -1,5 +1,6 @@
 ﻿using Main.Core.Documents;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -86,5 +87,40 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
             //aaa
             Assert.That(contentVersion, Is.EqualTo(26));
         }
+
+        [Test]
+        public void should_return_27_when_self_is_used_in_substitutions()
+        {
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(children:
+                new IComposite[]{
+                    Create.SingleOptionQuestion(title: "%self%")
+                });
+
+
+            var service = this.CreateDesignerEngineVersionService();
+
+            // act 
+            var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
+            //aaa
+            Assert.That(contentVersion, Is.EqualTo(27));
+        }
+
+        [Test]
+        public void should_return_27_when_table_roster_is_used()
+        {
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(children:
+                new IComposite[]{
+                    Create.Roster(displayMode: RosterDisplayMode.Table)
+                });
+
+
+            var service = this.CreateDesignerEngineVersionService();
+
+            // act 
+            var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
+            //aaa
+            Assert.That(contentVersion, Is.EqualTo(27));
+        }
+
     }
 }

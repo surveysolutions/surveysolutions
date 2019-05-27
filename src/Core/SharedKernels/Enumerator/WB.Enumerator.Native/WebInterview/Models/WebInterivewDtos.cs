@@ -23,6 +23,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public bool ReceivedByInterviewer { get; set; }
         public bool IsCurrentUserObserving { get; set; }
         public bool DoesBrokenPackageExist { get; set; }
+        public long QuestionnaireVersion { get; set; }
     }
 
     public class LanguageInfo
@@ -240,6 +241,30 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public GroupStatus Status { get; set; }
 
         public Validity Validity { get; set; } = new Validity();
+    }
+    
+    public class TableRoster : InterviewEntity
+    {
+        public Validity Validity { get; set; } = new Validity();
+
+        public TableRosterQuestionReference[] Questions { get; set; }
+
+        public TableRosterInstance[] Instances { get; set; }
+    }
+
+    public class TableRosterInstance : InterviewEntity
+    {
+        public string RosterVector { get; set; }
+        public string RosterTitle { get; set; }
+        public GroupStatus Status { get; set; }
+        public Validity Validity { get; set; } = new Validity();
+    }
+
+    public class TableRosterQuestionReference 
+    {
+        public string Id { get; set; }
+        public string Title { get; set; }
+        public string EntityType { get; set; }
     }
     
 
