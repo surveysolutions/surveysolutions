@@ -57,9 +57,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
                     Id = questionnaire.GetRostersFromTopToSpecifiedEntity(identity.Id).Last()
                 });
             }
-
+            
             return new SubstitutionText(identity, 
-                text, 
+                text == null ? null : questionnaire.ApplyMarkDownTransformation(text) ?? text, 
                 entityVariable,
                 substitutionVariables, 
                 this.substitutionService, 

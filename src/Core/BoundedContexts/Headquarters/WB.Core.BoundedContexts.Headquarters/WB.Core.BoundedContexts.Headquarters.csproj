@@ -1,6 +1,6 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net471</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
     <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
@@ -56,16 +56,17 @@
     <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
     <PackageReference Include="Microsoft.Graph" Version="1.14.0-preview" />
     <PackageReference Include="Microsoft.Graph.Core" Version="1.14.0-preview" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.2.0" />
     <PackageReference Include="Microsoft.Owin" Version="3.1.0" />
     <PackageReference Include="Microsoft.Owin.Host.SystemWeb" Version="3.1.0" />
     <PackageReference Include="Microsoft.Owin.Security" Version="3.1.0" />
     <PackageReference Include="Microsoft.Owin.Security.Cookies" Version="3.1.0" />
     <PackageReference Include="Microsoft.Owin.Security.OAuth" Version="3.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-    <PackageReference Include="NHibernate" Version="5.2.4" />
+    <PackageReference Include="NHibernate" Version="5.2.5" />
     <PackageReference Include="Owin" Version="1.0" />
-    <PackageReference Include="Quartz" Version="2.6.1" />
-    <PackageReference Include="refit" Version="4.6.58" />
+    <PackageReference Include="Quartz" Version="3.0.7" />
+    <PackageReference Include="refit" Version="4.6.107" />
     <PackageReference Include="Sendgrid" Version="9.10.0" />
     <PackageReference Include="SuperclusterBox" Version="0.1.16" />
   </ItemGroup>

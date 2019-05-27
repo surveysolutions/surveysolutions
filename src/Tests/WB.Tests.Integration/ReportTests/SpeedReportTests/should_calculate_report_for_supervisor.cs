@@ -31,12 +31,12 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
             var interview = CreateCompletedInterviewWithDuration(TimeSpan.FromMinutes(15), 
                 supervisorId, interviewerId, reportEndDate);
             var interviewSummaries = CreateInterviewSummaryRepository();
-            var speedReportRepository = CreateSpeedReportInterviewItemsRepository();
+
+            interview = AppendSpeedReportInfo(interview);
 
             interviewSummaries.Store(interview, interview.SummaryId);
-            speedReportRepository.Store(CreateSpeedReportItemForInterview(interview), interview.SummaryId);
 
-            var report = CreateSpeedReport(interviewSummaries, speedReportRepository);
+            var report = CreateSpeedReport(interviewSummaries);
 
             UnitOfWork.Session.Flush();
 
@@ -69,14 +69,13 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
             var interview2 = CreateCompletedInterviewWithDuration(TimeSpan.FromMinutes(secondInterviewDuration), supervisorId, interviewer2Id, reportEndDate);
 
             var interviewSummaries = CreateInterviewSummaryRepository();
-            var speedReportRepository = CreateSpeedReportInterviewItemsRepository();
+            interview1 = AppendSpeedReportInfo(interview1);
+            interview2 = AppendSpeedReportInfo(interview2);
 
             interviewSummaries.Store(interview1, interview1.SummaryId);
             interviewSummaries.Store(interview2, interview2.SummaryId);
-            speedReportRepository.Store(CreateSpeedReportItemForInterview(interview1), interview1.SummaryId);
-            speedReportRepository.Store(CreateSpeedReportItemForInterview(interview2), interview2.SummaryId);
 
-            var report = CreateSpeedReport(interviewSummaries, speedReportRepository);
+            var report = CreateSpeedReport(interviewSummaries);
 
             // Act
             var speedBySupervisorsReportInputModel = new SpeedBySupervisorsReportInputModel
