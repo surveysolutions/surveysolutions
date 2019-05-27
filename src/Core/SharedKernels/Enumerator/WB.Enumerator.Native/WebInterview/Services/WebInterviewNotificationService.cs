@@ -54,15 +54,15 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     doesNeedRefreshSectionList = true;
                 }
 
-                if (questionnaire.ShouldBeHiddenIfDisabled(identity.Id))
-                {
-                    doesNeedRefreshSectionList = true;
-                }
-                
                 var currentEntity = identity;
 
                 while (currentEntity != null)
                 {
+                    if (questionnaire.ShouldBeHiddenIfDisabled(currentEntity.Id))
+                    {
+                        doesNeedRefreshSectionList = true;
+                    }
+
                     var parent = this.GetParentIdentity(currentEntity, interview);
                     if (questionnaire.IsTableRoster(currentEntity.Id))
                     {
