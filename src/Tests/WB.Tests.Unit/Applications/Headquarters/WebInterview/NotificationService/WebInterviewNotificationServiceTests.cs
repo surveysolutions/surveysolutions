@@ -79,7 +79,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.NotificationServi
         {
             this.NotificationService.RefreshEntities(interview.Id, textQuestion, prefilledTextQuestion);
 
-            this.hubMock.Verify(g => g.RefreshSection(interview.Id), Times.Once);
+            this.hubMock.Verify(g => g.RefreshSectionState(interview.Id), Times.Once);
         }
     }
 }
