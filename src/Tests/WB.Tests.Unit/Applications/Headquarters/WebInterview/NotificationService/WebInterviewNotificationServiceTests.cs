@@ -5,6 +5,7 @@ using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Services;
@@ -26,7 +27,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.NotificationServi
         [SetUp]
         public void Setup()
         {
-            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(new IComposite[]
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(new IComposite[]
             {
                 Create.Entity.Group(subGroup.Id, children: new IComposite[] {
                     Create.Entity.TextQuestion(textQuestion.Id),
@@ -34,14 +35,15 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.NotificationServi
                     preFilled: true)})
             });
 
-            this.interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
+            this.interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaireDocument);
 
             this.hubMock = new Mock<IWebInterviewInvoker>();
             this.prefilledSectionId = GetConnectedClientPrefilledSectionKey(interview.Id);
 
             var repo = Mock.Of<IStatefulInterviewRepository>(s => s.Get(interview.Id.FormatGuid()) == interview);
+            var questionnaireStorage = Create.Storage.QuestionnaireStorage(questionnaireDocument);
 
-            this.NotificationService = new WebInterviewNotificationService(repo, null, hubMock.Object);
+            this.NotificationService = new WebInterviewNotificationService(repo, questionnaireStorage, hubMock.Object);
         }
 
         public class WebInterviewHubMock<TClientContract> where TClientContract : class
@@ -77,7 +79,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.NotificationServi
         {
             this.NotificationService.RefreshEntities(interview.Id, textQuestion, prefilledTextQuestion);
 
-            this.hubMock.Verify(g => g.RefreshSection(interview.Id), Times.Once);
+            this.hubMock.Verify(g => g.RefreshSectionState(interview.Id), Times.Once);
         }
     }
 }
