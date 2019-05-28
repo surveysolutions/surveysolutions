@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -445,7 +446,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
         }
 
         [Test]
-        public void when_selecting_object_in_cascading_view_model_set_in_null()
+        public async Task when_selecting_object_in_cascading_view_model_set_in_null()
         {
             CascadingSingleOptionQuestionViewModel cascadingModel;
             SetUp();
@@ -480,8 +481,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
             var combo = cascadingModel.Children[1] as CategoricalComboboxAutocompleteViewModel;
 
-            combo.FilterCommand.Execute("oooo");
-            combo.ShowErrorIfNoAnswerCommand.Execute(null);
+            await combo.FilterCommand.ExecuteAsync("oooo");
+            await combo.ShowErrorIfNoAnswerCommand.ExecuteAsync(null);
 
             AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerSingleOptionQuestionCommand>()), Times.Never);
             QuestionStateMock.Verify(x => x.Validity.MarkAnswerAsNotSavedWithMessage(Moq.It.IsAny<string>()), Times.Once);
