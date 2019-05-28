@@ -10,8 +10,8 @@ Vue.use(config);
 import VueTextareaAutosize from "vue-textarea-autosize";
 Vue.use(VueTextareaAutosize);
 
-import * as uiv from "uiv"
-Vue.use(uiv)
+import { Popover } from 'uiv'
+Vue.component("popover", Popover);
 
 import Vuei18n from "~/shared/plugins/locale";
 import { browserLanguage } from "~/shared/helpers";
