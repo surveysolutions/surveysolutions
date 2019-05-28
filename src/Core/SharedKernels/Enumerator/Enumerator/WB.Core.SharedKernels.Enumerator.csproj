@@ -23,7 +23,7 @@
     <PackageReference Include="sqlite-net-pcl" Version="1.5.231" />
     <PackageReference Include="SQLitePCLRaw.bundle_green" Version="1.1.13" />
     <PackageReference Include="SQLitePCLRaw.core" Version="1.1.13" />
-    <PackageReference Include="System.Reactive.Linq" Version="4.1.5" />
+    <PackageReference Include="System.Reactive" Version="4.1.5" />
     <PackageReference Include="Xam.Plugin.Geolocator" Version="4.5.0.6" />
   </ItemGroup>
   <ItemGroup>
