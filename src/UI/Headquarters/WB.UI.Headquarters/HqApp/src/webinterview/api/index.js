@@ -50,6 +50,10 @@ const scriptIncludedPromise = new Promise(resolve =>
             store.dispatch("refreshSectionState")           // fetching breadcrumbs/sidebar/buttons
         }
 
+        interviewProxy.client.refreshSectionState = () => {
+            store.dispatch("refreshSectionState")           // fetching breadcrumbs/sidebar/buttons
+        }
+
         interviewProxy.client.markAnswerAsNotSaved = (id, message) => {
             store.dispatch("fetchProgress", -1)
             store.dispatch("fetch", { id, done: true })
