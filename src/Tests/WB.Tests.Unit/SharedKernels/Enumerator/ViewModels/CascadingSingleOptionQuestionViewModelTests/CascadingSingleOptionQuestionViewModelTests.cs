@@ -262,7 +262,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
         }
 
         [Test]
-        public void when_setting_FilterText_and_there_are_match_options()
+        public async Task when_setting_FilterText_and_there_are_match_options()
         {
             CascadingSingleOptionQuestionViewModel cascadingModel;
             SetUp();
@@ -297,7 +297,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             var combo = cascadingModel.Children[1] as CategoricalComboboxAutocompleteViewModel;
 
             //act
-            combo.FilterCommand.Execute("a");
+            await combo.FilterCommand.ExecuteAsync("a");
 
             combo.FilterText.Should().Be("a");
             combo.AutoCompleteSuggestions.Should().NotBeEmpty();
@@ -306,7 +306,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
         }
 
         [Test]
-        public void when_setting_FilterText_to_empty_and_was_not_empty()
+        public async Task when_setting_FilterText_to_empty_and_was_not_empty()
         {
             CascadingSingleOptionQuestionViewModel cascadingModel;
             List<CategoricalOption> OptionsIfParentAnswerIs1 = Options.Where(x => x.ParentValue == 1).ToList();
@@ -339,8 +339,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
             var combo = cascadingModel.Children[1] as CategoricalComboboxAutocompleteViewModel;
 
-            combo.FilterCommand.Execute("a");
-            combo.FilterCommand.Execute(string.Empty);
+            await combo.FilterCommand.ExecuteAsync("a");
+            await combo.FilterCommand.ExecuteAsync(string.Empty);
 
             combo.FilterText.Should().BeEmpty();
             combo.AutoCompleteSuggestions.Count.Should().Be(3);
@@ -350,7 +350,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
         
         [Test]
-        public void Should_show_first_items_in_list()
+        public async Task Should_show_first_items_in_list()
         {
             SetUp();
 
@@ -382,7 +382,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
             var combo = cascadingModel.Children[1] as CategoricalComboboxAutocompleteViewModel;
             // Act
-            combo.FilterCommand.Execute(string.Empty);
+            await combo.FilterCommand.ExecuteAsync(string.Empty);
 
             // Assert
             combo.FilterText.Should().BeEmpty();
@@ -395,7 +395,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
 
         [Test]
-        public void when_selecting_an_option_from_dropdown()
+        public async Task  when_selecting_an_option_from_dropdown()
         {
 
             CascadingSingleOptionQuestionViewModel cascadingModel;
@@ -437,7 +437,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
             var combo = cascadingModel.Children[1] as CategoricalComboboxAutocompleteViewModel;
 
-            combo.FilterCommand.Execute("o");
+            await combo.FilterCommand.ExecuteAsync("o");
 
             combo.SaveAnswerBySelectedOptionCommand.Execute(Create.Entity.OptionWithSearchTerm(3, title: "option 3"));
 
@@ -489,7 +489,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
         }
 
         [Test]
-        public void should_set_suggestion_list_to_empty()
+        public async Task should_set_suggestion_list_to_empty()
         {
             SetUp();
 
@@ -524,7 +524,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             var combo = cascadingModel.Children[1] as CategoricalComboboxAutocompleteViewModel;
 
             // Act
-            combo.FilterCommand.Execute("ebw");
+            await combo.FilterCommand.ExecuteAsync("ebw");
 
             // Assert
             combo.FilterText.Should().Be("ebw");
