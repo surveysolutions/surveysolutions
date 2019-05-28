@@ -179,7 +179,7 @@ function versionCheck() {
     Write-Host "Node version: $(&node -v)"
     Write-Host "NPM version: $(&npm --version)"
     Write-Host "Yarn version: $(&yarn --version)"
-    Write-host "MsBuild version: $(& (GetPathToMSBuild) /version /nologo)"
+    Write-host "MsBuild version: $(&(GetPathToMSBuild) /version /nologo)"
     Write-Host "Dotnet CLI version: $(dotnet --version)"
 }
 
