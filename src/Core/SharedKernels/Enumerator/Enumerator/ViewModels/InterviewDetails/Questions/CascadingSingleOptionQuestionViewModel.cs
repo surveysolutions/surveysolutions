@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Base;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -106,8 +105,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
            
             this.RaisePropertyChanged(() => RenderAsComboBox);
-             
-            this.UpdateOptions(forced: true);
+
+            this.InvokeOnMainThread(() => this.UpdateOptions(forced: true));
 
             this.RaisePropertyChanged(() => Options);
             this.RaisePropertyChanged(() => Children);
