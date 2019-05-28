@@ -152,7 +152,8 @@ namespace WB.UI.Interviewer.Services
 
 
             var startedInterviewsCount = this.interviewViewRepository.Count(x => x.Status == InterviewStatus.Restarted 
-                                                                                 || x.Status == InterviewStatus.Created);
+                                                                                 || x.Status == InterviewStatus.Created 
+                                                                                 || x.Status == InterviewStatus.InterviewerAssigned);
             if (startedInterviewsCount > 5)
             {
                 notifications.Add(new SimpleNotification()
