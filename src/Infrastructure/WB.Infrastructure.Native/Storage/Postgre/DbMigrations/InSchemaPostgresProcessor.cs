@@ -18,7 +18,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
             ILogger<PostgresProcessor> logger, 
             IOptionsSnapshot<ProcessorOptions> options,
             IConnectionStringAccessor connectionStringAccessor)
-            : base(factory, generator, logger, options, connectionStringAccessor)
+            : base(factory, generator, logger, options, connectionStringAccessor, new PostgresOptions())
         {
             this.SchemaName = schemaName;
         }
