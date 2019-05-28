@@ -2,7 +2,6 @@
 using System.Linq;
 using Android.App;
 using Android.Content;
-using Android.Graphics;
 using Android.OS;
 using Android.Support.V4.App;
 using WB.Core.GenericSubdomains.Portable;
@@ -48,7 +47,7 @@ namespace WB.UI.Shared.Enumerator.Services.Notifications
             if (Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop)
             {
                 builder.SetSmallIcon(notificationModel.IconId); //transparent Icon would be better
-                builder.SetColor(0x1055DB); 
+                builder.SetColor(Resource.Color.notification_icon_background); 
             }
             else
             {
@@ -72,6 +71,7 @@ namespace WB.UI.Shared.Enumerator.Services.Notifications
                         new NotificationCompat.Builder(context, CHANNEL_ID)
 
                             .SetContentIntent(notificationModels.First().Intent)
+                            .SetAutoCancel(true)
 
                             .SetContentTitle("Interviewer")
                             .SetContentText(UIResources.Notifications_SummaryTitle.FormatString(notificationModels.Count))
