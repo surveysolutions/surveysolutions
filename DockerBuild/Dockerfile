@@ -5,14 +5,18 @@ FROM mcr.microsoft.com/dotnet/framework/sdk:4.8 as base
 SHELL ["cmd", "/S", "/C"]
 RUN MKDIR c:\temp
 
-RUN powershell [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest https://curl.haxx.se/download/curl-7.65.0.zip -outFile c:\temp\curl.Zip; `
-  Expand-Archive c:\temp\curl.zip .; Remove-Item c:\temp\curl.zip 
+RUN powershell [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; `
+  Invoke-WebRequest https://curl.haxx.se/windows/dl-7.65.0_1/curl-7.65.0_1-win64-mingw.zip -outFile c:\temp\curl.Zip; `
+  Expand-Archive c:\temp\curl.zip c:\temp\curl; Remove-Item c:\temp\curl.zip;
 
-RUN curl -sL https://www.7-zip.org/a/7z1900-x64.msi -o c:\temp\7zip.msi `
+RUN setx /M PATH "C:\temp\curl\curl-7.65.0-win64-mingw\bin;%PATH%"
+
+RUN curl.exe -sL https://www.7-zip.org/a/7z1900-x64.msi -o c:\temp\7zip.msi `
   && c:\temp\7zip.msi /quiet /norestart `
   && del c:\temp\7zip.msi
 
-RUN ["setx", "path", "%path%;C:\\Program Files\\7-Zip\\"]
+RUN setx /M PATH "C:\\Program Files\\7-Zip;%PATH%"
+#RUN ["powershell", "setx", "PATH", "C:\\Program Files\\7-Zip;$env:path"]
 
 FROM base as ndk
 RUN curl -L https://dl.google.com/android/repository/android-ndk-r19c-windows-x86_64.zip -o c:\temp\ndk.zip && `
