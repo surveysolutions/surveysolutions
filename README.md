@@ -1,6 +1,3 @@
-# 19.06
- for designer .net core 2.2.5 runtime should be installed https://dotnet.microsoft.com/download/thank-you/dotnet-runtime-2.2.5-windows-hosting-bundle-installer
-
 ![Link Text](http://build.mysurvey.solutions/app/rest/builds/buildType:`(id:CI)`/statusIcon)
 # 19.01
 - For export service we need to execute script in deploy tools to move all archives into new place
