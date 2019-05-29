@@ -1,15 +1,32 @@
 # escape=`
 
 # Use the latest Windows Server Core image with .NET Framework 4.8.
-FROM mcr.microsoft.com/dotnet/framework/sdk:4.8
-
-# Restore the default Windows shell for correct batch processing.
+FROM mcr.microsoft.com/dotnet/framework/sdk:4.8 as base
 SHELL ["cmd", "/S", "/C"]
+RUN MKDIR c:\temp
+
+RUN powershell Invoke-WebRequest https://curl.haxx.se/download/curl-7.65.0.zip -outFile c:\temp\curl.Zip; `
+  Expand-Archive c:\temp\curl.zip .; Remove-Item c:\temp\curl.zip 
+
+RUN curl -sL https://www.7-zip.org/a/7z1900-x64.msi -o c:\temp\7zip.msi `
+  && c:\temp\7zip.msi /quiet /norestart `
+  && del c:\temp\7zip.msi
+
+RUN ["setx", "path", "%path%;C:\\Program Files\\7-Zip\\"]
+
+FROM base as ndk
+RUN curl -L https://dl.google.com/android/repository/android-ndk-r19c-windows-x86_64.zip -o c:\temp\ndk.zip && `
+  7z x c:\temp\ndk.zip -oc:\AndroidNDK -y && del c:\temp\ndk.zip
+
+FROM base as sdk
+RUN curl -L https://dl.google.com/android/repository/sdk-tools-windows-4333796.zip -o c:\temp\sdk.zip && `
+  7z x c:\temp\sdk.zip -oc:\AndroidSDK -y && del c:\temp\sdk.zip
+
+
+FROM base
 
 # Download the Build Tools bootstrapper.
-RUN powershell.exe  -Command `
-  $ErrorActionPreference = 'Stop'; New-Item c:\Temp -ItemType Directory;`
-  Invoke-WebRequest https://aka.ms/vs/16/release/vs_buildtools.exe -OutFile C:\TEMP\vs_buildtools.exe;
+RUN curl -L https://aka.ms/vs/16/release/vs_buildtools.exe -o C:\TEMP\vs_buildtools.exe
 
 ADD .vsconfig C:\Temp
 
@@ -19,53 +36,32 @@ RUN C:\TEMP\vs_buildtools.exe --quiet --wait --norestart --nocache `
     --installPath C:\BuildTools `
  || IF "%ERRORLEVEL%"=="3010" EXIT 0
 
-# Setting up Android SDK/NDK
-RUN powershell.exe -Command `
-  $ErrorActionPreference = 'Stop'; `
-  Invoke-WebRequest https://www.7-zip.org/a/7z1900-x64.msi -OutFile c:\temp\7zip.msi;
-
-# Expand-Archive is painfully slow.
-RUN c:\temp\7zip.msi /quiet /norestart
-
-RUN powershell.exe -Command `
-  $ErrorActionPreference = 'Stop'; `
-  $ProgressPreference = 'SilentlyContinue'; `
-  Invoke-WebRequest https://dl.google.com/android/repository/android-ndk-r19c-windows-x86_64.zip -OutFile c:\temp\ndk.zip
-
-RUN ["C:\\Program Files\\7-Zip\\7z.exe", "x", "c:\\temp\\ndk.zip", "-oc:\\AndroidNDK\\", "-y"]
-
-RUN powershell.exe -Command `
-  $ErrorActionPreference = 'Stop'; `
-  $ProgressPreference = 'SilentlyContinue'; `
-  Invoke-WebRequest https://dl.google.com/android/repository/sdk-tools-windows-4333796.zip -OutFile c:\temp\sdk.zip
-
-RUN ["C:\\Program Files\\7-Zip\\7z.exe", "x", "c:\\temp\\sdk.zip", "-oc:\\AndroidSDK\\", "-y"]
-
-RUN powershell -Command `
-  Invoke-WebRequest https://yarnpkg.com/latest.msi -OutFile c:\temp\yarn.msi
-
-RUN c:\temp\yarn.msi /quiet /norestart
-
-ENV JAVA_HOME="c:\\Program Files\\Android\\jdk\\microsoft_dist_openjdk_1.8.0.25"
-
-# 'yes' file required to accept google licenses: https://stackoverflow.com/a/48539058
-ADD yes .
+# Copy SDK and NDK
+COPY --from=ndk c:\AndroidNDK c:\AndroidNDK
+COPY --from=sdk c:\AndroidSDK c:\AndroidSDK
 
 # Install Android v28 build tools
+## 'yes' file required to accept google licenses: https://stackoverflow.com/a/48539058
+ADD yes .
+ENV JAVA_HOME="c:\\Program Files\\Android\\jdk\\microsoft_dist_openjdk_1.8.0.25"
 RUN call C:\AndroidSDK\tools\bin\sdkmanager.bat "platform-tools" "platforms;android-28" "build-tools;28.0.3" < yes
 
-# Setting up NODEjs env
-RUN powershell.exe -Command `
-  $ErrorActionPreference = 'Stop'; `
-  $ProgressPreference = 'SilentlyContinue'; `
-  Invoke-WebRequest https://nodejs.org/dist/v10.15.3/node-v10.15.3-x64.msi -OutFile c:\temp\node.msi
+# Install Nodejs
+RUN curl -L https://nodejs.org/dist/v10.15.3/node-v10.15.3-x64.msi -o c:\temp\node.msi `
+  && c:\temp\node.msi /quiet /norestart `
+  && del c:\temp\node.msi
 
-RUN c:\temp\node.msi /quiet /norestart 
+# Setting node to cache packages in volume
+RUN npm config set cache c:\src\.cache\npm
+
+# Install Yarn
+RUN curl -L https://yarnpkg.com/latest.msi -o c:\temp\yarn.msi `
+  && c:\temp\yarn.msi /quiet /norestart && del c:\temp\yarn.msi
 
 # Start developer command prompt with any other commands specified.
 ENTRYPOINT C:\BuildTools\Common7\Tools\VsDevCmd.bat &&
 
-ENV NUGET_PACKAGES C:\src\.packages_cache
+ENV NUGET_PACKAGES C:\src\.cache\nuget
 ENV AndroidSdkDirectory=C:\AndroidSDK
 ENV AndroidNdkDirectory=C:\AndroidNDK\android-ndk-r19c
 ENV JavaSdkDirectory="c:\\Program Files\\Android\\jdk\\microsoft_dist_openjdk_1.8.0.25"
