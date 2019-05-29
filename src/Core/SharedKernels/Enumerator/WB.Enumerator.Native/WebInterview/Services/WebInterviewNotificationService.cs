@@ -49,9 +49,10 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
                 var questionnaire = questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, null);
 
-                if (questionnaire.IsQuestion(identity.Id) 
-                    && questionnaire.IsRosterSizeQuestion(identity.Id)
-                    && questionnaire.IsRosterTitleQuestion(identity.Id))
+                if (questionnaire.IsQuestion(identity.Id) && (
+                        questionnaire.IsRosterSizeQuestion(identity.Id)
+                        || questionnaire.IsRosterTitleQuestion(identity.Id)
+                   ))
                 {
                     doesNeedRefreshSectionList = true;
                 }
