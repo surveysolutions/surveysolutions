@@ -33,6 +33,18 @@ function GetMsBuildFromVsWhere() {
             return $result
         }
     }
+
+    $path = & $vswhere -latest -products * -requires Microsoft.Component.MSBuild -requires Component.Xamarin -property installationPath
+    if ($path) {
+        $result = join-path $path 'MSBuild\15.0\Bin\MSBuild.exe'
+        if (test-path $result) {
+            return $result
+        }
+        $result = join-path $path  'MSBuild\Current\Bin\MSBuild.exe'
+        if(test-path $result) {
+            return $result
+        }
+    }
 }
 
 ##############################
@@ -331,6 +343,8 @@ function MoveArtifacts([string[]] $items, $folder) {
     }
 }
 
+$buildCount = 0;
+
 function Execute-MSBuild($ProjectFile, $Configuration, $buildArgs = $null) {
     $build = @(
         $ProjectFile
@@ -351,8 +365,8 @@ function Execute-MSBuild($ProjectFile, $Configuration, $buildArgs = $null) {
         $build = ($build + $buildArgs | select -uniq)
     }
 
-    $binLogPath = "$([System.IO.Path]::GetFileName($ProjectFile)).msbuild.binlog"
-
+    $binLogPath = "$([System.IO.Path]::GetFileName($ProjectFile)).$buildCount.msbuild.binlog"
+    $buildCount += 1
     $build += "/bl:$binLogPath"
     
     & (GetPathToMSBuild) $build | Write-Host
