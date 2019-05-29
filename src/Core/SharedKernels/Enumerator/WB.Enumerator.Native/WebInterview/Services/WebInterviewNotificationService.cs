@@ -51,7 +51,10 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
                 if (questionnaire.IsQuestion(identity.Id) && (
                         questionnaire.IsRosterSizeQuestion(identity.Id)
-                        || questionnaire.IsRosterTitleQuestion(identity.Id)
+                     || questionnaire.IsRosterTitleQuestion(identity.Id)
+                     || questionnaire.GetSubstitutedQuestions(identity.Id).Any()
+                     || questionnaire.GetSubstitutedGroups(identity.Id).Any()
+                     || questionnaire.GetSubstitutedStaticTexts(identity.Id).Any()
                    ))
                 {
                     doesNeedRefreshSectionList = true;
