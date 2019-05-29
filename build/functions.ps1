@@ -343,9 +343,8 @@ function MoveArtifacts([string[]] $items, $folder) {
     }
 }
 
-$buildCount = 0;
 
-function Execute-MSBuild($ProjectFile, $Configuration, $buildArgs = $null) {
+function Execute-MSBuild($ProjectFile, $Configuration, $buildArgs = $null, $logId = '.') {
     $build = @(
         $ProjectFile
         "/p:Configuration=$Configuration", '/nologo', "/v:$verbosity", '/m:4'
@@ -365,8 +364,8 @@ function Execute-MSBuild($ProjectFile, $Configuration, $buildArgs = $null) {
         $build = ($build + $buildArgs | select -uniq)
     }
 
-    $binLogPath = "$([System.IO.Path]::GetFileName($ProjectFile)).$buildCount.msbuild.binlog"
-    $buildCount += 1
+    $binLogPath = "$([System.IO.Path]::GetFileName($ProjectFile))$logId.msbuild.binlog"
+    
     $build += "/bl:$binLogPath"
     
     & (GetPathToMSBuild) $build | Write-Host
