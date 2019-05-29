@@ -29,6 +29,10 @@ if(!$VersionCode){
 
 function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtensions, $TargetAbi, $VersionCode, $OutFileName) {
     return Log-Block "Building Android project: $AndroidProject => $([System.IO.Path]::GetFileName($OutFileName))" {
+        $logId = ""
+        if($ExcludeExtensions -eq $True){ 
+            $logId = ".ext"
+        }
         return Execute-MSBuild $AndroidProject $BuildConfiguration @(
             "/p:VersionCode=$VersionCode"
             "/p:ApkOutputPath=$([System.IO.Path]::GetFullPath($OutFileName))"
@@ -63,7 +67,7 @@ function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtension
             {
                 "/p:AndroidSupportedAbis=$TargetAbi"
             }
-        )
+        ) $logId
     }
 }
 
