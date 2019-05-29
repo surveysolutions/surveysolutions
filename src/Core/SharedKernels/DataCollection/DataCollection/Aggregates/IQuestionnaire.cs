@@ -111,6 +111,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool IsRosterSizeQuestion(Guid questionId);
 
+        bool IsRosterTitleQuestion(Guid questionId);
+
         IEnumerable<Guid> GetRosterGroupsByRosterSizeQuestion(Guid questionId);
 
         int? GetListSizeForListQuestion(Guid questionId);

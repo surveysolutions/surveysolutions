@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -16,7 +14,6 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {

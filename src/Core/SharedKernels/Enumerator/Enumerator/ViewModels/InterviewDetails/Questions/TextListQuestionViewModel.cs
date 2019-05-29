@@ -128,7 +128,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             listItem.ItemEdited -= this.ListItemEdited;
             listItem.ItemDeleted -= this.ListItemDeleted;
 
-            this.Answers.Remove(listItem);
+            this.InvokeOnMainThread(() => this.Answers.Remove(listItem));
 
             await this.SaveAnswers();
         }
