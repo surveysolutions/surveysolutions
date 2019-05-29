@@ -41,6 +41,11 @@ RUN powershell.exe -Command `
 
 RUN ["C:\\Program Files\\7-Zip\\7z.exe", "x", "c:\\temp\\sdk.zip", "-oc:\\AndroidSDK\\", "-y"]
 
+RUN powershell -Command `
+  Invoke-WebRequest https://yarnpkg.com/latest.msi -OutFile c:\temp\yarn.msi
+
+RUN c:\temp\yarn.msi /quiet /norestart
+
 ENV JAVA_HOME="c:\\Program Files\\Android\\jdk\\microsoft_dist_openjdk_1.8.0.25"
 
 # 'yes' file required to accept google licenses: https://stackoverflow.com/a/48539058
