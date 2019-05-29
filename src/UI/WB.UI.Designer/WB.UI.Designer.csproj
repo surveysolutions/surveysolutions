@@ -2,9 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
+    <RuntimeFrameworkVersion>2.2.4</RuntimeFrameworkVersion>
     <UserSecretsId>WB.UI.Designer-083C0E5C-5E46-4A24-AE00-1A58F4183DE6</UserSecretsId>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
-    <RootNamespace>WB.UI.Designer</RootNamespace>   
+    <RootNamespace>WB.UI.Designer</RootNamespace>
     <AspNetCoreModuleName>AspNetCoreModuleV2</AspNetCoreModuleName>
     <VersionPrefix Condition="'$(VersionPrefix)' == ''">18.10.0-development-$(COMPUTERNAME)</VersionPrefix>
   </PropertyGroup>
@@ -139,6 +140,6 @@
     <None Update="appsettings.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup> 
-  
+  </ItemGroup>
+
 </Project>
