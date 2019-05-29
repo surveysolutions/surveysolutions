@@ -103,3 +103,4 @@ Elmah/
 /src/Services/Export/WB.Services.Export.Host/.temp
 *.received.txt
 src/UI/WB.UI.Designer/wwwroot
+/src/UI/WB.UI.Designer/web.config
