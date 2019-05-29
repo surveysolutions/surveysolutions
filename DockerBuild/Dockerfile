@@ -4,6 +4,7 @@
 FROM mcr.microsoft.com/dotnet/framework/sdk:4.8 as base
 SHELL ["cmd", "/S", "/C"]
 RUN MKDIR c:\temp
+RUN powershell [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 RUN powershell Invoke-WebRequest https://curl.haxx.se/download/curl-7.65.0.zip -outFile c:\temp\curl.Zip; `
   Expand-Archive c:\temp\curl.zip .; Remove-Item c:\temp\curl.zip 
