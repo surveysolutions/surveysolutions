@@ -580,6 +580,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 && this.GetRosterGroupsByRosterSizeQuestion(questionId).Any();
         }
 
+        public bool IsRosterTitleQuestion(Guid questionId)
+        {
+            return this.DoesQuestionSupportRoster(questionId)
+                && this.AllGroups.Any(x => x.IsRoster && x.RosterTitleQuestionId == questionId);
+        }
+
         public IEnumerable<Guid> GetRosterGroupsByRosterSizeQuestion(Guid questionId)
         {
             if (!this.DoesQuestionSupportRoster(questionId))

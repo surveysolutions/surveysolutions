@@ -1,6 +1,6 @@
 <template>
     <div :class="questionStyle" :id='questionId'>
-        <popover  :title="validationTitle" :enable="doesExistValidationMessage" trigger="hover-focus" append-to="body">
+        <popover :enable="doesExistValidationMessage" trigger="hover-focus" append-to="body">
             <a class="cell-content has-tooltip" type="primary" data-role="trigger">
                 <span v-if="(questionType == 'Integer' || questionType == 'Double') && question.useFormatting">
                     {{question.answer | formatNumber}}
@@ -8,10 +8,18 @@
                 <span v-else>{{question.answer}}</span>
             </a>
             <template slot="popover">
-                <div class="popover-content error-tooltip" v-html="validationMessage"></div>
+                <div class="popover-content error-tooltip" v-if="question.validity.messages.length > 0">        
+                    <template v-for="message in question.validity.messages">
+                        <span v-dateTimeFormatting v-html="message" :key="message"></span>
+                    </template>
+                </div>
+                <div class="popover-content warning-tooltip" v-else-if="question.validity.warnings.length > 0">        
+                    <template v-for="message in question.validity.warnings">
+                        <span v-dateTimeFormatting v-html="message" :key="message"></span>
+                    </template>
+                </div>
             </template>
         </popover>
-
         <wb-progress :visible="isFetchInProgress" :valuenow="valuenow" :valuemax="valuemax" />
     </div>
 </template>
@@ -29,7 +37,7 @@
             }
         }, 
         watch: {
-            ["$me"](watchedQuestion) {
+            ["$watchedQuestion"](watchedQuestion) {
                 if (watchedQuestion.updatedAt != this.lastUpdate) {
                     this.question = watchedQuestion
                     this.cacheQuestionData()
@@ -37,7 +45,7 @@
             }
         },
         computed: {
-            $me() {
+            $watchedQuestion() {
                 return this.$store.state.webinterview.entityDetails[this.questionId] 
             },
 
@@ -50,9 +58,6 @@
                     'syncing': this.question.fetching
                 }, 'cell-unit']
             },
-            isFetchInProgress() {
-                return this.question.fetching
-            },
             doesExistValidationMessage() {
                 const validity = this.question.validity
                 if (validity.messages && validity.messages.length > 0)
@@ -61,26 +66,8 @@
                     return true
                 return false
             },
-            validationTitle() {
-                const validity = this.question.validity
-                if (validity.messages && validity.messages.length > 0)
-                    return 'Error'
-                if (validity.warnings && validity.warnings.length > 0)
-                    return 'Warning'
-                return null
-            },
-            validationMessage() {
-                let message = ''
-                const validity = this.question.validity
-                for (let index = 0; index < validity.messages.length; index++) {
-                    const errorMessage = validity.messages[index];
-                    message += errorMessage + '<br />'
-                }
-                for (let index = 0; index < validity.warnings.length; index++) {
-                    const errorMessage = validity.warnings[index];
-                    message += errorMessage + '<br />'
-                }
-                return message;
+            isFetchInProgress() {
+                return this.question.fetching
             },
             valuenow() {
                 if (this.question.fetchState) {
@@ -98,14 +85,12 @@
         methods: {
             cacheQuestionData() {
                 this.lastUpdate = this.question.updatedAt
-                //this.hasTooltip = 
-                //this.isValid =
             }
         },
         created() {
             this.questionId = this.params.value.identity
             this.questionType = this.params.value.type
-            this.question = this.$store.state.webinterview.entityDetails[this.questionId]
+            this.question = this.$watchedQuestion
             this.cacheQuestionData()
         },
         filters: {
