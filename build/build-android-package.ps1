@@ -1,4 +1,4 @@
-param([string]$VersionName,
+param([string]$VersionName = $null,
 [INT]$VersionCode,
 [string]$BuildConfiguration='release',
 [string]$KeystorePassword = $null,
@@ -26,6 +26,10 @@ if(!$VersionCode){
 #     Log-Error "KeystorePassword param is not set"
 #     Exit
 # }
+
+if($versionName -eq $null) {
+    $versionName = (GetVersionString 'src')
+}
 
 function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtensions, $TargetAbi, $VersionCode, $OutFileName) {
     return Log-Block "Building Android project: $AndroidProject => $([System.IO.Path]::GetFileName($OutFileName))" {
