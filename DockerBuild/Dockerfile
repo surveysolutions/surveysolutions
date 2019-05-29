@@ -16,7 +16,6 @@ RUN curl.exe -sL https://www.7-zip.org/a/7z1900-x64.msi -o c:\temp\7zip.msi `
   && del c:\temp\7zip.msi
 
 RUN setx /M PATH "C:\\Program Files\\7-Zip;%PATH%"
-#RUN ["powershell", "setx", "PATH", "C:\\Program Files\\7-Zip;$env:path"]
 
 FROM base as ndk
 RUN curl -L https://dl.google.com/android/repository/android-ndk-r19c-windows-x86_64.zip -o c:\temp\ndk.zip && `
@@ -56,11 +55,12 @@ RUN curl -L https://nodejs.org/dist/v10.15.3/node-v10.15.3-x64.msi -o c:\temp\no
   && del c:\temp\node.msi
 
 # Setting node to cache packages in volume
-RUN npm config set cache c:\src\.cache\npm
 
 # Install Yarn
 RUN curl -L https://yarnpkg.com/latest.msi -o c:\temp\yarn.msi `
   && c:\temp\yarn.msi /quiet /norestart && del c:\temp\yarn.msi
+
+RUN npm config set cache g:\.cache\npm
 
 # Start developer command prompt with any other commands specified.
 ENTRYPOINT C:\BuildTools\Common7\Tools\VsDevCmd.bat &&
@@ -72,6 +72,8 @@ ENV JavaSdkDirectory="c:\\Program Files\\Android\\jdk\\microsoft_dist_openjdk_1.
 RUN MKDIR c:\src
 
 VOLUME c:\src
-WORKDIR c:\src\
 
+RUN powershell Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\DOS Devices' -Name 'G:' -Value "\??\C:\src" -Type String; 
+
+WORKDIR g:\
 # Default to PowerShell if no other command specified.
