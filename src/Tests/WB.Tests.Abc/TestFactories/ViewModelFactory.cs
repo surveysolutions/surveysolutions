@@ -597,7 +597,7 @@ namespace WB.Tests.Abc.TestFactories
             FilteredOptionsViewModel filteredOptionsViewModel, IQuestionStateViewModel questionState = null) =>
             new CategoricalComboboxAutocompleteViewModel(
                 questionState ?? Create.ViewModel.QuestionState<MultipleOptionsQuestionAnswered>(), filteredOptionsViewModel, 
-                false, Mock.Of<IMvxMainThreadAsyncDispatcher>());
+                false, Create.Fake.MvxMainThreadDispatcher1());
 
         public FilteredSingleOptionQuestionViewModel FilteredSingleOptionQuestionViewModel(
             Identity questionId,

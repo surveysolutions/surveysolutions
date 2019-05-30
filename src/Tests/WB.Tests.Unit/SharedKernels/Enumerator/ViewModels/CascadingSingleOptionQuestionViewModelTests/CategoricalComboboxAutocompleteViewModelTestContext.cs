@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             var cascadingSingleOptionQuestionViewModel = new CategoricalComboboxAutocompleteViewModel(
                 questionState ?? Mock.Of<IQuestionStateViewModel>(),
                 filteredOptionsViewModel ?? Mock.Of<FilteredOptionsViewModel>(),
-            true, Mock.Of<IMvxMainThreadAsyncDispatcher>());
+            true, Create.Fake.MvxMainThreadDispatcher1());
 
             return cascadingSingleOptionQuestionViewModel;
         }
