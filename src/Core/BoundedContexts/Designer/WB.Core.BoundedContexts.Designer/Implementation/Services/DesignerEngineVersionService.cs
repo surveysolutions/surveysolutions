@@ -218,9 +218,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                             return false;
                         },
                         Description = "Contains %self% as substituted text"
-                    }
+                    },
+                    new QuestionnaireFeature
+                    {
+                        HasQuestionnaire = questionnaire => questionnaire.Find<IGroup>(q => q.DisplayMode == RosterDisplayMode.Table).Any(),
+                        Description = "Contains roster with table display mode"
+                    },
                 }
-            }
+            },
         };
 
         private bool IsNonImageAttachment(string contentId) =>

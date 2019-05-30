@@ -28,11 +28,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void SetAnswer(DateTimeAnswer answer) => this.answer = answer;
         public override void RemoveAnswer() => this.answer = null;
 
-        public override bool EqualByAnswer(BaseInterviewQuestion question)
-        {
-            return (question as InterviewTreeDateTimeQuestion)?.answer == this.answer;
-        }
-
         public override BaseInterviewQuestion Clone() => (InterviewTreeDateTimeQuestion) this.MemberwiseClone();
 
         public string UiFormatString => IsTimestamp ? DateTimeFormat.DateWithTimeFormat : DateTimeFormat.DateFormat;

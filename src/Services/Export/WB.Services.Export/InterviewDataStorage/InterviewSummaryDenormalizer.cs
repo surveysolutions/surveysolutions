@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using WB.Services.Export.Events.Interview;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
-using WB.Services.Export.Questionnaire;
 using WB.Services.Infrastructure.EventSourcing;
 
 namespace WB.Services.Export.InterviewDataStorage
@@ -36,12 +35,10 @@ namespace WB.Services.Export.InterviewDataStorage
         IEventHandler<QRBarcodeQuestionAnswered>,
         IEventHandler<YesNoQuestionAnswered>
     {
-        private readonly ITenantContext tenantContext;
         private readonly TenantDbContext dbContext;
 
-        public InterviewSummaryDenormalizer(ITenantContext tenantContext, TenantDbContext dbContext)
+        public InterviewSummaryDenormalizer(TenantDbContext dbContext)
         {
-            this.tenantContext = tenantContext;
             this.dbContext = dbContext;
         }
 

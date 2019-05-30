@@ -101,7 +101,7 @@ namespace WB.UI.Interviewer.Settings
                 settings.GpsResponseTimeoutInSec = timeout;
             });
         }
-
+        
         public void SetGpsDesiredAccuracy(double value)
         {
             this.SaveCurrentSettings(settings =>

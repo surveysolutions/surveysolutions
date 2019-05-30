@@ -31,17 +31,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void SetTitle(SubstitutionText title)
         {
             this.Title = title;
-            this.Title.SetTree(this.Tree);
         }
 
         public void SetValidationMessages(SubstitutionText[] validationMessages)
         {
-            if (validationMessages == null) throw new ArgumentNullException(nameof(validationMessages));
-            this.ValidationMessages = validationMessages;
-            foreach (var validationMessage in validationMessages)
-            {
-                validationMessage.SetTree(this.Tree);
-            }
+            this.ValidationMessages = validationMessages ?? throw new ArgumentNullException(nameof(validationMessages));
         }
 
         public void MarkInvalid(IEnumerable<FailedValidationCondition> failedValidations)
@@ -92,19 +86,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void ReplaceSubstitutions()
         {
-            this.Title.ReplaceSubstitutions();
+            this.Title.ReplaceSubstitutions(Tree);
             foreach (var messagesWithSubstition in this.ValidationMessages)
             {
-                messagesWithSubstition.ReplaceSubstitutions();
-            }
-        }
-        public override void SetTree(InterviewTree tree)
-        {
-            base.SetTree(tree);
-            this.Title?.SetTree(tree);
-            foreach (var messagesWithSubstition in this.ValidationMessages)
-            {
-                messagesWithSubstition.SetTree(tree);
+                messagesWithSubstition.ReplaceSubstitutions(Tree);
             }
         }
     }

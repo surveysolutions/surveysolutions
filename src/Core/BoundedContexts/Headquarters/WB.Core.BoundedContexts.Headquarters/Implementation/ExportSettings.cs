@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
         public bool EncryptionEnforced()
         {
             if (settingCache == null)
-                settingCache = this.appSettingsStorage.GetById(ExportEncryptionSettings.EncriptionSettingId);
+                settingCache = this.appSettingsStorage.GetById(ExportEncryptionSettings.EncryptionSettingId);
 
             return settingCache != null && settingCache.IsEnabled;
         }
@@ -32,29 +32,29 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
         public string GetPassword()
         {
             if (settingCache == null)
-                settingCache = this.appSettingsStorage.GetById(ExportEncryptionSettings.EncriptionSettingId);
+                settingCache = this.appSettingsStorage.GetById(ExportEncryptionSettings.EncryptionSettingId);
 
             return settingCache != null ? settingCache.Value : string.Empty;
         }
 
         public void SetEncryptionEnforcement(bool enabled)
         {
-            var setting = this.appSettingsStorage.GetById(ExportEncryptionSettings.EncriptionSettingId);
+            var setting = this.appSettingsStorage.GetById(ExportEncryptionSettings.EncryptionSettingId);
             var password = setting != null ? setting.Value : this.GeneratePassword();
 
             var newSetting = new ExportEncryptionSettings(enabled, password);
-            this.appSettingsStorage.Store(newSetting, ExportEncryptionSettings.EncriptionSettingId);
+            this.appSettingsStorage.Store(newSetting, ExportEncryptionSettings.EncryptionSettingId);
 
             settingCache = newSetting;
         }
 
         public void RegeneratePassword()
         {
-            var setting = this.appSettingsStorage.GetById(ExportEncryptionSettings.EncriptionSettingId);
+            var setting = this.appSettingsStorage.GetById(ExportEncryptionSettings.EncryptionSettingId);
             if (setting != null && setting.IsEnabled)
             {
                 var newSetting = new ExportEncryptionSettings(setting.IsEnabled, GeneratePassword());
-                this.appSettingsStorage.Store(newSetting, ExportEncryptionSettings.EncriptionSettingId);
+                this.appSettingsStorage.Store(newSetting, ExportEncryptionSettings.EncryptionSettingId);
 
                 settingCache = newSetting;
             }

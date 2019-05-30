@@ -1,6 +1,7 @@
 ﻿using FluentMigrator.Expressions;
 using FluentMigrator.Model;
 using FluentMigrator.Runner.Generators.Postgres;
+using FluentMigrator.Runner.Processors.Postgres;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
 {
@@ -8,7 +9,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
     {
         private readonly string schemaName;
 
-        public InSchemaPostgresGenerator(string schemaName)
+        public InSchemaPostgresGenerator(string schemaName) : base(new PostgresQuoter(new PostgresOptions()))
         {
             this.schemaName = schemaName;
         }

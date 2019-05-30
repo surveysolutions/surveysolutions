@@ -274,7 +274,7 @@
     <value>Found in Security Credentials at AWS Management Console</value>
   </data>
   <data name="EmailProvider_SendGridApiKeyHelp" xml:space="preserve">
-    <value>You can find it on API Keys page under Sendgrid settings menu item</value>
+    <value>You can find it on API Keys page under SendGrid settings menu item</value>
   </data>
   <data name="EmailProvider_GeneralError" xml:space="preserve">
     <value>General error occurred</value>
@@ -286,6 +286,12 @@
     <value>Send yourself a test email message to verify that the bulk email service is functional and to get a preview of what the respondents will receive.</value>
   </data>
   <data name="EmailProvider_SettingsSavedSuccessfully" xml:space="preserve">
-    <value>Email service configuration was saved succeessfully.</value>
+    <value>Email service configuration was saved successfully.</value>
+  </data>
+  <data name="DeviceNotifications" xml:space="preserve">
+    <value>Enable notifications on device</value>
+  </data>
+  <data name="DeviceNotificationsDescription" xml:space="preserve">
+    <value>When enabled devices will notify owners about changes and actions to be taken</value>
   </data>
 </root>

@@ -62,8 +62,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
 
             subject.Process(this.interview, null);
 
-            this.interviewSummaryRepo.Verify(
-                repo => repo.Store(It.Is<InterviewSummary>(s => s.ErrorsCount == 4), interviewId.FormatGuid()), Times.Once);
+            Assert.That(this.summary.ErrorsCount, Is.EqualTo(4));
         }
         
         [Test]
@@ -73,8 +72,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
 
             subject.Process(this.interview, null);
 
-            this.interviewSummaryRepo.Verify(
-                repo => repo.Store(It.Is<InterviewSummary>(s => s.ErrorsCount == 0), interviewId.FormatGuid()), Times.Once);
+            Assert.That(this.summary.ErrorsCount, Is.EqualTo(0));
         }
 
         [Test]
@@ -83,9 +81,6 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             var someInterview = Create.AggregateRoot.StatefulInterview(Guid.NewGuid());
 
             Assert.DoesNotThrow(() => subject.Process(someInterview, new DeleteInterviewCommand(someInterview.Id, Guid.NewGuid())));
-
-            this.interviewSummaryRepo.Verify(
-                repo => repo.Store(It.IsAny<InterviewSummary>(), It.IsAny<string>()), Times.Never);
         }
     }
 }

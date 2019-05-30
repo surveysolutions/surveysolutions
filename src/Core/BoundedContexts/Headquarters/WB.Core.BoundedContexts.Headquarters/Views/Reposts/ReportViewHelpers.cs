@@ -136,7 +136,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts
             }
 
             report.Data = reportData.ToArray();
-            report.Warnings = new Quartz.Collection.HashSet<ReportWarnings>(a.Warnings.Union(b.Warnings));
+            report.Warnings = new HashSet<ReportWarnings>(a.Warnings.Union(b.Warnings));
             return report;
         }
 

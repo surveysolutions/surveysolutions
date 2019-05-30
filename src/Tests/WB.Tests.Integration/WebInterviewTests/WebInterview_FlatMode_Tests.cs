@@ -3,6 +3,7 @@ using System.Linq;
 using AppDomainToolkit;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.SignalR.Hosting;
 using Microsoft.AspNet.SignalR.Hubs;
 using Moq;
@@ -42,7 +43,7 @@ namespace WB.Tests.Integration.WebInterviewTests
                     {
                         Create.Entity.Group(groupId, children: new IComposite[]
                         {
-                            Create.Entity.FixedRoster(isFlatMode: true, fixedTitles: new FixedRosterTitle[]
+                            Create.Entity.FixedRoster(displayMode: RosterDisplayMode.Flat, fixedTitles: new FixedRosterTitle[]
                             {
                                 Create.Entity.FixedTitle(1, "1"),
                                 Create.Entity.FixedTitle(2, "2"),

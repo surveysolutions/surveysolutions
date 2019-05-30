@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
@@ -44,12 +45,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             this.httpStatistician = httpStatistician;
         }
 
-        public void Execute(IJobExecutionContext context)
+        public Task Execute(IJobExecutionContext context)
         {
             try
             {
                 if (!emailService.IsConfigured())
-                    return;
+                    return Task.CompletedTask;
 
                 var questionnaires = invitationService.GetQuestionnairesWithInvitations().ToList();
                 
@@ -83,6 +84,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             {
                 this.logger.Error($"Reminders distribution job: FAILED. Reason: {ex.Message} ", ex);
             }
+
+            return Task.CompletedTask;
         }
 
         private void SendPartialResponseReminder(QuestionnaireIdentity questionnaireIdentity, string questionnaireTitle, WebInterviewConfig webInterviewConfig, string baseUrl, ISenderInformation senderInfo)

@@ -734,4 +734,24 @@
   <data name="WB0282_IdentifyingQuestionInSectionWithCondition" xml:space="preserve">
     <value>Идентифицирующий вопрос не может быть расположен внутри секции с условием.</value>
   </data>
+  <data name="WB0282_TableRosterContainsNestedGroup" xml:space="preserve">
+      <value>Табличное представлние не может содержать вложенные группы и ростеры.</value>
+      <comment>Табличное представлние не может содержать вложенные группы и ростеры.</comment>
+  </data>
+  <data name="WB0283_TableRosterAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+      <value>Табличное представление может содержать не больше чем {0} вопросов.</value>
+      <comment>Табличное представление может содержать не больше чем {0} вопросов.</comment>
+  </data>
+  <data name="WB0284_TableRosterCantContainsSupervisorQuestions" xml:space="preserve">
+      <value>Табличный ростер не может содержать супервизоровские вопросы.</value>
+      <comment>Табличный ростер не может содержать супервизоровские вопросы.</comment>
+  </data>
+  <data name="WB0285_TableRosterContainsOnlyAllowedQuestionTypes" xml:space="preserve">
+      <value>Табличный ростер может содержать только тестовые и числовые вопросы.</value>
+      <comment>Табличный ростер может содержать только тестовые и числовые вопросы.</comment>
+  </data>
+  <data name="WB0286_TableRosterWorksOnlyInWebMode" xml:space="preserve">
+      <value>Табличное представление доступно только в web режиме, на плпншетах это будет обычный режим.</value>
+      <comment>Табличное представление доступно только в web режиме, на плпншетах это будет обычный режим.</comment>
+  </data>
 </root>
