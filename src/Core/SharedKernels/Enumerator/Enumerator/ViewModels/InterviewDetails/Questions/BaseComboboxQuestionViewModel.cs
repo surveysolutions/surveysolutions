@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
@@ -39,7 +40,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionInstructionViewModel instructionViewModel,
             IStatefulInterviewRepository interviewRepository,
             ILiteEventRegistry eventRegistry,
-            FilteredOptionsViewModel filteredOptionsViewModel)
+            FilteredOptionsViewModel filteredOptionsViewModel,
+            IMvxMainThreadAsyncDispatcher mainThreadDispatcher)
         {
             this.principal = principal;
             this.interviewRepository = interviewRepository;
@@ -50,7 +52,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.InstructionViewModel = instructionViewModel;
             this.filteredOptionsViewModel = filteredOptionsViewModel;
 
-            this.comboboxViewModel = new CategoricalComboboxAutocompleteViewModel(questionStateViewModel, filteredOptionsViewModel, true);
+            this.comboboxViewModel = 
+                new CategoricalComboboxAutocompleteViewModel(questionStateViewModel, filteredOptionsViewModel, 
+                    true, mainThreadDispatcher);
         }
 
         protected Guid interviewId;

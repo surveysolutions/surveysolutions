@@ -33,12 +33,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.parentRosters = questionnaire.GetRostersFromTopToSpecifiedEntity(this.linkedToRosterId).ToHashSet();
         }
 
-        public override void Handle(RosterInstancesTitleChanged @event)
+        public override async void Handle(RosterInstancesTitleChanged @event)
         {
             if (!@event.ChangedInstances.Any(x => x.RosterInstance.GroupId == this.linkedToRosterId ||
                                                   this.parentRosters.Contains(x.RosterInstance.GroupId))) return;
 
-            this.UpdateViewModelsInMainThreadAsync();
+            await this.UpdateViewModelsInMainThreadAsync();
         }
     }
 }
