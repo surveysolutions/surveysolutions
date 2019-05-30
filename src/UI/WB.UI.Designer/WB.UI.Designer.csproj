@@ -2,8 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <RuntimeFrameworkVersion>2.2.4</RuntimeFrameworkVersion>
-    <NetCoreAppImplicitPackageVersion>2.2.4</NetCoreAppImplicitPackageVersion>
     <UserSecretsId>WB.UI.Designer-083C0E5C-5E46-4A24-AE00-1A58F4183DE6</UserSecretsId>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <RootNamespace>WB.UI.Designer</RootNamespace>
@@ -19,7 +17,7 @@
   <ItemGroup>
     <PackageReference Include="FFmpeg.Win64.Static" Version="4.1.1.1" />
     <PackageReference Include="FluentMigrator.Runner" Version="3.2.1" />
-    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.4"/>
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.2.0" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.2.4" />
     <PackageReference Include="reCAPTCHA.AspNetCore" Version="2.2.3" />
