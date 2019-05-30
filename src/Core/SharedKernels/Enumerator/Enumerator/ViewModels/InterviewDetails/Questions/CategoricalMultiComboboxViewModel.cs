@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MvvmCross.Base;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -28,9 +29,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterviewRepository interviewRepository, IPrincipal principal,
             IUserInteractionService userInteraction, AnsweringViewModel answering,
             FilteredOptionsViewModel filteredOptionsViewModel, QuestionInstructionViewModel instructionViewModel,
-            ThrottlingViewModel throttlingModel) : base(questionStateViewModel, questionnaireRepository, eventRegistry,
+            ThrottlingViewModel throttlingModel, IMvxMainThreadAsyncDispatcher mainThreadDispatcher) : base(questionStateViewModel, questionnaireRepository, eventRegistry,
             interviewRepository, principal, userInteraction, answering, filteredOptionsViewModel, instructionViewModel,
-            throttlingModel)
+            throttlingModel, mainThreadDispatcher)
         {
             this.comboboxViewModel =
                 new CategoricalComboboxAutocompleteViewModel(questionStateViewModel, filteredOptionsViewModel, false);
@@ -116,7 +117,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (!@event.Questions.Any(x => x.Id == this.Identity.Id && x.RosterVector.Identical(this.Identity.RosterVector))) return;
 
             this.UpdateComboboxInMainThread(null);
-            this.UpdateViewModelsInMainThread();
+            this.UpdateViewModelsInMainThreadAsync();
         }
 
         public override void Handle(MultipleOptionsQuestionAnswered @event)
@@ -124,7 +125,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (@event.QuestionId != this.Identity.Id || !@event.RosterVector.Identical(this.Identity.RosterVector)) return;
 
             this.UpdateComboboxInMainThread(@event.SelectedValues.Select(Convert.ToInt32).ToArray());
-            this.UpdateViewModelsInMainThread();
+            this.UpdateViewModelsInMainThreadAsync();
         }
 
         public override void Dispose()
