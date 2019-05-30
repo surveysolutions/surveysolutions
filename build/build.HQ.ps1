@@ -28,20 +28,23 @@ try {
 
     $buildArgs = @("/p:BuildNumber=$BuildNumber", "/p:VersionSuffix=$branch")
 
-    Log-Block "Building HQ Package" {
-        BuildWebPackage $ProjectHeadquarters $BuildConfiguration | % { if (-not $_) { Exit } }
+    $buildSuccessful = BuildSolution -Solution $MainSolution -BuildConfiguration $BuildConfiguration -BuildArgs $buildArgs
+    if ($buildSuccessful) { 
+
+        Log-Block "Building HQ Package" {
+            BuildWebPackage $ProjectHeadquarters $BuildConfiguration | % { if (-not $_) { Exit } }
+        }
+
+        Log-Block "Building web packages and support tool" {
+            BuildWebPackage $ProjectHeadquarters $BuildConfiguration | % { if (-not $_) { Exit } }
+        }
+
+        Log-Block "Collecting/building artifacts" {
+            AddArtifacts $ProjectHeadquarters $BuildConfiguration -folder "Headquarters"
+        }
+
+        Write-Host "##teamcity[publishArtifacts '$artifactsFolder']"
     }
-
-    Log-Block "Building web packages and support tool" {
-        BuildWebPackage $ProjectHeadquarters $BuildConfiguration | % { if (-not $_) { Exit } }
-    }
-
-    Log-Block "Collecting/building artifacts" {
-        AddArtifacts $ProjectHeadquarters $BuildConfiguration -folder "Headquarters"
-    }
-
-    Write-Host "##teamcity[publishArtifacts '$artifactsFolder']"
-
 }
 catch {
     Log-Error Unexpected error occurred
