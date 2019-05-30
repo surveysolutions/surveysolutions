@@ -19,6 +19,7 @@ $SupportToolSolution = 'src\Tools\support\support.sln'
 
 versionCheck
 "GIT_BRANCH: $ENV:GIT_BRANCH" | Out-Host
+Load-DevEnvVariables
 
 $versionString = (GetVersionString 'src')
 Log-Block "Update project version" {
