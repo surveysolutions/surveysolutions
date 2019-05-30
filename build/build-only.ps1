@@ -2,7 +2,9 @@ param([string]$VersionPrefix,
     [INT]$BuildNumber,
     [string]$KeystorePassword,
     [string]$BuildConfiguration = "Release",
-    [string]$branch = "master")
+    [string]$branch = "master",
+    [switch]$nostatic,
+    [switch]$noandroid)
 
 $ErrorActionPreference = "Stop"
 
@@ -42,20 +44,22 @@ try {
 
         New-Item "$artifactsFolder\stats" -Type Directory -Force | Out-Null
 
-        BuildStaticContent "Hq Deps" "src\UI\Headquarters\WB.UI.Headquarters\Dependencies" | % { if (-not $_) {
-            Log-Error 'Unexpected error occurred in BuildStaticContent while build static content for HQ Deps'
-            Exit 
-        }}
+        if($nostatic -eq $False){
+            BuildStaticContent "Hq Deps" "src\UI\Headquarters\WB.UI.Headquarters\Dependencies" | % { if (-not $_) {
+                Log-Error 'Unexpected error occurred in BuildStaticContent while build static content for HQ Deps'
+                Exit 
+            }}
 
-        BuildStaticContent "Hq App" "src\UI\Headquarters\WB.UI.Headquarters\HqApp" | % { if (-not $_) {
-            Log-Error 'Unexpected error occurred in BuildStaticContent while build static content for HQ App'
-            Exit 
-        } else {
-            Move-Item ".\dist\stats.html" "$artifactsFolder\stats\HqApp.html" -ErrorAction SilentlyContinue
-            Move-Item ".\dist\shared_vendor.stats.html" "$artifactsFolder\stats\HqApp.vendor.html" -ErrorAction SilentlyContinue
-            New-Item "$artifactsFolder\coverage" -Type Directory -Force
-            Move-Item ".\.coverage" "$artifactsFolder\coverage\hqapp" -ErrorAction SilentlyContinue
-        }}
+            BuildStaticContent "Hq App" "src\UI\Headquarters\WB.UI.Headquarters\HqApp" | % { if (-not $_) {
+                Log-Error 'Unexpected error occurred in BuildStaticContent while build static content for HQ App'
+                Exit 
+            } else {
+                Move-Item ".\dist\stats.html" "$artifactsFolder\stats\HqApp.html" -ErrorAction SilentlyContinue
+                Move-Item ".\dist\shared_vendor.stats.html" "$artifactsFolder\stats\HqApp.vendor.html" -ErrorAction SilentlyContinue
+                New-Item "$artifactsFolder\coverage" -Type Directory -Force
+                Move-Item ".\.coverage" "$artifactsFolder\coverage\hqapp" -ErrorAction SilentlyContinue
+            }}
+        }
 
         CreateZip "$artifactsFolder\stats" "$artifactsFolder\stats.zip"
         CreateZip "$artifactsFolder\coverage" "$artifactsFolder\coverage.zip"
@@ -68,50 +72,48 @@ try {
             RunConfigTransform $ProjectWebTester $BuildConfiguration
         }
 
-        $PackageName = 'WBCapi.apk'
-        . "$scriptFolder\build-android-package.ps1" `
-            -VersionName $versionString `
-            -VersionCode $BuildNumber `
-            -BuildConfiguration $BuildConfiguration `
-            -KeystorePassword $KeystorePassword `
-            -KeystoreName 'WBCapi.keystore' `
-            -KeystoreAlias 'wbcapipublish' `
-            -CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
-            -OutFileName "$(Split-Path $ProjectHeadquarters)\Client\$PackageName" `
-            -NoCleanUp `
-            -ExcludeExtra $true | % { if (-not $_) { Exit } }
+        if($noandroid.IsPresent -eq $False) 
+        {
+            $PackageName = 'WBCapi.apk'
+            . "$scriptFolder\build-android-package.ps1" `
+                -VersionName $versionString `
+                -VersionCode $BuildNumber `
+                -BuildConfiguration $BuildConfiguration `
+                -KeystorePassword $KeystorePassword `
+                -KeystoreName 'WBCapi.keystore' `
+                -KeystoreAlias 'wbcapipublish' `
+                -CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
+                -OutFileName "$(Split-Path $ProjectHeadquarters)\Client\$PackageName" `
+                -NoCleanUp `
+                -ExcludeExtra $true | % { if (-not $_) { Exit } }
 
-        $ExtPackageName = 'WBCapi.Ext.apk'
-        . "$scriptFolder\build-android-package.ps1" `
-            -VersionName $versionString `
-            -VersionCode $BuildNumber `
-            -BuildConfiguration $BuildConfiguration `
-            -KeystorePassword $KeystorePassword `
-            -KeystoreName 'WBCapi.keystore' `
-            -KeystoreAlias 'wbcapipublish' `
-            -CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
-            -OutFileName "$(Split-Path $ProjectHeadquarters)\Client\$ExtPackageName" `
-            -branch $branch `
-            -NoCleanUp `
-            -ExcludeExtra $false | % { if (-not $_) { Exit } }
+            $ExtPackageName = 'WBCapi.Ext.apk'
+            . "$scriptFolder\build-android-package.ps1" `
+                -VersionName $versionString `
+                -VersionCode $BuildNumber `
+                -BuildConfiguration $BuildConfiguration `
+                -KeystorePassword $KeystorePassword `
+                -KeystoreName 'WBCapi.keystore' `
+                -KeystoreAlias 'wbcapipublish' `
+                -CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
+                -OutFileName "$(Split-Path $ProjectHeadquarters)\Client\$ExtPackageName" `
+                -branch $branch `
+                -NoCleanUp `
+                -ExcludeExtra $false | % { if (-not $_) { Exit } }
 
-        #remove leftovers after previous build
-
-        #CleanFolders 'bin' | %{ if (-not $_) { Exit } }
-        #CleanFolders 'obj' | %{ if (-not $_) { Exit } }
-
-        $SuperPackageName = 'Supervisor.apk'
-        . "$scriptFolder\build-android-package.ps1" `
-            -VersionName $versionString `
-            -VersionCode $BuildNumber `
-            -BuildConfiguration $BuildConfiguration `
-            -KeystorePassword $KeystorePassword `
-            -KeystoreName 'WBCapi.keystore' `
-            -KeystoreAlias 'wbcapipublish' `
-            -CapiProject 'src\UI\Supervisor\WB.UI.Supervisor\WB.UI.Supervisor.csproj' `
-            -OutFileName "$(Split-Path $ProjectHeadquarters)\Client\$SuperPackageName" `
-            -NoCleanUp `
-            -ExcludeExtra $false | % { if (-not $_) { Exit } }
+            $SuperPackageName = 'Supervisor.apk'
+            . "$scriptFolder\build-android-package.ps1" `
+                -VersionName $versionString `
+                -VersionCode $BuildNumber `
+                -BuildConfiguration $BuildConfiguration `
+                -KeystorePassword $KeystorePassword `
+                -KeystoreName 'WBCapi.keystore' `
+                -KeystoreAlias 'wbcapipublish' `
+                -CapiProject 'src\UI\Supervisor\WB.UI.Supervisor\WB.UI.Supervisor.csproj' `
+                -OutFileName "$(Split-Path $ProjectHeadquarters)\Client\$SuperPackageName" `
+                -NoCleanUp `
+                -ExcludeExtra $false | % { if (-not $_) { Exit } }
+        }
 
         Log-Block "Building web packages and support tool" {
             
