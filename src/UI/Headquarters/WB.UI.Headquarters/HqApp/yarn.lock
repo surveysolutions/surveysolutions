@@ -6171,11 +6171,6 @@ lodash.memoize@^4.1.2:
   resolved "https://registry.yarnpkg.com/lodash.memoize/-/lodash.memoize-4.1.2.tgz#bcc6c49a42a2840ed997f323eada5ecd182e0bfe"
   integrity sha1-vMbEmkKihA7Zl/Mj6tpezRguC/4=
 
-lodash.merge@^4.6.0:
-  version "4.6.1"
-  resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.1.tgz#adc25d9cb99b9391c59624f379fbba60d7111d54"
-  integrity sha512-AOYza4+Hf5z1/0Hztxpm2/xiPZgi/cjMqdnKTUWTBSKchJlxXXuUSxCCl8rJlf4g6yww/j6mA8nC8Hw/EZWxKQ==
-
 lodash.mergewith@^4.6.0:
   version "4.6.1"
   resolved "https://registry.yarnpkg.com/lodash.mergewith/-/lodash.mergewith-4.6.1.tgz#639057e726c3afbdb3e7d42741caa8d6e4335927"
@@ -6617,10 +6612,15 @@ mkdirp@0.5.1, mkdirp@0.5.x, "mkdirp@>=0.5 0", mkdirp@^0.5.0, mkdirp@^0.5.1, mkdi
   dependencies:
     minimist "0.0.8"
 
-moment@^2.10.2, moment@^2.20.1, moment@^2.22.1:
+moment@^2.10.2, moment@^2.22.1:
   version "2.23.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.23.0.tgz#759ea491ac97d54bac5ad776996e2a58cc1bc225"
   integrity sha512-3IE39bHVqFbWWaPOMHZF98Q9c3LDKGTmypMiTM2QygGXXElkFWIH7GxfmlwmY2vwa+wmNsoYZmG2iusf1ZjJoA==
+
+moment@^2.24.0:
+  version "2.24.0"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
+  integrity sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==
 
 move-concurrently@^1.0.1:
   version "1.0.1"
@@ -8893,7 +8893,7 @@ schema-utils@^1.0.0:
     ajv-errors "^1.0.0"
     ajv-keywords "^3.1.0"
 
-scriptjs@^2.5.8:
+scriptjs@^2.5.9:
   version "2.5.9"
   resolved "https://registry.yarnpkg.com/scriptjs/-/scriptjs-2.5.9.tgz#343915cd2ec2ed9bfdde2b9875cd28f59394b35f"
   integrity sha512-qGVDoreyYiP1pkQnbnFAUIS5AjenNwwQBdl7zeos9etl+hYKWahjRTfzAZZYBv5xNHx7vNKCmaLDQZ6Fr2AEXg==
@@ -9964,10 +9964,10 @@ uglify-js@3.4.x:
     commander "~2.17.1"
     source-map "~0.6.1"
 
-uiv@^0.31.5:
-  version "0.31.5"
-  resolved "https://registry.yarnpkg.com/uiv/-/uiv-0.31.5.tgz#bfb87833b9abb59d8f0bb4f630943449b053b733"
-  integrity sha512-VcizUxkJCr4XhnFJ3KWCuiVaDvU3H5yDLX4F1yhrmK5hz+2+OIuCShJd6Is366oJdJagoh42sjWQqZL74uMEmw==
+uiv@^0.32.0:
+  version "0.32.0"
+  resolved "https://registry.yarnpkg.com/uiv/-/uiv-0.32.0.tgz#2c3950d2c61e735d76da627b25273c7ffdd15f44"
+  integrity sha512-5GiZhmz+S4ihYreLDiSd3q9uhzFBDbau0rZSMlqnwKBEWLt97LJOgF4IgUaWUsbDnrQCoj6LmcBWp+8hh5zaMw==
   dependencies:
     vue-functional-data-merge "^2.0.3"
 
@@ -10328,13 +10328,14 @@ vue-textarea-autosize@^1.0.4:
   resolved "https://registry.yarnpkg.com/vue-textarea-autosize/-/vue-textarea-autosize-1.0.4.tgz#671e4f9b69d278be9b94ea304a3032bcabb54135"
   integrity sha512-24ivBeHvivkJdtUMSi7Pv8OBqzTnIRr/eTlDlbg0W3umpERY8Fq67FlAK3CrhCNHAlXOxgUOQtVKlslYN1/MTg==
 
-vue2-editor@^2.6.6:
-  version "2.6.6"
-  resolved "https://registry.yarnpkg.com/vue2-editor/-/vue2-editor-2.6.6.tgz#567f7c2aabdd10d465756da7aebf568ee34ebbc5"
-  integrity sha512-jrJE7Wmwg6Vw9YXlVBJZLsS/3s5IKPQMZ/aGKJwVLP/xC+4DCAydorw1jUzYtvZofZhYLPS/VoMIOb0ZvOanLQ==
+vue2-editor@^2.7.2:
+  version "2.7.2"
+  resolved "https://registry.yarnpkg.com/vue2-editor/-/vue2-editor-2.7.2.tgz#8cb9bda9bc120aacab261b534dc2a871a9403e81"
+  integrity sha512-7wr0hd/OplcnFNeRLbEejTSrt/FUxNA64VAMW+cWn9a6ufhV38eufLfrbA4hU7zTfS1ywBprQpvGG0NP7KWgAQ==
   dependencies:
-    lodash.merge "^4.6.0"
+    lodash "^4.17.11"
     quill "^1.3.6"
+    vue "^2.6.10"
 
 vue@^2.6.10:
   version "2.6.10"
