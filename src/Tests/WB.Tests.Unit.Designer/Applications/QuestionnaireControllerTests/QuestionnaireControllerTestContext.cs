@@ -1,10 +1,7 @@
 using System.IO;
-using System.Reflection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.AspNetCore.Session;
 using Microsoft.Extensions.Logging;
 using Moq;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
