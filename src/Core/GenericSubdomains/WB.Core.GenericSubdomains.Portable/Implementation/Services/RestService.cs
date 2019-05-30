@@ -214,13 +214,17 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
         private async Task<string> GetReasonPhrase(ExtendedMessageHandlerException ex)
         {
-            var responseMessage = ex.Call.Response;
-            var responseContent = await responseMessage.Content.ReadAsByteArrayAsync();
-            var restContentCompressionType = this.GetContentCompressionType(responseMessage.Content.Headers);
-            var decompressedContent = DecompressedContentFromHttpResponseMessage(restContentCompressionType, responseContent);
-            var jsonFromHttpResponseMessage = this.synchronizationSerializer.Deserialize<ResponseWithErrorMessage>(decompressedContent);
-            if (jsonFromHttpResponseMessage != null)
-                return jsonFromHttpResponseMessage.Message;
+            try
+            {
+                var responseMessage = ex.Call.Response;
+                var responseContent = await responseMessage.Content.ReadAsByteArrayAsync();
+                var restContentCompressionType = this.GetContentCompressionType(responseMessage.Content.Headers);
+                var decompressedContent = DecompressedContentFromHttpResponseMessage(restContentCompressionType, responseContent);
+                var jsonFromHttpResponseMessage = this.synchronizationSerializer.Deserialize<ResponseWithErrorMessage>(decompressedContent);
+                if (jsonFromHttpResponseMessage != null)
+                    return jsonFromHttpResponseMessage.Message;
+            }
+            catch { } // if cant get message from response
 
             return ex.Call.Response.ReasonPhrase;
         }
