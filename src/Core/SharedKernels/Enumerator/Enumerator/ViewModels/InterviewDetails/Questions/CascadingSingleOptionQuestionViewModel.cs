@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             ThrottlingViewModel throttlingModel) :
             base(principal: principal, questionStateViewModel: questionStateViewModel, answering: answering,
                 instructionViewModel: instructionViewModel, interviewRepository: interviewRepository,
-                eventRegistry: eventRegistry, filteredOptionsViewModel)
+                eventRegistry: eventRegistry, filteredOptionsViewModel, mvxMainThreadDispatcher)
         {
             this.questionnaireRepository = questionnaireRepository ??
                                            throw new ArgumentNullException(nameof(questionnaireRepository));

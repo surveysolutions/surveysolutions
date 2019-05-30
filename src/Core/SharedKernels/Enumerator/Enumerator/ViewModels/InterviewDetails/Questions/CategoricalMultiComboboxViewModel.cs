@@ -34,7 +34,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             throttlingModel, mainThreadDispatcher)
         {
             this.comboboxViewModel =
-                new CategoricalComboboxAutocompleteViewModel(questionStateViewModel, filteredOptionsViewModel, false);
+                new CategoricalComboboxAutocompleteViewModel(questionStateViewModel, filteredOptionsViewModel, 
+                    false, mainThreadDispatcher);
         }
 
         public override void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -53,12 +54,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             var answeredOptions = this.GetAnsweredOptionsFromInterview(interview);
 
-            this.UpdateComboboxInMainThread(answeredOptions).WaitAndUnwrapException();
+            this.UpdateComboboxInMainThreadAsync(answeredOptions).WaitAndUnwrapException();
         }
 
-        private async Task UpdateComboboxInMainThread(int[] answeredOptions)
+        private async Task UpdateComboboxInMainThreadAsync(int[] answeredOptions)
         {
-            await this.InvokeOnMainThreadAsync(async () =>
+            await mainThreadDispatcher.ExecuteOnMainThreadAsync(async () =>
             {
                 answeredOptions = answeredOptions ?? Array.Empty<int>();
 
@@ -112,20 +113,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public override void Handle(AnswersRemoved @event)
+        public override async void Handle(AnswersRemoved @event)
         {
             if (!@event.Questions.Any(x => x.Id == this.Identity.Id && x.RosterVector.Identical(this.Identity.RosterVector))) return;
 
-            this.UpdateComboboxInMainThread(null);
-            this.UpdateViewModelsInMainThreadAsync();
+            await this.UpdateComboboxInMainThreadAsync(null);
+            await this.UpdateViewModelsInMainThreadAsync();
         }
 
-        public override void Handle(MultipleOptionsQuestionAnswered @event)
+        public override async void Handle(MultipleOptionsQuestionAnswered @event)
         {
             if (@event.QuestionId != this.Identity.Id || !@event.RosterVector.Identical(this.Identity.RosterVector)) return;
 
-            this.UpdateComboboxInMainThread(@event.SelectedValues.Select(Convert.ToInt32).ToArray());
-            this.UpdateViewModelsInMainThreadAsync();
+            await this.UpdateComboboxInMainThreadAsync(@event.SelectedValues.Select(Convert.ToInt32).ToArray());
+            await this.UpdateViewModelsInMainThreadAsync();
         }
 
         public override void Dispose()

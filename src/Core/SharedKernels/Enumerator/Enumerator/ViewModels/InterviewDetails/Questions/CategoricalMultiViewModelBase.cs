@@ -6,6 +6,7 @@ using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -31,7 +32,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly ILiteEventRegistry eventRegistry;
         private readonly IPrincipal principal;
         protected readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
+        protected readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
         private Guid interviewId;
         private bool areAnswersOrdered;
         protected int? maxAllowedAnswers;
@@ -134,7 +135,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.eventRegistry.Subscribe(this, interviewId);
 
-            this.UpdateViewModelsInMainThreadAsync(); 
+            this.UpdateViewModelsInMainThreadAsync().WaitAndUnwrapException(); 
         }
 
         private async Task SaveAnswer()
@@ -163,8 +164,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(
                 () => 
-                    this.Options.SynchronizeWith(this.GetOptions(interview).ToList(), 
-                        (s, t) => s.Value.Equals(t.Value) && s.Title == t.Title));
+                    this.Options.ReplaceWith(this.GetOptions(interview).ToList()));
 
             this.UpdateOptionsFromInterviewInMainThread();
         }

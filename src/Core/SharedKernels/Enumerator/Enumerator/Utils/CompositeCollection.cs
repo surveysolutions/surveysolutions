@@ -65,16 +65,12 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                     array.SetValue(item, index++);
         }
 
-        private List<Tuple<int, StackTrace>> history = new List<Tuple<int, StackTrace>>();
         private int count;
         public int Count {
             get => count;
             private set
             {
                 count = value;
-
-                if (value == 7)
-                    history.Add(new Tuple<int, StackTrace>(value, new System.Diagnostics.StackTrace()));
             }
          }
 

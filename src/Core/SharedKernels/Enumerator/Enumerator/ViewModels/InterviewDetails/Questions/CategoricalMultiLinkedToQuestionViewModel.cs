@@ -77,18 +77,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.UpdateViewModelsByAnsweredOptionsInMainThread(@event.SelectedRosterVectors?.Select(RosterVector.Convert)?.ToArray());
         }
 
-        public void Handle(LinkedOptionsChanged @event)
+        public async void Handle(LinkedOptionsChanged @event)
         {
             if (@event.ChangedLinkedQuestions.All(x => x.QuestionId != this.Identity)) return;
 
-            this.UpdateViewModelsInMainThreadAsync();
+            await this.UpdateViewModelsInMainThreadAsync();
         }
 
-        public virtual void Handle(RosterInstancesTitleChanged @event)
+        public virtual async void Handle(RosterInstancesTitleChanged @event)
         {
             if (!@event.ChangedInstances.Any(x => this.parentRosters.Contains(x.RosterInstance.GroupId))) return;
 
-            this.UpdateViewModelsInMainThreadAsync();
+            await this.UpdateViewModelsInMainThreadAsync();
         }
     }
 }
