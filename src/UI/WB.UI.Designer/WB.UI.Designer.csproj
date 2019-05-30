@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <RuntimeFrameworkVersion>2.2.4</RuntimeFrameworkVersion>
-    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+    <NetCoreAppImplicitPackageVersion>2.2.4</NetCoreAppImplicitPackageVersion>
     <UserSecretsId>WB.UI.Designer-083C0E5C-5E46-4A24-AE00-1A58F4183DE6</UserSecretsId>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <RootNamespace>WB.UI.Designer</RootNamespace>
