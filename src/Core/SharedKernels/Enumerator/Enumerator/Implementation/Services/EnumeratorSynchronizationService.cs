@@ -39,6 +39,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         protected string AttachmentContentController => string.Concat(ApplicationUrl, "/attachments");
         
         protected string LogoUrl => string.Concat(ApplicationUrl, "/companyLogo");
+        protected string TenantIdUrl => string.Concat(ApplicationUrl, "/tenantId");
         protected string AutoUpdateUrl => string.Concat(ApplicationUrl, "/autoupdate");
         protected string NotificationsUrl => string.Concat(ApplicationUrl, "/notifications");
         protected string PublicKeyForEncryptionUrl => string.Concat(ApplicationUrl, "/encryption-key");
@@ -166,6 +167,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<bool>(url: string.Concat(this.UsersController, "/hasdevice"),
                 credentials: credentials ?? this.restCredentials, token: token));
+        }
+
+        public async Task<string> GetTenantId(RestCredentials credentials = null, CancellationToken token = default)
+        {
+            var response = await this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<TenantIdApiView>(
+                url: TenantIdUrl, credentials: credentials ?? this.restCredentials, token: token));
+            return response.TenantId;
         }
 
         public async Task CanSynchronizeAsync(RestCredentials credentials = null, CancellationToken token = default)
