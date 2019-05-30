@@ -176,7 +176,8 @@
   </data>
   <data name="Dashboard_EmptyQuestionnairesList" xml:space="preserve">
     <value>لا توجد استبيانات بعد
-
+
+
 يمكنك إنشاء أو تحرير الاستبيانات الخاصة بك في مصمم Survey Solutions</value>
   </data>
   <data name="Dashboard_EmptySearchResult" xml:space="preserve">
@@ -550,5 +551,8 @@
   </data>
   <data name="Yes" xml:space="preserve">
     <value>نعم</value>
+  </data>
+  <data name="Interview_Question_NumberRosterRemoveConfirm" xml:space="preserve">
+    <value>هل أنت أكيد من أنك تريد حذف {{amountOfRostersToRemove}} صفاً (صفوفاً) من كل جدول ذي صلة؟</value>
   </data>
 </root>

@@ -18,6 +18,10 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 {
     public class RestService : IRestService
     {
+        private class ResponseWithErrorMessage
+        {
+            public string Message { get; set; }
+        }
         private readonly IRestServiceSettings restServiceSettings;
         private readonly INetworkService networkService;
         private readonly IJsonAllTypesSerializer synchronizationSerializer;
@@ -182,7 +186,8 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 }
                 else if (ex.Call.Response != null)
                 {
-                    throw new RestException(ex.Call.Response.ReasonPhrase, statusCode: ex.Call.Response.StatusCode, innerException: ex);
+                    var reasonPhrase = await GetReasonPhrase(ex);
+                    throw new RestException(reasonPhrase, statusCode: ex.Call.Response.StatusCode, innerException: ex);
                 }
                 else
                 {
@@ -205,6 +210,23 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
                 throw new RestException(message: "Unexpected web exception", innerException: ex);
             }
+        }
+
+        private async Task<string> GetReasonPhrase(ExtendedMessageHandlerException ex)
+        {
+            try
+            {
+                var responseMessage = ex.Call.Response;
+                var responseContent = await responseMessage.Content.ReadAsByteArrayAsync();
+                var restContentCompressionType = this.GetContentCompressionType(responseMessage.Content.Headers);
+                var decompressedContent = DecompressedContentFromHttpResponseMessage(restContentCompressionType, responseContent);
+                var jsonFromHttpResponseMessage = this.synchronizationSerializer.Deserialize<ResponseWithErrorMessage>(decompressedContent);
+                if (jsonFromHttpResponseMessage != null)
+                    return jsonFromHttpResponseMessage.Message;
+            }
+            catch { } // if cant get message from response
+
+            return ex.Call.Response.ReasonPhrase;
         }
 
         public Task GetAsync(string url, object queryString, RestCredentials credentials, bool forceNoCache,
@@ -440,8 +462,12 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
         private byte[] GetDecompressedContentFromHttpResponseMessage(RestResponse restResponse)
         {
             var responseContent = restResponse.Response;
+            return DecompressedContentFromHttpResponseMessage(restResponse.ContentCompressionType, responseContent);
+        }
 
-            switch (restResponse.ContentCompressionType)
+        private byte[] DecompressedContentFromHttpResponseMessage(RestContentCompressionType restContentCompressionType, byte[] responseContent)
+        {
+            switch (restContentCompressionType)
             {
                 case RestContentCompressionType.GZip:
                     responseContent = this.stringCompressor.DecompressGZip(responseContent);

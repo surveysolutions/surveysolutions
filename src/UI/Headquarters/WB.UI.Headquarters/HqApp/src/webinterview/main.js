@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 
 import { sync } from "vuex-router-sync";
+
 Vue.use(Vuex);
 
 import config from "~/shared/config";
@@ -9,6 +10,9 @@ Vue.use(config);
 
 import VueTextareaAutosize from "vue-textarea-autosize";
 Vue.use(VueTextareaAutosize);
+
+import { Popover } from 'uiv'
+Vue.component("popover", Popover);
 
 import Vuei18n from "~/shared/plugins/locale";
 import { browserLanguage } from "~/shared/helpers";

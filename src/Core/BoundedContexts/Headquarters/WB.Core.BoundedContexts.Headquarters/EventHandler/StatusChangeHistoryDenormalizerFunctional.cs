@@ -52,17 +52,17 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
     {
         private readonly IUserViewFactory users;
         private readonly string unknown = "Unknown";
-        private readonly InterviewExportedAction[] listOfActionsAfterWhichFirstAnswerSetAtionShouldBeRecorded = new[] { InterviewExportedAction.InterviewerAssigned, InterviewExportedAction.RejectedBySupervisor, InterviewExportedAction.Restarted };
+        private readonly InterviewExportedAction[] listOfActionsAfterWhichFirstAnswerSetActionShouldBeRecorded = new[] { InterviewExportedAction.InterviewerAssigned, InterviewExportedAction.RejectedBySupervisor, InterviewExportedAction.Restarted };
 
         private InterviewSummary RecordFirstAnswerIfNeeded(Guid eventIdentifier, InterviewSummary interviewSummary, Guid interviewId, Guid userId, DateTime answerTime)
         {
             if(!interviewSummary.InterviewCommentedStatuses.Any())
                    return interviewSummary;
 
-            if (!this.listOfActionsAfterWhichFirstAnswerSetAtionShouldBeRecorded.Contains(interviewSummary.InterviewCommentedStatuses.Last().Status))
+            if (!this.listOfActionsAfterWhichFirstAnswerSetActionShouldBeRecorded.Contains(interviewSummary.InterviewCommentedStatuses.Last().Status))
                 return interviewSummary;
 
-            var responsible = this.users.GetUser(new UserViewInputModel(userId));
+            var responsible = this.users.GetUser(userId);
 
             if (responsible == null || !responsible.Roles.Contains(UserRoles.Interviewer))
                 return interviewSummary;
@@ -271,7 +271,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         }
 
         private string GetResponsibleIdName(Guid responsibleId)
-            => this.users.GetUser(new UserViewInputModel(responsibleId))?.UserName ?? this.unknown;
+            => this.users.GetUser(responsibleId)?.UserName ?? this.unknown;
 
         private readonly List<InterviewExportedAction> actionsThatAreNotStatusChange = new List<InterviewExportedAction>
         {
@@ -300,7 +300,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             var supervisorName = supervisorId.HasValue ? this.GetResponsibleIdName(supervisorId.Value) : "";
             var interviewerName = interviewerId.HasValue ? this.GetResponsibleIdName(interviewerId.Value) : "";
 
-            var statusOriginator = this.users.GetUser(new UserViewInputModel(userId));
+            var statusOriginator = this.users.GetUser(userId);
 
             state.InterviewCommentedStatuses.Add(new InterviewCommentedStatus(
                 eventId,

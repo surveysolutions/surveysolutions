@@ -393,10 +393,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             // this verification should be skipped
             if (allRowsByAllFiles.Any(x => x.InterviewIdValue == null)) yield break;
 
-            var allInterviewIdsFromMainFile = allRowsByAllFiles
+            var enumerableRows = allRowsByAllFiles
                 .Where(x => IsQuestionnaireFile(x.QuestionnaireOrRosterName, questionnaire))
-                .Select(x => x.InterviewIdValue.Value)
-                .ToHashSet();
+                .Select(x => x.InterviewIdValue.Value);
+            var allInterviewIdsFromMainFile = Enumerable.ToHashSet(enumerableRows);
 
             var allInterviewsIdsFromFirstLevelRoster = allRowsByAllFiles
                 .Where(x => x.RosterInstanceCodes.Length == 1)
@@ -467,10 +467,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             if(numericRosterSizeQuestions.Length == 0)
                 yield break;
 
-            var rosterNamesByNumericRosters = numericRosterSizeQuestions
+            var enumerableVariables = numericRosterSizeQuestions
                 .SelectMany(questionnaire.GetRosterGroupsByRosterSizeQuestion)
-                .Select(questionnaire.GetRosterVariableName)
-                .ToHashSet();
+                .Select(questionnaire.GetRosterVariableName);
+            var rosterNamesByNumericRosters = Enumerable.ToHashSet(enumerableVariables);
 
             var rowsByNumericRosters = allRowsByAllFiles.GroupBy(z => z.QuestionnaireOrRosterName)
                 .Where(x => rosterNamesByNumericRosters.Contains(x.Key));

@@ -1,4 +1,4 @@
-param([string]$VersionName,
+param([string]$VersionName = $null,
 [INT]$VersionCode,
 [string]$BuildConfiguration='release',
 [string]$KeystorePassword = $null,
@@ -27,8 +27,16 @@ if(!$VersionCode){
 #     Exit
 # }
 
+if($versionName -eq $null) {
+    $versionName = (GetVersionString 'src')
+}
+
 function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtensions, $TargetAbi, $VersionCode, $OutFileName) {
     return Log-Block "Building Android project: $AndroidProject => $([System.IO.Path]::GetFileName($OutFileName))" {
+        $logId = ""
+        if($ExcludeExtensions -eq $False){ 
+            $logId = ".ext"
+        }
         return Execute-MSBuild $AndroidProject $BuildConfiguration @(
             "/p:VersionCode=$VersionCode"
             "/p:ApkOutputPath=$([System.IO.Path]::GetFullPath($OutFileName))"
@@ -49,6 +57,7 @@ function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtension
                 $PathToKeystore = (Join-Path (Get-Location).Path "Security/KeyStore/$KeyStoreName")
                 '/p:AndroidUseApkSigner=true'
                 '/p:AndroidKeyStore=True'
+                "/p:GIT_BRANCH=$branch"
                 "/p:AndroidSigningKeyAlias=$KeystoreAlias"
                 "/p:AndroidSigningKeyPass=$KeystorePassword"
                 "/p:AndroidSigningKeyStore=$PathToKeystore"
@@ -63,7 +72,7 @@ function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtension
             {
                 "/p:AndroidSupportedAbis=$TargetAbi"
             }
-        )
+        ) $logId
     }
 }
 

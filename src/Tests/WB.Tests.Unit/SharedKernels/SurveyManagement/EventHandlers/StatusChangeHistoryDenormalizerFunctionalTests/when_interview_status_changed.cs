@@ -43,7 +43,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
         private void BecauseOf() =>
                 denormalizer.Handle(statusEventsToPublish, interviewId);
 
-        [NUnit.Framework.Test] public void should_store_all_Status_changes_and_preserve_the_order () => history.InterviewCommentedStatuses.Select(i => i.Status).ToArray()
+        [NUnit.Framework.Test] public void should_store_all_Status_changes_and_preserve_the_order () => 
+            history.InterviewCommentedStatuses.Select(i => i.Status).ToArray()
                 .Should().BeEquivalentTo(new[]
                 {
                     InterviewExportedAction.InterviewerAssigned, 
