@@ -18,7 +18,7 @@
   <ItemGroup>
     <PackageReference Include="FFmpeg.Win64.Static" Version="4.1.1.1" />
     <PackageReference Include="FluentMigrator.Runner" Version="3.2.1" />
-    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.4" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.2.0" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.2.4" />
     <PackageReference Include="reCAPTCHA.AspNetCore" Version="2.2.3" />
