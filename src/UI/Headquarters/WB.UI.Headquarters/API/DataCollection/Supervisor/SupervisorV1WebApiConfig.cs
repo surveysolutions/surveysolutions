@@ -23,8 +23,6 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor
             config.TypedRoute(@"api/supervisor/v1/devices/info", c => c.Action<DevicesApiV1Controller>(x => x.Info(Param.Any<DeviceInfoApiView>())));
             config.TypedRoute(@"api/supervisor/v1/devices/statistics", c => c.Action<DevicesApiV1Controller>(x => x.Statistics(Param.Any<SyncStatisticsApiView>())));
             config.TypedRoute(@"api/supervisor/v1/devices/exception", c => c.Action<DevicesApiV1Controller>(x => x.UnexpectedException(Param.Any<UnexpectedExceptionApiView>())));
-            //
-            //            config.TypedRoute("api/supervisor/v1", c => c.Action<InterviewerApiV2Controller>(x => x.Get()));
 
             config.TypedRoute(@"api/supervisor/v1/extended", c => c.Action<SupervisorApiController>(x => x.GetSupervisor()));
             config.TypedRoute(@"api/supervisor/v1/apk/interviewer", c => c.Action<SupervisorApiController>(x => x.GetInterviewer()));
@@ -33,12 +31,6 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor
             config.TypedRoute("api/supervisor/v1/extended/latestversion", c => c.Action<SupervisorApiController>(x => x.GetLatestVersion()));
 
             config.TypedRoute("api/supervisor/v1/tabletInfo", c => c.Action<SupervisorApiController>(x => x.PostTabletInformation()));
-            //
-            //
-            //            config.TypedRoute("api/supervisor/v1/tabletInfo",
-            //                c => c.Action<InterviewerApiV2Controller>(x => x.PostTabletInformation(Param.Any<TabletInformationPackage>())));
-            //            config.TypedRoute("api/supervisor/v1/tabletInfoAsFile",
-            //                c => c.Action<InterviewerApiV2Controller>(x => x.PostTabletInformationAsFile()));
             config.TypedRoute("api/supervisor/v1/devices/current/{id}/{version}",
                 c => c.Action<DevicesApiV1Controller>(x => x.CanSynchronize(Param.Any<string>(), Param.Any<int>())));
             config.TypedRoute("api/supervisor/v1/devices/link/{id}/{version:int}",
@@ -52,6 +44,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor
             config.TypedRoute("api/supervisor/v1/translations/{id}",
                 c => c.Action<TranslationsApiV1Controller>(x => x.Get(Param.Any<string>())));
             config.TypedRoute("api/supervisor/v1/companyLogo", c => c.Action<SettingsV1Controller>(x => x.CompanyLogo()));
+            config.TypedRoute("api/supervisor/v1/tenantId", c => c.Action<SettingsV1Controller>(x => x.TenantId()));
             config.TypedRoute("api/supervisor/v1/autoupdate", c => c.Action<SettingsV1Controller>(x => x.AutoUpdateEnabled()));
             config.TypedRoute("api/supervisor/v1/notifications", c => c.Action<SettingsV1Controller>(x => x.NotificationsEnabled()));
             config.TypedRoute("api/supervisor/v1/encryption-key", c => c.Action<SettingsV1Controller>(x => x.PublicKeyForEncryption()));

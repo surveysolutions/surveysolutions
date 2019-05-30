@@ -14,5 +14,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Views
         public string Name { get; set; }
         public Guid UserId { get; set; }
         public string Email { get; set; }
+        public string TenantId { get; set; }
     }
 }
