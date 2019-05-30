@@ -582,8 +582,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public bool IsRosterTitleQuestion(Guid questionId)
         {
-            return this.DoesQuestionSupportRoster(questionId)
-                && this.AllGroups.Any(x => x.IsRoster && x.RosterTitleQuestionId == questionId);
+            return this.AllGroups.Any(x => x.IsRoster && x.RosterTitleQuestionId == questionId);
         }
 
         public IEnumerable<Guid> GetRosterGroupsByRosterSizeQuestion(Guid questionId)
