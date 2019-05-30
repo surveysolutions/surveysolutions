@@ -186,12 +186,8 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 }
                 else if (ex.Call.Response != null)
                 {
-                    var responseMessage = ex.Call.Response;
-                    var responseContent = await responseMessage.Content.ReadAsByteArrayAsync();
-                    var restContentCompressionType = this.GetContentCompressionType(responseMessage.Content.Headers);
-                    var decompressedContent = DecompressedContentFromHttpResponseMessage(restContentCompressionType, responseContent);
-                    var jsonFromHttpResponseMessage = this.synchronizationSerializer.Deserialize<ResponseWithErrorMessage>(decompressedContent);
-                    throw new RestException(jsonFromHttpResponseMessage.Message, statusCode: ex.Call.Response.StatusCode, innerException: ex);
+                    var reasonPhrase = await GetReasonPhrase(ex);
+                    throw new RestException(reasonPhrase, statusCode: ex.Call.Response.StatusCode, innerException: ex);
                 }
                 else
                 {
@@ -214,6 +210,19 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
                 throw new RestException(message: "Unexpected web exception", innerException: ex);
             }
+        }
+
+        private async Task<string> GetReasonPhrase(ExtendedMessageHandlerException ex)
+        {
+            var responseMessage = ex.Call.Response;
+            var responseContent = await responseMessage.Content.ReadAsByteArrayAsync();
+            var restContentCompressionType = this.GetContentCompressionType(responseMessage.Content.Headers);
+            var decompressedContent = DecompressedContentFromHttpResponseMessage(restContentCompressionType, responseContent);
+            var jsonFromHttpResponseMessage = this.synchronizationSerializer.Deserialize<ResponseWithErrorMessage>(decompressedContent);
+            if (jsonFromHttpResponseMessage != null)
+                return jsonFromHttpResponseMessage.Message;
+
+            return ex.Call.Response.ReasonPhrase;
         }
 
         public Task GetAsync(string url, object queryString, RestCredentials credentials, bool forceNoCache,

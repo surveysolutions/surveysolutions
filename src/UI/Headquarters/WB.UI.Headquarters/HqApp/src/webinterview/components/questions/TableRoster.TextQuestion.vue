@@ -1,31 +1,24 @@
 <template>
-    <input v-if="hasMask"
-        ref="inputWithMask"
+    <input 
+        ref="input"
         autocomplete="off"
         type="text"
         class="ag-cell-edit-input"
+        :maxlength="$me.maxLength"
         :placeholder="noAnswerWatermark"
         :value="$me.answer"
         :disabled="!$me.acceptAnswer"
         v-maskedText="$me.mask"
         :data-mask-completed="$me.isAnswered" />
-    <input v-else ref="inputWithoutMask"
-        autocomplete="off"
-        type="text"
-        :maxlength="$me.maxLength"
-        class="ag-cell-edit-input"
-        :placeholder="noAnswerWatermark"
-        :value="$me.answer"
-        :disabled="!$me.acceptAnswer" />
 </template>
 
 <script lang="js">
     import Vue from 'vue'
-    import { entityDetails } from "../mixins"
+    import { entityDetails, tableCellEditor } from "../mixins"
 
     export default {
         name: 'TableRoster_TextQuestion',
-        mixins: [entityDetails],
+        mixins: [entityDetails, tableCellEditor],
         
         data() {
             return {
@@ -55,26 +48,30 @@
             },
             answerTextQuestion() {
                 this.sendAnswer(() => {
-                    const target = $(this.$refs.inputWithMask || this.$refs.inputWithoutMask)
+                    const target = $(this.$refs.input)
                     const answer = target.val()
 
                     if(this.handleEmptyAnswer(answer)) {
                         return
                     }
 
+                    this.$me.answer = answer
+
                     if (this.$me.mask && !target.data("maskCompleted")) {
                         this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.TextRequired"))
                     }
                     else {
-                        this.$me.answer = answer
                         this.$store.dispatch('answerTextQuestion', { identity: this.id, text: answer })
                     }
                 })
             }
         },
+        created() {
+
+        },
         mounted() {
             Vue.nextTick(() => {
-                const input = $(this.$refs.inputWithMask || this.$refs.inputWithoutMask)
+                const input = $(this.$refs.input)
                 if (input) {
                     input.focus();
                     input.select();
