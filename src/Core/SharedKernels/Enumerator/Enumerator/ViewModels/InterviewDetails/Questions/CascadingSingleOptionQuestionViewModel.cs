@@ -48,9 +48,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                                            throw new ArgumentNullException(nameof(questionnaireRepository));
 
             this.Options = new CovariantObservableCollection<SingleOptionQuestionOptionViewModel>();
-            
-            this.mvxMainThreadDispatcher = mvxMainThreadDispatcher;
-            
             this.throttlingModel = throttlingModel;
             this.throttlingModel.Init(SaveAnswer);
         }
@@ -219,7 +216,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private int? previousOptionToReset = null;
         private int? selectedOptionToSave = null;
-        private readonly IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher;
 
         private async Task SaveAnswer()
         {
