@@ -14,11 +14,11 @@
         var $changeStateUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "ExportSettingsApi", action = "ChangeState" })';
         var $regenPasswordUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "ExportSettingsApi", action = "RegeneratePassword" })';
         var $globalNoticeSettingsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "AdminSettings", action = "GlobalNoticeSettings" })';
-        var $autoUpdateSettingsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "AdminSettings", action = "AutoUpdateSettings" })';
-
+        var $interviewerSettingsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "AdminSettings", action = "InterviewerSettings" })';
+        
         $(function () {
             var notifier = new Notifier();
-            var model = new Supervisor.VM.SiteSettings(new Ajax(notifier), notifier, $dataUrl, $changeStateUrl, $regenPasswordUrl, $globalNoticeSettingsUrl, $autoUpdateSettingsUrl);
+            var model = new Supervisor.VM.SiteSettings(new Ajax(notifier), notifier, $dataUrl, $changeStateUrl, $regenPasswordUrl, $globalNoticeSettingsUrl, $interviewerSettingsUrl);
             ko.applyBindings(model);
             model.load();
         });
@@ -110,10 +110,25 @@
             <div class="col-sm-7">
                 <div class="block-filter">
                     <div class="form-group">
-                        <input class="checkbox-filter single-checkbox" data-bind="checked: isInterviewerAutomaticUpdatesEnabled, click: updateIsInterviewerAutomaticUpdatesEnabled" id="interviewerAutomaticUpdatesEnabled" type="checkbox">
+                        <input class="checkbox-filter single-checkbox" 
+                               data-bind="checked: isInterviewerAutomaticUpdatesEnabled, click: updateDeviceSettings" 
+                               id="interviewerAutomaticUpdatesEnabled" type="checkbox">
                         <label for="interviewerAutomaticUpdatesEnabled" style="font-weight: bold">
                             <span class="tick"></span>@Settings.InterviewerAutoUpdate
                             <p style="font-weight: normal">@Settings.AutoUpdateDescription</p>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-7">
+                <div class="block-filter">
+                    <div class="form-group">
+                        <input class="checkbox-filter single-checkbox" 
+                               data-bind="checked: isDeviceNotificationsEnabled, click: updateDeviceSettings" 
+                               id="deviceNotificationsEnabled" type="checkbox">
+                        <label for="deviceNotificationsEnabled" style="font-weight: bold">
+                            <span class="tick"></span>@Settings.DeviceNotifications
+                            <p style="font-weight: normal">@Settings.DeviceNotificationsDescription</p>
                         </label>
                     </div>
                 </div>
@@ -151,6 +166,7 @@
                 </div>
             </div>
         </div>
+
         <script type="text/html" id="confirm-regenerate-password">
             <h3>
                 @Settings.RegeneratePasswordConfirm

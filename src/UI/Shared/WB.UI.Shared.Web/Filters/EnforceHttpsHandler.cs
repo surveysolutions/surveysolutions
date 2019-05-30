@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
@@ -11,7 +12,9 @@ namespace WB.UI.Shared.Web.Filters
     {
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            if (request.RequestUri.Scheme != Uri.UriSchemeHttps && CoreSettings.IsHttpsRequired)
+            var isHttpRequest = request.RequestUri.Scheme != Uri.UriSchemeHttps;
+
+            if (isHttpRequest && CoreSettings.IsHttpsRequired)
             {
                 var response = new HttpResponseMessage(HttpStatusCode.Forbidden)
                 {

@@ -26,8 +26,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         public override async Task ExecuteAsync()
         {
-             if (!await this.synchronizationService.IsAutoUpdateEnabledAsync(Context.CancellationToken))
-                return;
+            if (!await this.synchronizationService.IsAutoUpdateEnabledAsync(Context.CancellationToken))
+               return;
 
             Context.Progress.Report(new SyncProgressInfo
             {

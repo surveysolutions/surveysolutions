@@ -16,6 +16,9 @@ import "~/webinterview/componentsRegistry";
 import VueTextareaAutosize from "vue-textarea-autosize";
 Vue.use(VueTextareaAutosize);
 
+import { Popover } from 'uiv'
+Vue.component("popover", Popover);
+
 import box from "~/webinterview/components/modal";
 import "flatpickr/dist/flatpickr.css";
 import "toastr/build/toastr.css";

@@ -173,7 +173,7 @@ To complete the registration process click on this link:</value>
   <data name="SystemMailer_ResetPasswordEmail_Complete_Password_Reset" xml:space="preserve">
     <value>Complete Password Reset</value>
   </data>
-  <data name="PassOwnershipNotification" xml:space="preserve">
+  <data name="TranfserOwnershipNotification" xml:space="preserve">
     <value>Hello {0}, &lt;br&gt; {1} has transferred ownership of the questionnaire {2} to You</value>
   </data>
 </root>

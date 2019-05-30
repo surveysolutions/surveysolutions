@@ -95,7 +95,7 @@
             <table class="table table-bordered table-hover table-condensed">
                 <thead>
                     <tr class="active">
-                        <td>@QuestionnaireEditor.OptionsUploadValue</td>
+                        <td nowrap>@QuestionnaireEditor.OptionsUploadValue</td>
                         <td>@QuestionnaireEditor.OptionsUploadTitle</td>
                     </tr>
                 </thead>
@@ -103,7 +103,7 @@
                     @foreach (var option in Model)
                     {
                         <tr>
-                            <td>@option.Value</td>
+                            <td nowrap>@option.Value</td>
                             <td>@option.Title</td>
                         </tr>
                     }

@@ -22,9 +22,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             };
 
             var usersMock = new Mock<IUserViewFactory>();
-
-            usersMock.Setup(_ => _.GetUser(Moq.It.Is<UserViewInputModel>(x=>x.PublicKey == responsibleId)))
-                .Returns(new UserView() {Supervisor = new UserLight() {Id = supervisorId, Name = supervisorName}});
+            
+            usersMock.Setup(_ => _.GetUser(responsibleId))
+                .Returns(new UserViewLite() {Supervisor = new UserLight() {Id = supervisorId, Name = supervisorName}});
 
             var denormalizer = CreateDenormalizer(users: usersMock.Object);
 

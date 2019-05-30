@@ -74,6 +74,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public virtual bool WasCompleted { get; set; }
 
+        public virtual DateTime CreatedDate { get; set; }
+        public virtual DateTime? FirstAnswerDate { get; set; }
+        public virtual Guid? FirstInterviewerId { get; set; }
+        public virtual string FirstInterviewerName { get; set; }
+        public virtual Guid? FirstSupervisorId { get; set; }
+        public virtual string FirstSupervisorName { get; set; }
+
         public virtual TimeSpan? InterviewDuration
         {
             get => InterviewDurationLong != null ? new TimeSpan(this.InterviewDurationLong.Value) : (TimeSpan?)null;

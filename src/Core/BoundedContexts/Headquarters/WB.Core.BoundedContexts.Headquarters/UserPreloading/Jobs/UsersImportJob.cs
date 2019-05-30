@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
             this.userImportService = userImportService;
         }
 
-        public void Execute(IJobExecutionContext context)
+        public Task Execute(IJobExecutionContext context)
         {
             logger.Info("User import job: Started");
 
@@ -54,6 +54,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
 
             sw.Stop();
             logger.Info($"User import job: Finished. Elapsed time: {sw.Elapsed}");
+            return Task.CompletedTask;
         }
 
         private async Task CreateUserOrUnarchiveAndUpdateAsync(UserToImport userToCreate)

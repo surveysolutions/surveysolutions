@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Security.Claims;
-using System.Web.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;

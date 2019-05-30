@@ -7,6 +7,7 @@ namespace WB.Enumerator.Native.WebInterview
     {
         void RefreshEntities(string interviewId, string[] identities);
         void RefreshSection(Guid interviewId);
+        void RefreshSectionState(Guid interviewId);
         void ReloadInterview(Guid interviewId);
         void FinishInterview(Guid interviewId);
         void MarkAnswerAsNotSaved(string section, string questionId, string errorMessage);

@@ -72,13 +72,13 @@
                                     <a ng-click="revokeAccess(s)" href="javascript:void(0)" ng-i18next="SettingsRevokeAccess"></a>
                                 </li>
                                 <li ng-if="isQuestionnaireOwner()">
-                                    <a ng-click="passOwnership(s)" href="javascript:void(0)" ng-i18next="SettingsPassOwnership"></a>
+                                    <a ng-click="passOwnership(s)" href="javascript:void(0)" ng-i18next="SettingsMakeOwner"></a>
                                 </li>
                             </ul>
                         </div>
                         <div ng-if="passConfirmationOpen === s.email" class="well">
                             <h2 ng-i18next="AreYouSure"></h2>
-                            <p ng-i18next="PassOwnershipConfirmationMessage"></p>
+                            <p ng-i18next="MakeOwnerConfirmationMessage"></p>
                             <div class="btn-group">
                                 <button type="button" class="btn btn-default" ng-click='passOwnershipConfirmation(s)' ng-i18next="Yes"></button>
                                 <button type="button" class="btn btn-default" ng-click='passOwnershipCancel()' ng-i18next="Cancel"></button>

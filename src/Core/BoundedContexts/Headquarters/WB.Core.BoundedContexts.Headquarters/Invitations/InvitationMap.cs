@@ -1,5 +1,6 @@
 ﻿using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Headquarters.Invitations
@@ -32,6 +33,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             ManyToOne(x => x.Interview, mto =>
             {
                 mto.Column("InterviewId");
+                mto.PropertyRef(nameof(InterviewSummary.SummaryId));
                 mto.Cascade(Cascade.None);
                 mto.Update(false);
                 mto.Insert(false);

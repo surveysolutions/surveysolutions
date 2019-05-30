@@ -1,4 +1,5 @@
 using System;
+using Microsoft.Extensions.Caching.Memory;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
@@ -22,23 +23,19 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
             var interviewId = Guid.NewGuid();
 
             var interviewSummary = Create.Entity.InterviewSummary(interviewId);
-            var speedReportInterviewItem = Create.Entity.SpeedReportInterviewItem(interviewSummary);
-            UseTransactionToSaveSummaryAndSpeedReport(interviewSummary, speedReportInterviewItem);
+            UseTransactionToSaveSummaryAndSpeedReport(interviewSummary);
 
             var interviewSummaryStorage = SetupAndCreateInterviewSummaryRepository();
-            var speedReportItemsStorage = CreateSpeedReportInterviewItemsRepository();
 
-            var denormalizer = CreateDenormalizer(interviewSummaryStorage, speedReportItemsStorage);
+            var denormalizer = CreateDenormalizer(interviewSummaryStorage);
 
             denormalizer.Handle(new[] { Create.PublishedEvent.InterviewDeleted(interviewId: interviewId) }, interviewId);
 
             Assert.That(interviewSummaryStorage.GetById(interviewId.FormatGuid()), Is.Null);
-            Assert.That(speedReportItemsStorage.GetById(interviewId.FormatGuid()), Is.Null);
         }
 
         protected static InterviewSummaryCompositeDenormalizer CreateDenormalizer(
-            IReadSideRepositoryWriter<InterviewSummary> interviewStatuses,
-            IReadSideRepositoryWriter<SpeedReportInterviewItem> speedReportItems)
+            IReadSideRepositoryWriter<InterviewSummary> interviewStatuses)
         {
             var defaultUserView = Create.Entity.UserView(supervisorId: Guid.NewGuid());
             var userViewFactory = Mock.Of<IUserViewFactory>(_ => _.GetUser(Moq.It.IsAny<UserViewInputModel>()) == defaultUserView);
@@ -46,22 +43,21 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
             var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), It.IsAny<long>()) == questionnaireDocument);
             return new InterviewSummaryCompositeDenormalizer(
                 interviewStatuses,
+                new TestInMemoryWriter<InterviewSummary, int>(), 
                 new InterviewSummaryDenormalizer(userViewFactory, questionnaireStorage),
                 new StatusChangeHistoryDenormalizerFunctional(userViewFactory),
                 new InterviewStatusTimeSpanDenormalizer(),
-                new SpeedReportDenormalizerFunctional(speedReportItems),
                 Mock.Of<IInterviewStatisticsReportDenormalizer>(), 
-                new InterviewGeoLocationAnswersDenormalizer(null, questionnaireStorage));
+                new InterviewGeoLocationAnswersDenormalizer(null, questionnaireStorage),
+                Mock.Of<IMemoryCache>());
         }
 
-        protected void UseTransactionToSaveSummaryAndSpeedReport(InterviewSummary interviewSummary, 
-            SpeedReportInterviewItem speedReportInterviewItem)
+        protected void UseTransactionToSaveSummaryAndSpeedReport(InterviewSummary interviewSummary)
         {
             SetupSessionFactory();
 
             var interviewSummaryStorage = CreateInterviewSummaryRepository();
-            var speedReportItemsStorage = CreateSpeedReportInterviewItemsRepository();
-            speedReportItemsStorage.Store(Create.Entity.SpeedReportInterviewItem(interviewSummary), interviewSummary.InterviewId.FormatGuid());
+            interviewSummary = AppendSpeedReportInfo(interviewSummary);
             interviewSummaryStorage.Store(interviewSummary, interviewSummary.InterviewId.FormatGuid());
 
             UnitOfWork.Session.Flush();

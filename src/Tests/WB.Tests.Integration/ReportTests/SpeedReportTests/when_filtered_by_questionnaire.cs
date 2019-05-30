@@ -29,16 +29,16 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
             var interview1 = CreateCompletedInterviewWithDuration(TimeSpan.FromMinutes(8), supervisorId, interviewerId, reportEndDate, questionnaireId: Id.g2, questionnaireVersion: 2);
             var interview2 = CreateCompletedInterviewWithDuration(TimeSpan.FromMinutes(10), supervisorId, interviewerId, reportEndDate, questionnaireId: Id.g3);
             var interviewSummaries =  CreateInterviewSummaryRepository();
-            var speedReportRepository = CreateSpeedReportInterviewItemsRepository();
+
+            interview = AppendSpeedReportInfo(interview);
+            interview1 = AppendSpeedReportInfo(interview1);
+            interview2 = AppendSpeedReportInfo(interview2);
 
             interviewSummaries.Store(interview, interview.SummaryId);
             interviewSummaries.Store(interview1, interview1.SummaryId);
             interviewSummaries.Store(interview2, interview2.SummaryId);
-            speedReportRepository.Store(CreateSpeedReportItemForInterview(interview), interview.SummaryId);
-            speedReportRepository.Store(CreateSpeedReportItemForInterview(interview1), interview1.SummaryId);
-            speedReportRepository.Store(CreateSpeedReportItemForInterview(interview2), interview2.SummaryId);
 
-            var report = CreateSpeedReport(interviewSummaries, speedReportRepository);
+            var report = CreateSpeedReport(interviewSummaries);
 
             // Act
             var speedBySupervisorsReportInputModel = new SpeedBySupervisorsReportInputModel
@@ -66,14 +66,14 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
             var interview = CreateCompletedInterviewWithDuration(TimeSpan.FromMinutes(10), supervisorId, interviewerId, reportEndDate, questionnaireId: Id.g2, questionnaireVersion: 1);
             var interview1 = CreateCompletedInterviewWithDuration(TimeSpan.FromMinutes(8), supervisorId, interviewerId, reportEndDate, questionnaireId: Id.g2, questionnaireVersion: 2);
             var interviewSummaries =  CreateInterviewSummaryRepository();
-            var speedReportRepository = CreateSpeedReportInterviewItemsRepository();
+
+            interview = AppendSpeedReportInfo(interview);
+            interview1 = AppendSpeedReportInfo(interview1);
 
             interviewSummaries.Store(interview, interview.SummaryId);
             interviewSummaries.Store(interview1, interview1.SummaryId);
-            speedReportRepository.Store(CreateSpeedReportItemForInterview(interview), interview.SummaryId);
-            speedReportRepository.Store(CreateSpeedReportItemForInterview(interview1), interview1.SummaryId);
 
-            var report = CreateSpeedReport(interviewSummaries, speedReportRepository);
+            var report = CreateSpeedReport(interviewSummaries);
 
             // Act
             var speedBySupervisorsReportInputModel = new SpeedBySupervisorsReportInputModel

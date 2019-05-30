@@ -115,18 +115,31 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public IReadOnlyCollection<InterviewTreeNodeDiff> Compare(InterviewTree that)
         {
-            var existingIdentities = this.nodesCache.Keys.Where(thisIdentity => that.nodesCache.ContainsKey(thisIdentity));
-            var removedIdentities = this.nodesCache.Keys.Where(thisIdentity => !that.nodesCache.ContainsKey(thisIdentity));
-            var addedIdentities = that.nodesCache.Keys.Where(thatIdentity => !this.nodesCache.ContainsKey(thatIdentity));
+            IEnumerable<InterviewTreeNodeDiff> GetDiffs()
+            {                
+                foreach (var identity in this.nodesCache.Keys)
+                {
+                    if (that.nodesCache.ContainsKey(identity))
+                    {
+                        yield return InterviewTreeNodeDiff.Create(this.nodesCache[identity], that.nodesCache[identity]);
+                    }
 
-            var diffs =
-                existingIdentities.Select(identity => InterviewTreeNodeDiff.Create(this.nodesCache[identity], that.nodesCache[identity]))
-                    .Concat(
-                removedIdentities.Select(identity => InterviewTreeNodeDiff.Create(this.nodesCache[identity], null)))
-                    .Concat(
-                addedIdentities.Select(identity => InterviewTreeNodeDiff.Create(null, that.nodesCache[identity])));
+                    if (!that.nodesCache.ContainsKey(identity))
+                    {
+                        yield return InterviewTreeNodeDiff.Create(this.nodesCache[identity], null);
+                    }
+                }
 
-            return diffs
+                foreach (var identity in that.nodesCache.Keys)
+                {
+                    if (!this.nodesCache.ContainsKey(identity))
+                    {
+                        yield return InterviewTreeNodeDiff.Create(null, that.nodesCache[identity]);
+                    }
+                }
+            }
+
+            return GetDiffs()
                 .Where(diff =>
                     diff.IsNodeAdded ||
                     diff.IsNodeRemoved ||
@@ -144,7 +157,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     IsLinkedToListOptionsSetChanged(diff as InterviewTreeQuestionDiff) ||
                     IsFailedErrorValidationIndexChanged(diff as InterviewTreeValidateableDiff) ||
                     IsFailedWarningValidationIndexChanged(diff as InterviewTreeValidateableDiff))
-                .ToReadOnlyCollection();
+                .ToList();
         }
 
         private bool IsFailedErrorValidationIndexChanged(InterviewTreeValidateableDiff diff) 
@@ -268,10 +281,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeQuestion CreateQuestion(Identity questionIdentity)
         {
-            return CreateQuestion(this, this.Questionnaire, this.textFactory, questionIdentity);
+            return CreateQuestion(this.Questionnaire, this.textFactory, questionIdentity);
         }
 
-        public static InterviewTreeQuestion CreateQuestion(InterviewTree tree, IQuestionnaire questionnaire, ISubstitutionTextFactory textFactory, Identity questionIdentity)
+        public static InterviewTreeQuestion CreateQuestion(IQuestionnaire questionnaire, ISubstitutionTextFactory textFactory, Identity questionIdentity)
         {
             QuestionType questionType = questionnaire.GetQuestionType(questionIdentity.Id);
 
@@ -355,17 +368,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeSubSection CreateSubSection(Identity subSectionIdentity)
         {
-            return CreateSubSection(this, this.Questionnaire, textFactory, subSectionIdentity);
+            return CreateSubSection(this.Questionnaire, textFactory, subSectionIdentity);
         }
 
-        public static InterviewTreeSubSection CreateSubSection(InterviewTree tree, IQuestionnaire questionnaire, ISubstitutionTextFactory textFactory, Identity subSectionIdentity)
+        public static InterviewTreeSubSection CreateSubSection(IQuestionnaire questionnaire, ISubstitutionTextFactory textFactory, Identity subSectionIdentity)
         {
             var childrenReferences = questionnaire.GetChidrenReferences(subSectionIdentity.Id);
             SubstitutionText title = textFactory.CreateText(subSectionIdentity, questionnaire.GetGroupTitle(subSectionIdentity.Id), questionnaire);
             return new InterviewTreeSubSection(subSectionIdentity, title, childrenReferences);
         }
 
-        public static InterviewTreeSection CreateSection(InterviewTree tree, IQuestionnaire questionnaire, ISubstitutionTextFactory textFactory, Identity sectionIdentity)
+        public static InterviewTreeSection CreateSection(IQuestionnaire questionnaire, ISubstitutionTextFactory textFactory, Identity sectionIdentity)
         {
             var childrenReferences = questionnaire.GetChidrenReferences(sectionIdentity.Id);
             SubstitutionText title = textFactory.CreateText(sectionIdentity, questionnaire.GetGroupTitle(sectionIdentity.Id), questionnaire);
@@ -374,10 +387,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeStaticText CreateStaticText(Identity staticTextIdentity)
         {
-            return CreateStaticText(this, this.Questionnaire, textFactory, staticTextIdentity);
+            return CreateStaticText(this.Questionnaire, textFactory, staticTextIdentity);
         }
 
-        public static InterviewTreeStaticText CreateStaticText(InterviewTree tree, IQuestionnaire questionnaire, ISubstitutionTextFactory textFactory, Identity staticTextIdentity)
+        public static InterviewTreeStaticText CreateStaticText(IQuestionnaire questionnaire, ISubstitutionTextFactory textFactory, Identity staticTextIdentity)
         {
             SubstitutionText title = textFactory.CreateText(staticTextIdentity, questionnaire.GetStaticText(staticTextIdentity.Id), questionnaire);
             SubstitutionText[] validationMessages = questionnaire.GetValidationMessages(staticTextIdentity.Id)
