@@ -15,6 +15,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
     {
         Task<string> LoginAsync(LogonInfo logonInfo, RestCredentials credentials, CancellationToken token = default);
         Task<bool> HasCurrentUserDeviceAsync(RestCredentials credentials = null, CancellationToken token = default);
+        Task<string> GetTenantId(RestCredentials credentials = null, CancellationToken token = default);
 
         Task CanSynchronizeAsync(RestCredentials credentials = null, CancellationToken token = default);
         Task SendDeviceInfoAsync(DeviceInfoApiView info, CancellationToken token = default);

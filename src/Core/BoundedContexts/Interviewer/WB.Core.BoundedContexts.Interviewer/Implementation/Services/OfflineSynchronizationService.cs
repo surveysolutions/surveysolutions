@@ -269,6 +269,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return Task.FromResult(true);
         }
 
+        public async Task<string> GetTenantId(RestCredentials credentials = null, CancellationToken token = default)
+        {
+            var response = await syncClient.SendAsync<GetTenantIdRequest, GetTenantIdResponse>(
+                new GetTenantIdRequest(), token);
+            return response.TenantId;
+        }
+
         public async Task CanSynchronizeAsync(RestCredentials credentials = null, CancellationToken token = default)
         {
             var request = new CanSynchronizeRequest(this.deviceSettings.GetApplicationVersionCode(), 

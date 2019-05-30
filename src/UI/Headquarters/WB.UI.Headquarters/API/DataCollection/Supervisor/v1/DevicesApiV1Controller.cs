@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -21,7 +22,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
             IAuthorizedUser authorizedUser,
             IDeviceSyncInfoRepository deviceSyncInfoRepository,
             IPlainStorageAccessor<SynchronizationLogItem> syncLogRepository,
-            HqUserManager userManager) : base(
+            HqUserManager userManager,
+            IPlainKeyValueStorage<TenantSettings> tenantSettings) : base(
                 authorizedUser: authorizedUser,
                 syncVersionProvider: syncVersionProvider,
                 userManager: userManager,
