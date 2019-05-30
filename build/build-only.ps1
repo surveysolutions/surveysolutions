@@ -59,13 +59,13 @@ try {
                 New-Item "$artifactsFolder\coverage" -Type Directory -Force
                 Move-Item ".\.coverage" "$artifactsFolder\coverage\hqapp" -ErrorAction SilentlyContinue
             }}
+            
+            CreateZip "$artifactsFolder\stats" "$artifactsFolder\stats.zip"
+            CreateZip "$artifactsFolder\coverage" "$artifactsFolder\coverage.zip"
+
+            Remove-Item -Path "$artifactsFolder\stats" -Recurse -Force -ErrorAction SilentlyContinue
+            Remove-Item -Path "$artifactsFolder\coverage" -Recurse -Force -ErrorAction SilentlyContinue
         }
-
-        CreateZip "$artifactsFolder\stats" "$artifactsFolder\stats.zip"
-        CreateZip "$artifactsFolder\coverage" "$artifactsFolder\coverage.zip"
-
-        Remove-Item -Path "$artifactsFolder\stats" -Recurse -Force -ErrorAction SilentlyContinue
-        Remove-Item -Path "$artifactsFolder\coverage" -Recurse -Force -ErrorAction SilentlyContinue
 
         Log-Block "Run configuration transformations" {
             RunConfigTransform $ProjectHeadquarters $BuildConfiguration
