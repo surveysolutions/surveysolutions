@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
                 answering ?? Mock.Of<AnsweringViewModel>(),
                 Mock.Of<QuestionInstructionViewModel>(),
                 Create.ViewModel.ThrottlingViewModel(),
-                mainThreadDispatcher);
+                Stub.MvxMainThreadAsyncDispatcher());
         }
 
         protected static CategoricalMultiLinkedToRosterTitleViewModel CreateMultiOptionRosterLinkedQuestionViewModel(
@@ -72,7 +72,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
                     answering ?? Mock.Of<AnsweringViewModel>(),
                     Mock.Of<QuestionInstructionViewModel>(),
                     Create.ViewModel.ThrottlingViewModel(),
-                    mainThreadDispatcher ?? Mock.Of<IMvxMainThreadAsyncDispatcher>());
+                    Stub.MvxMainThreadAsyncDispatcher());
         }
     }
 }

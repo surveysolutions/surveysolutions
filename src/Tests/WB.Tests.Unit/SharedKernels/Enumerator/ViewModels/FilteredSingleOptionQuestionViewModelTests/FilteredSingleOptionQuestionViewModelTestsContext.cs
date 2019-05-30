@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
                 questionStateViewModel ?? Mock.Of<QuestionStateViewModel<SingleOptionQuestionAnswered>>(),
                 answering ?? Mock.Of<AnsweringViewModel>(),
                 Mock.Of<QuestionInstructionViewModel>(),
-                Mock.Of<IMvxMainThreadAsyncDispatcher>());
+                Stub.MvxMainThreadAsyncDispatcher());
         }
         
         protected static ReadOnlyCollection<CategoricalOption> Options = new List<CategoricalOption>
