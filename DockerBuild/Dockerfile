@@ -25,7 +25,6 @@ FROM base as sdk
 RUN curl -L https://dl.google.com/android/repository/sdk-tools-windows-4333796.zip -o c:\temp\sdk.zip && `
   7z x c:\temp\sdk.zip -oc:\AndroidSDK -y && del c:\temp\sdk.zip
 
-
 FROM base
 
 # Download the Build Tools bootstrapper.
@@ -60,8 +59,10 @@ RUN curl -L https://nodejs.org/dist/v10.15.3/node-v10.15.3-x64.msi -o c:\temp\no
 RUN curl -L https://yarnpkg.com/latest.msi -o c:\temp\yarn.msi `
   && c:\temp\yarn.msi /quiet /norestart && del c:\temp\yarn.msi
 
-RUN npm config set cache g:\.cache\npm
+RUN curl.exe https://download.visualstudio.microsoft.com/download/pr/0d4f13a2-dd2f-4259-852e-58763d9ef303/cacb9821c492242072b0927dcb5808f5/dotnet-sdk-2.2.300-win-x64.exe  -o c:\temp\netcore2.2.exe`
+&& c:\temp\netcore2.2.exe /install /quiet /norestart && del c:\temp\netcore2.2.exe
 
+RUN npm config set cache g:\.cache\npm
 # Start developer command prompt with any other commands specified.
 ENTRYPOINT C:\BuildTools\Common7\Tools\VsDevCmd.bat &&
 
