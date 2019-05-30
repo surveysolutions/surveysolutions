@@ -28,6 +28,8 @@ try {
 
     $buildArgs = @("/p:BuildNumber=$BuildNumber", "/p:VersionSuffix=$branch")
 
+    nuget restore $MainSolution
+
     $buildSuccessful = BuildSolution -Solution $MainSolution -BuildConfiguration $BuildConfiguration -BuildArgs $buildArgs
     if ($buildSuccessful) { 
 
