@@ -30,7 +30,7 @@ if(!$VersionCode){
 function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtensions, $TargetAbi, $VersionCode, $OutFileName) {
     return Log-Block "Building Android project: $AndroidProject => $([System.IO.Path]::GetFileName($OutFileName))" {
         $logId = ""
-        if($ExcludeExtensions -eq $True){ 
+        if($ExcludeExtensions -eq $False){ 
             $logId = ".ext"
         }
         return Execute-MSBuild $AndroidProject $BuildConfiguration @(
@@ -53,6 +53,7 @@ function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtension
                 $PathToKeystore = (Join-Path (Get-Location).Path "Security/KeyStore/$KeyStoreName")
                 '/p:AndroidUseApkSigner=true'
                 '/p:AndroidKeyStore=True'
+                "/p:GIT_BRANCH=$branch"
                 "/p:AndroidSigningKeyAlias=$KeystoreAlias"
                 "/p:AndroidSigningKeyPass=$KeystorePassword"
                 "/p:AndroidSigningKeyStore=$PathToKeystore"

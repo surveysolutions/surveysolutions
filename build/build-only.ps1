@@ -16,6 +16,7 @@ $MainSolution = 'src\WB without Xamarin.sln'
 $SupportToolSolution = 'src\Tools\support\support.sln'
 
 versionCheck
+"GIT_BRANCH: $ENV:GIT_BRANCH" | Out-Host
 
 $versionString = (GetVersionString 'src')
 Log-Block "Update project version" {
