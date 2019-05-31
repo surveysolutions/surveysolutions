@@ -108,13 +108,17 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
         [WriteToSyncLog(SynchronizationLogType.CanSynchronize)]
         [HttpGet]
         [ApiNoCache]
-        public virtual HttpResponseMessage CheckCompatibility(string deviceId, int deviceSyncProtocolVersion, string tenantId)
+        public virtual HttpResponseMessage CheckCompatibility(string deviceId, int deviceSyncProtocolVersion, string tenantId = null)
         {
             int serverSyncProtocolVersion = this.syncVersionProvider.GetProtocolVersion();
             int lastNonUpdatableSyncProtocolVersion = this.syncVersionProvider.GetLastNonUpdatableVersion();
             if (deviceSyncProtocolVersion < lastNonUpdatableSyncProtocolVersion)
                 return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
 
+            if (!UserIsFromThisTenant(tenantId))
+            {
+                return this.Request.CreateResponse(HttpStatusCode.Conflict);
+            }
 
             var currentVersion = new Version(this.productVersion.ToString().Split(' ')[0]);
             var supervisorVersion = GetSupervisorVersionFromUserAgent(this.Request);
