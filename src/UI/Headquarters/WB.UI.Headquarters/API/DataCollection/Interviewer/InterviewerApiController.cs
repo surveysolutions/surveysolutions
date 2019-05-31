@@ -238,7 +238,6 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
 
             if (!UserIsFromThisTenant(tenantId))
             {
-                // https://httpstatuses.com/421
                 return this.Request.CreateResponse(HttpStatusCode.Conflict);
             }
 
