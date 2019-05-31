@@ -621,7 +621,9 @@
             $scope.$watch('activeQuestion.isCascade', function (newValue) {
                 if ($scope.activeQuestion) {
                     if (newValue) {
-                        if ($scope.activeQuestion.questionScope !== 'Interviewer' && $scope.activeQuestion.questionScope !== 'Hidden') {
+                        if ($scope.activeQuestion.questionScope !== 'Interviewer'
+                            && $scope.activeQuestion.questionScope !== 'Hidden'
+                            && $scope.activeQuestion.questionScope !== 'Supervisor') {
                             $scope.changeQuestionScope($scope.getQuestionScopeByValue('Interviewer'));
                             $scope.activeQuestion.optionsFilterExpression = null;
                         }
