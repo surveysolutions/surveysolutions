@@ -9,6 +9,7 @@ using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
+using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -43,8 +44,9 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
             IProductVersion productVersion,
             IUserViewFactory userViewFactory, 
             HqSignInManager signInManager,
-            IPlainKeyValueStorage<InterviewerSettings> settingsStorage)
-            : base(settingsStorage)
+            IPlainKeyValueStorage<InterviewerSettings> settingsStorage,
+            IPlainKeyValueStorage<TenantSettings> tenantSettings)
+            : base(settingsStorage, tenantSettings)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.androidPackageReader = androidPackageReader;
@@ -106,12 +108,13 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
         [WriteToSyncLog(SynchronizationLogType.CanSynchronize)]
         [HttpGet]
         [ApiNoCache]
-        public virtual HttpResponseMessage CheckCompatibility(string deviceId, int deviceSyncProtocolVersion)
+        public virtual HttpResponseMessage CheckCompatibility(string deviceId, int deviceSyncProtocolVersion, string tenantId)
         {
             int serverSyncProtocolVersion = this.syncVersionProvider.GetProtocolVersion();
             int lastNonUpdatableSyncProtocolVersion = this.syncVersionProvider.GetLastNonUpdatableVersion();
             if (deviceSyncProtocolVersion < lastNonUpdatableSyncProtocolVersion)
                 return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
+
 
             var currentVersion = new Version(this.productVersion.ToString().Split(' ')[0]);
             var supervisorVersion = GetSupervisorVersionFromUserAgent(this.Request);

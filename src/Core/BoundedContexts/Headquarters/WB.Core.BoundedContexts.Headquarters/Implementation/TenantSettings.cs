@@ -5,6 +5,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
 {
     public class TenantSettings : AppSetting
     {
-        public Guid TenantPublicId { get; set; }
+        public string TenantPublicId { get; set; }
     }
 }
