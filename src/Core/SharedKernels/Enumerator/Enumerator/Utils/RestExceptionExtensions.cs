@@ -61,6 +61,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                                 exceptionMessage = InterviewerUIResources.Unauthorized;
                                 exceptionType = SynchronizationExceptionType.Unauthorized;
                             }
+
                             break;
                         case HttpStatusCode.ServiceUnavailable:
                             var isMaintenance = restException.Message.Contains("maintenance");
@@ -75,6 +76,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                                 exceptionMessage = InterviewerUIResources.ServiceUnavailable;
                                 exceptionType = SynchronizationExceptionType.ServiceUnavailable;
                             }
+
                             break;
                         case HttpStatusCode.NotAcceptable:
                             exceptionMessage = InterviewerUIResources.NotSupportedServerSyncProtocolVersion;
@@ -83,6 +85,9 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                         case HttpStatusCode.UpgradeRequired:
                             exceptionMessage = InterviewerUIResources.UpgradeRequired;
                             exceptionType = SynchronizationExceptionType.UpgradeRequired;
+                            break;
+                        case HttpStatusCode.Conflict:
+                            exceptionType = SynchronizationExceptionType.UserLinkedToAnotherServer;
                             break;
                         case HttpStatusCode.BadRequest:
                         case HttpStatusCode.Redirect:
@@ -95,7 +100,6 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                             exceptionType = SynchronizationExceptionType.InvalidUrl;
                             break;
                         case HttpStatusCode.InternalServerError:
-
                             exceptionMessage = InterviewerUIResources.InternalServerError;
                             exceptionType = SynchronizationExceptionType.InternalServerError;
                             break;
@@ -103,6 +107,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                             exceptionType = SynchronizationExceptionType.UserLinkedToAnotherDevice;
                             break;
                     }
+
                     break;
             }
 

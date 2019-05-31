@@ -176,10 +176,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return response.TenantId;
         }
 
-        public async Task CanSynchronizeAsync(RestCredentials credentials = null, CancellationToken token = default)
+        public async Task CanSynchronizeAsync(RestCredentials credentials = null, string tenantId = null, CancellationToken token = default)
         {
             string url = string.Concat(ApiUrl, "compatibility/", this.deviceSettings.GetDeviceId(), "/",
                 this.syncProtocolVersionProvider.GetProtocolVersion());
+            if (tenantId != null)
+            {
+                url += "?tenantId=" + WebUtility.UrlEncode(tenantId);
+            }
 
             var response = await this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<string>(
                 url: url, credentials: credentials ?? this.restCredentials, token: token)).ConfigureAwait(false);

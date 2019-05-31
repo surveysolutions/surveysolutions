@@ -60,7 +60,7 @@ namespace WB.UI.Headquarters.API.DataCollection
                 throw new NullReferenceException("Tenant public key is not set");
             return this.Request.CreateResponse(HttpStatusCode.OK, new TenantIdApiView
             {
-                TenantId = byId.TenantPublicId.FormatGuid()
+                TenantId = byId.TenantPublicId
             });
         }
 

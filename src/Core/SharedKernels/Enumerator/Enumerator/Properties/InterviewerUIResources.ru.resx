@@ -843,11 +843,11 @@
   <data name="FinishInstallation_QrBarcodeReaderErrorMessage" xml:space="preserve">
     <value>Ошибка сканирования</value>
   </data>
-    <data name="SelectResponsible_Reassign" xml:space="preserve">
+  <data name="SelectResponsible_Reassign" xml:space="preserve">
     <value>Назначить</value>
     <comment>Назначить</comment>
   </data>
-    <data name="SelectResponsible_ReassignDescription" xml:space="preserve">
+  <data name="SelectResponsible_ReassignDescription" xml:space="preserve">
     <value>Выберите нового ответственного для этого интервью
 он сможет получить его после следующей синхронизации
 </value>
@@ -855,23 +855,23 @@
 он сможет получить его после следующей синхронизации
 </comment>
   </data>
-    <data name="SelectResponsible_ReassignButtonText" xml:space="preserve">
+  <data name="SelectResponsible_ReassignButtonText" xml:space="preserve">
     <value>Назначить</value>
     <comment>Назначить</comment>
   </data>
-    <data name="SelectResponsible_CancelButtonText" xml:space="preserve">
+  <data name="SelectResponsible_CancelButtonText" xml:space="preserve">
     <value>Отмена</value>
     <comment>Отмена</comment>
   </data>
-    <data name="Dashboard_Searching" xml:space="preserve">
+  <data name="Dashboard_Searching" xml:space="preserve">
     <value>Поиск...</value>
     <comment>Поиск...</comment>
   </data>
-    <data name="Interview_Creating" xml:space="preserve">
+  <data name="Interview_Creating" xml:space="preserve">
     <value>Создание интервью</value>
     <comment>Создание интервью</comment>
   </data>
-    <data name="Interview_Loading_Description" xml:space="preserve">
+  <data name="Interview_Loading_Description" xml:space="preserve">
     <value>Пожалуйста, подождите</value>
   </data>
   <data name="Interview_Creating_Description" xml:space="preserve">
@@ -905,5 +905,10 @@
   <data name="Notifications_StaleAssignments" xml:space="preserve">
     <value>Есть назначения, которые не обрабатывались последние 3 дня</value>
   </data>
-
+  <data name="Synchronization_UserLinkedToAnotherServer_Description" xml:space="preserve">
+    <value>Текущий пользователь был создан на другом сервере Headquarters. Измените URL точки синхронизации на исходный сервер</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherServer_Status" xml:space="preserve">
+    <value>Пользователь создан на другом сервере</value>
+  </data>
 </root>

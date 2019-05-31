@@ -276,7 +276,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return response.TenantId;
         }
 
-        public async Task CanSynchronizeAsync(RestCredentials credentials = null, CancellationToken token = default)
+        public async Task CanSynchronizeAsync(RestCredentials credentials = null, string tenantId = null, CancellationToken token = default)
         {
             var request = new CanSynchronizeRequest(this.deviceSettings.GetApplicationVersionCode(), 
                 this.principal.CurrentUserIdentity.UserId,
