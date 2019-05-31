@@ -881,4 +881,10 @@ It will appear on interviewer device after next synchronization</value>
   <data name="Notifications_StaleAssignments" xml:space="preserve">
     <value>Some assignments were not updated last 3 days.</value>
   </data>
+  <data name="Synchronization_UserLinkedToAnotherServer_Description" xml:space="preserve">
+    <value>Current user was created on another instance of Headquarters application. Change synchronization endpoint URL to the original server</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherServer_Status" xml:space="preserve">
+    <value>User linked to another server</value>
+  </data>
 </root>

@@ -22,8 +22,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
             IAuthorizedUser authorizedUser,
             IDeviceSyncInfoRepository deviceSyncInfoRepository,
             IPlainStorageAccessor<SynchronizationLogItem> syncLogRepository,
-            HqUserManager userManager,
-            IPlainKeyValueStorage<TenantSettings> tenantSettings) : base(
+            HqUserManager userManager) : base(
                 authorizedUser: authorizedUser,
                 syncVersionProvider: syncVersionProvider,
                 userManager: userManager,

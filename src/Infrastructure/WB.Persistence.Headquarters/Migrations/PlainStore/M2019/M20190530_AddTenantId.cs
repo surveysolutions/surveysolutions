@@ -12,7 +12,7 @@ namespace WB.Persistence.Headquarters.Migrations.PlainStore
             var serviceKey = Guid.NewGuid();
             var serializeObject = JsonConvert.SerializeObject(new
             {
-                TenantPublicId = serviceKey.ToString()
+                TenantPublicId = serviceKey.ToString("N")
             });
             Insert.IntoTable("appsettings").Row(new { id = "TenantSettings", value = serializeObject });
         }
