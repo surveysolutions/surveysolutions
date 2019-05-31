@@ -13,7 +13,11 @@
   <style name="VerticalFullWidthWrappingLayout" parent="FullWidthWrappingLayout">
     <item name="android:orientation">vertical</item>
   </style>
-  
+
+  <style name="InfoFullWidthWrappingLayout" parent="FullWidthWrappingLayout">
+      <item name="android:background">#EFF1F3</item>
+  </style>
+
   <style name="PrefilledQuestionsToolbarTitle" parent="ToolbarTitle">
     <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
     <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>

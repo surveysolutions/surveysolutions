@@ -27,13 +27,20 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         public override async Task ExecuteAsync()
         {
             if (!await this.synchronizationService.IsAutoUpdateEnabledAsync(Context.CancellationToken))
-               return;
+            {
+                var versionFromServerCheck = await 
+                    this.synchronizationService.GetLatestApplicationVersionAsync(Context.CancellationToken);
+                Context.Statistics.NewVersionExists = 
+                    versionFromServerCheck.HasValue && versionFromServerCheck > GetApplicationVersionCode();
+
+                return;
+            }
 
             Context.Progress.Report(new SyncProgressInfo
             {
                 Title = InterviewerUIResources.Synchronization_CheckNewVersionOfApplication,
                 Status = SynchronizationStatus.Started,
-                Stage= SyncStage.CheckNewVersionOfApplication
+                Stage = SyncStage.CheckNewVersionOfApplication
             });
 
             var versionFromServer = await
