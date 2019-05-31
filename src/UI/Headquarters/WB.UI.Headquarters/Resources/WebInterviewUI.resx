@@ -444,6 +444,6 @@ Contact support for assistance.</value>
     <value>Email resume link</value>
   </data>
   <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
-    <value>Are you sure you want to remove related roster {{rosterTitle}}?</value>
+    <value>Are you sure you want to remove related roster '{{rosterTitle}}'?</value>
   </data>
 </root>
