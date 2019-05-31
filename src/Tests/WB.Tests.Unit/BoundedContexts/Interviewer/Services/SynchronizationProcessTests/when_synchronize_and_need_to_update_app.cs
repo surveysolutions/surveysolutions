@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             var principalMock = Mock.Get(SetUp.InterviewerPrincipal(interviewerIdentity));
             
             synchronizationServiceMock
-                .Setup(x => x.CanSynchronizeAsync(It.IsAny<RestCredentials>()))
+                .Setup(x => x.CanSynchronizeAsync(It.IsAny<RestCredentials>(), null, It.IsAny<CancellationToken>()))
                 .Throws(new SynchronizationException(type: SynchronizationExceptionType.UpgradeRequired, message: "Test UpgradeRequired", innerException: null));
 
             var updateApplicationMock = new Mock<IUpdateApplicationSynchronizationStep>();
