@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.OS;
+using Android.Util;
 using MvvmCross;
 using MvvmCross.Platforms.Android;
 using Plugin.Permissions.Abstractions;
@@ -60,30 +61,44 @@ namespace WB.UI.Shared.Enumerator.Services
         {
             await this.permissions.AssureHasPermission(Permission.Storage);
 
-            var pathToRootDirectory = Build.VERSION.SdkInt <= BuildVersionCodes.N
+            var pathToRootDirectory = Build.VERSION.SdkInt < BuildVersionCodes.N
                 ? AndroidPathUtils.GetPathToExternalDirectory()
                 : AndroidPathUtils.GetPathToInternalDirectory();
 
+            logger.Error($"Build.VERSION.SdkInt <= BuildVersionCodes.N {Build.VERSION.SdkInt < BuildVersionCodes.N}");
+            logger.Error($"pathToRootDirectory {pathToRootDirectory}");
+
             var downloadFolder = this.fileSystemAccessor.CombinePath(pathToRootDirectory, "download");
+            logger.Error($"downloadFolder {downloadFolder}");
 
             string pathToPatch = this.fileSystemAccessor.CombinePath(downloadFolder, "application.patch");
+            logger.Error($"pathToPatch {pathToPatch}");
             string pathToNewApk = this.fileSystemAccessor.CombinePath(downloadFolder, "application.apk");
+            logger.Error($"pathToNewApk {pathToNewApk}");
             string pathToOldApk = this.deviceSettings.InstallationFilePath;
+            logger.Error($"pathToOldApk {pathToOldApk}");
 
             if (this.fileSystemAccessor.IsFileExists(pathToPatch))
             {
+                logger.Error($"pathToPatch exists");
                 this.fileSystemAccessor.DeleteFile(pathToPatch);
             }
 
+            logger.Error($"pathToPatch check complited");
+
             if (this.fileSystemAccessor.IsFileExists(pathToNewApk))
             {
+                logger.Error($"pathToNewApk exists");
                 this.fileSystemAccessor.DeleteFile(pathToNewApk);
             }
+            logger.Error($"pathToNewApk check complited");
 
             if (!this.fileSystemAccessor.IsDirectoryExists(downloadFolder))
             {
+                logger.Error($"downloadFolder exists");
                 this.fileSystemAccessor.CreateDirectory(downloadFolder);
             }
+            logger.Error($"downloadFolder check complited");
             
             byte[] patchOrFullApkBytes = null;
 
@@ -93,6 +108,7 @@ namespace WB.UI.Shared.Enumerator.Services
             }
             catch (SynchronizationException ex) when (ex.InnerException is RestException rest)
             {
+                logger.Error($"patchOrFullApkBytes error", ex);
                 if (rest.StatusCode != HttpStatusCode.NotFound)
                     throw;
             }
@@ -101,9 +117,11 @@ namespace WB.UI.Shared.Enumerator.Services
 
             async Task GetWithFullApk()
             {
+                logger.Error($"GetWithFullApk start");
                 cancellationToken.ThrowIfCancellationRequested();
                 patchOrFullApkBytes = await this.synchronizationService.GetApplicationAsync(onDownloadProgressChanged, cancellationToken);
                 cancellationToken.ThrowIfCancellationRequested();
+                logger.Error($"GetWithFullApk GetApplicationAsync finished");
 
                 if (this.fileSystemAccessor.IsFileExists(pathToNewApk))
                 {
@@ -111,10 +129,13 @@ namespace WB.UI.Shared.Enumerator.Services
                 }
 
                 this.fileSystemAccessor.WriteAllBytes(pathToNewApk, patchOrFullApkBytes);
+                logger.Error($"GetWithFullApk WriteAllBytes finished");
             }
 
             if (patchOrFullApkBytes != null)
             {
+                logger.Error($"patchOrFullApkBytes != null");
+
                 try
                 {
                     this.fileSystemAccessor.WriteAllBytes(pathToPatch, patchOrFullApkBytes);
