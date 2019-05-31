@@ -60,7 +60,7 @@ namespace WB.UI.Shared.Enumerator.Services
         {
             await this.permissions.AssureHasPermission(Permission.Storage);
 
-            var pathToRootDirectory = Build.VERSION.SdkInt <= BuildVersionCodes.N
+            var pathToRootDirectory = Build.VERSION.SdkInt < BuildVersionCodes.N
                 ? AndroidPathUtils.GetPathToExternalDirectory()
                 : AndroidPathUtils.GetPathToInternalDirectory();
 
