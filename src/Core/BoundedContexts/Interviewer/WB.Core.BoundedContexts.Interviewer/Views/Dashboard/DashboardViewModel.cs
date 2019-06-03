@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
@@ -31,6 +33,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private readonly IPlainStorage<InterviewView> interviewsRepository;
         private readonly IAuditLogService auditLogService;
         private readonly IOfflineSyncClient syncClient;
+        
         private readonly IMvxMessenger messenger;
 
         private MvxSubscriptionToken startingLongOperationMessageSubscriptionToken;

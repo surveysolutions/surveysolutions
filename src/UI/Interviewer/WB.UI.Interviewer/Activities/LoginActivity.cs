@@ -3,9 +3,11 @@ using Android.Content;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
+using MvvmCross;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.Services.Notifications;
 
 namespace WB.UI.Interviewer.Activities
 {
@@ -53,6 +55,14 @@ namespace WB.UI.Interviewer.Activities
                     break;
             }
             return base.OnOptionsItemSelected(item);
+        }
+
+        protected override void OnResume()
+        {
+            base.OnResume();
+         
+            var notificationsPublisher = Mvx.IoCProvider.Resolve<INotificationPublisher>();
+            notificationsPublisher.CancelAllNotifications(this);
         }
     }
 }

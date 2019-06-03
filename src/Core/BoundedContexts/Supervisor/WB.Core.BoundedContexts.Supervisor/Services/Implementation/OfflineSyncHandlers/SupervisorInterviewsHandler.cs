@@ -30,6 +30,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
     {
         public const string UnknownExceptionType = "Unexpected";
 
+        private readonly ISupervisorSettings settings;
         private readonly ILiteEventBus eventBus;
         private readonly IEnumeratorEventStorage eventStore;
         private readonly IPlainStorage<InterviewView> interviews;
@@ -51,7 +52,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             IPlainStorage<BrokenInterviewPackageView, int?> brokenInterviewPackageStorage,
             IPlainStorage<SuperivsorReceivedPackageLogEntry, int> receivedPackagesLog,
             IPrincipal principal,
-            IAssignmentDocumentsStorage assignmentsStorage)
+            IAssignmentDocumentsStorage assignmentsStorage,
+            ISupervisorSettings settings)
         {
             this.eventBus = eventBus;
             this.eventStore = eventStore;
@@ -63,6 +65,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             this.brokenInterviewPackageStorage = brokenInterviewPackageStorage;
             this.principal = principal;
             this.assignmentsStorage = assignmentsStorage;
+            this.settings = settings;
         }
 
         public void Register(IRequestHandler requestHandler)
@@ -73,8 +76,17 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             requestHandler.RegisterHandler<GetInterviewDetailsRequest, GetInterviewDetailsResponse>(Handle);
             requestHandler.RegisterHandler<UploadInterviewRequest, OkResponse>(UploadInterview);
             requestHandler.RegisterHandler<SupervisorIdRequest, SupervisorIdResponse>(GetSupervisorId);
+            requestHandler.RegisterHandler<ApplicationSettingsRequest, ApplicationSettingsResponse>(GetApplicationSettings);
         }
-        
+
+        private Task<ApplicationSettingsResponse> GetApplicationSettings(ApplicationSettingsRequest arg)
+        {
+            return Task.FromResult(new ApplicationSettingsResponse()
+            {
+                NotificationsEnabled = settings.NotificationsEnabled
+            });
+        }
+
         public Task<OkResponse> UploadInterview(UploadInterviewRequest request)
         {
             var interview = request.Interview;

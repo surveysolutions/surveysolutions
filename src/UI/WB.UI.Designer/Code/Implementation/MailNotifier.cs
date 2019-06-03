@@ -80,14 +80,15 @@ namespace WB.UI.Designer.Code.Implementation
                 UserCallName = String.IsNullOrWhiteSpace(userName) ? email : userName,
                 QuestionnaireId = questionnaireId,
                 QuestionnaireDisplayTitle = String.IsNullOrWhiteSpace(questionnaireTitle) ? NotificationResources.MailNotifier_NotifyTargetPersonAboutShareChange_link : questionnaireTitle,
-                ShareTypeName = shareType == ShareType.Edit ? NotificationResources.MailNotifier_NotifyTargetPersonAboutShareChange_edit : NotificationResources.MailNotifier_NotifyOwnerAboutShareChange_view,
+                ShareTypeName = shareType == ShareType.Edit 
+                    ? NotificationResources.MailNotifier_NotifyTargetPersonAboutShareChange_edit 
+                    : NotificationResources.MailNotifier_NotifyOwnerAboutShareChange_view,
                 ActionPersonCallName = String.IsNullOrWhiteSpace(actionPersonEmail) ? NotificationResources.MailNotifier_NotifyTargetPersonAboutShareChange_user : actionPersonEmail,
                 SharedWithPersonEmail = String.IsNullOrWhiteSpace(sharedWithPersonEmail) ? NotificationResources.MailNotifier_NotifyTargetPersonAboutShareChange_user : sharedWithPersonEmail,
                 QuestionnaireLink = urlHelper.Action("Details", "Questionnaire", new { id = questionnaireId }, "https")
 
             };
-            var message = this.GetOwnerShareChangeNotificationEmail(
-                                sharingNotificationModel);
+            var message = this.GetOwnerShareChangeNotificationEmail(sharingNotificationModel);
 
             message.ContinueWith((state) =>
             {
@@ -105,7 +106,7 @@ namespace WB.UI.Designer.Code.Implementation
             {
                 case ShareChangeType.Share: email = "Emails/TargetPersonShareNotification"; break;
                 case ShareChangeType.StopShare: email = "Emails/TargetPersonStopShareNotification"; break;
-                case ShareChangeType.PassOwnership: email = "Emails/PassOwnershipNotification"; break;
+                case ShareChangeType.TransferOwnership: email = "Emails/TranfserOwnershipNotification"; break;
             }
 
             var view = await this.renderingService.RenderToStringAsync(email, model);

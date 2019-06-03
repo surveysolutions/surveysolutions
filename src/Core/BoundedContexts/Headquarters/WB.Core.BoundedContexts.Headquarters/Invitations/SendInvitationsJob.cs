@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
@@ -28,20 +29,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             this.invitationMailingService = invitationMailingService;
         }
 
-        public void Execute(IJobExecutionContext context)
+        public Task Execute(IJobExecutionContext context)
         {
             try
             {
                 if (!emailService.IsConfigured())
-                    return;
+                    return Task.CompletedTask;
 
                 InvitationDistributionStatus status = invitationService.GetEmailDistributionStatus();
 
                 if (status == null)
-                    return;
+                    return Task.CompletedTask;
 
                 if (status.Status > InvitationProcessStatus.InProgress)
-                    return;
+                    return Task.CompletedTask;
 
                 this.logger.Debug("Invitations distribution job: Started");
 
@@ -84,6 +85,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 invitationService.EmailDistributionFailed();
                 this.logger.Error($"Invitations distribution job: FAILED. Reason: {ex.Message} ", ex);
             }
+
+            return Task.CompletedTask;
         }
     }
 

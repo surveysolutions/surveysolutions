@@ -583,6 +583,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 && this.GetRosterGroupsByRosterSizeQuestion(questionId).Any();
         }
 
+        public bool IsRosterTitleQuestion(Guid questionId)
+        {
+            return this.DoesQuestionSupportRoster(questionId)
+                && this.AllGroups.Any(x => x.IsRoster && x.RosterTitleQuestionId == questionId);
+        }
+
         public IEnumerable<Guid> GetRosterGroupsByRosterSizeQuestion(Guid questionId)
         {
             if (!this.DoesQuestionSupportRoster(questionId))
@@ -966,8 +972,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
          
 
         public ReadOnlyCollection<Guid> GetChildInterviewerQuestions(Guid groupId)
-            => this.cacheOfChildInterviewerQuestions.GetOrAdd(groupId, this
-                    .GetGroupOrThrow(groupId)
+            => this.cacheOfChildInterviewerQuestions.GetOrAdd(groupId, id => this
+                    .GetGroupOrThrow(id)
                     .Children.OfType<IQuestion>()
                     .Where(IsInterviewierQuestion)
                     .Select(question => question.PublicKey)
@@ -1013,7 +1019,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public bool IsFlatRoster(Guid entityId)
         {
-            return this.GetGroup(entityId)?.IsFlatMode ?? false;
+            return this.GetGroup(entityId)?.DisplayMode == RosterDisplayMode.Flat;
+        }
+
+        public bool IsTableRoster(Guid entityId)
+        {
+            return this.GetGroup(entityId)?.DisplayMode == RosterDisplayMode.Table;
         }
 
         public bool ShowCascadingAsList(Guid questionId)
@@ -1291,8 +1302,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public IEnumerable<Guid> GetRostersAffectedByRosterTitleQuestion(Guid questionId)
         {
-            return this.cacheOfRostersAffectedByRosterTitleQuestion.GetOrAdd(questionId,
-                this.GetRostersAffectedByRosterTitleQuestionImpl(questionId));
+            return this.cacheOfRostersAffectedByRosterTitleQuestion.GetOrAdd(questionId, this.GetRostersAffectedByRosterTitleQuestionImpl);
         }
 
         public bool IsRosterTitleQuestionAvailable(Guid rosterId)
@@ -1856,5 +1866,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             var entity = this.GetEntityOrThrow(id);
             return entity.VariableName;
         }
+
+        readonly ConcurrentDictionary<string, string> markdownTransformationCache = new ConcurrentDictionary<string, string>();
+
+        public string ApplyMarkDownTransformation(string text) => 
+            markdownTransformationCache.GetOrAdd(text, s =>
+            {
+                var transform = QuestionnaireMarkdown.ToHtml(s);
+                if (s.Equals(transform, StringComparison.Ordinal))
+                {
+                    return null;
+                }
+
+                return transform;
+            });
     }
 }

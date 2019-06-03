@@ -50,7 +50,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         protected override void WriteToAuditLogStartSyncMessage()
             => this.auditLogService.Write(new SynchronizationStartedAuditLogEntity(SynchronizationType.Offline));
 
-        protected override void OnSuccesfullSynchronization() => this.interviewerSettings.SetOfflineSynchronizationCompleted();
+        protected override void OnSuccessfulSynchronization() => this.interviewerSettings.SetOfflineSynchronizationCompleted();
         protected override async Task CheckAfterStartSynchronization(CancellationToken cancellationToken)
         {
             var currentSupervisorId = await this.synchronizationService.GetCurrentSupervisor(token: cancellationToken, credentials: this.RestCredentials);

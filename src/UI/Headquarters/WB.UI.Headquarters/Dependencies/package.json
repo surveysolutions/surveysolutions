@@ -38,6 +38,7 @@
     "production": "gulp --production"
   },
   "dependencies": {
+    "ag-grid-community": "^20.2.0",
     "datatables.net-responsive": "^2.2.0",
     "gulp": "^3.9.1",
     "gulp-install": "^1.1.0",

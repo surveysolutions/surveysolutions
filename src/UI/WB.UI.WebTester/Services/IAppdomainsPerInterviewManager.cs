@@ -22,6 +22,8 @@ namespace WB.UI.WebTester.Services
         List<CategoricalOption> GetFirstTopFilteredOptionsForQuestion(Guid interviewId, Identity questionIdentity, 
             int? parentQuestionValue, string filter, int itemsCount = 200);
 
+        int? GetLastEventSequence(Guid interviewId);
+
         /// <summary>
         /// Deletes existing data inside interview but keeps appdomain ready to be reused for new interview
         /// </summary>

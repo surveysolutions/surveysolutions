@@ -113,6 +113,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool IsRosterSizeQuestion(Guid questionId);
 
+        bool IsRosterTitleQuestion(Guid questionId);
+
         IEnumerable<Guid> GetRosterGroupsByRosterSizeQuestion(Guid questionId);
 
         int? GetListSizeForListQuestion(Guid questionId);
@@ -287,6 +289,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsRosterTriggeredByOrderedMultiQuestion(Guid rosterId);
         DateTime? GetDefaultDateForDateQuestion(Guid dateQuestionId);
         bool IsFlatRoster(Guid groupId);
+        bool IsTableRoster(Guid groupId);
 
         bool ShowCascadingAsList(Guid id);
         int? GetCascadingAsListThreshold(Guid id);
@@ -297,5 +300,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         /// </summary>
         /// <param name="id">Entity Id</param>
         string GetEntityVariableOrThrow(Guid id);
+
+        string ApplyMarkDownTransformation(string text);
     }
 }

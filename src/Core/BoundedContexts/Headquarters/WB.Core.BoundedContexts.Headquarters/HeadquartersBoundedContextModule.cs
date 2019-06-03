@@ -1,5 +1,7 @@
 ﻿using Ncqrs.Eventing.Storage;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
@@ -170,7 +172,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IInterviewsToDeleteFactory, InterviewsToDeleteFactory>();
             //registry.BindToMethod<Func<IInterviewsToDeleteFactory>>(context => () => context.Get<IInterviewsToDeleteFactory>());
             registry.Bind<IInterviewHistoryFactory, InterviewHistoryFactory>();
-            registry.Bind<ISpeedReportDenormalizerFunctional, SpeedReportDenormalizerFunctional>();
             registry.Bind<IInterviewStatisticsReportDenormalizer, InterviewStatisticsReportDenormalizer>();
             registry.Bind<IInterviewInformationFactory, InterviewerInterviewsFactory>();
             registry.Bind<IDatasetWriterFactory, DatasetWriterFactory>();
@@ -193,7 +194,9 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAllUsersAndQuestionnairesFactory, AllUsersAndQuestionnairesFactory>();
             registry.Bind<IQuestionnairePreloadingDataViewFactory, QuestionnairePreloadingDataViewFactory>();
             registry.Bind<ITeamViewFactory, TeamViewFactory>();
-            registry.BindToMethod<IUserViewFactory>(context => new UserViewFactory(context.Resolve<IUserRepository>()));
+            registry.BindToMethod<IUserViewFactory>(context => 
+                new UserViewFactory(context.Resolve<IUserRepository>(), context.Resolve<IMemoryCache>()));
+
             registry.Bind<ITeamUsersAndQuestionnairesFactory, TeamUsersAndQuestionnairesFactory>();
             registry.Bind<IInterviewFactory, InterviewFactory>();
             registry.Bind<IInterviewSummaryViewFactory, InterviewSummaryViewFactory>();
@@ -308,6 +311,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.BindAsSingleton<ITokenGenerator,TokenGenerator>();
             registry.Bind<IInvitationMailingService, InvitationMailingService>();
             registry.Bind<IInvitationsDeletionService, InvitationsDeletionService>();
+
+            registry.BindToConstant<IMemoryCache>(() => new MemoryCache(Options.Create(new MemoryCacheOptions())));
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)

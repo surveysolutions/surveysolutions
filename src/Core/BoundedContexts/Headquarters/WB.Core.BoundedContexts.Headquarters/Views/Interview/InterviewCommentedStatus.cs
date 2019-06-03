@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
@@ -6,6 +7,7 @@ using WB.Core.Infrastructure.Domain;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
+    [DebuggerDisplay("{Status}:{Position} - {InterviewSummary.InterviewId}")]
     public class InterviewCommentedStatus : EntityBase<Guid>
     {
         public InterviewCommentedStatus()

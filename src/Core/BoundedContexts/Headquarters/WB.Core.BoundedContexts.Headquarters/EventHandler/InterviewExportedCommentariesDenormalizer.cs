@@ -248,7 +248,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             decimal[] rosterVector,
             DateTime timestamp)
         {
-            UserView responsible = this.userStorage.GetUser(new UserViewInputModel(originatorId));
+            var responsible = this.userStorage.GetUser(originatorId);//.GetUser(new UserViewInputModel(originatorId));
             var originatorName = responsible == null ? this.unknown : responsible.UserName;
             var originatorRole = responsible == null || !responsible.Roles.Any()
                 ? 0

@@ -212,8 +212,6 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             if (!aggregate.HasUncommittedChanges())
                 return;
 
-            //var eventStream = new UncommittedEventStream(origin, aggregate.GetUnCommittedChanges());
-
             var commitedEvents = this.eventBus.CommitUncommittedEvents(aggregate, origin);
 
             aggregate.MarkChangesAsCommitted();
