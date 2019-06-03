@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
@@ -64,7 +65,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.comboboxViewModel.ExcludeOptions(answeredOptions);
 
                 var hasNoOptionsForAnswers = answeredOptions.Length == this.maxAllowedAnswers ||
-                                             answeredOptions.Length == this.filteredOptionsViewModel.GetOptions().Count;
+                                             answeredOptions.Length == Constants.MaxLongRosterRowCount;
 
                 if (hasNoOptionsForAnswers && this.comboboxCollection.Contains(this.comboboxViewModel))
                     this.comboboxCollection.Remove(this.comboboxViewModel);
