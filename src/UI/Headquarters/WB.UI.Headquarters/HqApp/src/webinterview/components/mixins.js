@@ -122,3 +122,12 @@ export const entityDetails = {
     }
 }
 
+// Table Roster cell parameters
+export const tableCellEditor = {
+    props: {
+        editorParams: {
+            type: Object,
+            default: {}
+        }
+    }
+}

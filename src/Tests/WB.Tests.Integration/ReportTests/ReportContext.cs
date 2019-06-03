@@ -40,8 +40,7 @@ namespace WB.Tests.Integration.ReportTests
                     typeof(TimeSpanBetweenStatusesMap),
                     typeof(QuestionAnswerMap),
                     typeof(InterviewStatisticsReportRowMap),
-                    typeof(InterviewCommentedStatusMap),
-                    typeof(SpeedReportInterviewItemMap)
+                    typeof(InterviewCommentedStatusMap)
                 }, true);
 
             UnitOfWork = IntegrationCreate.UnitOfWork(sessionFactory);
@@ -50,11 +49,6 @@ namespace WB.Tests.Integration.ReportTests
         protected PostgreReadSideStorage<InterviewSummary> CreateInterviewSummaryRepository()
         {
             return new PostgreReadSideStorage<InterviewSummary>(UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
-        }
-
-        protected PostgreReadSideStorage<SpeedReportInterviewItem> CreateSpeedReportInterviewItemsRepository()
-        {
-            return new PostgreReadSideStorage<SpeedReportInterviewItem>(UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
         }
 
         internal class SvReport
@@ -127,5 +121,6 @@ namespace WB.Tests.Integration.ReportTests
                 return SurveyAndStatuses(reader);
             }
         }
+
     }
 }

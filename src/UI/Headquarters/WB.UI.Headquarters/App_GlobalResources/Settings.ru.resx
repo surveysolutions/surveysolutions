@@ -296,4 +296,10 @@
   <data name="EmailProvider_SettingsSavedSuccessfully" xml:space="preserve">
     <value>Конфигурация службы рассылки электонных писем сохранена успешно.</value>
   </data>
+  <data name="DeviceNotifications" xml:space="preserve">
+    <value>Включить уведомления на устройстве</value>
+  </data>
+  <data name="DeviceNotificationsDescription" xml:space="preserve">
+    <value>Опция активирует уведомления пользователя на устройстве касательно изменений и необходимых действий</value>
+  </data>
 </root>

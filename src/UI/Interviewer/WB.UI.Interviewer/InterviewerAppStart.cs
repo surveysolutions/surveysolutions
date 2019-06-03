@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.UI.Interviewer.Activities;
 using WB.UI.Shared.Enumerator.Migrations;
+using WB.UI.Shared.Enumerator.Services.Notifications;
 
 namespace WB.UI.Interviewer
 {
@@ -20,10 +21,12 @@ namespace WB.UI.Interviewer
         private readonly IMigrationRunner migrationRunner;
         private readonly IAuditLogService auditLogService;
         private readonly IServiceLocator serviceLocator;
+        private IEnumeratorSettings enumeratorSettings;
 
         public InterviewerAppStart(IMvxApplication application, 
             IMvxNavigationService navigationService,
             IAuditLogService auditLogService,
+            IEnumeratorSettings enumeratorSettings, 
             IServiceLocator serviceLocator,
             ILogger logger,
             IMigrationRunner migrationRunner) : base(application, navigationService)
@@ -32,6 +35,7 @@ namespace WB.UI.Interviewer
             this.serviceLocator = serviceLocator;
             this.logger = logger;
             this.migrationRunner = migrationRunner;
+            this.enumeratorSettings = enumeratorSettings;
         }
 
         public override void ResetStart()
@@ -52,8 +56,20 @@ namespace WB.UI.Interviewer
             migrationRunner.MigrateUp(this.GetType().Assembly, typeof(Encrypt_Data).Assembly);
 
             Mvx.IoCProvider.Resolve<IAudioAuditService>().CheckAndProcessAllAuditFiles();
-
+            
+            this.UpdateNotificationsWorker();
+           
             return base.ApplicationStartup(hint);
+        }
+
+        private void UpdateNotificationsWorker()
+        {
+            var workerManager = Mvx.IoCProvider.Resolve<IEnumeratorWorkerManager>();
+
+            if(enumeratorSettings.NotificationsEnabled)
+                workerManager.SetNotificationsWorker();
+            else
+                workerManager.CancelNotificationsWorker();
         }
 
         protected override async Task NavigateToFirstViewModel(object hint = null)

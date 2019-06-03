@@ -207,6 +207,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public Task<bool> IsAutoUpdateEnabledAsync(CancellationToken token = default) => Task.FromResult(true);
 
+        public async Task<bool> AreNotificationsEnabledAsync(CancellationToken token = default)
+        {
+            var response = await this.syncClient.SendAsync<ApplicationSettingsRequest, ApplicationSettingsResponse>(
+                new ApplicationSettingsRequest(), token);
+
+            return response.NotificationsEnabled;
+        }
+
         public Task UploadAuditLogEntityAsync(AuditLogEntitiesApiView auditLogEntity, CancellationToken token = default)
         {
             return this.syncClient.SendAsync(new UploadAuditLogEntityRequest

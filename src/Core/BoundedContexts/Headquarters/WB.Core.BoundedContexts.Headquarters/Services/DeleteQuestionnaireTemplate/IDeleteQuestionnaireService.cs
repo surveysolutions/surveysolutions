@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate
 {
     public interface IDeleteQuestionnaireService
     {
-        void DisableQuestionnaire(Guid questionnaireId,
+        Task DisableQuestionnaire(Guid questionnaireId,
             long questionnaireVersion, Guid? userId);
 
         void DeleteInterviewsAndQuestionnaireAfter(Guid questionnaireId, long questionnaireVersion, Guid? userId);

@@ -17,7 +17,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void SetValueToView(FrameLayout frameLayout, InterviewStageViewModel stageViewModel)
         {
-            var userInterfaceStateService = Mvx.Resolve<IUserInterfaceStateService>();
+            var userInterfaceStateService = Mvx.IoCProvider.Resolve<IUserInterfaceStateService>();
 
             userInterfaceStateService.NotifyRefreshStarted();
             try
@@ -38,10 +38,10 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             var frameViewModel = stageViewModel.Stage;
 
             var viewModelType = frameViewModel.GetType();
-            var mvxViewFinder = Mvx.Resolve<IMvxViewsContainer>();
+            var mvxViewFinder = Mvx.IoCProvider.Resolve<IMvxViewsContainer>();
             var fragmentType = mvxViewFinder.GetViewType(viewModelType);
 
-            if (!(Mvx.Resolve(fragmentType) is MvxFragment mvxFragment))
+            if (!(Mvx.IoCProvider.Resolve(fragmentType) is MvxFragment mvxFragment))
                 throw new ArgumentException("Can't resolve frame for ViewModel: " + viewModelType);
 
             mvxFragment.ViewModel = frameViewModel;

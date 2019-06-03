@@ -170,4 +170,5 @@
     <color name="loading_indeterminate_progress_gradient_start">#C4C4C4</color>
     <color name="loading_indeterminate_progress_gradient_center">#FFFFFF</color>
 
+    <color name ="notification_icon_background">#1055DB</color>
 </resources>

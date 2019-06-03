@@ -589,8 +589,11 @@ namespace WB.Tests.Abc.TestFactories
             IUnitOfWork sessionProvider = null,
             UsersImportTask usersImportTask = null)
         {
-            usersImportTask = usersImportTask ?? new UsersImportTask(Mock.Of<IScheduler>(x =>
-                                  x.GetCurrentlyExecutingJobs() == Array.Empty<IJobExecutionContext>()));
+            var scheduler = new Mock<IScheduler>();
+            scheduler.Setup(x => x.GetCurrentlyExecutingJobs(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(Array.Empty<IJobExecutionContext>());
+
+            usersImportTask = usersImportTask ?? new UsersImportTask(scheduler.Object);
 
             userPreloadingSettings = userPreloadingSettings ?? Create.Entity.UserPreloadingSettings();
             return new UserImportService(
@@ -792,7 +795,8 @@ namespace WB.Tests.Abc.TestFactories
             IPrincipal principal = null,
             IPlainStorage<InterviewerDocument> interviewerViewRepository = null,
             IPlainStorage<SuperivsorReceivedPackageLogEntry, int> receivedPackagesLog = null,
-            IAssignmentDocumentsStorage assignments = null)
+            IAssignmentDocumentsStorage assignments = null,
+            ISupervisorSettings settings = null)
         {
             return new SupervisorInterviewsHandler(
                 eventBus ?? Mock.Of<ILiteEventBus>(),
@@ -804,7 +808,8 @@ namespace WB.Tests.Abc.TestFactories
                 brokenInterviewStorage ?? Mock.Of<IPlainStorage<BrokenInterviewPackageView, int?>>(),
                 receivedPackagesLog ?? new SqliteInmemoryStorage<SuperivsorReceivedPackageLogEntry, int>(),
                 principal ?? Mock.Of<IPrincipal>(),
-                assignments ?? Create.Storage.AssignmentDocumentsInmemoryStorage());
+                assignments ?? Create.Storage.AssignmentDocumentsInmemoryStorage(),
+                settings ?? Mock.Of<ISupervisorSettings>());
         }
 
         public SupervisorGroupStateCalculationStrategy SupervisorGroupStateCalculationStrategy()

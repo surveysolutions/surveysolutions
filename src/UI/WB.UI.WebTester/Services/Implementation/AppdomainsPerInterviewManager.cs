@@ -83,5 +83,16 @@ namespace WB.UI.WebTester.Services.Implementation
 
             throw new ArgumentException("Cannot get first top filtered options. No remote domain were setted up");
         }
+
+        public int? GetLastEventSequence(Guid interviewId)
+        {
+            if (appDomains.TryGetValue(interviewId, out var interview))
+            {
+                logger.Debug($"Execute remote interview GetLastEventSequence: {interviewId}");
+                return interview.Value.GetLastEventSequence();
+            }
+
+            throw new ArgumentException("Cannot get last event sequence. No remote domain were setted up");
+        }
     }
 }

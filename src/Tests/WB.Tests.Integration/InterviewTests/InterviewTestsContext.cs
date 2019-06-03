@@ -16,6 +16,7 @@ using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -27,6 +28,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Enumerator.Native.Questionnaire.Impl;
 using WB.Tests.Abc;
+using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Tests.Integration.InterviewTests
 {
@@ -253,7 +255,7 @@ namespace WB.Tests.Integration.InterviewTests
 
             foreach (var evnt in events)
             {
-                interview.Apply((dynamic)evnt);
+                interview.Apply((IEvent)evnt);
             }
         }
 
