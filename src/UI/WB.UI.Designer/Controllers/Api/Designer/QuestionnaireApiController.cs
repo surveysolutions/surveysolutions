@@ -123,9 +123,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 return NotFound();
             }
 
-            bool shouldTruncateOptions = editQuestionView.Type == QuestionType.SingleOption
-                && (editQuestionView.IsFilteredCombobox == true || !string.IsNullOrWhiteSpace(editQuestionView.CascadeFromQuestionId))
-                && editQuestionView.Options != null;
+            bool shouldTruncateOptions = (editQuestionView.IsFilteredCombobox == true || !string.IsNullOrWhiteSpace(editQuestionView.CascadeFromQuestionId))
+                                         && editQuestionView.Options != null;
 
             if (shouldTruncateOptions)
             {
