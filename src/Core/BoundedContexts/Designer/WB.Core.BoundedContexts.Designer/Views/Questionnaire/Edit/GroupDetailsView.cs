@@ -1,4 +1,5 @@
 using System;
+using Main.Core.Entities.SubEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {
@@ -9,6 +10,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public string EnablementCondition { get; set; }
         public bool HideIfDisabled { get; set; }
         public string VariableName { get; set; }
-        public bool IsFlatMode { get; set; }
+        public RosterDisplayMode DisplayMode { get; set; }
     }
 }

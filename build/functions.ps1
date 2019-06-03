@@ -22,13 +22,26 @@ function GetPathRelativeToCurrectLocation($FullPath) {
 #https://docs.microsoft.com/en-us/visualstudio/install/workload-and-component-ids
 ##############################
 function GetMsBuildFromVsWhere() {
-    $path = & $vswhere -latest -products * -requires Microsoft.Component.MSBuild -requires Component.Xamarin -property installationPath
+    $path = GetVSLocation #& $vswhere -latest -products * -requires Microsoft.Component.MSBuild -requires Microsoft.VisualStudio.Workload.XamarinBuildTools -property installationPath
     if ($path) {
-        $path = join-path $path 'MSBuild\15.0\Bin\MSBuild.exe'
-        if (test-path $path) {
-            return $path
+        $result = join-path $path 'MSBuild\15.0\Bin\MSBuild.exe'
+        if (test-path $result) {
+            return $result
+        }
+        $result = join-path $path  'MSBuild\Current\Bin\MSBuild.exe'
+        if(test-path $result) {
+            return $result
         }
     }
+}
+
+function GetVSLocation() {
+      $path = & $vswhere -latest -products * -requires Microsoft.Component.MSBuild -requires Microsoft.VisualStudio.Workload.XamarinBuildTools -property installationPath
+      if($path) {
+          return $path
+      }
+      $path = & $vswhere -latest -products * -requires Microsoft.Component.MSBuild -requires Component.Xamarin -property installationPath
+      return $path
 }
 
 ##############################
@@ -59,20 +72,13 @@ function GetPathToMSBuild() {
     return 'C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe'
 }
 
-if($ENV:NUGET_EXE -eq $null) {
-    $nuget = "D:\tools\nuget.exe"
-} else {
-    $nuget = $ENV:NUGET_EXE
-    $nuget = "$nuget\tools\nuget.exe"
-}
-
 function GetPathToConfigTransformator() {
     $path = ".\packages\WebConfigTransformRunner.1.0.0.1\Tools\WebConfigTransformRunner.exe"
 
     if(Test-Path $path) {
         return $path
     } else {    
-        & $nuget install WebConfigTransformRunner -Version 1.0.0.1 | Out-Null
+        nuget.exe install WebConfigTransformRunner -Version 1.0.0.1 | Out-Null
         return $path
     }
 }
@@ -175,7 +181,7 @@ function versionCheck() {
     Write-Host "Node version: $(&node -v)"
     Write-Host "NPM version: $(&npm --version)"
     Write-Host "Yarn version: $(&yarn --version)"
-    Write-host "MsBuild version: $(& (GetPathToMSBuild) /version /nologo)"
+    Write-host "MsBuild version: $(&(GetPathToMSBuild) /version /nologo)"
     Write-Host "Dotnet CLI version: $(dotnet --version)"
 }
 
@@ -327,7 +333,12 @@ function MoveArtifacts([string[]] $items, $folder) {
     }
 }
 
-function Execute-MSBuild($ProjectFile, $Configuration, $buildArgs = $null) {
+function Load-DevEnvVariables() {
+    $vs = GetVSLocation
+    & "$vs\Common7\Tools\VsDevCmd.bat"
+}
+
+function Execute-MSBuild($ProjectFile, $Configuration, $buildArgs = $null, $logId = '.') {
     $build = @(
         $ProjectFile
         "/p:Configuration=$Configuration", '/nologo', "/v:$verbosity", '/m:4'
@@ -347,8 +358,8 @@ function Execute-MSBuild($ProjectFile, $Configuration, $buildArgs = $null) {
         $build = ($build + $buildArgs | select -uniq)
     }
 
-    $binLogPath = "$([System.IO.Path]::GetFileName($ProjectFile)).msbuild.binlog"
-
+    $binLogPath = "$([System.IO.Path]::GetFileName($ProjectFile))$logId.msbuild.binlog"
+    
     $build += "/bl:$binLogPath"
     
     & (GetPathToMSBuild) $build | Write-Host

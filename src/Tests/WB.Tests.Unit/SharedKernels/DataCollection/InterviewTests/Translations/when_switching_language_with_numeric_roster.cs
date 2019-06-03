@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
@@ -17,16 +17,17 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Translations
 {
     internal class when_switching_language_with_numeric_roster_having_title_question : InterviewTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
-            rosterId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            rosterSizeQuestion = Guid.Parse("11111111111111111111111111111111");
-            rosterTitleQuestionId = Guid.Parse("21111111111111111111111111111111");
+        [NUnit.Framework.OneTimeSetUp] public void context ()
+        {
+            rosterId = Id.gA;
+            rosterSizeQuestion = Id.g1;
+            rosterTitleQuestionId = Id.g2;
 
             var options = new List<Answer>();
-            options.Add(Create.Entity.Answer(1.ToString(), 1));
-            options.Add(Create.Entity.Answer(2.ToString(), 2));
+            options.Add(Create.Entity.Answer("Option1", 1));
+            options.Add(Create.Entity.Answer("Option2", 2));
 
-            var chapterId = Guid.Parse("33333333333333333333333333333333");
+            var chapterId = Id.g3;
 
             var nonTranslatedQuestionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 chapterId,
@@ -41,19 +42,17 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Translations
                         Create.Entity.SingleQuestion(
                             id: rosterTitleQuestionId,
                             options: options)
-                    }
-
-                    ));
+                    }));
 
             nonTranslatedQuestionnaire.Translations.Add(
                     Create.Entity.Translation(translationId, targetLanguage));
 
             var optionsTranslated = new List<Answer>();
-            optionsTranslated.Add(Create.Entity.Answer(11.ToString(), 1));
-            optionsTranslated.Add(Create.Entity.Answer(22.ToString(), 2));
+            optionsTranslated.Add(Create.Entity.Answer("Опция1", 1));
+            optionsTranslated.Add(Create.Entity.Answer("Опция2", 2));
 
-            var translatedQuestionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
-                chapterId,  
+            var translatedQuestionnaire = Create.Entity.QuestionnaireDocumentWithOneChapterAndLanguages(
+                chapterId,  new [] { targetLanguage },
                 Create.Entity.NumericQuestion(questionId: rosterSizeQuestion, isInteger: true),
                 Create.Entity.Roster(
                     rosterId: rosterId,
@@ -65,9 +64,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Translations
                         Create.Entity.SingleQuestion(
                             id: rosterTitleQuestionId,
                             options: optionsTranslated)
-                    }
-                    ));
-
+                    }));
+            
             IQuestionnaire nonTranslatedPlainQuestionnaire = Create.Entity.PlainQuestionnaire(nonTranslatedQuestionnaire);
             IQuestionnaire translatedPlainQuestionnaire = Create.Entity.PlainQuestionnaire(translatedQuestionnaire);
 
@@ -75,7 +73,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Translations
                 x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), null) == nonTranslatedPlainQuestionnaire &&
                 x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), targetLanguage) == translatedPlainQuestionnaire);
 
-            interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaires);
+            interview = Create.AggregateRoot.StatefulInterview(questionnaireRepository: questionnaires);
 
             interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), rosterSizeQuestion, RosterVector.Empty, DateTime.Now, 1);
             interview.AnswerSingleOptionQuestion(Guid.NewGuid(), rosterTitleQuestionId, new decimal[] {0}, DateTime.Now, 1);
@@ -83,8 +81,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Translations
             BecauseOf();
         }
 
-
-        public void BecauseOf() => interview.SwitchTranslation(Create.Command.SwitchTranslation(language: targetLanguage));
+        public void BecauseOf() => 
+            interview.SwitchTranslation(Create.Command.SwitchTranslation(language: targetLanguage));
 
         [NUnit.Framework.Test] public void should_raise_roster_titles_changed_event_for_roster () 
         {
@@ -92,7 +90,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Translations
             @event.ChangedInstances.Length.Should().Be(1);
             @event.ChangedInstances.All(x => x.RosterInstance.GroupId == rosterId).Should().BeTrue();
             @event.ChangedInstances[0].RosterInstance.RosterInstanceId.Should().Be(0);
-            @event.ChangedInstances[0].Title.Should().Be("11");
+            @event.ChangedInstances[0].Title.Should().Be("Опция1");
         }
 
         static Interview interview;

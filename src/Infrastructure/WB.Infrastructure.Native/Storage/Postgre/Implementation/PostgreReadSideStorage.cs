@@ -82,6 +82,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         {
             ISession session = this.unitOfWork.Session;
 
+            if (session.Contains(entity))
+            {
+                return;
+            }
+
             var storedEntity = GetById(id);
             if (!object.ReferenceEquals(storedEntity, entity) && storedEntity != null)
             {

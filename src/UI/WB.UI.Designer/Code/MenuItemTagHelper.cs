@@ -56,7 +56,7 @@ namespace WB.UI.Designer.Code
             string href;
             if (IsPageTag)
             {
-                href = string.IsNullOrWhiteSpace(Area) ? Page : "/" + Area + Page;
+                href = ViewContext.HttpContext.Request.PathBase + (string.IsNullOrWhiteSpace(Area) ? Page : "/" + Area + Page);
             }
             else
             {

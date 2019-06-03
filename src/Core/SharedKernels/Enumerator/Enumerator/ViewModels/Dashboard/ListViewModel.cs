@@ -26,18 +26,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             protected set => this.RaiseAndSetIfChanged( ref this.itemsCount, value);
         }
 
-        public Task UpdateUiItemsAsync() => Task.Run(() =>
+        public async Task UpdateUiItemsAsync() 
         {
             this.IsItemsLoaded = false;
 
             try
             {
-                var newItems = this.GetUiItems();
-                lock (this.UiItems)
+                var newItems = await Task.Run(this.GetUiItems);
+
+                await this.InvokeOnMainThreadAsync(() =>
                 {
                     this.UiItems.ToList().ForEach(uiItem => uiItem.DisposeIfDisposable());
                     this.UiItems.ReplaceWith(newItems);
-                }
+
+                }, false);
             }
             finally
             {
@@ -45,6 +47,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             }
             
             this.OnItemsLoaded?.Invoke(this, EventArgs.Empty);
-        });
+        }
     }
 }

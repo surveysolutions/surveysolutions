@@ -56,7 +56,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Translations
                 x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), null) == nonTranslatedPlainQuestionnaire &&
                 x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), targetLanguage) == translatedPlainQuestionnaire);
 
-            interview = Create.AggregateRoot.Interview(
+            interview = Create.AggregateRoot.StatefulInterview(
                 questionnaireRepository: questionnaires
                 );
 

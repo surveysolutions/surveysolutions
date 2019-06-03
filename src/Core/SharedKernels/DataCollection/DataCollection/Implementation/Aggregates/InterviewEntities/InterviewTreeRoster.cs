@@ -46,8 +46,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public string RosterTitle { get; set; }
         public int SortIndex { get; set; } = 0;
 
-        public bool IsPlain { get; set; }
-
         public InterviewTreeNumericRoster AsNumeric { get; private set; }
         public InterviewTreeListRoster AsList { get; private set; }
         public InterviewTreeYesNoRoster AsYesNo { get; private set; }
@@ -93,10 +91,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public override string ToString()
            => $"{this.GetTypeAsText()} Roster ({this.Identity}) [{this.RosterTitle}] " + (this.IsDisabled() ? "Disabled" : "Enabled") + Environment.NewLine
               + string.Join(Environment.NewLine, this.Children.Select(child => StringExtensions.PrefixEachLine(child.ToString(), "  ")));
-
-        //public override string ToString()
-        //    => $"Roster {this.Identity} '{this.Title} - {this.RosterTitle ?? "[...]"}'. " +
-        //       $" {(this.IsDisabled() ? "Disabled" : "Enabled")}. ";
 
         public void SetRosterTitle(string rosterTitle)
         {

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net471</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
       <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
       <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
       <Configurations>Debug;Release;Debug-ESRI</Configurations>
@@ -40,49 +40,50 @@
     <PackageReference Include="Antlr3.Runtime" Version="3.5.1" />
     <PackageReference Include="AppDomainToolkit" Version="1.0.4.3" />
     <PackageReference Include="AutoMapper" Version="8.1.0" />
-    <PackageReference Include="Castle.Core" Version="4.3.1" />
+    <PackageReference Include="Castle.Core" Version="4.4.0" />
     <PackageReference Include="Common.Logging" Version="3.4.1" />
     <PackageReference Include="Common.Logging.Core" Version="3.4.1" />
     <PackageReference Include="CsQuery" Version="1.3.4" />
     <PackageReference Include="CsvHelper" Version="12.1.2" />
     <PackageReference Include="EntityFramework" Version="6.2.0" />
     <PackageReference Include="FluentAssertions" Version="5.6.0" />
-    <PackageReference Include="Humanizer.Core" Version="2.4.2" />
+    <PackageReference Include="Humanizer.Core" Version="2.6.2" />
     <PackageReference Include="Iesi.Collections" Version="4.0.4" />
     <PackageReference Include="JsonDiffPatch.Net" Version="2.1.0" />
-    <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.1" />
-    <PackageReference Include="Microsoft.AspNet.Identity.Owin" Version="2.2.1" />
-    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.3" />
-    <PackageReference Include="Microsoft.AspNet.Razor" Version="3.2.3" />
-    <PackageReference Include="Microsoft.AspNet.SignalR.Core" Version="2.4.0" />
-    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.3" />
-    <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.3" />
-    <PackageReference Include="Microsoft.AspNet.WebPages" Version="3.2.3" />
-    <PackageReference Include="Microsoft.AspNet.WebPages.Data" Version="3.2.3" />
-    <PackageReference Include="Microsoft.AspNet.WebPages.WebData" Version="3.2.3" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.2" />
+    <PackageReference Include="Microsoft.AspNet.Identity.Owin" Version="2.2.2" />
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.7" />
+    <PackageReference Include="Microsoft.AspNet.Razor" Version="3.2.7" />
+    <PackageReference Include="Microsoft.AspNet.SignalR.Core" Version="2.4.1" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.7" />
+    <PackageReference Include="Microsoft.AspNet.WebPages" Version="3.2.7" />
+    <PackageReference Include="Microsoft.AspNet.WebPages.Data" Version="3.2.7" />
+    <PackageReference Include="Microsoft.AspNet.WebPages.WebData" Version="3.2.7" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="3.1.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
-    <PackageReference Include="Microsoft.NETCore.Platforms" Version="2.0.1" />
-    <PackageReference Include="Microsoft.Owin" Version="3.1.0" />
-    <PackageReference Include="Microsoft.Owin.Security" Version="3.1.0" />
-    <PackageReference Include="Microsoft.Owin.Security.Cookies" Version="3.1.0" />
-    <PackageReference Include="Microsoft.Owin.Security.OAuth" Version="3.1.0" />
+    <PackageReference Include="Microsoft.NETCore.Platforms" Version="2.2.1" />
+    <PackageReference Include="Microsoft.Owin" Version="4.0.1" />
+    <PackageReference Include="Microsoft.Owin.Security" Version="4.0.1" />
+    <PackageReference Include="Microsoft.Owin.Security.Cookies" Version="4.0.1" />
+    <PackageReference Include="Microsoft.Owin.Security.OAuth" Version="4.0.1" />
     <PackageReference Include="Microsoft.Web.Infrastructure" Version="1.0.0.0" />
     <PackageReference Include="Microsoft.Win32.Primitives" Version="4.3.0" />
-    <PackageReference Include="Moq" Version="4.9.0" />
+    <PackageReference Include="Moq" Version="4.10.1" />
     <PackageReference Include="MvcMailer" Version="4.5" />
-    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="6.2.3" />
-    <PackageReference Include="MvvmCross.Tests" Version="6.2.3" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-    <PackageReference Include="NHibernate" Version="5.2.4" />
-    <PackageReference Include="NSubstitute" Version="3.1.0" />
-    <PackageReference Include="NUnit" Version="3.11.0" />
+    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="6.3.0" />
+    <PackageReference Include="MvvmCross.Tests" Version="6.3.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="NHibernate" Version="5.2.5" />
+    <PackageReference Include="NSubstitute" Version="4.2.0" />
+    <PackageReference Include="NUnit" Version="3.12.0" />
     <PackageReference Include="NUnit.Extension.NUnitProjectLoader" Version="3.6.0" />
     <PackageReference Include="NUnit.Extension.TeamCityEventListener" Version="1.0.6" />
     <PackageReference Include="NUnit.Extension.VSProjectLoader" Version="3.8.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
     <PackageReference Include="Owin" Version="1.0" />
     <PackageReference Include="Plugin.Permissions" Version="3.0.0.12" />
-    <PackageReference Include="Quartz" Version="2.6.1" />
+    <PackageReference Include="Quartz" Version="3.0.7" />
     <PackageReference Include="Remotion.Linq" Version="2.2.0" />
     <PackageReference Include="Remotion.Linq.EagerFetching" Version="2.2.0" />
     <PackageReference Include="RhinoMocks" Version="3.6.1" />

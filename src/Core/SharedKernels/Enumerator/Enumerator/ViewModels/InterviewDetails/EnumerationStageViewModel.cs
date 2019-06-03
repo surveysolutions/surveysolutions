@@ -109,11 +109,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             try
             {
                 this.userInterfaceStateService.NotifyRefreshStarted();
-                
-                foreach (var interviewItemViewModel in this.Items.OfType<IDisposable>())
-                {
-                    interviewItemViewModel.Dispose();
-                }
 
                 var previousGroupNavigationViewModel = this.interviewViewModelFactory.GetNew<GroupNavigationViewModel>();
                 previousGroupNavigationViewModel.Init(this.interviewId, groupIdentity, this.navigationState);
@@ -122,26 +117,27 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     interviewId: this.navigationState.InterviewId,
                     groupIdentity: groupIdentity,
                     navigationState: this.navigationState);
+
                 entities.Add(previousGroupNavigationViewModel);
 
-                this.InterviewEntities = entities;
-                
-                this.Items = this.compositeCollectionInflationService.GetInflatedCompositeCollection(entities);
+                var newEntities = this.compositeCollectionInflationService.GetInflatedCompositeCollection(entities);
+
+                InvokeOnMainThread(() =>
+                {
+                    this.Items.ToArray().ForEach(ie => ie.DisposeIfDisposable());
+                    this.Items = newEntities;
+                });
             }
             finally
             {
                 this.userInterfaceStateService.NotifyRefreshFinished();
             }
         }
-
-        private IList<IInterviewEntityViewModel> InterviewEntities { get; set; }
         
         public void Dispose()
         {
             this.liteEventRegistry.Unsubscribe(this);
-            this.InterviewEntities.ToArray().ForEach(ie => ie.DisposeIfDisposable());
             this.Items.ToArray().ForEach(ie => ie.DisposeIfDisposable());
-
             this.Name.Dispose();
         }
 

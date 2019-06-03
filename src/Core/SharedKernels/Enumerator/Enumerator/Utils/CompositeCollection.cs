@@ -47,7 +47,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                         }
                     }
 
-                    throw new IndexOutOfRangeException();
+                    throw new IndexOutOfRangeException($" Index was outside the bounds of the array. Type argument is {typeof(T).FullName}");
                 }
                 finally
                 {
@@ -65,7 +65,9 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                     array.SetValue(item, index++);
         }
 
+
         public int Count { get; private set; }
+
         public bool IsSynchronized => false;
         object ICollection.SyncRoot
         {
@@ -97,15 +99,15 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
         public void Clear()
         {
+            this.itemsLock.EnterWriteLock();
             try
             {
-                this.itemsLock.EnterWriteLock();
-
                 var removedItems = this.ToList();
+
+                this.Count = 0;
 
                 this.collections.OfType<INotifyCollectionChanged>().ForEach(x => x.CollectionChanged -= this.HandleChildCollectionChanged);
                 this.collections.Clear();
-                this.Count = 0;
 
                 this.NotifyItemsRemoved(removedItems, offset: 0);
             }
@@ -148,9 +150,9 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
         public bool Contains(T item)
         {
+            this.itemsLock.EnterReadLock();
             try
             {
-                this.itemsLock.EnterReadLock();
                 foreach (var coll in this.collections)
                     if (coll.Contains(item))
                         return true;
@@ -268,26 +270,35 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
         private void HandleChildCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             int newCount = 0;
-            if (e.Action == NotifyCollectionChangedAction.Reset)
+            this.itemsLock.EnterWriteLock();
+            try
             {
-                using (var enumerator = this.GetEnumerator())
+                if (e.Action == NotifyCollectionChangedAction.Reset)
                 {
-                    while (enumerator.MoveNext())
+                    using (var enumerator = this.GetEnumerator())
                     {
-                        newCount++;
+                        while (enumerator.MoveNext())
+                        {
+                            newCount++;
+                        }
                     }
                 }
-            }
-            else
-            {
-                newCount = this.Count + (e.NewItems?.Count ?? 0) - (e.OldItems?.Count ?? 0);
-            }
+                else
+                {
+                    newCount = this.Count + (e.NewItems?.Count ?? 0) - (e.OldItems?.Count ?? 0);
+                }
 
-            if (newCount != this.Count)
-            {
-                this.Count = newCount;
-                this.OnPropertyChanged(nameof(this.Count));
+                if (newCount != this.Count)
+                {
+                    this.Count = newCount;
+                    this.OnPropertyChanged(nameof(this.Count));
+                }
             }
+            finally
+            {
+                this.itemsLock.ExitWriteLock();
+            }
+            
 
             if (this.CollectionChanged == null)
                 return;

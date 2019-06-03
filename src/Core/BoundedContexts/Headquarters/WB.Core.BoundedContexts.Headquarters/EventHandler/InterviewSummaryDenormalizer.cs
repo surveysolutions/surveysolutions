@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Linq;
-using System.Runtime.Caching;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Quartz.Collection;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -48,7 +46,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewSummary, AreaQuestionAnswered>,
         IUpdateHandler<InterviewSummary, AudioQuestionAnswered>,
         IUpdateHandler<InterviewSummary, InterviewPaused>,
-        IUpdateHandler<InterviewSummary, InterviewResumed>
+        IUpdateHandler<InterviewSummary, InterviewResumed>,
+        IUpdateHandler<InterviewSummary, InterviewRestored>
     {
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IUserViewFactory users;
@@ -68,15 +67,31 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             return interviewSummary;
         }
 
-        private InterviewSummary AnswerQuestion(InterviewSummary interviewSummary, Guid questionId, object answer, DateTime updateDate)
+        private void RecordFirstAnswer(InterviewSummary interviewSummary, DateTime answerTime)
+        {
+            if (!interviewSummary.InterviewCommentedStatuses.Any())
+                return ;
+
+            if (interviewSummary.FirstAnswerDate.HasValue)
+                return ;
+
+            interviewSummary.FirstAnswerDate = answerTime;
+            interviewSummary.FirstSupervisorId = interviewSummary.TeamLeadId;
+            interviewSummary.FirstSupervisorName = interviewSummary.TeamLeadName;
+            interviewSummary.FirstInterviewerId = interviewSummary.ResponsibleId;
+            interviewSummary.FirstInterviewerName = interviewSummary.ResponsibleName;
+        }
+
+        private InterviewSummary AnswerQuestion(InterviewSummary interviewSummary, Guid questionId, object answer, DateTime updateDate, DateTime answerDate)
         {
             return this.UpdateInterviewSummary(interviewSummary, updateDate, interview =>
-             {
-                 if (interview.AnswersToFeaturedQuestions.Any(x => x.Questionid == questionId))
-                 {
-                     interview.AnswerFeaturedQuestion(questionId, AnswerUtils.AnswerToString(answer));
-                 }
-             });
+            {
+                RecordFirstAnswer(interview, answerDate);
+                if (interview.AnswersToFeaturedQuestions.Any(x => x.Questionid == questionId))
+                {
+                    interview.AnswerFeaturedQuestion(questionId, AnswerUtils.AnswerToString(answer));
+                }
+            });
         }
 
         private InterviewSummary AnswerFeaturedQuestionWithOptions(InterviewSummary interviewSummary, Guid questionId, DateTime updateDate,
@@ -111,12 +126,13 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             int? assignmentId,
             DateTime? creationTime)
         {
-            var responsible = this.users.GetUser(new UserViewInputModel(userId));
+            var responsible = this.users.GetUser(userId);
             var questionnaire = this.GetQuestionnaire(questionnaireId, questionnaireVersion);
 
             var interviewSummary = new InterviewSummary(questionnaire)
             {
                 InterviewId = eventSourceId,
+                CreatedDate = creationTime ?? eventTimeStamp,
                 WasCreatedOnClient = wasCreatedOnClient,
                 UpdateDate = eventTimeStamp,
                 QuestionnaireId = questionnaireId,
@@ -194,7 +210,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
             {
-                var user = this.users.GetUser(new UserViewInputModel(@event.Payload.SupervisorId));
+                var user = this.users.GetUser(@event.Payload.SupervisorId);
                 var supervisorName = user != null ? user.UserName : "<UNKNOWN SUPERVISOR>";
 
                 interview.ResponsibleId = @event.Payload.SupervisorId;
@@ -209,7 +225,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<TextQuestionAnswered> @event)
         {
-            return this.AnswerQuestion(state, @event.Payload.QuestionId, @event.Payload.Answer, @event.EventTimeStamp);
+            return this.AnswerQuestion(state, @event.Payload.QuestionId, @event.Payload.Answer, @event.EventTimeStamp, @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc.Value);
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<MultipleOptionsQuestionAnswered> @event)
@@ -224,12 +240,12 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<NumericRealQuestionAnswered> @event)
         {
-            return this.AnswerQuestion(state, @event.Payload.QuestionId, @event.Payload.Answer, @event.EventTimeStamp);
+            return this.AnswerQuestion(state, @event.Payload.QuestionId, @event.Payload.Answer, @event.EventTimeStamp, @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc.Value);
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<NumericIntegerQuestionAnswered> @event)
         {
-            return this.AnswerQuestion(state, @event.Payload.QuestionId, @event.Payload.Answer, @event.EventTimeStamp);
+            return this.AnswerQuestion(state, @event.Payload.QuestionId, @event.Payload.Answer, @event.EventTimeStamp, @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc.Value);
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<DateTimeQuestionAnswered> @event)
@@ -242,18 +258,18 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 answerString = @event.Payload.Answer.ToString(DateTimeFormat.DateWithTimeFormat);
             }
 
-            return this.AnswerQuestion(state, @event.Payload.QuestionId, answerString, @event.EventTimeStamp);
+            return this.AnswerQuestion(state, @event.Payload.QuestionId, answerString, @event.EventTimeStamp, @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc.Value);
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<GeoLocationQuestionAnswered> @event)
         {
             var answerByGeoQuestion = new GeoPosition(@event.Payload.Latitude, @event.Payload.Longitude, @event.Payload.Accuracy, @event.Payload.Altitude, @event.Payload.Timestamp);
-            return this.AnswerQuestion(state, @event.Payload.QuestionId, answerByGeoQuestion, @event.EventTimeStamp);
+            return this.AnswerQuestion(state, @event.Payload.QuestionId, answerByGeoQuestion, @event.EventTimeStamp, @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc.Value);
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<QRBarcodeQuestionAnswered> @event)
         {
-            return this.AnswerQuestion(state, @event.Payload.QuestionId, @event.Payload.Answer, @event.EventTimeStamp);
+            return this.AnswerQuestion(state, @event.Payload.QuestionId, @event.Payload.Answer, @event.EventTimeStamp, @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc.Value);
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<AnswersRemoved> @event)
@@ -335,7 +351,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                             }
                         }
                     }
-                    var responsible = this.users.GetUser(new UserViewInputModel(state.ResponsibleId));
+                    var responsible = this.users.GetUser(state.ResponsibleId);
                     if (responsible?.Supervisor != null)
                     {
                         state.TeamLeadId = responsible.Supervisor.Id;
@@ -405,7 +421,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         private string GetResponsibleIdName(Guid responsibleId)
         {
-            var responsible = this.users.GetUser(new UserViewInputModel(responsibleId));
+            var responsible = this.users.GetUser(responsibleId);
             return responsible != null ? responsible.UserName : "<UNKNOWN RESPONSIBLE>";
         }
 
@@ -413,17 +429,37 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             var area = new Area(@event.Payload.Geometry, @event.Payload.MapName,@event.Payload.NumberOfPoints,
                 @event.Payload.AreaSize, @event.Payload.Length, @event.Payload.Coordinates, @event.Payload.DistanceToEditor);
-            return this.AnswerQuestion(state, @event.Payload.QuestionId, area, @event.EventTimeStamp);
+            return this.AnswerQuestion(state, @event.Payload.QuestionId, area, @event.EventTimeStamp, @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc.Value);
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<AudioQuestionAnswered> @event)
         {
             var audioAnswer = AudioAnswer.FromString(@event.Payload.FileName, @event.Payload.Length);
-            return this.AnswerQuestion(state, @event.Payload.QuestionId, audioAnswer, @event.EventTimeStamp);
+            return this.AnswerQuestion(state, @event.Payload.QuestionId, audioAnswer, @event.EventTimeStamp,  @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc.Value);
         }
 
-        public string Name => "Interview Summary Denormalizer";
-        public object[] Readers => new object[0];
-        //public override object[] Writers => new object[0];
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewRestored> @event)
+        {
+            if (@event.Origin == Implementation.Synchronization.Constants.HeadquartersSynchronizationOrigin)
+                return state;
+
+            var createdStatusRecord =
+                state.InterviewCommentedStatuses.FirstOrDefault(s => s.Status == InterviewExportedAction.Created);
+            state.CreatedDate = createdStatusRecord?.Timestamp ?? @event.EventTimeStamp;
+
+            var firstAnswerSetStatusRecord =
+                state.InterviewCommentedStatuses.FirstOrDefault(s =>
+                    s.Status == InterviewExportedAction.FirstAnswerSet);
+            if (firstAnswerSetStatusRecord != null)
+            {
+                state.FirstAnswerDate = firstAnswerSetStatusRecord.Timestamp;
+                state.FirstSupervisorId = firstAnswerSetStatusRecord.SupervisorId;
+                state.FirstSupervisorName = firstAnswerSetStatusRecord.SupervisorName;
+                state.FirstInterviewerId = firstAnswerSetStatusRecord.InterviewerId;
+                state.FirstInterviewerName = firstAnswerSetStatusRecord.InterviewerName;
+            }
+
+            return state;
+        }
     }
 }

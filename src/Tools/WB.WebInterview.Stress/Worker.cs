@@ -2,13 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Transports;
+
+using Serilog;
 
 namespace WB.WebInterview.Stress
 {
@@ -21,6 +25,7 @@ namespace WB.WebInterview.Stress
         private readonly Configuration _config;
         private readonly ApiMaster _apiMaster;
         private readonly HashSet<string> _sharedInterviews;
+        private readonly ILogger logger;
         private readonly CancellationToken _cancellationToken;
         
         public string WorkerId { get; }
@@ -30,16 +35,18 @@ namespace WB.WebInterview.Stress
         private HubConnection _client;
         public string InterviewId { get; private set; }
         private IHubProxy _proxy;
-
         private int _liveTime;
         private string _interviewLocation;
         private int? _inDelay;
 
-        public Worker(Configuration configuration, ApiMaster apiMaster, HashSet<string> sharedInterviews, CancellationToken cancellationToken = default(CancellationToken))
+        private static readonly Stopwatch _global = new Stopwatch();
+
+        public Worker(Configuration configuration, ApiMaster apiMaster, HashSet<string> sharedInterviews, ILogger logger, CancellationToken cancellationToken = default(CancellationToken))
         {
             _config = configuration;
             _apiMaster = apiMaster;
             _sharedInterviews = sharedInterviews;
+            this.logger = logger;
             _cancellationToken = cancellationToken;
             WorkerId = Interlocked.Increment(ref _workerCounter).ToString();
         }
@@ -49,66 +56,116 @@ namespace WB.WebInterview.Stress
 
         public string State { get; set; }
 
+        public async Task InitQuestionnaireAsync()
+        {
+            await CreateInterviewAsync();
+            await ConnectToSignalr().ConfigureAwait(false);
+
+            await this._apiMaster.InitAsync(_proxy);
+        }
+
+        static readonly SemaphoreSlim StartupWindow = new SemaphoreSlim(20);
+
         public async Task StartAsync()
         {
+            _global.Start();
+            Interlocked.Increment(ref QueuedWorkers);
+            await StartupWindow.WaitAsync(_cancellationToken);
+            Interlocked.Decrement(ref QueuedWorkers);
+            Interlocked.Increment(ref ConnectingWorkers);
+            UpdateTitle();
+            try
+            {
+                await ConnectAndAnswerQuestions();
+            }
+            finally
+            {
+                StartupWindow.Release();
+                Interlocked.Increment(ref ActiveWorkers);
+                Interlocked.Decrement(ref ConnectingWorkers);
+            }
+
+            UpdateTitle();
+
             while (!_cancellationToken.IsCancellationRequested)
             {
-                _liveTime = Rnd.Next(_config.restartWorkersIn);
+                await ConnectAndAnswerQuestions();
+            }
 
-                if (_sharedInterviews.Any() && Rnd.NextDouble() < _config.shareInterviewPropability)
-                {
-                    lock (_sharedInterviews)
-                    {
-                        this.InterviewId = _sharedInterviews.Skip(Rnd.Next(0, _sharedInterviews.Count)).First();
-                        Log($"Reusing other interview. #{this.InterviewId}");
-                    }
-                }
-                else
-                {
-                    while (!await CreateInterviewAsync())
-                    {
-                        Log("Cannot create interview");
-                    }
+            Interlocked.Decrement(ref ActiveWorkers);
 
-                    _sharedInterviews.Add(this.InterviewId);
+            UpdateTitle();
+        }
+
+        private async Task ConnectAndAnswerQuestions()
+        {
+            _liveTime = Rnd.Next(_config.restartWorkersIn);
+
+            _answersToDo = Rnd.Next(_config.questionsToAnswerRange.From ?? 0, _config.questionsToAnswerRange.To);
+
+            if (_sharedInterviews.Any() && Rnd.NextDouble() < _config.shareInterviewPropability)
+            {
+                lock (_sharedInterviews)
+                {
+                    this.InterviewId = _sharedInterviews.Skip(Rnd.Next(0, _sharedInterviews.Count)).First();
+                    Log($"Reusing other interview. #{this.InterviewId}");
+                }
+            }
+            else
+            {
+                while (!await CreateInterviewAsync())
+                {
+                    Log("Cannot create interview");
                 }
 
-                await WorkAsync().ConfigureAwait(false);
+                _sharedInterviews.Add(this.InterviewId);
+            }
 
-                await this._apiMaster.InitAsync(_proxy);
+            await ConnectToSignalr().ConfigureAwait(false);
 
-                _restartWatcher.Restart();
-                try
-                {
-                    await QueryAsync().ConfigureAwait(false);
-                }
-                catch
-                {
-                    Log("Restarting");
-                }
-                finally
-                {
-                    _sharedInterviews.Remove(this.InterviewId);
-                    _client.Stop();
-                    _client.Dispose();
-                }
+            _restartWatcher.Restart();
+            try
+            {
+                await QueryAsync().ConfigureAwait(false);
+            }
+            catch
+            {
+                Log("Restarting");
+            }
+            finally
+            {
+                _sharedInterviews.Remove(this.InterviewId);
+                _client.Stop();
+                _client.Dispose();
             }
         }
 
-        private void Log(string message)
+        private void Log(string message, params object[] args)
         {
             string ms = _sw == null || !_sw.IsRunning ? "" : $"({_sw.ElapsedMilliseconds} ms)";
             State = message;
             OnStateChange();
             string mess = $"#{WorkerId,-3} [{InterviewId ?? ""}]: {ms}{message}.";
-            Console.WriteLine(mess);
+
+            logger.Debug(mess, args);
         }
 
-        private async Task WorkAsync()
+        static long ConnectedToHubCount = 0;
+        static long ActiveWorkers = 0;
+        static long QueuedWorkers = 0;
+        static long ConnectingWorkers = 0;
+        static readonly SimpleRunningAverage AvgAnswerTime = new SimpleRunningAverage(10);
+        static double AverageAnswerTime = 0;
+        static long ErrorsCount = 0;
+        static long InterviewsCreated = 0;
+        private int _answersToDo;
+
+        private async Task ConnectToSignalr()
         {
             var signalrHub = await GetSignalrHubsUriAsync();
             _client = new HubConnection(signalrHub, $"interviewId={InterviewId}");
-
+            _client.CookieContainer = new CookieContainer();
+            _client.Closed += OnHubDisconnected;
             _proxy = _client.CreateHubProxy("interview");
 
             while (_client.State != ConnectionState.Connected)
@@ -124,6 +181,28 @@ namespace WB.WebInterview.Stress
                     Log($"Error connecting to hub. Retry. {e.Message}");
                     await DelayAsync(_config.createInterviewDelay);
                 }
+                finally
+                {
+                    Interlocked.Increment(ref ConnectedToHubCount);
+                    UpdateTitle();
+                }
+
+        }
+
+        void UpdateTitle()
+        {
+            logger.Information("{totalTime} Workers - InQueue: {QueuedWorkers}, Connecting: {ConnectingWorkers}, " +
+                "Active: {ActiveWorkers}. Connections to HUB: {ConnectedToHubCount}. " +
+                "Avg. response: {AverageAnswerTime:F}s. Errors: {ErrorsCount}. Interviews: {InterviewsCreated} ({interviewsPerSecond:0.00} i/s)",
+                _global.Elapsed.ToString(@"hh\:mm\:ss"),
+                QueuedWorkers, ConnectingWorkers, ActiveWorkers, ConnectedToHubCount, AverageAnswerTime, ErrorsCount, InterviewsCreated,
+                InterviewsCreated / _global.Elapsed.TotalSeconds);
+        }
+
+        private void OnHubDisconnected()
+        {
+            Interlocked.Decrement(ref ConnectedToHubCount);
+            UpdateTitle();
         }
 
         private async Task<string> GetSignalrHubsUriAsync()
@@ -141,17 +220,25 @@ namespace WB.WebInterview.Stress
         {
             try
             {
-                while (!_cancellationToken.IsCancellationRequested && _restartWatcher.ElapsedMilliseconds < _liveTime)
+                var sw = Stopwatch.StartNew();
+
+                while (_answersToDo > 0 && !_cancellationToken.IsCancellationRequested && _restartWatcher.ElapsedMilliseconds < _liveTime)
                 {
                     await DelayAsync(Rnd.Next(_config.answerDelay));
                     _sw.Restart();
 
-                    await _apiMaster.AnswerRandomQuestionAsync(_proxy, Rnd, Log);
+                    sw.Restart();
+                    if (await _apiMaster.AnswerRandomQuestionAsync(_proxy, Rnd, logger))
+                    {
+                        AverageAnswerTime = AvgAnswerTime.Add(sw.Elapsed.TotalSeconds);
+                        _answersToDo--;
+                    }
                 }
             }
             catch (Exception e)
             {
                 Log($"Got exception: {e.Message}");
+                Interlocked.Increment(ref ErrorsCount);
                 throw;
             }
         }
@@ -165,7 +252,7 @@ namespace WB.WebInterview.Stress
 
         public int? InDelay
         {
-            get { return _inDelay; }
+            get => _inDelay;
             set
             {
                 _inDelay = value;
@@ -181,25 +268,19 @@ namespace WB.WebInterview.Stress
             {
                 var http = new HttpClient();
                 Log("Starting create interview");
-                var startInterviewPage = await http.GetStringAsync(_config.startUri);
-
-                var forgeryToken = GetAntiForgeryToken(startInterviewPage);
-                http.DefaultRequestHeaders.Add("Cookie", $"__RequestVerificationToken={forgeryToken}");
-
-                var response = await http.PostAsync(_config.startUri, new FormUrlEncodedContent(new[]
-                    {
-                        new KeyValuePair<string, string>("__RequestVerificationToken", forgeryToken),
-                        new KeyValuePair<string, string>("resume", "false")
-                    }), _cancellationToken);
+                var response = await http.SendAsync(new HttpRequestMessage
+                {
+                    RequestUri = new Uri(_config.startUri)
+                });
 
                 _interviewLocation = response.RequestMessage.RequestUri.AbsoluteUri;
                 InterviewId = GetInterviewId(_interviewLocation, "webinterview/start/") ??
                                GetInterviewId(_interviewLocation, "webinterview/");
 
-                Guid interviewId;
-                if (!Guid.TryParse(InterviewId, out interviewId)) return false;
+                if (!Guid.TryParse(InterviewId, out _)) return false;
 
                 Log("Done create interview.");
+                Interlocked.Increment(ref InterviewsCreated);
                 return true;
             }
             catch (Exception e)
@@ -209,15 +290,6 @@ namespace WB.WebInterview.Stress
             }
         }
 
-        private string GetAntiForgeryToken(string page)
-        {
-            // <input name="__RequestVerificationToken" type="hidden" value="P2Y94wdSa9ocMyaUDyCLmZNQ3TDzYzmpdmFSVmuRR2Quw2pQdpFiN6NB6rRdiDaktA5V0lkAp1a0SsdsiDE-Baha85DpofkAt1Y7PFA439s1" />
-            var tokenIdx = page.IndexOf("__RequestVerificationToken", StringComparison.InvariantCultureIgnoreCase);
-            var valueStart = page.IndexOf("value=\"", tokenIdx, StringComparison.InvariantCultureIgnoreCase) +
-                             "value=\"".Length;
-            var valueEnd = page.IndexOf('"', valueStart);
-            return page.Substring(valueStart, valueEnd - valueStart);
-        }
 
         private string GetInterviewId(string location, string marker)
         {

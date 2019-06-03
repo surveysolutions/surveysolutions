@@ -22,14 +22,11 @@ namespace Main.Core.Entities.SubEntities
             this.ValidationConditions = validationConditions ?? new List<ValidationCondition>();
         }
 
-        private ReadOnlyCollection<IComposite> children = new ReadOnlyCollection<IComposite>(new List<IComposite>(0));
+        private readonly ReadOnlyCollection<IComposite> children = new ReadOnlyCollection<IComposite>(new List<IComposite>(0));
 
         public ReadOnlyCollection<IComposite> Children
         {
-            get
-            {
-                return children;
-            }
+            get => children;
             set
             {
                 // do nothing
