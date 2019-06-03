@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.BoundedContexts.Tester.Implementation.Services
@@ -41,7 +42,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
         {
             this.optionsRepository.RemoveOptionsForQuestionnaire(questionnaireIdentity);
 
-            var questionsWithLongOptionsList = questionnaireDocument.Find<SingleQuestion>(
+            var questionsWithLongOptionsList = questionnaireDocument.Find<ICategoricalQuestion>(
                 x => x.CascadeFromQuestionId.HasValue || (x.IsFilteredCombobox ?? false)).ToList();
 
             foreach (var question in questionsWithLongOptionsList)
