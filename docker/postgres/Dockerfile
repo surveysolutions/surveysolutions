@@ -60,7 +60,7 @@ RUN if (Test-Path 'C:\\windows\\system32\\msvcp120.dll') { \
     }
 
 ####
-#### PostgreSQL on Windows Nano Server
+#### PostgreSQL on Windows Server Core
 ####
 FROM mcr.microsoft.com/dotnet/framework/sdk:4.8
 
@@ -68,13 +68,9 @@ RUN mkdir "C:\\docker-entrypoint-initdb.d"
 
 #### Copy over PostgreSQL
 COPY --from=prepare /pgsql /pgsql
+ADD path.ps1 /
+RUN ./path.ps1
 
-#### In order to set system PATH, ContainerAdministrator must be used
-#USER ContainerAdministrator
-RUN setx /M PATH 'C:\\pgsql\\bin;%PATH%'
-#RUN setx /M PATH "C:\temp\curl\curl-7.65.0-win64-mingw\bin;%PATH%"
-
-USER ContainerUser
 ENV PGDATA "C:\\pgsql\\data"
 
 COPY docker-entrypoint.cmd /
