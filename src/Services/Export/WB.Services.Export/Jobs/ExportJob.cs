@@ -113,6 +113,8 @@ namespace WB.Services.Export.Jobs
                     return serviceProvider.GetService<SpssFormatExportHandler>();
                 case DataExportFormat.STATA:
                     return serviceProvider.GetService<StataFormatExportHandler>();
+                case DataExportFormat.DDI:
+                    return serviceProvider.GetService<DdiFormatExportHandler>();
                 default:
                     throw new NotSupportedException($"Export handler for '{format}' not found");
             }

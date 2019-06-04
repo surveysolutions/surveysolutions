@@ -23,7 +23,7 @@
                 </div>
                  <div class="d-flex ai-center" v-else>
                     <a v-if="!isRunning && hasFile && fileDestination == 'File'" :href="downloadFileUrl" class="btn btn-primary btn-lg">Download</a>
-                    <div v-if="hasFile" class="file-info">Last updated on {{dataFileLastUpdateDate}}<br />File size: {{fileSize}} MB </div>
+                    <div v-if="hasFile" class="file-info">Last updated: {{dataFileLastUpdateDate}}<br />File size: {{fileSize}} MB </div>
                     <div v-if="!hasFile && !isFailed" class="file-info">File was regenerated</div>
                     <div v-if="isFailed" class="text-danger">{{error}}</div>
                 </div>
@@ -75,7 +75,8 @@ import {mixin as VueTimers} from 'vue-timers'
 
 const ProcessStatus = {
     Compressing: "Compressing",
-    Finished: "Finished"
+    Finished: "Finished",
+    Canceled: "Canceled"
 };
 
 export default {
@@ -169,8 +170,9 @@ export default {
 
                     this.isInitializing = false;
 
-                    if (this.processStatus == ProcessStatus.Finished)
+                    if (this.processStatus == ProcessStatus.Finished || this.processStatus == ProcessStatus.Canceled)
                     {
+                        this.isRunning = false;
                         this.$timer.stop("updateStatus");
                         if (this.hasFile)
                         {
@@ -206,7 +208,10 @@ export default {
       {
            modal.confirm(this.$t('WebInterviewUI.ConfirmRosterRemove'), result => {
                 if (result) {
-                    return;
+                    this.$http.post(this.$config.model.api.cancelExportProcessUrl, null, {  params: { id: this.dataExportProcessId }  })
+                        .catch((error) => {
+                            Vue.config.errorHandler(error, this);
+                        });
                 } else {
                     return
                 }
