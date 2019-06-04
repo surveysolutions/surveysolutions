@@ -66,7 +66,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Identity = entityIdentity ?? throw new ArgumentNullException(nameof(entityIdentity));
 
             this.interview = this.interviewRepository.Get(interviewId);
-            this.UpdateCommentsFromInterview();
+            this.UpdateCommentsFromInterview().WaitAndUnwrapException();
 
             this.HasComments = !string.IsNullOrWhiteSpace(this.InterviewerComment);
         }

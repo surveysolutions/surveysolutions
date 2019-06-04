@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MvvmCross.Base;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -29,9 +30,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionStateViewModel<MultipleOptionsQuestionAnswered> questionStateViewModel,
             IQuestionnaireStorage questionnaireRepository, ILiteEventRegistry eventRegistry,
             IStatefulInterviewRepository interviewRepository, IPrincipal principal, AnsweringViewModel answering,
-            QuestionInstructionViewModel instructionViewModel, ThrottlingViewModel throttlingModel) : base(
+            QuestionInstructionViewModel instructionViewModel, ThrottlingViewModel throttlingModel, IMvxMainThreadAsyncDispatcher mainThreadDispatcher) : base(
             questionStateViewModel, questionnaireRepository, eventRegistry, interviewRepository, principal, answering,
-            instructionViewModel, throttlingModel)
+            instructionViewModel, throttlingModel, mainThreadDispatcher)
         {
             this.Options = new CovariantObservableCollection<CategoricalMultiOptionViewModel<int>>();
         }
@@ -87,11 +88,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             });
         }
 
-        public void Handle(LinkedToListOptionsChanged @event)
+        public async void Handle(LinkedToListOptionsChanged @event)
         {
             if (@event.ChangedLinkedQuestions.All(x => x.QuestionId != this.Identity)) return;
 
-            this.UpdateViewModelsInMainThread();
+            await this.UpdateViewModelsInMainThreadAsync();
         }
 
         public void Handle(MultipleOptionsQuestionAnswered @event)
@@ -101,28 +102,28 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.UpdateViewModelsByAnsweredOptionsInMainThread(@event.SelectedValues.Select(Convert.ToInt32).ToArray());
         }
 
-        public void Handle(QuestionsEnabled @event)
+        public async void Handle(QuestionsEnabled @event)
         {
             if (@event.Questions.All(x => x.Id != this.linkedToQuestionId)) return;
 
-            this.UpdateViewModelsInMainThread();
+            await this.UpdateViewModelsInMainThreadAsync();
         }
 
-        public void Handle(QuestionsDisabled @event)
+        public async void Handle(QuestionsDisabled @event)
         {
             if (@event.Questions.All(x => x.Id != this.linkedToQuestionId))
                 return;
 
-            this.UpdateViewModelsInMainThread();
+            await this.UpdateViewModelsInMainThreadAsync();
         }
 
-        public override void Handle(AnswersRemoved @event)
+        public override async void Handle(AnswersRemoved @event)
         {
             if (@event.Questions.Contains(this.Identity))
                 this.UpdateViewModelsByAnsweredOptionsInMainThread(Array.Empty<int>());
 
             if (@event.Questions.Any(question => question.Id == this.linkedToQuestionId))
-                this.UpdateViewModelsInMainThread();
+                await this.UpdateViewModelsInMainThreadAsync();
         }
     }
 }
