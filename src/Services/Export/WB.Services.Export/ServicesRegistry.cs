@@ -121,6 +121,7 @@ namespace WB.Services.Export
             services.AddTransient<OnedriveBinaryDataExportHandler>();
             services.AddTransient<DropboxBinaryDataExportHandler>();
             services.AddTransient<GoogleDriveBinaryDataExportHandler>();
+            services.AddTransient<DdiFormatExportHandler>();
         }
     }
 }

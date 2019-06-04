@@ -25,7 +25,7 @@
                 <h3>Filter interviews to export</h3>
                 <div class="d-flex mb-20 filter-wrapper">
                   <div class="filter-column">
-                    <h5>Survey template (questionnaire version)</h5>
+                    <h5>Survey template <span class="text-danger">*</span></h5>
                     <div class="form-group">
                       <Typeahead
                         control-id="questionnaireId"
@@ -38,6 +38,7 @@
                         v-on:selected="questionnaireSelected"
                         :fetch-url="questionnaireFetchUrl"
                       />
+                      <span class="help-block">{{ errors.first('questionnaireId') }}</span>
                     </div>
                     <div class="form-group">
                       <Typeahead
@@ -53,6 +54,7 @@
                         :disabled="questionnaireVersionFetchUrl == null"
                         :selectFirst=true
                       />
+                      <span class="help-block">{{ errors.first('questionnaireVersion') }}</span>
                   </div>
                     </div>
                     
@@ -161,7 +163,7 @@
             <div class="mb-30">
                 <div class="structure-block">
                     <button type="button" class="btn btn-success" @click="queueExport">add to queue</button>
-                    <button type="button" class="btn btn-lg btn-link" @click="exportFormIsVisible = false">Cancel</button>
+                    <button type="button" class="btn btn-lg btn-link" @click="resetForm">Cancel</button>
                 </div>
             </div>
           </form>
@@ -169,7 +171,6 @@
         <div class="col-md-12" v-if="!exportServiceIsUnavailable">
           <div class="no-sets" v-if="!exportServiceIsUnavailable && exportResults.length == 0">
             <p>No generated sets yet</p>
-            <button  v-if="!exportFormIsVisible"  type="button" class="btn btn-success" @click="exportFormIsVisible = true">Generate new export set</button>
           </div>
           <div v-else>
             <h3 class="mb-20">Previously generated export sets</h3>
@@ -216,7 +217,6 @@ export default {
     data() {
         return {
             exportServiceIsUnavailable: true,
-            exportFormIsVisible: false,
             dataType: null,
             dataFormat: "Tabular",
             dataDestination: "zip",
@@ -289,6 +289,16 @@ export default {
     },
     watch: {},
     methods: {
+      resetForm(){
+        this.dataType = null,
+        this.dataFormat = "Tabular";
+        this.dataDestination = "zip";
+        this.questionnaireId = null;
+        this.questionnaireVersion = null;
+        this.status = null;
+        this.hasInterviews = false;
+        this.hasBinaryData = false;
+      },
       updateExportCards(){
         var self = this;
         this.$http.get(this.$config.model.api.statusUrl)
@@ -359,7 +369,6 @@ export default {
             this.$http.post(this.$config.model.api.updateSurveyDataUrl, null, { params: exportParams })
                 .then(function (response) {
                     self.$validator.reset();
-                    self.exportFormIsVisible = false;
                     const jobId = (response.data || { JobId: 0 }).JobId;
                     self.exportResults.splice(0, 0,{ 
                       id: jobId
@@ -423,7 +432,7 @@ export default {
         return {
           id: questionnaireId,
           version: questionnaireVersion,
-          format: dataFormat, 
+          format: result, 
           status: status
         };
       },
