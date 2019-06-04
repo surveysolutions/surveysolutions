@@ -193,10 +193,10 @@
     <value>Tap to enter decimal</value>
   </data>
   <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
-    <value>Are you sure you want to remove related roster {0}?</value>
+    <value>Are you sure you want to remove related roster '{0}' from each related roster?</value>
   </data>
   <data name="Interview_Questions_RemoveRowFromRosterListMessage" xml:space="preserve">
-    <value>Are you sure you want to remove related roster?</value>
+    <value>Are you sure you want to remove related rosters?</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>
@@ -685,7 +685,6 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>{0} notifications</value>
   </data>
   <data name="Interview_Question_NumberRosterRemoveConfirm" xml:space="preserve">
-    <value>Are you sure you want to remove {{amountOfRostersToRemove}} row(s) from each related roster?</value>
-    <comment>Do not translate parts inside {{}}: {{amountOfRostersToRemove}}</comment>
+    <value>Are you sure you want to remove {0} row(s) from each related roster?</value>
   </data>
 </root>

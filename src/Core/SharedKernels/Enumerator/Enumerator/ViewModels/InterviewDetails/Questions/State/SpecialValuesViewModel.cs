@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public event EventHandler SpecialValueChanged;
         public event EventHandler SpecialValueRemoved;
 
-        private async Task SpecialValueSelected(object sender, EventArgs eventArgs)
+        private Task SpecialValueSelected(object sender, EventArgs eventArgs)
         {
             var selectedSpecialValue = (SingleOptionQuestionOptionViewModel) sender;
             var previousOption =
@@ -61,6 +61,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (previousOption != null) previousOption.Selected = false;
 
             this.SpecialValueChanged?.Invoke(selectedSpecialValue, EventArgs.Empty);
+            return Task.CompletedTask;
         }
         
         public virtual void Init(string interviewId, Identity entityIdentity, IQuestionStateViewModel questionState)
@@ -97,9 +98,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private async Task RemoveAnswerHandler(object sender, EventArgs e)
+        private Task RemoveAnswerHandler(object sender, EventArgs e)
         {
             this.SpecialValueRemoved?.Invoke(sender, EventArgs.Empty);
+            return Task.CompletedTask;
         }
 
         private async Task UpdateSpecialValuesAsync()

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MvvmCross.Base;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -30,9 +31,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IQuestionnaireStorage questionnaireRepository, ILiteEventRegistry eventRegistry,
             IStatefulInterviewRepository interviewRepository, IPrincipal principal, IUserInteractionService userInteraction,
             AnsweringViewModel answering, QuestionInstructionViewModel instructionViewModel, ThrottlingViewModel throttlingModel,
-            FilteredOptionsViewModel filteredOptionsViewModel)
+            FilteredOptionsViewModel filteredOptionsViewModel, IMvxMainThreadAsyncDispatcher mainThreadDispatcher)
             : base(questionStateViewModel, questionnaireRepository, eventRegistry, interviewRepository, principal,
-                answering, instructionViewModel, throttlingModel)
+                answering, instructionViewModel, throttlingModel, mainThreadDispatcher)
         {
             this.userInteraction = userInteraction;
             this.filteredOptionsViewModel = filteredOptionsViewModel;
@@ -50,7 +51,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             filteredOptionsViewModel.OptionsChanged += FilteredOptionsViewModelOnOptionsChanged;
         }
         private async Task FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs e)
-            => await this.UpdateViewModelsInMainThread();
+            => await this.UpdateViewModelsInMainThreadAsync();
 
         protected override void SaveAnsweredOptionsForThrottling(IOrderedEnumerable<CategoricalMultiOptionViewModel<decimal>> answeredViewModels) 
             => this.selectedOptionsToSave = answeredViewModels.Select(x => new AnsweredYesNoOption(x.Value, x.Checked)).ToArray();

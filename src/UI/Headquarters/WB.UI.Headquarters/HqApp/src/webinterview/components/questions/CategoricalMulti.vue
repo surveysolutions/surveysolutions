@@ -90,7 +90,14 @@
                     return;
                 }
 
-                const confirmMessage = this.$t("WebInterviewUI.ConfirmRosterRemove");
+                const diff = _.difference(this.answer, value)
+                const rosterTitle = _.join(diff.map(v => {
+                    return _.find(this.answeredOrAllOptions, { value: v }).title
+                }), ', ')
+
+                const confirmMessage = this.$t("WebInterviewUI.Interview_Questions_RemoveRowFromRosterMessage", {
+                    rosterTitle
+                } );
 
                 modal.confirm(confirmMessage, result => {
                     if (result) {

@@ -224,6 +224,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                         HasQuestionnaire = questionnaire => questionnaire.Find<IGroup>(q => q.DisplayMode == RosterDisplayMode.Table).Any(),
                         Description = "Contains roster with table display mode"
                     },
+                    new QuestionnaireFeature
+                    {
+                        HasQuestionnaire = questionnaire => questionnaire.Find<IQuestion>(q => q.QuestionType == QuestionType.SingleOption
+                                                                       && q.QuestionScope == QuestionScope.Supervisor 
+                                                                       && q.CascadeFromQuestionId.HasValue).Any(),
+                        Description = "Contains cascading question with supervisor scope"
+                    }
                 }
             },
         };

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross;
 using MvvmCross.Base;
@@ -55,7 +54,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
             this.eventRegistry = eventRegistry;
-            this.mainThreadDispatcher = mainThreadDispatcher ?? Mvx.Resolve<IMvxMainThreadAsyncDispatcher>();
+            this.mainThreadDispatcher = mainThreadDispatcher ?? Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
 
             this.questionState = questionStateViewModel;
             this.InstructionViewModel = instructionViewModel;
@@ -326,8 +325,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
-                this.Options.SynchronizeWith(optionsToUpdate,
-                    (s, t) => s.RosterVector.Identical(t.RosterVector) && s.Title == t.Title);
+                this.Options.ReplaceWith(optionsToUpdate);
                 this.RaisePropertyChanged(() => this.HasOptions);
             });
         }
