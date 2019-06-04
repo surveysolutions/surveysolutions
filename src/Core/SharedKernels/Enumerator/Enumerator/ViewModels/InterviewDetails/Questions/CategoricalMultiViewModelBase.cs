@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MvvmCross;
+using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -29,6 +32,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly ILiteEventRegistry eventRegistry;
         private readonly IPrincipal principal;
         protected readonly IStatefulInterviewRepository interviewRepository;
+        protected readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
         private Guid interviewId;
         private bool areAnswersOrdered;
         protected int? maxAllowedAnswers;
@@ -80,12 +84,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IPrincipal principal,
             AnsweringViewModel answering,
             QuestionInstructionViewModel instructionViewModel,
-            ThrottlingViewModel throttlingModel)
+            ThrottlingViewModel throttlingModel,
+            IMvxMainThreadAsyncDispatcher mainThreadDispatcher)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.eventRegistry = eventRegistry;
             this.principal = principal;
             this.interviewRepository = interviewRepository;
+            this.mainThreadDispatcher = mainThreadDispatcher ?? Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
 
             this.QuestionState = questionStateViewModel;
             this.InstructionViewModel = instructionViewModel;
@@ -129,7 +135,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.eventRegistry.Subscribe(this, interviewId);
 
-            this.UpdateViewModelsInMainThread(); 
+            this.UpdateViewModelsInMainThreadAsync().WaitAndUnwrapException(); 
         }
 
         private async Task SaveAnswer()
@@ -152,11 +158,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        protected virtual async Task UpdateViewModelsInMainThread()
+        protected virtual async Task UpdateViewModelsInMainThreadAsync()
         {
             var interview = this.interviewRepository.Get(this.interviewId.FormatGuid());
 
-            await this.InvokeOnMainThreadAsync(async () => this.Options.SynchronizeWith(this.GetOptions(interview).ToList(), (s, t) => s.Value.Equals(t.Value) && s.Title == t.Title));
+            await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(
+                () => 
+                    this.Options.ReplaceWith(this.GetOptions(interview).ToList()));
 
             this.UpdateOptionsFromInterviewInMainThread();
         }

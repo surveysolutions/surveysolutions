@@ -648,7 +648,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to remove related roster {{rosterTitle}}?.
+        ///   Looks up a localized string similar to Are you sure you want to remove related roster &apos;{{rosterTitle}}&apos;?.
         /// </summary>
         internal static string Interview_Questions_RemoveRowFromRosterMessage {
             get {
