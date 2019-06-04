@@ -2,11 +2,13 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Sockets;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Text;
 using Dapper;
 using Npgsql;
+using Polly;
 using Serilog.Core;
 using Serilog.Events;
 using Serilog.Formatting.Json;
@@ -22,7 +24,12 @@ namespace WB.Services.Infrastructure.Logging
         private readonly Subject<LogEvent> queue;
         private readonly JsonFormatter formatter = new JsonFormatter();
         private bool tableCreated = false;
-
+        
+        private static readonly Policy RetryPolicy = 
+            Policy.Handle<NpgsqlException>(e => e.IsTransient)
+                .Or<SocketException>()
+                .WaitAndRetryForever(i => TimeSpan.FromSeconds(i < 10 ? i * i : 100));
+        
         public Postgres(string connectionString, string schema, string tableName, LogEventLevel minLevel)
         {
             this.connectionString = connectionString;
@@ -53,53 +60,67 @@ namespace WB.Services.Infrastructure.Logging
                         tableCreated = true;
                     }
 
-                    var sb = new StringBuilder();
-                    using (var db = new NpgsqlConnection(connectionString))
+                    try
                     {
-                        db.Execute($@"insert into ""{schema}"".""{tableName}"" " 
-                                   + "( message, jobId, source, stacktrace, level, tenant, data, timestamp, host, version, app)" 
-                                   + " values (@message, @jobId, @source, @stackTrace, @level, @tenant, @data::jsonb, @timestamp, "
-                                   + " @host, @version, @app)",
-                            events.Select(e =>
-                            {
-                                string GetProperty(string name) 
-                                {
-                                    return e.Properties.ContainsKey(name) ? e.Properties[name].ToString() : null;
-                                }
-
-                                sb.Clear();
-                                var text = new StringWriter(sb);
-                                formatter.Format(e, text);
-                            
-                                var jobId = GetProperty("jobId");
-                                var data = sb.ToString();
-                            
-                                return new
-                                {
-                                    app = GetProperty("AppType"),
-                                    data,
-                                    host = GetProperty("Host"),
-                                    jobId = jobId != null ? int.Parse(jobId) : (int?)null,
-                                    level = e.Level.ToString(),
-                                    message = e.RenderMessage(),
-                                    source= GetProperty("SourceContext"),
-                                    stackTrace = e.Exception?.ToStringDemystified(),
-                                    tenant = GetProperty("tenantName"),
-                                    timestamp = e.Timestamp,
-                                    version = GetProperty("Version")
-                                };
-                            }));
+                        RetryPolicy.Execute(() => StoreEventsToDabase(events));
+                    }
+                    catch
+                    {
+                        /* do not fail if still cannot write to DB, just ignore if */
                     }
                 });
+
+            void StoreEventsToDabase(LogEvent[] events)
+            {
+                using (var db = new NpgsqlConnection(connectionString))
+                {
+                    db.Execute($@"insert into ""{schema}"".""{tableName}"" "
+                               + "( message, jobId, source, stacktrace, level, tenant, data, timestamp, host, version, app)"
+                               + " values (@message, @jobId, @source, @stackTrace, @level, @tenant, @data::jsonb, @timestamp, "
+                               + " @host, @version, @app)",
+                        events.Select(e =>
+                        {
+                            string GetProperty(string name)
+                            {
+                                return e.Properties.ContainsKey(name) ? e.Properties[name].ToString() : null;
+                            }
+
+                            var sb = new StringBuilder();
+                            sb.Clear();
+                            var text = new StringWriter(sb);
+                            formatter.Format(e, text);
+
+                            var jobId = GetProperty("jobId");
+                            var data = sb.ToString();
+
+                            return new
+                            {
+                                app = GetProperty("AppType"),
+                                data,
+                                host = GetProperty("Host"),
+                                jobId = jobId != null ? int.Parse(jobId) : (int?) null,
+                                level = e.Level.ToString(),
+                                message = e.RenderMessage(),
+                                source = GetProperty("SourceContext"),
+                                stackTrace = e.Exception?.ToStringDemystified(),
+                                tenant = GetProperty("tenantName"),
+                                timestamp = e.Timestamp,
+                                version = GetProperty("Version")
+                            };
+                        }));
+                }
+            }
         }
 
 
         private void EnsureTableCreated()
         {
-            using (var db = new NpgsqlConnection(connectionString))
+            RetryPolicy.Execute(() =>
             {
-                db.Execute($@"create schema if not exists ""{schema}""  ");
-                db.Execute($@"CREATE TABLE if not exists ""{schema}"".""{tableName}"" (
+                using (var db = new NpgsqlConnection(connectionString))
+                {
+                    db.Execute($@"create schema if not exists ""{schema}""  ");
+                    db.Execute($@"CREATE TABLE if not exists ""{schema}"".""{tableName}"" (
 	id serial NOT NULL,
 	message varchar NULL,
     level varchar null,
@@ -116,7 +137,9 @@ namespace WB.Services.Infrastructure.Logging
 );
 CREATE INDEX if not exists {tableName}_tenant_idx ON ""{schema}"".""{tableName}"" (tenant);
 CREATE INDEX if not exists  {tableName}_timestamp_idx ON ""{schema}"".""{tableName}"" (""timestamp"");");
-            }
+                }
+
+            });
         }
 
         public void Emit(LogEvent logEvent)
