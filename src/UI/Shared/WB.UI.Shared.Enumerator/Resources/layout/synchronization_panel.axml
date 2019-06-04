@@ -4,18 +4,19 @@
               android:id="@+id/synchronization_panel"
               style="@style/VerticalContentHeightWrappingLayout"
               local:MvxBind="Visible Synchronization.IsSynchronizationInfoShowed;">
-
+    
   <LinearLayout style="@style/Dashboard_Synchronization_Holder">
     <ImageView style="@style/Dashboard_Synchronization_Image"
                local:MvxBind="BackgroundStyle SynchronizationStatusToDrawable(Synchronization.Status);
                               Visible Synchronization.IsSynchronizationInfoShowed"/>
     <LinearLayout style="@style/VerticalFullWidthWrappingLayout">
 
-        <LinearLayout style="@style/InfoFullWidthWrappingLayout"
+        <LinearLayout style="@style/FullWidthWrappingLayout"
                       local:MvxBind="Visible And(Synchronization.CanBeManaged, Not(Synchronization.SynchronizationErrorOccured), Not(Synchronization.IsUpdateRequired), Synchronization.Statistics.NewVersionExists)">
             <TextView style="@style/Dashboard_Synchronization_Lock_Text"
                       local:MvxBind="Text Localization('Synchronization_NewVersionExists');" />
-            <TextView style="@style/Dashboard_Synchronization_Update_Text"
+            <View style="@style/Dashboard_Synchronization_Spacing_View"/>
+            <TextView style="@style/Dashboard_Synchronization_Update_Text_Gravity_Right"
                       local:MvxBind="Text Localization('Synchronization_UpdateApp'); Click Synchronization.UpdateApplicationCommand;"/>
         </LinearLayout>
 

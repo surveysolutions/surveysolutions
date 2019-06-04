@@ -518,7 +518,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
             catch (RestException ex)
             {
-                throw ex.ToSynchronizationException();
+                var newException = ex.ToSynchronizationException();
+                throw newException;
             }
         }
 
