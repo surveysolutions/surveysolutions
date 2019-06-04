@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private CancellationTokenSource cancellationTokenSource;
 
         private bool isVersionCheckInProgress;
-        private bool isNewVersionAvaliable;
+        private bool isNewVersionAvailable;
         private string checkNewVersionResult;
         private string checkNewVersionDetails;
 
@@ -46,10 +46,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             set => this.RaiseAndSetIfChanged( ref this.isVersionCheckInProgress, value);
         }
 
-        public bool IsNewVersionAvaliable
+        public bool IsNewVersionAvailable
         {
-            get => this.isNewVersionAvaliable;
-            set => this.RaiseAndSetIfChanged( ref this.isNewVersionAvaliable, value);
+            get => this.isNewVersionAvailable;
+            set => this.RaiseAndSetIfChanged( ref this.isNewVersionAvailable, value);
         }
 
         public string CheckNewVersionResult
@@ -76,7 +76,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         
         private async Task UpdateApplication()
         {
-            this.IsNewVersionAvaliable = false;
+            this.IsNewVersionAvailable = false;
             this.IsVersionCheckInProgress = true;
             this.cancellationTokenSource = new CancellationTokenSource(this.downloadApkTimeout);
             this.CheckNewVersionDetails = string.Empty;
@@ -121,7 +121,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         private async Task CheckVersion()
         {
-            this.IsNewVersionAvaliable = false;
+            this.IsNewVersionAvailable = false;
             this.CheckNewVersionResult = null;
             this.IsVersionCheckInProgress = true;
             this.cancellationTokenSource = new CancellationTokenSource();
@@ -135,7 +135,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 {
                     if (versionFromServer.HasValue && versionFromServer > this.deviceSettings.GetApplicationVersionCode())
                     {
-                        this.IsNewVersionAvaliable = true;
+                        this.IsNewVersionAvailable = true;
                     }
                     else
                     {
@@ -155,7 +155,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         private void RejectUpdateApplication()
         {
-            this.IsNewVersionAvaliable = false;
+            this.IsNewVersionAvailable = false;
         }
     }
 }
