@@ -58,7 +58,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.userId = principal.CurrentUserIdentity.UserId;
             this.interviewRepository = interviewRepository ?? throw new ArgumentNullException(nameof(interviewRepository));
             this.eventRegistry = eventRegistry ?? throw new ArgumentNullException(nameof(eventRegistry));
-            this.mainThreadDispatcher = mainThreadDispatcher ?? Mvx.Resolve<IMvxMainThreadAsyncDispatcher>();
+            this.mainThreadDispatcher = mainThreadDispatcher ?? Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
 
             this.questionState = questionStateViewModel;
             this.InstructionViewModel = instructionViewModel;
@@ -132,7 +132,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             
             this.eventRegistry.Subscribe(this, interviewId);
 
-            this.RefreshOptionsFromModelAsync();
+            this.RefreshOptionsFromModelAsync().WaitAndUnwrapException();
         }
 
         public void Dispose()
@@ -319,7 +319,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.InsertOrUpdateOptions(textListAnswerRows);
             });
 
-            this.RaisePropertyChanged(() => this.HasOptions);
+            await this.RaisePropertyChanged(() => this.HasOptions);
         }
 
         private void InsertOrUpdateOptions(List<TextListAnswerRow> textListAnswerRows)
