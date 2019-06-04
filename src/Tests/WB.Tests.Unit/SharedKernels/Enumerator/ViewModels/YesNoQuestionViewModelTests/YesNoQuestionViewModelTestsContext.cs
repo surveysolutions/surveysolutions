@@ -1,5 +1,6 @@
 ﻿using System;
 using Moq;
+using MvvmCross.Base;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -48,7 +49,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                 answeringViewModel ?? Mock.Of<AnsweringViewModel>(),
                 Create.ViewModel.QuestionInstructionViewModel(),
                 throttlingModel ?? Create.ViewModel.ThrottlingViewModel(),
-                filteredOptionsViewModel ?? Mock.Of<FilteredOptionsViewModel>());
+                filteredOptionsViewModel ?? Mock.Of<FilteredOptionsViewModel>(),
+                Create.Fake.MvxMainThreadDispatcher1());
         }
     }
 }

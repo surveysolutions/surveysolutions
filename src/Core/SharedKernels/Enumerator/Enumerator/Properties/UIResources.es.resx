@@ -550,6 +550,6 @@
     <value>La versión de su aplicación no soporta esta funcionalidad</value>
   </data>
   <data name="Interview_Question_NumberRosterRemoveConfirm" xml:space="preserve">
-    <value>¿Está seguro de que quiere eliminar la {{amountOfRostersToRemove}} fila (s) de cada lista relacionada?</value>
+    <value>¿Está seguro de que quiere eliminar la {0} fila (s) de cada lista relacionada?</value>
   </data>
 </root>
