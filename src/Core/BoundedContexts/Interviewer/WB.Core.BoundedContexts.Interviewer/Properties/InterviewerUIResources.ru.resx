@@ -316,6 +316,9 @@
   <data name="Synchronization_Upload_Interviews_Text" xml:space="preserve">
     <value>интервью</value>
   </data>
+  <data name="Synchronization_NewVersionExists" xml:space="preserve">
+    <value>Доступна новая версия</value>
+  </data>
   <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
     <value>{0} из {1} {2} обработано</value>
   </data>
