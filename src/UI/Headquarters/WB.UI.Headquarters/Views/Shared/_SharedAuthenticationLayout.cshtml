@@ -21,6 +21,7 @@
         <p class="text-muted">
             <div class="text-center">
                 © @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">@Pages.Layout_WorldBank</a>, @Pages.Layout_RightsReserved <a href="http://go.worldbank.org/OS6V7NIUD0">@Pages.Layout_Legal</a>.
+                @Html.Partial("_PoweredBy")
             </div>
             <div class="text-center">
                 @(DependencyResolver.Current.GetService<IProductVersion>())
