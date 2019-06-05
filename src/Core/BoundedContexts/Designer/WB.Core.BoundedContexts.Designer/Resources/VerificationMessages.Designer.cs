@@ -1952,7 +1952,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questions in table roster can&apos;t contains substitutions in titles..
+        ///   Looks up a localized string similar to Questions in a table roster may not contain any substitutions in text..
         /// </summary>
         public static string WB0287_TableRosterDoesntContainsQuestionWithSubstitutions {
             get {
