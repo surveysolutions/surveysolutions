@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -23,6 +24,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
     public class GroupVerifications : AbstractVerifier, IPartialVerifier
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly ISubstitutionService substitutionService;
 
         private IEnumerable<Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> ErrorsVerifiers => new[]
         {
@@ -60,6 +62,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error<IGroup>(TableRosterHasMoreThanAllowedEntities, "WB0283", string.Format(VerificationMessages.WB0283_TableRosterAllowedOnlyForGroupWithNoMoreThanElements, MaxEntitiesInTableRoster)),
             Error<IGroup>(TableRosterCantContainsSupervisorQuestions, "WB0284", VerificationMessages.WB0284_TableRosterCantContainsSupervisorQuestions),
             Error<IGroup>(TableRosterContainsOnlyAllowedQuestionTypes, "WB0285", VerificationMessages.WB0285_TableRosterContainsOnlyAllowedQuestionTypes),
+            ErrorForTranslation<IGroup>(TableRosterDoesntContainsQuestionWithSubstitutions, "WB0287", VerificationMessages.WB0287_TableRosterDoesntContainsQuestionWithSubstitutions),
 
             Warning(LargeNumberOfRosters, "WB0200", VerificationMessages.WB0200_LargeNumberOfRostersIsCreated),
             Warning<IGroup>(TooManyQuestionsInGroup, "WB0201", string.Format(VerificationMessages.WB0201_LargeNumberOfQuestionsInGroup, MaxQuestionsCountInSubSection)),
@@ -177,9 +180,10 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private static bool LargeNumberOfRosters(MultiLanguageQuestionnaireDocument questionnaire)
             => questionnaire.Find<IGroup>(q => q.IsRoster).Count() > 20;
 
-        public GroupVerifications(IFileSystemAccessor fileSystemAccessor)
+        public GroupVerifications(IFileSystemAccessor fileSystemAccessor, ISubstitutionService substitutionService)
         {
             this.fileSystemAccessor = fileSystemAccessor;
+            this.substitutionService = substitutionService;
         }
 
         private static bool SectionHasMoreThanAllowedQuestions(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
@@ -527,6 +531,14 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                         default: return true;
                     }
                 return false;
+            });
+
+        private bool TableRosterDoesntContainsQuestionWithSubstitutions(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
+            => group.DisplayMode == RosterDisplayMode.Table && group.Children.Any(composite =>
+            {
+                var title = composite.GetTitle();
+                string[] substitutionReferences = this.substitutionService.GetAllSubstitutionVariableNames(title, composite.VariableName);
+                return substitutionReferences.Length > 0;
             });
 
         private static bool TableRosterWorksOnlyInWebMode(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)

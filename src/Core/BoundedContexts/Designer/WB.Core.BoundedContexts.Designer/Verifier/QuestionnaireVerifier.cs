@@ -59,7 +59,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             verifiers = new IPartialVerifier[]
             {
                 new QuestionVerifications(),
-                new GroupVerifications(fileSystemAccessor),
+                new GroupVerifications(fileSystemAccessor, substitutionService),
                 new AttachmentVerifications(attachmentService), 
                 new ExpressionVerifications(macrosSubstitutionService, expressionProcessor, compilerSettings), 
                 new LookupVerifications(lookupTableService, keywordsProvider), 
