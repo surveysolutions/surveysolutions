@@ -178,7 +178,7 @@
     <value>Нажмите для ввода числа</value>
   </data>
   <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
-    <value>Вы уверены, что хотите удалить строку {0} у зависимых списков?</value>
+    <value>Вы уверены, что хотите удалить строку '{0}' у зависимых списков?</value>
   </data>
   <data name="Interview_Questions_RemoveRowFromRosterListMessage" xml:space="preserve">
     <value>Вы уверены, что хотите удалить строку у зависимого списка?</value>
@@ -688,6 +688,6 @@
     <value>{0} уведомлений</value>
   </data>
   <data name="Interview_Question_NumberRosterRemoveConfirm" xml:space="preserve">
-    <value>Вы уверены, что хотите удалить {{amountOfRostersToRemove}} строк(у) у зависимых списков?</value>
+    <value>Вы уверены, что хотите удалить {0} строк(у) у зависимых списков?</value>
   </data>
 </root>

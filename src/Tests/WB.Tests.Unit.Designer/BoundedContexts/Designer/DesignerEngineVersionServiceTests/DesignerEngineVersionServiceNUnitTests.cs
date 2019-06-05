@@ -19,6 +19,21 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
         }
 
         [Test]
+        public void should_return_27_when_supervisor_cascading_question_added()
+        {
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(
+                Create.SingleOptionQuestion(scope: QuestionScope.Supervisor, cascadeFromQuestionId: Id.g1)
+                );
+            
+            var service = this.CreateDesignerEngineVersionService();
+
+            // act 
+            var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
+
+            Assert.That(contentVersion, Is.EqualTo(27));
+        }
+
+        [Test]
         public void should_return_version_24_when_non_image_attachment_exists()
         {
             QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter();
@@ -76,7 +91,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
         {
             QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(children:
                 new IComposite[]{
-                    Create.SingleOptionQuestion(showAsList:true)
+                    Create.SingleOptionQuestion(showAsList: true)
                 });
 
 
