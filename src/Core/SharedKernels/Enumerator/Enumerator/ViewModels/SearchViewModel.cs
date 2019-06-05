@@ -151,7 +151,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 }
 
                 this.UiItems.OfType<InterviewDashboardItemViewModel>().ForEach(i => i.OnItemRemoved -= InterviewItemRemoved);
-                this.UiItems.ReplaceWith(items);
+                this.InvokeOnMainThread(()=>this.UiItems.ReplaceWith(items));
                 this.UiItems.OfType<InterviewDashboardItemViewModel>().ForEach(i => i.OnItemRemoved += InterviewItemRemoved);
             }
             catch (OperationCanceledException)
