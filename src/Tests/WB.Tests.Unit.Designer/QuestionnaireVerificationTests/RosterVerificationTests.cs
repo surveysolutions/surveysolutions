@@ -207,5 +207,21 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 )
                 .ExpectWarning("WB0286");
         }
+
+        [TestCase("title %i1%")]
+        [TestCase("title %self%")]
+        [TestCase("title %q1%")]
+        public void should_show_error_on_question_with_substitution_in_title_inside_table_roster(string title)
+        {
+            Create.QuestionnaireDocumentWithOneChapter(
+                    Create.NumericIntegerQuestion(id: Id.g1, variable: "i1"),
+                    Create.NumericRoster(rosterId: Id.g2, rosterSizeQuestionId: Id.g1, displayMode: RosterDisplayMode.Table,
+                        children: new IComposite[]
+                        {
+                            Create.Question(title: title, variable: "q1"),
+                        })
+                )
+                .ExpectError("WB0287");
+        }
     }
 }
