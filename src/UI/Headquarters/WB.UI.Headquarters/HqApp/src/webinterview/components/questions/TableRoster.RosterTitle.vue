@@ -1,5 +1,5 @@
 <template>
-    <span>{{roster.rosterTitle}}</span>
+    <span v-html="roster.rosterTitle"></span>
 </template>
 
 <script lang="js">
