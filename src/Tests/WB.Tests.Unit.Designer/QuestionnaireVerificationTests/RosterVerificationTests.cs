@@ -194,6 +194,20 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 .ExpectError("WB0285");
         }
 
+        [TestCase]
+        public void should_not_allow_static_text_in_table_roster()
+        {
+            Create.QuestionnaireDocumentWithOneChapter(
+                    Create.NumericIntegerQuestion(id: Id.g1),
+                    Create.NumericRoster(rosterId: Id.g2, rosterSizeQuestionId: Id.g1, displayMode: RosterDisplayMode.Table,
+                        children: new IComposite[]
+                        {
+                            Create.StaticText(),
+                        })
+                )
+                .ExpectError("WB0285");
+        }
+
         [Test]
         public void should_show_warning_on_table_roster()
         {
