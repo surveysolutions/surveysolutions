@@ -188,8 +188,6 @@ namespace WB.Core.SharedKernels.Enumerator.Views
 
         public List<CommittedEvent> GetPendingEvents(Guid interviewId)
         {
-            IEnumerable<CommittedEvent> events = null;
-
             var eventSourceFilePath = this.GetEventSourceConnectionString(interviewId);
             if (this.fileSystemAccessor.IsFileExists(eventSourceFilePath))
             {

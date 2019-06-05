@@ -649,6 +649,6 @@
     <value>当前的二维表不再存在。请使用导航菜单导航至下一个可用的问卷模块或者二维表。</value>
   </data>
   <data name="Interview_Question_NumberRosterRemoveConfirm" xml:space="preserve">
-    <value>您确定想从相关的二维表要移除{{amountOfRostersToRemove}}行吗？</value>
+    <value>您确定想从相关的二维表要移除{0}行吗？</value>
   </data>
 </root>
