@@ -527,6 +527,10 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                             return false;
                         default: return true;
                     }
+
+                if (composite is IStaticText staticText)
+                    return true;
+
                 return false;
             });
 
