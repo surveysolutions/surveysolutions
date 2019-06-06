@@ -194,7 +194,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 .ExpectError("WB0285");
         }
 
-        [TestCase]
+        [Test]
         public void should_not_allow_static_text_in_table_roster()
         {
             Create.QuestionnaireDocumentWithOneChapter(
