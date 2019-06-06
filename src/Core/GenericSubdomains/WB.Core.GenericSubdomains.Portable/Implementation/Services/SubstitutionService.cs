@@ -9,6 +9,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
     public class SubstitutionService : ISubstitutionService
     {
         private const string SubstitutionVariableDelimiter = "%";
+        private const string SelfVariableReference = "self";
         private static readonly string AllowedSubstitutionVariableNameRegexp = String.Format(@"(?<={0})(\w+(?={0}))", SubstitutionVariableDelimiter);
         private static readonly Regex AllowedSubstitutionVariableNameRx = new Regex(AllowedSubstitutionVariableNameRegexp, RegexOptions.Compiled);
         private readonly ConcurrentDictionary<string, string[]> cache = new ConcurrentDictionary<string, string[]>();
@@ -19,7 +20,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             rosterTitle = string.Format("{0}{1}{0}", SubstitutionVariableDelimiter, RosterTitleSubstitutionReference);
         }
 
-        public string[] GetAllSubstitutionVariableNames(string source)
+        public string[] GetAllSubstitutionVariableNames(string source, string selfVariable)
         {
             if (String.IsNullOrWhiteSpace(source))
                 return Array.Empty<string>();
@@ -27,15 +28,25 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             return cache.GetOrAdd(source, s =>
             {
                 var allOccurenses = AllowedSubstitutionVariableNameRx.Matches(s)
-                    .OfType<Match>().Select(m => m.Value).Distinct();
+                    .OfType<Match>()
+                    .Select(m => m.Value.Equals(SelfVariableReference, StringComparison.Ordinal) ? selfVariable : m.Value)
+                    .Distinct();
                 
                 return allOccurenses.ToArray();
             });
         }
 
-        public string ReplaceSubstitutionVariable(string text, string variable, string replaceTo)
+        public string ReplaceSubstitutionVariable(string text, string selfVariableName, string variable, string replaceTo)
         {
-            return text.Replace($"{SubstitutionVariableDelimiter}{variable}{SubstitutionVariableDelimiter}", replaceTo);
+            var result = text;
+            if (!string.IsNullOrEmpty(selfVariableName) && selfVariableName.Equals(variable, StringComparison.Ordinal))
+            {
+                result = result.Replace($"{SubstitutionVariableDelimiter}{SelfVariableReference}{SubstitutionVariableDelimiter}",
+                    replaceTo);
+            }
+
+            result = result.Replace($"{SubstitutionVariableDelimiter}{variable}{SubstitutionVariableDelimiter}", replaceTo);
+            return result;
         }
 
         public string RosterTitleSubstitutionReference => "rostertitle";

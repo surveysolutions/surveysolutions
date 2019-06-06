@@ -1,5 +1,4 @@
 ﻿using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using System;
@@ -715,7 +714,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void UpdateGroup(Guid groupId, Guid responsibleId,
             string title,string variableName, Guid? rosterSizeQuestionId, string description, string condition, bool hideIfDisabled, 
             bool isRoster, RosterSizeSourceType rosterSizeSource, FixedRosterTitleItem[] rosterFixedTitles, Guid? rosterTitleQuestionId,
-            bool isFlatMode)
+            RosterDisplayMode displayMode)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -738,7 +737,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 description,
                 condition,
                 hideIfDisabled,
-                isFlatMode);
+                displayMode);
 
             if (isRoster)
             {
@@ -1772,6 +1771,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.sharedPersons.RemoveAll(sp => sp.UserId == personId);
         }
 
+        public void TransferOwnership(Guid ownerId, Guid newOwnerId, string ownerEmail, string newOwnerEmail)
+        {
+            this.ThrowDomainExceptionIfViewerIsNotOwnerOfQuestionnaire(ownerId);
+
+            this.RemoveSharedPerson(newOwnerId, newOwnerEmail, ownerId);
+            
+            this.QuestionnaireDocument.CreatedBy = newOwnerId;
+
+            this.AddSharedPerson(ownerId, ownerEmail, ShareType.Edit, newOwnerId);
+        }
+
         #endregion
 
         #region CopyPaste command handler
@@ -2111,6 +2121,15 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(
                    DomainExceptionType.DoesNotHavePermissionsForEdit, ExceptionMessages.NoPremissionsToEditQuestionnaire);
+            }
+        }
+
+        private void ThrowDomainExceptionIfViewerIsNotOwnerOfQuestionnaire(Guid viewerId)
+        {
+            if (this.innerDocument.CreatedBy != viewerId)
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.DoesNotHavePermissionsForEdit, ExceptionMessages.NoPremissionsToEditQuestionnaire);
             }
         }
 

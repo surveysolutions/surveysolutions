@@ -26,6 +26,11 @@ namespace WB.Enumerator.Native.WebInterview.Services
             this.HubClients.Group(interviewId.FormatGuid()).refreshSection();
         }
 
+        public void RefreshSectionState(Guid interviewId)
+        {
+            this.HubClients.Group(interviewId.FormatGuid()).refreshSectionState();
+        }
+
         public void ReloadInterview(Guid interviewId)
         {
             this.HubClients.Group(interviewId.FormatGuid()).reloadInterview();

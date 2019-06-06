@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Graph;
 using WB.Services.Export.Infrastructure;
-using WB.Services.Export.Interview;
 using WB.Services.Export.Services.Processing;
 
 namespace WB.Services.Export.ExportProcessHandlers.Externals
@@ -71,6 +70,14 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
                 var item = graphServiceClient.Drive.Root.ItemWithPath($"{folder}/{fileName}");
                 await item.Content.Request().PutAsync<DriveItem>(new MemoryStream(fileContent));
             }
+        }
+
+        protected override async Task<long?> GetFreeSpaceAsync()
+        {
+            var storageInfo = await graphServiceClient.Drive.Request().GetAsync();
+            if (storageInfo?.Quota?.Total == null) return null;
+
+            return storageInfo.Quota.Total - storageInfo.Quota.Used ?? 0;
         }
     }
 }

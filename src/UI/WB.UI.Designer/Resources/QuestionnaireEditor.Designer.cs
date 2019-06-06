@@ -19,7 +19,7 @@ namespace WB.UI.Designer.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class QuestionnaireEditor {
@@ -147,6 +147,15 @@ namespace WB.UI.Designer.Resources {
         public static string AllFolders {
             get {
                 return ResourceManager.GetString("AllFolders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are You sure?.
+        /// </summary>
+        public static string AreYouSure {
+            get {
+                return ResourceManager.GetString("AreYouSure", resourceCulture);
             }
         }
         
@@ -862,15 +871,6 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If unchecked, the questions of the roster are shown behind the buttons corresponding to roster instances. If checked, the questions of the roster are shown in the same level separated by headers corresponding to roster instances..
-        /// </summary>
-        public static string HelpFlatRoster {
-            get {
-                return ResourceManager.GetString("HelpFlatRoster", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to By default, a disabled item is greyed-out. Checking this option will hide a disabled question or section on a tablet..
         /// </summary>
         public static string HelpHideIfDisabled {
@@ -930,6 +930,17 @@ namespace WB.UI.Designer.Resources {
         public static string HelpQuestionnaireVarible {
             get {
                 return ResourceManager.GetString("HelpQuestionnaireVarible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sub-Section - the questions of the roster are shown behind the buttons corresponding to roster instances.
+        ///Flat - the questions of the roster are shown in the same level separated by headers corresponding to roster instances.
+        ///Table - the questions of the roster are shown in the same level as rows and columns of the table. Supported only in Web survey, tablet falls back to &apos;Sub-Section&apos; mode..
+        /// </summary>
+        public static string HelpRosterDisplayMode {
+            get {
+                return ResourceManager.GetString("HelpRosterDisplayMode", resourceCulture);
             }
         }
         
@@ -1222,6 +1233,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If you transfer ownership, the new owner will be notified. You may no longer be able to change ownership settings, and the new owner may also remove your access..
+        /// </summary>
+        public static string MakeOwnerConfirmationMessage {
+            get {
+                return ResourceManager.GetString("MakeOwnerConfirmationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mark as default language.
         /// </summary>
         public static string MarkAsDefault {
@@ -1267,7 +1287,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Move to another sub-section:.
+        ///   Looks up a localized string similar to Move to another section:.
         /// </summary>
         public static string MoveToAnotherSubSection {
             get {
@@ -1564,6 +1584,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Display mode.
+        /// </summary>
+        public static string QuestionDisplayMode {
+            get {
+                return ResourceManager.GetString("QuestionDisplayMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Filter.
         /// </summary>
         public static string QuestionFilter {
@@ -1614,15 +1643,6 @@ namespace WB.UI.Designer.Resources {
         public static string QuestionIsLinked {
             get {
                 return ResourceManager.GetString("QuestionIsLinked", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Kind.
-        /// </summary>
-        public static string QuestionKind {
-            get {
-                return ResourceManager.GetString("QuestionKind", resourceCulture);
             }
         }
         
@@ -1906,6 +1926,42 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Display mode:.
+        /// </summary>
+        public static string RosterDisplayMode {
+            get {
+                return ResourceManager.GetString("RosterDisplayMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Flat.
+        /// </summary>
+        public static string RosterDisplayMode_Flat {
+            get {
+                return ResourceManager.GetString("RosterDisplayMode_Flat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sub-Section.
+        /// </summary>
+        public static string RosterDisplayMode_SubSection {
+            get {
+                return ResourceManager.GetString("RosterDisplayMode_SubSection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Table.
+        /// </summary>
+        public static string RosterDisplayMode_Table {
+            get {
+                return ResourceManager.GetString("RosterDisplayMode_Table", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Roster name.
         /// </summary>
         public static string RosterName {
@@ -2163,6 +2219,15 @@ namespace WB.UI.Designer.Resources {
         public static string SettingsInviteCollaborators {
             get {
                 return ResourceManager.GetString("SettingsInviteCollaborators", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Make owner.
+        /// </summary>
+        public static string SettingsMakeOwner {
+            get {
+                return ResourceManager.GetString("SettingsMakeOwner", resourceCulture);
             }
         }
         
@@ -3423,6 +3488,15 @@ namespace WB.UI.Designer.Resources {
         public static string WarningsCounter_plural {
             get {
                 return ResourceManager.GetString("WarningsCounter_plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string Yes {
+            get {
+                return ResourceManager.GetString("Yes", resourceCulture);
             }
         }
     }

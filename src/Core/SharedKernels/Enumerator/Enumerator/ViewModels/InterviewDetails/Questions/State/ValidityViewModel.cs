@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -52,7 +53,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Identity = entityIdentity;
 
             this.liteEventRegistry.Subscribe(this, interviewId);
-            this.UpdateValidStateAsync();
+            this.UpdateValidStateAsync().WaitAndUnwrapException();
         }
 
         private string exceptionErrorMessageFromViewModel;

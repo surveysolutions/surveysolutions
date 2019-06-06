@@ -2,6 +2,7 @@
 using System.Linq;
 using AutoMapper;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
@@ -28,12 +29,12 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api.GetGro
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(sectionId, new IComposite[]
             {
                 Create.Entity.NumericIntegerQuestion(intQuestionId),
-                Create.Entity.NumericRoster(rosterSizeQuestionId: intQuestionId, isPlainMode: true,
+                Create.Entity.NumericRoster(rosterSizeQuestionId: intQuestionId, displayMode: RosterDisplayMode.Flat,
                     children: new IComposite[]
                     {
                         Create.Entity.TextQuestion()
                     }),
-                Create.Entity.FixedRoster(isFlatMode: true, fixedTitles: new FixedRosterTitle[]
+                Create.Entity.FixedRoster(displayMode: RosterDisplayMode.Flat, fixedTitles: new FixedRosterTitle[]
                 {
                     Create.Entity.FixedTitle(1, "1"),
                     Create.Entity.FixedTitle(2, "2"),
@@ -60,12 +61,12 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api.GetGro
                 Create.Entity.Group(groupId, children: new IComposite[]
                 {
                     Create.Entity.NumericIntegerQuestion(intQuestionId),
-                    Create.Entity.NumericRoster(rosterSizeQuestionId: intQuestionId, isPlainMode: true,
+                    Create.Entity.NumericRoster(rosterSizeQuestionId: intQuestionId, displayMode: RosterDisplayMode.Flat,
                         children: new IComposite[]
                         {
                             Create.Entity.TextQuestion()
                         }),
-                    Create.Entity.FixedRoster(isFlatMode: true, fixedTitles: new FixedRosterTitle[]
+                    Create.Entity.FixedRoster(displayMode: RosterDisplayMode.Flat, fixedTitles: new FixedRosterTitle[]
                     {
                         Create.Entity.FixedTitle(1, "1"),
                         Create.Entity.FixedTitle(2, "2"),

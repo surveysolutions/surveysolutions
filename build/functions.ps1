@@ -22,11 +22,27 @@ function GetPathRelativeToCurrectLocation($FullPath) {
 #https://docs.microsoft.com/en-us/visualstudio/install/workload-and-component-ids
 ##############################
 function GetMsBuildFromVsWhere() {
+    $path = & $vswhere -latest -products * -requires Microsoft.Component.MSBuild -requires Microsoft.VisualStudio.Workload.XamarinBuildTools -property installationPath
+    if ($path) {
+        $result = join-path $path 'MSBuild\15.0\Bin\MSBuild.exe'
+        if (test-path $result) {
+            return $result
+        }
+        $result = join-path $path  'MSBuild\Current\Bin\MSBuild.exe'
+        if(test-path $result) {
+            return $result
+        }
+    }
+
     $path = & $vswhere -latest -products * -requires Microsoft.Component.MSBuild -requires Component.Xamarin -property installationPath
     if ($path) {
-        $path = join-path $path 'MSBuild\15.0\Bin\MSBuild.exe'
-        if (test-path $path) {
-            return $path
+        $result = join-path $path 'MSBuild\15.0\Bin\MSBuild.exe'
+        if (test-path $result) {
+            return $result
+        }
+        $result = join-path $path  'MSBuild\Current\Bin\MSBuild.exe'
+        if(test-path $result) {
+            return $result
         }
     }
 }
@@ -327,7 +343,8 @@ function MoveArtifacts([string[]] $items, $folder) {
     }
 }
 
-function Execute-MSBuild($ProjectFile, $Configuration, $buildArgs = $null) {
+
+function Execute-MSBuild($ProjectFile, $Configuration, $buildArgs = $null, $logId = '.') {
     $build = @(
         $ProjectFile
         "/p:Configuration=$Configuration", '/nologo', "/v:$verbosity", '/m:4'
@@ -347,8 +364,8 @@ function Execute-MSBuild($ProjectFile, $Configuration, $buildArgs = $null) {
         $build = ($build + $buildArgs | select -uniq)
     }
 
-    $binLogPath = "$([System.IO.Path]::GetFileName($ProjectFile)).msbuild.binlog"
-
+    $binLogPath = "$([System.IO.Path]::GetFileName($ProjectFile))$logId.msbuild.binlog"
+    
     $build += "/bl:$binLogPath"
     
     & (GetPathToMSBuild) $build | Write-Host

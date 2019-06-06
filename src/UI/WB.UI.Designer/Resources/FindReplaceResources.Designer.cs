@@ -19,10 +19,10 @@ namespace WB.UI.Designer.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class FindReplaceResources {
+    public class FindReplaceResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace WB.UI.Designer.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.UI.Designer.Resources.FindReplaceResources", typeof(FindReplaceResources).Assembly);
@@ -51,7 +51,7 @@ namespace WB.UI.Designer.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Serch regular expression is malformed.
         /// </summary>
-        internal static string SearchForRegexNotValid {
+        public static string SearchForRegexNotValid {
             get {
                 return ResourceManager.GetString("SearchForRegexNotValid", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Search for field is not allowed to have more than {0} symbols.
         /// </summary>
-        internal static string SearchForTooLong {
+        public static string SearchForTooLong {
             get {
                 return ResourceManager.GetString("SearchForTooLong", resourceCulture);
             }

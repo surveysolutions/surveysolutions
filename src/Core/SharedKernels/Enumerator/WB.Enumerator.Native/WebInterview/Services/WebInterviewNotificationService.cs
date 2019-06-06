@@ -36,6 +36,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 return;
             }
 
+            bool doesNeedRefreshSectionList = false;
+
             var entitiesToRefresh = new List<(string section, Identity id)>();
 
             foreach (var identity in questions)
@@ -44,12 +46,36 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 {
                     entitiesToRefresh.Add((WebInterview.GetConnectedClientPrefilledSectionKey(interview.Id), identity));
                 }
-                
+
+                var questionnaire = questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, null);
+
+                if (questionnaire.IsQuestion(identity.Id) && (
+                        questionnaire.IsRosterSizeQuestion(identity.Id)
+                     || questionnaire.IsRosterTitleQuestion(identity.Id)
+                     || questionnaire.GetSubstitutedQuestions(identity.Id).Any()
+                     || questionnaire.GetSubstitutedGroups(identity.Id).Any()
+                     || questionnaire.GetSubstitutedStaticTexts(identity.Id).Any()
+                   ))
+                {
+                    doesNeedRefreshSectionList = true;
+                }
+
                 var currentEntity = identity;
 
                 while (currentEntity != null)
                 {
+                    if (questionnaire.ShouldBeHiddenIfDisabled(currentEntity.Id))
+                    {
+                        doesNeedRefreshSectionList = true;
+                    }
+
                     var parent = this.GetParentIdentity(currentEntity, interview);
+                    if (questionnaire.IsTableRoster(currentEntity.Id))
+                    {
+                        var tableClientRosterIdentity = new Identity(currentEntity.Id, currentEntity.RosterVector.Shrink());
+                        entitiesToRefresh.Add((WebInterview.GetConnectedClientSectionKey(parent, interview.Id), tableClientRosterIdentity));
+                    }
+
                     if (parent != null)
                     {
                         entitiesToRefresh.Add((WebInterview.GetConnectedClientSectionKey(parent, interview.Id), currentEntity));
@@ -63,12 +89,14 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 if (questionsGroupedByParent.Key == null)
                     continue;
 
-                this.webInterviewInvoker.RefreshEntities(
-                    questionsGroupedByParent.Key, 
-                    questionsGroupedByParent.Select(p => p.id.ToString()).Distinct().ToArray());
+                var ids = questionsGroupedByParent.Select(p => p.id.ToString()).Distinct().ToArray();
+                this.webInterviewInvoker.RefreshEntities(questionsGroupedByParent.Key, ids);
             }
 
-            this.webInterviewInvoker.RefreshSection(interviewId);
+            if (doesNeedRefreshSectionList)
+                this.webInterviewInvoker.RefreshSection(interviewId); 
+            else
+                this.webInterviewInvoker.RefreshSectionState(interviewId); 
         }
 
         public void ReloadInterview(Guid interviewId) => this.webInterviewInvoker.ReloadInterview(interviewId);
@@ -89,7 +117,6 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
             if (clientGroupIdentity != null)
                 this.webInterviewInvoker.MarkAnswerAsNotSaved(clientGroupIdentity, questionId, errorMessage);
-                
         }
 
         public virtual void RefreshRemovedEntities(Guid interviewId, params Identity[] entities)
@@ -101,43 +128,50 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 return;
             }
 
-            var questionnarie = this.questionnaireStorage.GetQuestionnaireDocument(interview.QuestionnaireIdentity);
-            if (questionnarie != null)
+            var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(interview.QuestionnaireIdentity);
+            if (questionnaire == null)
+                return;
+            
+            var entitiesToRefresh = new List<(string section, Identity identity)>();
+
+            foreach (var entity in entities)
             {
-                var entitiesToRefresh = new List<(string section, Identity identity)>();
+                var composite = questionnaire.Find<IComposite>(entity.Id);
+                var parent = composite.GetParent();
+                var entityRosterVector = entity.RosterVector;
+                var childIdentity = entity;
 
-                foreach (var entity in entities)
+                while (parent != null && parent.PublicKey != interview.QuestionnaireIdentity.QuestionnaireId)
                 {
-                    var composite = questionnarie.Find<IComposite>(entity.Id);
-                    var parent = composite.GetParent();
-                    var entityRosterVector = entity.RosterVector;
-                    var childIdentity = entity;
+                    entityRosterVector = entityRosterVector.Shrink(entity.RosterVector.Length - 1);
+                    var parentIdentity = new Identity(parent.PublicKey, entityRosterVector);
 
-                    while (parent != null && parent.PublicKey != interview.QuestionnaireIdentity.QuestionnaireId)
+                    if (composite is IGroup group && group.DisplayMode == RosterDisplayMode.Table)
                     {
-                        entityRosterVector = entityRosterVector.Shrink(entity.RosterVector.Length - 1);
-                        var parentIdentity = new Identity(parent.PublicKey, entityRosterVector);
-
-                        var parentIdentityAsString = WebInterview.GetConnectedClientSectionKey(parentIdentity, interview.Id);
-                        entitiesToRefresh.Add((parentIdentityAsString, childIdentity));
-
-                        childIdentity = parentIdentity;
-                        parent = parent.GetParent();
+                        var tableClientRosterIdentity = new Identity(composite.PublicKey, entityRosterVector);
+                        entitiesToRefresh.Add((WebInterview.GetConnectedClientSectionKey(parentIdentity, interview.Id), tableClientRosterIdentity));
                     }
+
+                    var parentIdentityAsString = WebInterview.GetConnectedClientSectionKey(parentIdentity, interview.Id);
+                    entitiesToRefresh.Add((parentIdentityAsString, childIdentity));
+
+                    childIdentity = parentIdentity;
+                    composite = parent;
+                    parent = parent.GetParent();
                 }
-
-                foreach (var questionsGroupedByParent in entitiesToRefresh.GroupBy(x => x.section))
-                {
-                    if (questionsGroupedByParent.Key == null)
-                        continue;
-
-                    this.webInterviewInvoker.RefreshEntities(
-                        questionsGroupedByParent.Key, 
-                        questionsGroupedByParent.Select(p => p.identity.ToString()).Distinct().ToArray());
-                }
-
-                this.webInterviewInvoker.RefreshSection(interviewId);
             }
+
+            foreach (var questionsGroupedByParent in entitiesToRefresh.GroupBy(x => x.section))
+            {
+                if (questionsGroupedByParent.Key == null)
+                    continue;
+
+                this.webInterviewInvoker.RefreshEntities(
+                    questionsGroupedByParent.Key, 
+                    questionsGroupedByParent.Select(p => p.identity.ToString()).Distinct().ToArray());
+            }
+
+            this.webInterviewInvoker.RefreshSection(interviewId);
         }
 
         private string GetClientGroupIdentity(Identity identity, IStatefulInterview interview)

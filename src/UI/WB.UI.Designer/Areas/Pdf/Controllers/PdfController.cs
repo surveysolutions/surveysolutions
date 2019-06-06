@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Configuration;
 using System.Globalization;
 using System.IO;
 using System.Net;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Internal;
 using Microsoft.AspNetCore.Mvc.Razor;
@@ -25,8 +21,8 @@ using Shark.PdfConvert;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
+using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Resources;
-using WB.UI.Designer1.Extensions;
 using ActionDescriptor = Microsoft.AspNetCore.Mvc.Abstractions.ActionDescriptor;
 using ActionResult = Microsoft.AspNetCore.Mvc.ActionResult;
 using Controller = Microsoft.AspNetCore.Mvc.Controller;
@@ -84,7 +80,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
 
         private readonly IPdfFactory pdfFactory;
         private readonly PdfSettings pdfSettings;
-        private readonly Microsoft.Extensions.Logging.ILogger logger;
+        private readonly ILogger logger;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IRazorViewEngine razorViewEngine;
         private readonly IServiceProvider serviceProvider;

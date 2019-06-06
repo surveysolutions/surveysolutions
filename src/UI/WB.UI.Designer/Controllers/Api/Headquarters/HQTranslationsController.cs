@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Attributes;
 
 namespace WB.UI.Designer.Controllers.Api.Headquarters
 {
     [ApiBasicAuth(onlyAllowedAddresses: true)]
     [Route("api/hq/translations")]
-    public class HQTranslationsController : ApiController
+    public class HQTranslationsController : ControllerBase
     {
         private readonly DesignerDbContext translations;
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
@@ -27,7 +26,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
 
         [HttpGet]
         [Route("{id:Guid}")]
-        public HttpResponseMessage Get(string id)
+        public IActionResult Get(string id)
         {
             Guid questionnaireId = Guid.Parse(id);
             var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireId));
@@ -47,8 +46,8 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
                 }).ToList();
 
             return translationInstances.Count == 0
-                ? this.Request.CreateErrorResponse(HttpStatusCode.NotFound, $"No translations found for questionnaire Id: {id}")
-                : this.Request.CreateResponse(HttpStatusCode.OK, translationInstances);
+                ? this.ErrorWithReasonPhraseForHQ(StatusCodes.Status404NotFound, $"No translations found for questionnaire Id: {id}")
+                : Ok(translationInstances);
         }
     }
 }

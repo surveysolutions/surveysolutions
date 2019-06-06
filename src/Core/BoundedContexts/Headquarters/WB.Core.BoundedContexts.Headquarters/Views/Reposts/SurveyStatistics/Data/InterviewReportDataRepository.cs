@@ -119,7 +119,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
                 join readside.interviewsummaries s on s.id = v1.interview_id
                 join readside.questionnaire_entities_answers qea on qea.value::bigint = v1.answer and qea.entity_id = v1.entity_id
                 where true = true
-                    {IfSupervisor(" and (@teamleadid is null or s.teamleadid = @teamleadid) and")}                    
+                    {IfSupervisor(" and (@teamleadid is null or s.teamleadid = @teamleadid) ")}                    
                     {IfWithCondition(" and array[v2.answer] && @condition")}
             ) as agg 
             group by 1, 2, 3 

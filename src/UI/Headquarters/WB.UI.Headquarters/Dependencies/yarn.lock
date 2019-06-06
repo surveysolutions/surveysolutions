@@ -12,6 +12,11 @@ acorn@~2.6.4:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-2.6.4.tgz#eb1f45b4a43fa31d03701a5ec46f3b52673e90ee"
   integrity sha1-6x9FtKQ/ox0DcBpexG87Umc+kO4=
 
+ag-grid-community@^20.2.0:
+  version "20.2.0"
+  resolved "https://registry.yarnpkg.com/ag-grid-community/-/ag-grid-community-20.2.0.tgz#22f26d53e309b51a156878d180c9ec6f16bc6403"
+  integrity sha512-3oAzg58lenhpyIfZ6dBp6cCE+PEoh0N+OSci2+k5fHROn8PMrginAkygONDd068E2NC+qfmDNRkU2WjPgiH/BA==
+
 ajv@^6.5.5:
   version "6.6.2"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.6.2.tgz#caceccf474bf3fc3ce3b147443711a24063cc30d"

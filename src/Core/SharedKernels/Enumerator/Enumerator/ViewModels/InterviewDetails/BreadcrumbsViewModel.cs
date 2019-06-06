@@ -64,14 +64,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     var itemRosterVector = newGroupIdentity.RosterVector.Shrink(metRosters);
                     var itemIdentity = new Identity(parentId, itemRosterVector);
                     
-                    var breadCrumb = Mvx.Resolve<BreadCrumbItemViewModel>();
+                    var breadCrumb = Mvx.IoCProvider.Resolve<BreadCrumbItemViewModel>();
                     breadCrumb.Init(this.interviewId, itemIdentity, this.navigationState);
                     breadCrumbs.Add(breadCrumb);
                 }
                 else
                 {
                     var itemIdentity = new Identity(parentId, newGroupIdentity.RosterVector.Shrink(metRosters));
-                    var breadCrumb = Mvx.Resolve<BreadCrumbItemViewModel>();
+                    var breadCrumb = Mvx.IoCProvider.Resolve<BreadCrumbItemViewModel>();
                     breadCrumb.Init(this.interviewId, itemIdentity, this.navigationState);
                     breadCrumbs.Add(breadCrumb);
                 }

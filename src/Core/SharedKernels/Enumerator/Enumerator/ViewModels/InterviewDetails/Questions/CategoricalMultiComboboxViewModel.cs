@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MvvmCross.Base;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -28,12 +29,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterviewRepository interviewRepository, IPrincipal principal,
             IUserInteractionService userInteraction, AnsweringViewModel answering,
             FilteredOptionsViewModel filteredOptionsViewModel, QuestionInstructionViewModel instructionViewModel,
-            ThrottlingViewModel throttlingModel) : base(questionStateViewModel, questionnaireRepository, eventRegistry,
+            ThrottlingViewModel throttlingModel, IMvxMainThreadAsyncDispatcher mainThreadDispatcher) : base(questionStateViewModel, questionnaireRepository, eventRegistry,
             interviewRepository, principal, userInteraction, answering, filteredOptionsViewModel, instructionViewModel,
-            throttlingModel)
+            throttlingModel, mainThreadDispatcher)
         {
             this.comboboxViewModel =
-                new CategoricalComboboxAutocompleteViewModel(questionStateViewModel, filteredOptionsViewModel, false);
+                new CategoricalComboboxAutocompleteViewModel(questionStateViewModel, filteredOptionsViewModel, 
+                    false, mainThreadDispatcher);
         }
 
         public override void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -52,12 +54,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             var answeredOptions = this.GetAnsweredOptionsFromInterview(interview);
 
-            this.UpdateComboboxInMainThread(answeredOptions).WaitAndUnwrapException();
+            this.UpdateComboboxInMainThreadAsync(answeredOptions).WaitAndUnwrapException();
         }
 
-        private async Task UpdateComboboxInMainThread(int[] answeredOptions)
+        private async Task UpdateComboboxInMainThreadAsync(int[] answeredOptions)
         {
-            await this.InvokeOnMainThreadAsync(async () =>
+            await mainThreadDispatcher.ExecuteOnMainThreadAsync(async () =>
             {
                 answeredOptions = answeredOptions ?? Array.Empty<int>();
 
@@ -72,7 +74,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 else if (!hasNoOptionsForAnswers && !this.comboboxCollection.Contains(this.comboboxViewModel))
                     this.comboboxCollection.Add(this.comboboxViewModel);
 
-                await comboboxViewModel.UpdateFilter(comboboxViewModel.FilterText, true);
+                await comboboxViewModel.UpdateFilter(null, true);
             });
         }
 
@@ -111,20 +113,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public override void Handle(AnswersRemoved @event)
+        public override async void Handle(AnswersRemoved @event)
         {
             if (!@event.Questions.Any(x => x.Id == this.Identity.Id && x.RosterVector.Identical(this.Identity.RosterVector))) return;
 
-            this.UpdateComboboxInMainThread(null);
-            this.UpdateViewModelsInMainThread();
+            await this.UpdateComboboxInMainThreadAsync(null);
+            await this.UpdateViewModelsInMainThreadAsync();
         }
 
-        public override void Handle(MultipleOptionsQuestionAnswered @event)
+        public override async void Handle(MultipleOptionsQuestionAnswered @event)
         {
             if (@event.QuestionId != this.Identity.Id || !@event.RosterVector.Identical(this.Identity.RosterVector)) return;
 
-            this.UpdateComboboxInMainThread(@event.SelectedValues.Select(Convert.ToInt32).ToArray());
-            this.UpdateViewModelsInMainThread();
+            await this.UpdateComboboxInMainThreadAsync(@event.SelectedValues.Select(Convert.ToInt32).ToArray());
+            await this.UpdateViewModelsInMainThreadAsync();
         }
 
         public override void Dispose()

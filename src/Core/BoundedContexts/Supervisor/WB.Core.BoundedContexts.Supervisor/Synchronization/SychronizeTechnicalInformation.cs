@@ -6,11 +6,11 @@ using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 
 namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 {
-    public class SychronizeTechnicalInformation : SynchronizationStep
+    public class SynchronizeTechnicalInformation : SynchronizationStep
     {
         private readonly ITechInfoSynchronizer techInfoSynchronizer;
 
-        public SychronizeTechnicalInformation(int sortOrder, ISynchronizationService synchronizationService, ITechInfoSynchronizer techInfoSynchronizer, ILogger logger) : base(sortOrder, synchronizationService, logger)
+        public SynchronizeTechnicalInformation(int sortOrder, ISynchronizationService synchronizationService, ITechInfoSynchronizer techInfoSynchronizer, ILogger logger) : base(sortOrder, synchronizationService, logger)
         {
             this.techInfoSynchronizer = techInfoSynchronizer;
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using WB.Services.Export.Models;
 
 namespace WB.Services.Export.Services.Processing
 {
@@ -15,5 +16,6 @@ namespace WB.Services.Export.Services.Processing
         public string DataExportProcessId { get; set; }
         public DataExportStatus StatusOfLatestExportProcess { get; set; }
         public TimeSpan? TimeEstimation { get; set; }
+        public DataExportErrorView Error { get; set; }
     }
 }

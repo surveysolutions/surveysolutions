@@ -58,5 +58,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
         Task<List<AssignmentApiView>> GetAssignmentsAsync(CancellationToken cancellationToken);
         Task LogAssignmentAsHandledAsync(int id, CancellationToken cancellationToken);
         Task<string> GetPublicKeyForEncryptionAsync(CancellationToken cancellationToken);
+        Task<bool> AreNotificationsEnabledAsync(CancellationToken token);
     }
 }
