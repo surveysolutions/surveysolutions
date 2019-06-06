@@ -110,6 +110,7 @@
         <footer>
             <div class="text-center">
                 © @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">@Common.TheWorldBankGroup</a>, @(Common.AlRightsReserved). <a href="http://go.worldbank.org/OS6V7NIUD0">@Common.Legal</a>.
+                @Html.Partial("_PoweredBy")
             </div>
             <div class="text-center">
                 @(DependencyResolver.Current.GetService<IProductVersion>())
