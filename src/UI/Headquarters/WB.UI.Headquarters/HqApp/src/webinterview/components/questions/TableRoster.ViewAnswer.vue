@@ -99,7 +99,7 @@
                 if (value == null || value == undefined || value == NaN)
                     return ''
                 
-                return value.toLocaleString()    
+                return value.toLocaleString(undefined, {style: 'decimal', maximumFractionDigits : 15, minimumFractionDigits : 0})    
             }
         }
     }
