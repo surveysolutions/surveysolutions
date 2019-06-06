@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Base;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -43,15 +42,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             ThrottlingViewModel throttlingModel) :
             base(principal: principal, questionStateViewModel: questionStateViewModel, answering: answering,
                 instructionViewModel: instructionViewModel, interviewRepository: interviewRepository,
-                eventRegistry: eventRegistry, filteredOptionsViewModel)
+                eventRegistry: eventRegistry, filteredOptionsViewModel, mvxMainThreadDispatcher)
         {
             this.questionnaireRepository = questionnaireRepository ??
                                            throw new ArgumentNullException(nameof(questionnaireRepository));
 
             this.Options = new CovariantObservableCollection<SingleOptionQuestionOptionViewModel>();
-            
-            this.mvxMainThreadDispatcher = mvxMainThreadDispatcher;
-            
             this.throttlingModel = throttlingModel;
             this.throttlingModel.Init(SaveAnswer);
         }
@@ -106,8 +102,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
            
             this.RaisePropertyChanged(() => RenderAsComboBox);
-             
-            this.UpdateOptions(forced: true);
+
+            this.InvokeOnMainThread(() => this.UpdateOptions(forced: true));
 
             this.RaisePropertyChanged(() => Options);
             this.RaisePropertyChanged(() => Children);
@@ -220,7 +216,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private int? previousOptionToReset = null;
         private int? selectedOptionToSave = null;
-        private readonly IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher;
 
         private async Task SaveAnswer()
         {

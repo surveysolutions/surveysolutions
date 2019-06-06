@@ -51,9 +51,9 @@ namespace WB.UI.Tester.Activities
                 this.SetPreferenceTitleAndSummary(TesterSettings.DesignerEndpointParameterName, TesterUIResources.Prefs_DesignerEndPointTitle, settings.Endpoint);
                 this.SetPreferenceTitleAndSummary("AcceptUnsignedSslCertificate", TesterUIResources.Prefs_AcceptUnsignedTitle, TesterUIResources.Prefs_AcceptUnsignedSummary);
 
-                this.SetBooleanPreferenceTitleAndSummary(TesterSettings.ShowVariablesParamterName, TesterUIResources.Prefs_ShowVariables,
+                this.SetBooleanPreferenceTitleAndSummary(TesterSettings.ShowVariablesParameterName, TesterUIResources.Prefs_ShowVariables,
                     settings.ShowVariables ? TesterUIResources.Prefs_ShowVariablesSummary_Checked : TesterUIResources.Prefs_ShowVariablesSummary_UnChecked, settings.ShowVariables);
-                this.FindPreference(TesterSettings.ShowVariablesParamterName).PreferenceChange += (sender, args) =>
+                this.FindPreference(TesterSettings.ShowVariablesParameterName).PreferenceChange += (sender, args) =>
                 {
                     var checkBoxPreference = args.Preference as CheckBoxPreference;
                     var summary = !checkBoxPreference.Checked ? // this wonderful api returns value BEFORE change

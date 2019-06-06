@@ -54,7 +54,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.userId = principal.CurrentUserIdentity.UserId;
             this.interviewRepository = interviewRepository ?? throw new ArgumentNullException(nameof(interviewRepository));
             this.eventRegistry = eventRegistry ?? throw new ArgumentNullException(nameof(eventRegistry));
-            this.mainThreadDispatcher = mainThreadDispatcher ?? Mvx.Resolve<IMvxMainThreadAsyncDispatcher>();
+            this.mainThreadDispatcher = mainThreadDispatcher ?? Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
 
             this.questionState = questionStateViewModel;
             this.InstructionViewModel = instructionViewModel;

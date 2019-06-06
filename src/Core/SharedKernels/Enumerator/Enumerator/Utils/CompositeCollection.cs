@@ -47,7 +47,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                         }
                     }
 
-                    throw new IndexOutOfRangeException();
+                    throw new IndexOutOfRangeException($" Index was outside the bounds of the array. Type argument is {typeof(T).FullName}");
                 }
                 finally
                 {
@@ -65,7 +65,15 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                     array.SetValue(item, index++);
         }
 
-        public int Count { get; private set; }
+        private int count;
+        public int Count {
+            get => count;
+            private set
+            {
+                count = value;
+            }
+         }
+
         public bool IsSynchronized => false;
         object ICollection.SyncRoot
         {
@@ -97,15 +105,15 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
         public void Clear()
         {
+            this.itemsLock.EnterWriteLock();
             try
             {
-                this.itemsLock.EnterWriteLock();
-
                 var removedItems = this.ToList();
+
+                this.Count = 0;
 
                 this.collections.OfType<INotifyCollectionChanged>().ForEach(x => x.CollectionChanged -= this.HandleChildCollectionChanged);
                 this.collections.Clear();
-                this.Count = 0;
 
                 this.NotifyItemsRemoved(removedItems, offset: 0);
             }
@@ -148,9 +156,9 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
         public bool Contains(T item)
         {
+            this.itemsLock.EnterReadLock();
             try
             {
-                this.itemsLock.EnterReadLock();
                 foreach (var coll in this.collections)
                     if (coll.Contains(item))
                         return true;

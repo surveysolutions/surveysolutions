@@ -41,6 +41,8 @@ namespace WB.Core.SharedKernels.Enumerator.Views
 
         public DateTime? ReceivedByInterviewerAt { get; set; }
 
+        public DateTime? LastUpdated { get; set; }
+
         public class AssignmentAnswer
         {
             [PrimaryKey, AutoIncrement]

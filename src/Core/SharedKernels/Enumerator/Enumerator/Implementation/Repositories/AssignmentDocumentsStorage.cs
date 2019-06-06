@@ -95,6 +95,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 
         public override void Store(AssignmentDocument entity)
         {
+            entity.LastUpdated = DateTime.Now;
             RunInTransaction(table => StoreImplementation(table, entity));
         }
 

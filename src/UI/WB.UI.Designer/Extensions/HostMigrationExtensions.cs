@@ -6,7 +6,7 @@ using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
-namespace WB.UI.Designer1.Extensions
+namespace WB.UI.Designer.Extensions
 {
     public static class HostMigrationExtensions
     {

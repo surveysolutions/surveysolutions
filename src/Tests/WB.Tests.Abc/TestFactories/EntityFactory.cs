@@ -273,7 +273,7 @@ namespace WB.Tests.Abc.TestFactories
             IEnumerable<IComposite> children = null,
             string variable = "roster_var",
             string title = "Roster X",
-            bool isFlatMode = false,
+            RosterDisplayMode displayMode = RosterDisplayMode.SubSection,
             FixedRosterTitle[] fixedTitles = null) => Create.Entity.Roster(
                         rosterId: rosterId,
                         children: children,
@@ -281,7 +281,7 @@ namespace WB.Tests.Abc.TestFactories
                         variable: variable,
                         enablementCondition: enablementCondition,
                         fixedRosterTitles: fixedTitles,
-                        isFlatMode: isFlatMode,
+                        displayMode: displayMode,
                         fixedTitles: obsoleteFixedTitles?.ToArray() ?? new[] { "Fixed Roster 1", "Fixed Roster 2", "Fixed Roster 3" });
 
 
@@ -1062,7 +1062,7 @@ namespace WB.Tests.Abc.TestFactories
             Guid? rosterTitleQuestionId = null,
             string enablementCondition = null,
             IEnumerable<IComposite> children = null,
-            bool isPlainMode = false)
+            RosterDisplayMode displayMode = RosterDisplayMode.SubSection)
         {
             Group group = Create.Entity.Group(
                 groupId: rosterId,
@@ -1072,7 +1072,7 @@ namespace WB.Tests.Abc.TestFactories
                 children: children);
 
             group.IsRoster = true;
-            group.IsFlatMode = isPlainMode;
+            group.DisplayMode = displayMode;
             group.RosterSizeSource = RosterSizeSourceType.Question;
             group.RosterSizeQuestionId = rosterSizeQuestionId;
             group.RosterTitleQuestionId = rosterTitleQuestionId;
@@ -1092,7 +1092,7 @@ namespace WB.Tests.Abc.TestFactories
             Guid? rosterSizeQuestionId = null,
             Guid? rosterTitleQuestionId = null,
             FixedRosterTitle[] fixedRosterTitles = null,
-            bool isFlatMode = false,
+            RosterDisplayMode displayMode = RosterDisplayMode.SubSection,
             bool hideIfDisabled = false)
         {
             Group group = Create.Entity.Group(
@@ -1101,7 +1101,7 @@ namespace WB.Tests.Abc.TestFactories
                 variable: variable ?? "rost_" + rostersCounter++,
                 enablementCondition: enablementCondition,
                 children: children);
-            group.IsFlatMode = isFlatMode;
+            group.DisplayMode = displayMode;
             group.IsRoster = true;
             group.RosterSizeSource = rosterSizeSourceType ?? (rosterSizeQuestionId.HasValue ? RosterSizeSourceType.Question : RosterSizeSourceType.FixedTitles);
             group.HideIfDisabled = hideIfDisabled;
@@ -1577,7 +1577,7 @@ namespace WB.Tests.Abc.TestFactories
             string title,
             List<SubstitutionVariable> variables = null)
         {
-            return new SubstitutionText(identity, title, variables ?? new List<SubstitutionVariable>(), Mock.Of<ISubstitutionService>(), Mock.Of<IVariableToUIStringService>());
+            return new SubstitutionText(identity, "self", title, variables ?? new List<SubstitutionVariable>(), Mock.Of<ISubstitutionService>(), Mock.Of<IVariableToUIStringService>());
         }
 
         public InterviewTree InterviewTree(Guid? interviewId = null, IQuestionnaire questionnaire = null,
@@ -2446,7 +2446,9 @@ namespace WB.Tests.Abc.TestFactories
             Title = title
         };
 
-        public Invitation Invitation(int id, Assignment assignment, string token = null)
+        public Invitation Invitation(int id, Assignment assignment, 
+            string token = null,
+            string interviewId = null)
         {
             var invitation = new Invitation();
 
@@ -2455,6 +2457,7 @@ namespace WB.Tests.Abc.TestFactories
             asDynamic.AssignmentId = assignment.Id;
             asDynamic.Assignment = assignment;
             asDynamic.Token = token;
+            asDynamic.InterviewId = interviewId;
 
             return invitation;
         }

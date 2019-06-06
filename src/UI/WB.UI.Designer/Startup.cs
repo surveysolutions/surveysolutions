@@ -98,7 +98,6 @@ namespace WB.UI.Designer
                 .AddEntityFrameworkStores<DesignerDbContext>();
             services.AddRouting(options => options.LowercaseUrls = true);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-                .AddWebApiConventions()
                 .AddJsonOptions(options =>
                 {
                     options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
@@ -237,8 +236,6 @@ namespace WB.UI.Designer
                     name: "areas",
                     template: "{area:exists}/{controller=Questionnaire}/{action=My}/{id?}"
                 );
-
-                routes.MapWebApiRoute("DefaultApi", "api/{controller}/{id?}");
 
                 routes.MapRoute(
                     name: "default",

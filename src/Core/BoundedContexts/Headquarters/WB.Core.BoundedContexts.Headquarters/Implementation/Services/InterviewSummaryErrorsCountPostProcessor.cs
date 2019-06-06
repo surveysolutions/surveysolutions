@@ -37,8 +37,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 var errorsCount = aggregate.CountAllInvalidEntities();
                 summary.ErrorsCount = errorsCount;
             }
-
-            interviewSummaryReader.Store(summary, aggregate.Id.FormatGuid());
         }
     }
 }

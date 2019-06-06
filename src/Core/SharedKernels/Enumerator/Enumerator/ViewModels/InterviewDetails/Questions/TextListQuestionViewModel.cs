@@ -118,7 +118,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             if (this.isRosterSizeQuestion )
             {
-                var message = UIResources.Interview_Questions_RemoveRowFromRosterListMessage;
+                var message = UIResources.Interview_Questions_RemoveRowFromRosterMessage.FormatString(listItem.Title);
                 if (!(await this.userInteractionService.ConfirmAsync(message)))
                 {
                     return;
@@ -128,7 +128,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             listItem.ItemEdited -= this.ListItemEdited;
             listItem.ItemDeleted -= this.ListItemDeleted;
 
-            this.Answers.Remove(listItem);
+            this.InvokeOnMainThread(() => this.Answers.Remove(listItem));
 
             await this.SaveAnswers();
         }

@@ -572,4 +572,7 @@ Vous pouvez créer ou modifier vos questionnaires dans au site Designer de Surve
   <data name="Warnings" xml:space="preserve">
     <value>Avertissements</value>
   </data>
+  <data name="Interview_Question_NumberRosterRemoveConfirm" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir supprimer {0} ligne(s) de chaque roster associé?</value>
+  </data>
 </root>

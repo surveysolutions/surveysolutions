@@ -12,29 +12,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
     internal class QuestionnaireVerifierTests : QuestionnaireVerifierTestsContext
     {
         [Test]
-        public void when_verifying_questionnaire_having_question_instructions_referencing_self_in_substitution()
-        {
-            Guid questionWithSelfSubstitutionsId = Guid.Parse("10000000000000000000000000000000");
-
-            var questionnaire = Create.QuestionnaireDocument(children: new IComposite[]
-            {
-                Create.Question(questionId: questionWithSelfSubstitutionsId, variable: "me",
-                    instructions: "hello %me%!"),
-            });
-
-            var verifier = CreateQuestionnaireVerifier();
-
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
-            
-            verificationMessages.ShouldContainError("WB0016");
-
-            var error = verificationMessages.GetError("WB0016");
-            error.References.Count().Should().Be(1);
-            error.References.First().Type.Should().Be(QuestionnaireVerificationReferenceType.Question);
-            error.References.First().Id.Should().Be(questionWithSelfSubstitutionsId);
-        }
-
-        [Test]
         public void when_verifying_questionnaire_having_question_instructions_referencing_non_existing_item_in_substitution()
         {
             Guid questionWithSelfSubstitutionsId = Guid.Parse("10000000000000000000000000000000");

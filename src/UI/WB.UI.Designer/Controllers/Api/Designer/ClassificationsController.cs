@@ -5,8 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using WB.Core.BoundedContexts.Designer.Classifications;
-using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.UI.Designer1.Extensions;
+using WB.UI.Designer.Extensions;
 
 namespace WB.UI.Designer.Api.Designer
 {
@@ -87,7 +86,7 @@ namespace WB.UI.Designer.Api.Designer
         [Route("classification/{id}")]
         public Task DeleteClassification(Guid id)
         {
-            return classificationsStorage.DeleteClassification(id, User.GetId(), User.IsAdmin());
+            return classificationsStorage.DeleteClassificationAsync(id, User.GetId(), User.IsAdmin());
         }
 
         [HttpPatch]

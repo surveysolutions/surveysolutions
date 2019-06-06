@@ -259,7 +259,7 @@
     <value>Вы уверены, что хотите удалить {{amountOfRostersToRemove}} строк(у) у зависимых списков?</value>
   </data>
   <data name="Complete" xml:space="preserve">
-    <value>Закончить</value>
+    <value>Завершить</value>
   </data>
   <data name="Cover" xml:space="preserve">
     <value>Обложка</value>
@@ -433,5 +433,8 @@ Oбратитесь в тех. поддержку за помощью</value>
   </data>
   <data name="EmailLink_EmailResumeLink" xml:space="preserve">
     <value>Отправить ссылку для продолжения</value>
+  </data>
+  <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
+    <value>Вы уверены, что хотите удалить строку '{{rosterTitle}}' у зависимых списков?</value>
   </data>
 </root>

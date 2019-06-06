@@ -1,4 +1,4 @@
-@using System.Collections.Generic
+﻿@using System.Collections.Generic
 @using System.Linq
 @using Main.Core.Entities.SubEntities
 @using WB.Core.BoundedContexts.Designer.Implementation.Services
@@ -17,7 +17,8 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>@questionnaire.Title</title>
+    @*is passed as get param along with other on pdf generation and exceeds 2K limit for unicode*@
+    <title>@*@(questionnaire.Title.Length < 70 ? questionnaire.Title : questionnaire.Title.Substring(0, 70))*@</title>
     <!-- pdf:css -->
     <link rel='stylesheet' href='@Url.ContentAbsolute("~/css/pdf.css")'>
     <!-- endinject -->

@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class WebInterviewUI {
@@ -644,6 +644,15 @@ namespace WB.UI.Headquarters.Resources {
         internal static string Interview_Overview_NotAnswered {
             get {
                 return ResourceManager.GetString("Interview_Overview_NotAnswered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to remove related roster &apos;{{rosterTitle}}&apos;?.
+        /// </summary>
+        internal static string Interview_Questions_RemoveRowFromRosterMessage {
+            get {
+                return ResourceManager.GetString("Interview_Questions_RemoveRowFromRosterMessage", resourceCulture);
             }
         }
         
