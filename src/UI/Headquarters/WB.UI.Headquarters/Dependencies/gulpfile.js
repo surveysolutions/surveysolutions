@@ -116,6 +116,9 @@ const config = {
         targetFolder: '../../../WB.UI.WebTester/Content/',
         stylesFolder: 'Styles',
         scriptsFolder: 'Scripts',
+        images: [
+            'img/error2.svg'
+        ],
         fontsFolder: 'Fonts',
         distFolder: 'Dist',
         buildFolder: 'Build'
@@ -161,7 +164,7 @@ config.sourceFiles = [
     'node_modules/flatpickr/dist/flatpickr.js',
     'node_modules/flatpickr/dist/flatpickr.css',
     'node_modules/datatables.net-responsive/js/dataTables.responsive.js',
-    'vendor/jquery.validate.unobtrusive.bootstrap/jquery.validate.unobtrusive.bootstrap.js'
+    'vendor/jquery.validate.unobtrusive.bootstrap/jquery.validate.unobtrusive.bootstrap.js'    
 ];
 
 function compressJs(error) {
@@ -304,6 +307,11 @@ gulp.task('webtester:fonts', function() {
                .pipe(gulp.dest(config.webTester.targetFolder + config.webTester.fontsFolder));
 });
 
+gulp.task('webtester:images', function () {
+    return gulp.src(config.webTester.images)
+        .pipe(gulp.dest(config.webTester.targetFolder + "/img"));
+})
+
 gulp.task('webtester:styles', ['styles'], function() {
     var webInterview = gulp.src(config.buildDistDir + "/markup-web-interview-[a-f0-9]*.css");
     var markup = gulp.src(config.buildDistDir + "/markup-[a-f0-9]*.css");
@@ -325,7 +333,7 @@ gulp.task('webtester:js', ['libsJs'], function() {
         .pipe(gulp.dest(config.webTester.targetFolder + config.webTester.scriptsFolder));
 });
 
-gulp.task('webtester', ['webtester:fonts', 'webtester:styles', 'webtester:js', 'webtester:build_styles'])
+gulp.task('webtester', ['webtester:fonts', 'webtester:styles', 'webtester:js', 'webtester:build_styles', 'webtester:images'])
 
 gulp.task('clean', function () {
     var buildDir = gulp.src(config.buildDistDir + '/*');

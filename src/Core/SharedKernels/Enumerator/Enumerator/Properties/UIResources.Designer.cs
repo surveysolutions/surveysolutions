@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class UIResources {
@@ -990,6 +990,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to remove {0} row(s) from each related roster?.
+        /// </summary>
+        public static string Interview_Question_NumberRosterRemoveConfirm {
+            get {
+                return ResourceManager.GetString("Interview_Question_NumberRosterRemoveConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Entered value can not be parsed as decimal value.
         /// </summary>
         public static string Interview_Question_Real_ParsingError {
@@ -1080,7 +1089,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to remove related roster?.
+        ///   Looks up a localized string similar to Are you sure you want to remove related rosters?.
         /// </summary>
         public static string Interview_Questions_RemoveRowFromRosterListMessage {
             get {
@@ -1089,7 +1098,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to remove related roster {0}?.
+        ///   Looks up a localized string similar to Are you sure you want to remove related roster &apos;{0}&apos; from each related roster?.
         /// </summary>
         public static string Interview_Questions_RemoveRowFromRosterMessage {
             get {
@@ -1364,6 +1373,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string No {
             get {
                 return ResourceManager.GetString("No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} notifications.
+        /// </summary>
+        public static string Notifications_SummaryTitle {
+            get {
+                return ResourceManager.GetString("Notifications_SummaryTitle", resourceCulture);
             }
         }
         

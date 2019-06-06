@@ -34,6 +34,29 @@
             <div class="roster-type-specific-block" ng-include="activeRoster.type + '-template.html'" ng-if="activeRoster.type != undefined">
             </div>
         </div>
+        
+        <div class="form-group">
+            <div class="checkbox checkbox-in-column">
+                <label for="cb-categorical-kind">{{'RosterDisplayMode' | i18next }}&nbsp;</label>
+
+                <div class="btn-group dropup " uib-dropdown>
+                    <button class="btn dropdown-toggle" id="cb-roster-display-mode" uib-dropdown-toggle type="button">
+                        {{ 'RosterDisplayMode_' + activeRoster.displayMode | i18next }}
+                        <span class="dropdown-arrow"></span>
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="cb-roster-display-mode">
+                        <li role="presentation" ng-repeat="displayMode in activeRoster.displayModes">
+                            <a role="menuitem" tabindex="-1" ng-click="changeDisplayMode(displayMode)">
+                                {{ 'RosterDisplayMode_' + displayMode | i18next }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <help key="rosterDisplayMode" />
+            </div>
+        </div>
 
         <div class="form-group enabling-group">
             <div class="enabling-group-marker"></div>
@@ -66,7 +89,7 @@
         </div>
     </div>
 
-    <script type="text/ng-template" id="List-template.html">
+<script type="text/ng-template" id="List-template.html">
 
         <div class="dropdown-with-breadcrumbs-and-icons">
             <label>{{'RosterSourceQuestion' | i18next}} </label>
@@ -104,11 +127,6 @@
                 </ul>
             </div>
         </div>
-        <div class="form-group">
-            <input id="cb-plainRoster" type="checkbox" class="wb-checkbox" ng-model="activeRoster.isFlatMode" />
-            <label for="cb-plainRoster"><span title=""></span>{{'FlatRoster'| i18next}} <help key="flatRoster" /></label>
-        </div>
-
     </script>
 
 <script type="text/ng-template" id="Numeric-template.html">
@@ -184,10 +202,6 @@
                 </ul>
             </div>
         </div>
-        <div class="form-group">
-            <input id="cb-plainRoster" type="checkbox" class="wb-checkbox" ng-model="activeRoster.isFlatMode" />
-            <label for="cb-plainRoster"><span title=""></span>{{'FlatRoster'| i18next}} <help key="flatRoster" /></label>
-        </div>
 
     </script>
 
@@ -238,11 +252,6 @@
         </div>
     </div>
 
-    <div class="form-group">
-        <input id="cb-plainRoster" type="checkbox" class="wb-checkbox" ng-model="activeRoster.isFlatMode" />
-        <label for="cb-plainRoster"><span title=""></span>{{'FlatRoster'| i18next}} <help key="flatRoster" /></label>
-    </div>
-
 </script>
 
 <script type="text/ng-template" id="Multi-template.html">
@@ -282,10 +291,5 @@
                 </ul>
             </div>
         </div>
-        <div class="form-group">
-            <input id="cb-plainRoster" type="checkbox" class="wb-checkbox" ng-model="activeRoster.isFlatMode" />
-            <label for="cb-plainRoster"><span title=""></span>{{'FlatRoster'| i18next}} <help key="flatRoster" /></label>
-        </div>
-
     </script>
 </form>

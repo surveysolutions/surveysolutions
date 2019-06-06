@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using WB.Services.Scheduler.Model.Events;
 
 namespace WB.Services.Scheduler.Model
@@ -42,6 +43,7 @@ namespace WB.Services.Scheduler.Model
             this.EndAt = DateTime.UtcNow;
             this.Status = JobStatus.Canceled;
             this.Data["error"] = ev.Reason;
+            this.Data["errorType"] = Enum.GetName(typeof(JobError), JobError.Canceled);
         }
 
         private void Apply(CompleteJobEvent ev)
@@ -55,6 +57,16 @@ namespace WB.Services.Scheduler.Model
             this.EndAt = DateTime.UtcNow;
             this.Status = JobStatus.Fail;
             this.Data["error"] = ev.Exception.ToString();
+
+            var errorType = JobError.Unexpected;
+            switch (ev.Exception)
+            {
+                case IOException io when io.HResult == 0x70:
+                    errorType = JobError.NotEnoughExternalStorageSpace;
+                    break;
+            }
+
+            this.Data["errorType"] = Enum.GetName(typeof(JobError), errorType);
         }
 
         private void Apply(UpdateDataEvent ev)

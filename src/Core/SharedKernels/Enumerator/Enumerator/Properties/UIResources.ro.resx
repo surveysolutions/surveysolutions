@@ -611,4 +611,7 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
   <data name="Supervisor_Complete_Reject_btn" xml:space="preserve">
     <value>Respingere</value>
   </data>
+  <data name="Interview_Question_NumberRosterRemoveConfirm" xml:space="preserve">
+    <value>Sigur doriți să elliminați rândul(urile) {0} din fiecare listă asociată?</value>
+  </data>
 </root>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross;
+using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
@@ -23,16 +24,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly FilteredOptionsViewModel filteredOptionsViewModel;
         private readonly bool displaySelectedValue;
         private readonly ThrottlingViewModel throttlingModel;
+        private readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
 
         public CategoricalComboboxAutocompleteViewModel(IQuestionStateViewModel questionState,
             FilteredOptionsViewModel filteredOptionsViewModel,
-            bool displaySelectedValue)
+            bool displaySelectedValue,
+            IMvxMainThreadAsyncDispatcher mainThreadDispatcher)
         {
             this.QuestionState = questionState;
             this.filteredOptionsViewModel = filteredOptionsViewModel;
             this.displaySelectedValue = displaySelectedValue;
             this.throttlingModel = Mvx.IoCProvider.Create<ThrottlingViewModel>();
             this.throttlingModel.Init(UpdateFilterThrottled);
+            this.mainThreadDispatcher = mainThreadDispatcher;
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -105,6 +109,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             // When options is selected, FocusOut will be always fired after. 
             // We change filter text and we safe answer on focus out event
             this.FilterText = option.Title;
+            this.RaisePropertyChanged(() => this.FilterText);
         }
 
         private async Task InvokeAllHandlers<T>(Func<object, T, Task> handler, T value)
@@ -121,7 +126,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var suggestions = this.GetSuggestions(filterToUpdate).ToList();
 
-            await this.InvokeOnMainThreadAsync(() =>
+            await mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 this.AutoCompleteSuggestions = suggestions;
             });

@@ -2821,7 +2821,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 Guid? parentOfRoster = questionnaire.GetParentGroup(rosterId);
                 if (!parentOfRoster.HasValue) continue;
 
-                List<InterviewTreeGroup> parentsOfRosters = this.Tree.FindEntity(parentOfRoster.Value).OfType<InterviewTreeGroup>().ToList();
+                var parentsOfRosters = this.Tree.FindEntity(parentOfRoster.Value).OfType<InterviewTreeGroup>().ToList();
 
                 foreach (InterviewTreeGroup parentRoster in parentsOfRosters)
                     parentRoster.ActualizeChildren();

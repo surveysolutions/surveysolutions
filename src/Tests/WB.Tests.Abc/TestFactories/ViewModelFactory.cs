@@ -159,7 +159,8 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
                 answering ?? Mock.Of<AnsweringViewModel>(),
                 Mock.Of<QuestionInstructionViewModel>(),
-                Create.ViewModel.ThrottlingViewModel());
+                Create.ViewModel.ThrottlingViewModel(),
+                Create.Fake.MvxMainThreadDispatcher());
         }
 
         public SingleOptionLinkedQuestionViewModel SingleOptionLinkedQuestionViewModel(
@@ -413,7 +414,8 @@ namespace WB.Tests.Abc.TestFactories
                     _.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
                 answering ?? Mock.Of<AnsweringViewModel>(),
                 Mock.Of<QuestionInstructionViewModel>(),
-                Create.ViewModel.ThrottlingViewModel());
+                Create.ViewModel.ThrottlingViewModel(),
+                Create.Fake.MvxMainThreadDispatcher());
         }
 
         public CategoricalMultiLinkedToRosterTitleViewModel MultiOptionLinkedToRosterTitleViewModel(
@@ -439,7 +441,8 @@ namespace WB.Tests.Abc.TestFactories
                     _.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
                 answering ?? Mock.Of<AnsweringViewModel>(),
                 Mock.Of<QuestionInstructionViewModel>(),
-                Create.ViewModel.ThrottlingViewModel());
+                Create.ViewModel.ThrottlingViewModel(),
+                Create.Fake.MvxMainThreadDispatcher());
         }
 
         public VibrationViewModel VibrationViewModel(ILiteEventRegistry eventRegistry = null,
@@ -593,7 +596,8 @@ namespace WB.Tests.Abc.TestFactories
         public CategoricalComboboxAutocompleteViewModel CategoricalComboboxAutocompleteViewModel(
             FilteredOptionsViewModel filteredOptionsViewModel, IQuestionStateViewModel questionState = null) =>
             new CategoricalComboboxAutocompleteViewModel(
-                questionState ?? Create.ViewModel.QuestionState<MultipleOptionsQuestionAnswered>(), filteredOptionsViewModel, false);
+                questionState ?? Create.ViewModel.QuestionState<MultipleOptionsQuestionAnswered>(), filteredOptionsViewModel, 
+                false, Create.Fake.MvxMainThreadDispatcher1());
 
         public FilteredSingleOptionQuestionViewModel FilteredSingleOptionQuestionViewModel(
             Identity questionId,
@@ -614,7 +618,8 @@ namespace WB.Tests.Abc.TestFactories
                 principal ?? Mock.Of<IPrincipal>(),
                 questionStateViewModel ?? Create.ViewModel.QuestionState<SingleOptionQuestionAnswered>(interviewRepository: interviewRepository),
                 answering ?? Create.ViewModel.AnsweringViewModel(),
-                instructionViewModel ?? Create.ViewModel.QuestionInstructionViewModel());
+                instructionViewModel ?? Create.ViewModel.QuestionInstructionViewModel(),
+                Mock.Of<IMvxMainThreadAsyncDispatcher>());
         }
 
         public TimestampQuestionViewModel TimestampQuestionViewModel(

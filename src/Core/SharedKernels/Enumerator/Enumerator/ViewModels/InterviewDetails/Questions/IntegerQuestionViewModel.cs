@@ -79,8 +79,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     var amountOfRostersToRemove = this.previousAnswer;
                     if (this.previousAnswer > 0)
                     {
-                        var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage,
-                            amountOfRostersToRemove);
+                        var message = string.Format(UIResources.Interview_Question_NumberRosterRemoveConfirm, amountOfRostersToRemove);
                         if (!(await this.userInteractionService.ConfirmAsync(message)))
                         {
                             this.Answer = this.previousAnswer;
@@ -264,7 +263,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     var amountOfRostersToRemove = this.previousAnswer - Math.Max(answeredOrSelectedValue.Value, 0);
                     if (amountOfRostersToRemove > 0)
                     {
-                        var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage,
+                        var message = string.Format(UIResources.Interview_Question_NumberRosterRemoveConfirm,
                             amountOfRostersToRemove);
                         if (!await this.userInteractionService.ConfirmAsync(message))
                         {

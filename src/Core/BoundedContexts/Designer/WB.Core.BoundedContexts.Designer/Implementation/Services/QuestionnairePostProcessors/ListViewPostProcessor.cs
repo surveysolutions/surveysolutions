@@ -73,7 +73,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, RevertVersionQuestionnaire>,
         ICommandPostProcessor<Questionnaire, UpdateAreaQuestion>,
         ICommandPostProcessor<Questionnaire, UpdateAudioQuestion>,
-        ICommandPostProcessor<Questionnaire, UpdateMetadata>
+        ICommandPostProcessor<Questionnaire, UpdateMetadata>,
+        ICommandPostProcessor<Questionnaire, PassOwnershipFromQuestionnaire>
     {
         private readonly DesignerDbContext dbContext;
         private readonly IRecipientNotifier emailNotifier;
@@ -197,7 +198,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             this.SendEmailNotifications(questionnaireListViewItem.Title, questionnaireOwnerId, responsibleId,
                 ShareChangeType.StopShare, personEmail, questionnaireListViewItem.QuestionnaireId, ShareType.Edit);
         }
-
+        
         private void AddSharedPerson(string questionnaireId, Guid responsibleId, Guid personId, string personEmail, ShareType shareType)
         {
             var questionnaireListViewItem = this.dbContext.Questionnaires.Find(questionnaireId);
@@ -223,6 +224,43 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             this.SendEmailNotifications(questionnaireListViewItem.Title, questionnaireListViewItem.CreatedBy, responsibleId,
                 ShareChangeType.Share, personEmail, questionnaireListViewItem.QuestionnaireId, shareType);
         }
+               
+        public void Process(Questionnaire aggregate, PassOwnershipFromQuestionnaire command)
+        {
+            var questionnaireListViewItem = this.dbContext.Questionnaires.Find(command.QuestionnaireId.FormatGuid());
+            if (questionnaireListViewItem == null) return;
+
+            var newOwner = this.dbContext.Users.SingleOrDefault(u => u.Id == command.NewOwnerId);
+                        
+            questionnaireListViewItem.Owner = newOwner.UserName;
+            questionnaireListViewItem.CreatedBy = newOwner.Id;
+
+            if (questionnaireListViewItem.SharedPersons.Any(x => x.UserId == newOwner.Id))
+            {
+                var toRemove = questionnaireListViewItem.SharedPersons.Where(x => x.UserId == newOwner.Id).ToList();
+                toRemove.ForEach(x => questionnaireListViewItem.SharedPersons.Remove(x));
+            }
+
+            var sharedPerson = new SharedPerson
+            {
+                UserId = command.ResponsibleId,
+                Email = command.OwnerEmail,
+                ShareType = ShareType.Edit
+            };
+
+            questionnaireListViewItem.SharedPersons.Add(sharedPerson);
+
+            questionnaireListViewItem.LastEntryDate = DateTime.UtcNow;
+            this.dbContext.Questionnaires.Update(questionnaireListViewItem);
+
+            // notify old owner that he is now has Edit permissions
+            this.SendEmailNotifications(questionnaireListViewItem.Title, questionnaireListViewItem.CreatedBy, newOwner.Id,
+               ShareChangeType.Share, command.OwnerEmail, questionnaireListViewItem.QuestionnaireId, ShareType.Edit);
+
+            // notify new owner that he is now has owner of questionnaire
+            this.SendEmailNotifications(questionnaireListViewItem.Title, questionnaireListViewItem.CreatedBy, command.ResponsibleId,
+               ShareChangeType.TransferOwnership, command.NewOwnerEmail, questionnaireListViewItem.QuestionnaireId, ShareType.Edit);
+        }
 
         private void SendEmailNotifications(string questionnaireTitle,
             Guid? questionnaireOwnerId,
@@ -235,13 +273,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             string mailFrom = this.dbContext.Users.Find(responsibleId)?.Email;
             string mailToUserName = this.dbContext.Users.FirstOrDefault(x => x.NormalizedEmail == mailTo.ToUpper())?.UserName;
 
-            this.emailNotifier.NotifyTargetPersonAboutShareChange(shareChangeType, mailTo, mailToUserName, questionnaireId,
+            this.emailNotifier.NotifyTargetPersonAboutShareChange(
+                shareChangeType, 
+                mailTo, 
+                mailToUserName, 
+                questionnaireId,
                 questionnaireTitle, shareType, mailFrom);
 
             if (!questionnaireOwnerId.HasValue || questionnaireOwnerId.Value == responsibleId) return;
 
             var questionnaireOwner = this.dbContext.Users.Find(questionnaireOwnerId.Value);
-            if (questionnaireOwner != null)
+            if (questionnaireOwner != null && shareChangeType != ShareChangeType.TransferOwnership)
             {
                 this.emailNotifier.NotifyOwnerAboutShareChange(shareChangeType, questionnaireOwner.Email, questionnaireOwner.UserName,
                     questionnaireId, questionnaireTitle, shareType, mailFrom, mailTo);
@@ -316,5 +358,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
         public void Process(Questionnaire aggregate, UpdateMetadata command)
             => this.Update(command.QuestionnaireId.FormatGuid(), command.Title, aggregate.QuestionnaireDocument.IsPublic);
+
+        
     }
 }

@@ -5,7 +5,10 @@
         <div class="unit-section complete-section">
           <div class="wrapper-info error">
             <div class="container-info">
-              <h2>{{ $t('Assignments.CreatingNewAssignment', {questionnaire: questionnaireTitle}) }}</h2>
+              <h2>
+                {{ $t('Assignments.CreatingNewAssignment', {questionnaire: questionnaireTitle}) }}
+                <span :title="$t('Reports.Version')">({{ this.$t('Assignments.QuestionnaireVersion', { version: this.questionnaireVersion}) }})</span>
+              </h2>
             </div>
           </div>
           <component
@@ -86,7 +89,7 @@
             noComments="true"
             questionCssClassName="multiselect-question"
           >
-            <h5>{{ this.$t("Assignments.WebMode") }}</h5>
+            <h5>{{ this.$t("Assignments.WebMode") }} <a target="_blank" href="https://support.mysurvey.solutions/headquarters/cawi">(?)</a></h5>
             <div class="question-unit">
               <div class="options-group">
                 <div class="form-group">
@@ -298,6 +301,9 @@ export default {
         },
         questionnaireTitle() {
             return this.$store.state.takeNew.takeNew.interview.questionnaireTitle;
+        },
+        questionnaireVersion() {
+            return this.$store.state.takeNew.takeNew.interview.questionnaireVersion;
         },
         config() {
             return this.$config.model;

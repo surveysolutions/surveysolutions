@@ -106,8 +106,7 @@ namespace WB.UI.WebTester
                     Timeout = TimeSpan.FromMinutes(3)
                 },
                 new RefitSettings
-                {
-                   
+                {                   
                     JsonSerializerSettings = new JsonSerializerSettings
                     {
                         TypeNameHandling = TypeNameHandling.All,
@@ -151,7 +150,7 @@ namespace WB.UI.WebTester
 
             registry.RegisterDenormalizer<InterviewLifecycleEventHandler>();
 
-            registry.BindAsSingleton<IInMemoryEventStore, InMemoryEventStore>();
+            registry.BindAsSingleton<IInMemoryEventStore, WebTesterEventStore>();
             registry.BindToMethod<IEventStore>(f => f.Resolve<IInMemoryEventStore>());
 
             registry.BindAsSingleton<IPlainKeyValueStorage<QuestionnaireDocument>, InMemoryKeyValueStorage<QuestionnaireDocument>>();
