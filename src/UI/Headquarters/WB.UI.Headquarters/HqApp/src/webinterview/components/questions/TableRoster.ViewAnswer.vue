@@ -96,9 +96,10 @@
         },
         filters: {
             formatNumber (value) {
-                if (value)
-                    return value.toLocaleString()
-                return ''
+                if (value == null || value == undefined || value == NaN)
+                    return ''
+                
+                return value.toLocaleString(undefined, {style: 'decimal', maximumFractionDigits : 15, minimumFractionDigits : 0})    
             }
         }
     }
