@@ -617,6 +617,9 @@
   <data name="Interviewers_UserNameTitle" xml:space="preserve">
     <value>Login name</value>
   </data>
+  <data name="Interviewers_FullNameTitle" xml:space="preserve">
+    <value>Full name</value>
+  </data>
   <data name="Interviewers_CreationDateTitle" xml:space="preserve">
     <value>Account created on</value>
   </data>
