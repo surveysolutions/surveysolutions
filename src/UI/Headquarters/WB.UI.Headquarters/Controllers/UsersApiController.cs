@@ -113,6 +113,7 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     UserId = x.UserId,
                     UserName = x.UserName,
+                    FullName = x.FullName,
                     CreationDate = x.CreationDate,
                     SupervisorId = x.SupervisorId,
                     SupervisorName = x.SupervisorName,
@@ -161,6 +162,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             public virtual Guid UserId { get; set; }
             public virtual string UserName { get; set; }
+            public virtual string FullName { get; set; }
             public virtual DateTime CreationDate { get; set; }
             public virtual string SupervisorName { get; set; }
             public virtual string Email { get; set; }
