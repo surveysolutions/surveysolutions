@@ -37,10 +37,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 var preloadingInterviewId = preloadingValues.FirstOrDefault(x => x.VariableOrCodeOrPropertyName == ServiceColumns.InterviewId);
                 var preloadingResponsible = preloadingValues.FirstOrDefault(x => x.VariableOrCodeOrPropertyName == ServiceColumns.ResponsibleColumnName);
                 var preloadingQuantity = preloadingValues.FirstOrDefault(x => x.VariableOrCodeOrPropertyName == ServiceColumns.AssignmentsCountColumnName);
-
                 var preloadingEmail = preloadingValues.FirstOrDefault(x => x.VariableOrCodeOrPropertyName == ServiceColumns.EmailColumnName);
                 var preloadingPassword = preloadingValues.FirstOrDefault(x => x.VariableOrCodeOrPropertyName == ServiceColumns.PasswordColumnName);
                 var preloadingWebMode = preloadingValues.FirstOrDefault(x => x.VariableOrCodeOrPropertyName == ServiceColumns.WebModeColumnName);
+                var preloadingRecordAudio = preloadingValues.FirstOrDefault(x => x.VariableOrCodeOrPropertyName == ServiceColumns.RecordAudioColumnName);
 
                 yield return new PreloadingAssignmentRow
                 {
@@ -62,9 +62,24 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                         Column = preloadingPassword.Column,
                         Value = preloadingPassword.Value
                     },
-                    WebMode = preloadingWebMode == null ? null : ToAssignmentWebMode(preloadingWebMode)
+                    WebMode = preloadingWebMode == null ? null : ToAssignmentWebMode(preloadingWebMode),
+                    RecordAudio = preloadingRecordAudio == null ? null : ToAssignmentRecordAudio(preloadingWebMode),
                 };
             }
+        }
+
+        private AssignmentRecordAudio ToAssignmentRecordAudio(PreloadingValue preloadingWebMode)
+        {
+            var recordAudio = new AssignmentRecordAudio
+            {
+                Column = preloadingWebMode.Column,
+                Value = preloadingWebMode.Value
+            };
+
+            if (int.TryParse(preloadingWebMode.Value, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat, out var intNumericValue))
+                recordAudio.DoesNeedRecord = intNumericValue == 1;
+
+            return recordAudio;
         }
 
         private AssignmentWebMode ToAssignmentWebMode(PreloadingValue preloadingWebMode)
