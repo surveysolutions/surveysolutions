@@ -2,16 +2,11 @@
 
 .table-view{
     .ag-theme-customStyles{
-        //width: 100%;
         font-family:  Arial, sans-serif; 
         line-height: 16px;
         .ag-horizontal-left-spacer{
             height: 0;
         }
-        // .ag-body-horizontal-scroll-viewport{
-        //     max-height: 8px !important;
-        //     min-height: 8px !important;
-        // }
         .ag-header-cell{
             border: 1px solid #E5E5E5;
             border-bottom-color: rgba(0, 0, 0, 0.3);
@@ -27,13 +22,6 @@
             .ag-header-cell{
                 border-right-color: rgba(0, 0, 0, 0.3);
             }
-            // .ag-header-cell-label{
-            //     color: #2D9CDB;
-            //     padding-left: 40px;
-            //     background-image: url('../img/flip.svg');
-            //     background-repeat: no-repeat;
-            //     background-position: 7px;
-            // }
         }
         .ag-pinned-left-cols-container{
             
@@ -43,20 +31,6 @@
                 padding: 11px 15px;
             }
         }
-        // .ag-row-hover{
-        //     .ag-cell{
-        //         box-shadow: inset 300px 0 rgba(236, 240, 241, 0.5);
-        //         &.ag-column-hover{
-        //             box-shadow: none;
-        //         }
-        //     }
-            
-
-        // }
-
-        // .ag-center-cols-viewport{
-        //     overflow: visible;
-        // }
         .ag-cell{
             white-space: normal !important;
             & > .ag-input-text-wrapper{
@@ -146,13 +120,8 @@
                 
             }
             &.disabled-question{
-
-                //background-image: url('../img/locked.svg');
                 background-color: #E5E5E5;
-                //background-repeat: no-repeat;
                 border-color: #a0a0a0;
-                //background-position: 0 0;
-                
             }
             &.has-warnings{
                 background-image: url('../img/warning2.svg');
@@ -181,9 +150,25 @@
         white-space: normal !important;
     }
 }
+.popover-content{
+    font-style: italic !important;
+    font-weight: bold !important;
+    font: 12px/14px Arial, Helvetica, sans-serif;
+    h6{
+        text-transform: uppercase !important;
+        font: 10px/12px "TrebuchetMSBold";
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        font-style: normal !important;
+        font-weight: 400 !important;
+    }
+}
 .warning-tooltip{
     color: rgb(202, 145, 1);
 }
 .error-tooltip{
-    color: #FF2E00;
+    color: #e74924;
+}
+.instruction-tooltip{
+    color: #2a81cb;
 }
