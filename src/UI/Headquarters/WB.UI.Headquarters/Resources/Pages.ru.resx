@@ -381,6 +381,9 @@
   <data name="Interviewers_UserNameTitle" xml:space="preserve">
     <value>Имя</value>
   </data>
+  <data name="Interviewers_FullNameTitle" xml:space="preserve">
+    <value>Полное имя</value>
+  </data>
   <data name="InterviewHistory_Header" xml:space="preserve">
     <value>История интервью</value>
   </data>

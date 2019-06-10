@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MvvmCross.Base;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -32,9 +33,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             AnsweringViewModel answering,
             FilteredOptionsViewModel filteredOptionsViewModel,
             QuestionInstructionViewModel instructionViewModel,
-            ThrottlingViewModel throttlingModel) : base(questionStateViewModel, questionnaireRepository, eventRegistry,
+            ThrottlingViewModel throttlingModel,
+            IMvxMainThreadAsyncDispatcher mainThreadDispatcher) : base(questionStateViewModel, questionnaireRepository, eventRegistry,
             interviewRepository, principal, answering, instructionViewModel,
-            throttlingModel)
+            throttlingModel, mainThreadDispatcher)
         {
             this.userInteraction = userInteraction;
             this.filteredOptionsViewModel = filteredOptionsViewModel;
@@ -88,7 +90,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         private async Task FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs e)
-            => await this.UpdateViewModelsInMainThread();
+            => await this.UpdateViewModelsInMainThreadAsync();
 
         public override void Dispose()
         {

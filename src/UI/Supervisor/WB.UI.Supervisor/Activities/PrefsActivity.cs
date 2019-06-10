@@ -128,8 +128,7 @@ namespace WB.UI.Supervisor.Activities
 
             private static int ParseIntegerSettingsValue(object settingsValue, int defaultValue)
             {
-                var intValue = -1;
-                if (int.TryParse(settingsValue.ToString(), out intValue) && intValue > 0)
+                if (int.TryParse(settingsValue.ToString(), out var intValue) && intValue > 0)
                     return intValue;
 
                 return defaultValue;
@@ -143,8 +142,7 @@ namespace WB.UI.Supervisor.Activities
                 preference.Title = title;
                 preference.Summary = summary;
 
-                var editPreference = preference as EditTextPreference;
-                if (editPreference != null)
+                if (preference is EditTextPreference editPreference)
                 {
                     editPreference.Text = defaultValue;
                 }
@@ -157,8 +155,7 @@ namespace WB.UI.Supervisor.Activities
 
                 preference.Title = title;
                 preference.Summary = summary;
-                var checkBoxPreference = preference as CheckBoxPreference;
-                if (checkBoxPreference != null)
+                if (preference is CheckBoxPreference checkBoxPreference)
                 {
                     checkBoxPreference.Checked = defaultValue;
                 }

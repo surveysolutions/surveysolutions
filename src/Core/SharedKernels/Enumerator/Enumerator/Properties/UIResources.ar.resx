@@ -553,6 +553,6 @@
     <value>نعم</value>
   </data>
   <data name="Interview_Question_NumberRosterRemoveConfirm" xml:space="preserve">
-    <value>هل أنت أكيد من أنك تريد حذف {{amountOfRostersToRemove}} صفاً (صفوفاً) من كل جدول ذي صلة؟</value>
+    <value>هل أنت أكيد من أنك تريد حذف {0} صفاً (صفوفاً) من كل جدول ذي صلة؟</value>
   </data>
 </root>
