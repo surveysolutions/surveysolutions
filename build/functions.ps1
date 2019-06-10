@@ -181,7 +181,7 @@ function CleanBinAndObjFolders() {
 $nuget = "nuget.exe";
 
 if($ENV:NUGET_EXE -ne $NULL){
-    $nuget = $ENV:NUGET_EXE
+    $nuget = "$ENV:NUGET_EXE\tools\nuget.exe"
 }
 
 function versionCheck() {
