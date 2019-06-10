@@ -79,7 +79,7 @@ function GetPathToConfigTransformator() {
         return $path
     } else {
 
-        nuget.exe install WebConfigTransformRunner -Version 1.0.0.1 | Out-Null
+        & $nuget install WebConfigTransformRunner -Version 1.0.0.1 | Out-Null
         return $path
     }
 }
@@ -178,13 +178,20 @@ function CleanBinAndObjFolders() {
     }
 }
 
+$nuget = "nuget.exe";
+
+if($ENV:NUGET_EXE -ne $NULL){
+    $nuget = $ENV:NUGET_EXE
+}
+
 function versionCheck() {
     Write-Host "Node version: $(&node -v)"
     Write-Host "NPM version: $(&npm --version)"
     Write-Host "Yarn version: $(&yarn --version)"
     Write-host "MsBuild version: $(&(GetPathToMSBuild) /version /nologo)"
     Write-Host "Dotnet CLI version: $(dotnet --version)"
-    "Nuget: $(nuget help | select -First 1)" | Out-Host
+
+    $(& $nuget help | select -First 1) | Out-Host
 }
 
 ##############################
