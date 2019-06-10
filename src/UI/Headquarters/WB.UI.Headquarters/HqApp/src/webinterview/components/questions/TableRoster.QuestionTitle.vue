@@ -6,7 +6,7 @@
             </div>
         </div>
         <template slot="popover">
-            <div class="popover-content information-block instruction">        
+            <div class="instruction-tooltip">        
                 <span v-dateTimeFormatting v-html="instruction"></span>
             </div>
         </template>        
