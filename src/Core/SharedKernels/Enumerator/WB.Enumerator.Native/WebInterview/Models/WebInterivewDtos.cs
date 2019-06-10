@@ -265,6 +265,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public string Id { get; set; }
         public string Title { get; set; }
         public string EntityType { get; set; }
+        public string Instruction { get; set; }
     }
     
 

@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -16,6 +17,13 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 {
     public class QuestionVerifications : AbstractVerifier, IPartialVerifier
     {
+        private readonly ISubstitutionService substitutionService;
+
+        public QuestionVerifications(ISubstitutionService substitutionService)
+        {
+            this.substitutionService = substitutionService;
+        }
+
         private IEnumerable<Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> ErrorsVerifiers => new[]
         {
             Error<IQuestion>("WB0030", PrefilledQuestionCantBeInsideOfRoster, VerificationMessages.WB0030_PrefilledQuestionCantBeInsideOfRoster),
@@ -64,6 +72,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             ErrorForTranslation<INumericQuestion>("WB0137", SpecialValueTitlesMustBeUnique, VerificationMessages.WB0137_SpecialValuesTitlesMustBeUnique),
             Error<SingleQuestion, SingleQuestion>("WB0087", CascadingHasCircularReference, VerificationMessages.WB0087_CascadingQuestionHasCicularReference),
             ErrorForTranslation<IComposite, ValidationCondition>("WB0105", GetValidationConditionsOrEmpty, ValidationMessageIsTooLong, index => string.Format(VerificationMessages.WB0105_ValidationMessageIsTooLong, index, MaxValidationMessageLength)),
+            ErrorForTranslation<IComposite>("WB0287", TableRosterDoesntContainsQuestionWithSubstitutions, VerificationMessages.WB0287_TableRosterDoesntContainsQuestionWithSubstitutions),
+
             Error_ManyGpsPrefilledQuestions_WB0006,
             ErrorsByLinkedQuestions,
             Warning(TooManyQuestions, "WB0205", string.Format(VerificationMessages.WB0205_TooManyQuestions, MaxQuestionsCountInQuestionnaire)),
@@ -949,6 +959,16 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 verificationMessagesByQuestionnaire.AddRange(verifier.Invoke(multiLanguageQuestionnaireDocument));
             }
             return verificationMessagesByQuestionnaire;
+        }
+
+        private bool TableRosterDoesntContainsQuestionWithSubstitutions(IComposite entity, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            if (((IGroup) entity.GetParent()).DisplayMode != RosterDisplayMode.Table)
+                return false;
+
+            var title = entity.GetTitle();
+            string[] substitutionReferences = this.substitutionService.GetAllSubstitutionVariableNames(title, entity.VariableName);
+            return substitutionReferences.Length > 0;
         }
     }
 }

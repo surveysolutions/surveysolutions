@@ -296,43 +296,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
         public void ShowGoogleApiErrorDialog(int errorCode, int requestCode, Action onCancel = null)
         {
-            Field GetAccessibleField(Class clazz, string fieldName)
-            {
-                Field field = clazz.GetDeclaredField(fieldName);
-                AccessibleObject.SetAccessible(new AccessibleObject[] { field }, true);
-                return field;
-            }
-
             Dialog defaultDialog = GoogleApiAvailability.Instance.GetErrorDialog(this.mvxCurrentTopActivity.Activity, errorCode, requestCode);
-            if (Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop) // Remove this check if custom dialog theme is used
-            {
-                defaultDialog.Show();
-                return;
-            }
-
-            try
-            {
-                Field mAlert = GetAccessibleField(defaultDialog.Class, "mAlert");
-                Java.Lang.Object alertController = mAlert.Get(defaultDialog);
-                Class alertControllerClass = alertController.Class;
-
-                Field mTitle = GetAccessibleField(alertControllerClass, "mTitle");
-                Field mMessage = GetAccessibleField(alertControllerClass, "mMessage");
-                Field mButtonPositiveText = GetAccessibleField(alertControllerClass, "mButtonPositiveText");
-                Field mButtonPositiveMessage = GetAccessibleField(alertControllerClass, "mButtonPositiveMessage");
-
-                var title = (ICharSequence)mTitle.Get(alertController);
-                var message = (ICharSequence)mMessage.Get(alertController);
-                var buttonPositiveText = (ICharSequence)mButtonPositiveText.Get(alertController);
-                var onClickListener = ((Message)mButtonPositiveMessage.Get(alertController)).Obj.JavaCast<IDialogInterfaceOnClickListener>();
-
-                this.ShowAlert(title, message, buttonPositiveText, onClickListener, onCancel);
-            }
-            catch (Throwable)
-            {
-                // Something happened, returning default dialog
-                defaultDialog.Show();
-            }
+            defaultDialog.Show();
         }
 
         private void ShowAlert(ICharSequence title, ICharSequence message,

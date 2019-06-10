@@ -880,11 +880,13 @@ namespace WB.Tests.Unit.Designer
         }
 
 
-        public static SingleQuestion SingleOptionQuestion(Guid? questionId = null, string variable = null, 
+        public static SingleQuestion SingleOptionQuestion(Guid? questionId = null, 
+            QuestionScope scope = QuestionScope.Interviewer,
+            string variable = null,
             string enablementCondition = null, string validationExpression = null,
-            Guid? linkedToQuestionId = null, Guid? cascadeFromQuestionId = null, 
-            decimal[] answerCodes = null, string title = null, bool hideIfDisabled = false, 
-            string linkedFilterExpression = null, Guid? linkedToRosterId = null, List<Answer> answers = null, 
+            Guid? linkedToQuestionId = null, Guid? cascadeFromQuestionId = null,
+            decimal[] answerCodes = null, string title = null, bool hideIfDisabled = false,
+            string linkedFilterExpression = null, Guid? linkedToRosterId = null, List<Answer> answers = null,
             bool isPrefilled = false, bool isComboBox = false, bool showAsList = false)
         {
             var publicKey = questionId ?? Guid.NewGuid();
@@ -904,7 +906,8 @@ namespace WB.Tests.Unit.Designer
                 LinkedFilterExpression = linkedFilterExpression,
                 Featured = isPrefilled,
                 IsFilteredCombobox = isComboBox,
-                ShowAsList = showAsList
+                ShowAsList = showAsList,
+                QuestionScope = scope
             };
         }
 
