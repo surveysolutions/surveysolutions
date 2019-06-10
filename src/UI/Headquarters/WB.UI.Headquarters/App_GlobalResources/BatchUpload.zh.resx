@@ -339,9 +339,6 @@
   <data name="BackToImport" xml:space="preserve">
     <value>返回导入</value>
   </data>
-  <data name="BatchDescription" xml:space="preserve">
-    <value>上传包含识别.tab文件和已收集数据的归档。</value>
-  </data>
   <data name="BatchFileVerificationFailed" xml:space="preserve">
     <value>上传文件验证失败</value>
   </data>
@@ -539,9 +536,6 @@
   </data>
   <data name="SelectResponsibleToAssign" xml:space="preserve">
     <value>选择负责人</value>
-  </data>
-  <data name="SimpleDescription" xml:space="preserve">
-    <value>上传包含必要识别数据的tab分隔文件。可以在_responsible一列指定督导员或调查员的用户名，可以在_quantity一列指定该任务可以填写的问卷总数。</value>
   </data>
   <data name="SingleAssignmentCreated" xml:space="preserve">
     <value>新建了1个任务</value>
