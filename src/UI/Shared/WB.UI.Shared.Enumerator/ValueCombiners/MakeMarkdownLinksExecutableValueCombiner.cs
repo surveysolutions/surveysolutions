@@ -11,7 +11,6 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
-using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
@@ -156,15 +155,7 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
             var attachmentContentMetadata = attachmentContentStorage.GetMetadata(attachment.ContentId);
             if (!attachmentContentMetadata.ContentType.StartsWith("application/pdf", StringComparison.OrdinalIgnoreCase)) return;
 
-            if (ServiceLocator.Current.GetInstance<IEnumeratorSettings>().IsSupportedWebViewer)
-                sourceEntity.NavigationState.NavigateTo(NavigationIdentity.CreateForPdfView(attachmentId.Value));
-            else
-            {
-                
-                var contentPath = attachmentContentStorage.GetFileCacheLocation(attachment.ContentId);
-
-                ServiceLocator.Current.GetInstance<IExternalAppLauncher>().OpenPdf(contentPath);
-            }
+            sourceEntity.NavigationState.NavigateTo(NavigationIdentity.CreateForPdfView(attachmentId.Value));
         }
 
         private class NavigateToEntitySpan : ClickableSpan
