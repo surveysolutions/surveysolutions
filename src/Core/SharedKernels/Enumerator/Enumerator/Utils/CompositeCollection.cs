@@ -65,8 +65,14 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                     array.SetValue(item, index++);
         }
 
-
-        public int Count { get; private set; }
+        private int count;
+        public int Count {
+            get => count;
+            private set
+            {
+                count = value;
+            }
+         }
 
         public bool IsSynchronized => false;
         object ICollection.SyncRoot
@@ -270,35 +276,26 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
         private void HandleChildCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             int newCount = 0;
-            this.itemsLock.EnterWriteLock();
-            try
+            if (e.Action == NotifyCollectionChangedAction.Reset)
             {
-                if (e.Action == NotifyCollectionChangedAction.Reset)
+                using (var enumerator = this.GetEnumerator())
                 {
-                    using (var enumerator = this.GetEnumerator())
+                    while (enumerator.MoveNext())
                     {
-                        while (enumerator.MoveNext())
-                        {
-                            newCount++;
-                        }
+                        newCount++;
                     }
                 }
-                else
-                {
-                    newCount = this.Count + (e.NewItems?.Count ?? 0) - (e.OldItems?.Count ?? 0);
-                }
-
-                if (newCount != this.Count)
-                {
-                    this.Count = newCount;
-                    this.OnPropertyChanged(nameof(this.Count));
-                }
             }
-            finally
+            else
             {
-                this.itemsLock.ExitWriteLock();
+                newCount = this.Count + (e.NewItems?.Count ?? 0) - (e.OldItems?.Count ?? 0);
             }
-            
+
+            if (newCount != this.Count)
+            {
+                this.Count = newCount;
+                this.OnPropertyChanged(nameof(this.Count));
+            }
 
             if (this.CollectionChanged == null)
                 return;

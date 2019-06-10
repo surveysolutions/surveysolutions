@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+  db:
+    build: ./postgres
+    environment:
+       POSTGRES_PASSWORD: postgres
+
+networks:
+  default:
+    external:
+      name: nat

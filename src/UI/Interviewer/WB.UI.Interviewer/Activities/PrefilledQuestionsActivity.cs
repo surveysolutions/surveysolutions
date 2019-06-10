@@ -18,9 +18,9 @@ namespace WB.UI.Interviewer.Activities
         protected override int LanguagesMenuItemId => Resource.Id.interview_language;
         protected override int MenuId => Resource.Menu.interview;
 
-        public override void OnBackPressed()
+        public override async void OnBackPressed()
         {
-            this.ViewModel.NavigateBack();
+            await this.ViewModel.NavigateBack();
             this.Finish();
         }
 

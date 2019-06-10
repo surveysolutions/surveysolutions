@@ -1897,6 +1897,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Full name.
+        /// </summary>
+        public static string Interviewers_FullNameTitle {
+            get {
+                return ResourceManager.GetString("Interviewers_FullNameTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interviewers.
         /// </summary>
         public static string Interviewers_Header {

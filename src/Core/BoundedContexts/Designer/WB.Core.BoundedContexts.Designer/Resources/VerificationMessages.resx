@@ -745,6 +745,9 @@
     <value>Table roster allows to use only text and numeric questions.</value>
   </data>
   <data name="WB0286_TableRosterWorksOnlyInWebMode" xml:space="preserve">
-    <value>Table roster mode works only in web survey, on tablets it will be default mode.</value>
+    <value>Table roster mode works only in web survey, on tablets it will be 'sub section' mode.</value>
+  </data>
+  <data name="WB0287_TableRosterDoesntContainsQuestionWithSubstitutions" xml:space="preserve">
+    <value>Questions in a table roster may not contain any substitutions in text.</value>
   </data>
 </root>

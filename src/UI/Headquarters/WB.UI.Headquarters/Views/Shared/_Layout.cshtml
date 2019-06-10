@@ -124,13 +124,16 @@
                 }
                 <text>|</text>
                 <a href="@Url.Action("Index","Download")">@Common.GetInterviewerApp</a>
-                 
+
                 @if (DependencyResolver.Current.GetService<IVersionCheckService>().DoesNewVersionExist())
                 {
                     <div>
                         <span style="background-color: #ff8;">@Common.NewVersionAvailable @(DependencyResolver.Current.GetService<IVersionCheckService>().GetNewVersionString()) </span>
                     </div>
                 }
+            </div>
+            <div class="text-center">
+                @Html.Partial("_PoweredBy")
             </div>
         </footer>
     </div>
