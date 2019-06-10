@@ -77,7 +77,8 @@ function GetPathToConfigTransformator() {
 
     if(Test-Path $path) {
         return $path
-    } else {    
+    } else {
+
         nuget.exe install WebConfigTransformRunner -Version 1.0.0.1 | Out-Null
         return $path
     }
@@ -183,6 +184,7 @@ function versionCheck() {
     Write-Host "Yarn version: $(&yarn --version)"
     Write-host "MsBuild version: $(&(GetPathToMSBuild) /version /nologo)"
     Write-Host "Dotnet CLI version: $(dotnet --version)"
+    "Nuget: $(nuget help | select -First 1)" | Out-Host
 }
 
 ##############################
