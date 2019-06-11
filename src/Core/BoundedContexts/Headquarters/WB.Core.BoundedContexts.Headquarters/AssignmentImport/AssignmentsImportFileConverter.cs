@@ -63,7 +63,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                         Value = preloadingPassword.Value
                     },
                     WebMode = preloadingWebMode == null ? null : ToAssignmentWebMode(preloadingWebMode),
-                    RecordAudio = preloadingRecordAudio == null ? null : ToAssignmentRecordAudio(preloadingWebMode),
+                    RecordAudio = preloadingRecordAudio == null ? null : ToAssignmentRecordAudio(preloadingRecordAudio),
                 };
             }
         }
