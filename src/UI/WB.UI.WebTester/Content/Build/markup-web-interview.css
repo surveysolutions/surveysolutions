@@ -2503,7 +2503,6 @@ ag-grid, ag-grid-angular, ag-grid-ng2, ag-grid-polymer, ag-grid-aurelia {
       background-image: url("../img/warning2.svg");
       background-repeat: no-repeat;
       background-position: 0 0;
-      background-color: rgba(240, 173, 0, 0.4);
       border-color: #F0AD00; }
     .table-view .ag-theme-customStyles .cell-unit.for-supervisor {
       background-color: #C1D9EB;
@@ -2528,7 +2527,14 @@ ag-grid, ag-grid-angular, ag-grid-ng2, ag-grid-polymer, ag-grid-aurelia {
     letter-spacing: 0.5px;
     text-transform: uppercase;
     font-style: normal !important;
-    font-weight: 400 !important; }
+    font-weight: 400 !important;
+    margin-top: 0; }
+
+.has-instruction {
+  background-image: url("../img/instruction.svg");
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  border-color: #2D9CDB; }
 
 .warning-tooltip {
   color: #ca9101; }
