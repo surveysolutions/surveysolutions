@@ -123,11 +123,11 @@
                 background-color: #E5E5E5;
                 border-color: #a0a0a0;
             }
+            
             &.has-warnings{
                 background-image: url('../img/warning2.svg');
                 background-repeat: no-repeat;
                 background-position: 0 0;
-                background-color: rgba(240, 173, 0, 0.4);
                 border-color: #F0AD00;
                 
             }
@@ -161,7 +161,15 @@
         text-transform: uppercase;
         font-style: normal !important;
         font-weight: 400 !important;
+        margin-top: 0;
     }
+}
+.has-instruction{
+    background-image: url('../img/instruction.svg');
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    border-color: #2D9CDB;
+    
 }
 .warning-tooltip{
     color: rgb(202, 145, 1);
