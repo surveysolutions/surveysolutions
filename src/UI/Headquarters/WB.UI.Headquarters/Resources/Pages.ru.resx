@@ -1294,4 +1294,7 @@
   <data name="InterviewerProfile_QrCodeAlt" xml:space="preserve">
     <value>Qr code, упрощающий настройку планшета интервьюера</value>
   </data>
+  <data name="InterviewerProfile_NoMarkers" xml:space="preserve">
+    <value>Местоположения интервьювера не было еще записано</value>
+  </data>
 </root>
