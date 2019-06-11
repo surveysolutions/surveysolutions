@@ -16,7 +16,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-9 map" v-if="!markersExist"></div>
+        <div class="col-sm-9 map" v-if="!markersExist">{{$t("Pages.InterviewerProfile_NoMarkers")}}</div>
     </div>
     <div class="row" v-if="totalTrafficUsed > 0">
         <div class="col-sm-12 clearfix">
