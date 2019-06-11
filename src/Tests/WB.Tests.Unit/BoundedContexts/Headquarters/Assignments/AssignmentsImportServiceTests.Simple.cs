@@ -1286,6 +1286,35 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             Assert.That(savedAssignments, Has.One.Items);
             Assert.That(savedAssignments[0].WebMode, Is.False);
+        }       
+        
+        [TestCase("1", true)]
+        [TestCase("0", false)]
+        [TestCase("", null)]
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_with_IsAudioRecordingEnabled_flag_should_be_saved_assignment_with_correct_flag(string value, bool? result)
+        {
+            //arrange 
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion()));
+
+            var preloadedFile = Create.Entity.PreloadedFile(rows: new[]
+            {
+                Create.Entity.PreloadingRow(Create.Entity.PreloadingValue("_record_audio", value))
+            });
+
+            var importAssignmentsRepository = Create.Storage.InMemoryPlainStorage<AssignmentToImport>();
+
+            var service = Create.Service.AssignmentsImportService(importAssignmentsRepository: importAssignmentsRepository);
+
+            //act
+            var errors = service.VerifySimpleAndSaveIfNoErrors(preloadedFile, Guid.Empty, questionnaire);
+
+            //assert
+            Assert.That(errors, Is.Empty);
+
+            var savedAssignments = importAssignmentsRepository.Query(x => x.ToArray());
+
+            Assert.That(savedAssignments, Has.One.Items);
+            Assert.That(savedAssignments[0].IsAudioRecordingEnabled, Is.EqualTo(result));
         }
     }
 }
