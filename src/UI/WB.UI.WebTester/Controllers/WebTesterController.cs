@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Questionnaire.Api;
@@ -22,21 +23,17 @@ namespace WB.UI.WebTester.Controllers
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IEvictionNotifier evictionService;
         private readonly IQuestionnaireStorage questionnaireStorage;
-        private readonly IQuestionnaireImportService questionnaireImportService;
         private readonly IInterviewFactory interviewFactory;
 
         public WebTesterController(
             IStatefulInterviewRepository statefulInterviewRepository,
             IEvictionNotifier evictionService,
-            ICommandService commandService,
             IQuestionnaireStorage questionnaireStorage,
-            IQuestionnaireImportService questionnaireImportService,
             IInterviewFactory interviewFactory)
         {
             this.statefulInterviewRepository = statefulInterviewRepository ?? throw new ArgumentNullException(nameof(statefulInterviewRepository));
             this.evictionService = evictionService;
             this.questionnaireStorage = questionnaireStorage;
-            this.questionnaireImportService = questionnaireImportService;
             this.interviewFactory = interviewFactory;
         }
 
@@ -105,12 +102,17 @@ namespace WB.UI.WebTester.Controllers
 
             var reloadQuestionnaireUrl =
                 $"{ConfigurationSource.Configuration["DesignerAddress"]}/WebTesterReload/Index/{interview.QuestionnaireIdentity.QuestionnaireId}?interviewId={id}";
+
+            var saveScenarioDesignerUrl = $"{ConfigurationSource.Configuration["DesignerAddress"]}/api/WebTester/Scenarios/{interview.QuestionnaireIdentity.QuestionnaireId}";
+                
             var interviewPageModel = new InterviewPageModel
             {
                 Id = id,
                 Title = $"{questionnaire.Title} | Web Tester",
                 GoogleMapsKey = ConfigurationSource.Configuration["GoogleMapApiKey"],
-                ReloadQuestionnaireUrl = reloadQuestionnaireUrl
+                ReloadQuestionnaireUrl = reloadQuestionnaireUrl,
+                SaveScenarioUrl = saveScenarioDesignerUrl,
+                GetScenarioUrl = Url.Content("~/api/ScenariosApi")
             };
             return interviewPageModel;
         }
@@ -156,6 +158,8 @@ namespace WB.UI.WebTester.Controllers
         public string Id { get; set; }
         public string ReloadQuestionnaireUrl { get; set; }
         public string OriginalInterviewId { get; set; }
+        public string SaveScenarioUrl { get; set; }
+        public string GetScenarioUrl { get; set; }
     }
 
     public class ApiTestModel
