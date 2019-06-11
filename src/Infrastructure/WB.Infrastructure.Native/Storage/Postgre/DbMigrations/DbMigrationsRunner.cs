@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Npgsql;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
 {
