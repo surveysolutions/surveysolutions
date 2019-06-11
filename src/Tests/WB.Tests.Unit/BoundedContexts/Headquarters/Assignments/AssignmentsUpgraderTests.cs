@@ -153,6 +153,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             {
                 protectedVariableName
             });
+            assignmentToMigrate.SetAudioRecordingEnabled(true);
 
             assignmentsStorage.Store(assignmentToMigrate, migratedAssignmentId);
 
@@ -183,6 +184,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(newAssignment.Answers, Is.EquivalentTo(assignmentToMigrate.Answers));
             Assert.That(newAssignment.IdentifyingData, Has.Count.EqualTo(1));
             Assert.That(newAssignment.ProtectedVariables, Has.Count.EqualTo(1));
+            Assert.That(newAssignment.IsAudioRecordingEnabled, Is.True);
         }
 
         [Test]
