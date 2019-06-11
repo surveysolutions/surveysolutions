@@ -265,6 +265,7 @@
     <Compile Include="Controllers\DiagnosticsController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\MultimediaController.cs" />
+    <Compile Include="Controllers\ScenariosApiController.cs" />
     <Compile Include="Infrastructure\AppDomainSpecific\CurrentInterview.cs" />
     <Compile Include="Infrastructure\AppDomainSpecific\IWebTesterTranslationStorage.cs" />
     <Compile Include="Infrastructure\AppDomainSpecific\PrivateSettersResolver.cs" />
