@@ -1,7 +1,7 @@
 <template>
 <div class="container-fluid">
     <div class="row" v-if="showMap">
-        <div class="col-sm-9 map">
+        <div class="col-sm-9 map" v-if="markersExist">
             <div ref="map" id="map-canvas" class="extra-margin-bottom" style="width:100%; height: 400px"></div>
             <div style="display:none;">
                 <div ref="tooltip" >
@@ -16,6 +16,7 @@
                 </div>
             </div>
         </div>
+        <div class="col-sm-9 map" v-if="!markersExist">{{$t("Pages.InterviewerProfile_NoMarkers")}}</div>
     </div>
     <div class="row" v-if="totalTrafficUsed > 0">
         <div class="col-sm-12 clearfix">
@@ -71,7 +72,8 @@
                 minimumClusterSize: 5,
                 totalTrafficUsed: 0,
                 trafficUsage: [],
-                maxDailyUsage: 0
+                maxDailyUsage: 0,
+                markerExist: false
             };
         },
         mounted() {
@@ -96,27 +98,7 @@
                             $('[data-toggle="tooltip"]').tooltip({html: true})
                         })
                     });
-            },
-            loadPoints() {
-                const self = this;
-                this.$http
-                    .get(this.model.api.interviewerPoints + "/" + this.interviewerId)
-                    .then(response => {
-                        var data = response.data || { CheckInPoints: [], TargetLocations: []};
-                        var points = data.CheckInPoints || [];
-                        var locations = data.TargetLocations || [];
-                        if (points.length > 0) {
-                            self.showPointsOnMap(points);
-                        } else {
-                            toastr.error(this.$t("MapReport.NoGpsQuestionsByQuestionnaire"));
-                        }
-
-                        if (locations.length > 0)
-                        {
-                            self.showLocationsOnMap(locations);
-                        }
-                    });
-            },
+            },            
             isIE() {
                 var ua = navigator.userAgent;
                 /* MSIE used to detect old browsers and Trident used to newer ones*/
@@ -310,37 +292,60 @@
                     });
             },
             initializeMap() {
+
                 if (!this.model.showMap) return;
 
-                var self = this;
-                var mapOptions = {
-                    zoom: 9,
-                    mapTypeControl: true,
-                    mapTypeControlOptions: {
-                        style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-                        position: google.maps.ControlPosition.TOP_CENTER
-                    },
-                    panControl: true,
-                    panControlOptions: {
-                        position: google.maps.ControlPosition.TOP_RIGHT
-                    },
-                    zoomControl: true,
-                    zoomControlOptions: {
-                        style: google.maps.ZoomControlStyle.LARGE,
-                        position: google.maps.ControlPosition.TOP_RIGHT
-                    },
-                    mapTypeControlOptions: {
-                        position: google.maps.ControlPosition.LEFT_TOP
-                    },
-                    minZoom: 3,
-                    scaleControl: true,
-                    streetViewControl: false,
-                    center: this.model.initialLocation
-                };
+                const self = this;
+                this.$http
+                    .get(this.model.api.interviewerPoints + "/" + this.interviewerId)
+                    .then(response => {
+                        var data = response.data || { CheckInPoints: [], TargetLocations: []};
+                        var points = data.CheckInPoints || [];
+                        var locations = data.TargetLocations || [];
+                        
+                        if(points.length > 0 || locations.length > 0)
+                        {
+                            this.markerExist = true;
 
-                this.map = new google.maps.Map(this.$refs.map, mapOptions);
+                            var mapOptions = {
+                                zoom: 9,
+                                mapTypeControl : true,
+                                mapTypeControlOptions: {
+                                    style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                                    position: google.maps.ControlPosition.TOP_CENTER
+                                },
+                                panControl: true,
+                                panControlOptions: {
+                                position: google.maps.ControlPosition.TOP_RIGHT},
+                                zoomControl: true,
+                                zoomControlOptions: {
+                                style: google.maps.ZoomControlStyle.LARGE,
+                                position: google.maps.ControlPosition.TOP_RIGHT
+                            },
+                            mapTypeControlOptions: {
+                                position: google.maps.ControlPosition.LEFT_TOP
+                            },
+                            minZoom: 3,
+                            scaleControl: true,
+                            streetViewControl: false,
+                            center: this.model.initialLocation};
 
-                this.loadPoints();
+                            this.map = new google.maps.Map(this.$refs.map, mapOptions);
+                        
+                            if (points.length > 0) {
+                                self.showPointsOnMap(points);
+                            }
+                        
+                            if (locations.length > 0)
+                            {
+                                self.showLocationsOnMap(locations);
+                            }
+                        }
+                        else{
+                            this.markerExist = false;
+                        }                        
+                    });
+                             
             }
         },
         computed: {
