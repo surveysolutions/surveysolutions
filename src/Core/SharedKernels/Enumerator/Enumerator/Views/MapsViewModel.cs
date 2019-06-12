@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
             }
         }
 
-        public string MapsTitle => InterviewerUIResources.Maps_Title;
+        public string MapsTitle => EnumeratorUIResources.Maps_Title;
 
         
         private async Task RunMapSyncAsync()
