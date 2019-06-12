@@ -172,7 +172,5 @@
   <data name="SendToSupervisor_TransferWasAborted" xml:space="preserve">
     <value>转换已被终止</value>
   </data>
-  <data name="Synchronization_UploadAuditLog" xml:space="preserve">
-    <value>上传审计信息</value>
-  </data>
+  
 </root>
