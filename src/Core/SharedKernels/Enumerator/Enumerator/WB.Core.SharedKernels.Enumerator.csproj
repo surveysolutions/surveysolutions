@@ -39,10 +39,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Properties\InterviewerUIResources.Designer.cs">
+    <Compile Update="Properties\EnumeratorUIResources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
     </Compile>
     <Compile Update="Properties\UIResources.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -51,48 +51,48 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.ar.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    <EmbeddedResource Update="Properties\EnumeratorUIResources.ar.resx">
+      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.es.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    <EmbeddedResource Update="Properties\EnumeratorUIResources.es.resx">
+      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.fr.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    <EmbeddedResource Update="Properties\EnumeratorUIResources.fr.resx">
+      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.id-ID.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    <EmbeddedResource Update="Properties\EnumeratorUIResources.id-ID.resx">
+      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.ka.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    <EmbeddedResource Update="Properties\EnumeratorUIResources.ka.resx">
+      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.km.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    <EmbeddedResource Update="Properties\EnumeratorUIResources.km.resx">
+      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.pt.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    <EmbeddedResource Update="Properties\EnumeratorUIResources.pt.resx">
+      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.resx">
+    <EmbeddedResource Update="Properties\EnumeratorUIResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>InterviewerUIResources.Designer.cs</LastGenOutput>
+      <LastGenOutput>EnumeratorUIResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.ro.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    <EmbeddedResource Update="Properties\EnumeratorUIResources.ro.resx">
+      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.ru.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    <EmbeddedResource Update="Properties\EnumeratorUIResources.ru.resx">
+      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.th-TH.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    <EmbeddedResource Update="Properties\EnumeratorUIResources.th-TH.resx">
+      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.uk-UA.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    <EmbeddedResource Update="Properties\EnumeratorUIResources.uk-UA.resx">
+      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.vi-VN.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    <EmbeddedResource Update="Properties\EnumeratorUIResources.vi-VN.resx">
+      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.zh.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    <EmbeddedResource Update="Properties\EnumeratorUIResources.zh.resx">
+      <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Update="Properties\UIResources.ar.resx">
       <DependentUpon>UIResources.resx</DependentUpon>
