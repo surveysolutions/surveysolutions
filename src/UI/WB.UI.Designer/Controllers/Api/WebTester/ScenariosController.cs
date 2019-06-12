@@ -6,22 +6,25 @@ using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Scenarios;
 using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer.Controllers.Api.Designer;
+using WB.UI.Designer.Services;
 
 namespace WB.UI.Designer.Controllers.Api.WebTester
 {
     [Route("api/webtester/Scenarios")]
-    [Authorize]
-    [QuestionnairePermissions]
     public class ScenariosController : ControllerBase
     {
         private readonly DesignerDbContext dbContext;
+        private readonly IWebTesterService webTesterService;
 
-        public ScenariosController(DesignerDbContext dbContext)
+        public ScenariosController(DesignerDbContext dbContext, IWebTesterService webTesterService)
         {
             this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+            this.webTesterService = webTesterService ?? throw new ArgumentNullException(nameof(webTesterService));
         }
 
         [Route("{id:Guid}")]
+        [Authorize]
+        [QuestionnairePermissions]
         public async Task<IActionResult> Post(Guid id, [FromForm]PostScenarioModel model)
         {
             var newScenario = new StoredScenario();
@@ -33,6 +36,20 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             await this.dbContext.SaveChangesAsync();
 
             return Ok();
+        }
+
+        [Route("{token}/{scenarioId:int}")]
+        public async Task<IActionResult> Get(string token, int scenarioId)
+        {
+            var questionnaire = this.webTesterService.GetQuestionnaire(token);
+
+            StoredScenario scenario = await this.dbContext.Scenarios.FindAsync(scenarioId);
+            if (scenario == null)
+                return NotFound(new {Message = "Scenario not found"});
+            if (questionnaire != scenario.QuestionnaireId)
+                return Forbid();
+
+            return Ok(scenario.Steps);
         }
     }
 

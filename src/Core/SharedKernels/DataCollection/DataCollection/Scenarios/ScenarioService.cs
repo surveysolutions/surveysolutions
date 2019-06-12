@@ -10,9 +10,147 @@ namespace WB.Core.SharedKernels.DataCollection.Scenarios
 {
     class ScenarioService : IScenarioService
     {
-        public List<ICommand> ConvertFromScenario(IEnumerable<IScenarioCommand> commands)
+        public List<InterviewCommand> ConvertFromScenario(IQuestionnaire questionnaire, IEnumerable<IScenarioCommand> commands)
         {
-            throw new NotImplementedException();
+            List<InterviewCommand> result = new List<InterviewCommand>();
+
+
+            var stubInterviewId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+            var stubUserId = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
+            foreach (var interviewCommand in commands)
+            {
+                Identity questionId = null;
+                if (interviewCommand is ScenarioAnswerCommand scenarioAnswerCommand)
+                {
+                    questionId = new Identity(questionnaire.GetQuestionIdByVariable(scenarioAnswerCommand.Variable).Value, scenarioAnswerCommand.RosterVector);
+                }
+
+                switch (interviewCommand)
+                {
+                    case ScenarioRemoveAnswerCommand removeAnswer:
+                        result.Add(new RemoveAnswerCommand(stubInterviewId, stubUserId, questionId));
+                        break;
+                    case ScenarioAnswerAudioCommand audioAnswer:
+                        result.Add(new AnswerAudioQuestionCommand(stubInterviewId, stubUserId, questionId.Id,
+                            questionId.RosterVector, audioAnswer.FileName, audioAnswer.Length));
+                        break;
+                    case ScenarioAnswerDateTimeCommand dateTimeAnswer:
+
+                        result.Add(new AnswerDateTimeQuestionCommand(stubInterviewId, stubUserId, questionId.Id, questionId.RosterVector, dateTimeAnswer.Answer));
+                        break;
+
+                    case ScenarioAnswerGeoLocationCommand geoAnswer:
+                        result.Add(new AnswerGeoLocationQuestionCommand(
+                            stubInterviewId,
+                            stubUserId,
+                            questionId.Id,
+                            questionId.RosterVector,
+                            geoAnswer.Latitude,
+                            geoAnswer.Longitude,
+                            geoAnswer.Accuracy,
+                            geoAnswer.Altitude,
+                            geoAnswer.Timestamp));
+                        break;
+                    case ScenarioAnswerGeographyCommand geography:
+                        result.Add(new AnswerGeographyQuestionCommand(
+                            stubInterviewId, stubUserId,
+                            questionId.Id,
+                            questionId.RosterVector,
+                            geography.Geometry,
+                            geography.MapName,
+                            geography.Area,
+                            geography.Coordinates,
+                            geography.Length,
+                            geography.DistanceToEditor,
+                            geography.NumberOfPoints));
+                        break;
+                    case ScenarioAnswerMultipleOptionsLinkedCommand linkedMultipleOption:
+                        result.Add(new AnswerMultipleOptionsLinkedQuestionCommand(
+                            stubInterviewId, stubUserId,
+                            questionId.Id,
+                            questionId.RosterVector,
+                            linkedMultipleOption.SelectedRosterVectors
+                        ));
+                        break;
+                    case ScenarioAnswerMultipleOptionsCommand multipleOptions:
+                        result.Add(new AnswerMultipleOptionsQuestionCommand(
+                            stubInterviewId,
+                            stubUserId,
+                            questionId.Id,
+                            questionId.RosterVector,
+                            multipleOptions.SelectedValues));
+                        break;
+                    case ScenarioAnswerNumericIntegerCommand integerAnswer:
+                        result.Add(new AnswerNumericIntegerQuestionCommand(
+                            stubInterviewId, stubUserId,
+                            questionId.Id,
+                            questionId.RosterVector,
+                            integerAnswer.Answer));
+                        break;
+                    case ScenarioAnswerNumericRealCommand realAnswer:
+                        result.Add(new AnswerNumericRealQuestionCommand(
+                            stubInterviewId, stubUserId,
+                            questionId.Id,
+                            questionId.RosterVector,
+                            realAnswer.Answer));
+                        break;
+                    case ScenarioAnswerPictureCommand picture:
+                        result.Add(new AnswerPictureQuestionCommand(
+                            stubInterviewId,
+                            stubUserId,
+                            questionId.Id,
+                            questionId.RosterVector,
+                            picture.PictureFileName));
+                        break;
+                    case ScenarioAnswerSingleOptionLinkedCommand singleLinkedOption:
+                        result.Add(new AnswerSingleOptionLinkedQuestionCommand(
+                            stubInterviewId,
+                            stubUserId,
+                            questionId.Id,
+                            questionId.RosterVector,
+                            singleLinkedOption.SelectedRosterVector));
+                        break;
+                    case ScenarioAnswerSingleOptionCommand singleOption:
+                        result.Add(new AnswerSingleOptionQuestionCommand(
+                            stubInterviewId,
+                            stubInterviewId,
+                            questionId.Id,
+                            questionId.RosterVector,
+                            singleOption.SelectedValue
+                        ));
+                        break;
+                    case ScenarioAnswerTextListCommand textList:
+                        result.Add(new AnswerTextListQuestionCommand(
+                            stubInterviewId,
+                            stubUserId,
+                            questionId.Id,
+                            questionId.RosterVector,
+                            textList.Answers.Select(x => Tuple.Create((decimal)x.Code, x.Text)).ToArray()));
+                        break;
+                    case ScenarioAnswerTextCommand answerText:
+                        result.Add(new AnswerTextQuestionCommand(
+                            stubInterviewId,
+                            stubUserId,
+                            questionId.Id,
+                            questionId.RosterVector,
+                            answerText.Answer));
+                        break;
+                    case ScenarioAnswerYesNoCommand answerYesNo:
+                        result.Add(new AnswerYesNoQuestion(
+                            stubInterviewId,
+                            stubUserId,
+                            questionId.Id,
+                            questionId.RosterVector,
+                            answerYesNo.AnsweredOptions.ToList()));
+                        break;
+                    case ScenarioSwitchTranslationCommand switchTranslation:
+                        result.Add(new SwitchTranslation(stubInterviewId, switchTranslation.TargetLanguage, stubUserId));
+                        break;
+                }
+            }
+
+            return result;
+
         }
 
         public List<IScenarioCommand> ConvertFromInterview(IQuestionnaire questionnaire, IEnumerable<InterviewCommand> commands)

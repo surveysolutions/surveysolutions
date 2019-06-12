@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Newtonsoft.Json;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -17,18 +18,21 @@ namespace WB.UI.WebTester.Controllers
     {
         private readonly ICacheStorage<List<InterviewCommand>, Guid> executedCommandsStorage;
         private readonly IScenarioService scenarioService;
+        private readonly ISerializer serializer;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IQuestionnaireStorage questionnaireStorage;
 
         public ScenariosApiController(IStatefulInterviewRepository statefulInterviewRepository,
             IQuestionnaireStorage questionnaireStorage,
             ICacheStorage<List<InterviewCommand>, Guid> executedCommandsStorage,
-            IScenarioService scenarioService)
+            IScenarioService scenarioService,
+            ISerializer serializer)
         {
             this.statefulInterviewRepository = statefulInterviewRepository ?? throw new ArgumentNullException(nameof(statefulInterviewRepository));
             this.questionnaireStorage = questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
             this.executedCommandsStorage = executedCommandsStorage ?? throw new ArgumentNullException(nameof(executedCommandsStorage));
             this.scenarioService = scenarioService ?? throw new ArgumentNullException(nameof(scenarioService));
+            this.serializer = serializer;
         }
 
         [ApiNoCache]
@@ -46,13 +50,7 @@ namespace WB.UI.WebTester.Controllers
                 Steps = readyToBeStoredCommands
             };
 
-            string response = JsonConvert.SerializeObject(scenario,
-                Formatting.Indented,
-                new JsonSerializerSettings
-                {
-                    TypeNameHandling = TypeNameHandling.Auto
-                });
-
+            string response = this.serializer.Serialize(scenario);
             return Request.CreateResponse(HttpStatusCode.OK, response);
         }
     }
