@@ -1272,4 +1272,7 @@
   <data name="InterviewerProfile_QrCodeAlt" xml:space="preserve">
     <value>Qr code that simplifies interviewer application setup</value>
   </data>
+  <data name="InterviewerProfile_NoMarkers" xml:space="preserve">
+    <value>Interviewer location was never recorded in any of the interviews that he/she has submitted</value>
+  </data>
 </root>
