@@ -1546,6 +1546,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interviewer location was never recorded in any of the interviews that he/she has submitted.
+        /// </summary>
+        public static string InterviewerProfile_NoMarkers {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_NoMarkers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total number of failed synchronizations.
         /// </summary>
         public static string InterviewerProfile_NumberOfFailedSynchronizations {

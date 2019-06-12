@@ -585,7 +585,9 @@ namespace WB.Services.Export.Tests
 
         public static ServiceProvider SetupEventsProcessor(ServiceCollection services, IHeadquartersApi api, bool withDefaultEventsFilter = false)
         {
-            services.AddMock<ITenantApi<IHeadquartersApi>>(c => c.For(It.IsAny<TenantInfo>()) == api);
+            services.AddMockObject<ITenantApi<IHeadquartersApi>, IHeadquartersApi>(
+                s => s.For(It.IsAny<TenantInfo>()), api);
+
             services.AddScoped<ITenantContext, TenantContext>();
 
             if (withDefaultEventsFilter)
