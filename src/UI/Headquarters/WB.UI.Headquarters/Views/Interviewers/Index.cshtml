@@ -79,13 +79,7 @@
 
                             if (row.isLocked) {
                                 tdHtml += "<span class='lock' title='@Users.Locked'></span>";
-
-                                var api = new $.fn.dataTable.Api(meta.settings);
-                                var cell = api.cell(meta.col, meta.row);
-                                var jqCell = $(cell.node());
-                                jqCell.addClass("locked-user");
                             }
-
                             return tdHtml;
                         }
                     },
@@ -164,6 +158,13 @@
                 }
                 ];
             };
+
+            model.createdRow = function(row, data) {
+                if (data.isLocked) {
+                    var jqCell = $(row.cells[1]);
+                    jqCell.addClass("locked-user");
+                }
+            }
 
             model.unarchiveInterviewers = function() {
                 model.getConfirmAndSendRequest(notifier,
