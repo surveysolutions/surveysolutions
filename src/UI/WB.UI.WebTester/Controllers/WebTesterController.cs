@@ -7,10 +7,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.UI.WebTester.Resources;
@@ -37,13 +34,14 @@ namespace WB.UI.WebTester.Controllers
             this.interviewFactory = interviewFactory;
         }
 
-        public ActionResult Run(Guid id, string sid) => this.View(new InterviewPageModel
+        public ActionResult Run(Guid id, string sid, int? scenarioId = null) => this.View(new InterviewPageModel
         {
             Id = id.ToString(),
-            OriginalInterviewId = sid ?? string.Empty
+            OriginalInterviewId = sid ?? string.Empty,
+            ScenarioId = scenarioId
         });
 
-        public async Task<ActionResult> Redirect(Guid id, string originalInterviewId)
+        public async Task<ActionResult> Redirect(Guid id, string originalInterviewId, string scenarioId)
         {
             if (this.statefulInterviewRepository.Get(id.FormatGuid()) != null)
             {
@@ -52,7 +50,15 @@ namespace WB.UI.WebTester.Controllers
 
             try
             {
-                if (!string.IsNullOrEmpty(originalInterviewId))
+                if (scenarioId != null)
+                {
+                    var result = await this.interviewFactory.CreateInterview(id, int.Parse(scenarioId));
+                    if (result != CreationResult.DataRestored)
+                    {
+                        TempData["Message"] = Common.ReloadInterviewErrorMessage;
+                    }
+                }
+                else if (!string.IsNullOrEmpty(originalInterviewId))
                 {
                     var result = await this.interviewFactory.CreateInterview(id, Guid.Parse(originalInterviewId));
                     if (result != CreationResult.DataRestored)
@@ -160,6 +166,7 @@ namespace WB.UI.WebTester.Controllers
         public string OriginalInterviewId { get; set; }
         public string SaveScenarioUrl { get; set; }
         public string GetScenarioUrl { get; set; }
+        public int? ScenarioId { get; set; }
     }
 
     public class ApiTestModel
