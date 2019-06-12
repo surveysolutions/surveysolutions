@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 
@@ -25,8 +26,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.CensusQuestionnai
 
         public void BecauseOf() => viewModel.Init(questionnaireView);
 
-        [NUnit.Framework.Test] public void should_view_model_have_specified_questionnaire_message () => viewModel.Title.Should().Be(string.Format(InterviewerUIResources.DashboardItem_Title, questionnaireView.Title, questionnaireView.GetIdentity().Version));
-        [NUnit.Framework.Test] public void should_view_model_have_specified_comment () => viewModel.SubTitle.Should().Be(string.Format(InterviewerUIResources.DashboardItem_CensusModeComment, interviewsByQuestionnaireCount));
+        [NUnit.Framework.Test] public void should_view_model_have_specified_questionnaire_message () => viewModel.Title.Should().Be(string.Format(EnumeratorUIResources.DashboardItem_Title, questionnaireView.Title, questionnaireView.GetIdentity().Version));
+        [NUnit.Framework.Test] public void should_view_model_have_specified_comment () => viewModel.SubTitle.Should().Be(string.Format(EnumeratorUIResources.DashboardItem_CensusModeComment, interviewsByQuestionnaireCount));
 
         static CensusQuestionnaireDashboardItemViewModel viewModel;
         const int interviewsByQuestionnaireCount = 3;
