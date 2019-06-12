@@ -104,10 +104,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     cancellationToken.ThrowIfCancellationRequested();
                     progress.Report(new SyncProgressInfo
                     {
-                        Title = InterviewerUIResources.Synchronization_Download_Title,
-                        Description = string.Format(InterviewerUIResources.Synchronization_Download_Description_Format,
+                        Title = EnumeratorUIResources.Synchronization_Download_Title,
+                        Description = string.Format(EnumeratorUIResources.Synchronization_Download_Description_Format,
                             statistics.RejectedInterviewsCount + statistics.NewInterviewsCount + 1, interviews.Count,
-                            InterviewerUIResources.Synchronization_Interviews),
+                            EnumeratorUIResources.Synchronization_Interviews),
                         Stage = SyncStage.UpdatingAssignments,
                         StageExtraInfo = new Dictionary<string, string>()
                         {

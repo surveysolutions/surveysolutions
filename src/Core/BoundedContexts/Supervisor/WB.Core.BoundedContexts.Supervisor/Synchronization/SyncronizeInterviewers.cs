@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
             var processedInterviewersCount = 0;
             Context.Progress.Report(new SyncProgressInfo
             {
-                Title = InterviewerUIResources.Synchronization_Of_Interviewers,
+                Title = EnumeratorUIResources.Synchronization_Of_Interviewers,
                 Statistics = Context.Statistics,
                 Status = SynchronizationStatus.Download
             });
@@ -86,7 +86,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 
                 Context.Progress.Report(new SyncProgressInfo
                 {
-                    Title = InterviewerUIResources.Synchronization_Of_InterviewersFormat.FormatString(
+                    Title = EnumeratorUIResources.Synchronization_Of_InterviewersFormat.FormatString(
                         processedInterviewersCount, remoteInterviewers.Count),
                     Statistics = Context.Statistics,
                     Status = SynchronizationStatus.Download
@@ -95,7 +95,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 
             Context.Progress.Report(new SyncProgressInfo
             {
-                Title = InterviewerUIResources.Synchronization_Of_InterviewersFormat.FormatString(
+                Title = EnumeratorUIResources.Synchronization_Of_InterviewersFormat.FormatString(
                     processedInterviewersCount, remoteInterviewers.Count),
                 Statistics = Context.Statistics,
                 Status = SynchronizationStatus.Download

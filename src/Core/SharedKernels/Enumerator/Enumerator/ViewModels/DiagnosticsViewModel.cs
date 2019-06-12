@@ -53,7 +53,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         private void ShareDeviceTechnicalInformation()
         {
-            this.tabletDiagnosticService.LaunchShareAction(InterviewerUIResources.Share_to_Title,
+            this.tabletDiagnosticService.LaunchShareAction(EnumeratorUIResources.Share_to_Title,
                 this.deviceSettings.GetDeviceTechnicalInformation());
         }
     }

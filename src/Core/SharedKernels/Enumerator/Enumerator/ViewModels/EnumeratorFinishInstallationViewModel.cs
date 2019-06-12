@@ -159,7 +159,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             var settingsEndpoint = this.deviceSettings.Endpoint;
             if (!string.IsNullOrEmpty(settingsEndpoint) && !string.Equals(settingsEndpoint, this.endpoint, StringComparison.OrdinalIgnoreCase))
             {
-                var message = string.Format(InterviewerUIResources.FinishInstallation_EndpointDiffers,  this.Endpoint, settingsEndpoint);
+                var message = string.Format(EnumeratorUIResources.FinishInstallation_EndpointDiffers,  this.Endpoint, settingsEndpoint);
                 if (await this.userInteractionService.ConfirmAsync(message, isHtml: false).ConfigureAwait(false))
                 {
                     this.Endpoint = settingsEndpoint;
@@ -190,7 +190,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             {
                 if (string.IsNullOrWhiteSpace(UserName))
                 {
-                    throw new SynchronizationException(SynchronizationExceptionType.Unauthorized, InterviewerUIResources.Login_WrongPassword);
+                    throw new SynchronizationException(SynchronizationExceptionType.Unauthorized, EnumeratorUIResources.Login_WrongPassword);
                 }
 
                 var authToken = await this.synchronizationService.LoginAsync(new LogonInfo
@@ -236,7 +236,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
             catch (Exception ex)
             {
-                this.ErrorMessage = InterviewerUIResources.UnexpectedException;
+                this.ErrorMessage = EnumeratorUIResources.UnexpectedException;
                 this.logger.Error("Finish installation view model. Unexpected exception", ex);
             }
             finally
@@ -284,7 +284,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             catch (Exception e)
             {
                 this.logger.Error("Qrbarcode reader error: ", e);
-                this.ErrorMessage = InterviewerUIResources.FinishInstallation_QrBarcodeReaderErrorMessage;
+                this.ErrorMessage = EnumeratorUIResources.FinishInstallation_QrBarcodeReaderErrorMessage;
             }
             finally
             {
