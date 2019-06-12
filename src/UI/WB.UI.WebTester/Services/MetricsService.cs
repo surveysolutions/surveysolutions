@@ -36,7 +36,7 @@ namespace WB.UI.WebTester.Services
             catch (Exception e)
             {
                 e.Log(null);
-                logger.Error("Unable to start metrics push", e);
+                logger.Error(e, "Unable to start metrics push");
             }
         }
     }
