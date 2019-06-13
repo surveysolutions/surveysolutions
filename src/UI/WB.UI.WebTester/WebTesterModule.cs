@@ -84,6 +84,7 @@ namespace WB.UI.WebTester
             registry.Bind<IImageProcessingService, ImageProcessingService>();
             registry.Bind<IVirtualPathService, VirtualPathService>();
             registry.Bind<ISerializer, NewtonJsonSerializer>();
+            registry.BindAsSingleton<IScenarioSerializer, ScenarioSerializer>();
 
             registry.BindToMethod<IServiceLocator>(() => ServiceLocator.Current);
 
