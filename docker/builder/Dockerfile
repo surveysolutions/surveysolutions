@@ -70,11 +70,11 @@ ENV NUGET_PACKAGES C:\src\.cache\nuget
 ENV AndroidSdkDirectory=C:\AndroidSDK
 ENV AndroidNdkDirectory=C:\AndroidNDK\android-ndk-r19c
 ENV JavaSdkDirectory="c:\\Program Files\\Android\\jdk\\microsoft_dist_openjdk_1.8.0.25"
-RUN MKDIR c:\src
+# RUN MKDIR c:\src
 
-VOLUME c:\src
+# VOLUME c:\src
 
-RUN powershell Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\DOS Devices' -Name 'G:' -Value "\??\C:\src" -Type String; 
+# RUN powershell Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\DOS Devices' -Name 'G:' -Value "\??\C:\src" -Type String; 
 
-WORKDIR g:\
+# WORKDIR g:\
 # Default to PowerShell if no other command specified.

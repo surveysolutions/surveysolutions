@@ -19,7 +19,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 {
     public class RelinkDeviceViewModel : BaseViewModel<RelinkDeviceViewModelArg>
     {
-        private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly ISynchronizationService synchronizationService;
         private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
         private readonly IAuditLogService auditLogService;
@@ -33,7 +32,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IAuditLogService auditLogService)
             : base(principal, viewModelNavigationService)
         {
-            this.viewModelNavigationService = viewModelNavigationService;
             this.synchronizationService = synchronizationService;
             this.interviewersPlainStorage = interviewersPlainStorage;
             this.auditLogService = auditLogService;
@@ -111,7 +109,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
             catch (Exception)
             {
-                this.ErrorMessage = InterviewerUIResources.UnexpectedException;   
+                this.ErrorMessage = EnumeratorUIResources.UnexpectedException;   
             }
             finally
             {

@@ -6,7 +6,6 @@ using Ncqrs.Domain;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
-using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 
@@ -21,7 +20,6 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
         private readonly ILiteEventBus eventBus;
         private readonly IServiceLocator serviceLocator;
         private readonly IAggregateRootCacheCleaner aggregateRootCacheCleaner;
-        private readonly EventBusSettings eventBusSettings;
 
         private static int executingCommandsCount = 0;
         private static readonly object executionCountLock = new object();

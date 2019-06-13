@@ -94,9 +94,8 @@ namespace WB.UI.Shared.Enumerator.Services
 
         public bool Encrypted => this.CurrentSettings.Encrypted ?? false;
         public void SetEncrypted(bool encrypted) => this.SaveCurrentSettings(s => s.Encrypted = encrypted);
-        public bool IsSupportedWebViewer => Build.VERSION.SdkInt > BuildVersionCodes.Kitkat;
         public bool NotificationsEnabled => this.CurrentSettings.NotificationsEnabled ?? true;
-        public void SetNotifications(bool notificationsEnabled) => this.SaveCurrentSettings(s => s.NotificationsEnabled = notificationsEnabled);
+        public virtual void SetNotifications(bool notificationsEnabled) => this.SaveCurrentSettings(s => s.NotificationsEnabled = notificationsEnabled);
         public void MarkSyncStart()
         {
             this.SaveCurrentSettings(settings => {

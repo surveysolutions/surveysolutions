@@ -45,14 +45,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
         }
 
         protected override bool SendStatistics => false;
-        protected override string SuccessDescription => InterviewerUIResources.Maps_Synchronization_Success_Description;
+        protected override string SuccessDescription => EnumeratorUIResources.Maps_Synchronization_Success_Description;
 
         public override async Task Synchronize(IProgress<SyncProgressInfo> progress, 
             CancellationToken cancellationToken, SynchronizationStatistics statistics)
         {
             progress.Report(new SyncProgressInfo
             {
-                Title = InterviewerUIResources.MapSyncProvider_SyncronizeMapsAsync_Checking_maps_on_server,
+                Title = EnumeratorUIResources.MapSyncProvider_SyncronizeMapsAsync_Checking_maps_on_server,
                 Status = SynchronizationStatus.Started
             });
 
@@ -92,7 +92,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
                         progress.Report(new SyncProgressInfo
                         {
                             Title =
-                                string.Format(InterviewerUIResources.MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format,
+                                string.Format(EnumeratorUIResources.MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format,
                                                 mapDescription.MapName, processedMapsCount, items.Count, args.ProgressPercentage),
                             Status = SynchronizationStatus.Download
                         });
@@ -150,7 +150,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
 
             progress.Report(new SyncProgressInfo
             {
-                Title = InterviewerUIResources.MapSyncProvider_SyncronizeMapsAsync_Map_synchronization_succesfuly_finished,
+                Title = EnumeratorUIResources.MapSyncProvider_SyncronizeMapsAsync_Map_synchronization_succesfuly_finished,
                 Status = SynchronizationStatus.Success,
             });
         }
