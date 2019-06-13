@@ -107,14 +107,14 @@ namespace WB.UI.WebTester
                 },
                 new RefitSettings
                 {                   
-                    JsonSerializerSettings = new JsonSerializerSettings
+                    ContentSerializer = new JsonContentSerializer(new JsonSerializerSettings
                     {
                         TypeNameHandling = TypeNameHandling.All,
                         NullValueHandling = NullValueHandling.Ignore,
                         FloatParseHandling = FloatParseHandling.Decimal,
                         Converters = new List<JsonConverter> { new IdentityJsonConverter(), new RosterVectorConverter() },
                         Binder = new OldToNewAssemblyRedirectSerializationBinder()
-                    }
+                    })
                 }));
 
             foreach (var type in HubPipelineModules)

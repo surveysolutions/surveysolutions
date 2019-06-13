@@ -27,7 +27,7 @@ namespace WB.Infrastructure.Native.Storage
             FloatParseHandling = FloatParseHandling.Decimal,
             MetadataPropertyHandling = MetadataPropertyHandling.ReadAhead,
             Converters = new List<JsonConverter> { new IdentityJsonConverter(), new RosterVectorConverter() },
-            Binder = new OldToNewAssemblyRedirectSerializationBinder()
+            SerializationBinder = new OldToNewAssemblyRedirectSerializationBinder()
         };
     }
 }

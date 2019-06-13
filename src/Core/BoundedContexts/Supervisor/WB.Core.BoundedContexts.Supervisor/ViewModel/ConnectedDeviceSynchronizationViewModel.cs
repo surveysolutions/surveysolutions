@@ -35,52 +35,52 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             switch (syncProgressInfo.Stage)
             {
                 case SyncStage.CheckForObsoleteInterviews:
-                    return InterviewerUIResources.Synchronization_CheckForObsolete_Interviews;
+                    return EnumeratorUIResources.Synchronization_CheckForObsolete_Interviews;
                 case SyncStage.CheckObsoleteQuestionnaires:
-                    return InterviewerUIResources.Synchronization_Check_Obsolete_Questionnaires;
+                    return EnumeratorUIResources.Synchronization_Check_Obsolete_Questionnaires;
                 case SyncStage.DownloadingLogo:
-                    return InterviewerUIResources.Synchronization_UploadingLogo;
+                    return EnumeratorUIResources.Synchronization_UploadingLogo;
                 case SyncStage.UploadingAuditLog:
-                    return InterviewerUIResources.Synchronization_ReceivingAuditLog;
+                    return EnumeratorUIResources.Synchronization_ReceivingAuditLog;
                 case SyncStage.AssignmentsSynchronization:
                     return syncProgressInfo.StageExtraInfo != null ?
-                        InterviewerUIResources.Synchronization_Of_AssignmentsFormat.FormatString(
+                        EnumeratorUIResources.Synchronization_Of_AssignmentsFormat.FormatString(
                             syncProgressInfo.StageExtraInfo.GetOrNull("processedCount"),
                             syncProgressInfo.StageExtraInfo.GetOrNull("totalCount")) :
-                        InterviewerUIResources.AssignmentsSynchronization;
+                        EnumeratorUIResources.AssignmentsSynchronization;
                 case SyncStage.UserAuthentication:
-                    return InterviewerUIResources.Synchronization_UserAuthentication_Title;
+                    return EnumeratorUIResources.Synchronization_UserAuthentication_Title;
                 case SyncStage.Success:
-                    return InterviewerUIResources.Synchronization_Success_Title;
+                    return EnumeratorUIResources.Synchronization_Success_Title;
                 case SyncStage.Stopped:
                     return null;
                 case SyncStage.Canceled:
                 case SyncStage.Failed:
                 case SyncStage.FailedAccountIsLockedOnServer:
-                    return InterviewerUIResources.Synchronization_Fail_Title;
+                    return EnumeratorUIResources.Synchronization_Fail_Title;
                 case SyncStage.FailedUserLinkedToAnotherDevice:
-                    return InterviewerUIResources.Synchronization_UserLinkedToAnotherDevice_Status;
+                    return EnumeratorUIResources.Synchronization_UserLinkedToAnotherDevice_Status;
                 case SyncStage.FailedSupervisorShouldDoOnlineSync:
-                    return InterviewerUIResources.Synchronization_SupervisorShouldDoOnlineSync_Title;
+                    return EnumeratorUIResources.Synchronization_SupervisorShouldDoOnlineSync_Title;
                 case SyncStage.FailedUnacceptableSSLCertificate:
                 case SyncStage.FailedUserDoNotBelongToTeam:
-                    return InterviewerUIResources.UnexpectedException;
+                    return EnumeratorUIResources.UnexpectedException;
                 case SyncStage.FailedUpgradeRequired:
-                    return InterviewerUIResources.UpgradeRequired;
+                    return EnumeratorUIResources.UpgradeRequired;
                 case SyncStage.FailedUnexpectedException:
-                    return InterviewerUIResources.Synchronization_Fail_Title;
+                    return EnumeratorUIResources.Synchronization_Fail_Title;
                 case SyncStage.UploadInterviews:
-                    return string.Format(InterviewerUIResources.Synchronization_Receiving_Title_Format,
-                        InterviewerUIResources.Synchronization_Upload_CompletedAssignments_Text);
+                    return string.Format(EnumeratorUIResources.Synchronization_Receiving_Title_Format,
+                        EnumeratorUIResources.Synchronization_Upload_CompletedAssignments_Text);
                 case SyncStage.CheckNewVersionOfApplication:
-                    return InterviewerUIResources.Synchronization_CheckNewVersionOfApplication;
+                    return EnumeratorUIResources.Synchronization_CheckNewVersionOfApplication;
                 case SyncStage.DownloadApplication:
-                    return InterviewerUIResources.Synchronization_UploadingApplication;
+                    return EnumeratorUIResources.Synchronization_UploadingApplication;
                 case SyncStage.AttachmentsCleanup:
-                    return InterviewerUIResources.Synchronization_Download_AttachmentsCleanup;
+                    return EnumeratorUIResources.Synchronization_Download_AttachmentsCleanup;
                 case SyncStage.UpdatingAssignments:
                 case SyncStage.UpdatingQuestionnaires:
-                    return InterviewerUIResources.Synchronization_Download_Title;
+                    return EnumeratorUIResources.Synchronization_Download_Title;
                 case SyncStage.Unknown:
                 case null:
                 default:
@@ -94,7 +94,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             {
                 case SyncStage.CheckObsoleteQuestionnaires:
                     return syncProgressInfo.StageExtraInfo != null ?
-                        string.Format(InterviewerUIResources.Synchronization_Check_Obsolete_Questionnaires_Description,
+                        string.Format(EnumeratorUIResources.Synchronization_Check_Obsolete_Questionnaires_Description,
                             syncProgressInfo.StageExtraInfo.GetOrNull("processedCount"),
                             syncProgressInfo.StageExtraInfo.GetOrNull("totalCount")) :
                         null;
@@ -105,39 +105,39 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                 case SyncStage.UploadingAuditLog:
                     return null;
                 case SyncStage.UserAuthentication:
-                    return InterviewerUIResources.Synchronization_UserAuthentication_Description;
+                    return EnumeratorUIResources.Synchronization_UserAuthentication_Description;
                 case SyncStage.Success:
-                    return InterviewerUIResources.Synchronization_Success_Description;
+                    return EnumeratorUIResources.Synchronization_Success_Description;
                 case SyncStage.Stopped:
                     return null;
                 case SyncStage.Canceled:
                 case SyncStage.Failed:
                     return syncProgressInfo.Description;
                 case SyncStage.FailedAccountIsLockedOnServer:
-                    return InterviewerUIResources.AccountIsLockedOnServer;
+                    return EnumeratorUIResources.AccountIsLockedOnServer;
                 case SyncStage.FailedUserLinkedToAnotherDevice:
-                    return InterviewerUIResources.Synchronization_UserLinkedToAnotherDevice_Title;
+                    return EnumeratorUIResources.Synchronization_UserLinkedToAnotherDevice_Title;
                 case SyncStage.FailedSupervisorShouldDoOnlineSync:
-                    return InterviewerUIResources.Synchronization_SupervisorShouldDoOnlineSync;
+                    return EnumeratorUIResources.Synchronization_SupervisorShouldDoOnlineSync;
                 case SyncStage.FailedUnacceptableSSLCertificate:
-                    return InterviewerUIResources.UnacceptableSSLCertificate;
+                    return EnumeratorUIResources.UnacceptableSSLCertificate;
                 case SyncStage.FailedUserDoNotBelongToTeam:
-                    return InterviewerUIResources.Synchronization_UserDoNotBelongToTeam;
+                    return EnumeratorUIResources.Synchronization_UserDoNotBelongToTeam;
                 case SyncStage.FailedUnexpectedException:
-                    return InterviewerUIResources.Synchronization_Fail_UnexpectedException;
+                    return EnumeratorUIResources.Synchronization_Fail_UnexpectedException;
                 case SyncStage.UploadInterviews:
                     return syncProgressInfo.StageExtraInfo != null
-                        ? string.Format(InterviewerUIResources.Synchronization_Upload_Description_Format,
+                        ? string.Format(EnumeratorUIResources.Synchronization_Upload_Description_Format,
                             syncProgressInfo.StageExtraInfo.GetOrNull("processedCount"),
                             syncProgressInfo.StageExtraInfo.GetOrNull("totalCount"),
-                            InterviewerUIResources.Synchronization_Upload_Interviews_Text)
+                            EnumeratorUIResources.Synchronization_Upload_Interviews_Text)
                         : null;
                 case SyncStage.FailedUpgradeRequired:
                 case SyncStage.CheckNewVersionOfApplication:
                     return null;
                 case SyncStage.DownloadApplication:
                     return syncProgressInfo.StageExtraInfo != null ?
-                        string.Format(InterviewerUIResources.Synchronization_SendingApplication_Description,
+                        string.Format(EnumeratorUIResources.Synchronization_SendingApplication_Description,
                             syncProgressInfo.StageExtraInfo.GetOrNull("receivedKilobytes"),
                             syncProgressInfo.StageExtraInfo.GetOrNull("totalKilobytes"),
                             syncProgressInfo.StageExtraInfo.GetOrNull("receivingRate"),
@@ -147,19 +147,19 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                     return null;
                 case SyncStage.UpdatingAssignments:
                     return syncProgressInfo.StageExtraInfo != null ?
-                        string.Format(InterviewerUIResources.Synchronization_Download_Description_Format,
+                        string.Format(EnumeratorUIResources.Synchronization_Download_Description_Format,
                             syncProgressInfo.StageExtraInfo.GetOrNull("processedCount"),
                             syncProgressInfo.StageExtraInfo.GetOrNull("totalCount"),
-                            InterviewerUIResources.Synchronization_Interviews)
-                        : InterviewerUIResources.TransferringAssignments;
+                            EnumeratorUIResources.Synchronization_Interviews)
+                        : EnumeratorUIResources.TransferringAssignments;
 
                 case SyncStage.UpdatingQuestionnaires:
                     return syncProgressInfo.StageExtraInfo != null ?
-                        string.Format(InterviewerUIResources.Synchronization_Download_Description_Format,
+                        string.Format(EnumeratorUIResources.Synchronization_Download_Description_Format,
                             syncProgressInfo.StageExtraInfo.GetOrNull("processedCount"),
                             syncProgressInfo.StageExtraInfo.GetOrNull("totalCount"),
-                            InterviewerUIResources.Synchronization_Questionnaires)
-                        : InterviewerUIResources.UpdatingQuestionnaires;
+                            EnumeratorUIResources.Synchronization_Questionnaires)
+                        : EnumeratorUIResources.UpdatingQuestionnaires;
 
                 case SyncStage.Unknown:
                 case null:

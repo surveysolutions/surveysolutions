@@ -22,17 +22,17 @@ namespace WB.UI.Supervisor.Activities.Interview
         {
             {
                 Resource.Id.menu_dashboard,
-                InterviewerUIResources.MenuItem_Title_Dashboard,
+                EnumeratorUIResources.MenuItem_Title_Dashboard,
                 this.ViewModel.NavigateToDashboardCommand
             },
             {
                 Resource.Id.menu_signout,
-                InterviewerUIResources.MenuItem_Title_SignOut,
+                EnumeratorUIResources.MenuItem_Title_SignOut,
                 this.ViewModel.SignOutCommand
             },
             {
                 Resource.Id.menu_diagnostics,
-                InterviewerUIResources.MenuItem_Title_Diagnostics,
+                EnumeratorUIResources.MenuItem_Title_Diagnostics,
                 this.ViewModel.NavigateToDiagnosticsPageCommand
             },
             //{
@@ -42,11 +42,11 @@ namespace WB.UI.Supervisor.Activities.Interview
             //},
             {
                 Resource.Id.interview_language,
-                InterviewerUIResources.MenuItem_Title_Language
+                EnumeratorUIResources.MenuItem_Title_Language
             },
             {
                 Resource.Id.interview_language_original,
-                InterviewerUIResources.MenuItem_Title_Language_Original
+                EnumeratorUIResources.MenuItem_Title_Language_Original
             },
         };
     }

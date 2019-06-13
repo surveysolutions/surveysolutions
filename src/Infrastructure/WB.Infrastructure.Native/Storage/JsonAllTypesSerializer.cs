@@ -20,7 +20,7 @@ namespace WB.Infrastructure.Native.Storage
                 NullValueHandling = NullValueHandling.Ignore,
                 FloatParseHandling = FloatParseHandling.Decimal,
                 Converters = new List<JsonConverter> { new IdentityJsonConverter(), new RosterVectorConverter() },
-                Binder = new OldToNewAssemblyRedirectSerializationBinder()
+                SerializationBinder = new OldToNewAssemblyRedirectSerializationBinder()
             };
         }
 

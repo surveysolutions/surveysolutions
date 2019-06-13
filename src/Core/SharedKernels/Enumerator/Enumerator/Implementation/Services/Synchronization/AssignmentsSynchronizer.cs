@@ -77,7 +77,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 processedAssignmentsCount++;
                 progress.Report(new SyncProgressInfo
                 {
-                    Title = InterviewerUIResources.Synchronization_Of_AssignmentsFormat.FormatString(
+                    Title = EnumeratorUIResources.Synchronization_Of_AssignmentsFormat.FormatString(
                         processedAssignmentsCount, remoteAssignments.Count),
                     Statistics = statistics,
                     Status = SynchronizationStatus.Download,

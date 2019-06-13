@@ -46,11 +46,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization.Steps
                 this.Context.CancellationToken.ThrowIfCancellationRequested();
                 this.Context.Progress.Report(new SyncProgressInfo
                 {
-                    Title = InterviewerUIResources.Synchronization_Download_Title,
-                    Description = string.Format(InterviewerUIResources.Synchronization_Download_Description_Format,
+                    Title = EnumeratorUIResources.Synchronization_Download_Title,
+                    Description = string.Format(EnumeratorUIResources.Synchronization_Download_Description_Format,
                         processedQuestionnaires,
                         notExistingLocalCensusQuestionnaireIdentities.Count,
-                        InterviewerUIResources.Synchronization_Questionnaires),
+                        EnumeratorUIResources.Synchronization_Questionnaires),
                     Stage = SyncStage.UpdatingQuestionnaires,
                     StageExtraInfo = new Dictionary<string, string>()
                     {

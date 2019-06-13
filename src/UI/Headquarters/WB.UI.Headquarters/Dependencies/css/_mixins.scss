@@ -336,6 +336,7 @@
     & ~ label .tick {
         display: inline-block;
         @include square(18px);
+        min-width: 18px;
         background: transparent url("#{$assetsPath}/img/questionnaire-sprite.png") no-repeat;
         vertical-align: middle;
         background-size: 793px 18px;

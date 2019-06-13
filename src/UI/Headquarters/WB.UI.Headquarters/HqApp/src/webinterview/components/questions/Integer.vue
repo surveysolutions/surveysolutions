@@ -140,6 +140,9 @@
                                 return
                             } else {
                                 this.fetch()
+                                if(this.autoNumericElement)
+                                    this.autoNumericElement.set(this.$me.answer)
+                                
                                 return
                             }
                         });
@@ -173,7 +176,10 @@
                         if (result) {
                             this.$store.dispatch('removeAnswer', this.id)
                         } else {
-                            this.fetch()
+                            this.fetch() 
+                            
+                            if(this.autoNumericElement)
+                                this.autoNumericElement.set(this.$me.answer)
                         }
                     });
                 }
