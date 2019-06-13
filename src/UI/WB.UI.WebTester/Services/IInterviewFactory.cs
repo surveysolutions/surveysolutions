@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Scenarios;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.UI.WebTester.Infrastructure;
 
 namespace WB.UI.WebTester.Services
 {
@@ -40,7 +41,7 @@ namespace WB.UI.WebTester.Services
         private readonly IDesignerWebTesterApi webTesterApi;
         private readonly IScenarioService scenarioService;
         private readonly IQuestionnaireStorage questionnaireStorage;
-        private readonly ISerializer serializer;
+        private readonly IScenarioSerializer serializer;
 
         public InterviewFactory(ICacheStorage<List<ICommand>, Guid> executedCommandsStorage,
             ICommandService commandService,
@@ -50,7 +51,7 @@ namespace WB.UI.WebTester.Services
             IDesignerWebTesterApi webTesterApi, 
             IScenarioService scenarioService, 
             IQuestionnaireStorage questionnaireStorage,
-            ISerializer serializer)
+            IScenarioSerializer serializer)
         {
             this.executedCommandsStorage = executedCommandsStorage ?? throw new ArgumentNullException(nameof(executedCommandsStorage));
             this.commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
@@ -101,7 +102,7 @@ namespace WB.UI.WebTester.Services
             this.commandService.Execute(createInterview);
 
             var scenarioSerialized = await this.webTesterApi.GetScenario(designerToken.ToString(), scenarioId);
-            var scenario = this.serializer.Deserialize<Scenario>(scenarioSerialized);
+            var scenario = this.serializer.Deserialize(scenarioSerialized);
 
             var questionnaireDocument = this.questionnaireStorage.GetQuestionnaire(questionnaire, null);
             var commands = this.scenarioService.ConvertFromScenario(questionnaireDocument, scenario.Steps);

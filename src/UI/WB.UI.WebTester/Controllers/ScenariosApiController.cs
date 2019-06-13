@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Scenarios;
 using WB.UI.Shared.Web.Filters;
+using WB.UI.WebTester.Infrastructure;
 using WB.UI.WebTester.Services;
 
 namespace WB.UI.WebTester.Controllers
@@ -18,7 +19,7 @@ namespace WB.UI.WebTester.Controllers
     {
         private readonly ICacheStorage<List<InterviewCommand>, Guid> executedCommandsStorage;
         private readonly IScenarioService scenarioService;
-        private readonly ISerializer serializer;
+        private readonly IScenarioSerializer serializer;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IQuestionnaireStorage questionnaireStorage;
 
@@ -26,7 +27,7 @@ namespace WB.UI.WebTester.Controllers
             IQuestionnaireStorage questionnaireStorage,
             ICacheStorage<List<InterviewCommand>, Guid> executedCommandsStorage,
             IScenarioService scenarioService,
-            ISerializer serializer)
+            IScenarioSerializer serializer)
         {
             this.statefulInterviewRepository = statefulInterviewRepository ?? throw new ArgumentNullException(nameof(statefulInterviewRepository));
             this.questionnaireStorage = questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
