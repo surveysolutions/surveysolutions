@@ -52,6 +52,7 @@
                     </span>
                     <span class="error-message strong" ng-show="questionnaire.isReadOnlyForUser" ng-i18next>ReadOnly</span>
                     <input id="webtest-btn" type="button" class="btn" ng-if="questionnaire.webTestAvailable" ng-i18next="[value]Test" value="Test" ng-click="webTest()" />
+                    <input id="webtest-btn" type="button" class="btn" ng-if="questionnaire.webTestAvailable" value="Web run" ng-click="webRun()" />
                 </div>
             </div>
         </div>

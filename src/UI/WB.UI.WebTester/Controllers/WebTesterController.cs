@@ -50,7 +50,7 @@ namespace WB.UI.WebTester.Controllers
 
             try
             {
-                if (scenarioId != null)
+                if (!string.IsNullOrEmpty(scenarioId))
                 {
                     var result = await this.interviewFactory.CreateInterview(id, int.Parse(scenarioId));
                     if (result != CreationResult.DataRestored)
