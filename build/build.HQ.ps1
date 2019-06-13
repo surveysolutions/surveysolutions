@@ -33,12 +33,18 @@ try {
         nuget restore $MainSolution
     }
 
-    Log-Block "Building HQ Package" {
-        BuildWebPackage $ProjectHeadquarters $BuildConfiguration | % { if (-not $_) { Exit } }
-    }
+    $buildArgs = @("/p:BuildNumber=$BuildNumber", "/p:VersionSuffix=$branch")
 
-    Log-Block "Collecting/building artifacts" {
-        AddArtifacts $ProjectHeadquarters $BuildConfiguration -folder "HQ"
+    $buildSuccessful = BuildSolution -Solution $MainSolution -BuildConfiguration $BuildConfiguration -BuildArgs $buildArgs
+    
+    if ($buildSuccessful) { 
+        Log-Block "Building HQ Package" {
+            BuildWebPackage $ProjectHeadquarters $BuildConfiguration | % { if (-not $_) { Exit } }
+        }
+
+        Log-Block "Collecting/building artifacts" {
+            AddArtifacts $ProjectHeadquarters $BuildConfiguration -folder "HQ"
+        }
     }
 }
 catch {
