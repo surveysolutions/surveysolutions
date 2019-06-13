@@ -14,16 +14,7 @@
     <meta name="viewport" content="width=device-width">
 
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-
-    <!-- libs:css -->
-     <link rel="stylesheet" href="~/css/libs.css">
-     <!-- endinject --> 
-    
-    <!-- markup:css -->
-     <link rel="stylesheet" href="~/css/markup.css">
-     <!-- endinject -->
-
-    <link rel="icon" type="image/png" sizes="192x192" href="~/favicon-designer-192x192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="~/favicon-designer-192x192.png?v=2">
     <link rel="apple-touch-icon-precomposed" sizes="180x180" href="~/favicon-designer-180x180.png">
     <link rel="apple-touch-icon-precomposed" sizes="152x152" href="~/favicon-designer-152x152.png">
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="~/favicon-designer-144x144.png">
@@ -32,17 +23,23 @@
     <link rel="apple-touch-icon-precomposed" sizes="76x76" href="~/favicon-designer-76x76.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="~/favicon-designer-72x72.png">
     <link rel="apple-touch-icon-precomposed" href="~/favicon-designer-180x180.png">
-    
-        <!-- manifest:json -->
-    <script>window.localization = {"QuestionnaireEditor.en.json":"../../resx/QuestionnaireEditor-e167fd7d65.en.json","QuestionnaireEditor.ar.json":"../../resx/QuestionnaireEditor-2ba780ecf0.ar.json","QuestionnaireEditor.es.json":"../../resx/QuestionnaireEditor-6a9970d529.es.json","QuestionnaireEditor.fr.json":"../../resx/QuestionnaireEditor-93748ca796.fr.json","QuestionnaireEditor.ru.json":"../../resx/QuestionnaireEditor-8f1853a19a.ru.json","QuestionnaireEditor.zh.json":"../../resx/QuestionnaireEditor-10fc0c91a8.zh.json"}</script>@{ var locales_json = @"{""QuestionnaireEditor.en.json"":""../../resx/QuestionnaireEditor-e167fd7d65.en.json"",""QuestionnaireEditor.ar.json"":""../../resx/QuestionnaireEditor-2ba780ecf0.ar.json"",""QuestionnaireEditor.es.json"":""../../resx/QuestionnaireEditor-6a9970d529.es.json"",""QuestionnaireEditor.fr.json"":""../../resx/QuestionnaireEditor-93748ca796.fr.json"",""QuestionnaireEditor.ru.json"":""../../resx/QuestionnaireEditor-8f1853a19a.ru.json"",""QuestionnaireEditor.zh.json"":""../../resx/QuestionnaireEditor-10fc0c91a8.zh.json""}"; }
+
+    <!-- libs:css -->
+    <link rel="stylesheet" href="~/css/libs.css">
     <!-- endinject -->
-    @{ 
+    <!-- markup:css -->
+    <link rel="stylesheet" href="~/css/markup.css">
+    <!-- endinject -->
+    <!-- manifest:json -->
+    <script>window.localization = { "QuestionnaireEditor.en.json": "../../resx/QuestionnaireEditor-e167fd7d65.en.json", "QuestionnaireEditor.ar.json": "../../resx/QuestionnaireEditor-2ba780ecf0.ar.json", "QuestionnaireEditor.es.json": "../../resx/QuestionnaireEditor-6a9970d529.es.json", "QuestionnaireEditor.fr.json": "../../resx/QuestionnaireEditor-93748ca796.fr.json", "QuestionnaireEditor.ru.json": "../../resx/QuestionnaireEditor-8f1853a19a.ru.json", "QuestionnaireEditor.zh.json": "../../resx/QuestionnaireEditor-10fc0c91a8.zh.json" }</script>@{ var locales_json = @"{""QuestionnaireEditor.en.json"":""../../resx/QuestionnaireEditor-e167fd7d65.en.json"",""QuestionnaireEditor.ar.json"":""../../resx/QuestionnaireEditor-2ba780ecf0.ar.json"",""QuestionnaireEditor.es.json"":""../../resx/QuestionnaireEditor-6a9970d529.es.json"",""QuestionnaireEditor.fr.json"":""../../resx/QuestionnaireEditor-93748ca796.fr.json"",""QuestionnaireEditor.ru.json"":""../../resx/QuestionnaireEditor-8f1853a19a.ru.json"",""QuestionnaireEditor.zh.json"":""../../resx/QuestionnaireEditor-10fc0c91a8.zh.json""}"; }
+    <!-- endinject -->
+    @{
         var locales = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(locales_json);
         var locale = locales["QuestionnaireEditor." + CultureInfo.CurrentUICulture.TwoLetterISOLanguageName + ".json"];
 
     }
     <link rel='preload' href='@locale' as="fetch" crossorigin="anonymous">
-    
+
 </head>
 <body ng-app="designerApp">
     <div id="designer-editor" class="container" ui-view>
