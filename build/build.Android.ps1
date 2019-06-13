@@ -59,7 +59,7 @@ try {
         -KeystoreName 'WBCapi.keystore' `
         -KeystoreAlias 'wbcapipublish' `
         -CapiProject 'src\UI\Supervisor\WB.UI.Supervisor\WB.UI.Supervisor.csproj' `
-        -OutFileName "$artifactsFolder\Client\$SuperPackageName" `
+        -OutFileName "$artifactsFolder\$SuperPackageName" `
         -NoCleanUp `
         -ExcludeExtra $false | % { if (-not $_) { Exit } }
 
@@ -72,7 +72,7 @@ try {
         -KeystoreName 'WBCapi.keystore' `
         -KeystoreAlias 'wbcapipublish' `
         -CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
-        -OutFileName "$artifactsFolder\Client\$ExtPackageName" `
+        -OutFileName "$artifactsFolder\$ExtPackageName" `
         -branch $branch `
         -NoCleanUp `
         -ExcludeExtra $false | % { if (-not $_) { Exit } }
