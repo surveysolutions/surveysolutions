@@ -51,7 +51,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         public void Init(QuestionnaireView questionnaire)
         {
             this.questionnaireIdentity = QuestionnaireIdentity.Parse(questionnaire.Id);
-            this.Title = string.Format(InterviewerUIResources.DashboardItem_Title, questionnaire.Title, this.questionnaireIdentity.Version);
+            this.Title = string.Format(EnumeratorUIResources.DashboardItem_Title, questionnaire.Title, this.questionnaireIdentity.Version);
 
             UpdateSubtitle();
         }
@@ -60,7 +60,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         {
             var questionnaireId = this.questionnaireIdentity.ToString();
             var interviewsByQuestionnareCount = this.interviewViewRepository.Count(interview => interview.QuestionnaireId == questionnaireId);
-            this.SubTitle = InterviewerUIResources.DashboardItem_CensusModeComment.FormatString(interviewsByQuestionnareCount);
+            this.SubTitle = EnumeratorUIResources.DashboardItem_CensusModeComment.FormatString(interviewsByQuestionnareCount);
         }
 
         public DashboardInterviewStatus Status => DashboardInterviewStatus.Assignment;

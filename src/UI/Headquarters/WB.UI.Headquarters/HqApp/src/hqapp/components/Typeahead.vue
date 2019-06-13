@@ -169,7 +169,7 @@ export default {
 
             this.isLoading = true;
             const requestParams = _.assign(
-                { query: filter, cache: false },
+                { query: filter, cache: false},
                 this.ajaxParams
             );
 

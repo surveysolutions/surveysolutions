@@ -342,7 +342,8 @@ _responsible - username of a supervisor or an interviewer who will be responsibl
 _quantity - capacity of the assignment;&lt;br/&gt;
 _email - email of the respondent (for web-interviews only);&lt;br/&gt;
 _password - password to start an interview (for web-interviews only);&lt;br/&gt;
-_webmode - is this assignment in the web mode (value 1 should be used)</value>
+_webmode - is this assignment in the web mode (value 1 should be used);&lt;br/&gt;
+_record_audio - is enabled record audio for interviews (1 - enabled, 0 - disabled, blank - get this value from questionnaire)</value>
   </data>
   <data name="BatchTitle" xml:space="preserve">
     <value>Identifying and collected data (archive)</value>
@@ -370,7 +371,8 @@ _responsible - username of a supervisor or an interviewer who will be responsibl
 _quantity - capacity of the assignment;&lt;br/&gt;
 _email - email of the respondent (for web-interviews only);&lt;br/&gt;
 _password - password to start an interview (for web-interviews only);&lt;br/&gt;
-_webmode - is this assignment in the web mode (value 1 should be used)</value>
+_webmode - is this assignment in the web mode (value 1 should be used);&lt;br/&gt;
+_record_audio - is enabled record audio for interviews (1 - enabled, 0 - disabled, blank - get this value from questionnaire)</value>
   </data>
   <data name="SimpleTitle" xml:space="preserve">
     <value>Identifying data only</value>

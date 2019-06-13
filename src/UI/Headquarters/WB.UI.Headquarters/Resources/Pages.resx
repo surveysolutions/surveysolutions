@@ -617,6 +617,9 @@
   <data name="Interviewers_UserNameTitle" xml:space="preserve">
     <value>Login name</value>
   </data>
+  <data name="Interviewers_FullNameTitle" xml:space="preserve">
+    <value>Full name</value>
+  </data>
   <data name="Interviewers_CreationDateTitle" xml:space="preserve">
     <value>Account created on</value>
   </data>
@@ -1268,5 +1271,8 @@
   </data>
   <data name="InterviewerProfile_QrCodeAlt" xml:space="preserve">
     <value>Qr code that simplifies interviewer application setup</value>
+  </data>
+  <data name="InterviewerProfile_NoMarkers" xml:space="preserve">
+    <value>Interviewer location was never recorded in any of the interviews that he/she has submitted</value>
   </data>
 </root>
