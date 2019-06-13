@@ -7,7 +7,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
     public class DiagnosticsViewModel : BaseViewModel
     {
-        private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly ITabletDiagnosticService tabletDiagnosticService;
         private readonly IDeviceSettings deviceSettings;
 
@@ -20,7 +19,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             BackupRestoreViewModel backupRestore,
             BandwidthTestViewModel bandwidthTest) : base(principal, viewModelNavigationService)
         {
-            this.viewModelNavigationService = viewModelNavigationService;
             this.deviceSettings = deviceSettings;
             this.tabletDiagnosticService = tabletDiagnosticService;
             this.TabletInformation = sendTabletInformationViewModel;
