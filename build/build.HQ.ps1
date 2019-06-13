@@ -24,7 +24,9 @@ Log-Block "Update project version" {
 $artifactsFolder = (Get-Location).Path + "\Artifacts"
 Log-Message "Artifacts Folder: $artifactsFolder"
 
-Remove-Item $artifactsFolder\* -Recurse -Force
+if(Test-Path $artifactsFolder) {
+    Remove-Item $artifactsFolder\* -Recurse -Force
+}
 
 try {
 
