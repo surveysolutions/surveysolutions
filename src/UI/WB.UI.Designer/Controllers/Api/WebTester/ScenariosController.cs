@@ -35,19 +35,20 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             await this.dbContext.Scenarios.AddAsync(newScenario);
             await this.dbContext.SaveChangesAsync();
 
-            return Ok();
+            return RedirectToAction("Details", "Questionnaire", new {id = id.FormatGuid()});
         }
 
         [Route("{token}/{scenarioId:int}")]
         public async Task<IActionResult> Get(string token, int scenarioId)
         {
             var questionnaire = this.webTesterService.GetQuestionnaire(token);
+            if (questionnaire == null) return Forbid("Token expired");
 
             StoredScenario scenario = await this.dbContext.Scenarios.FindAsync(scenarioId);
             if (scenario == null)
                 return NotFound(new {Message = "Scenario not found"});
             if (questionnaire != scenario.QuestionnaireId)
-                return Forbid();
+                return Forbid("Scenario from other questionnaire");
 
             return Ok(scenario.Steps);
         }
