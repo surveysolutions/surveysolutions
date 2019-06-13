@@ -26,6 +26,23 @@
                 });
             }
 
+            function urlCall(method, relativeUrl, data) {
+                blockUI.start();
+
+                return $http({
+                    method: method,
+                    url: '../../api/' + relativeUrl,
+                    data: data,
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
+                }).then(function (response) {
+                    blockUI.stop();
+                    return response;
+                }, function (response) {
+                    blockUI.stop();
+                    return $q.reject(response);
+                });
+            }
+
             commandService.execute = function (type, command) {
                 return commandCall(type, command);
             };
@@ -521,6 +538,26 @@
                     entityId: newId,
                     questionnaireId: questionnaireId
                 });
+            };
+
+            commandService.runScenario = function (questionnaireId, scenario) {
+                var command = {
+                    questionnaireId: questionnaireId,
+                    scenarioId: scenario.id
+                };
+                return commandCall("RunScenario", command);
+            };
+
+            commandService.updateScenario = function (questionnaireId, scenario) {
+                var data = {
+                    title: scenario.title
+                };
+
+                return urlCall('PUT', "questionnaire/" + questionnaireId + "/scenarios/" + scenario.id, data);
+            };
+
+            commandService.deleteScenario = function (questionnaireId, id) {
+                return urlCall('DELETE', "questionnaire/" + questionnaireId + "/scenarios/" + id, { });
             };
 
             return commandService;
