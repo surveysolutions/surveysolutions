@@ -24,6 +24,8 @@ Log-Block "Update project version" {
 $artifactsFolder = (Get-Location).Path + "\Artifacts"
 Log-Message "Artifacts Folder: $artifactsFolder"
 
+Remove-Item $artifactsFolder\* -Recurse -Force
+
 try {
 
     $buildArgs = @("/p:BuildNumber=$BuildNumber", "/p:VersionSuffix=$branch")
@@ -47,7 +49,7 @@ try {
             AddArtifacts $ProjectHeadquarters $BuildConfiguration -folder "Headquarters"
         }
 
-        Write-Host "##teamcity[publishArtifacts '$artifactsFolder']"
+        #Write-Host "##teamcity[publishArtifacts '$artifactsFolder']"
     }
 }
 catch {
