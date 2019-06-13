@@ -2,13 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Scenarios;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -129,15 +126,31 @@ namespace WB.UI.WebTester.Services
         {
             try
             {
-                var questionnaireIdentity = await questionnaireImportService.ImportQuestionnaire(designerToken);
+                var questionnaireId = await questionnaireImportService.ImportQuestionnaire(designerToken);
+
+                var createInterview = new CreateInterview(
+                    interviewId: designerToken,
+                    userId: Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"),
+                    questionnaireId: questionnaireId,
+                    answers: new List<InterviewAnswer>(),
+                    protectedVariables: new List<string>(),
+                    supervisorId: Guid.NewGuid(),
+                    interviewerId: Guid.NewGuid(),
+                    interviewKey: new InterviewKey(new Random().Next(99999999)),
+                    assignmentId: null,
+                    isAudioRecordingEnabled: false);
+
+                this.commandService.Execute(createInterview);
 
                 var existingInterviewCommands = this.executedCommandsStorage.Get(originalInterviewId, originalInterviewId);
-                foreach (var existingInterviewCommand in existingInterviewCommands.Cast<InterviewCommand>())
+                var questionnaireDocument = this.questionnaireStorage.GetQuestionnaire(questionnaireId, null);
+
+                var scenario = this.scenarioService.ConvertFromInterview(questionnaireDocument, 
+                    existingInterviewCommands.Cast<InterviewCommand>());
+                var commands = this.scenarioService.ConvertFromScenario(questionnaireDocument, scenario);
+
+                foreach (var existingInterviewCommand in commands)
                 {
-                    if (existingInterviewCommand is CreateInterview createCommand)
-                    {
-                        createCommand.QuestionnaireId = questionnaireIdentity;
-                    }
                     existingInterviewCommand.InterviewId = designerToken;
                     this.commandService.Execute(existingInterviewCommand);
                 }
