@@ -125,3 +125,5 @@ if NOT exist "%PGDATA%\PG_VERSION" (
 
     echo PostgreSQL init process complete; ready for start up.
 )
+
+call %*

@@ -69,9 +69,9 @@ RUN mkdir "C:\\docker-entrypoint-initdb.d"
 #### Copy over PostgreSQL
 COPY --from=prepare /pgsql /pgsql
 ADD path.ps1 /
-RUN powershell .\path.ps1
+RUN powershell ./path.ps1
 
 ENV PGDATA "C:\\pgsql\\data"
 
 COPY docker-entrypoint.cmd /
-RUN ["C:\\docker-entrypoint.cmd"]
+ENTRYPOINT ["C:\\docker-entrypoint.cmd"]
