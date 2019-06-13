@@ -64,8 +64,8 @@ RUN if (Test-Path 'C:\\windows\\system32\\msvcp120.dll') { \
 ####
 #### PostgreSQL on Windows Server Core
 ####
-FROM ${PG_BUILDER}
-# wb_builder
+FROM wb_builder
+# should be FROM $PG_BUILDER - but something is broken
 
 RUN mkdir "C:\\docker-entrypoint-initdb.d"
 
