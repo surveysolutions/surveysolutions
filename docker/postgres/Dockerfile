@@ -5,6 +5,8 @@ FROM mcr.microsoft.com/dotnet/framework/sdk:4.8 as prepare
 
 # Set the variables for EnterpriseDB
 ARG EDB_VER=11.3-1
+ARG PG_BUILDER
+
 ENV EDB_VER $EDB_VER
 ENV EDB_REPO https://get.enterprisedb.com/postgresql
 
@@ -62,7 +64,8 @@ RUN if (Test-Path 'C:\\windows\\system32\\msvcp120.dll') { \
 ####
 #### PostgreSQL on Windows Server Core
 ####
-FROM builder
+FROM ${PG_BUILDER}
+# wb_builder
 
 RUN mkdir "C:\\docker-entrypoint-initdb.d"
 
