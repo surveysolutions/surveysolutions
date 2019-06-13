@@ -9,6 +9,19 @@ namespace WB.Core.SharedKernels.DataCollection
     [DebuggerDisplay("{ToString()}")]
     public class CheckedYesNoAnswerOption
     {
+        protected bool Equals(CheckedYesNoAnswerOption other)
+        {
+            return Value == other.Value && Yes == other.Yes;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return (Value * 397) ^ Yes.GetHashCode();
+            }
+        }
+
         public CheckedYesNoAnswerOption(int value, bool yes)
         {
             this.Value = value;
@@ -32,10 +45,10 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public override bool Equals(object obj)
         {
-            var targetAnswer = (CheckedYesNoAnswerOption) obj;
-            if (targetAnswer == null) return false;
-
-            return this.Value == targetAnswer.Value && this.Yes == targetAnswer.Yes && this.No == targetAnswer.No;
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((CheckedYesNoAnswerOption) obj);
         }
     }
 

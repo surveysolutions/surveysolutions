@@ -61,7 +61,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.localQuestionnaires = this.questionnaireListStorage.LoadAll();
             
             if (!localQuestionnaires.Any())
+#pragma warning disable 4014
                 Task.Run(this.LoadServerQuestionnairesAsync);
+#pragma warning restore 4014
             else
                 this.SearchByLocalQuestionnaires(QuestionnairesType.My);
 

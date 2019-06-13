@@ -18,7 +18,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
     public abstract class EnumeratorFinishInstallationViewModel : BaseViewModel<FinishInstallationViewModelArg>
     {
-        protected readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IDeviceSettings deviceSettings;
         private readonly ISynchronizationService synchronizationService;
         private readonly ILogger logger;
@@ -38,7 +37,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             ISerializer serializer,
             IUserInteractionService userInteractionService) : base(principal, viewModelNavigationService)
         {
-            this.viewModelNavigationService = viewModelNavigationService;
             this.deviceSettings = deviceSettings;
             this.synchronizationService = synchronizationService;
             this.logger = logger;

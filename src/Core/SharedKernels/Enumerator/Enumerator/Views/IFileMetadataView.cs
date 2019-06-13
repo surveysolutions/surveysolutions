@@ -5,7 +5,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
 {
     public interface IFileMetadataView : IPlainStorageEntity
     {
-        string Id { get; set; }
+        new string Id { get; set; }
         Guid InterviewId { get; set; }
         string FileId { get; set; }
         string FileName { get; set; }
