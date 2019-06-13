@@ -9,6 +9,7 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 
@@ -61,7 +62,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.Diagnostics
 
             Assert.That(checkNewVersionViewModel.IsVersionCheckInProgress, Is.EqualTo(false));
             Assert.That(checkNewVersionViewModel.IsNewVersionAvailable, Is.EqualTo(false));
-            Assert.That(checkNewVersionViewModel.CheckNewVersionResult, Is.EqualTo(InterviewerUIResources.Diagnostics_YouHaveTheLatestVersionOfApplication));
+            Assert.That(checkNewVersionViewModel.CheckNewVersionResult, Is.EqualTo(EnumeratorUIResources.Diagnostics_YouHaveTheLatestVersionOfApplication));
         }
 
         [Test]
