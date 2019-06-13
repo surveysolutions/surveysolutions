@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
@@ -12,15 +13,19 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
-    public class FileSystemMapStorageService : IMapStorageService
+    public class MapFileStorageService : IMapStorageService
     {
         private readonly IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor;
         private readonly IPlainStorageAccessor<UserMap> userMapsStorage;
         private readonly IMapService mapPropertiesProvider;
         private readonly IUserRepository userStorage;
+
+        
+        private readonly IExternalFileStorage externalFileStorage;
 
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IArchiveUtils archiveUtils;
@@ -32,11 +37,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
         private readonly string mapsFolderPath;
 
-        public FileSystemMapStorageService(IFileSystemAccessor fileSystemAccessor, string folderPath, IArchiveUtils archiveUtils,
+        public MapFileStorageService(IFileSystemAccessor fileSystemAccessor, string folderPath, IArchiveUtils archiveUtils,
             IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor,
             IPlainStorageAccessor<UserMap> userMapsStorage,
             IMapService mapPropertiesProvider,
-            IUserRepository userStorage)
+            IUserRepository userStorage,
+            IExternalFileStorage externalFileStorage)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.archiveUtils = archiveUtils;
@@ -47,6 +53,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.userMapsStorage = userMapsStorage;
             this.userStorage = userStorage;
 
+            this.externalFileStorage = externalFileStorage;
+
             this.path = fileSystemAccessor.CombinePath(folderPath, TempFolderName);
             if (!fileSystemAccessor.IsDirectoryExists(this.path))
                 fileSystemAccessor.CreateDirectory(this.path);
@@ -55,6 +63,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             if (!fileSystemAccessor.IsDirectoryExists(this.mapsFolderPath))
                 fileSystemAccessor.CreateDirectory(this.mapsFolderPath);
         }
+
+        public string GetExternalStoragePath(string name) => $"maps/" + name;
 
         public async Task SaveOrUpdateMapAsync(ExtractedFile mapFile)
         {
@@ -86,8 +96,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     MinScale = properties.MinScale
                 };
 
-                var targetFile = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, mapFile.Name);
-                fileSystemAccessor.MoveFile(tempFile, targetFile);
+                if (externalFileStorage.IsEnabled())
+                {
+                    using (FileStream file = File.OpenRead(tempFile))
+                    {
+                        var name = this.fileSystemAccessor.GetFileName(tempFile);
+                        await this.externalFileStorage.StoreAsync(GetExternalStoragePath(name), file, "application/zip");
+                    }
+                }
+                else
+                {
+                    var targetFile = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, mapFile.Name);
+                    fileSystemAccessor.MoveFile(tempFile, targetFile);
+                }
+                
                 this.mapPlainStorageAccessor.Store(mapItem, mapItem.Id);
             }
             catch
@@ -109,10 +131,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             if (map != null)
                 this.mapPlainStorageAccessor.Remove(mapName);
 
-            var filePath = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, mapName);
+            if (externalFileStorage.IsEnabled())
+            {
+                this.externalFileStorage.Remove(GetExternalStoragePath(mapName));
+            }
+            else
+            {
+                var filePath = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, mapName);
 
-            if(this.fileSystemAccessor.IsFileExists(filePath))
-                fileSystemAccessor.DeleteFile(filePath);
+                if (this.fileSystemAccessor.IsFileExists(filePath))
+                    fileSystemAccessor.DeleteFile(filePath);
+            }
         }
 
         public void DeleteMapUserLink(string map, string user)
@@ -225,6 +254,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
         public byte[] GetMapContent(string mapName)
         {
+            if (externalFileStorage.IsEnabled())
+            {
+                return this.externalFileStorage.GetBinary((GetExternalStoragePath(mapName)));
+            }
+            
             var filePath = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, mapName);
 
             if (!this.fileSystemAccessor.IsFileExists(filePath))
