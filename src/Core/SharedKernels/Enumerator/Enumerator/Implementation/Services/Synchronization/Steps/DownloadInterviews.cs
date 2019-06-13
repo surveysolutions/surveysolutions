@@ -26,7 +26,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly ILiteEventBus eventBus;
         protected readonly IEnumeratorEventStorage EventStore;
-        private readonly ILogger logger;
         private readonly IInterviewsRemover interviewsRemover;
 
         protected DownloadInterviews(ISynchronizationService synchronizationService,
@@ -45,7 +44,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             this.interviewViewRepository = interviewViewRepository ?? throw new ArgumentNullException(nameof(interviewViewRepository));
             this.eventBus = eventBus ?? throw new ArgumentNullException(nameof(eventBus));
             this.EventStore = eventStore ?? throw new ArgumentNullException(nameof(eventStore));
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.interviewsRemover = interviewsRemover ?? throw new ArgumentNullException(nameof(interviewsRemover));
         }
 

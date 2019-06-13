@@ -33,9 +33,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly GroupStateViewModel groupState;
         private readonly InterviewStateViewModel interviewState;
         private readonly CoverStateViewModel coverState;
-        protected readonly IViewModelNavigationService viewModelNavigationService;
         protected readonly IInterviewViewModelFactory interviewViewModelFactory;
-        public IEnumeratorSettings EnumeratorSettings { get; }
         public static BaseInterviewViewModel CurrentInterviewScope;
 
         protected BaseInterviewViewModel(
@@ -63,9 +61,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.groupState = groupState;
             this.interviewState = interviewState;
             this.coverState = coverState;
-            this.viewModelNavigationService = viewModelNavigationService;
             this.interviewViewModelFactory = interviewViewModelFactory;
-            this.EnumeratorSettings = enumeratorSettings;
 
             this.BreadCrumbs = breadCrumbsViewModel;
             this.Sections = sectionsViewModel;

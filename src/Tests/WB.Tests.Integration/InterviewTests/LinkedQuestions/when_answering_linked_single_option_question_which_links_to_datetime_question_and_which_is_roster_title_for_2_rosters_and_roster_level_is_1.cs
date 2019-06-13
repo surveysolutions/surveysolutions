@@ -112,7 +112,6 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         private static Guid userId;
         private static Guid questionId;
         private static int[] rosterVector;
-        private static int[] emptyRosterVector;
         private static Guid rosterAId;
         private static Guid rosterBId;
         private static RosterVector linkedOption2Vector;
