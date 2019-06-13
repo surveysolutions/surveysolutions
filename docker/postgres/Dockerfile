@@ -62,7 +62,7 @@ RUN if (Test-Path 'C:\\windows\\system32\\msvcp120.dll') { \
 ####
 #### PostgreSQL on Windows Server Core
 ####
-FROM mcr.microsoft.com/dotnet/framework/sdk:4.8
+FROM builder
 
 RUN mkdir "C:\\docker-entrypoint-initdb.d"
 
@@ -74,7 +74,4 @@ RUN ./path.ps1
 ENV PGDATA "C:\\pgsql\\data"
 
 COPY docker-entrypoint.cmd /
-ENTRYPOINT ["C:\\docker-entrypoint.cmd"]
-
-EXPOSE 5432
-CMD ["postgres"]
+CMD ["C:\\docker-entrypoint.cmd"]

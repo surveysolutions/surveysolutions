@@ -123,10 +123,10 @@ if NOT exist "%PGDATA%\PG_VERSION" (
         call psql !psqlParam! -f "%%f"
     )
 
-    pg_ctl -U "!POSTGRES_USER!" -D "%PGDATA%" -m fast -w stop
+ ::   pg_ctl -U "!POSTGRES_USER!" -D "%PGDATA%" -m fast -w stop
 
     echo PostgreSQL init process complete; ready for start up.
 )
 
 :: start the database
-call %*
+::#call %*
