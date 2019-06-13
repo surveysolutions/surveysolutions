@@ -4,6 +4,7 @@
             'use strict';
 
             $scope.isUnfoldedChapters = false;
+            $scope.isUnfoldedScenarios = false;
             $scope.isUnfoldedMacros = false;
             $scope.isUnfoldedLookupTables = false;
             $scope.isUnfoldedAttachments = false;
@@ -13,12 +14,15 @@
 
 
             var closeOpenPanelIfAny = function() {
-                if (!($scope.isUnfoldedChapters || $scope.isUnfoldedMacros || $scope.isUnfoldedLookupTables || $scope.isUnfoldedAttachments 
+                if (!($scope.isUnfoldedChapters || $scope.isUnfoldedScenarios || $scope.isUnfoldedMacros || $scope.isUnfoldedLookupTables || $scope.isUnfoldedAttachments 
                     || $scope.isUnfoldedTranslations || $scope.isUnfoldedMetadata  || $scope.isUnfoldedComments))
                     return;
 
                 if ($scope.isUnfoldedChapters) {
                     $rootScope.$broadcast("closeChaptersListRequested", {});
+                }
+                if ($scope.isUnfoldedScenarios) {
+                    $rootScope.$broadcast("closeScenariosListRequested", {});
                 }
                 if ($scope.isUnfoldedMacros) {
                     $rootScope.$broadcast("closeMacrosListRequested", {});
@@ -42,6 +46,7 @@
             };
 
             var closeAllPanel = function () {
+                $scope.isUnfoldedScenarios = false;
                 $scope.isUnfoldedMacros = false;
                 $scope.isUnfoldedChapters = false;
                 $scope.isUnfoldedLookupTables = false;
@@ -66,6 +71,15 @@
                 closeOpenPanelIfAny();
                 $scope.isUnfoldedMacros = true;
                 $rootScope.$broadcast("openMacrosList", {});
+            };
+
+            $scope.unfoldScenarios = function () {
+                if ($scope.isUnfoldedScenarios)
+                    return;
+
+                closeOpenPanelIfAny();
+                $scope.isUnfoldedScenarios = true;
+                $rootScope.$broadcast("openScenariosList", {});
             };
 
             $scope.unfoldLookupTables = function () {
@@ -137,11 +151,19 @@
                 $scope.isUnfoldedComments = true;
             });
 
+            $scope.$on('openScenariosList', function () {
+                $scope.isUnfoldedScenarios = true;
+            });
+
             $scope.$on('openMacrosList', function () {
                 $scope.isUnfoldedMacros = true;
             });
 
             $scope.$on('closeChaptersList', function () {
+                closeAllPanel();
+            });
+
+            $scope.$on('closeScenariosList', function () {
                 closeAllPanel();
             });
 
