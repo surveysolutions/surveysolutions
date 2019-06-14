@@ -2,9 +2,9 @@
 
 namespace WB.Core.SharedKernels.DataCollection.Scenarios
 {
-    public class ScenarioAnswerAudioCommand : ScenarioAnswerCommand
+    public class AnswerAudio : ScenarioAnswerCommand
     {
-        public ScenarioAnswerAudioCommand(string variable, RosterVector rosterVector, string fileName, TimeSpan length) : base(variable, rosterVector)
+        public AnswerAudio(string variable, RosterVector rosterVector, string fileName, TimeSpan length) : base(variable, rosterVector)
         {
             FileName = fileName;
             Length = length;
