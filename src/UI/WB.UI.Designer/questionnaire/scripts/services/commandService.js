@@ -557,6 +557,14 @@
                 return urlCall('PUT', "questionnaire/" + questionnaireId + "/scenarios/" + scenario.id, data);
             };
 
+            commandService.upadteScenarioSteps = function (questionnaireId, id, steps) {
+                var data = {
+                    steps: steps
+                };
+
+                return urlCall('PATCH', "questionnaire/" + questionnaireId + "/scenarios/" + id, data);
+            };
+
             commandService.deleteScenario = function (questionnaireId, id) {
                 return urlCall('DELETE', "questionnaire/" + questionnaireId + "/scenarios/" + id, { });
             };

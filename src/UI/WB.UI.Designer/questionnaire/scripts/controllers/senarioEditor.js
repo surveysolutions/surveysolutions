@@ -1,6 +1,6 @@
 angular.module('designerApp')
     .controller('scenarioEditorCtrl',
-        function ($state, $scope, $http, isReadOnlyForUser, scenarioId, webTesterService) {
+        function ($state, $scope, $http, isReadOnlyForUser, scenarioId, webTesterService, commandService) {
             $scope.scenario = {
             }
 
@@ -16,9 +16,11 @@ angular.module('designerApp')
             };
 
             $scope.onSave = function () {
-                return webTesterService.setScenarioSteps($state.params.questionnaireId, 
+                return commandService.upadteScenarioSteps($state.params.questionnaireId, 
                     scenarioId,
-                    {steps: $scope.scenario.steps});
+                    $scope.scenario.steps).then(function(){
+                        $scope.frmEditor.$setPristine();
+                    });
             };
 
             webTesterService.getScenarioSteps($state.params.questionnaireId, scenarioId)
