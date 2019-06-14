@@ -8,6 +8,10 @@
                     return $http.get('../../api/questionnaire/webTest/' + questionnaireId);
                 };
 
+                webTesterService.getScenarioSteps = function(questionnaireId, scenarioId){
+                    return $http.get('../../api/questionnaire/'+ questionnaireId + '/scenarios/' + scenarioId);
+                }
+
                 return webTesterService;
             }
         ]);

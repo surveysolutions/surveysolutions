@@ -1,8 +1,8 @@
 ﻿namespace WB.Core.SharedKernels.DataCollection.Scenarios
 {
-    public class ScenarioSwitchTranslationCommand : IScenarioCommand
+    public class SwitchTranslation : IScenarioCommand
     {
-        public ScenarioSwitchTranslationCommand(string targetLanguage)
+        public SwitchTranslation(string targetLanguage)
         {
             TargetLanguage = targetLanguage;
         }

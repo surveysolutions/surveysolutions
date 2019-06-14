@@ -59,10 +59,11 @@ namespace WB.UI.WebTester.Infrastructure
 
             foreach (var typeInfo in commandTypes)
             {
-                if (this.shortTypeNameToTypeMap.ContainsKey(typeInfo.Name))
+                var shortTypeName = typeInfo.Name;
+                if (this.shortTypeNameToTypeMap.ContainsKey(shortTypeName))
                     throw new InvalidOperationException("Assembly contains more then one type with same name.");
 
-                this.shortTypeNameToTypeMap[typeInfo.Name] = typeInfo;
+                this.shortTypeNameToTypeMap[shortTypeName] = typeInfo;
             }
         }
 
