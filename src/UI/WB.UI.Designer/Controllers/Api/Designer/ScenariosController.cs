@@ -3,8 +3,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.Core.BoundedContexts.Designer.Scenarios;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.UI.Designer.Extensions;
+using WB.UI.Designer.Models;
 
 namespace WB.UI.Designer.Controllers.Api.Designer
 {
@@ -44,6 +46,24 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             await dbContext.SaveChangesAsync();
 
             return Ok();
+        }
+
+        [Route("{scenarioId:int}")]
+        [HttpPatch]
+        public async Task<IActionResult> Patch(Guid questionnaireId, int scenarioId, [FromBody]UpdateStepsModel content)
+        {
+            var hasUserAccess = viewFactory.HasUserAccessToQuestionnaire(questionnaireId, User.GetId());
+            if (!hasUserAccess)
+                return Forbid();
+
+            StoredScenario scenario = await this.dbContext.Scenarios.FindAsync(scenarioId);
+            if (scenario == null)
+                return NotFound(new { Message = "Scenario not found" });
+
+            scenario.Steps = content.Steps;
+            await this.dbContext.SaveChangesAsync();
+
+            return Ok(scenario.Steps);
         }
 
         [HttpDelete]
