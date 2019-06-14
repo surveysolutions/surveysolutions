@@ -6,7 +6,7 @@
 </div>
 <div class="modal-body">
     <div class="header-block clearfix">
-        <form>
+        <form name="frmEditor">
             <div id="edit-scenario" 
                 ui-ace="{ onLoad : aceLoaded,
                     mode: 'json',
@@ -17,5 +17,5 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-lg btn-primary" ng-click="onSave()" ng-i18next="Save"></button>
+    <button type="button" class="btn btn-lg btn-primary" ng-click="onSave()" ng-i18next="Save" ng-disabled="frmEditor.$pristine"></button>
 </div>
