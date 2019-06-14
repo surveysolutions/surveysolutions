@@ -16,7 +16,9 @@ angular.module('designerApp')
             };
 
             $scope.onSave = function () {
-
+                return webTesterService.setScenarioSteps($state.params.questionnaireId, 
+                    scenarioId,
+                    {steps: $scope.scenario.steps});
             };
 
             webTesterService.getScenarioSteps($state.params.questionnaireId, scenarioId)

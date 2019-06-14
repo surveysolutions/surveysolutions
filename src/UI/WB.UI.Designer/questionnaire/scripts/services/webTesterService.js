@@ -12,6 +12,10 @@
                     return $http.get('../../api/questionnaire/'+ questionnaireId + '/scenarios/' + scenarioId);
                 }
 
+                webTesterService.setScenarioSteps = function(questionnaireId, scenarioId, steps){
+                    return $http.patch('../../api/questionnaire/'+ questionnaireId + '/scenarios/' + scenarioId, steps);
+                }
+
                 return webTesterService;
             }
         ]);
