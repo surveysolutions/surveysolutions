@@ -2,9 +2,9 @@
 
 namespace WB.Core.SharedKernels.DataCollection.Scenarios
 {
-    public class ScenarioAnswerGeoLocationCommand : ScenarioAnswerCommand
+    public class AnswerGeoLocation : ScenarioAnswerCommand
     {
-        public ScenarioAnswerGeoLocationCommand(string variable, RosterVector rosterVector, DateTimeOffset timestamp, double latitude, double longitude, double accuracy, double altitude) : base(variable, rosterVector)
+        public AnswerGeoLocation(string variable, RosterVector rosterVector, DateTimeOffset timestamp, double latitude, double longitude, double accuracy, double altitude) : base(variable, rosterVector)
         {
             Timestamp = timestamp;
             Latitude = latitude;

@@ -139,6 +139,27 @@ angular.module('designerApp')
                 }
             };
 
+            var scenarioEditorShown = false;
+            $scope.showScenarioEditor = function(scenarioId) {
+                if (!scenarioEditorShown) {
+                    var modalInstance = $uibModal.open({
+                        templateUrl: 'views/scenario-editor.html',
+                        backdrop: false,
+                        size: 'lg',
+                        windowClass: "scenarioEditorModal dragAndDrop",
+                        controller: 'scenarioEditorCtrl',
+                        resolve: {
+                            isReadOnlyForUser: $scope.questionnaire.isReadOnlyForUser || false,
+                            scenarioId: scenarioId
+                        }
+                    });
+                    scenarioEditorShown = true;
+                    modalInstance.closed.then(function() {
+                        scenarioEditorShown = false;
+                    });
+                }
+            }
+
             $scope.questionnaireId = $state.params.questionnaireId;
             var ERROR = "error";
             var WARNING = "warning";

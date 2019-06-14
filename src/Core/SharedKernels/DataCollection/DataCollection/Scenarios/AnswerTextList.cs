@@ -2,9 +2,9 @@
 
 namespace WB.Core.SharedKernels.DataCollection.Scenarios
 {
-    public class ScenarioAnswerTextListCommand : ScenarioAnswerCommand
+    public class AnswerTextList : ScenarioAnswerCommand
     {
-        public ScenarioAnswerTextListCommand(string variable, RosterVector rosterVector, List<TextListAnswer> answers) : base(variable, rosterVector)
+        public AnswerTextList(string variable, RosterVector rosterVector, List<TextListAnswer> answers) : base(variable, rosterVector)
         {
             Answers = answers;
         }

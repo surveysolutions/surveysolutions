@@ -1,8 +1,8 @@
 ﻿namespace WB.Core.SharedKernels.DataCollection.Scenarios
 {
-    public class ScenarioAnswerGeographyCommand : ScenarioAnswerCommand
+    public class AnswerGeography : ScenarioAnswerCommand
     {
-        public ScenarioAnswerGeographyCommand(string variable, RosterVector rosterVector, string geometry, string mapName, double? area, string coordinates, double? length, double? distanceToEditor, int? numberOfPoints) : base(variable, rosterVector)
+        public AnswerGeography(string variable, RosterVector rosterVector, string geometry, string mapName, double? area, string coordinates, double? length, double? distanceToEditor, int? numberOfPoints) : base(variable, rosterVector)
         {
             Geometry = geometry;
             MapName = mapName;

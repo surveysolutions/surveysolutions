@@ -63,5 +63,19 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
             return Ok();
         }
+
+        [Route("{id:int}")]
+        public async Task<IActionResult> Get(Guid questionnaireId, int id)
+        {
+            var hasUserAccess = viewFactory.HasUserAccessToQuestionnaire(questionnaireId, User.GetId());
+            if (!hasUserAccess)
+                return Forbid();
+
+            var scenario = await dbContext.Scenarios.FindAsync(id);
+            if (scenario == null || scenario.QuestionnaireId != questionnaireId)
+                return NotFound();
+
+            return Ok(scenario.Steps);
+        }
     }
 }
