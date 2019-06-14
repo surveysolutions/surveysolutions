@@ -113,11 +113,11 @@
 
     <div class="left-side-panel scenarios" ng-class="{unfolded: isFolded }" ng-controller="ScenariosCtrl">
         <div class="foldback-region" ng-click="foldback();$event.stopPropagation()"></div>
-        <div class="left-side-panel-content scenarios-panel">
+        <div class="left-side-panel-content macros-panel">
             <div class="foldback-button-region" ng-click="foldback();$event.stopPropagation()">
                 <div class="foldback-button"></div>
             </div>
-            <div class="scenarios">
+            <div class="macroses">
                 <perfect-scrollbar class="scroller">
                     <h3>
                         <span ng-i18next="[i18next]({count: scenarios.length})SideBarScenarioCounter"></span>
@@ -128,12 +128,13 @@
                     </div>
                     <form role="form" name="scenariosForm" novalidate>
                         <ul ng-model="scenarios">
-                            <li class="scenarios-panel-item" ng-repeat="scenario in scenarios">
+                            <li class="macroses-panel-item" ng-repeat="scenario in scenarios">
                                 <ng-form name="scenario.form">
                                     <a href ng-click="deleteScenario($index)" class="btn delete-btn" tabindex="-1"></a>
-                                    <div class="input-group scenarios-name">
+                                    <div class="input-group macroses-name">
                                         <input focus-on-out="focusScenario{{scenario.id}}" ng-i18next="[placeholder]SideBarScenarioName" maxlength="32" spellcheck="false" ng-model="scenario.title" name="name" class="form-control" type="text" />
                                     </div>
+                                    <div class="divider"></div>
                                     <button type="button" class="btn lighter-hover" ng-click="runScenario(scenario)" ng-i18next>Run</button>
 
                                     <div class="actions" ng-show="scenario.form.$dirty">
