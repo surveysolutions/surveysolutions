@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
         {
             Context.Progress.Report(new SyncProgressInfo
             {
-                Title = InterviewerUIResources.Synchronization_Of_Supervisor_details,
+                Title = EnumeratorUIResources.Synchronization_Of_Supervisor_details,
                 Statistics = Context.Statistics,
                 Status = SynchronizationStatus.Download
             });

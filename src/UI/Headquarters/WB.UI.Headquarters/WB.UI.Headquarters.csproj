@@ -872,6 +872,7 @@
     <Content Include="Dependencies\img\Icon-demo-server.png" />
     <Content Include="Dependencies\img\icon-mic-1x.png" />
     <Content Include="Dependencies\img\icon-mic-2x.png" />
+    <Content Include="Dependencies\img\instruction.svg" />
     <Content Include="Dependencies\img\language.png" />
     <Content Include="Dependencies\img\locked.svg" />
     <Content Include="Dependencies\img\logo.svg" />
@@ -2003,6 +2004,7 @@
     <Content Include="Views\WebEmails\EmailText.cshtml" />
     <Content Include="Views\Reports\TeamStatusDuration.cshtml" />
     <Content Include="Views\WebInterview\_StartOrResumeForm.cshtml" />
+    <Content Include="Views\Shared\_PoweredBy.cshtml" />
     <Content Include="Views\DataExport\New.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
