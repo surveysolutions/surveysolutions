@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
             Context.Progress.Report(new SyncProgressInfo
             {
-                Title = InterviewerUIResources.Synchronization_CheckNewVersionOfApplication,
+                Title = EnumeratorUIResources.Synchronization_CheckNewVersionOfApplication,
                 Status = SynchronizationStatus.Started,
                 Stage= SyncStage.CheckNewVersionOfApplication
             });
@@ -54,9 +54,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
                         Context.Progress.Report(new SyncProgressInfo
                         {
-                            Title = InterviewerUIResources.Synchronization_DownloadApplication,
+                            Title = EnumeratorUIResources.Synchronization_DownloadApplication,
                             Description = string.Format(
-                                InterviewerUIResources.Synchronization_DownloadApplication_Description,
+                                EnumeratorUIResources.Synchronization_DownloadApplication_Description,
                                 receivedKilobytes.Humanize("0.00 MB"),
                                 totalKilobytes.Humanize("0.00 MB"),
                                 receivedKilobytes.Per(sw.Elapsed).Humanize("0.00"),

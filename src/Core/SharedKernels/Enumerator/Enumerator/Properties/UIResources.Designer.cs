@@ -990,7 +990,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to remove {{amountOfRostersToRemove}} row(s) from each related roster?.
+        ///   Looks up a localized string similar to Are you sure you want to remove {0} row(s) from each related roster?.
         /// </summary>
         public static string Interview_Question_NumberRosterRemoveConfirm {
             get {
@@ -1089,7 +1089,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to remove related roster?.
+        ///   Looks up a localized string similar to Are you sure you want to remove related rosters?.
         /// </summary>
         public static string Interview_Questions_RemoveRowFromRosterListMessage {
             get {
@@ -1098,7 +1098,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to remove related roster {0}?.
+        ///   Looks up a localized string similar to Are you sure you want to remove related roster &apos;{0}&apos; from each related roster?.
         /// </summary>
         public static string Interview_Questions_RemoveRowFromRosterMessage {
             get {

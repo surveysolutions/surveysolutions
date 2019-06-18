@@ -49,24 +49,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
         protected virtual void BindTitles()
         {
-            Title = string.Format(InterviewerUIResources.DashboardItem_Title, Assignment.Title, questionnaireIdentity.Version);
+            Title = string.Format(EnumeratorUIResources.DashboardItem_Title, Assignment.Title, questionnaireIdentity.Version);
             IdLabel = "#" + Assignment.Id;
 
             if (Assignment.Quantity.HasValue)
             {
                 if (InterviewsLeftByAssignmentCount == 1)
                 {
-                    SubTitle = InterviewerUIResources.Dashboard_AssignmentCard_SubTitleSingleInterivew;
+                    SubTitle = EnumeratorUIResources.Dashboard_AssignmentCard_SubTitleSingleInterivew;
                 }
                 else
                 {
-                    SubTitle = InterviewerUIResources.Dashboard_AssignmentCard_SubTitleCountdownFormat
+                    SubTitle = EnumeratorUIResources.Dashboard_AssignmentCard_SubTitleCountdownFormat
                         .FormatString(InterviewsLeftByAssignmentCount, Assignment.Quantity);
                 }
             }
             else
             {
-                SubTitle = InterviewerUIResources.Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat
+                SubTitle = EnumeratorUIResources.Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat
                     .FormatString(Assignment.Quantity.GetValueOrDefault());
             }
         }

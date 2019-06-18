@@ -147,9 +147,6 @@
   <data name="BackToImport" xml:space="preserve">
     <value>الرجوع الى الاستيراد</value>
   </data>
-  <data name="BatchDescription" xml:space="preserve">
-    <value>حمل الأرشيف باستخدام ملف علامة تبويب محدد والبيانات المجمعة.</value>
-  </data>
   <data name="BatchFileVerificationFailed" xml:space="preserve">
     <value>أخفق التحقق من الملف الذي تم تحميله</value>
   </data>
@@ -449,9 +446,6 @@
   </data>
   <data name="SelectResponsibleToAssign" xml:space="preserve">
     <value>اختر المسؤول لهذه الدفعة</value>
-  </data>
-  <data name="SimpleDescription" xml:space="preserve">
-    <value>تحميل ملف فصل علامة التبويب مع بيانات تحديد اللازمة. اختياريا، حدد أسماء المستخدمين للمشرفين أو العدادين في العمود _responsible(المسؤولية)، في عمود _(الكمية)quantity يمكنك تحديد قدرة التعيين.</value>
   </data>
   <data name="SimpleTitle" xml:space="preserve">
     <value>تحديد البيانات فقط</value>

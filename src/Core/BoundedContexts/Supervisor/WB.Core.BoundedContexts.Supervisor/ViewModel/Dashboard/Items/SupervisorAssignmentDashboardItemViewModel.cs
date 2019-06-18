@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
         protected override void BindTitles()
         {
             base.BindTitles();
-            Responsible =  string.Format(InterviewerUIResources.DashboardItem_Responsible,  Assignment.ResponsibleName);
+            Responsible =  string.Format(EnumeratorUIResources.DashboardItem_Responsible,  Assignment.ResponsibleName);
         }
 
         protected override void BindActions()
@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
             {
                 ActionType = ActionType.Primary,
                 Command = new MvxAsyncCommand(this.SelectInterviewerAsync),
-                Label = InterviewerUIResources.Dashboard_Assign
+                Label = EnumeratorUIResources.Dashboard_Assign
             });
         }
 

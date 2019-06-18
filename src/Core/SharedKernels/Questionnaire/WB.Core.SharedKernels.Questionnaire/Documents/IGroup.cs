@@ -10,7 +10,7 @@ namespace Main.Core.Entities.SubEntities
 
         string Description { get; set; }
 
-        string VariableName { get; set; }
+        new string VariableName { get; set; }
 
         bool IsRoster { get; }
 

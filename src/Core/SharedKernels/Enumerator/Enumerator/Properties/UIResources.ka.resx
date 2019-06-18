@@ -552,6 +552,6 @@
     <value>დიახ</value>
   </data>
   <data name="Interview_Question_NumberRosterRemoveConfirm" xml:space="preserve">
-    <value>დარწმუნებული ხართ, რომ გსურთ წაშალოთ {{amountOfRostersToRemove}} მწკრივ(ები)ი თითოეული დაკავშირებული როსტერისგან?</value>
+    <value>დარწმუნებული ხართ, რომ გსურთ წაშალოთ {0} მწკრივ(ები)ი თითოეული დაკავშირებული როსტერისგან?</value>
   </data>
 </root>

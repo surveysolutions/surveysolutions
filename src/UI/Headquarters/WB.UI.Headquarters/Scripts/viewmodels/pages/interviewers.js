@@ -7,14 +7,19 @@
 
     self.SupervisorUrl = supervisorsUrl;
     self.IsSupervisorsLoading = ko.observable(false);
-    self.Supervisors = function (query, sync, pageSize) {
+    self.Supervisors = function(query, sync, pageSize) {
         self.IsSupervisorsLoading(true);
-        self.SendRequest(self.SupervisorUrl, { query: query, pageSize: pageSize, showLocked: true }, function (response) {
-            sync(response.Users, response.TotalCountByQuery);
-        }, true, true, function () {
-            self.IsSupervisorsLoading(false);
-        });
-    }
+        self.SendRequest(self.SupervisorUrl,
+            { query: query, pageSize: pageSize, showLocked: true },
+            function(response) {
+                sync(response.Users, response.TotalCountByQuery);
+            },
+            true,
+            true,
+            function() {
+                self.IsSupervisorsLoading(false);
+            });
+    };
     self.SelectedSupervisor = ko.observable();
 
     self.Archived = ko.observable(false);
@@ -23,12 +28,12 @@
     self.GetFilterMethod = function () {
 
         return {
-            SupervisorName : _.isUndefined(self.SelectedSupervisor())
-                                ? null
-                                : self.SelectedSupervisor().UserName,
-            Archived : self.Archived(),
+            SupervisorName: _.isUndefined(self.SelectedSupervisor())
+                ? null
+                : self.SelectedSupervisor().UserName,
+            Archived: self.Archived(),
             Facet: self.Facet()
-        }
+        };
     };
 
     var formatNames = function (interviewers, limit) {
@@ -36,7 +41,7 @@
 
         var names = ko.utils.arrayMap(interviewers || [], function (i) { return i.userName; });
 
-        if (names == null || names == undefined || names.length === 0)
+        if (names === null || names === undefined || names.length === 0)
             return '';
 
         if (names.length === 1)
@@ -51,7 +56,7 @@
     };
 
     self.load = function () {
-        if (self.QueryString['supervisor'] != null) {
+        if (self.QueryString['supervisor'] !== null) {
             self.SelectedSupervisor({ UserName: self.QueryString['supervisor'] });
         }
 
@@ -188,11 +193,11 @@
         model.InterviewersToStayNamesOnly = ko.observable();
 
         model.Users.AssignTo.subscribe(function(newValue) {
-            var isSuvervisorSelected = newValue != undefined && newValue != null;
+            var isSupervisorSelected = newValue !== undefined && newValue !== null;
             model.InterviewersToMove.removeAll();
             model.InterviewersToStay.removeAll();
 
-            if (isSuvervisorSelected) {
+            if (isSupervisorSelected) {
                 model.SelectedSupervisor(newValue.UserName);
                 ko.utils.arrayForEach(selectedInterviewers,
                     function(interviewer) {

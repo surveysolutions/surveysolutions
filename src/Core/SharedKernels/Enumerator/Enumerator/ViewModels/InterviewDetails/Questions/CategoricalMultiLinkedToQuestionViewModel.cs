@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MvvmCross.Base;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
@@ -26,9 +27,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public CategoricalMultiLinkedToQuestionViewModel(QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionStateViewModel,
             IQuestionnaireStorage questionnaireRepository, ILiteEventRegistry eventRegistry,
             IStatefulInterviewRepository interviewRepository, IPrincipal principal, AnsweringViewModel answering,
-            QuestionInstructionViewModel instructionViewModel, ThrottlingViewModel throttlingModel)
+            QuestionInstructionViewModel instructionViewModel, ThrottlingViewModel throttlingModel, IMvxMainThreadAsyncDispatcher mainThreadDispatcher)
             : base(questionStateViewModel, questionnaireRepository, eventRegistry,
-                interviewRepository, principal, answering, instructionViewModel, throttlingModel)
+                interviewRepository, principal, answering, instructionViewModel, throttlingModel, mainThreadDispatcher)
         {
             this.Options = new CovariantObservableCollection<CategoricalMultiOptionViewModel<RosterVector>>();
         }
@@ -76,18 +77,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.UpdateViewModelsByAnsweredOptionsInMainThread(@event.SelectedRosterVectors?.Select(RosterVector.Convert)?.ToArray());
         }
 
-        public void Handle(LinkedOptionsChanged @event)
+        public async void Handle(LinkedOptionsChanged @event)
         {
             if (@event.ChangedLinkedQuestions.All(x => x.QuestionId != this.Identity)) return;
 
-            this.UpdateViewModelsInMainThread();
+            await this.UpdateViewModelsInMainThreadAsync();
         }
 
-        public virtual void Handle(RosterInstancesTitleChanged @event)
+        public virtual async void Handle(RosterInstancesTitleChanged @event)
         {
             if (!@event.ChangedInstances.Any(x => this.parentRosters.Contains(x.RosterInstance.GroupId))) return;
 
-            this.UpdateViewModelsInMainThread();
+            await this.UpdateViewModelsInMainThreadAsync();
         }
     }
 }

@@ -72,6 +72,8 @@
     <DevInstrumentationEnabled>False</DevInstrumentationEnabled>
     <DefineConstants>$(Constants)</DefineConstants>
     <DebugSymbols>False</DebugSymbols>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>618</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Java.Interop" />
