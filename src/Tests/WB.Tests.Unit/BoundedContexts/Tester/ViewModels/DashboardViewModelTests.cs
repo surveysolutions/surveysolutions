@@ -60,21 +60,23 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels
                 new QuestionnaireListItem {IsOwner = true, Id = "5"}
             };
 
-            var designerApiService = Mock.Of<IDesignerApiService>(
-                _ => _.GetQuestionnairesAsync(Moq.It.IsAny<CancellationToken>()) == Task.FromResult(questionnaires));
-
+            var designerApiService = new Mock<IDesignerApiService>();
+            designerApiService.Setup(x => x.GetQuestionnairesAsync(Moq.It.IsAny<CancellationToken>()))
+                .ReturnsAsync(questionnaires);
+            
             var storageAccessor = new SqliteInmemoryStorage<QuestionnaireListItem>();
 
             var viewModel = CreateDashboardViewModel(questionnaireListStorage: storageAccessor,
-                designerApiService: designerApiService);
+                designerApiService: designerApiService.Object);
             await viewModel.Initialize();
+            await Task.Delay(1000); // there is a fire and forget event in the initialize method that cannot be awaited outside of viewmodel
 
             // act
             viewModel.ShowMyQuestionnairesCommand.Execute();
 
             // assert
-            viewModel.Questionnaires.Count.Should().Be(3);
-            viewModel.Questionnaires.All(_ => _.IsShared).Should().BeFalse();
+            viewModel.Questionnaires.Should().HaveCount(3);
+            viewModel.Questionnaires.Should().OnlyContain(_ => _.IsShared == false);
         }
     }
 }

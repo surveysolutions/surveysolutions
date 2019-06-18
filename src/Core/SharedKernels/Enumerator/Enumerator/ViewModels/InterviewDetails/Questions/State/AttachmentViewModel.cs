@@ -6,7 +6,6 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
-using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
@@ -16,8 +15,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IAttachmentContentStorage attachmentContentStorage;
-        private readonly IEnumeratorSettings enumeratorSettings;
-        private readonly IExternalAppLauncher externalAppLauncher;
         private readonly Func<IMediaAttachment> attachmentFactory;
 
         private AttachmentContentMetadata attachmentContentMetadata;
@@ -35,15 +32,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             IAttachmentContentStorage attachmentContentStorage,
-            IEnumeratorSettings enumeratorSettings,
-            IExternalAppLauncher externalAppLauncher,
             Func<IMediaAttachment> attachmentFactory)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
             this.attachmentContentStorage = attachmentContentStorage;
-            this.enumeratorSettings = enumeratorSettings;
-            this.externalAppLauncher = externalAppLauncher;
             this.attachmentFactory = attachmentFactory;
         }
 
@@ -123,10 +116,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task NavigateToPdfAsync()
         {
-            if (this.enumeratorSettings.IsSupportedWebViewer)
-                await this.navigationState.NavigateTo(NavigationIdentity.CreateForPdfViewByStaticText(this.Identity));
-            else
-                this.externalAppLauncher.OpenPdf(this.ContentPath);
+            await this.navigationState.NavigateTo(NavigationIdentity.CreateForPdfViewByStaticText(this.Identity));
         }
 
         public override void ViewDestroy(bool viewFinishing = true)

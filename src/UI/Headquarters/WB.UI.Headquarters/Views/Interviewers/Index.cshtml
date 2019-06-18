@@ -68,8 +68,9 @@
                     {
                         data: "userName",
                         name: "UserName", // case-sensitive!
-                        render: function (data, type, row, meta) {
-                            var tdHtml = !row.isArchived ? "<a class='interviewer' href='@Url.Action("Profile", "Interviewer")/" +
+                        render: function(data, type, row, meta) {
+                            var tdHtml = !row.isArchived
+                                ? "<a href='@Url.Action("Profile", "Interviewer")/" +
                                 row.userId +
                                 "'>" +
                                 data +
@@ -78,72 +79,92 @@
 
                             if (row.isLocked) {
                                 tdHtml += "<span class='lock' title='@Users.Locked'></span>";
-
-                                var api = new $.fn.dataTable.Api(meta.settings);
-                                var cell = api.cell(meta.col, meta.row);
-                                var jqCell = $(cell.node());
-                                jqCell.addClass("locked-user");
                             }
-                            
                             return tdHtml;
                         }
                     },
                     {
+                        data: "fullName",
+                        name: "FullName", // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                        "class": "created-by"
+                    },
+                    {
                         data: "creationDate",
-                        name: "CreationDate", // case-sensitive!
-                        "class": "changed-recently",
-                        render: function (data) {
-                            var localDate = moment.utc(data).local();
-                            return localDate.format(window.CONFIG.dateFormat);
+                        name:"CreationDate", // case-sensitive!
+                        "class":"changed-recently",
+                        render: function(data) {
+                        var localDate = moment.utc(data).local();
+                        return localDate.format(window.CONFIG.dateFormat);
+                    }
+                },
+                {
+                    data: "email",
+                        name:
+                    "Email", // case-sensitive!
+                        render:
+
+                    function(data, type, row) {
+                        return data ? "<a href='mailto:" + data + "'>" + data + "</a>" : "";
+                    },
+                    "class":
+                    "changed-recently"
+                },
+                @if (isAdminOrHQ)
+                {
+                    <text>
+                {
+                    "orderable":
+                    false,
+                        data:
+                    "supervisorName",
+                        name:
+                    "SupervisorName", // case-sensitive!
+                        "class":
+                    "changed-recently"
+                },</text>
+                }
+                {
+                    orderable: true,
+                        data:
+                    "enumeratorVersion",
+                        name:
+                    "EnumeratorVersion", // case-sensitive!
+                        createdCell:
+
+                    function(td, cellData, rowData, row, col) {
+                        if (cellData) {
+                            $(td).css('color', rowData.isUpToDate ? 'green' : 'red');
                         }
                     },
-                    {
-                        data: "email",
-                        name: "Email", // case-sensitive!
-                        render: function(data, type, row) {
-                            return data ? "<a href='mailto:" + data + "'>" + data + "</a>" : "";
-                        },
-                        "class": "changed-recently"
-                    },
-                    @if (isAdminOrHQ)
-                    {
-                        <text>
-                            {
-                                "orderable":
-                                    false,
-                                data:
-                                    "supervisorName",
-                                name:
-                                    "SupervisorName", // case-sensitive!
-                                "class":
-                                    "changed-recently"
-                            },</text>
+                    "defaultContent":
+                    "@HttpUtility.JavaScriptStringEncode(Pages.Interviewers_InterviewerNeverConnected)",
+                        "class":
+                    "changed-recently"
+                },
+                {
+                    orderable: false,
+                        data:
+                    "trafficUsed",
+                        name:
+                    "TrafficUsed", // case-sensitive!
+                        class:
+                    "type-numeric",
+                        render:
+
+                    function(data, type, row) {
+                        var formattedKB = data.toLocaleString();
+                        return data > 0 ? formattedKB + " Kb" : "0";
                     }
-                    {
-                        orderable: true,
-                        data: "enumeratorVersion",
-                        name: "EnumeratorVersion", // case-sensitive!
-                        createdCell: function(td, cellData, rowData, row, col) {
-                            if (cellData) {
-                                $(td).css('color', rowData.isUpToDate ? 'green' : 'red');
-                            }
-                        },
-                        "defaultContent":
-                            "@HttpUtility.JavaScriptStringEncode(Pages.Interviewers_InterviewerNeverConnected)",
-                        "class": "changed-recently"
-                    },
-                    {
-                        orderable: false,
-                        data: "trafficUsed",
-                        name: "TrafficUsed", // case-sensitive!
-                        class: "type-numeric",
-                        render: function (data, type, row) {
-                            var formattedKB = data.toLocaleString();
-                            return data > 0 ? formattedKB + " Kb" : "0";
-                        }
-                    }
+                }
                 ];
             };
+
+            model.createdRow = function(row, data) {
+                if (data.isLocked) {
+                    var jqCell = $(row.cells[1]);
+                    jqCell.addClass("locked-user");
+                }
+            }
 
             model.unarchiveInterviewers = function() {
                 model.getConfirmAndSendRequest(notifier,
@@ -198,7 +219,7 @@
                                 return { items: items };
                             },
                             trigger: 'left',
-                            zIndex:1050
+                            zIndex: 1050
                         };
 
                         $.contextMenu(contextMenuOptions);
@@ -298,6 +319,7 @@
                                     </th>
                                 }
                                 <th>@Pages.Interviewers_UserNameTitle</th>
+                                <th>@Pages.Interviewers_FullNameTitle</th>
                                 <th class="for-tablets" title="@Pages.Interviewers_CreationDateTooltip">@Pages.Interviewers_CreationDateTitle</th>
                                 <th class="for-mobile-devices">@Pages.Interviewers_EmailTitle</th>
                                 @if (isAdminOrHQ)

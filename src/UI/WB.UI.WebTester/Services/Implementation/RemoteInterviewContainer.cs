@@ -130,7 +130,7 @@ namespace WB.UI.WebTester.Services.Implementation
                 {
                     Directory.Delete(cachePath, true);
                 }
-                catch (UnauthorizedAccessException exception)
+                catch (UnauthorizedAccessException)
                 {
                     //this.logger.Error(
                     //    $"Failed to delete folder during interview tear down. Path: {interviewContainer.CachePath}",

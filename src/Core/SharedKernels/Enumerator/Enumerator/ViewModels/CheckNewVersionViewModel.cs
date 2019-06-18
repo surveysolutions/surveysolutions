@@ -82,12 +82,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.CheckNewVersionDetails = string.Empty;
             try
             {
-                this.CheckNewVersionResult = InterviewerUIResources.Diagnostics_DownloadingPleaseWait;
+                this.CheckNewVersionResult = EnumeratorUIResources.Diagnostics_DownloadingPleaseWait;
 
                 await this.tabletDiagnosticService.UpdateTheApp(this.cancellationTokenSource.Token, true,
                     new Progress<TransferProgress>(progress =>
                     {
-                        this.CheckNewVersionResult = InterviewerUIResources.Diagnostics_DownloadingPleaseWait
+                        this.CheckNewVersionResult = EnumeratorUIResources.Diagnostics_DownloadingPleaseWait
                                                      + $" ({(int)progress.ProgressPercentage}%)";
 
                         var bytesReceived = progress.BytesReceived.Bytes().Humanize("0.00");
@@ -107,7 +107,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
             catch (Exception) when (cancellationTokenSource.IsCancellationRequested)
             {
-                this.CheckNewVersionResult = InterviewerUIResources.RequestCanceledByUser;
+                this.CheckNewVersionResult = EnumeratorUIResources.RequestCanceledByUser;
             }
             catch (Exception ex)
             {
@@ -140,7 +140,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                     else
                     {
                         this.CheckNewVersionResult =
-                            InterviewerUIResources.Diagnostics_YouHaveTheLatestVersionOfApplication;
+                            EnumeratorUIResources.Diagnostics_YouHaveTheLatestVersionOfApplication;
                     }
                 }
             }

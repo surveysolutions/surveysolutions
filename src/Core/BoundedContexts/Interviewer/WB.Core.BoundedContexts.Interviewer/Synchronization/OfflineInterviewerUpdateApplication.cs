@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
 
             Context.Progress.Report(new SyncProgressInfo
             {
-                Title = InterviewerUIResources.Synchronization_CheckNewVersionOfApplication,
+                Title = EnumeratorUIResources.Synchronization_CheckNewVersionOfApplication,
                 Status = SynchronizationStatus.Started,
                 Stage = SyncStage.CheckNewVersionOfApplication
             });
@@ -75,9 +75,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
 
                             Context.Progress.Report(new SyncProgressInfo
                             {
-                                Title = InterviewerUIResources.Synchronization_DownloadApplication,
+                                Title = EnumeratorUIResources.Synchronization_DownloadApplication,
                                 Description = string.Format(
-                                    InterviewerUIResources.Synchronization_DownloadApplication_Description,
+                                    EnumeratorUIResources.Synchronization_DownloadApplication_Description,
                                     receivedKilobytes.Humanize("0.00"),
                                     totalKilobytes.Humanize("0.00"),
                                     speed,

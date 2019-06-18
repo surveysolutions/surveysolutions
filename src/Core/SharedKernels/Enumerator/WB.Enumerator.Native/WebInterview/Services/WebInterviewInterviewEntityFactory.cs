@@ -364,6 +364,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     {
                         Id = questionId.FormatGuid(),
                         Title = questionnaire.GetQuestionTitle(questionId),
+                        Instruction = questionnaire.GetQuestionInstruction(questionId),
                         EntityType = GetEntityTypeInTableRoster(questionId, questionnaire).ToString(),
                     })
                     .ToArray();

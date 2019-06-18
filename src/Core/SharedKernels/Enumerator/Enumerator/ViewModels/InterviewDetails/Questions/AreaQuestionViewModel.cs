@@ -176,7 +176,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 userInteractionService.ShowToast(UIResources.Device_Does_Not_Support);
             }
-            catch (MissingPermissionsException e)
+            catch (MissingPermissionsException)
             {
                 await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.MissingPermissions_Storage);
             }

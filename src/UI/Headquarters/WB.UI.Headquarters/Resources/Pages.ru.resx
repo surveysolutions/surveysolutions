@@ -381,6 +381,9 @@
   <data name="Interviewers_UserNameTitle" xml:space="preserve">
     <value>Имя</value>
   </data>
+  <data name="Interviewers_FullNameTitle" xml:space="preserve">
+    <value>Полное имя</value>
+  </data>
   <data name="InterviewHistory_Header" xml:space="preserve">
     <value>История интервью</value>
   </data>
@@ -1290,5 +1293,8 @@
   </data>
   <data name="InterviewerProfile_QrCodeAlt" xml:space="preserve">
     <value>Qr code, упрощающий настройку планшета интервьюера</value>
+  </data>
+  <data name="InterviewerProfile_NoMarkers" xml:space="preserve">
+    <value>Местоположения интервьювера не было еще записано</value>
   </data>
 </root>
