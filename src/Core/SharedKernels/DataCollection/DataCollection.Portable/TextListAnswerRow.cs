@@ -23,12 +23,25 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public override string ToString() => $"{Value} -> {Text}";
 
+        protected bool Equals(TextListAnswerRow other)
+        {
+            return Value == other.Value && string.Equals(Text, other.Text);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return (Value * 397) ^ (Text != null ? Text.GetHashCode() : 0);
+            }
+        }
+
         public override bool Equals(object obj)
         {
-            var row = (TextListAnswerRow) obj;
-            if (row == null) return false;
-
-            return this.Value == row.Value && this.Text == row.Text;
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((TextListAnswerRow) obj);
         }
     }
 }

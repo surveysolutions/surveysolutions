@@ -109,7 +109,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
             catch (Exception)
             {
-                this.ErrorMessage = InterviewerUIResources.UnexpectedException;   
+                this.ErrorMessage = EnumeratorUIResources.UnexpectedException;   
             }
             finally
             {

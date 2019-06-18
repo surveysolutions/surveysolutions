@@ -89,13 +89,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             {
                 switch (Status) {
                     case DashboardInterviewStatus.New:
-                        return InterviewerUIResources.Dashboard_Open;
+                        return EnumeratorUIResources.Dashboard_Open;
                     case DashboardInterviewStatus.InProgress:
-                        return InterviewerUIResources.Dashboard_Open;
+                        return EnumeratorUIResources.Dashboard_Open;
                     case DashboardInterviewStatus.Completed:
-                        return InterviewerUIResources.Dashboard_Reopen;
+                        return EnumeratorUIResources.Dashboard_Reopen;
                     case DashboardInterviewStatus.Rejected:
-                        return InterviewerUIResources.Dashboard_ViewIssues;
+                        return EnumeratorUIResources.Dashboard_ViewIssues;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -109,7 +109,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                     case DashboardInterviewStatus.New:
                     case DashboardInterviewStatus.InProgress:
                     case DashboardInterviewStatus.Rejected:
-                        return InterviewerUIResources.Dashboard_Discard;
+                        return EnumeratorUIResources.Dashboard_Discard;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -135,9 +135,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             if (!string.IsNullOrWhiteSpace(interview.InterviewKey))
                 this.IdLabel = interview.InterviewKey;
             else
-                this.IdLabel = InterviewerUIResources.Dashboard_No_InterviewKey;
+                this.IdLabel = EnumeratorUIResources.Dashboard_No_InterviewKey;
 
-            Title = string.Format(InterviewerUIResources.DashboardItem_Title, interview.QuestionnaireTitle, questionnaireIdentity.Version);
+            Title = string.Format(EnumeratorUIResources.DashboardItem_Title, interview.QuestionnaireTitle, questionnaireIdentity.Version);
             
             var comment = GetInterviewCommentByStatus(interview);
             var dateComment = GetInterviewDateCommentByStatus(interview);
@@ -146,8 +146,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             this.SubTitle = $"{dateComment}{separator}{comment}";
             
             this.AssignmentIdLabel = interview.Assignment.HasValue
-                ? InterviewerUIResources.Dashboard_Interview_AssignmentLabelFormat.FormatString(interview.Assignment)
-                : InterviewerUIResources.Dashboard_CensusAssignment;
+                ? EnumeratorUIResources.Dashboard_Interview_AssignmentLabelFormat.FormatString(interview.Assignment)
+                : EnumeratorUIResources.Dashboard_CensusAssignment;
         }
 
         public string AssignmentIdLabel
@@ -163,19 +163,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             switch (this.Status)
             {
                 case DashboardInterviewStatus.Assignment:
-                    return FormatDateTimeString(InterviewerUIResources.DashboardItem_AssignedOn, interview.InterviewerAssignedDateTime);
+                    return FormatDateTimeString(EnumeratorUIResources.DashboardItem_AssignedOn, interview.InterviewerAssignedDateTime);
                 case DashboardInterviewStatus.New:
-                    return FormatDateTimeString(InterviewerUIResources.DashboardItem_AssignedOn, interview.InterviewerAssignedDateTime);
+                    return FormatDateTimeString(EnumeratorUIResources.DashboardItem_AssignedOn, interview.InterviewerAssignedDateTime);
                 case DashboardInterviewStatus.InProgress:
-                    return FormatDateTimeString(InterviewerUIResources.DashboardItem_StartedOn, interview.StartedDateTime);
+                    return FormatDateTimeString(EnumeratorUIResources.DashboardItem_StartedOn, interview.StartedDateTime);
                 case DashboardInterviewStatus.Completed:
-                    return FormatDateTimeString(InterviewerUIResources.DashboardItem_CompletedOn, interview.CompletedDateTime);
+                    return FormatDateTimeString(EnumeratorUIResources.DashboardItem_CompletedOn, interview.CompletedDateTime);
                 case DashboardInterviewStatus.Rejected:
-                    return FormatDateTimeString(InterviewerUIResources.DashboardItem_RejectedOn, interview.RejectedDateTime);
+                    return FormatDateTimeString(EnumeratorUIResources.DashboardItem_RejectedOn, interview.RejectedDateTime);
                 case DashboardInterviewStatus.RejectedByHeadquarters:
-                    return FormatDateTimeString(InterviewerUIResources.DashboardItem_RejectedByHqOn, interview.RejectedDateTime);
+                    return FormatDateTimeString(EnumeratorUIResources.DashboardItem_RejectedByHqOn, interview.RejectedDateTime);
                 case DashboardInterviewStatus.ApprovedBySupervisor:
-                    return FormatDateTimeString(InterviewerUIResources.DashboardItem_ApprovedBySupervisor, interview.ApprovedDateTimeUtc);
+                    return FormatDateTimeString(EnumeratorUIResources.DashboardItem_ApprovedBySupervisor, interview.ApprovedDateTimeUtc);
                 default:
                     return string.Empty;
             }
@@ -236,7 +236,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             this.isInterviewReadyToLoad = false;
 
             var isNeedDelete = await this.UserInteractionService.ConfirmAsync(
-                InterviewerUIResources.Dashboard_RemoveInterviewQuestion.FormatString(this.interview.InterviewKey),
+                EnumeratorUIResources.Dashboard_RemoveInterviewQuestion.FormatString(this.interview.InterviewKey),
                 okButton: UIResources.Yes,
                 cancelButton: UIResources.No);
 
@@ -260,7 +260,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                 if (this.Status == DashboardInterviewStatus.Completed)
                 {
                     var isReopen = await this.UserInteractionService.ConfirmAsync(
-                        InterviewerUIResources.Dashboard_Reinitialize_Interview_Message,
+                        EnumeratorUIResources.Dashboard_Reinitialize_Interview_Message,
                         okButton: UIResources.Yes,
                         cancelButton: UIResources.No);
 

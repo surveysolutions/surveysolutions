@@ -8,8 +8,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
     public class ConnectedDeviceViewModel : MvxViewModel
     {
         private string interviewerName;
-        private SendingDeviceStatus status;
-        private SynchronizationStatistics statistics;
 
         public ConnectedDeviceViewModel()
         {

@@ -39,12 +39,12 @@ namespace WB.UI.Interviewer.Activities
             {
                 var interviewerSettings = Mvx.IoCProvider.Resolve<IInterviewerSettings>();
 
-                this.SetPreferenceTitleAndSummary("interview_settings_category", InterviewerUIResources.Prefs_InterviewSettings, string.Empty);
-                this.SetPreferenceTitleAndSummary("about_category", InterviewerUIResources.Prefs_AboutApplication, string.Empty);
-                this.SetPreferenceTitleAndSummary("connection_settings_category", InterviewerUIResources.Prefs_ConnectionSettings, string.Empty);
+                this.SetPreferenceTitleAndSummary("interview_settings_category", EnumeratorUIResources.Prefs_InterviewSettings, string.Empty);
+                this.SetPreferenceTitleAndSummary("about_category", EnumeratorUIResources.Prefs_AboutApplication, string.Empty);
+                this.SetPreferenceTitleAndSummary("connection_settings_category", EnumeratorUIResources.Prefs_ConnectionSettings, string.Empty);
 
-                this.SetPreferenceTitleAndSummary("version", InterviewerUIResources.Prefs_ApplicationVersionTitle, interviewerSettings.GetApplicationVersionName());
-                this.SetPreferenceTitleAndSummary("deviceid", InterviewerUIResources.Prefs_DeviceIdTitle, interviewerSettings.GetDeviceId());
+                this.SetPreferenceTitleAndSummary("version", EnumeratorUIResources.Prefs_ApplicationVersionTitle, interviewerSettings.GetApplicationVersionName());
+                this.SetPreferenceTitleAndSummary("deviceid", EnumeratorUIResources.Prefs_DeviceIdTitle, interviewerSettings.GetDeviceId());
 
                 this.FindPreference(SettingsNames.GpsDesiredAccuracy).PreferenceChange += (sender, e) =>
                 {
@@ -112,25 +112,25 @@ namespace WB.UI.Interviewer.Activities
             {
                 var interviewerSettings = Mvx.IoCProvider.Resolve<IInterviewerSettings>();
 
-                this.SetPreferenceTitleAndSummary(SettingsNames.Endpoint, InterviewerUIResources.Prefs_EndpointTitle,
+                this.SetPreferenceTitleAndSummary(SettingsNames.Endpoint, EnumeratorUIResources.Prefs_EndpointTitle,
                     interviewerSettings.Endpoint, interviewerSettings.Endpoint);
                 this.SetPreferenceTitleAndSummary(SettingsNames.HttpResponseTimeout,
-                    InterviewerUIResources.Prefs_HttpResponseTimeoutTitle,
-                    InterviewerUIResources.Prefs_HttpResponseTimeoutSummary, interviewerSettings.Timeout.TotalSeconds.ToString(CultureInfo.InvariantCulture));
-                this.SetPreferenceTitleAndSummary(SettingsNames.BufferSize, InterviewerUIResources.Prefs_BufferSizeTitle,
-                    InterviewerUIResources.Prefs_BufferSizeSummary, interviewerSettings.BufferSize.ToString());
+                    EnumeratorUIResources.Prefs_HttpResponseTimeoutTitle,
+                    EnumeratorUIResources.Prefs_HttpResponseTimeoutSummary, interviewerSettings.Timeout.TotalSeconds.ToString(CultureInfo.InvariantCulture));
+                this.SetPreferenceTitleAndSummary(SettingsNames.BufferSize, EnumeratorUIResources.Prefs_BufferSizeTitle,
+                    EnumeratorUIResources.Prefs_BufferSizeSummary, interviewerSettings.BufferSize.ToString());
 
                 this.SetPreferenceTitleAndSummary(SettingsNames.GpsReceiveTimeoutSec,
-                    InterviewerUIResources.Prefs_GpsReceiveTimeoutSecTitle,
-                    InterviewerUIResources.Prefs_GpsReceiveTimeoutSecSummary,
+                    EnumeratorUIResources.Prefs_GpsReceiveTimeoutSecTitle,
+                    EnumeratorUIResources.Prefs_GpsReceiveTimeoutSecSummary,
                     interviewerSettings.GpsReceiveTimeoutSec.ToString());
 
                 this.SetPreferenceTitleAndSummary(SettingsNames.GpsDesiredAccuracy,
                     UIResources.Prefs_GpsDesiredAccuracyTitle,
                     UIResources.Prefs_GpsDesiredAccuracySubTitle,
                     interviewerSettings.GpsDesiredAccuracy.ToString());
-                this.SetPreferenceTitleAndSummary(SettingsNames.EventChunkSize, InterviewerUIResources.Prefs_EventChunkSizeTitle,
-                    InterviewerUIResources.Prefs_EventChunkSizeSummary, interviewerSettings.EventChunkSize.ToString());
+                this.SetPreferenceTitleAndSummary(SettingsNames.EventChunkSize, EnumeratorUIResources.Prefs_EventChunkSizeTitle,
+                    EnumeratorUIResources.Prefs_EventChunkSizeSummary, interviewerSettings.EventChunkSize.ToString());
 
                 this.SetBooleanPreferenceTitleAndSummary(SettingsNames.VibrateOnError, UIResources.Prefs_VibrateOnErrorTitle,
                     UIResources.Prefs_VibrateOnErrorSummary, interviewerSettings.VibrateOnError);
@@ -140,11 +140,11 @@ namespace WB.UI.Interviewer.Activities
                     UIResources.Prefs_ShowLocationOnMapSummary,
                     interviewerSettings.ShowLocationOnMap);
 
-                this.SetBooleanPreferenceTitleAndSummary(SettingsNames.AllowSyncWithHq, 
-                    InterviewerUIResources.Prefs_AllowSyncWithHq,
+                this.SetBooleanPreferenceTitleAndSummary(SettingsNames.AllowSyncWithHq,
+                    EnumeratorUIResources.Prefs_AllowSyncWithHq,
                     interviewerSettings.IsOfflineSynchronizationDone 
-                        ? InterviewerUIResources.Prefs_AllowSyncWithHq_Summary_Disabled
-                        : InterviewerUIResources.Prefs_AllowSyncWithHq_Summary,
+                        ? EnumeratorUIResources.Prefs_AllowSyncWithHq_Summary_Disabled
+                        : EnumeratorUIResources.Prefs_AllowSyncWithHq_Summary,
                     interviewerSettings.AllowSyncWithHq);
             }
 

@@ -872,6 +872,7 @@
     <Content Include="Dependencies\img\Icon-demo-server.png" />
     <Content Include="Dependencies\img\icon-mic-1x.png" />
     <Content Include="Dependencies\img\icon-mic-2x.png" />
+    <Content Include="Dependencies\img\instruction.svg" />
     <Content Include="Dependencies\img\language.png" />
     <Content Include="Dependencies\img\locked.svg" />
     <Content Include="Dependencies\img\logo.svg" />

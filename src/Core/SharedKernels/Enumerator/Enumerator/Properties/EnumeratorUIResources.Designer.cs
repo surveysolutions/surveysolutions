@@ -22,14 +22,14 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class InterviewerUIResources {
+    public class EnumeratorUIResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal InterviewerUIResources() {
+        internal EnumeratorUIResources() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.SharedKernels.Enumerator.Properties.InterviewerUIResources", typeof(InterviewerUIResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.SharedKernels.Enumerator.Properties.EnumeratorUIResources", typeof(EnumeratorUIResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -921,7 +921,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interview is in invalid state and сan&apos;t be open. Please contact support or try to synchronize to get correct state..
+        ///   Looks up a localized string similar to Interview is in invalid state and cannot be open. Please contact support or try to synchronize to get correct state..
         /// </summary>
         public static string FailedToLoadInterviewDescription {
             get {
@@ -1131,7 +1131,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Map synchronization succesfuly finished.
+        ///   Looks up a localized string similar to Map synchronization successfully finished.
         /// </summary>
         public static string MapSyncProvider_SyncronizeMapsAsync_Map_synchronization_succesfuly_finished {
             get {
@@ -1357,7 +1357,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Disable this setting if you want to synchronize only with mobile supervisor application. After first succesfull synchronization with Supervisor App it will be not possible to enable this setting back.
+        ///   Looks up a localized string similar to Disable this setting if you want to synchronize only with mobile supervisor application. After first successful synchronization with Supervisor App it will be not possible to enable this setting back.
         /// </summary>
         public static string Prefs_AllowSyncWithHq_Summary {
             get {
@@ -1366,7 +1366,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is not possible to synchronize with Headquarters once there was at least one succesfull synchronization with Supervisor Application.
+        ///   Looks up a localized string similar to It is not possible to synchronize with Headquarters once there was at least one successful synchronization with Supervisor Application.
         /// </summary>
         public static string Prefs_AllowSyncWithHq_Summary_Disabled {
             get {
@@ -2267,7 +2267,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to verify certificate for target URL. Please, check if Headquarters website address is valid and your device has corrent current date and time.
+        ///   Looks up a localized string similar to Failed to verify certificate for target URL. Please, check if Headquarters website address is valid and your device has current date and time.
         /// </summary>
         public static string UnacceptableSSLCertificate {
             get {

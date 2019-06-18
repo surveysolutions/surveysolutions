@@ -134,7 +134,7 @@
 Your device ID is '{0}'</value>
   </data>
   <data name="OfflineSync_WaitingInterviewers" xml:space="preserve">
-    <value>Waitnig for action from Interviewer devices</value>
+    <value>Waiting for action from Interviewer devices</value>
   </data>
   <data name="Synchronization_UploadStatistics" xml:space="preserve">
     <value>Uploading interviewers synchronization statistics</value>

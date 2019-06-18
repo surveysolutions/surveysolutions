@@ -136,9 +136,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 
             Context.Progress.Report(new SyncProgressInfo
             {
-                Title = InterviewerUIResources.Synchronization_DownloadApplication,
+                Title = EnumeratorUIResources.Synchronization_DownloadApplication,
                 Description = string.Format(
-                    InterviewerUIResources.Synchronization_DownloadApplication_Description,
+                    EnumeratorUIResources.Synchronization_DownloadApplication_Description,
                     receivedKilobytes.Humanize("0.00"),
                     totalKilobytes.Humanize("0.00"),
                     receivedKilobytes.Per(stopWatch.Elapsed).Humanize("0.00"),

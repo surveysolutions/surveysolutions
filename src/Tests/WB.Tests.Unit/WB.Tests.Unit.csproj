@@ -5,6 +5,7 @@
       <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
       <Configurations>Debug;Release;Debug-ESRI</Configurations>
       <LangVersion>7.3</LangVersion>
+      <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\**" />
