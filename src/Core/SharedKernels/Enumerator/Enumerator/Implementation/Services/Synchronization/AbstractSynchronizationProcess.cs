@@ -215,8 +215,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
                 progress.Report(new SyncProgressInfo
                 {
-                    Title = InterviewerUIResources.Synchronization_UserAuthentication_Title,
-                    Description = InterviewerUIResources.Synchronization_UserAuthentication_Description,
+                    Title = EnumeratorUIResources.Synchronization_UserAuthentication_Title,
+                    Description = EnumeratorUIResources.Synchronization_UserAuthentication_Description,
                     Status = SynchronizationStatus.Started,
                     Statistics = statistics,
                     Stage = SyncStage.UserAuthentication
@@ -295,7 +295,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
                 progress.Report(new SyncProgressInfo
                 {
-                    Title = InterviewerUIResources.Synchronization_Success_Title,
+                    Title = EnumeratorUIResources.Synchronization_Success_Title,
                     Description = SuccessDescription,
                     Status = SynchronizationStatus.Success,
                     Statistics = statistics,
@@ -317,7 +317,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             }
             catch (SynchronizationException ex)
             {
-                var errorTitle = InterviewerUIResources.Synchronization_Fail_Title;
+                var errorTitle = EnumeratorUIResources.Synchronization_Fail_Title;
                 var errorDescription = ex.Message;
 
                 switch (ex.Type)
@@ -340,7 +340,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         progress.Report(new SyncProgressInfo
                         {
                             Title = errorTitle,
-                            Description = InterviewerUIResources.AccountIsLockedOnServer,
+                            Description = EnumeratorUIResources.AccountIsLockedOnServer,
                             Status = SynchronizationStatus.Fail,
                             Statistics = statistics,
                             Stage = SyncStage.FailedAccountIsLockedOnServer
@@ -349,8 +349,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     case SynchronizationExceptionType.UserLinkedToAnotherDevice:
                         progress.Report(new SyncProgressInfo
                         {
-                            Title = InterviewerUIResources.Synchronization_UserLinkedToAnotherDevice_Status,
-                            Description = InterviewerUIResources.Synchronization_UserLinkedToAnotherDevice_Title,
+                            Title = EnumeratorUIResources.Synchronization_UserLinkedToAnotherDevice_Status,
+                            Description = EnumeratorUIResources.Synchronization_UserLinkedToAnotherDevice_Title,
                             UserIsLinkedToAnotherDevice = true,
                             Status = SynchronizationStatus.Fail,
                             Statistics = statistics,
@@ -373,8 +373,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     case SynchronizationExceptionType.SupervisorRequireOnlineSync:
                         progress.Report(new SyncProgressInfo
                         {
-                            Title = InterviewerUIResources.Synchronization_SupervisorShouldDoOnlineSync_Title,
-                            Description = InterviewerUIResources.Synchronization_SupervisorShouldDoOnlineSync,
+                            Title = EnumeratorUIResources.Synchronization_SupervisorShouldDoOnlineSync_Title,
+                            Description = EnumeratorUIResources.Synchronization_SupervisorShouldDoOnlineSync,
                             Status = SynchronizationStatus.Fail,
                             Statistics = statistics,
                             Stage = SyncStage.FailedSupervisorShouldDoOnlineSync
@@ -384,8 +384,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     case SynchronizationExceptionType.UnacceptableSSLCertificate:
                         progress.Report(new SyncProgressInfo
                         {
-                            Title = InterviewerUIResources.UnexpectedException,
-                            Description = InterviewerUIResources.UnacceptableSSLCertificate,
+                            Title = EnumeratorUIResources.UnexpectedException,
+                            Description = EnumeratorUIResources.UnacceptableSSLCertificate,
                             Status = SynchronizationStatus.Fail,
                             Statistics = statistics,
                             Stage = SyncStage.FailedUnacceptableSSLCertificate
@@ -396,8 +396,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     case SynchronizationExceptionType.InterviewerFromDifferentTeam:
                         progress.Report(new SyncProgressInfo
                         {
-                            Title = InterviewerUIResources.UnexpectedException,
-                            Description = InterviewerUIResources.Synchronization_UserDoNotBelongToTeam,
+                            Title = EnumeratorUIResources.UnexpectedException,
+                            Description = EnumeratorUIResources.Synchronization_UserDoNotBelongToTeam,
                             Status = SynchronizationStatus.Fail,
                             Statistics = statistics,
                             Stage = SyncStage.FailedUserDoNotBelongToTeam
@@ -408,7 +408,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     case SynchronizationExceptionType.UpgradeRequired:
                         progress.Report(new SyncProgressInfo
                         {
-                            Title = InterviewerUIResources.UpgradeRequired,
+                            Title = EnumeratorUIResources.UpgradeRequired,
                             Status = SynchronizationStatus.Fail,
                             IsApplicationUpdateRequired = true,
                             Statistics = statistics,
@@ -432,7 +432,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             {
                 progress.Report(new SyncProgressInfo
                 {
-                    Title = InterviewerUIResources.Synchronization_Fail_Title,
+                    Title = EnumeratorUIResources.Synchronization_Fail_Title,
                     Description = ex.Message,
                     Status = SynchronizationStatus.Fail,
                     Statistics = statistics,
@@ -443,8 +443,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             {
                 progress.Report(new SyncProgressInfo
                 {
-                    Title = InterviewerUIResources.Synchronization_Fail_Title,
-                    Description = InterviewerUIResources.Synchronization_Fail_UnexpectedException,
+                    Title = EnumeratorUIResources.Synchronization_Fail_Title,
+                    Description = EnumeratorUIResources.Synchronization_Fail_UnexpectedException,
                     Status = SynchronizationStatus.Fail,
                     Statistics = statistics,
                     Stage = SyncStage.FailedUnexpectedException
@@ -465,8 +465,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     this.shouldUpdatePasswordOfResponsible = false;
                     progress.Report(new SyncProgressInfo
                     {
-                        Title = InterviewerUIResources.Synchronization_Fail_Title,
-                        Description = InterviewerUIResources.Unauthorized,
+                        Title = EnumeratorUIResources.Synchronization_Fail_Title,
+                        Description = EnumeratorUIResources.Unauthorized,
                         Status = SynchronizationStatus.Fail,
                         Statistics = statistics,
                         Stage = SyncStage.FailedUnauthorized
@@ -507,13 +507,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         protected virtual Task<string> GetNewPasswordAsync()
         {
-            var message = InterviewerUIResources.Synchronization_UserPassword_Update_Format.FormatString(
+            var message = EnumeratorUIResources.Synchronization_UserPassword_Update_Format.FormatString(
                 this.principal.CurrentUserIdentity.Name);
 
             return this.userInteractionService.ConfirmWithTextInputAsync(
                 message,
                 okButton: UIResources.LoginText,
-                cancelButton: InterviewerUIResources.Synchronization_Cancel,
+                cancelButton: EnumeratorUIResources.Synchronization_Cancel,
                 isTextInputPassword: true);
         }
         protected virtual void WriteToAuditLogStartSyncMessage()
@@ -527,7 +527,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         }
 
         protected virtual bool SendStatistics => true;
-        protected virtual string SuccessDescription => InterviewerUIResources.Synchronization_Success_Description;
+        protected virtual string SuccessDescription => EnumeratorUIResources.Synchronization_Success_Description;
 
         public virtual SyncStatisticsApiView ToSyncStatisticsApiView(SynchronizationStatistics statistics, Stopwatch stopwatch)
         {

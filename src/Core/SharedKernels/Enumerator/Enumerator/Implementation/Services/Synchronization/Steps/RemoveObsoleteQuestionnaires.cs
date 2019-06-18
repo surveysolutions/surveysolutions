@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         {
             this.Context.Progress.Report(new SyncProgressInfo
             {
-                Title = InterviewerUIResources.Synchronization_Check_Obsolete_Questionnaires,
+                Title = EnumeratorUIResources.Synchronization_Check_Obsolete_Questionnaires,
                 Statistics = this.Context.Statistics,
                 Status = SynchronizationStatus.Download,
                 Stage = SyncStage.CheckObsoleteQuestionnaires
@@ -52,9 +52,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
                 this.Context.Progress.Report(new SyncProgressInfo
                 {
-                    Title = InterviewerUIResources.Synchronization_Check_Obsolete_Questionnaires,
+                    Title = EnumeratorUIResources.Synchronization_Check_Obsolete_Questionnaires,
                     Description = string.Format(
-                        InterviewerUIResources.Synchronization_Check_Obsolete_Questionnaires_Description,
+                        EnumeratorUIResources.Synchronization_Check_Obsolete_Questionnaires_Description,
                         removedQuestionnairesCounter, questionnairesToRemove.Count),
                     Statistics = this.Context.Statistics,
                     Status = SynchronizationStatus.Download,
@@ -81,7 +81,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             {
                 this.Context.Progress.Report(new SyncProgressInfo
                 {
-                    Title = InterviewerUIResources.Synchronization_Download_AttachmentsCleanup,
+                    Title = EnumeratorUIResources.Synchronization_Download_AttachmentsCleanup,
                     Stage = SyncStage.AttachmentsCleanup
                 });
 

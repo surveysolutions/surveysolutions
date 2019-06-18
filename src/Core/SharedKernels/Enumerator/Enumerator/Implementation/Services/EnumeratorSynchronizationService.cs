@@ -190,7 +190,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             if (response == null || response.Trim('"') != CanSynchronizeValidResponse)
             {
-                throw new SynchronizationException(SynchronizationExceptionType.InvalidUrl, InterviewerUIResources.InvalidEndpoint);
+                throw new SynchronizationException(SynchronizationExceptionType.InvalidUrl, EnumeratorUIResources.InvalidEndpoint);
             }
         }
 

@@ -21,10 +21,11 @@
         <p class="text-muted">
             <div class="text-center">
                 © @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">@Pages.Layout_WorldBank</a>, @Pages.Layout_RightsReserved <a href="http://go.worldbank.org/OS6V7NIUD0">@Pages.Layout_Legal</a>.
+
             </div>
             <div class="text-center">
                 @(DependencyResolver.Current.GetService<IProductVersion>())
-                
+
                 @if (AppSettings.IsDebugBuilded)
                 {
                     <span id="build-config">[.NET Debug]</span>
@@ -36,13 +37,16 @@
                 }
 
                 @RenderSection("interviewerlink", false)
-                
+
                 @if (DependencyResolver.Current.GetService<IVersionCheckService>().DoesNewVersionExist())
                 {
                     <div>
                         <span style="background-color: #ff8;">@Common.NewVersionAvailable @(DependencyResolver.Current.GetService<IVersionCheckService>().GetNewVersionString()) </span>
                     </div>
                 }
+            </div>
+            <div class="text-center">
+                @Html.Partial("_PoweredBy")
             </div>
         </p>
 

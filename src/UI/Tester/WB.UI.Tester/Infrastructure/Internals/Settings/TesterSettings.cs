@@ -140,7 +140,6 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
             throw new NotImplementedException();
         }
 
-        public bool IsSupportedWebViewer => Build.VERSION.SdkInt > BuildVersionCodes.Kitkat;
         public bool NotificationsEnabled => false;
         public void SetNotifications(bool notificationsEnabled)
         {

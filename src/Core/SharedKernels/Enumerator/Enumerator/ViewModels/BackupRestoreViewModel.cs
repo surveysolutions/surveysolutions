@@ -130,7 +130,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                     }
                     else 
                     {
-                        await this.userInteractionService.AlertAsync(InterviewerUIResources.Troubleshooting_RestoreFolderIsEmpty.FormatString(restoreFolder));
+                        await this.userInteractionService.AlertAsync(EnumeratorUIResources.Troubleshooting_RestoreFolderIsEmpty.FormatString(restoreFolder));
                     }
                 }
                 catch (MissingPermissionsException e)
@@ -174,7 +174,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 return;
 
             if (await this.userInteractionService.ConfirmAsync(
-                InterviewerUIResources.Troubleshooting_RestoreConfirmation.FormatString(this.RestoreLocation),
+                EnumeratorUIResources.Troubleshooting_RestoreConfirmation.FormatString(this.RestoreLocation),
                 string.Empty, UIResources.Yes, UIResources.No))
             {
                 this.IsBackupInProgress = true;

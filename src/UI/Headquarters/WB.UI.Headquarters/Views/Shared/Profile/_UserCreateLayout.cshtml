@@ -10,7 +10,7 @@
     @RenderSection("Breadcrumbs", false)
 }
 <div class="row extra-margin-bottom">
-    @using (Html.BeginForm("Create", null, FormMethod.Post, new { @class = @"profile" }))
+    @using (Html.BeginForm("Create", null, FormMethod.Post, new { @class = @"profile", autocomplete = "off" }))
     {
         @Html.HiddenFor(x => x.HideDetails)
         @Html.HiddenFor(x => x.IsLockedDisabled)
@@ -18,7 +18,7 @@
         @RenderSection(@"PreFormSection", false)
         <div class="col-sm-12">
             @RenderSection(@"PreDetailsSection", false)
-            @Html.EditorFor(x => x.UserName, "TextBoxFormField")
+            @Html.EditorFor(x => x.UserName, "TextBoxFormField", new { autocomplete = "off" })
             @Html.EditorFor(x => x.Password, "PasswordFormField")
             @Html.EditorFor(x => x.ConfirmPassword, "PasswordFormField")
             @RenderSection(@"LockWarningSection", false)

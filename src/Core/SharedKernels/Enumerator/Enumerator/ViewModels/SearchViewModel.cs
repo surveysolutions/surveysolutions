@@ -99,7 +99,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public override async Task Initialize()
         {
             await base.Initialize().ConfigureAwait(false);
-            EmptySearchText = InterviewerUIResources.Dashboard_SearchWatermark;
+            EmptySearchText = EnumeratorUIResources.Dashboard_SearchWatermark;
             await UpdateUiItemsAsync(SearchText, CancellationToken.None);
         }
 
@@ -134,8 +134,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.IsInProgressItemsLoadingCount++;
 
             this.SearchResultText = string.IsNullOrWhiteSpace(searchText)
-                ? InterviewerUIResources.Dashboard_NeedTextForSearch
-                : InterviewerUIResources.Dashboard_Searching;
+                ? EnumeratorUIResources.Dashboard_NeedTextForSearch
+                : EnumeratorUIResources.Dashboard_Searching;
 
             var items = new List<IDashboardItem>();
 
@@ -146,12 +146,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                     items = await this.GetViewModelsAsync(searchText, cancellationToken);
 
                     this.SearchResultText = items.Count > 0
-                        ? string.Format(InterviewerUIResources.Dashboard_SearchResult, items.Count)
-                        : InterviewerUIResources.Dashboard_NotFoundSearchResult;
+                        ? string.Format(EnumeratorUIResources.Dashboard_SearchResult, items.Count)
+                        : EnumeratorUIResources.Dashboard_NotFoundSearchResult;
                 }
 
                 this.UiItems.OfType<InterviewDashboardItemViewModel>().ForEach(i => i.OnItemRemoved -= InterviewItemRemoved);
-                this.UiItems.ReplaceWith(items);
+                this.InvokeOnMainThread(()=>this.UiItems.ReplaceWith(items));
                 this.UiItems.OfType<InterviewDashboardItemViewModel>().ForEach(i => i.OnItemRemoved += InterviewItemRemoved);
             }
             catch (OperationCanceledException)
@@ -200,8 +200,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             var countOfItems = UiItems.Count;
             SearchResultText = countOfItems > 0
-                ? string.Format(InterviewerUIResources.Dashboard_SearchResult, countOfItems)
-                : InterviewerUIResources.Dashboard_NotFoundSearchResult;
+                ? string.Format(EnumeratorUIResources.Dashboard_SearchResult, countOfItems)
+                : EnumeratorUIResources.Dashboard_NotFoundSearchResult;
         }
         
         protected IEnumerable<IDashboardItem> GetUiItems(string searchText)

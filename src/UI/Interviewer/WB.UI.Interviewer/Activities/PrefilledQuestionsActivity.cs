@@ -18,9 +18,9 @@ namespace WB.UI.Interviewer.Activities
         protected override int LanguagesMenuItemId => Resource.Id.interview_language;
         protected override int MenuId => Resource.Menu.interview;
 
-        public override void OnBackPressed()
+        public override async void OnBackPressed()
         {
-            this.ViewModel.NavigateBack();
+            await this.ViewModel.NavigateBack();
             this.Finish();
         }
 
@@ -28,31 +28,31 @@ namespace WB.UI.Interviewer.Activities
         {
             {
                 Resource.Id.menu_dashboard,
-                InterviewerUIResources.MenuItem_Title_Dashboard,
+                EnumeratorUIResources.MenuItem_Title_Dashboard,
                 this.ViewModel.NavigateToDashboardCommand
             },
             {
                 Resource.Id.menu_signout,
-                InterviewerUIResources.MenuItem_Title_SignOut,
+                EnumeratorUIResources.MenuItem_Title_SignOut,
                 this.ViewModel.SignOutCommand
             },
             {
                 Resource.Id.menu_diagnostics,
-                InterviewerUIResources.MenuItem_Title_Diagnostics,
+                EnumeratorUIResources.MenuItem_Title_Diagnostics,
                 this.ViewModel.NavigateToDiagnosticsPageCommand
             },
             {
                 Resource.Id.menu_maps,
-                InterviewerUIResources.MenuItem_Title_Maps,
+                EnumeratorUIResources.MenuItem_Title_Maps,
                 this.ViewModel.NavigateToMapsCommand
             },
             {
                 Resource.Id.interview_language,
-                InterviewerUIResources.MenuItem_Title_Language
+                EnumeratorUIResources.MenuItem_Title_Language
             },
             {
                 Resource.Id.interview_language_original,
-                InterviewerUIResources.MenuItem_Title_Language_Original
+                EnumeratorUIResources.MenuItem_Title_Language_Original
             },
         };
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using MvvmCross.Base;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
@@ -20,9 +21,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IPrincipal principal,
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering,
-            QuestionInstructionViewModel instructionViewModel) :
+            QuestionInstructionViewModel instructionViewModel,
+            IMvxMainThreadAsyncDispatcher mainThreadDispatcher) :
             base(principal: principal, questionStateViewModel: questionStateViewModel, answering: answering,
-                instructionViewModel: instructionViewModel, interviewRepository: interviewRepository, eventRegistry: eventRegistry, filteredOptionsViewModel)
+                instructionViewModel: instructionViewModel, interviewRepository: interviewRepository, 
+                eventRegistry: eventRegistry, filteredOptionsViewModel, mainThreadDispatcher)
         {
         }
 

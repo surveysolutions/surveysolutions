@@ -100,8 +100,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
 
         protected async Task<IStatefulInterview> LoadInterviewAsync(Guid interviewId)
         {
-            this.ProgressDescription = InterviewerUIResources.Interview_Loading;
-            this.OperationDescription = InterviewerUIResources.Interview_Loading_Description;
+            this.ProgressDescription = EnumeratorUIResources.Interview_Loading;
+            this.OperationDescription = EnumeratorUIResources.Interview_Loading_Description;
             IsIndeterminate = false;
 
             this.loadingCancellationTokenSource = new CancellationTokenSource();
@@ -110,7 +110,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
             var progress = new Progress<EventReadingProgress>(e =>
             {
                 var percent = e.Current.PercentOf(e.Maximum);
-                this.ProgressDescription = string.Format(InterviewerUIResources.Interview_Loading_With_Percents, percent);
+                this.ProgressDescription = string.Format(EnumeratorUIResources.Interview_Loading_With_Percents, percent);
                 this.Progress = percent;
             });
 
@@ -139,7 +139,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
             catch (Exception exception)
             {
                 this.logger.Error($"Failed to load interview {interviewId}. {exception.ToString()}", exception);
-                await this.interactionService.AlertAsync(InterviewerUIResources.FailedToLoadInterviewDescription, InterviewerUIResources.FailedToLoadInterview);
+                await this.interactionService.AlertAsync(EnumeratorUIResources.FailedToLoadInterviewDescription, EnumeratorUIResources.FailedToLoadInterview);
             }
 
             return null;

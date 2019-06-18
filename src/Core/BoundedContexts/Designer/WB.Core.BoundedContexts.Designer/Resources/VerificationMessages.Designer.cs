@@ -1943,11 +1943,20 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Table roster mode works only in web survey, on tablets it will be default mode..
+        ///   Looks up a localized string similar to Table roster mode works only in web survey, on tablets it will be &apos;sub section&apos; mode..
         /// </summary>
         public static string WB0286_TableRosterWorksOnlyInWebMode {
             get {
                 return ResourceManager.GetString("WB0286_TableRosterWorksOnlyInWebMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questions in a table roster may not contain any substitutions in text..
+        /// </summary>
+        public static string WB0287_TableRosterDoesntContainsQuestionWithSubstitutions {
+            get {
+                return ResourceManager.GetString("WB0287_TableRosterDoesntContainsQuestionWithSubstitutions", resourceCulture);
             }
         }
     }
