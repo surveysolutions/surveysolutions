@@ -270,4 +270,91 @@
   <data name="DataExport_Destination_OneDrive" xml:space="preserve">
     <value>Export file will be uploaded on OneDrive</value>
   </data>
+  <data name="DataExport_QueuedOn" xml:space="preserve">
+    <value>Queued on {{date}}</value>
+  </data>
+  <data name="DataExport_QuestionnaireWithVersion" xml:space="preserve">
+    <value>{{title}} (ver. {{version}})</value>
+  </data>
+  <data name="DataExport_Regenerate" xml:space="preserve">
+    <value>Regenerate</value>
+  </data>
+  <data name="DataExport_RegenerateDesc" xml:space="preserve">
+    <value>Queue export with the same params</value>
+  </data>
+  <data name="DataExport_FileLastUpdate" xml:space="preserve">
+    <value>Last updated: {{date}}</value>
+  </data>
+  <data name="DataExport_FileWasRegenerated" xml:space="preserve">
+    <value>File was regenerated</value>
+  </data>
+  <data name="DataExport_FileSize" xml:space="preserve">
+    <value>File size: {{size}} MB</value>
+  </data>
+  <data name="DataExport_Destination" xml:space="preserve">
+    <value>Destination: {{dest}}</value>
+  </data>
+  <data name="DataExport_ServiceIsNotAvailable" xml:space="preserve">
+    <value>Export service is not available</value>
+  </data>
+  <data name="DataType" xml:space="preserve">
+    <value>Data type</value>
+  </data>
+  <data name="DataType_Binary" xml:space="preserve">
+    <value>Binary Data. Archive with binary data (e.g., pictures, audio)</value>
+  </data>
+  <data name="DataType_Ddi" xml:space="preserve">
+    <value>DDI. Data Documentation Initiative XML data</value>
+  </data>
+  <data name="DataType_MainSurveyData" xml:space="preserve">
+    <value>Main Survey Data. Zip archive with main interview data</value>
+  </data>
+  <data name="FilterTitle" xml:space="preserve">
+    <value>Filter interviews to export</value>
+  </data>
+  <data name="SurveyQuestionnaire" xml:space="preserve">
+    <value>Survey template</value>
+  </data>
+  <data name="DataType_Paradata" xml:space="preserve">
+    <value>Paradata. Metadata on the interview process (events and timing)</value>
+  </data>
+  <data name="DataDestination" xml:space="preserve">
+    <value>Export file destination</value>
+  </data>
+  <data name="DataFormat" xml:space="preserve">
+    <value>Data format</value>
+  </data>
+  <data name="DataDestination_Dropbox" xml:space="preserve">
+    <value>Upload to Dropbox</value>
+  </data>
+  <data name="DataDestination_GoogleDrive" xml:space="preserve">
+    <value>Upload to Google Drive</value>
+  </data>
+  <data name="DataDestination_OneDrive" xml:space="preserve">
+    <value>Upload to OneDrive</value>
+  </data>
+  <data name="DataDestination_Zip" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="DataFormat_Spss" xml:space="preserve">
+    <value>SPSS format</value>
+  </data>
+  <data name="DataFormat_Stata" xml:space="preserve">
+    <value>Stata 14 format</value>
+  </data>
+  <data name="DataFormat_Tab" xml:space="preserve">
+    <value>Tab separated data</value>
+  </data>
+  <data name="AddToQueue" xml:space="preserve">
+    <value>Add to queue</value>
+  </data>
+  <data name="GeneratedDataSets" xml:space="preserve">
+    <value>Previously generated export sets</value>
+  </data>
+  <data name="GeneratedDataSets_Desc" xml:space="preserve">
+    <value>Every set is a zip archive with all collected interview data and DDI XML structure you an download previously generated reports</value>
+  </data>
+  <data name="NoDataSets" xml:space="preserve">
+    <value>No generated data sets yet</value>
+  </data>
 </root>

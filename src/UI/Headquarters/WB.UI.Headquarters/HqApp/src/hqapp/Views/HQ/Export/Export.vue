@@ -6,14 +6,14 @@
       </h1>
       <div class="row">
         <div class="col-lg-5">
-          <p>Data export set will be generated based on selected version of questionaire, timeline and statuses and can contain additional data (DDI structure, paradata, collected binary data)</p>
+          <p>{{$t('DataExport.ExportExplanation')}}</p>
         </div>
       </div>
     </div>
     <div class="col-md-12">
      <div class="row" v-if="exportServiceIsUnavailable">
         <div class="col-md-12 mb-30">
-          Export service is not available
+          {{$t('DataExport.DataExport_ServiceIsNotAvailable')}}
         </div>
     </div>
     
@@ -22,10 +22,10 @@
         <div class="col-md-12">
           <form v-if="!exportServiceIsUnavailable">
             <div class="mb-30">
-                <h3>Filter interviews to export</h3>
+                <h3>{{$t('DataExport.FilterTitle')}}</h3>
                 <div class="d-flex mb-20 filter-wrapper">
                   <div class="filter-column">
-                    <h5>Survey template <span class="text-danger">*</span></h5>
+                    <h5>{{$t('DataExport.SurveyQuestionnaire')}} <span class="text-danger">*</span></h5>
                     <div class="form-group">
                       <Typeahead
                         control-id="questionnaireId"
@@ -52,15 +52,14 @@
                         :fetch-url="questionnaireVersionFetchUrl"
                         v-on:selected="questionnaireVersionSelected"
                         :disabled="questionnaireVersionFetchUrl == null"
-                        :selectFirst=true
+                        :selectFirst="true"                        
                       />
                       <span class="help-block">{{ errors.first('questionnaireVersion') }}</span>
                   </div>
                     </div>
                     
-                  
                   <div class="filter-column">
-                    <h5>Status of exported interviews</h5>
+                    <h5>{{$t('DataExport.StatusOfExportTitle')}}</h5>
                     <Typeahead
                       control-id="status"
                       fuzzy
@@ -74,107 +73,107 @@
                   </div>
                  </div>
             </div>
-            <div class="mb-30">
-                <h3>Data type</h3>
+            <div class="mb-30" v-if="hasInterviews || hasBinaryData || questionnaireVersion">
+                <h3>{{$t('DataExport.DataType')}}</h3>
                 <div class="radio-btn-row" v-if="hasInterviews">
                   <input class="radio-row" type="radio" name="dataType" id="surveyData" v-model="dataType" value="surveyData">
                   <label for="surveyData" class="" >
                     <span class="tick"></span>
-                    <span class="format-data Binary">{{$t('DataExport.MainSurveyDataTitle')}}. {{$t('DataExport.ZipArchiveDescription')}}</span>
+                    <span class="format-data Binary">{{$t('DataExport.DataType_MainSurveyData')}}</span>
                   </label>
                 </div>
                 <div class="radio-btn-row" v-if="hasInterviews && hasBinaryData">
                   <input class="radio-row" type="radio" name="dataType" id="binaryData"  v-model="dataType" value="binaryData">
                   <label for="binaryData">
                     <span class="tick"></span>
-                    <span class="format-data Binary">Binary Data. Archive with binary data (e.g., pictures, audio)</span>
+                    <span class="format-data Binary">{{$t('DataExport.DataType_Binary')}}</span>
                   </label>
                 </div>
                 <div class="radio-btn-row" v-if="questionnaireVersion">
                   <input class="radio-row" type="radio" name="dataType" id="ddiData" v-model="dataType" value="ddiData">
                   <label for="ddiData">
                     <span class="tick"></span>
-                    <span class="format-data">DDI. Data Documentation Initiative XML data</span>
+                    <span class="format-data">{{$t('DataExport.DataType_Ddi')}}</span>
                   </label>
                 </div>
                 <div class="radio-btn-row" v-if="hasInterviews">
                   <input class="radio-row" type="radio" name="dataType" id="paraData" v-model="dataType" value="paraData">
                   <label for="paraData">
                     <span class="tick"></span>
-                    <span class="format-data Tabular">Paradata. Metadata on the interview process (events and timing)</span>
+                    <span class="format-data Tabular">{{$t('DataExport.DataType_Paradata')}}</span>
                   </label>
                 </div>
             </div>
             <div class="mb-30" v-if="dataType == 'surveyData'">
-                <h3>Data format</h3>
+                <h3>{{$t('DataExport.DataFormat')}}</h3>
                 <div class="radio-btn-row">
                   <input class="radio-row" type="radio" name="dataFormat" id="separated" v-model="dataFormat" value="Tabular">
                   <label for="separated">
                     <span class="tick"></span>
-                    <span class="format-data Tabular">Tab separated data</span>
+                    <span class="format-data Tabular">{{$t('DataExport.DataFormat_Tab')}}</span>
                   </label>
                 </div>
                 <div class="radio-btn-row">
                   <input class="radio-row" type="radio" name="dataFormat" id="Stata"  v-model="dataFormat" value="Stata">
                   <label for="Stata" class="">
                     <span class="tick"></span>
-                    <span class="format-data STATA">Stata 10 format (no Unicode)</span>
+                    <span class="format-data STATA">{{$t('DataExport.DataFormat_Stata')}}</span>
                   </label>
                 </div>
                 <div class="radio-btn-row">
                   <input class="radio-row" type="radio" name="dataFormat" id="Spss" v-model="dataFormat" value="Spss">
                   <label for="Spss">
                     <span class="tick"></span>
-                    <span class="format-data SPSS">SPSS format</span>
+                    <span class="format-data SPSS">{{$t('DataExport.DataFormat_Spss')}}</span>
                   </label>
                 </div>
             </div>
             <div class="mb-30" v-if="canExportExternally">
-                <h3>Export file destination</h3>
+                <h3>{{$t('DataExport.DataDestination')}}</h3>
                 <div class="radio-btn-row">
                   <input class="radio-row" type="radio" name="exportDestination" id="download"  v-model="dataDestination" value="zip">
                   <label for="download">
                     <span class="tick"></span>
-                    <span class="export-destination">Download</span>
+                    <span class="export-destination">{{$t('DataExport.DataDestination_Zip')}}</span>
                   </label>
                 </div>
                 <div class="radio-btn-row" v-if="isDropboxSetUp">
                   <input class="radio-row" type="radio" name="exportDestination" id="onedrive"  v-model="dataDestination" value="oneDrive">
                   <label for="onedrive">
                     <span class="tick"></span>
-                    <span class="export-destination OneDrive">Upload to OneDrive</span>
+                    <span class="export-destination OneDrive">{{$t('DataExport.DataDestination_OneDrive')}}</span>
                   </label>
                 </div>
                 <div class="radio-btn-row" v-if="isDropboxSetUp">
                   <input class="radio-row" type="radio" name="exportDestination" id="dropbox"  v-model="dataDestination" value="dropbox">
                   <label for="dropbox">
                     <span class="tick"></span>
-                    <span class="export-destination Dropbox">Upload to Dropbox</span>
+                    <span class="export-destination Dropbox">{{$t('DataExport.DataDestination_Dropbox')}}</span>
                   </label>
                 </div>
                 <div class="radio-btn-row" v-if="isGoogleDriveSetUp">
                   <input class="radio-row" type="radio" name="exportDestination" id="googleDrive" v-model="dataDestination" value="googleDrive">
                   <label for="googleDrive">
                     <span class="tick"></span>
-                    <span class="export-destination GoogleDrive">Upload to Google Drive</span>
+                    <span class="export-destination GoogleDrive">{{$t('DataExport.DataDestination_GoogleDrive')}}</span>
                   </label>
                 </div>
             </div>
             <div class="mb-30">
                 <div class="structure-block">
-                    <button type="button" class="btn btn-success" @click="queueExport">add to queue</button>
-                    <button type="button" class="btn btn-lg btn-link" @click="resetForm">Cancel</button>
+                    <button type="button" class="btn btn-success" @click="queueExport">{{$t('DataExport.AddToQueue')}}</button>
+                    <button type="button" class="btn btn-lg btn-link" @click="resetForm">{{$t('Strings.Cancel')}}</button>
                 </div>
             </div>
           </form>
         </div>
         <div class="col-md-12" v-if="!exportServiceIsUnavailable">
           <div class="no-sets" v-if="!exportServiceIsUnavailable && exportResults.length == 0">
-            <p>No generated sets yet</p>
+            <p>{{$t('DataExport.NoDataSets')}}</p>
           </div>
           <div v-else>
-            <h3 class="mb-20">Previously generated export sets</h3>
-            <p>Every set is a zip archive with all collected interview data and DDI XML structure you an download previously generated reports</p>
+            <h3 class="mb-20">{{$t('DataExport.GeneratedDataSets')}}</h3>
+            <p>{{$t('DataExport.GeneratedDataSets_Desc')}}</p>
             <ExportProcessCard  v-for="result in exportResults" v-bind:key="result.id" :data="result"></ExportProcessCard>
           </div>
         </div>
@@ -182,9 +181,9 @@
     </div>
     <div class="row" v-if="!exportServiceIsUnavailable">
       <div class="col-lg-5">
-          <h3 class="mb-20">Data export API</h3>
-          <p>You can setup automatic export of collected interview data using our API toolset for more information 
-              and inctruction use <a href="#" target="_blank" class="underlined-link">Data Export API reference</a>
+          <h3 class="mb-20">{{$t('DataExport.NoDataSets')}}Data export API</h3>
+          <p>{{$t('DataExport.NoDataSets')}}You can setup automatic export of collected interview data using our API toolset for more information 
+              and inctruction use <a href="https://support.mysurvey.solutions/headquarters/api/api-for-data-export/" target="_blank" class="underlined-link">Data Export API reference</a>
           </p>
       </div>
     </div>
