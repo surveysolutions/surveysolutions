@@ -53,7 +53,7 @@
                             <span class="glyphicon glyphicon-sort"></span>
                         </button>
                     </li>
-                    <li v-if="this.$config.inWebTesterMode">
+                    <li v-if="this.$config.inWebTesterMode && this.$config.saveScenarioUrl">
                         <form method="POST" :action="saveScenarioUrl" ref="scenarioForm">
                             <input type="hidden" ref="scenarioTextInput" name="ScenarioText"/>
                             <button  type="button" class="btn btn-default btn-link btn-icon" @click="saveScenario" :title="$t('WebInterviewUI.SaveScenario')">

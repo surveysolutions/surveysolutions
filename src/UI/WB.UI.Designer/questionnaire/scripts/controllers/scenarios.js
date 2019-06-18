@@ -45,7 +45,7 @@
                 var webTesterWindow = window.open("about:blank", '_blank');
 
                 webTesterService.run($state.params.questionnaireId).then(function (response) {
-                    webTesterWindow.location.href = response.data + "?scenarioId=" + scenario.id;
+                    webTesterService.setLocation(webTesterWindow, response, $scope.questionnaire.hasViewerAdminRights, scenario.id);
                 });
             };
 
