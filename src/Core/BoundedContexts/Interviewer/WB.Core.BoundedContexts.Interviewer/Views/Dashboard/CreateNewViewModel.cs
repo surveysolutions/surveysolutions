@@ -46,7 +46,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public async Task LoadAsync(LocalSynchronizationViewModel sync)
         {
             this.synchronization = sync;
-            this.Title = InterviewerUIResources.Dashboard_AssignmentsTabTitle;
+            this.Title = EnumeratorUIResources.Dashboard_AssignmentsTabTitle;
 
             var censusQuestionnairesCount = this.questionnaireViewRepository.Count(questionnaire => questionnaire.Census);
             var assignmentsCount = this.assignmentsRepository.Count();
@@ -78,7 +78,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             if (dbQuestionnaires.Count > 0 || dbAssignments.Count > 0)
             {
                 var subTitle = this.viewModelFactory.GetNew<DashboardSubTitleViewModel>();
-                subTitle.Title = InterviewerUIResources.Dashboard_CreateNewTabText;
+                subTitle.Title = EnumeratorUIResources.Dashboard_CreateNewTabText;
 
                 yield return subTitle;
             }

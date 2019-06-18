@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                     () => !Assignment.Quantity.HasValue ||
                           Math.Max(val1: 0, val2: InterviewsLeftByAssignmentCount) > 0),
 
-                Label = InterviewerUIResources.Dashboard_StartNewInterview
+                Label = EnumeratorUIResources.Dashboard_StartNewInterview
             });
         }
 

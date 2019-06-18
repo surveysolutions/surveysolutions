@@ -5,6 +5,8 @@ FROM mcr.microsoft.com/dotnet/framework/sdk:4.8 as prepare
 
 # Set the variables for EnterpriseDB
 ARG EDB_VER=11.3-1
+ARG PG_BUILDER
+
 ENV EDB_VER $EDB_VER
 ENV EDB_REPO https://get.enterprisedb.com/postgresql
 
@@ -62,19 +64,17 @@ RUN if (Test-Path 'C:\\windows\\system32\\msvcp120.dll') { \
 ####
 #### PostgreSQL on Windows Server Core
 ####
-FROM mcr.microsoft.com/dotnet/framework/sdk:4.8
+FROM wb_builder
+# should be FROM $PG_BUILDER - but something is broken
 
 RUN mkdir "C:\\docker-entrypoint-initdb.d"
 
 #### Copy over PostgreSQL
 COPY --from=prepare /pgsql /pgsql
 ADD path.ps1 /
-RUN ./path.ps1
+RUN powershell ./path.ps1
 
 ENV PGDATA "C:\\pgsql\\data"
 
 COPY docker-entrypoint.cmd /
 ENTRYPOINT ["C:\\docker-entrypoint.cmd"]
-
-EXPOSE 5432
-CMD ["postgres"]

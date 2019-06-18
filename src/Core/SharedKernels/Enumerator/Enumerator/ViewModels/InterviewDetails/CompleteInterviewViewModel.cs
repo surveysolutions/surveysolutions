@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public class CompleteInterviewViewModel : MvxViewModel, IDisposable
     {
-        private readonly IViewModelNavigationService viewModelNavigationService;
+        protected readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IMvxMessenger messenger;
         private readonly ICommandService commandService;
         private readonly IEntitiesListViewModelFactory entitiesListViewModelFactory;

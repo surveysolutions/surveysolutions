@@ -46,7 +46,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
 
             string MainLabel()
             {
-                return InterviewerUIResources.Dashboard_Open;
+                return EnumeratorUIResources.Dashboard_Open;
             }
         }
 
@@ -86,7 +86,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
                 var interviewer = this.interviewers.GetById(this.interview.ResponsibleId.FormatGuid());
                 if (interviewer != null)
                 {
-                    Responsible = string.Format(InterviewerUIResources.DashboardItem_Responsible, interviewer.UserName);
+                    Responsible = string.Format(EnumeratorUIResources.DashboardItem_Responsible, interviewer.UserName);
                 }
             }
         }

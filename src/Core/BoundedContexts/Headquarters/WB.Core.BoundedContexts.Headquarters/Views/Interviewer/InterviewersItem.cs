@@ -17,6 +17,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviewer
 
         public string UserName { get; set; }
 
+        public string FullName { get; set; }
         public string SupervisorName { get; set; }
 
         public string DeviceId { get; set; }

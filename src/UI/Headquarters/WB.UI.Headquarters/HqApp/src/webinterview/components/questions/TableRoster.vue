@@ -29,6 +29,7 @@
     import TableRoster_QuestionEditor from "./TableRoster.QuestionEditor";
     import TableRoster_ViewAnswer from "./TableRoster.ViewAnswer";
     import TableRoster_RosterTitle from "./TableRoster.RosterTitle";
+    import TableRoster_QuestionTitle from "./TableRoster.QuestionTitle";
     
     export default {
         name: 'TableRoster',
@@ -51,6 +52,7 @@
             TableRoster_ViewAnswer,
             TableRoster_QuestionEditor,
             TableRoster_RosterTitle,
+            TableRoster_QuestionTitle,
         },
 
         beforeMount() {
@@ -96,6 +98,11 @@
                     (question, key) => {
                         return {
                             headerName: question.title, 
+                            headerComponentFramework: 'TableRoster_QuestionTitle',
+                            headerComponentParams: {
+                                title: question.title,
+                                instruction: question.instruction, 
+                            },
                             field: question.id, 
                             cellRendererFramework: 'TableRoster_ViewAnswer',
                             cellRendererParams: {
@@ -110,7 +117,7 @@
                     }
                 );
                 columnsFromQuestions.unshift({
-                    headerName: "", 
+                    headerName: this.$me.title, 
                     field: "rosterTitle", 
                     autoHeight: true, 
                     pinned: true, 

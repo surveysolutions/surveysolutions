@@ -43,48 +43,50 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\InterviewerUIResources.ar.resx">
-      <Link>InterviewerUIResources.ar.resx</Link>
+  
+  <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.ar.resx">
+      <Link>EnumeratorUIResources.ar.resx</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\InterviewerUIResources.es.resx">
-      <Link>InterviewerUIResources.es.resx</Link>
+    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.es.resx">
+      <Link>EnumeratorUIResources.es.resx</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\InterviewerUIResources.fr.resx">
-      <Link>InterviewerUIResources.fr.resx</Link>
+    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.fr.resx">
+      <Link>EnumeratorUIResources.fr.resx</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\InterviewerUIResources.id-ID.resx">
-      <Link>InterviewerUIResources.id-ID.resx</Link>
+    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.id-ID.resx">
+      <Link>EnumeratorUIResources.id-ID.resx</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\InterviewerUIResources.ka.resx">
-      <Link>InterviewerUIResources.ka.resx</Link>
+    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.ka.resx">
+      <Link>EnumeratorUIResources.ka.resx</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\InterviewerUIResources.km.resx">
-      <Link>InterviewerUIResources.km.resx</Link>
+    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.km.resx">
+      <Link>EnumeratorUIResources.km.resx</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\InterviewerUIResources.pt.resx">
-      <Link>InterviewerUIResources.pt.resx</Link>
+    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.pt.resx">
+      <Link>EnumeratorUIResources.pt.resx</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\InterviewerUIResources.resx">
-      <Link>InterviewerUIResources.resx</Link>
+    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.resx">
+      <Link>EnumeratorUIResources.resx</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\InterviewerUIResources.ro.resx">
-      <Link>InterviewerUIResources.ro.resx</Link>
+    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.ro.resx">
+      <Link>EnumeratorUIResources.ro.resx</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\InterviewerUIResources.ru.resx">
-      <Link>InterviewerUIResources.ru.resx</Link>
+    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.ru.resx">
+      <Link>EnumeratorUIResources.ru.resx</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\InterviewerUIResources.th-TH.resx">
-      <Link>InterviewerUIResources.th-TH.resx</Link>
+    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.th-TH.resx">
+      <Link>EnumeratorUIResources.th-TH.resx</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\InterviewerUIResources.uk-UA.resx">
-      <Link>InterviewerUIResources.uk-UA.resx</Link>
+    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.uk-UA.resx">
+      <Link>EnumeratorUIResources.uk-UA.resx</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\InterviewerUIResources.vi-VN.resx">
-      <Link>InterviewerUIResources.vi-VN.resx</Link>
+    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.vi-VN.resx">
+      <Link>EnumeratorUIResources.vi-VN.resx</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\InterviewerUIResources.zh.resx">
-      <Link>InterviewerUIResources.zh.resx</Link>
+    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.zh.resx">
+      <Link>EnumeratorUIResources.zh.resx</Link>
     </EmbeddedResource>
+  
     <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.es.resx">
       <Link>UIResources.es.resx</Link>
     </EmbeddedResource>

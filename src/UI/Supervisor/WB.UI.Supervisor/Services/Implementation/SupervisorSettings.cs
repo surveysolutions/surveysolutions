@@ -65,7 +65,7 @@ namespace WB.UI.Supervisor.Services.Implementation
         public void SetGpsDesiredAccuracy(double value) => throw new NotImplementedException();
         public void SetShowLocationOnMap(bool showLocationOnMap) => this.SaveCurrentSettings(settings => settings.ShowLocationOnMap = showLocationOnMap);
 
-        public void SetNotifications(bool notificationsEnabled) =>
+        public override void SetNotifications(bool notificationsEnabled) =>
             this.SaveCurrentSettings(settings => settings.NotificationsEnabled = notificationsEnabled);
 
         public string InterviewerApplicationsDirectory =>

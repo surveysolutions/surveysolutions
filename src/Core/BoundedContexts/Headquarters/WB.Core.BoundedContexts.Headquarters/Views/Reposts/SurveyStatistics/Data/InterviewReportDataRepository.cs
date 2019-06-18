@@ -119,7 +119,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
                 join readside.interviewsummaries s on s.id = v1.interview_id
                 join readside.questionnaire_entities_answers qea on qea.value::bigint = v1.answer and qea.entity_id = v1.entity_id
                 where true = true
-                    {IfSupervisor(" and (@teamleadid is null or s.teamleadid = @teamleadid) and")}                    
+                    {IfSupervisor(" and (@teamleadid is null or s.teamleadid = @teamleadid) ")}                    
                     {IfWithCondition(" and array[v2.answer] && @condition")}
             ) as agg 
             group by 1, 2, 3 
@@ -152,13 +152,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
                         answer >= @minanswer and answer <= @maxanswer
                 )
                 select c.teamleadname, c.responsiblename,
-                    count(c.answer) as count, avg(c.answer) as avg, 
+                    count(c.answer) as count, avg(c.answer) as average, 
                     readside.median(c.answer) as median, 
                     min(c.answer) as min, max(c.answer) as max, 
                     sum(c.answer) as sum, 
-                    percentile_cont(0.05) within group (order by c.answer asc) as percentile_05,
-                    percentile_cont(0.5) within group (order by c.answer asc) as percentile_50,
-                    percentile_cont(0.95) within group (order by c.answer asc) as percentile_95
+                    percentile_cont(0.05) within group (order by c.answer asc) as percentile05,
+                    percentile_cont(0.5) within group (order by c.answer asc) as percentile50,
+                    percentile_cont(0.95) within group (order by c.answer asc) as percentile95
                 from countables c
                 group by 1,2
 

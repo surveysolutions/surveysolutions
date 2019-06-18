@@ -101,7 +101,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.CustomLogo = companyLogo?.File;
             this.IsUserValid = true;
             this.UserName = this.GetUserName();
-            this.ErrorMessage = InterviewerUIResources.Login_WrongPassword;
+            this.ErrorMessage = EnumeratorUIResources.Login_WrongPassword;
         }
 
         public override async void ViewCreated()
@@ -161,7 +161,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 switch (ex.Type)
                 {
                     case SynchronizationExceptionType.Unauthorized:
-                        this.ErrorMessage = InterviewerUIResources.Login_Online_SignIn_Failed;
+                        this.ErrorMessage = EnumeratorUIResources.Login_Online_SignIn_Failed;
                         break;
                     default:
                         this.ErrorMessage = ex.Message;
@@ -171,7 +171,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
             catch (Exception ex)
             {
-                this.ErrorMessage = InterviewerUIResources.UnexpectedException;
+                this.ErrorMessage = EnumeratorUIResources.UnexpectedException;
                 this.logger.Error("Login view model. Unexpected exception", ex);
                 this.IsUserValid = false;
             }
@@ -186,7 +186,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.countOfFailedLoginAttempts++;
             IsOnlineLoginButtonVisible = countOfFailedLoginAttempts > 4;
             if(this.IsOnlineLoginButtonVisible)
-                this.ErrorMessage = InterviewerUIResources.Login_Online_Signin_Explanation_message;
+                this.ErrorMessage = EnumeratorUIResources.Login_Online_Signin_Explanation_message;
         }
     }
 }
