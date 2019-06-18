@@ -17,9 +17,6 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void SetValueToView(ViewGroup target, GroupStatus value)
         {
-            if (Build.VERSION.SdkInt < BuildVersionCodes.Lollipop)
-                return;
-
             switch (value)
             {
                 case GroupStatus.CompletedInvalid:

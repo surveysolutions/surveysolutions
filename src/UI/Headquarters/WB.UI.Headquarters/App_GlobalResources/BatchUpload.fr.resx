@@ -342,9 +342,6 @@
   <data name="BackToImport" xml:space="preserve">
     <value>Retour à l'importation</value>
   </data>
-  <data name="BatchDescription" xml:space="preserve">
-    <value>Importer l'archive avec le fichier d'identification tab et les données collectées.</value>
-  </data>
   <data name="BatchFileVerificationFailed" xml:space="preserve">
     <value>La vérification du fichier téléchargé a échoué</value>
   </data>
@@ -506,9 +503,6 @@
   </data>
   <data name="SelectResponsibleToAssign" xml:space="preserve">
     <value>Sélectionnez le responsable de ce lot</value>
-  </data>
-  <data name="SimpleDescription" xml:space="preserve">
-    <value>Importer le fichier séparé .tab avec les données d'identification nécessaires. De façon facultative, spécifiez les noms d'utilisateur des superviseurs ou des enquêteurs dans la colonne _responsible, dans la colonne _quantity vous pouvez spécifier la capacité d'affectation.</value>
   </data>
   <data name="SimpleTitle" xml:space="preserve">
     <value>Identification des données uniquement</value>

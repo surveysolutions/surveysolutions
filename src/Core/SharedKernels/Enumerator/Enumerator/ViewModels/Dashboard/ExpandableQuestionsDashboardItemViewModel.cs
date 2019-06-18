@@ -123,7 +123,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
                 ActionType = ActionType.Secondary,
 
-                Label = InterviewerUIResources.Dashboard_ShowLocation
+                Label = EnumeratorUIResources.Dashboard_ShowLocation
             });
         }
 

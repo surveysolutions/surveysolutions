@@ -9,32 +9,32 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
     {
         public static SynchronizationException ToSynchronizationException(this RestException restException)
         {
-            string exceptionMessage = InterviewerUIResources.UnexpectedException;
+            string exceptionMessage = EnumeratorUIResources.UnexpectedException;
             SynchronizationExceptionType exceptionType = SynchronizationExceptionType.Unexpected;
             switch (restException.Type)
             {
                 case RestExceptionType.RequestByTimeout:
-                    exceptionMessage = InterviewerUIResources.RequestTimeout;
+                    exceptionMessage = EnumeratorUIResources.RequestTimeout;
                     exceptionType = SynchronizationExceptionType.RequestByTimeout;
                     break;
                 case RestExceptionType.RequestCanceledByUser:
-                    exceptionMessage = InterviewerUIResources.RequestCanceledByUser;
+                    exceptionMessage = EnumeratorUIResources.RequestCanceledByUser;
                     exceptionType = SynchronizationExceptionType.RequestCanceledByUser;
                     break;
                 case RestExceptionType.HostUnreachable:
-                    exceptionMessage = InterviewerUIResources.HostUnreachable;
+                    exceptionMessage = EnumeratorUIResources.HostUnreachable;
                     exceptionType = SynchronizationExceptionType.HostUnreachable;
                     break;
                 case RestExceptionType.InvalidUrl:
-                    exceptionMessage = InterviewerUIResources.InvalidEndpoint;
+                    exceptionMessage = EnumeratorUIResources.InvalidEndpoint;
                     exceptionType = SynchronizationExceptionType.InvalidUrl;
                     break;
                 case RestExceptionType.NoNetwork:
-                    exceptionMessage = InterviewerUIResources.NoNetwork;
+                    exceptionMessage = EnumeratorUIResources.NoNetwork;
                     exceptionType = SynchronizationExceptionType.NoNetwork;
                     break;
                 case RestExceptionType.UnacceptableCertificate:
-                    exceptionMessage = InterviewerUIResources.UnacceptableSSLCertificate;
+                    exceptionMessage = EnumeratorUIResources.UnacceptableSSLCertificate;
                     exceptionType = SynchronizationExceptionType.UnacceptableSSLCertificate;
                     break;
                 case RestExceptionType.Unexpected:
@@ -43,22 +43,22 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                         case HttpStatusCode.Unauthorized:
                             if (restException.Message.Contains("lock"))
                             {
-                                exceptionMessage = InterviewerUIResources.AccountIsLockedOnServer;
+                                exceptionMessage = EnumeratorUIResources.AccountIsLockedOnServer;
                                 exceptionType = SynchronizationExceptionType.UserLocked;
                             }
                             else if (restException.Message.Contains("not approved"))
                             {
-                                exceptionMessage = InterviewerUIResources.AccountIsNotApprovedOnServer;
+                                exceptionMessage = EnumeratorUIResources.AccountIsNotApprovedOnServer;
                                 exceptionType = SynchronizationExceptionType.UserNotApproved;
                             }
                             else if (restException.Message.Contains("not have an interviewer role"))
                             {
-                                exceptionMessage = InterviewerUIResources.AccountIsNotAnInterviewer;
+                                exceptionMessage = EnumeratorUIResources.AccountIsNotAnInterviewer;
                                 exceptionType = SynchronizationExceptionType.UserIsNotInterviewer;
                             }
                             else
                             {
-                                exceptionMessage = InterviewerUIResources.Unauthorized;
+                                exceptionMessage = EnumeratorUIResources.Unauthorized;
                                 exceptionType = SynchronizationExceptionType.Unauthorized;
                             }
 
@@ -68,22 +68,22 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
                             if (isMaintenance)
                             {
-                                exceptionMessage = InterviewerUIResources.Maintenance;
+                                exceptionMessage = EnumeratorUIResources.Maintenance;
                                 exceptionType = SynchronizationExceptionType.Maintenance;
                             }
                             else
                             {
-                                exceptionMessage = InterviewerUIResources.ServiceUnavailable;
+                                exceptionMessage = EnumeratorUIResources.ServiceUnavailable;
                                 exceptionType = SynchronizationExceptionType.ServiceUnavailable;
                             }
 
                             break;
                         case HttpStatusCode.NotAcceptable:
-                            exceptionMessage = InterviewerUIResources.NotSupportedServerSyncProtocolVersion;
+                            exceptionMessage = EnumeratorUIResources.NotSupportedServerSyncProtocolVersion;
                             exceptionType = SynchronizationExceptionType.NotSupportedServerSyncProtocolVersion;
                             break;
                         case HttpStatusCode.UpgradeRequired:
-                            exceptionMessage = InterviewerUIResources.UpgradeRequired;
+                            exceptionMessage = EnumeratorUIResources.UpgradeRequired;
                             exceptionType = SynchronizationExceptionType.UpgradeRequired;
                             break;
                         case HttpStatusCode.Conflict:
@@ -92,15 +92,15 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                         case HttpStatusCode.BadRequest:
                         case HttpStatusCode.Redirect:
                         case HttpStatusCode.MethodNotAllowed:
-                            exceptionMessage = InterviewerUIResources.InvalidEndpoint;
+                            exceptionMessage = EnumeratorUIResources.InvalidEndpoint;
                             exceptionType = SynchronizationExceptionType.InvalidUrl;
                             break;
                         case HttpStatusCode.NotFound:
-                            exceptionMessage = InterviewerUIResources.InvalidEndpoint;
+                            exceptionMessage = EnumeratorUIResources.InvalidEndpoint;
                             exceptionType = SynchronizationExceptionType.InvalidUrl;
                             break;
                         case HttpStatusCode.InternalServerError:
-                            exceptionMessage = InterviewerUIResources.InternalServerError;
+                            exceptionMessage = EnumeratorUIResources.InternalServerError;
                             exceptionType = SynchronizationExceptionType.InternalServerError;
                             break;
                         case HttpStatusCode.Forbidden:

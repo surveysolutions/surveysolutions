@@ -147,9 +147,6 @@
   <data name="BackToImport" xml:space="preserve">
     <value>უკან იმპორტისკენ</value>
   </data>
-  <data name="BatchDescription" xml:space="preserve">
-    <value>ატვირთეთ არქივი იდენტიფიცირებული ტაბ-ფაილით და შეგროვებული მონაცემებით</value>
-  </data>
   <data name="BatchFileVerificationFailed" xml:space="preserve">
     <value>ატვირთული ფაილის ვერიფიკაცია ვერ შესრულდა</value>
   </data>
@@ -443,9 +440,6 @@
   </data>
   <data name="SelectResponsibleToAssign" xml:space="preserve">
     <value>მონიშნეთ პასუხისმგებელი ამ პაკეტებისთვის</value>
-  </data>
-  <data name="SimpleDescription" xml:space="preserve">
-    <value>ატვირთეთ tab გამოყოფილი ფაილი საჭირო საიდენტიფიკაციო მონაცემებით. სურვილისამებრ, დააკონკრეტეთ ზედამხედველების ან მომხსენებლების მომხმარებლის სახელწოდება საპასუხისმგებლო სვეტში, _ სურვილისამებრ სვეტში შეგიძლიათ მიუთითოთ დავალების მოცულობა.</value>
   </data>
   <data name="SimpleTitle" xml:space="preserve">
     <value>ხოლოდ მონაცემების იდენტიფიცირება</value>

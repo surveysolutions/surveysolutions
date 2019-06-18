@@ -24,11 +24,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             {
                 progress.Report(new SyncProgressInfo
                 {
-                    Title = InterviewerUIResources.Synchronization_Download_Title,
-                    Description = string.Format(InterviewerUIResources.Synchronization_Download_Description_Format,
+                    Title = EnumeratorUIResources.Synchronization_Download_Title,
+                    Description = string.Format(EnumeratorUIResources.Synchronization_Download_Description_Format,
                         statistics.DeletedInterviewsCount + 1,
                         interviewIds.Length,
-                        InterviewerUIResources.Synchronization_Interviews),
+                        EnumeratorUIResources.Synchronization_Interviews),
                     Stage = SyncStage.UpdatingAssignments,
                     StageExtraInfo = new Dictionary<string, string>()
                     {

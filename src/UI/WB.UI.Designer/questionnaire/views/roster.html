@@ -36,26 +36,24 @@
         </div>
         
         <div class="form-group">
-            <div class="checkbox checkbox-in-column">
-                <label for="cb-categorical-kind">{{'RosterDisplayMode' | i18next }}&nbsp;</label>
+            <label for="cb-roster-display-mode">{{'RosterDisplayMode' | i18next }}&nbsp;</label>
 
-                <div class="btn-group dropup " uib-dropdown>
-                    <button class="btn dropdown-toggle" id="cb-roster-display-mode" uib-dropdown-toggle type="button">
-                        {{ 'RosterDisplayMode_' + activeRoster.displayMode | i18next }}
-                        <span class="dropdown-arrow"></span>
-                    </button>
+            <div class="btn-group dropup " uib-dropdown>
+                <button class="btn dropdown-toggle" id="cb-roster-display-mode" uib-dropdown-toggle type="button">
+                    {{ 'RosterDisplayMode_' + activeRoster.displayMode | i18next }}
+                    <span class="dropdown-arrow"></span>
+                </button>
 
-                    <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="cb-roster-display-mode">
-                        <li role="presentation" ng-repeat="displayMode in activeRoster.displayModes">
-                            <a role="menuitem" tabindex="-1" ng-click="changeDisplayMode(displayMode)">
-                                {{ 'RosterDisplayMode_' + displayMode | i18next }}
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-                <help key="rosterDisplayMode" />
+                <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="cb-roster-display-mode">
+                    <li role="presentation" ng-repeat="displayMode in activeRoster.displayModes">
+                        <a role="menuitem" tabindex="-1" ng-click="changeDisplayMode(displayMode)">
+                            {{ 'RosterDisplayMode_' + displayMode | i18next }}
+                        </a>
+                    </li>
+                </ul>
             </div>
+
+            <label><help key="rosterDisplayMode" /></label>
         </div>
 
         <div class="form-group enabling-group">

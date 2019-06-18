@@ -19,7 +19,7 @@ namespace WB.Tests.Integration.Core
     {
         private IServiceLocator serviceLocator;
 
-        [OneTimeSetUp]
+        [SetUp]
         public void InitEnvironment()
         {
             var connectionString = $"Server=127.0.0.1;Port=5432;User Id=postgres;Password=P@$$w0rd;Database={"testdb_" + Guid.NewGuid().ToString("N")};";
@@ -40,7 +40,7 @@ namespace WB.Tests.Integration.Core
             this.serviceLocator = new DotNetCoreServiceLocatorAdapter(serviceProvider);
         }
 
-        [OneTimeTearDown]
+        [TearDown]
         public void DropEnvironment() => 
             this.serviceLocator.GetInstance<DesignerDbContext>().Database.EnsureDeleted();
 

@@ -101,8 +101,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
         protected async Task<Guid?> CreateInterviewAsync(int assignmentId, Guid interviewId)
         {
             IsIndeterminate = true;
-            this.ProgressDescription = InterviewerUIResources.Interview_Creating;
-            this.OperationDescription = InterviewerUIResources.Interview_Creating_Description;
+            this.ProgressDescription = EnumeratorUIResources.Interview_Creating;
+            this.OperationDescription = EnumeratorUIResources.Interview_Creating_Description;
 
             try
             {
@@ -148,7 +148,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
             catch (InterviewException e)
             {
                 logger.Error($"Failed to create interview {interviewId}. {e.ToString()}", e);
-                await userInteractionService.AlertAsync(string.Format(InterviewerUIResources.FailedToCreateInterview, e.Message), UIResources.Error);
+                await userInteractionService.AlertAsync(string.Format(EnumeratorUIResources.FailedToCreateInterview, e.Message), UIResources.Error);
             }
 
             return null;
