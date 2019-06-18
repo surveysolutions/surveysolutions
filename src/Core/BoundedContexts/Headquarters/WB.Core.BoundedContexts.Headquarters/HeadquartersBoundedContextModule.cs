@@ -163,7 +163,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAttachmentContentService, AttachmentContentService>();
             registry.Bind<IInterviewAnswerSerializer, NewtonInterviewAnswerJsonSerializer>();
 
-            registry.BindWithConstructorArgument<IMapStorageService, FileSystemMapStorageService>("folderPath", this.currentFolderPath);
+            registry.BindWithConstructorArgument<IMapStorageService, MapFileStorageService>("folderPath", this.currentFolderPath);
 
             //commented because auto registered somewhere 
             //registry.Bind<IMetaDescriptionFactory>().To<MetaDescriptionFactory>();

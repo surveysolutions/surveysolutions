@@ -453,11 +453,9 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
         private struct TaskCompletionSourceWithProgress
         {
             private readonly ILogger logger;
-            private Timer timer;
             private readonly Stopwatch sw;
             private readonly EtaTransferRate etaHelper;
             public TransferProgress ProgressData { get; }
-            private bool isCompleted;
 
             public TaskCompletionSourceWithProgress(Package payload, IProgress<TransferProgress> progress,
                 ILogger logger,
@@ -471,7 +469,6 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 sw = Stopwatch.StartNew();
                 etaHelper = new EtaTransferRate();
                 Debounce();
-                isCompleted = false;
 
                 cancellationToken.Register(SetCanceled);
             }
@@ -519,13 +516,10 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             {
                 logger.Verbose($"Payload: {Payload.Comment}");
                 TaskCompletionSource.TrySetCanceled();
-               // SetCanceled(null);
-                isCompleted = true;
             }
 
             public void SetResult(ICommunicationMessage data)
             {
-                isCompleted = true;
                 TaskCompletionSource.TrySetResult(data);
             }
         }

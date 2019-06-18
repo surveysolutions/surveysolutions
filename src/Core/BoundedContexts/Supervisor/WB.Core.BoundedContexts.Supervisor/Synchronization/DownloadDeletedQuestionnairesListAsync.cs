@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
         {
             Context.Progress.Report(new SyncProgressInfo
             {
-                Title = InterviewerUIResources.Synchronization_Check_Obsolete_Questionnaires,
+                Title = EnumeratorUIResources.Synchronization_Check_Obsolete_Questionnaires,
                 Statistics = Context.Statistics,
                 Status = SynchronizationStatus.Download,
                 Stage = SyncStage.CheckObsoleteQuestionnaires

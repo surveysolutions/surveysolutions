@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.Headquarters.Storage
@@ -38,6 +39,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage
         }
 
         public FileObject Store(string path, Stream inputStream, string contentType, IProgress<int> progress = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<FileObject> StoreAsync(string path, Stream inputStream, string contentType, IProgress<int> progress = null)
         {
             throw new NotImplementedException();
         }
