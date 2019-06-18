@@ -24,30 +24,27 @@ Log-Block "Update project version" {
 $artifactsFolder = (Get-Location).Path + "\Artifacts"
 Log-Message "Artifacts Folder: $artifactsFolder"
 
+if(Test-Path $artifactsFolder) {
+    Remove-Item $artifactsFolder\* -Recurse -Force
+}
+
 try {
-
-    $buildArgs = @("/p:BuildNumber=$BuildNumber", "/p:VersionSuffix=$branch")
-
     Log-Block "Restore nuget" {
         nuget restore $MainSolution
     }
 
-    $buildSuccessful = BuildSolution -Solution $MainSolution -BuildConfiguration $BuildConfiguration -BuildArgs $buildArgs
-    if ($buildSuccessful) { 
+    $buildArgs = @("/p:BuildNumber=$BuildNumber", "/p:VersionSuffix=$branch")
 
+    $buildSuccessful = BuildSolution -Solution $MainSolution -BuildConfiguration $BuildConfiguration -BuildArgs $buildArgs
+    
+    if ($buildSuccessful) { 
         Log-Block "Building HQ Package" {
             BuildWebPackage $ProjectHeadquarters $BuildConfiguration | % { if (-not $_) { Exit } }
         }
 
-        Log-Block "Building web packages and support tool" {
-            BuildWebPackage $ProjectHeadquarters $BuildConfiguration | % { if (-not $_) { Exit } }
-        }
-
         Log-Block "Collecting/building artifacts" {
-            AddArtifacts $ProjectHeadquarters $BuildConfiguration -folder "Headquarters"
+            AddArtifacts $ProjectHeadquarters $BuildConfiguration -folder "HQ"
         }
-
-        Write-Host "##teamcity[publishArtifacts '$artifactsFolder']"
     }
 }
 catch {

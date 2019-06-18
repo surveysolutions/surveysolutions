@@ -9,6 +9,12 @@
     <VersionPrefix Condition="'$(VersionPrefix)' == ''">18.10.0-development-$(COMPUTERNAME)</VersionPrefix>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <NoWarn>1701;1702;618</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <Content Update="**\*.json" CopyToPublishDirectory="Never" />
     <Content Update="wwwroot\**\*" CopyToPublishDirectory="PreserveNewest" />
@@ -17,7 +23,7 @@
   <ItemGroup>
     <PackageReference Include="FFmpeg.Win64.Static" Version="4.1.1.1" />
     <PackageReference Include="FluentMigrator.Runner" Version="3.2.1" />
-    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.4"/>
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.4" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.2.0" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.2.4" />
     <PackageReference Include="reCAPTCHA.AspNetCore" Version="2.2.3" />

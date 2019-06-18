@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         {
             progress.Report(new SyncProgressInfo
             {
-                Title = InterviewerUIResources.Synchronization_DownloadingLogo,
+                Title = EnumeratorUIResources.Synchronization_DownloadingLogo,
                 Stage = SyncStage.DownloadingLogo
             });
 

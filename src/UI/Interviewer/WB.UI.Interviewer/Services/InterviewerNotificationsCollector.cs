@@ -68,8 +68,8 @@ namespace WB.UI.Interviewer.Services
                 {
                     NotificationId = (int)NotificationType.CompletedInterviewsNotSynced,
                     AutoCancel = true,
-                    ContentTitle = InterviewerUIResources.Notifications_InterviewsTitle,
-                    ContentText = InterviewerUIResources.Notifications_CompletedInterviewsText.FormatString(completedLateCount),
+                    ContentTitle = EnumeratorUIResources.Notifications_InterviewsTitle,
+                    ContentText = EnumeratorUIResources.Notifications_CompletedInterviewsText.FormatString(completedLateCount),
                     IconId = Resource.Drawable.icon,
                     Intent = GetPendingIntent()
                 });
@@ -86,8 +86,8 @@ namespace WB.UI.Interviewer.Services
                 {
                     NotificationId = (int)NotificationType.RejectedInterviewNotOpened,
                     AutoCancel = true,
-                    ContentTitle = InterviewerUIResources.Notifications_InterviewsTitle,
-                    ContentText = InterviewerUIResources.Notifications_RejectedInterviewsText.FormatString(rejectedNotOpenedCount),
+                    ContentTitle = EnumeratorUIResources.Notifications_InterviewsTitle,
+                    ContentText = EnumeratorUIResources.Notifications_RejectedInterviewsText.FormatString(rejectedNotOpenedCount),
                     IconId = Resource.Drawable.icon,
                     Intent = GetPendingIntent()
                 });
@@ -103,8 +103,8 @@ namespace WB.UI.Interviewer.Services
                         {
                             NotificationId = (int)NotificationType.NoRetryAfterFailedSync,
                             AutoCancel = true,
-                            ContentTitle = InterviewerUIResources.Notifications_SyncTitle,
-                            ContentText = InterviewerUIResources.Notifications_SyncNoRetryTitle,
+                            ContentTitle = EnumeratorUIResources.Notifications_SyncTitle,
+                            ContentText = EnumeratorUIResources.Notifications_SyncNoRetryTitle,
                             IconId = Resource.Drawable.icon,
                             Intent = GetPendingIntent()
                         });
@@ -118,8 +118,8 @@ namespace WB.UI.Interviewer.Services
                         {
                             NotificationId = (int)NotificationType.LastSyncTooLongAgo,
                             AutoCancel = true,
-                            ContentTitle = InterviewerUIResources.Notifications_SyncTitle,
-                            ContentText = InterviewerUIResources.Notifications_SyncTooLongAgoText,
+                            ContentTitle = EnumeratorUIResources.Notifications_SyncTitle,
+                            ContentText = EnumeratorUIResources.Notifications_SyncTooLongAgoText,
                             IconId = Resource.Drawable.icon,
                             Intent = GetPendingIntent()
                         });
@@ -158,7 +158,7 @@ namespace WB.UI.Interviewer.Services
             {
                 notifications.Add(new SimpleNotification()
                 {
-                    ContentText = InterviewerUIResources.Notifications_ManyStartedInterviews
+                    ContentText = EnumeratorUIResources.Notifications_ManyStartedInterviews
                 });
             }
 
@@ -167,7 +167,7 @@ namespace WB.UI.Interviewer.Services
             {
                 notifications.Add(new SimpleNotification()
                 {
-                    ContentText = InterviewerUIResources.Notifications_ManyCompletedInterviews
+                    ContentText = EnumeratorUIResources.Notifications_ManyCompletedInterviews
                 });
             }
 
@@ -178,7 +178,7 @@ namespace WB.UI.Interviewer.Services
             {
                 notifications.Add(new SimpleNotification()
                 {
-                    ContentText = InterviewerUIResources.Notifications_StaleAssignments
+                    ContentText = EnumeratorUIResources.Notifications_StaleAssignments
                 });
             }
 
