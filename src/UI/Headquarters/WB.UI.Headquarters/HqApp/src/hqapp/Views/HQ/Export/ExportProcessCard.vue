@@ -2,14 +2,14 @@
     <div class="export-card">
         <div class="top-row">
             <div class="format-data" :class="format">
-                <div class="gray-text-row"><b>#{{processId}}</b> Queued on {{beginDate}}</div>
-                <div class="h3 mb-05">{{questionnaireTitle}} (ver. {{questionnaireIdentity.version}})</div>
+                <div class="gray-text-row"><b>#{{processId}}</b> {{$t('DataExport.DataExport_QueuedOn', { date: beginDate }) }}</div>
+                <div class="h3 mb-05">{{ $t('DataExport.DataExport_QuestionnaireWithVersion', { title: questionnaireTitle,  version: questionnaireIdentity.version}) }}</div>
                 <p class="mb-0 font-regular"><u class="font-bold">{{format}}</u> format. Interviews in <u class="font-bold">{{interviewStatus}}</u>.</p>
             </div>
         </div>
         <div class="bottom-row" :class="{'is-failed': isFailed, 'is-successful': isSuccessfull }">
             <div class="export-destination" :class="fileDestination">
-                <p>Destination: <span>{{$t(`DataExport.DataExport_Destination_${fileDestination}`)}}</span></p>
+                <p>{{ $t('DataExport.DataExport_Destination', { dest: $t(`DataExport.DataExport_Destination_${fileDestination}`)}) }}</p>
                 <div class="d-flex ai-center" v-if="isRunning">
                     <span class="success-text status">{{processStatus}}</span>
                     <div class="cancelable-progress">
@@ -19,12 +19,12 @@
                             </div>
                         </div>
                     </div>
-                    <button class="btn btn-link" type="button" @click="cancel">Cancel</button>
+                    <button class="btn btn-link" type="button" @click="cancel">{{$t('Strings.Cancel')}}</button>
                 </div>
                  <div class="d-flex ai-center" v-else>
-                    <a v-if="!isRunning && hasFile && fileDestination == 'File'" :href="downloadFileUrl" class="btn btn-primary btn-lg">Download</a>
-                    <div v-if="hasFile" class="file-info">Last updated: {{dataFileLastUpdateDate}}<br />File size: {{fileSize}} MB </div>
-                    <div v-if="!hasFile && !isFailed" class="file-info">File was regenerated</div>
+                    <a v-if="!isRunning && hasFile && fileDestination == 'File'" :href="downloadFileUrl" class="btn btn-primary btn-lg">{{$t('DataExport.Download')}}</a>
+                    <div v-if="hasFile" class="file-info">{{ $t('DataExport.DataExport_FileLastUpdate', { date: dataFileLastUpdateDate }) }}<br />{{ $t('DataExport.DataExport_FileSize', { size: fileSize }) }}</div>
+                    <div v-if="!hasFile && !isFailed" class="file-info">{{ $t('DataExport.DataExport_FileWasRegenerated') }}</div>
                     <div v-if="isFailed" class="text-danger">{{error}}</div>
                 </div>
             </div>
@@ -34,7 +34,7 @@
                 <span></span>
             </button>
             <ul class="dropdown-menu">
-                <li><a href="#" @click="regenerate">Regenerate<br />Queue export with the same params</a></li>
+                <li><a href="#" @click="regenerate">{{ $t('DataExport.DataExport_Regenerate') }}<br /><small>{{ $t('DataExport.DataExport_RegenerateDesc') }}</small></a></li>
             </ul>
         </div>
         <div class="card-loading" style="display: block;" v-if="isInitializing">
