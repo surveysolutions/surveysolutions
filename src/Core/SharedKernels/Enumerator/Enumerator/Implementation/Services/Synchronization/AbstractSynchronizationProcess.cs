@@ -361,8 +361,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     case SynchronizationExceptionType.UserLinkedToAnotherServer:
                         progress.Report(new SyncProgressInfo
                         {
-                            Title = InterviewerUIResources.Synchronization_UserLinkedToAnotherServer_Status,
-                            Description = InterviewerUIResources.Synchronization_UserLinkedToAnotherServer_Description,
+                            Title = EnumeratorUIResources.Synchronization_UserLinkedToAnotherServer_Status,
+                            Description = EnumeratorUIResources.Synchronization_UserLinkedToAnotherServer_Description,
                             UserIsLinkedToAnotherDevice = true,
                             Status = SynchronizationStatus.Fail,
                             Statistics = statistics,
