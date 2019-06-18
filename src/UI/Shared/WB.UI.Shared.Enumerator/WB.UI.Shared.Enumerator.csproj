@@ -2231,7 +2231,7 @@
       <Version>2.2.1</Version>
     </PackageReference>
     <PackageReference Include="modernhttpclient-updated">
-      <Version>2.7.2</Version>
+      <Version>2.8.1</Version>
     </PackageReference>
     <PackageReference Include="MvvmCross.Droid.Support.Core.Utils">
       <Version>6.3.0</Version>
