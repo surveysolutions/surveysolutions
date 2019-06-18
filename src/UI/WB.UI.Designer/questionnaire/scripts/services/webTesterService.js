@@ -1,18 +1,24 @@
-﻿(function () {
-    angular.module('designerApp')
-        .factory('webTesterService', [
-            '$http', function ($http) {
-                var webTesterService = {};
+﻿angular.module('designerApp')
+    .factory('webTesterService',
+        function ($http) {
+            var webTesterService = {};
 
-                webTesterService.run = function (questionnaireId) {
-                    return $http.get('../../api/questionnaire/webTest/' + questionnaireId);
-                };
+            webTesterService.run = function (questionnaireId) {
+                return $http.get('../../api/questionnaire/webTest/' + questionnaireId);
+            };
 
-                webTesterService.getScenarioSteps = function (questionnaireId, scenarioId) {
-                    return $http.get('../../api/questionnaire/' + questionnaireId + '/scenarios/' + scenarioId);
+            webTesterService.setLocation = function (webTesterWindow, response, isAdmin, scenarioId) {
+                var url = response.data + "?saveScenarioAvailable=" + isAdmin;
+                if (!angular.isUndefined(scenarioId)) {
+                    url += "&scenarioId=" + scenarioId;
                 }
+                webTesterWindow.location.href = url;
+            };
 
-                return webTesterService;
-            }
-        ]);
-})();
+            webTesterService.getScenarioSteps = function (questionnaireId, scenarioId) {
+                return $http.get('../../api/questionnaire/' + questionnaireId + '/scenarios/' + scenarioId);
+            };
+
+            return webTesterService;
+        }
+    );
