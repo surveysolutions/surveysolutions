@@ -17,6 +17,7 @@ namespace WB.UI.WebTester.Controllers
 {
     public class WebTesterController : Controller
     {
+        private const string SaveScenarioSessionKey = "SaveScenarioAvailable";
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IEvictionNotifier evictionService;
         private readonly IQuestionnaireStorage questionnaireStorage;
@@ -34,12 +35,20 @@ namespace WB.UI.WebTester.Controllers
             this.interviewFactory = interviewFactory;
         }
 
-        public ActionResult Run(Guid id, string sid, int? scenarioId = null) => this.View(new InterviewPageModel
+        public ActionResult Run(Guid id, string sid, string saveScenarioAvailable, int? scenarioId = null)
         {
-            Id = id.ToString(),
-            OriginalInterviewId = sid ?? string.Empty,
-            ScenarioId = scenarioId
-        });
+            if (!string.IsNullOrEmpty(saveScenarioAvailable) && bool.TryParse(saveScenarioAvailable, out var saveScenarioAvailableBool))
+            {
+                Session[SaveScenarioSessionKey] = saveScenarioAvailableBool;
+            }
+
+            return this.View(new InterviewPageModel
+            {
+                Id = id.ToString(),
+                OriginalInterviewId = sid ?? string.Empty,
+                ScenarioId = scenarioId
+            });
+        }
 
         public async Task<ActionResult> Redirect(Guid id, string originalInterviewId, string scenarioId)
         {
@@ -116,10 +125,14 @@ namespace WB.UI.WebTester.Controllers
                 Id = id,
                 Title = $"{questionnaire.Title} | Web Tester",
                 GoogleMapsKey = ConfigurationSource.Configuration["GoogleMapApiKey"],
-                ReloadQuestionnaireUrl = reloadQuestionnaireUrl,
-                SaveScenarioUrl = saveScenarioDesignerUrl,
-                GetScenarioUrl = Url.Content("~/api/ScenariosApi")
+                ReloadQuestionnaireUrl = reloadQuestionnaireUrl
             };
+            if (Session[SaveScenarioSessionKey] != null && (bool)Session[SaveScenarioSessionKey])
+            {
+                interviewPageModel.GetScenarioUrl = Url.Content("~/api/ScenariosApi");
+                interviewPageModel.SaveScenarioUrl = saveScenarioDesignerUrl;
+            }
+            
             return interviewPageModel;
         }
 

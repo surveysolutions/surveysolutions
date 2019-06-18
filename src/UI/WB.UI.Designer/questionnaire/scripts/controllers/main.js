@@ -191,15 +191,7 @@ angular.module('designerApp')
                 var webTesterWindow = window.open("about:blank", '_blank');
 
                 webTesterService.run($state.params.questionnaireId).then(function (response) {
-                    webTesterWindow.location.href = response.data;
-                });
-            };
-        
-            $scope.webRun = function () {
-                var webTesterWindow = window.open("about:blank", '_blank');
-
-                webTesterService.run($state.params.questionnaireId).then(function (response) {
-                    webTesterWindow.location.href = response.data + "?scenarioId=" + 4;
+                    webTesterService.setLocation(webTesterWindow, response, $scope.questionnaire.hasViewerAdminRights);
                 });
             };
 
