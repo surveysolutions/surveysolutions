@@ -32,14 +32,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
             try
             {
-                var newItems = await Task.Run(this.GetUiItems);
+                var newItems = await Task.Run(this.GetUiItems).ConfigureAwait(false);
+
+                this.UiItems.ToList().ForEach(uiItem => uiItem.DisposeIfDisposable());
 
                 await this.InvokeOnMainThreadAsync(() =>
                 {
-                    this.UiItems.ToList().ForEach(uiItem => uiItem.DisposeIfDisposable());
                     this.UiItems.ReplaceWith(newItems);
 
-                }, false);
+                }, false).ConfigureAwait(false);
             }
             finally
             {
