@@ -117,7 +117,7 @@
                     }
                 );
                 columnsFromQuestions.unshift({
-                    headerName: "", 
+                    headerName: this.$me.title, 
                     field: "rosterTitle", 
                     autoHeight: true, 
                     pinned: true, 

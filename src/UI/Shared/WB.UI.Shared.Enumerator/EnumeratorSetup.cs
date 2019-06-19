@@ -74,7 +74,7 @@ namespace WB.UI.Shared.Enumerator
 
         protected virtual void ProcessException(Exception exception)
         {
-            NLog.LogManager.GetCurrentClassLogger().Error(exception);
+            NLog.LogManager.GetLogger("Global").Error(exception);
         }
 
         protected override void InitializeViewLookup()
