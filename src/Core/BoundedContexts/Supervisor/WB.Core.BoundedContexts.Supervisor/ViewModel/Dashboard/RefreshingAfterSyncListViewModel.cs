@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         public override void ViewAppeared()
         {
             base.ViewAppeared();
-            messengerSubscription = messenger.Subscribe<DashboardChangedMsg>(async msg => await this.UpdateUiItemsAsync());
+            messengerSubscription = messenger.Subscribe<DashboardChangedMsg>(async msg => await this.UpdateUiItemsAsync(), MvxReference.Strong);
         }
 
         public override void ViewDisappeared()
