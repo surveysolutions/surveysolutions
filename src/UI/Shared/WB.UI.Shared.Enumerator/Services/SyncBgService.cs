@@ -22,7 +22,7 @@ namespace WB.UI.Shared.Enumerator.Services
         {
             if (!this.isSyncRunning)
             {
-                var synchronizationProcess = Mvx.Resolve<ISynchronizationProcess>();
+                var synchronizationProcess = Mvx.IoCProvider.Resolve<ISynchronizationProcess>();
                 this.CurrentProgress = new SyncProgressDto(new Progress<SyncProgressInfo>(), new CancellationTokenSource());
 
                 this.thread = new Thread(() =>
@@ -34,11 +34,11 @@ namespace WB.UI.Shared.Enumerator.Services
                     }
                     catch (System.OperationCanceledException ec)
                     {
-                        Mvx.Resolve<ILoggerProvider>().GetFor<SyncBgService>().Error(">!>Failed to synchronize (canceled)", ec);
+                        Mvx.IoCProvider.Resolve<ILoggerProvider>().GetFor<SyncBgService>().Error(">!>Failed to synchronize (canceled)", ec);
                     }
                     catch (Exception e)
                     {
-                        Mvx.Resolve<ILoggerProvider>().GetFor<SyncBgService>().Error(">!>Failed to synchronize", e);
+                        Mvx.IoCProvider.Resolve<ILoggerProvider>().GetFor<SyncBgService>().Error(">!>Failed to synchronize", e);
                     }
                     finally
                     {

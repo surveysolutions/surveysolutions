@@ -186,7 +186,7 @@
             noComments="true"
             questionCssClassName="multiselect-question"
           >
-            <h5>{{ this.$t("Assignments.IsAudioRecordingEnabled") }}</h5>
+            <h5>{{ this.$t("Assignments.IsAudioRecordingEnabled") }} <a target="_blank" href="https://support.mysurvey.solutions/headquarters/audio-audit/">(?)</a></h5>
             <div class="question-unit">
               <div class="options-group">
                 <div class="form-group">
