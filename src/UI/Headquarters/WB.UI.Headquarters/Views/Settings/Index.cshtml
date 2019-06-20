@@ -15,10 +15,11 @@
         var $regenPasswordUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "ExportSettingsApi", action = "RegeneratePassword" })';
         var $globalNoticeSettingsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "AdminSettings", action = "GlobalNoticeSettings" })';
         var $interviewerSettingsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "AdminSettings", action = "InterviewerSettings" })';
+        var $profileSettingsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "AdminSettings", action = "ProfileSettings" })';
         
         $(function () {
             var notifier = new Notifier();
-            var model = new Supervisor.VM.SiteSettings(new Ajax(notifier), notifier, $dataUrl, $changeStateUrl, $regenPasswordUrl, $globalNoticeSettingsUrl, $interviewerSettingsUrl);
+            var model = new Supervisor.VM.SiteSettings(new Ajax(notifier), notifier, $dataUrl, $changeStateUrl, $regenPasswordUrl, $globalNoticeSettingsUrl, $interviewerSettingsUrl, $profileSettingsUrl);
             ko.applyBindings(model);
             model.load();
         });
@@ -98,6 +99,28 @@
                 </div>
             </form>
         </div>
+
+        <div class="row extra-margin-bottom contain-input">
+            <div class="col-sm-7">
+                <h2>
+                    @Settings.UserProfileSettings_Title
+                </h2>
+            </div>
+            <div class="col-sm-7">
+                <div class="block-filter">
+                    <div class="form-group">
+                        <input class="checkbox-filter single-checkbox"
+                               data-bind="checked: isEditOwnProfileEnabled, click: updateEditOwnProfileEnabled"
+                               id="editOwnProfileEnabled" type="checkbox">
+                        <label for="editOwnProfileEnabled" style="font-weight: bold">
+                            <span class="tick"></span>@Settings.EditOwnProfileEnabled
+                            <p style="font-weight: normal">@Settings.EditOwnProfileEnabledDesc</p>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row extra-margin-bottom contain-input">
             <div class="col-sm-7">
                 <h2>
@@ -110,8 +133,8 @@
             <div class="col-sm-7">
                 <div class="block-filter">
                     <div class="form-group">
-                        <input class="checkbox-filter single-checkbox" 
-                               data-bind="checked: isInterviewerAutomaticUpdatesEnabled, click: updateDeviceSettings" 
+                        <input class="checkbox-filter single-checkbox"
+                               data-bind="checked: isInterviewerAutomaticUpdatesEnabled, click: updateDeviceSettings"
                                id="interviewerAutomaticUpdatesEnabled" type="checkbox">
                         <label for="interviewerAutomaticUpdatesEnabled" style="font-weight: bold">
                             <span class="tick"></span>@Settings.InterviewerAutoUpdate
@@ -123,8 +146,8 @@
             <div class="col-sm-7">
                 <div class="block-filter">
                     <div class="form-group">
-                        <input class="checkbox-filter single-checkbox" 
-                               data-bind="checked: isDeviceNotificationsEnabled, click: updateDeviceSettings" 
+                        <input class="checkbox-filter single-checkbox"
+                               data-bind="checked: isDeviceNotificationsEnabled, click: updateDeviceSettings"
                                id="deviceNotificationsEnabled" type="checkbox">
                         <label for="deviceNotificationsEnabled" style="font-weight: bold">
                             <span class="tick"></span>@Settings.DeviceNotifications
