@@ -75,7 +75,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             Assert.That(recordView.Offset, Is.EqualTo(answerOffset));
             Assert.That(recordView.Timestamp, Is.EqualTo(originDate.LocalDateTime), "Timestamp of the answer should always use server time when exporting");
             Assert.That(recordView.Parameters["answer"], Is.EqualTo(originDate.DateTime.ToString(DateTimeFormat.DateWithTimeFormat)));
-            Assert.That(recordView.Parameters["answer"], Is.EqualTo(originDate.DateTime.ToString(DateTimeFormat.DateWithTimeFormat)));
         }
 
         [Test]
