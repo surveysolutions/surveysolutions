@@ -13,9 +13,12 @@ using Resources;
 using WB.Core.BoundedContexts.Headquarters.InterviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.UserProfile;
+using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Code;
@@ -35,8 +38,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                               HqUserManager userManager,
                               IQueryableReadSideRepositoryReader<InterviewSummary> interviewRepository,
                               IDeviceSyncInfoRepository deviceSyncInfoRepository, IInterviewerVersionReader interviewerVersionReader, 
-                              IInterviewerProfileFactory interviewerProfileFactory)
-            : base(commandService, logger, authorizedUser, userManager)
+                              IInterviewerProfileFactory interviewerProfileFactory,
+                              IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage)
+            : base(commandService, logger, authorizedUser, userManager, profileSettingsStorage)
         {
             this.interviewerProfileFactory = interviewerProfileFactory;
         }
@@ -132,7 +136,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             };
         }
 
-        [AuthorizeOr403(Roles = "Administrator, Headquarter, Supervisor")]
+        [AuthorizeOr403(Roles = "Administrator, Headquarter, Supervisor, Interviewer")]
         public async Task<ActionResult> Edit(Guid id)
         {
             var user = await this.userManager.FindByIdAsync(id);
@@ -140,6 +144,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             if (user == null) throw new HttpException(404, string.Empty);
             if (user.IsArchived) throw new HttpException(403, string.Empty);
             if (!user.IsInRole(UserRoles.Interviewer)) throw new HttpException(403, HQ.NoPermission);
+
+            var allowEditOnlyContactInfo = false;
+
+            if (this.authorizedUser.IsInterviewer)
+            {
+                if (authorizedUser.Id != user.Id) throw new HttpException(404, string.Empty);
+
+                var profileSettings = this.profileSettingsStorage.GetById(AppSetting.ProfileSettings);
+                var isAllowEditOwnProfileEnabled = profileSettings?.EditOwnProfileEnabled ?? false;
+                if (!isAllowEditOwnProfileEnabled) throw new HttpException(404, string.Empty);
+                allowEditOnlyContactInfo = true;
+            }
 
             return this.View(new UserEditModel
             {
@@ -152,16 +168,30 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 PhoneNumber = user.PhoneNumber,
                 CancelAction = "Profile",
                 CancelArg = new { id },
-                IsLockedDisabled = !(this.authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator)
+                IsLockedDisabled = !(this.authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator),
+                AllowEditLockState = !allowEditOnlyContactInfo,
+                AllowEditPassword = !allowEditOnlyContactInfo,
             });
         }
 
-        [AuthorizeOr403(Roles = "Administrator, Headquarter, Supervisor")]
+        [AuthorizeOr403(Roles = "Administrator, Headquarter, Supervisor, Interviewer")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
         public async Task<ActionResult> Edit(UserEditModel model)
         {
+            if (this.authorizedUser.IsInterviewer)
+            {
+                if (authorizedUser.Id != model.Id) throw new HttpException(404, string.Empty);
+
+                var profileSettings = this.profileSettingsStorage.GetById(AppSetting.ProfileSettings);
+                var isAllowEditOwnProfileEnabled = profileSettings?.EditOwnProfileEnabled ?? false;
+                if (!isAllowEditOwnProfileEnabled) throw new HttpException(404, string.Empty);
+
+                model.AllowEditLockState = false;
+                model.AllowEditPassword = false;
+            }
+
             if (ModelState.IsValid)
             {
                 var updateResult = await this.UpdateAccountAsync(model);

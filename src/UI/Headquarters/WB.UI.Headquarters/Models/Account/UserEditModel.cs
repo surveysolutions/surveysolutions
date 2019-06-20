@@ -39,5 +39,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
         public bool IsLockedBySupervisor { get; set; }
 
         public string UpdatePasswordAction { get; set; } = @"UpdatePassword";
+
+        public bool AllowEditPassword { get; set; } = true;
+        public bool AllowEditLockState { get; set; } = true;
     }
 }
