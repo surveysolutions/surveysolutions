@@ -8,7 +8,7 @@ namespace WB.UI.Headquarters.API.PublicApi
     {
         public void Apply(SwaggerDocument swaggerDoc, SchemaRegistry schemaRegistry, IApiExplorer apiExplorer)
         {
-            IDictionary<string, PathItem> pathsToKeep = new Dictionary<string, PathItem>();
+            IDictionary<string, PathItem> pathsToKeep = new SortedDictionary<string, PathItem>();
             foreach (ApiDescription apiDescription in apiExplorer.ApiDescriptions)
             {
                 var controllerTypeNamespace = apiDescription.ActionDescriptor.ControllerDescriptor.ControllerType.Namespace;
