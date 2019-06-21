@@ -203,6 +203,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 AddErrors(updateResult);
             }
 
+            model.CancelAction = @"Profile";
+            model.CancelArg = new {model.Id};
+
             // If we got this far, something failed, redisplay form
             return View(model);
         }
