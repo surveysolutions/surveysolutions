@@ -6,7 +6,7 @@ using WB.Core.GenericSubdomains.Portable;
 namespace WB.Core.Infrastructure.TopologicalSorter
 {
     /// <summary>
-    /// Implementation of the Tarjan stronly connected components algorithm. 
+    /// Implementation of the Tarjan strongly connected components algorithm. 
     /// https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm
     /// http://en.wikipedia.org/wiki/Topological_sorting
     /// </summary>
