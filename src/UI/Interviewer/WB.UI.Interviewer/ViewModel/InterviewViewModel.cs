@@ -101,7 +101,9 @@ namespace WB.UI.Interviewer.ViewModel
             var interviewId = Guid.Parse(InterviewId);
             if (!lastCreatedInterviewStorage.WasJustCreated(InterviewId))
             {
-                commandService.Execute(new ResumeInterviewCommand(interviewId, Principal.CurrentUserIdentity.UserId));
+                var interview = interviewRepository.Get(this.InterviewId);
+                if (interview != null)
+                    commandService.Execute(new ResumeInterviewCommand(interviewId, Principal.CurrentUserIdentity.UserId));
             }
 
             if (IsAudioRecordingEnabled == true && !isAuditStarting)
@@ -109,7 +111,7 @@ namespace WB.UI.Interviewer.ViewModel
                 isAuditStarting = true;
                 try
                 {
-                        await audioAuditService.StartAudioRecordingAsync(interviewId).ConfigureAwait(false);
+                    await audioAuditService.StartAudioRecordingAsync(interviewId).ConfigureAwait(false);
                 }
                 catch (Exception exc)
                 {
