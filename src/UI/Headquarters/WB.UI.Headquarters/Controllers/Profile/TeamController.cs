@@ -161,8 +161,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                     return false;
 
                 var profileSettings = this.profileSettingsStorage.GetById(AppSetting.ProfileSettings);
-                var isAllowEditOwnProfileEnabled = profileSettings?.EditOwnProfileEnabled ?? false;
-                if (!isAllowEditOwnProfileEnabled)
+                var isAllowInterviewerUpdateProfile = profileSettings?.AllowInterviewerUpdateProfile ?? false;
+                if (!isAllowInterviewerUpdateProfile)
                     return false;
             }
 

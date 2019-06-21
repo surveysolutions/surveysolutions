@@ -256,12 +256,15 @@ namespace WB.Core.BoundedContexts.Headquarters.InterviewerProfiles
                     Login = profile.InterviewerName
                 })), 250, 250);
 
-            profile.IsCanEditProfile = !currentUser.IsInterviewer;
-            if (!profile.IsCanEditProfile)
+            if (currentUser.IsInterviewer)
             {
                 var profileSettings = this.profileSettingsStorage.GetById(AppSetting.ProfileSettings);
-                profile.IsCanEditProfile = profileSettings?.EditOwnProfileEnabled ?? false;
-            } 
+                profile.IsModifiable = profileSettings?.AllowInterviewerUpdateProfile ?? false;
+            }
+            else
+            {
+                profile.IsModifiable = true;
+            }
 
             return profile;
         }

@@ -2,6 +2,6 @@
 {
     public class ProfileSettings
     {
-        public bool EditOwnProfileEnabled { get; set; }
+        public bool AllowInterviewerUpdateProfile { get; set; }
     }
 }

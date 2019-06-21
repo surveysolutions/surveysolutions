@@ -10,7 +10,7 @@
     self.isEnabled = ko.observable(false);
     self.isInterviewerAutomaticUpdatesEnabled = ko.observable(true);
     self.isDeviceNotificationsEnabled = ko.observable(true);
-    self.isEditOwnProfileEnabled = ko.observable(false);
+    self.isAllowInterviewerUpdateProfile = ko.observable(false);
 
     self.password = ko.observable('');
     self.message = ko.observable('');
@@ -97,12 +97,12 @@
             {},
             function (data) {
                 if (!data) return;
-                self.isEditOwnProfileEnabled(data.EditOwnProfileEnabled);
+                self.isAllowInterviewerUpdateProfile(data.AllowInterviewerUpdateProfile);
             }, true, true);
     };
 
 
-    self.updateEditOwnProfileEnabled = function(obj, event) {
+    self.updateAllowInterviewerUpdateProfile = function(obj, event) {
         self.updateProfileSettings();
         return true;
     };
@@ -110,7 +110,7 @@
     self.updateProfileSettings = function() {
         ajax.sendRequest($profileSettingsUrl, "POST",
             {
-                editOwnProfileEnabled: self.isEditOwnProfileEnabled(),
+                allowInterviewerUpdateProfile: self.isAllowInterviewerUpdateProfile(),
             }, false,
             //onSuccess
             function () { }
