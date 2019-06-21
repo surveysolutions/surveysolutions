@@ -32,7 +32,7 @@ namespace WB.UI.Headquarters.API
 
         public class ProfileSettingsModel
         {
-            public bool EditOwnProfileEnabled { get; set; }
+            public bool AllowInterviewerUpdateProfile { get; set; }
         }
 
         public class TestEmailModel
@@ -126,7 +126,7 @@ namespace WB.UI.Headquarters.API
 
             return Request.CreateResponse(new ProfileSettingsModel
             {
-                EditOwnProfileEnabled = profileSettings?.EditOwnProfileEnabled ?? false
+                AllowInterviewerUpdateProfile = profileSettings?.AllowInterviewerUpdateProfile ?? false
             });
         }
 
@@ -136,7 +136,7 @@ namespace WB.UI.Headquarters.API
             this.profileSettingsStorage.Store(
                 new ProfileSettings
                 {
-                    EditOwnProfileEnabled = message.EditOwnProfileEnabled,
+                    AllowInterviewerUpdateProfile = message.AllowInterviewerUpdateProfile,
                 },
                 AppSetting.ProfileSettings);
 

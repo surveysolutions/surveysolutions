@@ -153,10 +153,10 @@
   <data name="MobileAppSettings_Description" xml:space="preserve">
     <value>Some specific settings by android version of Interviewer/Supervisor application</value>
   </data>
-  <data name="EditOwnProfileEnabled" xml:space="preserve">
+  <data name="AllowInterviewerUpdateProfile" xml:space="preserve">
     <value>Enumerator's Profile editing</value>
   </data>
-  <data name="EditOwnProfileEnabledDesc" xml:space="preserve">
+  <data name="AllowInterviewerUpdateProfileDesc" xml:space="preserve">
     <value>Allow enumerators update their contact information in the profile</value>
   </data>
   <data name="InterviewerAutoUpdate" xml:space="preserve">

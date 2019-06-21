@@ -108,18 +108,18 @@ namespace Resources {
         /// <summary>
         ///   Looks up a localized string similar to Enumerator&apos;s Profile editing.
         /// </summary>
-        internal static string EditOwnProfileEnabled {
+        internal static string AllowInterviewerUpdateProfile {
             get {
-                return ResourceManager.GetString("EditOwnProfileEnabled", resourceCulture);
+                return ResourceManager.GetString("AllowInterviewerUpdateProfile", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Allow enumerators update their contact information in the profile.
         /// </summary>
-        internal static string EditOwnProfileEnabledDesc {
+        internal static string AllowInterviewerUpdateProfileDesc {
             get {
-                return ResourceManager.GetString("EditOwnProfileEnabledDesc", resourceCulture);
+                return ResourceManager.GetString("AllowInterviewerUpdateProfileDesc", resourceCulture);
             }
         }
         

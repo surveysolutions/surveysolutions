@@ -149,11 +149,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             if (this.authorizedUser.IsInterviewer)
             {
-                if (authorizedUser.Id != user.Id) throw new HttpException(404, string.Empty);
+                if (authorizedUser.Id != user.Id) throw new HttpException(403, string.Empty);
 
                 var profileSettings = this.profileSettingsStorage.GetById(AppSetting.ProfileSettings);
-                var isAllowEditOwnProfileEnabled = profileSettings?.EditOwnProfileEnabled ?? false;
-                if (!isAllowEditOwnProfileEnabled) throw new HttpException(404, string.Empty);
+                var isAllowInterviewerUpdateProfile = profileSettings?.AllowInterviewerUpdateProfile ?? false;
+                if (!isAllowInterviewerUpdateProfile) throw new HttpException(404, string.Empty);
                 allowEditOnlyContactInfo = true;
             }
 
@@ -182,11 +182,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         {
             if (this.authorizedUser.IsInterviewer)
             {
-                if (authorizedUser.Id != model.Id) throw new HttpException(404, string.Empty);
+                if (authorizedUser.Id != model.Id) throw new HttpException(403, string.Empty);
 
                 var profileSettings = this.profileSettingsStorage.GetById(AppSetting.ProfileSettings);
-                var isAllowEditOwnProfileEnabled = profileSettings?.EditOwnProfileEnabled ?? false;
-                if (!isAllowEditOwnProfileEnabled) throw new HttpException(404, string.Empty);
+                var isAllowInterviewerUpdateProfile = profileSettings?.AllowInterviewerUpdateProfile ?? false;
+                if (!isAllowInterviewerUpdateProfile) throw new HttpException(404, string.Empty);
 
                 model.AllowEditLockState = false;
                 model.AllowEditPassword = false;
