@@ -98,7 +98,7 @@
                     <li>@string.Format(Pages.InterviewerProfile_PhoneFormat, Model.Phone)</li>
                 }
                 
-                @if (Model.IsCanEditProfile)
+                @if (Model.IsModifiable)
                 {
                     <li>
                         @if (!Model.IsArchived)
