@@ -29,19 +29,19 @@ namespace WB.Services.Export.Jobs
         private readonly IDataExportProcessesService dataExportProcessesService;
         private readonly IFileBasedExportedDataAccessor fileBasedExportedDataAccessor;
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IExternalFileStorage externalFileStorage;
+        private readonly IExternalArtifactsStorage externalArtifactsStorage;
         private readonly IDataExportFileAccessor exportFileAccessor;
 
         public JobsStatusReporting(IDataExportProcessesService dataExportProcessesService,
             IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
             IFileSystemAccessor fileSystemAccessor,
-            IExternalFileStorage externalFileStorage,
+            IExternalArtifactsStorage externalArtifactsStorage,
             IDataExportFileAccessor exportFileAccessor)
         {
             this.dataExportProcessesService = dataExportProcessesService;
             this.fileBasedExportedDataAccessor = fileBasedExportedDataAccessor;
             this.fileSystemAccessor = fileSystemAccessor;
-            this.externalFileStorage = externalFileStorage;
+            this.externalArtifactsStorage = externalArtifactsStorage;
             this.exportFileAccessor = exportFileAccessor;
         }
 
@@ -196,10 +196,10 @@ namespace WB.Services.Export.Jobs
             };
 
             string filePath = this.fileBasedExportedDataAccessor.GetArchiveFilePathForExportedData(exportSettings);
-            if (this.externalFileStorage.IsEnabled())
+            if (this.externalArtifactsStorage.IsEnabled())
             {
                 var externalStoragePath = this.exportFileAccessor.GetExternalStoragePath(exportSettings.Tenant, Path.GetFileName(filePath));
-                var metadata = await this.externalFileStorage.GetObjectMetadataAsync(externalStoragePath);
+                var metadata = await this.externalArtifactsStorage.GetObjectMetadataAsync(externalStoragePath);
 
                 if (metadata == null) 
                     return exportFileInfo;

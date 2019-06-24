@@ -2,36 +2,22 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Auth.OAuth2.Flows;
 using Google.Apis.Drive.v3;
 using Google.Apis.Services;
-using Microsoft.Extensions.Options;
-using WB.Services.Export.Infrastructure;
-using WB.Services.Export.Services.Processing;
 using File = Google.Apis.Drive.v3.Data.File;
 
 namespace WB.Services.Export.ExportProcessHandlers.Externals
 {
-    internal class GoogleDriveBinaryDataExportHandler : AbstractExternalStorageDataExportHandler
+    internal class GoogleDriveDataClient : IExternalDataClient
     {
-        public GoogleDriveBinaryDataExportHandler(
-            IFileSystemAccessor fileSystemAccessor,
-            IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
-            IOptions<ExportServiceSettings> interviewDataExportSettings,
-            IDataExportProcessesService dataExportProcessesService,
-            IBinaryDataSource binaryDataSource,
-            IDataExportFileAccessor dataExportFileAccessor)
-            : base(fileSystemAccessor, fileBasedExportedDataAccessor, interviewDataExportSettings,
-                dataExportProcessesService, dataExportFileAccessor, binaryDataSource)
-        {
-        }
-
         private DriveService driveService;
-        private string GoogleDriveFolderMimeType = "application/vnd.google-apps.folder";
+        private const string GoogleDriveFolderMimeType = "application/vnd.google-apps.folder";
 
-        protected override IDisposable GetClient(string accessToken)
+        public IDisposable GetClient(string accessToken)
         {
             var token = new Google.Apis.Auth.OAuth2.Responses.TokenResponse
             {
@@ -40,7 +26,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
                 IssuedUtc = DateTime.UtcNow
             };
 
-            var fakeflow = new GoogleAuthorizationCodeFlow(new GoogleAuthorizationCodeFlow.Initializer
+            var fakeFlow = new GoogleAuthorizationCodeFlow(new GoogleAuthorizationCodeFlow.Initializer
             {
                 ClientSecrets = new ClientSecrets
                 {
@@ -49,7 +35,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
                 }
             });
 
-            UserCredential credential = new UserCredential(fakeflow, "fakeUserId", token);
+            UserCredential credential = new UserCredential(fakeFlow, "fakeUserId", token);
             var serviceInitializer = new BaseClientService.Initializer
             {
                 HttpClientInitializer = credential
@@ -59,13 +45,14 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
             return this.driveService;
         }
 
-        protected override Task<string> CreateApplicationFolderAsync()
+        public async Task<string> CreateApplicationFolderAsync()
         {
             const string applicationFolderName = "Survey Solutions";
-            return GetOrCreateFolderAsync(applicationFolderName);
+            var folder = await GetOrCreateFolderAsync(applicationFolderName);
+            return folder.Id;
         }
 
-        protected override async Task<string> CreateFolderAsync(string applicationFolder, string folderName)
+        public async Task<string> CreateFolderAsync(string applicationFolder, string folderName)
         {
             string[] folders = folderName.Split('/');
 
@@ -73,30 +60,32 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
 
             foreach (var folder in folders)
             {
-                parentFolder = await GetOrCreateFolderAsync(folder, parentFolder);
+                var parentFolderFile = await GetOrCreateFolderAsync(folder, parentFolder);
+                parentFolder = parentFolderFile.Id;
             }
 
             return parentFolder;
         }
 
-        protected override async Task UploadFileAsync(string folder, byte[] fileContent, string fileName)
+        public async Task UploadFileAsync(string folder, string fileName, Stream fileStream, long contentLength, CancellationToken cancellationToken = default)
         {
-            var file = await this.GetFileIdAsync(fileName, folder);
-            if (file != null) return;
-
             var fileMetadata = new File
             {
                 Name = fileName,
                 Parents = new List<string> { folder }
             };
 
-            var request = driveService.Files.Create(
-                fileMetadata, new MemoryStream(fileContent), "application/octet-stream");
+            var file = await GetFileIdAsync(fileName, folder);
 
-            await request.UploadAsync();
+            if (file != null)
+            {
+                await driveService.Files.Delete(file.Id).ExecuteAsync(cancellationToken);
+            }
+
+            await driveService.Files.Create(fileMetadata, fileStream, "application/octet-stream").UploadAsync(cancellationToken);
         }
-        
-        protected override async Task<long?> GetFreeSpaceAsync()
+
+        public async Task<long?> GetFreeSpaceAsync()
         {
             var storageInfoRequest = driveService.About.Get();
             storageInfoRequest.Fields = "storageQuota";
@@ -107,19 +96,19 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
             return storageInfo.StorageQuota.Limit - storageInfo.StorageQuota.Usage ?? 0;
         }
 
-        private Task<string> GetFileIdAsync(string filename, string parentFolderId = null)
+        private Task<File> GetFileIdAsync(string filename, string parentFolderId = null)
         {
             var query = SearchQuery(filename, parentFolderId);
             return SearchForFirstOccurenceAsync(query);
         }
 
-        private async Task<string> GetOrCreateFolderAsync(string folder, string parentId = null)
+        private async Task<File> GetOrCreateFolderAsync(string folder, string parentId = null)
         {
-            return await this.GetFolderIdAsync(folder, parentId) 
-                ?? await this.ExecuteCreateFolderAsync(folder, parentId);
+            return await this.GetFolderIdAsync(folder, parentId)
+                   ?? await this.ExecuteCreateFolderAsync(folder, parentId);
         }
 
-        private async Task<string> ExecuteCreateFolderAsync(string folder, string parentId = null)
+        private async Task<File> ExecuteCreateFolderAsync(string folder, string parentId = null)
         {
             var file = new File
             {
@@ -135,18 +124,17 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
             var request = driveService.Files.Create(file);
 
             request.Fields = "id";
-            var result = await request.ExecuteAsync();
-            return result?.Id;
+            return await request.ExecuteAsync();
         }
 
-        private Task<string> GetFolderIdAsync(string folderName, string parentFolderId = null)
+        private Task<File> GetFolderIdAsync(string folderName, string parentFolderId = null)
         {
             var query = SearchQuery(folderName, parentFolderId);
             query += $" and mimeType = \'{GoogleDriveFolderMimeType}'";
             return SearchForFirstOccurenceAsync(query);
         }
 
-        private async Task<string> SearchForFirstOccurenceAsync(string query)
+        private async Task<File> SearchForFirstOccurenceAsync(string query)
         {
             FilesResource.ListRequest listRequest = driveService.Files.List();
             listRequest.Q = query;
@@ -154,7 +142,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
 
             var files = (await listRequest.ExecuteAsync()).Files;
 
-            return files.FirstOrDefault()?.Id;
+            return files.FirstOrDefault();
         }
 
         private string SearchQuery(string name, string parentFolder)

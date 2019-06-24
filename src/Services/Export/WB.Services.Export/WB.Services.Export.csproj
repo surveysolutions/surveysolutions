@@ -7,16 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.Core" Version="3.3.102.1" />
+    <PackageReference Include="AWSSDK.Core" Version="3.3.103" />
     <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.3.100.1" />
-    <PackageReference Include="AWSSDK.S3" Version="3.3.102.10" />
+    <PackageReference Include="AWSSDK.S3" Version="3.3.102.17" />
     <PackageReference Include="CsvHelper" Version="12.1.2" />
     <PackageReference Include="Dapper" Version="1.60.6" />
-    <PackageReference Include="Dropbox.Api" Version="4.9.3" />
-    <PackageReference Include="Google.Apis" Version="1.40.0" />
-    <PackageReference Include="Google.Apis.Auth" Version="1.40.0" />
-    <PackageReference Include="Google.Apis.Core" Version="1.40.0" />
-    <PackageReference Include="Google.Apis.Drive.v3" Version="1.40.0.1608" />
+    <PackageReference Include="Dropbox.Api" Version="4.9.4" />
+    <PackageReference Include="Google.Apis" Version="1.40.2" />
+    <PackageReference Include="Google.Apis.Auth" Version="1.40.2" />
+    <PackageReference Include="Google.Apis.Core" Version="1.40.2" />
+    <PackageReference Include="Google.Apis.Drive.v3" Version="1.40.2.1624" />
     <PackageReference Include="HtmlSanitizer" Version="4.0.210" />
     <PackageReference Include="Humanizer.Core" Version="2.6.2" />
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
@@ -37,6 +37,7 @@
     <PackageReference Include="Scrutor" Version="3.0.2" />
     <PackageReference Include="System.Reactive" Version="4.1.5" />
     <PackageReference Include="System.Runtime.Caching" Version="4.5.0" />
+    <PackageReference Include="System.Threading.Tasks.Dataflow" Version="4.9.0" />
   </ItemGroup>
 
   <ItemGroup>

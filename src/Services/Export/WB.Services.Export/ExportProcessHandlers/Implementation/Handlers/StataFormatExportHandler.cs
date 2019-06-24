@@ -1,50 +1,42 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using WB.Services.Export.CsvExport;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
-using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Infrastructure.Tenant;
 
-namespace WB.Services.Export.ExportProcessHandlers.Implementation
+namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
 {
-    public class StataFormatExportHandler : TabBasedFormatExportHandler
+    class StataFormatExportHandler : TabBasedFormatExportHandler, IExportHandler
     {
         private readonly ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService;
 
         public StataFormatExportHandler(IFileSystemAccessor fileSystemAccessor,
-            IOptions<ExportServiceSettings> interviewDataExportSettings,
             ITabularFormatExportService tabularFormatExportService,
-            IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
-            ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService,
-            IDataExportProcessesService dataExportProcessesService,
-            ILogger<StataFormatExportHandler> logger,
-            IDataExportFileAccessor dataExportFileAccessor)
-            : base(fileSystemAccessor, fileBasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, tabularFormatExportService, dataExportFileAccessor)
+            ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService)
+            : base(fileSystemAccessor, tabularFormatExportService)
         {
             this.tabularDataToExternalStatPackageExportService = tabularDataToExternalStatPackageExportService;
         }
 
-        protected override DataExportFormat Format => DataExportFormat.STATA;
+        public DataExportFormat Format => DataExportFormat.STATA;
 
-        protected override async Task ExportDataIntoDirectory(ExportSettings settings, ExportProgress progress,
-            CancellationToken cancellationToken)
+        public async Task ExportDataAsync(ExportState state, CancellationToken cancellationToken)
         {
-            var tabFiles = await this.CreateTabularDataFilesAsync(settings, progress, cancellationToken);
+            var settings = state.Settings;
+            var tabFiles = await this.CreateTabularDataFilesAsync(state, cancellationToken);
 
-            var exportedFiles = await this.CreateStataDataFilesFromTabularDataFilesAsync(settings.Tenant, settings.QuestionnaireId, tabFiles, progress, cancellationToken);
+            var exportedFiles = await this.CreateStataDataFilesFromTabularDataFilesAsync(settings.Tenant, settings.QuestionnaireId, tabFiles, state.Progress, cancellationToken);
 
             CheckFileListsAndThrow(tabFiles, exportedFiles);
 
             this.DeleteTabularDataFiles(tabFiles, cancellationToken);
 
-            await this.GenerateDescriptionTxtAsync(settings.Tenant, settings.QuestionnaireId, ExportTempDirectoryPath, ExportFileSettings.StataDataFileExtension);
+            await this.GenerateDescriptionTxtAsync(settings.Tenant, settings.QuestionnaireId, 
+                state.ExportTempFolder, ExportFileSettings.StataDataFileExtension);
         }
 
         private async Task<string[]> CreateStataDataFilesFromTabularDataFilesAsync(TenantInfo tenant, QuestionnaireId questionnaireIdentity, string[] tabDataFiles,
