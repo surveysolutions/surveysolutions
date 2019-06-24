@@ -2064,12 +2064,15 @@
     <Compile Include="API\PublicApi\AssignmentsController.cs" />
     <Compile Include="API\PublicApi\Models\AssignmentQuantitySettings.cs" />
     <Compile Include="API\PublicApi\Models\AssignmentAudioRecordingEnabled.cs" />
+    <Compile Include="API\PublicApi\Models\GlobalNoticeApiView.cs" />
     <Compile Include="API\PublicApi\Models\QuestionApiView.cs" />
     <Compile Include="API\PublicApi\Models\InterviewApiStatistics.cs" />
     <Compile Include="API\PublicApi\Models\QuestionAnswerView.cs" />
     <Compile Include="API\PublicApi\Models\RecordAudioRequest.cs" />
+    <Compile Include="API\PublicApi\Models\SetGlobalNoticeApiModel.cs" />
     <Compile Include="API\PublicApi\Models\TypeaheadApiView.cs" />
     <Compile Include="API\PublicApi\Models\UpdateRecordingRequest.cs" />
+    <Compile Include="API\PublicApi\SettingsController.cs" />
     <Compile Include="API\PublicApi\StatisticsController.cs" />
     <Compile Include="API\PublicApi\Models\Statistics\QuestionnaireDto.cs" />
     <Compile Include="API\PublicApi\Models\Statistics\QuestionDto.cs" />
