@@ -99,11 +99,12 @@ namespace WB.UI.Interviewer.ViewModel
         public override async void ViewAppeared()
         {
             var interviewId = Guid.Parse(InterviewId);
+            var interview = interviewRepository.Get(this.InterviewId);
+            if (interview == null) return;
+
             if (!lastCreatedInterviewStorage.WasJustCreated(InterviewId))
             {
-                var interview = interviewRepository.Get(this.InterviewId);
-                if (interview != null)
-                    commandService.Execute(new ResumeInterviewCommand(interviewId, Principal.CurrentUserIdentity.UserId));
+                commandService.Execute(new ResumeInterviewCommand(interviewId, Principal.CurrentUserIdentity.UserId));
             }
 
             if (IsAudioRecordingEnabled == true && !isAuditStarting)
