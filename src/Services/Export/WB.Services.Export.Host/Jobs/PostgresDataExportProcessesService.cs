@@ -60,19 +60,20 @@ namespace WB.Services.Export.Host.Jobs
 
             args.Status = new DataExportProcessStatus
             {
-                ProgressInPercents = Int32.Parse(job.GetData<string>(ProgressField) ?? "0"),
                 TimeEstimation = eta == null ? (TimeSpan?) null : TimeSpan.Parse(eta),
                 BeginDate = job.StartAt,
                 IsRunning = job.Status == JobStatus.Running || job.Status == JobStatus.Created,
-                Status = status,
-                Error = hasError
-                    ? new DateExportProcessError
-                    {
-                        Type = Enum.Parse<DataExportError>(job.GetData<string>(ErrorTypeField)),
-                        Message = job.GetData<string>(ErrorField)
-                    }
-                    : null
+                Status = status
             };
+
+            args.Status.ProgressInPercents = Int32.Parse(job.GetData<string>(ProgressField) ?? "0");
+            args.Status.Error = hasError
+                ? new DateExportProcessError
+                {
+                    Type = Enum.Parse<DataExportError>(job.GetData<string>(ErrorTypeField) ?? DataExportError.Unexpected.ToString()),
+                    Message = job.GetData<string>(ErrorField)
+                }
+                : null;
             args.ProcessId = job.Id;
             return args;
         }

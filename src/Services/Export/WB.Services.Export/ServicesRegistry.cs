@@ -12,6 +12,7 @@ using WB.Services.Export.Events;
 using WB.Services.Export.ExportProcessHandlers;
 using WB.Services.Export.ExportProcessHandlers.Externals;
 using WB.Services.Export.ExportProcessHandlers.Implementation;
+using WB.Services.Export.ExportProcessHandlers.Implementation.Handlers;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Infrastructure.Implementation;
 using WB.Services.Export.Interview;
@@ -19,6 +20,7 @@ using WB.Services.Export.InterviewDataStorage;
 using WB.Services.Export.InterviewDataStorage.InterviewDataExport;
 using WB.Services.Export.InterviewDataStorage.Services;
 using WB.Services.Export.Jobs;
+using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Questionnaire.Services.Implementation;
@@ -65,7 +67,7 @@ namespace WB.Services.Export
             services.AddTransient<IQuestionnaireLabelFactory, QuestionnaireLabelFactory>();
             services.AddTransient<IExportFileNameService, ExportExportFileNameService>();
             services.AddTransient<IArchiveUtils, ZipArchiveUtils>();
-            services.AddTransient<IExternalFileStorage, S3FileStorage>();
+            services.AddTransient<IExternalArtifactsStorage, S3ArtifactsStorage>();
             services
                 .AddTransient<ITabularDataToExternalStatPackageExportService,
                     TabularDataToExternalStatPackageExportService>();
@@ -89,11 +91,11 @@ namespace WB.Services.Export
 
             services.AddTransient<IEventProcessor, EventsProcessor>();
             services.AddScoped<ITenantContext, TenantContext>();
-            
+
             RegisterFunctionalHandlers(services, typeof(InterviewSummaryDenormalizer));
 
-            // Singletons
-            RegisterHandlers(services);
+            
+            RegisterExportDataHandlers(services);
 
             FileStorageModule.Register(services, configuration);
 
@@ -111,17 +113,23 @@ namespace WB.Services.Export
             );
         }
 
-        private static void RegisterHandlers(IServiceCollection services)
+        private static void RegisterExportDataHandlers(IServiceCollection services)
         {
-            services.AddTransient<BinaryFormatDataExportHandler>();
+            services.AddTransient<BinaryDataIntoArchiveExportHandler>();
+            services.AddTransient<BinaryDataExternalStorageDataExportHandler>();
             services.AddTransient<TabularFormatParaDataExportProcessHandler>();
             services.AddTransient<TabularFormatDataExportHandler>();
             services.AddTransient<SpssFormatExportHandler>();
             services.AddTransient<StataFormatExportHandler>();
-            services.AddTransient<OnedriveBinaryDataExportHandler>();
-            services.AddTransient<DropboxBinaryDataExportHandler>();
-            services.AddTransient<GoogleDriveBinaryDataExportHandler>();
+            services.AddTransient<OneDriveDataClient>();
+            services.AddTransient<DropboxDataClient>();
+            services.AddTransient<GoogleDriveDataClient>();
             services.AddTransient<DdiFormatExportHandler>();
+
+            services.AddTransient<IExternalStorageDataClientFactory, ExternalStorageDataClientFactory>();
+            services.AddTransient<IExportHandlerFactory, ExportHandlerFactory>();
+            services.AddTransient<IExportProcessHandler<DataExportProcessArgs>, ExportProcessHandler>();
         }
     }
+
 }
