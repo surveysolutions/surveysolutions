@@ -1,8 +1,10 @@
 ﻿using Moq;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.UserProfile;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.Controllers;
 
@@ -17,7 +19,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
                 commandService ?? Mock.Of<ICommandService>(),
                 Mock.Of<ILogger>(),
                 Mock.Of<IAuthorizedUser>(),
-                userManager ?? Create.Storage.HqUserManager());
+                userManager ?? Create.Storage.HqUserManager(),
+                Mock.Of<IPlainKeyValueStorage<ProfileSettings>>());
         }
     }
 }

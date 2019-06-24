@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.UserProfile;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
@@ -29,11 +30,17 @@ namespace WB.UI.Headquarters.API
             public bool NotificationsEnabled { get; set; }
         }
 
+        public class ProfileSettingsModel
+        {
+            public bool AllowInterviewerUpdateProfile { get; set; }
+        }
+
         public class TestEmailModel
         {
             public string Email{ get; set; }
         }
 
+        private readonly IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage;
         private readonly IPlainKeyValueStorage<GlobalNotice> appSettingsStorage;
         private readonly IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage;
         private readonly IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage;
@@ -46,12 +53,14 @@ namespace WB.UI.Headquarters.API
             IPlainKeyValueStorage<GlobalNotice> appSettingsStorage,
             IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage, 
             IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage,
+            IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage,
             IEmailService emailService, IAuditLog auditLog, 
             IWebInterviewEmailRenderer emailRenderer)
         {
             this.appSettingsStorage = appSettingsStorage ?? throw new ArgumentNullException(nameof(appSettingsStorage));
             this.interviewerSettingsStorage = interviewerSettingsStorage ?? throw new ArgumentNullException(nameof(interviewerSettingsStorage));
             this.emailProviderSettingsStorage = emailProviderSettingsStorage ?? throw new ArgumentNullException(nameof(emailProviderSettingsStorage));
+            this.profileSettingsStorage = profileSettingsStorage ?? throw new ArgumentNullException(nameof(profileSettingsStorage));
             this.emailService = emailService;
             this.auditLog = auditLog;
             this.emailRenderer = emailRenderer;
@@ -106,6 +115,30 @@ namespace WB.UI.Headquarters.API
                     DeviceNotificationsEnabled = message.NotificationsEnabled
                 },
                 AppSetting.InterviewerSettings);
+
+            return Request.CreateResponse(HttpStatusCode.OK, new {sucess = true});
+        }
+
+        [HttpGet]
+        public HttpResponseMessage ProfileSettings()
+        {
+            var profileSettings = this.profileSettingsStorage.GetById(AppSetting.ProfileSettings);
+
+            return Request.CreateResponse(new ProfileSettingsModel
+            {
+                AllowInterviewerUpdateProfile = profileSettings?.AllowInterviewerUpdateProfile ?? false
+            });
+        }
+
+        [HttpPost]
+        public HttpResponseMessage ProfileSettings([FromBody] ProfileSettingsModel message)
+        {
+            this.profileSettingsStorage.Store(
+                new ProfileSettings
+                {
+                    AllowInterviewerUpdateProfile = message.AllowInterviewerUpdateProfile,
+                },
+                AppSetting.ProfileSettings);
 
             return Request.CreateResponse(HttpStatusCode.OK, new {sucess = true});
         }

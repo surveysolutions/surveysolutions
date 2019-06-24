@@ -16,7 +16,13 @@
     <Compile Remove="SharedKernels\DataCollection\InterviewItemIdTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="SharedKernels\DataCollection\InterviewEntities\serializedAnswers.json" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="..\..\UI\Shared\WB.UI.Shared.Enumerator\Services\DevicePasswordHasher.cs" Link="GenericSubdomains\Utils\PasswordHasherTests\DevicePasswordHasher.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SharedKernels\DataCollection\InterviewEntities\serializedAnswers.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj" />
