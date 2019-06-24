@@ -8,10 +8,13 @@ using Microsoft.AspNet.Identity;
 using Resources;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Resources;
+using WB.Core.BoundedContexts.Headquarters.UserProfile;
+using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Code;
@@ -26,12 +29,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     {
         protected readonly IAuthorizedUser authorizedUser;
         protected readonly HqUserManager userManager;
-        
-        public TeamController(ICommandService commandService, ILogger logger, IAuthorizedUser authorizedUser, HqUserManager userManager)
+        protected readonly IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage;
+
+        public TeamController(ICommandService commandService, ILogger logger, IAuthorizedUser authorizedUser, HqUserManager userManager, IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage)
             : base(commandService, logger)
         {
             this.authorizedUser = authorizedUser;
             this.userManager = userManager;
+            this.profileSettingsStorage = profileSettingsStorage;
             this.ViewBag.ActivePage = MenuItem.Teams;
         }
 
@@ -150,7 +155,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 return false;
             }
 
-            if (this.authorizedUser.IsInterviewer) return false;
+            if (this.authorizedUser.IsInterviewer)
+            {
+                if (this.authorizedUser.Id != updatedAccount.Id)
+                    return false;
+
+                var profileSettings = this.profileSettingsStorage.GetById(AppSetting.ProfileSettings);
+                var isAllowInterviewerUpdateProfile = profileSettings?.AllowInterviewerUpdateProfile ?? false;
+                if (!isAllowInterviewerUpdateProfile)
+                    return false;
+            }
 
             return true;
         }

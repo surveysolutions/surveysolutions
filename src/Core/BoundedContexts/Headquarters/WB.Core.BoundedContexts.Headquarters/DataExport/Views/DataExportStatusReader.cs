@@ -85,19 +85,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                 {
                     return new DataExportStatusView() { Success = false };
                 }
-
-                var hasAssignmentWithAudioRecordingEnabled = assignmentsService.HasAssignmentWithAudioRecordingEnabled(questionnaireIdentity);
-
-                foreach (var dataExportView in binaryExport)
-                {
-                    if (!questionnaire.HasAnyMultimediaQuestion() &&
-                        !hasAssignmentWithAudioRecordingEnabled)
-                    {
-                        dataExportView.CanRefreshBeRequested = false;
-                        dataExportView.HasAnyDataToBePrepared = false;
-                    }
-                }
-
+                
                 await slackApiClient.SendMessageAsync(new SlackFatalMessage
                 {
                     Color = SlackColor.Good,

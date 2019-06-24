@@ -210,6 +210,14 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
 
             AssertReportHasTotal(report, "Count", 1);
             AssertReportHasTotal(report, "Max", 10);
+            AssertReportHasTotal(report, "average", 10);
+            AssertReportHasTotal(report, "percentile_05", 10);
+            AssertReportHasTotal(report, "percentile_95", 10);
+            AssertReportHasTotal(report, "percentile_50", 10);
+            AssertReportHasTotal(report, "median", 10);
+            AssertReportHasTotal(report, "min", 10);
+            AssertReportHasTotal(report, "sum", 10);
+
 
             report = reporter.GetReport(new SurveyStatisticsReportInputModel
             {
@@ -219,6 +227,13 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
             
             AssertReportHasTotal(report, "Count", 1);
             AssertReportHasTotal(report, "Max", 44);
+            AssertReportHasTotal(report, "average", 44);
+            AssertReportHasTotal(report, "percentile_05", 44);
+            AssertReportHasTotal(report, "percentile_95", 44);
+            AssertReportHasTotal(report, "percentile_50", 44);
+            AssertReportHasTotal(report, "median", 44);
+            AssertReportHasTotal(report, "min", 44);
+            AssertReportHasTotal(report, "sum", 44);
         }
 
         private void AssertReportHasTotal<T>(ReportView report, T @enum, int amount) where T : Enum
