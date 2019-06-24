@@ -9,43 +9,43 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
-using WB.Services.Export.Models;
 using WB.Services.Export.Services;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Infrastructure;
 
-namespace WB.Services.Export.ExportProcessHandlers.Implementation
+namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
 {
-    internal class TabularFormatParaDataExportProcessHandler : AbstractDataExportHandler
+    internal class TabularFormatParaDataExportProcessHandler : IExportHandler
     {
         private readonly ICsvWriter csvWriter;
+        private readonly IOptions<ExportServiceSettings> interviewDataExportSettings;
         private readonly ITenantApi<IHeadquartersApi> tenantApi;
+        private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IInterviewsToExportSource interviewsToExportSource;
         private readonly ILogger<TabularFormatParaDataExportProcessHandler> logger;
 
         public TabularFormatParaDataExportProcessHandler(
             IOptions<ExportServiceSettings> interviewDataExportSettings,
             ITenantApi<IHeadquartersApi> tenantApi,
-            IDataExportProcessesService dataExportProcessesService,
-            IFileSystemAccessor fs,
-            IFileBasedExportedDataAccessor dataAccessor,
-            IDataExportFileAccessor exportFileAccessor,
+            IFileSystemAccessor fileSystemAccessor,
             IInterviewsToExportSource interviewsToExportSource,
             ICsvWriter csvWriter,
-            ILogger<TabularFormatParaDataExportProcessHandler> logger) 
-            :  base(fs, dataAccessor, interviewDataExportSettings, dataExportProcessesService, exportFileAccessor)
+            ILogger<TabularFormatParaDataExportProcessHandler> logger)
         {
+            this.interviewDataExportSettings = interviewDataExportSettings;
             this.tenantApi = tenantApi;
+            this.fileSystemAccessor = fileSystemAccessor;
             this.interviewsToExportSource = interviewsToExportSource;
             this.csvWriter = csvWriter;
             this.logger = logger;
         }
 
-        protected override DataExportFormat Format => DataExportFormat.Paradata;
+        public DataExportFormat Format => DataExportFormat.Paradata;
 
-        protected override Task ExportDataIntoDirectory(ExportSettings settings, ExportProgress progress,
-            CancellationToken cancellationToken)
+        public Task ExportDataAsync(ExportState state, CancellationToken cancellationToken)
         {
+            var settings = state.Settings;
+
             logger.LogInformation("Start paradata export for {settings}", settings);
             var api = this.tenantApi.For(settings.Tenant);
             var interviewsToExport = this.interviewsToExportSource.GetInterviewsToExport(settings.QuestionnaireId,
@@ -53,7 +53,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             
             cancellationToken.ThrowIfCancellationRequested();
 
-            var exportFilePath = this.fileSystemAccessor.CombinePath(ExportTempDirectoryPath, "paradata.tab");
+            var exportFilePath = this.fileSystemAccessor.CombinePath(state.ExportTempFolder, "paradata.tab");
 
             long totalInterviewsProcessed = 0;
 
@@ -82,7 +82,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                     }
 
                     totalInterviewsProcessed += historyItems.Count;
-                    progress.Report(totalInterviewsProcessed.PercentOf(interviewsToExport.Count));
+                    state.Progress.Report(totalInterviewsProcessed.PercentOf(interviewsToExport.Count));
                 }
 
                 var options = new BatchOptions
@@ -103,19 +103,18 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                         QueryParadata(interviews).Wait(cancellationToken);
                     }
                 });
-               
             }
 
-            WriteDoFile();
+            WriteDoFile(state.ExportTempFolder);
 
             logger.LogInformation("Completed paradata export for {settings}", settings);
 
             return Task.CompletedTask;
         }
 
-        private void WriteDoFile()
+        private void WriteDoFile(string tempFolder)
         {
-            var doFilePath = this.fileSystemAccessor.CombinePath(ExportTempDirectoryPath, "paradata.do");
+            var doFilePath = this.fileSystemAccessor.CombinePath(tempFolder, "paradata.do");
             var doFileContent = new StringBuilder();
 
             doFileContent.AppendLine("insheet using \"paradata.tab\", tab case names");

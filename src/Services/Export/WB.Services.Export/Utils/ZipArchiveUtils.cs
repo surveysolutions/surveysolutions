@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using WB.Services.Infrastructure.FileSystem;
 
 namespace WB.Services.Export
@@ -92,6 +95,39 @@ namespace WB.Services.Export
                                 archive.CreateEntry(file.Substring(exportTempDirectoryPath.Length + 1), fs);
                             }
                         }
+                    }
+                }
+            }
+        }
+
+        public async Task ZipDirectoryAsync(string exportTempDirectoryPath, string archiveName,
+            string archivePassword, 
+            IProgress<int> exportProgress,
+            CancellationToken token = default)
+        {
+            using (var archiveFile = File.Create(archiveName))
+            {
+                using (var archive = CreateArchive(archiveFile, archivePassword, CompressionLevel.Optimal))
+                {
+                    var files = Directory.EnumerateFiles(exportTempDirectoryPath).ToList();
+                    var total = files.Count;
+                    long added = 0;
+                    foreach (var file in Directory.EnumerateFiles(exportTempDirectoryPath))
+                    {
+                        using (var fs = File.OpenRead(file))
+                        {
+                            if (fs.Length == 0)
+                            {
+                                await archive.CreateEntryAsync(file.Substring(exportTempDirectoryPath.Length + 1), Array.Empty<byte>(), token);
+                            }
+                            else
+                            {
+                                await archive.CreateEntryAsync(file.Substring(exportTempDirectoryPath.Length + 1), fs, token);
+                            }
+                        }
+
+                        added++;
+                        exportProgress?.Report(added.PercentOf(total));
                     }
                 }
             }
