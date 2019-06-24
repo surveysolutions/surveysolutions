@@ -479,6 +479,25 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                         // ignore
                         return null;
                 }
+
+                case InterviewHistoricalAction.AnswerRemoved:
+                    var argsForRemoved = new Dictionary<string, string>();
+                    if (parameters.ContainsKey("questionId"))
+                    {
+                        var questionId = Guid.Parse(parameters["questionId"]);
+                        var question = questionnaire.GetExportedQuestionHeaderItemForQuestion(questionId);
+
+                        if (question != null)
+                        {
+                            argsForRemoved["question"] = question.VariableName;
+
+                            if (parameters.TryGetValue("roster", out var roster))
+                            {
+                                argsForRemoved["roster"] = roster;
+                            }
+                        }
+                    }
+                    return new InterviewHistoricalRecordView(0, action, userName, userRole, argsForRemoved, timestamp, offset);
                 case InterviewHistoricalAction.AnswerSet:
                 case InterviewHistoricalAction.CommentSet:
                 case InterviewHistoricalAction.QuestionDeclaredInvalid:

@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
+using WB.Core.BoundedContexts.Headquarters.UserProfile;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -42,8 +43,8 @@ namespace WB.UI.Headquarters.Controllers
             ICaptchaService captchaService,
             HqUserManager userManager,
             HqSignInManager signInManager,
-            IAuthenticationManager authenticationManager, IPlainKeyValueStorage<CompanyLogo> appSettingsStorage)
-            : base(commandService, logger, authorizedUser, userManager)
+            IAuthenticationManager authenticationManager, IPlainKeyValueStorage<CompanyLogo> appSettingsStorage, IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage)
+            : base(commandService, logger, authorizedUser, userManager, profileSettingsStorage)
         {
             this.captchaProvider = captchaProvider;
             this.captchaService = captchaService;
@@ -141,9 +142,8 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.ManageAccount;
 
-
-            this.ViewBag.IsOwnAccoutEditing = true;
             var manageAccountModel = GetCurrentUserModel();
+            manageAccountModel.AllowEditLockState = false;
             return View(manageAccountModel);
         }
 
@@ -173,8 +173,8 @@ namespace WB.UI.Headquarters.Controllers
             model.Id = currentUser.Id;
 
             this.ViewBag.ActivePage = MenuItem.ManageAccount;
-            this.ViewBag.IsOwnAccoutEditing = true;
 
+            model.AllowEditLockState = false;
             model.Password = null;
             model.ConfirmPassword = null;
             model.OldPassword = null;
@@ -205,7 +205,7 @@ namespace WB.UI.Headquarters.Controllers
             model.Id = currentUser.Id;
 
             this.ViewBag.ActivePage = MenuItem.ManageAccount;
-            this.ViewBag.IsOwnAccoutEditing = true;
+            model.AllowEditLockState = false;
 
             if (!string.IsNullOrEmpty(model.Password))
             {

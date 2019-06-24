@@ -40,6 +40,7 @@ using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
+using WB.Core.BoundedContexts.Headquarters.UserProfile;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -630,7 +631,8 @@ namespace WB.Tests.Abc.TestFactories
                 interviewerVersionReader ?? Mock.Of<IInterviewerVersionReader>(),
                 interviewFactory ?? Mock.Of<IInterviewFactory>(),
                 currentUser ?? Mock.Of<IAuthorizedUser>(),
-                Mock.Of<IQRCodeHelper>());
+                Mock.Of<IQRCodeHelper>(),
+                Mock.Of<IPlainKeyValueStorage<ProfileSettings>>());
         }
 
         public StatefullInterviewSearcher StatefullInterviewSearcher()

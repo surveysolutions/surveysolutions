@@ -99,6 +99,9 @@ namespace WB.UI.Interviewer.ViewModel
         public override async void ViewAppeared()
         {
             var interviewId = Guid.Parse(InterviewId);
+            var interview = interviewRepository.Get(this.InterviewId);
+            if (interview == null) return;
+
             if (!lastCreatedInterviewStorage.WasJustCreated(InterviewId))
             {
                 commandService.Execute(new ResumeInterviewCommand(interviewId, Principal.CurrentUserIdentity.UserId));
@@ -109,7 +112,7 @@ namespace WB.UI.Interviewer.ViewModel
                 isAuditStarting = true;
                 try
                 {
-                        await audioAuditService.StartAudioRecordingAsync(interviewId).ConfigureAwait(false);
+                    await audioAuditService.StartAudioRecordingAsync(interviewId).ConfigureAwait(false);
                 }
                 catch (Exception exc)
                 {

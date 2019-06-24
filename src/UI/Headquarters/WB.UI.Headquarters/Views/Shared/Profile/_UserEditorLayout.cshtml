@@ -1,7 +1,6 @@
 ﻿@model UserEditModel
 @{
     Layout = "_EditorLayout.cshtml";
-    var isOwnAccoutEditing = this.ViewBag.IsOwnAccoutEditing ?? false;
 }
 @section scripts {
     @RenderSection(@"scripts", false)
@@ -28,7 +27,7 @@
                 @Html.EditorFor(x => x.PhoneNumber, "TextBoxFormField")
             }
             @RenderSection(@"LockWarningSection", false)
-            @if (!isOwnAccoutEditing)
+            @if (Model.AllowEditLockState)
             {
                 if (Model.IsLockedDisabled && Model.IsLocked) {
                     <p class="text-danger">
@@ -46,7 +45,11 @@
 
         @Html.EditorForModel("UpdateButtonsRow")
     }
-
-    @Html.Partial(@"Profile/" + Model.UpdatePasswordAction ?? @"UpdatePassword")
+    
+    @if (Model.AllowEditPassword)
+    {
+        @Html.Partial(@"Profile/" + Model.UpdatePasswordAction ?? @"UpdatePassword")
+    }
+    
 </div>
 @RenderBody()

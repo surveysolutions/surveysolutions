@@ -166,13 +166,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
 
                 select null, null,
                     count(c.answer) as count, 
-                    avg(c.answer) as avg, 
+                    avg(c.answer) as average, 
                     readside.median(c.answer) as median, 
                     min(c.answer) as min, max(c.answer) as max, 
                     sum(c.answer) as sum, 
-                    percentile_cont(0.05) within group (order by c.answer asc) as percentile_05,
-                    percentile_cont(0.50) within group (order by c.answer asc) as percentile_50,
-                    percentile_cont(0.95) within group (order by c.answer asc) as percentile_95
+                    percentile_cont(0.05) within group (order by c.answer asc) as percentile05,
+                    percentile_cont(0.50) within group (order by c.answer asc) as percentile50,
+                    percentile_cont(0.95) within group (order by c.answer asc) as percentile95
                 from countables c;",
                 new
                 {
