@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
+using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Infrastructure.Native.Storage
 {
@@ -23,7 +25,13 @@ namespace WB.Infrastructure.Native.Storage
                 FloatParseHandling = FloatParseHandling.Decimal,
                 Formatting = Formatting.Indented,
                 SerializationBinder = new InterviewAnswerSerializationBinder(),
-                MetadataPropertyHandling = MetadataPropertyHandling.ReadAhead
+                MetadataPropertyHandling = MetadataPropertyHandling.ReadAhead,
+                Converters = new List<JsonConverter>
+                {
+                    new IdentityJsonConverter(),
+                    new RosterVectorConverter()
+                },
+                ContractResolver = new NewtonInterviewAnswerContractResolver()
             };
         }
 
@@ -72,6 +80,26 @@ namespace WB.Infrastructure.Native.Storage
                 assemblyName = null;
                 typeName = serializedType.Name;
             }
+        }
+    }
+
+    public class NewtonInterviewAnswerContractResolver : DefaultContractResolver
+    {
+        protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
+        {
+            var prop = base.CreateProperty(member, memberSerialization);
+
+            if (!prop.Writable)
+            {
+                var property = member as PropertyInfo;
+                if (property != null)
+                {
+                    var hasNonPublicSetter = property.GetSetMethod(true) != null;
+                    prop.Writable = hasNonPublicSetter;
+                }
+            }
+
+            return prop;
         }
     }
 }
