@@ -432,25 +432,33 @@
     </script>
     <script type="text/html" id="confirm-delete-template">
         @Html.Raw(Interviews.DeleteConfirmMessageHQ.FormatString(
-            "<span data-bind='text: length'></span>",
+            "<span data-bind='text: FilteredItems.length'></span>",
             InterviewStatus.SupervisorAssigned.ToLocalizeString(),
             InterviewStatus.InterviewerAssigned.ToLocalizeString()))
     </script>
     <script type="text/html" id="confirm-approve-template">
         @Html.Raw(Interviews.ApproveConfirmMessageHQ.FormatString(
-            "<span data-bind='text: length'></span>",
+            "<span data-bind='text: FilteredItems.length'></span>",
             InterviewStatus.Completed.ToLocalizeString(),
             InterviewStatus.ApprovedBySupervisor.ToLocalizeString()))
+        <div>
+            <label for="txtStatusChangeComment">Comment:</label>
+            <textarea class="form-control" rows="10" maxlength="200" id="txtStatusChangeComment" data-bind="textInput: StatusChangeComment"></textarea>
+        </div>
     </script>
     <script type="text/html" id="confirm-reject-template">
         @Html.Raw(Interviews.RejectConfirmMessageHQ.FormatString(
-            "<span data-bind='text: length'></span>",
+            "<span data-bind='text: FilteredItems.length'></span>",
             InterviewStatus.Completed.ToLocalizeString(),
             InterviewStatus.ApprovedBySupervisor.ToLocalizeString()))
+        <div>
+            <label for="txtStatusChangeComment1">Comment:</label>
+            <textarea class="form-control" rows="10" maxlength="200" id="txtStatusChangeComment1" data-bind="textInput: StatusChangeComment"></textarea>
+        </div>
     </script>
     <script type="text/html" id="confirm-unapprove-template">
         @Html.Raw(Interviews.UnapproveConfirmMessageHQ.FormatString(
-            "<span data-bind='text: length'></span>",
+            "<span data-bind='text: FilteredItems.length'></span>",
             InterviewStatus.ApprovedByHeadquarters.ToLocalizeString()))
     </script>
     <script type="text/html" id="confirm-continue-message-template">

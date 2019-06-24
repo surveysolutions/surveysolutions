@@ -143,7 +143,12 @@ Supervisor.VM.InterviewsBase = function (serviceUrl, interviewDetailsUrl, respon
         var allItems  = _.isArray(selectedRowAsArray) ? selectedRowAsArray : self.SelectedItems();
         var filteredItems = ko.utils.arrayFilter(allItems, filterFunc);
 
-        var messageHtml = self.getBindedHtmlTemplate(messageTemplateId, filteredItems);
+        var model = {
+            FilteredItems: filteredItems,
+            StatusChangeComment: ko.observable('')
+        };
+
+        var messageHtml = self.getBindedHtmlTemplate(messageTemplateId, model);
 
         if (filteredItems.length === 0) {
             notifier.alert('', messageHtml);
@@ -154,7 +159,8 @@ Supervisor.VM.InterviewsBase = function (serviceUrl, interviewDetailsUrl, respon
 
         notifier.confirm('', messageHtml, function (result) {
             if (result) {
-                self.sendCommand(commandName, parametersFunc, filteredItems, onSuccessCommandExecuting);
+                var comment = model.StatusChangeComment();
+                self.sendCommand(commandName, parametersFunc, filteredItems, comment, onSuccessCommandExecuting);
             } else {
                 if (!_.isUndefined(onCancelConfirmation)) {
                     onCancelConfirmation();
@@ -163,10 +169,10 @@ Supervisor.VM.InterviewsBase = function (serviceUrl, interviewDetailsUrl, respon
         });
     };
 
-    self.sendCommand = function (commandName, parametersFunc, items, onSuccessCommandExecuting) {
+    self.sendCommand = function (commandName, parametersFunc, items, comment, onSuccessCommandExecuting) {
         var commands = ko.utils.arrayMap(items, function (rawItem) {
             var item = ko.mapping.toJS(rawItem);
-            return ko.toJSON(parametersFunc(item));
+            return ko.toJSON(parametersFunc(item, comment));
         });
 
         var command = {
@@ -218,7 +224,7 @@ Supervisor.VM.InterviewsBase = function (serviceUrl, interviewDetailsUrl, respon
                     key: interview.Key(),
                     interviewUrl: $detailsUrl + '/' + interview.InterviewId(),
                     responsible: interview.ResponsibleName(),
-                    isResponsibleInterviewer: interview.ResponsibleRole() == 4,
+                    isResponsibleInterviewer: interview.ResponsibleRole() === 4,
                     statusHistory: statusHistory,
                     formatDate: function(date) {
                         return moment.utc(date).local().format('MMM DD, YYYY HH:mm');
