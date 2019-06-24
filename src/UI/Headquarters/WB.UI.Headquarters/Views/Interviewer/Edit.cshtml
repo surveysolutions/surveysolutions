@@ -13,9 +13,15 @@
 }
 @section PostDetailsSection
 {
-    @Html.EditorFor(x => x.IsLockedBySupervisor, "CheckboxFormField")
+    @if (Model.AllowEditLockState)
+    {
+        @Html.EditorFor(x => x.IsLockedBySupervisor, "CheckboxFormField")
+    }
 }
 @section LockWarningSection
 {
-    <p>@Pages.Interviewer_LockWarning</p>
+    @if (Model.AllowEditLockState)
+    {
+        <p>@Pages.Interviewer_LockWarning</p>
+    }
 }
