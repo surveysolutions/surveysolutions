@@ -66,7 +66,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             };
         }
 
-        public Task<ExportDataAvailabilityView> DataAvailabilityAsync(QuestionnaireIdentity questionnaireIdentity)
+        public Task<ExportDataAvailabilityView> GetDataAvailabilityAsync(QuestionnaireIdentity questionnaireIdentity)
         {
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
             if (questionnaire == null)
@@ -86,6 +86,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             if (processView == null)
             {
                 return null;
+            }
+
+            if (processView.Error!=null)
+            {
+                switch(processView.Error.Type)
+                {
+                    case DataExportError.Canceled: processView.Error.Message = DataExport.Error_Canceled; break;
+                    case DataExportError.NotEnoughExternalStorageSpace: processView.Error.Message = DataExport.Error_NotEnoughExternalStorageSpace; break;
+                    default: processView.Error.Message = DataExport.Error_Unhandled;
+                }
             }
 
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(processView.QuestionnaireIdentity, null);

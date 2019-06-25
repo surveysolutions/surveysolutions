@@ -169,6 +169,33 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Data export API.
+        /// </summary>
+        internal static string DataExportApi {
+            get {
+                return ResourceManager.GetString("DataExportApi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can setup automatic export of collected interview data using our API toolset for more information and inctruction use:.
+        /// </summary>
+        internal static string DataExportApiDesc {
+            get {
+                return ResourceManager.GetString("DataExportApiDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data Export API reference.
+        /// </summary>
+        internal static string DataExportApiInfoPage {
+            get {
+                return ResourceManager.GetString("DataExportApiInfoPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Destination: {{dest}}.
         /// </summary>
         internal static string DataExport_Destination {
@@ -435,6 +462,33 @@ namespace Resources {
         internal static string ErrorThereAreRunningProcesses {
             get {
                 return ResourceManager.GetString("ErrorThereAreRunningProcesses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export job was canceled by user..
+        /// </summary>
+        internal static string Error_Canceled {
+            get {
+                return ResourceManager.GetString("Error_Canceled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not enough space fot the selected cloud storage provide. Please free space and restart the job or choose another provider..
+        /// </summary>
+        internal static string Error_NotEnoughExternalStorageSpace {
+            get {
+                return ResourceManager.GetString("Error_NotEnoughExternalStorageSpace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An unexpected error occurred during export. We are sorry for inconvenience. Please contact support team support@mysurvey.solutions..
+        /// </summary>
+        internal static string Error_Unhandled {
+            get {
+                return ResourceManager.GetString("Error_Unhandled", resourceCulture);
             }
         }
         

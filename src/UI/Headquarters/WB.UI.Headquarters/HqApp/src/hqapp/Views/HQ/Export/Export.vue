@@ -181,9 +181,8 @@
     </div>
     <div class="row" v-if="!exportServiceIsUnavailable">
       <div class="col-lg-5">
-          <h3 class="mb-20">{{$t('DataExport.NoDataSets')}}Data export API</h3>
-          <p>{{$t('DataExport.NoDataSets')}}You can setup automatic export of collected interview data using our API toolset for more information 
-              and inctruction use <a href="https://support.mysurvey.solutions/headquarters/api/api-for-data-export/" target="_blank" class="underlined-link">Data Export API reference</a>
+          <h3 class="mb-20">{{$t('DataExport.DataExportApi')}}</h3>
+          <p>{{$t('DataExport.DataExportApiDesc')}}<a href="https://support.mysurvey.solutions/headquarters/api/api-for-data-export/" target="_blank" class="underlined-link">{{$t('DataExport.DataExportApiInfoPage')}}</a>
           </p>
       </div>
     </div>
