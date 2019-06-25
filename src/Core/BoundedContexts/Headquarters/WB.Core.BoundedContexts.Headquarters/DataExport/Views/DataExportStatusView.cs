@@ -40,21 +40,4 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
     {
         public long JobId { get; set; }
     }
-
-    public class ExportProcessStatusView
-    {
-        public string DataExportProcessId { get;  set; }
-        public DateTime BeginDate { get;  set; }
-        public DateTime LastUpdateDate { get;  set; }
-        public int Progress { get;  set; }
-        public DataExportType Type { get;  set; }
-        public DataExportFormat Format { get;  set; }
-        public InterviewStatus? InterviewStatus { get;  set; }
-        public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
-        public DataExportStatus ProcessStatus { get; set; }
-        public string QuestionnaireTitle { get; set; }
-        public bool HasFile { get; set; }
-        public bool IsFinished { get; set; }
-        public string Error { get; set; }
-    }
 }
