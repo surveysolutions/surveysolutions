@@ -446,4 +446,7 @@ Contact support for assistance.</value>
   <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
     <value>Are you sure you want to remove related roster '{{rosterTitle}}'?</value>
   </data>
+  <data name="SaveScenario" xml:space="preserve">
+    <value>Save scenario</value>
+  </data>
 </root>

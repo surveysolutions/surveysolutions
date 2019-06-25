@@ -53,6 +53,14 @@
                             <span class="glyphicon glyphicon-sort"></span>
                         </button>
                     </li>
+                    <li v-if="this.$config.inWebTesterMode && this.$config.saveScenarioUrl">
+                        <form method="POST" :action="saveScenarioUrl" ref="scenarioForm">
+                            <input type="hidden" ref="scenarioTextInput" name="ScenarioText"/>
+                            <button  type="button" class="btn btn-default btn-link btn-icon" @click="saveScenario" :title="$t('WebInterviewUI.SaveScenario')">
+                                <span class="glyphicon glyphicon-floppy-disk"></span>
+                            </button>
+                        </form>
+                    </li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -68,7 +76,8 @@
         name: 'navbar',
         data() {
             return {
-                showEmailPersonalLink: this.$config.askForEmail
+                showEmailPersonalLink: this.$config.askForEmail,
+                scenarioText: null
             }
         },
         beforeMount() {
@@ -132,6 +141,12 @@
             },
             hqLink() {
                 return this.$config.hqLink
+            },
+            saveScenarioUrl() {
+                return this.$config.saveScenarioUrl;
+            },
+            getScenarioUrl() {
+                return this.$config.getScenarioUrl;
             }
         },
         methods: {
@@ -189,6 +204,11 @@
             },
             reloadQuestionnaire() {
                 window.location = this.$config.reloadQuestionnaireUrl;
+            },
+            async saveScenario() {
+                const scenario = await axios.get(`${this.getScenarioUrl}/${this.$route.params.interviewId}`);
+                this.$refs.scenarioTextInput.value = scenario.data;
+                this.$refs.scenarioForm.submit();
             }
         }
     }
