@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
             ITransferUtility transferUtility,
             ILoggerProvider loggerProvider)
         {
-            log = loggerProvider.GetFor<S3FileStorage>();
+            log = loggerProvider.GetForType(GetType());
             this.s3Settings = s3Settings;
             client = amazonS3Client;
             this.transferUtility = transferUtility;
