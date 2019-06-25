@@ -2,7 +2,6 @@ using System;
 using System.ComponentModel;
 using System.Configuration;
 using System.IO;
-using System.Runtime.Remoting.Channels;
 using NConsole;
 
 namespace support
@@ -14,6 +13,7 @@ namespace support
         private string connectionString;
         private string designerUrl;
         private string appDataDirectory;
+        private string exportServiceUrl;
         protected internal string PathToHq;
 
         protected internal string ConnectionString
@@ -46,6 +46,16 @@ namespace support
             set => appDataDirectory = value;
         }
 
+        protected internal string ExportServiceUrl
+        {
+            get
+            {
+                ThrowIfSettingsWereNotInitialized();
+                return exportServiceUrl;
+            }
+            set => exportServiceUrl = value;
+        }
+
         public ConfigurationDependentCommand(IConfigurationManagerSettings configurationManagerSettings)
         {
             this.configurationManagerSettings = configurationManagerSettings;
@@ -70,8 +80,9 @@ namespace support
             ConnectionString = ConfigurationManager.ConnectionStrings["Postgres"]?.ConnectionString;
             DesignerUrl = ConfigurationManager.AppSettings["DesignerAddress"];
             var dataStorePath = ConfigurationManager.AppSettings["DataStorePath"];
+            ExportServiceUrl = ConfigurationManager.AppSettings["Export.ServiceUrl"];
 
-              
+
             if (dataStorePath.StartsWith("~/") || dataStorePath.StartsWith(@"~\"))
             {
                 dataStorePath = dataStorePath.Replace(@"~/", "./");

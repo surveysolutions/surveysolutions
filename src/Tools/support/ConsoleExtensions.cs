@@ -30,13 +30,18 @@ namespace support
             host.WriteLine();
         }
 
-        public static void WriteFailed(this IConsoleHost host)
+        public static void WriteFailed(this IConsoleHost host, string recommendation = "")
         {
             host.WriteHighlightedText("FAILED", ConsoleColor.DarkRed);
             host.WriteLine();
+            if (!string.IsNullOrWhiteSpace(recommendation))
+            {
+                host.WriteHighlightedText($"Recommendation:{recommendation}", ConsoleColor.DarkYellow);
+                host.WriteLine();
+            }
         }
 
-        public static async Task TryExecuteActionWithAnimationAsync(this IConsoleHost host, ILogger logger, Task<bool> action)
+        public static async Task TryExecuteActionWithAnimationAsync(this IConsoleHost host, ILogger logger, Task<bool> action, string recommendation = "")
         {
             SpinAnimation.Start();
 
@@ -56,7 +61,7 @@ namespace support
             if (isActionExecutedSuccessfully)
                 host.WriteOk();
             else
-                host.WriteFailed();
+                host.WriteFailed(recommendation);
         }
     }
 }
