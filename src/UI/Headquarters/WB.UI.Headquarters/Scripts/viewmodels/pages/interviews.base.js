@@ -167,6 +167,8 @@ Supervisor.VM.InterviewsBase = function (serviceUrl, interviewDetailsUrl, respon
                 }
             }
         });
+
+        ko.applyBindings(model, $(".action-container")[0]);
     };
 
     self.sendCommand = function (commandName, parametersFunc, items, comment, onSuccessCommandExecuting) {
