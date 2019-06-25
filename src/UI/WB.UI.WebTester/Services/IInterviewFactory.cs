@@ -30,7 +30,7 @@ namespace WB.UI.WebTester.Services
 
     public class InterviewFactory : IInterviewFactory
     {
-        private readonly ICacheStorage<List<ICommand>, Guid> executedCommandsStorage;
+        private readonly ICacheStorage<List<InterviewCommand>, Guid> executedCommandsStorage;
         private readonly ICommandService commandService;
         private readonly IImageFileStorage imageFileStorage;
         private readonly IEvictionNotifier evictionService;
@@ -40,7 +40,7 @@ namespace WB.UI.WebTester.Services
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IScenarioSerializer serializer;
 
-        public InterviewFactory(ICacheStorage<List<ICommand>, Guid> executedCommandsStorage,
+        public InterviewFactory(ICacheStorage<List<InterviewCommand>, Guid> executedCommandsStorage,
             ICommandService commandService,
             IImageFileStorage imageFileStorage,
             IEvictionNotifier evictionService,
@@ -142,7 +142,8 @@ namespace WB.UI.WebTester.Services
 
                 this.commandService.Execute(createInterview);
 
-                var existingInterviewCommands = this.executedCommandsStorage.Get(originalInterviewId, originalInterviewId);
+                var existingInterviewCommands = this.executedCommandsStorage.Get(originalInterviewId, originalInterviewId) ?? 
+                                                new List<InterviewCommand>();
                 var questionnaireDocument = this.questionnaireStorage.GetQuestionnaire(questionnaireId, null);
 
                 var scenario = this.scenarioService.ConvertFromInterview(questionnaireDocument, 
