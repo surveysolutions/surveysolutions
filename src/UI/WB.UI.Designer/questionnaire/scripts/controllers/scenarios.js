@@ -42,11 +42,7 @@
             };
 
             $scope.runScenario = function (scenario) {
-                var webTesterWindow = window.open("about:blank", '_blank');
-
-                webTesterService.run($state.params.questionnaireId).then(function (response) {
-                    webTesterService.setLocation(webTesterWindow, response, $scope.questionnaire.hasViewerAdminRights, scenario.id);
-                });
+                return webTesterService.run($state.params.questionnaireId, $scope.questionnaire, scenario.id);
             };
 
             $scope.saveScenario = function (scenario) {

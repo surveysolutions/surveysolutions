@@ -188,11 +188,7 @@ angular.module('designerApp')
             };
 
             $scope.webTest = function () {
-                var webTesterWindow = window.open("about:blank", '_blank');
-
-                webTesterService.run($state.params.questionnaireId).then(function (response) {
-                    webTesterService.setLocation(webTesterWindow, response, $scope.questionnaire.hasViewerAdminRights);
-                });
+                webTesterService.run($state.params.questionnaireId, $scope.questionnaire);
             };
 
             $scope.showVerificationErrors = function () {
