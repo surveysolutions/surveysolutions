@@ -6,7 +6,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace WB.Infrastructure.Native.Storage
 {
-    [Obsolete("Resolves old namespaces. Cuold be dropped after incompatibility shift with the next version.")]
+    [Obsolete("Resolves old namespaces. Could be dropped after incompatibility shift with the next version.")]
     public class MainCoreAssemblyRedirectSerializationBaseBinder : DefaultSerializationBinder
     {
         protected string oldAssemblyNameToRedirect = "Main.Core";

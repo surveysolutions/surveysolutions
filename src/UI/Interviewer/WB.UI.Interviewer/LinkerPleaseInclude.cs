@@ -10,7 +10,7 @@ using System;
 using System.Collections.Specialized;
 using System.Windows.Input;
 
-namespace WB.UI.Interviewer
+namespace WB.UI.LinkerInclusion
 {
     public class LinkerPleaseInclude
     {
