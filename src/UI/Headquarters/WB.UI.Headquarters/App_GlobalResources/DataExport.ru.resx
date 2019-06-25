@@ -377,4 +377,13 @@
   <data name="DataExportApiInfoPage" xml:space="preserve">
     <value>Справочник по API экспорта данных</value>
   </data>
+  <data name="Error_Canceled" xml:space="preserve"> 
+    <value>Экспорт был отменен пользователем.</value> 
+  </data>
+  <data name="Error_NotEnoughExternalStorageSpace" xml:space="preserve"> 
+    <value>Недостаточно места на выбранном внешнем хранилище. Очистите место и запустите экспорт заново, или выберите другого провайдера.</value> 
+  </data>
+  <data name="Error_Unhandled" xml:space="preserve"> 
+    <value>Во время экспорта произошла непредвиденная ошибка. Приносим извинения за неудобства. Пожалуйста, свяжитесь со службой поддержки support@mysurvey.solutions.</value> 
+  </data>
 </root>
