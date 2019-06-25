@@ -166,7 +166,7 @@ export default {
                     this.fileSize = info.fileSize;
                     this.dataFileLastUpdateDate = this.formatDate(info.dataFileLastUpdateDate);
                     this.fileDestination = info.dataDestination;
-                    this.error = info.error;
+                    this.error = (info.error || {}).message;
 
                     this.isInitializing = false;
 

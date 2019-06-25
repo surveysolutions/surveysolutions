@@ -357,4 +357,22 @@
   <data name="NoDataSets" xml:space="preserve">
     <value>No generated data sets yet</value>
   </data>
+  <data name="DataExportApi" xml:space="preserve">
+    <value>Data export API</value>
+  </data>
+  <data name="DataExportApiDesc" xml:space="preserve">
+    <value>You can setup automatic export of collected interview data using our API toolset for more information and inctruction use:</value>
+  </data>
+  <data name="DataExportApiInfoPage" xml:space="preserve">
+    <value>Data Export API reference</value>
+  </data>
+  <data name="Error_Canceled" xml:space="preserve">
+    <value>Export job was canceled by user.</value>
+  </data>
+  <data name="Error_NotEnoughExternalStorageSpace" xml:space="preserve">
+    <value>Not enough space fot the selected cloud storage provide. Please free space and restart the job or choose another provider.</value>
+  </data>
+  <data name="Error_Unhandled" xml:space="preserve">
+    <value>An unexpected error occurred during export. We are sorry for inconvenience. Please contact support team support@mysurvey.solutions.</value>
+  </data>
 </root>

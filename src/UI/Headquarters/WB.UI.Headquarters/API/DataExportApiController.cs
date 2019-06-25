@@ -97,7 +97,7 @@ namespace WB.UI.Headquarters.API
         [CamelCase]
         public async Task<HttpResponseMessage> DataAvailability(Guid id, long version)
         {
-            var result = await dataExportStatusReader.DataAvailabilityAsync(new QuestionnaireIdentity(id, version));
+            var result = await dataExportStatusReader.GetDataAvailabilityAsync(new QuestionnaireIdentity(id, version));
             if (result == null)
             {
                 return Request.CreateResponse(HttpStatusCode.NotFound);

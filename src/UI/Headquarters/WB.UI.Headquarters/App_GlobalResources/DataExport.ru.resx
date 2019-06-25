@@ -368,4 +368,13 @@
   <data name="NoDataSets" xml:space="preserve">
     <value>Нет созданных экспортных файлов</value>
   </data>
+  <data name="DataExportApi" xml:space="preserve">
+    <value>API Экспорта данных</value>
+  </data>
+  <data name="DataExportApiDesc" xml:space="preserve">
+    <value>Вы можете настроить автоматический экспорт собранных данные используя API. Более подробно прочитать об API и способе использования можно на:</value>
+  </data>
+  <data name="DataExportApiInfoPage" xml:space="preserve">
+    <value>Справочник по API экспорта данных</value>
+  </data>
 </root>
