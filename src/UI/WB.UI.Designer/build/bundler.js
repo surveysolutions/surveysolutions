@@ -37,7 +37,8 @@ const bundler = () =>
 
           src(bundle.inputFiles)
             .pipe(filter(["**/*.css", "**/*.less"]))
-            .pipe(cache(less(), {name: "less"}))
+            //.pipe(cache(less(), {name: "less"}))
+            .pipe(less())
             .pipe(concat(bundle.name + ".css"))
             .pipe(gulpif(PRODUCTION, rev()))
             .pipe(dest(join(config.dist, "css"))),

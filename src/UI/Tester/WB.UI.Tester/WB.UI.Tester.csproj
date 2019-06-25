@@ -85,6 +85,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\Interviewer\WB.UI.Interviewer\LinkerPleaseInclude.cs">
+      <Link>LinkerPleaseInclude.cs</Link>
+    </Compile>
     <Compile Include="Activities\PrefilledQuestionsActivity.cs" />
     <Compile Include="Activities\PrefsActivity.cs" />
     <Compile Include="Activities\InterviewActivity.cs" />
@@ -99,7 +102,6 @@
     <Compile Include="Infrastructure\Internals\Compression\Compressor.cs" />
     <Compile Include="Infrastructure\Internals\DesignerApiService.cs" />
     <Compile Include="Infrastructure\Internals\Storage\TesterQuestionnaireAssemblyFileAccessor.cs" />
-    <Compile Include="LinkerPleaseInclude.cs" />
     <Compile Include="Infrastructure\TesterInfrastructureModule.cs" />
     <Compile Include="ServiceLocation\TesterUIModule.cs" />
     <Compile Include="ServiceLocation\IoCAdapterSetup.cs" />

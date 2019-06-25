@@ -22,7 +22,7 @@ namespace WB.UI.WebTester.Infrastructure
         private readonly ILiteEventBus eventBus;
         private readonly IAggregateLock aggregateLock;
         private readonly IServiceLocator serviceLocator;
-        private readonly ICacheStorage<List<ICommand>, Guid> executedCommandsStorage;
+        private readonly ICacheStorage<List<InterviewCommand>, Guid> executedCommandsStorage;
 
         public WebTesterCommandService(
             IEventSourcedAggregateRootRepository eventSourcedRepository,
@@ -31,7 +31,7 @@ namespace WB.UI.WebTester.Infrastructure
             ILiteEventBus eventBus,
             IAggregateLock aggregateLock,
             IServiceLocator serviceLocator,
-            ICacheStorage<List<ICommand>, Guid> executedCommandsStorage)
+            ICacheStorage<List<InterviewCommand>, Guid> executedCommandsStorage)
         {
             this.eventSourcedRepository = eventSourcedRepository;
             this.cacheFiller = cacheFiller;
@@ -69,7 +69,7 @@ namespace WB.UI.WebTester.Infrastructure
 
                 eventBus.PublishCommittedEvents(events);
 
-                var commands = this.executedCommandsStorage.Get(interviewCommand.InterviewId, interviewCommand.InterviewId) ?? new List<ICommand>();
+                var commands = this.executedCommandsStorage.Get(interviewCommand.InterviewId, interviewCommand.InterviewId) ?? new List<InterviewCommand>();
                 commands.Add(interviewCommand);
                 this.executedCommandsStorage.Store(commands, interviewCommand.InterviewId, interviewCommand.InterviewId);
             });
