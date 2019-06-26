@@ -94,8 +94,7 @@ namespace WB.Services.Export
 
             RegisterFunctionalHandlers(services, typeof(InterviewSummaryDenormalizer));
 
-            
-            RegisterExportDataHandlers(services);
+            services.UseExportProcessHandlers();;
 
             FileStorageModule.Register(services, configuration);
 
@@ -113,23 +112,6 @@ namespace WB.Services.Export
             );
         }
 
-        private static void RegisterExportDataHandlers(IServiceCollection services)
-        {
-            services.AddTransient<BinaryDataIntoArchiveExportHandler>();
-            services.AddTransient<BinaryDataExternalStorageDataExportHandler>();
-            services.AddTransient<TabularFormatParaDataExportProcessHandler>();
-            services.AddTransient<TabularFormatDataExportHandler>();
-            services.AddTransient<SpssFormatExportHandler>();
-            services.AddTransient<StataFormatExportHandler>();
-            services.AddTransient<OneDriveDataClient>();
-            services.AddTransient<DropboxDataClient>();
-            services.AddTransient<GoogleDriveDataClient>();
-            services.AddTransient<DdiFormatExportHandler>();
-
-            services.AddTransient<IExternalStorageDataClientFactory, ExternalStorageDataClientFactory>();
-            services.AddTransient<IExportHandlerFactory, ExportHandlerFactory>();
-            services.AddTransient<IExportProcessHandler<DataExportProcessArgs>, ExportProcessHandler>();
-        }
     }
 
 }

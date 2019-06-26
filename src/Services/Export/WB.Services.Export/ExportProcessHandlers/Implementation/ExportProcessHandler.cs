@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Models;
-using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Infrastructure.FileSystem;
 
@@ -18,10 +17,9 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
         private readonly IDataExportProcessesService dataExportProcessesService;
         private readonly IOptions<ExportServiceSettings> interviewDataExportSettings;
         private readonly IDataExportFileAccessor dataExportFileAccessor;
-        private readonly IExternalStorageDataClientFactory externalStorageDataClientFactory;
+        private readonly IPublisherToExternalStorage publisherToExternalStorage;
         private readonly IFileBasedExportedDataAccessor fileBasedExportedDataAccessor;
         private readonly IArchiveUtils archiveUtils;
-        private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
         public ExportProcessHandler(IExportHandlerFactory exportHandlerFactory,
@@ -31,8 +29,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             IFileSystemAccessor fileSystemAccessor,
             IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
             IArchiveUtils archiveUtils,
-            IExternalStorageDataClientFactory externalStorageDataClientFactory,
-            IQuestionnaireStorage questionnaireStorage)
+            IPublisherToExternalStorage publisherToExternalStorage)
         {
             this.exportHandlerFactory = exportHandlerFactory;
             this.dataExportProcessesService = dataExportProcessesService;
@@ -41,8 +38,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             this.fileSystemAccessor = fileSystemAccessor;
             this.fileBasedExportedDataAccessor = fileBasedExportedDataAccessor;
             this.archiveUtils = archiveUtils;
-            this.externalStorageDataClientFactory = externalStorageDataClientFactory;
-            this.questionnaireStorage = questionnaireStorage;
+            this.publisherToExternalStorage = publisherToExternalStorage;
         }
 
         public async Task ExportDataAsync(DataExportProcessArgs process, CancellationToken cancellationToken)
@@ -53,10 +49,13 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             HandleProgress(state);
             PrepareOutputArchive(state);
 
-            using (TemporaryFolder(state))
+            CreateTemporaryFolder(state);
+
+            try
             {
                 // ReSharper disable once InconsistentlySynchronizedField
                 this.dataExportProcessesService.ChangeStatusType(state.ProcessId, DataExportStatus.Running);
+
                 await handler.ExportDataAsync(state, cancellationToken);
 
                 if (state.RequireCompression)
@@ -74,27 +73,15 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                     }
                 }
             }
+            finally
+            {
+                DeleteExportTempDirectory(state);
+            }
         }
 
         private async Task PublishToExternalStorage(ExportState state, CancellationToken cancellationToken)
         {
-            var dataClient = externalStorageDataClientFactory.GetDataClient(state.StorageType);
-
-            using (dataClient.GetClient(state.ProcessArgs.AccessToken))
-            {
-                var applicationFolder = await dataClient.CreateApplicationFolderAsync();
-
-                var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(state.Settings.QuestionnaireId, cancellationToken);
-                var questionnaireFolder = questionnaire.VariableName ?? questionnaire.QuestionnaireId.ToString();
-
-                var folder = await dataClient.CreateFolderAsync(applicationFolder, questionnaireFolder);
-
-                using (var fileStream = File.OpenRead(state.ArchiveFilePath))
-                {
-                    var filename = Path.GetFileName(state.ArchiveFilePath);
-                    await dataClient.UploadFileAsync(folder, filename, fileStream, fileStream.Length, cancellationToken);
-                }
-            }
+            await this.publisherToExternalStorage.PublishToExternalStorage(state, cancellationToken);
         }
 
         private async Task Compress(ExportState state, CancellationToken cancellationToken)
@@ -113,14 +100,12 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                 state.ArchiveFilePath, state.Progress, cancellationToken);
         }
 
-        private IDisposable TemporaryFolder(ExportState state)
+        private void CreateTemporaryFolder(ExportState state)
         {
             state.ExportTempFolder = this.fileSystemAccessor.GetTempPath(
                     interviewDataExportSettings.Value.DirectoryPath);
 
             RecreateExportTempDirectory(state);
-
-            return new Disposer(() => DeleteExportTempDirectory(state));
         }
 
         private void PrepareOutputArchive(ExportState state)
