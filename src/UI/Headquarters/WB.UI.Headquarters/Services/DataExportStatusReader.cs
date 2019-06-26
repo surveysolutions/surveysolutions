@@ -2,9 +2,11 @@
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Resources;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -13,7 +15,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native;
 using WB.Infrastructure.Native.Logging.Slack;
 
-namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
+namespace WB.UI.Headquarters.Services
 {
     internal class DataExportStatusReader : IDataExportStatusReader
     {
@@ -44,14 +46,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             InterviewStatus? status = null, DateTime? from = null, DateTime? to = null)
         {
             var archiveFileName = exportFileNameService.GetQuestionnaireTitleWithVersion(questionnaireIdentity);
-            var result = await exportServiceApi.DownloadArchive(questionnaireIdentity.ToString(), archiveFileName, 
+            var result = await exportServiceApi.DownloadArchive(questionnaireIdentity.ToString(), archiveFileName,
                 format, status, from, to);
 
             if (result.StatusCode == HttpStatusCode.NotFound) return null;
 
             result.EnsureSuccessStatusCode();
 
-            if (result.Headers.TryGetValues("NewLocation", out var values))
+            if (result.Headers.TryGetValues(@"NewLocation", out var values))
             {
                 return new DataExportArchive
                 {
@@ -69,8 +71,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
         public Task<ExportDataAvailabilityView> GetDataAvailabilityAsync(QuestionnaireIdentity questionnaireIdentity)
         {
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
+
             if (questionnaire == null)
-                return null;
+                return Task.FromResult<ExportDataAvailabilityView>(null);
 
             var hasAssignmentWithAudioRecordingEnabled = assignmentsService.HasAssignmentWithAudioRecordingEnabled(questionnaireIdentity);
             return Task.FromResult(new ExportDataAvailabilityView
@@ -88,13 +91,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                 return null;
             }
 
-            if (processView.Error!=null)
+            if (processView.Error != null)
             {
-                switch(processView.Error.Type)
+                switch (processView.Error.Type)
                 {
                     case DataExportError.Canceled: processView.Error.Message = DataExport.Error_Canceled; break;
                     case DataExportError.NotEnoughExternalStorageSpace: processView.Error.Message = DataExport.Error_NotEnoughExternalStorageSpace; break;
-                    default: processView.Error.Message = DataExport.Error_Unhandled;
+                    default: processView.Error.Message = DataExport.Error_Unhandled; break;
                 }
             }
 
@@ -131,11 +134,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                 {
                     return new DataExportStatusView() { Success = false };
                 }
-                
+
                 await slackApiClient.SendMessageAsync(new SlackFatalMessage
                 {
                     Color = SlackColor.Good,
-                    Message = "HQ restored connection to Export Service",
+                    Message = @"HQ restored connection to Export Service",
                     Type = FatalExceptionType.HqExportServiceUnavailable
                 });
 
@@ -143,7 +146,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             }
             catch (Exception e)
             {
-                this.logger.Fatal("HQ lost connection to Export Service",
+                this.logger.Fatal(@"HQ lost connection to Export Service",
                     e.WithFatalType(FatalExceptionType.HqExportServiceUnavailable));
 
                 return new DataExportStatusView
