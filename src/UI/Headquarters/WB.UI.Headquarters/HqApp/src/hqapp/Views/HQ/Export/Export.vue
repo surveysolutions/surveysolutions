@@ -27,16 +27,15 @@
                   <div class="filter-column">
                     <h5>{{$t('DataExport.SurveyQuestionnaire')}} <span class="text-danger">*</span></h5>
                     <div class="form-group">
-                      <Typeahead
+                      <Typeahead fuzzy
                         control-id="questionnaireId"
-                        fuzzy
+                        :value="questionnaireId"
                         :placeholder="$t('Common.AllQuestionnaires')"
+                        :fetch-url="questionnaireFetchUrl"
                         data-vv-name="questionnaireId"
                         data-vv-as="questionnaire"
-                        v-validate="'required'" 
-                        :value="questionnaireId"
+                        v-validate="'required'"
                         v-on:selected="questionnaireSelected"
-                        :fetch-url="questionnaireFetchUrl"
                       />
                       <span class="help-block">{{ errors.first('questionnaireId') }}</span>
                     </div>
@@ -52,7 +51,7 @@
                         :fetch-url="questionnaireVersionFetchUrl"
                         v-on:selected="questionnaireVersionSelected"
                         :disabled="questionnaireVersionFetchUrl == null"
-                        :selectFirst="true"                        
+                        :selectFirst="true"
                       />
                       <span class="help-block">{{ errors.first('questionnaireVersion') }}</span>
                   </div>
@@ -203,6 +202,7 @@ import {mixin as VueTimers} from 'vue-timers'
   Ddi: 5,
   Paradata: 6
 };
+
 const ExternalStorageType =
 {
     dropbox: 1,
@@ -232,6 +232,26 @@ export default {
     timers: {
       updateExportCards: { time: 5000, autostart: true, repeat: true }
     },
+
+    mounted() {
+      if(window.location.hash != '') {
+        const jsonState = window.atob(window.location.hash.substring(1));
+        console.log("got state", window.location.hash.length, jsonState)
+        // restoring empty hash
+        window.location.hash = ''
+        if(window.location.href.endsWith("#")){
+          window.history.replaceState(null, window.title, window.location.href.substring(0, window.location.href.length - 1))
+        }
+
+        try {
+          const state = JSON.parse(jsonState)
+          this.restorePageState(state)
+        } catch {
+          // do nothing
+        }
+      }
+    },
+
     created() {
         var self = this;
         self.$store.dispatch("showProgress");
@@ -342,8 +362,8 @@ export default {
                 self.$store.dispatch("hideProgress");
             });
       },
-      async queueExport(){
 
+      async queueExport(){
         if (this.dataDestination != "zip")
         {
           this.redirectToExternalStorage();
@@ -407,16 +427,29 @@ export default {
         };
 
         let storageSettings = this.externalStoragesSettings[this.dataDestination];
+        const jsonState = JSON.stringify(state);
+
+        window.location.hash = window.btoa(JSON.stringify({
+          id: this.questionnaireId,
+          version: this.questionnaireVersion,
+          status: this.status,
+          dataType: this.dataType,
+          dataFormat: this.dataFormat,
+          dataDestination: this.dataDestination
+        }));
+        
         var request = {
           response_type: this.externalStoragesSettings.responseType,
           redirect_uri: encodeURIComponent(this.externalStoragesSettings.redirectUri),
           client_id: storageSettings.clientId,
-          state: window.btoa(window.location.href + ";" + this.$config.model.api.exportToExternalStorageUrl + ";" + JSON.stringify(state)),
+          state: window.btoa(window.location.href + ";" + this.$config.model.api.exportToExternalStorageUrl + ";" + jsonState),
           scope: storageSettings.scope
         };
 
+        console.log(state, window.location.href, request, this.$config.model.api.exportToExternalStorageUrl )
         window.location = storageSettings.authorizationUri + "?" + decodeURIComponent($.param(request));
       },
+
       getExportParams(questionnaireId, questionnaireVersion, dataType, dataFormat, dataDestination, status){
        
         var result = dataFormatNum.Tabular;
@@ -435,36 +468,46 @@ export default {
           status: status
         };
       },
-        statusSelected(newValue) {
-            this.status = newValue;
-        },
-        questionnaireSelected(newValue) {
-            this.questionnaireId = newValue;
-        },
-        questionnaireVersionSelected(newValue) {
-            this.questionnaireVersion = newValue;
-            if (this.questionnaireVersion)
-              this.updateDataAvalability();
-        },
-        updateDataAvalability(){
-          this.isUpdatingDataAvailability = true;
-          
-          this.$http.get(this.$config.model.api.dataAvailabilityUrl, { params: {
-            id: this.questionnaireId.key,
-            version: this.questionnaireVersion.key
-          } })
-            .then((response) => {
-              this.hasInterviews = response.data.hasInterviews;
-              this.hasBinaryData = response.data.hasBinaryData;
-              this.dataType = this.hasInterviews ? "surveyData" : "ddi";
-            })
-            .catch((error) => {
-                Vue.config.errorHandler(error, self);
-            })
-            .then(() => {
-                this.isUpdatingDataAvailability = false;
-            });
-        }
+
+      restorePageState(state) {
+          this.questionnaireSelected(state.id);
+          this.questionnaireVersionSelected(state.version);
+          this.statusSelected(state.status);
+          this.dataType = state.dataType;
+          this.dataFormat = state.dataFormat;
+          this.dataDestination = state.dataDestination;
+      },
+
+      statusSelected(newValue) {
+          this.status = newValue;
+      },
+      questionnaireSelected(newValue) {
+          this.questionnaireId = newValue;
+      },
+      questionnaireVersionSelected(newValue) {
+          this.questionnaireVersion = newValue;
+          if (this.questionnaireVersion)
+            this.updateDataAvalability();
+      },
+      updateDataAvalability(){
+        this.isUpdatingDataAvailability = true;
+        
+        this.$http.get(this.$config.model.api.dataAvailabilityUrl, { params: {
+          id: this.questionnaireId.key,
+          version: this.questionnaireVersion.key
+        } })
+          .then((response) => {
+            this.hasInterviews = response.data.hasInterviews;
+            this.hasBinaryData = response.data.hasBinaryData;
+            this.dataType = this.hasInterviews ? "surveyData" : "ddi";
+          })
+          .catch((error) => {
+              Vue.config.errorHandler(error, self);
+          })
+          .then(() => {
+              this.isUpdatingDataAvailability = false;
+          });
+      }
     },
     components: {ExportProcessCard}
 };
