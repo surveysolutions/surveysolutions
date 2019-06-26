@@ -112,20 +112,22 @@ export default {
             isInitializing: true
         };
     },
+    
     timers: {
       updateStatus: { time: 1000, autostart: true, repeat: true },
       dataRecreationStatus: { time: 10000, autostart: false, repeat: true }
     },
+
     computed: {
         downloadFileUrl()
         {
             var url = this.$config.model.api.downloadDataUrl;
             return  `${url}?id=${this.processId}`;
         },
-        isFailed(){
+        isFailed() {
             return this.isInitializing == false && this.isRunning == false && this.error!=null;
         },
-        isSuccessfull(){
+        isSuccessfull() {
             return this.isInitializing == false && this.isRunning == false && this.error==null;
         }
     },
@@ -170,10 +172,11 @@ export default {
 
                     this.isInitializing = false;
 
-                    if (this.processStatus == ProcessStatus.Finished || this.processStatus == ProcessStatus.Canceled)
+                    if (!info.isRunning)
                     {
                         this.isRunning = false;
                         this.$timer.stop("updateStatus");
+
                         if (this.hasFile)
                         {
                             this.$timer.start("dataRecreationStatus");
@@ -185,13 +188,14 @@ export default {
                     this.$timer.stop("updateStatus");
                 });
       },
+
       dataRecreationStatus(){
           this.$http.get(this.$config.model.api.wasExportFileRecreatedUrl, {  params: { id: this.data.id }  })
             .then((response) => {
                 var wasExportFileRecreated = response.data;
                 this.hasFile = this.hasFile && !wasExportFileRecreated;
 
-                if (!this.hasFile)
+                if (!wasExportFileRecreated)
                 {
                     this.$timer.stop("dataRecreationStatus");
                 }

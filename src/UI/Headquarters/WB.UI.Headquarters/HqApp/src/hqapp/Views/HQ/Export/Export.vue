@@ -297,6 +297,7 @@ export default {
         this.hasInterviews = false;
         this.hasBinaryData = false;
       },
+
       updateExportCards(){
         var self = this;
         this.$http.get(this.$config.model.api.statusUrl)
@@ -382,10 +383,10 @@ export default {
             var fieldName = this.errors.items[0].field;
             const $firstFieldWithError = $("#"+fieldName);
             $firstFieldWithError.focus();
-        }        
+        }
       },
-      redirectToExternalStorage(){
 
+      redirectToExternalStorage(){
         const exportParams = this.getExportParams(
             this.questionnaireId.key,
             this.questionnaireVersion.key,

@@ -115,10 +115,8 @@ namespace WB.Services.Export.Host.Controllers
             DateTime? toDate,
             TenantInfo tenant)
         {
-            var dataExportStatusForQuestionnaire = await this.jobsStatusReporting.GetDataExportStatusForQuestionnaireAsync(tenant,
+            return await this.jobsStatusReporting.GetDataExportStatusForQuestionnaireAsync(tenant,
                 new QuestionnaireId(questionnaireId), status, fromDate, toDate);
-
-            return dataExportStatusForQuestionnaire;
         }
 
   
@@ -175,16 +173,14 @@ namespace WB.Services.Export.Host.Controllers
         [Route("api/v1/job/wasExportRecreated")]
         public async Task<bool> WasExportFileRecreated(long processId, TenantInfo tenant)
         {
-            var hasMoreRecentJob = await this.jobService.HasMostRecentFinishedJobIdWithSameTag(processId, tenant);
-            return hasMoreRecentJob;
+            return await this.jobService.HasMostRecentFinishedJobIdWithSameTag(processId, tenant);
         }
 
         [HttpGet]
         [Route("api/v1/job")]
         public async Task<DataExportProcessView> GetDataExportStatus(long processId, TenantInfo tenant)
         {
-            var exportStatus = await this.jobsStatusReporting.GetDataExportStatusAsync(processId, tenant);
-            return exportStatus;
+            return await this.jobsStatusReporting.GetDataExportStatusAsync(processId, tenant);
         }
 
         [HttpDelete]
