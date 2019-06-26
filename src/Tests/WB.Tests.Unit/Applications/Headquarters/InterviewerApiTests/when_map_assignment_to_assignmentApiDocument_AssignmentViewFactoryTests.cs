@@ -10,6 +10,8 @@ using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Infrastructure.Native.Storage;
 using WB.Tests.Abc;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
 {
