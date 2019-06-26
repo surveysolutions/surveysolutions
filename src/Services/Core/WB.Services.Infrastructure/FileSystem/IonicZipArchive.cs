@@ -45,13 +45,13 @@ namespace WB.Services.Infrastructure.FileSystem
             zipStream.Dispose();
         }
 
-        public void CreateEntry(string path, Stream content)
+        public void CreateEntry(string path, Stream content, long contentLength)
         {
             var entry = new ZipEntry(path);
 
             zipStream.PutNextEntry(entry);
 
-            if (content.Length != 0)
+            if (contentLength != 0)
             {
                 content.CopyTo(zipStream);
             }

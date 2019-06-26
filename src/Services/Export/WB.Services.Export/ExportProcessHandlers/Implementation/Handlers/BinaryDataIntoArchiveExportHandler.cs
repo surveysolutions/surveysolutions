@@ -30,7 +30,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
             var tempArchivePath = this.fileSystemAccessor.CombinePath(state.ExportTempFolder, 
                 this.fileSystemAccessor.GetFileName(state.ArchiveFilePath));
 
-            using (var archiveFile = fileSystemAccessor.OpenOrCreateFile(state.ExportTempFolder, false))
+            using (var archiveFile = fileSystemAccessor.OpenOrCreateFile(tempArchivePath, false))
             {
                 using (var archive = dataExportFileAccessor.CreateExportArchive(archiveFile, state.ProcessArgs.ArchivePassword))
                 {
@@ -45,7 +45,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
                             }
 
                             path = this.fileSystemAccessor.CombinePath(path, binaryDataAction.FileName);
-                            archive.CreateEntry(path, binaryDataAction.Content);
+                            archive.CreateEntry(path, binaryDataAction.Content, binaryDataAction.ContentLength);
                             return Task.CompletedTask;
                         }, cancellationToken);
                 }

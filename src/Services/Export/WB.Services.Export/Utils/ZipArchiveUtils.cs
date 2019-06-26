@@ -92,7 +92,7 @@ namespace WB.Services.Export
                             }
                             else
                             {
-                                archive.CreateEntry(file.Substring(exportTempDirectoryPath.Length + 1), fs);
+                                archive.CreateEntry(file.Substring(exportTempDirectoryPath.Length + 1), fs, fs.Length);
                             }
                         }
                     }
@@ -149,7 +149,7 @@ namespace WB.Services.Export
                             }
                             else
                             {
-                                archive.CreateEntry(file.Substring(exportTempDirectoryPath.Length + 1), fs);
+                                archive.CreateEntry(file.Substring(exportTempDirectoryPath.Length + 1), fs, fs.Length);
                             }
                         }
                     }
