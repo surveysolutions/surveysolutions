@@ -236,7 +236,7 @@ export default {
     mounted() {
       if(window.location.hash != '') {
         const jsonState = window.atob(window.location.hash.substring(1));
-        console.log("got state", window.location.hash.length, jsonState)
+
         // restoring empty hash
         window.location.hash = ''
         if(window.location.href.endsWith("#")){
