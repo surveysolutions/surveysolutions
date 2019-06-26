@@ -4,6 +4,8 @@ using System.Linq;
 using NConsole;
 using Ninject;
 using NLog;
+using support.Implementation;
+using support.Services;
 
 namespace support
 {
@@ -17,6 +19,8 @@ namespace support
             ninjectKernel.Bind<INetworkService>().To<NetworkService>();
             ninjectKernel.Bind<IDatabaseService>().To<PostgresDatabaseService>();
             ninjectKernel.Bind<IConfigurationManagerSettings>().To<ConfigurationManagerSettings>().InSingletonScope();
+            ninjectKernel.Bind<ISystemService>().To<SystemService>();
+
             ninjectKernel.Bind<ILogger>().ToConstant(logger);
 
             var processor = new CommandLineProcessor(new ConsoleHost(), new ConsoleDependencyResolver(ninjectKernel));
@@ -24,7 +28,7 @@ namespace support
 
             processor.RegisterCommand<MigrateDbCommand>("migrate");
             processor.RegisterCommand<ResetPasswordCommand>("reset-password");
-            processor.RegisterCommand<CheckAccessCommand>("health-check");
+            processor.RegisterCommand<CheckHealthCommand>("health-check");
             processor.RegisterCommand<ArchiveLogsCommand>("archive-logs");
             processor.RegisterCommand<CustomHelpCommand>("help");
             processor.RegisterCommand<CustomHelpCommand>("");

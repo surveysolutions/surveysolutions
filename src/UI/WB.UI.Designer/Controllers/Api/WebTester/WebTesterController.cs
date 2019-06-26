@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
@@ -25,15 +27,13 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
         private readonly IWebTesterService webTesterService;
         private readonly ISerializer serializer;
 
-
         public WebTesterController(
             IQuestionnairePackageComposer questionnairePackageComposer,
             IQuestionnaireViewFactory questionnaireViewFactory,
             IAttachmentService attachmentService,
             DesignerDbContext designerDbContext,
             IWebTesterService webTesterService,
-            ISerializer serializer
-            )
+            ISerializer serializer)
         {
             this.questionnairePackageComposer = questionnairePackageComposer;
             this.questionnaireViewFactory = questionnaireViewFactory;
@@ -125,7 +125,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
 
             var actualTranslations = questionnaireView.Source.Translations.Select(x => x.Id).ToList();
 
-            return Ok(this.designerDbContext.TranslationInstances
+            var model = this.designerDbContext.TranslationInstances
                 .Where(x => x.QuestionnaireId == questionnaireId && actualTranslations.Contains(x.TranslationId))
                 .Select(x => new TranslationDto
                 {
@@ -135,7 +135,8 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
                     QuestionnaireEntityId = x.QuestionnaireEntityId,
                     TranslationIndex = x.TranslationIndex
                 })
-                .ToArray());
+                .ToArray();
+            return Ok(model);
         }
     }
 }
