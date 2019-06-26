@@ -161,7 +161,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<ISerializer, NewtonJsonSerializer>();
             registry.Bind<IJsonAllTypesSerializer, JsonAllTypesSerializer>();
             registry.Bind<IAttachmentContentService, AttachmentContentService>();
-            registry.Bind<IInterviewAnswerSerializer, NewtonInterviewAnswerJsonSerializer>();
 
             registry.BindWithConstructorArgument<IMapStorageService, MapFileStorageService>("folderPath", this.currentFolderPath);
 
