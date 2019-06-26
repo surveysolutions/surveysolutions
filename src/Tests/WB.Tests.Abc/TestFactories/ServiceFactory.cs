@@ -1115,6 +1115,14 @@ namespace WB.Tests.Abc.TestFactories
                 assignments ?? new InMemoryPlainStorageAccessor<Assignment>(),
                 importAssignments ?? new InMemoryPlainStorageAccessor<AssignmentToImport>());
         }
+
+        public IWebInterviewNotificationService WebInterviewNotificationService(
+            IStatefulInterviewRepository statefulInterviewRepository,
+            IQuestionnaireStorage questionnaireStorage,
+            IWebInterviewInvoker webInterviewInvoker)
+        {
+            return new WebInterviewNotificationService(statefulInterviewRepository, questionnaireStorage, webInterviewInvoker);
+        }
     }
 
     internal class SimpleFileHandler : IFastBinaryFilesHttpHandler
