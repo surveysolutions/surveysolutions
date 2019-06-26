@@ -36,7 +36,7 @@ namespace support
             host.WriteLine();
             if (!string.IsNullOrWhiteSpace(recommendation))
             {
-                host.WriteHighlightedText($"Recommendation:{recommendation}", ConsoleColor.DarkYellow);
+                host.WriteHighlightedText($"Recommendation: {recommendation}", ConsoleColor.DarkYellow);
                 host.WriteLine();
             }
         }
@@ -61,7 +61,12 @@ namespace support
             if (isActionExecutedSuccessfully)
                 host.WriteOk();
             else
+            {
+                logger.Info($"Action Failed. Provided Recomendation: {recommendation}");
                 host.WriteFailed(recommendation);
+            }
+
+            
         }
     }
 }

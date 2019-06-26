@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using NConsole;
 using Ninject;
 using NLog;
@@ -13,8 +14,12 @@ namespace support
     {
         static void Main(string[] args)
         {
+            var compiledAt = Util.GetLinkerTimestampUtc(Assembly.GetExecutingAssembly());
+            Console.WriteLine($"Survey Solutions Support Tool. UTC Build time: {compiledAt}");
+
             var logger = LogManager.GetLogger("support");
-            logger.Info($"Support tool started {DateTime.Now}.");
+            logger.Info($"Support tool started {DateTime.Now}. Version was built at UTC: {compiledAt}");
+            
             var ninjectKernel = new StandardKernel();
             ninjectKernel.Bind<INetworkService>().To<NetworkService>();
             ninjectKernel.Bind<IDatabaseService>().To<PostgresDatabaseService>();

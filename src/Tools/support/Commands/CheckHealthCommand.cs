@@ -1,6 +1,4 @@
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using NConsole;
 using NLog;
@@ -90,7 +88,7 @@ namespace support
                 host.WriteMessage("Permissions to database: ");
                 await host.TryExecuteActionWithAnimationAsync(logger,
                     databaseService.HasPermissionsAsync(ConnectionString),
-                    "User has no permissions to access database. Please ensure that user has permissions.");
+                    "Please ensure that user has sufficient permissions.");
             }
             else
                 host.WriteMessage("Connection string not found");
@@ -104,7 +102,7 @@ namespace support
                 host.WriteMessage("Connection to database: ");
                 await host.TryExecuteActionWithAnimationAsync(logger,
                     databaseService.HasConnectionAsync(ConnectionString),
-                    "Database was not available. Please check that server can be reached and DB exists.");
+                    "Please check that server can be reached and DB exists.");
             }
             else
                 host.WriteMessage("Connection string not found");
@@ -118,7 +116,7 @@ namespace support
                 host.WriteMessage("Connection to the Survey Solutions website: ");
                 await host.TryExecuteActionWithAnimationAsync(logger,
                     networkService.IsHostReachableAsync(DesignerUrl),
-                    $"Survey Solutions Designer is not reachable. Please check that site {DesignerUrl} can be reached from the server.");
+                    $"Please check that site {DesignerUrl} can be reached from the server.");
             }
             else
                 host.WriteLine("Url to Survey Solutions Website not found.");
@@ -128,22 +126,38 @@ namespace support
         {
             if (!string.IsNullOrEmpty(ExportServiceUrl))
             {
+                var processName = "WB.Services.Export.Host";
+
+                logger.Info("Checking Export Service process");
+                host.WriteMessage("Checking Export Service is running : ");
+                await host.TryExecuteActionWithAnimationAsync(logger,
+                    this.systemService.IsProcessRunning(processName),
+                    $"Please check that export service with process {processName} is running.");
+
                 logger.Info("Checking connection to Export Service");
                 host.WriteMessage("Connection to the Export Service: ");
                 await host.TryExecuteActionWithAnimationAsync(logger,
-                    networkService.IsHostReachableAsync(ExportServiceUrl),
-                    $"Export service access point {ExportServiceUrl} is not reachable. Please check that it's running and healthy.");
+                    networkService.IsHostReachableAsync($"{ExportServiceUrl}/.hc"),
+                    $"Please check that export service access point {ExportServiceUrl} is reachable and service is running.");
+                
+                /*
+                var serviceName = "wb.service.export";
 
-                var processName = "WB.Services.Export.Host";
-
-                host.WriteMessage("Checking running Export Service: ");
+                logger.Info($"Checking Export Windows Service {serviceName}");
+                host.WriteMessage("Checking Export Windows Service existence: ");
                 await host.TryExecuteActionWithAnimationAsync(logger,
-                    this.systemService.IsProcessRunning(processName),
-                    $"Export service process {processName} was not found. Please check that service can be started.");
+                    this.systemService.IsWindowsServiceExist(serviceName),
+                    $"Please check that export windows service is installed.");
+
+                logger.Info($"Checking Export Windows Service {serviceName}");
+                host.WriteMessage("Checking Export Windows Service status: ");
+                await host.TryExecuteActionWithAnimationAsync(logger,
+                    this.systemService.IsWindowsServiceRunning(serviceName),
+                    $"Please check that export windows service is enabled and started.");
+                */
             }
             else
                 host.WriteLine("Export Service Access point was not found.");
-
         }
     }
 }
