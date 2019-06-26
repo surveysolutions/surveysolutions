@@ -1,5 +1,4 @@
-﻿@using WB.Core.GenericSubdomains.Portable.ServiceLocation
-@using WB.Core.Infrastructure.Versions
+﻿@using WB.Core.Infrastructure.Versions
 @model WB.UI.WebTester.Controllers.InterviewPageModel
 <!DOCTYPE html>
 <html>
@@ -34,6 +33,8 @@
         hubName: "interview",
         inWebTesterMode: true,
         reloadQuestionnaireUrl: '@Model.ReloadQuestionnaireUrl',
+        saveScenarioUrl: '@Model.SaveScenarioUrl',
+        getScenarioUrl: '@Model.GetScenarioUrl',
         loadedMessage: '@TempData["Message"]'
     }
     </script>

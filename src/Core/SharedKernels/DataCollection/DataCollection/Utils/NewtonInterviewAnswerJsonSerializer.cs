@@ -6,11 +6,9 @@ using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
-using WB.Core.SharedKernels.DataCollection.Utils;
 
-namespace WB.Infrastructure.Native.Storage
+namespace WB.Core.SharedKernels.DataCollection.Utils
 {
     public class NewtonInterviewAnswerJsonSerializer : IInterviewAnswerSerializer
     {

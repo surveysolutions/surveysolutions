@@ -28,6 +28,7 @@ using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandDeserialization;
 using WB.Core.Synchronization.MetaInfo;
@@ -56,6 +57,7 @@ namespace WB.UI.Headquarters.Injections
     {
         public void Load(IWebIocRegistry registry)
         {
+            registry.BindAsSingleton<IInterviewAnswerSerializer, NewtonInterviewAnswerJsonSerializer>();
             registry.Bind<ISlackApiClient, SlackApiClient>();
             registry.BindAsSingleton<ISlackMessageThrottler, SlackMessageThrottler>();
             registry.Bind<IAssignmentsImportReader, AssignmentsImportReader>();

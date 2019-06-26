@@ -24,7 +24,7 @@ namespace WB.Tests.Integration.Core
             var gA = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var gB = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
-            await RunActionInScopeAsync(async locator =>
+            await RunActionInScopeAsync(locator =>
             {
                 var accessor = locator.GetInstance<IClassificationsStorage>();
 
@@ -40,6 +40,7 @@ namespace WB.Tests.Integration.Core
                 };
 
                 accessor.Store(entities);
+                return Task.CompletedTask;
             });
 
             List<Classification> classifications = null;
