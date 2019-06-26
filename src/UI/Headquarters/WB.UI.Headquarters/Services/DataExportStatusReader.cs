@@ -127,7 +127,6 @@ namespace WB.UI.Headquarters.Services
                 DataExportStatusView result = await exportServiceApi.GetDataExportStatusForQuestionnaireAsync(
                     questionnaireIdentity.ToString(), status, fromDate, toDate);
 
-                var binaryExport = result.DataExports.Where(x => x.DataExportFormat == DataExportFormat.Binary);
                 var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
 
                 if (questionnaire == null)
