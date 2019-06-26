@@ -98,7 +98,7 @@ namespace WB.Services.Export.Jobs
                     FromDate = fromDate,
                     ToDate = toDate
                 };
-                var dataExportView = await this.CreateDataExportView(exportSettings, 
+                var dataExportView = await this.CreateDataExportView(exportSettings,
                     supportedDataExport.exportType, allProcesses);
 
                 exports.Add(dataExportView);
