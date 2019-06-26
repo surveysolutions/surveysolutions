@@ -22,7 +22,9 @@
         };
 
         var filteredItems = self.GetSelectedItemsAfterFilter(selectedRowAsArray, function(item) { return item.CanBeReassigned(); });
-        var receivedByInterviewerItemsCount = _.filter(filteredItems, function (item) { return item.ReceivedByInterviewer() === true }).length;
+        var receivedByInterviewerItemsCount = _.filter(filteredItems, function (item) {
+            return item.ReceivedByInterviewer() === true;
+        }).length;
         var countInterviewsToAssign = ko.observable(0);
 
         var model = {
@@ -40,19 +42,21 @@
 
                 var itemsThatShouldBeReassigned = [];
 
-                if (model.Users.AssignTo() == undefined) {
+                if (model.Users.AssignTo() === undefined) {
                     return itemsThatShouldBeReassigned;
                 }
 
-                if (model.IsReassignReceivedByInterviewer() == true) {
+                if (model.IsReassignReceivedByInterviewer() === true) {
                     itemsThatShouldBeReassigned = filteredItems;
                 } else {
-                    itemsThatShouldBeReassigned = _.filter(filteredItems, function (item) { return item.ReceivedByInterviewer() === false });
+                    itemsThatShouldBeReassigned = _.filter(filteredItems, function (item) {
+                        return item.ReceivedByInterviewer() === false;
+                    });
                 }
 
                 itemsThatShouldBeReassigned = _.filter(itemsThatShouldBeReassigned,
                     function (item) {
-                        return !(item.Status() == 'InterviewerAssigned' && item.ResponsibleId() == model.Users.AssignTo().UserId);
+                        return !(item.Status() === 'InterviewerAssigned' && item.ResponsibleId() === model.Users.AssignTo().UserId);
                     });
 
                 return itemsThatShouldBeReassigned;
@@ -78,7 +82,9 @@
             if (result) {
                 var itemsThatShouldBeReassigned = model.GetListInterviewsToAssign();
 
-                var parametersFunc = function (item) { return { InterviewerId: model.Users.AssignTo().UserId, InterviewId: item.InterviewId } };
+                var parametersFunc = function (item) {
+                    return { InterviewerId: model.Users.AssignTo().UserId, InterviewId: item.InterviewId };
+                };
 
                 if (itemsThatShouldBeReassigned.length > 0) {
                     self.sendCommand(commandName, parametersFunc, itemsThatShouldBeReassigned, onSuccessCommandExecuting);
@@ -97,7 +103,7 @@
         self.sendCommandAfterFilterAndConfirm(
             selectedRowAsArray, 
             "ApproveInterviewCommand",
-            function (item) { return { InterviewId: item.InterviewId } },
+            function (item, comment) { return { InterviewId: item.InterviewId, Comment: comment }; },
             function (item) { return item.CanApprove(); },
             "#confirm-approve-template",
             "#confirm-continue-message-template"
@@ -122,17 +128,19 @@
         var model = {
             CountInterviewsToReject: countInterviewsToReject,
             Users: self.CreateUsersViewModel(usersToAssignUrl),
-            StoreInteviewer: function () {
-                model.Users.AssignTo() == undefined
+            StoreInteviewer: function() {
+                model.Users.AssignTo() === undefined
                     ? countInterviewsToReject(countReadyToReject)
                     : countInterviewsToReject(countAllInterviewsToReject);
             },
             IsNeedShowAssignInterviewers: isNeedShowAssignInterviewers,
-            ClearAssignTo: function () {
+            ClearAssignTo: function() {
                 model.Users.AssignTo(undefined);
                 countInterviewsToReject(countReadyToReject);
-            }
-        }
+            },
+
+            StatusChangeComment: ko.observable('')
+        };
 
         var messageHtml = self.getBindedHtmlTemplate(messageTemplateId, model);
 
@@ -146,17 +154,20 @@
         notifier.confirm('', messageHtml, function (result) {
             if (result) {
                 var interviewer = model.Users.AssignTo();
+                var comment = model.StatusChangeComment();
                 $.each(filteredItems, function (index, interview) {
                     if (interview.IsNeedInterviewerAssign()) {
-                        if (interviewer != undefined)
+                        if (interviewer !== undefined)
                         {
                             self.sendCommand(rejectToInterviewerCommandName,
-                                function (interview) { return { InterviewId: interview.InterviewId, InterviewerId: interviewer.UserId } },
+                                function (interview) {
+                                    return { InterviewId: interview.InterviewId, InterviewerId: interviewer.UserId, Comment: comment };
+                                },
                                 [interview]);
                         }
                     } else {
                         self.sendCommand(rejectCommandName,
-                            function (interview) { return { InterviewId: interview.InterviewId } },
+                            function (interview) { return { InterviewId: interview.InterviewId, Comment: comment }; },
                             [ interview ]);
                     }
                 });

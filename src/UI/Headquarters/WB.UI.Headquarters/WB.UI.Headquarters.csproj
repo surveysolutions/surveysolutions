@@ -2573,7 +2573,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Elmah\" />
-    <Folder Include="App_Start\OwinSecurity\" />
     <Folder Include="Dependencies\dist\" />
     <Folder Include="Views\WebInterviewSetupApi\" />
   </ItemGroup>
