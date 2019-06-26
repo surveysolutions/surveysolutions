@@ -2539,6 +2539,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>WebInterviewUI.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\DataExportStatusReader.cs" />
     <Compile Include="Services\IQuestionnaireExporter.cs" />
     <Compile Include="Services\MetricsService.cs" />
     <Compile Include="Services\IInterviewCreatorFromAssignment.cs" />
