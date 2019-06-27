@@ -34,7 +34,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
             result.IsForSupervisor = question.IsSupervisors &&
                                      callerInterview.Status < InterviewStatus.ApprovedByHeadquarters &&
-                                     (this.authorizedUser.IsSupervisor && !this.authorizedUser.IsObserving);
+                                     ((this.authorizedUser.IsSupervisor || this.authorizedUser.IsHeadquarter) && !this.authorizedUser.IsObserving);
             result.AcceptAnswer = result.IsForSupervisor;
         }
 
