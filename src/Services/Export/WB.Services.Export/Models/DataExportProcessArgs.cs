@@ -8,6 +8,7 @@ namespace WB.Services.Export.Models
         public DataExportError Type { get; set; }
         public string Message { get; set; }
     }
+
     public class DataExportProcessStatus
     {
         public DateTime? BeginDate { get; set; }

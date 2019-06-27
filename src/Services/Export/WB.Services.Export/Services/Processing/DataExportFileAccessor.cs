@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Threading;
 using System.Threading.Tasks;
 using WB.Services.Export.Storage;
 using WB.Services.Infrastructure.FileSystem;
@@ -12,12 +13,12 @@ namespace WB.Services.Export.Services.Processing
     class DataExportFileAccessor : IDataExportFileAccessor
     {
         private readonly IArchiveUtils archiveUtils;
-        private readonly IExternalFileStorage externalFileStorage;
+        private readonly IExternalArtifactsStorage externalArtifactsStorage;
 
-        public DataExportFileAccessor(IArchiveUtils archiveUtils, IExternalFileStorage externalFileStorage)
+        public DataExportFileAccessor(IArchiveUtils archiveUtils, IExternalArtifactsStorage externalArtifactsStorage)
         {
             this.archiveUtils = archiveUtils;
-            this.externalFileStorage = externalFileStorage;
+            this.externalArtifactsStorage = externalArtifactsStorage;
         }
 
         public string GetExternalStoragePath(TenantInfo tenant, string name) => $"{tenant.Name}/{name}";
@@ -36,14 +37,14 @@ namespace WB.Services.Export.Services.Processing
             this.archiveUtils.ZipFiles(exportTempDirectoryPath, filesToArchive, archiveFilePath, archivePassword);
         }
 
-        public async Task PublishArchiveToExternalStorageAsync(TenantInfo tenant, string archiveFile, ExportProgress exportProgress)
+        public async Task PublishArchiveToArtifactsStorageAsync(TenantInfo tenant, string archiveFile, ExportProgress exportProgress, CancellationToken cancellationToken)
         {
-            if (externalFileStorage.IsEnabled())
+            if (externalArtifactsStorage.IsEnabled())
             {
                 using (var file = File.OpenRead(archiveFile))
                 {
                     var name = Path.GetFileName(archiveFile);
-                    await this.externalFileStorage.StoreAsync(GetExternalStoragePath(tenant, name), file, "application/zip", exportProgress);
+                    await this.externalArtifactsStorage.StoreAsync(GetExternalStoragePath(tenant, name), file, "application/zip", exportProgress, cancellationToken);
                 }
 
                 File.Delete(archiveFile);
