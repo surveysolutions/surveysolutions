@@ -1,6 +1,6 @@
 import EmailProviders from "./EmailProviders"
-
 import Vue from "vue"
+
 export default class AdminComponent {
     constructor(rootStore) {
         this.rootStore = rootStore;

@@ -10,7 +10,6 @@ using Microsoft.Extensions.Options;
 using WB.Services.Infrastructure.Storage;
 using WB.Services.Infrastructure.Tenant;
 using WB.Services.Scheduler.Model;
-using WB.Services.Scheduler.Storage;
 
 namespace WB.Services.Scheduler.Services.Implementation
 {
@@ -106,6 +105,23 @@ namespace WB.Services.Scheduler.Services.Implementation
                 tr.Commit();
                 return job;
             }
+        }
+
+        
+        public async Task<bool> HasMostRecentFinishedJobIdWithSameTag(long jobId, TenantInfo tenant)
+        {
+            var job = await this.GetJobAsync(jobId);
+            bool hasMoreRecentJob = await db.Jobs
+                .Where(x => x.Tag == job.Tag && x.Status == JobStatus.Completed && x.Id > jobId)
+                .AnyAsync();
+
+            return hasMoreRecentJob;
+        }
+
+
+        public async Task<JobItem> GetJobAsync(long id)
+        {
+            return await db.Jobs.FindAsync(id);
         }
 
         public async Task<JobItem> GetJobAsync(TenantInfo tenant, string tag, params JobStatus[] statuses)
