@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
@@ -80,6 +83,40 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.NotificationServi
             this.NotificationService.RefreshEntities(interview.Id, textQuestion, prefilledTextQuestion);
 
             this.hubMock.Verify(g => g.RefreshSectionState(interview.Id), Times.Once);
+        }
+
+        [Test]
+        public void should_notify_parent_group_if_it_has_flat_roster()
+        {
+            var sectionId = Id.g1;
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(chapterId: sectionId, new IComposite[]
+            {
+                Create.Entity.Roster(Id.g2,
+                    displayMode: RosterDisplayMode.Flat,
+                    children: new List<IComposite>
+                    {
+                        Create.Entity.TextQuestion(Id.gA)
+                    })
+            });
+
+            var localInterview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire, shouldBeInitialized: true);
+            var localHubMock = new Mock<IWebInterviewInvoker>();
+
+            var service = Create.Service.WebInterviewNotificationService(Create.Storage.InterviewRepository(localInterview), 
+                Create.Storage.QuestionnaireStorage(questionnaire), localHubMock.Object);
+
+            // act
+            var question = Create.Identity(Id.gA, 1);
+            service.RefreshEntities(localInterview.Id, question);
+
+            // Assert
+            var identity = Create.Identity(sectionId);
+            var sectionKey = GetConnectedClientSectionKey(identity, localInterview.Id);
+
+            localHubMock.Verify(g => g.RefreshEntities(
+                sectionKey,
+                It.Is<string[]>(m => m.Contains(question.ToString()))
+            ), Times.Once);
         }
     }
 }
