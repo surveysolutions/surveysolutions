@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace WB.Services.Infrastructure.FileSystem
 {
@@ -23,6 +25,11 @@ namespace WB.Services.Infrastructure.FileSystem
         IEnumerable<ExtractedFile> GetFilesFromArchive(Stream inputStream);
         IZipArchive CreateArchive(Stream outputStream, string password, System.IO.Compression.CompressionLevel compressionLevel);
         void ZipDirectory(string exportTempDirectoryPath, string archiveName, string archivePassword, IProgress<int> exportProgress);
+
+        Task ZipDirectoryAsync(string exportTempDirectoryPath, string archiveName,
+            string archivePassword,
+            IProgress<int> exportProgress,
+            CancellationToken token = default);
         void ZipFiles(string exportTempDirectoryPath, IEnumerable<string> files, string archiveFilePath, string password = null);
     }
 }

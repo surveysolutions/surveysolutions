@@ -17,12 +17,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         [Test]
         public void when_AnswerSet_recived_with_dateTimeOffset()
         {
-
             Guid interviewId = Guid.NewGuid();
             Guid userId = Guid.NewGuid();
             Guid questionId = Guid.Parse("11111111111111111111111111111111");
             string variableName = "q1";
-
 
             var interviewHistoryView = CreateInterviewHistoryView(interviewId);
             var questionnaireDocument = Create.Entity.QuestionnaireDocument(children: new[]
@@ -63,5 +61,33 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             Assert.False(isImplimentedInterface);
         }
 
+        [Test]
+        public void when_answer_removed_Should_subtitute_variable_name_instead_of_id()
+        {
+            Guid interviewId = Id.gA;
+            Guid questionId = Id.g1;
+            string variableName = "q1";
+
+            var interviewHistoryView = CreateInterviewHistoryView(interviewId);
+            var questionnaireDocument = Create.Entity.QuestionnaireDocument(children: new[]
+            {
+                Create.Entity.TextQuestion(questionId, variable: variableName)
+            });
+
+            var questionnaireStorage = Stub<IQuestionnaireStorage>.Returning(questionnaireDocument);
+
+            var answerEvents = new List<IEvent>();
+            answerEvents.Add(Create.Event.AnswersRemoved(Create.Identity(questionId)));
+
+            var interviewExportedDataDenormalizer = CreateInterviewHistoryDenormalizer(
+               questionnaire: CreateQuestionnaireExportStructure(questionId, variableName),
+               questionnaireStorage: questionnaireStorage);
+
+            //act
+            PublishEventsOnOnInterviewExportedDataDenormalizer(answerEvents, interviewHistoryView,
+                interviewExportedDataDenormalizer);
+
+            Assert.AreEqual(interviewHistoryView.Records[0].Parameters["question"], variableName);
+        }
     }
 }

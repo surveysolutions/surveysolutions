@@ -1,4 +1,7 @@
 ![Link Text](http://build.mysurvey.solutions/app/rest/builds/buildType:`(id:CI)`/statusIcon)
+# 19.07
+ - .net framework 4.8 is required for HQ application
+
 # 19.01
 - For export service we need to execute script in deploy tools to move all archives into new place
 > `deploy-tools\utils\move-archive.ps1 -config export-0`

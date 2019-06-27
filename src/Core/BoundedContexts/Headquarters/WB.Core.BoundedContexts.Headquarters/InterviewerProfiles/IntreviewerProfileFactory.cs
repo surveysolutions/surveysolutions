@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.UserProfile;
+using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -38,6 +42,7 @@ namespace WB.Core.BoundedContexts.Headquarters.InterviewerProfiles
         private readonly IInterviewFactory interviewFactory;
         private readonly IAuthorizedUser currentUser;
         private readonly IQRCodeHelper qRCodeHelper;
+        private readonly IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage;
 
         public InterviewerProfileFactory(
             HqUserManager userManager,
@@ -46,7 +51,8 @@ namespace WB.Core.BoundedContexts.Headquarters.InterviewerProfiles
             IInterviewerVersionReader interviewerVersionReader, 
             IInterviewFactory interviewFactory,
             IAuthorizedUser currentUser,
-            IQRCodeHelper qRCodeHelper)
+            IQRCodeHelper qRCodeHelper,
+            IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage)
         {
             this.userManager = userManager;
             this.interviewRepository = interviewRepository;
@@ -55,6 +61,7 @@ namespace WB.Core.BoundedContexts.Headquarters.InterviewerProfiles
             this.interviewFactory = interviewFactory;
             this.currentUser = currentUser;
             this.qRCodeHelper = qRCodeHelper;
+            this.profileSettingsStorage = profileSettingsStorage;
         }
 
         public InterviewerPoints GetInterviewerCheckInPoints(Guid interviewerId)
@@ -248,6 +255,16 @@ namespace WB.Core.BoundedContexts.Headquarters.InterviewerProfiles
                     Url = qRCodeHelper.GetBaseUrl(),
                     Login = profile.InterviewerName
                 })), 250, 250);
+
+            if (currentUser.IsInterviewer)
+            {
+                var profileSettings = this.profileSettingsStorage.GetById(AppSetting.ProfileSettings);
+                profile.IsModifiable = profileSettings?.AllowInterviewerUpdateProfile ?? false;
+            }
+            else
+            {
+                profile.IsModifiable = true;
+            }
 
             return profile;
         }

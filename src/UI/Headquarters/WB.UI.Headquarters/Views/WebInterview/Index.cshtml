@@ -26,7 +26,7 @@
 <body class="gray-background">
     <script>
     global: CONFIG = {
-        askForEmail: @(Json.Encode(ViewBag.AskForEmail)),
+        askForEmail: @ViewBag.AskForEmail,
         sendLinkUri: '@Url.RouteUrl(@"WebInterview.LinkSending", new { controller = @"WebInterview", Action = @"EmailLink" })',
         virtualPath: '@Url.RouteUrl(@"Default", new {controller = @"WebInterview", Action = "Index"})',
         imageUploadUri: '@Url.RouteUrl(@"WebInterview.ImageAnswering", new { controller = @"WebInterview", Action = @"Image"})',

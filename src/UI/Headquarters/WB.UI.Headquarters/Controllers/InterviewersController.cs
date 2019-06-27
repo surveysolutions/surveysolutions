@@ -1,8 +1,10 @@
 ﻿using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.UserProfile;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Code;
@@ -14,8 +16,8 @@ namespace WB.UI.Headquarters.Controllers
     public class InterviewersController : TeamController
     {
         public InterviewersController(ICommandService commandService, 
-            ILogger logger, IAuthorizedUser authorizedUser, HqUserManager userManager)
-            : base(commandService, logger, authorizedUser, userManager)
+            ILogger logger, IAuthorizedUser authorizedUser, HqUserManager userManager, IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage)
+            : base(commandService, logger, authorizedUser, userManager, profileSettingsStorage)
         {
         }
        

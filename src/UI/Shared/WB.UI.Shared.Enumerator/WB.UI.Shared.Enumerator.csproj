@@ -198,7 +198,6 @@
     <Compile Include="Services\Logging\NLogLogger.cs" />
     <Compile Include="Services\Logging\NLogLoggerProvider.cs" />
     <Compile Include="Services\Internals\PictureChooser.cs" />
-    <Compile Include="Services\Internals\PortableInterviewAnswerJsonSerializer.cs" />
     <Compile Include="Services\Internals\PortableJsonAllTypesSerializer.cs" />
     <Compile Include="Services\Internals\PortableJsonSerializer.cs" />
     <Compile Include="Services\Internals\PortableOldToNewAssemblyRedirectSerializationBinder.cs" />
