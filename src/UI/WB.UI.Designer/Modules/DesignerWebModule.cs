@@ -24,30 +24,14 @@ namespace WB.UI.Designer.Modules
         {
             registry.BindAsScoped<LocalOrDevelopmentAccessOnlyAttribute, LocalOrDevelopmentAccessOnlyAttribute>();
 
-            //registry.Bind<ILog>().ToConstant(new Log()).InSingletonScope();
-            //registry.BindMvcExceptionFilter<CustomHandleErrorFilter>();
-            //registry.BindMvcAuthorizationFilter<CustomAuthorizeFilter>();
-
             registry.Bind<IJsonAllTypesSerializer, JsonAllTypesSerializer>();
 
             registry.Bind<IQuestionnairePackageComposer, QuestionnairePackageComposer>();
             registry.BindAsSingleton<IQuestionnaireCacheStorage, QuestionnaireCacheStorage>();
             registry.Bind<IArchiveUtils, ZipArchiveUtils>();
 
-            //registry.Bind<IRecipientNotifier, MailNotifier>();
             registry.Bind<IQuestionnaireSearchStorage, QuestionnaireSearchStorage>();
             registry.Bind<IClassificationsStorage, ClassificationsStorage>();
-
-//            registry.BindToMethod<WebTesterSettings>(() =>
-//            {
-//                var appSettings = System.Configuration.ConfigurationManager.AppSettings;
-//                return new WebTesterSettings
-//                {
-//                    ExpirationAmountMinutes = appSettings["WebTester.ExpirationAmountMinutes"].AsInt(),
-//                    BaseUri = appSettings["WebTester.BaseUri"]
-//                };
-//            });
-
             registry.BindAsSingleton<IWebTesterService, WebTesterService>();
         }
 

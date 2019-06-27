@@ -9,6 +9,8 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.DependencyInjection;
 using WB.Core.Infrastructure.Modularity;
 using WB.UI.Designer.Code;
@@ -21,15 +23,9 @@ namespace WB.UI.Designer.Modules
     {
         public void Load(IDependencyRegistry registry)
         {
-//            registry.BindMvcActionFilter<UnderConstructionMvcFilter>();
-//            registry.BindWebApiFilter<UnderConstructionHttpFilter>(/*System.Web.Http.Filters.FilterScope.Controller, 0*/);
-//            registry.BindMvcActionFilterWhenControllerOrActionHasNoAttribute<TransactionFilter, NoTransactionAttribute>(/*FilterScope.First,*/ 1);
-//            registry.BindWebApiActionFilterWhenControllerOrActionHasNoAttribute<ApiTransactionFilter, NoTransactionAttribute>(/*System.Web.Http.Filters.FilterScope.Global, 1*/);
-
             registry.Bind<ICommandInflater, CommandInflater>();
             registry.Bind<IQuestionnaireHelper, QuestionnaireHelper>();
             registry.Bind<IVerificationErrorsMapper, VerificationErrorsMapper>();
-            //registry.Bind<ISystemMailer, SystemMailer>();
             registry.Bind<IDynamicCompiler, RoslynCompiler>();
             registry.Bind<IExpressionReplacer, ExpressionReplacer>();
             registry.Bind<IMacrosSubstitutionService, MacrosSubstitutionService>();
@@ -40,6 +36,7 @@ namespace WB.UI.Designer.Modules
             registry.Bind<ICommentsService, CommentsService>();
             registry.Bind<IPdfFactory, PdfFactory>();
             registry.Bind<IDeskAuthenticationService, DeskAuthenticationService>();
+            registry.Bind<ICommandsMonitoring, TraceCommandsMonitoring>();
         }
 
         public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status)

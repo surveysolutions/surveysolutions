@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Ncqrs.Domain;
@@ -20,6 +21,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
         private readonly ILiteEventBus eventBus;
         private readonly IServiceLocator serviceLocator;
         private readonly IAggregateRootCacheCleaner aggregateRootCacheCleaner;
+        private readonly ICommandsMonitoring commandsMonitoring;
 
         private static int executingCommandsCount = 0;
         private static readonly object executionCountLock = new object();
@@ -31,7 +33,8 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             IServiceLocator serviceLocator,
             IPlainAggregateRootRepository plainRepository,
             IAggregateLock aggregateLock, 
-            IAggregateRootCacheCleaner aggregateRootCacheCleaner)
+            IAggregateRootCacheCleaner aggregateRootCacheCleaner,
+            ICommandsMonitoring commandsMonitoring)
         {
             this.eventSourcedRepository = eventSourcedRepository;
             this.eventBus = eventBus;
@@ -39,7 +42,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             this.plainRepository = plainRepository;
             this.aggregateLock = aggregateLock;
             this.aggregateRootCacheCleaner = aggregateRootCacheCleaner;
-            
+            this.commandsMonitoring = commandsMonitoring;
         }
 
         public Task ExecuteAsync(ICommand command, string origin, CancellationToken cancellationToken)
@@ -132,6 +135,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
+                var sw = Stopwatch.StartNew();
                 switch (aggregateKind)
                 {
                     case AggregateKind.EventSourced:
@@ -145,6 +149,8 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
                     default:
                         throw new CommandServiceException($"Unable to execute command {command.GetType().Name} because it is registered to unknown aggregate root kind.");
                 }
+                sw.Stop();
+                this.commandsMonitoring.Report(command.GetType().Name, sw.Elapsed);
             });
         }
 
@@ -210,13 +216,13 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             if (!aggregate.HasUncommittedChanges())
                 return;
 
-            var commitedEvents = this.eventBus.CommitUncommittedEvents(aggregate, origin);
+            var committedEvents = this.eventBus.CommitUncommittedEvents(aggregate, origin);
 
             aggregate.MarkChangesAsCommitted();
 
             try
             {
-                this.eventBus.PublishCommittedEvents(commitedEvents);
+                this.eventBus.PublishCommittedEvents(committedEvents);
 
                 foreach (Action<IAggregateRoot, ICommand> postProcessor in postProcessors)
                 {
