@@ -141,7 +141,8 @@ namespace WB.Tests.Abc.TestFactories
                 serviceLocator ?? Mock.Of<IServiceLocator>(),
                 plainRepository ?? Mock.Of<IPlainAggregateRootRepository>(),
                 aggregateLock ?? Stub.Lock(),
-                aggregateRootCacheCleaner ?? Mock.Of<IAggregateRootCacheCleaner>());
+                aggregateRootCacheCleaner ?? Mock.Of<IAggregateRootCacheCleaner>(),
+                Mock.Of<ICommandsMonitoring>());
         }
 
         public AttachmentContentService AttachmentContentService(
