@@ -84,6 +84,10 @@ export default {
         selectFirst: {
             type: Boolean,
             default: false
+        },
+        selectedKey: {
+            type: String,
+            default: null
         }
     },
     watch: {
@@ -140,6 +144,10 @@ export default {
             minMatchCharLength: 1,
             keys: ["value"]
         };
+
+        if(this.selectedKey != null) {
+            this.fetchOptions(this.searchTerm, this.selectedKey);
+        }
     },
 
     methods: {
@@ -161,7 +169,7 @@ export default {
             }
         },
 
-        fetchOptions(filter = "") {
+        fetchOptions(filter = "", selectedKey = null) {
             if (this.values) {
                 if (filter != "") {
                     const fuse = new Fuse(this.values, this.fuseOptions);
@@ -169,6 +177,11 @@ export default {
                 } else {
                     this.options = this.setOptions(this.values);
                 }
+
+                if(selectedKey != null) {
+                    this.selectByKey(selectedKey);
+                }
+
                 return;
             }
 
@@ -188,7 +201,12 @@ export default {
                             this.selectOption(this.options[0].item);
                         }
                     }
+
                     this.isLoading = false;
+                    
+                    if(selectedKey != null) {
+                        this.selectByKey(selectedKey);
+                    }
                 })
                 .catch(() => (this.isLoading = false));
         },
@@ -210,6 +228,12 @@ export default {
         },
         selectOption(value) {
             this.$emit("selected", value, this.controlId);
+        },
+        selectByKey(key) {
+            const itemToSelect = _.find(this.options, o => o.item.key == key)
+            if(itemToSelect != null) {
+                this.selectOption(itemToSelect.item)
+            }
         },
         updateOptionsList(e) {
             this.fetchOptions(e.target.value);
