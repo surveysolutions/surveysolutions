@@ -7,9 +7,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.UI.WebTester.Resources;
@@ -19,34 +17,40 @@ namespace WB.UI.WebTester.Controllers
 {
     public class WebTesterController : Controller
     {
+        private const string SaveScenarioSessionKey = "SaveScenarioAvailable";
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IEvictionNotifier evictionService;
         private readonly IQuestionnaireStorage questionnaireStorage;
-        private readonly IQuestionnaireImportService questionnaireImportService;
         private readonly IInterviewFactory interviewFactory;
 
         public WebTesterController(
             IStatefulInterviewRepository statefulInterviewRepository,
             IEvictionNotifier evictionService,
-            ICommandService commandService,
             IQuestionnaireStorage questionnaireStorage,
-            IQuestionnaireImportService questionnaireImportService,
             IInterviewFactory interviewFactory)
         {
             this.statefulInterviewRepository = statefulInterviewRepository ?? throw new ArgumentNullException(nameof(statefulInterviewRepository));
             this.evictionService = evictionService;
             this.questionnaireStorage = questionnaireStorage;
-            this.questionnaireImportService = questionnaireImportService;
             this.interviewFactory = interviewFactory;
         }
 
-        public ActionResult Run(Guid id, string sid) => this.View(new InterviewPageModel
+        public ActionResult Run(Guid id, string sid, string saveScenarioAvailable, int? scenarioId = null)
         {
-            Id = id.ToString(),
-            OriginalInterviewId = sid ?? string.Empty
-        });
+            if (!string.IsNullOrEmpty(saveScenarioAvailable) && bool.TryParse(saveScenarioAvailable, out var saveScenarioAvailableBool))
+            {
+                Session[SaveScenarioSessionKey] = saveScenarioAvailableBool;
+            }
 
-        public async Task<ActionResult> Redirect(Guid id, string originalInterviewId)
+            return this.View(new InterviewPageModel
+            {
+                Id = id.ToString(),
+                OriginalInterviewId = sid ?? string.Empty,
+                ScenarioId = scenarioId
+            });
+        }
+
+        public async Task<ActionResult> Redirect(Guid id, string originalInterviewId, string scenarioId)
         {
             if (this.statefulInterviewRepository.Get(id.FormatGuid()) != null)
             {
@@ -55,7 +59,15 @@ namespace WB.UI.WebTester.Controllers
 
             try
             {
-                if (!string.IsNullOrEmpty(originalInterviewId))
+                if (!string.IsNullOrEmpty(scenarioId))
+                {
+                    var result = await this.interviewFactory.CreateInterview(id, int.Parse(scenarioId));
+                    if (result != CreationResult.DataRestored)
+                    {
+                        TempData["Message"] = Common.ReloadInterviewErrorMessage;
+                    }
+                }
+                else if (!string.IsNullOrEmpty(originalInterviewId))
                 {
                     var result = await this.interviewFactory.CreateInterview(id, Guid.Parse(originalInterviewId));
                     if (result != CreationResult.DataRestored)
@@ -105,6 +117,9 @@ namespace WB.UI.WebTester.Controllers
 
             var reloadQuestionnaireUrl =
                 $"{ConfigurationSource.Configuration["DesignerAddress"]}/WebTesterReload/Index/{interview.QuestionnaireIdentity.QuestionnaireId}?interviewId={id}";
+
+            var saveScenarioDesignerUrl = $"{ConfigurationSource.Configuration["DesignerAddress"]}/api/WebTester/Scenarios/{interview.QuestionnaireIdentity.QuestionnaireId}";
+                
             var interviewPageModel = new InterviewPageModel
             {
                 Id = id,
@@ -112,6 +127,12 @@ namespace WB.UI.WebTester.Controllers
                 GoogleMapsKey = ConfigurationSource.Configuration["GoogleMapApiKey"],
                 ReloadQuestionnaireUrl = reloadQuestionnaireUrl
             };
+            if (Session[SaveScenarioSessionKey] != null && (bool)Session[SaveScenarioSessionKey])
+            {
+                interviewPageModel.GetScenarioUrl = Url.Content("~/api/ScenariosApi");
+                interviewPageModel.SaveScenarioUrl = saveScenarioDesignerUrl;
+            }
+            
             return interviewPageModel;
         }
 
@@ -156,6 +177,9 @@ namespace WB.UI.WebTester.Controllers
         public string Id { get; set; }
         public string ReloadQuestionnaireUrl { get; set; }
         public string OriginalInterviewId { get; set; }
+        public string SaveScenarioUrl { get; set; }
+        public string GetScenarioUrl { get; set; }
+        public int? ScenarioId { get; set; }
     }
 
     public class ApiTestModel

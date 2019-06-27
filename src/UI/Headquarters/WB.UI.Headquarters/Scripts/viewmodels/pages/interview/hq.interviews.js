@@ -7,7 +7,7 @@
         self.sendCommandAfterFilterAndConfirm(
             selectedRowAsArray,
             "DeleteInterviewCommand",
-            function (item) { return { InterviewId: item.InterviewId }; },
+            function (item, comment) { return { InterviewId: item.InterviewId, Comment:comment }; },
             function(item) { return item.CanDelete(); },
             "#confirm-delete-template",
             "#confirm-continue-message-template"
@@ -45,14 +45,14 @@
                             SupervisorId: self.AssignTo().SupervisorId,
                             InterviewerId: self.AssignTo().InterviewerId,
                             InterviewId: interview.InterviewId
-                        }
+                        };
                     };
 
                     var onSuccessCommandExecuting = function () {
                         self.AssignTo(undefined);
                     };
 
-                    self.sendCommand(commandName, getParamsToAssignToOtherTeam, itemsThatShouldBeReassigned, onSuccessCommandExecuting);
+                    self.sendCommand(commandName, getParamsToAssignToOtherTeam, itemsThatShouldBeReassigned, "", onSuccessCommandExecuting);
                 }
             }
             else {
@@ -65,7 +65,7 @@
         self.sendCommandAfterFilterAndConfirm(
             selectedRowAsArray,
             "HqApproveInterviewCommand",
-            function (item) { return { InterviewId: item.InterviewId } },
+            function (item, comment) { return { InterviewId: item.InterviewId, Comment: comment}; },
             function (item) { return item.CanApprove(); },
             "#confirm-approve-template",
             "#confirm-continue-message-template"
@@ -76,7 +76,7 @@
         self.sendCommandAfterFilterAndConfirm(
             selectedRowAsArray,
             "HqRejectInterviewCommand",
-            function (item) { return { InterviewId: item.InterviewId } },
+            function (item, comment) { return { InterviewId: item.InterviewId, Comment: comment}; },
             function (item) { return item.CanReject(); },
             "#confirm-reject-template",
             "#confirm-continue-message-template"
@@ -87,7 +87,7 @@
         self.sendCommandAfterFilterAndConfirm(
             selectedRowAsArray,
             "UnapproveByHeadquarterCommand",
-            function (item) { return { InterviewId: item.InterviewId } },
+            function (item) { return { InterviewId: item.InterviewId }; },
             function (item) { return item.CanUnapprove(); },
             "#confirm-unapprove-template",
             "#confirm-continue-message-template"
@@ -126,19 +126,21 @@
 
                 var itemsThatShouldBeReassigned = [];
 
-                if (model.Users.AssignTo() == undefined) {
+                if (model.Users.AssignTo() === undefined) {
                     return itemsThatShouldBeReassigned;
                 }
 
-                if (model.IsReassignReceivedByInterviewer() == true) {
+                if (model.IsReassignReceivedByInterviewer() === true) {
                     itemsThatShouldBeReassigned = eligibleSelectedItems;
                 } else {
-                    itemsThatShouldBeReassigned = _.filter(eligibleSelectedItems, function (item) { return item.ReceivedByInterviewer() === false });
+                    itemsThatShouldBeReassigned = _.filter(eligibleSelectedItems, function (item) {
+                        return item.ReceivedByInterviewer() === false;
+                    });
                 }
 
                 itemsThatShouldBeReassigned = _.filter(itemsThatShouldBeReassigned,
                     function (item) {
-                        return !(item.Status() == 'InterviewerAssigned' && item.ResponsibleId() == model.Users.AssignTo().UserId);
+                        return !(item.Status() === 'InterviewerAssigned' && item.ResponsibleId() === model.Users.AssignTo().UserId);
                     });
 
                 return itemsThatShouldBeReassigned;
@@ -169,14 +171,14 @@
                             SupervisorId: model.Users.AssignTo().SupervisorId,
                             InterviewerId: model.Users.AssignTo().InterviewerId,
                             InterviewId: interview.InterviewId
-                        }
+                        };
                     };
 
                     var onSuccessCommandExecuting = function () {
                         model.Users.AssignTo(undefined);
                     };
 
-                    self.sendCommand(commandName, getParamsToAssignToOtherTeam, itemsThatShouldBeReassigned, onSuccessCommandExecuting);
+                    self.sendCommand(commandName, getParamsToAssignToOtherTeam, itemsThatShouldBeReassigned, "", onSuccessCommandExecuting);
                 }
             }
             else {

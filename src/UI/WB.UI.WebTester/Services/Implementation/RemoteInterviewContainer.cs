@@ -132,9 +132,6 @@ namespace WB.UI.WebTester.Services.Implementation
                 }
                 catch (UnauthorizedAccessException)
                 {
-                    //this.logger.Error(
-                    //    $"Failed to delete folder during interview tear down. Path: {interviewContainer.CachePath}",
-                    //    exception);
                 }
             }
 

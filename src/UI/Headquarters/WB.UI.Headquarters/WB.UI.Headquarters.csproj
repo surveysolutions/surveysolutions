@@ -863,10 +863,12 @@
     <Content Include="Content\img\loading.gif" />
     <Content Include="data-export-storages.html" />
     <Content Include="Dependencies\img\back-to-parrent-1-no-animation-4.png" />
+    <Content Include="Dependencies\img\data-image2.png" />
     <Content Include="Dependencies\img\designer-left-icons-2-3.png" />
     <Content Include="Dependencies\img\error.svg" />
     <Content Include="Dependencies\img\error2.svg" />
     <Content Include="Dependencies\img\Exprt-icons.png" />
+    <Content Include="Dependencies\img\Exprt-icons2.png" />
     <Content Include="Dependencies\img\flip.svg" />
     <Content Include="Dependencies\img\HQ-login-supervisor-get-button-logo.png" />
     <Content Include="Dependencies\img\Icon-demo-server.png" />
@@ -2005,6 +2007,7 @@
     <Content Include="Views\Reports\TeamStatusDuration.cshtml" />
     <Content Include="Views\WebInterview\_StartOrResumeForm.cshtml" />
     <Content Include="Views\Shared\_PoweredBy.cshtml" />
+    <Content Include="Views\DataExport\New.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -2063,12 +2066,15 @@
     <Compile Include="API\PublicApi\AssignmentsController.cs" />
     <Compile Include="API\PublicApi\Models\AssignmentQuantitySettings.cs" />
     <Compile Include="API\PublicApi\Models\AssignmentAudioRecordingEnabled.cs" />
+    <Compile Include="API\PublicApi\Models\GlobalNoticeApiView.cs" />
     <Compile Include="API\PublicApi\Models\QuestionApiView.cs" />
     <Compile Include="API\PublicApi\Models\InterviewApiStatistics.cs" />
     <Compile Include="API\PublicApi\Models\QuestionAnswerView.cs" />
     <Compile Include="API\PublicApi\Models\RecordAudioRequest.cs" />
+    <Compile Include="API\PublicApi\Models\SetGlobalNoticeApiModel.cs" />
     <Compile Include="API\PublicApi\Models\TypeaheadApiView.cs" />
     <Compile Include="API\PublicApi\Models\UpdateRecordingRequest.cs" />
+    <Compile Include="API\PublicApi\SettingsController.cs" />
     <Compile Include="API\PublicApi\StatisticsController.cs" />
     <Compile Include="API\PublicApi\Models\Statistics\QuestionnaireDto.cs" />
     <Compile Include="API\PublicApi\Models\Statistics\QuestionDto.cs" />
@@ -2535,6 +2541,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>WebInterviewUI.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\DataExportStatusReader.cs" />
     <Compile Include="Services\IQuestionnaireExporter.cs" />
     <Compile Include="Services\MetricsService.cs" />
     <Compile Include="Services\IInterviewCreatorFromAssignment.cs" />
@@ -2568,7 +2575,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Elmah\" />
-    <Folder Include="App_Start\OwinSecurity\" />
     <Folder Include="Dependencies\dist\" />
     <Folder Include="Views\WebInterviewSetupApi\" />
   </ItemGroup>
