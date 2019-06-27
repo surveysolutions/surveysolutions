@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
+using WB.Core.BoundedContexts.Designer.Scenarios;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.AllowedAddresses;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
@@ -56,7 +57,10 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
         public DbSet<StoredQuestionnaireDocument> QuestionnaireDocuments { get; set; }
 
         public DbSet<StoredQuestionnaireStateTracker> QuestionnaireStateTrackers { get; set; }
+
         public DbSet<ProductVersionChange> ProductVersionChanges { get; set; }
+
+        public DbSet<StoredScenario> Scenarios { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -80,6 +84,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
             builder.ApplyConfiguration(new CommentInstanceTypeConfig());
             builder.ApplyConfiguration(new ClassificationEntityTypeConfig());
             builder.ApplyConfiguration(new ProductVersionChangeTypeConfig());
+            builder.ApplyConfiguration(new StoredScenarioTypeConfig());
 
             // Key value
             builder.ApplyConfiguration(new KeyValueTableTypeConfig<StoredLookupTable>("lookuptablecontents"));

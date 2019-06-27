@@ -57,12 +57,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.synchronizationCancellationTokenSource = new CancellationTokenSource();
             try
             {
-                this.ProcessOperation = InterviewerUIResources.Diagnostics_DownloadingPleaseWait;
+                this.ProcessOperation = EnumeratorUIResources.Diagnostics_DownloadingPleaseWait;
 
                 await this.diagnosticService.UpdateTheApp(synchronizationCancellationTokenSource.Token, true,
                     new Progress<TransferProgress>(progress =>
                     {
-                        this.ProcessOperation = InterviewerUIResources.Diagnostics_DownloadingPleaseWait
+                        this.ProcessOperation = EnumeratorUIResources.Diagnostics_DownloadingPleaseWait
                                                      + $" ({(int)progress.ProgressPercentage}%)";
                     }));
 
@@ -70,12 +70,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
             catch (Exception) when (synchronizationCancellationTokenSource.IsCancellationRequested)
             {
-                this.ProcessOperation = InterviewerUIResources.RequestCanceledByUser;
+                this.ProcessOperation = EnumeratorUIResources.RequestCanceledByUser;
                 this.Status = SynchronizationStatus.Canceled;
             }
             catch (Exception ex)
             {
-                this.ProcessOperation = InterviewerUIResources.UpgradeRequired;
+                this.ProcessOperation = EnumeratorUIResources.UpgradeRequired;
                 this.SynchronizationErrorOccured = true;
                 this.Status = SynchronizationStatus.Fail;
                 this.logger.Fatal("Failed to update app", ex);

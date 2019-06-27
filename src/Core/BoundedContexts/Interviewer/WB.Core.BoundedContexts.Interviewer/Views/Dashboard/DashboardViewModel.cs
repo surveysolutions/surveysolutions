@@ -1,11 +1,10 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
+using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable;
@@ -16,12 +15,12 @@ using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Messages;
 using WB.Core.SharedKernels.Enumerator.Views;
-using InterviewerUIResources = WB.Core.BoundedContexts.Interviewer.Properties.InterviewerUIResources;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
@@ -192,7 +191,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public LocalSynchronizationViewModel Synchronization { get; set; }
 
         public string DashboardTitle
-            => InterviewerUIResources.Dashboard_Title.FormatString(this.NumberOfAssignedInterviews.ToString(),
+            => EnumeratorUIResources.Dashboard_Title.FormatString(this.NumberOfAssignedInterviews.ToString(),
                 Principal.CurrentUserIdentity.Name);
 
         private async void OnInterviewRemoved(object sender, InterviewRemovedArgs e)

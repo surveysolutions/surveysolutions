@@ -2,7 +2,8 @@
     .factory('commandService',
         function ($http, blockUI, Upload, notificationService, $q) {
 
-            var urlBase = '../../api/command';
+            var urlBase = '../../api/';
+            var urlCommands = urlBase + 'command';
             var commandService = {};
 
             function commandCall(type, command) {
@@ -11,11 +12,28 @@
                 }
                 return $http({
                     method: 'POST',
-                    url: urlBase,
+                    url: urlCommands,
                     data: {
                         "type": type,
                         "command": JSON.stringify(command)
                     },
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
+                }).then(function (response) {
+                    blockUI.stop();
+                    return response;
+                }, function (response) {
+                    blockUI.stop();
+                    return $q.reject(response);
+                });
+            }
+
+            function urlCall(method, relativeUrl, data) {
+                blockUI.start();
+
+                return $http({
+                    method: method,
+                    url: urlBase + relativeUrl,
+                    data: data,
                     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
                 }).then(function (response) {
                     blockUI.stop();
@@ -55,7 +73,7 @@
                 }
 
                 return Upload.upload({
-                    url: urlBase + '/attachment',
+                    url: urlCommands + '/attachment',
                     data: { file: _.isNull(attachment.file) ? "" : attachment.file, fileName: fileName, "command": JSON.stringify(command) }
                 }).then(function () {
                     blockUI.stop();
@@ -84,7 +102,7 @@
                 };
 
                 return Upload.upload({
-                    url: urlBase + '/UpdateLookupTable',
+                    url: urlCommands + '/UpdateLookupTable',
                     data: { file: _.isNull(lookupTable.file) ? "" : lookupTable.file, "command": JSON.stringify(command) }
                 }).then(function () {
                     blockUI.stop();
@@ -121,7 +139,7 @@
                 };
 
                 return Upload.upload({
-                    url: urlBase + '/translation',
+                    url: urlCommands + '/translation',
                     data: { file: _.isNull(translation.file) ? "" : translation.file, "command": JSON.stringify(command) }
                 }).then(function (response) {
                     blockUI.stop();
@@ -521,6 +539,34 @@
                     entityId: newId,
                     questionnaireId: questionnaireId
                 });
+            };
+
+            commandService.runScenario = function (questionnaireId, scenario) {
+                var command = {
+                    questionnaireId: questionnaireId,
+                    scenarioId: scenario.id
+                };
+                return commandCall("RunScenario", command);
+            };
+
+            commandService.updateScenario = function (questionnaireId, scenario) {
+                var data = {
+                    title: scenario.title
+                };
+
+                return urlCall('PUT', "questionnaire/" + questionnaireId + "/scenarios/" + scenario.id, data);
+            };
+
+            commandService.upadteScenarioSteps = function (questionnaireId, id, steps) {
+                var data = {
+                    steps: steps
+                };
+
+                return urlCall('PATCH', "questionnaire/" + questionnaireId + "/scenarios/" + id, data);
+            };
+
+            commandService.deleteScenario = function (questionnaireId, id) {
+                return urlCall('DELETE', "questionnaire/" + questionnaireId + "/scenarios/" + id, { });
             };
 
             return commandService;

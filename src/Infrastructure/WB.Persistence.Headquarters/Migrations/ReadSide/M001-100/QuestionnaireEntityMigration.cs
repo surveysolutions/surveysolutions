@@ -28,7 +28,6 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
                         .ToList();
 
                 //logger?.Info($"Got {questionnaireList.Count} questionnaires to update");
-                int processed = 0;
 
                 foreach (var questionnaireId in questionnaireList)
                 {

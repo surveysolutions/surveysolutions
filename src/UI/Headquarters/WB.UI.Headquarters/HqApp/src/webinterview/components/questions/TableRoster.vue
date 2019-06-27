@@ -99,6 +99,10 @@
                         return {
                             headerName: question.title, 
                             headerComponentFramework: 'TableRoster_QuestionTitle',
+                            headerComponentParams: {
+                                title: question.title,
+                                instruction: question.instruction, 
+                            },
                             field: question.id, 
                             cellRendererFramework: 'TableRoster_ViewAnswer',
                             cellRendererParams: {
@@ -113,7 +117,7 @@
                     }
                 );
                 columnsFromQuestions.unshift({
-                    headerName: "", 
+                    headerName: this.$me.title, 
                     field: "rosterTitle", 
                     autoHeight: true, 
                     pinned: true, 

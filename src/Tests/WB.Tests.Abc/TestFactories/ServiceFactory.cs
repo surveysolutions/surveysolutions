@@ -40,6 +40,7 @@ using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
+using WB.Core.BoundedContexts.Headquarters.UserProfile;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -140,7 +141,8 @@ namespace WB.Tests.Abc.TestFactories
                 serviceLocator ?? Mock.Of<IServiceLocator>(),
                 plainRepository ?? Mock.Of<IPlainAggregateRootRepository>(),
                 aggregateLock ?? Stub.Lock(),
-                aggregateRootCacheCleaner ?? Mock.Of<IAggregateRootCacheCleaner>());
+                aggregateRootCacheCleaner ?? Mock.Of<IAggregateRootCacheCleaner>(),
+                Mock.Of<ICommandsMonitoring>());
         }
 
         public AttachmentContentService AttachmentContentService(
@@ -589,8 +591,11 @@ namespace WB.Tests.Abc.TestFactories
             IUnitOfWork sessionProvider = null,
             UsersImportTask usersImportTask = null)
         {
-            usersImportTask = usersImportTask ?? new UsersImportTask(Mock.Of<IScheduler>(x =>
-                                  x.GetCurrentlyExecutingJobs() == Array.Empty<IJobExecutionContext>()));
+            var scheduler = new Mock<IScheduler>();
+            scheduler.Setup(x => x.GetCurrentlyExecutingJobs(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(Array.Empty<IJobExecutionContext>());
+
+            usersImportTask = usersImportTask ?? new UsersImportTask(scheduler.Object);
 
             userPreloadingSettings = userPreloadingSettings ?? Create.Entity.UserPreloadingSettings();
             return new UserImportService(
@@ -627,7 +632,8 @@ namespace WB.Tests.Abc.TestFactories
                 interviewerVersionReader ?? Mock.Of<IInterviewerVersionReader>(),
                 interviewFactory ?? Mock.Of<IInterviewFactory>(),
                 currentUser ?? Mock.Of<IAuthorizedUser>(),
-                Mock.Of<IQRCodeHelper>());
+                Mock.Of<IQRCodeHelper>(),
+                Mock.Of<IPlainKeyValueStorage<ProfileSettings>>());
         }
 
         public StatefullInterviewSearcher StatefullInterviewSearcher()
@@ -1109,6 +1115,14 @@ namespace WB.Tests.Abc.TestFactories
             return new AssignmentPasswordGenerator(
                 assignments ?? new InMemoryPlainStorageAccessor<Assignment>(),
                 importAssignments ?? new InMemoryPlainStorageAccessor<AssignmentToImport>());
+        }
+
+        public IWebInterviewNotificationService WebInterviewNotificationService(
+            IStatefulInterviewRepository statefulInterviewRepository,
+            IQuestionnaireStorage questionnaireStorage,
+            IWebInterviewInvoker webInterviewInvoker)
+        {
+            return new WebInterviewNotificationService(statefulInterviewRepository, questionnaireStorage, webInterviewInvoker);
         }
     }
 

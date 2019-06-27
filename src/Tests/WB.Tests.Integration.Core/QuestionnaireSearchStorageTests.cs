@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search;
 namespace WB.Tests.Integration.Core
 {
     [TestOf(typeof(QuestionnaireSearchStorage))]
+    [NonParallelizable]
     internal class QuestionnaireSearchStorageTests : IntegrationTest
     {
         [Test]

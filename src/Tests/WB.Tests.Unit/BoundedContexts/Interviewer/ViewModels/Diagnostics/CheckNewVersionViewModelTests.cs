@@ -6,13 +6,11 @@ using MvvmCross.Tests;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSync;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.Diagnostics
@@ -63,8 +61,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.Diagnostics
             checkNewVersionViewModel.CheckVersionCommand.Execute();
 
             Assert.That(checkNewVersionViewModel.IsVersionCheckInProgress, Is.EqualTo(false));
-            Assert.That(checkNewVersionViewModel.IsNewVersionAvaliable, Is.EqualTo(false));
-            Assert.That(checkNewVersionViewModel.CheckNewVersionResult, Is.EqualTo(InterviewerUIResources.Diagnostics_YouHaveTheLatestVersionOfApplication));
+            Assert.That(checkNewVersionViewModel.IsNewVersionAvailable, Is.EqualTo(false));
+            Assert.That(checkNewVersionViewModel.CheckNewVersionResult, Is.EqualTo(EnumeratorUIResources.Diagnostics_YouHaveTheLatestVersionOfApplication));
         }
 
         [Test]
@@ -80,7 +78,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.Diagnostics
             checkNewVersionViewModel.CheckVersionCommand.Execute();
 
             Assert.That(checkNewVersionViewModel.IsVersionCheckInProgress, Is.EqualTo(false));
-            Assert.That(checkNewVersionViewModel.IsNewVersionAvaliable, Is.EqualTo(true));
+            Assert.That(checkNewVersionViewModel.IsNewVersionAvailable, Is.EqualTo(true));
             Assert.That(checkNewVersionViewModel.CheckNewVersionResult, Is.Null);
         }
 
@@ -98,7 +96,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.Diagnostics
             checkNewVersionViewModel.CheckVersionCommand.Execute();
 
             Assert.That(checkNewVersionViewModel.IsVersionCheckInProgress, Is.EqualTo(false));
-            Assert.That(checkNewVersionViewModel.IsNewVersionAvaliable, Is.EqualTo(false));
+            Assert.That(checkNewVersionViewModel.IsNewVersionAvailable, Is.EqualTo(false));
             Assert.That(checkNewVersionViewModel.CheckNewVersionResult, Is.EqualTo(exceptionMessage));
         }
 
@@ -107,11 +105,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.Diagnostics
         {
             var checkNewVersionViewModel = CreateCheckNewVersionViewModel();
 
-            checkNewVersionViewModel.IsNewVersionAvaliable = true;
+            checkNewVersionViewModel.IsNewVersionAvailable = true;
 
             checkNewVersionViewModel.RejectUpdateApplicationCommand.Execute();
             
-            Assert.That(checkNewVersionViewModel.IsNewVersionAvaliable, Is.EqualTo(false));
+            Assert.That(checkNewVersionViewModel.IsNewVersionAvailable, Is.EqualTo(false));
         }
 
         private CheckNewVersionViewModel CreateCheckNewVersionViewModel(

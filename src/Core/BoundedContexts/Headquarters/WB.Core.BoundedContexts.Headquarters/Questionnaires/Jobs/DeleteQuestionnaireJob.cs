@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
@@ -19,14 +20,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs
             this.questionnaireBrowseItemReader = questionnaireBrowseItemReader;
         }
 
-        public void Execute(IJobExecutionContext context)
+        public Task Execute(IJobExecutionContext context)
         {
             var disabledNotDeletedQuestionnaire =
                     questionnaireBrowseItemReader.Query(_ => _.FirstOrDefault(q => q.Disabled && !q.IsDeleted));
 
-            if(disabledNotDeletedQuestionnaire == null) return;
+            if(disabledNotDeletedQuestionnaire == null) return Task.CompletedTask;
 
             deleteQuestionnaireService.DeleteInterviewsAndQuestionnaireAfter(disabledNotDeletedQuestionnaire.QuestionnaireId, disabledNotDeletedQuestionnaire.Version, disabledNotDeletedQuestionnaire.DisabledBy);
+
+            return Task.CompletedTask;
         }
     }
 }

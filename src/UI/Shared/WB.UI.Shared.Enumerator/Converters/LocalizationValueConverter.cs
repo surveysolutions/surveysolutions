@@ -7,11 +7,10 @@ namespace WB.UI.Shared.Enumerator.Converters
 {
     public class LocalizationValueConverter : MvxValueConverter<string, string>
     {
-        private static CultureInfo indonesianCultureInfo = CultureInfo.CreateSpecificCulture("id");
+        private static readonly CultureInfo indonesianCultureInfo = CultureInfo.CreateSpecificCulture("id");
 
         protected override string Convert(string value, Type targetType, object parameter, CultureInfo culture)
         {
-
             if (culture == null)
                 culture = CultureInfo.CurrentUICulture;
 

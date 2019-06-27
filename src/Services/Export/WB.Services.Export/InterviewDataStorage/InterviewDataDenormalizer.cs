@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Npgsql;
 using NpgsqlTypes;
 using WB.Services.Export.Events.Interview;
 using WB.Services.Export.Infrastructure;

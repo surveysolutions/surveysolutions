@@ -28,16 +28,32 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         protected TextAnswer() { }
         private TextAnswer(string value)
         {
-            if (value == null) throw new ArgumentNullException(nameof(value));
-
-            this.Value = value;
+            this.Value = value ?? throw new ArgumentNullException(nameof(value));
         }
 
-        public string Value { get; set; }
+        public string Value { get; protected set; }
 
         public static TextAnswer FromString(string value) => value != null ? new TextAnswer(value.Trim().RemoveControlChars()) : null;
 
         public override string ToString() => Value;
+
+        protected bool Equals(TextAnswer other)
+        {
+            return string.Equals(Value, other.Value);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((TextAnswer) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return (Value != null ? Value.GetHashCode() : 0);
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -50,11 +66,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.Value = value;
         }
 
-        public int Value { get; set; }
+        public int Value { get; protected set; }
 
         public static NumericIntegerAnswer FromInt(int value) => new NumericIntegerAnswer(value);
 
         public override string ToString() => Value.ToString();
+
+        protected bool Equals(NumericIntegerAnswer other)
+        {
+            return Value == other.Value;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((NumericIntegerAnswer) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return Value;
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -67,13 +101,31 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.Value = value;
         }
 
-        public double Value { get; set; }
+        public double Value { get; protected set; }
 
         public static NumericRealAnswer FromDouble(double value) => new NumericRealAnswer(value);
 
         public static NumericRealAnswer FromDecimal(decimal value) => new NumericRealAnswer((double)value);
 
         public override string ToString() => Value.ToString(CultureInfo.InvariantCulture);
+
+        protected bool Equals(NumericRealAnswer other)
+        {
+            return Value.Equals(other.Value);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((NumericRealAnswer) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return Value.GetHashCode();
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -86,11 +138,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.Value = value;
         }
 
-        public DateTime Value { get; set; }
+        public DateTime Value { get; protected set; }
 
         public static DateTimeAnswer FromDateTime(DateTime value) => new DateTimeAnswer(value);
 
         public override string ToString() => Value.ToString("yyyy-MM-ddTHH:mm:ss");
+
+        protected bool Equals(DateTimeAnswer other)
+        {
+            return Value.Equals(other.Value);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((DateTimeAnswer) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return Value.GetHashCode();
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -104,36 +174,35 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.SelectedValue = selectedValue;
         }
 
-        private int _selectedValue;
-        public int SelectedValue
-        {
-            get => _selectedValue;
-            set {
-                if(_selectedValue != value)
-                {
-                    TextAnswer = null;
-                }
-                _selectedValue = value;
-            }
-        }
+        public int SelectedValue { get; protected set; }
 
         public static CategoricalFixedSingleOptionAnswer FromInt(int selectedValue) => new CategoricalFixedSingleOptionAnswer(selectedValue);
 
         public static CategoricalFixedSingleOptionAnswer FromDecimal(decimal selectedValue) => new CategoricalFixedSingleOptionAnswer((int)selectedValue);
 
         public override string ToString() => SelectedValue.ToString();
-
-        private (Guid? translation, string answer)? TextAnswer { get; set; }
-
+                
         public string GetAnswerAsText(IQuestionnaire questionnaire, Guid questionId)
         {
-            if(TextAnswer == null || TextAnswer.Value.translation != questionnaire.Translation?.Id)
-            {
-                var option = questionnaire.GetOptionForQuestionByOptionValue(questionId, SelectedValue);
-                TextAnswer = (questionnaire.Translation?.Id, option.Title);
-            }
+            return questionnaire.GetOptionForQuestionByOptionValue(questionId, SelectedValue).Title;
+        }
 
-            return TextAnswer?.answer;
+        protected bool Equals(CategoricalFixedSingleOptionAnswer other)
+        {
+            return SelectedValue == other.SelectedValue;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((CategoricalFixedSingleOptionAnswer) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return SelectedValue;
         }
     }
 
@@ -150,12 +219,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.CheckedValues = checkedValues.ToReadOnlyCollection();
         }
 
-        public IReadOnlyCollection<int> CheckedValues { get; set; }
+        public IReadOnlyCollection<int> CheckedValues { get; protected set; }
 
         public IEnumerable<decimal> ToDecimals() => this.CheckedValues.Select(value => (decimal)value);
 
         public IEnumerable<int> ToInts() => this.CheckedValues;
-
 
         public static CategoricalFixedMultiOptionAnswer Convert(object obj)
         {
@@ -185,6 +253,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             => checkedValues == null || !checkedValues.Any() ? null : new CategoricalFixedMultiOptionAnswer(checkedValues.Select(value => (int)value));
 
         public override string ToString() => string.Join(", ", CheckedValues);
+
+        protected bool Equals(CategoricalFixedMultiOptionAnswer other)
+        {
+            return CheckedValues.SequenceEqual(other.CheckedValues);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((CategoricalFixedMultiOptionAnswer) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return (CheckedValues != null ? CheckedValues.GetHashCode() : 0);
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -199,12 +285,30 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.SelectedValue = selectedValue;
         }
 
-        public RosterVector SelectedValue { get; set; }
+        public RosterVector SelectedValue { get; protected set; }
 
         public static CategoricalLinkedSingleOptionAnswer FromRosterVector(RosterVector selectedValue)
             => selectedValue == null ? null : new CategoricalLinkedSingleOptionAnswer(selectedValue);
 
         public override string ToString() => SelectedValue.ToString();
+
+        protected bool Equals(CategoricalLinkedSingleOptionAnswer other)
+        {
+            return Equals(SelectedValue, other.SelectedValue);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((CategoricalLinkedSingleOptionAnswer) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return (SelectedValue != null ? SelectedValue.GetHashCode() : 0);
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -219,7 +323,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.CheckedValues = checkedValues.ToReadOnlyCollection();
         }
 
-        public IReadOnlyCollection<RosterVector> CheckedValues { get; set; }
+        public IReadOnlyCollection<RosterVector> CheckedValues { get; protected set; }
 
         public static CategoricalLinkedMultiOptionAnswer FromRosterVectors(IEnumerable<RosterVector> checkedValues)
             => checkedValues == null ? null : new CategoricalLinkedMultiOptionAnswer(checkedValues);
@@ -227,6 +331,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public RosterVector[] ToRosterVectorArray() => this.CheckedValues.ToArray();
 
         public override string ToString() => string.Join(", ", CheckedValues);
+
+        protected bool Equals(CategoricalLinkedMultiOptionAnswer other)
+        {
+            //TODO: CHECK equality
+            return CheckedValues.SequenceEqual(other.CheckedValues);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((CategoricalLinkedMultiOptionAnswer) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return (CheckedValues != null ? CheckedValues.GetHashCode() : 0);
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -241,7 +364,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.Rows = rows.ToReadOnlyCollection();
         }
 
-        public IReadOnlyList<TextListAnswerRow> Rows { get; set; }
+        public IReadOnlyList<TextListAnswerRow> Rows { get; protected set; }
 
         public Tuple<decimal, string>[] ToTupleArray() => this.Rows.Select(row => Tuple.Create((decimal)row.Value, row.Text)).ToArray();
 
@@ -256,6 +379,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                tupleArray.Select(tuple => new TextListAnswerRow(Convert.ToInt32(tuple.Item1), tuple.Item2.Trim().RemoveControlChars())));
 
         public override string ToString() => string.Join(", ", Rows.Select(x => x.Text));
+
+        protected bool Equals(TextListAnswer other)
+        {
+            return other.ToTupleArray().SequenceEqual(this.ToTupleArray());
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((TextListAnswer) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return (Rows != null ? Rows.GetHashCode() : 0);
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -269,7 +410,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.Value = value;
         }
 
-        public GeoPosition Value { get; set; }
+        public GeoPosition Value { get; protected set; }
 
         public static GpsAnswer FromGeoPosition(GeoPosition value) => value != null ? new GpsAnswer(value) : null;
 
@@ -277,7 +418,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             => new GeoLocation(Value.Latitude, Value.Longitude, Value.Accuracy, Value.Altitude);
 
         public override string ToString() => Value.ToString();
+
+        protected bool Equals(GpsAnswer other)
+        {
+            return Equals(Value, other.Value);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((GpsAnswer) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return (Value != null ? Value.GetHashCode() : 0);
+        }
     }
+
     [DebuggerDisplay("{ToString()}")]
     public class QRBarcodeAnswer : AbstractAnswer
     {
@@ -289,9 +449,27 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.DecodedText = decodedText;
         }
 
-        public string DecodedText { get; set; }
+        public string DecodedText { get; protected set; }
         public static QRBarcodeAnswer FromString(string decodedText) => decodedText != null ? new QRBarcodeAnswer(decodedText) : null;
         public override string ToString() => DecodedText;
+
+        protected bool Equals(QRBarcodeAnswer other)
+        {
+            return string.Equals(DecodedText, other.DecodedText);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((QRBarcodeAnswer) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return (DecodedText != null ? DecodedText.GetHashCode() : 0);
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -305,13 +483,34 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             AnswerTimeUtc = answerTimeUtc;
         }
 
-        public string FileName { get; set; }
-        public DateTime? AnswerTimeUtc { get; }
+        public string FileName { get; protected set; }
+        public DateTime? AnswerTimeUtc { get; protected set; }
 
         public static MultimediaAnswer FromString(string fileName, DateTime? answerTimeUtc) 
             => fileName != null ? new MultimediaAnswer(fileName,answerTimeUtc) : null;
 
         public override string ToString() => FileName;
+
+        protected bool Equals(MultimediaAnswer other)
+        {
+            return string.Equals(FileName, other.FileName) && AnswerTimeUtc.Equals(other.AnswerTimeUtc);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((MultimediaAnswer) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return ((FileName != null ? FileName.GetHashCode() : 0) * 397) ^ AnswerTimeUtc.GetHashCode();
+            }
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -328,8 +527,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.Length = length;
         }
 
-        public string FileName { get; set; }
-        public TimeSpan Length { get; set; }
+        public string FileName { get; protected set; }
+        public TimeSpan Length { get; protected set; }
 
         public static AudioAnswer FromString(string fileName, TimeSpan? length)
         {
@@ -370,7 +569,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.Value = area;
         }
 
-        public Area Value { get; set; }
+        public Area Value { get; protected set; }
 
         public static AreaAnswer FromArea(Area area) => area != null ? new AreaAnswer(area) : null;
 
@@ -384,6 +583,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 Length = Value.Length ?? 0,
                 PointsCount = Value.NumberOfPoints ?? 0
             };
+        }
+
+        protected bool Equals(AreaAnswer other)
+        {
+            return Equals(Value, other.Value);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((AreaAnswer) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return (Value != null ? Value.GetHashCode() : 0);
         }
     }
 
@@ -399,7 +616,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.CheckedOptions = checkedOptions.ToReadOnlyCollection();
         }
 
-        public IReadOnlyCollection<CheckedYesNoAnswerOption> CheckedOptions { get; set; }
+        public IReadOnlyCollection<CheckedYesNoAnswerOption> CheckedOptions { get; protected set; }
 
         public IEnumerable<AnsweredYesNoOption> ToAnsweredYesNoOptions() => this.CheckedOptions.Select(option => new AnsweredYesNoOption(option.Value, option.Yes));
 
@@ -422,6 +639,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 this.CheckedOptions.Where(x => x.No).Select(x => (decimal)x.Value).ToArray());
 
         public override string ToString() => string.Join(", ", CheckedOptions);
+
+        protected bool Equals(YesNoAnswer other)
+        {
+            return other.ToAnsweredYesNoOptions().SequenceEqual(this.ToAnsweredYesNoOptions());
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((YesNoAnswer) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return (CheckedOptions != null ? CheckedOptions.GetHashCode() : 0);
+        }
     }
 }
 

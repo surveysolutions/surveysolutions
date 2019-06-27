@@ -53,6 +53,9 @@ namespace support
                                      .Text.Replace("${basedir}", PathToHq)
                                      .Replace("/", "\\")
                                      .TrimEnd('\\') + "\\logs";
+            
+            //export service logs location
+            string pathToExportLogs = Path.Combine(PathToHq, "/.bin/logs");
 
             totalLogFilesCount = 0;
             if (Directory.Exists(pathToElmahLogs))
@@ -60,6 +63,9 @@ namespace support
 
             if (Directory.Exists(pathToNlogLogs))
                 totalLogFilesCount += Directory.EnumerateFiles(pathToNlogLogs).Count();
+
+            if (Directory.Exists(pathToExportLogs))
+                totalLogFilesCount += Directory.EnumerateFiles(pathToExportLogs).Count();
 
             if (totalLogFilesCount == 0)
             {
@@ -75,6 +81,7 @@ namespace support
             {
                 await MoveLogFilesToTempDirAsync(pathToElmahLogs, tempLogsDirectory, "elmah");
                 await MoveLogFilesToTempDirAsync(pathToNlogLogs, tempLogsDirectory, "nlog");
+                await MoveLogFilesToTempDirAsync(pathToExportLogs, tempLogsDirectory, "export");
             }
             catch (Exception e)
             {
@@ -132,7 +139,7 @@ namespace support
                     {
                         await sourceStream.CopyToAsync(destinationStream);
                         Console.CursorLeft = 0;
-                        Console.Write($"Moving log files to temporary directory: {++logFilesCount} of {totalLogFilesCount}");
+                        Console.Write($"Copying log files to temporary directory: {++logFilesCount} of {totalLogFilesCount}");
                     }
                 }
             }

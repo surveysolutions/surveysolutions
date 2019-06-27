@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Headquarters.InterviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
 {
@@ -13,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
     internal class UserViewFactoryTestContext
     {
         protected static UserViewFactory CreateInterviewersViewFactory(IUserRepository userRepository)
-            => new UserViewFactory(userRepository);
+            => new UserViewFactory(userRepository, Create.Storage.NewMemoryCache());
 
         protected static IUserRepository CreateQueryableReadSideRepositoryReaderWithUsers( params HqUser[] users)
         {

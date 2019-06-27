@@ -19,7 +19,7 @@ namespace WB.Services.Export.Storage
 
             if (isS3Enabled)
             {
-                services.AddTransient<IExternalFileStorage, S3FileStorage>();
+                services.AddTransient<IExternalArtifactsStorage, S3ArtifactsStorage>();
 
                 var options = configuration.GetAWSOptions("AWS");
                 
@@ -43,7 +43,7 @@ namespace WB.Services.Export.Storage
             }
             else
             {
-                services.AddTransient<IExternalFileStorage, NoExternalFileSystemStorage>();
+                services.AddTransient<IExternalArtifactsStorage, NoExternalArtifactsSystemStorage>();
             }
         }
     }

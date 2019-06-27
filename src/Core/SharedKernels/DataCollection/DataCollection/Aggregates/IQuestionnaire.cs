@@ -298,5 +298,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         /// </summary>
         /// <param name="id">Entity Id</param>
         string GetEntityVariableOrThrow(Guid id);
+
+        string ApplyMarkDownTransformation(string text);
     }
 }

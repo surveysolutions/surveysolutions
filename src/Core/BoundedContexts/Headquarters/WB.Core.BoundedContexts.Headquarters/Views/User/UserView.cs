@@ -5,6 +5,20 @@ using Main.Core.Entities.SubEntities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.User
 {
+    public class UserViewLite
+    {
+        public Guid PublicKey { get; set; }
+        public ISet<UserRoles> Roles { get; set; } = new HashSet<UserRoles>();
+        
+        public string UserName { get; set; }
+        public UserLight Supervisor { get; set; }
+
+        public bool IsInterviewer()
+        {
+            return Roles.Any(x => x == UserRoles.Interviewer);
+        }
+    }
+
     public class UserView
     {
         public DateTime CreationDate { get; set; }

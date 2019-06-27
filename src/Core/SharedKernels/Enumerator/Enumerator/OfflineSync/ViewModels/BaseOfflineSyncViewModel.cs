@@ -86,7 +86,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
             catch (MissingPermissionsException)
             {
                 ShouldStartAdvertising = false;
-                this.OnConnectionError(InterviewerUIResources.LocationPermissionRequired,
+                this.OnConnectionError(EnumeratorUIResources.LocationPermissionRequired,
                     ConnectionStatusCode.MissingPermissionAccessCoarseLocation);
                 return false;
             }

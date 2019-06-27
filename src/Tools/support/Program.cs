@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using NConsole;
 using Ninject;
 using NLog;
+using support.Implementation;
+using support.Services;
 
 namespace support
 {
@@ -11,12 +14,18 @@ namespace support
     {
         static void Main(string[] args)
         {
+            var compiledAt = Util.GetLinkerTimestampUtc(Assembly.GetExecutingAssembly());
+            Console.WriteLine($"Survey Solutions Support Tool. UTC Build time: {compiledAt}");
+
             var logger = LogManager.GetLogger("support");
-            logger.Info($"Support tool started {DateTime.Now}.");
+            logger.Info($"Support tool started {DateTime.Now}. Version was built at UTC: {compiledAt}");
+            
             var ninjectKernel = new StandardKernel();
             ninjectKernel.Bind<INetworkService>().To<NetworkService>();
             ninjectKernel.Bind<IDatabaseService>().To<PostgresDatabaseService>();
             ninjectKernel.Bind<IConfigurationManagerSettings>().To<ConfigurationManagerSettings>().InSingletonScope();
+            ninjectKernel.Bind<ISystemService>().To<SystemService>();
+
             ninjectKernel.Bind<ILogger>().ToConstant(logger);
 
             var processor = new CommandLineProcessor(new ConsoleHost(), new ConsoleDependencyResolver(ninjectKernel));
@@ -24,7 +33,7 @@ namespace support
 
             processor.RegisterCommand<MigrateDbCommand>("migrate");
             processor.RegisterCommand<ResetPasswordCommand>("reset-password");
-            processor.RegisterCommand<CheckAccessCommand>("health-check");
+            processor.RegisterCommand<CheckHealthCommand>("health-check");
             processor.RegisterCommand<ArchiveLogsCommand>("archive-logs");
             processor.RegisterCommand<CustomHelpCommand>("help");
             processor.RegisterCommand<CustomHelpCommand>("");

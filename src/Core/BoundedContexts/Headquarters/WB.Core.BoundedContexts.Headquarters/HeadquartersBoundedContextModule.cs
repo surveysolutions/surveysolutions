@@ -1,5 +1,7 @@
 ﻿using Ncqrs.Eventing.Storage;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
@@ -159,9 +161,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<ISerializer, NewtonJsonSerializer>();
             registry.Bind<IJsonAllTypesSerializer, JsonAllTypesSerializer>();
             registry.Bind<IAttachmentContentService, AttachmentContentService>();
-            registry.Bind<IInterviewAnswerSerializer, NewtonInterviewAnswerJsonSerializer>();
 
-            registry.BindWithConstructorArgument<IMapStorageService, FileSystemMapStorageService>("folderPath", this.currentFolderPath);
+            registry.BindWithConstructorArgument<IMapStorageService, MapFileStorageService>("folderPath", this.currentFolderPath);
 
             //commented because auto registered somewhere 
             //registry.Bind<IMetaDescriptionFactory>().To<MetaDescriptionFactory>();
@@ -170,7 +171,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IInterviewsToDeleteFactory, InterviewsToDeleteFactory>();
             //registry.BindToMethod<Func<IInterviewsToDeleteFactory>>(context => () => context.Get<IInterviewsToDeleteFactory>());
             registry.Bind<IInterviewHistoryFactory, InterviewHistoryFactory>();
-            registry.Bind<ISpeedReportDenormalizerFunctional, SpeedReportDenormalizerFunctional>();
             registry.Bind<IInterviewStatisticsReportDenormalizer, InterviewStatisticsReportDenormalizer>();
             registry.Bind<IInterviewInformationFactory, InterviewerInterviewsFactory>();
             registry.Bind<IDatasetWriterFactory, DatasetWriterFactory>();
@@ -193,7 +193,9 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAllUsersAndQuestionnairesFactory, AllUsersAndQuestionnairesFactory>();
             registry.Bind<IQuestionnairePreloadingDataViewFactory, QuestionnairePreloadingDataViewFactory>();
             registry.Bind<ITeamViewFactory, TeamViewFactory>();
-            registry.BindToMethod<IUserViewFactory>(context => new UserViewFactory(context.Resolve<IUserRepository>()));
+            registry.BindToMethod<IUserViewFactory>(context => 
+                new UserViewFactory(context.Resolve<IUserRepository>(), context.Resolve<IMemoryCache>()));
+
             registry.Bind<ITeamUsersAndQuestionnairesFactory, TeamUsersAndQuestionnairesFactory>();
             registry.Bind<IInterviewFactory, InterviewFactory>();
             registry.Bind<IInterviewSummaryViewFactory, InterviewSummaryViewFactory>();
@@ -208,6 +210,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<ISurveysAndStatusesReport, SurveysAndStatusesReport>();
             registry.Bind<IMapReport, MapReport>();
             registry.Bind<IStatusDurationReport, StatusDurationReport>();
+            registry.BindAsSingleton<ICommandsMonitoring, PrometheusCommandsMonitoring>();
 
             registry.Bind<IInterviewUniqueKeyGenerator, InterviewUniqueKeyGenerator>();
             registry.BindAsSingleton<IRandomValuesSource, RandomValuesSource>();
@@ -266,8 +269,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<ICsvWriterService, CsvWriterService>();
             registry.Bind<ICsvWriter, CsvWriter>();
             registry.Bind<ICsvReader, CsvReader>();
-            registry.Bind<IDataExportStatusReader, DataExportStatusReader>();
-
+            
             registry.Bind<IExportQuestionService, ExportQuestionService>();
 
             registry.Bind<IRosterStructureService, RosterStructureService>();
@@ -308,6 +310,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.BindAsSingleton<ITokenGenerator,TokenGenerator>();
             registry.Bind<IInvitationMailingService, InvitationMailingService>();
             registry.Bind<IInvitationsDeletionService, InvitationsDeletionService>();
+
+            registry.BindToConstant<IMemoryCache>(() => new MemoryCache(Options.Create(new MemoryCacheOptions())));
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
