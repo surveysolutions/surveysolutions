@@ -74,7 +74,7 @@
                   </div>
                  </div>
             </div>
-            <div class="mb-30" v-if="hasInterviews || hasBinaryData || questionnaireVersion">
+            <div class="mb-30" v-if="hasBinaryData || questionnaireVersion">
                 <h3>{{$t('DataExport.DataType')}}</h3>
                 <div class="radio-btn-row" v-if="hasInterviews">
                   <input class="radio-row" type="radio" name="dataType" id="surveyData" v-model="dataType" value="surveyData">
@@ -489,11 +489,23 @@ export default {
       },
       questionnaireSelected(newValue) {
           this.questionnaireId = newValue;
+          if (!newValue)
+          {
+            this.reesetDataAvalability();
+          }
       },
       questionnaireVersionSelected(newValue) {
           this.questionnaireVersion = newValue;
           if (this.questionnaireVersion)
             this.updateDataAvalability();
+          else{
+             this.reesetDataAvalability();
+          }
+      },
+      reesetDataAvalability(){
+        this.hasInterviews = null;
+        this.hasBinaryData = null;
+        this.dataType = "ddi";
       },
       updateDataAvalability(){
         this.isUpdatingDataAvailability = true;
