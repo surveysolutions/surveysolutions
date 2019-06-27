@@ -29,6 +29,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Implementation.Aggregates;
@@ -300,7 +301,8 @@ namespace WB.Tests.Integration
                 Mock.Of<IServiceLocator>(),
                 Mock.Of<IPlainAggregateRootRepository>(),
                 new AggregateLock(),
-                Mock.Of<IAggregateRootCacheCleaner>());
+                Mock.Of<IAggregateRootCacheCleaner>(),
+                Mock.Of<ICommandsMonitoring>());
         }
 
         public static Answer Answer(string answer, decimal value, decimal? parentValue = null)
