@@ -32,6 +32,7 @@
                         :value="questionnaireId"
                         :placeholder="$t('Common.AllQuestionnaires')"
                         :fetch-url="questionnaireFetchUrl"
+                        :selectedKey="pageState.id"
                         data-vv-name="questionnaireId"
                         data-vv-as="questionnaire"
                         v-validate="'required'"
@@ -45,6 +46,7 @@
                         ref="questionnaireVersionControl"
                         data-vv-name="questionnaireVersion"
                         data-vv-as="questionnaireVersion"
+                        :selectedKey="pageState.version"
                         v-validate="'required'"
                         :placeholder="$t('Common.AllVersions')"
                         :value="questionnaireVersion"
@@ -60,8 +62,8 @@
                   <div class="filter-column">
                     <h5>{{$t('DataExport.StatusOfExportTitle')}}</h5>
                     <Typeahead
-                      control-id="status"
-                      fuzzy
+                      control-id="status" fuzzy
+                      :selectedKey="pageState.status"
                       data-vv-name="status"
                       data-vv-as="status"
                       :placeholder="$t('Common.AllStatuses')"
@@ -193,8 +195,9 @@
 import Vue from "vue"
 import ExportProcessCard from "./ExportProcessCard"
 import {mixin as VueTimers} from 'vue-timers'
+import queryString from 'query-string';
 
- const dataFormatNum = {  
+const dataFormatNum = {  
   Tabular: 1,
   Stata: 2,
   Spss: 3,
@@ -226,7 +229,8 @@ export default {
             isUpdatingDataAvailability: false,
             hasInterviews: false,
             hasBinaryData: false,
-            externalStoragesSettings: (this.$config.model.externalStoragesSettings || {}).oAuth2 || {}
+            externalStoragesSettings: (this.$config.model.externalStoragesSettings || {}).oAuth2 || {},
+            pageState: {}
         };
     },
     timers: {
@@ -235,7 +239,7 @@ export default {
 
     mounted() {
       if(window.location.hash != '') {
-        const jsonState = window.atob(window.location.hash.substring(1));
+        const state = queryString.parse(window.location.hash);
 
         // restoring empty hash
         window.location.hash = ''
@@ -244,10 +248,8 @@ export default {
         }
 
         try {
-          const state = JSON.parse(jsonState)
           this.restorePageState(state)
         } catch {
-          // do nothing
         }
       }
     },
@@ -306,6 +308,10 @@ export default {
         }
     },   
     methods: {
+      onOptionsFetch(a,b,c,d,e) {
+        console.log(a,b,c,d,e);
+      },
+
       resetForm(){
         this.dataType = null,
         this.dataFormat = "Tabular";
@@ -428,14 +434,7 @@ export default {
         let storageSettings = this.externalStoragesSettings[this.dataDestination];
         const jsonState = JSON.stringify(state);
 
-        window.location.hash = window.btoa(JSON.stringify({
-          id: this.questionnaireId,
-          version: this.questionnaireVersion,
-          status: this.status,
-          dataType: this.dataType,
-          dataFormat: this.dataFormat,
-          dataDestination: this.dataDestination
-        }));
+        window.location.hash = queryString.stringify(this.getPageState())
         
         var request = {
           response_type: this.externalStoragesSettings.responseType,
@@ -468,12 +467,21 @@ export default {
       },
 
       restorePageState(state) {
-          this.questionnaireSelected(state.id);
-          this.questionnaireVersionSelected(state.version);
-          this.statusSelected(state.status);
+          this.pageState = state;
           this.dataType = state.dataType;
           this.dataFormat = state.dataFormat;
           this.dataDestination = state.dataDestination;
+      },
+
+      getPageState() {
+          return {
+              id: this.questionnaireId == null ? null : this.questionnaireId.key,
+              version: this.questionnaireVersion == null ? null : this.questionnaireVersion.key,
+              status: this.status == null ? null : this.status.key,
+              dataType: this.dataType,
+              dataFormat: this.dataFormat,
+              dataDestination: this.dataDestination
+          }
       },
 
       statusSelected(newValue) {
