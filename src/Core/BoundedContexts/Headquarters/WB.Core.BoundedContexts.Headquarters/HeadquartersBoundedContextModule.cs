@@ -210,6 +210,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<ISurveysAndStatusesReport, SurveysAndStatusesReport>();
             registry.Bind<IMapReport, MapReport>();
             registry.Bind<IStatusDurationReport, StatusDurationReport>();
+            registry.BindAsSingleton<ICommandsMonitoring, PrometheusCommandsMonitoring>();
 
             registry.Bind<IInterviewUniqueKeyGenerator, InterviewUniqueKeyGenerator>();
             registry.BindAsSingleton<IRandomValuesSource, RandomValuesSource>();
