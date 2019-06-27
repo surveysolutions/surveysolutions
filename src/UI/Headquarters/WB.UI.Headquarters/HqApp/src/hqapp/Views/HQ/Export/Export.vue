@@ -304,8 +304,7 @@ export default {
                 return `${this.$config.model.api.questionnairesUrl}/${this.questionnaireId.key}`;
             return null;
         }
-    },
-    watch: {},
+    },   
     methods: {
       resetForm(){
         this.dataType = null,
@@ -446,7 +445,6 @@ export default {
           scope: storageSettings.scope
         };
 
-        console.log(state, window.location.href, request, this.$config.model.api.exportToExternalStorageUrl )
         window.location = storageSettings.authorizationUri + "?" + decodeURIComponent($.param(request));
       },
 
@@ -499,7 +497,9 @@ export default {
           .then((response) => {
             this.hasInterviews = response.data.hasInterviews;
             this.hasBinaryData = response.data.hasBinaryData;
-            this.dataType = this.hasInterviews ? "surveyData" : "ddi";
+            if(this.dataType == null) {
+              this.dataType = this.hasInterviews ? "surveyData" : "ddi";
+            }
           })
           .catch((error) => {
               Vue.config.errorHandler(error, self);
