@@ -1,5 +1,7 @@
 ﻿using System.IO;
 using System.IO.Compression;
+using System.Threading;
+using System.Threading.Tasks;
 using ICSharpCode.SharpZipLib.Zip;
 using ICSharpCode.SharpZipLib.Zip.Compression;
 
@@ -43,13 +45,13 @@ namespace WB.Services.Infrastructure.FileSystem
             zipStream.Dispose();
         }
 
-        public void CreateEntry(string path, Stream content)
+        public void CreateEntry(string path, Stream content, long contentLength)
         {
             var entry = new ZipEntry(path);
 
             zipStream.PutNextEntry(entry);
 
-            if (content.Length != 0)
+            if (contentLength != 0)
             {
                 content.CopyTo(zipStream);
             }
@@ -66,6 +68,34 @@ namespace WB.Services.Infrastructure.FileSystem
             if (content.Length != 0)
             {
                 zipStream.Write(content, 0, content.Length);
+            }
+
+            zipStream.CloseEntry();
+        }
+        
+        public async Task CreateEntryAsync(string path, byte[] content, CancellationToken token = default)
+        {
+            var entry = new ZipEntry(path);
+            
+            zipStream.PutNextEntry(entry);
+
+            if (content.Length != 0)
+            {
+                await zipStream.WriteAsync(content, 0, content.Length, token);
+            }
+
+            zipStream.CloseEntry();
+        }
+
+        public async Task CreateEntryAsync(string path, Stream content, CancellationToken token = default)
+        {
+            var entry = new ZipEntry(path);
+
+            zipStream.PutNextEntry(entry);
+
+            if (content.Length != 0)
+            {
+                await content.CopyToAsync(zipStream, 81920, token);
             }
 
             zipStream.CloseEntry();

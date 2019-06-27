@@ -437,4 +437,7 @@ Oбратитесь в тех. поддержку за помощью</value>
   <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
     <value>Вы уверены, что хотите удалить строку '{{rosterTitle}}' у зависимых списков?</value>
   </data>
+  <data name="SaveScenario" xml:space="preserve">
+    <value>Сохранить сценарий</value>
+  </data>
 </root>

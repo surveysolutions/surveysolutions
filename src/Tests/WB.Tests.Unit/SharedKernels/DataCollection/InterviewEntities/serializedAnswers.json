@@ -1,0 +1,14 @@
+[
+  {
+    "$type": "InterviewAnswer",
+    "Answer": {
+      "$type": "CategoricalFixedSingleOptionAnswer",
+      "SelectedValue": 1000
+    },
+    "Identity": {
+      "Id": "3c8097f6-fdc3-d63f-ddcc-75cff8062f28",
+      "$type": "Identity",
+      "RosterVector": [1, 2]
+    }
+  }
+]

@@ -106,6 +106,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enumerator&apos;s Profile editing.
+        /// </summary>
+        internal static string AllowInterviewerUpdateProfile {
+            get {
+                return ResourceManager.GetString("AllowInterviewerUpdateProfile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allow enumerators update their contact information in the profile.
+        /// </summary>
+        internal static string AllowInterviewerUpdateProfileDesc {
+            get {
+                return ResourceManager.GetString("AllowInterviewerUpdateProfileDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sender postal address.
         /// </summary>
         internal static string EmailProvider_Address {
@@ -588,6 +606,15 @@ namespace Resources {
         internal static string Settings_Title {
             get {
                 return ResourceManager.GetString("Settings_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User Profile settings.
+        /// </summary>
+        internal static string UserProfileSettings_Title {
+            get {
+                return ResourceManager.GetString("UserProfileSettings_Title", resourceCulture);
             }
         }
     }

@@ -78,8 +78,18 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
                     if (parent != null)
                     {
-                        entitiesToRefresh.Add((WebInterview.GetConnectedClientSectionKey(parent, interview.Id), currentEntity));
+                        if (questionnaire.IsFlatRoster(parent.Id))
+                        {
+                            var parentGroupIdentity = GetParentIdentity(parent, interview);
+                            var connectedClientSectionKey = WebInterview.GetConnectedClientSectionKey(parentGroupIdentity, interview.Id);
+                            entitiesToRefresh.Add((connectedClientSectionKey, currentEntity));
+                        }
+                        else
+                        {
+                            entitiesToRefresh.Add((WebInterview.GetConnectedClientSectionKey(parent, interview.Id), currentEntity));
+                        }
                     }
+
                     currentEntity = parent;
                 }
             }

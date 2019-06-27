@@ -1,4 +1,4 @@
-﻿Supervisor.VM.SiteSettings = function (ajax, notifier, $dataUrl, $changeStateUrl, $regenPasswordUrl, $globalNoticeSettingsUrl, $interviewerSettingsUrl) {
+﻿Supervisor.VM.SiteSettings = function (ajax, notifier, $dataUrl, $changeStateUrl, $regenPasswordUrl, $globalNoticeSettingsUrl, $interviewerSettingsUrl, $profileSettingsUrl) {
     Supervisor.VM.SiteSettings.superclass.constructor.apply(this, arguments);
 
     var self = this;
@@ -10,6 +10,7 @@
     self.isEnabled = ko.observable(false);
     self.isInterviewerAutomaticUpdatesEnabled = ko.observable(true);
     self.isDeviceNotificationsEnabled = ko.observable(true);
+    self.isAllowInterviewerUpdateProfile = ko.observable(false);
 
     self.password = ko.observable('');
     self.message = ko.observable('');
@@ -30,6 +31,7 @@
             }, true, true);
         
         self.loadAutoUpdateSettings();
+        self.loadProfileSettings();
     };
 
     self.loadAutoUpdateSettings = function() {
@@ -89,6 +91,32 @@
             self.updateAutoUpdateSettings();
         }
     };
+
+    self.loadProfileSettings = function () {
+        self.SendRequest($profileSettingsUrl,
+            {},
+            function (data) {
+                if (!data) return;
+                self.isAllowInterviewerUpdateProfile(data.AllowInterviewerUpdateProfile);
+            }, true, true);
+    };
+
+
+    self.updateAllowInterviewerUpdateProfile = function(obj, event) {
+        self.updateProfileSettings();
+        return true;
+    };
+
+    self.updateProfileSettings = function() {
+        ajax.sendRequest($profileSettingsUrl, "POST",
+            {
+                allowInterviewerUpdateProfile: self.isAllowInterviewerUpdateProfile(),
+            }, false,
+            //onSuccess
+            function () { }
+        );
+    };
+
 
     self.updateDeviceSettings = function(obj, event) {
         self.updateAutoUpdateSettings();

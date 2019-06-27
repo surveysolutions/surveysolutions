@@ -3,6 +3,8 @@ using Ncqrs;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.Implementation.Aggregates;
@@ -25,6 +27,7 @@ namespace WB.Core.Infrastructure
             registry.Bind<ILiteEventBus, LiteEventBus>();
             registry.Bind<IPlainAggregateRootRepository, PlainAggregateRootRepository>();
             registry.BindAsSingleton<IAggregateLock, AggregateLock>();
+            registry.BindAsSingleton<ICommandsMonitoring, TraceCommandsMonitoring>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
