@@ -180,6 +180,35 @@
             </div>
           </wb-question>
 
+          <wb-question
+            :question="isAudioRecordingEnabled"
+            noValidation="true"
+            noComments="true"
+            questionCssClassName="multiselect-question"
+          >
+            <h5>{{ this.$t("Assignments.IsAudioRecordingEnabled") }} <a target="_blank" href="https://support.mysurvey.solutions/headquarters/audio-audit/">(?)</a></h5>
+            <div class="question-unit">
+              <div class="options-group">
+                <div class="form-group">
+                  <div class="field answered">
+                    <input
+                      id="isAudioRecordingEnabledId"
+                      checked="checked"
+                      v-model="isAudioRecordingEnabled.answer"
+                      data-val="true"
+                      type="checkbox"
+                      class="wb-checkbox"
+                    >
+                    <label for="isAudioRecordingEnabledId">
+                      <span class="tick"></span>
+                      {{$t("Assignments.Activated")}}
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </wb-question>
+
           <div class="action-container">
             <button
               type="button"
@@ -270,6 +299,15 @@ export default {
                 validity: {
                     isValid: true
                 }
+            },
+            isAudioRecordingEnabled: {
+                id: "isAudioRecordingEnabled",
+                acceptAnswer: true,
+                isAnswered: true,
+                answer: false,
+                validity: {
+                    isValid: true
+                }
             }
         };
     },
@@ -343,7 +381,8 @@ export default {
                         quantity: this.sizeQuestion.answer,
                         email: this.emailQuestion.answer,
                         password: this.passwordQuestion.answer,
-                        webMode: this.webMode.answer
+                        webMode: this.webMode.answer,
+                        isAudioRecordingEnabled: this.isAudioRecordingEnabled.answer
                     })
                     .then(response => {
                          window.location.href = self.config.assignmentsUrl

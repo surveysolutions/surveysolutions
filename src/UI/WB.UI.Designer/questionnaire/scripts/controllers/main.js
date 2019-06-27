@@ -139,6 +139,27 @@ angular.module('designerApp')
                 }
             };
 
+            var scenarioEditorShown = false;
+            $scope.showScenarioEditor = function(scenarioId) {
+                if (!scenarioEditorShown) {
+                    var modalInstance = $uibModal.open({
+                        templateUrl: 'views/scenario-editor.html',
+                        backdrop: false,
+                        size: 'lg',
+                        windowClass: "scenarioEditorModal dragAndDrop",
+                        controller: 'scenarioEditorCtrl',
+                        resolve: {
+                            isReadOnlyForUser: $scope.questionnaire.isReadOnlyForUser || false,
+                            scenarioId: scenarioId
+                        }
+                    });
+                    scenarioEditorShown = true;
+                    modalInstance.closed.then(function() {
+                        scenarioEditorShown = false;
+                    });
+                }
+            }
+
             $scope.questionnaireId = $state.params.questionnaireId;
             var ERROR = "error";
             var WARNING = "warning";
@@ -167,11 +188,7 @@ angular.module('designerApp')
             };
 
             $scope.webTest = function () {
-                var webTesterWindow = window.open("about:blank", '_blank');
-
-                webTesterService.run($state.params.questionnaireId).then(function (response) {
-                    webTesterWindow.location.href = response.data;
-                });
+                webTesterService.run($state.params.questionnaireId, $scope.questionnaire);
             };
 
             $scope.showVerificationErrors = function () {

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Web.Http;
 using AutoFixture;
 using Main.Core.Documents;
 using Microsoft.CodeAnalysis;
@@ -8,10 +6,8 @@ using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.Tests.Abc;
 using WB.UI.Designer.Api.WebTester;

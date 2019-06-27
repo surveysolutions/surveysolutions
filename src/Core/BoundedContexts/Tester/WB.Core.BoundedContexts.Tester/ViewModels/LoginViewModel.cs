@@ -17,7 +17,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
     public class LoginViewModel : BaseViewModel
     {
         private readonly IDesignerApiService designerApiService;
-        private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IUserInteractionService userInteractionService;
         private readonly IFriendlyErrorMessageService friendlyErrorMessageService;
 
@@ -37,7 +36,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             : base(principal, viewModelNavigationService)
         {
             this.designerApiService = designerApiService;
-            this.viewModelNavigationService = viewModelNavigationService;
             this.userInteractionService = userInteractionService;
             this.friendlyErrorMessageService = friendlyErrorMessageService;
 

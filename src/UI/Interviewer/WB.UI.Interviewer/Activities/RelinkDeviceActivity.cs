@@ -29,7 +29,7 @@ namespace WB.UI.Interviewer.Activities
         {
             this.MenuInflater.Inflate(Resource.Menu.relink, menu);
 
-            menu.LocalizeMenuItem(Resource.Id.menu_diagnostics, InterviewerUIResources.MenuItem_Title_Diagnostics);
+            menu.LocalizeMenuItem(Resource.Id.menu_diagnostics, EnumeratorUIResources.MenuItem_Title_Diagnostics);
             return base.OnCreateOptionsMenu(menu);
         }
         public override bool OnOptionsItemSelected(IMenuItem item)

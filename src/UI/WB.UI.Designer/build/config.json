@@ -46,6 +46,7 @@
       "node_modules/jquery/dist/jquery.js",
       "node_modules/ace-builds/src-noconflict/ace.js",
       "node_modules/ace-builds/src-noconflict/ext-language_tools.js",
+      "node_modules/ace-builds/src-noconflict/mode-json.js",
       "node_modules/angular/angular.js",
       "node_modules/angular-animate/angular-animate.js",
       "node_modules/angular-block-ui/dist/angular-block-ui.js",

@@ -14,8 +14,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
     public class CompletedInterviewsViewModel : BaseInterviewsViewModel
     {
         public override GroupStatus InterviewStatus => GroupStatus.Completed;
-        public override string TabTitle => InterviewerUIResources.Dashboard_CompletedLinkText;
-        public override string TabDescription => InterviewerUIResources.Dashboard_CompletedTabText;
+        public override string TabTitle => EnumeratorUIResources.Dashboard_CompletedLinkText;
+        public override string TabDescription => EnumeratorUIResources.Dashboard_CompletedTabText;
         
         public event EventHandler<InterviewRemovedArgs> OnInterviewRemoved;
 

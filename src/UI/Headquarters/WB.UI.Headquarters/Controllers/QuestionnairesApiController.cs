@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
@@ -103,9 +104,9 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Administrator")]
-        public JsonCommandResponse DeleteQuestionnaire(DeleteQuestionnaireRequestModel request)
+        public async Task<JsonCommandResponse> DeleteQuestionnaire(DeleteQuestionnaireRequestModel request)
         {
-            deleteQuestionnaireService.DisableQuestionnaire(request.QuestionnaireId, request.Version, this.authorizedUser.Id);
+            await deleteQuestionnaireService.DisableQuestionnaire(request.QuestionnaireId, request.Version, this.authorizedUser.Id);
             
             return new JsonCommandResponse { IsSuccess = true };
         }

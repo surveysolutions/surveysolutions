@@ -28,21 +28,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         bool IsNodeEnabledImpl(IInterviewTreeNode sourceNode, IInterviewTreeNode changedNode)
         {
-            var nodeIsRemovedAndWasDisabled = changedNode == null && sourceNode != null &&
-                                              sourceNode.IsDisabledByOwnCondition();
+            var nodeIsRemovedAndWasDisabled = changedNode == null && sourceNode != null && sourceNode.IsDisabledByOwnCondition();
             var existingNodeWasEnabledAndNowIsDisabled = sourceNode != null && changedNode != null &&
                                                          sourceNode.IsDisabledByOwnCondition() && !changedNode.IsDisabledByOwnCondition();
             return existingNodeWasEnabledAndNowIsDisabled || nodeIsRemovedAndWasDisabled;
         }
 
-        public bool IsNodeAdded { get; private set; }
-        public bool IsNodeRemoved { get; private set; }
+        public bool IsNodeAdded { get; }
+        public bool IsNodeRemoved { get; }
 
-        public bool IsNodeDisabled { get; private set; }
+        public bool IsNodeDisabled { get; }
 
-        public bool IsNodeEnabled { get; private set; }
+        public bool IsNodeEnabled { get; }
 
-        public Identity Identity { get; private set; }
+        public Identity Identity { get; }
 
         public static InterviewTreeNodeDiff Create(IInterviewTreeNode source, IInterviewTreeNode changed)
         {
@@ -60,6 +59,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 return new InterviewTreeVariableDiff(source, changed);
 
             return new InterviewTreeNodeDiff(source, changed);
+        }
+
+        public override string ToString()
+        {
+            return $"{Identity}. {ChangedNode.Title} Added: {IsNodeAdded}, Removed: {IsNodeRemoved}, Disabled: {IsNodeDisabled}, Enabled: {IsNodeEnabled}";
         }
     }
 }

@@ -47,5 +47,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         public List<CountryItem> Countries { get; set; }
         public List<ModeOfDataCollectionItem> ModesOfDataCollection { get; set; }
         public bool? HideIfDisabled { get; set; }
+
+        public List<ScenarioView> Scenarios { get; set; }
     }
 }

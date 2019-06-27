@@ -19,11 +19,7 @@ namespace WB.UI.Shared.Enumerator.Activities.Dashboard
             var itemBindingContext =
                 new MvxAndroidBindingContext(parent.Context, this.bindingContext.LayoutInflaterHolder);
             var vh = new ExpandableViewHolder(this.InflateViewForHolder(parent, viewType, itemBindingContext),
-                itemBindingContext)
-            {
-                Click = this.ItemClick,
-                LongClick = this.ItemLongClick
-            };
+                itemBindingContext);
 
             return vh;
         }

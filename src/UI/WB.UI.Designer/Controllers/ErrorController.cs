@@ -8,7 +8,7 @@ namespace WB.UI.Designer.Controllers
         [Route("500")]
         public ActionResult Index() => View();
         [Route("404")]
-        public ActionResult NotFound() => View();
+        public new ActionResult NotFound() => View();
         [Route("401")]
         public ActionResult AccessDenied() => View();
         [Route("403")]

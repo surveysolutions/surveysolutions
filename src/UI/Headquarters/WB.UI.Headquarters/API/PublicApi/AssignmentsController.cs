@@ -240,9 +240,9 @@ namespace WB.UI.Headquarters.API.PublicApi
             }
 
             var assignment = this.assignmentFactory.CreateAssignment(questionnaireId, responsible.Id, quantity,
-                createItem.Email, password, createItem.WebMode);
+                createItem.Email, password, createItem.WebMode, createItem.IsAudioRecordingEnabled);
 
-            var identifyingQuestionIds = questionnaire.GetPrefilledQuestions().ToHashSet();
+            var identifyingQuestionIds = Enumerable.ToHashSet(questionnaire.GetPrefilledQuestions());
 
             List<InterviewAnswer> answers = new List<InterviewAnswer>();
 

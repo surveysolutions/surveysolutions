@@ -15,7 +15,6 @@ namespace WB.Core.SharedKernels.Enumerator.Views
 {
     public class MapsViewModel : BaseViewModel
     {
-        private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IMapService mapService;
         private readonly IPermissionsService permissions;
         private readonly IUserInteractionService userInteractionService;
@@ -31,7 +30,6 @@ namespace WB.Core.SharedKernels.Enumerator.Views
             IUserInteractionService userInteractionService)
             : base(principal, viewModelNavigationService)
         {
-            this.viewModelNavigationService = viewModelNavigationService;
             this.Synchronization = synchronization;
             this.Synchronization.SyncCompleted += this.Refresh;
             this.mapService = mapService;
@@ -69,7 +67,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
             }
         }
 
-        public string MapsTitle => InterviewerUIResources.Maps_Title;
+        public string MapsTitle => EnumeratorUIResources.Maps_Title;
 
         
         private async Task RunMapSyncAsync()

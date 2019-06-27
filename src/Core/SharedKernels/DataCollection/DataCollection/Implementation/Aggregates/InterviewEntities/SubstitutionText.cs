@@ -1,12 +1,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.IO;
 using System.Net;
-using Markdig;
-using Markdig.Parsers;
-using Markdig.Parsers.Inlines;
-using Markdig.Renderers;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Services;
 
@@ -20,7 +15,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         private readonly ISubstitutionService substitutionService;
         private readonly IVariableToUIStringService variableToUiStringService;
         private readonly List<SubstitutionVariable> substitutionVariables;
-        private InterviewTree tree;
 
         public SubstitutionText()
         {
@@ -34,11 +28,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             ISubstitutionService substitutionService,
             IVariableToUIStringService variableToUiStringService)
         {
-            var markdownReplacedText = string.IsNullOrEmpty(text) ? text : MarkdownTextToHtml(text);
-
-            this.Text = markdownReplacedText;
-            this.BrowserReadyText = markdownReplacedText;
-            this.originalText = markdownReplacedText;
+            // this constructor is one of the most used constructors during interview progress
+            // do not add any cpu/memory intensive operations
+            this.Text = text;
+            this.BrowserReadyText = text;
+            this.originalText = text;
             this.identity = identity;
             this.selfVariable = selfVariable;
             this.substitutionService = substitutionService;
@@ -46,114 +40,98 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.substitutionVariables = variables;
         }
 
-        public void SetTree(InterviewTree interviewTree)
-        {
-            this.tree = interviewTree;
-        }
-
         private readonly string originalText;
         public string Text { get; private set; }
         public string BrowserReadyText { get; private set; }
 
         public bool HasSubstitutions => this.substitutionVariables?.Count > 0;
-        
-        public void ReplaceSubstitutions()
+
+        public void ReplaceSubstitutions(InterviewTree tree)
         {
             if (!this.HasSubstitutions)
                 return;
 
-            this.Text = GetTextWithReplacedSubstitutions(false);
-            this.BrowserReadyText = GetTextWithReplacedSubstitutions(shouldAddBrowserTags: true);
-        }
-
-        private string GetTextWithReplacedSubstitutions(bool shouldAddBrowserTags)
-        {
-            var textWithReplacedSubstitutions = this.originalText;
+            var plainTextReplaced = this.originalText;
+            var browserTextReplaced = this.originalText;
 
             foreach (var substitution in this.substitutionVariables)
             {
-                string substitutionResult = null;
+                string plainSubstitutionResult = null;
+                string browserSubstitutionResult = null;
                 bool shouldEncode = true;
 
-                var treeEntity = this.tree.FindEntityInQuestionBranch(substitution.Id, this.identity);
-                if(treeEntity != null && !treeEntity.IsDisabled())
+                var treeEntity = tree.FindEntityInQuestionBranch(substitution.Id, this.identity);
+                if (treeEntity != null && !treeEntity.IsDisabled())
                 {
                     switch (treeEntity)
                     {
                         case InterviewTreeRoster roster:
-                            substitutionResult = roster.RosterTitle;
+                            plainSubstitutionResult = roster.RosterTitle;
+                            browserSubstitutionResult = plainSubstitutionResult;
                             break;
 
                         case InterviewTreeVariable variable:
-                            substitutionResult = this.variableToUiStringService.VariableToUIString(variable.Value);
+                            plainSubstitutionResult = this.variableToUiStringService.VariableToUIString(variable.Value);
+                            browserSubstitutionResult = plainSubstitutionResult;
                             break;
-
 
                         case InterviewTreeQuestion question:
                             string answerString = question.GetAnswerAsString(CultureInfo.CurrentCulture);
                             shouldEncode = false;
 
-                            if (shouldAddBrowserTags && question.IsDateTime && question.IsAnswered())
-                            {
-                                var asDateTime = question.GetAsInterviewTreeDateTimeQuestion();
-                                var dateTime = asDateTime.GetAnswer().Value;
+                            plainSubstitutionResult = SubstitutionResult(false);
+                            browserSubstitutionResult = SubstitutionResult(true);
 
-                                substitutionResult = asDateTime.IsTimestamp 
-                                    ? $"<time datetime=\"{dateTime:O}\">{dateTime.ToString(asDateTime.UiFormatString)}</time>" 
-                                    : $"<time date=\"{dateTime:yyyy-MM-dd}\">{dateTime.ToString(asDateTime.UiFormatString)}</time>";
-                            }
-                            else
+                            string SubstitutionResult(bool shouldAddBrowserTags)
                             {
-                                substitutionResult = shouldAddBrowserTags ? WebUtility.HtmlEncode(answerString ?? string.Empty) : answerString;
+                                string result;
+
+                                if (shouldAddBrowserTags && question.IsDateTime && question.IsAnswered())
+                                {
+                                    var asDateTime = question.GetAsInterviewTreeDateTimeQuestion();
+                                    var dateTime = asDateTime.GetAnswer().Value;
+
+                                    result = asDateTime.IsTimestamp
+                                        ? $"<time datetime=\"{dateTime:O}\">{dateTime.ToString(asDateTime.UiFormatString)}</time>"
+                                        : $"<time date=\"{dateTime:yyyy-MM-dd}\">{dateTime.ToString(asDateTime.UiFormatString)}</time>";
+                                }
+                                else
+                                {
+                                    result = shouldAddBrowserTags ? WebUtility.HtmlEncode(answerString ?? string.Empty) : answerString;
+                                }
+
+                                return result;
                             }
-                        
+
                             break;
                     }
                 }
-                substitutionResult = shouldAddBrowserTags && shouldEncode 
-                    ? WebUtility.HtmlEncode(substitutionResult) // DO NOT CHANGE TO HttpUtility.HtmlEncode: KP-10869
-                    : substitutionResult;
-
-                substitutionResult = string.IsNullOrEmpty(substitutionResult)
+                
+                plainSubstitutionResult = string.IsNullOrEmpty(plainSubstitutionResult)
                     ? this.substitutionService.DefaultSubstitutionText
-                    : substitutionResult;
+                    : plainSubstitutionResult;
 
-                textWithReplacedSubstitutions = this.substitutionService.ReplaceSubstitutionVariable(
-                        textWithReplacedSubstitutions, this.selfVariable, substitution.Name, substitutionResult);
+                browserSubstitutionResult = shouldEncode
+                    ? WebUtility.HtmlEncode(browserSubstitutionResult) // DO NOT CHANGE TO HttpUtility.HtmlEncode: KP-10869
+                    : browserSubstitutionResult;
+
+                browserSubstitutionResult = string.IsNullOrEmpty(browserSubstitutionResult)
+                    ? this.substitutionService.DefaultSubstitutionText
+                    : browserSubstitutionResult;
+
+                plainTextReplaced = this.substitutionService.ReplaceSubstitutionVariable(
+                        plainTextReplaced, this.selfVariable, substitution.Name, plainSubstitutionResult);
+
+                browserTextReplaced = this.substitutionService.ReplaceSubstitutionVariable(
+                    browserTextReplaced, this.selfVariable, substitution.Name, browserSubstitutionResult);
             }
 
-            return textWithReplacedSubstitutions;
-        }
-
-        private static string MarkdownTextToHtml(string text)
-        {
-            using (var writer = new StringWriter())
-            {
-                var renderer = new HtmlRenderer(writer) { EnableHtmlForBlock = false};
-
-                var builder = new MarkdownPipelineBuilder();
-
-                builder.BlockParsers.Clear();
-                builder.InlineParsers.Clear();
-
-                builder.BlockParsers.AddIfNotAlready<HtmlBlockParser>();
-                builder.BlockParsers.AddIfNotAlready<ParagraphBlockParser>();
-                builder.InlineParsers.AddIfNotAlready<HtmlEntityParser>();
-                builder.InlineParsers.AddIfNotAlready<LinkInlineParser>();
-                builder.InlineParsers.AddIfNotAlready<AutolineInlineParser>();
-
-                var pipeline = builder.Build();
-
-                pipeline.Setup(renderer);
-                var document = Markdown.Parse(text, pipeline);
-                renderer.Render(document);
-
-                return writer.ToString().TrimEnd('\n');
-            }
+            Text = plainTextReplaced;
+            BrowserReadyText = browserTextReplaced;
         }
 
         public override string ToString() => this.Text;
 
-        public SubstitutionText Clone() => (SubstitutionText) MemberwiseClone();
+        public SubstitutionText Clone() => (SubstitutionText)MemberwiseClone();
     }
 }
