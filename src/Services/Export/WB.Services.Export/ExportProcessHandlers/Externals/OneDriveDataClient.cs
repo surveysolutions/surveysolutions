@@ -44,7 +44,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
 
         public async Task UploadFileAsync(string folder, string fileName, Stream fileStream, long contentLength, CancellationToken cancellationToken = default)
         {
-            if (fileStream.Length > MaxAllowedFileSizeByMicrosoftGraphApi)
+            if (contentLength > MaxAllowedFileSizeByMicrosoftGraphApi)
             {
                 logger.LogTrace("Uploading {fileName} to {folder}. Large file of size {Length} in chunks", 
                     fileName, folder, contentLength);
