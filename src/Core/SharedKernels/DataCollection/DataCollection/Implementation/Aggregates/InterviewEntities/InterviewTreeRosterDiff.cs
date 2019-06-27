@@ -13,5 +13,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
 
         public bool IsRosterTitleChanged { get; }
+        public override string ToString()
+        {
+            return base.ToString() + $", RosterTitleChanged: {IsRosterTitleChanged}";
+        }
     }
 }

@@ -16,5 +16,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         }
 
         public bool IsTitleChanged {get; }
+
+        public override string ToString()
+        {
+            return base.ToString() + $", TitleChanged: {IsTitleChanged}";
+        }
     }
 }

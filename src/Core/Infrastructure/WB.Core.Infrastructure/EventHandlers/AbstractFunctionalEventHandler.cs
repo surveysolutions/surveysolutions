@@ -104,7 +104,7 @@ namespace WB.Core.Infrastructure.EventHandlers
             storage.Store(newState, id);
         }
 
-        private static TEntity GetViewById(Guid id, IReadSideStorage<TEntity> storage)
+        protected virtual TEntity GetViewById(Guid id, IReadSideStorage<TEntity> storage)
         {
             return storage.GetById(id);
         }

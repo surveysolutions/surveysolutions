@@ -9,11 +9,13 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Tester.Infrastructure.Internals;
 using WB.UI.Tester.Infrastructure.Internals.Rest;
@@ -66,7 +68,7 @@ namespace WB.UI.Tester.Infrastructure
             registry.Bind<IRestService, RestService>();
             registry.Bind<IFastBinaryFilesHttpHandler, FastBinaryFilesHttpHandler>();
             registry.Bind<ISerializer, PortableJsonSerializer>();
-            registry.Bind<IInterviewAnswerSerializer,PortableInterviewAnswerJsonSerializer>();
+            registry.Bind<IInterviewAnswerSerializer, NewtonInterviewAnswerJsonSerializer>();
             registry.Bind<IJsonAllTypesSerializer, PortableJsonAllTypesSerializer>();
 
             registry.Bind<IStringCompressor, JsonCompressor>();

@@ -328,7 +328,7 @@ namespace WB.UI.Headquarters.Code
             var apiView = this.GetResponseObject<AssignmentApiDocument>(context);
             QuestionnaireIdentity assignmentQuestionnaireId = apiView.QuestionnaireId;
             var questionnaire = questionnaireStorage.GetQuestionnaire(assignmentQuestionnaireId, null);
-            var identityQuestions = questionnaire.GetPrefilledQuestions().ToHashSet();
+            var identityQuestions = Enumerable.ToHashSet(questionnaire.GetPrefilledQuestions());
 
             var answers = apiView.Answers
                 .Where(x => !string.IsNullOrEmpty(x.SerializedAnswer))

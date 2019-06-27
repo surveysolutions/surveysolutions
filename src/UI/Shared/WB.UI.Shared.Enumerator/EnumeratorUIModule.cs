@@ -143,7 +143,7 @@ namespace WB.UI.Shared.Enumerator
             config.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, fileTarget));
 
             #if DEBUG
-            var androidTarget = new ConsoleTarget("android")
+            var androidTarget = new TraceTarget("android")
             {
                 Layout =
                     "[${logger:shortName=true}][${level}][${message}][${onexception:${exception:format=toString,Data}|${stacktrace}}]"

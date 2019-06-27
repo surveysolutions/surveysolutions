@@ -14,7 +14,6 @@ using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -246,7 +245,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             var responsibleId = assignmentToImport.Interviewer ?? assignmentToImport.Supervisor ?? defaultResponsible;
             var identifyingQuestionIds = questionnaire.GetPrefilledQuestions().ToHashSet();
 
-            var assignment = this.assignmentFactory.CreateAssignment(questionnaireIdentity, responsibleId, assignmentToImport.Quantity, null, null, null);
+            var assignment = this.assignmentFactory.CreateAssignment(questionnaireIdentity, 
+                responsibleId, 
+                assignmentToImport.Quantity,
+                assignmentToImport.Email, 
+                assignmentToImport.Password, 
+                assignmentToImport.WebMode,
+                assignmentToImport.IsAudioRecordingEnabled);
             var identifyingAnswers = assignmentToImport.Answers
                 .Where(x => identifyingQuestionIds.Contains(x.Identity.Id)).Select(a =>
                     IdentifyingAnswer.Create(assignment, questionnaire, a.Answer.ToString(), a.Identity))
@@ -255,9 +260,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             assignment.SetIdentifyingData(identifyingAnswers);
             assignment.SetAnswers(assignmentToImport.Answers);
             assignment.SetProtectedVariables(assignmentToImport.ProtectedVariables);
-            assignment.UpdatePassword(assignmentToImport.Password);
-            assignment.UpdateEmail(assignmentToImport.Email);
-            assignment.UpdateMode(assignmentToImport.WebMode);
 
             this.assignmentsStorage.Store(assignment, null);
 
@@ -344,6 +346,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             var email = assignment.Select(_ => _.Email).FirstOrDefault(_ => _ != null)?.Value;
             var password = assignment.Select(_ => _.Password).FirstOrDefault(_ => _ != null)?.Value;
             var webMode = assignment.Select(_ => _.WebMode).FirstOrDefault(_ => _ != null)?.WebMode;
+            var isAudioRecordingEnabled = assignment.Select(_ => _.RecordAudio).FirstOrDefault(_ => _ != null)?.DoesNeedRecord;
 
             return new AssignmentToImport
             {
@@ -355,7 +358,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 ProtectedVariables = protectedQuestions,
                 Email = email,
                 Password = password,
-                WebMode = webMode ?? false
+                WebMode = webMode ?? false,
+                IsAudioRecordingEnabled = isAudioRecordingEnabled,
             };
         }
 

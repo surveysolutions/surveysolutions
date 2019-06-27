@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private CancellationTokenSource cancellationTokenSource;
 
         private bool isVersionCheckInProgress;
-        private bool isNewVersionAvaliable;
+        private bool isNewVersionAvailable;
         private string checkNewVersionResult;
         private string checkNewVersionDetails;
 
@@ -46,10 +46,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             set => this.RaiseAndSetIfChanged( ref this.isVersionCheckInProgress, value);
         }
 
-        public bool IsNewVersionAvaliable
+        public bool IsNewVersionAvailable
         {
-            get => this.isNewVersionAvaliable;
-            set => this.RaiseAndSetIfChanged( ref this.isNewVersionAvaliable, value);
+            get => this.isNewVersionAvailable;
+            set => this.RaiseAndSetIfChanged( ref this.isNewVersionAvailable, value);
         }
 
         public string CheckNewVersionResult
@@ -76,18 +76,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         
         private async Task UpdateApplication()
         {
-            this.IsNewVersionAvaliable = false;
+            this.IsNewVersionAvailable = false;
             this.IsVersionCheckInProgress = true;
             this.cancellationTokenSource = new CancellationTokenSource(this.downloadApkTimeout);
             this.CheckNewVersionDetails = string.Empty;
             try
             {
-                this.CheckNewVersionResult = InterviewerUIResources.Diagnostics_DownloadingPleaseWait;
+                this.CheckNewVersionResult = EnumeratorUIResources.Diagnostics_DownloadingPleaseWait;
 
                 await this.tabletDiagnosticService.UpdateTheApp(this.cancellationTokenSource.Token, true,
                     new Progress<TransferProgress>(progress =>
                     {
-                        this.CheckNewVersionResult = InterviewerUIResources.Diagnostics_DownloadingPleaseWait
+                        this.CheckNewVersionResult = EnumeratorUIResources.Diagnostics_DownloadingPleaseWait
                                                      + $" ({(int)progress.ProgressPercentage}%)";
 
                         var bytesReceived = progress.BytesReceived.Bytes().Humanize("0.00");
@@ -107,7 +107,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
             catch (Exception) when (cancellationTokenSource.IsCancellationRequested)
             {
-                this.CheckNewVersionResult = InterviewerUIResources.RequestCanceledByUser;
+                this.CheckNewVersionResult = EnumeratorUIResources.RequestCanceledByUser;
             }
             catch (Exception ex)
             {
@@ -121,7 +121,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         private async Task CheckVersion()
         {
-            this.IsNewVersionAvaliable = false;
+            this.IsNewVersionAvailable = false;
             this.CheckNewVersionResult = null;
             this.IsVersionCheckInProgress = true;
             this.cancellationTokenSource = new CancellationTokenSource();
@@ -135,12 +135,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 {
                     if (versionFromServer.HasValue && versionFromServer > this.deviceSettings.GetApplicationVersionCode())
                     {
-                        this.IsNewVersionAvaliable = true;
+                        this.IsNewVersionAvailable = true;
                     }
                     else
                     {
                         this.CheckNewVersionResult =
-                            InterviewerUIResources.Diagnostics_YouHaveTheLatestVersionOfApplication;
+                            EnumeratorUIResources.Diagnostics_YouHaveTheLatestVersionOfApplication;
                     }
                 }
             }
@@ -155,7 +155,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         private void RejectUpdateApplication()
         {
-            this.IsNewVersionAvaliable = false;
+            this.IsNewVersionAvailable = false;
         }
     }
 }

@@ -27,13 +27,20 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         public override async Task ExecuteAsync()
         {
             if (!await this.synchronizationService.IsAutoUpdateEnabledAsync(Context.CancellationToken))
-               return;
+            {
+                var versionFromServerCheck = await 
+                    this.synchronizationService.GetLatestApplicationVersionAsync(Context.CancellationToken);
+                Context.Statistics.NewVersionExists = 
+                    versionFromServerCheck.HasValue && versionFromServerCheck > GetApplicationVersionCode();
+
+                return;
+            }
 
             Context.Progress.Report(new SyncProgressInfo
             {
-                Title = InterviewerUIResources.Synchronization_CheckNewVersionOfApplication,
+                Title = EnumeratorUIResources.Synchronization_CheckNewVersionOfApplication,
                 Status = SynchronizationStatus.Started,
-                Stage= SyncStage.CheckNewVersionOfApplication
+                Stage = SyncStage.CheckNewVersionOfApplication
             });
 
             var versionFromServer = await
@@ -54,9 +61,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
                         Context.Progress.Report(new SyncProgressInfo
                         {
-                            Title = InterviewerUIResources.Synchronization_DownloadApplication,
+                            Title = EnumeratorUIResources.Synchronization_DownloadApplication,
                             Description = string.Format(
-                                InterviewerUIResources.Synchronization_DownloadApplication_Description,
+                                EnumeratorUIResources.Synchronization_DownloadApplication_Description,
                                 receivedKilobytes.Humanize("0.00 MB"),
                                 totalKilobytes.Humanize("0.00 MB"),
                                 receivedKilobytes.Per(sw.Elapsed).Humanize("0.00"),

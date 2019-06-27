@@ -36,9 +36,10 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             IServiceLocator serviceLocator, 
             IPlainAggregateRootRepository plainRepository,
             IAggregateLock aggregateLock,
-            IAggregateRootCacheCleaner aggregateRootCacheCleaner)
+            IAggregateRootCacheCleaner aggregateRootCacheCleaner,
+            ICommandsMonitoring monitoring)
             : base(eventSourcedRepository, eventBus, serviceLocator, plainRepository, 
-                aggregateLock, aggregateRootCacheCleaner) { }
+                aggregateLock, aggregateRootCacheCleaner, monitoring) { }
 
         protected override void ExecuteImpl(ICommand command, string origin, CancellationToken cancellationToken)
         {
