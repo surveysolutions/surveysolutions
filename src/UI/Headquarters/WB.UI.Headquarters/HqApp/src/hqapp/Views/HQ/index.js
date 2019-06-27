@@ -7,6 +7,7 @@ import WebInterviewSetup from "./WebInterviewSetup"
 import SurveySetup from "./SurveySetup"
 import Profile from "./Profile"
 import Admin from "./Admin"
+import Export from "./Export"
 
 export default [
     Assignments,
@@ -17,5 +18,6 @@ export default [
     WebInterviewSetup,
     SurveySetup,
     Profile,
-    Admin
+    Admin,
+    Export
 ]

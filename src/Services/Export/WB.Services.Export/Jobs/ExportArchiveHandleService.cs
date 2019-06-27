@@ -12,19 +12,19 @@ namespace WB.Services.Export.Jobs
     internal class ExportArchiveHandleService : IExportArchiveHandleService
     {
         private readonly IFileBasedExportedDataAccessor fileBasedExportedDataAccessor;
-        private readonly IExternalFileStorage externalFileStorage;
+        private readonly IExternalArtifactsStorage externalArtifactsStorage;
         private readonly IDataExportFileAccessor exportFileAccessor;
         private readonly ILogger<JobsStatusReporting> logger;
         private readonly IExportFileNameService fileNameService;
 
         public ExportArchiveHandleService(IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
-            IExternalFileStorage externalFileStorage,
+            IExternalArtifactsStorage externalArtifactsStorage,
             IDataExportFileAccessor exportFileAccessor,
             ILogger<JobsStatusReporting> logger,
             IExportFileNameService fileNameService)
         {
             this.fileBasedExportedDataAccessor = fileBasedExportedDataAccessor;
-            this.externalFileStorage = externalFileStorage;
+            this.externalArtifactsStorage = externalArtifactsStorage;
             this.exportFileAccessor = exportFileAccessor;
             this.logger = logger;
             this.fileNameService = fileNameService;
@@ -32,15 +32,15 @@ namespace WB.Services.Export.Jobs
 
         public async Task ClearAllExportArchives(TenantInfo tenant)
         {
-            if (this.externalFileStorage.IsEnabled())
+            if (this.externalArtifactsStorage.IsEnabled())
             {
                 var externalStoragePath = this.exportFileAccessor.GetExternalStoragePath(tenant, string.Empty);
-                var items = await this.externalFileStorage.ListAsync(externalStoragePath);
+                var items = await this.externalArtifactsStorage.ListAsync(externalStoragePath);
                 logger.LogInformation("Deleting export archives for tenant: {tenant} - there is {count} files", tenant, items.Count);
 
                 foreach (var file in items)
                 {
-                    await this.externalFileStorage.RemoveAsync(file.Path);
+                    await this.externalArtifactsStorage.RemoveAsync(file.Path);
                 }
 
                 return;
@@ -55,20 +55,20 @@ namespace WB.Services.Export.Jobs
 
         public async Task<DataExportArchive> DownloadArchiveAsync(ExportSettings settings, string archiveName)
         {
-            if (this.externalFileStorage.IsEnabled())
+            if (this.externalArtifactsStorage.IsEnabled())
             {
                 var internalFilePath = this.fileNameService.GetFileNameForExportArchive(settings);
 
                 var externalStoragePath = this.exportFileAccessor.GetExternalStoragePath(
                     settings.Tenant, Path.GetFileName(internalFilePath));
 
-                var metadata = await this.externalFileStorage.GetObjectMetadataAsync(externalStoragePath);
+                var metadata = await this.externalArtifactsStorage.GetObjectMetadataAsync(externalStoragePath);
 
                 if (metadata != null)
                 {
                     var downloadFileName = this.fileNameService.GetFileNameForExportArchive(settings, archiveName);
 
-                    var uri = this.externalFileStorage.GetDirectLink(externalStoragePath,
+                    var uri = this.externalArtifactsStorage.GetDirectLink(externalStoragePath,
                         TimeSpan.FromHours(10), downloadFileName);
 
                     return new DataExportArchive

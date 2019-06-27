@@ -19,5 +19,9 @@ namespace WB.Services.Export.Services.Processing
         public bool IsRunning { get; set; }
         public TimeSpan? TimeEstimation { get; set; }
         public DataExportErrorView Error { get; set; }
+        public bool HasFile { get; set; }
+        public double FileSize { get; set; }
+        public DateTime DataFileLastUpdateDate { get; set; }
+        public string DataDestination { get; set; }
     }
 }
