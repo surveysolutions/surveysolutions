@@ -24,6 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         public AssignmentPassword Password { get; set; }
 
         public AssignmentWebMode WebMode { get; set; }
+        public AssignmentRecordAudio RecordAudio { get; set; }
 
         public override string ToString() =>
             $"{InterviewIdValue?.Value}[{string.Join("_", RosterInstanceCodes.Select(x => x.Value))}]";
@@ -161,6 +162,12 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
     [DebuggerDisplay("{Value}")]
     public class AssignmentPassword : AssignmentValue { }
+
+    [DebuggerDisplay("{Value}")]
+    public class AssignmentRecordAudio : AssignmentValue
+    {
+        public bool? DoesNeedRecord { get; set; }
+    }
 
     [DebuggerDisplay("{Value}")]
     public class AssignmentWebMode : AssignmentValue

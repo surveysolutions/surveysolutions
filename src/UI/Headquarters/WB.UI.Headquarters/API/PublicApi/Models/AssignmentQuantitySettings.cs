@@ -1,4 +1,4 @@
-﻿using System.Runtime.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace WB.UI.Headquarters.API.PublicApi.Models
 {
@@ -7,7 +7,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         /// <summary>
         /// Assignment Quantity Settings.
         /// </summary>
-        [DataMember(IsRequired = true)]
+        [Required]
         public bool CanChangeQuantity { get; set; }
     }
 }

@@ -108,6 +108,48 @@
             </div>
         </div>
     </div>
+
+
+    <div class="left-side-panel scenarios" ng-class="{unfolded: isFolded }" ng-controller="ScenariosCtrl">
+        <div class="foldback-region" ng-click="foldback();$event.stopPropagation()"></div>
+        <div class="left-side-panel-content macros-panel">
+            <div class="foldback-button-region" ng-click="foldback();$event.stopPropagation()">
+                <div class="foldback-button"></div>
+            </div>
+            <div class="macroses">
+                <perfect-scrollbar class="scroller">
+                    <h3>
+                        <span ng-i18next="[i18next]({count: scenarios.length})SideBarScenarioCounter"></span>
+                    </h3>
+                    <div class="empty-list" ng-show="scenarios.length == 0">
+                        <p ng-i18next>SideBarScenarioEmptyLine1</p>
+                        <p ng-i18next>SideBarScenarioEmptyLine2</p>
+                    </div>
+                    <form role="form" name="scenariosForm" novalidate>
+                        <ul ng-model="scenarios">
+                            <li class="macroses-panel-item" ng-repeat="scenario in scenarios">
+                                <ng-form name="scenario.form">
+                                    <a href ng-click="deleteScenario($index)" class="btn delete-btn" tabindex="-1"></a>
+                                    <div class="input-group macroses-name">
+                                        <input focus-on-out="focusScenario{{scenario.id}}" ng-i18next="[placeholder]SideBarScenarioName" maxlength="32" spellcheck="false" ng-model="scenario.title" name="name" class="form-control" type="text" />
+                                    </div>
+                                    <div class="divider"></div>
+                                    <button type="button" class="btn lighter-hover" ng-click="runScenario(scenario)" ng-i18next>Run</button>
+                                    <button type="button" class="btn lighter-hover" ng-click="showScenarioEditor(scenario.id)" ng-i18next>Edit</button>
+                                    <div class="actions" ng-show="scenario.form.$dirty">
+                                        <button type="submit" ng-disabled="scenario.form.$invalid" class="btn lighter-hover" ng-click="saveScenario(scenario)" ng-i18next>Save</button>
+                                        <button type="button" class="btn lighter-hover" ng-click="cancel(scenario)" ng-i18next>Cancel</button>
+                                    </div>
+                                </ng-form>
+                            </li>
+                        </ul>
+                    </form>
+                </perfect-scrollbar>
+            </div>
+        </div>
+    </div>
+
+
     <div class="left-side-panel macroses" ng-class="{unfolded: isFolded }" ng-controller="MacrosCtrl">
         <div class="foldback-region" ng-click="foldback();$event.stopPropagation()"></div>
         <div class="left-side-panel-content macros-panel">
@@ -246,7 +288,7 @@
                                 click here
                             </a>
                         </p>
-                        <p ng-bind-html="emptyAttachmentsDescription"/>
+                        <p ng-bind-html="emptyAttachmentsDescription" />
                     </div>
                     <form role="form" name="attachmentsForm" novalidate>
                         <div class="attachment-list">
@@ -671,6 +713,7 @@
             <li><a class="left-menu-chapters" ng-class="{unfolded: isUnfoldedChapters }" ng-click="unfoldChapters();" ng-i18next="[title]SideBarSectionsTitle"></a></li>
             <li><a class="left-menu-metadata" ng-class="{unfolded: isUnfoldedMetadata }" ng-click="unfoldMetadata();" ng-i18next="[title]SideBarMetadataTitle"></a></li>
             <li><a class="left-menu-translations" ng-class="{unfolded: isUnfoldedTranslations }" ng-click="unfoldTranslations();" ng-i18next="[title]SideBarTranslationsTitle"></a></li>
+            <li><a class="left-menu-scenarios" style="background-image: url(../../i/designer-left-icons-2-3.png);background-position: 0 -100px;background-repeat: no-repeat;" ng-show="questionnaire.hasViewerAdminRights" ng-class="{unfolded: isUnfoldedScenarios }" ng-click="unfoldScenarios();" ng-i18next="[title]SideBarScenarioTitle"></a></li>
             <li><a class="left-menu-macroses" ng-class="{unfolded: isUnfoldedMacros }" ng-click="unfoldMacros();" ng-i18next="[title]SideBarMacroTitle"></a></li>
             <li><a class="left-menu-lookupTables" ng-class="{unfolded: isUnfoldedLookupTables }" ng-click="unfoldLookupTables();" ng-i18next="[title]SideBarLookupTitle"></a></li>
             <li><a class="left-menu-attachments" ng-class="{unfolded: isUnfoldedAttachments }" ng-click="unfoldAttachments();" ng-i18next="[title]SideBarAttachmentsTitle"></a></li>

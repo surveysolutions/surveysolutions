@@ -6,6 +6,10 @@
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
     <Configurations>Debug;Release;Debug-ESRI</Configurations>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+  </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Implementation\AuditLog\**" />
     <Compile Remove="Implementation\Storage\**" />
@@ -16,10 +20,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.9.2" />
-    <PackageReference Include="MvvmCross.Plugin.File" Version="6.3.0" />
-    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="6.3.0" />
-    <PackageReference Include="MvvmCross.Plugin.Network" Version="6.3.0" />
-    <PackageReference Include="MvvmCross.Plugin.WebBrowser" Version="6.3.0" />
+    <PackageReference Include="MvvmCross.Plugin.File" Version="6.3.1" />
+    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="6.3.1" />
+    <PackageReference Include="MvvmCross.Plugin.Network" Version="6.3.1" />
+    <PackageReference Include="MvvmCross.Plugin.WebBrowser" Version="6.3.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="sqlite-net-pcl" Version="1.5.231" />
     <PackageReference Include="SQLitePCLRaw.bundle_green" Version="1.1.13" />
@@ -33,12 +37,6 @@
     <ProjectReference Include="..\..\..\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj" />
     <ProjectReference Include="..\..\..\SharedKernels\Enumerator\Enumerator\WB.Core.SharedKernels.Enumerator.csproj" />
     <ProjectReference Include="..\..\..\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\Dashboard\Messages\" />
-    <Reference Include="FFImageLoading">
-      <HintPath>..\..\..\..\..\packages\Xamarin.FFImageLoading.2.4.3.840\lib\MonoAndroid10\FFImageLoading.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\InterviewerUIResources.Designer.cs">

@@ -21,12 +21,16 @@ namespace WB.UI.Headquarters.Controllers
             var assignmentId = interviewSummary.GetById(interviewId)?.AssignmentId ?? 0;
             var assignment = assignments.GetById(assignmentId);
 
-            int invitationId = 0;
-            invitationId = invitationService.CreateInvitationForPublicLink(assignment, interviewId);
+            int invitationId = invitationService.CreateInvitationForPublicLink(assignment, interviewId);
             
             try
             {
                 await invitationMailingService.SendResumeAsync(invitationId, assignment, email);
+                if (Request.Cookies[AskForEmail] != null)
+                {
+                    Response.Cookies[AskForEmail].Expires = DateTime.UtcNow.AddDays(-1);
+                }
+
                 return this.Json("ok");
             }
             catch (EmailServiceException e)

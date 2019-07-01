@@ -7,7 +7,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
     public interface IDataExportFileAccessor
     {
-        void PubishArchiveToExternalStorage(string archiveFile, IProgress<int> exportProgress);
+        void PublishArchiveToExternalStorage(string archiveFile, IProgress<int> exportProgress);
         IZipArchive CreateExportArchive(Stream outputStream, CompressionLevel compressionLevel = CompressionLevel.BestSpeed);
         void RecreateExportArchive(string folderForDataExport, string archiveFilePath, IProgress<int> progress = null);
         string GetExternalStoragePath(string name);

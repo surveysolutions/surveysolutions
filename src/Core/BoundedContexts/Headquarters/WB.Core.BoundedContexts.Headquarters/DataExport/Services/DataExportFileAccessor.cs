@@ -41,7 +41,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         public string GetExternalStoragePath(string name) => $"export/" + name;
 
-        public void PubishArchiveToExternalStorage(string archiveFile, IProgress<int> exportProgress)
+        public void PublishArchiveToExternalStorage(string archiveFile, IProgress<int> exportProgress)
         {
             if (externalFileStorage.IsEnabled())
             {

@@ -178,7 +178,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             if (response == null || response.Trim('"') != CanSynchronizeValidResponse)
             {
-                throw new SynchronizationException(SynchronizationExceptionType.InvalidUrl, InterviewerUIResources.InvalidEndpoint);
+                throw new SynchronizationException(SynchronizationExceptionType.InvalidUrl, EnumeratorUIResources.InvalidEndpoint);
             }
         }
 
@@ -518,7 +518,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
             catch (RestException ex)
             {
-                throw ex.ToSynchronizationException();
+                var newException = ex.ToSynchronizationException();
+                throw newException;
             }
         }
 

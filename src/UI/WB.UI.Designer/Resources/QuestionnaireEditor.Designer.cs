@@ -3006,6 +3006,60 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {{count}} Scenario:.
+        /// </summary>
+        public static string SideBarScenarioCounter {
+            get {
+                return ResourceManager.GetString("SideBarScenarioCounter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{count}} Scenarios:.
+        /// </summary>
+        public static string SideBarScenarioCounter_plural {
+            get {
+                return ResourceManager.GetString("SideBarScenarioCounter_plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use this tab to view your scenarios..
+        /// </summary>
+        public static string SideBarScenarioEmptyLine1 {
+            get {
+                return ResourceManager.GetString("SideBarScenarioEmptyLine1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A scenario is a snapshot of tester state, you can save it on tester by click on button &quot;Save Scenario&quot;..
+        /// </summary>
+        public static string SideBarScenarioEmptyLine2 {
+            get {
+                return ResourceManager.GetString("SideBarScenarioEmptyLine2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to scenario title.
+        /// </summary>
+        public static string SideBarScenarioName {
+            get {
+                return ResourceManager.GetString("SideBarScenarioName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scenarios.
+        /// </summary>
+        public static string SideBarScenarioTitle {
+            get {
+                return ResourceManager.GetString("SideBarScenarioTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {{count}} Section:.
         /// </summary>
         public static string SideBarSectionsCounter {

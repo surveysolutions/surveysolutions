@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace WB.Core.SharedKernels.DataCollection.Repositories
 {
@@ -15,6 +16,8 @@ namespace WB.Core.SharedKernels.DataCollection.Repositories
 
         FileObject Store(string path, byte[] data, string contentType, IProgress<int> progress = null);
         FileObject Store(string path, Stream inputStream, string contentType, IProgress<int> progress = null);
+
+        Task<FileObject> StoreAsync(string path, Stream inputStream, string contentType, IProgress<int> progress = null);
 
         FileObject GetObjectMetadata(string key);
         bool IsExist(string path);

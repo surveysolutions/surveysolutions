@@ -14,11 +14,13 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Interviewer.Services;
@@ -48,7 +50,7 @@ namespace WB.UI.Interviewer.Infrastructure
             registry.BindAsSingletonWithConstructorArgument<IQuestionnaireAssemblyAccessor, InterviewerQuestionnaireAssemblyAccessor>(
                 "pathToAssembliesDirectory", AndroidPathUtils.GetPathToSubfolderInLocalDirectory("assemblies"));
             registry.Bind<ISerializer, PortableJsonSerializer>();
-            registry.Bind<IInterviewAnswerSerializer, PortableInterviewAnswerJsonSerializer>();
+            registry.Bind<IInterviewAnswerSerializer, NewtonInterviewAnswerJsonSerializer>();
             registry.Bind<IJsonAllTypesSerializer, PortableJsonAllTypesSerializer>();
 
             registry.BindAsSingleton<IPlainKeyValueStorage<QuestionnaireDocument>, QuestionnaireKeyValueStorage>();

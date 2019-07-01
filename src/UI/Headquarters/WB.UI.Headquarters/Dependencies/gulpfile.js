@@ -117,7 +117,9 @@ const config = {
         stylesFolder: 'Styles',
         scriptsFolder: 'Scripts',
         images: [
-            'img/error2.svg'
+            'img/error2.svg',
+            'img/warning2.svg',
+            'img/instruction.svg'
         ],
         fontsFolder: 'Fonts',
         distFolder: 'Dist',
