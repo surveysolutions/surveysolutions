@@ -205,7 +205,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export file will be uploaded on Dropbox.
+        ///   Looks up a localized string similar to Export file will be uploaded to Dropbox.
         /// </summary>
         internal static string DataExport_Destination_Dropbox {
             get {
@@ -223,7 +223,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export file will be uploaded on Google Drive.
+        ///   Looks up a localized string similar to Export file will be uploaded to Google Drive.
         /// </summary>
         internal static string DataExport_Destination_GoogleDrive {
             get {
@@ -232,7 +232,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export file will be uploaded on OneDrive.
+        ///   Looks up a localized string similar to Export file will be uploaded to OneDrive.
         /// </summary>
         internal static string DataExport_Destination_OneDrive {
             get {
