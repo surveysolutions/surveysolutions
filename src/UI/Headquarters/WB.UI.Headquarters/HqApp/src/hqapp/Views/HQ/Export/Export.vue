@@ -105,7 +105,7 @@
                   </label>
                 </div>
             </div>
-            <div class="mb-30" v-if="dataType == 'surveyData'">
+            <div class="mb-30" v-if="dataType == 'surveyData' && questionnaireVersion">
                 <h3>{{$t('DataExport.DataFormat')}}</h3>
                 <div class="radio-btn-row">
                   <input class="radio-row" type="radio" name="dataFormat" id="separated" v-model="dataFormat" value="Tabular">
@@ -129,7 +129,7 @@
                   </label>
                 </div>
             </div>
-            <div class="mb-30" v-if="canExportExternally">
+            <div class="mb-30" v-if="canExportExternally && questionnaireVersion">
                 <h3>{{$t('DataExport.DataDestination')}}</h3>
                 <div class="radio-btn-row">
                   <input class="radio-row" type="radio" name="exportDestination" id="download"  v-model="dataDestination" value="zip">
@@ -183,7 +183,7 @@
     <div class="row" v-if="!exportServiceIsUnavailable">
       <div class="col-lg-5">
           <h3 class="mb-20">{{$t('DataExport.DataExportApi')}}</h3>
-          <p>{{$t('DataExport.DataExportApiDesc')}}<a href="https://support.mysurvey.solutions/headquarters/api/api-for-data-export/" target="_blank" class="underlined-link">{{$t('DataExport.DataExportApiInfoPage')}}</a>
+          <p>{{$t('DataExport.DataExportApiDesc')}} <a href="https://support.mysurvey.solutions/headquarters/api/api-for-data-export/" target="_blank" class="underlined-link">{{$t('DataExport.DataExportApiInfoPage')}}</a>
           </p>
       </div>
     </div>
