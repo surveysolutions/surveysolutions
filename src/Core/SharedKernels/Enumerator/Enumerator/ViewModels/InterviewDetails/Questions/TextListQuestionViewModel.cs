@@ -138,13 +138,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task AddListItemCmd(string arg)
         {
+            if (string.IsNullOrWhiteSpace(arg)) return;
+            var answer = arg.Trim();
+
             var answerViewModels = this.Answers.OfType<TextListItemViewModel>().ToList();
             var maxValue = answerViewModels.Count == 0
                 ? 1
                 : answerViewModels.Max(x => x.Value) + 1;
 
             this.Answers.Insert(this.Answers.Count - 1,
-                this.CreateListItemViewModel(maxValue, arg, this.interviewRepository.Get(this.interviewId)));
+                this.CreateListItemViewModel(maxValue, answer, this.interviewRepository.Get(this.interviewId)));
 
             await this.SaveAnswers().ConfigureAwait(false);
 
