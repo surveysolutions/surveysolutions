@@ -252,6 +252,9 @@
                 if (data.isDisabled) {
                     $(row).addClass('disabled');
                 }
+                if (self.createdRow) {
+                    self.createdRow(row, data, dataIndex);
+                }
             },
             order: self.defaultOrder,
             search: {
@@ -270,8 +273,6 @@
                 $input.off().on('keyup cut paste',
                     _.debounce(function() { api.search($input.val()).draw(); },
                     searchDelay));
-
-                
             }
         });
     };

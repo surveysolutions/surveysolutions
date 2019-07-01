@@ -16,7 +16,6 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview;
 
 namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 {
@@ -24,9 +23,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
     {
         private readonly IAuditLogService auditLogService;
         private readonly ICommandService commandService;
-        private readonly IPrincipal principal;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IViewModelNavigationService navigationService;
         
         public SupervisorResolveInterviewViewModel(
             ICommandService commandService, 
@@ -51,9 +48,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                 logger)
         {
             this.commandService = commandService;
-            this.principal = principal;
             this.interviewRepository = interviewRepository;
-            this.navigationService = navigationService;
             this.auditLogService = auditLogService;
         }
 
@@ -87,7 +82,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                 Comment);
             await this.commandService.ExecuteAsync(command);
             auditLogService.Write(new ApproveInterviewAuditLogEntity(this.interviewId, interview.GetInterviewKey().ToString()));
-            await this.navigationService.NavigateToDashboardAsync(interviewId.FormatGuid());
+            await viewModelNavigationService.NavigateToDashboardAsync(interviewId.FormatGuid());
         }, () => this.status == InterviewStatus.Completed || 
                  this.status == InterviewStatus.RejectedByHeadquarters);
 
@@ -97,7 +92,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                 Comment);
             await this.commandService.ExecuteAsync(command);
             auditLogService.Write(new RejectInterviewAuditLogEntity(this.interviewId, interview.GetInterviewKey().ToString()));
-            await this.navigationService.NavigateToDashboardAsync(interviewId.FormatGuid());
+            await viewModelNavigationService.NavigateToDashboardAsync(interviewId.FormatGuid());
         }, () => this.status == InterviewStatus.Completed || 
                  this.status == InterviewStatus.RejectedByHeadquarters);
 
@@ -107,7 +102,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             this.status == InterviewStatus.InterviewerAssigned);
 
         private Task SelectInterviewer() =>
-            navigationService.NavigateToAsync<SelectResponsibleForAssignmentViewModel, SelectResponsibleForAssignmentArgs>(
+            viewModelNavigationService.NavigateToAsync<SelectResponsibleForAssignmentViewModel, SelectResponsibleForAssignmentArgs>(
                     new SelectResponsibleForAssignmentArgs(this.interviewId));
     }
 }

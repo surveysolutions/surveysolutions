@@ -83,11 +83,13 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.ReportsTests
             });
 
             Mock.Get(this.interviewReportDataRepository).Verify(r => r.GetNumericalReportData(
-                It.IsAny<string>(), It.IsAny<long?>(),
+                It.IsAny<string>(), 
+                It.IsAny<long?>(),
                 It.IsAny<Guid>(),
                 It.IsAny<Guid?>(),
                 It.IsAny<bool>(),
-                It.IsAny<long>(), It.IsAny<long>()
+                It.IsAny<long>(), 
+                It.IsAny<long>()
             ), Times.Once);
         }
 

@@ -15,6 +15,7 @@ namespace WB.Core.BoundedContexts.Headquarters.InterviewerProfiles
         public bool SupportQRCodeGeneration { set; get; }
         public string QRCodeAsBase64String { set; get; }
 
+        public bool IsModifiable { set; get; }
     }
 
     public class InterviewerProfileSyncStatistics

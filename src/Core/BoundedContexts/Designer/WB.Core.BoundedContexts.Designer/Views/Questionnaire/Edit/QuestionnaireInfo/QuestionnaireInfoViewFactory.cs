@@ -194,6 +194,16 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             questionnaireInfoView.Countries = CountryListProvider.GetCounryItems();
             questionnaireInfoView.ModesOfDataCollection = ModeOfDataCollectionProvider.GetModeOfDataCollectionItems();
 
+            questionnaireInfoView.Scenarios = dbContext.Scenarios
+                .Where(s => s.QuestionnaireId == questionnaireDocument.PublicKey)
+                .OrderBy(s => s.Id)
+                .Select(s => new ScenarioView()
+                {
+                    Id = s.Id,
+                    Title = s.Title
+                })
+                .ToList();
+
             return questionnaireInfoView;
         }
     }

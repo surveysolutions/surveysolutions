@@ -9347,26 +9347,11 @@ table.dataTable.fixedHeader-locked {
 .table-view .cell-wrap-text {
   white-space: normal !important; }
 
-.popover-content {
-  font-style: italic !important;
-  font-weight: bold !important;
-  font: 12px/14px Arial, Helvetica, sans-serif; }
-
 .warning-tooltip {
   color: #ca9101; }
 
 .error-tooltip {
-  color: #e74924; }
-  .error-tooltip h6 {
-    text-transform: uppercase !important;
-    font: 10px/12px "TrebuchetMSBold";
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    font-style: normal !important;
-    font-weight: 400 !important; }
-
-.instruction-tooltip {
-  color: #2a81cb; }
+  color: #FF2E00; }
 
 @font-face {
   font-family: "RobotoRegular";

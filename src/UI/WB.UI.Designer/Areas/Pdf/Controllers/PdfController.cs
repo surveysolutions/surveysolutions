@@ -156,7 +156,10 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
                 this.fileSystemAccessor.DeleteFile(pdfGenerationProgress.FilePath);
                 GeneratedPdfs.TryRemove(pdfKey, out _);
 
-                return this.File(content, "application/pdf", $"{questionnaireTitle}.pdf");
+                // MS edge brakes on long file name
+                string validTitle = questionnaireTitle.Length < 250 ? questionnaireTitle : questionnaireTitle.Substring(0, 250);
+
+                return this.File(content, "application/pdf", $"{validTitle}.pdf");
             }
             else
             {

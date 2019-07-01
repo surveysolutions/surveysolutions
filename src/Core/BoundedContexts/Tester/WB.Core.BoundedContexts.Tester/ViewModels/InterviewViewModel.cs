@@ -15,8 +15,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
     public class InterviewViewModel : BaseInterviewViewModel
     {
-        private readonly IViewModelNavigationService viewModelNavigationService;
-
         private QuestionnaireDownloadViewModel QuestionnaireDownloader { get; }
 
         public InterviewViewModel(
@@ -40,7 +38,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, coverState, principal, viewModelNavigationService,
                 interviewViewModelFactory, commandService, vibrationViewModel, enumeratorSettings)
         {
-            this.viewModelNavigationService = viewModelNavigationService;
             this.QuestionnaireDownloader = questionnaireDownloader;
         }
 

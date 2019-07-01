@@ -147,9 +147,6 @@
   <data name="BackToImport" xml:space="preserve">
     <value>Regresar a importar</value>
   </data>
-  <data name="BatchDescription" xml:space="preserve">
-    <value>Cargue el archivo con la pestaña de identificación del archivo y los datos recopilados. </value>
-  </data>
   <data name="BatchFileVerificationFailed" xml:space="preserve">
     <value>La verificación del archivo cargado ha fallado</value>
   </data>
@@ -446,9 +443,6 @@
   </data>
   <data name="SelectResponsibleToAssign" xml:space="preserve">
     <value>Seleccione el responsable de este lote</value>
-  </data>
-  <data name="SimpleDescription" xml:space="preserve">
-    <value>Cargue el archivo separado por tabulaciones con los datos de identificación necesarios. Opcionalmente, especifique los nombres de usuario de los supervisores o enumeradores en la columna _responsable, en la columna _quintita puede especificar la capacidad de asignación.</value>
   </data>
   <data name="SimpleTitle" xml:space="preserve">
     <value>Solamente datos de identificación </value>

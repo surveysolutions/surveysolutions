@@ -9559,6 +9559,11 @@ vue2-editor@^2.7.2:
   version "2.7.2"
   resolved "https://registry.yarnpkg.com/vue2-editor/-/vue2-editor-2.7.2.tgz#8cb9bda9bc120aacab261b534dc2a871a9403e81"
   integrity sha512-7wr0hd/OplcnFNeRLbEejTSrt/FUxNA64VAMW+cWn9a6ufhV38eufLfrbA4hU7zTfS1ywBprQpvGG0NP7KWgAQ==
+vue-timers@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/vue-timers/-/vue-timers-2.0.2.tgz#0a4f0900a6fa907e518d2fed1678dece2e8e2430"
+  integrity sha512-R5B2iQZwRqOPNKU5pobJHSqkNFTSik2pRVgD9/Ki2OrFAOiEmD/MqJ82WH+bxk9tcmqoQCs4Ha3MrZG4f58IKg==
+
   dependencies:
     lodash "^4.17.11"
     quill "^1.3.6"

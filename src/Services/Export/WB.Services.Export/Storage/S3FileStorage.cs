@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Amazon.S3;
 using Amazon.S3.Model;
@@ -14,18 +15,18 @@ using WB.Services.Export.Services.Processing;
 
 namespace WB.Services.Export.Storage
 {
-    public class S3FileStorage : IExternalFileStorage
+    public class S3ArtifactsStorage : IExternalArtifactsStorage
     {
         private readonly IOptions<S3StorageSettings> s3Settings;
         private readonly IAmazonS3 client;
         private readonly ITransferUtility transferUtility;
 
-        private readonly ILogger<S3FileStorage> log;
+        private readonly ILogger<S3ArtifactsStorage> log;
 
-        public S3FileStorage(IOptions<S3StorageSettings> s3Settings,
+        public S3ArtifactsStorage(IOptions<S3StorageSettings> s3Settings,
             IAmazonS3 amazonS3Client,
             ITransferUtility transferUtility,
-            ILogger<S3FileStorage> log)
+            ILogger<S3ArtifactsStorage> log)
         {
             this.s3Settings = s3Settings;
             client = amazonS3Client;
@@ -136,7 +137,8 @@ namespace WB.Services.Export.Storage
             return client.GetPreSignedURL(preSignedUrlRequest);
         }
 
-        public async Task<FileObject> StoreAsync(string key, Stream inputStream, string contentType, ExportProgress progress = null)
+        public async Task<FileObject> StoreAsync(string key, Stream inputStream, string contentType,
+            ExportProgress progress = null, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -208,7 +210,7 @@ namespace WB.Services.Export.Storage
             return (await GetObjectMetadataAsync(key)) != null;
         }
 
-        public async Task<FileObject> StoreAsync(string path, byte[] data, string contentType, ExportProgress progress = null)
+        public async Task<FileObject> StoreAsync(string path, byte[] data, string contentType, ExportProgress progress = null, CancellationToken cancellationToken = default)
         {
             using (var ms = new MemoryStream(data))
             {
