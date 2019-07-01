@@ -14,8 +14,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
     public class RejectedInterviewsViewModel : BaseInterviewsViewModel
     {
         public override GroupStatus InterviewStatus => GroupStatus.StartedInvalid;
-        public override string TabTitle => InterviewerUIResources.Dashboard_RejectedLinkText;
-        public override string TabDescription => InterviewerUIResources.Dashboard_RejectedTabText;
+        public override string TabTitle => EnumeratorUIResources.Dashboard_RejectedLinkText;
+        public override string TabDescription => EnumeratorUIResources.Dashboard_RejectedTabText;
         protected override Expression<Func<InterviewView, bool>> GetDbQuery()
         {
             var interviewerId = Principal.CurrentUserIdentity.UserId;

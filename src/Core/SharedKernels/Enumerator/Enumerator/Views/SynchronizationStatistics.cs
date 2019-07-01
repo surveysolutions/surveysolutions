@@ -19,6 +19,8 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public int NewAssignmentsCount { get; set; }
         public int RemovedAssignmentsCount { get; set; }
 
+        public bool NewVersionExists { get; set; }
+
         public int FailedInterviewsCount => this.FailedToCreateInterviewsCount + this.FailedToUploadInterviewsCount;
     }
 }

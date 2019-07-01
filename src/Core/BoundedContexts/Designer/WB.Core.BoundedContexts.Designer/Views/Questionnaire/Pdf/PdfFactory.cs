@@ -4,6 +4,7 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
@@ -67,7 +68,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 questionnaire = questionnaireTranslator.Translate(questionnaire, translationData);
             }
 
-            var listItem = this.dbContext.Questionnaires.Find(questionnaireId);
+            var listItem = this.dbContext.Questionnaires.Where(x => x.QuestionnaireId == questionnaireId).Include(x => x.SharedPersons).First();
             var sharedPersons =  listItem.SharedPersons;
 
             var modificationStatisticsByUsers = this.dbContext.QuestionnaireChangeRecords

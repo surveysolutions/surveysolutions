@@ -64,6 +64,16 @@ namespace WB.Services.Export.Tests
             }
         }
 
+        public static void AddMockObject<TService, TResult>(this ServiceCollection services,
+            Expression<Func<TService, TResult>> setup, TResult returns) where TService : class
+        {
+            var mock = new Mock<TService>();
+
+            mock.Setup(setup).Returns(returns);
+
+            services.AddTransient(s => mock.Object);
+        }
+
         public static void AddMock<TService>(this ServiceCollection coll, Expression<Func<TService, bool>> predicate = null) where TService : class
         {
             coll.AddTransient(c => predicate == null ? Mock.Of<TService>() : Mock.Of(predicate));
@@ -73,7 +83,7 @@ namespace WB.Services.Export.Tests
         {
             coll.AddScoped(c => predicate == null ? Mock.Of<TService>() : Mock.Of(predicate));
         }
-        
+
         public static void Verify<T>(this Mock<ILogger<T>> logMock, LogLevel level, Predicate<Exception> exception, Func<Times> times)
         {
             logMock.Verify(l => l.Log(level, 0, It.IsAny<object>(), Match.Create(exception), It.IsAny<Func<object, Exception, string>>()), times);

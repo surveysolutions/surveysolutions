@@ -3,8 +3,9 @@ using System.IO;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 
-namespace WB.Core.BoundedContexts.Headquarters.Invitations
+namespace WB.UI.Headquarters.Services
 {
     public class WebInterviewEmailRenderer : IWebInterviewEmailRenderer
     {

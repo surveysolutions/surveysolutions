@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.Value = value ?? throw new ArgumentNullException(nameof(value));
         }
 
-        public string Value { get; set; }
+        public string Value { get; protected set; }
 
         public static TextAnswer FromString(string value) => value != null ? new TextAnswer(value.Trim().RemoveControlChars()) : null;
 
@@ -66,7 +66,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.Value = value;
         }
 
-        public int Value { get; set; }
+        public int Value { get; protected set; }
 
         public static NumericIntegerAnswer FromInt(int value) => new NumericIntegerAnswer(value);
 
@@ -101,7 +101,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.Value = value;
         }
 
-        public double Value { get; set; }
+        public double Value { get; protected set; }
 
         public static NumericRealAnswer FromDouble(double value) => new NumericRealAnswer(value);
 
@@ -138,7 +138,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.Value = value;
         }
 
-        public DateTime Value { get; }
+        public DateTime Value { get; protected set; }
 
         public static DateTimeAnswer FromDateTime(DateTime value) => new DateTimeAnswer(value);
 
@@ -174,7 +174,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.SelectedValue = selectedValue;
         }
 
-        public int SelectedValue {get;}
+        public int SelectedValue { get; protected set; }
 
         public static CategoricalFixedSingleOptionAnswer FromInt(int selectedValue) => new CategoricalFixedSingleOptionAnswer(selectedValue);
 
@@ -219,7 +219,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.CheckedValues = checkedValues.ToReadOnlyCollection();
         }
 
-        public IReadOnlyCollection<int> CheckedValues { get; }
+        public IReadOnlyCollection<int> CheckedValues { get; protected set; }
 
         public IEnumerable<decimal> ToDecimals() => this.CheckedValues.Select(value => (decimal)value);
 
@@ -285,7 +285,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.SelectedValue = selectedValue;
         }
 
-        public RosterVector SelectedValue { get; set; }
+        public RosterVector SelectedValue { get; protected set; }
 
         public static CategoricalLinkedSingleOptionAnswer FromRosterVector(RosterVector selectedValue)
             => selectedValue == null ? null : new CategoricalLinkedSingleOptionAnswer(selectedValue);
@@ -323,7 +323,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.CheckedValues = checkedValues.ToReadOnlyCollection();
         }
 
-        public IReadOnlyCollection<RosterVector> CheckedValues { get; set; }
+        public IReadOnlyCollection<RosterVector> CheckedValues { get; protected set; }
 
         public static CategoricalLinkedMultiOptionAnswer FromRosterVectors(IEnumerable<RosterVector> checkedValues)
             => checkedValues == null ? null : new CategoricalLinkedMultiOptionAnswer(checkedValues);
@@ -364,7 +364,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.Rows = rows.ToReadOnlyCollection();
         }
 
-        public IReadOnlyList<TextListAnswerRow> Rows { get; }
+        public IReadOnlyList<TextListAnswerRow> Rows { get; protected set; }
 
         public Tuple<decimal, string>[] ToTupleArray() => this.Rows.Select(row => Tuple.Create((decimal)row.Value, row.Text)).ToArray();
 
@@ -410,7 +410,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.Value = value;
         }
 
-        public GeoPosition Value { get; set; }
+        public GeoPosition Value { get; protected set; }
 
         public static GpsAnswer FromGeoPosition(GeoPosition value) => value != null ? new GpsAnswer(value) : null;
 
@@ -449,7 +449,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.DecodedText = decodedText;
         }
 
-        public string DecodedText { get; }
+        public string DecodedText { get; protected set; }
         public static QRBarcodeAnswer FromString(string decodedText) => decodedText != null ? new QRBarcodeAnswer(decodedText) : null;
         public override string ToString() => DecodedText;
 
@@ -483,8 +483,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             AnswerTimeUtc = answerTimeUtc;
         }
 
-        public string FileName { get; }
-        public DateTime? AnswerTimeUtc { get; }
+        public string FileName { get; protected set; }
+        public DateTime? AnswerTimeUtc { get; protected set; }
 
         public static MultimediaAnswer FromString(string fileName, DateTime? answerTimeUtc) 
             => fileName != null ? new MultimediaAnswer(fileName,answerTimeUtc) : null;
@@ -527,8 +527,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.Length = length;
         }
 
-        public string FileName { get; set; }
-        public TimeSpan Length { get; set; }
+        public string FileName { get; protected set; }
+        public TimeSpan Length { get; protected set; }
 
         public static AudioAnswer FromString(string fileName, TimeSpan? length)
         {
@@ -569,7 +569,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.Value = area;
         }
 
-        public Area Value { get; set; }
+        public Area Value { get; protected set; }
 
         public static AreaAnswer FromArea(Area area) => area != null ? new AreaAnswer(area) : null;
 
@@ -616,7 +616,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.CheckedOptions = checkedOptions.ToReadOnlyCollection();
         }
 
-        public IReadOnlyCollection<CheckedYesNoAnswerOption> CheckedOptions { get; }
+        public IReadOnlyCollection<CheckedYesNoAnswerOption> CheckedOptions { get; protected set; }
 
         public IEnumerable<AnsweredYesNoOption> ToAnsweredYesNoOptions() => this.CheckedOptions.Select(option => new AnsweredYesNoOption(option.Value, option.Yes));
 

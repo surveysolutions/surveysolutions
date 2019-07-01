@@ -96,7 +96,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             {
                 this.IsBandwidthTested = true;
                 this.IsConnectionAbsent = true;
-                this.ConnectionDescription = InterviewerUIResources.InvalidEndpoint;
+                this.ConnectionDescription = EnumeratorUIResources.InvalidEndpoint;
             }
         });
 
@@ -109,7 +109,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             {
                 this.IsBandwidthTested = true;
                 this.IsConnectionAbsent = true;
-                this.ConnectionDescription = InterviewerUIResources.Diagnostics_BandwidthTestConnectionAbsent_Title;
+                this.ConnectionDescription = EnumeratorUIResources.Diagnostics_BandwidthTestConnectionAbsent_Title;
                 return;
             }
 
@@ -144,10 +144,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.IsConnectionAbsent = countOfFailedPingAttemps == CountOfPingAttemps;
             this.ConnectionDescription = this.IsConnectionAbsent
                 ? this.ConnectionDescription =
-                    InterviewerUIResources.Diagnostics_BandwidthTestConnectionToTheServerAbsent_Title
+                    EnumeratorUIResources.Diagnostics_BandwidthTestConnectionToTheServerAbsent_Title
                 : (countOfFailedPingAttemps == 0
-                    ? InterviewerUIResources.Diagnostics_BandwidthTestConnectionOK_Title
-                    : InterviewerUIResources.Diagnostics_BandwidthTestConnectionNotOK_Title);
+                    ? EnumeratorUIResources.Diagnostics_BandwidthTestConnectionOK_Title
+                    : EnumeratorUIResources.Diagnostics_BandwidthTestConnectionNotOK_Title);
 
             this.IsInProgress = false;
             this.IsBandwidthTested = true;

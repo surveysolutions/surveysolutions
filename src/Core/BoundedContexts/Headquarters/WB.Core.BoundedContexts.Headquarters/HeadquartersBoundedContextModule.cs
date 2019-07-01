@@ -161,9 +161,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<ISerializer, NewtonJsonSerializer>();
             registry.Bind<IJsonAllTypesSerializer, JsonAllTypesSerializer>();
             registry.Bind<IAttachmentContentService, AttachmentContentService>();
-            registry.Bind<IInterviewAnswerSerializer, NewtonInterviewAnswerJsonSerializer>();
 
-            registry.BindWithConstructorArgument<IMapStorageService, FileSystemMapStorageService>("folderPath", this.currentFolderPath);
+            registry.BindWithConstructorArgument<IMapStorageService, MapFileStorageService>("folderPath", this.currentFolderPath);
 
             //commented because auto registered somewhere 
             //registry.Bind<IMetaDescriptionFactory>().To<MetaDescriptionFactory>();
@@ -211,6 +210,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<ISurveysAndStatusesReport, SurveysAndStatusesReport>();
             registry.Bind<IMapReport, MapReport>();
             registry.Bind<IStatusDurationReport, StatusDurationReport>();
+            registry.BindAsSingleton<ICommandsMonitoring, PrometheusCommandsMonitoring>();
 
             registry.Bind<IInterviewUniqueKeyGenerator, InterviewUniqueKeyGenerator>();
             registry.BindAsSingleton<IRandomValuesSource, RandomValuesSource>();
@@ -269,8 +269,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<ICsvWriterService, CsvWriterService>();
             registry.Bind<ICsvWriter, CsvWriter>();
             registry.Bind<ICsvReader, CsvReader>();
-            registry.Bind<IDataExportStatusReader, DataExportStatusReader>();
-
+            
             registry.Bind<IExportQuestionService, ExportQuestionService>();
 
             registry.Bind<IRosterStructureService, RosterStructureService>();

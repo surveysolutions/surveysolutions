@@ -11,7 +11,7 @@ namespace WB.UI.Shared.Enumerator.Converters
             var translation = base.Convert(value, targetType, parameter, culture);
 
             return string.IsNullOrEmpty(translation)
-                ? InterviewerUIResources.ResourceManager.GetString(value, culture)
+                ? EnumeratorUIResources.ResourceManager.GetString(value, culture)
                 : translation;
         }
     }

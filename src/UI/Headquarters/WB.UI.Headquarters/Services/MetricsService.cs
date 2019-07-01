@@ -7,7 +7,6 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Infrastructure.Native.Monitoring;
-using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.Services

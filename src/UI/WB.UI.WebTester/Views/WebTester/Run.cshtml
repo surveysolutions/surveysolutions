@@ -1,4 +1,5 @@
-﻿@{
+﻿@model WB.UI.WebTester.Controllers.InterviewPageModel
+@{
     Layout = "InterviewLayout.cshtml";
 }
 @section scripts {
@@ -9,6 +10,6 @@
 }
 @section footer{
     <script>
-        window.location = '@Url.Content("~/WebTester/Redirect/" + Model.Id + "?originalInterviewId=" + Model.OriginalInterviewId)'
+        window.location = '@Html.Raw(Url.Content("~/WebTester/Redirect/" + Model.Id + "?originalInterviewId=" + Model.OriginalInterviewId + "&scenarioId=" + Model.ScenarioId))'
     </script>
 }

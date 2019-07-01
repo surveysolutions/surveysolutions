@@ -4,26 +4,35 @@
               android:id="@+id/synchronization_panel"
               style="@style/VerticalContentHeightWrappingLayout"
               local:MvxBind="Visible Synchronization.IsSynchronizationInfoShowed;">
-
+    
   <LinearLayout style="@style/Dashboard_Synchronization_Holder">
     <ImageView style="@style/Dashboard_Synchronization_Image"
                local:MvxBind="BackgroundStyle SynchronizationStatusToDrawable(Synchronization.Status);
                               Visible Synchronization.IsSynchronizationInfoShowed"/>
     <LinearLayout style="@style/VerticalFullWidthWrappingLayout">
-      <LinearLayout style="@style/VerticalContentHeightWrappingLayout" local:MvxBind="Visible Not(Synchronization.SynchronizationErrorOccured)">
+
+        <LinearLayout style="@style/FullWidthWrappingLayout"
+                      local:MvxBind="Visible And(Synchronization.CanBeManaged, Not(Synchronization.SynchronizationErrorOccured), Not(Synchronization.IsUpdateRequired), Synchronization.Statistics.NewVersionExists)">
+            <TextView style="@style/Dashboard_Synchronization_Lock_Text"
+                      local:MvxBind="Text Localization('Synchronization_NewVersionExists');" />
+            <View style="@style/Dashboard_Synchronization_Spacing_View"/>
+            <TextView style="@style/Dashboard_Synchronization_Update_Text_Gravity_Right"
+                      local:MvxBind="Text Localization('Synchronization_UpdateApp'); Click Synchronization.UpdateApplicationCommand;"/>
+        </LinearLayout>
+
+        <LinearLayout style="@style/VerticalContentHeightWrappingLayout" local:MvxBind="Visible Not(Synchronization.SynchronizationErrorOccured)">
         <TextView style="@style/Dashboard_Synchronization_Operation_Title"
                   local:MvxBind="Text Synchronization.ProcessOperation; TextColor SynchronizationStatusToTextColor(Synchronization.Status)" />
         <TextView style="@style/Dashboard_Synchronization_Operation_Title"
                   local:MvxBind="Text Synchronization.ProcessOperationDescription; TextColor SynchronizationStatusToTextColor(Synchronization.Status)" />
-      </LinearLayout>
+        </LinearLayout>
 
       <LinearLayout style="@style/VerticalContentHeightWrappingLayout" local:MvxBind="Visible Synchronization.SynchronizationErrorOccured">
         <TextView style="@style/Dashboard_Synchronization_WithError_Title"
                   local:MvxBind="Text Localization('Synchronization_DoneWithErrors_Title');" />
       </LinearLayout>
-      
-      <RelativeLayout style="@style/FullWidthWrappingLayout"
-                        local:MvxBind="Visible Synchronization.CanBeManaged">
+
+      <RelativeLayout style="@style/FullWidthWrappingLayout" local:MvxBind="Visible Synchronization.CanBeManaged">
           <TextView style="@style/Dashboard_Synchronization_Lock_Text"
                     local:MvxBind="Text Localization('Synchronization_LockedAssignments_Text'); Visible Synchronization.IsSynchronizationInProgress" />
           <TextView style="@style/Dashboard_Synchronization_Cancel_Text"

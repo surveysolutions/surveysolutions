@@ -8,16 +8,16 @@ namespace WB.Services.Export.Storage
 {
     public class S3ImageFileStorage : IImageFileStorage
     {
-        private readonly IExternalFileStorage externalFileStorage;
+        private readonly IExternalArtifactsStorage externalArtifactsStorage;
 
-        public S3ImageFileStorage(IExternalFileStorage externalFileStorage)
+        public S3ImageFileStorage(IExternalArtifactsStorage externalArtifactsStorage)
         {
-            this.externalFileStorage = externalFileStorage;
+            this.externalArtifactsStorage = externalArtifactsStorage;
         }
 
         public Task<byte[]> GetInterviewBinaryData(Guid interviewId, string filename)
         {
-            return this.externalFileStorage.GetBinaryAsync(GetPath(interviewId, filename));
+            return this.externalArtifactsStorage.GetBinaryAsync(GetPath(interviewId, filename));
         }
 
         private string GetPath(Guid interviewId, string filename = null) =>
@@ -26,7 +26,7 @@ namespace WB.Services.Export.Storage
         public async Task<List<InterviewBinaryDataDescriptor>> GetBinaryFilesForInterview(Guid interviewId)
         {
             var prefix = GetPath(interviewId);
-            var files = await this.externalFileStorage.ListAsync(prefix);
+            var files = await this.externalArtifactsStorage.ListAsync(prefix);
 
             return files.Select(file =>
             {
@@ -38,12 +38,12 @@ namespace WB.Services.Export.Storage
 
         public Task StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data, string contentType)
         {
-            return externalFileStorage.StoreAsync(GetPath(interviewId, fileName), data, contentType);
+            return externalArtifactsStorage.StoreAsync(GetPath(interviewId, fileName), data, contentType);
         }
 
         public Task RemoveInterviewBinaryData(Guid interviewId, string fileName)
         {
-            return externalFileStorage.RemoveAsync(GetPath(interviewId, fileName));
+            return externalArtifactsStorage.RemoveAsync(GetPath(interviewId, fileName));
         }
     }
 }
