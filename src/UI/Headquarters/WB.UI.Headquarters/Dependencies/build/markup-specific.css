@@ -907,6 +907,12 @@ main .flex-row {
     text-transform: none;
     letter-spacing: normal;
     font-style: italic; }
+  .interview-setup .row-element textarea::-moz-placeholder,
+  .interview-setup .row-element input::-moz-placeholder {
+    font: 14px/16px Arial, "Helvetica Neue", Helvetica, sans-serif;
+    text-transform: none;
+    letter-spacing: normal;
+    font-style: italic; }
   .interview-setup .row-element textarea::-ms-input-placeholder,
   .interview-setup .row-element input::-ms-input-placeholder {
     font: 14px/16px Arial, "Helvetica Neue", Helvetica, sans-serif;
