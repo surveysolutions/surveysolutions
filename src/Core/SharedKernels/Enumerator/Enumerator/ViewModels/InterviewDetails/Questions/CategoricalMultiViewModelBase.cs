@@ -135,7 +135,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.eventRegistry.Subscribe(this, interviewId);
 
-            this.UpdateViewModelsInMainThreadAsync().WaitAndUnwrapException(); 
+            this.UpdateViewModelsInMainThread(); 
         }
 
         private async Task SaveAnswer()
@@ -156,6 +156,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                 this.QuestionState.Validity.ProcessException(ex);
             }
+        }
+
+        private void UpdateViewModelsInMainThread()
+        {
+            var interview = this.interviewRepository.Get(this.interviewId.FormatGuid());
+            this.Options.ReplaceWith(this.GetOptions(interview).ToList());
+            this.UpdateOptionsFromInterviewInMainThread();
         }
 
         protected virtual async Task UpdateViewModelsInMainThreadAsync()
