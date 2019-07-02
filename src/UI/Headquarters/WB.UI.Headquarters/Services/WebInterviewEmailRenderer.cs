@@ -1,8 +1,11 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.Mvc;
 using System.Web.Routing;
+using System.Web.UI;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 
 namespace WB.UI.Headquarters.Services
@@ -31,12 +34,36 @@ namespace WB.UI.Headquarters.Services
                 Link = link
             };
 
-            return RenderEmail(model);
+            var context = ViewRenderer.CreateController<EmptyController>().ControllerContext;
+            return RenderEmailWithControllerContext(context, model);
         }
 
         public PersonalizedWebInterviewEmail RenderEmail(EmailParams emailParams)
         {
-            var context = ViewRenderer.CreateController<EmptyController>().ControllerContext;
+            var originalHttpContext = HttpContext.Current;
+            try
+            {
+                var sb = new StringBuilder();
+                using (var memWriter = new StringWriter(sb))
+                {
+                    var fakeContext = new HttpContext(new SimpleWorkerRequest(emailParams.Id, String.Empty, memWriter));
+                    HttpContext.Current = fakeContext;
+
+                    var routeData = new RouteData();
+                    routeData.Values.Add("controller", "WebEmails");
+                    var fakeControllerContext = new ControllerContext(new HttpContextWrapper(fakeContext), routeData, ViewRenderer.CreateController<EmptyController>());
+
+                    return RenderEmailWithControllerContext(fakeControllerContext, emailParams);
+                }
+            }
+            finally
+            {
+                HttpContext.Current = originalHttpContext;
+            }
+        }
+
+        private PersonalizedWebInterviewEmail RenderEmailWithControllerContext(ControllerContext context, EmailParams emailParams)
+        {
             var renderer = new ViewRenderer(context);
             string html = renderer.RenderViewToString("~/Views/WebEmails/EmailHtml.cshtml", emailParams);
             string text = renderer.RenderViewToString("~/Views/WebEmails/EmailText.cshtml", emailParams);
