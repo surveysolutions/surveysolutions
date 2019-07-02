@@ -567,11 +567,20 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         private List<DropdownEntityView> GetSourcesOfSingleQuestionBriefs(ReadOnlyQuestionnaireDocument document, Guid questionId)
         {
-            IEnumerable<IQuestion> filteredQuestions = 
+            var questionRosters = document.GetRosterScope(questionId);
+
+            IEnumerable<IQuestion> filteredQuestions =
                 document.Find<SingleQuestion>()
-                .Where(q => q.PublicKey != questionId)
-                .Where(q => !q.LinkedToRosterId.HasValue && !q.LinkedToQuestionId.HasValue)
-                .ToList();
+                    .Where(q => q.PublicKey != questionId)
+                    .Where(q => !q.LinkedToRosterId.HasValue && !q.LinkedToQuestionId.HasValue)
+                    .Where(q =>
+                    {
+                        var parentRosters = document.GetRosterScope(q);
+
+                        return parentRosters.Length <= questionRosters.Length &&
+                               !parentRosters.Where((parentGuid, i) => questionRosters[i] != parentGuid).Any();
+                    })
+                    .ToList();
 
             var result = this.PrepareGroupedQuestionsListForDropdown(document, filteredQuestions);
 
