@@ -1,210 +1,117 @@
 ﻿using System;
 using System.Linq;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
     internal class InterviewExportedCommentariesDenormalizer:
-        BaseDenormalizer,
-        IEventHandler<InterviewOnClientCreated>,
-        IEventHandler<InterviewFromPreloadedDataCreated>,
-        IEventHandler<InterviewRestored>,
-        IEventHandler<InterviewCreated>,
-        IEventHandler<InterviewApprovedByHQ>,
-        IEventHandler<InterviewCompleted>,
-        IEventHandler<InterviewRestarted>,
-        IEventHandler<InterviewApproved>,
-        IEventHandler<InterviewDeleted>,
-        IEventHandler<InterviewHardDeleted>,
-        IEventHandler<InterviewRejected>,
-        IEventHandler<InterviewRejectedByHQ>,
-        IEventHandler<AnswerCommented>,
-        IEventHandler<UnapprovedByHeadquarters>
+        ICompositeFunctionalPartEventHandler<InterviewSummary, IReadSideRepositoryWriter<InterviewSummary>>,
+        IUpdateHandler<InterviewSummary, InterviewApprovedByHQ>,
+        IUpdateHandler<InterviewSummary, InterviewCompleted>,
+        IUpdateHandler<InterviewSummary, InterviewRestarted>,
+        IUpdateHandler<InterviewSummary, InterviewApproved>,
+        IUpdateHandler<InterviewSummary, InterviewRejected>,
+        IUpdateHandler<InterviewSummary, InterviewRejectedByHQ>,
+        IUpdateHandler<InterviewSummary, AnswerCommented>,
+        IUpdateHandler<InterviewSummary, UnapprovedByHeadquarters>
     {
-        private readonly IReadSideRepositoryWriter<InterviewCommentaries> interviewCommentariesStorage;
         private readonly IUserViewFactory userStorage;
-        private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
+        private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly string unknown = "Unknown";
 
         public InterviewExportedCommentariesDenormalizer(
-            IReadSideRepositoryWriter<InterviewCommentaries> interviewCommentariesStorage,
             IUserViewFactory userStorage,
-            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
+            IQuestionnaireStorage questionnaireStorage)
         {
-            this.interviewCommentariesStorage = interviewCommentariesStorage;
             this.userStorage = userStorage;
-            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
-        public override object[] Writers => new[] {this.interviewCommentariesStorage};
-
-        public override object[] Readers => new object[0];
-
-        public void CleanWritersByEventSource(Guid eventSourceId)
+        public InterviewSummary Update(InterviewSummary summary, IPublishedEvent<InterviewApprovedByHQ> evnt)
         {
-            this.interviewCommentariesStorage.Remove(eventSourceId);
-        }
-
-
-        public void Handle(IPublishedEvent<InterviewOnClientCreated> evnt)
-        {
-            this.interviewCommentariesStorage.Store(
-                new InterviewCommentaries()
-                {
-                    InterviewId = evnt.EventSourceId.FormatGuid(),
-                    QuestionnaireId = evnt.Payload.QuestionnaireId.FormatGuid(),
-                    QuestionnaireVersion = evnt.Payload.QuestionnaireVersion
-                }, evnt.EventSourceId);
-        }
-
-        public void Handle(IPublishedEvent<InterviewFromPreloadedDataCreated> evnt)
-        {
-            this.interviewCommentariesStorage.Store(
-                new InterviewCommentaries()
-                {
-                    InterviewId = evnt.EventSourceId.FormatGuid(),
-                    QuestionnaireId = evnt.Payload.QuestionnaireId.FormatGuid(),
-                    QuestionnaireVersion = evnt.Payload.QuestionnaireVersion
-                }, evnt.EventSourceId);
-        }
-
-        public void Handle(IPublishedEvent<InterviewRestored> evnt)
-        {
-            InterviewCommentaries interviewCommentaries = this.interviewCommentariesStorage.GetById(evnt.EventSourceId);
-            if (interviewCommentaries == null)
-                return;
-
-            interviewCommentaries.IsDeleted = false;
-
-            this.interviewCommentariesStorage.Store(interviewCommentaries, evnt.EventSourceId);
-        }
-
-        public void Handle(IPublishedEvent<InterviewCreated> evnt)
-        {
-            this.interviewCommentariesStorage.Store(
-                new InterviewCommentaries()
-                {
-                    InterviewId = evnt.EventSourceId.FormatGuid(),
-                    QuestionnaireId = evnt.Payload.QuestionnaireId.FormatGuid(),
-                    QuestionnaireVersion = evnt.Payload.QuestionnaireVersion
-                }, evnt.EventSourceId);
-        }
-
-        public void Handle(IPublishedEvent<InterviewApprovedByHQ> evnt)
-        {
-            Guid interviewId = evnt.EventSourceId;
-            InterviewCommentaries interviewCommentaries = this.interviewCommentariesStorage.GetById(interviewId);
-            if (interviewCommentaries == null)
-                return;
-
-            if (!string.IsNullOrEmpty(evnt.Payload.Comment))
+            if (!string.IsNullOrWhiteSpace(evnt.Payload.Comment))
                 this.AddInterviewComment(
-                    interviewCommentaries: interviewCommentaries,
+                    interviewCommentaries: summary,
                     originatorId: evnt.Payload.UserId,
                     comment: evnt.Payload.Comment,
                     roster: String.Empty,
                     variableName: "@@" + InterviewExportedAction.ApprovedByHeadquarter,
                     rosterVector: new decimal[0],
                     timestamp: evnt.EventTimeStamp);
-
-            interviewCommentaries.IsApprovedByHQ = true;
-
-            this.interviewCommentariesStorage.Store(interviewCommentaries, interviewId);
+            return summary;
         }
 
-        public void Handle(IPublishedEvent<InterviewCompleted> evnt)
+        public InterviewSummary Update(InterviewSummary summary, IPublishedEvent<InterviewCompleted> evnt)
         {
-            this.StoreCommentForStatusChange(evnt.EventSourceId, evnt.Payload.UserId,
+            this.StoreCommentForStatusChange(summary, evnt.Payload.UserId,
              InterviewExportedAction.Completed, evnt.Payload.Comment,
              evnt.Payload.CompleteTime ?? evnt.EventTimeStamp);
+            return summary;
         }
 
-        public void Handle(IPublishedEvent<InterviewRestarted> evnt)
+        public InterviewSummary Update(InterviewSummary summary, IPublishedEvent<InterviewRestarted> evnt)
         {
-            this.StoreCommentForStatusChange(evnt.EventSourceId, evnt.Payload.UserId,
+            this.StoreCommentForStatusChange(summary, evnt.Payload.UserId,
              InterviewExportedAction.Restarted, evnt.Payload.Comment,
              evnt.Payload.RestartTime ?? evnt.EventTimeStamp);
+            return summary;
         }
 
-        public void Handle(IPublishedEvent<InterviewApproved> evnt)
+        public InterviewSummary Update(InterviewSummary summary, IPublishedEvent<InterviewApproved> evnt)
         {
-            this.StoreCommentForStatusChange(evnt.EventSourceId, evnt.Payload.UserId,
+            this.StoreCommentForStatusChange(summary, evnt.Payload.UserId,
              InterviewExportedAction.ApprovedBySupervisor, evnt.Payload.Comment,
              evnt.Payload.ApproveTime ?? evnt.EventTimeStamp);
+            return summary;
         }
 
-        public void Handle(IPublishedEvent<InterviewDeleted> evnt)
+        public InterviewSummary Update(InterviewSummary summary, IPublishedEvent<InterviewRejected> evnt)
         {
-            InterviewCommentaries interviewCommentaries = this.interviewCommentariesStorage.GetById(evnt.EventSourceId);
-            if (interviewCommentaries == null)
-                return;
-
-            interviewCommentaries.IsDeleted = true;
-
-            this.interviewCommentariesStorage.Store(interviewCommentaries, evnt.EventSourceId);
-        }
-
-        public void Handle(IPublishedEvent<InterviewHardDeleted> evnt)
-        {
-            this.interviewCommentariesStorage.Remove(evnt.EventSourceId);
-        }
-
-        public void Handle(IPublishedEvent<InterviewRejected> evnt)
-        {
-            this.StoreCommentForStatusChange(evnt.EventSourceId, evnt.Payload.UserId,
+            this.StoreCommentForStatusChange(summary, evnt.Payload.UserId,
                 InterviewExportedAction.RejectedBySupervisor, evnt.Payload.Comment,
                 evnt.Payload.RejectTime ?? evnt.EventTimeStamp);
+            return summary;
         }
 
-        public void Handle(IPublishedEvent<InterviewRejectedByHQ> evnt)
+        public InterviewSummary Update(InterviewSummary summary, IPublishedEvent<InterviewRejectedByHQ> evnt)
         {
-            this.StoreCommentForStatusChange(evnt.EventSourceId, evnt.Payload.UserId,
+            this.StoreCommentForStatusChange(summary, evnt.Payload.UserId,
                 InterviewExportedAction.RejectedByHeadquarter, evnt.Payload.Comment, evnt.EventTimeStamp);
+            return summary;
         }
 
-        public void Handle(IPublishedEvent<UnapprovedByHeadquarters> evnt)
+        public InterviewSummary Update(InterviewSummary summary, IPublishedEvent<UnapprovedByHeadquarters> evnt)
         {
-            this.StoreCommentForStatusChange(evnt.EventSourceId, evnt.Payload.UserId,
+            this.StoreCommentForStatusChange(summary, evnt.Payload.UserId,
                 InterviewExportedAction.UnapprovedByHeadquarter, evnt.Payload.Comment, evnt.EventTimeStamp);
+            return summary;
         }
 
-        public void Handle(IPublishedEvent<AnswerCommented> evnt)
+        public InterviewSummary Update(InterviewSummary summary, IPublishedEvent<AnswerCommented> evnt)
         {
-            InterviewCommentaries interviewCommentaries = this.interviewCommentariesStorage.GetById(evnt.EventSourceId);
-            if (interviewCommentaries == null)
-                return;
-
-            QuestionnaireExportStructure questionnaire =
-                this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(new QuestionnaireIdentity(Guid.Parse(interviewCommentaries.QuestionnaireId),interviewCommentaries.QuestionnaireVersion));
-            if (questionnaire == null)
-                return;
+            var questionnaire =
+                this.questionnaireStorage.GetQuestionnaire(new QuestionnaireIdentity(summary.QuestionnaireId, summary.QuestionnaireVersion), null);
 
             string roster = this.unknown;
-            string variable = this.unknown;
 
-            foreach (var rosterLevel in questionnaire.HeaderToLevelMap.Values)
+            if (evnt.Payload.RosterVector.Length > 0)
             {
-                ExportedQuestionHeaderItem question =
-                    rosterLevel.HeaderItems.Values.FirstOrDefault(q => q.PublicKey == evnt.Payload.QuestionId) as ExportedQuestionHeaderItem;
-
-                if (question != null)
-                {
-                    roster = evnt.Payload.RosterVector.Length > 0 ? rosterLevel.LevelName : String.Empty;
-                    variable = question.VariableName;
-                    break;
-                }
+                var lastRosterId = questionnaire.GetRostersFromTopToSpecifiedEntity(evnt.Payload.QuestionId).Last();
+                roster = questionnaire.GetRosterVariableName(lastRosterId);
             }
+            
+            string variable = questionnaire.GetQuestionVariableName(evnt.Payload.QuestionId);
 
             this.AddInterviewComment(
-             interviewCommentaries: interviewCommentaries,
+             interviewCommentaries: summary,
              originatorId: evnt.Payload.UserId,
              comment: evnt.Payload.Comment,
              roster: roster,
@@ -212,35 +119,31 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
              rosterVector:evnt.Payload.RosterVector,
              timestamp: evnt.Payload.OriginDate?.UtcDateTime ?? evnt.Payload.CommentTime.Value);
 
-            this.interviewCommentariesStorage.Store(interviewCommentaries, evnt.EventSourceId);
+            return summary;
         }
 
-        private void StoreCommentForStatusChange(Guid interviewId, Guid statusChangeOriginatorId, InterviewExportedAction statusChangeActionName, string comment, DateTime timestamp)
+        private void StoreCommentForStatusChange(
+            InterviewSummary summary,
+            Guid statusChangeOriginatorId, 
+            InterviewExportedAction statusChangeActionName, 
+            string comment, 
+            DateTime timestamp)
         {
             if(string.IsNullOrEmpty(comment))
-                return;
-
-            InterviewCommentaries interviewCommentaries = this.interviewCommentariesStorage.GetById(interviewId);
-            if (interviewCommentaries == null)
-                return;
+                return; 
 
             this.AddInterviewComment(
-                interviewCommentaries: interviewCommentaries,
+                interviewCommentaries: summary,
                 originatorId: statusChangeOriginatorId, 
                 comment:comment,
                 roster: String.Empty,
                 variableName:"@@" + statusChangeActionName,
                 rosterVector: new decimal[0], 
                 timestamp: timestamp);
-
-            interviewCommentaries.IsApprovedByHQ = InterviewExportedAction.ApprovedByHeadquarter ==
-                                                   statusChangeActionName;
-
-            this.interviewCommentariesStorage.Store(interviewCommentaries, interviewId);
         }
 
         private void AddInterviewComment(
-            InterviewCommentaries interviewCommentaries, 
+            InterviewSummary interviewCommentaries, 
             Guid originatorId, 
             string comment, 
             string roster, 
@@ -248,16 +151,16 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             decimal[] rosterVector,
             DateTime timestamp)
         {
-            var responsible = this.userStorage.GetUser(originatorId);//.GetUser(new UserViewInputModel(originatorId));
+            var responsible = this.userStorage.GetUser(originatorId);
             var originatorName = responsible == null ? this.unknown : responsible.UserName;
             var originatorRole = responsible == null || !responsible.Roles.Any()
                 ? 0
                 : responsible.Roles.FirstOrDefault();
 
-            var interviewComment = new InterviewComment()
+            var interviewComment = new InterviewComment(interviewCommentaries)
             {
                 Comment = comment,
-                CommentSequence = interviewCommentaries.Commentaries.Count + 1,
+                CommentSequence = interviewCommentaries.Comments.Count + 1,
                 OriginatorUserId = originatorId,
                 OriginatorName = originatorName,
                 OriginatorRole = originatorRole,
@@ -266,7 +169,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 Timestamp = timestamp,
                 Variable = variableName
             };
-            interviewCommentaries.Commentaries.Add(interviewComment);
+            interviewCommentaries.Comments.Add(interviewComment);
         }
     }
 }
