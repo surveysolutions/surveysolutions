@@ -53,35 +53,6 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
 
         public event EventHandlerExceptionDelegate OnCatchingNonCriticalEventHandlerException;
 
-        public void Publish(IPublishableEvent eventMessage)
-        {
-            var occurredExceptions = new List<Exception>();
-
-            foreach (EventHandlerWrapper handler in this.registredHandlers.Values.ToList())
-            {
-                handler.Bus.OnCatchingNonCriticalEventHandlerException +=
-                        this.OnCatchingNonCriticalEventHandlerException;
-                try
-                {
-                    handler.Bus.Publish(eventMessage);
-                }
-                catch (Exception exception)
-                {
-                    occurredExceptions.Add(exception);
-                }
-                finally
-                {
-                    handler.Bus.OnCatchingNonCriticalEventHandlerException -=
-                        this.OnCatchingNonCriticalEventHandlerException;
-                }
-            }
-
-            if (occurredExceptions.Count > 0)
-                throw new AggregateException(
-                    $"{occurredExceptions.Count} handler(s) failed to handle published event '{eventMessage.EventIdentifier}' by event source '{eventMessage.EventSourceId}' with sequence '{eventMessage.EventSequence}'.",
-                    occurredExceptions);
-        }
-
         public void Publish(IEnumerable<IPublishableEvent> eventMessages)
         {
             List<IPublishableEvent> events = eventMessages.ToList();
