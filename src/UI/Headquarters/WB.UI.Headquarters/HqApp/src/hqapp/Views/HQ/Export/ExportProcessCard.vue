@@ -4,7 +4,7 @@
             <div class="format-data" :class="format">
                 <div class="gray-text-row"><b>#{{processId}}</b> {{$t('DataExport.DataExport_QueuedOn', { date: beginDate }) }}</div>
                 <div class="h3 mb-05">{{ $t('DataExport.DataExport_QuestionnaireWithVersion', { title: questionnaireTitle,  version: questionnaireIdentity.version}) }}</div>
-                <p class="mb-0 font-regular"><u class="font-bold">{{format}}</u> format. Interviews in <u class="font-bold">{{interviewStatus}}</u>.</p>
+                <p class="mb-0 font-regular"><u class="font-bold">{{format}}</u> format. <span v-if="format!='DDI'">{{ $t('DataExport.DataExport_InterviewsStatus', { status: $t('DataExport.'+interviewStatus) , interpolation: {escapeValue: false} }) }}</span></p>
             </div>
         </div>
         <div class="bottom-row" :class="{'is-failed': isFailed, 'is-successful': isSuccessfull }">
