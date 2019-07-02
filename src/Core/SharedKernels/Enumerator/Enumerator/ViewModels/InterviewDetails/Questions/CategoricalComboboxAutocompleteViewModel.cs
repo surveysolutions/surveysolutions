@@ -167,7 +167,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private IEnumerable<OptionWithSearchTerm> GetSuggestions(string filter)
         {
-            List<CategoricalOption> filteredOptions = this.filteredOptionsViewModel.GetOptions(filter);
+            List<CategoricalOption> filteredOptions = this.filteredOptionsViewModel.GetOptions(filter,
+                this.filteredOptionsViewModel.Count + this.excludedOptions.Length);
 
             foreach (var model in filteredOptions.Count == 1 && displaySelectedValue
                 ? filteredOptions

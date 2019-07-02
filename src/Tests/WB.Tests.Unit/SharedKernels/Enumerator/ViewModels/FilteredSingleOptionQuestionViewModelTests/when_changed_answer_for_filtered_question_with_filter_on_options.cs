@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
 
             filteredOptionsViewModel = new Mock<FilteredOptionsViewModel>();
             filteredOptionsViewModel.Setup(x => x.GetAnsweredOption(3)).Returns(new CategoricalOption() { Title = "3", Value = 3, ParentValue = null });
-            filteredOptionsViewModel.Setup(x => x.GetOptions(Moq.It.IsAny<string>())).Returns((string filter) => 
+            filteredOptionsViewModel.Setup(x => x.GetOptions(Moq.It.IsAny<string>(), It.IsAny<int?>())).Returns((string filter, int? optionsCount) => 
                 interview.Object.GetTopFilteredOptionsForQuestion(questionIdentity, null, filter, 15));
 
             viewModel = CreateFilteredSingleOptionQuestionViewModel(
@@ -65,7 +65,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
 
         [Test] 
         public void should_update_suggestions_list () =>
-            filteredOptionsViewModel.Verify(_ => _.GetOptions(Moq.It.IsAny<string>()), Times.Once);
+            filteredOptionsViewModel.Verify(_ => _.GetOptions(Moq.It.IsAny<string>(), It.IsAny<int?>()), Times.Once);
 
         private static FilteredSingleOptionQuestionViewModel viewModel;
         private static Mock<FilteredOptionsViewModel> filteredOptionsViewModel;
