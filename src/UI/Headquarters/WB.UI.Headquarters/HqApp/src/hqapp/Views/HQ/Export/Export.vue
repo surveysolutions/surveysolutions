@@ -105,7 +105,7 @@
                   </label>
                 </div>
             </div>
-            <div class="mb-30" v-if="dataType == 'surveyData'">
+            <div class="mb-30" v-if="dataType == 'surveyData' && questionnaireVersion">
                 <h3>{{$t('DataExport.DataFormat')}}</h3>
                 <div class="radio-btn-row">
                   <input class="radio-row" type="radio" name="dataFormat" id="separated" v-model="dataFormat" value="Tabular">
@@ -129,7 +129,7 @@
                   </label>
                 </div>
             </div>
-            <div class="mb-30" v-if="canExportExternally">
+            <div class="mb-30" v-if="canExportExternally && questionnaireVersion">
                 <h3>{{$t('DataExport.DataDestination')}}</h3>
                 <div class="radio-btn-row">
                   <input class="radio-row" type="radio" name="exportDestination" id="download"  v-model="dataDestination" value="zip">
@@ -183,7 +183,7 @@
     <div class="row" v-if="!exportServiceIsUnavailable">
       <div class="col-lg-5">
           <h3 class="mb-20">{{$t('DataExport.DataExportApi')}}</h3>
-          <p>{{$t('DataExport.DataExportApiDesc')}}<a href="https://support.mysurvey.solutions/headquarters/api/api-for-data-export/" target="_blank" class="underlined-link">{{$t('DataExport.DataExportApiInfoPage')}}</a>
+          <p>{{$t('DataExport.DataExportApiDesc')}} <a href="https://support.mysurvey.solutions/headquarters/api/api-for-data-export/" target="_blank" class="underlined-link">{{$t('DataExport.DataExportApiInfoPage')}}</a>
           </p>
       </div>
     </div>
@@ -218,7 +218,7 @@ export default {
     data() {
         return {
             exportServiceIsUnavailable: true,
-            dataType: null,
+            dataType: "surveyData",
             dataFormat: "Tabular",
             dataDestination: "zip",
             questionnaireId: null,
@@ -306,14 +306,15 @@ export default {
                 return `${this.$config.model.api.questionnairesUrl}/${this.questionnaireId.key}`;
             return null;
         }
-    },   
+    },
+
     methods: {
       onOptionsFetch(a,b,c,d,e) {
         console.log(a,b,c,d,e);
       },
 
-      resetForm(){
-        this.dataType = null,
+      resetForm() {
+        this.dataType = "surveyData",
         this.dataFormat = "Tabular";
         this.dataDestination = "zip";
         this.questionnaireId = null;
@@ -385,7 +386,7 @@ export default {
               self.dataType,
               self.dataFormat,
               self.dataDestination,
-              (self.status || { value: null}).value
+              self.status
             );
 
             self.$store.dispatch("showProgress");
@@ -404,7 +405,7 @@ export default {
                 .then(function () {
                     self.$store.dispatch("hideProgress");
                 });
-        }else{
+        } else {
             var fieldName = this.errors.items[0].field;
             const $firstFieldWithError = $("#"+fieldName);
             $firstFieldWithError.focus();
@@ -418,7 +419,7 @@ export default {
             this.dataType,
             this.dataFormat,
             this.dataDestination,
-            (this.status || { value: null}).value
+            this.status
           );
 
         var state = {
@@ -447,22 +448,24 @@ export default {
         window.location = storageSettings.authorizationUri + "?" + decodeURIComponent($.param(request));
       },
 
-      getExportParams(questionnaireId, questionnaireVersion, dataType, dataFormat, dataDestination, status){
+      getExportParams(questionnaireId, questionnaireVersion, dataType, dataFormat, dataDestination, statusOption){
        
-        var result = dataFormatNum.Tabular;
+        var format = dataFormatNum.Tabular;
+
         switch(dataType)
         {
-          case "surveyData": result = dataFormatNum[dataFormat]; break;
-          case "binaryData": result = dataFormatNum.Binary; break;
-          case "ddiData": result = dataFormatNum.Ddi; break;
-          case "paraData":  result = dataFormatNum.Paradata; break;
+          case "surveyData": format = dataFormatNum[dataFormat]; break;
+          case "binaryData": format = dataFormatNum.Binary; break;
+          case "ddiData": format = dataFormatNum.Ddi; break;
+          case "paraData":  format = dataFormatNum.Paradata; break;
         }
+
+        const status = (statusOption || { key : null }).key
 
         return {
           id: questionnaireId,
           version: questionnaireVersion,
-          format: result, 
-          status: status
+          format, status
         };
       },
 
@@ -505,7 +508,7 @@ export default {
       reesetDataAvalability(){
         this.hasInterviews = null;
         this.hasBinaryData = null;
-        this.dataType = "ddi";
+        this.dataType = "ddiData";
       },
       updateDataAvalability(){
         this.isUpdatingDataAvailability = true;
