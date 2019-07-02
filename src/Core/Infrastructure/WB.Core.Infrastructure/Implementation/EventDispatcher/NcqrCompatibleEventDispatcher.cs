@@ -17,7 +17,7 @@ using WB.Core.Infrastructure.EventHandlers;
 
 namespace WB.Core.Infrastructure.Implementation.EventDispatcher
 {
-    public class NcqrCompatibleEventDispatcher : IEventDispatcher
+    public class NcqrCompatibleEventDispatcher : IEventBus
     {
         private readonly Dictionary<Type, EventHandlerWrapper> registredHandlers = new Dictionary<Type, EventHandlerWrapper>();
         private readonly Type[] handlersToIgnore;
