@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private IStatefulInterview interview;
         private List<CategoricalOption> Options { get; set; }
         private string Filter { get; set; } = String.Empty;
-        public int Count { get; protected set; } = 50;
+        public int Count { get; protected set; } = 20;
 
         public virtual event Func<object, EventArgs, Task> OptionsChanged;
 
@@ -95,10 +95,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public virtual List<CategoricalOption> GetOptions(string filter = "")
+        public virtual List<CategoricalOption> GetOptions(string filter = "", int? optionsCount = null)
         {
             this.Filter = filter;
-            this.Options = this.interview.GetTopFilteredOptionsForQuestion(this.questionIdentity, ParentValue, filter, this.Count).ToList();
+            this.Options = this.interview.GetTopFilteredOptionsForQuestion(this.questionIdentity, ParentValue, filter, optionsCount ?? this.Count).ToList();
             return Options;
         }
 
