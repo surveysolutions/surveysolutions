@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Graph;
+using File = System.IO.File;
 
 namespace WB.Services.Export.ExportProcessHandlers.Externals
 {
@@ -46,19 +47,31 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
         {
             if (contentLength > MaxAllowedFileSizeByMicrosoftGraphApi)
             {
-                logger.LogTrace("Uploading {fileName} to {folder}. Large file of size {Length} in chunks", 
+                logger.LogTrace("Uploading {fileName} to {folder}. Large file of size {Length} in chunks",
                     fileName, folder, contentLength);
                 const int maxSizeChunk = 320 * 4 * 1024;
-                
+
                 var item = graphServiceClient.Drive.Root.ItemWithPath($"{folder}/{fileName}");
                 var session = await item.CreateUploadSession().Request().PostAsync(cancellationToken);
-                var chunkUploader = new ChunkedUploadProvider(session, graphServiceClient, fileStream, maxSizeChunk);
-                await chunkUploader.UploadAsync();
-            
+
+                var temp = Path.GetTempFileName();
+                var fs = File.Open(temp, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+                try
+                {
+                    await fileStream.CopyToAsync(fs);
+
+                    var chunkUploader = new ChunkedUploadProvider(session, graphServiceClient, fs, maxSizeChunk);
+                    await chunkUploader.UploadAsync();
+                }
+                finally
+                {
+                    fs.Close();
+                    System.IO.File.Delete(temp);
+                }
             }
             else
             {
-                logger.LogTrace("Uploading {fileName} to {folder}. Small file of size {Length}", fileName, folder, fileStream.Length);
+                logger.LogTrace("Uploading {fileName} to {folder}. Small file of size {Length}", fileName, folder, contentLength);
                 var item = graphServiceClient.Drive.Root.ItemWithPath($"{folder}/{fileName}");
                 await item.Content.Request().PutAsync<DriveItem>(fileStream);
             }
