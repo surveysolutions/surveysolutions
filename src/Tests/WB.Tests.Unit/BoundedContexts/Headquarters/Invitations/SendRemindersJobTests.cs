@@ -82,30 +82,35 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
                 _.GetEmailTemplate(EmailTextTemplateType.Reminder_PartialResponse) == Create.Entity.EmailTemplate("Subject: %SURVEYNAME%", "%SURVEYNAME% %PASSWORD% %SURVEYLINK%", "", ""));
 
             settingsMock.Setup(x => x.Get(questionnaireIdentity)).Returns(settings);
-            var testMessageHandler = new TestMessageHandler();
+
+            var personalizedWebInterviewEmail = new PersonalizedWebInterviewEmail("subject", "html", "text");
+            var paramsIds = new List<string>();
+            var webInterviewEmailRenderer = new Mock<IWebInterviewEmailRenderer>();
+            webInterviewEmailRenderer.Setup(x => x.RenderEmail(It.IsAny<EmailParams>()))
+                .Returns(personalizedWebInterviewEmail)
+                .Callback<EmailParams>(x => paramsIds.Add(x.Id));
 
             var job = Create.Service.SendRemindersJob(
                 invitationService: invitationServiceMock.Object, 
                 webInterviewConfigProvider: settingsMock.Object,
                 emailService: emailService.Object,
                 emailParamsStorage: emailParameters,
-                messageHandler: testMessageHandler);
+                webInterviewEmailRenderer: webInterviewEmailRenderer.Object);
 
             //act
             job.Execute(Mock.Of<IJobExecutionContext>());
 
             //assert
             Assert.That(sentEmails.Count, Is.EqualTo(2));
-            Assert.That(testMessageHandler.ExecutedRequests.Count, Is.EqualTo(4));
             
             Assert.That(sentEmails[0].Email, Is.EqualTo("one@email.com"));
-            var paramsId = testMessageHandler.ExecutedRequests[0].RequestUri.Segments.Last();
+            var paramsId = paramsIds[0];
             Assert.That(emailParameters.GetById(paramsId).Password, Is.EqualTo("AAAAAAAA"));
             Assert.That(emailParameters.GetById(paramsId).SurveyName, Is.EqualTo("Web Survey"));
             Assert.That(emailParameters.GetById(paramsId).Link, Is.EqualTo("http://localhost/WebInterview/token1/Start"));
 
             Assert.That(sentEmails[1].Email, Is.EqualTo("two@email.com"));
-            paramsId = testMessageHandler.ExecutedRequests[2].RequestUri.Segments.Last();
+            paramsId = paramsIds[1];
             Assert.That(emailParameters.GetById(paramsId).Password, Is.EqualTo("BBBBBBBB"));
             Assert.That(emailParameters.GetById(paramsId).SurveyName, Is.EqualTo("Web Survey"));
             Assert.That(emailParameters.GetById(paramsId).Link, Is.EqualTo("http://localhost/WebInterview/token2/Start"));
@@ -141,14 +146,17 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
 
             settingsMock.Setup(x => x.Get(questionnaireIdentity)).Returns(settings);
 
-            var testMessageHandler = new TestMessageHandler();
+            var personalizedWebInterviewEmail = new PersonalizedWebInterviewEmail("subject", "html", "text");
+            var webInterviewEmailRenderer = new Mock<IWebInterviewEmailRenderer>();
+            webInterviewEmailRenderer.Setup(x => x.RenderEmail(It.IsAny<EmailParams>()))
+                .Returns(personalizedWebInterviewEmail);
 
             var job = Create.Service.SendRemindersJob(
                 invitationService: invitationServiceMock.Object, 
                 webInterviewConfigProvider: settingsMock.Object,
                 emailService: emailService.Object,
                 emailParamsStorage: emailParameters,
-                messageHandler: testMessageHandler);
+                webInterviewEmailRenderer: webInterviewEmailRenderer.Object);
 
             //act
             job.Execute(Mock.Of<IJobExecutionContext>());
