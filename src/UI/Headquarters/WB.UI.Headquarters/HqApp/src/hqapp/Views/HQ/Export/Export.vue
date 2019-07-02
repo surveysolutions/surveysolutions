@@ -26,7 +26,7 @@
                 <div class="d-flex mb-20 filter-wrapper">
                   <div class="filter-column">
                     <h5>{{$t('DataExport.SurveyQuestionnaire')}} <span class="text-danger">*</span></h5>
-                    <div class="form-group">
+                    <div class="form-group" :class="{ 'has-error': errors.has('questionnaireId') }">
                       <Typeahead fuzzy
                         control-id="questionnaireId"
                         :value="questionnaireId"
@@ -40,12 +40,12 @@
                       />
                       <span class="help-block">{{ errors.first('questionnaireId') }}</span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" :class="{ 'has-error': errors.has('questionnaireVersion') }">
                       <Typeahead noClear
                         control-id="questionnaireVersion"
                         ref="questionnaireVersionControl"
                         data-vv-name="questionnaireVersion"
-                        data-vv-as="questionnaireVersion"
+                        data-vv-as="questionnaire version"
                         :selectedKey="pageState.version"
                         v-validate="'required'"
                         
@@ -398,6 +398,10 @@ export default {
                     self.exportResults.splice(0, 0,{ 
                       id: jobId
                     });
+                    self.questionnaireId = null;
+                    self.questionnaireVersion = null;
+                    self.status = null;
+                    self.resetDataAvalability();
                 })
                 .catch(function (error) {
                     Vue.config.errorHandler(error, self);
