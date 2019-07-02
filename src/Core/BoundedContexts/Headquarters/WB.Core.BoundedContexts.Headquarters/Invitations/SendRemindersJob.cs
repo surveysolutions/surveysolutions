@@ -125,6 +125,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 var emailParamsId = $"{Guid.NewGuid().FormatGuid()}-{invitationId}";
                 var emailParams = new EmailParameters
                 {
+                    Id = emailParamsId,
                     AssignmentId = invitation.AssignmentId,
                     InvitationId = invitation.Id,
                     Subject = emailContent.Subject,

@@ -94,7 +94,7 @@
                     <tr>
                         <td align="center" style="padding: 15px 0;">
                             <ul>
-                                @if (ViewBag.Id != null)
+                                @if (Model.Id != null)
                                 {
                                     <li><a href="@Url.Action("Html", "WebEmails", new {id = ViewBag.Id}, Request.Url.Scheme)" style="color: #808080; text-decoration: none; padding: 0 10px;">View email in browser</a></li>
                                 }
