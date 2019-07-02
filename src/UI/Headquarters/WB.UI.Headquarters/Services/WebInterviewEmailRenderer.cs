@@ -31,12 +31,16 @@ namespace WB.UI.Headquarters.Services
                 Link = link
             };
 
+            return RenderEmail(model);
+        }
+
+        public PersonalizedWebInterviewEmail RenderEmail(EmailParams emailParams)
+        {
             var context = ViewRenderer.CreateController<EmptyController>().ControllerContext;
             var renderer = new ViewRenderer(context);
-            string html = renderer.RenderViewToString("~/Views/WebEmails/EmailHtml.cshtml", model);
-            string text = renderer.RenderViewToString("~/Views/WebEmails/EmailText.cshtml", model);
-
-            return new PersonalizedWebInterviewEmail(model.Subject, html, text);
+            string html = renderer.RenderViewToString("~/Views/WebEmails/EmailHtml.cshtml", emailParams);
+            string text = renderer.RenderViewToString("~/Views/WebEmails/EmailText.cshtml", emailParams);
+            return new PersonalizedWebInterviewEmail(emailParams.Subject, html, text);
         }
 
         public class ViewRenderer
