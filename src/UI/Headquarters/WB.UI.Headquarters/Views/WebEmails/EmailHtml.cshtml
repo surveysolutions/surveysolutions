@@ -96,7 +96,7 @@
                             <ul>
                                 @if (Model.Id != null)
                                 {
-                                    <li><a href="@Url.Action("Html", "WebEmails", new {id = ViewBag.Id}, Request.Url.Scheme)" style="color: #808080; text-decoration: none; padding: 0 10px;">View email in browser</a></li>
+                                    <li><a href="@Url.Action("Html", "WebEmails", new {id = Model.Id}, Request.Url.Scheme)" style="color: #808080; text-decoration: none; padding: 0 10px;">View email in browser</a></li>
                                 }
                                 @*<li><a href="#" style="color: #808080; text-decoration: none; padding: 0 10px; border-left: 1px solid #808080;">Unsubscribe</a></li>
                                   <li><a href="#" style="color: #808080; text-decoration: none; padding: 0 10px; border-left: 1px solid #808080;">Privacy Policy</a></li>*@
