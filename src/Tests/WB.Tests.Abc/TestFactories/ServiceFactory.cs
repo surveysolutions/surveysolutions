@@ -376,8 +376,7 @@ namespace WB.Tests.Abc.TestFactories
             ICsvWriterService csvWriterService = null,
             ICsvWriter csvWriter = null,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses = null,
-            QuestionnaireExportStructure questionnaireExportStructure = null,
-            IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentaries = null)
+            QuestionnaireExportStructure questionnaireExportStructure = null)
             => new ReadSideToTabularFormatExportService(fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 csvWriter ?? Mock.Of<ICsvWriter>(_
                     => _.OpenCsvWriter(It.IsAny<Stream>(), It.IsAny<string>()) ==
@@ -912,7 +911,7 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewsToExportViewFactory InterviewsToExportViewFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries)
         {
-            return new InterviewsToExportViewFactory(new InMemoryReadSideRepositoryAccessor<InterviewCommentaries>());
+            return new InterviewsToExportViewFactory(new InMemoryReadSideRepositoryAccessor<InterviewComment>());
         }
 
         public AttachmentContentStorage AttachmentContentStorage(
