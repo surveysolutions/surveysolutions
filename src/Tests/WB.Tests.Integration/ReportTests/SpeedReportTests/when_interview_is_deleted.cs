@@ -49,6 +49,7 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
                 new InterviewStatusTimeSpanDenormalizer(),
                 Mock.Of<IInterviewStatisticsReportDenormalizer>(), 
                 new InterviewGeoLocationAnswersDenormalizer(null, questionnaireStorage),
+                new InterviewExportedCommentariesDenormalizer(userViewFactory, questionnaireStorage), 
                 Mock.Of<IMemoryCache>());
         }
 
