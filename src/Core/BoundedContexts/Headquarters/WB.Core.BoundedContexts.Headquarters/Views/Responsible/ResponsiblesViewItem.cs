@@ -8,6 +8,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Responsible
         public Guid SupervisorId { get; set; }
         public Guid? InterviewerId { get; set; }
         public string UserName { get; set; }
+        public int Rank { get; set; }
 
         public Guid ResponsibleId => InterviewerId ?? SupervisorId;
 
