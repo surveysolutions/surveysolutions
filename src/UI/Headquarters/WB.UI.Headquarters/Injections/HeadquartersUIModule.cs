@@ -110,6 +110,7 @@ namespace WB.UI.Headquarters.Injections
             registry.Bind<ITranslationsExportService, TranslationsExportService>();
             registry.Bind<IQuestionnaireExporter, QuestionnaireExporter>();
 
+            registry.Bind<IClientApkProvider, ClientApkProvider>();
             registry.Bind<IQRCodeHelper, QRCodeHelper>();
 
             registry.BindAsSingleton<ILocalExportServiceRunner, LocalExportServiceRunner>();

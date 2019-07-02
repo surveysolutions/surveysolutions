@@ -33,6 +33,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.Models.Admin;
 using WB.UI.Headquarters.Resources;
+using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Settings;
 
@@ -50,6 +51,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IInterviewPackagesService interviewPackagesService;
         private readonly IUserViewFactory userViewFactory;
         private readonly IJsonAllTypesSerializer serializer;
+        private readonly IClientApkProvider clientApkProvider;
 
         public ControlPanelController(
             IServiceLocator serviceLocator,
@@ -62,7 +64,8 @@ namespace WB.UI.Headquarters.Controllers
             IAssignmentsService assignmentsService, 
             IInterviewPackagesService interviewPackagesService, 
             IUserViewFactory userViewFactory, 
-            IJsonAllTypesSerializer serializer)
+            IJsonAllTypesSerializer serializer,
+            IClientApkProvider clientApkProvider)
              : base(commandService: commandService, logger: logger)
         {
             this.userManager = userManager;
@@ -74,6 +77,7 @@ namespace WB.UI.Headquarters.Controllers
             this.interviewPackagesService = interviewPackagesService;
             this.userViewFactory = userViewFactory;
             this.serializer = serializer;
+            this.clientApkProvider = clientApkProvider;
         }
 
         public ActionResult CreateHeadquarters()
@@ -200,7 +204,7 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult AppUpdates()
         {
-            var folder = Server.MapPath(ClientApkInfo.Directory);
+            var folder = clientApkProvider.ApkClientsFolder();
             var appFiles = Directory.EnumerateFiles(folder);
 
             return View(appFiles
