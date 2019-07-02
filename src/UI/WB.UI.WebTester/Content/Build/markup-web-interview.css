@@ -2450,6 +2450,11 @@ ag-grid, ag-grid-angular, ag-grid-ng2, ag-grid-polymer, ag-grid-aurelia {
         text-transform: none;
         letter-spacing: normal;
         font-style: italic; }
+      .table-view .ag-theme-customStyles .ag-cell .ag-cell-edit-input::-moz-placeholder {
+        font: 14px/16px Arial, "Helvetica Neue", Helvetica, sans-serif;
+        text-transform: none;
+        letter-spacing: normal;
+        font-style: italic; }
       .table-view .ag-theme-customStyles .ag-cell .ag-cell-edit-input::-ms-input-placeholder {
         font: 14px/16px Arial, "Helvetica Neue", Helvetica, sans-serif;
         text-transform: none;

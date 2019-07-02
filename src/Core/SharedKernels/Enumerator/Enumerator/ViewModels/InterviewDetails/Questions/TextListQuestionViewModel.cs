@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Base;
+using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
@@ -28,6 +29,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IUserInteractionService userInteractionService;
+        private readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
         private string interviewId;
         private bool isRosterSizeQuestion;
         private int? maxAnswerCount;
@@ -59,6 +61,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionState = questionStateViewModel;
             this.InstructionViewModel = instructionViewModel;
             this.userInteractionService = userInteractionService;
+            this.mainThreadDispatcher = mainThreadDispatcher;
             this.Answering = answering;
             this.Answers = new CovariantObservableCollection<ICompositeEntity>();
         }
@@ -98,13 +101,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             if (denyAddNewItem && this.addNewItemViewModel != null)
             {
-                this.addNewItemViewModel.ItemAdded -= this.ListItemAdded;
                 this.Answers.Remove(addNewItemViewModel);
             }
             else if (!denyAddNewItem && this.addNewItemViewModel == null)
             {
-                var viewModel = new TextListAddNewItemViewModel(this.questionState);
-                viewModel.ItemAdded += this.ListItemAdded;
+                var viewModel = new TextListAddNewItemViewModel(this.questionState, this.AddListItem);
                 this.Answers.Add(viewModel);
             }
         }
@@ -133,17 +134,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             await this.SaveAnswers();
         }
 
-        private async void ListItemAdded(object sender, TextListItemAddedEventArgrs e)
+        private IMvxAsyncCommand<string> AddListItem => new MvxAsyncCommand<string>(AddListItemCmd);
+
+        private async Task AddListItemCmd(string arg)
         {
+            if (string.IsNullOrWhiteSpace(arg)) return;
+            var answer = arg.Trim();
+
             var answerViewModels = this.Answers.OfType<TextListItemViewModel>().ToList();
             var maxValue = answerViewModels.Count == 0
                 ? 1
                 : answerViewModels.Max(x => x.Value) + 1;
 
             this.Answers.Insert(this.Answers.Count - 1,
-                this.CreateListItemViewModel(maxValue, e.NewText, this.interviewRepository.Get(this.interviewId)));
+                this.CreateListItemViewModel(maxValue, answer, this.interviewRepository.Get(this.interviewId)));
 
-            await this.SaveAnswers();
+            await this.SaveAnswers().ConfigureAwait(false);
 
             if (this.addNewItemViewModel != null)
                 this.addNewItemViewModel.Text = string.Empty;
@@ -174,9 +180,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             try
             {
-                await this.Answering.SendAnswerQuestionCommandAsync(command);
+                await this.Answering.SendAnswerQuestionCommandAsync(command)
+                    .ConfigureAwait(false);
                 this.questionState.Validity.ExecutedWithoutExceptions();
-                this.InvokeOnMainThread(this.ShowOrHideAddNewItem);
+                await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(this.ShowOrHideAddNewItem)
+                    .ConfigureAwait(false);
             }
             catch (InterviewException ex)
             {
