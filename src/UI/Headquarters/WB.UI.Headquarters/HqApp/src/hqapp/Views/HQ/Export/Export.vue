@@ -470,20 +470,25 @@ export default {
       },
 
       restorePageState(state) {
-          this.pageState = state;
-          this.dataType = state.dataType;
-          this.dataFormat = state.dataFormat;
-          this.dataDestination = state.dataDestination;
+          this.pageState = {
+              id:      state.i,
+              version: state.v,
+              status:  state.s
+          };
+
+          this.dataType = state.t;
+          this.dataFormat = state.f;
+          this.dataDestination = state.d;
       },
 
       getPageState() {
           return {
-              id: this.questionnaireId == null ? null : this.questionnaireId.key,
-              version: this.questionnaireVersion == null ? null : this.questionnaireVersion.key,
-              status: this.status == null ? null : this.status.key,
-              dataType: this.dataType,
-              dataFormat: this.dataFormat,
-              dataDestination: this.dataDestination
+              i: this.questionnaireId == null ? null : this.questionnaireId.key,
+              v: this.questionnaireVersion == null ? null : this.questionnaireVersion.key,
+              s: this.status == null ? null : this.status.key,
+              t: this.dataType,
+              f: this.dataFormat,
+              d: this.dataDestination
           }
       },
 
