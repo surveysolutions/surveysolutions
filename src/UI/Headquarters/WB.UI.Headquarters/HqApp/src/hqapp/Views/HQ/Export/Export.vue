@@ -41,14 +41,14 @@
                       <span class="help-block">{{ errors.first('questionnaireId') }}</span>
                     </div>
                     <div class="form-group">
-                      <Typeahead
+                      <Typeahead noClear
                         control-id="questionnaireVersion"
                         ref="questionnaireVersionControl"
                         data-vv-name="questionnaireVersion"
                         data-vv-as="questionnaireVersion"
                         :selectedKey="pageState.version"
                         v-validate="'required'"
-                        :placeholder="$t('Common.AllVersions')"
+                        
                         :value="questionnaireVersion"
                         :fetch-url="questionnaireVersionFetchUrl"
                         v-on:selected="questionnaireVersionSelected"
@@ -494,7 +494,7 @@ export default {
           this.questionnaireId = newValue;
           if (!newValue)
           {
-            this.reesetDataAvalability();
+            this.resetDataAvalability();
           }
       },
       questionnaireVersionSelected(newValue) {
@@ -502,13 +502,13 @@ export default {
           if (this.questionnaireVersion)
             this.updateDataAvalability();
           else{
-             this.reesetDataAvalability();
+             this.resetDataAvalability();
           }
       },
-      reesetDataAvalability(){
+      resetDataAvalability(){
         this.hasInterviews = null;
         this.hasBinaryData = null;
-        this.dataType = "ddiData";
+        this.dataType = null;
       },
       updateDataAvalability(){
         this.isUpdatingDataAvailability = true;
