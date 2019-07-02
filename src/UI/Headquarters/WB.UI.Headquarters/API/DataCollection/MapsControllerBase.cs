@@ -47,7 +47,7 @@ namespace WB.UI.Headquarters.API.DataCollection
             if (mapContent == null)
                 return Request.CreateResponse(HttpStatusCode.NotFound);
 
-            return this.AsProgressiveDownload(mapContent, @"application/octet-stream");
+            return this.Request.AsProgressiveDownload(mapContent, @"application/octet-stream");
         }
     }
 }
