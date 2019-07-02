@@ -1080,8 +1080,7 @@ namespace WB.Tests.Abc.TestFactories
                 emailService ?? emailServiceMock.Object,
                 webInterviewConfigProvider ?? Mock.Of<IWebInterviewConfigProvider>(),
                 emailParamsStorage ?? Mock.Of<IPlainKeyValueStorage<EmailParameters>>(),
-                httpClientFactory,
-                Mock.Of<IHttpStatistician>());
+                Mock.Of<IWebInterviewEmailRenderer>());
         }
 
         public SendInvitationsJob SendInvitationsJob(

@@ -16,17 +16,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         private readonly IEmailService emailService;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         private readonly IPlainKeyValueStorage<EmailParameters> emailParamsStorage;
+        private readonly IWebInterviewEmailRenderer webInterviewEmailRenderer;
 
         public InvitationMailingService(
             IInvitationService invitationService, 
             IEmailService emailService,
             IWebInterviewConfigProvider webInterviewConfigProvider, 
-            IPlainKeyValueStorage<EmailParameters> emailParamsStorage)
+            IPlainKeyValueStorage<EmailParameters> emailParamsStorage,
+            IWebInterviewEmailRenderer webInterviewEmailRenderer)
         {
             this.invitationService = invitationService;
             this.emailService = emailService;
             this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.emailParamsStorage = emailParamsStorage;
+            this.webInterviewEmailRenderer = webInterviewEmailRenderer;
         }
 
         public async Task SendInvitationAsync(int invitationId, Assignment assignment, string email = null)
@@ -76,11 +79,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             };
             emailParamsStorage.Store(emailParams, emailParamsId);
 
-            var client = new HttpClient { };
-            var htmlMessage = (await client.GetStringAsync($"{webInterviewConfig.BaseUrl}/WebEmails/Html/{emailParamsId}")) ?? string.Empty;
-            var textMessage = (await client.GetStringAsync($"{webInterviewConfig.BaseUrl}/WebEmails/Text/{emailParamsId}/")) ?? string.Empty;
-
-            var emailId = await emailService.SendEmailAsync(address, emailParams.Subject, htmlMessage.Trim(), textMessage.Trim());
+            var interviewEmail = webInterviewEmailRenderer.RenderEmail(emailParams);
+            var emailId = await emailService.SendEmailAsync(address, emailParams.Subject, interviewEmail.MessageHtml.Trim(), interviewEmail.MessageText.Trim());
             invitationService.MarkInvitationAsSent(invitation.Id, emailId);
         }
     }
