@@ -48,7 +48,6 @@
                         data-vv-as="questionnaire version"
                         :selectedKey="pageState.version"
                         v-validate="'required'"
-                        
                         :value="questionnaireVersion"
                         :fetch-url="questionnaireVersionFetchUrl"
                         v-on:selected="questionnaireVersionSelected"
@@ -175,7 +174,7 @@
           <div v-else>
             <h3 class="mb-20">{{$t('DataExport.GeneratedDataSets')}}</h3>
             <p>{{$t('DataExport.GeneratedDataSets_Desc')}}</p>
-            <ExportProcessCard  v-for="result in exportResults" v-bind:key="result.id" :data="result"></ExportProcessCard>
+            <ExportProcessCard  v-for="result in exportResults" v-bind:key="result.id" :data="result" @deleted="removeProcessCard"></ExportProcessCard>
           </div>
         </div>
       </div>
@@ -183,7 +182,8 @@
     <div class="row" v-if="!exportServiceIsUnavailable">
       <div class="col-lg-5">
           <h3 class="mb-20">{{$t('DataExport.DataExportApi')}}</h3>
-          <p>{{$t('DataExport.DataExportApiDesc')}} <a href="https://support.mysurvey.solutions/headquarters/api/api-for-data-export/" target="_blank" class="underlined-link">{{$t('DataExport.DataExportApiInfoPage')}}</a>
+          <p>{{$t('DataExport.DataExportApiDesc')}} <a href="https://support.mysurvey.solutions/headquarters/api/api-for-data-export/" 
+            target="_blank" class="underlined-link">{{$t('DataExport.DataExportApiInfoPage')}}</a>
           </p>
       </div>
     </div>
@@ -197,21 +197,8 @@ import ExportProcessCard from "./ExportProcessCard"
 import {mixin as VueTimers} from 'vue-timers'
 import queryString from 'query-string';
 
-const dataFormatNum = {  
-  Tabular: 1,
-  Stata: 2,
-  Spss: 3,
-  Binary: 4,
-  Ddi: 5,
-  Paradata: 6
-};
-
-const ExternalStorageType =
-{
-    dropbox: 1,
-    oneDrive: 2,
-    googleDrive: 3
-};
+const dataFormatNum = { Tabular: 1, Stata: 2, Spss: 3, Binary: 4, Ddi: 5, Paradata: 6 };
+const ExternalStorageType = { dropbox: 1, oneDrive: 2, googleDrive: 3 };
 
 export default {
     mixins: [VueTimers],
@@ -233,6 +220,7 @@ export default {
             pageState: {}
         };
     },
+
     timers: {
       updateExportCards: { time: 5000, autostart: true, repeat: true }
     },
@@ -322,6 +310,10 @@ export default {
         this.status = null;
         this.hasInterviews = false;
         this.hasBinaryData = false;
+      },
+
+      removeProcessCard(id) {
+        this.exportResults = _.reject(this.exportResults, { id })
       },
 
       updateExportCards(){
