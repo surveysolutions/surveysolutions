@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
             plainQuestionnaire = Create.Entity.PlainQuestionnaire(document: questionnaire, 1, questionOptionsRepository: questionOptionsRepository.Object);
 
             // Act
-            categoricalOptions = plainQuestionnaire.GetOptionsForQuestion(questionId, null, String.Empty);
+            categoricalOptions = plainQuestionnaire.GetOptionsForQuestion(questionId, null, String.Empty, null);
 
             // assert
             categoricalOptions.Should().BeSameAs(optionsFromRepository);

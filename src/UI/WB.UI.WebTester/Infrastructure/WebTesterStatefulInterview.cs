@@ -27,9 +27,10 @@ namespace WB.UI.WebTester.Infrastructure
             base.ServiceLocatorInstance = serviceLocator;
         }
 
-        public override List<CategoricalOption> GetFirstTopFilteredOptionsForQuestion(Identity questionIdentity, int? parentQuestionValue, string filter, int itemsCount = 200)
+        public override List<CategoricalOption> GetFirstTopFilteredOptionsForQuestion(Identity questionIdentity,
+            int? parentQuestionValue, string filter, int itemsCount = 200, int[] excludedOptionIds = null)
         {
-            return this.appdomainsPerInterviewManager.GetFirstTopFilteredOptionsForQuestion(this.Id, questionIdentity, parentQuestionValue, filter, itemsCount);
+            return this.appdomainsPerInterviewManager.GetFirstTopFilteredOptionsForQuestion(this.Id, questionIdentity, parentQuestionValue, filter, itemsCount, excludedOptionIds);
         }
     }
 }

@@ -28,6 +28,6 @@ namespace WB.Enumerator.Native.Questionnaire.Impl
         }
 
         public IEnumerable<CategoricalOption> GetOptionsByOptionValues(IQuestionnaire questionnaire, Guid questionId, int[] optionsValues) => 
-            questionnaire.GetOptionsForQuestion(questionId, null, null).Where(x => optionsValues.Contains(x.Value));
+            questionnaire.GetOptionsForQuestion(questionId, null, null, null).Where(x => optionsValues.Contains(x.Value));
     }
 }
