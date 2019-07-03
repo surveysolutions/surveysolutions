@@ -1,8 +1,10 @@
 ﻿using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services.Processing;
+using ILogger = Amazon.Runtime.Internal.Util.ILogger;
 
 namespace WB.Services.Export.ExportProcessHandlers.Implementation
 {
@@ -11,19 +13,25 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
         private readonly IExternalStorageDataClientFactory externalStorageDataClientFactory;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IExportFileNameService exportFileNameService;
+        private readonly ILogger<PublisherToExternalStorage> logger;
 
         public PublisherToExternalStorage(
             IExternalStorageDataClientFactory externalStorageDataClientFactory,
             IQuestionnaireStorage questionnaireStorage,
-            IExportFileNameService exportFileNameService)
+            IExportFileNameService exportFileNameService,
+            ILogger<PublisherToExternalStorage> logger)
         {
             this.externalStorageDataClientFactory = externalStorageDataClientFactory;
             this.questionnaireStorage = questionnaireStorage;
             this.exportFileNameService = exportFileNameService;
+            this.logger = logger;
         }
 
         public async Task PublishToExternalStorage(ExportState state, CancellationToken cancellationToken = default)
         {
+            logger.LogTrace("Publishing to external storage. File: {archive}. {storageType}", 
+                state.ArchiveFilePath, state.StorageType);
+
             var dataClient = externalStorageDataClientFactory.GetDataClient(state.StorageType);
 
             using (dataClient.GetClient(state.ProcessArgs.AccessToken))

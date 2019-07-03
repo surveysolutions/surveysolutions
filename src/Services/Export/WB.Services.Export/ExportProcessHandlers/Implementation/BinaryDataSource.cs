@@ -48,7 +48,6 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
             cancellationToken.ThrowIfCancellationRequested();
             var api = this.tenantApi.For(settings.Tenant);
-
             var interviewsToExport = this.interviewsToExportSource.GetInterviewsToExport(
                 settings.QuestionnaireId, settings.Status, settings.FromDate, settings.ToDate);
 
@@ -119,7 +118,6 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                     }
                 }
 
-
                 foreach (var audioAuditInfo in audioAuditInfos)
                 {
                     foreach (var fileName in audioAuditInfo.FileNames)
@@ -135,6 +133,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                                 InterviewId = audioAuditInfo.InterviewId,
                                 FileName = fileName,
                                 Content = content,
+                                ContentLength = audioContent.Headers.ContentLength ?? 0,
                                 Type = BinaryDataType.AudioAudit
                             });
 
@@ -145,7 +144,6 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                             var batchInterviewsProgress = batchProgress.PercentOf(interviewsToExport.Count);
 
                             progress.Report(interviewProgress + batchInterviewsProgress);
-
                         }
                         catch (ApiException e) when (e.StatusCode == HttpStatusCode.NotFound)
                         {
