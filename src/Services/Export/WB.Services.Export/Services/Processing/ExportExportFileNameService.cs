@@ -22,9 +22,7 @@ namespace WB.Services.Export.Services.Processing
 
         public string GetFileNameForExportArchive(ExportSettings exportSettings, string withQuestionnaireName = null)
         {
-            var statusSuffix = exportSettings.Status != null && exportSettings.ExportFormat != DataExportFormat.Binary 
-                ? exportSettings.Status.ToString() 
-                : "All";
+            var statusSuffix = exportSettings.Status == null ? "All" : exportSettings.Status.ToString();
 
             var fromDatePrefix = exportSettings.FromDate == null || exportSettings.ExportFormat == DataExportFormat.Binary 
                 ? "" : $"_{exportSettings.FromDate.Value:yyyyMMddTHHmm}Z";
@@ -33,6 +31,7 @@ namespace WB.Services.Export.Services.Processing
 
             var archiveName = $"{withQuestionnaireName ?? exportSettings.QuestionnaireId.ToString()}_" +
                               $"{exportSettings.ExportFormat}_{statusSuffix}{fromDatePrefix}{toDatePrefix}.zip";
+
             return archiveName;
         }
     }
