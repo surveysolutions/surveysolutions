@@ -48,6 +48,9 @@ namespace WB.Services.Export.Jobs
         public async Task<DataExportProcessView> GetDataExportStatusAsync(long processId, TenantInfo tenant)
         {
             DataExportProcessArgs process = await this.dataExportProcessesService.GetProcessAsync(processId);
+
+            if(!tenant.Equals(process.ExportSettings.Tenant)) throw new ArgumentException("Cannot found process #" + processId, nameof(processId));
+
             var dataExportProcessView = ToDataExportProcessView(process);
 
             var exportSettings = new ExportSettings
