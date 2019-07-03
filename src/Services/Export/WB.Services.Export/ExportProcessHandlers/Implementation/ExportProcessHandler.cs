@@ -82,6 +82,11 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             }
             finally
             {
+                if (state.ShouldDeleteResultExportFile == true)
+                {
+                    File.Delete(state.ArchiveFilePath);
+                }
+
                 DeleteExportTempDirectory(state);
             }
         }
@@ -103,8 +108,10 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
         private async Task PublishToArtifactStorage(ExportState state, CancellationToken cancellationToken)
         {
             // ReSharper disable once InconsistentlySynchronizedField
-            await this.dataExportFileAccessor.PublishArchiveToArtifactsStorageAsync(state.Settings.Tenant,
+            var isFilePublished = await this.dataExportFileAccessor.PublishArchiveToArtifactsStorageAsync(state.Settings.Tenant,
                 state.ArchiveFilePath, state.Progress, cancellationToken);
+
+            state.ShouldDeleteResultExportFile = isFilePublished;
         }
 
         private void CreateTemporaryFolder(ExportState state)
