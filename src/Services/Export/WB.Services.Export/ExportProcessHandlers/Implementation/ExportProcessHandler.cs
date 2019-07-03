@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Amazon.Runtime.Internal.Util;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Models;
@@ -18,6 +20,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
         private readonly IOptions<ExportServiceSettings> interviewDataExportSettings;
         private readonly IDataExportFileAccessor dataExportFileAccessor;
         private readonly IPublisherToExternalStorage publisherToExternalStorage;
+        private readonly ILogger<ExportProcessHandler> logger;
         private readonly IFileBasedExportedDataAccessor fileBasedExportedDataAccessor;
         private readonly IArchiveUtils archiveUtils;
         private readonly IFileSystemAccessor fileSystemAccessor;
@@ -29,7 +32,8 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             IFileSystemAccessor fileSystemAccessor,
             IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
             IArchiveUtils archiveUtils,
-            IPublisherToExternalStorage publisherToExternalStorage)
+            IPublisherToExternalStorage publisherToExternalStorage,
+            ILogger<ExportProcessHandler> logger)
         {
             this.exportHandlerFactory = exportHandlerFactory;
             this.dataExportProcessesService = dataExportProcessesService;
@@ -39,6 +43,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             this.fileBasedExportedDataAccessor = fileBasedExportedDataAccessor;
             this.archiveUtils = archiveUtils;
             this.publisherToExternalStorage = publisherToExternalStorage;
+            this.logger = logger;
         }
 
         public async Task ExportDataAsync(DataExportProcessArgs process, CancellationToken cancellationToken)
@@ -47,6 +52,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             var handler = exportHandlerFactory.GetHandler(state.ExportFormat, state.StorageType);
 
             HandleProgress(state);
+            
             PrepareOutputArchive(state);
 
             CreateTemporaryFolder(state);
@@ -56,6 +62,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                 // ReSharper disable once InconsistentlySynchronizedField
                 this.dataExportProcessesService.ChangeStatusType(state.ProcessId, DataExportStatus.Running);
 
+                logger.LogTrace("Start of data export");
                 await handler.ExportDataAsync(state, cancellationToken);
 
                 if (state.RequireCompression)
