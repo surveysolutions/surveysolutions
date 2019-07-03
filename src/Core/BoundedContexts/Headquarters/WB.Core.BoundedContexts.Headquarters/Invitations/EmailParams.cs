@@ -4,6 +4,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 {
     public class EmailParams : IStorableEntity
     {
+        public string Id { get; set; }
         public string Subject { get; set; }
         public string MainText { get; set; }
         public string PasswordDescription { get; set; }
