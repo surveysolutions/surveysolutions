@@ -115,7 +115,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         {
                             result = this.Map<InterviewSingleOptionQuestion>(question, res =>
                             {
-                                res.Options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200);
+                                res.Options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200, null);
                             });
                         }
                         break;
@@ -131,7 +131,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                                 {
                                     result = this.Map<InterviewSingleOptionQuestion>(question, res =>
                                         {
-                                            res.Options = callerInterview.GetTopFilteredOptionsForQuestion(identity, parentCascadingQuestion.GetAnswer().SelectedValue, null, threshold);
+                                            res.Options = callerInterview.GetTopFilteredOptionsForQuestion(identity, parentCascadingQuestion.GetAnswer().SelectedValue, null, threshold, null);
                                         });
                                     break;
                                 }
@@ -171,7 +171,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                                 var isRosterSizeOfLongRoster = callerQuestionnaire.IsQuestionIsRosterSizeForLongRoster(identity.Id);
                                 interviewIntegerQuestion.AnswerMaxValue = isRosterSizeOfLongRoster ? Constants.MaxLongRosterRowCount : Constants.MaxRosterRowCount;
                             }
-                            interviewIntegerQuestion.Options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200);
+                            interviewIntegerQuestion.Options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200, null);
 
                             if (interviewIntegerQuestion.Answer.HasValue)
                             {
@@ -191,7 +191,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                             var callerQuestionnaire = questionnaire;
                             interviewDoubleQuestion.CountOfDecimalPlaces = callerQuestionnaire.GetCountOfDecimalPlacesAllowedByQuestion(identity.Id);
                             interviewDoubleQuestion.UseFormatting = callerQuestionnaire.ShouldUseFormatting(identity.Id);
-                            interviewDoubleQuestion.Options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200);
+                            interviewDoubleQuestion.Options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200, null);
                             result = interviewDoubleQuestion;
                         }
                         break;
@@ -201,7 +201,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
                             var typedResult = this.autoMapper.Map<InterviewMutliOptionQuestion>(question);
 
-                            var options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200);
+                            var options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200, null);
                             var answeredOptions = questionnaire.GetCategoricalMultiOptionsByValues(question.Identity.Id, typedResult.Answer);
 
                             typedResult.Options = options.Union(answeredOptions).Distinct().ToList();
@@ -254,7 +254,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     case InterviewQuestionType.YesNo:
                         {
                             var interviewYesNoQuestion = this.autoMapper.Map<InterviewYesNoQuestion>(question);
-                            var options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200);
+                            var options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200, null);
                             interviewYesNoQuestion.Options = options;
                             var callerQuestionnaire = questionnaire;
                             interviewYesNoQuestion.Ordered = callerQuestionnaire.ShouldQuestionRecordAnswersOrder(identity.Id);

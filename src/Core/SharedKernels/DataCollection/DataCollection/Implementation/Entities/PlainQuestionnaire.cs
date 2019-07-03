@@ -378,7 +378,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public IEnumerable<CategoricalOption> GetCategoricalMultiOptionsByValues(Guid questionId, int[] values) =>
             this.questionOptionsRepository.GetOptionsByOptionValues(this, questionId, values);
 
-        public IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, int? parentQuestionValue, string searchFor)
+        public IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, int? parentQuestionValue,
+            string searchFor, int[] excludedOptionIds)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
             CheckShouldQestionProvideOptions(question, questionId);
@@ -1808,7 +1809,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public bool HasAnyCascadingOptionsForSelectedParentOption(Guid cascadingQuestionId, Guid parenQuestionId,
             int selectedParentValue)
         {
-            var options = this.GetOptionsForQuestion(cascadingQuestionId, selectedParentValue, string.Empty);
+            var options = this.GetOptionsForQuestion(cascadingQuestionId, selectedParentValue, string.Empty, null);
             return options.Any();
         }
 
