@@ -51,31 +51,44 @@ namespace WB.Services.Export.Host.Jobs
 
         private DataExportProcessArgs AsDataExportProcessArgs(JobItem job)
         {
-            var args = JsonConvert.DeserializeObject<DataExportProcessArgs>(job.Args);
-
-            var eta = job.GetData<string>(EtaField);
-            var status = Enum.Parse<DataExportStatus>(job.GetData<string>(StatusField));
-            var hasError = job.Status == JobStatus.Canceled || job.Status == JobStatus.Fail;
-
-            args.Status = new DataExportProcessStatus
+            try
             {
-                TimeEstimation = eta == null ? (TimeSpan?)null : TimeSpan.Parse(eta),
-                BeginDate = job.StartAt,
-                IsRunning = job.Status == JobStatus.Running || job.Status == JobStatus.Created,
-                Status = status
-            };
+                var args = JsonConvert.DeserializeObject<DataExportProcessArgs>(job.Args);
 
-            args.Status.ProgressInPercents = Int32.Parse(job.GetData<string>(ProgressField) ?? "0");
-            args.Status.Error = hasError
-                ? new DateExportProcessError
+                var eta = job.GetData<string>(EtaField);
+                var status = Enum.Parse<DataExportStatus>(job.GetData<string>(StatusField));
+                var hasError = job.Status == JobStatus.Canceled || job.Status == JobStatus.Fail;
+
+                args.Status = new DataExportProcessStatus
                 {
-                    Type = Enum.Parse<DataExportError>(job.GetData<string>(ErrorTypeField) ?? DataExportError.Unexpected.ToString()),
-                    Message = job.GetData<string>(ErrorField)
-                }
-                : null;
+                    TimeEstimation = eta == null ? (TimeSpan?) null : TimeSpan.Parse(eta),
+                    BeginDate = job.StartAt,
+                    IsRunning = job.Status == JobStatus.Running || job.Status == JobStatus.Created,
+                    Status = status
+                };
 
-            args.ProcessId = job.Id;
-            return args;
+                args.Status.ProgressInPercents = Int32.Parse(job.GetData<string>(ProgressField) ?? "0");
+                args.Status.Error = hasError
+                    ? new DateExportProcessError
+                    {
+                        Type = Enum.Parse<DataExportError>(job.GetData<string>(ErrorTypeField) ??
+                                                           DataExportError.Unexpected.ToString()),
+                        Message = job.GetData<string>(ErrorField)
+                    }
+                    : null;
+
+                args.ProcessId = job.Id;
+                return args;
+            }
+            catch (NullReferenceException)
+            {
+                if (job != null)
+                {
+                    logger.LogTrace("Temp trace. Args: {jobArgs}", job.Args);
+                }
+
+                throw;
+            }
         }
 
         public async Task<DataExportProcessArgs[]> GetAllProcesses(TenantInfo tenant, bool runningOnly = true)
