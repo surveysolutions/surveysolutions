@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             var interview = Mock.Of<IStatefulInterview>(_
                 => _.QuestionnaireIdentity == questionnaireId
                    && _.GetSingleOptionQuestion(questionIdentity) == singleOptionAnswer &&
-                   _.GetTopFilteredOptionsForQuestion(questionIdentity, null, answerValue, 200) ==
+                   _.GetTopFilteredOptionsForQuestion(questionIdentity, null, answerValue, 200, It.IsAny<int[]>()) ==
                    new List<CategoricalOption>()
                    {
                        new CategoricalOption() {Title = "abc", Value = 1},
@@ -101,7 +101,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             var interview = Mock.Of<IStatefulInterview>(_
                 => _.QuestionnaireIdentity == questionnaireId
                    && _.GetSingleOptionQuestion(questionIdentity) == singleOptionAnswer &&
-                   _.GetTopFilteredOptionsForQuestion(questionIdentity, null, answerValue, 200) == new List<CategoricalOption>() { option });
+                   _.GetTopFilteredOptionsForQuestion(questionIdentity, null, answerValue, 200, It.IsAny<int[]>()) == new List<CategoricalOption>() { option });
 
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(_ => _.Get(interviewId) == interview);
 

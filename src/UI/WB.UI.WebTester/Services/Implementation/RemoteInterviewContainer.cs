@@ -202,13 +202,14 @@ namespace WB.UI.WebTester.Services.Implementation
             }
         }
 
-        public List<CategoricalOption> GetFirstTopFilteredOptionsForQuestion(Identity questionIdentity, int? parentQuestionValue, string filter, int itemsCount = 200)
+        public List<CategoricalOption> GetFirstTopFilteredOptionsForQuestion(Identity questionIdentity,
+            int? parentQuestionValue, string filter, int itemsCount = 200, int[] excludedOptionIds = null)
         {
             lock (this.context)
             {
                 if (state == State.Teardown) throw new InterviewException("Interview deleted", InterviewDomainExceptionType.InterviewHardDeleted);
 
-                var sArg = JsonConvert.SerializeObject((questionIdentity, parentQuestionValue, filter, itemsCount),
+                var sArg = JsonConvert.SerializeObject((questionIdentity, parentQuestionValue, filter, itemsCount, excludedOptionIds),
                        CommandsSerializerSettings);
 
                 var invokeResult = RemoteFunc.Invoke(context.Domain, sArg, jsonArg =>
@@ -217,7 +218,7 @@ namespace WB.UI.WebTester.Services.Implementation
                     {
                         var args = JsonConvert
                             .DeserializeObject<(Identity questionIdentity, int? parentQuestionValue, string filter, int
-                                    itemsCount)>
+                                    itemsCount, int[] excludedOptionIds)>
                                 (jsonArg, CommandsSerializerSettings);
 
                         var interview = CurrentInterview.Instance;
@@ -225,7 +226,7 @@ namespace WB.UI.WebTester.Services.Implementation
                         var result = interview.GetFirstTopFilteredOptionsForQuestion(
                             args.questionIdentity,
                             args.parentQuestionValue,
-                            args.filter, args.itemsCount);
+                            args.filter, args.itemsCount, args.excludedOptionIds);
 
                         return JsonConvert.SerializeObject(result, CommandsSerializerSettings);
                     }

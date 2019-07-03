@@ -748,23 +748,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
 
         /// Filter for regular categorical questions, such as YesNo, Single and Multi.
-        public virtual List<CategoricalOption> GetFirstTopFilteredOptionsForQuestion(Identity questionIdentity, 
-            int? parentQuestionValue, string filter, int itemsCount = 200)
+        public virtual List<CategoricalOption> GetFirstTopFilteredOptionsForQuestion(Identity questionIdentity,
+            int? parentQuestionValue, string filter, int itemsCount = 200, int[] excludedOptionIds = null)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
+            var options = questionnaire.GetOptionsForQuestion(questionIdentity.Id, parentQuestionValue, filter, excludedOptionIds);
+
             if (!questionnaire.IsSupportFilteringForOptions(questionIdentity.Id))
-                return questionnaire.GetOptionsForQuestion(questionIdentity.Id, parentQuestionValue, filter).Take(itemsCount).ToList();
+                return options.Take(itemsCount).ToList();
 
             if (this.UsesExpressionStorage)
-            {
-                var unfilteredOptionsForQuestion = questionnaire.GetOptionsForQuestion(questionIdentity.Id, parentQuestionValue, filter);
+                return this.FilteredCategoricalOptions(questionIdentity, itemsCount, options);
 
-                return this.FilteredCategoricalOptions(questionIdentity, itemsCount, unfilteredOptionsForQuestion);
-            }
-
-            return this.ExpressionProcessorStatePrototype.FilterOptionsForQuestion(questionIdentity,
-                questionnaire.GetOptionsForQuestion(questionIdentity.Id, parentQuestionValue, filter)).Take(itemsCount).ToList();
+            return this.ExpressionProcessorStatePrototype.FilterOptionsForQuestion(questionIdentity, options).Take(itemsCount).ToList();
         }
 
         protected List<CategoricalOption> FilteredCategoricalOptions(Identity questionIdentity, int itemsCount,
