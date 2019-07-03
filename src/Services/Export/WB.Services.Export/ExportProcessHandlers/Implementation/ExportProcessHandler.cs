@@ -52,7 +52,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             var handler = exportHandlerFactory.GetHandler(state.ExportFormat, state.StorageType);
 
             HandleProgress(state);
-            
+
             PrepareOutputArchive(state);
 
             CreateTemporaryFolder(state);
@@ -68,16 +68,16 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                 if (state.RequireCompression)
                 {
                     await Compress(state, cancellationToken);
+                }
 
-                    if (state.RequirePublishToArtifactStorage)
-                    {
-                        await PublishToArtifactStorage(state, cancellationToken);
-                    }
+                if (state.RequirePublishToArtifactStorage)
+                {
+                    await PublishToArtifactStorage(state, cancellationToken);
+                }
 
-                    if (state.RequirePublishToExternalStorage)
-                    {
-                        await PublishToExternalStorage(state, cancellationToken);
-                    }
+                if (state.RequirePublishToExternalStorage)
+                {
+                    await PublishToExternalStorage(state, cancellationToken);
                 }
             }
             finally
