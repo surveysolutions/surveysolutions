@@ -184,8 +184,12 @@ export default {
                     }
                 })
                 .catch((error) => {
-                    Vue.config.errorHandler(error, this);
-                    this.$timer.stop("updateStatus");
+                    if(error.response.status == 404) 
+                        this.$emit("deleted", this.processId) 
+                    else {
+                        Vue.config.errorHandler(error, this);
+                        this.$timer.stop("updateStatus");
+                    }
                 });
       },
 
