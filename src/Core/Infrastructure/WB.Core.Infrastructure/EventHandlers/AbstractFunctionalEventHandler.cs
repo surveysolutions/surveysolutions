@@ -77,28 +77,6 @@ namespace WB.Core.Infrastructure.EventHandlers
             storage.Remove(id);
         }
 
-        public virtual void RegisterHandlersInOldFashionNcqrsBus(InProcessEventBus oldEventBus)
-        {
-            var handlerMethodNames = new string[] { "Create", "Update", "Delete" };
-
-            var handlers = this.GetType().GetMethods().Where(m => handlerMethodNames.Contains(m.Name)).ToList();
-
-            handlers.ForEach((handler) => this.RegisterOldFashionHandler(oldEventBus, handler));
-        }
-
-        private static Type ExtractEventType(MethodInfo method)
-        {
-            var parameters = method.GetParameters();
-            var eventParameter = parameters.Last().ParameterType;
-            return eventParameter.GenericTypeArguments[0];
-        }
-
-        protected void RegisterOldFashionHandler(InProcessEventBus oldEventBus, MethodInfo method)
-        {
-            var evntType = ExtractEventType(method);
-            oldEventBus.RegisterHandler(eventType: evntType, eventHandlerType: this.GetType(), handle: this.Handle);
-        }
-
         private static void SaveView(Guid id, TEntity newState, IReadSideStorage<TEntity> storage)
         {
             storage.Store(newState, id);

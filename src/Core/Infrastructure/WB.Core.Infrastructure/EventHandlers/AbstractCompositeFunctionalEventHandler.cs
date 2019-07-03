@@ -68,19 +68,5 @@ namespace WB.Core.Infrastructure.EventHandlers
 
             return newState;
         }
-
-        public override void RegisterHandlersInOldFashionNcqrsBus(InProcessEventBus oldEventBus)
-        {
-            var handlerMethodNames = new string[] { "Create", "Update", "Delete" };
-
-            List<MethodInfo> handlers = new List<MethodInfo>();
-
-            foreach (var handler in Handlers)
-            {
-                handlers.AddRange(handler.GetType().GetMethods().Where(m => handlerMethodNames.Contains(m.Name)));
-            }
-
-            handlers.ForEach((handler) => this.RegisterOldFashionHandler(oldEventBus, handler));
-        }
     }
 }

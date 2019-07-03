@@ -78,6 +78,7 @@ using WB.Enumerator.Native.Questionnaire.Impl;
 using WB.Enumerator.Native.WebInterview;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
@@ -315,6 +316,10 @@ namespace WB.Core.BoundedContexts.Headquarters
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
+            var registry = serviceLocator.GetInstance<IDenormalizerRegistry>();
+            registry.RegisterFunctional<InterviewSummaryCompositeDenormalizer>();
+            registry.RegisterFunctional<CumulativeChartDenormalizer>();
+
             CommandRegistry
                 .Setup<Questionnaire>()
                 .ResolvesIdFrom<QuestionnaireCommand>(command => command.QuestionnaireId)
