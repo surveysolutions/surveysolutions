@@ -161,30 +161,38 @@ namespace WB.Services.Export.Jobs
             return matchingProcess?.ProcessStatus ?? DataExportStatus.NotStarted;
         }
 
-        private static DataExportProcessView ToDataExportProcessView(DataExportProcessArgs dataExportProcessDetails) =>
-            new DataExportProcessView
+        private static DataExportProcessView ToDataExportProcessView(DataExportProcessArgs dataExportProcessDetails)
+        {
+            var status = dataExportProcessDetails.Status ?? new DataExportProcessStatus();
+            var error = status.Error;
+            var settings = dataExportProcessDetails.ExportSettings ?? new ExportSettings();
+
+            return new DataExportProcessView
             {
-                IsRunning = dataExportProcessDetails.Status.IsRunning,
+                IsRunning = status.IsRunning,
                 DataExportProcessId = dataExportProcessDetails.NaturalId,
-                BeginDate = dataExportProcessDetails.Status.BeginDate ?? DateTime.MinValue,
-                LastUpdateDate = dataExportProcessDetails.Status.LastUpdateDate,
-                Progress = dataExportProcessDetails.Status.ProgressInPercents,
-                TimeEstimation = dataExportProcessDetails.Status.TimeEstimation,
-                Format = dataExportProcessDetails.ExportSettings.ExportFormat,
-                ProcessStatus = dataExportProcessDetails.Status.Status,
-                Type = dataExportProcessDetails.ExportSettings.ExportFormat == DataExportFormat.Paradata
+                BeginDate = status.BeginDate ?? DateTime.MinValue,
+                LastUpdateDate = status.LastUpdateDate,
+                Progress = status.ProgressInPercents,
+                TimeEstimation = status.TimeEstimation,
+                Format = settings.ExportFormat,
+                ProcessStatus = status.Status,
+                Type = settings.ExportFormat == DataExportFormat.Paradata
                     ? DataExportType.ParaData
                     : DataExportType.Data,
-                QuestionnaireId = dataExportProcessDetails.ExportSettings.QuestionnaireId.ToString(),
-                InterviewStatus = dataExportProcessDetails.ExportSettings.Status,
-                FromDate = dataExportProcessDetails.ExportSettings.FromDate,
-                ToDate = dataExportProcessDetails.ExportSettings.ToDate,
-                Error =  dataExportProcessDetails.Status.Error == null ? null : new DataExportErrorView
-                {
-                    Type = dataExportProcessDetails.Status.Error.Type,
-                    Message = dataExportProcessDetails.Status.Error.Message
-                }
+                QuestionnaireId = settings.QuestionnaireId.ToString(),
+                InterviewStatus = settings.Status,
+                FromDate = settings.FromDate,
+                ToDate = settings.ToDate,
+                Error = error == null
+                    ? null
+                    : new DataExportErrorView
+                    {
+                        Type = status.Error.Type,
+                        Message = status.Error.Message
+                    }
             };
+        }
 
         private async Task<ExportFileInfoView> GetExportFileInfo(ExportSettings exportSettings)
         {
