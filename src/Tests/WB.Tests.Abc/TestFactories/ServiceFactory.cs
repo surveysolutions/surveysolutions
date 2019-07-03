@@ -248,14 +248,14 @@ namespace WB.Tests.Abc.TestFactories
         public NcqrCompatibleEventDispatcher NcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null,
             ILogger logger = null,
             IServiceLocator serviceLocator = null,
-            params IEventHandler[] handlers)
+            IDenormalizerRegistry denormalizerRegistry = null)
             => new NcqrCompatibleEventDispatcher(
                 eventStore: Mock.Of<IEventStore>(),
                 inMemoryEventStore: Mock.Of<IInMemoryEventStore>(),
                 serviceLocator: serviceLocator ?? Mock.Of<IServiceLocator>(),
                 eventBusSettings: eventBusSettings ?? Create.Entity.EventBusSettings(),
                 logger: logger ?? Mock.Of<ILogger>(),
-                eventHandlers: handlers);
+                denormalizerRegistry: denormalizerRegistry ?? Create.Service.DenormalizerRegistry());
 
         public QuestionnaireKeyValueStorage QuestionnaireKeyValueStorage(
             IPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository = null)
@@ -269,7 +269,7 @@ namespace WB.Tests.Abc.TestFactories
                 Stub<IPlainStorageAccessor<QuestionnaireBrowseItem>>.WithNotEmptyValues);
 
         public IStatefulInterviewRepository StatefulInterviewRepository(
-            IEventSourcedAggregateRootRepository aggregateRootRepository, ILiteEventBus liteEventBus = null)
+            IEventSourcedAggregateRootRepository aggregateRootRepository)
             => new StatefulInterviewRepository(
                 aggregateRootRepository: aggregateRootRepository ?? Mock.Of<IEventSourcedAggregateRootRepository>());
 
@@ -1122,6 +1122,24 @@ namespace WB.Tests.Abc.TestFactories
             IWebInterviewInvoker webInterviewInvoker)
         {
             return new WebInterviewNotificationService(statefulInterviewRepository, questionnaireStorage, webInterviewInvoker);
+        }
+
+        public IDenormalizerRegistry DenormalizerRegistry()
+        {
+            return new DenormalizerRegistry();
+        }
+
+        public IServiceLocator ServiceLocatorService(params object[] instances)
+        {
+            var result = new Mock<IServiceLocator>();
+
+            foreach (var instance in instances)
+            {
+                result.Setup(x => x.GetInstance(instance.GetType()))
+                    .Returns(instance);
+            }
+
+            return result.Object;
         }
     }
 

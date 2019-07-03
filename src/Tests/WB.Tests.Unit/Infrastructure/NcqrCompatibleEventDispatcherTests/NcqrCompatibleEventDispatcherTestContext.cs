@@ -11,13 +11,21 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
     [NUnit.Framework.TestOf(typeof(NcqrCompatibleEventDispatcher))]
     internal class NcqrCompatibleEventDispatcherTestContext
     {
-        protected static NcqrCompatibleEventDispatcher CreateNcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null, IServiceLocator serviceLocator = null)
+        protected static NcqrCompatibleEventDispatcher CreateNcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null, 
+            IServiceLocator serviceLocator = null,
+            IDenormalizerRegistry denormalizerRegistry = null)
         {
-            return Create.Service.NcqrCompatibleEventDispatcher(eventBusSettings: eventBusSettings, serviceLocator:serviceLocator);
+            return Create.Service.NcqrCompatibleEventDispatcher(eventBusSettings: eventBusSettings, 
+                serviceLocator: serviceLocator,
+                denormalizerRegistry: denormalizerRegistry);
         }
 
         protected static IPublishableEvent CreatePublishableEvent(Guid? eventSourceId = null, IEvent evnt = null)
         {
+            if (evnt == null)
+            {
+                return Create.PublishedEvent.InterviewCreated();
+            }
             return Create.Fake.PublishableEvent(eventSourceId, evnt);
         }
 
