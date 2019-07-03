@@ -74,7 +74,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void Handle(MultipleOptionsLinkedQuestionAnswered @event)
         {
             if (@event.QuestionId != this.Identity.Id || !@event.RosterVector.Identical(this.Identity.RosterVector)) return;
-            this.UpdateViewModelsByAnsweredOptionsInMainThread(@event.SelectedRosterVectors?.Select(RosterVector.Convert)?.ToArray());
+            this.UpdateViewModelsByAnsweredOptionsInMainThread(@event.SelectedRosterVectors?.Select(RosterVector.Convert).ToArray());
         }
 
         public async void Handle(LinkedOptionsChanged @event)

@@ -259,16 +259,16 @@
     <value>Export</value>
   </data>
   <data name="DataExport_Destination_Dropbox" xml:space="preserve">
-    <value>Export file will be uploaded on Dropbox</value>
+    <value>Export file will be uploaded to Dropbox</value>
   </data>
   <data name="DataExport_Destination_File" xml:space="preserve">
     <value>Export file will be avalaible for download</value>
   </data>
   <data name="DataExport_Destination_GoogleDrive" xml:space="preserve">
-    <value>Export file will be uploaded on Google Drive</value>
+    <value>Export file will be uploaded to Google Drive</value>
   </data>
   <data name="DataExport_Destination_OneDrive" xml:space="preserve">
-    <value>Export file will be uploaded on OneDrive</value>
+    <value>Export file will be uploaded to OneDrive</value>
   </data>
   <data name="DataExport_QueuedOn" xml:space="preserve">
     <value>Queued on {{date}}</value>
