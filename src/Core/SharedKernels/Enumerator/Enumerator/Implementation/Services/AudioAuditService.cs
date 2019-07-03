@@ -54,6 +54,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 {
                     var audioStream = audioAuditService.GetRecord(file);
                     var mimeType = this.audioAuditService.GetMimeType();
+
                     using (var audioMemoryStream = new MemoryStream())
                     {
                         audioStream.CopyTo(audioMemoryStream);
