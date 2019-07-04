@@ -267,7 +267,7 @@ export default {
           return settings!=null;
         },
         canExportExternally(){
-            return this.$config.model.externalStoragesSettings != null && (this.dataType == 'surveyData' || this.dataType == 'binaryData'); 
+            return this.$config.model.externalStoragesSettings != null; 
         },
         questionnaireFetchUrl() {
             return this.$config.model.api.questionnairesUrl;
