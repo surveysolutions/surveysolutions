@@ -1,10 +1,12 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Graph;
+using WB.Services.Infrastructure.Tenant;
 using File = System.IO.File;
 
 namespace WB.Services.Export.ExportProcessHandlers.Externals
@@ -13,6 +15,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
     {
         private readonly ILogger<OneDriveDataClient> logger;
         private IGraphServiceClient graphServiceClient;
+        private TenantInfo tenant;
 
         private static long MaxAllowedFileSizeByMicrosoftGraphApi = 4 * 1024 * 1024;
 
@@ -22,8 +25,10 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
             this.logger = logger;
         }
 
-        public IDisposable GetClient(string accessToken)
+        public IDisposable InitializeDataClient(string accessToken, TenantInfo tenant)
         {
+            this.tenant = tenant;
+
             logger.LogTrace("Creating Microsoft.Graph.Client for OneDrive file upload");
 
             graphServiceClient = new GraphServiceClient(new DelegateAuthenticationProvider(requestMessage =>
@@ -38,14 +43,18 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
             return null;
         }
 
-        public Task<string> CreateApplicationFolderAsync() => Task.FromResult("Survey Solutions");
+        private string Join(params string[] path) 
+            => string.Join("/", path.Where( p => p != null));
 
-        public Task<string> CreateFolderAsync(string applicationFolder, string folderName)
-            => Task.FromResult($"{applicationFolder}/{folderName}");
+        public Task<string> CreateApplicationFolderAsync(string subFolder)
+            => Task.FromResult(Join("Survey Solutions", tenant.Name, subFolder));
+
+        public Task<string> CreateFolderAsync(string folder, string parentFolder)
+            => Task.FromResult(Join(parentFolder, folder));
 
         public async Task UploadFileAsync(string folder, string fileName, Stream fileStream, long contentLength, CancellationToken cancellationToken = default)
         {
-            var item = graphServiceClient.Drive.Root.ItemWithPath($"{folder}/{fileName}");
+            var item = graphServiceClient.Drive.Root.ItemWithPath(Join(folder, fileName));
             
             if (contentLength > MaxAllowedFileSizeByMicrosoftGraphApi)
             {

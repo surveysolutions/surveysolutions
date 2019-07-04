@@ -10,5 +10,6 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
         public Stream Content { get; set; }
         public BinaryDataType Type { get; set; }
         public long ContentLength { get; set; }
+        public string InterviewKey { get; set; }
     }
 }
