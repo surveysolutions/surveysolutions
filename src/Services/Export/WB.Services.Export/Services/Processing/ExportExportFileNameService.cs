@@ -35,10 +35,10 @@ namespace WB.Services.Export.Services.Processing
 
             if (TryParseQuestionnaireVersion(questionnaireId, out var version))
             {
-                return $"{variableName}__{version}";
+                return $"{variableName}${version}";
             }
 
-            return $"{variableName}__{questionnaireId}";
+            return $"{variableName}${questionnaireId}";
         }
 
 
