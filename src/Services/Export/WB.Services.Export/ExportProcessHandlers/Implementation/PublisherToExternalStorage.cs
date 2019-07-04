@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services.Processing;
-using ILogger = Amazon.Runtime.Internal.Util.ILogger;
 
 namespace WB.Services.Export.ExportProcessHandlers.Implementation
 {
@@ -34,19 +33,16 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
             var dataClient = externalStorageDataClientFactory.GetDataClient(state.StorageType);
 
-            using (dataClient.GetClient(state.ProcessArgs.AccessToken))
+            using (dataClient.InitializeDataClient(state.ProcessArgs.AccessToken, state.Settings.Tenant))
             {
-                var applicationFolder = await dataClient.CreateApplicationFolderAsync();
+                var applicationFolder = await dataClient.CreateApplicationFolderAsync("Data Export");
 
                 var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(state.Settings.QuestionnaireId, cancellationToken);
-                var questionnaireFolder = "Data Export";
-
-                var folder = await dataClient.CreateFolderAsync(applicationFolder, questionnaireFolder);
-
+                
                 using (var fileStream = File.OpenRead(state.ArchiveFilePath))
                 {
                     var filename = this.exportFileNameService.GetFileNameForExportArchive(state.Settings, questionnaire.VariableName);
-                    await dataClient.UploadFileAsync(folder, filename, fileStream, fileStream.Length, cancellationToken);
+                    await dataClient.UploadFileAsync(applicationFolder, filename, fileStream, fileStream.Length, cancellationToken);
                 }
             }
         }
