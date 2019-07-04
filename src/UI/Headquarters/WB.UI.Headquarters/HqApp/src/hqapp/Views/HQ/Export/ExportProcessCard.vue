@@ -4,7 +4,7 @@
             <div class="format-data" :class="format">
                 <div class="gray-text-row"><b>#{{processId}}</b> {{$t('DataExport.DataExport_QueuedOn', { date: beginDate }) }}</div>
                 <div class="h3 mb-05">{{ $t('DataExport.DataExport_QuestionnaireWithVersion', { title: questionnaireTitle,  version: questionnaireIdentity.version}) }}</div>
-                <p class="mb-0 font-regular"><u class="font-bold">{{format}}</u> format. <span v-if="format!='DDI'">{{ $t('DataExport.DataExport_InterviewsStatus', { status: $t('DataExport.'+interviewStatus) , interpolation: {escapeValue: false} }) }}</span></p>
+                <p class="mb-0 font-regular"><u class="font-bold">{{format}}</u> format. <span v-if="format!='DDI'" class="font-bold">{{ $t('DataExport.DataExport_InterviewsStatus', { status: $t('DataExport.'+interviewStatus) , interpolation: {escapeValue: false} }) }}</span></p>
             </div>
         </div>
         <div class="bottom-row" :class="{'is-failed': isFailed, 'is-successful': isSuccessfull }">
@@ -29,7 +29,7 @@
                 </div>
             </div>
         </div>
-        <div class="dropdown aside-menu" v-if="!isRunning">
+        <div class="dropdown aside-menu" v-if="!isRunning && canRegenerate">
             <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-link">
                 <span></span>
             </button>
@@ -129,6 +129,9 @@ export default {
         },
         isSuccessfull() {
             return this.isInitializing == false && this.isRunning == false && this.error==null;
+        },
+        canRegenerate() {
+            return this.fileDestination == "File"
         }
     },
     watch: {},
