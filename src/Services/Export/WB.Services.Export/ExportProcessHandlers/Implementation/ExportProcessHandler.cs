@@ -24,6 +24,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
         private readonly IFileBasedExportedDataAccessor fileBasedExportedDataAccessor;
         private readonly IArchiveUtils archiveUtils;
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly IExportFileNameService exportFileNameService;
 
         public ExportProcessHandler(IExportHandlerFactory exportHandlerFactory,
             IDataExportProcessesService dataExportProcessesService,
@@ -33,7 +34,8 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
             IArchiveUtils archiveUtils,
             IPublisherToExternalStorage publisherToExternalStorage,
-            ILogger<ExportProcessHandler> logger)
+            ILogger<ExportProcessHandler> logger, 
+            IExportFileNameService exportFileNameService)
         {
             this.exportHandlerFactory = exportHandlerFactory;
             this.dataExportProcessesService = dataExportProcessesService;
@@ -44,16 +46,17 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             this.archiveUtils = archiveUtils;
             this.publisherToExternalStorage = publisherToExternalStorage;
             this.logger = logger;
+            this.exportFileNameService = exportFileNameService;
         }
 
         public async Task ExportDataAsync(DataExportProcessArgs process, CancellationToken cancellationToken)
         {
             var state = new ExportState(process);
             var handler = exportHandlerFactory.GetHandler(state.ExportFormat, state.StorageType);
-
+            
             HandleProgress(state);
 
-            PrepareOutputArchive(state);
+            await PrepareOutputArchive(state, cancellationToken);
 
             CreateTemporaryFolder(state);
 
@@ -122,9 +125,10 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             RecreateExportTempDirectory(state);
         }
 
-        private void PrepareOutputArchive(ExportState state)
+        private async Task PrepareOutputArchive(ExportState state, CancellationToken cancellationToken)
         {
             state.ArchiveFilePath = this.fileBasedExportedDataAccessor.GetArchiveFilePathForExportedData(state.Settings);
+            state.QuestionnaireName = await this.exportFileNameService.GetQuestionnaireDirectoryName(state.Settings, cancellationToken);
         }
 
         private void RecreateExportTempDirectory(ExportState state)

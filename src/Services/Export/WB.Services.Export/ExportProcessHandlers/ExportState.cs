@@ -27,5 +27,6 @@ namespace WB.Services.Export.ExportProcessHandlers
         public bool RequirePublishToExternalStorage { get; set; }
         public long ProcessId => ProcessArgs.ProcessId;
         public bool? ShouldDeleteResultExportFile { get; set; }
+        public string QuestionnaireName { get; set; }
     }
 }
