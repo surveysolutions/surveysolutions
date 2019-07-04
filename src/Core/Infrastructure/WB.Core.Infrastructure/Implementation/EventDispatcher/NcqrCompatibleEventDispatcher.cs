@@ -99,49 +99,61 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
                     {
                         if (publishableEvent?.Payload == null)
                         {
+                            continue;
                         }
-                        else
+
+                        bool isIgnoredAggregate =
+                            this.eventBusSettings.IsIgnoredAggregate(publishableEvent.EventSourceId);
+
+                        var eventType = publishableEvent.Payload.GetType();
+                        var eventHandlerMethod = denormalizerRegistry.HandlerMethod(handler, eventType);
+
+                        if (isIgnoredAggregate && !eventHandlerMethod.ReceivesIgnoredEvents)
                         {
-                            bool isIgnoredAggregate =
-                                this.eventBusSettings.IsIgnoredAggregate(publishableEvent.EventSourceId);
+                            continue;
+                        }
 
-                            var eventType = publishableEvent.Payload.GetType();
-                            var eventHandlerMethod = denormalizerRegistry.HandlerMethod(handler, eventType);
+                        var publishedEventClosedType = typeof(PublishedEvent<>).MakeGenericType(eventType);
+                        var publishedEvent = Activator.CreateInstance(publishedEventClosedType, publishableEvent);
 
-                            if (!isIgnoredAggregate || eventHandlerMethod.ReceivesIgnoredEvents)
+                        List<Exception> occurredExceptions = null;
+                        try
+                        {
+                            var denormalizerInstance = this.serviceLocator.GetInstance(handler);
+                            eventHandlerMethod.Handle.Invoke(denormalizerInstance, new[] {publishedEvent});
+                        }
+                        catch (Exception exception)
+                        {
+                            var shouldIgnoreException =
+                                this.eventBusSettings.EventHandlerTypesWithIgnoredExceptions.Contains(handler);
+
+                            var eventHandlerException = new EventHandlerException(eventHandlerType: handler,
+                                eventType: eventType,
+                                isCritical: !shouldIgnoreException,
+                                innerException: exception);
+
+                            if (shouldIgnoreException)
                             {
-                                var publishedEventClosedType = typeof(PublishedEvent<>).MakeGenericType(eventType);
-                                var publishedEvent = Activator.CreateInstance(publishedEventClosedType, publishableEvent);
-
-                                List<Exception> occurredExceptions = new List<Exception>();
-                                try
-                                {
-                                    var denormalizerInstance = this.serviceLocator.GetInstance(handler);
-                                    eventHandlerMethod.Handle.Invoke(denormalizerInstance, new[] { publishedEvent });
-                                }
-                                catch (Exception exception)
-                                {
-                                    var shouldIgnoreException = this.eventBusSettings.EventHandlerTypesWithIgnoredExceptions.Contains(handler);
-
-                                    var eventHandlerException = new EventHandlerException(eventHandlerType: handler,
-                                        eventType: eventType, 
-                                        isCritical: !shouldIgnoreException,
-                                        innerException: exception);
-
-                                    if (shouldIgnoreException)
-                                    {
-                                        this.logger.Error($"Failed to handle {eventHandlerException.EventType.Name} in {eventHandlerException.EventHandlerType} for event '{publishableEvent.EventIdentifier}' by event source '{publishableEvent.EventSourceId}' with sequence '{publishableEvent.EventSequence}'.", eventHandlerException);
-                                    }
-                                    else
-                                    {
-                                        occurredExceptions.Add(eventHandlerException);
-                                    }
-                                }
-                                if (occurredExceptions.Count > 0)
-                                {
-                                    throw new AggregateException($"{occurredExceptions.Count} handler(s) failed to handle published event '{publishableEvent.EventIdentifier}' by event source '{publishableEvent.EventSourceId}' with sequence '{publishableEvent.EventSequence}'.", occurredExceptions);
-                                }
+                                this.logger.Error(
+                                    $"Failed to handle {eventHandlerException.EventType.Name} in {eventHandlerException.EventHandlerType} for event '{publishableEvent.EventIdentifier}' by event source '{publishableEvent.EventSourceId}' with sequence '{publishableEvent.EventSequence}'.",
+                                    eventHandlerException);
                             }
+                            else
+                            {
+                                if (occurredExceptions == null)
+                                {
+                                    occurredExceptions = new List<Exception>();
+                                }
+
+                                occurredExceptions.Add(eventHandlerException);
+                            }
+                        }
+
+                        if (occurredExceptions?.Count > 0)
+                        {
+                            throw new AggregateException(
+                                $"{occurredExceptions.Count} handler(s) failed to handle published event '{publishableEvent.EventIdentifier}' by event source '{publishableEvent.EventSourceId}' with sequence '{publishableEvent.EventSequence}'.",
+                                occurredExceptions);
                         }
                     }
                     catch (Exception exception)
