@@ -77,7 +77,7 @@
             },
             optionsSource(filter) {
                 const self = this;
-                const optionsPromise = Vue.$api.call(api => api.getTopFilteredOptionsForQuestion(this.$me.id, filter, 20 + self.$me.answer.length))
+                const optionsPromise = Vue.$api.call(api => api.getTopFilteredOptionsForQuestion(this.$me.id, filter, 20, self.$me.answer))
                 return optionsPromise
                     .then(options => {
                         return loFilter(options, (o) => {
