@@ -45,13 +45,14 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
 
         public async Task UploadFileAsync(string folder, string fileName, Stream fileStream, long contentLength, CancellationToken cancellationToken = default)
         {
+            var item = graphServiceClient.Drive.Root.ItemWithPath($"{folder}/{fileName}");
+            
             if (contentLength > MaxAllowedFileSizeByMicrosoftGraphApi)
             {
                 logger.LogTrace("Uploading {fileName} to {folder}. Large file of size {Length} in chunks",
                     fileName, folder, contentLength);
                 const int maxSizeChunk = 320 * 4 * 1024;
-
-                var item = graphServiceClient.Drive.Root.ItemWithPath($"{folder}/{fileName}");
+                
                 var session = await item.CreateUploadSession().Request().PostAsync(cancellationToken);
 
                 var temp = Path.GetTempFileName();
@@ -66,13 +67,12 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
                 finally
                 {
                     fs.Close();
-                    System.IO.File.Delete(temp);
+                    File.Delete(temp);
                 }
             }
             else
             {
                 logger.LogTrace("Uploading {fileName} to {folder}. Small file of size {Length}", fileName, folder, contentLength);
-                var item = graphServiceClient.Drive.Root.ItemWithPath($"{folder}/{fileName}");
                 await item.Content.Request().PutAsync<DriveItem>(fileStream);
             }
         }

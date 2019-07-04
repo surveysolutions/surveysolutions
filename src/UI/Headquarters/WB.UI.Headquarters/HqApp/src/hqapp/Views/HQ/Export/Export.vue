@@ -225,23 +225,6 @@ export default {
       updateExportCards: { time: 5000, autostart: true, repeat: true }
     },
 
-    mounted() {
-      if(window.location.hash != '') {
-        const state = queryString.parse(window.location.hash);
-
-        // restoring empty hash
-        window.location.hash = ''
-        if(window.location.href.endsWith("#")){
-          window.history.replaceState(null, window.title, window.location.href.substring(0, window.location.href.length - 1))
-        }
-
-        try {
-          this.restorePageState(state)
-        } catch {
-        }
-      }
-    },
-
     created() {
         var self = this;
         self.$store.dispatch("showProgress");
@@ -429,10 +412,9 @@ export default {
         };
 
         let storageSettings = this.externalStoragesSettings[this.dataDestination];
+
         const jsonState = JSON.stringify(state);
 
-        window.location.hash = queryString.stringify(this.getPageState())
-        
         var request = {
           response_type: this.externalStoragesSettings.responseType,
           redirect_uri: encodeURIComponent(this.externalStoragesSettings.redirectUri),
@@ -475,17 +457,6 @@ export default {
           this.dataType = state.t;
           this.dataFormat = state.f;
           this.dataDestination = state.d;
-      },
-
-      getPageState() {
-          return {
-              i: this.questionnaireId == null ? null : this.questionnaireId.key,
-              v: this.questionnaireVersion == null ? null : this.questionnaireVersion.key,
-              s: this.status == null ? null : this.status.key,
-              t: this.dataType,
-              f: this.dataFormat,
-              d: this.dataDestination
-          }
       },
 
       statusSelected(newValue) {
