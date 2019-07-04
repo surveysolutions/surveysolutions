@@ -10,10 +10,11 @@ namespace WB.Enumerator.Native.Questionnaire.Impl
 {
     public class QuestionnaireQuestionOptionsRepository : IQuestionOptionsRepository
     {
-        public IEnumerable<CategoricalOption> GetOptionsForQuestion(IQuestionnaire questionnaire, 
-            Guid questionId, int? parentQuestionValue, string searchFor, Translation translation)
+        public IEnumerable<CategoricalOption> GetOptionsForQuestion(IQuestionnaire questionnaire,
+            Guid questionId, int? parentQuestionValue, string searchFor, Translation translation,
+            int[] excludedOptionIds = null)
         {
-            return questionnaire.GetOptionsForQuestionFromStructure(questionId, parentQuestionValue, searchFor);
+            return questionnaire.GetOptionsForQuestionFromStructure(questionId, parentQuestionValue, searchFor, excludedOptionIds);
         }
 
         public CategoricalOption GetOptionForQuestionByOptionText(IQuestionnaire questionnaire, Guid questionId, string optionText, int? parentQuestionValue, Translation translation)

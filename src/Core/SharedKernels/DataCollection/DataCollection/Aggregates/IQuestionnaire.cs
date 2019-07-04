@@ -76,7 +76,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         CategoricalOption GetOptionForQuestionByOptionValue(Guid questionId, decimal optionValue);
 
-        IEnumerable<CategoricalOption> GetOptionsForQuestionFromStructure(Guid questionId, int? parentQuestionValue, string filter);
+        IEnumerable<CategoricalOption> GetOptionsForQuestionFromStructure(Guid questionId, int? parentQuestionValue, string filter, int[] excludedOptionIds = null);
 
         CategoricalOption GetOptionForQuestionByOptionTextFromStructure(Guid questionId, string optionText, int? parentQuestionValue);
 

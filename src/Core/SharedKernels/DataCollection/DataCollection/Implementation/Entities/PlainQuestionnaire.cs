@@ -388,11 +388,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             if (question.CascadeFromQuestionId.HasValue || ((question as ICategoricalQuestion)?.IsFilteredCombobox ?? false))
             {
                 return questionOptionsRepository.GetOptionsForQuestion(this,
-                    questionId, parentQuestionValue, searchFor, this.translation);
+                    questionId, parentQuestionValue, searchFor, this.translation, excludedOptionIds);
             }
 
             //regular options
-            return AnswerUtils.GetCategoricalOptionsFromQuestion(question, parentQuestionValue, searchFor);
+            return AnswerUtils.GetCategoricalOptionsFromQuestion(question, parentQuestionValue, searchFor, excludedOptionIds);
         }
 
         public CategoricalOption GetOptionForQuestionByOptionText(Guid questionId, string optionText, int? parentQuestionValue)
@@ -477,12 +477,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return GetAnswerOption(questionId, optionValue);
         }
 
-        public IEnumerable<CategoricalOption> GetOptionsForQuestionFromStructure(Guid questionId, int? parentQuestionValue, string filter)
+        public IEnumerable<CategoricalOption> GetOptionsForQuestionFromStructure(Guid questionId, int? parentQuestionValue, string filter, int[] excludedOptionIds = null)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
             CheckShouldQestionProvideOptions(question, questionId);
 
-            return AnswerUtils.GetCategoricalOptionsFromQuestion(question, parentQuestionValue, filter);
+            return AnswerUtils.GetCategoricalOptionsFromQuestion(question, parentQuestionValue, filter, excludedOptionIds);
         }
 
         public CategoricalOption GetOptionForQuestionByOptionTextFromStructure(Guid questionId, string optionText, int? parentQuestionValue)

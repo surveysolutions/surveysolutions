@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
             var optionsFromRepository = new List<CategoricalOption>();
             var questionOptionsRepository = new Mock<IQuestionOptionsRepository>();
             questionOptionsRepository.Setup(x =>
-                    x.GetOptionsForQuestion(Moq.It.IsAny<IQuestionnaire>(), questionId, null, String.Empty, null))
+                    x.GetOptionsForQuestion(Moq.It.IsAny<IQuestionnaire>(), questionId, null, String.Empty, null, null))
                 .Returns(optionsFromRepository);
 
 
