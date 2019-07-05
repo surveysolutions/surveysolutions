@@ -3,8 +3,12 @@
         <div class="top-row">
             <div class="format-data" :class="format">
                 <div class="gray-text-row"><b>#{{processId}}</b> {{$t('DataExport.DataExport_QueuedOn', { date: beginDate }) }}</div>
-                <div class="h3 mb-05">{{ $t('DataExport.DataExport_QuestionnaireWithVersion', { title: questionnaireTitle,  version: questionnaireIdentity.version}) }}</div>
-                <p class="mb-0 font-regular"><u class="font-bold">{{format}}</u> format. <span v-if="format!='DDI'" class="font-bold">{{ $t('DataExport.DataExport_InterviewsStatus', { status: $t('DataExport.'+interviewStatus) , interpolation: {escapeValue: false} }) }}</span></p>
+                <div class="h3 mb-05">{{ $t('DataExport.DataExport_QuestionnaireWithVersion', 
+                        { title: questionnaireTitle,  version: questionnaireIdentity.version}) }}</div>
+                <p class="mb-0 font-regular"><u class="font-bold">{{format}}</u> format.<span 
+                    v-if="format!='DDI'" class="font-bold">{{ $t('DataExport.DataExport_InterviewsStatus', {
+                        status: $t('DataExport.'+ interviewStatus) , 
+                        interpolation: {escapeValue: false} }) }}</span></p>
             </div>
         </div>
         <div class="bottom-row" :class="{'is-failed': isFailed, 'is-successful': isSuccessfull }">
@@ -14,7 +18,8 @@
                     <span class="success-text status">{{processStatus}}</span>
                     <div class="cancelable-progress">
                         <div class="progress" v-if="progress > 0">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" v-bind:style="{ width: progress + '%' }">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" 
+                                    v-bind:style="{ width: progress + '%' }">
                                 <span class="sr-only">{{progress}}%</span>
                             </div>
                         </div>
