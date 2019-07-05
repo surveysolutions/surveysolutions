@@ -387,9 +387,6 @@
   <data name="DataExport_InterviewsStatus" xml:space="preserve">
     <value>Interviews in {{status}}.</value>
   </data>
-  <data name="Completed">
-      <value>Completed status</value>
-  </data>
   <data name="InterviewerAssigned" xml:space="preserve">
     <value>Interviewer assigned  status</value>
   </data>
