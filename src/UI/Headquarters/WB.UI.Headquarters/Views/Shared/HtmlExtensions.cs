@@ -147,7 +147,7 @@ namespace ASP
 
             var json = model != null ? JsonConvert.SerializeObject(model, asJsonValueSettings) : "null";
             
-            return new HtmlString($@"<script>{script};window.CONFIG.model=JSON.parse('{json}')</script>");
+            return new HtmlString($@"<script>{script};window.CONFIG.model={json}</script>");
         }
 
         public static string UrlScheme(this HttpRequestBase request)
