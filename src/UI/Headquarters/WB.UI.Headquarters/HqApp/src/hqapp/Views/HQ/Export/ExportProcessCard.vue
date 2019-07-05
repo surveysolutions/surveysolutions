@@ -6,14 +6,17 @@
                 <div class="h3 mb-05">{{ $t('DataExport.DataExport_QuestionnaireWithVersion', 
                         { title: questionnaireTitle,  version: questionnaireIdentity.version}) }}</div>
                 <p class="mb-0 font-regular"><u class="font-bold">{{format}}</u> format.<span 
-                    v-if="format!='DDI'" class="font-bold">{{ $t('DataExport.DataExport_InterviewsStatus', {
+                    v-if="format!='DDI' && interviewStatus != null" class="font-bold">{{ $t('DataExport.DataExport_InterviewsStatus', {
                         status: $t('DataExport.'+ interviewStatus) , 
                         interpolation: {escapeValue: false} }) }}</span></p>
             </div>
         </div>
         <div class="bottom-row" :class="{'is-failed': isFailed, 'is-successful': isSuccessfull }">
             <div class="export-destination" :class="fileDestination">
-                <p>{{ $t('DataExport.DataExport_Destination', { dest: $t(`DataExport.DataExport_Destination_${fileDestination}`)}) }}</p>
+                <p><span v-if="fileDestination != null">{{ 
+                    $t('DataExport.DataExport_Destination', { 
+                        dest: $t(`DataExport.DataExport_Destination_${fileDestination}`)}) 
+                    }}</span></p>
                 <div class="d-flex ai-center" v-if="isRunning">
                     <span class="success-text status">{{processStatus}}</span>
                     <div class="cancelable-progress">
