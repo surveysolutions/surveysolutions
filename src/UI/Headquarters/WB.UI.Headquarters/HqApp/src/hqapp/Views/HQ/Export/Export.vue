@@ -217,7 +217,8 @@ export default {
             hasInterviews: false,
             hasBinaryData: false,
             externalStoragesSettings: (this.$config.model.externalStoragesSettings || {}).oAuth2 || {},
-            pageState: {}
+            pageState: {},
+            updateInProgress: false
         };
     },
 
@@ -250,6 +251,7 @@ export default {
                 self.$store.dispatch("hideProgress");
             });
     },
+
     computed: {
         isDropboxSetUp()
         {
@@ -301,9 +303,13 @@ export default {
 
       updateExportCards(){
         var self = this;
+
+        if(this.updateInProgress) return;
+
+        this.updateInProgress = true;
         this.$http.get(this.$config.model.api.statusUrl)
             .then((response) => {
-
+              self.updateInProgress = false;
               self.exportServiceIsUnavailable = response.data == null;
 
               let exportIds = response.data || [];
@@ -340,6 +346,7 @@ export default {
                 Vue.config.errorHandler(error, self);
             })
             .then(function () {
+                self.updateInProgress = false;
                 self.$store.dispatch("hideProgress");
             });
       },
