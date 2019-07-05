@@ -157,6 +157,16 @@ namespace ASP
                 return "https";
             }
 
+            return request?.Url?.Scheme ?? "http";
+        }
+
+        public static string UrlScheme(this HttpRequest request)
+        {
+            if (CoreSettings.IsHttpsRequired)
+            {
+                return "https";
+            }
+
             return request.Url.Scheme;
         }
     }
