@@ -398,6 +398,9 @@
   <data name="DataExport_InterviewsStatus" xml:space="preserve">
     <value>Интервью в {{status}}.</value>
   </data>
+  <data name="Completed">
+      <value>статусе Завершено</value>
+  </data>
   <data name="InterviewerAssigned" xml:space="preserve">
     <value>статусе назначено на интервьюера</value>
   </data>
