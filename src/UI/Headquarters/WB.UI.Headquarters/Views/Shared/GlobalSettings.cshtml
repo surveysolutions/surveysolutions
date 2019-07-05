@@ -1,7 +1,5 @@
 ﻿@using WB.Core.BoundedContexts.Headquarters
-@using WB.Core.GenericSubdomains.Portable.ServiceLocation
 @using WB.UI.Shared.Web.Filters
-@using WB.UI.Headquarters.Code
 
 @functions{
     public string TokenHeaderValue()
@@ -14,54 +12,68 @@
 <script type="text/javascript">
     var input = window.input || (function () {
         'use strict';
-        return {
-            settings: {
-                messages: {
-                    forbiddenMessage: "@Html.ToSafeJavascriptMessage(Pages.GlobalSettings_ForbiddenMessage)",
-                    unhandledExceptionMessage: "@Html.ToSafeJavascriptMessage(Pages.GlobalSettings_UnhandledExceptionMessage)",
-                    notifyDialogTitle: "@Html.ToSafeJavascriptMessage(Pages.GlobalSettings_NotifyDialogTitle)",
-                    notifyDialogText: "@Html.ToSafeJavascriptMessage(Pages.GlobalSettings_NotifyDialogText)",
-                    notifyNoMarkersTitle: "@Html.ToSafeJavascriptMessage(Pages.GlobalSettings_NotifyNoMarkersDialogTitle)",
-                    notifyNoMarkersText: "@Html.ToSafeJavascriptMessage(Pages.GlobalSettings_NotifyNoMarkersDialogText)",
-                    deleteQuestionnaireConfirmationMessage: "@Html.ToSafeJavascriptMessage(Pages.GlobalSettings_DeleteQuestionnareConfirmation)",
-                    notifyMarkersLimitReachedTitle: "@Html.ToSafeJavascriptMessage(Pages.GlobalSettings_NotifyMarkersLimitReachedTitle)",
-                    notifyNoMarkersLimitReachedText: "@Html.ToSafeJavascriptMessage(Pages.GlobalSettings_NotifyMarkersLimitReachedText)",
-                    deleteMapConfirmationMessage: "@Html.ToSafeJavascriptMessage(Pages.GlobalSettings_DeleteMapConfirmation)",
-                    confirmationNeededTitle: "@Html.ToSafeJavascriptMessage(Pages.ConfirmationNeededTitle)",
-                    enablingAuditConfirmationMessage: "@Html.ToSafeJavascriptMessage(Pages.GlobalSettings_TurningAudioAuditOn)"
-                },
-                acsrf: {
-                    tokenName : '@TokenValidationAuthorizationFilter.Apikey',
-                    token : '@TokenHeaderValue()'
-                },
-                config: {
-                    syncQueue: {
-                        enabled: @(DependencyResolver.Current.GetService<SyncSettings>().UseBackgroundJobForProcessingPackages ? "true" : "false"),
-                        lengthUrl: '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "ControlPanelApi", action = "GetIncomingPackagesQueueLength"})'
+
+        @{ var model = new
+           {
+               settings = new
+               {
+                   messages = new
+                   {
+                       forbiddenMessage = Pages.GlobalSettings_ForbiddenMessage,
+                       unhandledExceptionMessage = Pages.GlobalSettings_UnhandledExceptionMessage,
+                       notifyDialogTitle = Pages.GlobalSettings_NotifyDialogTitle,
+                       notifyDialogText = Pages.GlobalSettings_NotifyDialogText,
+                       notifyNoMarkersTitle = Pages.GlobalSettings_NotifyNoMarkersDialogTitle,
+                       notifyNoMarkersText = Pages.GlobalSettings_NotifyNoMarkersDialogText,
+                       deleteQuestionnaireConfirmationMessage = Pages.GlobalSettings_DeleteQuestionnareConfirmation,
+                       notifyMarkersLimitReachedTitle = Pages.GlobalSettings_NotifyMarkersLimitReachedTitle,
+                       notifyNoMarkersLimitReachedText = Pages.GlobalSettings_NotifyMarkersLimitReachedText,
+                       deleteMapConfirmationMessage = Pages.GlobalSettings_DeleteMapConfirmation,
+                       confirmationNeededTitle = Pages.ConfirmationNeededTitle,
+                       enablingAuditConfirmationMessage = Pages.GlobalSettings_TurningAudioAuditOn
+                   },
+                   acsrf = new
+                   {
+                       tokenName = TokenValidationAuthorizationFilter.Apikey,
+                       token = TokenHeaderValue()
+                   },
+                   clientDateTimeFormat = Extensions.ClientDateTimeFormat,
+                   config = new {
+                    syncQueue = new {
+                        enabled = DependencyResolver.Current.GetService<SyncSettings>().UseBackgroundJobForProcessingPackages 
+                            ? "true" : "false",
+                        lengthUrl = Url.RouteUrl("DefaultApiWithAction", new
+                        {
+                            httproute = "", controller = "ControlPanelApi", action = "GetIncomingPackagesQueueLength"
+                        })
                     },
-                    basePath: '@Url.Content("~/")',
-                    dataTableTranslationsUrl: '@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "DataTableTranslations" })'
+                    basePath = Url.Content("~/"),
+                    dataTableTranslationsUrl = Url.RouteUrl("DefaultApi", new
+                    {
+                        httproute = "", controller = "DataTableTranslations"
+                    })
                 },
-                clientDateTimeFormat: '@Extensions.ClientDateTimeFormat'
-            }
-        };
+               }
+           };
+        }
+
+        return JSON.parse('@(model.AsJsonValue())');
     }(document));
     window.input = input;
 
-    window.CONFIG = {
-        verboseMode: false,
-        googleApiKey: '@(WB.Core.SharedKernels.SurveyManagement.Web.Code.AppSettings.Instance.GoogleMapApiKey)',
-        googleMapsApiBaseUrl:
-            '@WB.Core.SharedKernels.SurveyManagement.Web.Code.AppSettings.Instance.GoogleMapApiBaseUrl',
-        googleMapsBaseUrl: '@WB.Core.SharedKernels.SurveyManagement.Web.Code.AppSettings.Instance.GoogleMapBaseUrl',
-        basePath: '@Url.Content(@"~/")',
-        imageGetBase: '@Url.Content("~/api/WebInterviewResources")',
-        audioGet: '@Url.Content("~/Resource/AudioRecord")',
-        appVersion: '@(DependencyResolver.Current.GetService<WB.Core.Infrastructure.Versions.IProductVersion>())',
-        dateFormat: '@WB.Core.BoundedContexts.Headquarters.Extensions.ClientDateTimeFormat',
-        signalrPath: '@Url.Content("~/signalr/hubs")',
-        supportedTransports: ["webSockets", "longPolling"]
-    }
+    window.CONFIG = JSON.parse('@( new {
+        verboseMode = false,
+        googleApiKey = WB.Core.SharedKernels.SurveyManagement.Web.Code.AppSettings.Instance.GoogleMapApiKey,
+        googleMapsApiBaseUrl = WB.Core.SharedKernels.SurveyManagement.Web.Code.AppSettings.Instance.GoogleMapApiBaseUrl,
+        googleMapsBaseUrl = WB.Core.SharedKernels.SurveyManagement.Web.Code.AppSettings.Instance.GoogleMapBaseUrl,
+        basePath = Url.Content(@"~/"),
+        imageGetBase = Url.Content("~/api/WebInterviewResources"),
+        audioGet = Url.Content("~/Resource/AudioRecord"),
+        appVersion = DependencyResolver.Current.GetService<WB.Core.Infrastructure.Versions.IProductVersion>().ToString(),
+        dateFormat = Extensions.ClientDateTimeFormat,
+        signalrPath = Url.Content("~/signalr/hubs"),
+        supportedTransports = new [] { "webSockets", "longPolling"}
+    }.AsJsonValue())');
 
     if (typeof moment !== 'undefined') {
         moment.locale('@UICulture');
