@@ -358,6 +358,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             Func<IQueryable<HqUser>, IQueryable<ResponsiblesViewItem>> query = users =>
             {
                 bool? isArchivedShowed = showArchived ? (bool?)null : false;
+                var searchByToLower = searchBy?.ToLower();
 
                 var responsible = ApplyFilter(users, searchBy, isArchivedShowed, UserRoles.Supervisor, UserRoles.Interviewer)
                     .Where(user => showLocked || !user.IsLockedByHeadquaters && !user.IsLockedBySupervisor);
@@ -366,12 +367,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 {
                     InterviewerId = x.Profile.SupervisorId.HasValue ? x.Id : (Guid?)null,
                     SupervisorId = x.Profile.SupervisorId ?? x.Id,
-                    UserName = x.UserName
+                    UserName = x.UserName,
+                    Rank = x.UserName.ToLower().StartsWith(searchByToLower) ? 1 : 0
                 });
             };
 
+            var orderByRankAndUserName = nameof(ResponsiblesViewItem.Rank) + " Desc," + nameof(ResponsiblesViewItem.UserName);
             var filteredUsers = query
-                .PagedAndOrderedQuery(nameof(HqUser.UserName), 1, pageSize)
+                .PagedAndOrderedQuery(orderByRankAndUserName, 1, pageSize)
                 .Invoke(this.userRepository.Users)
                 .ToList();
 
