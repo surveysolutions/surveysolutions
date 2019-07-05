@@ -136,6 +136,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                             await binaryDataAction(new BinaryData
                             {
                                 InterviewId = audioAuditInfo.InterviewId,
+                                InterviewKey = interviewsKeyMap[audioAuditInfo.InterviewId],
                                 FileName = fileName,
                                 Content = content,
                                 ContentLength = audioContent.Headers.ContentLength ?? 0,
