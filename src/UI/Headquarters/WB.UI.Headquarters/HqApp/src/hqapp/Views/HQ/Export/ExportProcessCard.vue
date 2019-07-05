@@ -3,7 +3,7 @@
         <div class="top-row">
             <div class="format-data" :class="format">
                 <div class="gray-text-row"><b>#{{processId}}</b> {{$t('DataExport.DataExport_QueuedOn', { date: beginDate }) }}</div>
-                <div class="h3 mb-05">{{ $t('DataExport.DataExport_QuestionnaireWithVersion', 
+                <div class="h3 mb-05" v-if="questionnaireIdentity != null">{{ $t('DataExport.DataExport_QuestionnaireWithVersion', 
                         { title: questionnaireTitle,  version: questionnaireIdentity.version}) }}</div>
                 <p class="mb-0 font-regular"><u class="font-bold">{{format}}</u> format.<span 
                     v-if="format!='DDI' && interviewStatus != null" class="font-bold">{{ $t('DataExport.DataExport_InterviewsStatus', {
