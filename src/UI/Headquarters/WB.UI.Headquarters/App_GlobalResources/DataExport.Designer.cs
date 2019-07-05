@@ -124,7 +124,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Completed status.
+        ///   Looks up a localized string similar to Completed.
         /// </summary>
         internal static string Completed {
             get {
