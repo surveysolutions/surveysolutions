@@ -184,6 +184,7 @@
             :question="isAudioRecordingEnabled"
             noValidation="true"
             noComments="true"
+            :isDisabled="webMode.answer"
             questionCssClassName="multiselect-question"
           >
             <h5>{{ this.$t("Assignments.IsAudioRecordingEnabled") }} <a target="_blank" href="https://support.mysurvey.solutions/headquarters/audio-audit/">(?)</a></h5>
@@ -400,6 +401,8 @@ export default {
                 this.emailQuestion.answer = null;
                 this.passwordQuestion.validity.isValid = true;
                 this.emailQuestion.validity.isValid = true;
+            } else if (this.webMode.answer == true) {
+              this.isAudioRecordingEnabled.answer = null;
             }
         }
     },
