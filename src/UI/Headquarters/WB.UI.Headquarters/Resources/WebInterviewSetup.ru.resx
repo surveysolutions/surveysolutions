@@ -235,10 +235,10 @@
   <data name="Invitations_SendAction" xml:space="preserve">
     <value>Отправить {{count}} приглашений</value>
   </data>
-  <data name="WebInterviewUserMessages_CompleteButton" xml:space="preserve">
+  <data name="WebInterviewUserMessages_CompleteButton_Descr" xml:space="preserve">
     <value>Завершить</value>
   </data>
-  <data name="WebInterviewUserMessages_CompleteNoteToSupervisor" xml:space="preserve">
+  <data name="WebInterviewUserMessages_CompleteNoteToSupervisor_Descr" xml:space="preserve">
     <value>Комментарий для супервизора</value>
   </data>
 </root>
