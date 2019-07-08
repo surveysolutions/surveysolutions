@@ -604,9 +604,6 @@
   <data name="WB0260_GroupTitleIsTooLong" xml:space="preserve">
     <value>العنوان طويل جدا. يجب ألا يزيد عدد الأحرف عن {0}.</value>
   </data>
-  <data name="WB0261_RosterStructureTooExplosive" xml:space="preserve">
-    <value>يحتوي الاستبيان على لوائح بعدد إجمالي من الحالات التي تتجاوز حدود النظام.</value>
-  </data>
   <data name="WB0263_FirstChapterHasEnablingCondition" xml:space="preserve">
     <value>القسم الأول لا يمكن أن يكون شرط التمكين.</value>
   </data>
