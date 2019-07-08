@@ -160,6 +160,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             return new WebInterviewIndexPageModel
             {
+                AskForEmail = Request.Cookies.Get(AskForEmail)?.Value ?? "false",
                 CustomMessages = webInterviewConfig.CustomMessages
             };
         }
