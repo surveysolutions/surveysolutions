@@ -373,7 +373,6 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             LogResume(interview);
-            ViewBag.AskForEmail = Request.Cookies.Get(AskForEmail)?.Value ?? "false";
 
             return View("Index", GetInterviewModel(webInterviewConfig));
         }
