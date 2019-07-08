@@ -353,4 +353,11 @@ We would appreciate if you try addressing all issues marked in your response and
  
 Thank you for your cooperation!</value>
   </data>
+  <data name="NoteForSupervisor" xml:space="preserve">
+    <value>Note for supervisor</value>
+  </data>
+  <data name="Complete" xml:space="preserve">
+    <value>Complete</value>
+    <comment>Complete interview button text</comment>
+  </data>
 </root>
