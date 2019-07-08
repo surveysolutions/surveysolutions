@@ -26,7 +26,7 @@ namespace WB.Services.Export.Models
         public DataExportProcessStatus Status { get; set; } = new DataExportProcessStatus();
         public string ArchivePassword { get; set; }
 
-        public string NaturalId => $"{this.StorageTypeString}${ExportSettings.NaturalId}";
+        public string NaturalId => $"{this.StorageTypeString}${ExportSettings?.NaturalId ?? "noSettings"}";
 
         public string AccessToken { get; set; }
         public ExternalStorageType? StorageType { get; set; }

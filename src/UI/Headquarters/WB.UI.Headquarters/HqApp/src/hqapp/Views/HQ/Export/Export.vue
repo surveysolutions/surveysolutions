@@ -26,7 +26,7 @@
                 <div class="d-flex mb-20 filter-wrapper">
                   <div class="filter-column">
                     <h5>{{$t('DataExport.SurveyQuestionnaire')}} <span class="text-danger">*</span></h5>
-                    <div class="form-group">
+                    <div class="form-group" :class="{ 'has-error': errors.has('questionnaireId') }">
                       <Typeahead fuzzy
                         control-id="questionnaireId"
                         :value="questionnaireId"
@@ -40,15 +40,14 @@
                       />
                       <span class="help-block">{{ errors.first('questionnaireId') }}</span>
                     </div>
-                    <div class="form-group">
-                      <Typeahead
+                    <div class="form-group" :class="{ 'has-error': errors.has('questionnaireVersion') }">
+                      <Typeahead noClear
                         control-id="questionnaireVersion"
                         ref="questionnaireVersionControl"
                         data-vv-name="questionnaireVersion"
-                        data-vv-as="questionnaireVersion"
+                        data-vv-as="questionnaire version"
                         :selectedKey="pageState.version"
                         v-validate="'required'"
-                        :placeholder="$t('Common.AllVersions')"
                         :value="questionnaireVersion"
                         :fetch-url="questionnaireVersionFetchUrl"
                         v-on:selected="questionnaireVersionSelected"
@@ -175,7 +174,7 @@
           <div v-else>
             <h3 class="mb-20">{{$t('DataExport.GeneratedDataSets')}}</h3>
             <p>{{$t('DataExport.GeneratedDataSets_Desc')}}</p>
-            <ExportProcessCard  v-for="result in exportResults" v-bind:key="result.id" :data="result"></ExportProcessCard>
+            <ExportProcessCard  v-for="result in exportResults" v-bind:key="result.id" :data="result" @deleted="removeProcessCard"></ExportProcessCard>
           </div>
         </div>
       </div>
@@ -183,7 +182,8 @@
     <div class="row" v-if="!exportServiceIsUnavailable">
       <div class="col-lg-5">
           <h3 class="mb-20">{{$t('DataExport.DataExportApi')}}</h3>
-          <p>{{$t('DataExport.DataExportApiDesc')}} <a href="https://support.mysurvey.solutions/headquarters/api/api-for-data-export/" target="_blank" class="underlined-link">{{$t('DataExport.DataExportApiInfoPage')}}</a>
+          <p>{{$t('DataExport.DataExportApiDesc')}} <a href="https://support.mysurvey.solutions/headquarters/api/api-for-data-export/" 
+            target="_blank" class="underlined-link">{{$t('DataExport.DataExportApiInfoPage')}}</a>
           </p>
       </div>
     </div>
@@ -197,21 +197,8 @@ import ExportProcessCard from "./ExportProcessCard"
 import {mixin as VueTimers} from 'vue-timers'
 import queryString from 'query-string';
 
-const dataFormatNum = {  
-  Tabular: 1,
-  Stata: 2,
-  Spss: 3,
-  Binary: 4,
-  Ddi: 5,
-  Paradata: 6
-};
-
-const ExternalStorageType =
-{
-    dropbox: 1,
-    oneDrive: 2,
-    googleDrive: 3
-};
+const dataFormatNum = { Tabular: 1, Stata: 2, Spss: 3, Binary: 4, Ddi: 5, Paradata: 6 };
+const ExternalStorageType = { dropbox: 1, oneDrive: 2, googleDrive: 3 };
 
 export default {
     mixins: [VueTimers],
@@ -230,28 +217,13 @@ export default {
             hasInterviews: false,
             hasBinaryData: false,
             externalStoragesSettings: (this.$config.model.externalStoragesSettings || {}).oAuth2 || {},
-            pageState: {}
+            pageState: {},
+            updateInProgress: false
         };
     },
+
     timers: {
       updateExportCards: { time: 5000, autostart: true, repeat: true }
-    },
-
-    mounted() {
-      if(window.location.hash != '') {
-        const state = queryString.parse(window.location.hash);
-
-        // restoring empty hash
-        window.location.hash = ''
-        if(window.location.href.endsWith("#")){
-          window.history.replaceState(null, window.title, window.location.href.substring(0, window.location.href.length - 1))
-        }
-
-        try {
-          this.restorePageState(state)
-        } catch {
-        }
-      }
     },
 
     created() {
@@ -279,6 +251,7 @@ export default {
                 self.$store.dispatch("hideProgress");
             });
     },
+
     computed: {
         isDropboxSetUp()
         {
@@ -296,7 +269,7 @@ export default {
           return settings!=null;
         },
         canExportExternally(){
-            return this.$config.model.externalStoragesSettings != null && (this.dataType == 'surveyData' || this.dataType == 'binaryData'); 
+            return this.$config.model.externalStoragesSettings != null; 
         },
         questionnaireFetchUrl() {
             return this.$config.model.api.questionnairesUrl;
@@ -324,11 +297,19 @@ export default {
         this.hasBinaryData = false;
       },
 
+      removeProcessCard(id) {
+        this.exportResults = _.reject(this.exportResults, { id })
+      },
+
       updateExportCards(){
         var self = this;
+
+        if(this.updateInProgress) return;
+
+        this.updateInProgress = true;
         this.$http.get(this.$config.model.api.statusUrl)
             .then((response) => {
-
+              self.updateInProgress = false;
               self.exportServiceIsUnavailable = response.data == null;
 
               let exportIds = response.data || [];
@@ -365,6 +346,7 @@ export default {
                 Vue.config.errorHandler(error, self);
             })
             .then(function () {
+                self.updateInProgress = false;
                 self.$store.dispatch("hideProgress");
             });
       },
@@ -398,6 +380,10 @@ export default {
                     self.exportResults.splice(0, 0,{ 
                       id: jobId
                     });
+                    self.questionnaireId = null;
+                    self.questionnaireVersion = null;
+                    self.status = null;
+                    self.resetDataAvalability();
                 })
                 .catch(function (error) {
                     Vue.config.errorHandler(error, self);
@@ -433,10 +419,9 @@ export default {
         };
 
         let storageSettings = this.externalStoragesSettings[this.dataDestination];
+
         const jsonState = JSON.stringify(state);
 
-        window.location.hash = queryString.stringify(this.getPageState())
-        
         var request = {
           response_type: this.externalStoragesSettings.responseType,
           redirect_uri: encodeURIComponent(this.externalStoragesSettings.redirectUri),
@@ -470,21 +455,15 @@ export default {
       },
 
       restorePageState(state) {
-          this.pageState = state;
-          this.dataType = state.dataType;
-          this.dataFormat = state.dataFormat;
-          this.dataDestination = state.dataDestination;
-      },
+          this.pageState = {
+              id:      state.i,
+              version: state.v,
+              status:  state.s
+          };
 
-      getPageState() {
-          return {
-              id: this.questionnaireId == null ? null : this.questionnaireId.key,
-              version: this.questionnaireVersion == null ? null : this.questionnaireVersion.key,
-              status: this.status == null ? null : this.status.key,
-              dataType: this.dataType,
-              dataFormat: this.dataFormat,
-              dataDestination: this.dataDestination
-          }
+          this.dataType = state.t;
+          this.dataFormat = state.f;
+          this.dataDestination = state.d;
       },
 
       statusSelected(newValue) {
@@ -494,7 +473,7 @@ export default {
           this.questionnaireId = newValue;
           if (!newValue)
           {
-            this.reesetDataAvalability();
+            this.resetDataAvalability();
           }
       },
       questionnaireVersionSelected(newValue) {
@@ -502,13 +481,13 @@ export default {
           if (this.questionnaireVersion)
             this.updateDataAvalability();
           else{
-             this.reesetDataAvalability();
+             this.resetDataAvalability();
           }
       },
-      reesetDataAvalability(){
+      resetDataAvalability(){
         this.hasInterviews = null;
         this.hasBinaryData = null;
-        this.dataType = "ddiData";
+        this.dataType = null;
       },
       updateDataAvalability(){
         this.isUpdatingDataAvailability = true;
