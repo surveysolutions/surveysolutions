@@ -1709,7 +1709,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire contains excessive number of roster instances..
+        ///   Looks up a localized string similar to Questionnaire contains rosters with total number of roster instances {0} exceeding the system limits {1}.
         /// </summary>
         public static string WB0261_RosterStructureTooExplosive {
             get {
