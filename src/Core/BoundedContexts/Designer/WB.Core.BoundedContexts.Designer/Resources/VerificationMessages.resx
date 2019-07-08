@@ -750,4 +750,7 @@
   <data name="WB0287_TableRosterDoesntContainsQuestionWithSubstitutions" xml:space="preserve">
     <value>Questions in a table roster may not contain any substitutions in text.</value>
   </data>
+  <data name="WB0288_ValueAndTitleNumbersIsNotEquals" xml:space="preserve">
+    <value>Label {1} for code {0} is a number different from the value being labeled.</value>
+  </data>
 </root>

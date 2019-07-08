@@ -1959,5 +1959,14 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0287_TableRosterDoesntContainsQuestionWithSubstitutions", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Label {1} for code {0} is a number different from the value being labeled..
+        /// </summary>
+        public static string WB0288_ValueAndTitleNumbersIsNotEquals {
+            get {
+                return ResourceManager.GetString("WB0288_ValueAndTitleNumbersIsNotEquals", resourceCulture);
+            }
+        }
     }
 }
