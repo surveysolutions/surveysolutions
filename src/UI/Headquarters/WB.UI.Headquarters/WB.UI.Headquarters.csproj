@@ -2405,6 +2405,7 @@
     <Compile Include="Models\User\UserBrowseItem.cs" />
     <Compile Include="Models\WebInterview\EmailModel.cs" />
     <Compile Include="Models\WebInterview\StartWebInterview.cs" />
+    <Compile Include="Models\WebInterview\WebInterviewIndexPageModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\InterviewerAuditRecord.Designer.cs">
       <DependentUpon>InterviewerAuditRecord.resx</DependentUpon>
