@@ -188,8 +188,7 @@
     <value>Сообщения обновлены</value>
   </data>
   <data name="UseCaptcha" xml:space="preserve">
-      <value>Использовать CAPTCHA перед стартом интервью</value>
-      <comment>Включить защиту от спама</comment>
+    <value>Использовать CAPTCHA перед стартом интервью</value>
   </data>
   <data name="CustomMessageTooLong" xml:space="preserve">
     <value>Сообщение не должно содержать более чем {0} символов (включая html)</value>
@@ -235,5 +234,11 @@
   </data>
   <data name="Invitations_SendAction" xml:space="preserve">
     <value>Отправить {{count}} приглашений</value>
+  </data>
+  <data name="WebInterviewUserMessages_CompleteButton" xml:space="preserve">
+    <value>Завершить</value>
+  </data>
+  <data name="WebInterviewUserMessages_CompleteNoteToSupervisor" xml:space="preserve">
+    <value>Комментарий для супервизора</value>
   </data>
 </root>
