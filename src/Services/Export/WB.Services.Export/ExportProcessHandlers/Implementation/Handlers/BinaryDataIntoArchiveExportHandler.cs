@@ -27,8 +27,8 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
         
         public async Task ExportDataAsync(ExportState state, CancellationToken cancellationToken)
         { 
-            var tempArchivePath = this.fileSystemAccessor.CombinePath(state.ExportTempFolder, 
-                this.fileSystemAccessor.GetFileName(state.ArchiveFilePath));
+            var tempArchivePath = this.fileSystemAccessor.CombinePath(
+                state.ExportTempFolder, this.fileSystemAccessor.GetFileName(state.ArchiveFilePath));
 
             using (var archiveFile = fileSystemAccessor.OpenOrCreateFile(tempArchivePath, false))
             {
@@ -37,7 +37,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
                     await binaryDataSource.ForEachInterviewMultimediaAsync(state,
                         binaryDataAction =>
                         {
-                            var path = binaryDataAction.InterviewId.FormatGuid();
+                            var path = binaryDataAction.InterviewKey ?? binaryDataAction.InterviewId.FormatGuid();
                             if (binaryDataAction.Type == BinaryDataType.AudioAudit)
                             {
                                 path = this.fileSystemAccessor.CombinePath(path,

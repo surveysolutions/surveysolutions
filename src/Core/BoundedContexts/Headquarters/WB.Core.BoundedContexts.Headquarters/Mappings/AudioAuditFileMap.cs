@@ -16,14 +16,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                 idMap.Column("Id");
             });
 
-            this.Property(x => x.InterviewId);
-            this.Property(x => x.FileName);
-
             this.Property(x => x.Data, dataMap =>
             {
                 dataMap.Lazy(true);
             });
-
+            this.Property(x => x.InterviewId);
+            this.Property(x => x.FileName);
             this.Property(x => x.ContentType);
         }
     }
