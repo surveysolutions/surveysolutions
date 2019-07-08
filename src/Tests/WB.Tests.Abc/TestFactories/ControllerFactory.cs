@@ -29,6 +29,7 @@ using WB.Tests.Abc.Storage;
 using WB.UI.Headquarters.API.DataCollection.Interviewer;
 using WB.UI.Headquarters.Code.CommandTransformation;
 using WB.UI.Headquarters.Controllers;
+using WB.UI.Headquarters.Services;
 using AssignmentsController = WB.UI.Headquarters.API.PublicApi.AssignmentsController;
 
 namespace WB.Tests.Abc.TestFactories
@@ -67,17 +68,15 @@ namespace WB.Tests.Abc.TestFactories
             IPlainKeyValueStorage<InterviewerSettings> interviewerSettings = null)
         {
             {
-                var result = new InterviewerApiController(
-                    fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
-                    tabletInformationService ?? Mock.Of<ITabletInformationService>(),
+                var result = new InterviewerApiController(tabletInformationService ?? Mock.Of<ITabletInformationService>(),
                     userViewFactory ?? Mock.Of<IUserViewFactory>(),
-                    androidPackageReader ?? Mock.Of<IAndroidPackageReader>(),
                     syncVersionProvider ?? Mock.Of<IInterviewerSyncProtocolVersionProvider>(),
                     authorizedUser ?? Mock.Of<IAuthorizedUser>(),
                     productVersion ?? Mock.Of<IProductVersion>(),
                     signInManager ?? new HqSignInManager(Create.Storage.HqUserManager(), Mock.Of<IAuthenticationManager>(), Mock.Of<IHashCompatibilityProvider>()),
                     questionnaireBrowseViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(x => x.GetByIds(It.IsAny<QuestionnaireIdentity[]>()) == new List<QuestionnaireBrowseItem>()),
                     assignmentsService ?? Mock.Of<IAssignmentsService>(),
+                    Mock.Of<IClientApkProvider>(),
                     interviewerSettings ?? Mock.Of<IPlainKeyValueStorage<InterviewerSettings>>()
                 );
                 result.Request = new HttpRequestMessage();
