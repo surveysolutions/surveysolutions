@@ -1,8 +1,5 @@
-﻿@{ Layout = null; }
-@using WB.Core.BoundedContexts.Headquarters.WebInterview
-@using WB.UI.Headquarters.Code
-@using WB.UI.Headquarters.Models.WebInterview
-@model WB.UI.Headquarters.Models.WebInterview.WebInterviewIndexPageModel
+﻿@using WB.UI.Headquarters.Controllers
+@{ Layout = null; }
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,7 +27,7 @@
 <body class="gray-background">
     <script>
     global: CONFIG = {
-        askForEmail: @(ViewBag.AskForEmail ?? "false"),
+        askForEmail:  @(Request.Cookies.Get(WebInterviewController.AskForEmail)?.Value ?? "false"),
         sendLinkUri: '@Url.RouteUrl(@"WebInterview.LinkSending", new { controller = @"WebInterview", Action = @"EmailLink" })',
         virtualPath: '@Url.RouteUrl(@"Default", new {controller = @"WebInterview", Action = "Index"})',
         imageUploadUri: '@Url.RouteUrl(@"WebInterview.ImageAnswering", new { controller = @"WebInterview", Action = @"Image"})',
@@ -46,11 +43,7 @@
 		googleMapsBaseUrl: '@WB.Core.SharedKernels.SurveyManagement.Web.Code.AppSettings.Instance.GoogleMapBaseUrl',
         hqLink : @Html.Raw(this.User.Identity.IsAuthenticated && this.User.IsInRole("Interviewer")
                      ? "'" + Url.Content(@"~/InterviewerHq/Started") + "'"
-                     : "null"),
-        customTexts: {
-            completeButton: '@Html.ToSafeJavascriptMessage(Model.CustomMessages.GetText(WebInterviewUserMessages.CompleteButton).ToString())',
-            noteToSupervisor: '@Html.ToSafeJavascriptMessage(Model.CustomMessages.GetText(WebInterviewUserMessages.CompleteNoteToSupervisor).ToString())'
-        }
+                     : "null")
     }
     </script>
     <div id="app"></div>
