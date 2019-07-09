@@ -148,7 +148,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
             if (!hasErrors) this.Save(fileName, usersToImport);
 
-            usersImportTask.Run().Wait();
+            usersImportTask.ScheduleRunAsync().Wait();
         }
 
         private string[] GetRequiredUserProperties() => this.GetUserProperties().Take(4).ToArray();
