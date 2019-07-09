@@ -240,7 +240,12 @@ export default {
                     data: "id",
                     name: "Id",
                     title: "Id",
-                    responsivePriority: 2
+                    responsivePriority: 2,
+                    render(data, type, row) {
+                        var result =
+                            "<a href='" + self.config.api.assignmentsPage + "?id=" + row.id + "'>" + data + "</a>";
+                        return result;
+                    },
                 },
                 {
                     data: "responsible",
@@ -441,6 +446,7 @@ export default {
             requestData.userRole = this.userRole;
             requestData.receivedByTablet = (this.receivedByTablet || {}).key;
             requestData.teamId = this.teamId;
+            requestData.id = this.id;
         },
 
         userSelected(newValue) {
@@ -483,6 +489,7 @@ export default {
         },
 
         addParamsToQueryString() {
+
             var queryString = { showArchive: this.showArchive.key };
 
             if (this.questionnaireId != null) {
@@ -498,6 +505,7 @@ export default {
             if (this.userRole) queryString.userRole = this.userRole;
             if (this.receivedByTablet != null) queryString.receivedByTablet = this.receivedByTablet.key;
             if (this.teamId) queryString.teamId = this.teamId;
+            if (this.id) queryString.id = this.id;
 
             this.$router.push({ query: queryString });
         },
@@ -665,6 +673,7 @@ export default {
         this.dateEnd = this.$route.query.dateEnd;
         this.userRole = this.$route.query.userRole;
         this.teamId = this.$route.query.teamId;
+        this.id = this.$route.query.id;
 
         this.receivedByTabletSelected(this.ddlReceivedByTablet[0]);
 
