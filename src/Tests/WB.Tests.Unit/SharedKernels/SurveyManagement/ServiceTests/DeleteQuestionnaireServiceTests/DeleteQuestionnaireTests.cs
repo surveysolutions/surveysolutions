@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
             var interviewQueue = new Queue<List<InterviewSummary>>();
             interviewQueue.Enqueue(new List<InterviewSummary>() {new InterviewSummary() {InterviewId = interviewId}});
             interviewQueue.Enqueue(new List<InterviewSummary>());
-            interviewsToDeleteFactoryMock.Setup(x => x.Load(questionnaireId, questionnaireVersion))
+            interviewsToDeleteFactoryMock.Setup(x => x.LoadBatch(questionnaireId, questionnaireVersion))
                 .Returns(interviewQueue.Dequeue);
 
             var questionnaireBrowseItemStorageMock = new Mock<IPlainStorageAccessor<QuestionnaireBrowseItem>>();
@@ -116,7 +116,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
             var interviewQueue = new Queue<List<InterviewSummary>>();
             interviewQueue.Enqueue(new List<InterviewSummary>() { new InterviewSummary() { InterviewId = interviewId } });
             interviewQueue.Enqueue(new List<InterviewSummary>());
-            interviewsToDeleteFactoryMock.Setup(x => x.Load(questionnaireId, questionnaireVersion))
+            interviewsToDeleteFactoryMock.Setup(x => x.LoadBatch(questionnaireId, questionnaireVersion))
                 .Returns(interviewQueue.Dequeue);
 
             var questionnaireBrowseItemStorageMock = new Mock<IPlainStorageAccessor<QuestionnaireBrowseItem>>();
