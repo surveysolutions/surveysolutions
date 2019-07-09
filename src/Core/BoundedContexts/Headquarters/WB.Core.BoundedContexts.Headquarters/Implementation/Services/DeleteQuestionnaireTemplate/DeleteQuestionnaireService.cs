@@ -82,7 +82,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
                 {
                     this.commandService.Execute(new DisableQuestionnaire(questionnaireId, questionnaireVersion,
                         userId));
-                    await this.deleteQuestionnaireTask.Run(0);
+                    await this.deleteQuestionnaireTask.ScheduleRunAsync(0);
                 }
             }
         }

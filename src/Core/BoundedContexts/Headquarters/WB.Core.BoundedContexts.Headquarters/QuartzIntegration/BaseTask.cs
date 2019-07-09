@@ -50,7 +50,7 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
                 await this.scheduler.ScheduleJob(trigger);
         }
 
-        public virtual async Task Run(int startAtInSeconds = 1)
+        public virtual async Task ScheduleRunAsync(int startAtInSeconds = 1)
         {
             if (!await this.scheduler.CheckExists(jobKey))
             {
