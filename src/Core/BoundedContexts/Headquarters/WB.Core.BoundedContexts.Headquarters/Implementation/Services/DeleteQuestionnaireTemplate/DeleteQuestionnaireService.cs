@@ -15,6 +15,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -37,13 +38,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
         private static readonly HashSet<string> DeleteInProcess = new HashSet<string>();
         private readonly IAssignmetnsDeletionService assignmetnsDeletionService;
         private readonly IInvitationsDeletionService invitationsDeletionService;
+        private readonly IAggregateRootCacheCleaner aggregateRootCacheCleaner;
         private readonly IPlainKeyValueStorage<QuestionnaireLookupTable> lookupTablesStorage;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly DeleteQuestionnaireJobScheduler deleteQuestionnaireTask;
 
-        public DeleteQuestionnaireService(IInterviewsToDeleteFactory interviewsToDeleteFactory, 
+        public DeleteQuestionnaireService(IInterviewsToDeleteFactory interviewsToDeleteFactory,
             ICommandService commandService,
-            ILogger logger, 
+            ILogger logger,
             ITranslationManagementService translations,
             IAssignmentsImportService importService,
             IAuditLog auditLog,
@@ -52,7 +54,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             IPlainKeyValueStorage<QuestionnaireLookupTable> lookupTablesStorage,
             IQuestionnaireStorage questionnaireStorage,
             DeleteQuestionnaireJobScheduler deleteQuestionnaireTask,
-            IInvitationsDeletionService invitationsDeletionService)
+            IInvitationsDeletionService invitationsDeletionService,
+            IAggregateRootCacheCleaner aggregateRootCacheCleaner)
         {
             this.interviewsToDeleteFactory = interviewsToDeleteFactory;
             this.commandService = commandService;
@@ -66,6 +69,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             this.questionnaireStorage = questionnaireStorage;
             this.deleteQuestionnaireTask = deleteQuestionnaireTask;
             this.invitationsDeletionService = invitationsDeletionService;
+            this.aggregateRootCacheCleaner = aggregateRootCacheCleaner;
         }
 
         public async Task DisableQuestionnaire(Guid questionnaireId, long questionnaireVersion, Guid? userId)
@@ -82,7 +86,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
                 {
                     this.commandService.Execute(new DisableQuestionnaire(questionnaireId, questionnaireVersion,
                         userId));
-                    await this.deleteQuestionnaireTask.Run(0);
+                    await this.deleteQuestionnaireTask.ScheduleRunAsync(0);
                 }
             }
         }
@@ -90,7 +94,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
         public void DeleteInterviewsAndQuestionnaireAfter(Guid questionnaireId, long questionnaireVersion, Guid? userId)
         {
             var questionnaireKey = ObjectExtensions.AsCompositeKey(questionnaireId.FormatGuid(), questionnaireVersion);
-             
+
             lock (DeleteInProcessLockObject)
             {
                 if (DeleteInProcess.Contains(questionnaireKey))
@@ -142,7 +146,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
         private void DeleteLookupTables(QuestionnaireIdentity questionnaireIdentity)
         {
             var questionnaireDocument = questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
-            
+
             foreach (var lookupTableInfo in questionnaireDocument.LookupTables)
             {
                 var id = lookupTablesStorage.GetLookupKey(questionnaireIdentity, lookupTableInfo.Key);
@@ -158,17 +162,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
         private void DeleteInterviews(Guid questionnaireId, long questionnaireVersion, Guid? userId)
         {
             var exceptionsDuringDelete = new List<Exception>();
+            List<InterviewSummary> listOfInterviews;
 
-            //IInterviewsToDeleteFactory toDeleteFactory = this.interviewsToDeleteFactory.Invoke();
-            List<InterviewSummary> listOfInterviews = this.interviewsToDeleteFactory.Load(questionnaireId, questionnaireVersion);
             do
             {
+                listOfInterviews = this.interviewsToDeleteFactory.LoadBatch(questionnaireId, questionnaireVersion);
+
                 try
                 {
                     foreach (var interviewSummary in listOfInterviews)
                     {
                         this.commandService.Execute(new HardDeleteInterview(interviewSummary.InterviewId,
                             userId ?? interviewSummary.ResponsibleId));
+
+                        // to reduce memory pressure during deleting of thousands interviews
+                        this.aggregateRootCacheCleaner.Evict(interviewSummary.InterviewId);
                     }
                 }
                 catch (Exception e)
@@ -177,13 +185,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
                     exceptionsDuringDelete.Add(e);
                 }
 
-                listOfInterviews = this.interviewsToDeleteFactory.Load(questionnaireId, questionnaireVersion);
+            } while (exceptionsDuringDelete.Count == 0 && listOfInterviews.Count > 0);
 
-            } while (
-                exceptionsDuringDelete.Count == 0 && 
-                listOfInterviews.Any());
-
-            if(exceptionsDuringDelete.Count>0)
+            if (exceptionsDuringDelete.Count > 0)
                 throw new AggregateException(
                     $"interview delete process failed for questionnaire {questionnaireId.FormatGuid()} v. {questionnaireVersion}", exceptionsDuringDelete);
         }
