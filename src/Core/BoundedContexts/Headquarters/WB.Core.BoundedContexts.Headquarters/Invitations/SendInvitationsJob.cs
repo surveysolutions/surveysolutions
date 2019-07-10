@@ -5,7 +5,6 @@ using Quartz;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 
 namespace WB.Core.BoundedContexts.Headquarters.Invitations
 {
