@@ -18,27 +18,31 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
     {
         private readonly ILogger logger;
         private readonly IAssignmentsImportService assignmentsImportService;
+        private readonly AssignmentsImportTask assignmentsImportTask;
         private readonly SampleImportSettings sampleImportSettings;
 
-        public AssignmentsVerificationJob(ILogger logger, 
-            IAssignmentsImportService assignmentsImportService, SampleImportSettings sampleImportSettings)
+        public AssignmentsVerificationJob(ILogger logger,
+            IAssignmentsImportService assignmentsImportService,
+            AssignmentsImportTask assignmentsImportTask,
+            SampleImportSettings sampleImportSettings)
         {
             this.logger = logger;
             this.assignmentsImportService = assignmentsImportService;
+            this.assignmentsImportTask = assignmentsImportTask;
             this.sampleImportSettings = sampleImportSettings;
         }
 
-        public Task Execute(IJobExecutionContext context)
+        public async Task Execute(IJobExecutionContext context)
         {
             try
             {
                 var importProcess = assignmentsImportService.GetImportStatus();
 
-                if (importProcess?.ProcessStatus != AssignmentsImportProcessStatus.Verification) return Task.CompletedTask; 
+                if (importProcess?.ProcessStatus != AssignmentsImportProcessStatus.Verification) return;
 
                 var allAssignmentIds = assignmentsImportService.GetAllAssignmentIdsToVerify();
-                    
-                if (importProcess?.ProcessStatus != AssignmentsImportProcessStatus.Verification) return Task.CompletedTask; 
+
+                if (importProcess?.ProcessStatus != AssignmentsImportProcessStatus.Verification) return;
 
                 this.logger.Debug("Assignments verification job: Started");
 
@@ -51,12 +55,9 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                     {
                         InScopeExecutor.Current.ExecuteActionInScope((serviceLocatorLocal) =>
                         {
-                            var threadImportAssignmentsService =
-                                serviceLocatorLocal.GetInstance<IAssignmentsImportService>();
-                            IQuestionnaireStorage threadQuestionnaireStorage =
-                                serviceLocatorLocal.GetInstance<IQuestionnaireStorage>();
-                            IPreloadedDataVerifier threadImportAssignmentsVerifier =
-                                serviceLocatorLocal.GetInstance<IPreloadedDataVerifier>();
+                            var threadImportAssignmentsService = serviceLocatorLocal.GetInstance<IAssignmentsImportService>();
+                            IQuestionnaireStorage threadQuestionnaireStorage = serviceLocatorLocal.GetInstance<IQuestionnaireStorage>();
+                            IPreloadedDataVerifier threadImportAssignmentsVerifier = serviceLocatorLocal.GetInstance<IPreloadedDataVerifier>();
 
                             var assignmentToVerify = threadImportAssignmentsService.GetAssignmentById(assignmentId);
                             if (assignmentToVerify == null) return;
@@ -81,10 +82,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
 
                 assignmentsImportService.SetImportProcessStatus(AssignmentsImportProcessStatus.Import);
 
-                InScopeExecutor.Current.ExecuteActionInScope(serviceLocatorLocal =>
-                {
-                     serviceLocatorLocal.GetInstance<AssignmentsImportTask>().Run().Wait();
-                });
+                await assignmentsImportTask.ScheduleRunAsync();
 
                 sw.Stop();
                 this.logger.Debug($"Assignments verification job: Finished. Elapsed time: {sw.Elapsed}");
@@ -93,8 +91,6 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
             {
                 this.logger.Error($"Assignments verification job: FAILED. Reason: {ex.Message} ", ex);
             }
-
-            return Task.CompletedTask;
         }
     }
 }
