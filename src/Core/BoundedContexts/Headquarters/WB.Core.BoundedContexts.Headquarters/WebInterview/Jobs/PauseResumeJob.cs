@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Jobs
             {
                 try
                 {
-                    InScopeExecutor.Current.ExecuteActionInScope(serviceLocatorLocal =>
+                    InScopeExecutor.Current.Execute(serviceLocatorLocal =>
                     {
                         var commandService = serviceLocatorLocal.GetInstance<ICommandService>();
                         commandService.Execute(interviewCommand);
