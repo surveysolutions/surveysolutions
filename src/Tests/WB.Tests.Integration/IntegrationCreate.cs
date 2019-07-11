@@ -40,6 +40,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.SurveySolutions;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -431,7 +432,7 @@ namespace WB.Tests.Integration
                 Mock.Of<IServiceLocator>());
         }
 
-        public static AnswerNotifier AnswerNotifier(ILiteEventRegistry registry = null)
+        public static AnswerNotifier AnswerNotifier(IViewModelEventRegistry registry = null)
             => new AnswerNotifier(registry ?? Abc.Create.Service.LiteEventRegistry());
 
         public static IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> FailedValidationCondition(Identity questionIdentity)

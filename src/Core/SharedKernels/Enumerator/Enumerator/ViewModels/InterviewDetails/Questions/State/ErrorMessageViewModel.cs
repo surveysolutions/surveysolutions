@@ -2,12 +2,13 @@
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
     public class ErrorMessageViewModel : DynamicTextViewModel, IInterviewEntity
     {
-        public ErrorMessageViewModel(ILiteEventRegistry eventRegistry,
+        public ErrorMessageViewModel(IViewModelEventRegistry eventRegistry,
             IStatefulInterviewRepository interviewRepository,
             ISubstitutionService substitutionService) : 
                 base(eventRegistry, interviewRepository, substitutionService)

@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
         {
             return new FilteredSingleOptionQuestionViewModel(
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                Mock.Of<ILiteEventRegistry>(),
+                Mock.Of<IViewModelEventRegistry>(),
                 filteredOptionsViewModel ?? Mock.Of<FilteredOptionsViewModel>(),
                 principal ?? Mock.Of<IPrincipal>(),
                 questionStateViewModel ?? Mock.Of<QuestionStateViewModel<SingleOptionQuestionAnswered>>(),

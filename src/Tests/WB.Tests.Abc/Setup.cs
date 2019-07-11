@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
+using System.Threading.Tasks;
 using AutoFixture;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -15,6 +17,7 @@ using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -218,13 +221,16 @@ namespace WB.Tests.Abc
             return filteredOptionsViewModel.Object;
         }
 
-        internal static void ApplyInterviewEventsToViewModels(IEventSourcedAggregateRoot interview, ILiteEventRegistry eventRegistry, Guid interviewId)
+        internal static void ApplyInterviewEventsToViewModels(IEventSourcedAggregateRoot interview, IViewModelEventRegistry eventRegistry, Guid interviewId)
         {
             foreach (var evnt in interview.GetUnCommittedChanges().Select(x => Create.Other.CommittedEvent(x, interviewId)))
             {
-                foreach (var handler in eventRegistry.GetHandlers(evnt))
+                foreach (var viewModel in eventRegistry.GetViewModelsByEvent(evnt))
                 {
-                    handler.Invoke(evnt);
+                    var handler = viewModel.GetType().GetRuntimeMethod("Handle", new[] { evnt.Payload.GetType() });
+
+                    var taskOrVoid = (Task)handler?.Invoke(viewModel, new object[] { evnt.Payload });
+                    taskOrVoid?.WaitAndUnwrapException();
                 }
             }
         }

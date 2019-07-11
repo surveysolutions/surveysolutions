@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
             var chapterId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             var textListQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             var interviewerId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-
+            var interviewId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE").ToString("N");
 
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(chapterId,
                 Create.Entity.TextListQuestion(textListQuestionId),
@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
             var navigationState = Create.Other.NavigationState(statefulInterviewRepository);
 
             await navigationState.NavigateTo(Create.Entity.NavigationIdentity(Identity.Create(chapterId, RosterVector.Empty)));
-            viewModel.Init(null, Create.Entity.Identity(rosterId), navigationState);
+            viewModel.Init(interviewId, Create.Entity.Identity(rosterId), navigationState);
 
             interview.AnswerTextListQuestion(interviewerId, textListQuestionId, RosterVector.Empty, DateTime.UtcNow,
                 new[]

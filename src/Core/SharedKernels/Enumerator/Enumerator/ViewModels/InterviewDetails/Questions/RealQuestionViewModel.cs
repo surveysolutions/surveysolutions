@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class RealQuestionViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
-        ILiteEventHandler<AnswersRemoved>, 
+        IAsyncViewModelEventHandler<AnswersRemoved>, 
         ICompositeQuestionWithChildren,
         IDisposable
     {
@@ -28,7 +28,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         
         private readonly IPrincipal principal;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly ILiteEventRegistry liteEventRegistry;
+        private readonly IViewModelEventRegistry liteEventRegistry;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly ThrottlingViewModel throttlingModel;
         private readonly SpecialValuesViewModel specialValues;
@@ -88,7 +88,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             AnsweringViewModel answering,
             QuestionInstructionViewModel instructionViewModel,
             IQuestionnaireStorage questionnaireRepository, 
-            ILiteEventRegistry liteEventRegistry, 
+            IViewModelEventRegistry liteEventRegistry, 
             SpecialValuesViewModel specialValues, 
             ThrottlingViewModel throttlingModel)
         {
@@ -234,7 +234,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.throttlingModel.Dispose();
         }
 
-        public async void Handle(AnswersRemoved @event)
+        public async Task Handle(AnswersRemoved @event)
         {
             if (this.isDisposed) return;
 

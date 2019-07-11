@@ -3,6 +3,7 @@ using FluentAssertions;
 using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Tests.Abc;
 
 
@@ -10,13 +11,13 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
 {
     public class when_publishing_event_declared_in_base_handler_type : LiteEventBusTestsContext
     {
-        public class BaseHandler : ILiteEventHandler<DummyEvent>
+        public class BaseHandler : IViewModelEventHandler<DummyEvent>
         {
             public bool WasCalled = false;
             public virtual void Handle(DummyEvent @event) { this.WasCalled = true; }
         }
 
-        public class ChildrenHandler : BaseHandler, ILiteEventHandler<DifferentDummyEvent>
+        public class ChildrenHandler : BaseHandler, IViewModelEventHandler<DifferentDummyEvent>
         {
             public virtual void Handle(DifferentDummyEvent @event) { }
         }

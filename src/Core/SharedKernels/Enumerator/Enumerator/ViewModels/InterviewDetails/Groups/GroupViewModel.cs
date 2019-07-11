@@ -11,14 +11,15 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 {
     public class GroupViewModel : MvxNotifyPropertyChanged,
-        ILiteEventHandler<RosterInstancesTitleChanged>,
-        ILiteEventHandler<RosterInstancesAdded>,
-        ILiteEventHandler<RosterInstancesRemoved>,
+        IViewModelEventHandler<RosterInstancesTitleChanged>,
+        IViewModelEventHandler<RosterInstancesAdded>,
+        IViewModelEventHandler<RosterInstancesRemoved>,
         IInterviewEntityViewModel,
         IDisposable
     {
@@ -47,7 +48,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             }
         }
 
-        private readonly ILiteEventRegistry eventRegistry;
+        private readonly IViewModelEventRegistry eventRegistry;
         
         private GroupStatus status;
         public GroupStatus Status
@@ -71,7 +72,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             AnswerNotifier answerNotifier,
             IGroupStateCalculationStrategy groupStateCalculationStrategy,
             DynamicTextViewModel dynamicTextViewModel,
-            ILiteEventRegistry eventRegistry)
+            IViewModelEventRegistry eventRegistry)
         {
             this.Enablement = enablement;
             this.interviewRepository = interviewRepository;

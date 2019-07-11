@@ -5,13 +5,12 @@ using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -20,7 +19,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public class EnumerationStageViewModel : MvxViewModel,
-        ILiteEventHandler<GroupsDisabled>,
+        IAsyncViewModelEventHandler<GroupsDisabled>,
         IDisposable
     {
         private CompositeCollection<ICompositeEntity> items;
@@ -33,7 +32,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ICompositeCollectionInflationService compositeCollectionInflationService;
-        private readonly ILiteEventRegistry liteEventRegistry;
+        private readonly IViewModelEventRegistry liteEventRegistry;
         private readonly ICommandService commandService;
 
         readonly IUserInterfaceStateService userInterfaceStateService;
@@ -53,7 +52,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher,
             DynamicTextViewModel dynamicTextViewModel, 
             ICompositeCollectionInflationService compositeCollectionInflationService,
-            ILiteEventRegistry liteEventRegistry,
+            IViewModelEventRegistry liteEventRegistry,
             ICommandService commandService)
         {
             this.interviewViewModelFactory = interviewViewModelFactory;
@@ -141,7 +140,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.Name.Dispose();
         }
 
-        public async void Handle(GroupsDisabled @event)
+        public async Task Handle(GroupsDisabled @event)
         {
             if (@event.Groups.Any(id => id == groupId))
             {
