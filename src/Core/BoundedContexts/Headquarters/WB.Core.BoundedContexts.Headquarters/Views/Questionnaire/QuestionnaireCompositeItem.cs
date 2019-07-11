@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
         public virtual string QuestionText { get; set; }
         public virtual string VariableLabel { get; set; }
 
-        public virtual IList<QuestionnaireCompositeItemAnswer> Answers { get; set; }
+        public virtual ISet<QuestionnaireCompositeItemAnswer> Answers { get; set; }
     }
 
     public class QuestionnaireCompositeItemAnswer

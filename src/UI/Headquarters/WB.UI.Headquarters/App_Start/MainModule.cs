@@ -126,13 +126,13 @@ namespace WB.UI.Headquarters
         public async Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             serviceLocator.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
-            await serviceLocator.GetInstance<UsersImportTask>().Run();
+            await serviceLocator.GetInstance<UsersImportTask>().ScheduleRunAsync();
             await serviceLocator.GetInstance<AssignmentsImportTask>().Schedule(repeatIntervalInSeconds: 300);
             await serviceLocator.GetInstance<AssignmentsVerificationTask>().Schedule(repeatIntervalInSeconds: 300);
             await serviceLocator.GetInstance<DeleteQuestionnaireJobScheduler>().Schedule(repeatIntervalInSeconds: 10);
             serviceLocator.GetInstance<PauseResumeJobScheduler>().Configure();
             serviceLocator.GetInstance<UpgradeAssignmentJobScheduler>().Configure();
-            await serviceLocator.GetInstance<SendInvitationsTask>().Run();
+            await serviceLocator.GetInstance<SendInvitationsTask>().ScheduleRunAsync();
             await serviceLocator.GetInstance<SendRemindersTask>().Schedule(repeatIntervalInSeconds: 60 * 60);
             
             InitMetrics();

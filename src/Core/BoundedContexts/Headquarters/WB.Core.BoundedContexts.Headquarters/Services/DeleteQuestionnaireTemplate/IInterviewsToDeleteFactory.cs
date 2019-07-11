@@ -6,7 +6,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTempl
 {
     internal interface IInterviewsToDeleteFactory
     {
-        List<InterviewSummary> Load(Guid questionnaireId,
-            long questionnaireVersion);
+        List<InterviewSummary> LoadBatch(Guid questionnaireId, long questionnaireVersion);
     }
 }

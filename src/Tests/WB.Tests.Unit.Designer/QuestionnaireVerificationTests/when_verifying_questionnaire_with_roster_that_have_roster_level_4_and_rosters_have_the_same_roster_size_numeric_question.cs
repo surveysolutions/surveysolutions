@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             verificationMessages = verifier.Verify(Create.QuestionnaireView(questionnaire));
 
         [NUnit.Framework.Test] public void should_return_first_error_with_code__WB0261 () =>
-            verificationMessages.ShouldContainWarning("WB0261");
+            verificationMessages.ShouldContainWarning("WB0261", message => message.Contains("219660") && message.Contains("80000"));
 
         [NUnit.Framework.Test] public void should_return_first_error_with_code__WB0262 () =>
             verificationMessages.ShouldContainWarning("WB0262");

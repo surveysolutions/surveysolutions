@@ -11,7 +11,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.FilterTests.InstallationAttrib
             attribute.OnActionExecuting(CreateFilterContext(
                 new ControlPanelController(null, 
                 null, null, null, null, null, null,
-                assignmentsService: null, interviewPackagesService: null, userViewFactory: null, serializer: null)));
+                assignmentsService: null, interviewPackagesService: null, userViewFactory: null, serializer: null
+                , clientApkProvider: null)));
         }
     }
 }

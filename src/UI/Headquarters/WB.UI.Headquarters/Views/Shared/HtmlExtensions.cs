@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq.Expressions;
+using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
@@ -11,6 +12,7 @@ using WB.Core.BoundedContexts.Headquarters.Resources;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using WB.UI.Headquarters.Code;
+using WB.UI.Shared.Web.Settings;
 
 namespace ASP
 {
@@ -143,14 +145,29 @@ namespace ASP
                 script += $"window.CONFIG.title=\"{helper.ToSafeJavascriptMessage(titleString)}\"";
             }
 
-            return new HtmlString($@"<script>{script};window.CONFIG.model={ model?.AsJsonValue() ?? new HtmlString(@"null") }</script>");
+            var json = model != null ? JsonConvert.SerializeObject(model, asJsonValueSettings) : "null";
+            
+            return new HtmlString($@"<script>{script};window.CONFIG.model={json}</script>");
         }
 
-        /*public static IHtmlString AuthorizedUserInfoJson(this HtmlHelper helper)
+        public static string UrlScheme(this HttpRequestBase request)
         {
-            var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
-            if (authorizedUser == null) return new HtmlString("{}");
-            return new HtmlString(JsonConvert.SerializeObject(authorizedUser));
-        }*/
+            if (CoreSettings.IsHttpsRequired)
+            {
+                return "https";
+            }
+
+            return request?.Url?.Scheme ?? "http";
+        }
+
+        public static string UrlScheme(this HttpRequest request)
+        {
+            if (CoreSettings.IsHttpsRequired)
+            {
+                return "https";
+            }
+
+            return request.Url.Scheme;
+        }
     }
 }

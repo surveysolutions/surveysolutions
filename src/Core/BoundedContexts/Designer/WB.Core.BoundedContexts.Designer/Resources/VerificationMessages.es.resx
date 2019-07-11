@@ -642,9 +642,6 @@
   <data name="WB0260_GroupTitleIsTooLong" xml:space="preserve">
     <value>El titulo es demasiado largo. Este no debe ser mas lago que {0} caracteres</value>
   </data>
-  <data name="WB0261_RosterStructureTooExplosive" xml:space="preserve">
-    <value>El cuestionario contiene listas con un número de instancias de listas mayores al límite del sistema</value>
-  </data>
   <data name="WB0262_RosterHasTooBigPropagation" xml:space="preserve">
     <value>La lista ha alcanzado el tamaño límite. Reduzca el tamaño de la lista o decremento la anidación</value>
   </data>

@@ -20,7 +20,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
         private readonly string storageBasePath;
         private readonly ILogger log;
 
-        public S3FileStorage(AmazonS3Settings s3Settings, IAmazonS3 amazonS3Client, ITransferUtility transferUtility, ILoggerProvider loggerProvider)
+        public S3FileStorage(AmazonS3Settings s3Settings, 
+            IAmazonS3 amazonS3Client, 
+            ITransferUtility transferUtility,
+            ILoggerProvider loggerProvider)
         {
             log = loggerProvider.GetForType(GetType());
             this.s3Settings = s3Settings;
