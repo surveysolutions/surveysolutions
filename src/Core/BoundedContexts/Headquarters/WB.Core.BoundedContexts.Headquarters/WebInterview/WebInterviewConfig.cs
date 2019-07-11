@@ -19,8 +19,8 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
         public bool UseCaptcha { get; set; }
         public Dictionary<WebInterviewUserMessages, string> CustomMessages { get; set; }
 
-        public static Dictionary<WebInterviewUserMessages, string> DefaultMessages => 
-            new Dictionary<WebInterviewUserMessages, string> 
+        public static Dictionary<WebInterviewUserMessages, string> DefaultMessages =>
+            new Dictionary<WebInterviewUserMessages, string>
             {
                 { WebInterviewUserMessages.FinishInterview, Enumerator.Native.Resources.WebInterview.FinishInterviewText },
                 { WebInterviewUserMessages.Invitation,      Enumerator.Native.Resources.WebInterview.InvitationText },
@@ -28,7 +28,10 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
                 { WebInterviewUserMessages.ResumeWelcome,   Enumerator.Native.Resources.WebInterview.Resume_WelcomeText },
                 { WebInterviewUserMessages.SurveyName,      Enumerator.Native.Resources.WebInterview.SurveyFormatText },
                 { WebInterviewUserMessages.WebSurveyHeader, Enumerator.Native.Resources.WebInterview.WebSurvey },
-                { WebInterviewUserMessages.WelcomeText,     Enumerator.Native.Resources.WebInterview.WelcomeText }
+                { WebInterviewUserMessages.WelcomeText,     Enumerator.Native.Resources.WebInterview.WelcomeText },
+                { WebInterviewUserMessages.CompleteNoteToSupervisor,     Enumerator.Native.Resources.WebInterview.NoteForSupervisor},
+                { WebInterviewUserMessages.CompleteButton,  Enumerator.Native.Resources.WebInterview.Complete},
+
             };
 
         public Dictionary<EmailTextTemplateType, EmailTextTemplate> EmailTemplates { get; set; }
@@ -70,9 +73,9 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
             LinkText = linkText;
         }
 
-        public string Subject { get; set; }       
-        public string Message { get; set; }       
-        public string PasswordDescription { get; set; }       
+        public string Subject { get; set; }
+        public string Message { get; set; }
+        public string PasswordDescription { get; set; }
         public string LinkText { get; set; }
     }
 

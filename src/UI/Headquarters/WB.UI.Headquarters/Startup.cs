@@ -51,6 +51,7 @@ using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.DataAnnotations;
+using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Settings;
 
@@ -96,7 +97,10 @@ namespace WB.UI.Headquarters
             autofacKernel.ContainerBuilder.RegisterWebApiFilterProvider(config);
             autofacKernel.ContainerBuilder.RegisterWebApiModelBinderProvider();
 
-            var initTask = autofacKernel.InitAsync();
+            var initTask = autofacKernel.InitAsync(
+                    System.Configuration.ConfigurationManager.AppSettings
+                        .GetBool("RestartAppPoolOnInitializationError", true)
+                );
 
             if (CoreSettings.IsDevelopmentEnvironment)
                 initTask.Wait();

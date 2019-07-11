@@ -2024,6 +2024,8 @@
     <Compile Include="API\DataCollection\AssignmentsControllerBase.cs" />
     <Compile Include="API\DataCollection\AuditLogControllerBase.cs" />
     <Compile Include="API\DataCollection\AppApiControllerBase.cs" />
+    <Compile Include="Services\ClientApkProvider.cs" />
+    <Compile Include="Services\IClientApkProvider.cs" />
     <Compile Include="API\DataCollection\Interviewer\InterviewerCommonWebApiConfig.cs" />
     <Compile Include="API\DataCollection\Interviewer\InterviewerInterviewsControllerBase.cs" />
     <Compile Include="API\DataCollection\Interviewer\InterviewerV3WebApiConfig.cs" />
@@ -2403,6 +2405,7 @@
     <Compile Include="Models\User\UserBrowseItem.cs" />
     <Compile Include="Models\WebInterview\EmailModel.cs" />
     <Compile Include="Models\WebInterview\StartWebInterview.cs" />
+    <Compile Include="Models\WebInterview\WebInterviewIndexPageModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\InterviewerAuditRecord.Designer.cs">
       <DependentUpon>InterviewerAuditRecord.resx</DependentUpon>

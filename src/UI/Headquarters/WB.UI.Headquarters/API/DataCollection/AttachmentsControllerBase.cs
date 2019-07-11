@@ -25,7 +25,7 @@ namespace WB.UI.Headquarters.API.DataCollection
             if (attachmentContent == null)
                 return Request.CreateResponse(HttpStatusCode.NotFound);
 
-            var result = this.AsProgressiveDownload(attachmentContent.Content, attachmentContent.ContentType);
+            var result = this.Request.AsProgressiveDownload(attachmentContent.Content, attachmentContent.ContentType);
 
             if (result.StatusCode != HttpStatusCode.PartialContent)
             {

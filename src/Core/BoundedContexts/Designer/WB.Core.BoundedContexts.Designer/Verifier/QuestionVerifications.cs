@@ -99,6 +99,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Warning(MoreThan30PercentQuestionsAreText, "WB0265", string.Format(VerificationMessages.WB0265_MoreThan30PercentQuestionsAreText, TextQuestionsLengthInPercents)),
             WarningForCollection(SameTitle, "WB0266", VerificationMessages.WB0266_SameTitle),
             Warning(NoPrefilledQuestions, "WB0216", VerificationMessages.WB0216_NoPrefilledQuestions),
+            WarningByValueAndTitleNumbersIsNotEqualsInCategoricalQuestions,
         };
 
         private bool IdentifyingQuestionInSectionWithEnablingCondition(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
@@ -283,9 +284,36 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 ? entityAsIConditional.ValidationConditions
                 : Enumerable.Empty<ValidationCondition>();
         }
-
+        
         private static bool ValidationMessageIsTooLong(IComposite question, ValidationCondition validationCondition, MultiLanguageQuestionnaireDocument questionnaire)
             => validationCondition.Message?.Length > 250;
+
+        private static IEnumerable<QuestionnaireVerificationMessage> WarningByValueAndTitleNumbersIsNotEqualsInCategoricalQuestions(MultiLanguageQuestionnaireDocument document)
+        {
+            var categoricalQuestions = document.Find<ICategoricalQuestion>(q => q.Answers?.Count > 0);
+
+            foreach (var question in categoricalQuestions)
+            {
+                var optionsWithNotEqualsNumericValueAndTitle = question.Answers
+                    .Select((option, index) => new {
+                        value = option.AnswerValue.ParseIntOrNull(),
+                        title = option.AnswerText.ParseIntOrNull(),
+                        index = index,
+                    })
+                    .Where(option => option.value.HasValue && option.title.HasValue)
+                    .Where(option => option.value.Value != option.title.Value)
+                    .OrderBy(x => x.index)
+                    .Distinct()
+                    .ToArray();
+
+                foreach (var option in optionsWithNotEqualsNumericValueAndTitle)
+                {
+                    var message = string.Format(VerificationMessages.WB0288_ValueAndTitleNumbersIsNotEquals, option.value.Value, option.title.Value);
+                    var reference = QuestionnaireEntityReference.CreateFrom(question, QuestionnaireVerificationReferenceProperty.Option, option.index);
+                    yield return QuestionnaireVerificationMessage.Warning("WB0288", message, reference);
+                }
+            }
+        }
 
         private static IEnumerable<QuestionnaireVerificationMessage> Error_ManyGpsPrefilledQuestions_WB0006(MultiLanguageQuestionnaireDocument document)
         {

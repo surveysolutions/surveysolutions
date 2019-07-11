@@ -1,11 +1,8 @@
 using System;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Web.Hosting;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
@@ -14,36 +11,27 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Headquarters.Code;
-using WB.UI.Headquarters.Resources;
+using WB.UI.Headquarters.Services;
 using WB.UI.Headquarters.Utils;
-using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.API.DataCollection.Interviewer
 {
     public class InterviewerApiController : AppApiControllerBase
     {
-        private const string RESPONSEAPPLICATIONFILENAME = "interviewer.apk";
-        private const string PHYSICALAPPLICATIONFILENAME = "wbcapi.apk";
-        private const string PHYSICALAPPLICATIONEXTENDEDFILENAME = "wbcapi.ext.apk";
-        private const string PHYSICALPATHTOAPPLICATION = "~/Client/";
-        
-        private readonly IFileSystemAccessor fileSystemAccessor;
         protected readonly ITabletInformationService tabletInformationService;
         protected readonly IUserViewFactory userViewFactory;
-        private readonly IAndroidPackageReader androidPackageReader;
         private readonly ISyncProtocolVersionProvider syncVersionProvider;
         private readonly IAuthorizedUser authorizedUser;
         private readonly IProductVersion productVersion;
         private readonly IAssignmentsService assignmentsService;
+        private readonly IClientApkProvider clientApkProvider;
         private readonly HqSignInManager signInManager;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
 
@@ -54,30 +42,27 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
             WithMaps = 2
         }
 
-        public InterviewerApiController(
-            IFileSystemAccessor fileSystemAccessor,
-            ITabletInformationService tabletInformationService,
+        public InterviewerApiController(ITabletInformationService tabletInformationService,
             IUserViewFactory userViewFactory,
-            IAndroidPackageReader androidPackageReader,
             IInterviewerSyncProtocolVersionProvider syncVersionProvider,
             IAuthorizedUser authorizedUser,
             IProductVersion productVersion,
             HqSignInManager signInManager,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IAssignmentsService assignmentsService,
+            IClientApkProvider clientApkProvider,
             IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage)
             : base(interviewerSettingsStorage)
         {
-            this.fileSystemAccessor = fileSystemAccessor;
             this.tabletInformationService = tabletInformationService;
             this.userViewFactory = userViewFactory;
-            this.androidPackageReader = androidPackageReader;
             this.syncVersionProvider = syncVersionProvider;
             this.authorizedUser = authorizedUser;
             this.productVersion = productVersion;
             this.signInManager = signInManager;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.assignmentsService = assignmentsService;
+            this.clientApkProvider = clientApkProvider;
         }
         
         [HttpGet]
@@ -86,9 +71,9 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
         {
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
             if (clientVersion == ClientVersionFromUserAgent.WithMaps)
-                return this.HttpResponseMessage(PHYSICALAPPLICATIONEXTENDEDFILENAME, RESPONSEAPPLICATIONFILENAME);
+                return this.clientApkProvider.GetApkAsHttpResponse(Request, ClientApkInfo.InterviewerExtendedFileName, ClientApkInfo.InterviewerResponseFileName);
 
-            return this.HttpResponseMessage(PHYSICALAPPLICATIONFILENAME, RESPONSEAPPLICATIONFILENAME);
+            return this.clientApkProvider.GetApkAsHttpResponse(Request, ClientApkInfo.InterviewerFileName, ClientApkInfo.InterviewerResponseFileName);
         }
         
         [HttpGet]
@@ -97,30 +82,9 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
         {
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
             if (clientVersion == ClientVersionFromUserAgent.WithoutMaps)
-                return this.HttpResponseMessage(PHYSICALAPPLICATIONFILENAME, RESPONSEAPPLICATIONFILENAME);
+                return this.clientApkProvider.GetApkAsHttpResponse(Request, ClientApkInfo.InterviewerFileName, ClientApkInfo.InterviewerResponseFileName);
 
-            return this.HttpResponseMessage(PHYSICALAPPLICATIONEXTENDEDFILENAME, RESPONSEAPPLICATIONFILENAME);
-        }
-
-        private HttpResponseMessage HttpResponseMessage(string appName, string responseFileName)
-        {
-            string pathToInterviewerApp = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(PHYSICALPATHTOAPPLICATION), appName);
-
-            if (!this.fileSystemAccessor.IsFileExists(pathToInterviewerApp))
-                return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, TabletSyncMessages.FileWasNotFound);
-
-            var fileHash = this.fileSystemAccessor.ReadHash(pathToInterviewerApp);
-
-            if (this.RequestHasMatchingFileHash(fileHash))
-            {
-                return Request.CreateResponse(HttpStatusCode.NotModified);
-            }
-
-            Stream fileStream = new FileStream(pathToInterviewerApp, FileMode.Open, FileAccess.Read);
-
-            return this.AsProgressiveDownload(fileStream, 
-                @"application/vnd.android.package-archive", 
-                responseFileName, fileHash);
+            return this.clientApkProvider.GetApkAsHttpResponse(Request, ClientApkInfo.InterviewerExtendedFileName, ClientApkInfo.InterviewerResponseFileName);
         }
 
         [HttpGet]
@@ -129,9 +93,9 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
         {            
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
             if(clientVersion == ClientVersionFromUserAgent.WithMaps)
-                return GetPatchFile($@"WBCapi.{deviceVersion}.Ext.delta");
+                return this.clientApkProvider.GetPatchFileAsHttpResponse(Request, $@"WBCapi.{deviceVersion}.Ext.delta");
 
-            return GetPatchFile($@"WBCapi.{deviceVersion}.delta");
+            return this.clientApkProvider.GetPatchFileAsHttpResponse(Request, $@"WBCapi.{deviceVersion}.delta");
         }
 
         [HttpGet]
@@ -140,32 +104,19 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
         {
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
             if (clientVersion == ClientVersionFromUserAgent.WithoutMaps)
-                return GetPatchFile($@"WBCapi.{deviceVersion}.delta");
+                return this.clientApkProvider.GetPatchFileAsHttpResponse(Request, $@"WBCapi.{deviceVersion}.delta");
 
-            return GetPatchFile($@"WBCapi.{deviceVersion}.Ext.delta");
+            return this.clientApkProvider.GetPatchFileAsHttpResponse(Request, $@"WBCapi.{deviceVersion}.Ext.delta");
         }
-
-        private HttpResponseMessage GetPatchFile(string fileName)
-        {
-            string pathToInterviewerPatch = this.fileSystemAccessor.CombinePath(
-                HostingEnvironment.MapPath(PHYSICALPATHTOAPPLICATION), fileName);
-
-            if (!this.fileSystemAccessor.IsFileExists(pathToInterviewerPatch))
-                return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, TabletSyncMessages.FileWasNotFound);
-
-            Stream fileStream = new FileStream(pathToInterviewerPatch, FileMode.Open, FileAccess.Read);
-            return this.AsProgressiveDownload(fileStream, @"application/octet-stream", 
-                hash: this.fileSystemAccessor.ReadHash(pathToInterviewerPatch));
-        }
-
+      
         [HttpGet]
         public virtual int? GetLatestVersion()
         {
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
             if (clientVersion == ClientVersionFromUserAgent.WithMaps)
-                return GetLatestVersion(PHYSICALAPPLICATIONEXTENDEDFILENAME);
+                return this.clientApkProvider.GetLatestVersion(ClientApkInfo.InterviewerExtendedFileName);
 
-            return GetLatestVersion(PHYSICALAPPLICATIONFILENAME);
+            return this.clientApkProvider.GetLatestVersion(ClientApkInfo.InterviewerFileName);
         }
 
         [HttpGet]
@@ -173,19 +124,9 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
         {
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
             if (clientVersion == ClientVersionFromUserAgent.WithoutMaps)
-                return GetLatestVersion(PHYSICALAPPLICATIONFILENAME);
+                return this.clientApkProvider.GetLatestVersion(ClientApkInfo.InterviewerFileName);
 
-            return GetLatestVersion(PHYSICALAPPLICATIONEXTENDEDFILENAME);
-        }
-
-        private int? GetLatestVersion(string appName)
-        {
-            string pathToInterviewerApp = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(PHYSICALPATHTOAPPLICATION),
-                appName);
-
-            return !this.fileSystemAccessor.IsFileExists(pathToInterviewerApp)
-                ? null
-                : this.androidPackageReader.Read(pathToInterviewerApp).Version;
+            return this.clientApkProvider.GetLatestVersion(ClientApkInfo.InterviewerExtendedFileName);
         }
 
         [HttpPost]
@@ -236,7 +177,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
                 return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
 
             var currentVersion = new Version(this.productVersion.ToString().Split(' ')[0]);
-            var interviewerVersion = GetInterviewerVersionFromUserAgent(this.Request);
+            var interviewerVersion = this.Request.GetProductVersionFromUserAgent(@"org.worldbank.solutions.interviewer");
 
             if (IsNeedUpdateAppBySettings(interviewerVersion, currentVersion))
             {
@@ -290,20 +231,6 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
             return this.authorizedUser.DeviceId != deviceId
                 ? this.Request.CreateResponse(HttpStatusCode.Forbidden)
                 : this.Request.CreateResponse(HttpStatusCode.OK, @"449634775");
-        }
-
-        private Version GetInterviewerVersionFromUserAgent(HttpRequestMessage request)
-        {
-            foreach (var product in request.Headers?.UserAgent)
-            {
-                if ((product.Product?.Name.Equals(@"org.worldbank.solutions.interviewer", StringComparison.OrdinalIgnoreCase)
-                    ?? false) && Version.TryParse(product.Product.Version, out Version version))
-                {
-                    return version;
-                }
-            }
-
-            return null;
         }
 
         private ClientVersionFromUserAgent GetClientVersionFromUserAgent(HttpRequestMessage request)

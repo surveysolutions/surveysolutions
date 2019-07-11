@@ -667,7 +667,7 @@
     <value>Название секции слишком длинное. Оно не должно содержать более {0} символов. </value>
   </data>
   <data name="WB0261_RosterStructureTooExplosive" xml:space="preserve">
-    <value>Опросник содержит слишком большое количество экземпляров ростера.</value>
+      <value>Опросник содержит слишком большое количество экземпляров ростера {0}, что привышает разрешенный лимит {1}</value>
   </data>
   <data name="WB0262_RosterHasTooBigPropagation" xml:space="preserve">
     <value>Ростер достиг максимального размера. Уменьшите размер ростера или уровень вложенности.</value>
@@ -757,5 +757,9 @@
   <data name="WB0287_TableRosterDoesntContainsQuestionWithSubstitutions" xml:space="preserve">
       <value>Вопросы внутри табличного ростера не могут ссылаться на другие вопросы в своих заголовках.</value>
       <comment>Вопросы внутри табличного ростера не могут ссылаться на другие вопросы в своих заголовках.</comment>
+  </data>
+  <data name="WB0288_ValueAndTitleNumbersIsNotEquals" xml:space="preserve">
+      <value>Заголовок {1} и код {0} числовые и отличается значениями</value>
+      <comment>Заголовок {1} и код {0} числовые и отличается значениями</comment>
   </data>
 </root>
