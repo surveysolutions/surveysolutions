@@ -1,24 +1,52 @@
 <template>
-    <wb-question :question="$me" :questionCssClassName="$me.ordered ? 'ordered-question' : 'multiselect-question'" :noAnswer="noOptions">
-        <button class="section-blocker" disabled="disabled" v-if="$me.fetching"></button>
-        <div class="question-unit">
-            <div class="options-group" v-bind:class="{ 'dotted': noOptions }">
-                <div class="form-group" v-for="option in answeredOrAllOptions" :key="$me.id + '_' + option.value"  v-bind:class="{ 'unavailable-option locked-option': isProtected(option.value) }">
-                    <input class="wb-checkbox" type="checkbox" :id="$me.id + '_' + option.value" :name="$me.id" :value="option.value" :disabled="!$me.acceptAnswer" v-model="answer" v-disabledWhenUnchecked="{maxAnswerReached: allAnswersGiven, answerNotAllowed: !$me.acceptAnswer, forceDisabled: isProtected(option.value) }">
-                    <label :for="$me.id + '_' + option.value">
-                        <span class="tick"></span> {{option.title}}
-                    </label>
-                    <div class="badge" v-if="$me.ordered">{{ getAnswerOrder(option.value) }}</div>
-                    <div class="lock"></div>
-                </div>
-                <button type="button" class="btn btn-link btn-horizontal-hamburger" @click="toggleOptions" v-if="shouldShowAnsweredOptionsOnly && !showAllOptions">
-                    <span></span>
-                </button>
-                <div v-if="noOptions" class="options-not-available">{{ $t("WebInterviewUI.OptionsAvailableAfterAnswer") }}</div>
-                <wb-lock />
-            </div>
+  <wb-question
+    :question="$me"
+    :questionCssClassName="$me.ordered ? 'ordered-question' : 'multiselect-question'"
+    :noAnswer="noOptions"
+  >
+    <button class="section-blocker" disabled="disabled" v-if="$me.fetching"></button>
+    <div class="question-unit">
+      <div class="options-group" v-bind:class="{ 'dotted': noOptions }">
+        <div
+          class="form-group"
+          v-for="option in answeredOrAllOptions"
+          :key="$me.id + '_' + option.value"
+          v-bind:class="{ 'unavailable-option locked-option': isProtected(option.value) }"
+        >
+          <input
+            class="wb-checkbox"
+            type="checkbox"
+            :id="$me.id + '_' + option.value"
+            :name="$me.id"
+            :value="option.value"
+            :disabled="!$me.acceptAnswer"
+            v-model="answer"
+            @change="change"
+            v-disabledWhenUnchecked="{
+                                maxAnswerReached: allAnswersGiven,
+                                answerNotAllowed: !$me.acceptAnswer,
+                                forceDisabled: isProtected(option.value) }"
+          />
+          <label :for="$me.id + '_' + option.value">
+            <span class="tick"></span>
+            {{option.title}}
+          </label>
+          <div class="badge" v-if="$me.ordered">{{ getAnswerOrder(option.value) }}</div>
+          <div class="lock"></div>
         </div>
-    </wb-question>
+        <button
+          type="button"
+          class="btn btn-link btn-horizontal-hamburger"
+          @click="toggleOptions"
+          v-if="shouldShowAnsweredOptionsOnly && !showAllOptions"
+        >
+          <span></span>
+        </button>
+        <div v-if="noOptions" class="options-not-available">{{ $t("WebInterviewUI.OptionsAvailableAfterAnswer") }}</div>
+        <wb-lock />
+      </div>
+    </div>
+  </wb-question>
 </template>
 <script lang="js">
     import { entityDetails } from "../mixins"
@@ -30,38 +58,45 @@
         name: 'CategoricalMulti',
         data(){
             return {
-                showAllOptions: false
+                showAllOptions: false,
+                answer: []
             }
         },
+
+        watch: {
+            "$me.answer"(to, from) {
+                this.answer = to
+            }
+        },
+        
         computed: {
             shouldShowAnsweredOptionsOnly(){
                  return shouldShowAnsweredOptionsOnlyForMulti(this);
             },
             answeredOrAllOptions(){
-                if(!this.shouldShowAnsweredOptionsOnly)
+                if(!this.shouldShowAnsweredOptionsOnly){
                     return this.$me.options;
+                }
                 
                 var self = this;
-                return filter(this.$me.options, function(o) { return self.$me.answer.indexOf(o.value) >= 0; });
+                return filter(this.$me.options, function(o) { 
+                    return self.$me.answer.indexOf(o.value) >= 0; 
+                });
             },
-            answer: {
-                get() {
-                    return this.$me.answer
-                },
-                set(value) {
-                    this.sendAnswer(() => {
-                        this.answerMulti(value);
-                    });
-                }
-            },
+            
             noOptions() {
                 return this.$me.options == null || this.$me.options.length == 0;
             },
             allAnswersGiven() {
-                return this.$me.maxSelectedAnswersCount && this.$me.answer.length >= this.$me.maxSelectedAnswersCount;                                
+                return this.$me.maxSelectedAnswersCount && this.$me.answer.length >= this.$me.maxSelectedAnswersCount;
             }
         },
         methods: {
+            change() {
+                this.sendAnswer(() => {
+                    this.answerMulti(this.answer);
+                });
+            },
             toggleOptions(){
                 this.showAllOptions = !this.showAllOptions;
             },
