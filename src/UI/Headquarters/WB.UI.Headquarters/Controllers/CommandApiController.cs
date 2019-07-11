@@ -25,7 +25,6 @@ namespace WB.UI.Headquarters.Controllers
         private readonly ICommandDeserializer commandDeserializer;
         private readonly IInterviewFactory _interviewFactory;
         private ICommandTransformator commandTransformator;
-        private const string DefaultErrorMessage = "Unexpected error occurred";
 
         public CommandApiController(
             ICommandService commandService, ICommandDeserializer commandDeserializer, ILogger logger,
