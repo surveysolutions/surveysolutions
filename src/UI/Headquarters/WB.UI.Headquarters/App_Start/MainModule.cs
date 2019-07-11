@@ -15,7 +15,6 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Modularity;
@@ -61,7 +60,6 @@ namespace WB.UI.Headquarters
 
         public void Load(IWebIocRegistry registry)
         {
-            registry.Bind<ILiteEventRegistry, LiteEventRegistry>();
             registry.BindToConstant<ISettingsProvider>(() => settingsProvider);
 
             registry.BindToConstant<LegacyAssemblySettings>(() => legacyAssemblySettings);

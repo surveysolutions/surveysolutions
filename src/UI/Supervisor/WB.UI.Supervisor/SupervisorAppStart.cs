@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Supervisor.Activities;
@@ -31,7 +32,8 @@ namespace WB.UI.Supervisor
 
         protected override Task<object> ApplicationStartup(object hint = null)
         {
-            Mvx.IoCProvider.GetSingleton<InterviewDashboardEventHandler>();
+            Mvx.IoCProvider.GetSingleton<IDenormalizerRegistry>()
+                .RegisterDenormalizer(Mvx.IoCProvider.GetSingleton<InterviewDashboardEventHandler>());
 
             var logger = Mvx.IoCProvider.Resolve<ILoggerProvider>().GetFor<SupervisorAppStart>();
             logger.Info($"Application started. Version: {typeof(SplashActivity).Assembly.GetName().Version}");

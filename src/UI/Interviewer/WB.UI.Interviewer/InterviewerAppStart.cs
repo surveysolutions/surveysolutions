@@ -9,6 +9,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Interviewer.Activities;
@@ -51,7 +52,9 @@ namespace WB.UI.Interviewer
         protected override Task<object> ApplicationStartup(object hint = null)
         {
             auditLogService.Write(new OpenApplicationAuditLogEntity());
-            this.serviceLocator.GetInstance<InterviewDashboardEventHandler>();
+
+            this.serviceLocator.GetInstance<IDenormalizerRegistry>()
+                .RegisterDenormalizer(this.serviceLocator.GetInstance<InterviewDashboardEventHandler>());
 
             logger.Info($"Application started. Version: {typeof(SplashActivity).Assembly.GetName().Version}");
 

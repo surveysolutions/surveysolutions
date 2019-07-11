@@ -78,7 +78,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             
             AnsweringViewModelMock = new Mock<AnsweringViewModel>(Mock.Of<ICommandService>(), userInterfaceStateService, Mock.Of<IMvxMessenger>());
             
-            EventRegistry = new Mock<ILiteEventRegistry>();
+            EventRegistry = new Mock<IViewModelEventRegistry>();
         }
 
         protected static Identity questionIdentity = Create.Entity.Identity(Guid.Parse("11111111111111111111111111111111"), new decimal[] { 1, 2 });
@@ -91,7 +91,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
         protected static Mock<AnsweringViewModel> AnsweringViewModelMock;
 
-        protected static Mock<ILiteEventRegistry> EventRegistry;
+        protected static Mock<IViewModelEventRegistry> EventRegistry;
 
         protected static ReadOnlyCollection<CategoricalOption> Options = new List<CategoricalOption>
         {

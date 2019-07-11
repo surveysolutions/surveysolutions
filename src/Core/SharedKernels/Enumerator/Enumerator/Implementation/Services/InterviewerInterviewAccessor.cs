@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         private readonly IEventSourcedAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache;
         private readonly IJsonAllTypesSerializer synchronizationSerializer;
         private readonly IInterviewEventStreamOptimizer eventStreamOptimizer;
-        private readonly ILiteEventRegistry eventRegistry;
+        private readonly IViewModelEventRegistry eventRegistry;
         private readonly IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository;
 
         public InterviewerInterviewAccessor(
@@ -50,7 +50,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             IEventSourcedAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache,
             IJsonAllTypesSerializer synchronizationSerializer,
             IInterviewEventStreamOptimizer eventStreamOptimizer,
-            ILiteEventRegistry eventRegistry, 
+            IViewModelEventRegistry eventRegistry, 
             IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository)
         {
             this.questionnaireRepository = questionnaireRepository;

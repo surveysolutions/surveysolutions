@@ -4,6 +4,7 @@ using Ncqrs.Eventing;
 using NUnit.Framework;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionInstructionViewModelTests
@@ -30,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionInstructionV
 
             var interviewRepository = Create.Fake.StatefulInterviewRepositoryWith(statefullInterview);
 
-            ILiteEventRegistry registry = Create.Service.LiteEventRegistry();
+            IViewModelEventRegistry registry = Create.Service.LiteEventRegistry();
             ILiteEventBus liteEventBus = Create.Service.LiteEventBus(registry);
 
             var viewModel = CreateQuestionHeaderViewModel(SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire), interviewRepository, registry);
