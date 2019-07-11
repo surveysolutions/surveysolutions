@@ -57,7 +57,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
             if (!this.eventTypes.ContainsKey(eventType)) return new IViewModelEventHandler[0];
             if(!this.eventTypes[eventType].ContainsKey(eventSourceId)) return new IViewModelEventHandler[0];
 
-            return this.eventTypes[eventType][eventSourceId];
+            return this.eventTypes[eventType][eventSourceId].ToList();
         }
 
         public void RemoveAggregateRoot(string aggregateRootId)

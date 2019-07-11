@@ -18,8 +18,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 {
     public class GroupViewModel : MvxNotifyPropertyChanged,
         IViewModelEventHandler<RosterInstancesTitleChanged>,
-        IViewModelEventHandler<RosterInstancesAdded>,
-        IViewModelEventHandler<RosterInstancesRemoved>,
         IInterviewEntityViewModel,
         IDisposable
     {
@@ -138,16 +136,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
             if (changedInstance != null)
                 this.RosterInstanceTitle = changedInstance.Title;
-        }
-
-        public void Handle(RosterInstancesAdded @event)
-        {
-            
-        }
-
-        public void Handle(RosterInstancesRemoved @event)
-        {
-
         }
 
         public virtual void Dispose()
