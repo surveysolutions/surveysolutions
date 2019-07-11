@@ -10,8 +10,8 @@
     @Styles.Render("~/css/list")
     @Scripts.Render("~/js/list", "~/js/brokeninterviewpackages")
     <script type="text/javascript">
-        var $interviewPageUrl = '@Html.Raw(@Url.Action("Review", "Interview", new {area = ""}, Request.Url.Scheme))';
-        var controlPanelBrokenInperviewPackagesUrl = '@Html.Raw(@Url.Action("RejectedInterviewPackages", "ControlPanel", new { }, Request.Url.Scheme))';
+        var $interviewPageUrl = '@Html.Raw(@Url.Action("Review", "Interview", new {area = ""}))';
+        var controlPanelBrokenInperviewPackagesUrl = '@Html.Raw(@Url.Action("RejectedInterviewPackages", "ControlPanel", new { }))';
         var brokenInperviewPackagesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ControlPanelApi", action = "GetRejectedInterviewPackages" })';
         var exceptionTypesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ControlPanelApi", action = "GetRejectedInterviewPackageExceptionTypes" })';
         var responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ControlPanelApi", action = "Interviewers" })';

@@ -19,7 +19,7 @@ namespace WB.Enumerator.Native.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class WebInterview {
@@ -57,6 +57,15 @@ namespace WB.Enumerator.Native.Resources {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Complete.
+        /// </summary>
+        public static string Complete {
+            get {
+                return ResourceManager.GetString("Complete", resourceCulture);
             }
         }
         
@@ -520,6 +529,15 @@ namespace WB.Enumerator.Native.Resources {
         public static string InvitationText {
             get {
                 return ResourceManager.GetString("InvitationText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Note for supervisor.
+        /// </summary>
+        public static string NoteForSupervisor {
+            get {
+                return ResourceManager.GetString("NoteForSupervisor", resourceCulture);
             }
         }
         

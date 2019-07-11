@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
@@ -28,7 +29,7 @@ namespace WB.Services.Export.Tests.Services
             dbContext = Create.TenantDbContext();
 
             this.tenantContext = tenantContextMock.Object;
-            this.interviewsToExportSource = new InterviewsToExportSource(dbContext);
+            this.interviewsToExportSource = new InterviewsToExportSource(dbContext, Mock.Of<ILogger<InterviewsToExportSource>>());
 
         }
 

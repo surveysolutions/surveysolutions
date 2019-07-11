@@ -34,23 +34,23 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
             {
                 throw new ArgumentException("Cannot find appropriate external storage data client for type: " + state.StorageType);
             }
-
-            using (dataClient.GetClient(state.ProcessArgs.AccessToken))
+            
+            using (dataClient.InitializeDataClient(state.ProcessArgs.AccessToken, state.Settings.Tenant))
             {
-                var applicationFolder = await dataClient.CreateApplicationFolderAsync();
+                var applicationFolder = await dataClient.CreateApplicationFolderAsync("Binary Data");
 
-                string GetInterviewFolder(Guid interviewId) => $"{settings.QuestionnaireId}/{interviewId.FormatGuid()}";
-                string GetAudioAuditInterviewFolder(Guid interviewId) => $"{GetInterviewFolder(interviewId)}/{interviewDataExportSettings.Value.AudioAuditFolderName}";
+                string GetInterviewFolder(string interviewId) => $"{state.QuestionnaireName}/{interviewId}";
+                string GetAudioAuditInterviewFolder(string interviewId) => $"{GetInterviewFolder(interviewId)}/{interviewDataExportSettings.Value.AudioAuditFolderName}";
 
-                async Task<string> GetOrCreateFolderByType(BinaryDataType binaryDataType, Guid interviewId)
+                async Task<string> GetOrCreateFolderByType(BinaryDataType binaryDataType, string interviewId)
                 {
                     switch (binaryDataType)
                     {
                         case BinaryDataType.Audio:
                         case BinaryDataType.Image:
-                            return await dataClient.CreateFolderAsync(applicationFolder, GetInterviewFolder(interviewId));
+                            return await dataClient.CreateFolderAsync(GetInterviewFolder(interviewId), applicationFolder);
                         case BinaryDataType.AudioAudit:
-                            return await dataClient.CreateFolderAsync(applicationFolder, GetAudioAuditInterviewFolder(interviewId));
+                            return await dataClient.CreateFolderAsync(GetAudioAuditInterviewFolder(interviewId), applicationFolder);
                         default:
                             throw new ArgumentException("Unknown binary type: " + binaryDataType);
                     }
@@ -59,7 +59,8 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
                 await binaryDataSource.ForEachInterviewMultimediaAsync(state,
                     async binaryDataAction =>
                     {
-                        var folderPath = await GetOrCreateFolderByType(binaryDataAction.Type, binaryDataAction.InterviewId);
+                        var folderPath = await GetOrCreateFolderByType(binaryDataAction.Type, 
+                            binaryDataAction.InterviewKey ?? binaryDataAction.InterviewId.FormatGuid());
 
                         var storageSize = await dataClient.GetFreeSpaceAsync();
                         if (storageSize.HasValue && storageSize.Value < binaryDataAction.ContentLength)

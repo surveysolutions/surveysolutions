@@ -37,18 +37,23 @@ namespace WB.Services.Export.Services.Processing
             this.archiveUtils.ZipFiles(exportTempDirectoryPath, filesToArchive, archiveFilePath, archivePassword);
         }
 
-        public async Task PublishArchiveToArtifactsStorageAsync(TenantInfo tenant, string archiveFile, ExportProgress exportProgress, CancellationToken cancellationToken)
+        public async Task<bool> PublishArchiveToArtifactsStorageAsync(TenantInfo tenant, string archiveFile, ExportProgress exportProgress, CancellationToken cancellationToken)
         {
             if (externalArtifactsStorage.IsEnabled())
             {
                 using (var file = File.OpenRead(archiveFile))
                 {
                     var name = Path.GetFileName(archiveFile);
-                    await this.externalArtifactsStorage.StoreAsync(GetExternalStoragePath(tenant, name), file, "application/zip", exportProgress, cancellationToken);
+                    
+                    await this.externalArtifactsStorage.StoreAsync(
+                        GetExternalStoragePath(tenant, name), file, "application/zip",
+                        exportProgress, cancellationToken);
                 }
 
-                File.Delete(archiveFile);
+                return true;
             }
+
+            return false;
         }
     }
 }

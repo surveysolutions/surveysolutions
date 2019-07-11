@@ -115,6 +115,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Complete.
+        /// </summary>
+        internal static string Complete {
+            get {
+                return ResourceManager.GetString("Complete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Complete.
+        /// </summary>
+        internal static string CompletePage {
+            get {
+                return ResourceManager.GetString("CompletePage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Customize displayed text for respondents.
         /// </summary>
         internal static string CustomizeDisplayedText {
@@ -282,6 +300,15 @@ namespace WB.UI.Headquarters.Resources {
         internal static string MainText {
             get {
                 return ResourceManager.GetString("MainText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Note for supervisor.
+        /// </summary>
+        internal static string NoteToSupervisor {
+            get {
+                return ResourceManager.GetString("NoteToSupervisor", resourceCulture);
             }
         }
         

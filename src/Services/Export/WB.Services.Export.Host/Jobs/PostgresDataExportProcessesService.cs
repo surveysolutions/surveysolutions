@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Microsoft.Graph;
 using Newtonsoft.Json;
 using WB.Services.Export.Models;
 using WB.Services.Export.Services.Processing;
@@ -60,7 +59,7 @@ namespace WB.Services.Export.Host.Jobs
 
             args.Status = new DataExportProcessStatus
             {
-                TimeEstimation = eta == null ? (TimeSpan?) null : TimeSpan.Parse(eta),
+                TimeEstimation = eta == null ? (TimeSpan?)null : TimeSpan.Parse(eta),
                 BeginDate = job.StartAt,
                 IsRunning = job.Status == JobStatus.Running || job.Status == JobStatus.Created,
                 Status = status
@@ -74,24 +73,27 @@ namespace WB.Services.Export.Host.Jobs
                     Message = job.GetData<string>(ErrorField)
                 }
                 : null;
+
             args.ProcessId = job.Id;
             return args;
         }
 
         public async Task<DataExportProcessArgs[]> GetAllProcesses(TenantInfo tenant, bool runningOnly = true)
         {
-            var statusFilter = runningOnly ? new JobStatus[]{JobStatus.Created, JobStatus.Running} : new JobStatus[0];
+            var statusFilter = runningOnly ? new[] { JobStatus.Created, JobStatus.Running } : new JobStatus[0];
             var jobs = (await this.jobService.GetAllJobsAsync(tenant, statuses: statusFilter))
                 .Select(AsDataExportProcessArgs).ToArray();
 
             return jobs;
         }
-        
+
         public async Task<DataExportProcessArgs> GetProcessAsync(long processId)
         {
-            return AsDataExportProcessArgs(await this.jobService.GetJobAsync(processId));
+            var job = await this.jobService.GetJobAsync(processId);
+            if (job == null) return null;
+            return AsDataExportProcessArgs(job);
         }
-        
+
         public void UpdateDataExportProgress(long processId, int progressInPercents, TimeSpan estimatedTime = default)
         {
             logger.LogTrace("Update progress: {progressInPercents}%", progressInPercents);

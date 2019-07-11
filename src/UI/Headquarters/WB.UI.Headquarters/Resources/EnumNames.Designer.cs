@@ -196,6 +196,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Complete.
+        /// </summary>
+        public static string WebInterviewUserMessages_CompleteButton {
+            get {
+                return ResourceManager.GetString("WebInterviewUserMessages_CompleteButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Note for Supervisor.
+        /// </summary>
+        public static string WebInterviewUserMessages_CompleteNoteToSupervisor {
+            get {
+                return ResourceManager.GetString("WebInterviewUserMessages_CompleteNoteToSupervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Finish Text.
         /// </summary>
         public static string WebInterviewUserMessages_FinishInterview {
