@@ -2,20 +2,18 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Interview.Overview;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
-using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Headquarters.API.WebInterview.Pipeline;
 using WB.UI.Headquarters.Code;
 
@@ -165,6 +163,21 @@ namespace WB.UI.Headquarters.API.WebInterview
             }
         }
         
+        [ObserverNotAllowed]
+        [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+        public void ResolveComment(string questionIdentity, Guid commentId)
+        {
+            var identity = Identity.Parse(questionIdentity);
+            var command = new ResolveCommentAnswerCommand(this.GetCallerInterview().Id, 
+                this.CommandResponsibleId, 
+                identity.Id, 
+                identity.RosterVector,
+                commentId);
+
+            this.commandService.Execute(command);
+        }
+
         public override InterviewInfo GetInterviewDetails()
         {
             var interviewDetails = base.GetInterviewDetails();

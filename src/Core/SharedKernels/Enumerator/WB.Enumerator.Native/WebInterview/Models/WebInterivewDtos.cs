@@ -218,6 +218,9 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public bool IsOwnComment { get; set; }
         public UserRoles UserRole { get; set; }
         public DateTime CommentTimeUtc { get; set; }
+        public Guid? Id { get; set; }
+        public bool Resolved { get; set; }
+        public bool ResolveAllowed { get; set; }
     }
 
     public abstract class InterviewEntity

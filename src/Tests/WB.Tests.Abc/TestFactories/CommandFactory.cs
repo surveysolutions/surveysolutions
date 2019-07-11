@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Dropbox.Api.Files;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.Infrastructure.EventBus;
@@ -346,6 +347,16 @@ namespace WB.Tests.Abc.TestFactories
         public CreateTemporaryInterviewCommand CreateTemporaryInterview(Guid? interviewId= null, Guid? userId = null, QuestionnaireIdentity questionnaireId = null)
         {
             return new CreateTemporaryInterviewCommand(interviewId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), questionnaireId ?? Create.Entity.QuestionnaireIdentity());
+        }
+
+        public ResolveCommentAnswerCommand ResolveCommentAnswer(Guid? interviewId = null, Identity entityId = null, Guid? commentId = null)
+        {
+            var stubIdentity = Create.Identity();
+            return new ResolveCommentAnswerCommand(interviewId ?? Guid.NewGuid(),
+                Guid.NewGuid(),
+                entityId?.Id ?? stubIdentity.Id,
+                entityId?.RosterVector ?? stubIdentity.RosterVector,
+                commentId ?? Guid.NewGuid());
         }
     }
 }

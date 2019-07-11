@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using AutoMapper;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -41,12 +42,23 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
         protected override Comment[] GetComments(InterviewTreeQuestion question)
         {
             return question.AnswerComments.Select(
-                    ac => new Comment
+                    ac =>
                     {
-                        Text = ac.Comment,
-                        IsOwnComment = ac.UserId == this.authorizedUser.Id,
-                        UserRole = ac.UserRole,
-                        CommentTimeUtc = ac.CommentTime
+                        var comment = new Comment
+                        {
+                            Text = ac.Comment,
+                            IsOwnComment = ac.UserId == this.authorizedUser.Id,
+                            UserRole = ac.UserRole,
+                            CommentTimeUtc = ac.CommentTime,
+                            Id = ac.Id
+                        };
+
+                        comment.ResolveAllowed = comment.Id.HasValue && 
+                                                 (this.authorizedUser.IsAdministrator 
+                                                     || this.authorizedUser.IsHeadquarter 
+                                                     || comment.UserRole == UserRoles.Supervisor && this.authorizedUser.IsSupervisor);
+
+                        return comment;
                     })
                 .ToArray();
         }
