@@ -225,7 +225,7 @@ export default {
       },
       cancel()
       {
-           modal.confirm(this.$t('DataExport.ConfirmStop') + " " + this.$t('DataExport.export'), result => {
+           modal.confirm(this.$t('DataExport.ConfirmStop') + " " + this.$t('DataExport.export') + "?", result => {
                 if (result) {
                     this.$http.post(this.$config.model.api.cancelExportProcessUrl, null, {  params: { id: this.dataExportProcessId }  })
                         .catch((error) => {
