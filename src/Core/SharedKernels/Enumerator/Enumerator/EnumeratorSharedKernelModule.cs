@@ -3,6 +3,7 @@ using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection;
@@ -19,6 +20,7 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -66,6 +68,10 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<IImageFileStorage, InterviewerImageFileStorage>();
             registry.Bind<IAudioAuditFileStorage, InterviewerAudioAuditFileStorage>();
             registry.BindAsSingleton<IAuditLogService, EnumeratorAuditLogService>();
+
+            registry.BindAsSingleton<IViewModelEventRegistry, ViewModelEventRegistry>();
+            registry.BindAsSingleton<IDenormalizerRegistry, DenormalizerRegistry>();
+            registry.Bind<ILiteEventBus, LiteEventBus>();
 
             RegisterViewModels(registry);
         }

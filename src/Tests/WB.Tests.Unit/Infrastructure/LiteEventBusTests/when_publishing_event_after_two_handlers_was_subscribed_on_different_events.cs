@@ -3,6 +3,7 @@ using Moq;
 using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Tests.Abc;
 
 
@@ -17,10 +18,10 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
             var eventRegistry = Create.Service.LiteEventRegistry();
             eventBus = Create.Service.LiteEventBus(eventRegistry);
 
-            handlerOnFiredEventMock = new Mock<ILiteEventHandler<DummyEvent>>();
+            handlerOnFiredEventMock = new Mock<IViewModelEventHandler<DummyEvent>>();
             eventRegistry.Subscribe(handlerOnFiredEventMock.Object, eventSourceId.FormatGuid());
 
-            handlerOnDifferentEventMock = new Mock<ILiteEventHandler<DifferentDummyEvent>>();
+            handlerOnDifferentEventMock = new Mock<IViewModelEventHandler<DifferentDummyEvent>>();
             eventRegistry.Subscribe(handlerOnDifferentEventMock.Object, eventSourceId.FormatGuid());
             BecauseOf();
         }
@@ -37,8 +38,8 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
 
         private static ILiteEventBus eventBus;
         private static DummyEvent eventStub;
-        private static Mock<ILiteEventHandler<DummyEvent>> handlerOnFiredEventMock;
-        private static Mock<ILiteEventHandler<DifferentDummyEvent>> handlerOnDifferentEventMock;
+        private static Mock<IViewModelEventHandler<DummyEvent>> handlerOnFiredEventMock;
+        private static Mock<IViewModelEventHandler<DifferentDummyEvent>> handlerOnDifferentEventMock;
         private static CommittedEventStream eventsToPublish;
     }
 }

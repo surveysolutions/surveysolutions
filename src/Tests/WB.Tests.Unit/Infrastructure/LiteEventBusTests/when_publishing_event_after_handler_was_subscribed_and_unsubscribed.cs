@@ -2,6 +2,7 @@ using System;
 using Moq;
 using Ncqrs.Eventing;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Tests.Abc;
 
 
@@ -14,7 +15,7 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
             eventBus = Create.Service.LiteEventBus(liteEventRegistry);
             eventsToPublish = BuildReadyToBePublishedStream(Guid.NewGuid(), new DummyEvent());
 
-            handlerMock = new Mock<ILiteEventHandler<DummyEvent>>();
+            handlerMock = new Mock<IViewModelEventHandler<DummyEvent>>();
             liteEventRegistry.Subscribe(handlerMock.Object, "id");
             liteEventRegistry.Unsubscribe(handlerMock.Object);
             BecauseOf();
@@ -27,8 +28,8 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
             handlerMock.Verify(s => s.Handle(Moq.It.IsAny<DummyEvent>()), Times.Never);
 
         private static ILiteEventBus eventBus;
-        private static ILiteEventRegistry liteEventRegistry;
-        private static Mock<ILiteEventHandler<DummyEvent>> handlerMock;
+        private static IViewModelEventRegistry liteEventRegistry;
+        private static Mock<IViewModelEventHandler<DummyEvent>> handlerMock;
         private static CommittedEventStream eventsToPublish;
     }
 }

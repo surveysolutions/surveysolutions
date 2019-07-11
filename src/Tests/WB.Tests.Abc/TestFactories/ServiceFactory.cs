@@ -73,7 +73,6 @@ using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.DenormalizerStorage;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.Implementation.Aggregates;
@@ -162,7 +161,7 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewDashboardEventHandler DashboardDenormalizer(
             IPlainStorage<InterviewView> interviewViewRepository = null,
             IQuestionnaireStorage questionnaireStorage = null,
-            ILiteEventRegistry liteEventRegistry = null,
+            IDenormalizerRegistry liteEventRegistry = null,
             IPlainStorage<PrefilledQuestionView> prefilledQuestions = null,
             IAnswerToStringConverter answerToStringConverter = null
         )
@@ -170,7 +169,7 @@ namespace WB.Tests.Abc.TestFactories
                 interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>(),
                 prefilledQuestions ?? new InMemoryPlainStorage<PrefilledQuestionView>(),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
-                liteEventRegistry ?? Mock.Of<ILiteEventRegistry>(),
+                liteEventRegistry ?? Mock.Of<IDenormalizerRegistry>(),
                 answerToStringConverter ?? Mock.Of<IAnswerToStringConverter>());
 
         public DomainRepository DomainRepository(
@@ -228,7 +227,7 @@ namespace WB.Tests.Abc.TestFactories
                 aggregateRootRepositoryWithCache ?? Mock.Of<IEventSourcedAggregateRootRepositoryWithCache>(),
                 synchronizationSerializer ?? Mock.Of<IJsonAllTypesSerializer>(),
                 eventStreamOptimizer ?? Mock.Of<IInterviewEventStreamOptimizer>(),
-                Mock.Of<ILiteEventRegistry>(),
+                Mock.Of<IViewModelEventRegistry>(),
                 interviewSequenceStorage ?? Mock.Of<IPlainStorage<InterviewSequenceView, Guid>>());
 
         public InterviewEventStreamOptimizer InterviewEventStreamOptimizer()
@@ -237,13 +236,14 @@ namespace WB.Tests.Abc.TestFactories
         public KeywordsProvider KeywordsProvider()
             => new KeywordsProvider(Create.Service.SubstitutionService());
 
-        public LiteEventBus LiteEventBus(ILiteEventRegistry liteEventRegistry = null, IEventStore eventStore = null)
+        public LiteEventBus LiteEventBus(IViewModelEventRegistry liteEventRegistry = null, IEventStore eventStore = null, IDenormalizerRegistry denormalizerRegistry = null)
             => new LiteEventBus(
-                liteEventRegistry ?? Stub<ILiteEventRegistry>.WithNotEmptyValues,
-                eventStore ?? Mock.Of<IEventStore>());
+                liteEventRegistry ?? Stub<IViewModelEventRegistry>.WithNotEmptyValues,
+                eventStore ?? Mock.Of<IEventStore>(),
+                denormalizerRegistry ?? Stub<IDenormalizerRegistry>.WithNotEmptyValues);
 
-        public LiteEventRegistry LiteEventRegistry()
-            => new LiteEventRegistry();
+        public ViewModelEventRegistry LiteEventRegistry()
+            => new ViewModelEventRegistry();
 
         public NcqrCompatibleEventDispatcher NcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null,
             ILogger logger = null,

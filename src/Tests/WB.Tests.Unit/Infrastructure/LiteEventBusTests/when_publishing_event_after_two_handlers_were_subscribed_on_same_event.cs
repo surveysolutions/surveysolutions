@@ -3,6 +3,7 @@ using Moq;
 using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Tests.Abc;
 
 
@@ -18,10 +19,10 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
             var eventRegistry = Create.Service.LiteEventRegistry();
             eventBus = Create.Service.LiteEventBus(eventRegistry);
 
-            firstHandlerMock = new Mock<ILiteEventHandler<DummyEvent>>();
+            firstHandlerMock = new Mock<IViewModelEventHandler<DummyEvent>>();
             eventRegistry.Subscribe(firstHandlerMock.Object, eventSourceId.FormatGuid());
 
-            secondHandlerMock = new Mock<ILiteEventHandler<DummyEvent>>();
+            secondHandlerMock = new Mock<IViewModelEventHandler<DummyEvent>>();
             eventRegistry.Subscribe(secondHandlerMock.Object, eventSourceId.FormatGuid());
             BecauseOf();
         }
@@ -39,7 +40,7 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
         private static ILiteEventBus eventBus;
         private static DummyEvent dummyEventStub;
         private static CommittedEventStream eventsToPublish;
-        private static Mock<ILiteEventHandler<DummyEvent>> firstHandlerMock;
-        private static Mock<ILiteEventHandler<DummyEvent>> secondHandlerMock;
+        private static Mock<IViewModelEventHandler<DummyEvent>> firstHandlerMock;
+        private static Mock<IViewModelEventHandler<DummyEvent>> secondHandlerMock;
     }
 }
