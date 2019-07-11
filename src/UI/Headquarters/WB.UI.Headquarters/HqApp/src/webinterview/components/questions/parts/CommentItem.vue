@@ -1,7 +1,10 @@
 <template>
     <div :class="{'enumerators-comment': isInterviewersComment}">
         <h6>{{ commentTitle }}</h6>
-        <p :class="{'overloaded': isCollapsed}"> <span v-html="text"></span><button v-if="isCollapsed" type="button" v-on:click="toggle()" class="btn btn-link btn-horizontal-hamburger"><span></span></button></p>
+        <button type="button" v-if="resolveAllowed" @click="resolve">Resolve</button>
+        <p :class="{'overloaded': isCollapsed}"> <span v-html="text"></span>
+            <button v-if="isCollapsed" type="button" v-on:click="toggle()" class="btn btn-link btn-horizontal-hamburger"><span></span></button>
+        </p>
     </div>
 </template>
 
@@ -20,6 +23,18 @@
                 required: true,
                 type: Boolean
             },
+            resolveAllowed: {
+                required: true,
+                type: Boolean
+            },
+            commentId: {
+                required: false,
+                type: String
+            },
+            questionId: {
+                required: true,
+                type: String
+            }
         },
         data() {
             return {
@@ -27,7 +42,7 @@
             };
         },
         computed: {
-            isInterviewersComment(){
+            isInterviewersComment() {
                 return this.userRole == 4 /*'Interviewer'*/;
             },
             commentTitle() {
@@ -48,11 +63,14 @@
                 }
 
                 return this.$t("WebInterviewUI.Comment") //'Comment';
-            }           
+            }
         },
         methods: {
-            toggle(){
+            toggle() {
                 this.isCollapsed = !this.isCollapsed;
+            },
+            async resolve() {
+                await this.$store.dispatch('resolveComment', { questionId: this.questionId, commentId: this.commentId })
             }
         }
     }

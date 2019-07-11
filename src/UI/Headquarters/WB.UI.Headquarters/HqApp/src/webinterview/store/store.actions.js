@@ -83,6 +83,9 @@ export default {
         commit("POSTING_COMMENT", { questionId: questionId })
         await Vue.$api.call(api => api.sendNewComment(questionId, comment))
     },
+    async resolveComment({ dispatch }, { questionId, commentId }) {
+        await Vue.$api.call(api => api.resolveComment(questionId, commentId))
+    },
 
     setAnswerAsNotSaved({ commit }, { id, message }) {
         commit("SET_ANSWER_NOT_SAVED", { id, message })

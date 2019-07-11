@@ -2,7 +2,13 @@
     <div class="information-block comments-block">
 
         <template v-for="comment in $me.comments">
-            <wb-comment-item :userRole="comment.userRole" :text="comment.text" :isOwnComment="comment.isOwnComment" :key="comment.commentTimeUtc" />
+            <wb-comment-item :userRole="comment.userRole" 
+            :text="comment.text" 
+            :isOwnComment="comment.isOwnComment" 
+            :key="comment.commentTimeUtc"
+            :questionId="questionId"
+            :resolveAllowed="comment.resolveAllowed"
+            :commentId="comment.id" />
         </template>
 
         <div class="comment active" v-if="isShowingAddCommentDialog">
@@ -77,6 +83,9 @@
             },
             postBtnText() {
                 return this.$me.postingComment ? this.$t("WebInterviewUI.CommentPosting") : this.$t("WebInterviewUI.CommentPost")
+            },
+            questionId() {
+                return this.$me.id
             }
         }
     }

@@ -3,28 +3,32 @@ using Main.Core.Entities.SubEntities;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    public struct AnswerComment
+    public class AnswerComment
     {
+        public Guid? Id { get; }
         public Guid UserId { get; private set; }
         public UserRoles UserRole { get; private set; }
         public DateTime CommentTime { get; private set; }
         public string Comment { get; private set; }
         public Identity QuestionIdentity { get; private set; }
+        public bool Resolved { get; set; }
 
-        public AnswerComment(Guid userId, UserRoles userRole, DateTime commentTime, string comment, Identity questionIdentity)
-            : this()
+        public AnswerComment(Guid userId, UserRoles userRole, DateTime commentTime, string comment, Identity questionIdentity, Guid? id)
         {
             UserId = userId;
             UserRole = userRole;
             CommentTime = commentTime;
             Comment = comment;
             this.QuestionIdentity = questionIdentity;
+            this.Id = id;
         }
 
         #region equals
 
         public bool Equals(AnswerComment other)
         {
+            if (this.Id.HasValue) return this.Id == other.Id;
+
             return this.UserId.Equals(other.UserId) && this.CommentTime.Equals(other.CommentTime) &&
                 string.Equals(this.Comment, other.Comment) && this.QuestionIdentity.Equals(other.QuestionIdentity);
         }
@@ -37,6 +41,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public override int GetHashCode()
         {
+            if (this.Id.HasValue) return this.Id.GetHashCode();
+
             unchecked
             {
                 int hashCode = this.UserId.GetHashCode();
