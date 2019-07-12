@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.parentRosters = questionnaire.GetRostersFromTopToSpecifiedEntity(this.linkedToRosterId).ToHashSet();
         }
 
-        public override async Task Handle(RosterInstancesTitleChanged @event)
+        public override async Task HandleAsync(RosterInstancesTitleChanged @event)
         {
             if (!@event.ChangedInstances.Any(x => x.RosterInstance.GroupId == this.linkedToRosterId ||
                                                   this.parentRosters.Contains(x.RosterInstance.GroupId))) return;

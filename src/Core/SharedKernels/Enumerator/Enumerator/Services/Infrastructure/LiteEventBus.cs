@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Threading.Tasks;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
@@ -10,17 +9,19 @@ using WB.Core.Infrastructure.EventBus.Lite;
 
 namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
 {
-    public class LiteEventBus : ILiteEventBus
+    internal class LiteEventBus : ILiteEventBus
     {
-        private readonly IViewModelEventRegistry liteEventRegistry;
         private readonly IEventStore eventStore;
         private readonly IDenormalizerRegistry denormalizerRegistry;
+        private readonly ViewModelEventQueue viewModelEventQueue;
 
-        public LiteEventBus(IViewModelEventRegistry liteEventRegistry, IEventStore eventStore, IDenormalizerRegistry denormalizerRegistry)
+        public LiteEventBus(IEventStore eventStore, 
+            IDenormalizerRegistry denormalizerRegistry,
+            ViewModelEventQueue viewModelEventQueue)
         {
-            this.liteEventRegistry = liteEventRegistry;
             this.eventStore = eventStore;
             this.denormalizerRegistry = denormalizerRegistry;
+            this.viewModelEventQueue = viewModelEventQueue;
         }
 
         public IEnumerable<CommittedEvent> CommitUncommittedEvents(IEventSourcedAggregateRoot aggregateRoot, string origin) =>
@@ -29,35 +30,9 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
         public void PublishCommittedEvents(IEnumerable<CommittedEvent> committedEvents)
         {
             this.PublishToDenormalizers(committedEvents);
-            this.PublishToViewModels(committedEvents);
-        }
 
-        private void PublishToViewModels(IEnumerable<CommittedEvent> committedEvents) =>
-            Task.Run(async () => await this.PublishToViewModelsAsync(committedEvents));
-
-        private async Task PublishToViewModelsAsync(IEnumerable<CommittedEvent> committedEvents)
-        {
-            var exceptions = new List<Exception>();
-            foreach (var uncommittedChange in committedEvents)
-            foreach (var viewModel in this.liteEventRegistry.GetViewModelsByEvent(uncommittedChange))
-            {
-                try
-                {
-                    var handler = viewModel.GetType().GetRuntimeMethod("Handle", new[] {uncommittedChange.Payload.GetType()});
-                    
-                    var taskOrVoid = (Task)handler?.Invoke(viewModel, new object[] {uncommittedChange.Payload});
-                    if(taskOrVoid != null) await taskOrVoid;
-                }
-                catch (Exception e)
-                {
-                    exceptions.Add(e);
-                }
-            }
-
-            if (exceptions.Count > 0)
-            {
-                throw new AggregateException("Exception during update view models", exceptions);
-            }
+            foreach (var committedEvent in committedEvents)
+                this.viewModelEventQueue.Enqueue(committedEvent);
         }
 
         private void PublishToDenormalizers(IEnumerable<CommittedEvent> committedEvents)

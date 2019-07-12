@@ -85,7 +85,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             });
         }
 
-        public async Task Handle(AnswersDeclaredPlausible @event)
+        public async Task HandleAsync(AnswersDeclaredPlausible @event)
         {
             if (@event.Questions.Contains(this.Identity))
             {
@@ -93,7 +93,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public async Task Handle(AnswersDeclaredImplausible @event)
+        public async Task HandleAsync(AnswersDeclaredImplausible @event)
         {
             if (@event.GetFailedValidationConditionsDictionary().Keys.Contains(this.Identity))
             {
@@ -101,7 +101,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public async Task Handle(StaticTextsDeclaredPlausible @event)
+        public async Task HandleAsync(StaticTextsDeclaredPlausible @event)
         {
             if (@event.StaticTexts.Contains(this.Identity))
             {
@@ -109,7 +109,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public async Task Handle(StaticTextsDeclaredImplausible @event)
+        public async Task HandleAsync(StaticTextsDeclaredImplausible @event)
         {
             if (@event.GetFailedValidationConditionsDictionary().Keys.Contains(this.Identity))
             {
@@ -117,7 +117,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public async Task Handle(QuestionsEnabled @event)
+        public async Task HandleAsync(QuestionsEnabled @event)
         {
             if (@event.Questions.Contains(this.Identity))
             {
@@ -125,7 +125,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public async Task Handle(SubstitutionTitlesChanged @event)
+        public async Task HandleAsync(SubstitutionTitlesChanged @event)
         {
             if (@event.Questions.Contains(this.Identity) || @event.StaticTexts.Contains(this.Identity))
             {

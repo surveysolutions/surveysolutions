@@ -6,6 +6,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
     public interface IAsyncViewModelEventHandler<TEvent> : IViewModelEventHandler
         where TEvent : IEvent
     {
-        Task Handle(TEvent @event);
+        Task HandleAsync(TEvent @event);
     }
 }

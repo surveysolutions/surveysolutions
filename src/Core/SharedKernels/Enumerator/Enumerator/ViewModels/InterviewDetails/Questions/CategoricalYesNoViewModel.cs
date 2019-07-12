@@ -88,7 +88,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public async Task Handle(YesNoQuestionAnswered @event)
+        public async Task HandleAsync(YesNoQuestionAnswered @event)
         {
             if (@event.QuestionId != this.Identity.Id || !@event.RosterVector.Identical(this.Identity.RosterVector)) return;
             await this.UpdateViewModelsByAnsweredOptionsAsync(@event.AnsweredOptions);
