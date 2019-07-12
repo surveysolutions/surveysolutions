@@ -125,7 +125,7 @@
                     return;
                 }
 
-                const diff = _.difference(this.answer, value)
+                const diff = _.difference(this.$me.answer, value)
                 const rosterTitle = _.join(diff.map(v => {
                     return _.find(this.answeredOrAllOptions, { value: v }).title
                 }), ', ')
