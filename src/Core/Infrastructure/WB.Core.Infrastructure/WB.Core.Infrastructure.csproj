@@ -12,11 +12,6 @@
     <WarningsAsErrors />
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="EventBus\Lite\Implementation\**" />
-    <EmbeddedResource Remove="EventBus\Lite\Implementation\**" />
-    <None Remove="EventBus\Lite\Implementation\**" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Autofac" Version="4.9.2" />
     <PackageReference Include="System.Collections.Immutable" Version="1.5.0" />
     <PackageReference Include="System.Threading.Tasks.Dataflow" Version="4.9.0" />
