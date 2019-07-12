@@ -203,6 +203,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public Validity Validity { get; set; } = new Validity();
         public Comment[] Comments { get; set; }
         public int MaxLength => AnswerUtils.TextAnswerMaxLength;
+        public bool AllowResolveComments { get; set; }
     }
 
     public class Validity
@@ -220,7 +221,6 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public DateTime CommentTimeUtc { get; set; }
         public Guid? Id { get; set; }
         public bool Resolved { get; set; }
-        public bool ResolveAllowed { get; set; }
     }
 
     public abstract class InterviewEntity

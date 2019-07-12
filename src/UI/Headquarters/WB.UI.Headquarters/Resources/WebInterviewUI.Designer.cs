@@ -612,6 +612,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hide resolved.
+        /// </summary>
+        internal static string HideResolved {
+            get {
+                return ResourceManager.GetString("HideResolved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Instruction.
         /// </summary>
         internal static string Instruction {
@@ -864,6 +873,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Resolve.
+        /// </summary>
+        internal static string Resolve {
+            get {
+                return ResourceManager.GetString("Resolve", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resolved commentaries are not available for interviewer and hidden for supervisor and headquarters.
+        /// </summary>
+        internal static string ResolveHint {
+            get {
+                return ResourceManager.GetString("ResolveHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save scenario.
         /// </summary>
         internal static string SaveScenario {
@@ -914,6 +941,15 @@ namespace WB.UI.Headquarters.Resources {
         internal static string ShowOnMap {
             get {
                 return ResourceManager.GetString("ShowOnMap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show resolved.
+        /// </summary>
+        internal static string ShowResolved {
+            get {
+                return ResourceManager.GetString("ShowResolved", resourceCulture);
             }
         }
         

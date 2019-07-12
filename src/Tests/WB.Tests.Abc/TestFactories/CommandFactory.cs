@@ -349,14 +349,13 @@ namespace WB.Tests.Abc.TestFactories
             return new CreateTemporaryInterviewCommand(interviewId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), questionnaireId ?? Create.Entity.QuestionnaireIdentity());
         }
 
-        public ResolveCommentAnswerCommand ResolveCommentAnswer(Guid? interviewId = null, Identity entityId = null, Guid? commentId = null)
+        public ResolveCommentAnswerCommand ResolveCommentAnswer(Guid? interviewId = null, Identity entityId = null)
         {
             var stubIdentity = Create.Identity();
             return new ResolveCommentAnswerCommand(interviewId ?? Guid.NewGuid(),
                 Guid.NewGuid(),
                 entityId?.Id ?? stubIdentity.Id,
-                entityId?.RosterVector ?? stubIdentity.RosterVector,
-                commentId ?? Guid.NewGuid());
+                entityId?.RosterVector ?? stubIdentity.RosterVector);
         }
     }
 }
