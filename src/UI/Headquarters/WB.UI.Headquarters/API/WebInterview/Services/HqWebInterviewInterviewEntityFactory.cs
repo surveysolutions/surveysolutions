@@ -37,11 +37,26 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                                      callerInterview.Status < InterviewStatus.ApprovedByHeadquarters &&
                                      ((this.authorizedUser.IsSupervisor || this.authorizedUser.IsHeadquarter) && !this.authorizedUser.IsObserving);
             result.AcceptAnswer = result.IsForSupervisor;
+
+            if (!callerInterview.ReceivedByInterviewer && question.AnswerComments.Any(x => !x.Resolved && x.Id.HasValue))
+            {
+                if (this.authorizedUser.IsHeadquarter || this.authorizedUser.IsAdministrator)
+                {
+                    result.AllowResolveComments = true;
+                }
+                else if (this.authorizedUser.IsSupervisor)
+                {
+                    result.AllowResolveComments = 
+                        question.AnswerComments
+                            .Where(x => !x.Resolved)
+                            .All(x => x.UserRole == UserRoles.Supervisor || x.UserRole == UserRoles.Interviewer);
+                }
+            }
         }
 
         protected override Comment[] GetComments(InterviewTreeQuestion question)
         {
-            return question.AnswerComments.Select(
+            var result = question.AnswerComments.Select(
                     ac =>
                     {
                         var comment = new Comment
@@ -50,17 +65,14 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                             IsOwnComment = ac.UserId == this.authorizedUser.Id,
                             UserRole = ac.UserRole,
                             CommentTimeUtc = ac.CommentTime,
-                            Id = ac.Id
+                            Id = ac.Id,
+                            Resolved = ac.Resolved
                         };
-
-                        comment.ResolveAllowed = comment.Id.HasValue && 
-                                                 (this.authorizedUser.IsAdministrator 
-                                                     || this.authorizedUser.IsHeadquarter 
-                                                     || comment.UserRole == UserRoles.Supervisor && this.authorizedUser.IsSupervisor);
 
                         return comment;
                     })
                 .ToArray();
+            return result;
         }
 
         protected override string WebLinksVirtualDirectory(bool isReview) => isReview ? @"Interview/Review" : @"WebInterview";

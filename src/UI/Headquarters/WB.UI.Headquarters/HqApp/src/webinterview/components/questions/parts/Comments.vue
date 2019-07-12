@@ -1,13 +1,19 @@
 <template>
     <div class="information-block comments-block">
+        <button href="javascript:void(0);"
+                class="btn btn-link show-resolved-comments" 
+                v-if="$store.getters.isReviewMode && this.$me.comments.length > 0"
+                @click="showResolved = !showResolved">
+            <span>{{ showResolved ? this.$t('WebInterviewUI.HideResolved') : this.$t('WebInterviewUI.ShowResolved')}}</span>
+        </button>
 
-        <template v-for="comment in $me.comments">
+        <template v-for="comment in visibleComments">
             <wb-comment-item :userRole="comment.userRole" 
             :text="comment.text" 
             :isOwnComment="comment.isOwnComment" 
             :key="comment.commentTimeUtc"
-            :questionId="questionId"
-            :commentId="comment.id" />
+            :date="comment.commentTimeUtc"
+            :resolved="comment.resolved" />
         </template>
 
         <div class="comment active" v-if="isShowingAddCommentDialog">
@@ -31,7 +37,13 @@
                     </div>
                 </div>
             </form>
-            <button type="button">Resolve</button>
+            <button href="javascript:void(0);" class="btn btn-link resolve-comments" 
+                    :disabled="isResolving"
+                    v-if="resolveAllowed"
+                    @click="resolve"
+                    :title="$t('WebInterviewUI.ResolveHint')">
+                <span class="text-success">{{this.$t('WebInterviewUI.Resolve')}}</span>
+            </button>
         </div>
     </div>
 </template>
@@ -39,16 +51,19 @@
 <script lang="js">
 
     import { entityPartial } from "~/webinterview/components/mixins"
+    import { filter } from "lodash"
 
     export default {
         mixins: [entityPartial],
         data() {
             return {
-                comment: null
+                comment: null,
+                showResolved: false
             }
         },
         props: {
-            isShowingAddCommentDialog: { type: Boolean, default: false }
+            isShowingAddCommentDialog: { type: Boolean, default: false },
+            isResolving: { type: Boolean, default: false }
         },
         methods: {
             async postComment(evnt) {
@@ -65,21 +80,31 @@
                 }
             },
             async resolve() {
+                this.isResolving = true
                 await this.$store.dispatch('resolveComment', { questionId: this.questionId })
             }
         },
         computed: {
+            visibleComments() {
+                const self = this;
+                return filter(this.$me.comments, c => {
+                    return self.showResolved || !c.resolved
+                })
+            },
             allowPostComment() {
                 return this.comment && 
                        this.comment.trim().length > 0 &&
                        !this.$me.postingComment 
                        && this.$store.getters.addCommentsAllowed;
             },
+            resolveAllowed() {
+                return this.$me.allowResolveComments
+            },
             inputTitle() {
                 if (this.$store.state.webinterview.receivedByInterviewer === true) {
                     return this.$t('WebInterviewUI.InterviewReceivedCantModify')
                 }
-                return "";
+                return ""
             },
             buttonClass() {
                 return this.isActive ? 'comment-added' : null
