@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Comments
             var interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
 
             // Act
-            TestDelegate act = () => interview.ResolveComment(Create.Command.ResolveCommentAnswer(interview.Id, Create.Identity(Id.gA), Id.g1));
+            TestDelegate act = () => interview.ResolveComment(Create.Command.ResolveCommentAnswer(interview.Id, Create.Identity(Id.gA)));
 
             // Assert
             Assert.That(act, Throws.Exception.InstanceOf<InterviewException>().With.Message.EqualTo("Comment was not found in the interview"));
@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Comments
 
             // Act
             var entityId = Create.Identity(Id.gA);
-            interview.ResolveComment(Create.Command.ResolveCommentAnswer(interview.Id, entityId, commentId));
+            interview.ResolveComment(Create.Command.ResolveCommentAnswer(interview.Id, entityId));
 
             // Assert
             var interviewTreeQuestion = interview.GetQuestion(entityId);
