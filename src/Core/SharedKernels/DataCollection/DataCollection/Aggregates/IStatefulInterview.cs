@@ -86,7 +86,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool WasAnswered(Identity entityIdentity);
 
-        IEnumerable<AnswerComment> GetQuestionComments(Identity entityIdentity);
+        IEnumerable<AnswerComment> GetQuestionComments(Identity entityIdentity, bool includeResolved = false);
 
         string GetRosterTitle(Identity rosterIdentity);
 
