@@ -759,8 +759,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return question != null && !question.IsDisabled() && question.IsAnswered();
         }
 
-        public IEnumerable<AnswerComment> GetQuestionComments(Identity entityIdentity)
-            => this.Tree.GetQuestion(entityIdentity).AnswerComments;
+        public IEnumerable<AnswerComment> GetQuestionComments(Identity entityIdentity, bool includeResolved = false)
+            => this.Tree.GetQuestion(entityIdentity).AnswerComments.Where(x => includeResolved || !x.Resolved);
 
         List<CategoricalOption> IStatefulInterview.GetTopFilteredOptionsForQuestion(Identity question, int? parentQuestionValue, string filter, int sliceSize)
             => this.GetFirstTopFilteredOptionsForQuestion(question, parentQuestionValue, filter, sliceSize);
