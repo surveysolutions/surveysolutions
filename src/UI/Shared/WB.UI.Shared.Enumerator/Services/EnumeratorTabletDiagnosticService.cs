@@ -11,10 +11,8 @@ using Plugin.Permissions.Abstractions;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
-using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.UI.Shared.Enumerator.Services
 {
@@ -95,7 +93,7 @@ namespace WB.UI.Shared.Enumerator.Services
             catch (RestException restEx)
             {
                 if (restEx.StatusCode != HttpStatusCode.NotFound)
-                    throw restEx.ToSynchronizationException();
+                    throw;
             }
 
             cancellationToken.ThrowIfCancellationRequested();
