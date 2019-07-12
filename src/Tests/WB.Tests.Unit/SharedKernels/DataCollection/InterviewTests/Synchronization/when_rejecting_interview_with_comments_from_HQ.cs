@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion(commentedQuestionId));
 
             interview = SetUp.StatefulInterview(questionnaire);
-            interview.Apply(new AnswerCommented(userId, commentedQuestionId, new decimal[]{}, new DateTimeOffset(existingComment.Date, new TimeSpan(0)), existingComment.Text, Guid.NewGuid()));
+            interview.Apply(new AnswerCommented(userId, commentedQuestionId, new decimal[]{}, new DateTimeOffset(existingComment.Date, new TimeSpan(0)), existingComment.Text, null));
 
             interview.AssignInterviewer(supervisorId, userId, DateTimeOffset.Now);
             interview.Apply(Create.Event.InterviewStatusChanged(status: InterviewStatus.Completed));
@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
             @event.Comment == newComment.Text 
         );
 
-        [NUnit.Framework.Test] public void should_not_add_alrady_saved_comments () => eventContext.ShouldNotContainEvent<AnswerCommented>(@event => @event.Comment == existingComment.Text);
+        [NUnit.Framework.Test] public void should_not_add_already_saved_comments () => eventContext.ShouldNotContainEvent<AnswerCommented>(@event => @event.Comment == existingComment.Text);
 
         static Interview interview;
         static EventContext eventContext;
