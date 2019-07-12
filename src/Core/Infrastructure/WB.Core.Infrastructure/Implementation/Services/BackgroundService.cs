@@ -26,7 +26,7 @@ namespace WB.Core.Infrastructure.Implementation.Services
 
         public void Enqueue(T item) => queue.Post(item);
 
-        public Task Stop()
+        public Task StopAsync()
         {
             queue.Complete();
             return queue.Completion;
