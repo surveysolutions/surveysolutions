@@ -449,20 +449,29 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         #endregion
 
         #region [Application Api]
-        public Task<byte[]> GetApplicationAsync(IProgress<TransferProgress> transferProgress = null, CancellationToken token = default) => 
-            this.TryGetRestResponseOrThrowAsync(async () =>
+
+        public async Task<byte[]> GetApplicationAsync(IProgress<TransferProgress> transferProgress = null, CancellationToken token = default)
+        {
+            try
             {
                 var restFile = await this.restService.DownloadFileAsync(
                     url: this.checkVersionUriProvider.CheckVersionUrl, token: token,
-                    credentials: this.restCredentials, 
+                    credentials: this.restCredentials,
                     transferProgress: transferProgress);
 
                 return restFile.Content;
-            });
+            }
+            catch (RestException ex)
+            {
+                var newException = ex.ToSynchronizationException();
+                throw newException;
+            }
+        } 
+           
 
-        public Task<byte[]> GetApplicationPatchAsync(IProgress<TransferProgress> transferProgress, CancellationToken token = default)
+        public async Task<byte[]> GetApplicationPatchAsync(IProgress<TransferProgress> transferProgress, CancellationToken token = default)
         {
-            return this.TryGetRestResponseOrThrowAsync(async () =>
+            try
             {
                 var interviewerPatchApiUrl = $"{this.checkVersionUriProvider.CheckVersionUrl}patch/{this.deviceSettings.GetApplicationVersionCode()}";
 
@@ -472,7 +481,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     transferProgress: transferProgress);
 
                 return restFile.Content;
-            });
+            }
+            catch (RestException ex)
+            {
+                var newException = ex.ToSynchronizationException();
+                throw newException;
+            }
         }
 
         public Task<int?> GetLatestApplicationVersionAsync(CancellationToken token = default)
