@@ -166,14 +166,13 @@ namespace WB.UI.Headquarters.API.WebInterview
         [ObserverNotAllowed]
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public void ResolveComment(string questionIdentity, Guid commentId)
+        public void ResolveComment(string questionIdentity)
         {
             var identity = Identity.Parse(questionIdentity);
             var command = new ResolveCommentAnswerCommand(this.GetCallerInterview().Id, 
                 this.CommandResponsibleId, 
                 identity.Id, 
-                identity.RosterVector,
-                commentId);
+                identity.RosterVector);
 
             this.commandService.Execute(command);
         }
