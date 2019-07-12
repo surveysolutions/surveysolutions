@@ -471,22 +471,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public async Task<byte[]> GetApplicationPatchAsync(IProgress<TransferProgress> transferProgress, CancellationToken token = default)
         {
-            try
-            {
-                var interviewerPatchApiUrl = $"{this.checkVersionUriProvider.CheckVersionUrl}patch/{this.deviceSettings.GetApplicationVersionCode()}";
+            var interviewerPatchApiUrl = $"{this.checkVersionUriProvider.CheckVersionUrl}patch/{this.deviceSettings.GetApplicationVersionCode()}";
 
-                var restFile = await this.restService.DownloadFileAsync(url: interviewerPatchApiUrl,
+            var restFile = await this.restService.DownloadFileAsync(url: interviewerPatchApiUrl,
                     token: token,
                     credentials: this.restCredentials,
                     transferProgress: transferProgress);
 
                 return restFile.Content;
-            }
-            catch (RestException ex)
-            {
-                var newException = ex.ToSynchronizationException();
-                throw newException;
-            }
         }
 
         public Task<int?> GetLatestApplicationVersionAsync(CancellationToken token = default)
