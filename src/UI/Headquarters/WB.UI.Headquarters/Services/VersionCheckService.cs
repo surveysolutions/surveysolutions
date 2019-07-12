@@ -82,7 +82,7 @@ namespace WB.UI.Headquarters.Services
                 AvailableVersion = versionInfo;
                 LastLoadedAt = DateTime.Now;
                 ErrorOccuredAt = null;
-                InScopeExecutor.Current.ExecuteActionInScope((serviceLocatorLocal) =>
+                InScopeExecutor.Current.Execute((serviceLocatorLocal) =>
                 {
                     serviceLocatorLocal.GetInstance<IPlainKeyValueStorage<VersionCheckingInfo>>()
                         .Store(versionInfo, VersionCheckingInfo.VersionCheckingInfoKey);

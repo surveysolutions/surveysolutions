@@ -39,7 +39,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 
             //resolve from context to preserve scope
             IStatefulInterview interview = null;
-            InScopeExecutor.Current.ExecuteActionInScope((locator) =>
+            InScopeExecutor.Current.Execute((locator) =>
             {
                 IStatefulInterviewRepository statefulInterviewRepository = locator.GetInstance<IStatefulInterviewRepository>();
                 interview = statefulInterviewRepository.Get(interviewId);
