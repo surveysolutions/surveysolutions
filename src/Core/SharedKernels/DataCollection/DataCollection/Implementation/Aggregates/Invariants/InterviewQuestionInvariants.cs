@@ -801,20 +801,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         private static string JoinUsingCommas(IEnumerable<string> values) => string.Join(", ", values);
 
-        public void RequireCommentExists(Guid commentId)
+        public void RequireCommentExists()
         {
             var question = this.InterviewTree.GetQuestion(this.QuestionIdentity);
-            AnswerComment comment = question.AnswerComments.FirstOrDefault(x => x.Id == commentId);
+            bool comment = question.AnswerComments.Any(x => !x.Resolved);
 
-            if (comment == null)
+            if (!comment)
             {
-                throw new InterviewException("Comment was not found in the interview", InterviewDomainExceptionType.QuestionIsMissing)
+                throw new InterviewException("All question comments are already resolved", InterviewDomainExceptionType.QuestionIsMissing)
                 {
                     Data =
                     {
                         {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
-                        {ExceptionKeys.QuestionId, this.QuestionIdentity.ToString()},
-                        {ExceptionKeys.CommentId, commentId}
+                        {ExceptionKeys.QuestionId, this.QuestionIdentity.ToString()}
                     }
                 };
             }
