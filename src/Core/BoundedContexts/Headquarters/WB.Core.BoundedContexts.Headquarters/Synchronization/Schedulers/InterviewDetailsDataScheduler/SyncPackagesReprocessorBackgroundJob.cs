@@ -48,7 +48,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
                     },
                     packageId =>
                     {
-                        InScopeExecutor.Current.ExecuteActionInScope((serviceLocatorLocal) =>
+                        InScopeExecutor.Current.Execute((serviceLocatorLocal) =>
                         {
                             serviceLocatorLocal.GetInstance<IInterviewBrokenPackagesService>().ReprocessSelectedBrokenPackages(new[] { packageId });
                         });

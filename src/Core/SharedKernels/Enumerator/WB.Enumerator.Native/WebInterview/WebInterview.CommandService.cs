@@ -28,7 +28,7 @@ namespace WB.Enumerator.Native.WebInterview
         {
             try
             {
-                InScopeExecutor.Current.ExecuteActionInScope(sl =>
+                InScopeExecutor.Current.Execute(sl =>
                 {
                     sl.GetInstance<ICommandService>().Execute(command);
                 });
