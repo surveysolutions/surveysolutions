@@ -719,7 +719,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 .Select(v => new FailedValidationCondition(v.FailedConditionIndex))
                 .ToReadOnlyCollection();
             clonedQuestion.AnswerComments = this.AnswerComments?
-                .Select(a => new AnswerComment(a.UserId, a.UserRole, a.CommentTime, a.Comment, a.QuestionIdentity, a.Id))
+                .Select(a => new AnswerComment(a.UserId, a.UserRole, a.CommentTime, a.Comment, a.QuestionIdentity, a.Id, a.Resolved))
                 .ToList();
 
             return clonedQuestion;

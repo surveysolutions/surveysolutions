@@ -23,6 +23,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.Id = id;
         }
 
+        public AnswerComment(Guid userId, UserRoles userRole, DateTime commentTime, string comment, Identity questionIdentity, Guid? id, bool resolved)
+        : this(userId, userRole, commentTime, comment, questionIdentity, id)
+        {
+            this.Resolved = resolved;
+        }
+
         #region equals
 
         public bool Equals(AnswerComment other)
