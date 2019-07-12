@@ -259,7 +259,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public async Task Handle(LinkedOptionsChanged @event)
+        public async Task HandleAsync(LinkedOptionsChanged @event)
         {
             ChangedLinkedOptions changedLinkedQuestion = @event.ChangedLinkedQuestions.SingleOrDefault(x => x.QuestionId == this.Identity);
 
@@ -269,7 +269,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public async Task Handle(RosterInstancesTitleChanged @event)
+        public async Task HandleAsync(RosterInstancesTitleChanged @event)
         {
             var optionListShouldBeUpdated = @event.ChangedInstances.Any(x => this.parentRosterIds.Contains(x.RosterInstance.GroupId));
             if (optionListShouldBeUpdated)

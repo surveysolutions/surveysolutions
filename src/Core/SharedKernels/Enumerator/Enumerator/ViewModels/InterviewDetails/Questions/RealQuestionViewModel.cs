@@ -234,7 +234,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.throttlingModel.Dispose();
         }
 
-        public async Task Handle(AnswersRemoved @event)
+        public async Task HandleAsync(AnswersRemoved @event)
         {
             if (this.isDisposed) return;
 

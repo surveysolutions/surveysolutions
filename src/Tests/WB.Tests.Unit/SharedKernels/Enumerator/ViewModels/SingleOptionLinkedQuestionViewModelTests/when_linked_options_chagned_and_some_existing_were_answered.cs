@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
 
         public void BecauseOf() 
         {
-            viewModel.Handle(Create.Event.LinkedOptionsChanged(new[]
+            viewModel.HandleAsync(Create.Event.LinkedOptionsChanged(new[]
             {
                 new ChangedLinkedOptions(linkedQuestionId, new[]
                 {

@@ -97,7 +97,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             });
         }
 
-        public async Task Handle(AnswersDeclaredValid @event)
+        public async Task HandleAsync(AnswersDeclaredValid @event)
         {
             if (@event.Questions.Contains(this.Identity))
             {
@@ -105,7 +105,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public async Task Handle(AnswersDeclaredInvalid @event)
+        public async Task HandleAsync(AnswersDeclaredInvalid @event)
         {
             if (@event.FailedValidationConditions.Keys.Contains(this.Identity))
             {
@@ -113,7 +113,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public async Task Handle(StaticTextsDeclaredValid @event)
+        public async Task HandleAsync(StaticTextsDeclaredValid @event)
         {
             if (@event.StaticTexts.Contains(this.Identity))
             {
@@ -121,7 +121,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public async Task Handle(StaticTextsDeclaredInvalid @event)
+        public async Task HandleAsync(StaticTextsDeclaredInvalid @event)
         {
             if (@event.GetFailedValidationConditionsDictionary().Keys.Contains(this.Identity))
             {
@@ -129,7 +129,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public async Task Handle(QuestionsEnabled @event)
+        public async Task HandleAsync(QuestionsEnabled @event)
         {
             if (@event.Questions.Contains(this.Identity))
             {
@@ -138,7 +138,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
 
-        public async Task Handle(SubstitutionTitlesChanged @event)
+        public async Task HandleAsync(SubstitutionTitlesChanged @event)
         {
             if (@event.Questions.Contains(this.Identity) || @event.StaticTexts.Contains(this.Identity))
             {

@@ -236,11 +236,13 @@ namespace WB.Tests.Abc.TestFactories
         public KeywordsProvider KeywordsProvider()
             => new KeywordsProvider(Create.Service.SubstitutionService());
 
-        public LiteEventBus LiteEventBus(IViewModelEventRegistry liteEventRegistry = null, IEventStore eventStore = null, IDenormalizerRegistry denormalizerRegistry = null)
-            => new LiteEventBus(
-                liteEventRegistry ?? Stub<IViewModelEventRegistry>.WithNotEmptyValues,
-                eventStore ?? Mock.Of<IEventStore>(),
-                denormalizerRegistry ?? Stub<IDenormalizerRegistry>.WithNotEmptyValues);
+        public LiteEventBus LiteEventBus(IViewModelEventRegistry liteEventRegistry = null, 
+            IEventStore eventStore = null, 
+            IDenormalizerRegistry denormalizerRegistry = null,
+            ViewModelEventQueue viewModelEventQueue = null)
+            => new LiteEventBus(eventStore ?? Mock.Of<IEventStore>(),
+                denormalizerRegistry ?? Stub<IDenormalizerRegistry>.WithNotEmptyValues,
+                viewModelEventQueue ?? Mock.Of<ViewModelEventQueue>());
 
         public ViewModelEventRegistry LiteEventRegistry()
             => new ViewModelEventRegistry();
