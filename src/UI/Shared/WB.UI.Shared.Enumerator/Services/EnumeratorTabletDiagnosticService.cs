@@ -14,6 +14,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.UI.Shared.Enumerator.Services
 {
@@ -91,10 +92,10 @@ namespace WB.UI.Shared.Enumerator.Services
             {
                 patchOrFullApkBytes = await this.synchronizationService.GetApplicationPatchAsync(onDownloadProgressChanged, cancellationToken);
             }
-            catch (SynchronizationException ex) when (ex.InnerException is RestException rest)
+            catch (RestException restEx)
             {
-                if (rest.StatusCode != HttpStatusCode.NotFound)
-                    throw;
+                if (restEx.StatusCode != HttpStatusCode.NotFound)
+                    throw restEx.ToSynchronizationException();
             }
 
             cancellationToken.ThrowIfCancellationRequested();

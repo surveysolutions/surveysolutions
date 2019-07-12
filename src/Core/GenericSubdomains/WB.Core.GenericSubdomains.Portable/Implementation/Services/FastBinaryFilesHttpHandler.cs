@@ -76,7 +76,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             var avgChunkDownloadSpeed = new SimpleRunningAverage(5);
             avgChunkDownloadSpeed.Add(ChunkSize);
 
-            async Task ChunkDownloader()
+            async Task<bool> ChunkDownloader()
             {
                 var id = Interlocked.Increment(ref downloaderIds);
 
@@ -123,7 +123,9 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                     progress.Speed = progress.BytesReceived / totalTime.Elapsed.TotalSeconds;
 
                     transferProgress.Report(progress);
-                }                
+                }
+
+                return true;
             }
 
             // starting N chunk download workers
