@@ -760,7 +760,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         public IEnumerable<AnswerComment> GetQuestionComments(Identity entityIdentity, bool includeResolved = false)
-            => this.Tree.GetQuestion(entityIdentity).AnswerComments.Where(x => includeResolved || !x.Resolved);
+            => this.Tree.GetQuestion(entityIdentity).AnswerComments.Where(x => includeResolved || !x.Resolved).ToReadOnlyCollection();
 
         List<CategoricalOption> IStatefulInterview.GetTopFilteredOptionsForQuestion(Identity question, int? parentQuestionValue, string filter, int sliceSize)
             => this.GetFirstTopFilteredOptionsForQuestion(question, parentQuestionValue, filter, sliceSize);

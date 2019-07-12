@@ -23,19 +23,4 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
             CommentId = commentId;
         }
     }
-
-    public class AnswerCommentResolved : QuestionActiveEvent
-    {
-        public Guid CommentId { get; }
-
-        public AnswerCommentResolved(Guid userId, 
-            Guid questionId, 
-            RosterVector rosterVector, 
-            DateTimeOffset originDate, 
-            Guid commentId)
-            : base(userId, questionId, rosterVector, originDate)
-        {
-            CommentId = commentId;
-        }
-    }
 }

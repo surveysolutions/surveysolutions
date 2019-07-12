@@ -1,7 +1,6 @@
 <template>
     <div :class="{'enumerators-comment': isInterviewersComment}">
         <h6>{{ commentTitle }}</h6>
-        <button type="button" v-if="resolveAllowed" @click="resolve">Resolve</button>
         <p :class="{'overloaded': isCollapsed}"> <span v-html="text"></span>
             <button v-if="isCollapsed" type="button" v-on:click="toggle()" class="btn btn-link btn-horizontal-hamburger"><span></span></button>
         </p>
@@ -68,9 +67,6 @@
         methods: {
             toggle() {
                 this.isCollapsed = !this.isCollapsed;
-            },
-            async resolve() {
-                await this.$store.dispatch('resolveComment', { questionId: this.questionId, commentId: this.commentId })
             }
         }
     }

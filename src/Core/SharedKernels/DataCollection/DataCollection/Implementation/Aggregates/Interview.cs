@@ -540,9 +540,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(AnswerCommentResolved @event)
         {
             var commentByQuestion = Identity.Create(@event.QuestionId, @event.RosterVector);
-
-            var comment = this.Tree.GetQuestion(commentByQuestion).AnswerComments.First(x => x.Id == @event.CommentId);
-            comment.Resolved = true;
+            var answerComments = this.Tree.GetQuestion(commentByQuestion).AnswerComments;
+            foreach (var answerComment in answerComments)
+            {
+                if (@event.Comments.Contains(answerComment.Id.GetValueOrDefault()))
+                {
+                    answerComment.Resolved = true;
+                }
+            }
         }
 
         protected virtual void Apply(AnswerCommented @event)
@@ -1736,9 +1741,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             new InterviewQuestionInvariants(command.Question, questionnaire, this.Tree, questionOptionsRepository)
                 .RequireQuestionExists()
-                .RequireCommentExists(command.CommentId);
+                .RequireCommentExists();
 
-            this.ApplyEvent(new AnswerCommentResolved(command.UserId, command.QuestionId, command.RosterVector, command.OriginDate, command.CommentId));
+            var question = this.Tree.GetQuestion(command.Question);
+            var commentIds = question.AnswerComments.Where(x => x.Id.HasValue).Select(x => x.Id.Value).ToList();
+            this.ApplyEvent(new AnswerCommentResolved(command.UserId, command.QuestionId, command.RosterVector, command.OriginDate, commentIds));
         }
 
         public void AssignResponsible(AssignResponsibleCommand command)

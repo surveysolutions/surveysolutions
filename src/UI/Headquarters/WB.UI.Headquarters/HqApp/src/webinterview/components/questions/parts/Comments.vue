@@ -7,7 +7,6 @@
             :isOwnComment="comment.isOwnComment" 
             :key="comment.commentTimeUtc"
             :questionId="questionId"
-            :resolveAllowed="comment.resolveAllowed"
             :commentId="comment.id" />
         </template>
 
@@ -32,6 +31,7 @@
                     </div>
                 </div>
             </form>
+            <button type="button">Resolve</button>
         </div>
     </div>
 </template>
@@ -63,6 +63,9 @@
                 if(evnt && evnt.target) {
                     evnt.target.blur()
                 }
+            },
+            async resolve() {
+                await this.$store.dispatch('resolveComment', { questionId: this.questionId })
             }
         },
         computed: {
