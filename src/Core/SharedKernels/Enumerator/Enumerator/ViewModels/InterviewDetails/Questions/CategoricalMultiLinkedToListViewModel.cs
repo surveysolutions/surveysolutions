@@ -89,28 +89,28 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             });
         }
 
-        public async Task Handle(LinkedToListOptionsChanged @event)
+        public async Task HandleAsync(LinkedToListOptionsChanged @event)
         {
             if (@event.ChangedLinkedQuestions.All(x => x.QuestionId != this.Identity)) return;
 
             await this.UpdateViewModelsAsync();
         }
 
-        public async Task Handle(MultipleOptionsQuestionAnswered @event)
+        public async Task HandleAsync(MultipleOptionsQuestionAnswered @event)
         {
             if (@event.QuestionId != this.Identity.Id || !@event.RosterVector.Identical(this.Identity.RosterVector)) return;
 
             await this.UpdateViewModelsByAnsweredOptionsAsync(@event.SelectedValues.Select(Convert.ToInt32).ToArray());
         }
 
-        public async Task Handle(QuestionsEnabled @event)
+        public async Task HandleAsync(QuestionsEnabled @event)
         {
             if (@event.Questions.All(x => x.Id != this.linkedToQuestionId)) return;
 
             await this.UpdateViewModelsAsync();
         }
 
-        public async Task Handle(QuestionsDisabled @event)
+        public async Task HandleAsync(QuestionsDisabled @event)
         {
             if (@event.Questions.All(x => x.Id != this.linkedToQuestionId))
                 return;
@@ -118,7 +118,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             await this.UpdateViewModelsAsync();
         }
 
-        public override async Task Handle(AnswersRemoved @event)
+        public override async Task HandleAsync(AnswersRemoved @event)
         {
             if (@event.Questions.Contains(this.Identity))
                 await this.UpdateViewModelsByAnsweredOptionsAsync(Array.Empty<int>());

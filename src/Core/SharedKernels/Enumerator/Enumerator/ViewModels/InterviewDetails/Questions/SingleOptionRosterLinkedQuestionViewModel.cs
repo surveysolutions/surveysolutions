@@ -299,7 +299,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             return optionViewModel;
         }
 
-        public async Task Handle(RosterInstancesTitleChanged @event)
+        public async Task HandleAsync(RosterInstancesTitleChanged @event)
         {
             var optionListShouldBeUpdated = @event.ChangedInstances.Any(x =>
                 x.RosterInstance.GroupId == this.linkedToRosterId ||
@@ -310,7 +310,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public async Task Handle(LinkedOptionsChanged @event)
+        public async Task HandleAsync(LinkedOptionsChanged @event)
         {
             var optionListShouldBeUpdated = @event.ChangedLinkedQuestions.Any(x => x.QuestionId.Id == this.Identity.Id);
             if (optionListShouldBeUpdated)

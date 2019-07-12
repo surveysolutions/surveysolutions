@@ -242,7 +242,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.bottomBorderViewModel.HasOptions = this.HasOptions;
         }
 
-        public virtual async Task Handle(AnswersRemoved @event)
+        public virtual async Task HandleAsync(AnswersRemoved @event)
         {
             if (!@event.Questions.Any(x => x.Id == this.Identity.Id && x.RosterVector.Identical(this.Identity.RosterVector))) return;
 

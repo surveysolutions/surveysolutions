@@ -72,20 +72,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public async Task Handle(MultipleOptionsLinkedQuestionAnswered @event)
+        public async Task HandleAsync(MultipleOptionsLinkedQuestionAnswered @event)
         {
             if (@event.QuestionId != this.Identity.Id || !@event.RosterVector.Identical(this.Identity.RosterVector)) return;
             await this.UpdateViewModelsByAnsweredOptionsAsync(@event.SelectedRosterVectors?.Select(RosterVector.Convert).ToArray());
         }
 
-        public async Task Handle(LinkedOptionsChanged @event)
+        public async Task HandleAsync(LinkedOptionsChanged @event)
         {
             if (@event.ChangedLinkedQuestions.All(x => x.QuestionId != this.Identity)) return;
 
             await this.UpdateViewModelsAsync();
         }
 
-        public virtual async Task Handle(RosterInstancesTitleChanged @event)
+        public virtual async Task HandleAsync(RosterInstancesTitleChanged @event)
         {
             if (!@event.ChangedInstances.Any(x => this.parentRosters.Contains(x.RosterInstance.GroupId))) return;
 

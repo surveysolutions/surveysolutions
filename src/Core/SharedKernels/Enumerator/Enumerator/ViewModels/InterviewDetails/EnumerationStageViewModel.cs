@@ -140,7 +140,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.Name.Dispose();
         }
 
-        public async Task Handle(GroupsDisabled @event)
+        public async Task HandleAsync(GroupsDisabled @event)
         {
             if (@event.Groups.Any(id => id == groupId))
             {

@@ -81,7 +81,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         protected override int[] GetAnsweredOptionsFromInterview(IStatefulInterview interview) 
             => interview.GetMultiOptionQuestion(this.Identity).GetAnswer()?.CheckedValues?.ToArray();
         
-        public virtual async Task Handle(MultipleOptionsQuestionAnswered @event)
+        public virtual async Task HandleAsync(MultipleOptionsQuestionAnswered @event)
         {
             if (@event.QuestionId != this.Identity.Id || !@event.RosterVector.Identical(this.Identity.RosterVector)) return;
 
