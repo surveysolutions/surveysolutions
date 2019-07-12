@@ -8,7 +8,6 @@ using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -66,12 +65,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Identity = entityIdentity ?? throw new ArgumentNullException(nameof(entityIdentity));
 
             this.interview = this.interviewRepository.Get(interviewId);
-            this.UpdateCommentsFromInterview().WaitAndUnwrapException();
+            this.UpdateCommentsFromInterview();
 
             this.HasComments = !string.IsNullOrWhiteSpace(this.InterviewerComment);
         }
 
-        private async Task UpdateCommentsFromInterview()
+        private void UpdateCommentsFromInterview()
+        {
+            var comments = interview.GetQuestionComments(this.Identity) ?? new List<AnswerComment>();
+            this.Comments.Clear();
+            comments.Select(this.ToViewModel).ForEach(x => this.Comments.Add(x));
+        }
+
+        private async Task UpdateCommentsFromInterviewAsync()
         {
             var comments = interview.GetQuestionComments(this.Identity) ?? new List<AnswerComment>();
 
@@ -167,7 +173,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     rosterVector: this.Identity.RosterVector,
                     comment: this.InterviewerComment)).ConfigureAwait(false);
 
-            await this.UpdateCommentsFromInterview();
+            await this.UpdateCommentsFromInterviewAsync();
 
             this.InterviewerComment = "";
             this.IsCommentInEditMode = false;
