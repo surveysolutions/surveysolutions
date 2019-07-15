@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
-using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
@@ -39,7 +38,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IStatefulInterviewRepository interviewRepository;
         private IStatefulInterview interview;
         private readonly ICommandService commandService;
-        private readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
         private readonly IPrincipal principal;
 
         protected CommentsViewModel() { }
@@ -47,13 +45,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public CommentsViewModel(
             IStatefulInterviewRepository interviewRepository,
             IPrincipal principal,
-            ICommandService commandService,
-            IMvxMainThreadAsyncDispatcher mainThreadDispatcher)
+            ICommandService commandService)
         {
             this.interviewRepository = interviewRepository;
             this.principal = principal;
             this.commandService = commandService;
-            this.mainThreadDispatcher = mainThreadDispatcher;
         }
 
         private string interviewId;
@@ -75,17 +71,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var comments = interview.GetQuestionComments(this.Identity) ?? new List<AnswerComment>();
             this.Comments.Clear();
             comments.Select(this.ToViewModel).ForEach(x => this.Comments.Add(x));
-        }
-
-        private async Task UpdateCommentsFromInterviewAsync()
-        {
-            var comments = interview.GetQuestionComments(this.Identity) ?? new List<AnswerComment>();
-
-            await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
-            {
-                this.Comments.Clear();
-                comments.Select(this.ToViewModel).ForEach(x => this.Comments.Add(x));
-            });
         }
 
         private CommentViewModel ToViewModel(AnswerComment comment)
@@ -171,9 +156,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     userId: this.principal.CurrentUserIdentity.UserId,
                     questionId: this.Identity.Id,
                     rosterVector: this.Identity.RosterVector,
-                    comment: this.InterviewerComment)).ConfigureAwait(false);
+                    comment: this.InterviewerComment))
+                .ConfigureAwait(false);
 
-            await this.UpdateCommentsFromInterviewAsync();
+            await this.InvokeOnMainThreadAsync(UpdateCommentsFromInterview);
 
             this.InterviewerComment = "";
             this.IsCommentInEditMode = false;
