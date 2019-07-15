@@ -696,4 +696,7 @@
   <data name="Interview_Question_ShowResolvedComments" xml:space="preserve">
     <value>Скрыть решённые</value>
   </data>
+  <data name="Interview_Comment_Resolve" xml:space="preserve">
+    <value>Вопрос решён</value>
+  </data>
 </root>
