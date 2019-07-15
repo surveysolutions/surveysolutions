@@ -227,7 +227,15 @@ namespace WB.Tests.Abc
             {
                 foreach (var viewModel in eventRegistry.GetViewModelsByEvent(evnt))
                 {
-                    var handler = viewModel.GetType().GetRuntimeMethod("Handle", new[] { evnt.Payload.GetType() });
+                    var isAsyncHandler = viewModel
+                        .GetType()
+                        .GetTypeInfo()
+                        .ImplementedInterfaces
+                        .Any(type => type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IAsyncViewModelEventHandler<>));
+
+                    var methodName = $"Handle{(isAsyncHandler ? "Async" : "")}";
+
+                    var handler = viewModel.GetType().GetRuntimeMethod(methodName, new[] { evnt.Payload.GetType() });
 
                     var taskOrVoid = (Task)handler?.Invoke(viewModel, new object[] { evnt.Payload });
                     taskOrVoid?.WaitAndUnwrapException();

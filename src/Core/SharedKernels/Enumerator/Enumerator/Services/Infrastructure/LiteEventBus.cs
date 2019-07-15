@@ -13,11 +13,11 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
     {
         private readonly IEventStore eventStore;
         private readonly IDenormalizerRegistry denormalizerRegistry;
-        private readonly ViewModelEventQueue viewModelEventQueue;
+        private readonly IViewModelEventQueue viewModelEventQueue;
 
         public LiteEventBus(IEventStore eventStore, 
             IDenormalizerRegistry denormalizerRegistry,
-            ViewModelEventQueue viewModelEventQueue)
+            IViewModelEventQueue viewModelEventQueue)
         {
             this.eventStore = eventStore;
             this.denormalizerRegistry = denormalizerRegistry;

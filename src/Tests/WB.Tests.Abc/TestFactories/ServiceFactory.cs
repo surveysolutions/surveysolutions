@@ -10,10 +10,12 @@ using NHibernate;
 using NSubstitute;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Main.Core.Events;
+using Ncqrs.Eventing;
 using NHibernate.Linq;
 using Quartz;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -67,6 +69,7 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
@@ -236,13 +239,21 @@ namespace WB.Tests.Abc.TestFactories
         public KeywordsProvider KeywordsProvider()
             => new KeywordsProvider(Create.Service.SubstitutionService());
 
-        public LiteEventBus LiteEventBus(IViewModelEventRegistry liteEventRegistry = null, 
-            IEventStore eventStore = null, 
-            IDenormalizerRegistry denormalizerRegistry = null,
-            ViewModelEventQueue viewModelEventQueue = null)
-            => new LiteEventBus(eventStore ?? Mock.Of<IEventStore>(),
+        public LiteEventBus LiteEventBus(IViewModelEventRegistry liteEventRegistry = null,
+            IEventStore eventStore = null,
+            IDenormalizerRegistry denormalizerRegistry = null)
+        {
+            liteEventRegistry = liteEventRegistry ?? LiteEventRegistry();
+
+            var viewModelEventPublisher = new ViewModelEventPublisher(liteEventRegistry, Mock.Of<ILogger>());
+            var mockOfViewModelEventQueue = new Mock<IViewModelEventQueue>();
+            mockOfViewModelEventQueue.Setup(x => x.Enqueue(Moq.It.IsAny<CommittedEvent>())).Callback<CommittedEvent>(@event =>
+                viewModelEventPublisher.ExecuteAsync(@event).WaitAndUnwrapException());
+
+            return new LiteEventBus(eventStore ?? Mock.Of<IEventStore>(),
                 denormalizerRegistry ?? Stub<IDenormalizerRegistry>.WithNotEmptyValues,
-                viewModelEventQueue ?? Mock.Of<ViewModelEventQueue>());
+                mockOfViewModelEventQueue.Object);
+        }
 
         public ViewModelEventRegistry LiteEventRegistry()
             => new ViewModelEventRegistry();
