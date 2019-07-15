@@ -945,6 +945,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hide resolved.
+        /// </summary>
+        public static string Interview_Question_HideResolvedComments {
+            get {
+                return ResourceManager.GetString("Interview_Question_HideResolvedComments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Empty value cannot be saved.
         /// </summary>
         public static string Interview_Question_Integer_EmptyValueError {
@@ -1004,6 +1013,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Interview_Question_Real_ParsingError {
             get {
                 return ResourceManager.GetString("Interview_Question_Real_ParsingError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show resolved.
+        /// </summary>
+        public static string Interview_Question_ShowResolvedComments {
+            get {
+                return ResourceManager.GetString("Interview_Question_ShowResolvedComments", resourceCulture);
             }
         }
         
