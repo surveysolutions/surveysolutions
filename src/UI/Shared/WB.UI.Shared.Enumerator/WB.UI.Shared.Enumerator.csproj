@@ -185,6 +185,7 @@
     <Compile Include="Services\BackupRestoreService.cs" />
     <Compile Include="Services\BaseViewModelNavigationService.cs" />
     <Compile Include="Services\AutoSendingCrashListener.cs" />
+    <Compile Include="Services\CurrentViewModelPresenter.cs" />
     <Compile Include="Services\DeviceInformationService.cs" />
     <Compile Include="Services\DevicePasswordHasher.cs" />
     <Compile Include="Services\EnumeratorSettings.cs" />
