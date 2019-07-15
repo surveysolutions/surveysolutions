@@ -75,7 +75,7 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.BindAsSingleton<IDenormalizerRegistry, DenormalizerRegistry>();
             registry.Bind<ILiteEventBus, LiteEventBus>();
             registry.Bind<IBackgroundJob<CommittedEvent>, ViewModelEventPublisher>();
-            registry.BindAsSingleton<ViewModelEventQueue, ViewModelEventQueue>();
+            registry.BindAsSingleton<IViewModelEventQueue, ViewModelEventQueue>();
 
             RegisterViewModels(registry);
         }
