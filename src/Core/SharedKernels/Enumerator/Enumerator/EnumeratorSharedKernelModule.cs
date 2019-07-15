@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -74,7 +75,7 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.BindAsSingleton<IViewModelEventRegistry, ViewModelEventRegistry>();
             registry.BindAsSingleton<IDenormalizerRegistry, DenormalizerRegistry>();
             registry.Bind<ILiteEventBus, LiteEventBus>();
-            registry.Bind<IBackgroundJob<CommittedEvent>, ViewModelEventPublisher>();
+            registry.Bind<IBackgroundJob<IEnumerable<CommittedEvent>>, InterviewViewModelEventsPublisher>();
             registry.BindAsSingleton<IViewModelEventQueue, ViewModelEventQueue>();
 
             RegisterViewModels(registry);

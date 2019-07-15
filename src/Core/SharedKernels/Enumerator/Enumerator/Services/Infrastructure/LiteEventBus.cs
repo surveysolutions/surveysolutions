@@ -31,8 +31,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
         {
             this.PublishToDenormalizers(committedEvents);
 
-            foreach (var committedEvent in committedEvents)
-                this.viewModelEventQueue.Enqueue(committedEvent);
+            this.viewModelEventQueue.Enqueue(committedEvents);
         }
 
         private void PublishToDenormalizers(IEnumerable<CommittedEvent> committedEvents)

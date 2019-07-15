@@ -245,10 +245,13 @@ namespace WB.Tests.Abc.TestFactories
         {
             liteEventRegistry = liteEventRegistry ?? LiteEventRegistry();
 
-            var viewModelEventPublisher = new ViewModelEventPublisher(liteEventRegistry, Mock.Of<ILogger>());
+            var viewModelEventPublisher = new InterviewViewModelEventsPublisher(liteEventRegistry, Mock.Of<ILogger>(),
+                Mock.Of<ICurrentViewModelPresenter>());
+
             var mockOfViewModelEventQueue = new Mock<IViewModelEventQueue>();
-            mockOfViewModelEventQueue.Setup(x => x.Enqueue(Moq.It.IsAny<CommittedEvent>())).Callback<CommittedEvent>(@event =>
-                viewModelEventPublisher.ExecuteAsync(@event).WaitAndUnwrapException());
+            mockOfViewModelEventQueue.Setup(x => x.Enqueue(Moq.It.IsAny<IEnumerable<CommittedEvent>>()))
+                .Callback<IEnumerable<CommittedEvent>>(@events =>
+                    viewModelEventPublisher.ExecuteAsync(@events).WaitAndUnwrapException());
 
             return new LiteEventBus(eventStore ?? Mock.Of<IEventStore>(),
                 denormalizerRegistry ?? Stub<IDenormalizerRegistry>.WithNotEmptyValues,
