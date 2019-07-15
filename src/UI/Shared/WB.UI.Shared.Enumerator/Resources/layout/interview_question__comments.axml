@@ -33,5 +33,11 @@
                        FocusValueChanged InterviewerCommentChangeCommand; 
                        SetFocus IsCommentInEditMode;
                        Tag Format('Comment_Input_{0}', Identity)" />
-
+    <Button
+        style="@style/Interview_Button_Link"
+        android:textColor="@color/group_completed"
+        android:layout_marginTop="@dimen/Interview_Confirmation_EditText_margin"
+        local:MvxBind="Text Localization('Interview_Comment_Resolve');
+                       Visible ResolveCommentsButtonVisible;
+                       Click ResolveComments"/>
 </LinearLayout>

@@ -531,6 +531,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Resolve.
+        /// </summary>
+        public static string Interview_Comment_Resolve {
+            get {
+                return ResourceManager.GetString("Interview_Comment_Resolve", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Answered.
         /// </summary>
         public static string Interview_Complete_Answered {
