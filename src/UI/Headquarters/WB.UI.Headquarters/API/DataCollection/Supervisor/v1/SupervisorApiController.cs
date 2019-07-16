@@ -10,9 +10,9 @@ using Microsoft.AspNet.Identity;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
@@ -25,35 +25,34 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 {
     public class SupervisorApiController : AppApiControllerBase
     {
-        private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IAndroidPackageReader androidPackageReader;
         private readonly ITabletInformationService tabletInformationService;
         private readonly HqSignInManager signInManager;
         private readonly ISupervisorSyncProtocolVersionProvider syncVersionProvider;
         private readonly IProductVersion productVersion;
         private readonly IUserViewFactory userViewFactory;
         private readonly IClientApkProvider clientApkProvider;
+        private readonly IAuthorizedUser authorizedUser;
+        private readonly IInterviewInformationFactory interviewFactory;
 
-        public SupervisorApiController(
-            IFileSystemAccessor fileSystemAccessor,
-            IAndroidPackageReader androidPackageReader, 
-            ITabletInformationService tabletInformationService, 
+        public SupervisorApiController(ITabletInformationService tabletInformationService, 
             ISupervisorSyncProtocolVersionProvider syncVersionProvider,
             IProductVersion productVersion,
             IUserViewFactory userViewFactory, 
             HqSignInManager signInManager,
             IPlainKeyValueStorage<InterviewerSettings> settingsStorage, 
-            IClientApkProvider clientApkProvider)
+            IClientApkProvider clientApkProvider,
+            IAuthorizedUser authorizedUser,
+            IInterviewInformationFactory interviewFactory)
             : base(settingsStorage)
         {
-            this.fileSystemAccessor = fileSystemAccessor;
-            this.androidPackageReader = androidPackageReader;
             this.tabletInformationService = tabletInformationService;
             this.syncVersionProvider = syncVersionProvider;
             this.productVersion = productVersion;
             this.userViewFactory = userViewFactory;
             this.signInManager = signInManager;
             this.clientApkProvider = clientApkProvider;
+            this.authorizedUser = authorizedUser;
+            this.interviewFactory = interviewFactory;
         }
 
         [HttpGet]
@@ -90,6 +89,15 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 
             var currentVersion = new Version(this.productVersion.ToString().Split(' ')[0]);
             var supervisorVersion = this.Request.GetProductVersionFromUserAgent(@"org.worldbank.solutions.supervisor");
+
+            if (deviceSyncProtocolVersion < SupervisorSyncProtocolVersionProvider.ResolvedCommentsIntroduced)
+            {
+                if (this.interviewFactory.HasAnyInterviewsInProgressWithResolvedCommentsForSupervisor(
+                    this.authorizedUser.Id))
+                {
+                    return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
+                }
+            }
 
             if (IsNeedUpdateAppBySettings(supervisorVersion, currentVersion))
             {
