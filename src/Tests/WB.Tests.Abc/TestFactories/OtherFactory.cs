@@ -88,31 +88,41 @@ namespace WB.Tests.Abc.TestFactories
 
         public SupervisorIdentity SupervisorIdentity(string id = null,
             string userName = null,
-            string passwordHash = null)
+            string passwordHash = null,
+            Guid? userId = null)
         {
             return new SupervisorIdentity
             {
                 Id = id ?? Guid.NewGuid().FormatGuid(),
                 Name = userName ?? "name",
+                UserId = userId?? Guid.NewGuid(),
                 PasswordHash = passwordHash ?? "pswdHash"
             };
         }
 
-        public IPrincipal SupervisorPrincipal()
+        public IPrincipal SupervisorPrincipal(Guid? userId = null)
         {
             return Mock.Of<IPrincipal>(x => x.IsAuthenticated == true &&
-                                            x.CurrentUserIdentity == Create.Other.SupervisorIdentity(null, null, null));
+                                            x.CurrentUserIdentity == Create.Other.SupervisorIdentity(null, null, null, userId));
+        }
+
+        public IPrincipal InterviewerPrincipal(Guid? userId = null)
+        {
+            return Mock.Of<IPrincipal>(x => x.IsAuthenticated == true &&
+                                            x.CurrentUserIdentity == Create.Other.InterviewerIdentity(null, null, null, userId));
         }
 
         public InterviewerIdentity InterviewerIdentity(string id = null,
             string userName = null,
-            string passwordHash = null)
+            string passwordHash = null,
+            Guid? userId = null)
         {
             return new InterviewerIdentity
             {
                 Id = id ?? Guid.NewGuid().FormatGuid(),
                 Name = userName ?? "name",
-                PasswordHash = passwordHash ?? "pswdHash"
+                PasswordHash = passwordHash ?? "pswdHash",
+                UserId = userId ?? Guid.NewGuid()
             };
         }
 

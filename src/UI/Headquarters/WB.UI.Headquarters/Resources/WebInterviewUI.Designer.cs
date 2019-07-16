@@ -882,7 +882,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Resolved commentaries are not available for interviewer and hidden for supervisor and headquarters.
+        ///   Looks up a localized string similar to Resolved commentaries are hidden by default, but can be reviewed by all the interview participants.
         /// </summary>
         internal static string ResolveHint {
             get {
