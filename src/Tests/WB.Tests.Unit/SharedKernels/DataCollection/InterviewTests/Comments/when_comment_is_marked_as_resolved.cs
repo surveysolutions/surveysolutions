@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Comments
             TestDelegate act = () => interview.ResolveComment(Create.Command.ResolveCommentAnswer(interview.Id, Create.Identity(Id.gA)));
 
             // Assert
-            Assert.That(act, Throws.Exception.InstanceOf<InterviewException>().With.Message.EqualTo("Comment was not found in the interview"));
+            Assert.That(act, Throws.Exception.InstanceOf<InterviewException>().With.Message.EqualTo("All question comments are already resolved"));
         }
 
         [Test]
