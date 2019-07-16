@@ -11,9 +11,11 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Headquarters.Code;
@@ -34,6 +36,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
         private readonly IClientApkProvider clientApkProvider;
         private readonly HqSignInManager signInManager;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
+        private readonly IInterviewInformationFactory interviewFactory;
 
         public enum ClientVersionFromUserAgent
         {
@@ -49,6 +52,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
             IProductVersion productVersion,
             HqSignInManager signInManager,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
+            IInterviewInformationFactory interviewFactory,
             IAssignmentsService assignmentsService,
             IClientApkProvider clientApkProvider,
             IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage)
@@ -61,6 +65,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
             this.productVersion = productVersion;
             this.signInManager = signInManager;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
+            this.interviewFactory = interviewFactory;
             this.assignmentsService = assignmentsService;
             this.clientApkProvider = clientApkProvider;
         }
@@ -187,6 +192,14 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
             if (interviewerVersion != null && interviewerVersion > currentVersion)
             {
                 return this.Request.CreateResponse(HttpStatusCode.NotAcceptable);
+            }
+
+            if (deviceSyncProtocolVersion < InterviewerSyncProtocolVersionProvider.ResolvedCommentsIntroduced)
+            {
+                if (this.interviewFactory.HasAnyInterviewsInProgressWithResolvedCommentsForInterviewer(this.authorizedUser.Id))
+                {
+                    return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
+                }
             }
 
             if (deviceSyncProtocolVersion < InterviewerSyncProtocolVersionProvider.AudioRecordingIntroduced)

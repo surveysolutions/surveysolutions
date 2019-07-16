@@ -47,7 +47,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewSummary, AudioQuestionAnswered>,
         IUpdateHandler<InterviewSummary, InterviewPaused>,
         IUpdateHandler<InterviewSummary, InterviewResumed>,
-        IUpdateHandler<InterviewSummary, InterviewRestored>
+        IUpdateHandler<InterviewSummary, InterviewRestored>,
+        IUpdateHandler<InterviewSummary, AnswerCommentResolved>
     {
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IUserViewFactory users;
@@ -398,6 +399,14 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 {
                     state.LastResumeEventUtcTimestamp = @event.Payload.UtcTime;
                 }
+            });
+        }
+
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<AnswerCommentResolved> @event)
+        {
+            return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
+            {
+                state.HasResolvedComments = true;
             });
         }
 
