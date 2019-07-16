@@ -49,6 +49,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         protected override async Task SaveUserToLocalStorageAsync(RestCredentials credentials, CancellationToken token)
         {
             var interviewer = await this.synchronizationService.GetInterviewerAsync(credentials, token: token).ConfigureAwait(false);
+            var tenantId = await this.synchronizationService.GetTenantId(credentials, token).ConfigureAwait(false);
 
             var interviewerIdentity = new InterviewerIdentity
             {
@@ -58,7 +59,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 Name = this.UserName,
                 PasswordHash = this.passwordHasher.Hash(this.Password),
                 Token = credentials.Token,
-                SecurityStamp = interviewer.SecurityStamp
+                SecurityStamp = interviewer.SecurityStamp,
+                TenantId = tenantId
             };
 
             this.interviewersPlainStorage.Store(interviewerIdentity);
