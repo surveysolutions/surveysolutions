@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Dashboard
             var supervisorName = "supervisor";
 
             var principal = Mock.Of<IPrincipal>(x =>
-                x.CurrentUserIdentity == Create.Other.SupervisorIdentity(supervisorId.FormatGuid(), supervisorName, null));
+                x.CurrentUserIdentity == Create.Other.SupervisorIdentity(supervisorId.FormatGuid(), supervisorName, null, null));
 
             var interview = Create.Entity.InterviewView(interviewId: interviewId);
 

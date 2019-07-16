@@ -454,7 +454,7 @@ Contact support for assistance.</value>
     <comment>Resolve comment button text</comment>
   </data>
   <data name="ResolveHint" xml:space="preserve">
-    <value>Resolved commentaries are not available for interviewer and hidden for supervisor and headquarters</value>
+    <value>Resolved commentaries are hidden by default, but can be reviewed by all the interview participants</value>
   </data>
   <data name="HideResolved" xml:space="preserve">
     <value>Hide resolved</value>
