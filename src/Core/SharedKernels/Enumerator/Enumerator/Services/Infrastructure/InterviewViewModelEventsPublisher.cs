@@ -27,34 +27,44 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
 
         public async Task ExecuteAsync(IEnumerable<CommittedEvent> events)
         {
-            try
+            var exceptions = new List<Exception>();
+
+            foreach (var @event in events)
+            foreach (var viewModel in this.viewModelEventRegistry.GetViewModelsByEvent(@event))
             {
-                foreach (var @event in events)
-                foreach (var viewModel in this.viewModelEventRegistry.GetViewModelsByEvent(@event))
+                var eventType = @event.Payload.GetType();
+                var viewModelType = viewModel.GetType();
+
+                var isAsyncHandler = viewModelType
+                    .GetTypeInfo()
+                    .ImplementedInterfaces
+                    .Where(type =>
+                        type.IsGenericType && type.GetGenericTypeDefinition() ==
+                        typeof(IAsyncViewModelEventHandler<>))
+                    .Any(type => type.GetTypeInfo().GenericTypeArguments.Single() == eventType);
+
+                var methodName = $"Handle{(isAsyncHandler ? "Async" : "")}";
+
+                var handler = viewModelType
+                    .GetRuntimeMethod(methodName, new[] { eventType });
+
+                try
                 {
-                    var viewModelType = @event.Payload.GetType();
-
-                    var isAsyncHandler = viewModel
-                        .GetType()
-                        .GetTypeInfo()
-                        .ImplementedInterfaces
-                        .Where(type => type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IAsyncViewModelEventHandler<>))
-                        .Any(type => type.GetTypeInfo().GenericTypeArguments.Single() == viewModelType);
-
-                    var methodName = $"Handle{(isAsyncHandler ? "Async" : "")}";
-
-                    var handler = viewModel.GetType()
-                        .GetRuntimeMethod(methodName, new[] {viewModelType});
-
                     var taskOrVoid = (Task) handler?.Invoke(viewModel, new object[] {@event.Payload});
                     if (taskOrVoid != null) await taskOrVoid;
                 }
+                catch (Exception e)
+                {
+                    exceptions.Add(new Exception(
+                        $"Unhandled exception in {viewModelType.Name}.{methodName}<{eventType.Name}>", e));
+                }
             }
-            catch (Exception e)
-            {
-                ((BaseInterviewViewModel) this.currentViewModelPresenter.CurrentViewModel)?.ReloadCommand?.Execute();
 
-                this.logger.Error("Exception during update view models", e);
+            if (exceptions.Count > 0)
+            {
+                this.logger.Error("Exception(s) during update view models", new AggregateException(exceptions));
+
+                ((BaseInterviewViewModel) this.currentViewModelPresenter.CurrentViewModel)?.ReloadCommand?.Execute();
             }
         }
     }
