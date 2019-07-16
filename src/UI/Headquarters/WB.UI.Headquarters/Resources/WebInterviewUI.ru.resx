@@ -447,7 +447,7 @@ Oбратитесь в тех. поддержку за помощью</value>
     <value>Вопрос решен</value>
   </data>
   <data name="ResolveHint" xml:space="preserve">
-    <value>Комметарии будут недоступны интервьюеру и скрыты от супервизора</value>
+    <value>Комметарии будут скрыты по умолчанию, но все участники интервью смогут их просмотреть</value>
   </data>
   <data name="ShowResolved" xml:space="preserve">
     <value>Показать решённые</value>
