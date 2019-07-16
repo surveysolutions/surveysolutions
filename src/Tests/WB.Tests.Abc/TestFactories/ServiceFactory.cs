@@ -1135,6 +1135,12 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new WebInterviewNotificationService(statefulInterviewRepository, questionnaireStorage, webInterviewInvoker);
         }
+
+        public InterviewViewModelEventsPublisher InterviewViewModelEventsPublisher(IViewModelEventRegistry viewModelEventRegistry = null,
+            ILogger logger = null,
+            ICurrentViewModelPresenter currentViewModelPresenter = null) =>
+            new InterviewViewModelEventsPublisher(viewModelEventRegistry ?? Mock.Of<IViewModelEventRegistry>(),
+                logger ?? Mock.Of<ILogger>(), currentViewModelPresenter ?? Mock.Of<ICurrentViewModelPresenter>());
     }
 
     internal class SimpleFileHandler : IFastBinaryFilesHttpHandler
