@@ -32,18 +32,19 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
                 foreach (var @event in events)
                 foreach (var viewModel in this.viewModelEventRegistry.GetViewModelsByEvent(@event))
                 {
+                    var viewModelType = @event.Payload.GetType();
+
                     var isAsyncHandler = viewModel
                         .GetType()
                         .GetTypeInfo()
                         .ImplementedInterfaces
-                        .Any(type =>
-                            type.IsGenericType && type.GetGenericTypeDefinition() ==
-                            typeof(IAsyncViewModelEventHandler<>));
+                        .Where(type => type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IAsyncViewModelEventHandler<>))
+                        .Any(type => type.GetTypeInfo().GenericTypeArguments.Single() == viewModelType);
 
                     var methodName = $"Handle{(isAsyncHandler ? "Async" : "")}";
 
                     var handler = viewModel.GetType()
-                        .GetRuntimeMethod(methodName, new[] {@event.Payload.GetType()});
+                        .GetRuntimeMethod(methodName, new[] {viewModelType});
 
                     var taskOrVoid = (Task) handler?.Invoke(viewModel, new object[] {@event.Payload});
                     if (taskOrVoid != null) await taskOrVoid;
