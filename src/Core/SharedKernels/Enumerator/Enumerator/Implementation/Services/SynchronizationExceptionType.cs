@@ -20,6 +20,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         NotSupportedServerSyncProtocolVersion,
         UnacceptableSSLCertificate,
         InterviewerFromDifferentTeam,
-        SupervisorRequireOnlineSync
+        SupervisorRequireOnlineSync,
+        UserLinkedToAnotherServer
     }
 }
