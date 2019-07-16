@@ -37,22 +37,22 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                    && response.Headers.AcceptRanges.Any();
         }
 
-        public Task<byte[]> DownloadBinaryDataAsync(HttpClient http, HttpResponseMessage response,
+        public async Task<byte[]> DownloadBinaryDataAsync(HttpClient http, HttpResponseMessage response,
             IProgress<TransferProgress> transferProgress,
             CancellationToken token)
         {
             if (SupportRangeRequests(response))
             {
                 http.CancelPendingRequests();
-                return DownloadAsyncInMultipleChunks(http, response, transferProgress, token);
+                return await DownloadAsyncInMultipleChunks(http, response, transferProgress, token);
             }
 
-            return DownloadInSingleThreadAsync(response);
+            return await DownloadInSingleThreadAsync(response);
         }
 
-        private Task<byte[]> DownloadInSingleThreadAsync(HttpResponseMessage responseMessage)
+        private async Task<byte[]> DownloadInSingleThreadAsync(HttpResponseMessage responseMessage)
         {
-            return responseMessage.Content.ReadAsByteArrayAsync();
+            return await responseMessage.Content.ReadAsByteArrayAsync();
         }
 
         private async Task<byte[]> DownloadAsyncInMultipleChunks(HttpClient http, HttpResponseMessage response,
@@ -76,7 +76,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             var avgChunkDownloadSpeed = new SimpleRunningAverage(5);
             avgChunkDownloadSpeed.Add(ChunkSize);
 
-            async Task ChunkDownloader()
+            async Task<bool> ChunkDownloader()
             {
                 var id = Interlocked.Increment(ref downloaderIds);
 
@@ -123,13 +123,15 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                     progress.Speed = progress.BytesReceived / totalTime.Elapsed.TotalSeconds;
 
                     transferProgress.Report(progress);
-                }                
+                }
+
+                return true;
             }
 
             // starting N chunk download workers
             for (int i = 0; i < this.restServiceSettings.MaxDegreeOfParallelism; i++)
             {
-                var task = Task.Run(ChunkDownloader, token);
+                var task = Task.Run(async () => await ChunkDownloader(), token);
                 downloaders.Add(task);
             }
 
