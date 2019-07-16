@@ -158,7 +158,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Identity> GetCommentedBySupervisorQuestionsVisibleToInterviewer();
 
-        IEnumerable<Identity> GetCommentedBySupervisorAllQuestions();
+        IEnumerable<Identity> GetCommentedBySupervisorNonResolvedQuestions();
 
         IEnumerable<Identity> GetAllCommentedEnabledQuestions();
 

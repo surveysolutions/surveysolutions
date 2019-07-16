@@ -564,16 +564,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public IEnumerable<Identity> GetCommentedBySupervisorQuestionsVisibleToInterviewer()
         {
-            var allCommentedQuestions = this.GetCommentedBySupervisorAllQuestions();
+            var allCommentedQuestions = this.GetCommentedBySupervisorNonResolvedQuestions();
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             return allCommentedQuestions.Where(identity => questionnaire.IsInterviewierQuestion(identity.Id));
         }
 
-        public IEnumerable<Identity> GetCommentedBySupervisorAllQuestions()
+        public IEnumerable<Identity> GetCommentedBySupervisorNonResolvedQuestions()
         {
             return this.Tree.FindQuestions()
-                .Where(this.IsEnabledWithSupervisorComments)
+                .Where(this.IsEnabledWithSupervisorNonResolvedComments)
                 .Select(x => new
                 {
                     Id = x.Identity,
@@ -586,13 +586,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public IEnumerable<Identity> GetAllCommentedEnabledQuestions()
         {
             return this.Tree.FindQuestions()
-                .Where(question => !question.IsDisabled() && question.AnswerComments.Any())
+                .Where(question => !question.IsDisabled() && question.AnswerComments.Any() && question.AnswerComments.Any(x => !x.Resolved))
                 .Select(x => x.Identity);
         }
 
-        private bool IsEnabledWithSupervisorComments(InterviewTreeQuestion question)
+        private bool IsEnabledWithSupervisorNonResolvedComments(InterviewTreeQuestion question)
             => !question.IsDisabled() &&
-               question.AnswerComments.Any(y => y.UserId != this.properties.InterviewerId);
+               question.AnswerComments.Any(y => y.UserId != this.properties.InterviewerId && question.AnswerComments.Any(x => !x.Resolved));
 
         public string GetLastSupervisorComment() => this.SupervisorRejectComment;
 
