@@ -86,10 +86,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
             int lastNonUpdatableSyncProtocolVersion = this.syncVersionProvider.GetLastNonUpdatableVersion();
             if (deviceSyncProtocolVersion < lastNonUpdatableSyncProtocolVersion)
                 return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
-
-            var currentVersion = new Version(this.productVersion.ToString().Split(' ')[0]);
-            var supervisorVersion = this.Request.GetProductVersionFromUserAgent(@"org.worldbank.solutions.supervisor");
-
+            
             if (deviceSyncProtocolVersion < SupervisorSyncProtocolVersionProvider.V2_ResolvedCommentsIntroduced)
             {
                 if (this.interviewFactory.HasAnyInterviewsInProgressWithResolvedCommentsForSupervisor(
@@ -98,6 +95,9 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
                     return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
                 }
             }
+
+            var currentVersion = new Version(this.productVersion.ToString().Split(' ')[0]);
+            var supervisorVersion = this.Request.GetProductVersionFromUserAgent(@"org.worldbank.solutions.supervisor");
 
             if (IsNeedUpdateAppBySettings(supervisorVersion, currentVersion))
             {
