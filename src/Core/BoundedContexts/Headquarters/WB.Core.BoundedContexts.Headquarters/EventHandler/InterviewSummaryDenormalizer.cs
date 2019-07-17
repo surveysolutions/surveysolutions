@@ -70,27 +70,27 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         private void RecordFirstAnswer(InterviewSummary interviewSummary, DateTime answerTime)
         {
             if (!interviewSummary.InterviewCommentedStatuses.Any())
-                return ;
-
+                return;
+            
             if (interviewSummary.FirstAnswerDate.HasValue)
-                return ;
+                return;
+
+            // skip first answer date while interview status is zero.
+            if (interviewSummary.Status == InterviewStatus.Restored) return;
 
             interviewSummary.FirstAnswerDate = answerTime;
-            interviewSummary.FirstSupervisorId = interviewSummary.TeamLeadId;
-            interviewSummary.FirstSupervisorName = interviewSummary.TeamLeadName;
-            interviewSummary.FirstInterviewerId = interviewSummary.ResponsibleId;
-            interviewSummary.FirstInterviewerName = interviewSummary.ResponsibleName;
         }
 
         private InterviewSummary AnswerQuestion(InterviewSummary interviewSummary, Guid questionId, object answer, DateTime updateDate, DateTime answerDate)
         {
             return this.UpdateInterviewSummary(interviewSummary, updateDate, interview =>
             {
-                RecordFirstAnswer(interview, answerDate);
                 if (interview.AnswersToFeaturedQuestions.Any(x => x.Questionid == questionId))
                 {
                     interview.AnswerFeaturedQuestion(questionId, AnswerUtils.AnswerToString(answer));
                 }
+                
+                RecordFirstAnswer(interview, answerDate);
             });
         }
 
@@ -102,10 +102,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 if (interview.AnswersToFeaturedQuestions.Any(x => x.Questionid == questionId))
                 {
                     var questionnaire = this.GetQuestionnaire(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
-                    if (questionnaire == null)
-                        return;
 
-                    var question = questionnaire.FirstOrDefault<IQuestion>(q => q.PublicKey == questionId);
+                    var question = questionnaire?.FirstOrDefault<IQuestion>(q => q.PublicKey == questionId);
                     if (question?.Answers == null)
                         return;
 
@@ -220,6 +218,16 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 interview.TeamLeadName = supervisorName;
                 interview.IsAssignedToInterviewer = false;
                 interview.ReceivedByInterviewer = false;
+
+                if (interview.FirstSupervisorId == null)
+                {
+                    interview.FirstSupervisorId = interview.TeamLeadId;
+                }
+
+                if (interview.FirstSupervisorName == null)
+                {
+                    interview.FirstSupervisorName = interview.TeamLeadName;
+                }
             });
         }
 
@@ -300,6 +308,16 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     interview.IsAssignedToInterviewer = true;
 
                     interview.ReceivedByInterviewer = false;
+
+                    if (interview.FirstInterviewerId == null)
+                    {
+                        interview.FirstInterviewerId = interview.ResponsibleId;
+                    }
+
+                    if (interview.FirstInterviewerName == null)
+                    {
+                        interview.FirstInterviewerName = interview.ResponsibleName;
+                    }
                 }
                 else
                 {
@@ -308,6 +326,16 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     interview.ResponsibleRole = UserRoles.Supervisor;
                     interview.IsAssignedToInterviewer = false;
                     interview.ReceivedByInterviewer = false;
+
+                    if (interview.FirstSupervisorId == null)
+                    {
+                        interview.FirstSupervisorId = interview.ResponsibleId;
+                    }
+
+                    if (interview.FirstSupervisorName == null)
+                    {
+                        interview.FirstSupervisorName = interview.ResponsibleName;
+                    }
                 }
             });
         }
@@ -427,7 +455,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<AreaQuestionAnswered> @event)
         {
-            var area = new Area(@event.Payload.Geometry, @event.Payload.MapName,@event.Payload.NumberOfPoints,
+            var area = new Area(@event.Payload.Geometry, @event.Payload.MapName, @event.Payload.NumberOfPoints,
                 @event.Payload.AreaSize, @event.Payload.Length, @event.Payload.Coordinates, @event.Payload.DistanceToEditor);
             return this.AnswerQuestion(state, @event.Payload.QuestionId, area, @event.EventTimeStamp, @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc.Value);
         }
@@ -435,7 +463,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<AudioQuestionAnswered> @event)
         {
             var audioAnswer = AudioAnswer.FromString(@event.Payload.FileName, @event.Payload.Length);
-            return this.AnswerQuestion(state, @event.Payload.QuestionId, audioAnswer, @event.EventTimeStamp,  @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc.Value);
+            return this.AnswerQuestion(state, @event.Payload.QuestionId, audioAnswer, @event.EventTimeStamp, @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc.Value);
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewRestored> @event)
