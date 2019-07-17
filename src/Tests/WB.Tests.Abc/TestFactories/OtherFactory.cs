@@ -3,16 +3,19 @@ using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Web.Http.Controllers;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using AutoMapper;
 using Microsoft.AspNet.SignalR.Hosting;
 using Microsoft.AspNet.SignalR.Hubs;
+using Microsoft.Owin.Security;
 using Moq;
 using Ncqrs.Eventing;
 using NSubstitute;
 using ReflectionMagic;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Supervisor.Views;
@@ -33,9 +36,26 @@ namespace WB.Tests.Abc.TestFactories
 {
     internal class OtherFactory
     {
+        private class ApiControllerCustomization : ICustomization
+        {
+            public void Customize(IFixture fixture)
+            {
+                fixture.Inject(new HttpControllerContext());
+                fixture.Inject(new HttpRequestContext());
+            }
+        }
+
         public Fixture AutoFixture()
         {
             var autoFixture = new Fixture();
+            autoFixture.Customize(new AutoMoqCustomization());
+            return autoFixture;
+        }
+
+        public Fixture WebApiAutoFixture()
+        {
+            var autoFixture = new Fixture();
+            autoFixture.Customize(new ApiControllerCustomization());
             autoFixture.Customize(new AutoMoqCustomization());
             return autoFixture;
         }
@@ -157,6 +177,12 @@ namespace WB.Tests.Abc.TestFactories
             }
 
             return webInterviewHub;
+        }
+
+        public HqSignInManager HqSignInManager()
+        {
+            return new HqSignInManager(Create.Storage.HqUserManager(), Mock.Of<IAuthenticationManager>(),
+                Mock.Of<IHashCompatibilityProvider>());
         }
     }
 }

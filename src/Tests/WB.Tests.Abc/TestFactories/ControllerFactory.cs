@@ -60,6 +60,7 @@ namespace WB.Tests.Abc.TestFactories
             HqSignInManager signInManager = null,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory = null,
             IAssignmentsService assignmentsService = null,
+            IInterviewInformationFactory interviewInformationFactory = null,
             IPlainKeyValueStorage<InterviewerSettings> interviewerSettings = null)
         {
             var result = new InterviewerApiController(tabletInformationService ?? Mock.Of<ITabletInformationService>(),
@@ -71,7 +72,7 @@ namespace WB.Tests.Abc.TestFactories
                     Mock.Of<IHashCompatibilityProvider>()),
                 questionnaireBrowseViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(x =>
                     x.GetByIds(It.IsAny<QuestionnaireIdentity[]>()) == new List<QuestionnaireBrowseItem>()),
-                Mock.Of<IInterviewInformationFactory>(),
+                interviewInformationFactory ?? Mock.Of<IInterviewInformationFactory>(),
                 assignmentsService ?? Mock.Of<IAssignmentsService>(),
                 Mock.Of<IClientApkProvider>(),
                 interviewerSettings ?? Mock.Of<IPlainKeyValueStorage<InterviewerSettings>>()
