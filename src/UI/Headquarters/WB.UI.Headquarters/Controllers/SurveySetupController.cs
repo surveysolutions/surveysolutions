@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
@@ -180,7 +181,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
-        public ActionResult PanelBatchUploadAndVerify(BatchUploadModel model)
+        public async Task<ActionResult> PanelBatchUploadAndVerify(BatchUploadModel model)
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
 
@@ -273,7 +274,7 @@ namespace WB.UI.Headquarters.Controllers
                         CreateError(questionnaireIdentity, model.File.FileName, errors: answerErrors));
                 }
 
-                this.assignmentsVerificationTask.Run(3);
+                await this.assignmentsVerificationTask.ScheduleRunAsync(3);
             }
             catch (Exception e)
             {
@@ -289,7 +290,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
-        public ActionResult AssignmentsBatchUploadAndVerify(BatchUploadModel model)
+        public async Task<ActionResult> AssignmentsBatchUploadAndVerify(BatchUploadModel model)
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
 
@@ -389,7 +390,7 @@ namespace WB.UI.Headquarters.Controllers
                         CreateError(questionnaireIdentity, model.File.FileName, errors: answerErrors));
                 }
 
-                this.assignmentsVerificationTask.Run(3);
+                await this.assignmentsVerificationTask.ScheduleRunAsync(3);
             }
             catch (Exception e)
             {

@@ -118,8 +118,10 @@ namespace WB.Services.Export.Services
 
                     using (IDataQuery tabStreamDataQuery = dataQueryFactory.CreateDataQuery(tabFile))
                     {
+                        logger.LogTrace("Tab file data written: {tabFile} {filePath}", tabFile, dataFilePath);
                         writer.WriteToFile(dataFilePath, meta, tabStreamDataQuery);
                     }
+
                     result.Add(dataFilePath);
 
                     processedFiles++;

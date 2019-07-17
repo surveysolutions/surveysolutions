@@ -33,7 +33,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
             {
                 try
                 {
-                    InScopeExecutor.Current.ExecuteActionInScope(action);
+                    InScopeExecutor.Current.Execute(action);
                 }
                 catch (NotSupportedException)
                 {

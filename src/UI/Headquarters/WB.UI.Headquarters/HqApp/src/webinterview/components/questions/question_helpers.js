@@ -17,7 +17,9 @@ export function getGroupSeparator(question) {
         const etalon = 1111
         const localizedNumber = etalon.toLocaleString()
         const separator = localizedNumber.substring(1, localizedNumber.length - 3)
-        return separator || defaultSeparator
+        return (separator == null || separator == undefined)
+            ? defaultSeparator
+            : separator 
     }
 
     return defaultSeparator
@@ -25,15 +27,12 @@ export function getGroupSeparator(question) {
 
 export function getDecimalSeparator(question) {
     const defaultSeparator = '.'
-
-    if (question.useFormatting) {
-        const etalon = 1.111
-        const localizedNumber = etalon.toLocaleString()
-        const separator = localizedNumber.substring(1, localizedNumber.length - 3)
-        return separator || defaultSeparator
-    }
-
-    return defaultSeparator
+    const etalon = 1.111
+    const localizedNumber = etalon.toLocaleString()
+    const separator = localizedNumber.substring(1, localizedNumber.length - 3)
+    return (separator == null || separator == undefined)
+        ? defaultSeparator
+        : separator 
 }
 
 export function getDecimalPlacesCount(question){

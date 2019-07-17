@@ -1,32 +1,23 @@
-﻿using System.Web.Hosting;
-using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.Infrastructure.FileSystem;
+﻿using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.UI.Headquarters.API;
+using WB.UI.Headquarters.Services;
 
 namespace WB.UI.Headquarters.Code
 {
     class InterviewerVersionReader : IInterviewerVersionReader
     {
-        private readonly IAndroidPackageReader androidPackageReader;
-        private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly IClientApkProvider clientApkProvider;
 
-        public InterviewerVersionReader(IAndroidPackageReader androidPackageReader, IFileSystemAccessor fileSystemAccessor)
+        public InterviewerVersionReader(IClientApkProvider clientApkProvider)
         {
-            this.androidPackageReader = androidPackageReader;
-            this.fileSystemAccessor = fileSystemAccessor;
+            this.clientApkProvider = clientApkProvider;
         }
 
         public int? Version
         {
             get
             {
-                string pathToInterviewerApp = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(ClientApkInfo.Directory), ClientApkInfo.InterviewerFileName);
-
-                int? interviewerApkVersion = !this.fileSystemAccessor.IsFileExists(pathToInterviewerApp)
-                    ? null
-                    : this.androidPackageReader.Read(pathToInterviewerApp).Version;
-
-                return interviewerApkVersion;
+                return this.clientApkProvider.GetLatestVersion(ClientApkInfo.InterviewerFileName);
             }
         }
     }

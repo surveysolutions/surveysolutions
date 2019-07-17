@@ -864,6 +864,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save scenario.
+        /// </summary>
+        internal static string SaveScenario {
+            get {
+                return ResourceManager.GetString("SaveScenario", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Search.
         /// </summary>
         internal static string Search {

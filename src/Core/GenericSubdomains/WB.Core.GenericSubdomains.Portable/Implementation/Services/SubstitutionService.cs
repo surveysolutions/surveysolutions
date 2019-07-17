@@ -10,15 +10,11 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
     {
         private const string SubstitutionVariableDelimiter = "%";
         private const string SelfVariableReference = "self";
-        private static readonly string AllowedSubstitutionVariableNameRegexp = String.Format(@"(?<={0})(\w+(?={0}))", SubstitutionVariableDelimiter);
+        private const string AllowedSubstitutionVariableNameRegexp = "(?<=" + SubstitutionVariableDelimiter + @")(\w+(?=" + SubstitutionVariableDelimiter + "))";
+        private const string TitleSubstitution = "rostertitle";
+        private const string rosterTitle = SubstitutionVariableDelimiter + TitleSubstitution + SubstitutionVariableDelimiter;
         private static readonly Regex AllowedSubstitutionVariableNameRx = new Regex(AllowedSubstitutionVariableNameRegexp, RegexOptions.Compiled);
         private readonly ConcurrentDictionary<string, string[]> cache = new ConcurrentDictionary<string, string[]>();
-        private readonly string rosterTitle;
-
-        public SubstitutionService()
-        {
-            rosterTitle = string.Format("{0}{1}{0}", SubstitutionVariableDelimiter, RosterTitleSubstitutionReference);
-        }
 
         public string[] GetAllSubstitutionVariableNames(string source, string selfVariable)
         {
@@ -49,11 +45,11 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             return result;
         }
 
-        public string RosterTitleSubstitutionReference => "rostertitle";
+        public string RosterTitleSubstitutionReference => TitleSubstitution;
 
         public bool ContainsRosterTitle(string input)
         {
-            return !string.IsNullOrEmpty(input) && input.Contains(this.rosterTitle);
+            return !string.IsNullOrEmpty(input) && input.Contains(rosterTitle);
         }
 
         public string GenerateRosterName(string groupTitle, string rosterInstanceTitle)

@@ -9,7 +9,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
         public HttpStatusCode StatusCode { get; }
         public string[] Errors { get; }
 
-        public EmailServiceException(string email, HttpStatusCode statusCode, string[] errors) : base(string.Join("; ", errors))
+        public EmailServiceException(string email, HttpStatusCode statusCode, Exception innerException = null, params string[] errors) 
+            : base(string.Join("; ", errors), innerException)
         {
             Email = email;
             StatusCode = statusCode;

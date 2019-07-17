@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 
 namespace WB.Core.BoundedContexts.Headquarters.Invitations
 {
@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             this.invitationMailingService = invitationMailingService;
         }
 
-        public void Execute(IJobExecutionContext context)
+        public async Task Execute(IJobExecutionContext context)
         {
             try
             {
@@ -60,7 +60,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                     var address = invitation.Assignment.Email;
                     try
                     {
-                        invitationMailingService.SendInvitationAsync(invitationId, invitation.Assignment).WaitAndUnwrapException();
+                        await invitationMailingService.SendInvitationAsync(invitationId, invitation.Assignment);
                     }
                     catch (EmailServiceException e)
                     {
@@ -84,11 +84,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 invitationService.EmailDistributionFailed();
                 this.logger.Error($"Invitations distribution job: FAILED. Reason: {ex.Message} ", ex);
             }
+
+            return;
         }
     }
 
     public class SendInvitationsTask : BaseTask
     {
-        public SendInvitationsTask(IScheduler scheduler) : base(scheduler, "Send invitations", typeof(SendInvitationsJob)) { }
+        public SendInvitationsTask(IScheduler scheduler) 
+            : base(scheduler, "Send invitations", typeof(SendInvitationsJob)) { }
     }
 }

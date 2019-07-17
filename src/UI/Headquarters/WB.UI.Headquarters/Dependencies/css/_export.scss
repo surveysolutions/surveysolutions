@@ -298,32 +298,308 @@
 		@extend %inactive;
 	}
 }
-.format-data{
+
+
+
+// NEW *****************************************************************************
+.export{
+	flex-wrap: wrap;
+	&>div{
+		flex-basis: 740px;
+		padding-right: 60px;
+	}
+	.form-inline{
+		.form-group + .form-group{
+			margin-left: 15px;
+			
+		}
+	}
+	.bootstrap-select.btn-group:first-of-type{
+		margin-left: -10px;
+	}
+}
+.filter-wrapper{
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+.filter-column{
+	margin-right: 30px;
+	&:last-of-type{
+		margin-right: 0;
+	}
+}
+.radio-btn-row{
+	margin-left: -10px;
+	background-color: #edeff0;
+	&:first-of-type{
+		border-top-left-radius: 5px;
+		border-top-right-radius: 5px;
+	}
+	&:last-of-type{
+		border-bottom-left-radius: 5px;
+		border-bottom-right-radius: 5px;
+	}
+	&:nth-of-type(2n){
+		background-color: #f8f9f9;
+	}
+	label{
+		cursor: pointer;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		padding: 15px ;
+		margin: 0;
+
+	}
+}
+.format-data,
+.export-destination{
+	position: relative;
 	padding-left: 80px;
+}
+.format-data{
 	&:before{
 		display: block;
 		@include absolute(0, null, null, 0);
-		top: calc(50% - 21px);
+		top: calc(50% - 20px);
 		@include size(63px, 41px);
 		content: "";
-		background: url("#{$assetsPath}/img/data-image.png") no-repeat;
+		background: url("#{$assetsPath}/img/data-image2.png") no-repeat;
 		background-size: 63px 234px;
-		@include image-2x("#{$assetsPath}/img/data-image2k.png", 63px, 234px);
-		background-position: 20px -200px;
+		//@include image-2x("#{$assetsPath}/img/data-image2k.png", 63px, 234px);
+		background-position: 0 -200px;
 	}
-	&.separated-data:before{
-		background-position: 20px -120px;
+	&.Tabular:before{
+		background-position: 0 -120px;
 	}
 	&.xlsx:before{
-		background-position: 20px -78px;
+		background-position: 0 -78px;
 	}
-	&.stata:before{
-		background-position: 28px 4px;
+	&.STATA:before{
+		background-position: 0 4px;
 	}
-	&.spss:before{
+	&.SPSS:before{
 		background-position: 0px -38px;
 	}
-	&.zip:before{
-		background-position: 15px -165px;
+	&.Binary:before{
+		background-position: 0 -165px;
+	}
+	&.DDI:before{
+		background-position: 0 -200px;
+	}
+	&.Paradata:before{
+		background-position: 0 -120px;
+	}
+}
+.export-destination{
+	&:before{
+		display: block;
+		@include absolute(0, null, null, 0);
+		top: calc(50% - 24px);
+		@include size(65px, 50px);
+		content: "";
+		background: url("#{$assetsPath}/img/Exprt-icons2.png") no-repeat;
+		background-size: 64px 250px;
+		//@include image-2x("#{$assetsPath}/img/Exprt-icons2.png", 64px, 250px);
+		background-position: 0px -150px;
+	}
+	&.File:before{
+		background-position: 0px -150px;
+	}
+	&.OneDrive:before{
+		background-position: 0px 0px;
+	}
+	&.Dropbox:before{
+		background-position: 0px -50px;
+	}
+	&.ftp-icon:before{
+		background-position: 0px -100px;
+	}
+	&.GoogleDrive:before{
+		background-position: 0px -200px;
+	}
+}
+.export-card{
+	font: 14px/18px "RobotoBold";
+	//@extend %column-width;
+	margin-bottom: 30px;
+	border-radius: 5px;
+	position: relative;
+	border: 2px solid transparent;
+	@include transition(box-shadow, 0.2s);
+	&:hover {
+		box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.08), 0 5px 15px 0 rgba(0, 0, 0, 0.08);
+		border-color: #dbdfe2;
+	}
+	.top-row{
+		background-color: #f3f3f3;
+		border-top-right-radius: 5px;
+		border-top-left-radius: 5px;
+		padding: 15px 15px 10px;
+	}
+	.bottom-row{
+		background-color: #e6e9e9;
+		border-bottom-left-radius: 5px;
+		border-bottom-right-radius: 5px;
+		padding: 10px 15px 15px;
+		&.is-failed{
+			background-color: #f6d6d0;
+		}
+		&.is-successful{
+			background-color: #d1dfeb;
+		}
+	}
+	.aside-menu{
+		right: 0;
+	}
+	.status{
+		font: 12px/14px TrebuchetMSBold;
+    	text-transform: uppercase;
+		letter-spacing: .13em;
+	}
+	.file-info{
+		margin-left: 20px;
+		font: 12px/18px RobotoRegular;
+		color: #969a9a;
+		letter-spacing: 1px;
+		&:only-child{
+			margin-left: 0;
+		}
+	}
+	.cancelable-progress{
+		flex-grow: 1;
+		margin-left: 10px;
+		.progress{
+			width: 100%;
+			
+		}
+	} 
+}
+.card-loading{ 
+	display: none;
+	position: absolute;
+	z-index: 10;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	&:hover {
+		box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.08), 0 5px 15px 0 rgba(0, 0, 0, 0.08);
+		border-color: #dbdfe2;
+	}
+	.animated-background{
+		animation-duration: 1s;
+		animation-fill-mode: forwards;
+		animation-iteration-count: infinite;
+		animation-name: placeHolderShimmer;
+		animation-timing-function: linear;
+		background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+		height: 55px;
+		position: relative;
+	}
+	.background-masker {
+		position: absolute;
+	}
+	.mask-top-left{
+		top: 0;
+		left: 0;
+		width: 80px;
+		height: 10px;
+	}
+	.mask-top-right{
+		top: 0;
+		right: 4px;
+		height: 18px;
+		width: 40%;
+	}
+	.mask-left{
+		top: 0;
+		left: 60px;
+		width: 20px;
+		height: 100%;
+	}
+	.mask-bottom-left{
+		bottom: 0;
+		left: 0;
+		width: 80px;
+		height: 10px;
+	}
+	.submask-top{
+		top: 14px;
+		left: 80px;
+		width: calc(100% - 80px);
+		height: 8px;
+	}
+	.submask-top-right{
+		top: 18px;
+		right: 0;
+		height: 30px;
+		width: 30%;
+	}
+	.submask-bottom-right{
+		bottom: 0;
+		right: 0;
+		height: 18px;
+		width: 50%;
+	}
+	.submask-bottom{
+		bottom: 14px;
+		left: 80px;
+		width: calc(100% - 80px);
+		height: 8px;
+	}
+	.top-row-loading{
+		@extend .top-row;
+		.background-masker {
+			background-color: #f3f3f3;
+		}
+	}
+	.bottom-row-loading{
+		@extend .bottom-row;
+		.background-masker {
+			background-color: #e6e9e9;
+		}
+		.submask-top{
+			height: 15px;
+		}
+		.mask-top-right{
+			width: 55%;
+			right: 0;
+		}
+		.submask-left{
+			left: 200px;
+			bottom: 0;
+			width: 20px;
+			height: 50px;
+		}
+		.submask-bottom{
+			left: 220px;
+			width: calc(100% - 220px);
+		}
+	}
+
+}
+@keyframes placeHolderShimmer{
+    0%{
+        background-position: -468px 0
+    }
+    100%{
+        background-position: 468px 0
+    }
+}
+@media (max-width: 1600px){
+	.export{
+
+		//flex-direction: column;
+		&>div{
+			margin-bottom: 70px;
+			padding-right: 0;
+			&:first-of-type{
+				margin-right: 0px;
+			}
+			.export-card{
+				margin-left: -10px;
+			}
+		}
 	}
 }

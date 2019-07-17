@@ -12,7 +12,7 @@ namespace WB.Enumerator.Native.WebInterview.Pipeline
             return async context =>
             {
                 // This is responsible for invoking every server-side Hub method in your SignalR app.
-                return await InScopeExecutor.Current.ExecuteActionInScopeAsync(async sl =>
+                return await InScopeExecutor.Current.ExecuteAsync(async sl =>
                 {
                     if (context.Hub is WebInterview web)
                     {

@@ -22,9 +22,10 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
             IPlainAggregateRootRepository plainRepository,
             IAggregateLock aggregateLock,
             IAggregateRootCacheCleaner aggregateRootCacheCleaner,
-            IExecutedCommandsStorage executedCommandsStorage) : 
+            IExecutedCommandsStorage executedCommandsStorage,
+            ICommandsMonitoring monitoring) : 
                 base(eventSourcedRepository, eventBus, 
-                     serviceLocator, plainRepository, aggregateLock, aggregateRootCacheCleaner)
+                     serviceLocator, plainRepository, aggregateLock, aggregateRootCacheCleaner, monitoring)
         {
             this.executedCommandsStorage = executedCommandsStorage;
         }

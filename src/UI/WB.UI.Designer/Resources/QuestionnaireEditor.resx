@@ -277,6 +277,21 @@
   <data name="SideBarMacroShowDescription" xml:space="preserve">
     <value>add description</value>
   </data>
+  <data name="SideBarScenarioCounter" xml:space="preserve">
+    <value>{{count}} Scenario:</value>
+  </data>
+  <data name="SideBarScenarioCounter_plural" xml:space="preserve">
+    <value>{{count}} Scenarios:</value>
+  </data>
+  <data name="SideBarScenarioEmptyLine1" xml:space="preserve">
+    <value>Use this tab to view your scenarios.</value>
+  </data>
+  <data name="SideBarScenarioEmptyLine2" xml:space="preserve">
+    <value>A scenario is a snapshot of tester state, you can save it on tester by click on button "Save Scenario".</value>
+  </data>
+  <data name="SideBarScenarioName" xml:space="preserve">
+    <value>scenario title</value>
+  </data>
   <data name="SideBarSectionsCounter" xml:space="preserve">
     <value>{{count}} Section:</value>
   </data>
@@ -447,6 +462,9 @@
   </data>
   <data name="SideBarMacroTitle" xml:space="preserve">
     <value>Macros</value>
+  </data>
+  <data name="SideBarScenarioTitle" xml:space="preserve">
+    <value>Scenarios</value>
   </data>
   <data name="SideBarSectionsTitle" xml:space="preserve">
     <value>Sections</value>

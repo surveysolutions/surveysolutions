@@ -162,15 +162,15 @@ module.exports = class LocalizationBuilder {
 
     mergeNamespaces(namespace, initial, newone) {
         Object.keys(initial).forEach(key => {
-            if (newone[key] != null) {
-                console.error(
-                    "Found conflicting resources with same resource name",
-                    namespace,
-                    key,
-                    initial[key],
-                    newone[key]
-                );
-            }
+            // if (newone[key] != null) {
+            //     console.error(
+            //         "Found conflicting resources with same resource name",
+            //         namespace,
+            //         key,
+            //         initial[key],
+            //         newone[key]
+            //     );
+            // }
         });
 
 		var result = Object.assign(initial, newone);

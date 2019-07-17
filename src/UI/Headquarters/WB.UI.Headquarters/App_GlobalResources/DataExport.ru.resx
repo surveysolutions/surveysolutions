@@ -241,32 +241,164 @@
     <value>По</value>
     <comment>По</comment>
   </data>
-    <data name="ZipFile" xml:space="preserve">
+  <data name="ZipFile" xml:space="preserve">
     <value>Zip архив</value>
     <comment>Zip архив</comment>
   </data>
-    <data name="Dropbox" xml:space="preserve">
+  <data name="Dropbox" xml:space="preserve">
     <value>Dropbox</value>
     <comment>Dropbox</comment>
   </data>
-    <data name="OneDrive" xml:space="preserve">
+  <data name="OneDrive" xml:space="preserve">
     <value>OneDrive</value>
     <comment>OneDrive</comment>
   </data>
-    <data name="GoogleDrive" xml:space="preserve">
+  <data name="GoogleDrive" xml:space="preserve">
     <value>Google Диск</value>
     <comment>Google Диск</comment>
   </data>
-    <data name="SaveBinaryDataTo" xml:space="preserve">
+  <data name="SaveBinaryDataTo" xml:space="preserve">
     <value>Сохранить бинарные данные в:</value>
     <comment>Сохранить бинарные данные в:</comment>
   </data>
-    <data name="ExportBtn" xml:space="preserve">
+  <data name="ExportBtn" xml:space="preserve">
     <value>Экспорт</value>
     <comment>Экспортировать</comment>
   </data>
   <data name="Preparing" xml:space="preserve">
-      <value>Подготовка</value>
-      <comment>Подготовка</comment>
+    <value>Подготовка</value>
+    <comment>Подготовка</comment>
+  </data>
+  <data name="DataExport_Destination_Dropbox" xml:space="preserve">
+    <value>Экспортный файл будет загружен в Dropbox</value>
+  </data>
+  <data name="DataExport_Destination_File" xml:space="preserve">
+    <value>Экспортный файл будет доступен для скачивания</value>
+  </data>
+  <data name="DataExport_Destination_GoogleDrive" xml:space="preserve">
+    <value>Экспортный файл будет загружен в Google Drive</value>
+  </data>
+  <data name="DataExport_Destination_OneDrive" xml:space="preserve">
+    <value>Экспортный файл будет загружен в OneDrive</value>
+  </data>
+  <data name="DataExport_QueuedOn" xml:space="preserve">
+    <value>Добавлено в очередь: {{date}}</value>
+  </data>
+  <data name="DataExport_QuestionnaireWithVersion" xml:space="preserve">
+    <value>{{title}} (вер. {{version}})</value>
+  </data>
+  <data name="DataExport_Regenerate" xml:space="preserve">
+    <value>Пересоздать</value>
+  </data>
+  <data name="DataExport_RegenerateDesc" xml:space="preserve">
+    <value>Поставить в очередь экспорт с теми же параметрами</value>
+  </data>
+  <data name="DataExport_FileLastUpdate" xml:space="preserve">
+    <value>Последнее обновление: {{date}}</value>
+  </data>
+  <data name="DataExport_FileWasRegenerated" xml:space="preserve">
+    <value>Файл был пересоздан</value>
+  </data>
+  <data name="DataExport_FileSize" xml:space="preserve">
+    <value>Размер файла: {{size}} MB</value>
+  </data>
+  <data name="DataExport_Destination" xml:space="preserve">
+    <value>Место назначения: {{dest}}</value>
+  </data>
+  <data name="DataExport_ServiceIsNotAvailable" xml:space="preserve">
+    <value>Экспортный сервис недоступен</value>
+  </data>
+  <data name="DataType" xml:space="preserve">
+    <value>Тип данных</value>
+  </data>
+  <data name="DataType_Binary" xml:space="preserve">
+    <value>Двоичные данные. Архив с двоичными данными, включая картинки и аудиозаписи.</value>
+  </data>
+  <data name="DataType_Ddi" xml:space="preserve">
+    <value>DDI (Data Documentation Initiative) данные в формате XML</value>
+  </data>
+  <data name="DataType_MainSurveyData" xml:space="preserve">
+    <value>Основной экспортный файл. Архив, сожержащий ответы на вопросы интервью</value>
+  </data>
+  <data name="FilterTitle" xml:space="preserve">
+    <value>Фильтр интервью для экспорта</value>
+  </data>
+  <data name="SurveyQuestionnaire" xml:space="preserve">
+    <value>Вопросник обследования</value>
+  </data>
+  <data name="DataType_Paradata" xml:space="preserve">
+    <value>Параданные. Доступные данные, описывающие процесс сбора (события, времена)</value>
+  </data>
+  <data name="DataDestination" xml:space="preserve">
+    <value>Назвачение экспортного файла</value>
+  </data>
+  <data name="DataFormat" xml:space="preserve">
+    <value>Формат данных</value>
+  </data>
+  <data name="DataDestination_Dropbox" xml:space="preserve">
+    <value>Загрузить на Dropbox</value>
+  </data>
+  <data name="DataDestination_GoogleDrive" xml:space="preserve">
+    <value>Загрузить на Google Drive</value>
+  </data>
+  <data name="DataDestination_OneDrive" xml:space="preserve">
+    <value>Загрузить на OneDrive</value>
+  </data>
+  <data name="DataDestination_Zip" xml:space="preserve">
+    <value>Скачать</value>
+  </data>
+  <data name="DataFormat_Spss" xml:space="preserve">
+    <value>SPSS формат</value>
+  </data>
+  <data name="DataFormat_Stata" xml:space="preserve">
+    <value>Stata 14 формат</value>
+  </data>
+  <data name="DataFormat_Tab" xml:space="preserve">
+    <value>Tab separated data</value>
+  </data>
+  <data name="AddToQueue" xml:space="preserve">
+    <value>Добавить в очередь</value>
+  </data>
+  <data name="GeneratedDataSets" xml:space="preserve">
+    <value>Ранее сгеренированные экспортные файлы</value>
+  </data>
+  <data name="GeneratedDataSets_Desc" xml:space="preserve">
+    <value>Every set is a zip archive with all collected interview data and DDI XML structure you an download previously generated reports</value>
+  </data>
+  <data name="NoDataSets" xml:space="preserve">
+    <value>Нет созданных экспортных файлов</value>
+  </data>
+  <data name="DataExportApi" xml:space="preserve">
+    <value>API Экспорта данных</value>
+  </data>
+  <data name="DataExportApiDesc" xml:space="preserve">
+    <value>Вы можете настроить автоматический экспорт собранных данных используя API. Более подробно прочитать об API и способе использования можно на:</value>
+  </data>
+  <data name="DataExportApiInfoPage" xml:space="preserve">
+    <value>Справочник по API экспорта данных</value>
+  </data>
+  <data name="Error_Canceled" xml:space="preserve">
+    <value>Экспорт был отменен пользователем.</value>
+  </data>
+  <data name="Error_NotEnoughExternalStorageSpace" xml:space="preserve">
+    <value>Недостаточно свободного места на выбранном внешнем хранилище. Освободите место, запустите экспорт заново или выберите другого провайдера.</value>
+  </data>
+  <data name="Error_Unhandled" xml:space="preserve">
+    <value>Во время экспорта произошла непредвиденная ошибка. Приносим извинения за неудобства. Пожалуйста, свяжитесь со службой поддержки support@mysurvey.solutions.</value>
+  </data>
+  <data name="AllStatuses" xml:space="preserve">
+    <value>любом статусе</value>
+  </data>
+  <data name="ApprovedByHeadquarters" xml:space="preserve">
+    <value>статусе утверждено хедквотером</value>
+  </data>
+  <data name="ApprovedBySupervisor" xml:space="preserve">
+    <value>статусе утверждено супервизором</value>
+  </data>
+  <data name="DataExport_InterviewsStatus" xml:space="preserve">
+    <value>Интервью в {{status}}.</value>
+  </data>
+  <data name="InterviewerAssigned" xml:space="preserve">
+    <value>статусе назначено на интервьюера</value>
   </data>
 </root>
