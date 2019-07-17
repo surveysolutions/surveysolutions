@@ -18,7 +18,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         protected readonly IInterviewViewModelFactory interviewViewModelFactory;
         private readonly IQuestionnaireStorage questionnaireRepository;
         protected readonly IStatefulInterviewRepository interviewRepository;
-        protected readonly IViewModelNavigationService viewModelNavigationService;
         private readonly ILogger logger;
         private readonly ICompositeCollectionInflationService compositeCollectionInflationService;
 
@@ -39,7 +38,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
-            this.viewModelNavigationService = viewModelNavigationService;
             this.logger = logger;
             this.compositeCollectionInflationService = compositeCollectionInflationService;
         }

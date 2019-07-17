@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         {
             progress.Report(new SyncProgressInfo
             {
-                Title = InterviewerUIResources.Synchronization_UploadAuditLog,
+                Title = EnumeratorUIResources.Synchronization_UploadAuditLog,
                 Stage = SyncStage.UploadingAuditLog
             });
 

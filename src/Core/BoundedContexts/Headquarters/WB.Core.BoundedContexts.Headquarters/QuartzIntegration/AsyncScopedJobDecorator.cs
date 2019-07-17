@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Quartz;
 using WB.Core.Infrastructure.Modularity;
 using WB.Enumerator.Native.WebInterview;
@@ -14,15 +15,15 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
             this.jobType = jobType;
         }
 
-        public void Execute(IJobExecutionContext context)
+        public async Task Execute(IJobExecutionContext context)
         {
-            InScopeExecutor.Current.ExecuteActionInScope((serviceLocatorLocal) =>
+            await InScopeExecutor.Current.ExecuteAsync(async (serviceLocatorLocal) =>
             {
                 var job = serviceLocatorLocal.GetInstance(jobType) as IJob;
                 if (job == null)
                     throw new ArgumentNullException(nameof(job));
 
-                job.Execute(context);
+                await job.Execute(context);
             });
         }
     }

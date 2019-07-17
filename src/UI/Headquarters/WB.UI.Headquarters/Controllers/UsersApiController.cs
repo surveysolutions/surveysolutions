@@ -113,6 +113,7 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     UserId = x.UserId,
                     UserName = x.UserName,
+                    FullName = x.FullName,
                     CreationDate = x.CreationDate,
                     SupervisorId = x.SupervisorId,
                     SupervisorName = x.SupervisorName,
@@ -161,6 +162,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             public virtual Guid UserId { get; set; }
             public virtual string UserName { get; set; }
+            public virtual string FullName { get; set; }
             public virtual DateTime CreationDate { get; set; }
             public virtual string SupervisorName { get; set; }
             public virtual string Email { get; set; }
@@ -319,7 +321,7 @@ namespace WB.UI.Headquarters.Controllers
         [CamelCase]
         [ApiNoCache]
         [ObserverNotAllowedApi]
-        public IHttpActionResult ImportUsers(ImportUsersRequest request)
+        public async Task<IHttpActionResult> ImportUsers(ImportUsersRequest request)
         {
             if (request?.File?.FileBytes == null)
                 return this.BadRequest(BatchUpload.Prerequisite_FileOpen);
@@ -333,6 +335,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 var importUserErrors = this.userImportService.VerifyAndSaveIfNoErrors(request.File.FileBytes, request.File.FileName)
                     .Take(8).Select(ToImportError).ToArray();
+                await this.userImportService.ScheduleRunUserImportAsync();
                 return this.Ok(importUserErrors);
             }
             catch (PreloadingException e)

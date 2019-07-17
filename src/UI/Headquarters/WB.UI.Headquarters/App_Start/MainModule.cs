@@ -125,22 +125,20 @@ namespace WB.UI.Headquarters
             registry.Bind<IEncryptionService, RsaEncryptionService>();
         }
 
-        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
+        public async Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             serviceLocator.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
-            serviceLocator.GetInstance<UsersImportTask>().Run();
-            serviceLocator.GetInstance<AssignmentsImportTask>().Schedule(repeatIntervalInSeconds: 300);
-            serviceLocator.GetInstance<AssignmentsVerificationTask>().Schedule(repeatIntervalInSeconds: 300);
-            serviceLocator.GetInstance<DeleteQuestionnaireJobScheduler>().Schedule(repeatIntervalInSeconds: 10);
+            await serviceLocator.GetInstance<UsersImportTask>().ScheduleRunAsync();
+            await serviceLocator.GetInstance<AssignmentsImportTask>().Schedule(repeatIntervalInSeconds: 300);
+            await serviceLocator.GetInstance<AssignmentsVerificationTask>().Schedule(repeatIntervalInSeconds: 300);
+            await serviceLocator.GetInstance<DeleteQuestionnaireJobScheduler>().Schedule(repeatIntervalInSeconds: 10);
             serviceLocator.GetInstance<PauseResumeJobScheduler>().Configure();
             serviceLocator.GetInstance<UpgradeAssignmentJobScheduler>().Configure();
-            serviceLocator.GetInstance<SendInvitationsTask>().Run();
-            serviceLocator.GetInstance<SendRemindersTask>().Schedule(repeatIntervalInSeconds: 60 * 60);
+            await serviceLocator.GetInstance<SendInvitationsTask>().ScheduleRunAsync();
+            await serviceLocator.GetInstance<SendRemindersTask>().Schedule(repeatIntervalInSeconds: 60 * 60);
             
             InitMetrics();
             MetricsService.Start(serviceLocator);
-
-            return Task.CompletedTask;
         }
 
         private static void InitMetrics()

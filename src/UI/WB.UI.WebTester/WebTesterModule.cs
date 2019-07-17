@@ -83,6 +83,8 @@ namespace WB.UI.WebTester
             registry.BindAsSingletonWithConstructorArgument<IAppdomainsPerInterviewManager, AppdomainsPerInterviewManager>("binFolderPath", binPath);
             registry.Bind<IImageProcessingService, ImageProcessingService>();
             registry.Bind<IVirtualPathService, VirtualPathService>();
+            registry.Bind<ISerializer, NewtonJsonSerializer>();
+            registry.BindAsSingleton<IScenarioSerializer, ScenarioSerializer>();
 
             registry.BindToMethod<IServiceLocator>(() => ServiceLocator.Current);
 
@@ -107,14 +109,13 @@ namespace WB.UI.WebTester
                 },
                 new RefitSettings
                 {                   
-                    JsonSerializerSettings = new JsonSerializerSettings
-                    {
+                    ContentSerializer = new JsonContentSerializer(new JsonSerializerSettings { 
                         TypeNameHandling = TypeNameHandling.All,
                         NullValueHandling = NullValueHandling.Ignore,
                         FloatParseHandling = FloatParseHandling.Decimal,
                         Converters = new List<JsonConverter> { new IdentityJsonConverter(), new RosterVectorConverter() },
-                        Binder = new OldToNewAssemblyRedirectSerializationBinder()
-                    }
+                        SerializationBinder = new OldToNewAssemblyRedirectSerializationBinder()
+                    })
                 }));
 
             foreach (var type in HubPipelineModules)

@@ -51,11 +51,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 {
                     Context.Progress.Report(new SyncProgressInfo
                     {
-                        Title = string.Format(InterviewerUIResources.Synchronization_Upload_Title_Format,
-                            InterviewerUIResources.Synchronization_Upload_CompletedAssignments_Text),
-                        Description = string.Format(InterviewerUIResources.Synchronization_Upload_Description_Format,
+                        Title = string.Format(EnumeratorUIResources.Synchronization_Upload_Title_Format,
+                            EnumeratorUIResources.Synchronization_Upload_CompletedAssignments_Text),
+                        Description = string.Format(EnumeratorUIResources.Synchronization_Upload_Description_Format,
                             Context.Statistics.SuccessfullyUploadedInterviewsCount, Context.Statistics.TotalCompletedInterviewsCount,
-                            InterviewerUIResources.Synchronization_Upload_Interviews_Text),
+                            EnumeratorUIResources.Synchronization_Upload_Interviews_Text),
                         Status = SynchronizationStatus.Upload,
                         Stage = SyncStage.UploadInterviews,
                         Statistics = Context.Statistics,

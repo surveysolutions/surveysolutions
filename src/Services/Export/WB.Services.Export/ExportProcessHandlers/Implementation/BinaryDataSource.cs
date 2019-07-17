@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -39,14 +40,14 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             this.interviewDataExportSettings = interviewDataExportSettings;
         }
 
-        public async Task ForEachInterviewMultimediaAsync(ExportSettings settings, 
-            Func<BinaryData, Task> binaryDataAction, 
-            ExportProgress progress,
-            CancellationToken cancellationToken)
+        public async Task ForEachInterviewMultimediaAsync(ExportState state, 
+            Func<BinaryData, Task> binaryDataAction, CancellationToken cancellationToken)
         {
+            var settings = state.Settings;
+            var progress = state.Progress;
+
             cancellationToken.ThrowIfCancellationRequested();
             var api = this.tenantApi.For(settings.Tenant);
-
             var interviewsToExport = this.interviewsToExportSource.GetInterviewsToExport(
                 settings.QuestionnaireId, settings.Status, settings.FromDate, settings.ToDate);
 
@@ -59,7 +60,9 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             long interviewsProcessed = 0;
             foreach (var interviewBatch in interviewsToExport.Batch(batchSize))
             {
-                var interviewIds = interviewBatch.Select(i => i.Id).ToArray();
+                //var interviewIds = interviewBatch.Select(i => i.Id).ToArray();
+                var interviewsKeyMap = interviewBatch.ToDictionary(i => i.Id, i => i.Key);
+                var interviewIds = interviewsKeyMap.Keys.ToArray();
 
                 var allMultimediaAnswers = this.interviewFactory.GetMultimediaAnswersByQuestionnaire(questionnaire, interviewIds, cancellationToken);
 
@@ -77,32 +80,35 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                 {
                     try
                     {
-                        byte[] content;
-                        BinaryDataType binaryDataType;
+                        var data = new BinaryData
+                        {
+                            InterviewId = answer.InterviewId,
+                            InterviewKey = interviewsKeyMap[answer.InterviewId],
+                            FileName = answer.Answer
+                        };
 
                         switch (answer.Type)
                         {
                             case MultimediaType.Image:
                                 var imageContent = await api.GetInterviewImageAsync(answer.InterviewId, answer.Answer);
-                                content = await imageContent.ReadAsByteArrayAsync();
-                                binaryDataType = BinaryDataType.Image;
+                                data.Content = await imageContent.ReadAsStreamAsync();
+                                data.ContentLength = imageContent.Headers.ContentLength ?? 0;
+                                data.Type = BinaryDataType.Image;
+                                
+
                                 break;
                             case MultimediaType.Audio:
                                 var audioContent = await api.GetInterviewAudioAsync(answer.InterviewId, answer.Answer);
-                                content = await audioContent.ReadAsByteArrayAsync();
-                                binaryDataType = BinaryDataType.Audio;
+                                data.Content = await audioContent.ReadAsStreamAsync();
+                                data.ContentLength = audioContent.Headers.ContentLength ?? 0;
+                                data.Type = BinaryDataType.Audio;
+                                
                                 break;
                             default:
                                 continue;
                         }
                         
-                        await binaryDataAction(new BinaryData
-                        {
-                            InterviewId = answer.InterviewId,
-                            FileName = answer.Answer,
-                            Content = content,
-                            Type = binaryDataType
-                        });
+                        await binaryDataAction(data);
 
                         filesUploaded++;
 
@@ -118,7 +124,6 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                     }
                 }
 
-
                 foreach (var audioAuditInfo in audioAuditInfos)
                 {
                     foreach (var fileName in audioAuditInfo.FileNames)
@@ -126,13 +131,15 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                         try
                         {
                             var audioContent = await api.GetAudioAuditAsync(audioAuditInfo.InterviewId, fileName);
-                            var content = await audioContent.ReadAsByteArrayAsync();
+                            var content = await audioContent.ReadAsStreamAsync();
 
                             await binaryDataAction(new BinaryData
                             {
                                 InterviewId = audioAuditInfo.InterviewId,
+                                InterviewKey = interviewsKeyMap[audioAuditInfo.InterviewId],
                                 FileName = fileName,
                                 Content = content,
+                                ContentLength = audioContent.Headers.ContentLength ?? 0,
                                 Type = BinaryDataType.AudioAudit
                             });
 
@@ -143,7 +150,6 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                             var batchInterviewsProgress = batchProgress.PercentOf(interviewsToExport.Count);
 
                             progress.Report(interviewProgress + batchInterviewsProgress);
-
                         }
                         catch (ApiException e) when (e.StatusCode == HttpStatusCode.NotFound)
                         {

@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
         }
 
         
-        public void Execute(IJobExecutionContext context)
+        public Task Execute(IJobExecutionContext context)
         {
             try
             {
@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
                 IReadOnlyCollection<int> packageIds = interviewBrokenPackagesService
                         .GetTopBrokenPackageIdsAllowedToReprocess(syncPackagesProcessorBackgroundJobSetting.SynchronizationBatchCount);
                 
-                if (packageIds == null || !packageIds.Any()) return;
+                if (packageIds == null || !packageIds.Any()) return Task.CompletedTask;
 
                 logger.Info($"Interview reprocess packages job: Received {packageIds.Count} packages for re-procession. Took {stopwatch.Elapsed:g}.");
                 stopwatch.Restart();
@@ -48,7 +48,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
                     },
                     packageId =>
                     {
-                        InScopeExecutor.Current.ExecuteActionInScope((serviceLocatorLocal) =>
+                        InScopeExecutor.Current.Execute((serviceLocatorLocal) =>
                         {
                             serviceLocatorLocal.GetInstance<IInterviewBrokenPackagesService>().ReprocessSelectedBrokenPackages(new[] { packageId });
                         });
@@ -61,6 +61,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
             {
                 logger.Error($"Interview reprocess packages job: FAILED. Reason: {ex.Message} ", ex);
             }
+
+            return Task.CompletedTask; 
         }
     }
 }

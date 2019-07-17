@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -218,7 +219,8 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
                 };
             }
 
-            foreach (var variable in lvl.DisabledVariables.Except(lvl.Variables?.Keys?.ToHashSet() ?? new HashSet<Guid>()))
+            var variablesKeys = lvl.Variables.Keys;
+            foreach (var variable in lvl.DisabledVariables.Except(variablesKeys.ToImmutableHashSet()))
             {
                 yield return new InterviewEntity
                 {

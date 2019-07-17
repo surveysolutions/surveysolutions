@@ -6,8 +6,9 @@ namespace WB.Enumerator.Native.WebInterview
 {
     public interface IInScopeExecutor
     {
-        void ExecuteActionInScope(Action<IServiceLocator> action);
-        bool ExecuteFunctionInScope(Func<IServiceLocator, bool> func);
-        Task<object> ExecuteActionInScopeAsync(Func<IServiceLocator, Task<object>> func);
+        void Execute(Action<IServiceLocator> action);
+        T Execute<T>(Func<IServiceLocator, T> func);
+        Task<T> ExecuteAsync<T>(Func<IServiceLocator, Task<T>> func);
+        Task ExecuteAsync(Func<IServiceLocator, Task> func);
     }
 }

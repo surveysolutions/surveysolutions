@@ -53,7 +53,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         private AssemblyHolder GetAssemblyHolder(Guid questionnaireId, long questionnaireVersion)
         {
             string assemblyFileName = this.GetAssemblyFileName(questionnaireId, questionnaireVersion);
-            var assembly = assemblyCache.GetOrAdd(assemblyFileName, CreateAssemblyHolder(assemblyFileName));
+            var assembly = assemblyCache.GetOrAdd(assemblyFileName, CreateAssemblyHolder);
 
             return assembly;
         }

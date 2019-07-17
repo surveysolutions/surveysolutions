@@ -46,7 +46,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         void IInternalInterviewTreeNode.SetTree(InterviewTree tree)
         {
             this.Tree = tree;
-            this.Title.SetTree(tree);
             foreach (var child in this.Children)
             {
                 ((IInternalInterviewTreeNode) child).SetTree(tree);
@@ -257,7 +256,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void SetTitle(SubstitutionText title)
         {
             this.Title = title;
-            this.Title.SetTree(this.Tree);
         }
 
         public InterviewTreeQuestion GetQuestionFromThisOrUpperLevel(Guid questionId)
@@ -291,7 +289,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void ReplaceSubstitutions()
         {
-            this.Title.ReplaceSubstitutions();
+            this.Title.ReplaceSubstitutions(this.Tree);
         }
 
         private IEnumerable<InterviewTreeQuestion> GetEnabledInterviewerQuestions()

@@ -11,16 +11,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewsReader;
 
+        public const int BatchSize = 100;
+
         public InterviewsToDeleteFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviewsReader)
         {
             this.interviewsReader = interviewsReader;
         }
 
-        public List<InterviewSummary> Load(Guid questionnaireId, long questionnaireVersion)
+        public List<InterviewSummary> LoadBatch(Guid questionnaireId, long questionnaireVersion)
         {
             var result = this.interviewsReader.Query(_ => _.Where(interview => 
                 interview.QuestionnaireId == questionnaireId &&
-                interview.QuestionnaireVersion == questionnaireVersion).ToList());
+                interview.QuestionnaireVersion == questionnaireVersion)
+                .Take(BatchSize)
+                .ToList());
 
             return result;
         }

@@ -147,9 +147,6 @@
   <data name="BackToImport" xml:space="preserve">
     <value>Înapoi la import</value>
   </data>
-  <data name="BatchDescription" xml:space="preserve">
-    <value>Încărcare fișier tab cu date de identificare și date colectate anterior.</value>
-  </data>
   <data name="BatchFileVerificationFailed" xml:space="preserve">
     <value>Încărcare eșuată a fișierului</value>
   </data>
@@ -467,9 +464,6 @@
   </data>
   <data name="SelectResponsibleToAssign" xml:space="preserve">
     <value>Selectați responsabilul pentru acest grup</value>
-  </data>
-  <data name="SimpleDescription" xml:space="preserve">
-    <value>Încărcați fișierul .tab cu datele de identificare necesare. Opțional, specificați numele de utilizator al controlorilor sau anchetatorilor în coloana _responsible, iar în coloana _quantity puteți specifica capacitatea de alocare.</value>
   </data>
   <data name="SimpleTitle" xml:space="preserve">
     <value>Date de identificare</value>

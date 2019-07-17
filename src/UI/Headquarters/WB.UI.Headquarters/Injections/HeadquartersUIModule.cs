@@ -4,14 +4,14 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using ASP;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.UI.Headquarters.Views;
 using WB.UI.Shared.Web.Filters;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
@@ -27,11 +27,11 @@ using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandDeserialization;
 using WB.Core.Synchronization.MetaInfo;
 using WB.Enumerator.Native.WebInterview.Services;
-using WB.Infrastructure.Native.Logging;
 using WB.Infrastructure.Native.Logging.Slack;
 using WB.Infrastructure.Native.Questionnaire;
 using WB.UI.Headquarters.API.WebInterview;
@@ -55,6 +55,7 @@ namespace WB.UI.Headquarters.Injections
     {
         public void Load(IWebIocRegistry registry)
         {
+            registry.BindAsSingleton<IInterviewAnswerSerializer, NewtonInterviewAnswerJsonSerializer>();
             registry.Bind<ISlackApiClient, SlackApiClient>();
             registry.BindAsSingleton<ISlackMessageThrottler, SlackMessageThrottler>();
             registry.Bind<IAssignmentsImportReader, AssignmentsImportReader>();
@@ -77,6 +78,7 @@ namespace WB.UI.Headquarters.Injections
             registry.Bind<IVersionCheckService, VersionCheckService>();
             registry.BindAsSingleton<IHttpStatistician, HttpStatistician>();
             registry.BindAsSingleton<IAudioProcessingService, AudioProcessingService>();
+            registry.Bind<IDataExportStatusReader, DataExportStatusReader>();
 
             registry.BindAsSingleton<IRestServiceSettings, DesignerQuestionnaireApiRestServiceSettings>();
 
@@ -106,6 +108,7 @@ namespace WB.UI.Headquarters.Injections
             registry.Bind<ITranslationsExportService, TranslationsExportService>();
             registry.Bind<IQuestionnaireExporter, QuestionnaireExporter>();
 
+            registry.Bind<IClientApkProvider, ClientApkProvider>();
             registry.Bind<IQRCodeHelper, QRCodeHelper>();
 
             registry.BindAsSingleton<ILocalExportServiceRunner, LocalExportServiceRunner>();
@@ -162,7 +165,7 @@ namespace WB.UI.Headquarters.Injections
                 if (appUrl != "/")
                     appUrl = "/" + appUrl;
 
-                var baseUrl = string.Format("{0}://{1}{2}", request.Url.Scheme, request.Url.Authority, appUrl);
+                var baseUrl = string.Format("{0}://{1}{2}", request.UrlScheme(), request.Url.Authority, appUrl);
 
                 return new Uri(baseUrl);
             }

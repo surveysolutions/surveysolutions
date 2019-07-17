@@ -7,12 +7,10 @@ using System.Net.Http;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using Humanizer;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Polly;
-using Polly.Retry;
 using Refit;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Questionnaire.Services.Implementation;
@@ -54,11 +52,11 @@ namespace WB.Services.Export.Host.Infra
 
                 return RestService.For<T>(httpClient, new RefitSettings
                 {
-                    JsonSerializerSettings = new JsonSerializerSettings
+                    ContentSerializer = new JsonContentSerializer(new JsonSerializerSettings()
                     {
                         SerializationBinder = new QuestionnaireDocumentSerializationBinder(),
                         TypeNameHandling = TypeNameHandling.Auto
-                    }
+                    })
                 });
             });
         }

@@ -52,10 +52,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             var substitionTextFactory = Create.Service.SubstitutionTextFactory();
             var questionIdentity = Create.Entity.Identity(questionId, new RosterVector(new decimal[] { 2, 1 }));
             var substitionText = substitionTextFactory.CreateText(questionIdentity, "title: %r1% %r2%", questionnire);
-            substitionText.SetTree(tree);
+
 
             //act
-            substitionText.ReplaceSubstitutions();
+            substitionText.ReplaceSubstitutions(tree);
 
             //assert
             Assert.That(substitionText.HasSubstitutions, Is.True);
@@ -87,9 +87,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
 
             var tree = Create.Entity.InterviewTree(sections: sourceTreeMainSection);
 
-            text.SetTree(tree);
-
-            Assert.DoesNotThrow(() => text.ReplaceSubstitutions(), "KP-10048 hrvs2: error on interview details");
+            Assert.DoesNotThrow(() => text.ReplaceSubstitutions(tree), "KP-10048 hrvs2: error on interview details");
         }
 
         [Test]
@@ -135,9 +133,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             });
 
             var tree = Create.Entity.InterviewTree(sections: sourceTreeMainSection);
-            text.SetTree(tree);
 
-            text.ReplaceSubstitutions();
+            text.ReplaceSubstitutions(tree);
             var browserReadyText = text.BrowserReadyText;
 
             Assert.That(browserReadyText, Is.Not.Null.Or.Empty);
@@ -183,10 +180,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             });
 
             var tree = Create.Entity.InterviewTree(sections: sourceTreeMainSection);
-            text.SetTree(tree);
 
             // Act
-            text.ReplaceSubstitutions();
+            text.ReplaceSubstitutions(tree);
             var browserReadyText = text.BrowserReadyText;
 
             Assert.That(browserReadyText, Is.EqualTo($"<time date=\"2010-04-06\">2010-04-06</time> <time datetime=\"2010-04-06T04:30:50.0000000\">2010-04-06 04:30:50</time>"));
@@ -224,10 +220,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             var substitionTextFactory = Create.Service.SubstitutionTextFactory();
             var questionIdentity = Create.Entity.Identity(questionId, RosterVector.Empty);
             var substitionText = substitionTextFactory.CreateText(questionIdentity, "title: %numeric1% %numeric2%", questionnire);
-            substitionText.SetTree(tree);
 
             // Act
-            substitionText.ReplaceSubstitutions();
+            substitionText.ReplaceSubstitutions(tree);
             
             Assert.That(substitionText.Text, Is.EqualTo("title: 5 test"));
         }
@@ -256,10 +251,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             });
 
             var tree = Create.Entity.InterviewTree(sections: sourceTreeMainSection);
-            text.SetTree(tree);
 
             // Act
-            text.ReplaceSubstitutions();
+            text.ReplaceSubstitutions(tree);
             var browserReadyText = text.BrowserReadyText;
 
             Assert.That(browserReadyText, Is.EqualTo($"[...]"));
@@ -299,10 +293,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             });
 
             var tree = Create.Entity.InterviewTree(sections: sourceTreeMainSection);
-            text.SetTree(tree);
 
             // Act
-            text.ReplaceSubstitutions();
+            text.ReplaceSubstitutions(tree);
             var browserReadyText = text.BrowserReadyText;
 
             Assert.That(browserReadyText, Is.EqualTo($"answer"));
@@ -316,7 +309,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             params SubstitutionVariable[] variables)
         {
             SubstitutionText text = new SubstitutionText(id,
-                template,
+                QuestionnaireMarkdown.ToHtml(template),
                 selfVariableName,
                 variables.ToList(),
                 Create.Service.SubstitutionService(),

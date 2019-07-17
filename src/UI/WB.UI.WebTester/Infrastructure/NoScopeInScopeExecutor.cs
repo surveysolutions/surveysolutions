@@ -15,17 +15,22 @@ namespace WB.UI.WebTester.Infrastructure
             lifetimeScope = rootScope;
         }
 
-        public void ExecuteActionInScope(Action<IServiceLocator> action)
+        public void Execute(Action<IServiceLocator> action)
         {
             action(lifetimeScope.Resolve<IServiceLocator>());
         }
 
-        public bool ExecuteFunctionInScope(Func<IServiceLocator, bool> func)
+        public T Execute<T>(Func<IServiceLocator, T> func)
         {
             return func(lifetimeScope.Resolve<IServiceLocator>());
         }
 
-        public Task<object> ExecuteActionInScopeAsync(Func<IServiceLocator, Task<object>> func)
+        public Task<T> ExecuteAsync<T>(Func<IServiceLocator, Task<T>> func)
+        {
+            return func(lifetimeScope.Resolve<IServiceLocator>());
+        }
+
+        public Task ExecuteAsync(Func<IServiceLocator, Task> func)
         {
             return func(lifetimeScope.Resolve<IServiceLocator>());
         }

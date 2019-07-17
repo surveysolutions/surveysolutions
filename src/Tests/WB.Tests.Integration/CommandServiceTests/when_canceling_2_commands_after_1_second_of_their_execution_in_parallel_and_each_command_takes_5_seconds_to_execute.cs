@@ -76,6 +76,7 @@ namespace WB.Tests.Integration.CommandServiceTests
                 var t2 = commandService.ExecuteAsync(c2, null, cancellationTokenSource.Token);
 
                 await Task.WhenAny(c1.IsStarted.Task, c2.IsStarted.Task); // wait for both command to start execution
+                await Task.Delay(100);
 
                 cancellationTokenSource.Cancel();
 

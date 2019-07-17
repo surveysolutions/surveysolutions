@@ -2,12 +2,23 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using WB.Services.Infrastructure.FileSystem;
 
 namespace WB.Services.Export
 {
     public class ZipArchiveUtils : IArchiveUtils
     {
+        private readonly ILogger<ZipArchiveUtils> logger;
+
+        public ZipArchiveUtils(ILogger<ZipArchiveUtils> logger)
+        {
+            this.logger = logger;
+        }
+
         public void ZipDirectoryToFile(string sourceDirectory, string archiveFilePath)
         {
             throw new NotImplementedException();
@@ -89,9 +100,46 @@ namespace WB.Services.Export
                             }
                             else
                             {
-                                archive.CreateEntry(file.Substring(exportTempDirectoryPath.Length + 1), fs);
+                                archive.CreateEntry(file.Substring(exportTempDirectoryPath.Length + 1), fs, fs.Length);
                             }
                         }
+                    }
+                }
+            }
+        }
+
+        public async Task ZipDirectoryAsync(string exportTempDirectoryPath, string archiveName,
+            string archivePassword, 
+            IProgress<int> exportProgress,
+            CancellationToken token = default)
+        {
+            logger.LogTrace("Compressing directory {directory} into {archiveName}", exportTempDirectoryPath, archiveName);
+            using (var archiveFile = File.Create(archiveName))
+            {
+                using (var archive = CreateArchive(archiveFile, archivePassword, CompressionLevel.Optimal))
+                {
+                    var files = Directory.EnumerateFiles(exportTempDirectoryPath).ToList();
+                    var total = files.Count;
+                    long added = 0;
+                    foreach (var file in Directory.EnumerateFiles(exportTempDirectoryPath))
+                    {
+                        using (var fs = File.OpenRead(file))
+                        {
+                            var entryName = file.Substring(exportTempDirectoryPath.Length + 1);
+                            if (fs.Length == 0)
+                            {
+                                await archive.CreateEntryAsync(entryName, Array.Empty<byte>(), token);
+                            }
+                            else
+                            {
+                                await archive.CreateEntryAsync(entryName, fs, token);
+                            }
+
+                            logger.LogTrace("Adding file {file} into {archiveName}. Total: {added}", entryName, archiveName, added + 1);
+                        }
+
+                        added++;
+                        exportProgress?.Report(added.PercentOf(total));
                     }
                 }
             }
@@ -113,7 +161,7 @@ namespace WB.Services.Export
                             }
                             else
                             {
-                                archive.CreateEntry(file.Substring(exportTempDirectoryPath.Length + 1), fs);
+                                archive.CreateEntry(file.Substring(exportTempDirectoryPath.Length + 1), fs, fs.Length);
                             }
                         }
                     }

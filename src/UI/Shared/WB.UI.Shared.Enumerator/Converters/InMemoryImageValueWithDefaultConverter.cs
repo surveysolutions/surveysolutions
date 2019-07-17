@@ -34,11 +34,6 @@ namespace WB.UI.Shared.Enumerator.Converters
             if (fallbackBitmap == null)
             {
                 var drawable = AppCompatDrawableManager.Get().GetDrawable(context, drawableId);
-                if (Build.VERSION.SdkInt < BuildVersionCodes.Lollipop)
-                {
-                    drawable = DrawableCompat.Wrap(drawable).Mutate();
-                }
-
                 Bitmap bitmap = Bitmap.CreateBitmap(drawable.IntrinsicWidth,
                     drawable.IntrinsicHeight, Bitmap.Config.Argb8888);
                 Canvas canvas = new Canvas(bitmap);

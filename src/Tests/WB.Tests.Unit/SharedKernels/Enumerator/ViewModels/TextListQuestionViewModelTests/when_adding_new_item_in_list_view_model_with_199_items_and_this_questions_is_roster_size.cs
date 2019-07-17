@@ -60,7 +60,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
             var textListAddNewItemViewModel = listModel.Answers.OfType<TextListAddNewItemViewModel>().FirstOrDefault();
 
             textListAddNewItemViewModel.Text = newListItemTitle;
-            textListAddNewItemViewModel.AddNewItemCommand.Execute();
+            textListAddNewItemViewModel.AddNewItemCommand.Execute(newListItemTitle);
         }
 
         [NUnit.Framework.Test] public void should_create_list_with_200_answers () =>

@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.Questionnaire;
@@ -43,7 +44,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
                     lookupStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireLookupTable>>(),
                     questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                     new DeleteQuestionnaireJobScheduler(Mock.Of<IScheduler>()),
-                    Mock.Of<IInvitationsDeletionService>());
+                    Mock.Of<IInvitationsDeletionService>(),
+                    Mock.Of<IAggregateRootCacheCleaner>());
         }
     }
 }

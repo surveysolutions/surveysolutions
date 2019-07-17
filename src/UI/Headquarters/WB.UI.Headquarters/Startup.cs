@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -13,7 +15,6 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.SessionState;
-using System.Web.WebPages;
 using Autofac;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.SignalR;
@@ -31,7 +32,6 @@ using NLog;
 using NLog.Targets;
 using Owin;
 using Quartz;
-using RazorGenerator.Mvc;
 using StackExchange.Exceptional;
 using StackExchange.Exceptional.Stores;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
@@ -41,6 +41,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Versions;
+using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Binding;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Logging.Slack;
@@ -50,6 +51,7 @@ using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.DataAnnotations;
+using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Settings;
 
@@ -95,7 +97,10 @@ namespace WB.UI.Headquarters
             autofacKernel.ContainerBuilder.RegisterWebApiFilterProvider(config);
             autofacKernel.ContainerBuilder.RegisterWebApiModelBinderProvider();
 
-            var initTask = autofacKernel.InitAsync();
+            var initTask = autofacKernel.InitAsync(
+                    System.Configuration.ConfigurationManager.AppSettings
+                        .GetBool("RestartAppPoolOnInitializationError", true)
+                );
 
             if (CoreSettings.IsDevelopmentEnvironment)
                 initTask.Wait();
@@ -195,13 +200,7 @@ namespace WB.UI.Headquarters
                             regenerateIdentityCallback: (manager, user) => manager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie),
                             getUserIdCallback: (id) => Guid.Parse(id.GetUserId())),
 
-                    OnApplyRedirect = ctx =>
-                    {
-                        if (!IsAjaxRequest(ctx.Request) && !IsApiRequest(ctx.Request) && !IsBasicAuthApiUnAuthRequest(ctx.Response))
-                        {
-                            ctx.Response.Redirect(ctx.RedirectUri);
-                        }
-                    }
+                    OnApplyRedirect = ctx => ctx.ApplyNonApiRedirect()
                 },
                 ExpireTimeSpan = TimeSpan.FromHours(applicationSecuritySection.CookieSettings.ExpirationTime),
                 SlidingExpiration = applicationSecuritySection.CookieSettings.SlidingExpiration,
@@ -210,29 +209,7 @@ namespace WB.UI.Headquarters
             });
 
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
-        }
-
-        private static bool IsApiRequest(IOwinRequest request)
-        {
-            var userAgent = request.Headers[@"User-Agent"];
-            return (userAgent?.ToLowerInvariant().Contains(@"org.worldbank.solutions.") ?? false) || (userAgent?.Contains(@"okhttp/") ?? false);
-        }
-
-        private static bool IsBasicAuthApiUnAuthRequest(IOwinResponse response)
-        {
-            return response.Headers[ApiBasicAuthAttribute.AuthHeader] != null;
-        }
-
-        private static bool IsAjaxRequest(IOwinRequest request)
-        {
-            IReadableStringCollection query = request.Query;
-            if ((query != null) && (query["X-Requested-With"] == "XMLHttpRequest"))
-            {
-                return true;
-            }
-            IHeaderDictionary headers = request.Headers;
-            return ((headers != null) && (headers["X-Requested-With"] == "XMLHttpRequest"));
-        }
+        }      
 
         private static Task SetSessionStateBehavior(IOwinContext context, Func<Task> next)
         {

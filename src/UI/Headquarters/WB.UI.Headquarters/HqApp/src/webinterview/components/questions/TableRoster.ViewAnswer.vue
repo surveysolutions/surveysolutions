@@ -8,13 +8,13 @@
                 <span v-else>{{question.answer}}</span>
             </a>
             <template slot="popover">
-                <div class="popover-content error-tooltip" v-if="!question.validity.isValid">        
+                <div class="error-tooltip" v-if="!question.validity.isValid">        
                     <h6 style="text-transform:uppercase;" v-if="question.validity.errorMessage">{{ $t("WebInterviewUI.AnswerWasNotSaved") }}</h6>
                     <template v-for="message in question.validity.messages">
                         <span v-dateTimeFormatting v-html="message" :key="message"></span>
                     </template>
                 </div>
-                <div class="popover-content warning-tooltip" v-else-if="question.validity.warnings.length > 0">        
+                <div class="warning-tooltip" v-else-if="question.validity.warnings.length > 0">        
                     <template v-for="message in question.validity.warnings">
                         <span v-dateTimeFormatting v-html="message" :key="message"></span>
                     </template>

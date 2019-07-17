@@ -59,31 +59,41 @@ namespace WB.Services.Export.Host.Jobs
 
             args.Status = new DataExportProcessStatus
             {
-                ProgressInPercents = Int32.Parse(job.GetData<string>(ProgressField) ?? "0"),
-                TimeEstimation = eta == null ? (TimeSpan?) null : TimeSpan.Parse(eta),
+                TimeEstimation = eta == null ? (TimeSpan?)null : TimeSpan.Parse(eta),
                 BeginDate = job.StartAt,
                 IsRunning = job.Status == JobStatus.Running || job.Status == JobStatus.Created,
-                Status = status,
-                Error = hasError
-                    ? new DateExportProcessError
-                    {
-                        Type = Enum.Parse<DataExportError>(job.GetData<string>(ErrorTypeField)),
-                        Message = job.GetData<string>(ErrorField)
-                    }
-                    : null
+                Status = status
             };
 
+            args.Status.ProgressInPercents = Int32.Parse(job.GetData<string>(ProgressField) ?? "0");
+            args.Status.Error = hasError
+                ? new DateExportProcessError
+                {
+                    Type = Enum.Parse<DataExportError>(job.GetData<string>(ErrorTypeField) ?? DataExportError.Unexpected.ToString()),
+                    Message = job.GetData<string>(ErrorField)
+                }
+                : null;
+
+            args.ProcessId = job.Id;
             return args;
         }
 
-        public async Task<DataExportProcessArgs[]> GetAllProcesses(TenantInfo tenant)
+        public async Task<DataExportProcessArgs[]> GetAllProcesses(TenantInfo tenant, bool runningOnly = true)
         {
-            var jobs = (await this.jobService.GetAllJobsAsync(tenant, JobStatus.Created, JobStatus.Running))
+            var statusFilter = runningOnly ? new[] { JobStatus.Created, JobStatus.Running } : new JobStatus[0];
+            var jobs = (await this.jobService.GetAllJobsAsync(tenant, statuses: statusFilter))
                 .Select(AsDataExportProcessArgs).ToArray();
 
             return jobs;
         }
-        
+
+        public async Task<DataExportProcessArgs> GetProcessAsync(long processId)
+        {
+            var job = await this.jobService.GetJobAsync(processId);
+            if (job == null) return null;
+            return AsDataExportProcessArgs(job);
+        }
+
         public void UpdateDataExportProgress(long processId, int progressInPercents, TimeSpan estimatedTime = default)
         {
             logger.LogTrace("Update progress: {progressInPercents}%", progressInPercents);
@@ -104,6 +114,7 @@ namespace WB.Services.Export.Host.Jobs
         {
             jobProgressReporter.UpdateJobData(processId, StatusField, status.ToString());
         }
+
 
         public const string StatusField = "exportStatus";
         public const string ProgressField = "progress";

@@ -555,35 +555,280 @@ main .flex-row {
           .export-types .data .table-data .cell-data.format-data.stata:before {
             left: 45%; } }
 
-.format-data {
+.export {
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap; }
+  .export > div {
+    -ms-flex-preferred-size: 740px;
+        flex-basis: 740px;
+    padding-right: 60px; }
+  .export .form-inline .form-group + .form-group {
+    margin-left: 15px; }
+  .export .bootstrap-select.btn-group:first-of-type {
+    margin-left: -10px; }
+
+.filter-wrapper {
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap; }
+
+.filter-column {
+  margin-right: 30px; }
+  .filter-column:last-of-type {
+    margin-right: 0; }
+
+.radio-btn-row {
+  margin-left: -10px;
+  background-color: #edeff0; }
+  .radio-btn-row:first-of-type {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px; }
+  .radio-btn-row:last-of-type {
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px; }
+  .radio-btn-row:nth-of-type(2n) {
+    background-color: #f8f9f9; }
+  .radio-btn-row label {
+    cursor: pointer;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    padding: 15px;
+    margin: 0; }
+
+.format-data,
+.export-destination {
+  position: relative;
   padding-left: 80px; }
-  .format-data:before {
-    display: block;
-    position: absolute;
+
+.format-data:before {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  top: calc(50% - 20px);
+  width: 63px;
+  height: 41px;
+  content: "";
+  background: url("../img/data-image2.png") no-repeat;
+  background-size: 63px 234px;
+  background-position: 0 -200px; }
+
+.format-data.Tabular:before {
+  background-position: 0 -120px; }
+
+.format-data.xlsx:before {
+  background-position: 0 -78px; }
+
+.format-data.STATA:before {
+  background-position: 0 4px; }
+
+.format-data.SPSS:before {
+  background-position: 0px -38px; }
+
+.format-data.Binary:before {
+  background-position: 0 -165px; }
+
+.format-data.DDI:before {
+  background-position: 0 -200px; }
+
+.format-data.Paradata:before {
+  background-position: 0 -120px; }
+
+.export-destination:before {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  top: calc(50% - 24px);
+  width: 65px;
+  height: 50px;
+  content: "";
+  background: url("../img/Exprt-icons2.png") no-repeat;
+  background-size: 64px 250px;
+  background-position: 0px -150px; }
+
+.export-destination.File:before {
+  background-position: 0px -150px; }
+
+.export-destination.OneDrive:before {
+  background-position: 0px 0px; }
+
+.export-destination.Dropbox:before {
+  background-position: 0px -50px; }
+
+.export-destination.ftp-icon:before {
+  background-position: 0px -100px; }
+
+.export-destination.GoogleDrive:before {
+  background-position: 0px -200px; }
+
+.export-card {
+  font: 14px/18px "RobotoBold";
+  margin-bottom: 30px;
+  border-radius: 5px;
+  position: relative;
+  border: 2px solid transparent;
+  -webkit-transition: box-shadow 0.2s linear 0s;
+  -webkit-transition: -webkit-box-shadow 0.2s linear 0s;
+  transition: -webkit-box-shadow 0.2s linear 0s;
+  transition: box-shadow 0.2s linear 0s;
+  transition: box-shadow 0.2s linear 0s, -webkit-box-shadow 0.2s linear 0s; }
+  .export-card:hover {
+    -webkit-box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.08), 0 5px 15px 0 rgba(0, 0, 0, 0.08);
+            box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.08), 0 5px 15px 0 rgba(0, 0, 0, 0.08);
+    border-color: #dbdfe2; }
+  .export-card .top-row, .export-card .card-loading .top-row-loading, .card-loading .export-card .top-row-loading {
+    background-color: #f3f3f3;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    padding: 15px 15px 10px; }
+  .export-card .bottom-row, .export-card .card-loading .bottom-row-loading, .card-loading .export-card .bottom-row-loading {
+    background-color: #e6e9e9;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    padding: 10px 15px 15px; }
+    .export-card .bottom-row.is-failed, .export-card .card-loading .is-failed.bottom-row-loading, .card-loading .export-card .is-failed.bottom-row-loading {
+      background-color: #f6d6d0; }
+    .export-card .bottom-row.is-successful, .export-card .card-loading .is-successful.bottom-row-loading, .card-loading .export-card .is-successful.bottom-row-loading {
+      background-color: #d1dfeb; }
+  .export-card .aside-menu {
+    right: 0; }
+  .export-card .status {
+    font: 12px/14px TrebuchetMSBold;
+    text-transform: uppercase;
+    letter-spacing: .13em; }
+  .export-card .file-info {
+    margin-left: 20px;
+    font: 12px/18px RobotoRegular;
+    color: #969a9a;
+    letter-spacing: 1px; }
+    .export-card .file-info:only-child {
+      margin-left: 0; }
+  .export-card .cancelable-progress {
+    -webkit-box-flex: 1;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
+    margin-left: 10px; }
+    .export-card .cancelable-progress .progress {
+      width: 100%; }
+
+.card-loading {
+  display: none;
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0; }
+  .card-loading:hover {
+    -webkit-box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.08), 0 5px 15px 0 rgba(0, 0, 0, 0.08);
+            box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.08), 0 5px 15px 0 rgba(0, 0, 0, 0.08);
+    border-color: #dbdfe2; }
+  .card-loading .animated-background {
+    -webkit-animation-duration: 1s;
+            animation-duration: 1s;
+    -webkit-animation-fill-mode: forwards;
+            animation-fill-mode: forwards;
+    -webkit-animation-iteration-count: infinite;
+            animation-iteration-count: infinite;
+    -webkit-animation-name: placeHolderShimmer;
+            animation-name: placeHolderShimmer;
+    -webkit-animation-timing-function: linear;
+            animation-timing-function: linear;
+    background: -webkit-gradient(linear, left top, right top, color-stop(8%, #eeeeee), color-stop(18%, #dddddd), color-stop(33%, #eeeeee));
+    background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+    height: 55px;
+    position: relative; }
+  .card-loading .background-masker {
+    position: absolute; }
+  .card-loading .mask-top-left {
     top: 0;
     left: 0;
-    top: calc(50% - 21px);
-    width: 63px;
-    height: 41px;
-    content: "";
-    background: url("../img/data-image.png") no-repeat;
-    background-size: 63px 234px;
-    background-position: 20px -200px; }
-    @media (min--moz-device-pixel-ratio: 1.3), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
-      .format-data:before {
-        /* on retina, use image that's scaled by 2 */
-        background-image: url("../img/data-image2k.png");
-        background-size: 63px 234px; } }
-  .format-data.separated-data:before {
-    background-position: 20px -120px; }
-  .format-data.xlsx:before {
-    background-position: 20px -78px; }
-  .format-data.stata:before {
-    background-position: 28px 4px; }
-  .format-data.spss:before {
-    background-position: 0px -38px; }
-  .format-data.zip:before {
-    background-position: 15px -165px; }
+    width: 80px;
+    height: 10px; }
+  .card-loading .mask-top-right {
+    top: 0;
+    right: 4px;
+    height: 18px;
+    width: 40%; }
+  .card-loading .mask-left {
+    top: 0;
+    left: 60px;
+    width: 20px;
+    height: 100%; }
+  .card-loading .mask-bottom-left {
+    bottom: 0;
+    left: 0;
+    width: 80px;
+    height: 10px; }
+  .card-loading .submask-top {
+    top: 14px;
+    left: 80px;
+    width: calc(100% - 80px);
+    height: 8px; }
+  .card-loading .submask-top-right {
+    top: 18px;
+    right: 0;
+    height: 30px;
+    width: 30%; }
+  .card-loading .submask-bottom-right {
+    bottom: 0;
+    right: 0;
+    height: 18px;
+    width: 50%; }
+  .card-loading .submask-bottom {
+    bottom: 14px;
+    left: 80px;
+    width: calc(100% - 80px);
+    height: 8px; }
+  .card-loading .top-row-loading .background-masker {
+    background-color: #f3f3f3; }
+  .card-loading .bottom-row-loading .background-masker {
+    background-color: #e6e9e9; }
+  .card-loading .bottom-row-loading .submask-top {
+    height: 15px; }
+  .card-loading .bottom-row-loading .mask-top-right {
+    width: 55%;
+    right: 0; }
+  .card-loading .bottom-row-loading .submask-left {
+    left: 200px;
+    bottom: 0;
+    width: 20px;
+    height: 50px; }
+  .card-loading .bottom-row-loading .submask-bottom {
+    left: 220px;
+    width: calc(100% - 220px); }
+
+@-webkit-keyframes placeHolderShimmer {
+  0% {
+    background-position: -468px 0; }
+  100% {
+    background-position: 468px 0; } }
+
+@keyframes placeHolderShimmer {
+  0% {
+    background-position: -468px 0; }
+  100% {
+    background-position: 468px 0; } }
+
+@media (max-width: 1600px) {
+  .export > div {
+    margin-bottom: 70px;
+    padding-right: 0; }
+    .export > div:first-of-type {
+      margin-right: 0px; }
+    .export > div .export-card {
+      margin-left: -10px; } }
 
 #questionnaires .title {
   width: 40%; }
@@ -658,6 +903,12 @@ main .flex-row {
   transition: all 0.2ms linear; }
   .interview-setup .row-element textarea::-webkit-input-placeholder,
   .interview-setup .row-element input::-webkit-input-placeholder {
+    font: 14px/16px Arial, "Helvetica Neue", Helvetica, sans-serif;
+    text-transform: none;
+    letter-spacing: normal;
+    font-style: italic; }
+  .interview-setup .row-element textarea::-moz-placeholder,
+  .interview-setup .row-element input::-moz-placeholder {
     font: 14px/16px Arial, "Helvetica Neue", Helvetica, sans-serif;
     text-transform: none;
     letter-spacing: normal;
@@ -1226,9 +1477,9 @@ td.errors {
   display: -ms-flexbox;
   display: flex;
   -webkit-box-orient: vertical;
-  -webkit-box-direction: reverse;
-      -ms-flex-direction: column-reverse;
-          flex-direction: column-reverse;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   -ms-flex-wrap: nowrap;
       flex-wrap: nowrap;
   -webkit-box-pack: start;
