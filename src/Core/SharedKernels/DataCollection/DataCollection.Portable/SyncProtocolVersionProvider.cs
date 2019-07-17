@@ -14,7 +14,10 @@
 
     public class SupervisorSyncProtocolVersionProvider : ISupervisorSyncProtocolVersionProvider
     {
-        public int GetProtocolVersion() => 1000;
+        public static readonly int V1_BeforeResolvedCommentsIntroduced = 1_000;
+        public static readonly int V2_ResolvedCommentsIntroduced = 1_010;
+
+        public int GetProtocolVersion() => 1_010;
 
         public int GetLastNonUpdatableVersion() => 999;
     }
