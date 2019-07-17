@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -18,9 +17,8 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Headquarters.Code;
-using WB.UI.Headquarters.Resources;
+using WB.UI.Headquarters.Services;
 using WB.UI.Headquarters.Utils;
-using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
@@ -34,6 +32,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
         private readonly ISupervisorSyncProtocolVersionProvider syncVersionProvider;
         private readonly IProductVersion productVersion;
         private readonly IUserViewFactory userViewFactory;
+        private readonly IClientApkProvider clientApkProvider;
 
         public SupervisorApiController(
             IFileSystemAccessor fileSystemAccessor,
@@ -43,7 +42,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
             IProductVersion productVersion,
             IUserViewFactory userViewFactory, 
             HqSignInManager signInManager,
-            IPlainKeyValueStorage<InterviewerSettings> settingsStorage)
+            IPlainKeyValueStorage<InterviewerSettings> settingsStorage, 
+            IClientApkProvider clientApkProvider)
             : base(settingsStorage)
         {
             this.fileSystemAccessor = fileSystemAccessor;
@@ -53,53 +53,28 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
             this.productVersion = productVersion;
             this.userViewFactory = userViewFactory;
             this.signInManager = signInManager;
+            this.clientApkProvider = clientApkProvider;
         }
 
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetSupervisorApk)]
         public virtual HttpResponseMessage GetSupervisor() =>
-            this.HttpResponseMessage(ClientApkInfo.SupervisorFileName, ClientApkInfo.SupervisorFileName);
+            this.clientApkProvider.GetApkAsHttpResponse(Request, ClientApkInfo.SupervisorFileName, ClientApkInfo.SupervisorFileName);
 
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetApk)]
         public virtual HttpResponseMessage GetInterviewer() =>
-            this.HttpResponseMessage(ClientApkInfo.InterviewerFileName, ClientApkInfo.InterviewerFileName);
+            this.clientApkProvider.GetApkAsHttpResponse(Request, ClientApkInfo.InterviewerFileName, ClientApkInfo.InterviewerFileName);
 
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetExtendedApk)]
         public virtual HttpResponseMessage GetInterviewerWithMaps() =>
-            this.HttpResponseMessage(ClientApkInfo.InterviewerExtendedFileName, ClientApkInfo.InterviewerFileName);
-
-        private HttpResponseMessage HttpResponseMessage(string appName, string responseFileName)
-        {
-            string pathToSupervisorApp = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(ClientApkInfo.Directory), appName);
-
-            if (!this.fileSystemAccessor.IsFileExists(pathToSupervisorApp))
-                return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, TabletSyncMessages.FileWasNotFound);
-
-            var fileHash = this.fileSystemAccessor.ReadHash(pathToSupervisorApp);
-
-            if (this.RequestHasMatchingFileHash(fileHash))
-            {
-                return Request.CreateResponse(HttpStatusCode.NotModified);
-            }
-            
-            Stream fileStream = new FileStream(pathToSupervisorApp, FileMode.Open, FileAccess.Read);
-                       
-            return this.AsProgressiveDownload(fileStream, @"application/vnd.android.package-archive", 
-                responseFileName, fileHash);
-        }
-
+            this.clientApkProvider.GetApkAsHttpResponse(Request, ClientApkInfo.InterviewerExtendedFileName, ClientApkInfo.InterviewerFileName);
+        
         [HttpGet]
         public virtual int? GetLatestVersion()
         {
-            string pathToSupervisorApp =
-                this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(ClientApkInfo.Directory),
-                    ClientApkInfo.SupervisorFileName);
-
-            return !this.fileSystemAccessor.IsFileExists(pathToSupervisorApp)
-                ? null
-                : this.androidPackageReader.Read(pathToSupervisorApp).Version;
+            return this.clientApkProvider.GetLatestVersion(ClientApkInfo.SupervisorFileName);
         }
 
         [ApiBasicAuth(UserRoles.Supervisor)]
@@ -114,7 +89,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
                 return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
 
             var currentVersion = new Version(this.productVersion.ToString().Split(' ')[0]);
-            var supervisorVersion = GetSupervisorVersionFromUserAgent(this.Request);
+            var supervisorVersion = this.Request.GetProductVersionFromUserAgent(@"org.worldbank.solutions.supervisor");
 
             if (IsNeedUpdateAppBySettings(supervisorVersion, currentVersion))
             {
@@ -132,21 +107,6 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
             }
 
             return this.Request.CreateResponse(HttpStatusCode.OK, @"158329303");
-        }
-
-        private Version GetSupervisorVersionFromUserAgent(HttpRequestMessage request)
-        {
-            foreach (var product in request.Headers?.UserAgent)
-            {
-                if ((product.Product?.Name.Equals(@"org.worldbank.solutions.supervisor",
-                         StringComparison.OrdinalIgnoreCase) ?? false)
-                    && Version.TryParse(product.Product.Version, out Version version))
-                {
-                    return version;
-                }
-            }
-
-            return null;
         }
 
         [HttpPost]
@@ -183,25 +143,12 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 
             return this.Request.CreateResponse(HttpStatusCode.OK);
         }
-
-        private HttpResponseMessage GetPatchFile(string fileName)
-        {
-            string pathToInterviewerPatch = this.fileSystemAccessor.CombinePath(
-                HostingEnvironment.MapPath(ClientApkInfo.Directory), fileName);
-
-            if (!this.fileSystemAccessor.IsFileExists(pathToInterviewerPatch))
-                return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, TabletSyncMessages.FileWasNotFound);
-
-            Stream fileStream = new FileStream(pathToInterviewerPatch, FileMode.Open, FileAccess.Read);
-            return this.AsProgressiveDownload(fileStream, @"application/octet-stream", 
-                hash: this.fileSystemAccessor.ReadHash(pathToInterviewerPatch));
-        }
-
+     
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetSupervisorApkPatch)]
         public virtual HttpResponseMessage Patch(int deviceVersion)
         {
-            return GetPatchFile($@"Supervisor.{deviceVersion}.delta");
+            return this.clientApkProvider.GetPatchFileAsHttpResponse(Request, $@"Supervisor.{deviceVersion}.delta");
         }
     }
 }

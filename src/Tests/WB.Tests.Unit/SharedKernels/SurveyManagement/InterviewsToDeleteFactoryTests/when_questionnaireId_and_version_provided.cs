@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewsToDeleteFactory
             BecauseOf();
         }
 
-        public void BecauseOf() => foundSummaries = factory.Load(questionnaireId, questionnaireVersion);
+        public void BecauseOf() => foundSummaries = factory.LoadBatch(questionnaireId, questionnaireVersion);
 
         [NUnit.Framework.Test] public void should_return_interviews_by_version_and_questionnaire_id () 
         {

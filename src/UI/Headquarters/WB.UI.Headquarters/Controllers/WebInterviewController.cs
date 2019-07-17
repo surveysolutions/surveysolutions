@@ -24,7 +24,6 @@ using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.Captcha;
 using Microsoft.AspNet.Identity;
 using StackExchange.Exceptional;
-using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -48,7 +47,6 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IInterviewUniqueKeyGenerator keyGenerator;
         private readonly ICaptchaProvider captchaProvider;
         private readonly IPlainStorageAccessor<Assignment> assignments;
-        private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         private readonly IImageProcessingService imageProcessingService;
         private readonly IConnectionLimiter connectionLimiter;
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
@@ -58,7 +56,6 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IInvitationService invitationService;
         private readonly INativeReadSideStorage<InterviewSummary> interviewSummary;
         private readonly IInvitationMailingService invitationMailingService;
-        private readonly IEmailService emailService;
 
         private const string CapchaCompletedKey = "CaptchaCompletedKey";
         private const string PasswordVerifiedKey = "PasswordVerifiedKey";
@@ -102,7 +99,6 @@ namespace WB.UI.Headquarters.Controllers
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IImageFileStorage imageFileStorage,
             IStatefulInterviewRepository statefulInterviewRepository,
-            IWebInterviewConfigProvider webInterviewConfigProvider,
             IImageProcessingService imageProcessingService,
             IConnectionLimiter connectionLimiter,
             IWebInterviewNotificationService webInterviewNotificationService,
@@ -115,8 +111,7 @@ namespace WB.UI.Headquarters.Controllers
             IPauseResumeQueue pauseResumeQueue,
             IInvitationService invitationService,
             INativeReadSideStorage<InterviewSummary> interviewSummary,
-            IInvitationMailingService invitationMailingService,
-            IEmailService emailService)
+            IInvitationMailingService invitationMailingService)
             : base(commandService, logger)
         {
             this.commandService = commandService;
@@ -124,7 +119,6 @@ namespace WB.UI.Headquarters.Controllers
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.imageFileStorage = imageFileStorage;
             this.statefulInterviewRepository = statefulInterviewRepository;
-            this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.imageProcessingService = imageProcessingService;
             this.connectionLimiter = connectionLimiter;
             this.webInterviewNotificationService = webInterviewNotificationService;
@@ -138,7 +132,6 @@ namespace WB.UI.Headquarters.Controllers
             this.invitationService = invitationService;
             this.interviewSummary = interviewSummary;
             this.invitationMailingService = invitationMailingService;
-            this.emailService = emailService;
         }
 
         [WebInterviewAuthorize]
@@ -237,7 +230,10 @@ namespace WB.UI.Headquarters.Controllers
                         Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
                 if (invitation.InterviewId == null)
                 {
-                    TempData[AskForEmail] = true;
+                    Response.Cookies.Add(new HttpCookie(AskForEmail, "true")
+                    {
+                        Expires = DateTime.UtcNow.AddDays(7)
+                    });
                 }
 
                 if (!webInterviewConfig.UseCaptcha && string.IsNullOrWhiteSpace(assignment.Password))
@@ -369,7 +365,6 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             LogResume(interview);
-            ViewBag.AskForEmail = TempData[AskForEmail] ?? false;
 
             return View("Index");
         }
@@ -542,10 +537,8 @@ namespace WB.UI.Headquarters.Controllers
             if (!webInterviewConfig.Started)
                 throw new InvalidOperationException(@"Web interview is not started for this questionnaire");
 
-            var interviewer = this.usersRepository.GetUser(new UserViewInputModel(assignment.ResponsibleId));
-            //if (!interviewer.IsInterviewer())
-            //    throw new InvalidOperationException($"Assignment {assignment.Id} has responsible that is not an interviewer. Interview cannot be created");
-
+            var interviewer = this.usersRepository.GetUser(assignment.ResponsibleId);
+            
             var interviewId = Guid.NewGuid();
 
             var createInterviewCommand = new CreateInterview(

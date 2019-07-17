@@ -213,7 +213,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                 //Uow would contain partial data
                 //so a new scope created
 
-                InScopeExecutor.Current.ExecuteActionInScope((serviceLocator) =>
+                InScopeExecutor.Current.Execute((serviceLocator) =>
                 {
                     var interviewsLocal =
                         serviceLocator.GetInstance<IQueryableReadSideRepositoryReader<InterviewSummary>>();

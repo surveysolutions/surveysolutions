@@ -13,7 +13,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
 
         public void Add(Guid interviewId, InterviewCommand command)
         {
-            var storedCommands = commands.GetOrAdd(interviewId, new List<InterviewCommand>());
+            var storedCommands = commands.GetOrAdd(interviewId, id => new List<InterviewCommand>());
             storedCommands.Add(command);
         }
 

@@ -206,7 +206,7 @@ namespace WB.UI.Shared.Enumerator.Services
         {
             try
             {
-                return Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop && this.powerManager.IsPowerSaveMode;
+                return this.powerManager.IsPowerSaveMode;
             }
             catch
             {

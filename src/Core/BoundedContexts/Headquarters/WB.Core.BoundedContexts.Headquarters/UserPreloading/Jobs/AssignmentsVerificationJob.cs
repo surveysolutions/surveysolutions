@@ -18,17 +18,21 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
     {
         private readonly ILogger logger;
         private readonly IAssignmentsImportService assignmentsImportService;
+        private readonly AssignmentsImportTask assignmentsImportTask;
         private readonly SampleImportSettings sampleImportSettings;
 
-        public AssignmentsVerificationJob(ILogger logger, 
-            IAssignmentsImportService assignmentsImportService, SampleImportSettings sampleImportSettings)
+        public AssignmentsVerificationJob(ILogger logger,
+            IAssignmentsImportService assignmentsImportService,
+            AssignmentsImportTask assignmentsImportTask,
+            SampleImportSettings sampleImportSettings)
         {
             this.logger = logger;
             this.assignmentsImportService = assignmentsImportService;
+            this.assignmentsImportTask = assignmentsImportTask;
             this.sampleImportSettings = sampleImportSettings;
         }
 
-        public void Execute(IJobExecutionContext context)
+        public async Task Execute(IJobExecutionContext context)
         {
             try
             {
@@ -37,7 +41,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                 if (importProcess?.ProcessStatus != AssignmentsImportProcessStatus.Verification) return;
 
                 var allAssignmentIds = assignmentsImportService.GetAllAssignmentIdsToVerify();
-                    
+
                 if (importProcess?.ProcessStatus != AssignmentsImportProcessStatus.Verification) return;
 
                 this.logger.Debug("Assignments verification job: Started");
@@ -49,14 +53,11 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                     new ParallelOptions { MaxDegreeOfParallelism = sampleImportSettings.InterviewsImportParallelTasksLimit },
                     assignmentId =>
                     {
-                        InScopeExecutor.Current.ExecuteActionInScope((serviceLocatorLocal) =>
+                        InScopeExecutor.Current.Execute((serviceLocatorLocal) =>
                         {
-                            var threadImportAssignmentsService =
-                                serviceLocatorLocal.GetInstance<IAssignmentsImportService>();
-                            IQuestionnaireStorage threadQuestionnaireStorage =
-                                serviceLocatorLocal.GetInstance<IQuestionnaireStorage>();
-                            IPreloadedDataVerifier threadImportAssignmentsVerifier =
-                                serviceLocatorLocal.GetInstance<IPreloadedDataVerifier>();
+                            var threadImportAssignmentsService = serviceLocatorLocal.GetInstance<IAssignmentsImportService>();
+                            IQuestionnaireStorage threadQuestionnaireStorage = serviceLocatorLocal.GetInstance<IQuestionnaireStorage>();
+                            IPreloadedDataVerifier threadImportAssignmentsVerifier = serviceLocatorLocal.GetInstance<IPreloadedDataVerifier>();
 
                             var assignmentToVerify = threadImportAssignmentsService.GetAssignmentById(assignmentId);
                             if (assignmentToVerify == null) return;
@@ -81,10 +82,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
 
                 assignmentsImportService.SetImportProcessStatus(AssignmentsImportProcessStatus.Import);
 
-                InScopeExecutor.Current.ExecuteActionInScope((serviceLocatorLocal) =>
-                {
-                     serviceLocatorLocal.GetInstance<AssignmentsImportTask>().Run();
-                });
+                await assignmentsImportTask.ScheduleRunAsync();
 
                 sw.Stop();
                 this.logger.Debug($"Assignments verification job: Finished. Elapsed time: {sw.Elapsed}");

@@ -104,7 +104,7 @@ namespace WB.UI.WebTester.Services.Implementation
                 new NLogLoggingModule()
                 );
 
-            kernel.InitAsync().Wait();
+            kernel.InitAsync(false).Wait();
         }
 
         private static readonly Gauge AppDomainsAliveGauge =
@@ -130,11 +130,8 @@ namespace WB.UI.WebTester.Services.Implementation
                 {
                     Directory.Delete(cachePath, true);
                 }
-                catch (UnauthorizedAccessException exception)
+                catch (UnauthorizedAccessException)
                 {
-                    //this.logger.Error(
-                    //    $"Failed to delete folder during interview tear down. Path: {interviewContainer.CachePath}",
-                    //    exception);
                 }
             }
 

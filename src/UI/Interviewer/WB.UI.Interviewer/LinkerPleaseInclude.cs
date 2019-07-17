@@ -1,8 +1,16 @@
-using System.Collections.Specialized;
+using Android.App;
+using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
+using MvvmCross.Binding.BindingContext;
+using MvvmCross.Droid.Support.V7.RecyclerView;
+using MvvmCross.Navigation;
+using MvvmCross.ViewModels;
+using System;
+using System.Collections.Specialized;
+using System.Windows.Input;
 
-namespace WB.UI.Interviewer
+namespace WB.UI.LinkerInclusion
 {
     public class LinkerPleaseInclude
     {
@@ -61,6 +69,83 @@ namespace WB.UI.Interviewer
         {
             //fix for Thai calendar (KP-6403)
             var thai = new System.Globalization.ThaiBuddhistCalendar();
+        }
+
+        public void Include(Switch @switch)
+        {
+            @switch.CheckedChange += (sender, args) => @switch.Checked = !@switch.Checked;
+        }
+
+        public void Include(CheckedTextView text)
+        {
+            text.AfterTextChanged += (sender, args) => text.Text = "" + text.Text;
+            text.Hint = "" + text.Hint;
+        }
+
+        public void Include(RadioGroup radioGroup)
+        {
+            radioGroup.CheckedChange += (sender, args) => radioGroup.Check(args.CheckedId);
+        }
+
+        public void Include(RadioButton radioButton)
+        {
+            radioButton.CheckedChange += (sender, args) => radioButton.Checked = args.IsChecked;
+        }
+
+        public void Include(RatingBar ratingBar)
+        {
+            ratingBar.RatingBarChange += (sender, args) => ratingBar.Rating = 0 + ratingBar.Rating;
+        }
+
+        public void Include(Activity act)
+        {
+            act.Title = act.Title + "";
+        }
+
+        public void Include(MvvmCross.IoC.MvxPropertyInjector injector)
+        {
+            injector = new MvvmCross.IoC.MvxPropertyInjector();
+        }
+
+        public void Include(System.ComponentModel.INotifyPropertyChanged changed)
+        {
+            changed.PropertyChanged += (sender, e) =>
+            {
+                var test = e.PropertyName;
+            };
+        }
+
+        public void Include(MvxTaskBasedBindingContext context)
+        {
+            context.Dispose();
+            var context2 = new MvxTaskBasedBindingContext();
+            context2.Dispose();
+        }
+
+        public void Include(MvxNavigationService service, IMvxViewModelLoader loader)
+        {
+            service = new MvxNavigationService(null, loader);
+        }
+
+        public void Include(ConsoleColor color)
+        {
+            Console.Write("");
+            Console.WriteLine("");
+            color = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+        }
+
+        public void Include(RecyclerView.ViewHolder vh, MvxRecyclerView list)
+        {
+            vh.ItemView.Click += (sender, args) => { };
+            vh.ItemView.LongClick += (sender, args) => { };
+            list.ItemsSource = null;
+            list.Click += (sender, args) => { };
         }
     }
 }

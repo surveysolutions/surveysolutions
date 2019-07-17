@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
 
             var interviewsToDeleteFactoryMock = new Mock<IInterviewsToDeleteFactory>();
 
-            interviewsToDeleteFactoryMock.Setup(x => x.Load(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version))
+            interviewsToDeleteFactoryMock.Setup(x => x.LoadBatch(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version))
                 .Returns(new List<InterviewSummary>());
 
             var deleteQuestionnaireService = CreateDeleteQuestionnaireService(commandService: commandServiceMock,
@@ -105,7 +105,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
             var interviewQueue = new Queue<List<InterviewSummary>>();
             interviewQueue.Enqueue(new List<InterviewSummary>() { new InterviewSummary() { InterviewId = interviewId } });
             interviewQueue.Enqueue(new List<InterviewSummary>());
-            interviewsToDeleteFactoryMock.Setup(x => x.Load(questionnaireId, questionnaireVersion))
+            interviewsToDeleteFactoryMock.Setup(x => x.LoadBatch(questionnaireId, questionnaireVersion))
                 .Returns(interviewQueue.Dequeue);
 
             var deleteQuestionnaireService = CreateDeleteQuestionnaireService(commandService: commandServiceMock,

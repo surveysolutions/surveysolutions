@@ -65,7 +65,7 @@ namespace Ncqrs.Eventing.Sourcing
             _initialVersion = _currentVersion = version;
         }
 
-        public void InitializeFromHistory(Guid eventSourceId, IEnumerable<CommittedEvent> history)
+        public virtual void InitializeFromHistory(Guid eventSourceId, IEnumerable<CommittedEvent> history)
         {
             if (history == null)
                 throw new ArgumentNullException(nameof(history));
@@ -92,20 +92,17 @@ namespace Ncqrs.Eventing.Sourcing
 
         protected virtual void OnEventApplied(UncommittedEvent evnt)
         {
-            if (EventApplied != null)
-            {
-                EventApplied(this, new EventAppliedEventArgs(evnt));
-            }
+            EventApplied?.Invoke(this, new EventAppliedEventArgs(evnt));
         }
 
-        internal protected void RegisterHandler(ISourcedEventHandler handler)
+        protected internal void RegisterHandler(ISourcedEventHandler handler)
         {
             _eventHandlers.Add(handler);
         }
 
         protected virtual void HandleEvent(object evnt)
         {
-            Boolean handled = false;
+            var handled = false;
 
             // Get a copy of the handlers because an event
             // handler can register a new handler. This will
@@ -184,9 +181,9 @@ namespace Ncqrs.Eventing.Sourcing
             }
         }
         
-        public void AcceptChanges()
+        public virtual void AcceptChanges()
         {
-            _initialVersion = Version;
+            _initialVersion = Version;            
         }
 
         public override string ToString()

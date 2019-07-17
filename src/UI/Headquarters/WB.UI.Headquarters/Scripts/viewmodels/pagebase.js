@@ -249,12 +249,12 @@
     self.load = function() {
     };
 
-    self.getBindedHtmlTemplate = function (templateId, bindObject) {
+    self.getBindedHtmlTemplate = function(templateId, bindObject) {
         var messageTemplate = $("<div/>").html($(templateId).html())[0];
         ko.applyBindings(bindObject, messageTemplate);
         var html = $(messageTemplate).html();
         return html;
-    }
+    };
 
     self.CreateUsersViewModel = function (usersToAssignUrl) {
         var users = {};

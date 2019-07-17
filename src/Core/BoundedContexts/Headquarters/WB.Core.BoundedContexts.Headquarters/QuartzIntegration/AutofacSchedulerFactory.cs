@@ -5,16 +5,17 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 {
     public class AutofacSchedulerFactory : StdSchedulerFactory
     {
-        private readonly AutofacJobFactory autifacJobFactory;
+        private readonly AutofacJobFactory autofacJobFactory;
 
-        public AutofacSchedulerFactory(AutofacJobFactory autifacJobFactory)
+        public AutofacSchedulerFactory(AutofacJobFactory autofacJobFactory, IQuartzSettings quartzSettings): base(quartzSettings.GetSettings())
         {
-            this.autifacJobFactory = autifacJobFactory;
+            this.autofacJobFactory = autofacJobFactory;
         }
 
         protected override IScheduler Instantiate(Quartz.Core.QuartzSchedulerResources rsrcs, Quartz.Core.QuartzScheduler qs)
         {
-            qs.JobFactory = this.autifacJobFactory;
+            qs.JobFactory = this.autofacJobFactory;
+
             return base.Instantiate(rsrcs, qs);
         }
     }

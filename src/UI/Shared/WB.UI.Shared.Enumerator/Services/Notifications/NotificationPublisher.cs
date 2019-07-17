@@ -44,15 +44,8 @@ namespace WB.UI.Shared.Enumerator.Services.Notifications
                         .SetContentText(notificationModel.ContentText)
                         .SetGroup(GROUP_NAME);
             
-            if (Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop)
-            {
-                builder.SetSmallIcon(notificationModel.IconId); //transparent Icon would be better
-                builder.SetColor(Resource.Color.notification_icon_background); 
-            }
-            else
-            {
-                builder.SetSmallIcon(notificationModel.IconId);
-            }
+            builder.SetSmallIcon(notificationModel.IconId); //transparent Icon would be better
+            builder.SetColor(Resource.Color.notification_icon_background); 
 
             // Build the notification:
             return builder.Build();

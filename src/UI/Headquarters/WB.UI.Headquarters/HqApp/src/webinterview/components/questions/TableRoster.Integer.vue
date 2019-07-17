@@ -5,13 +5,20 @@
         inputmode="numeric" 
         class="ag-cell-edit-input" 
         :value="$me.answer" 
-        v-numericFormatting="{digitGroupSeparator: groupSeparator, decimalPlaces: 0, minimumValue: '-2147483648', maximumValue: '2147483647'}" />
+        v-numericFormatting="{
+                digitGroupSeparator: groupSeparator, 
+                decimalCharacter: decimalSeparator,
+                decimalPlaces: 0, 
+                minimumValue: '-2147483648', 
+                maximumValue: '2147483647'
+            }"
+        />
 </template>
 
 <script lang="js">
     import Vue from 'vue'
     import { entityDetails, tableCellEditor } from "../mixins"
-    import { getGroupSeparator } from "./question_helpers"
+    import { getGroupSeparator, getDecimalSeparator } from "./question_helpers"
     import modal from "../modal"
 
     export default {
@@ -27,6 +34,9 @@
         computed: {
             groupSeparator() {
                 return getGroupSeparator(this.$me)
+            },
+            decimalSeparator() {
+                return getDecimalSeparator(this.$me)
             }
         },
         methods: {

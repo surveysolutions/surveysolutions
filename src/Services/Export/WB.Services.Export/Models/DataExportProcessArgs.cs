@@ -8,6 +8,7 @@ namespace WB.Services.Export.Models
         public DataExportError Type { get; set; }
         public string Message { get; set; }
     }
+
     public class DataExportProcessStatus
     {
         public DateTime? BeginDate { get; set; }
@@ -25,7 +26,7 @@ namespace WB.Services.Export.Models
         public DataExportProcessStatus Status { get; set; } = new DataExportProcessStatus();
         public string ArchivePassword { get; set; }
 
-        public string NaturalId => $"{this.StorageTypeString}${ExportSettings.NaturalId}";
+        public string NaturalId => $"{this.StorageTypeString}${ExportSettings?.NaturalId ?? "noSettings"}";
 
         public string AccessToken { get; set; }
         public ExternalStorageType? StorageType { get; set; }

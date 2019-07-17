@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Dapper;
 using Main.Core.Entities.SubEntities;
 using Npgsql;
@@ -146,9 +147,12 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                 }
             }
 
-            if (!hasErrors) this.Save(fileName, usersToImport);
+            if (!hasErrors) this.Save(fileName, usersToImport); 
+        }
 
-            usersImportTask.Run();
+        public Task ScheduleRunUserImportAsync()
+        {
+            return usersImportTask.ScheduleRunAsync();
         }
 
         private string[] GetRequiredUserProperties() => this.GetUserProperties().Take(4).ToArray();

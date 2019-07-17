@@ -7,10 +7,11 @@
     <Configurations>Debug;Release;Debug-ESRI</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <TreatSpecificWarningsAsErrors />
     <WarningLevel>3</WarningLevel>
     <NoWarn>1701;1702;1705;618;1030</NoWarn>
+    <WarningsAsErrors />
   </PropertyGroup>
   <ItemGroup>
     <None Remove="ReferencedAssemblies\System.Collections.dll" />
@@ -34,12 +35,12 @@
     <PackageReference Include="CsvHelper" Version="12.1.2" />
     <PackageReference Include="Dapper" Version="1.60.6" />
     <PackageReference Include="EPPlus" Version="4.5.3.1" />
-    <PackageReference Include="HtmlSanitizer" Version="4.0.187" />
+    <PackageReference Include="HtmlSanitizer" Version="4.0.210" />
     <PackageReference Include="JsonDiffPatch.Net" Version="2.1.0" />
-    <PackageReference Include="Markdig" Version="0.16.0" />
+    <PackageReference Include="Markdig" Version="0.17.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.2.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.0.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.1.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.2.0" />
     <PackageReference Include="System.CodeDom" Version="4.5.0" />
   </ItemGroup>

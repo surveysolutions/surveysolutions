@@ -101,12 +101,20 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         }
 
         public async Task<bool> IsAutoUpdateEnabledAsync(CancellationToken token = default)
-            => await this.TryGetRestResponseOrThrowAsync(() =>
-                this.restService.GetAsync<bool>(url: AutoUpdateUrl, credentials: this.restCredentials, token: token));
+            => await this.TryGetRestResponseOrThrowAsync(async () =>
+            {
+                var result = await this.restService.GetAsync<bool>(url: AutoUpdateUrl,
+                    credentials: this.restCredentials, token: token);
+                return result;
+            });
 
         public async Task<bool> AreNotificationsEnabledAsync(CancellationToken token = default)
-            => await this.TryGetRestResponseOrThrowAsync(() =>
-                this.restService.GetAsync<bool>(url: NotificationsUrl, credentials: this.restCredentials, token: token));
+            => await this.TryGetRestResponseOrThrowAsync(async () =>
+            {
+                var result = await this.restService.GetAsync<bool>(url: NotificationsUrl, credentials: this.restCredentials,
+                    token: token);
+                return result;
+            });
 
         public Task UploadAuditLogEntityAsync(AuditLogEntitiesApiView entities, CancellationToken token = default)
         {
@@ -178,7 +186,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             if (response == null || response.Trim('"') != CanSynchronizeValidResponse)
             {
-                throw new SynchronizationException(SynchronizationExceptionType.InvalidUrl, InterviewerUIResources.InvalidEndpoint);
+                throw new SynchronizationException(SynchronizationExceptionType.InvalidUrl, EnumeratorUIResources.InvalidEndpoint);
             }
         }
 
@@ -449,30 +457,35 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         #endregion
 
         #region [Application Api]
-        public Task<byte[]> GetApplicationAsync(IProgress<TransferProgress> transferProgress = null, CancellationToken token = default) => 
-            this.TryGetRestResponseOrThrowAsync(async () =>
+
+        public async Task<byte[]> GetApplicationAsync(IProgress<TransferProgress> transferProgress = null, CancellationToken token = default)
+        {
+            try
             {
                 var restFile = await this.restService.DownloadFileAsync(
                     url: this.checkVersionUriProvider.CheckVersionUrl, token: token,
-                    credentials: this.restCredentials, 
+                    credentials: this.restCredentials,
                     transferProgress: transferProgress);
 
                 return restFile.Content;
-            });
-
-        public Task<byte[]> GetApplicationPatchAsync(IProgress<TransferProgress> transferProgress, CancellationToken token = default)
-        {
-            return this.TryGetRestResponseOrThrowAsync(async () =>
+            }
+            catch (RestException ex)
             {
-                var interviewerPatchApiUrl = $"{this.checkVersionUriProvider.CheckVersionUrl}patch/{this.deviceSettings.GetApplicationVersionCode()}";
+                var newException = ex.ToSynchronizationException();
+                throw newException;
+            }
+        } 
+           
 
-                var restFile = await this.restService.DownloadFileAsync(url: interviewerPatchApiUrl,
+        public async Task<byte[]> GetApplicationPatchAsync(IProgress<TransferProgress> transferProgress, CancellationToken token = default)
+        {
+            var interviewerPatchApiUrl = $"{this.checkVersionUriProvider.CheckVersionUrl}patch/{this.deviceSettings.GetApplicationVersionCode()}";
+            var restFile = await this.restService.DownloadFileAsync(url: interviewerPatchApiUrl,
                     token: token,
                     credentials: this.restCredentials,
                     transferProgress: transferProgress);
 
                 return restFile.Content;
-            });
         }
 
         public Task<int?> GetLatestApplicationVersionAsync(CancellationToken token = default)
@@ -518,7 +531,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
             catch (RestException ex)
             {
-                throw ex.ToSynchronizationException();
+                var newException = ex.ToSynchronizationException();
+                throw newException;
             }
         }
 

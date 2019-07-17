@@ -240,7 +240,7 @@ namespace WB.UI.Headquarters.API
             assignment.UpdateQuantity(quantity);
             assignment.Reassign(request.ResponsibleId);
 
-            bool isAudioRecordingEnabled = this.questionnaires.Query(_ => _
+            bool isAudioRecordingEnabled = request.IsAudioRecordingEnabled ?? this.questionnaires.Query(_ => _
                 .Where(q => q.Id == interview.QuestionnaireIdentity.ToString())
                 .Select(q => q.IsAudioRecordingEnabled).FirstOrDefault());
             assignment.SetAudioRecordingEnabled(isAudioRecordingEnabled);
@@ -268,6 +268,7 @@ namespace WB.UI.Headquarters.API
             public string Email { get; set; }
             public string Password { get; set; }
             public bool? WebMode { get; set; }
+            public bool? IsAudioRecordingEnabled { get; set; }
         }
 
         public class UpdateAssignmentRequest

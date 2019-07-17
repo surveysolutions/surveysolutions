@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
@@ -19,7 +20,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
         private readonly string storageBasePath;
         private readonly ILogger log;
 
-        public S3FileStorage(AmazonS3Settings s3Settings, IAmazonS3 amazonS3Client, ITransferUtility transferUtility, ILoggerProvider loggerProvider)
+        public S3FileStorage(AmazonS3Settings s3Settings, 
+            IAmazonS3 amazonS3Client, 
+            ITransferUtility transferUtility,
+            ILoggerProvider loggerProvider)
         {
             log = loggerProvider.GetForType(GetType());
             this.s3Settings = s3Settings;
@@ -137,6 +141,41 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
                 }
 
                 transferUtility.Upload(uploadRequest);
+
+                return new FileObject
+                {
+                    Path = uploadRequest.Key,
+                    Size = inputStream.Position,
+                    LastModified = DateTime.UtcNow
+                };
+            }
+            catch (Exception e)
+            {
+                LogError($"Unable to store object in S3. Path: {key}", e);
+                throw;
+            }
+        }
+
+        public async Task<FileObject> StoreAsync(string key, Stream inputStream, string contentType, IProgress<int> progress = null)
+        {
+            try
+            {
+                var uploadRequest = new TransferUtilityUploadRequest
+                {
+                    BucketName = s3Settings.BucketName,
+                    Key = GetKey(key),
+                    ContentType = contentType,
+                    AutoCloseStream = false,
+                    AutoResetStreamPosition = false,
+                    InputStream = inputStream
+                };
+
+                if (progress != null)
+                {
+                    uploadRequest.UploadProgressEvent += (sender, args) => { progress.Report(args.PercentDone); };
+                }
+
+                await transferUtility.UploadAsync(uploadRequest);
 
                 return new FileObject
                 {

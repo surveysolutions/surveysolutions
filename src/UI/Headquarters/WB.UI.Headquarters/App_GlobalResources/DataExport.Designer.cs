@@ -19,7 +19,7 @@ namespace Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option or rebuild the Visual Studio project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Web.Application.StronglyTypedResourceProxyBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Web.Application.StronglyTypedResourceProxyBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class DataExport {
@@ -57,6 +57,42 @@ namespace Resources {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add to queue.
+        /// </summary>
+        internal static string AddToQueue {
+            get {
+                return ResourceManager.GetString("AddToQueue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to all statuses.
+        /// </summary>
+        internal static string AllStatuses {
+            get {
+                return ResourceManager.GetString("AllStatuses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Approved by Headquarters status.
+        /// </summary>
+        internal static string ApprovedByHeadquarters {
+            get {
+                return ResourceManager.GetString("ApprovedByHeadquarters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Approved by Supervisor  status.
+        /// </summary>
+        internal static string ApprovedBySupervisor {
+            get {
+                return ResourceManager.GetString("ApprovedBySupervisor", resourceCulture);
             }
         }
         
@@ -115,6 +151,150 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export file destination.
+        /// </summary>
+        internal static string DataDestination {
+            get {
+                return ResourceManager.GetString("DataDestination", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload to Dropbox.
+        /// </summary>
+        internal static string DataDestination_Dropbox {
+            get {
+                return ResourceManager.GetString("DataDestination_Dropbox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload to Google Drive.
+        /// </summary>
+        internal static string DataDestination_GoogleDrive {
+            get {
+                return ResourceManager.GetString("DataDestination_GoogleDrive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload to OneDrive.
+        /// </summary>
+        internal static string DataDestination_OneDrive {
+            get {
+                return ResourceManager.GetString("DataDestination_OneDrive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download.
+        /// </summary>
+        internal static string DataDestination_Zip {
+            get {
+                return ResourceManager.GetString("DataDestination_Zip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data export API.
+        /// </summary>
+        internal static string DataExportApi {
+            get {
+                return ResourceManager.GetString("DataExportApi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can setup automatic export of collected interview data using our API toolset for more information and inctruction use:.
+        /// </summary>
+        internal static string DataExportApiDesc {
+            get {
+                return ResourceManager.GetString("DataExportApiDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data Export API reference.
+        /// </summary>
+        internal static string DataExportApiInfoPage {
+            get {
+                return ResourceManager.GetString("DataExportApiInfoPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Destination: {{dest}}.
+        /// </summary>
+        internal static string DataExport_Destination {
+            get {
+                return ResourceManager.GetString("DataExport_Destination", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export file will be uploaded to Dropbox.
+        /// </summary>
+        internal static string DataExport_Destination_Dropbox {
+            get {
+                return ResourceManager.GetString("DataExport_Destination_Dropbox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export file will be avalaible for download.
+        /// </summary>
+        internal static string DataExport_Destination_File {
+            get {
+                return ResourceManager.GetString("DataExport_Destination_File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export file will be uploaded to Google Drive.
+        /// </summary>
+        internal static string DataExport_Destination_GoogleDrive {
+            get {
+                return ResourceManager.GetString("DataExport_Destination_GoogleDrive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export file will be uploaded to OneDrive.
+        /// </summary>
+        internal static string DataExport_Destination_OneDrive {
+            get {
+                return ResourceManager.GetString("DataExport_Destination_OneDrive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last updated: {{date}}.
+        /// </summary>
+        internal static string DataExport_FileLastUpdate {
+            get {
+                return ResourceManager.GetString("DataExport_FileLastUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File size: {{size}} MB.
+        /// </summary>
+        internal static string DataExport_FileSize {
+            get {
+                return ResourceManager.GetString("DataExport_FileSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File was regenerated.
+        /// </summary>
+        internal static string DataExport_FileWasRegenerated {
+            get {
+                return ResourceManager.GetString("DataExport_FileWasRegenerated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select type and format of data to export.
         /// </summary>
         internal static string DataExport_Header {
@@ -124,11 +304,146 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interviews in {{status}}..
+        /// </summary>
+        internal static string DataExport_InterviewsStatus {
+            get {
+                return ResourceManager.GetString("DataExport_InterviewsStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{title}} (ver. {{version}}).
+        /// </summary>
+        internal static string DataExport_QuestionnaireWithVersion {
+            get {
+                return ResourceManager.GetString("DataExport_QuestionnaireWithVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Queued on {{date}}.
+        /// </summary>
+        internal static string DataExport_QueuedOn {
+            get {
+                return ResourceManager.GetString("DataExport_QueuedOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Regenerate.
+        /// </summary>
+        internal static string DataExport_Regenerate {
+            get {
+                return ResourceManager.GetString("DataExport_Regenerate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Queue export with the same params.
+        /// </summary>
+        internal static string DataExport_RegenerateDesc {
+            get {
+                return ResourceManager.GetString("DataExport_RegenerateDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export service is not available.
+        /// </summary>
+        internal static string DataExport_ServiceIsNotAvailable {
+            get {
+                return ResourceManager.GetString("DataExport_ServiceIsNotAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Data Export.
         /// </summary>
         internal static string DataExport_Title {
             get {
                 return ResourceManager.GetString("DataExport_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data format.
+        /// </summary>
+        internal static string DataFormat {
+            get {
+                return ResourceManager.GetString("DataFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SPSS format.
+        /// </summary>
+        internal static string DataFormat_Spss {
+            get {
+                return ResourceManager.GetString("DataFormat_Spss", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stata 14 format.
+        /// </summary>
+        internal static string DataFormat_Stata {
+            get {
+                return ResourceManager.GetString("DataFormat_Stata", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tab separated data.
+        /// </summary>
+        internal static string DataFormat_Tab {
+            get {
+                return ResourceManager.GetString("DataFormat_Tab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data type.
+        /// </summary>
+        internal static string DataType {
+            get {
+                return ResourceManager.GetString("DataType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Binary Data. Archive with binary data (e.g., pictures, audio).
+        /// </summary>
+        internal static string DataType_Binary {
+            get {
+                return ResourceManager.GetString("DataType_Binary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DDI. Data Documentation Initiative XML data.
+        /// </summary>
+        internal static string DataType_Ddi {
+            get {
+                return ResourceManager.GetString("DataType_Ddi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Main Survey Data. Zip archive with main interview data.
+        /// </summary>
+        internal static string DataType_MainSurveyData {
+            get {
+                return ResourceManager.GetString("DataType_MainSurveyData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paradata. Metadata on the interview process (events and timing).
+        /// </summary>
+        internal static string DataType_Paradata {
+            get {
+                return ResourceManager.GetString("DataType_Paradata", resourceCulture);
             }
         }
         
@@ -187,6 +502,33 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export job was canceled by user..
+        /// </summary>
+        internal static string Error_Canceled {
+            get {
+                return ResourceManager.GetString("Error_Canceled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not enough space fot the selected cloud storage provide. Please free space and restart the job or choose another provider..
+        /// </summary>
+        internal static string Error_NotEnoughExternalStorageSpace {
+            get {
+                return ResourceManager.GetString("Error_NotEnoughExternalStorageSpace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An unexpected error occurred during export. We are sorry for inconvenience. Please contact support team support@mysurvey.solutions..
+        /// </summary>
+        internal static string Error_Unhandled {
+            get {
+                return ResourceManager.GetString("Error_Unhandled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to export process.
         /// </summary>
         internal static string export {
@@ -232,6 +574,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Filter interviews to export.
+        /// </summary>
+        internal static string FilterTitle {
+            get {
+                return ResourceManager.GetString("FilterTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Format.
         /// </summary>
         internal static string Format {
@@ -268,6 +619,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Previously generated export sets.
+        /// </summary>
+        internal static string GeneratedDataSets {
+            get {
+                return ResourceManager.GetString("GeneratedDataSets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Every set is a zip archive with all collected interview data and DDI XML structure you an download previously generated reports.
+        /// </summary>
+        internal static string GeneratedDataSets_Desc {
+            get {
+                return ResourceManager.GetString("GeneratedDataSets_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Generating.
         /// </summary>
         internal static string Generating {
@@ -282,6 +651,15 @@ namespace Resources {
         internal static string GoogleDrive {
             get {
                 return ResourceManager.GetString("GoogleDrive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviewer assigned  status.
+        /// </summary>
+        internal static string InterviewerAssigned {
+            get {
+                return ResourceManager.GetString("InterviewerAssigned", resourceCulture);
             }
         }
         
@@ -345,6 +723,15 @@ namespace Resources {
         internal static string NoDataAvailable {
             get {
                 return ResourceManager.GetString("NoDataAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No generated data sets yet.
+        /// </summary>
+        internal static string NoDataSets {
+            get {
+                return ResourceManager.GetString("NoDataSets", resourceCulture);
             }
         }
         
@@ -426,6 +813,15 @@ namespace Resources {
         internal static string StatusOfExportTitle {
             get {
                 return ResourceManager.GetString("StatusOfExportTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Survey template.
+        /// </summary>
+        internal static string SurveyQuestionnaire {
+            get {
+                return ResourceManager.GetString("SurveyQuestionnaire", resourceCulture);
             }
         }
         
