@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using FluentAssertions;
 using Moq;
 using Ncqrs.Eventing;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.GenericSubdomains.Portable.Tasks;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Tests.Abc;
@@ -16,31 +16,33 @@ namespace WB.Tests.Unit.Infrastructure
     [TestOf(typeof(LiteEventBus))]
     public class LiteEventBusTests
     {
-        public class BaseHandler : IViewModelEventHandler<DummyEvent>
+        public class DummyDenormalizer : BaseDenormalizer, IEventHandler<DummyEvent>
         {
             public bool WasCalled = false;
-            public virtual void Handle(DummyEvent @event) { this.WasCalled = true; }
+            public virtual void Handle(IPublishedEvent<DummyEvent> evnt) => this.WasCalled = true;
+            public override object[] Writers { get; }
         }
 
-        public class ChildrenHandler : BaseHandler, IViewModelEventHandler<DifferentDummyEvent>
+        public class DifferentDummyDenormalizer : BaseDenormalizer, IEventHandler<DifferentDummyEvent>
         {
-            public virtual void Handle(DifferentDummyEvent @event) { }
+            public virtual void Handle(IPublishedEvent<DifferentDummyEvent> evnt) { }
+            public override object[] Writers { get; }
+        }
+
+        public class ChildrenHandler : DummyDenormalizer, IEventHandler<DifferentDummyEvent>
+        {
+            public virtual void Handle(IPublishedEvent<DifferentDummyEvent> evnt) { }
         }
 
         public class DummyEvent : IEvent { }
 
         public class DifferentDummyEvent : IEvent { }
 
-        internal static DummyEvent CreateDummyEvent()
-        {
-            return new DummyEvent();
-        }
+        internal static DummyEvent CreateDummyEvent() => new DummyEvent();
 
-        protected static CommittedEventStream BuildReadyToBePublishedStream(Guid eventSourceId, IEvent @event)
-        {
-            return new CommittedEventStream(eventSourceId,
+        protected static CommittedEventStream BuildReadyToBePublishedStream(Guid eventSourceId, IEvent @event) =>
+            new CommittedEventStream(eventSourceId,
                 Create.Other.CommittedEvent(eventSourceId: eventSourceId, payload: @event));
-        }
 
         [Test]
         public void when_publishing_event_after_two_handlers_were_subscribed_on_same_event()
@@ -50,40 +52,21 @@ namespace WB.Tests.Unit.Infrastructure
             var dummyEventStub = CreateDummyEvent();
             var eventsToPublish = BuildReadyToBePublishedStream(eventSourceId, dummyEventStub);
 
-            var eventRegistry = Create.Service.LiteEventRegistry();
-            ILiteEventBus eventBus = Create.Service.LiteEventBus(eventRegistry);
+            var denormalizerRegistry = Create.Service.DenormalizerRegistry();
+            ILiteEventBus eventBus = Create.Service.LiteEventBus(denormalizerRegistry: denormalizerRegistry);
 
-            var firstHandlerMock = new Mock<IViewModelEventHandler<DummyEvent>>();
-            eventRegistry.Subscribe(firstHandlerMock.Object, eventSourceId.FormatGuid());
+            var firstHandlerMock = new Mock<DummyDenormalizer>();
+            denormalizerRegistry.RegisterDenormalizer(firstHandlerMock.Object);
 
-            var secondHandlerMock = new Mock<IViewModelEventHandler<DummyEvent>>();
-            eventRegistry.Subscribe(secondHandlerMock.Object, eventSourceId.FormatGuid());
-
-            // act
-            eventBus.PublishCommittedEvents(eventsToPublish);
-
-            // assert
-            firstHandlerMock.Verify(s => s.Handle(dummyEventStub), Times.Once());
-            secondHandlerMock.Verify(s => s.Handle(dummyEventStub), Times.Once());
-        }
-
-        [Test]
-        public void when_publishing_event_after_handler_was_subscribed_and_unsubscribed()
-        {
-            // arrange
-            IViewModelEventRegistry liteEventRegistry = Create.Service.LiteEventRegistry();
-            ILiteEventBus eventBus = Create.Service.LiteEventBus(liteEventRegistry);
-            var eventsToPublish = BuildReadyToBePublishedStream(Guid.NewGuid(), new DummyEvent());
-
-            var handlerMock = new Mock<IViewModelEventHandler<DummyEvent>>();
-            liteEventRegistry.Subscribe(handlerMock.Object, "id");
-            liteEventRegistry.Unsubscribe(handlerMock.Object);
+            var secondHandlerMock = new Mock<DummyDenormalizer>();
+            denormalizerRegistry.RegisterDenormalizer(secondHandlerMock.Object);
 
             // act
             eventBus.PublishCommittedEvents(eventsToPublish);
 
             // assert
-            handlerMock.Verify(s => s.Handle(Moq.It.IsAny<DummyEvent>()), Times.Never);
+            firstHandlerMock.Verify(s => s.Handle(It.Is<IPublishedEvent<DummyEvent>>(x => x.Payload == dummyEventStub)), Times.Once());
+            secondHandlerMock.Verify(s => s.Handle(It.Is<IPublishedEvent<DummyEvent>>(x => x.Payload == dummyEventStub)), Times.Once());
         }
 
         [Test]
@@ -94,17 +77,17 @@ namespace WB.Tests.Unit.Infrastructure
             var eventSourceId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var eventsToPublish = BuildReadyToBePublishedStream(eventSourceId, eventStub);
 
-            var eventRegistry = Create.Service.LiteEventRegistry();
-            ILiteEventBus eventBus = Create.Service.LiteEventBus(eventRegistry);
+            var denormalizerRegistry = Create.Service.DenormalizerRegistry();
+            ILiteEventBus eventBus = Create.Service.LiteEventBus(denormalizerRegistry: denormalizerRegistry);
 
-            var handlerMock = new Mock<IViewModelEventHandler<DifferentDummyEvent>>();
-            eventRegistry.Subscribe(handlerMock.Object, eventSourceId.FormatGuid());
+            var handlerMock = new Mock<DifferentDummyDenormalizer>();
+            denormalizerRegistry.RegisterDenormalizer(handlerMock.Object);
 
             // act
             eventBus.PublishCommittedEvents(eventsToPublish);
 
             // assert
-            handlerMock.Verify(s => s.Handle(Moq.It.IsAny<DifferentDummyEvent>()), Times.Never);
+            handlerMock.Verify(s => s.Handle(Moq.It.IsAny<IPublishedEvent<DifferentDummyEvent>>()), Times.Never);
         }
 
         [Test]
@@ -114,29 +97,29 @@ namespace WB.Tests.Unit.Infrastructure
             var eventStub = CreateDummyEvent();
             Guid eventSourceId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var eventsToPublish = BuildReadyToBePublishedStream(eventSourceId, eventStub);
-            var eventRegistry = Create.Service.LiteEventRegistry();
-            ILiteEventBus eventBus = Create.Service.LiteEventBus(eventRegistry);
+            var denormalizerRegistry = Create.Service.DenormalizerRegistry();
+            ILiteEventBus eventBus = Create.Service.LiteEventBus(denormalizerRegistry: denormalizerRegistry);
 
-            var handlerOnFiredEventMock = new Mock<IViewModelEventHandler<DummyEvent>>();
-            eventRegistry.Subscribe(handlerOnFiredEventMock.Object, eventSourceId.FormatGuid());
+            var handlerOnFiredEventMock = new Mock<DummyDenormalizer>();
+            denormalizerRegistry.RegisterDenormalizer(handlerOnFiredEventMock.Object);
 
-            var handlerOnDifferentEventMock = new Mock<IViewModelEventHandler<DifferentDummyEvent>>();
-            eventRegistry.Subscribe(handlerOnDifferentEventMock.Object, eventSourceId.FormatGuid());
+            var handlerOnDifferentEventMock = new Mock<DifferentDummyDenormalizer>();
+            denormalizerRegistry.RegisterDenormalizer(handlerOnDifferentEventMock.Object);
 
             // act
             eventBus.PublishCommittedEvents(eventsToPublish);
 
             // assert
-            handlerOnDifferentEventMock.Verify(s => s.Handle(Moq.It.IsAny<DifferentDummyEvent>()), Times.Never);
-            handlerOnFiredEventMock.Verify(s => s.Handle(eventStub), Times.Once());
+            handlerOnDifferentEventMock.Verify(s => s.Handle(Moq.It.IsAny<IPublishedEvent<DifferentDummyEvent>>()), Times.Never);
+            handlerOnFiredEventMock.Verify(s => s.Handle(It.Is<IPublishedEvent<DummyEvent>>(x=>x.Payload == eventStub)), Times.Once());
         }
 
         [Test]
         public void when_publishing_event_and_bus_does_not_have_any_subscriptions()
         {
             var eventsToPublish = BuildReadyToBePublishedStream(Guid.NewGuid(), new DummyEvent());
-
-            var eventBus = Create.Service.LiteEventBus();
+            var denormalizerRegistry = Create.Service.DenormalizerRegistry();
+            var eventBus = Create.Service.LiteEventBus(denormalizerRegistry: denormalizerRegistry);
 
             Assert.That(() => eventBus.PublishCommittedEvents(eventsToPublish), Throws.Nothing);
         }
@@ -148,17 +131,34 @@ namespace WB.Tests.Unit.Infrastructure
             var eventStub = CreateDummyEvent();
             Guid eventSourceId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var eventsToPublish = BuildReadyToBePublishedStream(eventSourceId, eventStub);
-            var eventRegistry = Create.Service.LiteEventRegistry();
-            ILiteEventBus eventBus = Create.Service.LiteEventBus(eventRegistry);
+            var denormalizerRegistry = Create.Service.DenormalizerRegistry();
+            ILiteEventBus eventBus = Create.Service.LiteEventBus(denormalizerRegistry: denormalizerRegistry);
 
             var handlerOnFiredEvent = new ChildrenHandler();
-            eventRegistry.Subscribe(handlerOnFiredEvent, eventSourceId.FormatGuid());
+
+            denormalizerRegistry.RegisterDenormalizer(handlerOnFiredEvent);
 
             // act
             eventBus.PublishCommittedEvents(eventsToPublish);
 
             // assert
             handlerOnFiredEvent.WasCalled.Should().BeTrue();
+        }
+
+        [Test]
+        public void when_PublishCommittedEvents_then_committed_events_should_be_added_to_queue()
+        {
+            // arrange
+            var eventsToPublish = BuildReadyToBePublishedStream(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), CreateDummyEvent());
+
+            var mockOfViewModelEventQueue = new Mock<IViewModelEventQueue>();
+            var eventBus = Create.Service.LiteEventBus(viewModelEventQueue: mockOfViewModelEventQueue.Object);
+
+            // act
+            eventBus.PublishCommittedEvents(eventsToPublish);
+
+            // assert
+            mockOfViewModelEventQueue.Verify(x => x.Enqueue(It.IsAny<IEnumerable<CommittedEvent>>()), Times.Once);
         }
     }
 }

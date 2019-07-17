@@ -86,8 +86,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services
 
             var events = new[]
             {
-                Create.Event.CommittedEvent(Create.Event.TextQuestionAnswered(), interviewId),
-                Create.Event.CommittedEvent(Create.Event.NumericIntegerQuestionAnswered(), interviewId)
+                Create.Other.CommittedEvent(payload:Create.Event.TextQuestionAnswered(), eventSourceId: interviewId),
+                Create.Other.CommittedEvent(payload:Create.Event.NumericIntegerQuestionAnswered(), eventSourceId: interviewId)
             };
             
             // act
@@ -111,8 +111,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services
 
             var events = new[]
             {
-                Create.Event.CommittedEvent(Create.Event.TextQuestionAnswered(), interviewId),
-                Create.Event.CommittedEvent(Create.Event.NumericIntegerQuestionAnswered(), interviewId)
+                Create.Other.CommittedEvent(payload:Create.Event.TextQuestionAnswered(), eventSourceId: interviewId),
+                Create.Other.CommittedEvent(payload:Create.Event.NumericIntegerQuestionAnswered(), eventSourceId: interviewId)
             };
 
             var viewModel = new FakeViewModel();

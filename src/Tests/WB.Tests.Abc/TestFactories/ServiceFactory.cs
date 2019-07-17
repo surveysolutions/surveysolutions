@@ -82,6 +82,7 @@ using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Services;
 using WB.Core.Infrastructure.TopologicalSorter;
 using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernels.DataCollection;
@@ -241,7 +242,8 @@ namespace WB.Tests.Abc.TestFactories
 
         public LiteEventBus LiteEventBus(IViewModelEventRegistry liteEventRegistry = null,
             IEventStore eventStore = null,
-            IDenormalizerRegistry denormalizerRegistry = null)
+            IDenormalizerRegistry denormalizerRegistry = null,
+            IViewModelEventQueue viewModelEventQueue = null)
         {
             liteEventRegistry = liteEventRegistry ?? LiteEventRegistry();
 
@@ -255,11 +257,17 @@ namespace WB.Tests.Abc.TestFactories
 
             return new LiteEventBus(eventStore ?? Mock.Of<IEventStore>(),
                 denormalizerRegistry ?? Stub<IDenormalizerRegistry>.WithNotEmptyValues,
-                mockOfViewModelEventQueue.Object);
+                viewModelEventQueue ?? mockOfViewModelEventQueue.Object);
         }
 
         public ViewModelEventRegistry LiteEventRegistry()
             => new ViewModelEventRegistry();
+
+        public DenormalizerRegistry DenormalizerRegistry() => new DenormalizerRegistry();
+
+        public ViewModelEventQueue ViewModelEventQueue(IViewModelEventRegistry liteEventRegistry) =>
+            new ViewModelEventQueue(new InterviewViewModelEventsPublisher(liteEventRegistry,
+                Mock.Of<ILogger>(), Mock.Of<ICurrentViewModelPresenter>()), Mock.Of<ILogger>());
 
         public NcqrCompatibleEventDispatcher NcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null,
             ILogger logger = null,

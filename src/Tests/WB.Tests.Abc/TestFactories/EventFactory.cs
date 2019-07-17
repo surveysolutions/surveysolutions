@@ -476,17 +476,5 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new InterviewClosedBySupervisor(Guid.NewGuid(), localTime ?? DateTime.Now);
         }
-
-        public CommittedEvent CommittedEvent(
-            WB.Core.Infrastructure.EventBus.IEvent payload,
-            Guid eventSourceId,
-            Guid? commitId = null,
-            string origin = null,
-            Guid? eventIdentifier = null,
-            int? eventSequence = null,
-            DateTime? eventTimeStamp = null,
-            long? globalSequence = null) =>
-            new CommittedEvent(commitId ?? Guid.NewGuid(), origin, eventIdentifier ?? eventSourceId,
-                eventSourceId, eventSequence ?? 1, eventTimeStamp ?? DateTime.UtcNow, globalSequence, payload);
     }
 }
