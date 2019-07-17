@@ -31,8 +31,6 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
         private readonly IProductVersion productVersion;
         private readonly IUserViewFactory userViewFactory;
         private readonly IClientApkProvider clientApkProvider;
-        private readonly IAuthorizedUser authorizedUser;
-        private readonly IInterviewInformationFactory interviewFactory;
 
         public SupervisorApiController(ITabletInformationService tabletInformationService, 
             ISupervisorSyncProtocolVersionProvider syncVersionProvider,
@@ -40,9 +38,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
             IUserViewFactory userViewFactory, 
             HqSignInManager signInManager,
             IPlainKeyValueStorage<InterviewerSettings> settingsStorage, 
-            IClientApkProvider clientApkProvider,
-            IAuthorizedUser authorizedUser,
-            IInterviewInformationFactory interviewFactory)
+            IClientApkProvider clientApkProvider)
             : base(settingsStorage)
         {
             this.tabletInformationService = tabletInformationService;
@@ -51,8 +47,6 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
             this.userViewFactory = userViewFactory;
             this.signInManager = signInManager;
             this.clientApkProvider = clientApkProvider;
-            this.authorizedUser = authorizedUser;
-            this.interviewFactory = interviewFactory;
         }
 
         [HttpGet]
@@ -89,15 +83,6 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 
             var currentVersion = new Version(this.productVersion.ToString().Split(' ')[0]);
             var supervisorVersion = this.Request.GetProductVersionFromUserAgent(@"org.worldbank.solutions.supervisor");
-
-            if (deviceSyncProtocolVersion < SupervisorSyncProtocolVersionProvider.ResolvedCommentsIntroduced)
-            {
-                if (this.interviewFactory.HasAnyInterviewsInProgressWithResolvedCommentsForSupervisor(
-                    this.authorizedUser.Id))
-                {
-                    return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
-                }
-            }
 
             if (IsNeedUpdateAppBySettings(supervisorVersion, currentVersion))
             {
