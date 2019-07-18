@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
+using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -75,6 +76,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
         {
             var companyLogoApiV2Controller = new SettingsV2Controller(logoStorage ?? new InMemoryKeyValueStorage<CompanyLogo>(),
                 interviewerSettingsStorage ?? new InMemoryKeyValueStorage<InterviewerSettings>(),
+                new InMemoryKeyValueStorage<TenantSettings>(),
                 Mock.Of<ISecureStorage>());
             var httpRequestMessage = new HttpRequestMessage();
             if (requestEtag != null)
