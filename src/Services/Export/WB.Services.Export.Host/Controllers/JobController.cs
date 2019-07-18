@@ -219,9 +219,9 @@ namespace WB.Services.Export.Host.Controllers
 
             foreach (var job in jobs)
             {
-                var questionnaire =
-                    await this.questionnaireStorage.GetQuestionnaireAsync(job.ExportSettings.QuestionnaireId);
-                if (!questionnaire.IsDeleted)
+                var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(job.ExportSettings.QuestionnaireId);
+
+                if (!questionnaire?.IsDeleted ?? false)
                 {
                     filteredJobList.Add(job);
                 }
