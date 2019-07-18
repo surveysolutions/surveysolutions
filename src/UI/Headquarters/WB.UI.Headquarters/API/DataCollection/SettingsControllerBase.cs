@@ -5,10 +5,13 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
+using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.UI.Headquarters.Models.CompanyLogo;
 
 namespace WB.UI.Headquarters.API.DataCollection
@@ -16,12 +19,16 @@ namespace WB.UI.Headquarters.API.DataCollection
     public abstract class SettingsControllerBase : ApiController
     {
         private readonly IPlainKeyValueStorage<CompanyLogo> appSettingsStorage;
+        private readonly IPlainKeyValueStorage<TenantSettings> tenantSettings;
         private readonly ISecureStorage secureStorage;
 
-        protected SettingsControllerBase(IPlainKeyValueStorage<CompanyLogo> appSettingsStorage,
+        protected SettingsControllerBase(
+            IPlainKeyValueStorage<CompanyLogo> appSettingsStorage,
+            IPlainKeyValueStorage<TenantSettings> tenantSettings,
             ISecureStorage secureStorage)
         {
             this.appSettingsStorage = appSettingsStorage;
+            this.tenantSettings = tenantSettings;
             this.secureStorage = secureStorage;
         }
 
@@ -44,6 +51,17 @@ namespace WB.UI.Headquarters.API.DataCollection
             response.Headers.ETag = new EntityTagHeaderValue($"\"{etagValue}\"");
 
             return response;
+        }
+
+        public virtual HttpResponseMessage TenantId()
+        {
+            var byId = tenantSettings.GetById(AppSetting.TenantSettingsKey);
+            if(byId == null) 
+                throw new NullReferenceException("Tenant public key is not set");
+            return this.Request.CreateResponse(HttpStatusCode.OK, new TenantIdApiView
+            {
+                TenantId = byId.TenantPublicId
+            });
         }
 
         public virtual bool AutoUpdateEnabled() => false;
