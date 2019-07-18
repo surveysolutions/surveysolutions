@@ -321,7 +321,7 @@ namespace WB.UI.Headquarters.Controllers
         [CamelCase]
         [ApiNoCache]
         [ObserverNotAllowedApi]
-        public IHttpActionResult ImportUsers(ImportUsersRequest request)
+        public async Task<IHttpActionResult> ImportUsers(ImportUsersRequest request)
         {
             if (request?.File?.FileBytes == null)
                 return this.BadRequest(BatchUpload.Prerequisite_FileOpen);
@@ -335,6 +335,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 var importUserErrors = this.userImportService.VerifyAndSaveIfNoErrors(request.File.FileBytes, request.File.FileName)
                     .Take(8).Select(ToImportError).ToArray();
+                await this.userImportService.ScheduleRunUserImportAsync();
                 return this.Ok(importUserErrors);
             }
             catch (PreloadingException e)

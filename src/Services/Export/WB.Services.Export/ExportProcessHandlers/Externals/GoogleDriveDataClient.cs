@@ -8,6 +8,7 @@ using Google.Apis.Auth.OAuth2;
 using Google.Apis.Auth.OAuth2.Flows;
 using Google.Apis.Drive.v3;
 using Google.Apis.Services;
+using WB.Services.Infrastructure.Tenant;
 using File = Google.Apis.Drive.v3.Data.File;
 
 namespace WB.Services.Export.ExportProcessHandlers.Externals
@@ -15,10 +16,12 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
     internal class GoogleDriveDataClient : IExternalDataClient
     {
         private DriveService driveService;
+        private TenantInfo tenant;
         private const string GoogleDriveFolderMimeType = "application/vnd.google-apps.folder";
 
-        public IDisposable GetClient(string accessToken)
+        public IDisposable InitializeDataClient(string accessToken, TenantInfo tenant)
         {
+            this.tenant = tenant;
             var token = new Google.Apis.Auth.OAuth2.Responses.TokenResponse
             {
                 AccessToken = accessToken,
@@ -45,18 +48,23 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
             return this.driveService;
         }
 
-        public async Task<string> CreateApplicationFolderAsync()
+        public async Task<string> CreateApplicationFolderAsync(string subFolder)
         {
             const string applicationFolderName = "Survey Solutions";
-            var folder = await GetOrCreateFolderAsync(applicationFolderName);
-            return folder.Id;
+            var result = await GetOrCreateFolderAsync(applicationFolderName);
+            result = await GetOrCreateFolderAsync(this.tenant.Name, result.Id);
+            if (subFolder != null)
+            {
+                result = await GetOrCreateFolderAsync(subFolder, result.Id);
+            }
+            return result.Id;
         }
 
-        public async Task<string> CreateFolderAsync(string applicationFolder, string folderName)
+        public async Task<string> CreateFolderAsync(string directory, string parentDirectory)
         {
-            string[] folders = folderName.Split('/');
+            string[] folders = directory.Split('/');
 
-            string parentFolder = applicationFolder;
+            string parentFolder = parentDirectory;
 
             foreach (var folder in folders)
             {

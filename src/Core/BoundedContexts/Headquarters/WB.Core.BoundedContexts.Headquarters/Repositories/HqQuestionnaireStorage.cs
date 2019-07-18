@@ -37,6 +37,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
 
         public override void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument)
         {
+            if (!questionnaireDocument.IsDeleted)
+            {
+                ExtractQuestionnaireEntities(version, questionnaireDocument);
+            }
+
+            base.StoreQuestionnaire(id, version, questionnaireDocument);
+        }
+
+        private void ExtractQuestionnaireEntities(long version, QuestionnaireDocument questionnaireDocument)
+        {
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaireDocument.PublicKey, version).ToString();
             questionnaireDocument.EntitiesIdMap = new Dictionary<Guid, int>();
 
@@ -73,23 +83,22 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
                     compositeItem.StatExportCaption = abstractQuestion.StataExportCaption;
                 }
 
-                if (question?.Answers != null && question.Answers.Any())
+                if (question?.Answers != null && question.Answers.Count > 0)
                 {
-                    compositeItem.Answers = question.Answers.Select(a => new QuestionnaireCompositeItemAnswer
-                    {
-                        Value = a.AnswerValue,
-                        Text = a.AnswerText,
-                        AnswerCode = a.AnswerCode,
-                        Parent = a.ParentValue,
-                        ParentCode = a.ParentCode
-                    }).ToList();
+                    compositeItem.Answers = new HashSet<QuestionnaireCompositeItemAnswer>(question.Answers.Select(
+                        a => new QuestionnaireCompositeItemAnswer
+                        {
+                            Value = a.AnswerValue,
+                            Text = a.AnswerText,
+                            AnswerCode = a.AnswerCode,
+                            Parent = a.ParentValue,
+                            ParentCode = a.ParentCode
+                        }));
                 }
 
                 questionnaireItemsWriter.Store(compositeItem);
                 questionnaireDocument.EntitiesIdMap.Add(compositeItem.EntityId, compositeItem.Id);
             }
-
-            base.StoreQuestionnaire(id, version, questionnaireDocument);
         }
 
         public override QuestionnaireDocument GetQuestionnaireDocument(Guid id, long version)

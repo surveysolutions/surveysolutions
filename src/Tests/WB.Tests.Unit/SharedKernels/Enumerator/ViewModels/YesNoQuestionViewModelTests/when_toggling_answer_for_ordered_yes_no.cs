@@ -6,7 +6,6 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Tests.Abc;
 
@@ -73,7 +72,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             CollectionAssert.AreEqual(new int []{ 3, 4, 1, 2}, orders);
         }
 
-        static Mock<AnsweringViewModel> answering;
         static CategoricalYesNoViewModel viewModel;
         static Identity questionId;
     }

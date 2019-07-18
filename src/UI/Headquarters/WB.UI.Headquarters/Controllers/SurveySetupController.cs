@@ -274,7 +274,7 @@ namespace WB.UI.Headquarters.Controllers
                         CreateError(questionnaireIdentity, model.File.FileName, errors: answerErrors));
                 }
 
-                await this.assignmentsVerificationTask.Run(3);
+                await this.assignmentsVerificationTask.ScheduleRunAsync(3);
             }
             catch (Exception e)
             {
@@ -390,7 +390,7 @@ namespace WB.UI.Headquarters.Controllers
                         CreateError(questionnaireIdentity, model.File.FileName, errors: answerErrors));
                 }
 
-                await this.assignmentsVerificationTask.Run(3);
+                await this.assignmentsVerificationTask.ScheduleRunAsync(3);
             }
             catch (Exception e)
             {

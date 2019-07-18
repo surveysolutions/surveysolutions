@@ -11,7 +11,6 @@ using Plugin.Permissions.Abstractions;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 
@@ -91,9 +90,9 @@ namespace WB.UI.Shared.Enumerator.Services
             {
                 patchOrFullApkBytes = await this.synchronizationService.GetApplicationPatchAsync(onDownloadProgressChanged, cancellationToken);
             }
-            catch (SynchronizationException ex) when (ex.InnerException is RestException rest)
+            catch (RestException restEx)
             {
-                if (rest.StatusCode != HttpStatusCode.NotFound)
+                if (restEx.StatusCode != HttpStatusCode.NotFound)
                     throw;
             }
 

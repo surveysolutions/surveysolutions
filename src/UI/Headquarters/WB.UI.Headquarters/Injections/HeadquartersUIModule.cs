@@ -4,6 +4,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using ASP;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
@@ -107,6 +108,7 @@ namespace WB.UI.Headquarters.Injections
             registry.Bind<ITranslationsExportService, TranslationsExportService>();
             registry.Bind<IQuestionnaireExporter, QuestionnaireExporter>();
 
+            registry.Bind<IClientApkProvider, ClientApkProvider>();
             registry.Bind<IQRCodeHelper, QRCodeHelper>();
 
             registry.BindAsSingleton<ILocalExportServiceRunner, LocalExportServiceRunner>();
@@ -163,7 +165,7 @@ namespace WB.UI.Headquarters.Injections
                 if (appUrl != "/")
                     appUrl = "/" + appUrl;
 
-                var baseUrl = string.Format("{0}://{1}{2}", request.Url.Scheme, request.Url.Authority, appUrl);
+                var baseUrl = string.Format("{0}://{1}{2}", request.UrlScheme(), request.Url.Authority, appUrl);
 
                 return new Uri(baseUrl);
             }

@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Autofac;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage.Postgre;
 
@@ -23,7 +22,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
             return lifetimeScope.BeginLifetimeScope();
         }
 
-        public void ExecuteActionInScope(Action<IServiceLocator> action)
+        public void Execute(Action<IServiceLocator> action)
         {
             using (var scope = CreateChildContainer())
             {
@@ -35,7 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
             }
         }
         
-        public bool ExecuteFunctionInScope(Func<IServiceLocator, bool> func)
+        public T Execute<T>(Func<IServiceLocator, T> func)
         {
             using (var scope = CreateChildContainer())
             {
@@ -49,7 +48,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
             }
         }
 
-        public async Task<object> ExecuteActionInScopeAsync(Func<IServiceLocator, Task<object>> func)
+        public async Task<T> ExecuteAsync<T>(Func<IServiceLocator, Task<T>> func)
         {
             using (var scope = CreateChildContainer())
             {
@@ -60,6 +59,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
                 scope.Resolve<IUnitOfWork>().AcceptChanges();
 
                 return result;
+            }
+        }
+
+        public async Task ExecuteAsync(Func<IServiceLocator, Task> func)
+        {
+            using (var scope = CreateChildContainer())
+            {
+                var serviceLocatorLocal = scope.Resolve<IServiceLocator>();
+
+                await func(serviceLocatorLocal);
+
+                scope.Resolve<IUnitOfWork>().AcceptChanges();
             }
         }
     }

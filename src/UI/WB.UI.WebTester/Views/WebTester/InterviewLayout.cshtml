@@ -1,4 +1,5 @@
 ﻿@using WB.Core.Infrastructure.Versions
+@using WB.Enumerator.Native.Resources
 @model WB.UI.WebTester.Controllers.InterviewPageModel
 <!DOCTYPE html>
 <html>
@@ -35,7 +36,11 @@
         reloadQuestionnaireUrl: '@Model.ReloadQuestionnaireUrl',
         saveScenarioUrl: '@Model.SaveScenarioUrl',
         getScenarioUrl: '@Model.GetScenarioUrl',
-        loadedMessage: '@TempData["Message"]'
+        loadedMessage: '@TempData["Message"]',
+        customTexts: {
+            completeButton: "@Html.Raw(HttpUtility.JavaScriptStringEncode(WebInterview.Complete))",
+            noteToSupervisor: "@Html.Raw(HttpUtility.JavaScriptStringEncode(WebInterview.NoteForSupervisor))"
+        }
     }
     </script>
     @RenderSection("scripts", false)

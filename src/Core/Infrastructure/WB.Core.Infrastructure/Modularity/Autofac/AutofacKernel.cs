@@ -47,7 +47,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         }
 
         
-        public Task InitAsync()
+        public Task InitAsync(bool restartOnInitiazationError)
         {
             this.containerBuilder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
 
@@ -60,11 +60,12 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
 
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(Container));
 
-            var initTask = Task.Run(async () => await InitModules(status, Container));
+            var initTask = Task.Run(async () => await InitModules(status, Container, restartOnInitiazationError));
             return initTask;
         }
 
-        private async Task InitModules(UnderConstructionInfo status, IContainer container)
+        private async Task InitModules(UnderConstructionInfo status, IContainer container,
+            bool restartOnInitiazationError)
         {
             status.Run();
 
@@ -87,13 +88,33 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
                 status.Error(Modules.ErrorDuringRunningMigrations);
                 container.Resolve<ILogger>().Fatal("Exception during running migrations", 
                     ie.WithFatalType(FatalExceptionType.HqErrorDuringRunningMigrations));
+                ScheduleAppReboot();
             }
             catch(Exception e)
             {
                 status.Error(Modules.ErrorDuringSiteInitialization);
+                
                 container.Resolve<ILogger>().Fatal("Exception during site initialization",
                     e.WithFatalType(FatalExceptionType.HqErrorDuringSiteInitialization));
+                ScheduleAppReboot();
+            }
+
+            void ScheduleAppReboot()
+            {
+                if (restartOnInitiazationError && !scheduledAppReboot)
+                {
+                    container.Resolve<ILogger>().Error("Scheduled application pool reboot in 10 seconds");
+
+                    scheduledAppReboot = true;
+                    Task.Run(async () =>
+                    {
+                        await Task.Delay(TimeSpan.FromSeconds(10));
+                        AppDomain.Unload(AppDomain.CurrentDomain);
+                    });
+                }
             }
         }
+
+        private static bool scheduledAppReboot = false;
     }
 }
