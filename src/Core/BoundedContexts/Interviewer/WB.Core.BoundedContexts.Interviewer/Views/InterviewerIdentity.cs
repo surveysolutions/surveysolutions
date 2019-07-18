@@ -25,5 +25,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public string Email { get; set; }
 
         public string SecurityStamp { get; set; }
+
+        public string TenantId { get; set; }
     }
 }
