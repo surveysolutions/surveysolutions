@@ -79,7 +79,6 @@ namespace WB.Tests.Abc.TestFactories
                 assignmentsService ?? Mock.Of<IAssignmentsService>(),
                 Mock.Of<IClientApkProvider>(),
                 interviewerSettings ?? Mock.Of<IPlainKeyValueStorage<InterviewerSettings>>(),
-                    interviewerSettings ?? Mock.Of<IPlainKeyValueStorage<InterviewerSettings>>(),
                     tenantSettings ?? new InMemoryKeyValueStorage<TenantSettings>()
             );
             result.Request = new HttpRequestMessage();
