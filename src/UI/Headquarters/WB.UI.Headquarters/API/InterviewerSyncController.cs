@@ -7,17 +7,15 @@ using System.Web.Hosting;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Resources;
-using WB.UI.Shared.Web.Attributes;
+using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.API
@@ -27,37 +25,20 @@ namespace WB.UI.Headquarters.API
         private readonly ISyncProtocolVersionProvider syncVersionProvider;
         private readonly IAuthorizedUser authorizedUser;
         private readonly IImageFileStorage imageFileRepository;
-        private readonly IFileSystemAccessor fileSystemAccessor; 
-        private readonly ITabletInformationService tabletInformationService;
-        private readonly IInterviewPackagesService incomingSyncPackagesQueue;
-        
-        private readonly IUserViewFactory userViewFactory;
-        private readonly IAndroidPackageReader androidPackageReader;
-
-        private string ResponseInterviewerFileName = "interviewer.apk";
-
-        private string ResponseSupervisorFileName = "supervisor.apk";
+        private readonly IClientApkProvider clientApkProvider;
 
         public InterviewerSyncController(ICommandService commandService,
             IAuthorizedUser authorizedUser,
             ILogger logger,
             IImageFileStorage imageFileRepository,
-            IFileSystemAccessor fileSystemAccessor,
             IInterviewerSyncProtocolVersionProvider syncVersionProvider,
-            ITabletInformationService tabletInformationService,
-            IInterviewPackagesService incomingSyncPackagesQueue, 
-            IUserViewFactory userViewFactory,
-            IAndroidPackageReader androidPackageReader)
+            IClientApkProvider clientApkProvider)
             : base(commandService, logger)
         {
             this.authorizedUser = authorizedUser;
             this.imageFileRepository = imageFileRepository;
-            this.fileSystemAccessor = fileSystemAccessor;
-            this.tabletInformationService = tabletInformationService;
-            this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
             this.syncVersionProvider = syncVersionProvider;
-            this.userViewFactory = userViewFactory;
-            this.androidPackageReader = androidPackageReader;
+            this.clientApkProvider = clientApkProvider;
         }
 
         [HttpGet]
@@ -67,7 +48,9 @@ namespace WB.UI.Headquarters.API
         {
             int supervisorRevisionNumber = this.syncVersionProvider.GetProtocolVersion();
 
-            this.Logger.Info(string.Format("Old version client. Client has protocol version {0} but current app protocol is {1} ", version, supervisorRevisionNumber));
+            this.Logger.Info(
+                $@"Old version client. Client has protocol version {version} " +
+                $@"but current app protocol is {supervisorRevisionNumber} ");
 
             return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, TabletSyncMessages.InterviewerIsNotCompatibleWithThisVersion);
         }
@@ -99,23 +82,23 @@ namespace WB.UI.Headquarters.API
         [AllowAnonymous]
         public HttpResponseMessage GetLatestVersion()
         {
-            string pathToFile = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(ClientApkInfo.Directory), ClientApkInfo.InterviewerFileName);
+            string pathToFile = Path.Combine(this.clientApkProvider.ApkClientsFolder(), ClientApkInfo.InterviewerFileName);
 
-            return this.CheckFileAndResponse(pathToFile, this.ResponseInterviewerFileName);
+            return this.CheckFileAndResponse(pathToFile, ClientApkInfo.InterviewerResponseFileName);
         }
 
         [HttpGet]
         [AllowAnonymous]
         public HttpResponseMessage GetLatestSupervisor()
         {
-            string pathToFile = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(ClientApkInfo.Directory), ClientApkInfo.SupervisorFileName);
+            string pathToFile = Path.Combine(this.clientApkProvider.ApkClientsFolder(), ClientApkInfo.SupervisorFileName);
 
-            return this.CheckFileAndResponse(pathToFile, ResponseSupervisorFileName);
+            return this.CheckFileAndResponse(pathToFile, ClientApkInfo.SupervisorFileName);
         }
 
         private HttpResponseMessage CheckFileAndResponse(string pathToFile, string responseFileName)
         {
-            if (!this.fileSystemAccessor.IsFileExists(pathToFile))
+            if (!System.IO.File.Exists(pathToFile))
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, TabletSyncMessages.FileWasNotFound);
 
             Stream fileStream = new FileStream(pathToFile, FileMode.Open, FileAccess.Read);
@@ -134,23 +117,17 @@ namespace WB.UI.Headquarters.API
         [AllowAnonymous]
         public HttpResponseMessage GetLatestExtendedVersion()
         {
-            string pathToFile = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(ClientApkInfo.Directory), ClientApkInfo.InterviewerExtendedFileName);
+            string pathToFile = Path.Combine(this.clientApkProvider.ApkClientsFolder(), ClientApkInfo.InterviewerExtendedFileName);
 
-            return this.CheckFileAndResponse(pathToFile, this.ResponseInterviewerFileName);
+            return this.CheckFileAndResponse(pathToFile, ClientApkInfo.InterviewerResponseFileName);
         }
 
         [HttpGet]
         [AllowAnonymous]
         public bool CheckNewVersion(int versionCode)
         {
-            string pathToInterviewerApp =
-                this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(ClientApkInfo.Directory), ClientApkInfo.InterviewerFileName);
-
-            int? interviewerApkVersion = !this.fileSystemAccessor.IsFileExists(pathToInterviewerApp)
-                ? null
-                : this.androidPackageReader.Read(pathToInterviewerApp).Version;
-            
-            return interviewerApkVersion.HasValue && (interviewerApkVersion.Value > versionCode);
+            var version = this.clientApkProvider.GetLatestVersion(ClientApkInfo.InterviewerFileName);
+            return version.HasValue && (version.Value > versionCode);
         }
     }
 }

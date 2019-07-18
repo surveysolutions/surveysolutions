@@ -8,6 +8,7 @@ using Moq;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -20,6 +21,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
@@ -29,6 +31,7 @@ using WB.Tests.Abc.Storage;
 using WB.UI.Headquarters.API.DataCollection.Interviewer;
 using WB.UI.Headquarters.Code.CommandTransformation;
 using WB.UI.Headquarters.Controllers;
+using WB.UI.Headquarters.Services;
 using AssignmentsController = WB.UI.Headquarters.API.PublicApi.AssignmentsController;
 
 namespace WB.Tests.Abc.TestFactories
@@ -64,21 +67,21 @@ namespace WB.Tests.Abc.TestFactories
             HqSignInManager signInManager = null,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory = null,
             IAssignmentsService assignmentsService = null,
-            IPlainKeyValueStorage<InterviewerSettings> interviewerSettings = null)
+            IPlainKeyValueStorage<InterviewerSettings> interviewerSettings = null,
+            IPlainKeyValueStorage<TenantSettings> tenantSettings = null)
         {
             {
-                var result = new InterviewerApiController(
-                    fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
-                    tabletInformationService ?? Mock.Of<ITabletInformationService>(),
+                var result = new InterviewerApiController(tabletInformationService ?? Mock.Of<ITabletInformationService>(),
                     userViewFactory ?? Mock.Of<IUserViewFactory>(),
-                    androidPackageReader ?? Mock.Of<IAndroidPackageReader>(),
                     syncVersionProvider ?? Mock.Of<IInterviewerSyncProtocolVersionProvider>(),
                     authorizedUser ?? Mock.Of<IAuthorizedUser>(),
                     productVersion ?? Mock.Of<IProductVersion>(),
                     signInManager ?? new HqSignInManager(Create.Storage.HqUserManager(), Mock.Of<IAuthenticationManager>(), Mock.Of<IHashCompatibilityProvider>()),
                     questionnaireBrowseViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(x => x.GetByIds(It.IsAny<QuestionnaireIdentity[]>()) == new List<QuestionnaireBrowseItem>()),
                     assignmentsService ?? Mock.Of<IAssignmentsService>(),
-                    interviewerSettings ?? Mock.Of<IPlainKeyValueStorage<InterviewerSettings>>()
+                    Mock.Of<IClientApkProvider>(),
+                    interviewerSettings ?? Mock.Of<IPlainKeyValueStorage<InterviewerSettings>>(),
+                    tenantSettings ?? new InMemoryKeyValueStorage<TenantSettings>()
                 );
                 result.Request = new HttpRequestMessage();
                 result.Request.SetConfiguration(new HttpConfiguration());

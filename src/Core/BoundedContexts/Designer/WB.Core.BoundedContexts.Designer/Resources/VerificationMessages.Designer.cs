@@ -1709,7 +1709,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire contains excessive number of roster instances..
+        ///   Looks up a localized string similar to Questionnaire contains rosters with total number of roster instances {0} exceeding the system limits {1}.
         /// </summary>
         public static string WB0261_RosterStructureTooExplosive {
             get {
@@ -1957,6 +1957,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string WB0287_TableRosterDoesntContainsQuestionWithSubstitutions {
             get {
                 return ResourceManager.GetString("WB0287_TableRosterDoesntContainsQuestionWithSubstitutions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Label {1} for code {0} is a number different from the value being labeled..
+        /// </summary>
+        public static string WB0288_ValueAndTitleNumbersIsNotEquals {
+            get {
+                return ResourceManager.GetString("WB0288_ValueAndTitleNumbersIsNotEquals", resourceCulture);
             }
         }
     }

@@ -10,8 +10,8 @@
                             :id="$me.id + '_' + option.value + '_yes'" 
                             :checked="isYesChecked(option.value)"
                             :disabled="!$me.acceptAnswer"
-                            value="true"                            
-                            @click="answerYes(option.value)" 
+                            value="true"
+                            @change="answerYes(option.value, $event.target)" 
                             v-disabledWhenUnchecked="{maxAnswerReached: allAnswersGiven, answerNotAllowed: !$me.acceptAnswer, forceDisabled: !$me.acceptAnswer || isProtected(option.value)}" />
                         <label :for="$me.id + '_' + option.value + '_yes'">
                             <span class="tick"></span>
@@ -23,7 +23,7 @@
                             :checked="isNoChecked(option.value)"
                             :disabled="!$me.acceptAnswer || isProtected(option.value)"
                             value="false"
-                            @click="answerNo(option.value)" />
+                            @change="answerNo(option.value, $event.target)" />
                         <label :for="$me.id + '_' + option.value + '_no'">
                             <span class="tick"></span>
                         </label>
@@ -45,7 +45,7 @@
 </template>
 <script lang="js">
     import { entityDetails } from "../mixins"
-
+    import Vue from 'vue'
     import * as $ from "jquery"
     import modal from "../modal"
     import { findIndex, filter } from "lodash"
@@ -55,10 +55,16 @@
         name: 'CategoricalYesNo',
         data(){
             return {
-                showAllOptions: false
+                showAllOptions: false,
+                answer: []
             }
         },
         props: ['noComments'],
+        watch: {
+            "$me.answer"(to, from) {
+                Vue.set(this, 'answer', this.$me.answer)
+            }
+        },
         computed: {
             allAnswersGiven() {
                 const yesAnswers = $.grep(this.$me.answer, function(e){ return e.yes; });
@@ -74,8 +80,8 @@
                 
                 var self = this;
                 return filter(this.$me.options, function(option) {
-                    return $.grep(self.$me.answer, (e) => { return e.value == option.value; }).length != 0 
-                    });
+                    return $.grep(self.answer, (e) => { return e.value == option.value; }).length != 0 
+                });
             },
             noOptions() {
                 return this.$me.options == null || this.$me.options.length == 0;
@@ -147,15 +153,25 @@
                     this.$store.dispatch('answerYesNoQuestion', { questionId: this.$me.id, answer: newAnswer });
                     return;
                 }
+                const rosterTitle = _.find(this.answeredOrAllOptions, { value: optionValue}).title
 
-                const confirmMessage = this.$t("WebInterviewUI.ConfirmRosterRemove");
+                const confirmMessage = this.$t("WebInterviewUI.Interview_Questions_RemoveRowFromRosterMessage", {
+                    rosterTitle
+                } );
 
                 modal.confirm(confirmMessage,  result => {
                     if (result) {
                         this.$store.dispatch("answerYesNoQuestion", { questionId: this.$me.id, answer: newAnswer })
                         return;
                     } else {
-                        this.fetch()
+                        // trigger update for checkboxes to override some vue optimizations
+                        Vue.nextTick(() => {
+                            const opt = _.find(this.answer, { 'value': optionValue })
+                            opt.yes = answerValue
+                            Vue.nextTick( () => {
+                                opt.yes = !answerValue
+                            })
+                        })
                         return
                     }
                 })

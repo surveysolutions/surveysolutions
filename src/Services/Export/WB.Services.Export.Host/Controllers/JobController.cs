@@ -8,6 +8,7 @@ using WB.Services.Export.Interview;
 using WB.Services.Export.Jobs;
 using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire;
+using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Infrastructure.Tenant;
 using WB.Services.Scheduler.Model;
@@ -22,17 +23,18 @@ namespace WB.Services.Export.Host.Controllers
         private readonly IJobsStatusReporting jobsStatusReporting;
         private readonly IExportArchiveHandleService archiveHandleService;
         private readonly IJobService jobService;
-        
+        private readonly IQuestionnaireStorage questionnaireStorage;
 
         public JobController(IDataExportProcessesService exportProcessesService,
             IJobsStatusReporting jobsStatusReporting,
             IExportArchiveHandleService archiveHandleService,
-            IJobService jobService)
+            IJobService jobService, IQuestionnaireStorage questionnaireStorage)
         {
             this.exportProcessesService = exportProcessesService ?? throw new ArgumentNullException(nameof(exportProcessesService));
             this.jobsStatusReporting = jobsStatusReporting ?? throw new ArgumentNullException(nameof(jobsStatusReporting));
             this.archiveHandleService = archiveHandleService ?? throw new ArgumentNullException(nameof(archiveHandleService));
             this.jobService = jobService ?? throw new ArgumentNullException(nameof(jobService));
+            this.questionnaireStorage = questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
         }
 
         [HttpPut]
@@ -213,8 +215,19 @@ namespace WB.Services.Export.Host.Controllers
         public async Task<List<long>> GetAllJobsList(TenantInfo tenant)
         {
             var jobs = await this.exportProcessesService.GetAllProcesses(tenant, runningOnly: false);
+            var filteredJobList = new List<DataExportProcessArgs>();
 
-            List<long> result = jobs
+            foreach (var job in jobs)
+            {
+                var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(job.ExportSettings.QuestionnaireId);
+
+                if (!questionnaire?.IsDeleted ?? false)
+                {
+                    filteredJobList.Add(job);
+                }
+            }
+
+            List<long> result = filteredJobList
                 .GroupBy(x => x.NaturalId)
                 .Select(x => x.Max(s => s.ProcessId))
                 .ToList();

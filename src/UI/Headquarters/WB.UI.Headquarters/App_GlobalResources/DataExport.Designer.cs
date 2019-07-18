@@ -70,6 +70,33 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to all statuses.
+        /// </summary>
+        internal static string AllStatuses {
+            get {
+                return ResourceManager.GetString("AllStatuses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Approved by Headquarters status.
+        /// </summary>
+        internal static string ApprovedByHeadquarters {
+            get {
+                return ResourceManager.GetString("ApprovedByHeadquarters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Approved by Supervisor  status.
+        /// </summary>
+        internal static string ApprovedBySupervisor {
+            get {
+                return ResourceManager.GetString("ApprovedBySupervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Binary Data.
         /// </summary>
         internal static string BinaryData {
@@ -273,6 +300,15 @@ namespace Resources {
         internal static string DataExport_Header {
             get {
                 return ResourceManager.GetString("DataExport_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviews in {{status}}..
+        /// </summary>
+        internal static string DataExport_InterviewsStatus {
+            get {
+                return ResourceManager.GetString("DataExport_InterviewsStatus", resourceCulture);
             }
         }
         
@@ -615,6 +651,15 @@ namespace Resources {
         internal static string GoogleDrive {
             get {
                 return ResourceManager.GetString("GoogleDrive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviewer assigned  status.
+        /// </summary>
+        internal static string InterviewerAssigned {
+            get {
+                return ResourceManager.GetString("InterviewerAssigned", resourceCulture);
             }
         }
         

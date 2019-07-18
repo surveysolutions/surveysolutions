@@ -22,6 +22,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public DateTime? DateEnd { get; set; }
         public UserRoles? UserRole { get; set; }
         public AssignmentReceivedState ReceivedByTablet { get; set; }
+        public int? Id { get; set; }
 
         [Flags]
         public enum SearchTypes

@@ -747,7 +747,7 @@ main .flex-row {
             animation-timing-function: linear;
     background: -webkit-gradient(linear, left top, right top, color-stop(8%, #eeeeee), color-stop(18%, #dddddd), color-stop(33%, #eeeeee));
     background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
-    height: 64px;
+    height: 55px;
     position: relative; }
   .card-loading .background-masker {
     position: absolute; }
@@ -903,12 +903,6 @@ main .flex-row {
   transition: all 0.2ms linear; }
   .interview-setup .row-element textarea::-webkit-input-placeholder,
   .interview-setup .row-element input::-webkit-input-placeholder {
-    font: 14px/16px Arial, "Helvetica Neue", Helvetica, sans-serif;
-    text-transform: none;
-    letter-spacing: normal;
-    font-style: italic; }
-  .interview-setup .row-element textarea::-moz-placeholder,
-  .interview-setup .row-element input::-moz-placeholder {
     font: 14px/16px Arial, "Helvetica Neue", Helvetica, sans-serif;
     text-transform: none;
     letter-spacing: normal;
