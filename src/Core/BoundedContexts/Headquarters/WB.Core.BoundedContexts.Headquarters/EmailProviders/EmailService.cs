@@ -11,6 +11,7 @@ using SendGrid;
 using SendGrid.Helpers.Mail;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using AmazonContent = Amazon.SimpleEmail.Model.Content;
@@ -100,11 +101,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
                 if (responseErrors != null)
                 {
                     var errors = responseErrors.Errors.Select(x => $"{x.Message} For more information go to: {x.Help}").ToArray();
-                    throw new EmailServiceException(to, response.StatusCode, errors);
+                    throw new EmailServiceException(to, response.StatusCode, null, errors);
                 }
             }
 
-            throw new EmailServiceException(to, response.StatusCode, new string[0]);
+            throw new EmailServiceException(to, response.StatusCode);
         }
 
         private class SendGridResponseErrors
@@ -158,9 +159,14 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
                     var response = await client.SendEmailAsync(sendRequest);
                     return response.MessageId;
                 }
+                catch (AggregateException ae)
+                {
+                    throw new EmailServiceException(to, HttpStatusCode.Accepted, ae, 
+                        ae.UnwrapAllInnerExceptions().Select(x => x.Message).ToArray());
+                }
                 catch (Exception ex)
                 {
-                    throw new EmailServiceException(to, HttpStatusCode.Accepted, new[] {ex.Message});
+                    throw new EmailServiceException(to, HttpStatusCode.Accepted, ex, ex.Message);
                 }
             }
         }

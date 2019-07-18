@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage
         public void Load(IIocRegistry registry)
         {
             registry.Bind<IAudioFileStorage, AudioFileStorage>();
-            registry.Bind<IAudioAuditFileStorage, AudioAuditFileStorage>();
+            
 
             var isS3Enabled = ConfigurationManager.AppSettings["Storage.S3.Enable"].ToBool(true);
 
@@ -53,10 +53,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage
                 registry.BindToMethod<ITransferUtility>(c => new TransferUtility(c.Get<IAmazonS3>()));
 
                 registry.BindAsSingleton<IImageFileStorage, S3ImageFileStorage>();
+                registry.Bind<IAudioAuditFileStorage, AudioAuditFileS3Storage>();
             }
             else
             {
                 registry.Bind<IExternalFileStorage, NoExternalFileSystemStorage>();
+                registry.Bind<IAudioAuditFileStorage, AudioAuditFileStorage>();
 
                 registry.BindAsSingletonWithConstructorArgument<IImageFileStorage, ImageFileStorage>(
                     "rootDirectoryPath", this.currentFolderPath);

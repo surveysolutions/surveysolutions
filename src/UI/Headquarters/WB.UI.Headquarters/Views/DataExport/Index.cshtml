@@ -31,7 +31,7 @@
             '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "DeleteDataExportProcess"})';
 
         var $ExportToExternalStorageUrl =
-            '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "ExportToExternalStorage"}, Request.Url.Scheme)';
+            '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "ExportToExternalStorage"}, Request.UrlScheme())';
         $(function() {
             var templates = @Html.Raw(Json.Encode(Model.Questionnaires.Select(q => new
             {

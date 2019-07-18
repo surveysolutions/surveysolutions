@@ -53,6 +53,14 @@ namespace WB.Tests.Unit.Designer
             }
         }
 
+        public static void ShouldContainWarning(this IEnumerable<QuestionnaireVerificationMessage> messages, string code, Func<string, bool> messageChecker)
+        {
+            messages.Should().Contain(m
+                => m.MessageLevel == VerificationMessageLevel.Warning
+                && m.Code == code
+                && messageChecker.Invoke(m.Message));
+        }
+
         public static void ShouldContainError(this IEnumerable<QuestionnaireVerificationMessage> messages, string code)
             => messages
                 .Where(m => m.MessageLevel == VerificationMessageLevel.General)

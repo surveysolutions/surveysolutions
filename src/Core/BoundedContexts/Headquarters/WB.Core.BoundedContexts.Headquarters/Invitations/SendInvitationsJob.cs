@@ -5,7 +5,6 @@ using Quartz;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 
 namespace WB.Core.BoundedContexts.Headquarters.Invitations
 {
@@ -29,20 +28,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             this.invitationMailingService = invitationMailingService;
         }
 
-        public Task Execute(IJobExecutionContext context)
+        public async Task Execute(IJobExecutionContext context)
         {
             try
             {
                 if (!emailService.IsConfigured())
-                    return Task.CompletedTask;
+                    return;
 
                 InvitationDistributionStatus status = invitationService.GetEmailDistributionStatus();
 
                 if (status == null)
-                    return Task.CompletedTask;
+                    return;
 
                 if (status.Status > InvitationProcessStatus.InProgress)
-                    return Task.CompletedTask;
+                    return;
 
                 this.logger.Debug("Invitations distribution job: Started");
 
@@ -61,7 +60,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                     var address = invitation.Assignment.Email;
                     try
                     {
-                        invitationMailingService.SendInvitationAsync(invitationId, invitation.Assignment).WaitAndUnwrapException();
+                        await invitationMailingService.SendInvitationAsync(invitationId, invitation.Assignment);
                     }
                     catch (EmailServiceException e)
                     {
@@ -86,12 +85,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 this.logger.Error($"Invitations distribution job: FAILED. Reason: {ex.Message} ", ex);
             }
 
-            return Task.CompletedTask;
+            return;
         }
     }
 
     public class SendInvitationsTask : BaseTask
     {
-        public SendInvitationsTask(IScheduler scheduler) : base(scheduler, "Send invitations", typeof(SendInvitationsJob)) { }
+        public SendInvitationsTask(IScheduler scheduler) 
+            : base(scheduler, "Send invitations", typeof(SendInvitationsJob)) { }
     }
 }
