@@ -2024,6 +2024,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Current user was created on another instance of Headquarters application. Change synchronization endpoint URL to the original server.
+        /// </summary>
+        public static string Synchronization_UserLinkedToAnotherServer_Description {
+            get {
+                return ResourceManager.GetString("Synchronization_UserLinkedToAnotherServer_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User linked to another server.
+        /// </summary>
+        public static string Synchronization_UserLinkedToAnotherServer_Status {
+            get {
+                return ResourceManager.GetString("Synchronization_UserLinkedToAnotherServer_Status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Authentication problem. We were unable to confirm your credentials &apos;{0}&apos;. Your account may have a different password, be locked or deleted. Please re-enter your password. If the problem persists, contact your Supervisor or Headquarters..
         /// </summary>
         public static string Synchronization_UserPassword_Update_Format {

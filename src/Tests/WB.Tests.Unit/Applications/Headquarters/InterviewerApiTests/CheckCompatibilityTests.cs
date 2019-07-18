@@ -4,10 +4,12 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using FluentAssertions.Common;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
+using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -15,6 +17,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Tests.Abc;
+using WB.Tests.Abc.Storage;
 using WB.UI.Headquarters.API.DataCollection.Interviewer;
 
 namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
@@ -22,6 +25,21 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
     [TestOf(nameof(InterviewerApiController.CheckCompatibility))]
     public class CheckCompatibilityTests
     {
+        [Test]
+        public void when_user_is_linked_to_another_server_should_not_allow_to_synchronize()
+        {
+            var tenantSettings = new TestInMemoryKeyValueStorage<TenantSettings>();
+            tenantSettings.Store(new TenantSettings{ TenantPublicId = "server id"}, AppSetting.TenantSettingsKey);
+
+            var controller = Create.Controller.InterviewerApiController(tenantSettings: tenantSettings);
+
+            // Act 
+            var response  = controller.CheckCompatibility("device", 1, "client id");
+
+            // Assert
+            Assert.That(response, Has.Property(nameof(HttpResponseMessage.StatusCode)).EqualTo(HttpStatusCode.Conflict));
+        }
+
         [Test]
         public void when_resolved_comment_exists_and_client_has_7090_protocol_Should_not_allow_to_synchronize()
         {
