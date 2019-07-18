@@ -2,6 +2,7 @@
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
+using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -17,7 +18,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
 
         public SettingsV2Controller(IPlainKeyValueStorage<CompanyLogo> appSettingsStorage,
             IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage,
-            ISecureStorage secureStorage) : base(appSettingsStorage, secureStorage)
+            IPlainKeyValueStorage<TenantSettings> tenantSettings,
+            ISecureStorage secureStorage) : base(appSettingsStorage, tenantSettings, secureStorage)
         {
             this.interviewerSettingsStorage = interviewerSettingsStorage;
         }
@@ -36,5 +38,11 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
         [HttpGet]
         public override bool NotificationsEnabled() =>
             this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings).IsDeviceNotificationsEnabled();
+
+        [HttpGet]
+        public override HttpResponseMessage TenantId()
+        {
+            return base.TenantId();
+        }
     }
 }

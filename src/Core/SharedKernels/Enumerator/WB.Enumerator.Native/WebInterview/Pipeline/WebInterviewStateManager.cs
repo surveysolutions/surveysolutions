@@ -28,7 +28,7 @@ namespace WB.Enumerator.Native.WebInterview.Pipeline
             var interviewId = hub.Context.QueryString[@"interviewId"];
             string questionnaireId = null;
 
-            InScopeExecutor.Current.ExecuteActionInScope(ls =>
+            InScopeExecutor.Current.Execute(ls =>
             {
                 var interviewRepository = ls.GetInstance<IStatefulInterviewRepository>();
 

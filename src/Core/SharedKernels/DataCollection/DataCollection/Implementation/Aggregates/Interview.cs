@@ -1538,14 +1538,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 false,
                 command.OriginDate,
                 true));
-
-            this.ApplyEvents(treeDifference, command.UserId);
-
+            
             this.ApplyEvent(new SupervisorAssigned(command.UserId, command.UserId, command.OriginDate));
             this.ApplyEvent(new InterviewKeyAssigned(new InterviewKey(0), command.OriginDate));
 
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null,
                 previousStatus: InterviewStatus.SupervisorAssigned, originDate: command.OriginDate));
+
+            this.ApplyEvents(treeDifference, command.UserId);
         }
 
         public void CreateInterview(CreateInterview command)
@@ -1573,8 +1573,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 command.OriginDate,
                 questionnaire.IsUsingExpressionStorage()));
 
-            this.ApplyEvents(treeDifference, command.UserId);
-
+            
             this.ApplyEvent(new SupervisorAssigned(command.UserId, command.SupervisorId, command.OriginDate));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null, previousStatus: null, originDate: command.OriginDate));
 
@@ -1594,6 +1593,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 this.SwitchTranslation(new SwitchTranslation(this.EventSourceId, defaultTranslation, command.UserId));
             }
+
+            this.ApplyEvents(treeDifference, command.UserId);
         }
 
         private void ProtectAnswers(InterviewTree changedInterviewTree, List<string> protectedAnswers)

@@ -48,7 +48,6 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
             cancellationToken.ThrowIfCancellationRequested();
             var api = this.tenantApi.For(settings.Tenant);
-
             var interviewsToExport = this.interviewsToExportSource.GetInterviewsToExport(
                 settings.QuestionnaireId, settings.Status, settings.FromDate, settings.ToDate);
 
@@ -61,7 +60,9 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             long interviewsProcessed = 0;
             foreach (var interviewBatch in interviewsToExport.Batch(batchSize))
             {
-                var interviewIds = interviewBatch.Select(i => i.Id).ToArray();
+                //var interviewIds = interviewBatch.Select(i => i.Id).ToArray();
+                var interviewsKeyMap = interviewBatch.ToDictionary(i => i.Id, i => i.Key);
+                var interviewIds = interviewsKeyMap.Keys.ToArray();
 
                 var allMultimediaAnswers = this.interviewFactory.GetMultimediaAnswersByQuestionnaire(questionnaire, interviewIds, cancellationToken);
 
@@ -82,6 +83,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                         var data = new BinaryData
                         {
                             InterviewId = answer.InterviewId,
+                            InterviewKey = interviewsKeyMap[answer.InterviewId],
                             FileName = answer.Answer
                         };
 
@@ -92,12 +94,15 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                                 data.Content = await imageContent.ReadAsStreamAsync();
                                 data.ContentLength = imageContent.Headers.ContentLength ?? 0;
                                 data.Type = BinaryDataType.Image;
+                                
+
                                 break;
                             case MultimediaType.Audio:
                                 var audioContent = await api.GetInterviewAudioAsync(answer.InterviewId, answer.Answer);
                                 data.Content = await audioContent.ReadAsStreamAsync();
                                 data.ContentLength = audioContent.Headers.ContentLength ?? 0;
                                 data.Type = BinaryDataType.Audio;
+                                
                                 break;
                             default:
                                 continue;
@@ -119,7 +124,6 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                     }
                 }
 
-
                 foreach (var audioAuditInfo in audioAuditInfos)
                 {
                     foreach (var fileName in audioAuditInfo.FileNames)
@@ -128,13 +132,14 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                         {
                             var audioContent = await api.GetAudioAuditAsync(audioAuditInfo.InterviewId, fileName);
                             var content = await audioContent.ReadAsStreamAsync();
-                            //audioContent.Headers.ContentLength
 
                             await binaryDataAction(new BinaryData
                             {
                                 InterviewId = audioAuditInfo.InterviewId,
+                                InterviewKey = interviewsKeyMap[audioAuditInfo.InterviewId],
                                 FileName = fileName,
                                 Content = content,
+                                ContentLength = audioContent.Headers.ContentLength ?? 0,
                                 Type = BinaryDataType.AudioAudit
                             });
 
@@ -145,7 +150,6 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                             var batchInterviewsProgress = batchProgress.PercentOf(interviewsToExport.Count);
 
                             progress.Report(interviewProgress + batchInterviewsProgress);
-
                         }
                         catch (ApiException e) when (e.StatusCode == HttpStatusCode.NotFound)
                         {

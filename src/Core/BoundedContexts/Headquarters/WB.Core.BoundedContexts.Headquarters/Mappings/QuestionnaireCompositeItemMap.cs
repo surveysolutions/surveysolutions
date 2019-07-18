@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.VariableLabel, p => p.Column("variable_label"));
             Property(x => x.QuestionText, p => p.Column("question_text"));
 
-            Bag(x => x.Answers, mapper =>
+            Set(x => x.Answers, mapper =>
             {
                 mapper.Lazy(CollectionLazy.Extra);
                 mapper.Table("questionnaire_entities_answers");

@@ -104,7 +104,7 @@ namespace WB.UI.WebTester.Services.Implementation
                 new NLogLoggingModule()
                 );
 
-            kernel.InitAsync().Wait();
+            kernel.InitAsync(false).Wait();
         }
 
         private static readonly Gauge AppDomainsAliveGauge =

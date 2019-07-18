@@ -25,6 +25,7 @@
         var $detailsUrl = '@Url.Action("Review", "Interview")';
         var $surveysUrl = '@Url.Action("SurveysAndStatuses", "Reports")';
         var $profileUrl = '@Url.Action("Profile", "Interviewer")';
+        var $assignmentsUrl = '@Url.Action("Index","Assignments")';
         var commandExecutionUrl =
             '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "CommandApi", action = "ExecuteCommands"})';
         var statistics =
@@ -337,7 +338,9 @@
                                                 <span data-bind="text: ReceivedByInterviewer() ? '@Common.Yes' : '@Common.No'"></span>
                                             </td>
                                             <td>
-                                                <span data-bind="text: AssignmentId() ? AssignmentId() : ''"></span>
+                                                <a data-bind="attr: { href: $assignmentsUrl + '?id=' + AssignmentId() }">
+                                                    <!-- ko text:AssignmentId --><!--/ko-->
+                                                </a>
                                             </td>
                                         </tr>
                                         <!-- /ko -->
