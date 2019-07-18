@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
 
@@ -25,6 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.SpeedReport
 
             statusEventsToPublish.Add(Create.PublishedEvent.InterviewCreated(interviewId: interviewId, originDate: createdDate));
             statusEventsToPublish.Add(Create.PublishedEvent.InterviewerAssigned(interviewId: interviewId));
+            statusEventsToPublish.Add(Create.PublishedEvent.InterviewStatusChanged(interviewId, status: InterviewStatus.InterviewerAssigned));
             statusEventsToPublish.Add(Create.PublishedEvent.TextQuestionAnswered(interviewId: interviewId, originDate: firstAnswerDate));
 
             var denormalizer = CreateDenormalizer(interviewSummariesStorage);
@@ -52,6 +54,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.SpeedReport
             statusEventsToPublish.Add(Create.PublishedEvent.InterviewCreated(interviewId: interviewId, originDate: createdDate));
             statusEventsToPublish.Add(Create.PublishedEvent.SupervisorAssigned(interviewId: interviewId));
             statusEventsToPublish.Add(Create.PublishedEvent.InterviewerAssigned(interviewId: interviewId));
+            statusEventsToPublish.Add(Create.PublishedEvent.InterviewStatusChanged(interviewId, status: InterviewStatus.InterviewerAssigned));
             statusEventsToPublish.Add(Create.PublishedEvent.DateTimeQuestionAnswered(interviewId: interviewId, originDate: firstAnswerDate));
             statusEventsToPublish.Add(Create.PublishedEvent.TextQuestionAnswered(interviewId: interviewId, originDate: DateTimeOffset.Now));
 
