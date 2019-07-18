@@ -38,8 +38,8 @@
         getScenarioUrl: '@Model.GetScenarioUrl',
         loadedMessage: '@TempData["Message"]',
         customTexts: {
-            completeButton: "@HttpUtility.JavaScriptStringEncode(WebInterview.Complete)",
-            noteToSupervisor: "@HttpUtility.JavaScriptStringEncode(WebInterview.NoteForSupervisor)"
+            completeButton: "@Html.Raw(HttpUtility.JavaScriptStringEncode(WebInterview.Complete))",
+            noteToSupervisor: "@Html.Raw(HttpUtility.JavaScriptStringEncode(WebInterview.NoteForSupervisor))"
         }
     }
     </script>
