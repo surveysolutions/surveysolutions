@@ -24,7 +24,7 @@
         var $impersonateUrl = '@Url.Action("ObservePerson", "Account", new {area = string.Empty})';
         var $archiveUsersUrl =
             '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UsersApi", action = "ArchiveUsers"})';
-        var $interviewersPageUrl = '@Html.Raw(@Url.Action("Index", "Interviewers", new {}, Request.Url.Scheme))';
+        var $interviewersPageUrl = '@Html.Raw(@Url.Action("Index", "Interviewers", new {}))';
         var $supervisorsUrl =
             '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "Supervisors"})';
         var $moveUserToAnotherTeamUrl =

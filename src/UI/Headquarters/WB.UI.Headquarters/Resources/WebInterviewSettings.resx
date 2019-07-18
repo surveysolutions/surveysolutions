@@ -240,4 +240,14 @@
   <data name="EmailTemplateDescription" xml:space="preserve">
     <value>You can use %SURVEYNAME% placeholder in the text as a name of survey</value>
   </data>
+  <data name="CompletePage" xml:space="preserve">
+    <value>Complete</value>
+  </data>
+  <data name="Complete" xml:space="preserve">
+    <value>Complete</value>
+    <comment>Complete button title</comment>
+  </data>
+  <data name="NoteToSupervisor" xml:space="preserve">
+    <value>Note for supervisor</value>
+  </data>
 </root>

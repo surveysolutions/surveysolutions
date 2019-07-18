@@ -1,5 +1,6 @@
 ﻿using System.Web;
 using System.Web.Mvc;
+using ASP;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {
@@ -64,7 +65,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
         {
             var url = new UrlHelper(HttpContext.Current.Request.RequestContext);
 
-            return url.Action(action, controller, routes, HttpContext.Current.Request.Url.Scheme);
+            return url.Action(action, controller, routes, HttpContext.Current.Request.UrlScheme());
         }
     }
 }

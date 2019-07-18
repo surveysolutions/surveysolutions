@@ -6,6 +6,6 @@
         public const string InterviewerExtendedFileName = "WBCapi.Ext.apk";
 
         public const string SupervisorFileName = "Supervisor.apk";
-        public const string Directory = (@"~/Client/");
+        public const string InterviewerResponseFileName = "interviewer.apk";
     }
 }

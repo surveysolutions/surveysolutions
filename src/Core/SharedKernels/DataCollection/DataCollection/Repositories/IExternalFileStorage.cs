@@ -20,6 +20,7 @@ namespace WB.Core.SharedKernels.DataCollection.Repositories
         Task<FileObject> StoreAsync(string path, Stream inputStream, string contentType, IProgress<int> progress = null);
 
         FileObject GetObjectMetadata(string key);
+
         bool IsExist(string path);
     }
 }

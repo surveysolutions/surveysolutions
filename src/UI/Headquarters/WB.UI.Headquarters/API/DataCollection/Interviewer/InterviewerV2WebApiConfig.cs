@@ -36,6 +36,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
             config.TypedRoute("api/interviewer/v2/translations/{id}",
                 c => c.Action<TranslationsApiV2Controller>(x => x.Get(Param.Any<string>())));
             config.TypedRoute("api/interviewer/v2/companyLogo", c => c.Action<SettingsV2Controller>(x => x.CompanyLogo()));
+            config.TypedRoute("api/interviewer/v2/tenantId", c => c.Action<SettingsV2Controller>(x => x.TenantId()));
             config.TypedRoute("api/interviewer/v2/autoupdate", c => c.Action<SettingsV2Controller>(x => x.AutoUpdateEnabled()));
             config.TypedRoute("api/interviewer/v2/notifications", c => c.Action<SettingsV2Controller>(x => x.NotificationsEnabled()));
             config.TypedRoute("api/interviewer/v2/encryption-key", c => c.Action<SettingsV2Controller>(x => x.PublicKeyForEncryption()));

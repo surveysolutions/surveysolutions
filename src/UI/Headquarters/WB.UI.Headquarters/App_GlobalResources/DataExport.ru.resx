@@ -377,13 +377,28 @@
   <data name="DataExportApiInfoPage" xml:space="preserve">
     <value>Справочник по API экспорта данных</value>
   </data>
-  <data name="Error_Canceled" xml:space="preserve"> 
-    <value>Экспорт был отменен пользователем.</value> 
+  <data name="Error_Canceled" xml:space="preserve">
+    <value>Экспорт был отменен пользователем.</value>
   </data>
-  <data name="Error_NotEnoughExternalStorageSpace" xml:space="preserve"> 
-    <value>Недостаточно свободного места на выбранном внешнем хранилище. Освободите место, запустите экспорт заново или выберите другого провайдера.</value> 
+  <data name="Error_NotEnoughExternalStorageSpace" xml:space="preserve">
+    <value>Недостаточно свободного места на выбранном внешнем хранилище. Освободите место, запустите экспорт заново или выберите другого провайдера.</value>
   </data>
-  <data name="Error_Unhandled" xml:space="preserve"> 
-    <value>Во время экспорта произошла непредвиденная ошибка. Приносим извинения за неудобства. Пожалуйста, свяжитесь со службой поддержки support@mysurvey.solutions.</value> 
+  <data name="Error_Unhandled" xml:space="preserve">
+    <value>Во время экспорта произошла непредвиденная ошибка. Приносим извинения за неудобства. Пожалуйста, свяжитесь со службой поддержки support@mysurvey.solutions.</value>
+  </data>
+  <data name="AllStatuses" xml:space="preserve">
+    <value>любом статусе</value>
+  </data>
+  <data name="ApprovedByHeadquarters" xml:space="preserve">
+    <value>статусе утверждено хедквотером</value>
+  </data>
+  <data name="ApprovedBySupervisor" xml:space="preserve">
+    <value>статусе утверждено супервизором</value>
+  </data>
+  <data name="DataExport_InterviewsStatus" xml:space="preserve">
+    <value>Интервью в {{status}}.</value>
+  </data>
+  <data name="InterviewerAssigned" xml:space="preserve">
+    <value>статусе назначено на интервьюера</value>
   </data>
 </root>

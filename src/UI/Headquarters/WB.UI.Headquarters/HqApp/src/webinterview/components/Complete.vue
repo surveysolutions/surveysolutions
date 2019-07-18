@@ -41,7 +41,7 @@
         </div>
         <div class="wrapper-info">
             <div class="container-info">
-                <label class="gray-uppercase" for="comment-for-supervisor">{{ $t('WebInterviewUI.CompleteNoteToSupervisor')}}</label>
+                <label class="gray-uppercase" for="comment-for-supervisor">{{ noteToSupervisor }}</label>
                 <div class="field">
                     <textarea class="field-to-fill" id="comment-for-supervisor" :placeholder="$t('WebInterviewUI.TextEnter')" v-model="comment"></textarea>
                     <button type="submit" class="btn btn-link btn-clear">
@@ -87,7 +87,10 @@
                 return this.$store.state.webinterview.interviewCompleted && this.$config.inWebTesterMode
             },
             competeButtonTitle() {
-                return this.$t("WebInterviewUI.Complete")
+                return this.$config.customTexts.completeButton
+            },
+            noteToSupervisor() {
+                return this.$config.customTexts.noteToSupervisor
             },
             hasCompleteInfo() {
                 return this.completeInfo != undefined
