@@ -27,23 +27,13 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
 
         public async Task ExecuteAsync(IEnumerable<CommittedEvent> events)
         {
-            var exceptions = new List<Exception>();
-
             foreach (var @event in events)
             foreach (var viewModel in this.viewModelEventRegistry.GetViewModelsByEvent(@event))
             {
                 var eventType = @event.Payload.GetType();
                 var viewModelType = viewModel.GetType();
 
-                var isAsyncHandler = viewModelType
-                    .GetTypeInfo()
-                    .ImplementedInterfaces
-                    .Where(type =>
-                        type.IsGenericType && type.GetGenericTypeDefinition() ==
-                        typeof(IAsyncViewModelEventHandler<>))
-                    .Any(type => type.GetTypeInfo().GenericTypeArguments.Single() == eventType);
-
-                var methodName = $"Handle{(isAsyncHandler ? "Async" : "")}";
+                var methodName = $"Handle{(this.viewModelEventRegistry.IsAsyncViewModelHandleMethod(viewModelType, eventType) ? "Async" : "")}";
 
                 var handler = viewModelType
                     .GetRuntimeMethod(methodName, new[] { eventType });
@@ -55,17 +45,14 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
                 }
                 catch (Exception e)
                 {
-                    exceptions.Add(new Exception(
-                        $"Unhandled exception in {viewModelType.Name}.{methodName}<{eventType.Name}>", e));
+                    this.logger.Error($"Unhandled exception in {viewModelType.Name}.{methodName}<{eventType.Name}>", e);
+
+                    ((BaseInterviewViewModel) this.currentViewModelPresenter.CurrentViewModel)?.ReloadCommand?.Execute();
+
+                    return;
                 }
             }
 
-            if (exceptions.Count > 0)
-            {
-                this.logger.Error("Exception(s) during update view models", new AggregateException(exceptions));
-
-                ((BaseInterviewViewModel) this.currentViewModelPresenter.CurrentViewModel)?.ReloadCommand?.Execute();
-            }
         }
     }
 }

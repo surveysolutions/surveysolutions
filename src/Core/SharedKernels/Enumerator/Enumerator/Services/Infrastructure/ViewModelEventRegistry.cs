@@ -10,7 +10,10 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
     {
         private readonly Dictionary<Type, Dictionary<string, HashSet<IViewModelEventHandler>>> eventTypes =
             new Dictionary<Type, Dictionary<string, HashSet<IViewModelEventHandler>>>();
-        
+
+        private readonly Dictionary<(Type, Type), bool> asyncViewModelHandleMethods =
+            new Dictionary<(Type, Type), bool>();
+
         public void Subscribe(IViewModelEventHandler handler, string aggregateRootId)
         {
             lock (this.eventTypes)
@@ -58,6 +61,31 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
             if(!this.eventTypes[eventType].ContainsKey(eventSourceId)) return new IViewModelEventHandler[0];
 
             return this.eventTypes[eventType][eventSourceId].ToList();
+        }
+
+        public bool IsAsyncViewModelHandleMethod(Type viewModelType, Type eventType)
+        {
+            var handleMethodKey = (viewModelType, eventType);
+
+            lock (this.asyncViewModelHandleMethods)
+            {
+                if (!this.asyncViewModelHandleMethods.ContainsKey(handleMethodKey))
+                {
+                    var isAsync = viewModelType
+                        .GetTypeInfo()
+                        .ImplementedInterfaces
+                        .Where(type =>
+                            type.IsGenericType && type.GetGenericTypeDefinition() ==
+                            typeof(IAsyncViewModelEventHandler<>))
+                        .Any(type => type.GetTypeInfo().GenericTypeArguments.Single() == eventType);
+
+
+                    this.asyncViewModelHandleMethods.Add(handleMethodKey, isAsync);
+
+                }
+
+                return this.asyncViewModelHandleMethods[handleMethodKey];
+            }
         }
 
         public void RemoveAggregateRoot(string aggregateRootId)
