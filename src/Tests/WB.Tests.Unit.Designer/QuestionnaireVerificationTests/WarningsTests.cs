@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -815,5 +816,18 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             => Create
                 .SingleOptionQuestion(answerCodes: new decimal[] { 1, 2, 3, 4, 5 })
                 .ExpectNoWarning("WB0228");
+
+        [Test]
+        public void single_option_with_options_where_code_and_title_are_numbers_but_are_not_equeals()
+            => Create
+                .SingleOptionQuestion(answers: new List<Answer>
+                {
+                    new Answer() { AnswerValue = "1", AnswerText = "1" }, 
+                    new Answer() { AnswerValue = "2", AnswerText = "2" }, 
+                    new Answer() { AnswerValue = "3", AnswerText = "4" }, 
+                    new Answer() { AnswerValue = "4", AnswerText = "7" }, 
+                    new Answer() { AnswerValue = "10", AnswerText = "10+" }, 
+                })
+                .ExpectWarning("WB0288");
     }
 }

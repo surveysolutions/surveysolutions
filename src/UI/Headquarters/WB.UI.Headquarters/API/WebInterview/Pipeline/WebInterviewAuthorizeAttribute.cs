@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 
         public override bool AuthorizeHubConnection(HubDescriptor hubDescriptor, IRequest request)
         {
-            InScopeExecutor.Current.ExecuteActionInScope((serviceLocatorLocal) =>
+            InScopeExecutor.Current.Execute((serviceLocatorLocal) =>
             {
                 CheckPermissions(request, serviceLocatorLocal);
             });
@@ -30,7 +30,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
         public override bool AuthorizeHubMethodInvocation(IHubIncomingInvokerContext hubIncomingInvokerContext, 
             bool appliesToMethod)
         {
-            return InScopeExecutor.Current.ExecuteFunctionInScope((serviceLocatorLocal) =>
+            return InScopeExecutor.Current.Execute((serviceLocatorLocal) =>
             {
                 try
                 {

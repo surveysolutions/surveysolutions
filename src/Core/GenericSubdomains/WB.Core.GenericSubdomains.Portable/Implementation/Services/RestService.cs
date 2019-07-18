@@ -7,7 +7,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable.Implementation.Compression;
@@ -51,7 +50,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 restServicePointManager?.AcceptUnsignedSslCertificate();
         }
 
-        private Task<ExecuteRequestResult> ExecuteRequestAsync(
+        private async Task<ExecuteRequestResult> ExecuteRequestAsync(
             string url,
             HttpMethod method,
             object queryString = null,
@@ -63,7 +62,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             IProgress<TransferProgress> progress = null)
         {
             var compressedJsonContent = this.CreateCompressedJsonContent(request);
-            return this.ExecuteRequestAsync(url, method, queryString, compressedJsonContent, credentials, forceNoCache,
+            return await this.ExecuteRequestAsync(url, method, queryString, compressedJsonContent, credentials, forceNoCache,
                 customHeaders, userCancellationToken, progress);
         }
 
@@ -229,10 +228,10 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             return ex.Call.Response.ReasonPhrase;
         }
 
-        public Task GetAsync(string url, object queryString, RestCredentials credentials, bool forceNoCache,
+        public async Task GetAsync(string url, object queryString, RestCredentials credentials, bool forceNoCache,
             Dictionary<string, string> customHeaders, CancellationToken? token)
         {
-            return this.ExecuteRequestAsync(url: url,
+            await this.ExecuteRequestAsync(url: url,
                 queryString: queryString,
                 credentials: credentials,
                 method: HttpMethod.Get,
@@ -242,9 +241,9 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 request: null);
         }
 
-        public Task PostAsync(string url, object request, RestCredentials credentials = null, CancellationToken? token = null)
+        public async Task PostAsync(string url, object request, RestCredentials credentials = null, CancellationToken? token = null)
         {
-            return this.ExecuteRequestAsync(url: url,
+            await this.ExecuteRequestAsync(url: url,
                 credentials: credentials,
                 method: HttpMethod.Post,
                 request: request ?? string.Empty,
@@ -518,5 +517,4 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
         internal enum RestContentType { Unknown, Json }
         internal enum RestContentCompressionType { None, GZip, Deflate }
     }
-
 }

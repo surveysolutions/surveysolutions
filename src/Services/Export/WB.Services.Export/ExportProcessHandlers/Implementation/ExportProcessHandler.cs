@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Amazon.Runtime.Internal.Util;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Models;
@@ -18,9 +20,11 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
         private readonly IOptions<ExportServiceSettings> interviewDataExportSettings;
         private readonly IDataExportFileAccessor dataExportFileAccessor;
         private readonly IPublisherToExternalStorage publisherToExternalStorage;
+        private readonly ILogger<ExportProcessHandler> logger;
         private readonly IFileBasedExportedDataAccessor fileBasedExportedDataAccessor;
         private readonly IArchiveUtils archiveUtils;
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly IExportFileNameService exportFileNameService;
 
         public ExportProcessHandler(IExportHandlerFactory exportHandlerFactory,
             IDataExportProcessesService dataExportProcessesService,
@@ -29,7 +33,9 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             IFileSystemAccessor fileSystemAccessor,
             IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
             IArchiveUtils archiveUtils,
-            IPublisherToExternalStorage publisherToExternalStorage)
+            IPublisherToExternalStorage publisherToExternalStorage,
+            ILogger<ExportProcessHandler> logger, 
+            IExportFileNameService exportFileNameService)
         {
             this.exportHandlerFactory = exportHandlerFactory;
             this.dataExportProcessesService = dataExportProcessesService;
@@ -39,15 +45,18 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             this.fileBasedExportedDataAccessor = fileBasedExportedDataAccessor;
             this.archiveUtils = archiveUtils;
             this.publisherToExternalStorage = publisherToExternalStorage;
+            this.logger = logger;
+            this.exportFileNameService = exportFileNameService;
         }
 
         public async Task ExportDataAsync(DataExportProcessArgs process, CancellationToken cancellationToken)
         {
             var state = new ExportState(process);
             var handler = exportHandlerFactory.GetHandler(state.ExportFormat, state.StorageType);
-
+            
             HandleProgress(state);
-            PrepareOutputArchive(state);
+
+            await PrepareOutputArchive(state, cancellationToken);
 
             CreateTemporaryFolder(state);
 
@@ -56,25 +65,31 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                 // ReSharper disable once InconsistentlySynchronizedField
                 this.dataExportProcessesService.ChangeStatusType(state.ProcessId, DataExportStatus.Running);
 
+                logger.LogTrace("Start of data export");
                 await handler.ExportDataAsync(state, cancellationToken);
 
                 if (state.RequireCompression)
                 {
                     await Compress(state, cancellationToken);
+                }
 
-                    if (state.RequirePublishToArtifactStorage)
-                    {
-                        await PublishToArtifactStorage(state, cancellationToken);
-                    }
+                if (state.RequirePublishToArtifactStorage)
+                {
+                    await PublishToArtifactStorage(state, cancellationToken);
+                }
 
-                    if (state.RequirePublishToExternalStorage)
-                    {
-                        await PublishToExternalStorage(state, cancellationToken);
-                    }
+                if (state.RequirePublishToExternalStorage)
+                {
+                    await PublishToExternalStorage(state, cancellationToken);
                 }
             }
             finally
             {
+                if (state.ShouldDeleteResultExportFile == true)
+                {
+                    File.Delete(state.ArchiveFilePath);
+                }
+
                 DeleteExportTempDirectory(state);
             }
         }
@@ -96,8 +111,10 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
         private async Task PublishToArtifactStorage(ExportState state, CancellationToken cancellationToken)
         {
             // ReSharper disable once InconsistentlySynchronizedField
-            await this.dataExportFileAccessor.PublishArchiveToArtifactsStorageAsync(state.Settings.Tenant,
+            var isFilePublished = await this.dataExportFileAccessor.PublishArchiveToArtifactsStorageAsync(state.Settings.Tenant,
                 state.ArchiveFilePath, state.Progress, cancellationToken);
+
+            state.ShouldDeleteResultExportFile = isFilePublished;
         }
 
         private void CreateTemporaryFolder(ExportState state)
@@ -108,9 +125,10 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             RecreateExportTempDirectory(state);
         }
 
-        private void PrepareOutputArchive(ExportState state)
+        private async Task PrepareOutputArchive(ExportState state, CancellationToken cancellationToken)
         {
             state.ArchiveFilePath = this.fileBasedExportedDataAccessor.GetArchiveFilePathForExportedData(state.Settings);
+            state.QuestionnaireName = await this.exportFileNameService.GetQuestionnaireDirectoryName(state.Settings, cancellationToken);
         }
 
         private void RecreateExportTempDirectory(ExportState state)

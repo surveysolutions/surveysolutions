@@ -3,18 +3,26 @@
         <div class="top-row">
             <div class="format-data" :class="format">
                 <div class="gray-text-row"><b>#{{processId}}</b> {{$t('DataExport.DataExport_QueuedOn', { date: beginDate }) }}</div>
-                <div class="h3 mb-05">{{ $t('DataExport.DataExport_QuestionnaireWithVersion', { title: questionnaireTitle,  version: questionnaireIdentity.version}) }}</div>
-                <p class="mb-0 font-regular"><u class="font-bold">{{format}}</u> format. Interviews in <u class="font-bold">{{interviewStatus}}</u>.</p>
+                <div class="h3 mb-05" v-if="questionnaireIdentity != null">{{ $t('DataExport.DataExport_QuestionnaireWithVersion', 
+                        { title: questionnaireTitle,  version: questionnaireIdentity.version}) }}</div>
+                <p class="mb-0 font-regular"><u class="font-bold">{{format}}</u> format.<span 
+                    v-if="format!='DDI' && interviewStatus != null" class="font-bold">{{ $t('DataExport.DataExport_InterviewsStatus', {
+                        status: $t('DataExport.'+ interviewStatus) , 
+                        interpolation: {escapeValue: false} }) }}</span></p>
             </div>
         </div>
         <div class="bottom-row" :class="{'is-failed': isFailed, 'is-successful': isSuccessfull }">
             <div class="export-destination" :class="fileDestination">
-                <p>{{ $t('DataExport.DataExport_Destination', { dest: $t(`DataExport.DataExport_Destination_${fileDestination}`)}) }}</p>
+                <p><span v-if="fileDestination != null">{{ 
+                    $t('DataExport.DataExport_Destination', { 
+                        dest: $t(`DataExport.DataExport_Destination_${fileDestination}`)}) 
+                    }}</span></p>
                 <div class="d-flex ai-center" v-if="isRunning">
                     <span class="success-text status">{{processStatus}}</span>
                     <div class="cancelable-progress">
                         <div class="progress" v-if="progress > 0">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" v-bind:style="{ width: progress + '%' }">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" 
+                                    v-bind:style="{ width: progress + '%' }">
                                 <span class="sr-only">{{progress}}%</span>
                             </div>
                         </div>
@@ -29,7 +37,7 @@
                 </div>
             </div>
         </div>
-        <div class="dropdown aside-menu" v-if="!isRunning">
+        <div class="dropdown aside-menu" v-if="!isRunning && canRegenerate">
             <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-link">
                 <span></span>
             </button>
@@ -129,6 +137,9 @@ export default {
         },
         isSuccessfull() {
             return this.isInitializing == false && this.isRunning == false && this.error==null;
+        },
+        canRegenerate() {
+            return this.fileDestination == "File"
         }
     },
     watch: {},
@@ -184,8 +195,12 @@ export default {
                     }
                 })
                 .catch((error) => {
-                    Vue.config.errorHandler(error, this);
-                    this.$timer.stop("updateStatus");
+                    if(error.response.status == 404) 
+                        this.$emit("deleted", this.processId) 
+                    else {
+                        Vue.config.errorHandler(error, this);
+                        this.$timer.stop("updateStatus");
+                    }
                 });
       },
 
@@ -210,7 +225,7 @@ export default {
       },
       cancel()
       {
-           modal.confirm(this.$t('WebInterviewUI.ConfirmRosterRemove'), result => {
+           modal.confirm(this.$t('DataExport.ConfirmStop') + " " + this.$t('DataExport.export') + "?", result => {
                 if (result) {
                     this.$http.post(this.$config.model.api.cancelExportProcessUrl, null, {  params: { id: this.dataExportProcessId }  })
                         .catch((error) => {

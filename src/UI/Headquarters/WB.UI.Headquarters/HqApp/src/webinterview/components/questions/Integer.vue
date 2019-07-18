@@ -20,7 +20,14 @@
                         :disabled="isSpecialValueSelected || !$me.acceptAnswer"
                         :class="{ 'special-value-selected': isSpecialValueSelected }"
                         @blur="answerIntegerQuestion" 
-                        v-numericFormatting="{digitGroupSeparator: groupSeparator, decimalPlaces: 0, minimumValue: '-2147483648', maximumValue: '2147483647'}">
+                        v-numericFormatting="{
+                                digitGroupSeparator: groupSeparator,
+                                decimalCharacter: decimalSeparator,  
+                                decimalPlaces: 0, 
+                                minimumValue: '-2147483648', 
+                                maximumValue: '2147483647'
+                            }"
+                        />
                         <wb-remove-answer v-if="!isSpecialValueSelected && !$me.isProtected" :on-remove="removeAnswer" />
                     </div>
                 </div>
@@ -49,7 +56,7 @@
     import { entityDetails } from "../mixins"
     import * as $ from "jquery"
     import modal from "../modal"
-    import { getGroupSeparator } from "./question_helpers"
+    import { getGroupSeparator, getDecimalSeparator } from "./question_helpers"
 
     export default {
         data() {
@@ -70,6 +77,9 @@
             },
             groupSeparator() {
                 return getGroupSeparator(this.$me)
+            },
+            decimalSeparator() {
+                return getDecimalSeparator(this.$me)
             },
             specialValue: {
                 get() {

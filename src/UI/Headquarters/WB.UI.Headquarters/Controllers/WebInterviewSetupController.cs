@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Factories;
@@ -98,7 +99,7 @@ namespace WB.UI.Headquarters.Controllers
         [ActivePage(MenuItem.Questionnaires)]
         [HttpPost]
         [ActionName("SendInvitations")]
-        public ActionResult SendInvitationsPost(string id)
+        public async Task<ActionResult> SendInvitationsPost(string id)
         {
             QuestionnaireIdentity questionnaireIdentity = QuestionnaireIdentity.Parse(Request["questionnaireId"]);
 
@@ -113,7 +114,7 @@ namespace WB.UI.Headquarters.Controllers
                 this.invitationService.RequestEmailDistributionProcess(questionnaireIdentity, User.Identity.Name, questionnaire.Title);
             }
 
-            sendInvitationsTask.Run();
+            await sendInvitationsTask.ScheduleRunAsync();
             return RedirectToAction("EmailDistributionProgress");
         }
 

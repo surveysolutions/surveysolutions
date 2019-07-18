@@ -747,7 +747,7 @@ main .flex-row {
             animation-timing-function: linear;
     background: -webkit-gradient(linear, left top, right top, color-stop(8%, #eeeeee), color-stop(18%, #dddddd), color-stop(33%, #eeeeee));
     background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
-    height: 64px;
+    height: 55px;
     position: relative; }
   .card-loading .background-masker {
     position: absolute; }

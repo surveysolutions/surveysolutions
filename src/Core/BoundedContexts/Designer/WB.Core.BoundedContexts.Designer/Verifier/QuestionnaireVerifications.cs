@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             ErrorsByInvalidQuestionnaireVariable,
             Critical_EntitiesWithDuplicateVariableName_WB0026,
 
-            Warning("WB0261", QuestionnaireHasRostersPropagationsExededLimit,  VerificationMessages.WB0261_RosterStructureTooExplosive),
+            Warning_QuestionnaireHasRostersPropagationsExededLimit,
             Warning("WB0227", NotShared, VerificationMessages.WB0227_NotShared),
         };
 
@@ -534,7 +534,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 : QuestionnaireVerificationReferenceType.Group;
         }
 
-        private static bool QuestionnaireHasRostersPropagationsExededLimit(MultiLanguageQuestionnaireDocument questionnaire)
+        private static IEnumerable<QuestionnaireVerificationMessage> Warning_QuestionnaireHasRostersPropagationsExededLimit(MultiLanguageQuestionnaireDocument questionnaire)
         {
             var rosters = questionnaire.Find<IGroup>(q => q.IsRoster).ToList();
             Dictionary<Guid, long> rosterPropagationCounts = new Dictionary<Guid, long>();
@@ -543,7 +543,12 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 CalculateRosterInstancesCountAndUpdateCache(roster, rosterPropagationCounts, questionnaire);
             }
 
-            return rosterPropagationCounts.Values.Sum(x => x) > QuestionnaireTotalEntitiesLimit;
+            var sum = rosterPropagationCounts.Values.Sum(x => x);
+            if (sum > QuestionnaireTotalEntitiesLimit)
+            {
+                var message = string.Format(VerificationMessages.WB0261_RosterStructureTooExplosive, sum, QuestionnaireTotalEntitiesLimit);
+                yield return QuestionnaireVerificationMessage.Warning("WB0261", message);
+            }
         }
 
         private static Tuple<bool, decimal> QuestionnaireHasSizeMoreThan5Mb(MultiLanguageQuestionnaireDocument questionnaire)

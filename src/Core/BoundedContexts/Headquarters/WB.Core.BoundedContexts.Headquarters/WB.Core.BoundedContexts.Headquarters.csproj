@@ -38,7 +38,7 @@
     <ProjectReference Include="..\..\..\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AWSSDK.S3" Version="3.3.102.5" />
+    <PackageReference Include="AWSSDK.S3" Version="3.3.102.18" />
     <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.100.24" />
     <PackageReference Include="CsvHelper" Version="12.1.2" />
     <PackageReference Include="Dapper" Version="1.60.6" />
