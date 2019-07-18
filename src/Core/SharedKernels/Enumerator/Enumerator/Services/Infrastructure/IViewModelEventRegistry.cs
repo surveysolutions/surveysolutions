@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Ncqrs.Eventing;
 
 namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
@@ -14,5 +15,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
         IReadOnlyCollection<IViewModelEventHandler> GetViewModelsByEvent(CommittedEvent @event);
 
         void RemoveAggregateRoot(string aggregateRootId);
+
+        bool IsAsyncViewModelHandleMethod(Type viewModelType, Type eventType);
     }
 }
