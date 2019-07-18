@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
@@ -40,7 +38,41 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.SpeedReport
             Assert.That(summary.CreatedDate, Is.EqualTo(createdDate));
             Assert.That(summary.FirstAnswerDate, Is.EqualTo(firstAnswerDate));
         }
-        
+
+        [Test]
+        public void when_several_supervisors_interviewers_assigned_track_first_one()
+        {
+            var interviewId = Guid.NewGuid();
+            var createdDate = new DateTime(2019, 1, 17, 5, 34, 22, DateTimeKind.Utc);
+            var supervisor = Id.gA.ToString();
+            var interviewer = Id.gB.ToString();
+
+            var interviewSummariesStorage = new TestInMemoryWriter<InterviewSummary>();
+            var statusEventsToPublish = new List<IPublishableEvent>();
+
+            statusEventsToPublish.Add(Create.PublishedEvent.InterviewCreated(interviewId: interviewId, originDate: createdDate));
+            
+            // act  - assign first supervisor/interviewer. It should be stored in first one
+            statusEventsToPublish.Add(Create.PublishedEvent.InterviewerAssigned(interviewId: interviewId, interviewerId: interviewer));
+            statusEventsToPublish.Add(Create.PublishedEvent.SupervisorAssigned(interviewId: interviewId, supervisorId: supervisor));
+            
+            // act  - assign second supervisor. It should not be stored in first one
+            statusEventsToPublish.Add(Create.PublishedEvent.SupervisorAssigned(interviewId: interviewId));
+            statusEventsToPublish.Add(Create.PublishedEvent.InterviewerAssigned(interviewId: interviewId));
+            
+            var denormalizer = CreateDenormalizer(interviewSummariesStorage);
+
+            foreach (var publishableEvent in statusEventsToPublish)
+            {
+                denormalizer.Handle(new[] { publishableEvent }, publishableEvent.EventSourceId);
+            }
+
+            var summary = interviewSummariesStorage.GetById(interviewId.FormatGuid());
+
+            Assert.That(summary.FirstSupervisorId.ToString(), Is.EqualTo(supervisor));
+            Assert.That(summary.FirstInterviewerId.ToString(), Is.EqualTo(interviewer));
+        }
+
         [Test]
         public void when_interview_second_answer_given_should_store_first_answer_date()
         {
@@ -72,5 +104,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.SpeedReport
             Assert.That(speedReportInterviewItem.FirstSupervisorName, Is.EqualTo("name"));
             Assert.That(speedReportInterviewItem.FirstInterviewerName, Is.EqualTo("name"));
         }
+
+
     }
 }
