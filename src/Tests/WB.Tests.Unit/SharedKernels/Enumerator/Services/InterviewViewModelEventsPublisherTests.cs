@@ -94,12 +94,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services
             await publisher.ExecuteAsync(events);
             // assert
             mockOfReloadCommand.Verify(x => x.Execute(), Times.Once);
-            mockOfLogger.Verify(x => x.Error("Exception(s) during update view models",
-                Moq.It.Is<AggregateException>(exception =>
-                    exception.InnerExceptions[0].Message == $"Unhandled exception in {nameof(FakeViewModelWithException)}.HandleAsync<{nameof(TextQuestionAnswered)}>" &&
-                    exception.InnerExceptions[0].InnerException.InnerException is NotImplementedException &&
-                    exception.InnerExceptions[1].Message == $"Unhandled exception in {nameof(FakeViewModelWithException)}.Handle<{nameof(NumericIntegerQuestionAnswered)}>" &&
-                    exception.InnerExceptions[1].InnerException.InnerException is ArgumentNullException)), Times.Once);
+            mockOfLogger.Verify(x =>
+                x.Error($"Unhandled exception in {nameof(FakeViewModelWithException)}.HandleAsync<{nameof(TextQuestionAnswered)}>",
+                    Moq.It.Is<Exception>(y => y.InnerException is NotImplementedException)), Times.Once);
         }
 
         [Test]
