@@ -795,7 +795,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 commentTime: commentDto.Date,
                 comment: commentDto.Text,
                 questionIdentity: Identity.Create(answerDto.Id, answerDto.QuestionRosterVector),
-                commentDto.Id);
+                commentDto.Id,
+                false);
 
         public bool AcceptsInterviewerAnswers()
         {

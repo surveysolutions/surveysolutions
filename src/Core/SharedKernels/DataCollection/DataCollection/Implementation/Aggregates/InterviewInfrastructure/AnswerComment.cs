@@ -13,7 +13,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public Identity QuestionIdentity { get; private set; }
         public bool Resolved { get; set; }
 
-        public AnswerComment(Guid userId, UserRoles userRole, DateTime commentTime, string comment, Identity questionIdentity, Guid? id)
+        public AnswerComment(Guid userId, UserRoles userRole, DateTime commentTime, string comment, Identity questionIdentity, Guid? id, bool resolved)
         {
             UserId = userId;
             UserRole = userRole;
@@ -21,11 +21,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             Comment = comment;
             this.QuestionIdentity = questionIdentity;
             this.Id = id;
-        }
-
-        public AnswerComment(Guid userId, UserRoles userRole, DateTime commentTime, string comment, Identity questionIdentity, Guid? id, bool resolved)
-        : this(userId, userRole, commentTime, comment, questionIdentity, id)
-        {
             this.Resolved = resolved;
         }
 

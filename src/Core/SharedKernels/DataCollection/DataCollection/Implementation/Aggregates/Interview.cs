@@ -561,7 +561,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.Tree.GetQuestion(commentByQuestion).AnswerComments.Add(
                 new AnswerComment(@event.UserId, userRole, 
                     @event.OriginDate?.UtcDateTime ?? @event.CommentTime.Value, 
-                    @event.Comment, commentByQuestion, @event.CommentId));
+                    @event.Comment, commentByQuestion, @event.CommentId,
+                    false));
         }
 
         protected virtual void Apply(FlagSetToAnswer @event) { }
@@ -2520,7 +2521,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private static AnswerComment ToAnswerComment(CommentSynchronizationDto answerComment,
             AnsweredQuestionSynchronizationDto answerDto)
             => new AnswerComment(answerComment.UserId, answerComment.UserRole, answerComment.Date, answerComment.Text,
-                Identity.Create(answerDto.Id, answerDto.QuestionRosterVector), answerComment.Id);
+                Identity.Create(answerDto.Id, answerDto.QuestionRosterVector), answerComment.Id, false);
 
         public InterviewTreeMultiLinkedToRosterQuestion GetLinkedMultiOptionQuestion(Identity identity) =>
             this.Tree.GetQuestion(identity).GetAsInterviewTreeMultiLinkedToRosterQuestion();
