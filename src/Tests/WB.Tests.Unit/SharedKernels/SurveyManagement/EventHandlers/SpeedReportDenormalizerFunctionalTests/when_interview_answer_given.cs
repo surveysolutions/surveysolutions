@@ -39,6 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.SpeedReport
             Assert.That(summary.FirstAnswerDate, Is.EqualTo(firstAnswerDate));
         }
 
+
         [Test]
         public void when_several_supervisors_interviewers_assigned_track_first_one()
         {
@@ -105,6 +106,32 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.SpeedReport
             Assert.That(speedReportInterviewItem.FirstInterviewerName, Is.EqualTo("name"));
         }
 
+         [Test]
+        public void when_interview_answer_on_single_option_question_should_store_first_answer_date()
+        {
+            var interviewId = Guid.NewGuid();
+            var createdDate = new DateTime(2019, 1, 17, 5, 34, 22, DateTimeKind.Utc);
+            var firstAnswerDate = new DateTime(2019, 1, 17, 5, 37, 57, DateTimeKind.Utc);
 
+            var interviewSummariesStorage = new TestInMemoryWriter<InterviewSummary>();
+            var statusEventsToPublish = new List<IPublishableEvent>();
+
+            statusEventsToPublish.Add(Create.PublishedEvent.InterviewCreated(interviewId: interviewId, originDate: createdDate));
+            statusEventsToPublish.Add(Create.PublishedEvent.SupervisorAssigned(interviewId: interviewId));
+            statusEventsToPublish.Add(Create.PublishedEvent.InterviewerAssigned(interviewId: interviewId));
+            statusEventsToPublish.Add(Create.PublishedEvent.InterviewStatusChanged(interviewId, status: InterviewStatus.InterviewerAssigned));
+            statusEventsToPublish.Add(Create.PublishedEvent.SingleOptionQuestionAnswered(interviewId, originDate: firstAnswerDate));
+            
+            var denormalizer = CreateDenormalizer(interviewSummariesStorage);
+
+            foreach (var publishableEvent in statusEventsToPublish)
+            {
+                denormalizer.Handle(new[] { publishableEvent }, publishableEvent.EventSourceId);
+            }
+
+            var speedReportInterviewItem = interviewSummariesStorage.GetById(interviewId.FormatGuid());
+            Assert.That(speedReportInterviewItem.CreatedDate, Is.EqualTo(createdDate));
+            Assert.That(speedReportInterviewItem.FirstAnswerDate, Is.EqualTo(firstAnswerDate));
+        }
     }
 }

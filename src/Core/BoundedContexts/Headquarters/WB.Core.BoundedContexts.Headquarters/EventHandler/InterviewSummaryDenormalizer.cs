@@ -69,10 +69,10 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         private void RecordFirstAnswer(InterviewSummary interviewSummary, DateTime answerTime)
         {
-            if (!interviewSummary.InterviewCommentedStatuses.Any())
-                return;
-            
             if (interviewSummary.FirstAnswerDate.HasValue)
+                return;
+
+            if (!interviewSummary.InterviewCommentedStatuses.Any())
                 return;
 
             // skip first answer date while interview status is zero.
@@ -94,7 +94,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             });
         }
 
-        private InterviewSummary AnswerFeaturedQuestionWithOptions(InterviewSummary interviewSummary, Guid questionId, DateTime updateDate,
+        private InterviewSummary AnswerFeaturedQuestionWithOptions(InterviewSummary interviewSummary, Guid questionId, 
+            DateTime updateDate, DateTime? answerDateTime,
             params decimal[] answers)
         {
             return this.UpdateInterviewSummary(interviewSummary, updateDate, interview =>
@@ -112,6 +113,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
                     interview.AnswerFeaturedQuestion(questionId, string.Join(",", optionStrings));
                 }
+
+                RecordFirstAnswer(interviewSummary, answerDateTime ?? updateDate);
             });
         }
 
@@ -238,12 +241,14 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<MultipleOptionsQuestionAnswered> @event)
         {
-            return this.AnswerFeaturedQuestionWithOptions(state, @event.Payload.QuestionId, @event.EventTimeStamp, @event.Payload.SelectedValues);
+            return this.AnswerFeaturedQuestionWithOptions(state, @event.Payload.QuestionId, @event.EventTimeStamp, @event.Payload.AnswerTimeUtc, @event.Payload.SelectedValues);
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<SingleOptionQuestionAnswered> @event)
         {
-            return this.AnswerFeaturedQuestionWithOptions(state, @event.Payload.QuestionId, @event.EventTimeStamp, @event.Payload.SelectedValue);
+            return this.AnswerFeaturedQuestionWithOptions(state, @event.Payload.QuestionId, @event.EventTimeStamp,
+                @event.Payload.AnswerTimeUtc,
+                @event.Payload.SelectedValue);
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<NumericRealQuestionAnswered> @event)
@@ -370,12 +375,14 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                                 if (questionType == QuestionType.SingleOption)
                                 {
                                     decimal[] answer = { Convert.ToDecimal(questionFromDto.Answer) };
-                                    AnswerFeaturedQuestionWithOptions(interview, questionFromDto.Id, @event.EventTimeStamp, answer);
+                                    AnswerFeaturedQuestionWithOptions(interview, questionFromDto.Id, @event.EventTimeStamp, @event.EventTimeStamp, answer);
                                 }
                                 else
                                 {
                                     interview.AnswerFeaturedQuestion(questionFromDto.Id, AnswerUtils.AnswerToString(questionFromDto.Answer));
                                 }
+
+                                RecordFirstAnswer(interview, @event.EventTimeStamp);
                             }
                         }
                     }
