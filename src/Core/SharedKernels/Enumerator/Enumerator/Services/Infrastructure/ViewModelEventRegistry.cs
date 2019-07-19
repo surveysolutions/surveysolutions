@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -11,8 +12,8 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
         private readonly Dictionary<Type, Dictionary<string, HashSet<IViewModelEventHandler>>> eventTypes =
             new Dictionary<Type, Dictionary<string, HashSet<IViewModelEventHandler>>>();
 
-        private readonly Dictionary<(Type, Type), bool> asyncViewModelHandleMethods =
-            new Dictionary<(Type, Type), bool>();
+        private readonly ConcurrentDictionary<(Type, Type), bool> asyncViewModelHandleMethods =
+            new ConcurrentDictionary<(Type, Type), bool>();
 
         public void Subscribe(IViewModelEventHandler handler, string aggregateRootId)
         {
@@ -67,25 +68,22 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
         {
             var handleMethodKey = (viewModelType, eventType);
 
-            lock (this.asyncViewModelHandleMethods)
+            if (!this.asyncViewModelHandleMethods.ContainsKey(handleMethodKey))
             {
-                if (!this.asyncViewModelHandleMethods.ContainsKey(handleMethodKey))
-                {
-                    var isAsync = viewModelType
-                        .GetTypeInfo()
-                        .ImplementedInterfaces
-                        .Where(type =>
-                            type.IsGenericType && type.GetGenericTypeDefinition() ==
-                            typeof(IAsyncViewModelEventHandler<>))
-                        .Any(type => type.GetTypeInfo().GenericTypeArguments.Single() == eventType);
+                var isAsync = viewModelType
+                    .GetTypeInfo()
+                    .ImplementedInterfaces
+                    .Where(type =>
+                        type.IsGenericType && type.GetGenericTypeDefinition() ==
+                        typeof(IAsyncViewModelEventHandler<>))
+                    .Any(type => type.GetTypeInfo().GenericTypeArguments.Single() == eventType);
 
 
-                    this.asyncViewModelHandleMethods.Add(handleMethodKey, isAsync);
+                this.asyncViewModelHandleMethods[handleMethodKey] = isAsync;
 
-                }
-
-                return this.asyncViewModelHandleMethods[handleMethodKey];
             }
+
+            return this.asyncViewModelHandleMethods[handleMethodKey];
         }
 
         public void RemoveAggregateRoot(string aggregateRootId)
