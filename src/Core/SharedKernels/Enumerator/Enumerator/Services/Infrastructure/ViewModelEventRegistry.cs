@@ -64,27 +64,12 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
             return this.eventTypes[eventType][eventSourceId].ToList();
         }
 
-        public bool IsAsyncViewModelHandleMethod(Type viewModelType, Type eventType)
-        {
-            var handleMethodKey = (viewModelType, eventType);
-
-            if (!this.asyncViewModelHandleMethods.ContainsKey(handleMethodKey))
-            {
-                var isAsync = viewModelType
-                    .GetTypeInfo()
-                    .ImplementedInterfaces
-                    .Where(type =>
-                        type.IsGenericType && type.GetGenericTypeDefinition() ==
-                        typeof(IAsyncViewModelEventHandler<>))
-                    .Any(type => type.GetTypeInfo().GenericTypeArguments.Single() == eventType);
-
-
-                this.asyncViewModelHandleMethods[handleMethodKey] = isAsync;
-
-            }
-
-            return this.asyncViewModelHandleMethods[handleMethodKey];
-        }
+        public bool IsAsyncViewModelHandleMethod(Type viewModelType, Type eventType) =>
+            this.asyncViewModelHandleMethods.GetOrAdd((viewModelType, eventType), x => x.Item1
+                .GetTypeInfo()
+                .ImplementedInterfaces
+                .Where(type => type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IAsyncViewModelEventHandler<>))
+                .Any(type => type.GetTypeInfo().GenericTypeArguments.Single() == x.Item2));
 
         public void RemoveAggregateRoot(string aggregateRootId)
         {
