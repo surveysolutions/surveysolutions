@@ -6,6 +6,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.Infrastructure.Implementation.Services;
 
 namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
 {
@@ -13,21 +14,21 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
     {
         private readonly IEventStore eventStore;
         private readonly IDenormalizerRegistry denormalizerRegistry;
-        private readonly IViewModelEventQueue viewModelEventQueue;
+        private readonly IAsyncEventQueue viewModelEventQueue;
 
         public LiteEventBus(IEventStore eventStore, 
             IDenormalizerRegistry denormalizerRegistry,
-            IViewModelEventQueue viewModelEventQueue)
+            IAsyncEventQueue viewModelEventQueue)
         {
             this.eventStore = eventStore;
             this.denormalizerRegistry = denormalizerRegistry;
             this.viewModelEventQueue = viewModelEventQueue;
         }
 
-        public IEnumerable<CommittedEvent> CommitUncommittedEvents(IEventSourcedAggregateRoot aggregateRoot, string origin) =>
+        public IReadOnlyCollection<CommittedEvent> CommitUncommittedEvents(IEventSourcedAggregateRoot aggregateRoot, string origin) =>
             this.eventStore.Store(new UncommittedEventStream(origin, aggregateRoot.GetUnCommittedChanges()));
 
-        public void PublishCommittedEvents(IEnumerable<CommittedEvent> committedEvents)
+        public void PublishCommittedEvents(IReadOnlyCollection<CommittedEvent> committedEvents)
         {
             this.PublishToDenormalizers(committedEvents);
 

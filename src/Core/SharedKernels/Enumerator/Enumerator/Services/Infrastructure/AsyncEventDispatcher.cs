@@ -10,13 +10,13 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
 namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
 {
-    internal class InterviewViewModelEventsPublisher : IBackgroundJob<IEnumerable<CommittedEvent>>
+    internal class AsyncEventDispatcher : IAsyncEventDispatcher
     {
         private readonly IViewModelEventRegistry viewModelEventRegistry;
         private readonly ILogger logger;
         private readonly ICurrentViewModelPresenter currentViewModelPresenter;
 
-        public InterviewViewModelEventsPublisher(IViewModelEventRegistry viewModelEventRegistry,
+        public AsyncEventDispatcher(IViewModelEventRegistry viewModelEventRegistry,
             ILogger logger,
             ICurrentViewModelPresenter currentViewModelPresenter)
         {
@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
             this.currentViewModelPresenter = currentViewModelPresenter;
         }
 
-        public async Task ExecuteAsync(IEnumerable<CommittedEvent> events)
+        public async Task ExecuteAsync(IReadOnlyCollection<CommittedEvent> events)
         {
             foreach (var @event in events)
             foreach (var viewModel in this.viewModelEventRegistry.GetViewModelsByEvent(@event))

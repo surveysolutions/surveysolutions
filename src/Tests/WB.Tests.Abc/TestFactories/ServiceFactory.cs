@@ -80,6 +80,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
+using WB.Core.Infrastructure.Implementation.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Services;
@@ -243,16 +244,16 @@ namespace WB.Tests.Abc.TestFactories
         public LiteEventBus LiteEventBus(IViewModelEventRegistry liteEventRegistry = null,
             IEventStore eventStore = null,
             IDenormalizerRegistry denormalizerRegistry = null,
-            IViewModelEventQueue viewModelEventQueue = null)
+            IAsyncEventQueue viewModelEventQueue = null)
         {
             liteEventRegistry = liteEventRegistry ?? LiteEventRegistry();
 
-            var viewModelEventPublisher = new InterviewViewModelEventsPublisher(liteEventRegistry, Mock.Of<ILogger>(),
+            var viewModelEventPublisher = new AsyncEventDispatcher(liteEventRegistry, Mock.Of<ILogger>(),
                 Mock.Of<ICurrentViewModelPresenter>());
 
-            var mockOfViewModelEventQueue = new Mock<IViewModelEventQueue>();
-            mockOfViewModelEventQueue.Setup(x => x.Enqueue(Moq.It.IsAny<IEnumerable<CommittedEvent>>()))
-                .Callback<IEnumerable<CommittedEvent>>(@events =>
+            var mockOfViewModelEventQueue = new Mock<IAsyncEventQueue>();
+            mockOfViewModelEventQueue.Setup(x => x.Enqueue(Moq.It.IsAny<IReadOnlyCollection<CommittedEvent>>()))
+                .Callback<IReadOnlyCollection<CommittedEvent>>(@events =>
                     viewModelEventPublisher.ExecuteAsync(@events).WaitAndUnwrapException());
 
             return new LiteEventBus(eventStore ?? Mock.Of<IEventStore>(),
@@ -265,8 +266,8 @@ namespace WB.Tests.Abc.TestFactories
 
         public DenormalizerRegistry DenormalizerRegistry() => new DenormalizerRegistry();
 
-        public ViewModelEventQueue ViewModelEventQueue(IViewModelEventRegistry liteEventRegistry) =>
-            new ViewModelEventQueue(new InterviewViewModelEventsPublisher(liteEventRegistry,
+        public AsyncEventQueue ViewModelEventQueue(IViewModelEventRegistry liteEventRegistry) =>
+            new AsyncEventQueue(new AsyncEventDispatcher(liteEventRegistry,
                 Mock.Of<ILogger>(), Mock.Of<ICurrentViewModelPresenter>()), Mock.Of<ILogger>());
 
         public NcqrCompatibleEventDispatcher NcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null,
@@ -1144,10 +1145,10 @@ namespace WB.Tests.Abc.TestFactories
             return new WebInterviewNotificationService(statefulInterviewRepository, questionnaireStorage, webInterviewInvoker);
         }
 
-        public InterviewViewModelEventsPublisher InterviewViewModelEventsPublisher(IViewModelEventRegistry viewModelEventRegistry = null,
+        public AsyncEventDispatcher InterviewViewModelEventsPublisher(IViewModelEventRegistry viewModelEventRegistry = null,
             ILogger logger = null,
             ICurrentViewModelPresenter currentViewModelPresenter = null) =>
-            new InterviewViewModelEventsPublisher(viewModelEventRegistry ?? Mock.Of<IViewModelEventRegistry>(),
+            new AsyncEventDispatcher(viewModelEventRegistry ?? Mock.Of<IViewModelEventRegistry>(),
                 logger ?? Mock.Of<ILogger>(), currentViewModelPresenter ?? Mock.Of<ICurrentViewModelPresenter>());
     }
 

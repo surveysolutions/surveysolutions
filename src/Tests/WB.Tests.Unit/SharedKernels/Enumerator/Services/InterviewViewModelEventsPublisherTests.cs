@@ -14,7 +14,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.Services
 {
-    [TestOf(typeof(InterviewViewModelEventsPublisher))]
+    [TestOf(typeof(AsyncEventDispatcher))]
     public class InterviewViewModelEventsPublisherTests
     {
         public class FakeViewModelWithException : 

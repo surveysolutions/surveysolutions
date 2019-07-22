@@ -1,19 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
+using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Services;
 
 namespace WB.Core.Infrastructure.Implementation.Services
 {
-    public class BackgroundService<T>
+    public class AsyncEventQueue : IAsyncEventQueue
     {
-        private readonly BufferBlock<T> queue;
+        private readonly BufferBlock<IReadOnlyCollection<CommittedEvent>> queue;
 
-        public BackgroundService(IBackgroundJob<T> job, ILogger logger) 
+        public AsyncEventQueue(IAsyncEventDispatcher job, ILogger logger) 
         {
-            queue = new BufferBlock<T>();
+            queue = new BufferBlock<IReadOnlyCollection<CommittedEvent>>();
             var thread = new Thread(async () =>
             {
                 while (await queue.OutputAvailableAsync())
@@ -33,7 +35,7 @@ namespace WB.Core.Infrastructure.Implementation.Services
             thread.Start();
         }
 
-        public void Enqueue(T item) => this.queue.Post(item);
+        public void Enqueue(IReadOnlyCollection<CommittedEvent> item) => this.queue.Post(item);
 
         public Task StopAsync()
         {
