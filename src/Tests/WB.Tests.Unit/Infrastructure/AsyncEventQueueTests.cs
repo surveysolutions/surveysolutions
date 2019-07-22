@@ -3,14 +3,15 @@ using System.Threading;
 using Ncqrs.Eventing;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Tests.Abc;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Tests.Unit.Infrastructure
 {
-    [TestOf(typeof(ViewModelEventQueue))]
-    internal class ViewModelEventQueueTests
+    [TestOf(typeof(AsyncEventQueue))]
+    internal class AsyncEventQueueTests
     {
         public class DummyHandler : IViewModelEventHandler<DummyEvent>
         {
