@@ -67,6 +67,43 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpGet]
+        [CamelCase]
+        public InterviewsDataTableResponse Interviews([FromUri] InterviewsDataTableRequest request)
+        {
+
+            var input = new AllInterviewsInputModel
+            {
+                Page = request.PageIndex,
+                PageSize = request.PageSize,
+                Orders = request.GetSortOrderRequestItems(),
+                QuestionnaireId = request.QuestionnaireId,
+                QuestionnaireVersion = request.QuestionnaireVersion,
+                SupervisorOrInterviewerName = request.ResponsibleName,
+                Statuses = request.Status != null ? new[] { request.Status.Value } : null,
+                SearchBy = request.SearchBy ?? request.Search.Value,
+                TeamId = request.TeamId,
+                UnactiveDateStart = request.UnactiveDateStart?.ToUniversalTime(),
+                UnactiveDateEnd = request.UnactiveDateEnd?.ToUniversalTime(),
+                AssignmentId = request.AssignmentId,
+                ResponsibleId = request.ResponsibleId
+            };
+
+            var allInterviews = this.allInterviewsViewFactory.Load(input);
+
+            foreach (var x in allInterviews.Items) foreach (var y in x.FeaturedQuestions) y.Question = y.Question.RemoveHtmlTags();
+
+            var response = new InterviewsDataTableResponse
+            {
+                Draw = request.Draw + 1,
+                RecordsTotal = allInterviews.TotalCount,
+                RecordsFiltered = allInterviews.TotalCount,
+                Data = allInterviews.Items
+            };
+
+            return response;
+        }
+
+        [HttpGet]
         [Authorize(Roles = "Interviewer")]
         [CamelCase]
         public InterviewsDataTableResponse GetInterviews([FromUri] InterviewsDataTableRequest request)
