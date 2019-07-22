@@ -8,6 +8,7 @@ using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.Infrastructure.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Tests.Abc;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
@@ -169,14 +170,14 @@ namespace WB.Tests.Unit.Infrastructure
             // arrange
             var eventsToPublish = BuildReadyToBePublishedStream(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), CreateDummyEvent());
 
-            var mockOfViewModelEventQueue = new Mock<IViewModelEventQueue>();
+            var mockOfViewModelEventQueue = new Mock<IAsyncEventQueue>();
             var eventBus = Create.Service.LiteEventBus(viewModelEventQueue: mockOfViewModelEventQueue.Object);
 
             // act
             eventBus.PublishCommittedEvents(eventsToPublish);
 
             // assert
-            mockOfViewModelEventQueue.Verify(x => x.Enqueue(It.IsAny<IEnumerable<CommittedEvent>>()), Times.Once);
+            mockOfViewModelEventQueue.Verify(x => x.Enqueue(It.IsAny<IReadOnlyCollection<CommittedEvent>>()), Times.Once);
         }
 
         [Test]

@@ -7,6 +7,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Implementation.Aggregates;
+using WB.Core.Infrastructure.Implementation.Services;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernels.DataCollection;
@@ -75,8 +76,8 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.BindAsSingleton<IViewModelEventRegistry, ViewModelEventRegistry>();
             registry.BindAsSingleton<IDenormalizerRegistry, DenormalizerRegistry>();
             registry.Bind<ILiteEventBus, LiteEventBus>();
-            registry.Bind<IBackgroundJob<IEnumerable<CommittedEvent>>, InterviewViewModelEventsPublisher>();
-            registry.BindAsSingleton<IViewModelEventQueue, ViewModelEventQueue>();
+            registry.Bind<IAsyncEventDispatcher, AsyncEventDispatcher>();
+            registry.BindAsSingleton<IAsyncEventQueue, AsyncEventQueue>();
 
             RegisterViewModels(registry);
         }
