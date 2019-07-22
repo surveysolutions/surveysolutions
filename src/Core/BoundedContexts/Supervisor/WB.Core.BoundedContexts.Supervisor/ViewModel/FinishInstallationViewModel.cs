@@ -54,6 +54,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         protected override async Task SaveUserToLocalStorageAsync(RestCredentials credentials, CancellationToken token)
         {
             var supervisor = await this.synchronizationService.GetSupervisorAsync(credentials, token: token).ConfigureAwait(false);
+            var tenantId = await this.synchronizationService.GetTenantId(credentials, token).ConfigureAwait(false);
 
             var supervisorIdentity = new SupervisorIdentity
             {
@@ -62,7 +63,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                 Name = this.UserName,
                 Email = supervisor.Email,
                 PasswordHash = this.passwordHasher.Hash(this.Password),
-                Token = credentials.Token
+                Token = credentials.Token,
+                TenantId = tenantId
             };
 
             this.supervisorsPlainStorage.Store(supervisorIdentity);

@@ -53,7 +53,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                     new ParallelOptions { MaxDegreeOfParallelism = sampleImportSettings.InterviewsImportParallelTasksLimit },
                     assignmentId =>
                     {
-                        InScopeExecutor.Current.ExecuteActionInScope((serviceLocatorLocal) =>
+                        InScopeExecutor.Current.Execute((serviceLocatorLocal) =>
                         {
                             var threadImportAssignmentsService = serviceLocatorLocal.GetInstance<IAssignmentsImportService>();
                             IQuestionnaireStorage threadQuestionnaireStorage = serviceLocatorLocal.GetInstance<IQuestionnaireStorage>();

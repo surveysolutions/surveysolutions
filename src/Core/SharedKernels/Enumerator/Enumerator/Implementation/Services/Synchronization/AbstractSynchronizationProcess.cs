@@ -358,6 +358,18 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         });
                         auditLogService.Write(SynchronizationFailedAuditLogEntity.CreateFromException(ex));
                         break;
+                    case SynchronizationExceptionType.UserLinkedToAnotherServer:
+                        progress.Report(new SyncProgressInfo
+                        {
+                            Title = EnumeratorUIResources.Synchronization_UserLinkedToAnotherServer_Status,
+                            Description = EnumeratorUIResources.Synchronization_UserLinkedToAnotherServer_Description,
+                            UserIsLinkedToAnotherDevice = true,
+                            Status = SynchronizationStatus.Fail,
+                            Statistics = statistics,
+                            Stage = SyncStage.FailedUserLinkedToAnotherDevice
+                        });
+                        auditLogService.Write(SynchronizationFailedAuditLogEntity.CreateFromException(ex));
+                        break;
                     case SynchronizationExceptionType.SupervisorRequireOnlineSync:
                         progress.Report(new SyncProgressInfo
                         {
@@ -475,7 +487,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         {
             try
             {
-                await this.synchronizationService.CanSynchronizeAsync(this.RestCredentials, cancellationToken);
+                await this.synchronizationService.CanSynchronizeAsync(this.RestCredentials, this.principal.CurrentUserIdentity.TenantId,
+                    cancellationToken);
             }
             catch (SynchronizationException ex) when (ex.Type == SynchronizationExceptionType.UpgradeRequired)
             {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
+using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.Infrastructure.PlainStorage;
 
@@ -12,10 +13,13 @@ namespace WB.UI.Headquarters.API.DataCollection
         private readonly Version LastSupportedVersion = new Version(18, 04, 0, 0); // version from the sky, discussed on scrum 12/19/2018
 
         private readonly IPlainKeyValueStorage<InterviewerSettings> settingsStorage;
+        private readonly IPlainKeyValueStorage<TenantSettings> tenantSettings;
 
-        public AppApiControllerBase(IPlainKeyValueStorage<InterviewerSettings> settingsStorage)
+        public AppApiControllerBase(IPlainKeyValueStorage<InterviewerSettings> settingsStorage, 
+            IPlainKeyValueStorage<TenantSettings> tenantSettings)
         {
-            this.settingsStorage = settingsStorage;
+            this.settingsStorage = settingsStorage ?? throw new ArgumentNullException(nameof(settingsStorage));
+            this.tenantSettings = tenantSettings ?? throw new ArgumentNullException(nameof(tenantSettings));
         }
 
         protected bool IsNeedUpdateAppBySettings(Version appVersion, Version hqVersion)
@@ -30,6 +34,21 @@ namespace WB.UI.Headquarters.API.DataCollection
             }
 
             return appVersion < LastSupportedVersion;
+        }
+
+        protected bool UserIsFromThisTenant(string userTenantId)
+        {
+            if (!string.IsNullOrEmpty(userTenantId))
+            {
+                var serverTenantId = this.tenantSettings.GetById(AppSetting.TenantSettingsKey).TenantPublicId;
+                if (!userTenantId.Equals(serverTenantId, StringComparison.Ordinal))
+                {
+                    // https://httpstatuses.com/421
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }
