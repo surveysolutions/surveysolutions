@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks;
-using Autofac;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -11,14 +9,13 @@ using Main.Core.Entities.SubEntities.Question;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer.Classifications;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Enumerator.Native.WebInterview;
-using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Designer.Api.Designer.Qbank;
 using WB.UI.Designer.Extensions;
 
@@ -188,16 +185,14 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                     CreationDate = DateTime.UtcNow,
                     IsDeleted = false
                 };
-
+                
                 var command = new ImportQuestionnaire(User.GetId(), questionnaire);
-                InScopeExecutor.Current.ExecuteActionInScope((locator) =>
-                {
-                    commandService.Execute(command);
-                    Guid? folderId = publicFoldersIdMap.ContainsKey(mysqlQuestionnaire.Pid)
-                        ? publicFoldersIdMap[mysqlQuestionnaire.Pid]
-                        : (Guid?) null;
-                    publicFoldersStorage.AssignFolderToQuestionnaire(questionnaire.PublicKey, folderId);
-                });
+                commandService.Execute(command);
+                Guid? folderId = publicFoldersIdMap.ContainsKey(mysqlQuestionnaire.Pid)
+                    ? publicFoldersIdMap[mysqlQuestionnaire.Pid]
+                    : (Guid?) null;
+                publicFoldersStorage.AssignFolderToQuestionnaire(questionnaire.PublicKey, folderId);
+           
                 varNumber++;
             }
         }
@@ -212,7 +207,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 .ToList();
             return foldersAndQuestionnaires;
         }
-
 
         private List<MySqlOptions> NewMethod4()
         {
@@ -302,72 +296,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             var json = System.IO.File.ReadAllText(this.hostingEnvironment.MapPath("Content/qbank/QbankClassifications.json"));
             var entities = JsonConvert.DeserializeObject<MysqlClassificationEntity[]>(json);
             return entities;
-        }
-    }
-
-        public static class InScopeExecutor
-    {
-        public static IInScopeExecutor Current { get; private set; }
-
-        public static void Init(IInScopeExecutor executor)
-        {
-            Current = executor;
-        }
-    }
-
-    public class UnitOfWorkInScopeExecutor : IInScopeExecutor
-    {
-        private readonly ILifetimeScope lifetimeScope;
-
-        public UnitOfWorkInScopeExecutor(ILifetimeScope rootScope)
-        {
-            lifetimeScope = rootScope;
-        }
-
-        public ILifetimeScope CreateChildContainer()
-        {
-            if(lifetimeScope == null) throw new Exception($"Class was not initialized");
-            return lifetimeScope.BeginLifetimeScope();
-        }
-
-        public void ExecuteActionInScope(Action<IServiceLocator> action)
-        {
-            using (var scope = CreateChildContainer())
-            {
-                var serviceLocatorLocal = scope.Resolve<IServiceLocator>();
-
-                action(serviceLocatorLocal);
-
-                serviceLocatorLocal.GetInstance<IUnitOfWork>().AcceptChanges();
-            }
-        }
-        
-        public bool ExecuteFunctionInScope(Func<IServiceLocator, bool> func)
-        {
-            using (var scope = CreateChildContainer())
-            {
-                var serviceLocatorLocal = scope.Resolve<IServiceLocator>();
-
-                var result = func(serviceLocatorLocal);
-
-                serviceLocatorLocal.GetInstance<IUnitOfWork>().AcceptChanges();
-
-                return result;
-            }
-        }
-
-        public async Task<object> ExecuteActionInScopeAsync(Func<IServiceLocator, Task<object>> func)
-        {
-            using (var scope = CreateChildContainer())
-            {
-                var serviceLocatorLocal = scope.Resolve<IServiceLocator>();
-
-                var result = await func(serviceLocatorLocal);
-
-                scope.Resolve<IUnitOfWork>().AcceptChanges();
-
-                return result;
-            }
         }
     }
 

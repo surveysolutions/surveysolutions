@@ -15,18 +15,16 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
             this.jobType = jobType;
         }
 
-        public Task Execute(IJobExecutionContext context)
+        public async Task Execute(IJobExecutionContext context)
         {
-            InScopeExecutor.Current.ExecuteActionInScope((serviceLocatorLocal) =>
+            await InScopeExecutor.Current.ExecuteAsync(async (serviceLocatorLocal) =>
             {
                 var job = serviceLocatorLocal.GetInstance(jobType) as IJob;
                 if (job == null)
                     throw new ArgumentNullException(nameof(job));
 
-                job.Execute(context);
+                await job.Execute(context);
             });
-
-            return Task.CompletedTask;
         }
     }
 }

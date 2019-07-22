@@ -168,6 +168,18 @@
     <EmbeddedResource Update="Resources\HeadquarterUserCommandValidatorMessages.zh.resx">
       <DependentUpon>HeadquarterUserCommandValidatorMessages.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\InterviewerAuditRecord.resx">
+      <SubType>Designer</SubType>
+      <LastGenOutput>InterviewerAuditRecord.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\InterviewerAuditRecord.ro.resx">
+      <DependentUpon>InterviewerAuditRecord.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\InterviewerAuditRecord.ru.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>InterviewerAuditRecord.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Interviews.es.resx">
       <DependentUpon>Interviews.resx</DependentUpon>
     </EmbeddedResource>
@@ -341,6 +353,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>HeadquarterUserCommandValidatorMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\InterviewerAuditRecord.Designer.cs">
+      <DependentUpon>InterviewerAuditRecord.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Update="Resources\Interviews.Designer.cs">
       <DesignTime>True</DesignTime>
