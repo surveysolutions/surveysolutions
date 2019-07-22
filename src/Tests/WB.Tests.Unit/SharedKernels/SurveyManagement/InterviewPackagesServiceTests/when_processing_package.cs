@@ -78,7 +78,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
                 });
 
             var executor = new Mock<IInScopeExecutor>();
-            executor.Setup(x => x.ExecuteActionInScope(It.IsAny<Action<IServiceLocator>>())).Callback(
+            executor.Setup(x => x.Execute(It.IsAny<Action<IServiceLocator>>())).Callback(
                 (Action<IServiceLocator> action) => { action.Invoke(serviceLocatorNestedMock.Object); });
 
             InScopeExecutor.Init(executor.Object);

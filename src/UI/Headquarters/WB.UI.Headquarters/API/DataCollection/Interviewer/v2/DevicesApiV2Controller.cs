@@ -21,7 +21,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
             IAuthorizedUser authorizedUser,
             IDeviceSyncInfoRepository deviceSyncInfoRepository,
             IPlainStorageAccessor<SynchronizationLogItem> syncLogRepository,
-            HqUserManager userManager) : base(
+            HqUserManager userManager
+            ) : base(
                 authorizedUser: authorizedUser,
                 syncVersionProvider: syncVersionProvider,
                 userManager: userManager,
