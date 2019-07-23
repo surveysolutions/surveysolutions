@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog
 {
     public interface IAuditLogService
     {
-        InterviewerAuditLogResult GetLastExisted7DaysRecords(Guid id, DateTime? startDateTime = null, bool showErrorMessage = false);
-        byte[] GenerateTabFile(Guid id, bool showErrorMessage = false);
+        AuditLogQueryResult GetLastExisted7DaysRecords(Guid id, DateTime? startDateTime = null, bool showErrorMessage = false);
+        IEnumerable<AuditLogRecordItem> GetAddRecords(Guid id, bool showErrorMessage = false);
     }
 }

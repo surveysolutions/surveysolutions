@@ -3,19 +3,13 @@ using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 
 namespace WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog
 {
-    public class InterviewerAuditLogResult
+    public class AuditLogQueryResult
     {
         public DateTime? NextBatchRecordDate { get; set; }
-        public InterviewerAuditLogDateRecords[] Records { get; set; }
+        public AuditLogRecordItem[] RecordsItem { get; set; }
     }
     
-    public class InterviewerAuditLogDateRecords
-    {
-        public DateTime Date { get; set; }
-        public InterviewerAuditLogRecord[] RecordsByDate { get; set; }
-    }
-
-    public class InterviewerAuditLogRecord
+    public class AuditLogRecordItem
     {
         public DateTime Time { get; set; }
         public AuditLogEntityType Type { get; set; }
