@@ -288,6 +288,7 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.BindAsSingleton<IPauseResumeQueue, PauseResumeQueue>();
             registry.Bind<IAuditLogFactory, AuditLogFactory>();
+            registry.Bind<IAuditLogService, AuditLogService>();
             registry.BindToConstant<IAuditLogTypeResolver>(() => new AuditLogTypeResolver(typeof(IAuditLogEntity).Assembly));
 
             registry.Bind<IAssignmentsUpgradeService, AssignmentsUpgradeService>();

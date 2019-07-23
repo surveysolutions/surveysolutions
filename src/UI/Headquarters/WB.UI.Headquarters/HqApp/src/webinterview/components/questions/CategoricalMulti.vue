@@ -145,6 +145,9 @@
                 })
             }
         },
+        mounted() {
+            this.answer = this.$me.answer
+        },
         mixins: [entityDetails]
     }
 
