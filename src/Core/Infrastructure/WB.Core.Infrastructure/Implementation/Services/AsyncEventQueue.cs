@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -36,11 +35,5 @@ namespace WB.Core.Infrastructure.Implementation.Services
         }
 
         public void Enqueue(IReadOnlyCollection<CommittedEvent> item) => this.queue.Post(item);
-
-        public Task StopAsync()
-        {
-            queue.Complete();
-            return queue.Completion;
-        }
     }
 }
