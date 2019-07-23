@@ -1,13 +1,18 @@
 ﻿using System;
+using System.IO;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.Code;
+using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.API.PublicApi
 {
@@ -17,14 +22,17 @@ namespace WB.UI.Headquarters.API.PublicApi
     {
         private readonly IUserViewFactory usersFactory;
         private readonly HqUserManager userManager;
+        private readonly IAuditLogService auditLogService;
 
         public UsersController(ILogger logger,
             IUserViewFactory usersFactory,
-            HqUserManager userManager)
+            HqUserManager userManager,
+            IAuditLogService auditLogService)
             : base(logger)
         {
             this.usersFactory = usersFactory;
             this.userManager = userManager;
+            this.auditLogService = auditLogService;
         }
 
         /// <summary>
@@ -159,6 +167,17 @@ namespace WB.UI.Headquarters.API.PublicApi
 
             await this.userManager.UnarchiveUsersAsync(new[] { userGuid });
             return this.Ok();
+        }
+
+        [HttpGet]
+        [Route("interviewers/{id:guid}/actions-log")]
+        public HttpResponseMessage ActionsLog(Guid id)
+        {
+            var fileContent = auditLogService.GenerateTabFile(id, showErrorMessage: false);
+            HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
+            result.Content = new StreamContent(new MemoryStream(fileContent));
+            result.Content.Headers.ContentType = new MediaTypeHeaderValue("text/csv");
+            return result;
         }
     }
 }
