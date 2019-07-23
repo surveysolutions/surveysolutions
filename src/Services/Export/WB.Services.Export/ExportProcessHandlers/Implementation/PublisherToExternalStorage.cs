@@ -41,9 +41,15 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                 
                 using (var fileStream = File.OpenRead(state.ArchiveFilePath))
                 {
-                    var questionnaireName = string.IsNullOrEmpty(questionnaire.VariableName)
-                        ? null
-                        : $"{questionnaire.VariableName}_v{questionnaire.QuestionnaireId.Id.Split('$')[1]}";
+                    string questionnaireName = null;
+                    if (string.IsNullOrEmpty(questionnaire.VariableName))
+                    {
+                        var split = questionnaire.QuestionnaireId.Id.Split('$');
+                        var questionnaireVersion = split.Length == 2 
+                            ? split[1]
+                            : questionnaire.QuestionnaireId.Id;
+                        questionnaireName = $"{questionnaire.VariableName}_v{questionnaireVersion}";
+                    }
                     var filename = this.exportFileNameService.GetFileNameForExportArchive(state.Settings, questionnaireName);
                     await dataClient.UploadFileAsync(applicationFolder, filename, fileStream, fileStream.Length, cancellationToken);
                 }
