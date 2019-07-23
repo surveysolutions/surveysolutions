@@ -46,6 +46,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             public Identity Identity { get; set; }
 
             public CommentState CommentState { get; set; }
+            public UserRoles UserRole { get; set; }
         }
 
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -104,7 +105,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var principalCurrentUserIdentity = this.principal.CurrentUserIdentity;
             this.ResolveCommentsButtonVisible = principalCurrentUserIdentity.UserId == this.interview.SupervisorId
-                                                && this.Comments.Any(x => x.CommentState != CommentState.ResolvedComment);
+                                                && this.Comments.Any(x => x.CommentState != CommentState.ResolvedComment
+                                                                          && x.UserRole != UserRoles.Headquarter);
         }
 
         private CommentViewModel ToViewModel(AnswerComment comment)
@@ -127,7 +129,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 Comment = comment.Comment,
                 CommentCaption = commentCaption,
                 Identity = this.Identity,
-                CommentState = commentState
+                CommentState = commentState,
+                UserRole = comment.UserRole
             };
         }
 
