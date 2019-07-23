@@ -91,9 +91,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void UpdateCommentsFromInterview(bool showResolved = false)
         {
-            var comments = interview.GetQuestionComments(this.Identity, showResolved) ?? new List<AnswerComment>();
+            var allQuestionComments = interview.GetQuestionComments(this.Identity, true) ?? new List<AnswerComment>();
+            var visibleComments = allQuestionComments.Where(x => x.Resolved == showResolved).ToList();
+
+            this.ShowResolvedCommentsVisible = allQuestionComments.Any(x => x.Resolved);
             this.Comments.Clear();
-            comments.Select(this.ToViewModel).ForEach(x => this.Comments.Add(x));
+            visibleComments.Select(this.ToViewModel).ForEach(x => this.Comments.Add(x));
             ShowHideResolveButton();
         }
 
@@ -158,7 +161,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             set => SetProperty(ref showResolvedCommentsBtnText, value);
         }
 
-        public bool ShowResolvedCommentsVisible { get; private set; }
+        public bool ShowResolvedCommentsVisible
+        {
+            get => showResolvedCommentsVisible;
+            private set => SetProperty(ref showResolvedCommentsVisible, value);
+        }
 
         public bool ResolveCommentsButtonVisible
         {
@@ -208,6 +215,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private string showResolvedCommentsBtnText;
         private bool showResolvedComments;
         private bool resolveCommentsButtonVisible;
+        private bool showResolvedCommentsVisible;
 
         public string InterviewerComment
         {
