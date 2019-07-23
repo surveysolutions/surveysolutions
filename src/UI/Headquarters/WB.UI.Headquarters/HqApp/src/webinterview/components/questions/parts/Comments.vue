@@ -58,12 +58,12 @@
         data() {
             return {
                 comment: null,
-                showResolved: false
+                showResolved: false,
+                isResolving: false
             }
         },
         props: {
-            isShowingAddCommentDialog: { type: Boolean, default: false },
-            isResolving: { type: Boolean, default: false }
+            isShowingAddCommentDialog: { type: Boolean, default: false }
         },
         methods: {
             async postComment(evnt) {
@@ -82,6 +82,7 @@
             async resolve() {
                 this.isResolving = true
                 await this.$store.dispatch('resolveComment', { questionId: this.questionId })
+                this.isResolving = false
             }
         },
         computed: {
