@@ -1,4 +1,5 @@
 ﻿using System;
+using FluentAssertions;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
@@ -16,6 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CommentsViewModelTes
         private Guid questionId = Id.g2;
         private Guid interviewerId = Id.gA;
         private Guid supervisorId = Id.gB;
+        private Guid hqId = Id.gC;
         private IPrincipal principal;
 
         [SetUp]
@@ -75,6 +77,20 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CommentsViewModelTes
             viewModel.ToggleShowResolvedComments.Execute();
 
             Assert.That(viewModel.Comments, Has.Count.EqualTo(1));
+        }
+
+        [Test]
+        public void should_not_be_able_to_resolve_HQ_comments()
+        {
+            interview.CommentAnswer(hqId, questionId, RosterVector.Empty, DateTimeOffset.Now, "HQ comment");
+
+            var viewModel = CreateCommentsViewModel(interview, principal);
+
+            // Act
+            viewModel.Init(interview.Id.FormatGuid(), Create.Identity(questionId), Create.Other.NavigationState());
+
+            // Assert
+            Assert.That(viewModel, Has.Property(nameof(CommentsViewModel.ResolveCommentsButtonVisible)).EqualTo(false));
         }
     }
 }
