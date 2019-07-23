@@ -83,9 +83,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             if (string.IsNullOrEmpty(this.FilterText)) return;
 
-            var selectedOption = this.filteredOptionsViewModel.GetOptions(this.FilterText).FirstOrDefault(x => !this.excludedOptions.Contains(x.Value));
+            var selectedOption = this.filteredOptionsViewModel.GetOptionByTextValue(this.FilterText);
 
-            if (selectedOption?.Title.Equals(this.FilterText, StringComparison.CurrentCultureIgnoreCase) == true)
+            var isValidOption =
+                selectedOption?.Title.Equals(this.FilterText, StringComparison.CurrentCultureIgnoreCase) == true
+                && !this.excludedOptions.Contains(selectedOption.Value);
+
+            if (isValidOption)
             {
                 await InvokeAllHandlers<int>(this.OnItemSelected, selectedOption.Value);
                 if (displaySelectedValue)
