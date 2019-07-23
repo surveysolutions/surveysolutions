@@ -41,7 +41,10 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                 
                 using (var fileStream = File.OpenRead(state.ArchiveFilePath))
                 {
-                    var filename = this.exportFileNameService.GetFileNameForExportArchive(state.Settings, questionnaire.VariableName);
+                    var questionnaireName = string.IsNullOrEmpty(questionnaire.VariableName)
+                        ? null
+                        : $"{questionnaire.VariableName}_v{questionnaire.QuestionnaireId.Id.Split('$')[1]}";
+                    var filename = this.exportFileNameService.GetFileNameForExportArchive(state.Settings, questionnaireName);
                     await dataClient.UploadFileAsync(applicationFolder, filename, fileStream, fileStream.Length, cancellationToken);
                 }
             }
