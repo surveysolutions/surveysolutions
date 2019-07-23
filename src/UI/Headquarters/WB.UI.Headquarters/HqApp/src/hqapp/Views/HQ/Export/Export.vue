@@ -348,10 +348,6 @@ export default {
                         self.exportResults.splice(0, 0, {
                             id: jobId
                         });
-                        self.questionnaireId = null;
-                        self.questionnaireVersion = null;
-                        self.status = null;
-                        self.resetDataAvalability();
                     })
                     .catch(function(error) {
                         Vue.config.errorHandler(error, self);
