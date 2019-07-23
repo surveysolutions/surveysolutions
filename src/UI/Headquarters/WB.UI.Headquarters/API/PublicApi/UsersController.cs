@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -171,13 +172,30 @@ namespace WB.UI.Headquarters.API.PublicApi
 
         [HttpGet]
         [Route("interviewers/{id:guid}/actions-log")]
-        public HttpResponseMessage ActionsLog(Guid id)
+        public AuditLogApiView ActionsLog(Guid id)
         {
-            var fileContent = auditLogService.GenerateTabFile(id, showErrorMessage: false);
-            HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
-            result.Content = new StreamContent(new MemoryStream(fileContent));
-            result.Content.Headers.ContentType = new MediaTypeHeaderValue("text/csv");
-            return result;
+            return GetAuditLogRecords(id, null);
+        }
+
+        [HttpGet]
+        [Route("interviewers/{id:guid}/actions-log/{startDate}")]
+        public AuditLogApiView ActionsLog(Guid id, DateTime startDate)
+        {
+            return GetAuditLogRecords(id, startDate);
+        }
+
+        private AuditLogApiView GetAuditLogRecords(Guid id, DateTime? startDate)
+        {
+            var auditLogResult = auditLogService.GetLastExisted7DaysRecords(id, startDate, showErrorMessage: false);
+            return new AuditLogApiView()
+            {
+                NextBatchRecordDate = auditLogResult.NextBatchRecordDate,
+                Records = auditLogResult.RecordsItem.Select(r => new AuditLogRecordApiView()
+                {
+                    Time = r.Time,
+                    Message = r.Message,
+                }).ToArray()
+            };
         }
     }
 }
