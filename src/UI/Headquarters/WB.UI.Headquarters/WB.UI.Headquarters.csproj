@@ -1103,18 +1103,6 @@
     <EmbeddedResource Include="Resources\ImportQuestionnaire.ro.resx">
       <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\InterviewerAuditRecord.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>InterviewerAuditRecord.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\InterviewerAuditRecord.ro.resx">
-      <DependentUpon>InterviewerAuditRecord.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\InterviewerAuditRecord.ru.resx">
-      <DependentUpon>InterviewerAuditRecord.resx</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Archived.es.resx">
       <DependentUpon>Archived.resx</DependentUpon>
     </EmbeddedResource>
@@ -1163,7 +1151,6 @@
     <EmbeddedResource Include="Resources\ImportQuestionnaire.fr.resx">
       <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\InterviewerAuditRecord.zh.resx" />
     <EmbeddedResource Include="Resources\Interviews.ar.resx">
       <DependentUpon>Interviews.resx</DependentUpon>
     </EmbeddedResource>
@@ -2407,11 +2394,6 @@
     <Compile Include="Models\WebInterview\StartWebInterview.cs" />
     <Compile Include="Models\WebInterview\WebInterviewIndexPageModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resources\InterviewerAuditRecord.Designer.cs">
-      <DependentUpon>InterviewerAuditRecord.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Resources\Archived.Designer.cs">
       <DependentUpon>Archived.resx</DependentUpon>
       <DesignTime>True</DesignTime>
