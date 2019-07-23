@@ -12,8 +12,8 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
         private readonly Dictionary<Type, Dictionary<string, HashSet<IViewModelEventHandler>>> eventTypes =
             new Dictionary<Type, Dictionary<string, HashSet<IViewModelEventHandler>>>();
 
-        private readonly ConcurrentDictionary<(Type, Type), bool> asyncViewModelHandleMethods =
-            new ConcurrentDictionary<(Type, Type), bool>();
+        private readonly ConcurrentDictionary<(Type, Type), MethodInfo> asyncViewModelHandleMethods =
+            new ConcurrentDictionary<(Type, Type), MethodInfo>();
 
         public void Subscribe(IViewModelEventHandler handler, string aggregateRootId)
         {
@@ -64,12 +64,17 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
             return this.eventTypes[eventType][eventSourceId].ToList();
         }
 
-        public bool IsAsyncViewModelHandleMethod(Type viewModelType, Type eventType) =>
-            this.asyncViewModelHandleMethods.GetOrAdd((viewModelType, eventType), x => x.Item1
-                .GetTypeInfo()
-                .ImplementedInterfaces
-                .Where(type => type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IAsyncViewModelEventHandler<>))
-                .Any(type => type.GetTypeInfo().GenericTypeArguments.Single() == x.Item2));
+        public MethodInfo GetViewModelHandleMethod(Type viewModelType, Type eventType) =>
+            this.asyncViewModelHandleMethods.GetOrAdd((viewModelType, eventType), x =>
+            {
+                var isAsync = x.Item1.GetTypeInfo().ImplementedInterfaces
+                    .Where(type => type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IAsyncViewModelEventHandler<>))
+                    .Any(type => type.GetTypeInfo().GenericTypeArguments.Single() == x.Item2);
+
+                var methodName = $"Handle{(isAsync ? "Async" : "")}";
+
+                return viewModelType.GetRuntimeMethod(methodName, new[] { eventType });
+            });
 
         public void RemoveAggregateRoot(string aggregateRootId)
         {

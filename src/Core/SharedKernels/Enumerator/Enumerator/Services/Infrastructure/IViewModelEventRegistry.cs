@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Ncqrs.Eventing;
 
 namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
@@ -16,6 +17,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
 
         void RemoveAggregateRoot(string aggregateRootId);
 
-        bool IsAsyncViewModelHandleMethod(Type viewModelType, Type eventType);
+        MethodInfo GetViewModelHandleMethod(Type viewModelType, Type eventType);
     }
 }

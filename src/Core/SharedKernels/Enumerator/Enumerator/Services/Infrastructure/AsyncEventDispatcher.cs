@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -33,10 +31,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
                 var eventType = @event.Payload.GetType();
                 var viewModelType = viewModel.GetType();
 
-                var methodName = $"Handle{(this.viewModelEventRegistry.IsAsyncViewModelHandleMethod(viewModelType, eventType) ? "Async" : "")}";
-
-                var handler = viewModelType
-                    .GetRuntimeMethod(methodName, new[] { eventType });
+                var handler = this.viewModelEventRegistry.GetViewModelHandleMethod(viewModelType, eventType);
 
                 try
                 {
@@ -45,9 +40,10 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
                 }
                 catch (Exception e)
                 {
-                    this.logger.Error($"Unhandled exception in {viewModelType.Name}.{methodName}<{eventType.Name}>", e);
+                    this.logger.Error($"Unhandled exception in {viewModelType.Name}.{handler.Name}<{eventType.Name}>", e);
 
-                    ((BaseInterviewViewModel) this.currentViewModelPresenter.CurrentViewModel)?.ReloadCommand?.Execute();
+                    ((BaseInterviewViewModel) this.currentViewModelPresenter.CurrentViewModel)?.ReloadCommand
+                        ?.Execute();
 
                     return;
                 }
