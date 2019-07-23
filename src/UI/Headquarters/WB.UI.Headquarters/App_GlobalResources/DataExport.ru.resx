@@ -363,7 +363,7 @@
     <value>Ранее сгеренированные экспортные файлы</value>
   </data>
   <data name="GeneratedDataSets_Desc" xml:space="preserve">
-    <value>Every set is a zip archive with all collected interview data and DDI XML structure you an download previously generated reports</value>
+      <value>Данные экспортируются в zip-архив, содержащий файлы данных указанного содержания и типа. Ниже приведен список ранее экспортированных файлов данных.</value>
   </data>
   <data name="NoDataSets" xml:space="preserve">
     <value>Нет созданных экспортных файлов</value>
