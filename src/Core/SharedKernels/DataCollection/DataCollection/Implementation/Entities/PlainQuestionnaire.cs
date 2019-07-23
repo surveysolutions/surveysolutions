@@ -396,7 +396,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             IQuestion question = this.GetQuestionOrThrow(questionId);
             CheckShouldQestionProvideOptions(question, questionId);
 
-            if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
+            if (question.CascadeFromQuestionId.HasValue || ((question.IsFilteredCombobox ?? false) && question.QuestionType != QuestionType.MultyOption))
             {
                 return questionOptionsRepository.GetOptionForQuestionByOptionText(
                     this,
