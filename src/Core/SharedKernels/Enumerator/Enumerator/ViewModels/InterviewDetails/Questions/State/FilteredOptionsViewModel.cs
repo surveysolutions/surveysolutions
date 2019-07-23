@@ -102,6 +102,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             return Options;
         }
 
+        public virtual CategoricalOption GetOptionByTextValue(string textValue)
+        {
+            return this.interview.GetOptionForQuestionWithFilter(this.questionIdentity, textValue, ParentValue);
+        }
+
         public virtual CategoricalOption GetAnsweredOption(int answer)
             => this.interview.GetOptionForQuestionWithoutFilter(this.questionIdentity, answer, ParentValue);
 
