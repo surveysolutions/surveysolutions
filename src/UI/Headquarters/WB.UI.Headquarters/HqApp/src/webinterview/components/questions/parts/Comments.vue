@@ -2,7 +2,7 @@
     <div class="information-block comments-block">
         <button href="javascript:void(0);"
                 class="btn btn-link show-resolved-comments" 
-                v-if="$store.getters.isReviewMode && this.$me.comments.length > 0"
+                v-if="showResolvedVisible"
                 @click="showResolved = !showResolved">
             <span>{{ showResolved ? this.$t('WebInterviewUI.HideResolved') : this.$t('WebInterviewUI.ShowResolved')}}</span>
         </button>
@@ -51,7 +51,7 @@
 <script lang="js">
 
     import { entityPartial } from "~/webinterview/components/mixins"
-    import { filter } from "lodash"
+    import { filter, find } from "lodash"
 
     export default {
         mixins: [entityPartial],
@@ -91,6 +91,9 @@
                 return filter(this.$me.comments, c => {
                     return self.showResolved || !c.resolved
                 })
+            },
+            showResolvedVisible() {
+                return this.$me.comments.length > 0 && (find(this.$me.comments, cmt => cmt.resolved) != null)
             },
             allowPostComment() {
                 return this.comment && 
