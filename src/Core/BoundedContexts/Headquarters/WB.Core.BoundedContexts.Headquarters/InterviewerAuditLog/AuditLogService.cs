@@ -35,37 +35,41 @@ namespace WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog
             return new AuditLogQueryResult()
             {
                 NextBatchRecordDate = result.NextBatchRecordDate,
-                RecordsItem = result.Records.Select(record => new AuditLogRecordItem()
-                {
-                    Time = record.Time,
-                    Type = record.Type,
-                    Message = GetUserMessage(record, showErrorMessage),
-                    Description = GetMessageDescription(record, showErrorMessage),
-                }).ToArray()
+                RecordsItem = GetAuditLogRecordItems(result.Records, showErrorMessage).ToArray()
             };
         }
 
-        public IEnumerable<AuditLogRecordItem> GetAddRecords(Guid id, bool showErrorMessage = false)
+        public IEnumerable<AuditLogRecordItem> GetAllRecords(Guid id, bool showErrorMessage = false)
         {
             var userView = usersRepository.GetUser(new UserViewInputModel(id));
             if (userView == null || (!userView.IsInterviewer() && !userView.IsSupervisor()))
                 throw new InvalidOperationException($"User with id: {id} don't found");
 
             var records = auditLogFactory.GetRecords(id);
-
-            foreach (var record in records)
-            {
-                var auditLogRecord = new AuditLogRecordItem()
-                {
-                    Time = record.Time,
-                    Type = record.Type,
-                    Message = GetUserMessage(record, showErrorMessage),
-                    Description = GetMessageDescription(record, showErrorMessage),
-                };
-                yield return auditLogRecord;
-            }
+            return GetAuditLogRecordItems(records, showErrorMessage);
         }
 
+        public IEnumerable<AuditLogRecordItem> GetRecords(Guid id, DateTime start, DateTime end, bool showErrorMessage = false)
+        {
+            var userView = usersRepository.GetUser(new UserViewInputModel(id));
+            if (userView == null || (!userView.IsInterviewer() && !userView.IsSupervisor()))
+                throw new InvalidOperationException($"User with id: {id} don't found");
+
+            var records = auditLogFactory.GetRecords(id, start, end);
+            return GetAuditLogRecordItems(records, showErrorMessage);
+        }
+
+        IEnumerable<AuditLogRecordItem> GetAuditLogRecordItems(IEnumerable<AuditLogRecord> records, bool showErrorMessage)
+        {
+            return records.Select(record => new AuditLogRecordItem()
+            {
+                Time = record.Time,
+                Type = record.Type,
+                Message = GetUserMessage(record, showErrorMessage),
+                Description = GetMessageDescription(record, showErrorMessage),
+            });
+        }
+        
         private string GetUserMessage(AuditLogRecord record, bool showErrorMessage)
         {
             switch (record.Type)

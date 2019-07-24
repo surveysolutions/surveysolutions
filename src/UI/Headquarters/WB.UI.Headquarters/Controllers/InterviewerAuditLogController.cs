@@ -103,7 +103,7 @@ namespace WB.UI.Headquarters.Controllers
             if (userView == null || (!userView.IsInterviewer() && !userView.IsSupervisor()))
                 throw new InvalidOperationException($"User with id: {id} don't found");
 
-            var records = auditLogService.GetAddRecords(id);
+            var records = auditLogService.GetAllRecords(id);
 
             var csvConfiguration = new Configuration
             {
