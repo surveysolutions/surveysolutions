@@ -79,13 +79,7 @@ export default {
             name: "Maps",
             orderable: false,
             searchable: false,
-            title: this.$t("Pages.MapList_Title"),
-            render(data) {
-                const mapsLinks = _.map(data, (map) => { 
-                    return "<a href='" + window.input.settings.config.basePath + "Maps/Details?mapname=" + encodeURIComponent(map) + "'>" + map + "</a>" });
-
-                return _.join(mapsLinks, ", ");
-            }            
+            title: this.$t("Pages.MapList_Title")           
           }          
         ],
         ajax: {
