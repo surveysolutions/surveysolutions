@@ -353,12 +353,14 @@ namespace WB.Tests.Abc.TestFactories
             decimal[] rosterVector = null, 
             string comment = null, 
             Guid? userId = null,
-            DateTimeOffset? originDate = null)
+            DateTimeOffset? originDate = null,
+            Guid? id = null)
             => new AnswerCommented(userId ?? Guid.NewGuid(), 
                 questionId ?? Guid.NewGuid(),
                 rosterVector ?? RosterVector.Empty,
                 originDate ?? DateTimeOffset.Now,
-                comment ?? "Comment");
+                comment ?? "Comment",
+                id ?? Guid.NewGuid());
 
         public TextListQuestionAnswered TextListQuestionAnswered(
            Guid? questionId = null, decimal[] rosterVector = null, Tuple<decimal, string>[] answers = null, DateTimeOffset? originDate = null)
