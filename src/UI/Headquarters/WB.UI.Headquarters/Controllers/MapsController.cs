@@ -25,7 +25,8 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor;
 
         public MapsController(ICommandService commandService, ILogger logger,
-            IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor, IAuthorizedUser authorizedUser) : base(commandService, logger)
+            IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor,
+            IMapService mapPropertiesProvider, IAuthorizedUser authorizedUser) : base(commandService, logger)
         {
             this.mapPlainStorageAccessor = mapPlainStorageAccessor;
             this.authorizedUser = authorizedUser;
@@ -96,6 +97,54 @@ namespace WB.UI.Headquarters.Controllers
                 UserMapLinkingUrl = Url.RouteUrl("Default", new { httproute = "", controller = "Maps", action = "UserMapsLink" })
             };
             return View(model);
+        }
+
+        [HttpGet]
+        [ActivePage(MenuItem.Maps)]
+        public ActionResult Details(string mapName)
+        {
+            if (mapName == null)
+                return HttpNotFound();
+
+            MapBrowseItem map = mapPlainStorageAccessor.GetById(mapName);
+            if (map == null)
+                return HttpNotFound();
+
+            return this.View("Details",
+                new MapDetailsModel
+                {
+
+                    DataUrl = Url.RouteUrl("DefaultApiWithAction",
+                        new
+                        {
+                            httproute = "",
+                            controller = "MapsApi",
+                            action = "MapUserList"
+                        }),
+                    MapPreviewUrl = Url.RouteUrl("Default",
+                        new {httproute = "", controller = "Maps", action = "MapPreview", mapName = map.Id}),
+                    MapsUrl = Url.RouteUrl("Default", new {httproute = "", controller = "Maps", action = "Index"}),
+                    FileName = mapName,
+                    Size = FileSizeUtils.SizeInMegabytes(map.Size),
+                    Wkid = map.Wkid,
+                    ImportDate = map.ImportDate.HasValue ? map.ImportDate.Value.FormatDateWithTime() : "",
+                    MaxScale = map.MaxScale,
+                    MinScale = map.MinScale,
+                    DeleteMapUserLinkUrl = Url.RouteUrl("DefaultApiWithAction",
+                        new {httproute = "", controller = "MapsApi", action = "DeleteMapUser"})
+                });
+        }
+
+        [HttpGet]
+        public ActionResult MapPreview(string mapName)
+        {
+            this.ViewBag.ActivePage = MenuItem.Maps;
+
+            MapBrowseItem map = mapPlainStorageAccessor.GetById(mapName);
+            if (map == null)
+                return HttpNotFound();
+
+            return View(map);
         }
     }
 }

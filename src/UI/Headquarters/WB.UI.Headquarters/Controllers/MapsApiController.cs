@@ -18,6 +18,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
+using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Implementation.Maps;
@@ -39,12 +40,14 @@ namespace WB.UI.Headquarters.Controllers
         private readonly ILogger logger;
         private readonly IMapStorageService mapStorageService;
         private readonly IExportFactory exportFactory;
+        private readonly IMapService mapPropertiesProvider;
         private readonly ICsvReader recordsAccessorFactory;
         private readonly IArchiveUtils archiveUtils;
 
         public MapsApiController(ICommandService commandService,
             IMapBrowseViewFactory mapBrowseViewFactory, ILogger logger,
             IMapStorageService mapStorageService, IExportFactory exportFactory,
+            IMapService mapPropertiesProvider,
             IFileSystemAccessor fileSystemAccessor,
             ICsvReader recordsAccessorFactory,
             IArchiveUtils archiveUtils) : base(commandService, logger)
@@ -54,6 +57,7 @@ namespace WB.UI.Headquarters.Controllers
             this.mapStorageService = mapStorageService;
             this.exportFactory = exportFactory;
             this.fileSystemAccessor = fileSystemAccessor;
+            this.mapPropertiesProvider = mapPropertiesProvider;
             this.recordsAccessorFactory = recordsAccessorFactory;
             this.archiveUtils = archiveUtils;
         }
@@ -139,6 +143,13 @@ namespace WB.UI.Headquarters.Controllers
             if (".zip" != this.fileSystemAccessor.GetFileExtension(file.FileName).ToLower())
             {
                 response.Errors.Add(Maps.MapLoadingNotZipError);
+                return response;
+            }
+
+            if (!this.mapPropertiesProvider.IsEngineEnabled())
+            {
+                logger.Error($"Map engine is not initialized");
+                response.Errors.Add(Maps.MapEngineIsNotInitialized);
                 return response;
             }
             try
