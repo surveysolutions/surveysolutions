@@ -62,11 +62,10 @@
                 answer: []
             }
         },
-
-        watch: {
-            "$me.answer"(to, from) {
+        created(){
+            this.$watch('$me.answer', (to, from) => {
                 this.answer = to
-            }
+            }, { immediate: true });
         },
         
         computed: {
