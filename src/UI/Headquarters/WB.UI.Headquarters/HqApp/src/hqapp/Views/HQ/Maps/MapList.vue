@@ -114,10 +114,6 @@ export default {
     contextMenuItems({ rowData }) {
       return [
         {
-          name: this.$t("Common.Open"),
-          callback: () => window.location = window.input.settings.config.basePath + "Maps/Details?mapname=" + encodeURIComponent(rowData.fileName)           
-        },
-        {
           name: this.$t("Pages.MapList_DeleteMap"),
           callback: () => this.deleteMap(rowData.fileName)
         }
