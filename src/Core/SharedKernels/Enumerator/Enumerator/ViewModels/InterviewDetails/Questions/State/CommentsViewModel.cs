@@ -104,9 +104,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private void ShowHideResolveButton()
         {
             var principalCurrentUserIdentity = this.principal.CurrentUserIdentity;
+            bool anyHqComment = this.Comments.Any(x => x.CommentState != CommentState.ResolvedComment
+                                                        && x.UserRole == UserRoles.Headquarter || x.UserRole == UserRoles.Administrator);
+
             this.ResolveCommentsButtonVisible = principalCurrentUserIdentity.UserId == this.interview.SupervisorId
-                                                && this.Comments.Any(x => x.CommentState != CommentState.ResolvedComment
-                                                                          && x.UserRole != UserRoles.Headquarter);
+                                                && this.Comments.Any(x => x.CommentState != CommentState.ResolvedComment)
+                                                && !anyHqComment;
         }
 
         private CommentViewModel ToViewModel(AnswerComment comment)
