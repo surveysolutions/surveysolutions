@@ -21,7 +21,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
     {
         private readonly IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor;
         private readonly IPlainStorageAccessor<UserMap> userMapsStorage;
-        private readonly IMapService mapPropertiesProvider;
         private readonly IUserRepository userStorage;
 
         
@@ -40,15 +39,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         public MapFileStorageService(IFileSystemAccessor fileSystemAccessor, string folderPath, IArchiveUtils archiveUtils,
             IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor,
             IPlainStorageAccessor<UserMap> userMapsStorage,
-            IMapService mapPropertiesProvider,
             IUserRepository userStorage,
             IExternalFileStorage externalFileStorage)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.archiveUtils = archiveUtils;
             this.mapPlainStorageAccessor = mapPlainStorageAccessor;
-
-            this.mapPropertiesProvider = mapPropertiesProvider;
 
             this.userMapsStorage = userMapsStorage;
             this.userStorage = userStorage;
@@ -79,21 +75,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
             try
             {
-                var properties = await mapPropertiesProvider.GetMapPropertiesFromFileAsync(tempFile);
                 var mapItem = new MapBrowseItem()
                 {
                     Id = mapFile.Name,
                     ImportDate = DateTime.UtcNow,
                     FileName = mapFile.Name,
-                    Size = mapFile.Size,
-
-                    Wkid = properties.Wkid,
-                    XMaxVal = properties.XMax,
-                    YMaxVal = properties.YMax,
-                    XMinVal = properties.XMin,
-                    YMinVal = properties.YMin,
-                    MaxScale = properties.MaxScale,
-                    MinScale = properties.MinScale
+                    Size = mapFile.Size
                 };
 
                 if (externalFileStorage.IsEnabled())

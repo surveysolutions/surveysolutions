@@ -116,9 +116,6 @@
     <Reference Include="EntityFramework6.Npgsql, Version=3.2.0.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\EntityFramework6.Npgsql.3.2.0\lib\net45\EntityFramework6.Npgsql.dll</HintPath>
     </Reference>
-    <Reference Include="Esri.ArcGISRuntime, Version=100.2.1.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.2.1\lib\net452\Esri.ArcGISRuntime.dll</HintPath>
-    </Reference>
     <Reference Include="GeoJSON.Net, Version=1.1.72.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\GeoJSON.Net.1.1.72\lib\net45\GeoJSON.Net.dll</HintPath>
     </Reference>
@@ -1956,8 +1953,6 @@
     <Content Include="Views\Interview\Review.cshtml" />
     <Content Include="Views\Shared\_AdminLayout.cshtml" />
     <Content Include="Views\Shared\_MainLayoutHq.cshtml" />
-    <Content Include="Views\Maps\Details.cshtml" />
-    <Content Include="Views\Maps\MapPreview.cshtml" />
     <Content Include="Views\Maps\UserMapsLink.cshtml" />
     <Content Include="Views\Maps\Index.cshtml" />
     <Content Include="Views\Users\index.cshtml" />
@@ -2263,7 +2258,6 @@
     <Compile Include="Controllers\WebInterviewController.Actions.cs" />
     <Compile Include="Code\CustomAutofacHubActivator.cs" />
     <Compile Include="Implementation\Maps\JsonMapResponse.cs" />
-    <Compile Include="Implementation\Maps\MapService.cs" />
     <Compile Include="Implementation\Services\SecureStorage.cs" />
     <Compile Include="Injections\ILocalExportServiceRunner.cs" />
     <Compile Include="Injections\LocalExportServiceRunner.cs" />
@@ -2274,7 +2268,6 @@
     <Compile Include="Models\Maps\MapsModel.cs" />
     <Compile Include="Models\Maps\UserMapModel.cs" />
     <Compile Include="Models\Maps\UserMapLinkModel.cs" />
-    <Compile Include="Models\Maps\MapDetailsModel.cs" />
     <Compile Include="Models\Reports\StatusDurationModel.cs" />
     <Compile Include="Models\Reports\DevicesInterviewersModel.cs" />
     <Compile Include="Models\Reports\SurveysAndStatusesModel.cs" />
@@ -2650,12 +2643,10 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.2.1\build\net452\Esri.ArcGISRuntime.WPF.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.2.1\build\net452\Esri.ArcGISRuntime.WPF.targets'))" />
     <Error Condition="!Exists('..\..\..\..\packages\RazorGenerator.MsBuild.2.5.0\build\RazorGenerator.MsBuild.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\RazorGenerator.MsBuild.2.5.0\build\RazorGenerator.MsBuild.targets'))" />
     <Error Condition="!Exists('..\..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
     <Error Condition="!Exists('..\..\..\..\packages\Refit.4.7.9\build\net461\refit.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Refit.4.7.9\build\net461\refit.targets'))" />
   </Target>
-  <Import Project="..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.2.1\build\net452\Esri.ArcGISRuntime.WPF.targets" Condition="Exists('..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.2.1\build\net452\Esri.ArcGISRuntime.WPF.targets')" />
   <Import Project="..\..\..\..\packages\RazorGenerator.MsBuild.2.5.0\build\RazorGenerator.MsBuild.targets" Condition="Exists('..\..\..\..\packages\RazorGenerator.MsBuild.2.5.0\build\RazorGenerator.MsBuild.targets')" />
   <Import Project="..\..\..\..\packages\Refit.4.7.9\build\net461\refit.targets" Condition="Exists('..\..\..\..\packages\Refit.4.7.9\build\net461\refit.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
