@@ -96,7 +96,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual ISet<InterviewStatisticsReportRow> StatisticsReport { get; set; } = new HashSet<InterviewStatisticsReportRow>();
 
         public virtual int CommentedEntitiesCount { get; set; }
-        
+
+        public virtual bool HasResolvedComments { get; set; }
+
         public virtual void AnswerFeaturedQuestion(Guid questionId, string answer)
         {
             this.AnswersToFeaturedQuestions.First(x => x.Questionid == questionId).Answer = answer;

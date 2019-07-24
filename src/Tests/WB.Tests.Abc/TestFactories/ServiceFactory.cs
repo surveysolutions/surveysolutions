@@ -111,6 +111,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.WebInterview;
+using WB.Enumerator.Native.WebInterview.Models;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
@@ -1122,6 +1123,21 @@ namespace WB.Tests.Abc.TestFactories
             return new WebInterviewNotificationService(statefulInterviewRepository, questionnaireStorage, webInterviewInvoker);
         }
 
+        public HqWebInterviewInterviewEntityFactory HqWebInterviewInterviewEntityFactory(
+            IAuthorizedUser authorizedUser = null)
+        {
+            var autoMapperConfig = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new WebInterviewAutoMapProfile());
+            });
+
+            return new HqWebInterviewInterviewEntityFactory(autoMapperConfig.CreateMapper(),
+                authorizedUser ?? Mock.Of<IAuthorizedUser>(),
+                new EnumeratorGroupGroupStateCalculationStrategy(), 
+                new SupervisorGroupStateCalculationStrategy(), 
+                Create.Service.WebNavigationService());
+        }
+        
         public  WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog.IAuditLogService AuditLogService(
             IAuditLogFactory auditLogFactory,
             IAuthorizedUser authorizedUser = null)

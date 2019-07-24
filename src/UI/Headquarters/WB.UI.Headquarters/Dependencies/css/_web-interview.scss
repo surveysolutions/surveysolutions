@@ -195,7 +195,7 @@
 	}
 }
 .comments-block{
-	p{
+	p {
 		color: $gray_text;
 		& + .enumerators-comment h6,
 		& + h6{
@@ -208,10 +208,13 @@
 		
 	}
 	.publication-date{
-		color: rgb(203, 203, 203);
+		color: rgb(168, 168, 168);
 	}
 	.enumerators-comment, .enumerators-comment p, .enumerators-comment h6{
 		color: $pink;
+	}
+	.resolved-comment, .resolved-comment p, .resolved-comment h6 {
+		color: rgb(168, 168, 168);
 	}
 	.comment {
 		&:only-of-type{

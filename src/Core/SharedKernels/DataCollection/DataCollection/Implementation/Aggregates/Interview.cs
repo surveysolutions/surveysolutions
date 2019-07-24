@@ -537,6 +537,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ExpressionProcessorStatePrototype.DisableStaticTexts(@event.StaticTexts);
         }
 
+        protected virtual void Apply(AnswerCommentResolved @event)
+        {
+            var commentByQuestion = Identity.Create(@event.QuestionId, @event.RosterVector);
+            var answerComments = this.Tree.GetQuestion(commentByQuestion).AnswerComments;
+            foreach (var answerComment in answerComments)
+            {
+                if (@event.Comments.Contains(answerComment.Id.GetValueOrDefault()))
+                {
+                    answerComment.Resolved = true;
+                }
+            }
+        }
+
         protected virtual void Apply(AnswerCommented @event)
         {
             var commentByQuestion = Identity.Create(@event.QuestionId, @event.RosterVector);
@@ -548,7 +561,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.Tree.GetQuestion(commentByQuestion).AnswerComments.Add(
                 new AnswerComment(@event.UserId, userRole, 
                     @event.OriginDate?.UtcDateTime ?? @event.CommentTime.Value, 
-                    @event.Comment, commentByQuestion));
+                    @event.Comment, commentByQuestion, @event.CommentId,
+                    false));
         }
 
         protected virtual void Apply(FlagSetToAnswer @event) { }
@@ -1716,7 +1730,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             new InterviewQuestionInvariants(new Identity(questionId, rosterVector), questionnaire, this.Tree, questionOptionsRepository)
                 .RequireQuestionExists();
 
-            this.ApplyEvent(new AnswerCommented(userId, questionId, rosterVector, originDate, comment));
+            this.ApplyEvent(new AnswerCommented(userId, questionId, rosterVector, originDate, comment, Guid.NewGuid()));
+        }
+
+        public void ResolveComment(ResolveCommentAnswerCommand command)
+        {
+            new InterviewPropertiesInvariants(this.properties)
+                .RequireAnswerCanBeChanged();
+
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+
+            new InterviewQuestionInvariants(command.Question, questionnaire, this.Tree, questionOptionsRepository)
+                .RequireQuestionExists()
+                .RequireCommentExists();
+
+            var question = this.Tree.GetQuestion(command.Question);
+            var commentIds = question.AnswerComments.Where(x => x.Id.HasValue).Select(x => x.Id.Value).ToList();
+            this.ApplyEvent(new AnswerCommentResolved(command.UserId, command.QuestionId, command.RosterVector, command.OriginDate, commentIds));
         }
 
         public void AssignResponsible(AssignResponsibleCommand command)
@@ -1969,7 +1999,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     Date = answerComment.Date,
                     Text = answerComment.Text,
                     QuestionId = answerDto.Id,
-                    RosterVector = answerDto.QuestionRosterVector
+                    RosterVector = answerDto.QuestionRosterVector,
+                    Id = answerDto.Id
                 }).ToList();
 
             if (this.properties.Status == InterviewStatus.Deleted)
@@ -1988,7 +2019,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             foreach (var commentedAnswer in commentedAnswers)
             {
                 this.ApplyEvent(new AnswerCommented(commentedAnswer.UserId, commentedAnswer.QuestionId,
-                    commentedAnswer.RosterVector, commentedAnswer.Date, commentedAnswer.Text));
+                    commentedAnswer.RosterVector, commentedAnswer.Date, commentedAnswer.Text, commentedAnswer.Id));
             }
         }
 
@@ -2490,7 +2521,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private static AnswerComment ToAnswerComment(CommentSynchronizationDto answerComment,
             AnsweredQuestionSynchronizationDto answerDto)
             => new AnswerComment(answerComment.UserId, answerComment.UserRole, answerComment.Date, answerComment.Text,
-                Identity.Create(answerDto.Id, answerDto.QuestionRosterVector));
+                Identity.Create(answerDto.Id, answerDto.QuestionRosterVector), answerComment.Id, false);
 
         public InterviewTreeMultiLinkedToRosterQuestion GetLinkedMultiOptionQuestion(Identity identity) =>
             this.Tree.GetQuestion(identity).GetAsInterviewTreeMultiLinkedToRosterQuestion();

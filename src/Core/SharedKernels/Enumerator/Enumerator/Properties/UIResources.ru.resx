@@ -690,4 +690,13 @@
   <data name="Interview_Question_NumberRosterRemoveConfirm" xml:space="preserve">
     <value>Вы уверены, что хотите удалить {0} строк(у) у зависимых списков?</value>
   </data>
+  <data name="Interview_Question_HideResolvedComments" xml:space="preserve">
+    <value>Показать решённые</value>
+  </data>
+  <data name="Interview_Question_ShowResolvedComments" xml:space="preserve">
+    <value>Скрыть решённые</value>
+  </data>
+  <data name="Interview_Comment_Resolve" xml:space="preserve">
+    <value>Вопрос решён</value>
+  </data>
 </root>
