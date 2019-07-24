@@ -170,32 +170,26 @@ namespace WB.UI.Headquarters.API.PublicApi
             return this.Ok();
         }
 
+        /// <summary>
+        /// Returns audit log records for interviewer.
+        /// You can specify "start" and "end" parameters in query string to get range results.
+        /// </summary>
+        /// <param name="id">User id</param>
+        /// <param name="start" >Start datetime. If isn't specified then return data for last 7 days.</param>
+        /// <param name="end">End datetime. If isn't specified then get data for 7 days from start data.</param>
         [HttpGet]
         [Route("interviewers/{id:guid}/actions-log")]
-        public AuditLogApiView ActionsLog(Guid id)
+        public AuditLogRecordApiView[] ActionsLog(Guid id, DateTime? start = null, DateTime? end = null)
         {
-            return GetAuditLogRecords(id, null);
-        }
+            DateTime startDate = start ?? DateTime.UtcNow.AddDays(-7);
+            DateTime endDate = end ?? startDate.AddDays(7);
 
-        [HttpGet]
-        [Route("interviewers/{id:guid}/actions-log/{startDate}")]
-        public AuditLogApiView ActionsLog(Guid id, DateTime startDate)
-        {
-            return GetAuditLogRecords(id, startDate);
-        }
-
-        private AuditLogApiView GetAuditLogRecords(Guid id, DateTime? startDate)
-        {
-            var auditLogResult = auditLogService.GetLastExisted7DaysRecords(id, startDate, showErrorMessage: false);
-            return new AuditLogApiView()
+            var records = auditLogService.GetRecords(id, startDate, endDate, showErrorMessage: false);
+            return records.Select(record => new AuditLogRecordApiView()
             {
-                NextBatchRecordDate = auditLogResult.NextBatchRecordDate,
-                Records = auditLogResult.RecordsItem.Select(r => new AuditLogRecordApiView()
-                {
-                    Time = r.Time,
-                    Message = r.Message,
-                }).ToArray()
-            };
+                Time = record.Time,
+                Message = record.Message,
+            }).ToArray();
         }
     }
 }
