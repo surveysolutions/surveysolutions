@@ -12,15 +12,12 @@ namespace WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog
 {
     public class AuditLogService: IAuditLogService
     {
-        private readonly IUserViewFactory usersRepository;
         private readonly IAuditLogFactory auditLogFactory;
         private readonly IAuthorizedUser authorizedUser;
 
-        public AuditLogService(IUserViewFactory usersRepository,
-            IAuditLogFactory auditLogFactory,
+        public AuditLogService(IAuditLogFactory auditLogFactory,
             IAuthorizedUser authorizedUser)
         {
-            this.usersRepository = usersRepository;
             this.auditLogFactory = auditLogFactory;
             this.authorizedUser = authorizedUser;
         }
@@ -35,26 +32,18 @@ namespace WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog
             return new AuditLogQueryResult()
             {
                 NextBatchRecordDate = result.NextBatchRecordDate,
-                RecordsItem = GetAuditLogRecordItems(result.Records, showErrorMessage).ToArray()
+                Items = GetAuditLogRecordItems(result.Records, showErrorMessage).ToArray()
             };
         }
 
         public IEnumerable<AuditLogRecordItem> GetAllRecords(Guid id, bool showErrorMessage = false)
         {
-            var userView = usersRepository.GetUser(new UserViewInputModel(id));
-            if (userView == null || (!userView.IsInterviewer() && !userView.IsSupervisor()))
-                throw new InvalidOperationException($"User with id: {id} don't found");
-
             var records = auditLogFactory.GetRecords(id);
             return GetAuditLogRecordItems(records, showErrorMessage);
         }
 
         public IEnumerable<AuditLogRecordItem> GetRecords(Guid id, DateTime start, DateTime end, bool showErrorMessage = false)
         {
-            var userView = usersRepository.GetUser(new UserViewInputModel(id));
-            if (userView == null || (!userView.IsInterviewer() && !userView.IsSupervisor()))
-                throw new InvalidOperationException($"User with id: {id} don't found");
-
             var records = auditLogFactory.GetRecords(id, start, end);
             return GetAuditLogRecordItems(records, showErrorMessage);
         }

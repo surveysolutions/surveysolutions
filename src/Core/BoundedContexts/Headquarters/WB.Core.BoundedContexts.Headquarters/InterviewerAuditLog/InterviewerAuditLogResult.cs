@@ -6,7 +6,7 @@ namespace WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog
     public class AuditLogQueryResult
     {
         public DateTime? NextBatchRecordDate { get; set; }
-        public AuditLogRecordItem[] RecordsItem { get; set; }
+        public AuditLogRecordItem[] Items { get; set; }
     }
     
     public class AuditLogRecordItem
