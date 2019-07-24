@@ -7,13 +7,14 @@ namespace WB.Persistence.Headquarters.Migrations.PlainStore
     {
         public override void Up()
         {
-            Delete.Column("wkid").FromTable("mapbrowseitems");
-            Delete.Column("xmaxval").FromTable("mapbrowseitems");
-            Delete.Column("xminval").FromTable("mapbrowseitems");
-            Delete.Column("ymaxval").FromTable("mapbrowseitems");
-            Delete.Column("yminval").FromTable("mapbrowseitems");
-            Delete.Column("maxscale").FromTable("mapbrowseitems");
-            Delete.Column("minscale").FromTable("mapbrowseitems");
+            Delete.Column("wkid")
+                .Column("xmaxval")
+                .Column("xminval")
+                .Column("ymaxval")
+                .Column("yminval")
+                .Column("maxscale")
+                .Column("minscale")
+                .FromTable("mapbrowseitems");
         }
 
         public override void Down()
