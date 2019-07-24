@@ -56,7 +56,7 @@ namespace WB.UI.Headquarters.Controllers
             var result = auditLogService.GetLastExisted7DaysRecords(id, startDateTime.Value, showErrorMessage);
 
             var recordsByDate = new Dictionary<DateTime, List<AuditLogRecordItem>>();
-            foreach (var record in result.RecordsItem)
+            foreach (var record in result.Items)
             {
                 if (!recordsByDate.ContainsKey(record.Time.Date))
                     recordsByDate.Add(record.Time.Date, new List<AuditLogRecordItem>());
