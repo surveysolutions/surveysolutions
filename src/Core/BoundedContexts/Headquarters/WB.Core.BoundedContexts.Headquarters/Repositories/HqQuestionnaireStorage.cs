@@ -83,19 +83,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
                     compositeItem.StatExportCaption = abstractQuestion.StataExportCaption;
                 }
 
-                if (question?.Answers != null && question.Answers.Count > 0)
-                {
-                    compositeItem.Answers = new HashSet<QuestionnaireCompositeItemAnswer>(question.Answers.Select(
-                        a => new QuestionnaireCompositeItemAnswer
-                        {
-                            Value = a.AnswerValue,
-                            Text = a.AnswerText,
-                            AnswerCode = a.AnswerCode,
-                            Parent = a.ParentValue,
-                            ParentCode = a.ParentCode
-                        }));
-                }
-
                 questionnaireItemsWriter.Store(compositeItem);
                 questionnaireDocument.EntitiesIdMap.Add(compositeItem.EntityId, compositeItem.Id);
             }
