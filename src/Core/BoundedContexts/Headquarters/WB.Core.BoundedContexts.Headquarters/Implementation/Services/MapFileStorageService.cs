@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
+using OSGeo.GDAL;
+using OSGeo.OSR;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
@@ -11,6 +14,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Maps;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -21,7 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
     {
         private readonly IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor;
         private readonly IPlainStorageAccessor<UserMap> userMapsStorage;
-        private readonly IMapService mapPropertiesProvider;
+        private readonly ISerializer serializer;
         private readonly IUserRepository userStorage;
 
         
@@ -33,24 +37,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private const string MapsFolderName = "MapsData";
         private readonly string path;
 
-        private readonly string[] permittedFileExtensions = { ".tpk", ".mmpk" };
-
         private readonly string mapsFolderPath;
 
         public MapFileStorageService(IFileSystemAccessor fileSystemAccessor, string folderPath, IArchiveUtils archiveUtils,
             IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor,
             IPlainStorageAccessor<UserMap> userMapsStorage,
-            IMapService mapPropertiesProvider,
+            ISerializer serializer,
             IUserRepository userStorage,
             IExternalFileStorage externalFileStorage)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.archiveUtils = archiveUtils;
             this.mapPlainStorageAccessor = mapPlainStorageAccessor;
-
-            this.mapPropertiesProvider = mapPropertiesProvider;
-
             this.userMapsStorage = userMapsStorage;
+            this.serializer = serializer;
             this.userStorage = userStorage;
 
             this.externalFileStorage = externalFileStorage;
@@ -79,22 +79,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
             try
             {
-                var properties = await mapPropertiesProvider.GetMapPropertiesFromFileAsync(tempFile);
-                var mapItem = new MapBrowseItem()
-                {
-                    Id = mapFile.Name,
-                    ImportDate = DateTime.UtcNow,
-                    FileName = mapFile.Name,
-                    Size = mapFile.Size,
-
-                    Wkid = properties.Wkid,
-                    XMaxVal = properties.XMax,
-                    YMaxVal = properties.YMax,
-                    XMinVal = properties.XMin,
-                    YMinVal = properties.YMin,
-                    MaxScale = properties.MaxScale,
-                    MinScale = properties.MinScale
-                };
+                var mapItem = this.ToMapBrowseItem(tempFile, mapFile);
 
                 if (externalFileStorage.IsEnabled())
                 {
@@ -112,7 +97,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 
                 this.mapPlainStorageAccessor.Store(mapItem, mapItem.Id);
             }
-            catch
+            catch(Exception e)
             {
                 if (this.fileSystemAccessor.IsFileExists(tempFile))
                     fileSystemAccessor.DeleteFile(tempFile);
@@ -123,6 +108,68 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 if (this.fileSystemAccessor.IsDirectoryExists(pathToSave))
                     fileSystemAccessor.DeleteDirectory(pathToSave);
             }
+        }
+
+        private MapBrowseItem ToMapBrowseItem(string tempFile, ExtractedFile mapFile)
+        {
+            var item = new MapBrowseItem
+            {
+                Id = mapFile.Name,
+                ImportDate = DateTime.UtcNow,
+                FileName = mapFile.Name,
+                Size = mapFile.Size
+            };
+
+            void SetMapProperties(dynamic _, MapBrowseItem i)
+            {
+                i.Wkid = _.fullExtent.spatialReference.wkid;
+                i.XMaxVal = _.fullExtent.xmax;
+                i.XMinVal = _.fullExtent.xmin;
+                i.YMaxVal = _.fullExtent.ymax;
+                i.YMinVal = _.fullExtent.ymin;
+                i.MaxScale = _.maxScale;
+                i.MinScale = _.minScal;
+            };
+
+            switch (this.fileSystemAccessor.GetFileExtension(tempFile))
+            {
+                case ".tpk":
+                {
+                    var unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, "mapserver.json");
+                    var jsonObject = this.serializer.Deserialize<dynamic>(Encoding.UTF8.GetString(unzippedFile.Bytes));
+                    SetMapProperties(jsonObject.contents, item);
+                }
+                    break;
+                case ".mmpk":
+                {
+                    var unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, "root.json");
+                    if (unzippedFile == null) return null;
+
+                    var jsonObject = this.serializer.Deserialize<dynamic>(Encoding.UTF8.GetString(unzippedFile.Bytes));
+                    SetMapProperties(jsonObject, item);
+                }
+                    break;
+                case ".tif":
+                {
+                    GdalConfiguration.ConfigureGdal();
+                    Dataset ds = Gdal.Open(tempFile, Access.GA_ReadOnly);
+                    SpatialReference sr = new SpatialReference(ds.GetProjection());
+
+                    if (sr.IsProjected() < 1)
+                        throw new ArgumentException(
+                            $"Geotiff is not projected. {this.fileSystemAccessor.GetFileName(tempFile)}");
+
+                    var wkid = 102100;
+                    int.TryParse(sr.GetAuthorityCode(null), out wkid);
+
+                    item.Wkid = wkid;
+                }
+                    break;
+                default:
+                    throw new ArgumentException("Unsupported map type");
+            }
+
+            return item;
         }
 
         public void DeleteMap(string mapName)
