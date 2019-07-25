@@ -9,6 +9,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Interviewer.Activities;
@@ -45,6 +46,7 @@ namespace WB.UI.Interviewer
             //temp fix of KP-11583
             //
             //base.ResetStart();
+            this.serviceLocator.GetInstance<InterviewDashboardEventHandler>();
             logger.Warn("Ignored application reset start");
         }
 
@@ -62,8 +64,16 @@ namespace WB.UI.Interviewer
             this.CheckAndProcessAudit();
 
             this.UpdateNotificationsWorker();
-           
+
+            this.CheckAndProcessInterviewsWithoutViews();
+
             return base.ApplicationStartup(hint);
+        }
+
+        private void CheckAndProcessInterviewsWithoutViews()
+        {
+            var interviewsAccessor = Mvx.IoCProvider.Resolve<IInterviewerInterviewAccessor>();
+            interviewsAccessor.CheckAndProcessInterviewsWithoutViews();
         }
 
         private void UpdateNotificationsWorker()
