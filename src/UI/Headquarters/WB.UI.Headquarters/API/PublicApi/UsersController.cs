@@ -1,13 +1,19 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.Code;
+using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.API.PublicApi
 {
@@ -17,14 +23,17 @@ namespace WB.UI.Headquarters.API.PublicApi
     {
         private readonly IUserViewFactory usersFactory;
         private readonly HqUserManager userManager;
+        private readonly IAuditLogService auditLogService;
 
         public UsersController(ILogger logger,
             IUserViewFactory usersFactory,
-            HqUserManager userManager)
+            HqUserManager userManager,
+            IAuditLogService auditLogService)
             : base(logger)
         {
             this.usersFactory = usersFactory;
             this.userManager = userManager;
+            this.auditLogService = auditLogService;
         }
 
         /// <summary>
@@ -159,6 +168,28 @@ namespace WB.UI.Headquarters.API.PublicApi
 
             await this.userManager.UnarchiveUsersAsync(new[] { userGuid });
             return this.Ok();
+        }
+
+        /// <summary>
+        /// Returns audit log records for interviewer.
+        /// You can specify "start" and "end" parameters in query string to get range results.
+        /// </summary>
+        /// <param name="id">User id</param>
+        /// <param name="start" >Start datetime. If isn't specified then return data for last 7 days.</param>
+        /// <param name="end">End datetime. If isn't specified then get data for 7 days from start data.</param>
+        [HttpGet]
+        [Route("interviewers/{id:guid}/actions-log")]
+        public AuditLogRecordApiView[] ActionsLog(Guid id, DateTime? start = null, DateTime? end = null)
+        {
+            DateTime startDate = start ?? DateTime.UtcNow.AddDays(-7);
+            DateTime endDate = end ?? startDate.AddDays(7);
+
+            var records = auditLogService.GetRecords(id, startDate, endDate, showErrorMessage: false);
+            return records.Select(record => new AuditLogRecordApiView()
+            {
+                Time = record.Time,
+                Message = record.Message,
+            }).ToArray();
         }
     }
 }

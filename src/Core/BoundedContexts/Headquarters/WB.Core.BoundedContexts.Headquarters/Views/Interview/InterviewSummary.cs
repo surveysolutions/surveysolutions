@@ -100,7 +100,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual ISet<InterviewComment> Comments { get; protected set; }
 
         public virtual int CommentedEntitiesCount { get; set; }
-        
+
+        public virtual bool HasResolvedComments { get; set; }
+
         public virtual void AnswerFeaturedQuestion(Guid questionId, string answer)
         {
             this.AnswersToFeaturedQuestions.First(x => x.Questionid == questionId).Answer = answer;

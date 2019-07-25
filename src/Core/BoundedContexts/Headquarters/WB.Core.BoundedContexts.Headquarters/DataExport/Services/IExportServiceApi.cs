@@ -30,10 +30,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         [Get("/api/v1/job/status")]
         Task<DataExportStatusView> GetDataExportStatusForQuestionnaireAsync(
-            [Query]string questionnaireId,
-            [Query]InterviewStatus? status,
-            [Query]DateTime? fromDate,
-            [Query]DateTime? toDate);
+            string questionnaireId,
+            InterviewStatus? status,
+            DateTime? fromDate,
+            DateTime? toDate);
 
         [Get("/api/v1/job/running")]
         Task<List<string>> GetRunningExportJobs();
@@ -43,27 +43,27 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         [Get("/api/v1/job/download")]
         Task<HttpResponseMessage> DownloadArchive(
-            [Query] string questionnaireId,
-            [Query] string archiveName,
-            [Query] DataExportFormat format,
-            [Query] InterviewStatus? status,
-            [Query] DateTime? fromDate,
-            [Query] DateTime? toDate);
+             string questionnaireId,
+             string archiveName,
+             DataExportFormat format,
+             InterviewStatus? status,
+             DateTime? fromDate,
+             DateTime? toDate);
 
         [Get("/api/v1/job/wasExportRecreated")]
-        Task<bool> WasExportRecreated([Query] long processId);
+        Task<bool> WasExportRecreated(long processId);
 
         [Get("/api/v1/job")]
-        Task<DataExportProcessView> GetJobsStatus([Query] long processId);
+        Task<DataExportProcessView> GetJobsStatus(long processId);
 
         [Delete("/api/v1/job")]
-        Task DeleteProcess([Query] string processId);
+        Task DeleteProcess(string processId);
 
         [Delete("/api/v1/deleteArchives")]
         Task DeleteAll();
 
         [Get("/api/v1/ddi")]
-        Task<HttpContent> GetDdiArchive([Query]string questionnaireId, [Query]string archivePassword);
+        Task<HttpContent> GetDdiArchive(string questionnaireId, string archivePassword);
 
         [Get("/.hc")]
         Task<HttpResponseMessage> Health();

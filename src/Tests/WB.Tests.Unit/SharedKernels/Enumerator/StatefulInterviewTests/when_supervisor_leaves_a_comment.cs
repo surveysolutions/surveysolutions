@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             interview.AssignInterviewer(supervisorId, Guid.NewGuid(), DateTime.Now);
             interview.CommentAnswer(supervisorId, questionid, RosterVector.Empty, DateTime.Now, "in comment");
 
-            var commentedBySupervisorQuestionsInInterview = interview.GetCommentedBySupervisorAllQuestions();
+            var commentedBySupervisorQuestionsInInterview = interview.GetCommentedBySupervisorNonResolvedQuestions();
             Assert.That(commentedBySupervisorQuestionsInInterview.Count(), Is.EqualTo(1));
 
             var questionComments = interview.GetQuestionComments(Create.Entity.Identity(questionid, RosterVector.Empty));
@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             interview.AssignInterviewer(supervisorId, Guid.NewGuid(), DateTime.Now);
             interview.CommentAnswer(supervisorId, questionid, RosterVector.Empty, DateTime.Now, "in comment");
 
-            var commentedBySupervisorQuestionsInInterview = interview.GetCommentedBySupervisorAllQuestions();
+            var commentedBySupervisorQuestionsInInterview = interview.GetCommentedBySupervisorNonResolvedQuestions();
             Assert.That(commentedBySupervisorQuestionsInInterview.Count(), Is.EqualTo(1));
 
             var questionComments = interview.GetQuestionComments(Create.Entity.Identity(questionid, RosterVector.Empty));
@@ -63,11 +63,32 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             interview.AssignInterviewer(supervisorId, Guid.NewGuid(), DateTime.Now);
             interview.CommentAnswer(supervisorId, questionid, RosterVector.Empty, DateTime.Now, "in comment");
 
-            var commentedBySupervisorQuestionsInInterview = interview.GetCommentedBySupervisorAllQuestions();
+            var commentedBySupervisorQuestionsInInterview = interview.GetCommentedBySupervisorNonResolvedQuestions();
             Assert.That(commentedBySupervisorQuestionsInInterview.Count(), Is.EqualTo(1));
 
             var questionComments = interview.GetQuestionComments(Create.Entity.Identity(questionid, RosterVector.Empty));
             Assert.That(questionComments, Has.Count.EqualTo(1));
+        }
+
+        [Test]
+        public void GetCommentedBySupervisorNonResolvedQuestions_should_not_include_resolved_comments()
+        {
+            Guid questionid = Id.gA;
+            Guid supervisorId = Id.g1;
+            Guid interviewerId = Id.g2;
+
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.TextQuestion(questionid, scope: QuestionScope.Supervisor));
+
+            var interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire, userId: interviewerId, supervisorId: supervisorId);
+            interview.CommentAnswer(supervisorId, questionid, RosterVector.Empty, DateTime.Now, "SV comment");
+
+            // Act
+            interview.ResolveComment(Create.Command.ResolveCommentAnswer(entityId: Create.Identity(questionid)));
+
+            // Assert
+            Assert.That(interview.GetCommentedBySupervisorNonResolvedQuestions(), Is.Empty);
+            
         }
     }
 }

@@ -2720,10 +2720,13 @@ ag-grid, ag-grid-angular, ag-grid-ng2, ag-grid-polymer, ag-grid-aurelia {
   color: gray; }
 
 .comments-block .publication-date {
-  color: #cbcbcb; }
+  color: #a8a8a8; }
 
 .comments-block .enumerators-comment, .comments-block .enumerators-comment p, .comments-block .enumerators-comment h6 {
   color: #e3008b; }
+
+.comments-block .resolved-comment, .comments-block .resolved-comment p, .comments-block .resolved-comment h6 {
+  color: #a8a8a8; }
 
 .comments-block .comment {
   padding-top: 20px;

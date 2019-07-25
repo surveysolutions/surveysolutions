@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Moq;
@@ -8,6 +9,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Tests.Abc;
@@ -24,7 +26,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             var answeringViewModel = Create.ViewModel.AnsweringViewModel(commandService.Object);
 
             var interview = Mock.Of<IStatefulInterview>(x => x.GetDateTimeQuestion(It.IsAny<Identity>()) ==
-                                                             new InterviewTreeDateTimeQuestion());
+                                                             new InterviewTreeDateTimeQuestion()
+                                                             && x.GetQuestionComments(It.IsAny<Identity>(), It.IsAny<bool>()) == new List<AnswerComment>());
 
 
             var viewModel = Create.ViewModel.TimestampQuestionViewModel(interview, answeringViewModel);

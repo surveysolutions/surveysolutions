@@ -42,6 +42,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.FirstSupervisorId);
             Property(x => x.CreatedDate);
             Property(x => x.FirstAnswerDate);
+            Property(x => x.HasResolvedComments);
             Property(x => x.ErrorsCount);
             Property(x => x.CommentedEntitiesCount, clm =>
             {

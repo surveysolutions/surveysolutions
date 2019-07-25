@@ -5,12 +5,14 @@ using System.Linq;
 using System.Text;
 using Ionic.Zip;
 using Main.Core.Documents;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.Core.BoundedContexts.Designer.MembershipProvider.Roles;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -20,6 +22,7 @@ using WB.UI.Designer.Extensions;
 
 namespace WB.UI.Designer.Areas.Admin.Pages
 {
+    [Authorize(Roles = nameof(SimpleRoleEnum.Administrator))]
     public class RestoreQuestionnaireModel : PageModel
     {
         private readonly ILogger<RestoreQuestionnaireModel> logger;

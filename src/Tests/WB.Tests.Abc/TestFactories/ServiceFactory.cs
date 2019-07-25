@@ -30,6 +30,7 @@ using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
+using WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog;
 using WB.Core.BoundedContexts.Headquarters.InterviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
@@ -110,6 +111,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.WebInterview;
+using WB.Enumerator.Native.WebInterview.Models;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
@@ -121,6 +123,7 @@ using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Services;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
+using IAuditLogService = WB.Core.SharedKernels.Enumerator.Services.IAuditLogService;
 
 namespace WB.Tests.Abc.TestFactories
 {
@@ -1135,6 +1138,28 @@ namespace WB.Tests.Abc.TestFactories
             }
 
             return result.Object;
+        }
+        
+        public HqWebInterviewInterviewEntityFactory HqWebInterviewInterviewEntityFactory(
+            IAuthorizedUser authorizedUser = null)
+        {
+            var autoMapperConfig = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new WebInterviewAutoMapProfile());
+            });
+
+            return new HqWebInterviewInterviewEntityFactory(autoMapperConfig.CreateMapper(),
+                authorizedUser ?? Mock.Of<IAuthorizedUser>(),
+                new EnumeratorGroupGroupStateCalculationStrategy(), 
+                new SupervisorGroupStateCalculationStrategy(), 
+                Create.Service.WebNavigationService());
+        }
+        
+        public  WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog.IAuditLogService AuditLogService(
+            IAuditLogFactory auditLogFactory,
+            IAuthorizedUser authorizedUser = null)
+        {
+            return new AuditLogService(auditLogFactory, authorizedUser ?? Mock.Of<IAuthorizedUser>());
         }
     }
 
