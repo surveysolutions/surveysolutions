@@ -265,7 +265,7 @@
                         command.enablementCondition = question.cascadeFromQuestionId ? '' : command.enablementCondition;
                         command.validationExpression = question.cascadeFromQuestionId ? '' : command.validationExpression;
                         command.validationMessage = question.cascadeFromQuestionId ? '' : command.validationMessage;
-                        if (shouldGetOptionsOnServer) {
+                        if (shouldGetOptionsOnServer || !_.isEmpty(command.linkedToEntityId)) {
                             command.options = null;
                         } else {
                             command.options = question.options;

@@ -1,8 +1,19 @@
 <template>
     <div class="information-block comments-block">
+        <button href="javascript:void(0);"
+                class="btn btn-link show-resolved-comments" 
+                v-if="showResolvedVisible"
+                @click="showResolved = !showResolved">
+            <span>{{ showResolved ? this.$t('WebInterviewUI.HideResolved') : this.$t('WebInterviewUI.ShowResolved')}}</span>
+        </button>
 
-        <template v-for="comment in $me.comments">
-            <wb-comment-item :userRole="comment.userRole" :text="comment.text" :isOwnComment="comment.isOwnComment" :key="comment.commentTimeUtc" />
+        <template v-for="comment in visibleComments">
+            <wb-comment-item :userRole="comment.userRole" 
+            :text="comment.text" 
+            :isOwnComment="comment.isOwnComment" 
+            :key="comment.commentTimeUtc"
+            :date="comment.commentTimeUtc"
+            :resolved="comment.resolved" />
         </template>
 
         <div class="comment active" v-if="isShowingAddCommentDialog">
@@ -26,6 +37,13 @@
                     </div>
                 </div>
             </form>
+            <button href="javascript:void(0);" class="btn btn-link resolve-comments" 
+                    :disabled="isResolving"
+                    v-if="resolveAllowed"
+                    @click="resolve"
+                    :title="$t('WebInterviewUI.ResolveHint')">
+                <span class="text-success">{{this.$t('WebInterviewUI.Resolve')}}</span>
+            </button>
         </div>
     </div>
 </template>
@@ -33,12 +51,15 @@
 <script lang="js">
 
     import { entityPartial } from "~/webinterview/components/mixins"
+    import { filter, find } from "lodash"
 
     export default {
         mixins: [entityPartial],
         data() {
             return {
-                comment: null
+                comment: null,
+                showResolved: false,
+                isResolving: false
             }
         },
         props: {
@@ -57,26 +78,46 @@
                 if(evnt && evnt.target) {
                     evnt.target.blur()
                 }
+            },
+            async resolve() {
+                this.isResolving = true
+                await this.$store.dispatch('resolveComment', { questionId: this.questionId })
+                this.isResolving = false
             }
         },
         computed: {
+            visibleComments() {
+                const self = this;
+                return filter(this.$me.comments, c => {
+                    return self.showResolved || !c.resolved
+                })
+            },
+            showResolvedVisible() {
+                return this.$me.comments.length > 0 && (find(this.$me.comments, cmt => cmt.resolved) != null)
+            },
             allowPostComment() {
                 return this.comment && 
                        this.comment.trim().length > 0 &&
                        !this.$me.postingComment 
                        && this.$store.getters.addCommentsAllowed;
             },
+            resolveAllowed() {
+                return this.$me.allowResolveComments
+            },
             inputTitle() {
                 if (this.$store.state.webinterview.receivedByInterviewer === true) {
                     return this.$t('WebInterviewUI.InterviewReceivedCantModify')
                 }
-                return "";
+                return ""
             },
             buttonClass() {
                 return this.isActive ? 'comment-added' : null
             },
             postBtnText() {
                 return this.$me.postingComment ? this.$t("WebInterviewUI.CommentPosting") : this.$t("WebInterviewUI.CommentPost")
+            },
+            questionId() {
+                return this.$me.id
             }
         }
     }
