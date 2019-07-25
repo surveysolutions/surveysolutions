@@ -196,7 +196,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 logger.Info($"Processing orphan interview {orphan}");
                 try
                 {
-                    List<CommittedEvent> storedEvents = this.eventStore.GetPendingEvents(orphan).ToList();
+                    List<CommittedEvent> storedEvents = this.eventStore.Read(orphan, 0).ToList();
                     this.eventBus.PublishCommittedEvents(storedEvents);
                 }
                 catch (Exception e)
