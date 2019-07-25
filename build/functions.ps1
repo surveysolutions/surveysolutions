@@ -425,7 +425,7 @@ function BuildAspNetCoreWebPackage($Project, $BuildConfiguration, $BuildNumber, 
 
 function BuildWebPackage($Project, $BuildConfiguration) {
     return Log-Block "Building web package for project $Project" {
-        return Execute-MSBuild $Project $BuildConfiguration '/t:Package'
+        return Execute-MSBuild $Project $BuildConfiguration '/t:Package','/p:PackageTempRootDir=""'
     }
 }
 
