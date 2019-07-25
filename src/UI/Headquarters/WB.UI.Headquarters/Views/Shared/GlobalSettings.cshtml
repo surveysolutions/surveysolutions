@@ -56,11 +56,11 @@
            };
         }
 
-        return JSON.parse('@(model.AsJsonValue())');
+        return @(model.AsJsonValue());
     }(document));
     window.input = input;
 
-    window.CONFIG = JSON.parse('@( new {
+    window.CONFIG = @( new {
         verboseMode = false,
         googleApiKey = WB.Core.SharedKernels.SurveyManagement.Web.Code.AppSettings.Instance.GoogleMapApiKey,
         googleMapsApiBaseUrl = WB.Core.SharedKernels.SurveyManagement.Web.Code.AppSettings.Instance.GoogleMapApiBaseUrl,
@@ -72,7 +72,7 @@
         dateFormat = Extensions.ClientDateTimeFormat,
         signalrPath = Url.Content("~/signalr/hubs"),
         supportedTransports = new [] { "webSockets", "longPolling"}
-    }.AsJsonValue())');
+    }.AsJsonValue());
 
     if (typeof moment !== 'undefined') {
         moment.locale('@UICulture');

@@ -218,7 +218,9 @@ namespace WB.Tests.Abc.TestFactories
             IPlainStorage<InterviewMultimediaView> interviewMultimediaViewRepository = null,
             IPlainStorage<InterviewFileView> interviewFileViewRepository = null,
             IPlainStorage<InterviewSequenceView, Guid> interviewSequenceStorage = null,
-            IInterviewEventStreamOptimizer eventStreamOptimizer = null)
+            IInterviewEventStreamOptimizer eventStreamOptimizer = null,
+            ILiteEventBus eventBus = null,
+            ILogger logger = null)
             => new InterviewerInterviewAccessor(
                 questionnaireRepository ?? Mock.Of<IPlainStorage<QuestionnaireView>>(),
                 Mock.Of<IPlainStorage<PrefilledQuestionView>>(),
@@ -232,7 +234,9 @@ namespace WB.Tests.Abc.TestFactories
                 synchronizationSerializer ?? Mock.Of<IJsonAllTypesSerializer>(),
                 eventStreamOptimizer ?? Mock.Of<IInterviewEventStreamOptimizer>(),
                 Mock.Of<ILiteEventRegistry>(),
-                interviewSequenceStorage ?? Mock.Of<IPlainStorage<InterviewSequenceView, Guid>>());
+                interviewSequenceStorage ?? Mock.Of<IPlainStorage<InterviewSequenceView, Guid>>(),
+                eventBus ?? Mock.Of<ILiteEventBus>(),
+                logger?? Mock.Of<ILogger>());
 
         public InterviewEventStreamOptimizer InterviewEventStreamOptimizer()
             => new InterviewEventStreamOptimizer();
