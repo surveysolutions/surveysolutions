@@ -46,6 +46,7 @@ namespace WB.UI.Interviewer
             //temp fix of KP-11583
             //
             //base.ResetStart();
+            this.serviceLocator.GetInstance<InterviewDashboardEventHandler>();
             logger.Warn("Ignored application reset start");
         }
 
