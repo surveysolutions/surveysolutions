@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using Main.Core.Entities.SubEntities;
 using OSGeo.GDAL;
 using OSGeo.OSR;
@@ -117,7 +118,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 Id = mapFile.Name,
                 ImportDate = DateTime.UtcNow,
                 FileName = mapFile.Name,
-                Size = mapFile.Size
+                Size = mapFile.Size,
+                Wkid = 102100
             };
 
             void SetMapProperties(dynamic _, MapBrowseItem i)
@@ -135,38 +137,95 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             {
                 case ".tpk":
                 {
-                    var unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, "mapserver.json");
-                    var jsonObject = this.serializer.Deserialize<dynamic>(Encoding.UTF8.GetString(unzippedFile.Bytes));
-                    SetMapProperties(jsonObject.contents, item);
+                    var unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, "conf.cdi");
+                    if (unzippedFile != null)
+                    {
+                        XmlDocument doc = new XmlDocument();
+                        doc.LoadXml(Encoding.UTF8.GetString(unzippedFile.Bytes));
+                        var envelope = doc["EnvelopeN"];
+                        item.Wkid = int.Parse(envelope["SpatialReference"]["WKID"].InnerText);
+                        item.XMaxVal = double.Parse(envelope["XMax"].InnerText);
+                        item.XMinVal = double.Parse(envelope["XMin"].InnerText);
+                        item.YMaxVal = double.Parse(envelope["YMax"].InnerText);
+                        item.YMinVal = double.Parse(envelope["YMin"].InnerText);
+                    }
+                    else
+                    {
+                        unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, "mapserver.json");
+                        if (unzippedFile != null)
+                        {
+                            var jsonObject = this.serializer.Deserialize<dynamic>(Encoding.UTF8.GetString(unzippedFile.Bytes));
+                            SetMapProperties(jsonObject.contents, item);
+                        }
+                    }
                 }
                     break;
                 case ".mmpk":
                 {
-                    var unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, "root.json");
-                    if (unzippedFile == null) return null;
+                    var unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, "iteminfo.xml");
+                    if (unzippedFile != null)
+                    {
+                        XmlDocument doc = new XmlDocument();
+                        doc.LoadXml(Encoding.UTF8.GetString(unzippedFile.Bytes));
+                        var esriInfo = doc["ESRI_ItemInformation"];
 
-                    var jsonObject = this.serializer.Deserialize<dynamic>(Encoding.UTF8.GetString(unzippedFile.Bytes));
-                    SetMapProperties(jsonObject, item);
+                        unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, $"{esriInfo["name"].InnerText}.info");
+                        if (unzippedFile != null)
+                        {
+                            var jsonObject = this.serializer.Deserialize<dynamic>(Encoding.UTF8.GetString(unzippedFile.Bytes));
+                            
+                            if (jsonObject?.maps?.Count > 0)
+                            {
+                                var mapName = jsonObject.maps[0];
+                                unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, $"{mapName}.mmap");
+                                jsonObject = this.serializer.Deserialize<dynamic>(Encoding.UTF8.GetString(unzippedFile.Bytes));
+
+                                item.Wkid = jsonObject.map.spatialReference.wkid;
+
+                                var extent = jsonObject.item.extent;
+
+                                item.XMinVal = extent[0][0];
+                                item.YMinVal = extent[0][1];
+                                item.XMaxVal = extent[1][0];
+                                item.YMaxVal = extent[1][1];
+
+                                var layers = jsonObject.map.baseMap.baseMapLayers;
+                                if (layers?.Count > 0)
+                                {
+                                    var layer = layers[0];
+
+                                    item.MaxScale = layer.maxScale;
+                                    item.MinScale = layer.minScale;
+                                }
+
+                            }
+                        }
+                    }
                 }
                     break;
                 case ".tif":
                 {
                     GdalConfiguration.ConfigureGdal();
-                    Dataset ds = Gdal.Open(tempFile, Access.GA_ReadOnly);
-                    SpatialReference sr = new SpatialReference(ds.GetProjection());
+                    using (Dataset ds = Gdal.Open(tempFile, Access.GA_ReadOnly))
+                    using (SpatialReference sr = new SpatialReference(ds.GetProjection()))
+                    {
+                        if (sr.IsProjected() < 1)
+                            throw new ArgumentException(
+                                $"Geotiff is not projected. {this.fileSystemAccessor.GetFileName(tempFile)}");
 
-                    if (sr.IsProjected() < 1)
-                        throw new ArgumentException(
-                            $"Geotiff is not projected. {this.fileSystemAccessor.GetFileName(tempFile)}");
+                        if (int.TryParse(sr.GetAuthorityCode(null), out var wkid))
+                            item.Wkid = wkid;
 
-                    var wkid = 102100;
-                    int.TryParse(sr.GetAuthorityCode(null), out wkid);
+                        double[] geoTransform = new double[6];
+                        ds.GetGeoTransform(geoTransform);
 
-                    item.Wkid = wkid;
+                        item.XMinVal = geoTransform[0];
+                        item.YMaxVal = geoTransform[3];
+                        item.XMaxVal = item.XMinVal + geoTransform[1] * ds.RasterXSize;
+                        item.YMinVal = item.YMaxVal + geoTransform[5] * ds.RasterYSize;
+                    }
                 }
                     break;
-                default:
-                    throw new ArgumentException("Unsupported map type");
             }
 
             return item;
