@@ -301,9 +301,6 @@ export default {
                 });
             });
         },
-        onOptionsFetch(a, b, c, d, e) {
-            console.log(a, b, c, d, e);
-        },
 
         resetForm() {
             (this.dataType = "surveyData"), (this.dataFormat = "Tabular");
