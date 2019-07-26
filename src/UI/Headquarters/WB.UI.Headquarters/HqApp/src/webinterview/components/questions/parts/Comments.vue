@@ -24,13 +24,15 @@
                         <input type="text" class="form-control" v-on:keyup.enter="postComment" v-model="comment"
                             :placeholder='$t("WebInterviewUI.CommentEnter")' 
                             :disabled="!$store.getters.addCommentsAllowed"
+                            :id="inpAddCommentId"
                             :title="inputTitle"
                             :maxlength="$me.maxLength"/>
                         <div class="input-group-btn">
                             <button type="button" class="btn btn-default btn-post-comment"
                                 :class="buttonClass" 
                                 @click="postComment($event)" 
-                                :disabled="!allowPostComment">
+                                :disabled="!allowPostComment"
+                                :id="btnAddCommentId">
                                 {{ postBtnText }}
                             </button>
                         </div>
@@ -86,6 +88,12 @@
             }
         },
         computed: {
+            inpAddCommentId() {
+                return "inp_" + this.$me.id + "_addComment"
+            },
+            btnAddCommentId() {
+                return "btn_" + this.$me.id + "_addComment"
+            }
             visibleComments() {
                 const self = this;
                 return filter(this.$me.comments, c => {
