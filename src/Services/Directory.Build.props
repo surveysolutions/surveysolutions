@@ -4,7 +4,7 @@
    <PropertyGroup>
       <!-- Reading version from .version file into ProductVersion -->
       <WBVersionInfoFile>$([MSBuild]::GetPathOfFileAbove('.version', '$(MSBuildThisFileDirectory)../'))</WBVersionInfoFile>
-      <ProductVersion>$([System.IO.File]::ReadAllText($(WBVersionInfoFile)))</ProductVersion>
+      <ProductVersion>$([System.IO.File]::ReadAllText($(WBVersionInfoFile)).Trim())</ProductVersion>
 
       <!-- Extending Product Version with 0 if needed -->
       <_productVersionHas3Parts>$([System.Text.RegularExpressions.Regex]::Match($(ProductVersion),'\d+\.\d+\.\d+').Success)</_productVersionHas3Parts>
