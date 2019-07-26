@@ -93,7 +93,7 @@
             },
             btnAddCommentId() {
                 return "btn_" + this.$me.id + "_addComment"
-            }
+            },
             visibleComments() {
                 const self = this;
                 return filter(this.$me.comments, c => {
