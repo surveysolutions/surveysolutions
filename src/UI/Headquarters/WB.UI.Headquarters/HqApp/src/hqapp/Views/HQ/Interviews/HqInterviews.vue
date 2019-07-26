@@ -10,8 +10,7 @@
           :placeholder="$t('Common.AllQuestionnaires')"
           :value="questionnaireId"
           :values="this.$config.model.questionnaires"
-          v-on:selected="questionnaireSelected"
-        />
+          v-on:selected="questionnaireSelected"/>
       </FilterBlock>
 
       <FilterBlock :title="$t('Common.QuestionnaireVersion')">
@@ -24,8 +23,7 @@
           :disabled="questionnaireId == null "
           :value="questionnaireVersion"
           :values="questionnaireId == null ? [] : questionnaireId.versions"
-          v-on:selected="questionnaireVersionSelected"
-        />
+          v-on:selected="questionnaireVersionSelected"/>
       </FilterBlock>
       <FilterBlock :title="$t('Common.Status')">
         <Typeahead
@@ -37,8 +35,7 @@
           :placeholder="$t('Common.AllStatuses')"
           :value="status"
           :values="statuses"
-          v-on:selected="statusSelected"
-        />
+          v-on:selected="statusSelected"/>
       </FilterBlock>
 
       <FilterBlock :title="$t('Common.Responsible')">
@@ -48,8 +45,7 @@
           :value="responsibleId"
           :ajax-params="responsibleParams"
           v-on:selected="userSelected"
-          :fetch-url="config.api.responsible"
-        ></Typeahead>
+          :fetch-url="config.api.responsible"></Typeahead>
       </FilterBlock>
 
       <FilterBlock :title="$t('Pages.Filters_Assignment')">
@@ -58,8 +54,7 @@
             class="form-control with-clear-btn"
             :placeholder="$t('Common.AllAssignments')"
             type="text"
-            v-model="assignmentId"
-          />
+            v-model="assignmentId"/>
           <div class="input-group-btn" @click="clearAssignmentFilter">
             <div class="btn btn-default">
               <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
@@ -79,8 +74,7 @@
       @totalRows="(rows) => totalRows = rows"
       @ajaxComlpete="isLoading = false"
       :selectable="showSelectors"
-      :selectableId="'interviewId'"
-    >
+      :selectableId="'interviewId'">
       <div class="panel panel-table" v-if="selectedRows.length" id="pnlInterviewContextActions">
         <div class="panel-body">
           <input
@@ -88,8 +82,7 @@
             id="q1az"
             type="checkbox"
             checked
-            disabled="disabled"
-          />
+            disabled="disabled"/>
           <label for="q1az">
             <span class="tick"></span>
             {{ selectedRows.length + " " + $t("Pages.Interviews_Selected") }}
@@ -97,48 +90,41 @@
           <button
             class="btn btn-lg btn-success"
             v-if="selectedRows.length"
-            @click="assignInterview"
-          >{{ $t("Common.Assign") }}</button>
+            @click="assignInterview">{{ $t("Common.Assign") }}</button>
           <button
             class="btn btn-lg btn-success"
             v-if="selectedRows.length"
-            @click="approveInterview"
-          >{{ $t("Common.Approve")}}</button>
+            @click="approveInterview">{{ $t("Common.Approve")}}</button>
           <button
             class="btn btn-lg reject"
             v-if="selectedRows.length"
-            @click="rejectInterview"
-          >{{ $t("Common.Reject")}}</button>
+            @click="rejectInterview">{{ $t("Common.Reject")}}</button>
           <button
             class="btn btn-lg btn-primary"
             v-if="selectedRows.length"
-            @click="unapproveInterview"
-          >{{ $t("Common.Unapprove")}}</button>
+            @click="unapproveInterview">{{ $t("Common.Unapprove")}}</button>
           <button
             class="btn btn-link"
             v-if="selectedRows.length"
-            @click="deleteInterview"
-          >{{ $t("Common.Delete")}}</button>
+            @click="deleteInterview">{{ $t("Common.Delete")}}</button>
         </div>
       </div>
     </DataTables>
 
     <ModalFrame ref="assignModal">
-      <p>{{ $t("Interviews.ChooseResponsible")}}</p>
+      <p>{{$t("Interviews.ChooseResponsible")}}</p>
       <form onsubmit="return false;">
         <div class="form-group">
           <label
             class="control-label"
-            for="newResponsibleId"
-          >{{ $t("Assignments.SelectResponsible") }}</label>
+            for="newResponsibleId">{{$t("Assignments.SelectResponsible")}}</label>
           <Typeahead
             control-id="newResponsibleId"
             :placeholder="$t('Common.Responsible')"
             :value="newResponsibleId"
             :ajax-params="{ }"
             @selected="newResponsibleSelected"
-            :fetch-url="config.api.responsible"
-          ></Typeahead>
+            :fetch-url="config.api.responsible"></Typeahead>
         </div>
         <div id="pnlAssignToOtherTeamConfirmMessage">
           <p>{{ $t("Interviews.AssignToOtherTeamConfirmMessage", {count: selectedRows.length}, "SV approved", "HQ approved" )}}</p>
@@ -154,12 +140,8 @@
         </div-->
       </form>
       <div slot="actions">
-        <button
-          type="button"
-          class="btn btn-primary"
-          @click="assign"
-          :disabled="!newResponsibleId"
-        >{{ $t("Common.Assign") }}</button>
+        <button type="button" class="btn btn-primary"
+          @click="assign" :disabled="!newResponsibleId">{{ $t("Common.Assign") }}</button>
         <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
       </div>
     </ModalFrame>
@@ -225,11 +207,9 @@
         </div>
       </form>
       <div slot="actions">
-        <button
-          type="button"
+        <button type="button"
           class="btn btn-primary"
-          @click="rejectInterviews"
-        >{{ $t("Common.Reject") }}</button>
+          @click="rejectInterviews">{{ $t("Common.Reject") }}</button>
         <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
       </div>
     </ModalFrame>
@@ -384,8 +364,8 @@ export default {
                     searchable: true,
                     responsivePriority: 2,
                     class: "interview-id title-row",
-                    render(data) {
-                        var result = "<a href='" + data + "'>" + data + "</a>";
+                    render(data, type, row) {
+                        var result = "<a href='" + self.config.interviewReviewUrl + '/' + row.interviewId + "'>" + data + "</a>";
                         return result;
                     }
                 },
@@ -515,14 +495,42 @@ export default {
             this.status = newValue;
         },
 
-        assign() {
-            var filteredItems = this.selectedRows; //filter items in status
+        viewInterview(){
+            var id = this.selectedRows[0];
+            window.location = self.config.interviewReviewUrl + "/" + id.replace(/-/g, "");
+        },
 
-            var commands = this.arrayMap(Ids, function(rowId) {
+        arrayFilter: function (array, predicate) {
+            array = array || [];
+            var result = [];
+            for (var i = 0, j = array.length; i < j; i++)
+                if (predicate(array[i], i))
+                    result.push(array[i]);
+            return result;
+        },
+
+        assign() {
+          const self = this;
+          var selectedItems = this.$refs.table.table.rows( { selected: true } ).data();
+
+          var filteredItems = this.arrayFilter(selectedItems,
+                function (item) 
+                {
+                    var value = item.canBeReassigned && item.responsibleId !== self.newResponsibleId.key;
+                    return !isNaN(value) && value;
+          });
+
+          if(filteredItems.length == 0)
+          {
+            this.$refs.assignModal.hide();
+            return;
+          };
+
+            var commands = this.arrayMap(_.map(filteredItems, question => {return question.interviewId;}), function(rowId) {
                 var item = {
-                    InterviewId: rowId,
-                    Comment: comment,
-                    responsibleId: this.newResponsibleId.key
+                    InterviewId: rowId,                    
+                    InterviewerId: self.newResponsibleId.iconClass === "interviewer" ? self.newResponsibleId.key: null,
+                    SupervisorId: self.newResponsibleId.iconClass === "supervisor" ? self.newResponsibleId.key : null
                 };
                 return JSON.stringify(item);
             });
@@ -532,31 +540,47 @@ export default {
                 commands: commands
             };
 
-            executeCommand(
+            this.executeCommand(
                 command,
                 function() {},
                 function() {
-                    this.$refs.assignModal.hide();
-                    this.newResponsibleId = null;
-                    this.reloadTable();
+                    self.$refs.assignModal.hide();
+                    self.newResponsibleId = null;
+                    self.reloadTable();
                 }
             );
         },
 
         assignInterview() {
+            this.newResponsibleId = null;
             this.$refs.assignModal.modal({ keyboard: false });
         },
 
         approveInterviews() {
-            var filteredItems = this.selectedRows; //filter items in status
-            var command = this.getCommand("HqApproveInterviewCommand", filteredItems);
+          const self = this;
+          var selectedItems = this.$refs.table.table.rows( { selected: true } ).data();
 
-            executeCommand(
+          var filteredItems = this.arrayFilter(selectedItems,
+                function (item) 
+                {
+                    var value = item.canApprove;
+                    return !isNaN(value) && value;
+            });
+
+            if(filteredItems.length == 0)
+            {
+              this.$refs.approveModal.hide();
+              return;
+            }
+
+            var command = this.getCommand("HqApproveInterviewCommand", _.map(filteredItems, question => {return question.interviewId;}), this.statusChangeComment);
+
+            this.executeCommand(
                 command,
                 function() {},
                 function() {
-                    this.$refs.approveModal.hide();
-                    this.reloadTable();
+                    self.$refs.approveModal.hide();
+                    self.reloadTable();
                 }
             );
         },
@@ -568,15 +592,30 @@ export default {
         },
 
         rejectInterviews() {
-            var filteredItems = this.selectedRows; //filter items in status
-            var command = this.getCommand("HqRejectInterviewCommand", filteredItems);
+          const self = this;            
+          var selectedItems = this.$refs.table.table.rows( { selected: true } ).data();
 
-            executeCommand(
+            var filteredItems = this.arrayFilter(selectedItems,
+                function (item) 
+                {
+                    var value = item.canReject;
+                    return !isNaN(value) && value;
+            });
+
+            if(filteredItems.length == 0)
+            {
+              this.$refs.rejectModal.hide();
+              return;
+            }
+
+            var command = this.getCommand("HqRejectInterviewCommand", _.map(filteredItems, question => {return question.interviewId;}), this.statusChangeComment);
+
+            this.executeCommand(
                 command,
                 function() {},
                 function() {
-                    this.$refs.rejectModal.hide();
-                    this.reloadTable();
+                    self.$refs.rejectModal.hide();
+                    self.reloadTable();
                 }
             );
         },
@@ -614,13 +653,14 @@ export default {
                     if (jqXhr.status === 401) {
                         location.reload();
                     }
+                    //display error
                 })
                 .always(function() {
                     if (onDone !== undefined) onDone();
                 });
         },
 
-        getCommand(comandName, Ids, comment) {
+        getCommand(commandName, Ids, comment) {
             var commands = this.arrayMap(Ids, function(rowId) {
                 var item = { InterviewId: rowId, Comment: comment };
                 return JSON.stringify(item);
@@ -635,15 +675,30 @@ export default {
         },
 
         unapproveInterviews() {
-            var filteredItems = this.selectedRows; //filter items in status
-            var command = this.getCommand("UnapproveByHeadquarterCommand", filteredItems);
+          const self = this;
+            var selectedItems = this.$refs.table.table.rows( { selected: true } ).data();
 
-            executeCommand(
+            var filteredItems = this.arrayFilter(selectedItems,
+                function (item) 
+                {
+                    var value = item.canUnapprove;
+                    return !isNaN(value) && value;
+            });
+
+            if(filteredItems.length == 0)
+            {
+              this.$refs.unapproveModal.hide();
+              return;
+            }
+            
+            var command = this.getCommand("UnapproveByHeadquarterCommand", _.map(filteredItems, question => {return question.interviewId;}));
+
+            this.executeCommand(
                 command,
                 function() {},
                 function() {
-                    this.$refs.unapproveModal.hide();
-                    this.reloadTable();
+                    self.$refs.unapproveModal.hide();
+                    self.reloadTable();
                 }
             );
         },
@@ -653,15 +708,30 @@ export default {
         },
 
         deleteInterviews() {
-            var filteredItems = this.selectedRows; //filter items in status
-            var command = this.getCommand("DeleteInterviewCommand", filteredItems);
+          const self = this;
+          var selectedItems = this.$refs.table.table.rows( { selected: true } ).data();
 
-            executeCommand(
+          var filteredItems = this.arrayFilter(selectedItems,
+                function (item) 
+                {
+                    var value = item.canDelete;
+                    return !isNaN(value) && value;
+            });
+
+            if(filteredItems.length == 0)
+            {
+              this.$refs.deleteModal.hide();
+              return;
+            }
+
+            var command = this.getCommand("DeleteInterviewCommand", _.map(filteredItems, question => {return question.interviewId;}));
+
+            this.executeCommand(
                 command,
                 function() {},
                 function() {
-                    this.$refs.deleteModal.hide();
-                    this.reloadTable();
+                    self.$refs.deleteModal.hide();
+                    self.reloadTable();
                 }
             );
         },
@@ -779,15 +849,12 @@ export default {
         },
 
         addParamsToRequest(data) {
-            data.status = this.status;
+            data.status = (this.status || {}).key;
             data.questionnaireId = (this.questionnaireId || {}).key;
             data.questionnaireVersion = (this.questionnaireVersion || {}).key;
-
-            if (this.assignmentId) {
-                data.assignmentId = this.assignmentId;
-            }
-
             data.responsibleId = (this.responsibleId || {}).key;
+            
+            if (this.assignmentId) { data.assignmentId = this.assignmentId; };
         },
 
         clearAssignmentFilter() {
@@ -828,6 +895,26 @@ export default {
     },
 
     mounted() {
+
+// load url params
+
+      //this.userRole = this.$route.query.userRole;
+
+/* 
+
+        self.Url.query['templateId'] = self.QueryString['templateId'] || "";
+        self.Url.query['templateVersion'] = self.QueryString['templateVersion'] || "";
+        self.Url.query['status'] = self.QueryString['status'] || "";
+        self.Url.query['responsible'] = self.QueryString['responsible'] || "";
+        self.Url.query['searchBy'] = self.QueryString['searchBy'] || "";
+        self.Url.query['assignmentId'] = self.QueryString['assignmentId'] || "";
+        self.Url.query['unactiveDateStart'] = decodeURIComponent(self.QueryString['unactiveDateStart'] || "");
+        self.Url.query['unactiveDateEnd'] = decodeURIComponent(self.QueryString['unactiveDateEnd'] || "");
+        self.Url.query['teamId'] = self.QueryString['teamId'] || "";
+
+
+*/
+
         this.reloadTable();
     }
 };
