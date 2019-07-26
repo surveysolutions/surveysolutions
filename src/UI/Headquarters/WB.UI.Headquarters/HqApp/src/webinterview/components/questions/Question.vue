@@ -94,7 +94,7 @@
                 return getLocationHash(this.question.id)
             },
             isFetchInProgress() {
-                return this.question.fetching
+                return this.$store.state.webinterview.fetch.state[this.id] != null
             },
             isVisible() {
                 return !this.question.isLoading && 
