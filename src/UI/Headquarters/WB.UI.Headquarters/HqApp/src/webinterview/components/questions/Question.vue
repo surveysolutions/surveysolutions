@@ -2,17 +2,24 @@
     <div class="question" v-if="isVisible" :class="questionClass" :id="hash">
         <button class="section-blocker" disabled="disabled" v-if="isFetchInProgress"></button>
         <div class="dropdown aside-menu" v-if="showSideMenu">
-            <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-link">
+            <button type="button" data-toggle="dropdown" 
+                    aria-haspopup="true" 
+                    aria-expanded="false" 
+                    class="btn btn-link"
+                    :id="`btn_${this.question.id}_ContextMenuToggle`">
                 <span></span>
             </button>
             <ul class="dropdown-menu">
                 <li v-if="!isShowingAddCommentDialog">
-                    <a href="javascript:void(0)" @click="showAddComment" :disabled="!$store.getters.addCommentsAllowed">
+                    <a href="javascript:void(0)" @click="showAddComment" 
+                       :disabled="!$store.getters.addCommentsAllowed"
+                       :id="`btn_${this.question.id}_ShowAddComment`">
                         {{ $t("WebInterviewUI.CommentAdd") }}
                     </a>
                 </li>
                 <li v-else>
-                    <a href="javascript:void(0)" @click="hideAddComment" :disabled="!$store.getters.addCommentsAllowed">
+                    <a href="javascript:void(0)" @click="hideAddComment" :disabled="!$store.getters.addCommentsAllowed"
+                            :id="`btn_${this.question.id}_HideAddComment`">
                         {{ $t("WebInterviewUI.CommentHide") }}
                     </a>
                 </li>

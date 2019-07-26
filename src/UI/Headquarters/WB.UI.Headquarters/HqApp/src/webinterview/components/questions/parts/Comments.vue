@@ -89,10 +89,10 @@
         },
         computed: {
             inpAddCommentId() {
-                return "inp_" + this.$me.id + "_addComment"
+                return `inp_${this.$me.id}_addComment`
             },
             btnAddCommentId() {
-                return "btn_" + this.$me.id + "_addComment"
+                return `btn_${this.$me.id}_addComment`
             },
             visibleComments() {
                 const self = this;
