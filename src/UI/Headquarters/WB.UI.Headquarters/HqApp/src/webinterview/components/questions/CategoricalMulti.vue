@@ -4,7 +4,7 @@
     :questionCssClassName="$me.ordered ? 'ordered-question' : 'multiselect-question'"
     :noAnswer="noOptions"
   >
-    <button class="section-blocker" disabled="disabled" v-if="$me.fetching"></button>
+    <button class="section-blocker" disabled="disabled" v-if="inFetchState"></button>
     <div class="question-unit">
       <div class="options-group" v-bind:class="{ 'dotted': noOptions }">
         <div

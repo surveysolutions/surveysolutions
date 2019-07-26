@@ -56,7 +56,7 @@
                     'has-error' : !this.question.validity.isValid,
                     'has-warnings' : this.question.validity.warnings.length > 0,
                     'not-applicable' : this.question.isLocked,
-                    'syncing': this.question.fetching
+                    'syncing': this.isFetchInProgress
                 }, 'cell-unit']
             },
             doesExistValidationMessage() {
@@ -68,7 +68,7 @@
                 return false
             },
             isFetchInProgress() {
-                return this.question.fetching
+                return this.$store.state.webinterview.fetch.state[this.question.id] != null
             },
             valuenow() {
                 if (this.question.fetchState) {
