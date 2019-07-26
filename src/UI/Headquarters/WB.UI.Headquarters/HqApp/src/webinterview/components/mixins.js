@@ -43,7 +43,8 @@ export const entityDetails = {
             return this.$route.params.interviewId
         },
         inFetchState() {
-            return this.$me.fetchState != null && this.$me.fetching == true;
+            const fetchState = this.$store.state.webinterview.fetch.state[this.id]
+            return fetchState != null && fetchState == true;
         },
 
         acceptAnswer() {
