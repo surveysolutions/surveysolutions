@@ -224,6 +224,9 @@ export default {
             jobsLoadingBatchCount: 5
         };
     },
+    timers: {
+        updateExportCards: { time: 5000, autostart: true, repeat: true }
+    },
 
     created() {
         var self = this;
@@ -479,6 +482,35 @@ export default {
                 })
                 .then(() => {
                     this.isUpdatingDataAvailability = false;
+                });
+        },
+
+        updateExportCards() {
+            var self = this;
+
+            if (this.updateInProgress) return;
+
+            this.updateInProgress = true;
+            this.$http
+                .get(this.$config.model.api.runningJobsUrl)
+                .then(response => {
+                    self.updateInProgress = false;
+                    self.exportServiceIsUnavailable = response.data == null;
+
+                    response.data.forEach(function(jobId, index, array) {
+                        if (self.exportResults.some(job => job.id == jobId)) return;
+
+                        self.exportResults.splice(index, 0, {
+                            id: jobId
+                        });
+                    });
+                })
+                .catch(function(error) {
+                    Vue.config.errorHandler(error, self);
+                })
+                .then(function() {
+                    self.updateInProgress = false;
+                    self.$store.dispatch("hideProgress");
                 });
         }
     },
