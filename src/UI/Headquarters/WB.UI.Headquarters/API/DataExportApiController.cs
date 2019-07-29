@@ -80,6 +80,21 @@ namespace WB.UI.Headquarters.API
         [HttpGet]
         [ObserverNotAllowedApi]
         [ApiNoCache]
+        public async Task<List<long>> GetRunningJobs()
+        {
+            try
+            {
+                return (await this.exportServiceApi.GetRunningExportJobs()).OrderByDescending(x => x).ToList();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        [HttpGet]
+        [ObserverNotAllowedApi]
+        [ApiNoCache]
         [CamelCase]
         public async Task<HttpResponseMessage> Status(long id)
         {
