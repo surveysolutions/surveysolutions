@@ -24,8 +24,8 @@ export default {
         })
     },
     SET_ANSWER_NOT_SAVED(state, { id, message }) {
-        const validity = state.entityDetails[id].validity
-        Vue.set(validity, "errorMessage", true)
+        let validity = state.entityDetails[id].validity
+        validity.errorMessage = true
         validity.messages = [message]
         validity.isValid = false
     },
@@ -73,7 +73,7 @@ export default {
     POSTING_COMMENT(state, {questionId}){
         const question = state.entityDetails[questionId];
         if (question){ // can be posted from overview and question is not loaded
-            Vue.set(question, "postingComment", true)
+            question.postingComment = true
         }
     },
 
