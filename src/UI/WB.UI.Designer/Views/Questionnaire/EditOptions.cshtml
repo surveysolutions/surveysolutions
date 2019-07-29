@@ -2,9 +2,9 @@
 @using System.Web
 @using WB.UI.Designer.Extensions
 @using WB.UI.Shared.Web.Extensions
-@model IEnumerable<Main.Core.Entities.SubEntities.QuestionnaireCategoricalOption>
+@model WB.UI.Designer.Controllers.QuestionnaireController.EditOptionsViewModel
 @{
-    ViewBag.Title = QuestionnaireEditor.OptionsWindowTitle;
+    ViewBag.Title = $"{QuestionnaireEditor.OptionsWindowTitle}: {@Model.QuestionTitle}";
     Layout = null;
 }
 <!DOCTYPE html>
@@ -90,7 +90,7 @@
                 </div>
             }
         }
-        @if (Model != null && Model.Any())
+        @if (Model.Options != null && Model.Options.Any())
         {
             <table class="table table-bordered table-hover table-condensed">
                 <thead>
@@ -100,7 +100,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var option in Model)
+                    @foreach (var option in Model.Options)
                     {
                         <tr>
                             <td nowrap>@option.Value</td>
