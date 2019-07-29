@@ -15,7 +15,9 @@
                     </label>
                         <div class="badge" v-if="$me.ordered">{{getAnswerOrder(option.value)}}</div>
                 </div>
-                <button type="button" class="btn btn-link btn-horizontal-hamburger" @click="toggleOptions" v-if="shouldShowAnsweredOptionsOnly && !showAllOptions">
+                <button type="button" class="btn btn-link btn-horizontal-hamburger"
+                        @click="toggleOptions"
+                        v-if="shouldShowAnsweredOptionsOnly && !showAllOptions">
                     <span></span>
                 </button>
                 <div v-if="noOptions" class="options-not-available">{{ $t("WebInterviewUI.OptionsAvailableAfterAnswer") }}</div>
