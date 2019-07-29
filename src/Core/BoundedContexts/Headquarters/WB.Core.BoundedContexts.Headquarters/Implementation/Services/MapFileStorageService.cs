@@ -98,7 +98,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 
                 this.mapPlainStorageAccessor.Store(mapItem, mapItem.Id);
             }
-            catch(Exception e)
+            catch
             {
                 if (this.fileSystemAccessor.IsFileExists(tempFile))
                     fileSystemAccessor.DeleteFile(tempFile);
@@ -214,7 +214,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                                 $"Geotiff is not projected. {this.fileSystemAccessor.GetFileName(tempFile)}");
 
                         if (int.TryParse(sr.GetAuthorityCode(null), out var wkid))
-                            item.Wkid = wkid;
+                            item.Wkid = wkid == 0 ? item.Wkid : wkid;
 
                         double[] geoTransform = new double[6];
                         ds.GetGeoTransform(geoTransform);
