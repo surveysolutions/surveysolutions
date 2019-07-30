@@ -12,7 +12,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public IQuestionStateViewModel QuestionState => this.questionState;
 
         public TextListAddNewItemViewModel(QuestionStateViewModel<TextListQuestionAnswered> questionState,
-            IMvxCommand<string> addListItem)
+            IMvxAsyncCommand<string> addListItem)
         {
             this.questionState = questionState;
             this.AddNewItemCommand = addListItem;
@@ -29,6 +29,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
         
-        public IMvxCommand<string> AddNewItemCommand { get; }
+        public IMvxAsyncCommand<string> AddNewItemCommand { get; }
     }
 }
