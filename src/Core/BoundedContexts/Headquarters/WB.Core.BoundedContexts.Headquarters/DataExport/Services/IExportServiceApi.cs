@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             DateTime? toDate);
 
         [Get("/api/v1/job/running")]
-        Task<List<string>> GetRunningExportJobs();
+        Task<List<long>> GetRunningExportJobs();
 
         [Get("/api/v1/job/all")]
         Task<List<long>> GetAllJobsList();
