@@ -42,7 +42,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                 using (var fileStream = File.OpenRead(state.ArchiveFilePath))
                 {
                     string questionnaireName = null;
-                    if (string.IsNullOrEmpty(questionnaire.VariableName))
+                    if (!string.IsNullOrEmpty(questionnaire.VariableName))
                     {
                         var split = questionnaire.QuestionnaireId.Id.Split('$');
                         var questionnaireVersion = split.Length == 2 
