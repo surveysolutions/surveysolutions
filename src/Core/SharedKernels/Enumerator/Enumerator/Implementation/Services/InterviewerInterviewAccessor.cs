@@ -37,6 +37,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         private readonly IInterviewEventStreamOptimizer eventStreamOptimizer;
         private readonly ILiteEventRegistry eventRegistry;
         private readonly IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository;
+        private readonly ILiteEventBus eventBus;
+        private readonly ILogger logger;
 
         public InterviewerInterviewAccessor(
             IPlainStorage<QuestionnaireView> questionnaireRepository,
@@ -51,7 +53,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             IJsonAllTypesSerializer synchronizationSerializer,
             IInterviewEventStreamOptimizer eventStreamOptimizer,
             ILiteEventRegistry eventRegistry, 
-            IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository)
+            IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository,
+            ILiteEventBus eventBus,
+            ILogger logger)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.prefilledQuestions = prefilledQuestions;
@@ -66,6 +70,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.eventStreamOptimizer = eventStreamOptimizer;
             this.eventRegistry = eventRegistry;
             this.interviewSequenceViewRepository = interviewSequenceViewRepository;
+            this.eventBus = eventBus;
+            this.logger = logger;
         }
 
         public void RemoveInterview(Guid interviewId)
@@ -92,7 +98,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.interviewMultimediaViewRepository.Remove(imageViews);
         }
 
-        public InterviewPackageApiView GetInteviewEventsPackageOrNull(Guid interviewId)
+        public InterviewPackageApiView GetInterviewEventsPackageOrNull(Guid interviewId)
         {
             InterviewView interview = this.interviewViewRepository.GetById(interviewId.FormatGuid());
 
@@ -176,7 +182,30 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 LastEventTimeStamp = last.EventTimeStamp
             };
         }
-        
+
+        public void CheckAndProcessInterviewsWithoutViews()
+        {
+            var registeredItems = this.interviewViewRepository.LoadAll().Select(i => i.InterviewId).ToList();
+
+            var itemsInStore = this.eventStore.GetListOfAllItemsIds();
+
+            var orphans = itemsInStore.Except(registeredItems);
+            
+            foreach (var orphan in orphans)
+            {
+                logger.Info($"Processing orphan interview {orphan}");
+                try
+                {
+                    List<CommittedEvent> storedEvents = this.eventStore.Read(orphan, 0).ToList();
+                    this.eventBus.PublishCommittedEvents(storedEvents);
+                }
+                catch (Exception e)
+                {
+                    logger.Info($"Error on processing orphan interview {orphan}", e);
+                }
+            }
+        }
+
         public async Task CreateInterviewAsync(InterviewApiView info, InterviewerInterviewApiView details)
         {
             var questionnaireView = this.questionnaireRepository.GetById(info.QuestionnaireIdentity.ToString());

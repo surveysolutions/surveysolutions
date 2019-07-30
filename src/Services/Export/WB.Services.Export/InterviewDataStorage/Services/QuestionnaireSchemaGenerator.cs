@@ -42,28 +42,31 @@ namespace WB.Services.Export.InterviewDataStorage.Services
         {
             try
             {
-                var connection = dbContext.Database.GetDbConnection();
-
-                CreateSchema(connection, tenantContext.Tenant);
-
-                foreach (var storedGroup in questionnaireDocument.DatabaseStructure.GetAllLevelTables())
+                LockByValue<string>.Lock(questionnaireDocument.QuestionnaireId.Id, () =>
                 {
-                    CreateTableForGroup(connection, storedGroup, questionnaireDocument);
-                    CreateEnablementTableForGroup(connection, storedGroup);
-                    CreateValidityTableForGroup(connection, storedGroup);
-                }
+                    var connection = dbContext.Database.GetDbConnection();
 
-                dbContext.SaveChanges();
+                    CreateSchema(connection, tenantContext.Tenant);
 
-                logger.LogInformation("Created database structure for {tenantName} ({questionnaireId} [{table}])",
-                    this.tenantContext.Tenant?.Name, questionnaireDocument.QuestionnaireId,
-                    questionnaireDocument.TableName);
+                    foreach (var storedGroup in questionnaireDocument.DatabaseStructure.GetAllLevelTables())
+                    {
+                        CreateTableForGroup(connection, storedGroup, questionnaireDocument);
+                        CreateEnablementTableForGroup(connection, storedGroup);
+                        CreateValidityTableForGroup(connection, storedGroup);
+                    }
+
+                    dbContext.SaveChanges();
+
+                    logger.LogInformation("Created database structure for {tenantName} ({questionnaireId} [{table}])",
+                        this.tenantContext.Tenant?.Name, questionnaireDocument.QuestionnaireId,
+                        questionnaireDocument.TableName);
+                });
             }
             catch (Exception e)
             {
                 e.Data.Add("questionnaireId", questionnaireDocument.QuestionnaireId.ToString());
                 e.Data.Add("questionnaireTitle", questionnaireDocument.Title);
-                throw e;
+                throw;
             }
         }
 
@@ -86,7 +89,7 @@ namespace WB.Services.Export.InterviewDataStorage.Services
             {
                 e.Data.Add("questionnaireId", questionnaireDocument.QuestionnaireId.ToString());
                 e.Data.Add("questionnaireTitle", questionnaireDocument.Title);
-                throw e;
+                throw;
             }
         }
 
