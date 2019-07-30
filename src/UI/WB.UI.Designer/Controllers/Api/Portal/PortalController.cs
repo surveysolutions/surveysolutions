@@ -41,7 +41,7 @@ namespace WB.UI.Designer.Api.Portal
             if (string.IsNullOrWhiteSpace(userId))
                 return BadRequest(new {ReasonPhrase = $"Param {nameof(userId)} is empty or missing"});
 
-            var user = await this.accountRepository.FindByIdAsync(userId);
+            var user = await this.accountRepository.FindByEmailAsync(userId) ?? (await this.accountRepository.FindByNameAsync(userId));
 
             if (user == null)
                 return NotFound();
