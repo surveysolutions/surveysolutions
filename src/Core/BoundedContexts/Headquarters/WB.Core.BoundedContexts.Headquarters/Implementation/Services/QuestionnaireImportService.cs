@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Dapper;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.Resources;
@@ -17,6 +18,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Enumerator.Native.Questionnaire;
+using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
@@ -34,6 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly ICommandService commandService;
         private readonly ILogger logger;
         private readonly IAuditLog auditLog;
+        private readonly IUnitOfWork unitOfWork;
         private readonly IAuthorizedUser authorizedUser;
         private readonly DesignerUserCredentials designerUserCredentials;
 
@@ -47,6 +50,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             ICommandService commandService,
             ILogger logger,
             IAuditLog auditLog,
+            IUnitOfWork unitOfWork,
             IAuthorizedUser authorizedUser,
             DesignerUserCredentials designerUserCredentials)
         {
@@ -59,6 +63,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.commandService = commandService;
             this.logger = logger;
             this.auditLog = auditLog;
+            this.unitOfWork = unitOfWork;
             this.authorizedUser = authorizedUser;
             this.designerUserCredentials = designerUserCredentials;
             this.lookupTablesStorage = lookupTablesStorage;
@@ -107,8 +112,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                             attachmentContent.ContentType, attachmentContent.FileName, attachmentContent.Content);
                     }
                 }
+                var query = this.unitOfWork.Session.CreateSQLQuery("select pg_advisory_xact_lock(51658156)"); // prevent 2 concurrent requests from importing with same version
+                await query.ExecuteUpdateAsync();
 
                 var questionnaireVersion = this.questionnaireVersionProvider.GetNextVersion(questionnaire.PublicKey);
+
                 var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.PublicKey, questionnaireVersion);
                 if (questionnaire.Translations?.Count > 0)
                 {
