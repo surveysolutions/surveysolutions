@@ -130,6 +130,7 @@
           <p>{{ $t("Interviews.AssignToOtherTeamConfirmMessage", this.selectedRows.length, "SV approved", "HQ approved" )}}</p>
         </div>
         <!-- support checkbox for received items-->
+
         <!--div data-bind="if: CountReceivedByInterviewerItems > 0">
                     <br />
                     <input type="checkbox" id="reassignReceivedByInterviewer" data-bind="checked: IsReassignReceivedByInterviewer" class="checkbox-filter" />
@@ -148,12 +149,13 @@
 
     <ModalFrame ref="deleteModal">
       <div class="action-container">
-        <p>{{getDeleteConfirmMessage}}</p>
+        <p v-html="$t('Interviews.DeleteConfirmMessageHQ', {'0': this.getFilteredToDelete.length,'1': 'SupervisorAssigned', '2': 'InterviewerAssigned'})"></p>
       </div>
       <div slot="actions">
         <button type="button"
           class="btn btn-primary"
           @click="deleteInterviews"
+          :disabled="getFilteredToDelete.length==0"
         >{{ $t("Common.Delete") }}</button>
         <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
       </div>
@@ -187,7 +189,7 @@
     <ModalFrame ref="rejectModal">
       <form onsubmit="return false;">
         <div class="action-container">
-          <p>{{ $t("Interviews.RejectConfirmMessageHQ", this.selectedRows.length, "Completed", "ApprovedBySupervisor" )}}</p>
+          <p>{{ $t("Interviews.RejectConfirmMessageHQ", {0: this.selectedRows.length,1: "Completed", 2: "ApprovedBySupervisor"} )}}</p>
         </div>
         <div>
           <label
@@ -213,12 +215,11 @@
     <ModalFrame ref="unapproveModal">
       <form onsubmit="return false;">
         <div class="action-container">
-          <p>{{ $t("Interviews.UnapproveConfirmMessageHQ", this.selectedRows.length, "ApprovedByHeadquarters")}}</p>
+          <p>{{ $t("Interviews.UnapproveConfirmMessageHQ", {"0" : this.selectedRows.length,"1": "ApprovedByHeadquarters"})}}</p>
         </div>
       </form>
       <div slot="actions">
-        <button
-          type="button"
+        <button type="button"
           class="btn btn-primary"
           @click="unapproveInterviews"
         >{{ $t("Common.Unapprove") }}</button>
@@ -226,12 +227,12 @@
       </div>
     </ModalFrame>
 
-    <ModalFrame ref="statusHistory">
-      <div class="action-container">
-        <h3>{{ $t("Pages.HistoryOfStatuses_Interview")}}</h3>
-        <p><button type="button" class="btn btn-link title-row" @click="viewInterview" >{{interviewKey}}</button> by <span href="#">{{responsibleName}}</span></p>
-      </div>
-         <h3>{{ $t("Pages.HistoryOfStatuses_Title")}}</h3>
+    <ModalFrame ref="statusHistory" 
+                :title="$t('Pages.HistoryOfStatuses_Title')">
+      <div class="action-container">        
+        <p><a class="interview-id title-row" @click="viewInterview" href="#">{{interviewKey}}</a> by <span :class="getResponsibleClass" href="#">{{responsibleName}}</span></p>
+      </div>    
+      <div class="table-with-scroll">     
           <table class="table table-striped table-condensed history" id="statustable">
               <thead>
               <tr>
@@ -243,33 +244,15 @@
               </tr>
               </thead>              
           </table>
-      
+      </div>
       <div slot="actions">
-        <button
-          type="button"
+        <button type="button"
           class="btn btn-link"
-          @click="viewInterview"
+          @click="viewInterview"          
         >{{ $t("Pages.HistoryOfStatuses_ViewInterview") }}</button>
         <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
       </div>
-    </ModalFrame>    
-
-    <Confirm ref="confirmRestart" id="restartModal" slot="modals">
-      {{ $t("Pages.InterviewerHq_RestartConfirm") }}
-      <FilterBlock>
-        <div class="form-group">
-          <div class="field">
-            <input class="form-control with-clear-btn" type="text" v-model="restart_comment" />
-          </div>
-        </div>
-      </FilterBlock>
-    </Confirm>
-
-    <Confirm
-      ref="confirmDiscard"
-      id="discardConfirm"
-      slot="modals"
-    >{{ $t("Pages.InterviewerHq_DiscardConfirm") }}</Confirm>
+    </ModalFrame>        
   </HqLayout>
 </template>
 
@@ -322,8 +305,12 @@ export default {
             return this.$config.title;
         },
 
-        getDeleteConfirmMessage(){          
-          return this.$t("Interviews.DeleteConfirmMessageHQ", { "0": this.selectedRows.length, "1": "SupervisorAssigned", "2": "InterviewerAssigned"} );
+        getFilteredToDelete(){
+          return this.getFileredItems(function (item) 
+                {
+                    var value = item.canDelete;
+                    return !isNaN(value) && value;
+            });
         },
 
         interviewKey() {
@@ -331,6 +318,11 @@ export default {
         },
         responsibleName(){
             return this.selectedRowWithMenu != undefined ? this.selectedRowWithMenu.responsibleName: "";
+        },
+        getResponsibleClass(){
+          return this.selectedRowWithMenu != undefined 
+            ? ( this.selectedRowWithMenu.isResponsibleInterviewer ? "interviewer": "supervisor") 
+            : "";
         },
         tableColumns() {
             const self = this;
@@ -386,7 +378,7 @@ export default {
                     title: this.$t("Interviews.Errors"),
                     orderable: true,                    
                     render(data) {
-                        return data > 0 ? "<span class='errors'>" + data + "</span>" : "0";
+                        return data > 0 ? "<span style='color:red;'>" + data + "</span>" : "0";
                     }
                 },
                 {
@@ -537,6 +529,9 @@ export default {
 
         getFileredItems(filterPredicat){
           
+          if(this.$refs.table == undefined)
+            return [];
+
           var selectedItems = this.$refs.table.table.rows( { selected: true } ).data();
 
           if(selectedItems.length !== 0 && selectedItems[0] != null)
@@ -691,17 +686,12 @@ export default {
         },
 
         deleteInterviews() {
-          const self = this;
-          var filteredItems = this.getFileredItems(function (item) 
-                {
-                    var value = item.canDelete;
-                    return !isNaN(value) && value;
-            });
-
+            const self = this;          
+            var filteredItems = this.getFilteredToDelete();
             if(filteredItems.length == 0)
             {
-              this.$refs.deleteModal.hide();
-              return;
+                this.$refs.deleteModal.hide();
+                return;
             }
 
             var command = this.getCommand("DeleteInterviewCommand", _.map(filteredItems, question => {return question.interviewId;}));
@@ -737,16 +727,23 @@ export default {
                       "ordering": false,
                           "info": false,
                      "searching": false,
-                          "data":statusHistoryList,
-                          "columns":[
-                            {data:"StatusHumanized"},
-                            {data:"Date"},
-                            {data:"Responsible"},
-                            {data:"Assignee"},
-                            {data:"Comment"}],                    
-                          });
-                      
-                      $('#statustable').dataTable().fnDraw();
+                      "retrieve": true,                          
+                       "columns":[
+                            {data: "StatusHumanized"},
+                            {data: "Date",
+                             render: function ( data, type, row ) {
+                              return moment.utc(data).local().format('MMM DD, YYYY HH:mm');}
+                            },
+                            {data: "Responsible"},
+                            {data: "Assignee"},
+                            {data: "Comment"}],                    
+                          });                      
+
+                      var table = $('#statustable').dataTable();
+
+                      table.fnClearTable();
+                      table.fnAddData(statusHistoryList);
+                      table.fnDraw();
 
                       self.$refs.statusHistory.modal({keyboard: false});
                  }}
@@ -771,7 +768,7 @@ export default {
                 callback: () => self.showStatusHistory()
             });
 
-            if (rowData.responsibleRole === "Interviewer" && !self.config.isSupervisor) {
+            if (rowData.responsibleRole === "Interviewer") {
                 menu.push({
                     name: self.$t("Common.OpenResponsiblesProfile"),
                     callback: () => window.location = self.config.profileUrl + "/" + rowData.responsibleId
