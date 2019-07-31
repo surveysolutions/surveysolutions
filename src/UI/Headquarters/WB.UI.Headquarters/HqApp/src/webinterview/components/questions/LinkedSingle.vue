@@ -13,7 +13,7 @@
                         <label :for="$me.id + '_' + option.value">
                                 <span class="tick"></span> {{option.title}}
                         </label>
-                        <wb-remove-answer />
+                        <wb-remove-answer :id-suffix="`_opt_${option.value}`"/>
                     </div>
                 </div>
                 <button type="button" class="btn btn-link btn-horizontal-hamburger" @click="toggleOptions" v-if="shouldShowAnsweredOptionsOnly && !showAllOptions">

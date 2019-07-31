@@ -46,7 +46,9 @@ namespace WB.UI.Headquarters.Services
                 var sb = new StringBuilder();
                 using (var memWriter = new StringWriter(sb))
                 {
-                    var fakeContext = new HttpContext(new SimpleWorkerRequest(emailParams.Id, String.Empty, memWriter));
+                    var request = new HttpRequest(emailParams.Id, emailParams.Link, string.Empty);
+                    var response = new HttpResponse(memWriter);
+                    var fakeContext = new HttpContext(request, response);
                     HttpContext.Current = fakeContext;
 
                     var routeData = new RouteData();

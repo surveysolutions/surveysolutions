@@ -564,16 +564,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public IEnumerable<Identity> GetCommentedBySupervisorQuestionsVisibleToInterviewer()
         {
-            var allCommentedQuestions = this.GetCommentedBySupervisorAllQuestions();
+            var allCommentedQuestions = this.GetCommentedBySupervisorNonResolvedQuestions();
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             return allCommentedQuestions.Where(identity => questionnaire.IsInterviewierQuestion(identity.Id));
         }
 
-        public IEnumerable<Identity> GetCommentedBySupervisorAllQuestions()
+        public IEnumerable<Identity> GetCommentedBySupervisorNonResolvedQuestions()
         {
             return this.Tree.FindQuestions()
-                .Where(this.IsEnabledWithSupervisorComments)
+                .Where(this.IsEnabledWithSupervisorNonResolvedComments)
                 .Select(x => new
                 {
                     Id = x.Identity,
@@ -586,13 +586,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public IEnumerable<Identity> GetAllCommentedEnabledQuestions()
         {
             return this.Tree.FindQuestions()
-                .Where(question => !question.IsDisabled() && question.AnswerComments.Any())
+                .Where(question => !question.IsDisabled() && question.AnswerComments.Any() && question.AnswerComments.Any(x => !x.Resolved))
                 .Select(x => x.Identity);
         }
 
-        private bool IsEnabledWithSupervisorComments(InterviewTreeQuestion question)
+        private bool IsEnabledWithSupervisorNonResolvedComments(InterviewTreeQuestion question)
             => !question.IsDisabled() &&
-               question.AnswerComments.Any(y => y.UserId != this.properties.InterviewerId);
+               question.AnswerComments.Any(y => y.UserId != this.properties.InterviewerId && question.AnswerComments.Any(x => !x.Resolved));
 
         public string GetLastSupervisorComment() => this.SupervisorRejectComment;
 
@@ -759,8 +759,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return question != null && !question.IsDisabled() && question.IsAnswered();
         }
 
-        public IEnumerable<AnswerComment> GetQuestionComments(Identity entityIdentity)
-            => this.Tree.GetQuestion(entityIdentity).AnswerComments;
+        public List<AnswerComment> GetQuestionComments(Identity entityIdentity, bool includeResolved = false)
+            => this.Tree.GetQuestion(entityIdentity).AnswerComments.Where(x => includeResolved || !x.Resolved).ToList();
 
         List<CategoricalOption> IStatefulInterview.GetTopFilteredOptionsForQuestion(Identity question, int? parentQuestionValue, string filter, int sliceSize)
             => this.GetFirstTopFilteredOptionsForQuestion(question, parentQuestionValue, filter, sliceSize);
@@ -794,7 +794,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 userRole: commentDto.UserRole,
                 commentTime: commentDto.Date,
                 comment: commentDto.Text,
-                questionIdentity: Identity.Create(answerDto.Id, answerDto.QuestionRosterVector));
+                questionIdentity: Identity.Create(answerDto.Id, answerDto.QuestionRosterVector),
+                commentDto.Id,
+                false);
 
         public bool AcceptsInterviewerAnswers()
         {

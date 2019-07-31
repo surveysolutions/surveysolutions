@@ -8,10 +8,6 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
 
     public interface IEventBus : ILiteEventBus
     {
-        event EventHandlerExceptionDelegate OnCatchingNonCriticalEventHandlerException;
-
-        void Publish(IPublishableEvent eventMessage);
-
         void Publish(IEnumerable<IPublishableEvent> eventMessages);
     }
 }

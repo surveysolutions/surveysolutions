@@ -14,6 +14,8 @@ using NLog;
 using Owin;
 using StackExchange.Exceptional.Stores;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.Tasks;
+using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Enumerator.Native.WebInterview;
 using WB.UI.WebTester.Hub;
@@ -55,6 +57,13 @@ namespace WB.UI.WebTester
             app.UseAutofacWebApi(config);
             app.UseWebApi(config);
             MetricsService.Start(logger);
+
+            using (var scope = container.BeginLifetimeScope())
+            {
+                var serviceLocatorLocal = scope.Resolve<IServiceLocator>();
+                var m = new WebInterviewModule();
+                m.Init(serviceLocatorLocal, new UnderConstructionInfo()).WaitAndUnwrapException();
+            }
         }
 
         private void EnsureJsonStorageForErrorsExists()

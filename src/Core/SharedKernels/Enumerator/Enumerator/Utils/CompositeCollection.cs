@@ -327,7 +327,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                     throw new Exception("bug");
             }
 
-            this.CollectionChanged(this, args);
+            this.CollectionChanged?.Invoke(this, args);
         }
 
         private int CalculateOffset(object sender)

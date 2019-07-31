@@ -440,4 +440,16 @@ Oбратитесь в тех. поддержку за помощью</value>
   <data name="SaveScenario" xml:space="preserve">
     <value>Сохранить сценарий</value>
   </data>
+  <data name="HideResolved" xml:space="preserve">
+    <value>Скрыть решённые</value>
+  </data>
+  <data name="Resolve" xml:space="preserve">
+    <value>Вопрос решен</value>
+  </data>
+  <data name="ResolveHint" xml:space="preserve">
+    <value>Комметарии будут скрыты по умолчанию, но все участники интервью смогут их просмотреть</value>
+  </data>
+  <data name="ShowResolved" xml:space="preserve">
+    <value>Показать решённые</value>
+  </data>
 </root>
