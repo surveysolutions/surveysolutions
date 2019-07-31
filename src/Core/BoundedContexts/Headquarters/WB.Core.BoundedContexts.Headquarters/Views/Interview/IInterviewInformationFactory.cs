@@ -11,5 +11,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         IEnumerable<InterviewInformation> GetInterviewsByIds(Guid[] interviewIds);
         [Obsolete("Since 18.08 KP-11379")]
         InterviewSynchronizationDto GetInProgressInterviewDetails(Guid interviewId);
+
+        bool HasAnyInterviewsInProgressWithResolvedCommentsForInterviewer(Guid authorizedUserId);
+        bool HasAnyInterviewsInProgressWithResolvedCommentsForSupervisor(Guid authorizedUserId);
     }
 }

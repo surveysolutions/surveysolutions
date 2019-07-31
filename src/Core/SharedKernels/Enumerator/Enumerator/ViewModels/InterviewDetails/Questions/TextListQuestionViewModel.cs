@@ -146,8 +146,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 ? 1
                 : answerViewModels.Max(x => x.Value) + 1;
 
-            this.Answers.Insert(this.Answers.Count - 1,
-                this.CreateListItemViewModel(maxValue, answer, this.interviewRepository.Get(this.interviewId)));
+            var interview = this.interviewRepository.Get(this.interviewId);
+            var itemViewModel = this.CreateListItemViewModel(maxValue, answer, interview);
+            var insertPosition = this.Answers.Count - 1;
+            await mainThreadDispatcher.ExecuteOnMainThreadAsync(() => this.Answers.Insert(insertPosition, itemViewModel));
 
             await this.SaveAnswers().ConfigureAwait(false);
 
@@ -180,11 +182,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             try
             {
-                await this.Answering.SendAnswerQuestionCommandAsync(command)
-                    .ConfigureAwait(false);
+                await this.Answering.SendAnswerQuestionCommandAsync(command).ConfigureAwait(false);
                 this.questionState.Validity.ExecutedWithoutExceptions();
-                await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(this.ShowOrHideAddNewItem)
-                    .ConfigureAwait(false);
+                await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(this.ShowOrHideAddNewItem).ConfigureAwait(false);
             }
             catch (InterviewException ex)
             {

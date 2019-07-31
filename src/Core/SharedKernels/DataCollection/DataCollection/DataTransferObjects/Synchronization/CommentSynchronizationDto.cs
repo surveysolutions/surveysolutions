@@ -12,5 +12,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         public Guid UserId { get; set; }
 
         public UserRoles UserRole { get; set; }
+
+        public Guid? Id { get; set; }
     }
 }

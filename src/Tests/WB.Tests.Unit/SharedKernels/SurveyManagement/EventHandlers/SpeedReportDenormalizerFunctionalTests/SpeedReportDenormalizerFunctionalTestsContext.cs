@@ -28,7 +28,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.SpeedReport
                 new StatusChangeHistoryDenormalizerFunctional(userViewFactory),
                 new InterviewStatusTimeSpanDenormalizer(),
                 Mock.Of<IInterviewStatisticsReportDenormalizer>(),
-                new InterviewGeoLocationAnswersDenormalizer(null, questionnaireStorage),
+                new InterviewGeoLocationAnswersDenormalizer(null, questionnaireStorage), 
+                new InterviewExportedCommentariesDenormalizer(userViewFactory, questionnaireStorage), 
                 Create.Storage.NewMemoryCache());
         }
     }

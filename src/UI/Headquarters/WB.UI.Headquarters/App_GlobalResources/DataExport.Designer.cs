@@ -628,7 +628,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Every set is a zip archive with all collected interview data and DDI XML structure you an download previously generated reports.
+        ///   Looks up a localized string similar to Data is exported in a zip archive containing the data files of specified content and type. Below is a list of previously exported data files..
         /// </summary>
         internal static string GeneratedDataSets_Desc {
             get {
