@@ -39,7 +39,10 @@
                         <div class="lock"></div>
                     </div>
                 </div>
-                <button type="button" class="btn btn-link btn-horizontal-hamburger" @click="toggleOptions" v-if="shouldShowAnsweredOptionsOnly && !showAllOptions">
+                <button type="button" class="btn btn-link btn-horizontal-hamburger" 
+                    @click="toggleOptions"
+                     v-if="shouldShowAnsweredOptionsOnly && !showAllOptions"
+                     :id="`btn_${$me.id}_ShowAllOptions`">
                     <span></span>
                 </button>
                 <wb-lock />
