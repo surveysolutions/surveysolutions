@@ -1,5 +1,6 @@
 ﻿using System;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Headquarters.Models.Api;
 
@@ -25,6 +26,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
     }
 
     public class InterviewsDataTableResponse : DataTableResponse<AllInterviewsViewItem>
+    {
+    }
+    public class TeamInterviewsDataTableResponse : DataTableResponse<TeamInterviewsViewItem>
     {
     }
 }

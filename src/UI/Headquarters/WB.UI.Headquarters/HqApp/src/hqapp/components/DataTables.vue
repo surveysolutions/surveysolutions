@@ -258,11 +258,11 @@ export default {
                 self.rowsDeselected(e, dt, type, indexes)
             });
 
-            this.table.on('order', () => {
+            this.table.on('preXhr.dt', (e, diff, edit) => {
                 self.table.rows().deselect();
                 $(self.table.rows).find(".checkbox-filter").prop('checked', false);
             });
-
+           
             this.table.on('draw', () => {
                 self.$emit("draw")
             })
