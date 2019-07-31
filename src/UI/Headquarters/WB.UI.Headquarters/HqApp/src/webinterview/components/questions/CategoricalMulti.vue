@@ -38,6 +38,7 @@
           type="button"
           class="btn btn-link btn-horizontal-hamburger"
           @click="toggleOptions"
+          :id="`btn_${$me.id}_ShowAllOptions`"
           v-if="shouldShowAnsweredOptionsOnly && !showAllOptions"
         >
           <span></span>
