@@ -23,7 +23,7 @@ using WB.UI.Headquarters.Code;
 namespace WB.UI.Headquarters.Controllers
 {
     [LimitsFilter]
-    [AuthorizeOr403(Roles = "Administrator, Headquarter")]
+    [AuthorizeOr403(Roles = "Administrator, Headquarter, Supervisor")]
     public class InterviewsController : BaseController
     {
         private readonly IAuthorizedUser currentUser;
@@ -81,7 +81,7 @@ namespace WB.UI.Headquarters.Controllers
                 IsObserving = this.currentUser.IsObserving,
                 IsHeadquarter = this.currentUser.IsHeadquarter || this.currentUser.IsAdministrator,
                 Title = title,
-                AllInterviews = Url.Content(@"~/api/InterviewApi/Interviews"),
+                AllInterviews = this.currentUser.IsSupervisor ? Url.Content(@"~/api/InterviewApi/GetTeamInterviews") : Url.Content(@"~/api/InterviewApi/Interviews"),
                 AssignmentsUrl = @Url.Action("Index","Assignments"),
                 InterviewReviewUrl = Url.Action("Review", "Interview"),
                 ProfileUrl = Url.Action("Profile", "Interviewer"),
@@ -98,7 +98,10 @@ namespace WB.UI.Headquarters.Controllers
                     ? Url.RouteUrl("DefaultApiWithAction",
                         new {httproute = "", controller = "Teams", action = "InterviewersCombobox"})
                     : Url.RouteUrl("DefaultApiWithAction",
-                        new {httproute = "", controller = "Teams", action = "ResponsiblesCombobox"})
+                        new {httproute = "", controller = "Teams", action = "ResponsiblesCombobox"}),
+                InterviewStatuses = Url.RouteUrl("DefaultApiWithAction", 
+                    new { httproute = "", controller = "InterviewApi", action = "ChangeStateHistory" })
+
             };
 
             return model;
@@ -126,6 +129,7 @@ namespace WB.UI.Headquarters.Controllers
         public class ApiEndpoints
         {
             public string Responsible { get; set; }
+            public string InterviewStatuses { get; set; }
         }
 
 
