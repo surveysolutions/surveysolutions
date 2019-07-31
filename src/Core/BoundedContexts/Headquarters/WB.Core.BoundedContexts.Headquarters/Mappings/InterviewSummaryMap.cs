@@ -12,11 +12,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             this.Table("InterviewSummaries");
             this.DynamicUpdate(true);
 
-            Id(x => x.Id,p => p.Generator(Generators.Identity));
+            Id(x => x.Id, p => p.Generator(Generators.Identity));
 
             // Property(x => x.SummaryId);
             this.PropertyKeyAlias(x => x.SummaryId);
-            
+
             Property(x => x.QuestionnaireTitle);
             Property(x => x.ResponsibleName);
             Property(x => x.TeamLeadId, pm => pm.Column(cm => cm.Index("InterviewSummaries_TeamLeadId")));
@@ -42,13 +42,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.FirstSupervisorId);
             Property(x => x.CreatedDate);
             Property(x => x.FirstAnswerDate);
+            Property(x => x.HasResolvedComments);
             Property(x => x.ErrorsCount);
             Property(x => x.CommentedEntitiesCount, clm =>
             {
                 clm.Lazy(true);
                 clm.Formula(
-                    @"(SELECT COUNT(DISTINCT (c.interviewid, c.variable, c.rostervector)) FROM readside.commentaries c 
-                               WHERE c.interviewid = interviewid::text AND c.variable not like '@@%')");
+                    @"(SELECT COUNT(DISTINCT (c.summary_id, c.variable, c.rostervector)) FROM readside.commentaries c 
+                               WHERE c.summary_id = id AND c.variable not like '@@%')");
             });
             Property(x => x.AssignmentId);
             Property(x => x.ReceivedByInterviewer, pm => pm.Column(cm =>
@@ -104,6 +105,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                 listMap.Cascade(Cascade.All | Cascade.DeleteOrphans);
                 listMap.Lazy(CollectionLazy.Lazy);
                 listMap.Inverse(true);
+            }, rel => rel.OneToMany());
+
+            Set(x => x.Comments, sm =>
+            {
+                sm.Table("commentaries");
+                sm.Key(k => k.Column("summary_id"));
+                sm.Cascade(Cascade.All | Cascade.DeleteOrphans);
+                sm.Lazy(CollectionLazy.Lazy);
+                sm.Inverse(true);
             }, rel => rel.OneToMany());
         }
     }

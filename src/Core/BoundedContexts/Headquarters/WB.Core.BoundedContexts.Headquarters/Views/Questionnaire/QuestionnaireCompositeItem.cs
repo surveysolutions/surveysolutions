@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -24,8 +23,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
         public virtual string StatExportCaption { get; set; }
         public virtual string QuestionText { get; set; }
         public virtual string VariableLabel { get; set; }
-
-        public virtual ISet<QuestionnaireCompositeItemAnswer> Answers { get; set; }
     }
 
     public class QuestionnaireCompositeItemAnswer

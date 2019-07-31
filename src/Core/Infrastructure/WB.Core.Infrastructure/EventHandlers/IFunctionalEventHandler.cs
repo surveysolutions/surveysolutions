@@ -7,6 +7,5 @@ namespace WB.Core.Infrastructure.EventHandlers
     public interface IFunctionalEventHandler
     {
         void Handle(IEnumerable<IPublishableEvent> publishableEvents, Guid eventSourceId);
-        void RegisterHandlersInOldFashionNcqrsBus(InProcessEventBus oldEventBus);
     }
 }

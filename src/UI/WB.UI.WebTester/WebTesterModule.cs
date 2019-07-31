@@ -76,7 +76,6 @@ namespace WB.UI.WebTester
             registry.BindAsSingleton<IEventSourcedAggregateRootRepository, IAggregateRootCacheFiller, IAggregateRootCacheCleaner, WebTesterAggregateRootRepository>();
             registry.BindAsSingleton<IWebInterviewNotificationService, WebInterviewNotificationService>();
             registry.BindAsSingleton<ICommandService, WebTesterCommandService>();
-            registry.BindAsSingleton<IEventBus, InProcessEventBus>();
 
             //var binPath = Path.GetFullPath(Path.Combine(HttpRuntime.CodegenDir, ".." + Path.DirectorySeparatorChar + ".."));
             var binPath = System.Web.Hosting.HostingEnvironment.MapPath("~/bin");

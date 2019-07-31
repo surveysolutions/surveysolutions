@@ -112,11 +112,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             cumulativeReportStatusChangeStorage.BulkStore(state.Added.Select(x => new Tuple<CumulativeReportStatusChange, string>(x, x.EntryId)).ToList());
         }
 
-        public void RegisterHandlersInOldFashionNcqrsBus(InProcessEventBus oldEventBus)
-        {
-            //no need in current implementation
-        }
-
         public string Name => "Cumulative Chart Functional Denormalizer";
         public object[] Readers { get; } = Array.Empty<object>();
         public object[] Writers { get; } = Array.Empty<object>();

@@ -2013,6 +2013,7 @@
     <Compile Include="API\DataCollection\AuditLogControllerBase.cs" />
     <Compile Include="API\DataCollection\AppApiControllerBase.cs" />
     <Compile Include="Controllers\InterviewsController.cs" />
+    <Compile Include="API\PublicApi\Models\AuditLogApiView.cs" />
     <Compile Include="Services\ClientApkProvider.cs" />
     <Compile Include="Services\IClientApkProvider.cs" />
     <Compile Include="API\DataCollection\Interviewer\InterviewerCommonWebApiConfig.cs" />
