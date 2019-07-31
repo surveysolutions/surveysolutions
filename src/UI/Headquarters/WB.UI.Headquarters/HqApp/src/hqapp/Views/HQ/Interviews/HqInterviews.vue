@@ -101,11 +101,11 @@
             @click="rejectInterview">{{ $t("Common.Reject")}}</button>
           <button
             class="btn btn-lg btn-primary"
-            v-if="selectedRows.length"
+            v-if="selectedRows.length && !config.isSupervisor"
             @click="unapproveInterview">{{ $t("Common.Unapprove")}}</button>
           <button
             class="btn btn-link"
-            v-if="selectedRows.length"
+            v-if="selectedRows.length && !config.isSupervisor"
             @click="deleteInterview">{{ $t("Common.Delete")}}</button>
         </div>
       </div>
@@ -127,7 +127,7 @@
             :fetch-url="config.api.responsible"></Typeahead>
         </div>
         <div id="pnlAssignToOtherTeamConfirmMessage">
-          <p>{{ $t("Interviews.AssignToOtherTeamConfirmMessage", {count: selectedRows.length}, "SV approved", "HQ approved" )}}</p>
+          <p>{{ $t("Interviews.AssignToOtherTeamConfirmMessage", this.selectedRows.length, "SV approved", "HQ approved" )}}</p>
         </div>
         <!-- support checkbox for received items-->
         <!--div data-bind="if: CountReceivedByInterviewerItems > 0">
@@ -148,11 +148,10 @@
 
     <ModalFrame ref="deleteModal">
       <div class="action-container">
-        <p>{{ $t("Interviews.DeleteConfirmMessageHQ", {count: selectedRows.length}, "SupervisorAssigned", "InterviewerAssigned" )}}</p>
+        <p>{{getDeleteConfirmMessage}}</p>
       </div>
       <div slot="actions">
-        <button
-          type="button"
+        <button type="button"
           class="btn btn-primary"
           @click="deleteInterviews"
         >{{ $t("Common.Delete") }}</button>
@@ -163,19 +162,16 @@
     <ModalFrame ref="approveModal">
       <form onsubmit="return false;">
         <div class="action-container">
-          <p>{{ $t("Interviews.ApproveConfirmMessageHQ", {count: selectedRows.length}, "Completed", "ApprovedBySupervisor" )}}</p>
+          <p>{{ $t("Interviews.ApproveConfirmMessageHQ", this.selectedRows.length, "Completed", "ApprovedBySupervisor" )}}</p>
         </div>
         <div>
-          <label
-            for="txtStatusChangeComment"
+          <label for="txtStatusChangeComment"
           >{{$t("Pages.ApproveRejectPartialView_CommentLabel")}} :</label>
-          <textarea
-            class="form-control"
+          <textarea class="form-control"
             rows="10"
             maxlength="200"
             id="txtStatusChangeComment"
-            v-model="statusChangeComment"
-          ></textarea>
+            v-model="statusChangeComment"></textarea>
         </div>
       </form>
       <div slot="actions">
@@ -191,7 +187,7 @@
     <ModalFrame ref="rejectModal">
       <form onsubmit="return false;">
         <div class="action-container">
-          <p>{{ $t("Interviews.RejectConfirmMessageHQ", {count: selectedRows.length}, "Completed", "ApprovedBySupervisor" )}}</p>
+          <p>{{ $t("Interviews.RejectConfirmMessageHQ", this.selectedRows.length, "Completed", "ApprovedBySupervisor" )}}</p>
         </div>
         <div>
           <label
@@ -217,7 +213,7 @@
     <ModalFrame ref="unapproveModal">
       <form onsubmit="return false;">
         <div class="action-container">
-          <p>{{ $t("Interviews.UnapproveConfirmMessageHQ", {count: selectedRows.length}, "ApprovedByHeadquarters")}}</p>
+          <p>{{ $t("Interviews.UnapproveConfirmMessageHQ", this.selectedRows.length, "ApprovedByHeadquarters")}}</p>
         </div>
       </form>
       <div slot="actions">
@@ -233,60 +229,30 @@
     <ModalFrame ref="statusHistory">
       <div class="action-container">
         <h3>{{ $t("Pages.HistoryOfStatuses_Interview")}}</h3>
+        <p><button type="button" class="btn btn-link title-row" @click="viewInterview" >{{interviewKey}}</button> by <span href="#">{{responsibleName}}</span></p>
       </div>
-
+         <h3>{{ $t("Pages.HistoryOfStatuses_Title")}}</h3>
+          <table class="table table-striped table-condensed history" id="statustable">
+              <thead>
+              <tr>
+                  <td>{{ $t("Pages.HistoryOfStatuses_State")}}</td>
+                  <td>{{ $t("Pages.HistoryOfStatuses_On")}}</td>
+                  <td>{{ $t("Pages.HistoryOfStatuses_By")}}</td>
+                  <td>{{ $t("Pages.HistoryOfStatuses_AssignedTo")}}</td>
+                  <td>{{ $t("Pages.HistoryOfStatuses_Comment")}}</td>
+              </tr>
+              </thead>              
+          </table>
+      
       <div slot="actions">
         <button
           type="button"
-          class="btn btn-primary"
+          class="btn btn-link"
           @click="viewInterview"
         >{{ $t("Pages.HistoryOfStatuses_ViewInterview") }}</button>
         <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
       </div>
-    </ModalFrame>
-
-    <!--script type="text/html" id="interview-status-history-template">
-    <div class="modal fade" id="statusHistoryModal" tabindex="-1" role="dialog" aria-labelledby="statusHistoryModal">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
-                    <h3>@Pages.HistoryOfStatuses_Interview</h3>
-                    <p><a data-bind="attr: { href: interviewUrl, title: key },text: key" class="title-row"></a> by <span href="#" data-bind="text: responsible, css: { interviewer: isResponsibleInterviewer, supervisor: !isResponsibleInterviewer}"></span></p>
-                </div>
-                <div class="modal-body">
-                    <h3>@Pages.HistoryOfStatuses_Title</h3>
-                    <div class="table-with-scroll">
-                        <table class="table table-striped history">
-                            <thead>
-                            <tr>
-                                <td>@Pages.HistoryOfStatuses_State</td>
-                                <td>@Pages.HistoryOfStatuses_On</td>
-                                <td>@Pages.HistoryOfStatuses_By</td>
-                                <td>@Pages.HistoryOfStatuses_AssignedTo</td>
-                                <td>@Pages.HistoryOfStatuses_Comment</td>
-                            </tr>
-                            </thead>
-                            <tbody  data-bind="foreach:statusHistory">
-                            <tr>
-                                <td data-bind="text: StatusHumanized"></td>
-                                <td class="date" data-bind="text: $root.formatDate(Date)"></td>
-                                <td><span data-bind="text: Responsible, attr: { 'class' : ResponsibleRole }"></span></td>
-                                <td><span data-bind="text: Assignee, attr: { 'class' : AssigneeRole }"></span></td>
-                                <td data-bind="text: Comment"></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <a class="btn btn-link" data-bind="attr: { href: interviewUrl, title: key }">@Pages.HistoryOfStatuses_ViewInterview</a>
-                    <button type="button" class="btn btn-link" data-dismiss="modal">@Pages.CloseLabel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    </script-->
+    </ModalFrame>    
 
     <Confirm ref="confirmRestart" id="restartModal" slot="modals">
       {{ $t("Pages.InterviewerHq_RestartConfirm") }}
@@ -318,6 +284,7 @@ export default {
             questionnaireVersion: null,
             isLoading: false,
             selectedRows: [],
+            selectedRowWithMenu:null,
             totalRows: 0,
             assignmentId: null,
             responsibleId: null,
@@ -326,6 +293,8 @@ export default {
             statusChangeComment: null,
             status: null,
             selectedStatus: null,
+            unactiveDateStart:null,
+            unactiveDateEnd:null,
             statuses: this.$config.model.statuses
         };
     },
@@ -353,6 +322,16 @@ export default {
             return this.$config.title;
         },
 
+        getDeleteConfirmMessage(){          
+          return this.$t("Interviews.DeleteConfirmMessageHQ", { "0": this.selectedRows.length, "1": "SupervisorAssigned", "2": "InterviewerAssigned"} );
+        },
+
+        interviewKey() {
+            return this.selectedRowWithMenu != undefined ? this.selectedRowWithMenu.key: "";
+        },
+        responsibleName(){
+            return this.selectedRowWithMenu != undefined ? this.selectedRowWithMenu.responsibleName: "";
+        },
         tableColumns() {
             const self = this;
             return [
@@ -405,7 +384,10 @@ export default {
                     data: "errorsCount",
                     name: "ErrorsCount",
                     title: this.$t("Interviews.Errors"),
-                    orderable: true
+                    orderable: true,                    
+                    render(data) {
+                        return data > 0 ? "<span class='errors'>" + data + "</span>" : "0";
+                    }
                 },
                 {
                     data: "status",
@@ -466,7 +448,7 @@ export default {
             };
 
             return tableOptions;
-        },
+        },        
         showSelectors() {
             return !this.config.isObserver && !this.config.isObserving;
         },
@@ -496,8 +478,8 @@ export default {
         },
 
         viewInterview(){
-            var id = this.selectedRows[0];
-            window.location = self.config.interviewReviewUrl + "/" + id.replace(/-/g, "");
+            var id = this.selectedRowWithMenu.interviewId;
+            window.location = this.config.interviewReviewUrl + "/" + id.replace(/-/g, "");
         },
 
         arrayFilter: function (array, predicate) {
@@ -509,12 +491,9 @@ export default {
             return result;
         },
 
-        assign() {
+        assign() {        
           const self = this;
-          var selectedItems = this.$refs.table.table.rows( { selected: true } ).data();
-
-          var filteredItems = this.arrayFilter(selectedItems,
-                function (item) 
+          var filteredItems = this.getFileredItems(function (item) 
                 {
                     var value = item.canBeReassigned && item.responsibleId !== self.newResponsibleId.key;
                     return !isNaN(value) && value;
@@ -526,17 +505,17 @@ export default {
             return;
           };
 
-            var commands = this.arrayMap(_.map(filteredItems, question => {return question.interviewId;}), function(rowId) {
+          var commands = this.arrayMap(_.map(filteredItems, question => {return question.interviewId;}), function(rowId) {
                 var item = {
                     InterviewId: rowId,                    
                     InterviewerId: self.newResponsibleId.iconClass === "interviewer" ? self.newResponsibleId.key: null,
                     SupervisorId: self.newResponsibleId.iconClass === "supervisor" ? self.newResponsibleId.key : null
                 };
                 return JSON.stringify(item);
-            });
+          });
 
             var command = {
-                type: "AssignResponsibleCommand",
+                type: self.config.isSupervisor ? "AssignInterviewerCommand": "AssignResponsibleCommand",
                 commands: commands
             };
 
@@ -556,15 +535,21 @@ export default {
             this.$refs.assignModal.modal({ keyboard: false });
         },
 
-        approveInterviews() {
-          const self = this;
+        getFileredItems(filterPredicat){
+          
           var selectedItems = this.$refs.table.table.rows( { selected: true } ).data();
 
-          var filteredItems = this.arrayFilter(selectedItems,
-                function (item) 
-                {
-                    var value = item.canApprove;
-                    return !isNaN(value) && value;
+          if(selectedItems.length !== 0 && selectedItems[0] != null)
+            return this.arrayFilter(selectedItems, filterPredicat);           
+
+          return this.arrayFilter( [this.selectedRowWithMenu], filterPredicat);
+        },
+
+        approveInterviews() {     
+          const self = this;     
+          var filteredItems = this.getFileredItems(function (item) 
+                {  var value = item.canApprove;
+                   return !isNaN(value) && value;
             });
 
             if(filteredItems.length == 0)
@@ -573,7 +558,9 @@ export default {
               return;
             }
 
-            var command = this.getCommand("HqApproveInterviewCommand", _.map(filteredItems, question => {return question.interviewId;}), this.statusChangeComment);
+            var command = this.getCommand(
+              self.config.isSupervisor ? "ApproveInterviewCommand" :"HqApproveInterviewCommand", 
+            _.map(filteredItems, question => {return question.interviewId;}), this.statusChangeComment);
 
             this.executeCommand(
                 command,
@@ -592,11 +579,8 @@ export default {
         },
 
         rejectInterviews() {
-          const self = this;            
-          var selectedItems = this.$refs.table.table.rows( { selected: true } ).data();
-
-            var filteredItems = this.arrayFilter(selectedItems,
-                function (item) 
+          const self = this;
+            var filteredItems = this.getFileredItems(function (item) 
                 {
                     var value = item.canReject;
                     return !isNaN(value) && value;
@@ -608,7 +592,9 @@ export default {
               return;
             }
 
-            var command = this.getCommand("HqRejectInterviewCommand", _.map(filteredItems, question => {return question.interviewId;}), this.statusChangeComment);
+            var command = this.getCommand(
+              self.config.isSupervisor ? "RejectInterviewToInterviewerCommand" : "HqRejectInterviewCommand", 
+              _.map(filteredItems, question => {return question.interviewId;}), this.statusChangeComment);
 
             this.executeCommand(
                 command,
@@ -676,10 +662,7 @@ export default {
 
         unapproveInterviews() {
           const self = this;
-            var selectedItems = this.$refs.table.table.rows( { selected: true } ).data();
-
-            var filteredItems = this.arrayFilter(selectedItems,
-                function (item) 
+          var filteredItems = this.getFileredItems(function (item)  
                 {
                     var value = item.canUnapprove;
                     return !isNaN(value) && value;
@@ -709,10 +692,7 @@ export default {
 
         deleteInterviews() {
           const self = this;
-          var selectedItems = this.$refs.table.table.rows( { selected: true } ).data();
-
-          var filteredItems = this.arrayFilter(selectedItems,
-                function (item) 
+          var filteredItems = this.getFileredItems(function (item) 
                 {
                     var value = item.canDelete;
                     return !isNaN(value) && value;
@@ -737,52 +717,47 @@ export default {
         },
 
         deleteInterview() {
-            this.$refs.deleteModal.modal({
-                keyboard: false
-            });
+            this.$refs.deleteModal.modal({keyboard: false});
         },
         newResponsibleSelected(newValue) {
             this.newResponsibleId = newValue;
         },
 
-        showStatusHistory(interviewId) {
-            this.$refs.statusHistory.modal({
-                keyboard: false
-            });
+        showStatusHistory() {
+          var self = this;
+          
+          $.ajax({
+            type: "POST",
+            url: this.config.api.interviewStatuses,            
+            data: { interviewId: this.selectedRowWithMenu.interviewId },
+            success: function (statusHistoryList) {                 
+                 if (statusHistoryList.length != 0) {
+                      $('#statustable').dataTable({
+                        "paging": false,
+                      "ordering": false,
+                          "info": false,
+                     "searching": false,
+                          "data":statusHistoryList,
+                          "columns":[
+                            {data:"StatusHumanized"},
+                            {data:"Date"},
+                            {data:"Responsible"},
+                            {data:"Assignee"},
+                            {data:"Comment"}],                    
+                          });
+                      
+                      $('#statustable').dataTable().fnDraw();
 
-            //'@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewApi", action = "ChangeStateHistory"})'
-
-            /*
-            self.SendRequest(url,
-            { interviewId: interview.InterviewId() },
-            function(statusHistory) {
-
-                $(modalId).parent().remove();
-
-                var historyModalModel = {
-                    key: interview.Key(),
-                    interviewUrl: $detailsUrl + '/' + interview.InterviewId(),
-                    responsible: interview.ResponsibleName(),
-                    isResponsibleInterviewer: interview.ResponsibleRole() === 4,
-                    statusHistory: statusHistory,
-                    formatDate: function(date) {
-                        return moment.utc(date).local().format('MMM DD, YYYY HH:mm');
-                    }
-                };
-
-                $('body').append($("<div/>").html($(statusHistoryTemplateId).html())[0]);
-
-                ko.applyBindings(historyModalModel, $(modalId)[0]);
-
-                $(modalId).modal('show', { backdrop: true });
-            },
-            false,
-            false);*/
+                      self.$refs.statusHistory.modal({keyboard: false});
+                 }}
+            });      
         },
 
         contextMenuItems({ rowData, rowIndex }) {
             const menu = [];
             const self = this;
+
+            self.selectedRowWithMenu = rowData;
 
             menu.push({
                 name: self.$t("Pages.InterviewerHq_OpenInterview"),
@@ -796,10 +771,10 @@ export default {
                 callback: () => self.showStatusHistory()
             });
 
-            if (rowData.responsibleRole === "Interviewer") {
+            if (rowData.responsibleRole === "Interviewer" && !self.config.isSupervisor) {
                 menu.push({
                     name: self.$t("Common.OpenResponsiblesProfile"),
-                    callback: () => self.config.profileUrl + "/" + rowData.responsibleId
+                    callback: () => window.location = self.config.profileUrl + "/" + rowData.responsibleId
                 });
             }
 
@@ -826,20 +801,23 @@ export default {
                     callback: () => self.rejectInterview()
                 });
 
-                menu.push({
-                    name: self.$t("Common.Unapprove"),
-                    callback: () => self.unapproveInterview()
-                });
+                if(!self.config.isSupervisor)
+                {
+                    menu.push({
+                        name: self.$t("Common.Unapprove"),
+                        callback: () => self.unapproveInterview()
+                    });
 
-                menu.push({
-                    className: "context-menu-separator context-menu-not-selectable"
-                });
+                    menu.push({
+                        className: "context-menu-separator context-menu-not-selectable"
+                    });
 
-                menu.push({
-                    name: self.$t("Common.Delete"),
-                    className: "error-text",
-                    callback: () => self.deleteInterview()
-                });
+                    menu.push({
+                        name: self.$t("Common.Delete"),
+                        className: "error-text",
+                        callback: () => self.deleteInterview()
+                    });
+                }
             }
 
             return menu;
@@ -853,10 +831,16 @@ export default {
             data.questionnaireId = (this.questionnaireId || {}).key;
             data.questionnaireVersion = (this.questionnaireVersion || {}).key;
             data.responsibleId = (this.responsibleId || {}).key;
-            
-            if (this.assignmentId) { data.assignmentId = this.assignmentId; };
-        },
+            data.responsibleName = (this.responsibleId || {}).value;
 
+            if (this.assignmentId) { data.assignmentId = this.assignmentId; };
+            if (this.unactiveDateStart) { data.unactiveDateStart = this.unactiveDateStart; };
+            if (this.unactiveDateEnd) { data.unactiveDateEnd = this.unactiveDateEnd; };           
+
+        },
+        addParamsToRequestStatuses(data) {                        
+            data.interviewId = this.selectedRowWithMenu.interviewId; 
+        },
         clearAssignmentFilter() {
             this.assignmentId = null;
         },
@@ -879,10 +863,10 @@ export default {
             var queryString = {};
 
             if (this.questionnaireId != null) {
-                queryString.QuestionnaireId = this.questionnaireId.value;
+                queryString.templateId = this.questionnaireId.key;
             }
             if (this.questionnaireVersion != null) {
-                queryString.questionnaireVersion = this.questionnaireVersion.key;
+                queryString.templateVersion = this.questionnaireVersion.key;
             }
 
             if (this.responsibleId) queryString.responsible = this.responsibleId.value;
@@ -896,12 +880,14 @@ export default {
 
     mounted() {
 
+      this.unactiveDateStart = this.$route.query.unactiveDateStart;
+      this.unactiveDateEnd = this.$route.query.unactiveDateEnd;
+
 // load url params
 
-      //this.userRole = this.$route.query.userRole;
+      //this.unactiveDateStart = this.$route.query.unactiveDateStart;
 
 /* 
-
         self.Url.query['templateId'] = self.QueryString['templateId'] || "";
         self.Url.query['templateVersion'] = self.QueryString['templateVersion'] || "";
         self.Url.query['status'] = self.QueryString['status'] || "";
@@ -911,8 +897,6 @@ export default {
         self.Url.query['unactiveDateStart'] = decodeURIComponent(self.QueryString['unactiveDateStart'] || "");
         self.Url.query['unactiveDateEnd'] = decodeURIComponent(self.QueryString['unactiveDateEnd'] || "");
         self.Url.query['teamId'] = self.QueryString['teamId'] || "";
-
-
 */
 
         this.reloadTable();
