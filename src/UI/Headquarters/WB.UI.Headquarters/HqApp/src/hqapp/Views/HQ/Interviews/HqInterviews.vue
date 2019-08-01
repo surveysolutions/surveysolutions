@@ -150,8 +150,8 @@
           <br />
           <input
             type="checkbox"
-            id="reassignReceivedByInterviewer"
-            :checked="isReassignReceivedByInterviewer"
+            id="reassignReceivedByInterviewer"            
+            v-model="isReassignReceivedByInterviewer"
             class="checkbox-filter"
           />
           <label for="reassignReceivedByInterviewer" style="font-weight: normal">
