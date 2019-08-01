@@ -118,15 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ApproveConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt;个访谈将通过审核。&lt;/h3&gt;
-&lt;b&gt;注意！&lt;/b&gt;您只能通过审核处于以下状态的访谈： &lt;i&gt;{1}&lt;/i&gt;和&lt;i&gt;{2}&lt;/i&gt;。</value>
+    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt;个访谈将通过审核。&lt;/h3&gt;
+&lt;b&gt;注意！&lt;/b&gt;您只能通过审核处于以下状态的访谈： &lt;i&gt;{{status1}}&lt;/i&gt;和&lt;i&gt;{{status2}}&lt;/i&gt;。</value>
   </data>
   <data name="AssignConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt;个选中的访谈将被分配。&lt;/h3&gt;
-&lt;b&gt;注意！&lt;/b&gt;您只能分配处于以下状态的访谈：&lt;i&gt;{1}&lt;/i&gt;、&lt;i&gt;{2}（只能分配给其他调查员）&lt;/i&gt;和&lt;i&gt;{3}&lt;/i&gt;。</value>
+    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt;个选中的访谈将被分配。&lt;/h3&gt;
+&lt;b&gt;注意！&lt;/b&gt;您只能分配处于以下状态的访谈：&lt;i&gt;{{status1}}&lt;/i&gt;、&lt;i&gt;{{status2}}（只能分配给其他调查员）&lt;/i&gt;和&lt;i&gt;{{status3}}&lt;/i&gt;。</value>
   </data>
   <data name="AssignReceivedConfirm" xml:space="preserve">
-    <value>应用到调查员已经收到的{0}个访谈</value>
+    <value>应用到调查员已经收到的{{count}}个访谈</value>
   </data>
   <data name="ContinueConfirmMessage" xml:space="preserve">
     <value>您要继续吗？</value>
@@ -135,28 +135,28 @@
     <value>您要继续吗？</value>
   </data>
   <data name="DeleteConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt;个访谈将被删除。&lt;/h3&gt;
-&lt;b&gt;注意！&lt;/b&gt;您可以删除只有以下状态的面试者未收到的面试：&lt;i&gt;{1}&lt;/i&gt;和&lt;i&gt;{2}&lt;/i&gt;。</value>
+    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt;个访谈将被删除。&lt;/h3&gt;
+&lt;b&gt;注意！&lt;/b&gt;您可以删除只有以下状态的面试者未收到的面试：&lt;i&gt;{{status1}}&lt;/i&gt;和&lt;i&gt;{{status2}}&lt;/i&gt;。</value>
   </data>
   <data name="RejectConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt;个访谈将被驳回。&lt;/h3&gt;
-&lt;b&gt;注意！&lt;/b&gt;您只能驳回处于以下状态的访谈：&lt;i&gt;{1}&lt;/i&gt;和&lt;i&gt;{2}&lt;/i&gt;。</value>
+    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt;个访谈将被驳回。&lt;/h3&gt;
+&lt;b&gt;注意！&lt;/b&gt;您只能驳回处于以下状态的访谈：&lt;i&gt;{{status1}}&lt;/i&gt;和&lt;i&gt;{{status2}}&lt;/i&gt;。</value>
   </data>
   <data name="RejectConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt;个访谈将被驳回。&lt;/h3&gt;
-&lt;b&gt;注意！&lt;/b&gt;您只能驳回处于以下状态的访谈：&lt;i&gt;{1}&lt;/i&gt;和&lt;i&gt;{2}&lt;/i&gt;。</value>
+    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt;个访谈将被驳回。&lt;/h3&gt;
+&lt;b&gt;注意！&lt;/b&gt;您只能驳回处于以下状态的访谈：&lt;i&gt;{{status1}}&lt;/i&gt;和&lt;i&gt;{{status2}}&lt;/i&gt;。</value>
   </data>
   <data name="UnapproveConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt;个访谈将被取消审核。&lt;/h3&gt;
-&lt;b&gt;注意！&lt;/b&gt;您只能取消审核处于以下状态的访谈：&lt;i&gt;{1}&lt;/i&gt;。</value>
+    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt;个访谈将被取消审核。&lt;/h3&gt;
+&lt;b&gt;注意！&lt;/b&gt;您只能取消审核处于以下状态的访谈：&lt;i&gt;{{status1}}&lt;/i&gt;。</value>
   </data>
   <data name="ApproveConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt;个访谈将通过审核。&lt;/h3&gt;
-&lt;b&gt;注意！&lt;/b&gt;您只能通过审核处于以下状态的访谈：&lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2}&lt;/i&gt;。</value>
+    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt;个访谈将通过审核。&lt;/h3&gt;
+&lt;b&gt;注意！&lt;/b&gt;您只能通过审核处于以下状态的访谈：&lt;i&gt;{{status1}}&lt;/i&gt;, &lt;i&gt;{{status2}}&lt;/i&gt;。</value>
   </data>
   <data name="AssignToOtherTeamConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt;个访谈将被分配。&lt;/h3&gt;
-&lt;b&gt;注意！&lt;/b&gt;只有状态未处于&lt;i&gt;{1}&lt;/i&gt;和&lt;i&gt;{2}&lt;/i&gt;状态的问卷可以被重新分配。</value>
+    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt;个访谈将被分配。&lt;/h3&gt;
+&lt;b&gt;注意！&lt;/b&gt;只有状态未处于&lt;i&gt;{{status1}}&lt;/i&gt;和&lt;i&gt;{{status2}}&lt;/i&gt;状态的问卷可以被重新分配。</value>
   </data>
   <data name="ChooseResponsibleInterviewer" xml:space="preserve">
     <value>一些访谈没有选择负责人。请选择一个调查员。</value>
