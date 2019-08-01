@@ -123,7 +123,7 @@
       </div>
     </DataTables>
 
-    <ModalFrame ref="assignModal">      
+    <ModalFrame ref="assignModal">
       <form onsubmit="return false;">
         <div class="form-group" v-if="getFilteredToAssign().length > 0">
           <p>{{$t("Interviews.ChooseResponsible")}}</p>
@@ -141,16 +141,23 @@
           ></Typeahead>
         </div>
         <div id="pnlAssignToOtherTeamConfirmMessage">
-          <p v-html="this.config.isSupervisor ? $t('Interviews.AssignConfirmMessage', {count: this.getFilteredToAssign().length, status1: 'SupervisorAssigned', status2: 'InterviewerAssigned', status3: 'RejectedBySupervisor'} ) : $t('Interviews.AssignToOtherTeamConfirmMessage', {count: this.getFilteredToAssign().length, status1: 'ApprovedBySupervisor', status2: 'ApprovedByHQ'} )"></p>
+          <p
+            v-html="this.config.isSupervisor ? $t('Interviews.AssignConfirmMessage', {count: this.getFilteredToAssign().length, status1: 'SupervisorAssigned', status2: 'InterviewerAssigned', status3: 'RejectedBySupervisor'} ) : $t('Interviews.AssignToOtherTeamConfirmMessage', {count: this.getFilteredToAssign().length, status1: 'ApprovedBySupervisor', status2: 'ApprovedByHQ'} )"
+          ></p>
         </div>
-        
+
         <div v-if="CountReceivedByInterviewerItems() > 0">
-           <br />
-           <input type="checkbox" id="reassignReceivedByInterviewer" :checked="isReassignReceivedByInterviewer" class="checkbox-filter" />
-           <label for="reassignReceivedByInterviewer" style="font-weight: normal">
-             <span class="tick"></span>
-                        {{$t("Interviews.AssignReceivedConfirm", CountReceivedByInterviewerItems())}}
-           </label>
+          <br />
+          <input
+            type="checkbox"
+            id="reassignReceivedByInterviewer"
+            :checked="isReassignReceivedByInterviewer"
+            class="checkbox-filter"
+          />
+          <label for="reassignReceivedByInterviewer" style="font-weight: normal">
+            <span class="tick"></span>
+            {{$t("Interviews.AssignReceivedConfirm", CountReceivedByInterviewerItems())}}
+          </label>
         </div>
       </form>
       <div slot="actions">
@@ -184,7 +191,9 @@
     <ModalFrame ref="approveModal">
       <form onsubmit="return false;">
         <div class="action-container">
-          <p v-html="$t('Interviews.ApproveConfirmMessageHQ', {count: this.getFilteredToApprove().length, status1: 'Completed', status2: 'ApprovedBySupervisor'} )"></p>
+          <p
+            v-html="$t('Interviews.ApproveConfirmMessageHQ', {count: this.getFilteredToApprove().length, status1: 'Completed', status2: 'ApprovedBySupervisor'} )"
+          ></p>
         </div>
         <div>
           <label
@@ -213,7 +222,9 @@
     <ModalFrame ref="rejectModal">
       <form onsubmit="return false;">
         <div class="action-container">
-          <p v-html="$t('Interviews.RejectConfirmMessageHQ', {count: this.getFilteredToReject().length, status1: 'Completed', status2: 'ApprovedBySupervisor'} )"></p>
+          <p
+            v-html="$t('Interviews.RejectConfirmMessageHQ', {count: this.getFilteredToReject().length, status1: 'Completed', status2: 'ApprovedBySupervisor'} )"
+          ></p>
         </div>
         <div>
           <label
@@ -242,7 +253,9 @@
     <ModalFrame ref="unapproveModal">
       <form onsubmit="return false;">
         <div class="action-container">
-          <p v-html="$t('Interviews.UnapproveConfirmMessageHQ', {count : this.getFilteredToUnApprove().length, status1: 'ApprovedByHeadquarters'})"></p>
+          <p
+            v-html="$t('Interviews.UnapproveConfirmMessageHQ', {count : this.getFilteredToUnApprove().length, status1: 'ApprovedByHeadquarters'})"
+          ></p>
         </div>
       </form>
       <div slot="actions">
@@ -312,8 +325,8 @@ export default {
             unactiveDateEnd: null,
             statuses: this.$config.model.statuses,
 
-            isReassignReceivedByInterviewer:false,
-            isVisiblePrefilledColumns:true
+            isReassignReceivedByInterviewer: false,
+            isVisiblePrefilledColumns: true,
         }
     },
 
@@ -348,9 +361,9 @@ export default {
         getResponsibleClass() {
             return this.selectedRowWithMenu != undefined
                 ? this.selectedRowWithMenu.isResponsibleInterviewer
-                    ? "interviewer"
-                    : "supervisor"
-                : ""
+                    ? 'interviewer'
+                    : 'supervisor'
+                : ''
         },
         tableColumns() {
             const self = this
@@ -361,7 +374,7 @@ export default {
                     title: this.$t('Common.InterviewKey'),
                     orderable: true,
                     searchable: true,
-                    responsivePriority: 2,                    
+                    responsivePriority: 2,
                     class: 'interview-id title-row',
                     render(data, type, row) {
                         var result =
@@ -482,46 +495,46 @@ export default {
     },
 
     methods: {
-        togglePrefield(){
-          this.isVisiblePrefilledColumns = !this.isVisiblePrefilledColumns;
-          return false;
+        togglePrefield() {
+            this.isVisiblePrefilledColumns = !this.isVisiblePrefilledColumns
+            return false
         },
 
         getFilteredToDelete() {
             return this.getFileredItems(function(item) {
                 var value = item.canDelete
                 return !isNaN(value) && value
-            });
+            })
         },
         getFilteredToAssign() {
             return this.getFileredItems(function(item) {
                 var value = item.canBeReassigned
                 return !isNaN(value) && value
-            });
+            })
         },
-        getFilteredToApprove(){
+        getFilteredToApprove() {
             return this.getFileredItems(function(item) {
                 var value = item.canApprove
                 return !isNaN(value) && value
             })
         },
-        getFilteredToReject(){
-          return this.getFileredItems(function(item) {
+        getFilteredToReject() {
+            return this.getFileredItems(function(item) {
                 var value = item.canReject
                 return !isNaN(value) && value
-            });
+            })
         },
-        getFilteredToUnApprove(){
-          return this.getFileredItems(function(item) {
+        getFilteredToUnApprove() {
+            return this.getFileredItems(function(item) {
                 var value = item.canUnapprove
                 return !isNaN(value) && value
-            });
+            })
         },
 
-        CountReceivedByInterviewerItems(){
+        CountReceivedByInterviewerItems() {
             return this.getFileredItems(function(item) {
-                return item.receivedByInterviewer === true;                
-            }).length;
+                return item.receivedByInterviewer === true
+            }).length
         },
         questionnaireSelected(newValue) {
             this.questionnaireId = newValue
@@ -554,12 +567,13 @@ export default {
         assign() {
             const self = this
 
-            var filteredItems = this.getFilteredToAssign();
+            var filteredItems = this.getFilteredToAssign()
 
-            if(!isReassignReceivedByInterviewer)
-            filteredItems = arrayFilter(filteredItems, function(item) {
-                return item.receivedByInterviewer === false;
-            }); 
+            if (!this.isReassignReceivedByInterviewer) {
+                filteredItems = this.arrayFilter(filteredItems, function(item) {
+                    return item.receivedByInterviewer === false
+                });
+            }
 
             if (filteredItems.length == 0) {
                 this.$refs.assignModal.hide()
@@ -598,9 +612,9 @@ export default {
             )
         },
 
-        assignInterview() {            
-            this.newResponsibleId = null;
-            this.$refs.assignModal.modal({keyboard: false});
+        assignInterview() {
+            this.newResponsibleId = null
+            this.$refs.assignModal.modal({keyboard: false})
         },
 
         getFileredItems(filterPredicat) {
@@ -616,7 +630,7 @@ export default {
 
         approveInterviews() {
             const self = this
-            var filteredItems = this.getFilteredToApprove();
+            var filteredItems = this.getFilteredToApprove()
 
             if (filteredItems.length == 0) {
                 this.$refs.approveModal.hide()
@@ -649,7 +663,7 @@ export default {
 
         rejectInterviews() {
             const self = this
-            var filteredItems = this.getFilteredToReject();
+            var filteredItems = this.getFilteredToReject()
 
             if (filteredItems.length == 0) {
                 this.$refs.rejectModal.hide()
@@ -730,7 +744,7 @@ export default {
 
         unapproveInterviews() {
             const self = this
-            var filteredItems = this.getFilteredToUnApprove();
+            var filteredItems = this.getFilteredToUnApprove()
 
             if (filteredItems.length == 0) {
                 this.$refs.unapproveModal.hide()
