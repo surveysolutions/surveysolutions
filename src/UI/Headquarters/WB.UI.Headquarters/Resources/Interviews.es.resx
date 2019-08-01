@@ -118,22 +118,22 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ApproveConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entrevista (s) será aprobada. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Solo puede aprobar entrevistas con los siguientes estados: &lt;i&gt; {1} &lt;/ i&gt; y &lt;i&gt; {2} &lt;/ i&gt;</value>
+    <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt; entrevista (s) será aprobada. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Solo puede aprobar entrevistas con los siguientes estados: &lt;i&gt; {{status1}} &lt;/ i&gt; y &lt;i&gt; {{status2}} &lt;/ i&gt;</value>
   </data>
   <data name="ApproveConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entrevista (s) será aprobada. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Solo puede aprobar entrevistas con el siguiente estado: &lt;i&gt; {1} &lt;/ i&gt; y &lt;i&gt; {2} &lt;/ i&gt;</value>
+    <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt; entrevista (s) será aprobada. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Solo puede aprobar entrevistas con el siguiente estado: &lt;i&gt; {{status1}} &lt;/ i&gt; y &lt;i&gt; {{status2}} &lt;/ i&gt;</value>
   </data>
   <data name="AssignConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entrevista (s) seleccionadas para reasignar. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Puede asignar entrevistas solo con los siguientes estados: &lt;i&gt; {1} &lt;/ i&gt;, &lt;i&gt; {2} (solo en otro entrevistador) &lt;/ i&gt; y &lt;i&gt; {3} &lt;/ i&gt;</value>
+    <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt; entrevista (s) seleccionadas para reasignar. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Puede asignar entrevistas solo con los siguientes estados: &lt;i&gt; {{status1}} &lt;/ i&gt;, &lt;i&gt; {{status2}} (solo en otro entrevistador) &lt;/ i&gt; y &lt;i&gt; {{status3}} &lt;/ i&gt;</value>
   </data>
   <data name="Assignment" xml:space="preserve">
     <value>Asignación</value>
   </data>
   <data name="AssignReceivedConfirm" xml:space="preserve">
-    <value>Aplicar en {0} entrevista (s) que el Entrevistador ya recibió</value>
+    <value>Aplicar en {{count}} entrevista (s) que el Entrevistador ya recibió</value>
   </data>
   <data name="AssignToOtherTeamConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entrevista (s) serán asignadas. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Solo las entrevistas que no están en el estado &lt;i&gt; {1} &lt;/ i&gt; y &lt;i&gt; {2} &lt;/ i&gt; podrían reasignarse.</value>
+    <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt; entrevista (s) serán asignadas. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Solo las entrevistas que no están en el estado &lt;i&gt; {{status1}} &lt;/ i&gt; y &lt;i&gt; {{status2}} &lt;/ i&gt; podrían reasignarse.</value>
   </data>
   <data name="ChooseResponsible" xml:space="preserve">
     <value>No se ha elegido responsable para alguna entrevista (s). Por favor elija un supervisor o entrevistador responsable.</value>
@@ -154,13 +154,13 @@
     <value>Desea continuar?</value>
   </data>
   <data name="DeleteConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entrevista (s) será eliminada. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Puede eliminar entrevistas que no haya recibido Interviewer solo con los siguientes estados: &lt;i&gt; {1} &lt;/ i&gt; y &lt;i&gt; {2} &lt;/ i&gt;.</value>
+    <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt; entrevista (s) será eliminada. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Puede eliminar entrevistas que no haya recibido Interviewer solo con los siguientes estados: &lt;i&gt; {{status1}} &lt;/ i&gt; y &lt;i&gt; {{status2}} &lt;/ i&gt;.</value>
   </data>
   <data name="RejectConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entrevista (s) será rechazada. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Solo puede rechazar entrevistas con los siguientes estados: &lt;i&gt; {1} &lt;/ i&gt; y &lt;i&gt; {2} &lt;/ i&gt;.</value>
+    <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt; entrevista (s) será rechazada. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Solo puede rechazar entrevistas con los siguientes estados: &lt;i&gt; {{status1}} &lt;/ i&gt; y &lt;i&gt; {{status2}} &lt;/ i&gt;.</value>
   </data>
   <data name="RejectConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entrevista (s) será rechazada. &lt;/ h3&gt; &lt;b&gt; ¡Tenga en cuenta! &lt;/ b&gt; Puede rechazar entrevistas solo con el siguiente estado: &lt;i&gt; {1} &lt;/ i&gt; y &lt;i&gt; {2} &lt;/ i&gt;.</value>
+    <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt; entrevista (s) será rechazada. &lt;/ h3&gt; &lt;b&gt; ¡Tenga en cuenta! &lt;/ b&gt; Puede rechazar entrevistas solo con el siguiente estado: &lt;i&gt; {{status1}} &lt;/ i&gt; y &lt;i&gt; {{status2}} &lt;/ i&gt;.</value>
   </data>
   <data name="Tooltip_Filter_Assignment" xml:space="preserve">
     <value>ID de asignación. Haga clic en el campo para escribir el número de identificación completo.</value>
@@ -196,6 +196,6 @@
     <value>Estado de la entrevista en el flujo de trabajo de la encuesta. Haga clic en el icono de ordenar para ordenar por estado.</value>
   </data>
   <data name="UnapproveConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entrevista (s) no será aprobada. &lt;/ h3&gt; &lt;b&gt; ¡Tenga en cuenta! &lt;/ b&gt; Puede desaprobar las entrevistas con el siguiente estado solamente: &lt;i&gt; {1} &lt;/ i&gt;. </value>
+    <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt; entrevista (s) no será aprobada. &lt;/ h3&gt; &lt;b&gt; ¡Tenga en cuenta! &lt;/ b&gt; Puede desaprobar las entrevistas con el siguiente estado solamente: &lt;i&gt; {{status1}} &lt;/ i&gt;. </value>
   </data>
 </root>
