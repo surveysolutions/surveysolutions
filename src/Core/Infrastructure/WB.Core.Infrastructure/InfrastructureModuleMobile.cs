@@ -24,7 +24,6 @@ namespace WB.Core.Infrastructure
             registry.BindToRegisteredInterface<IEventSourcedAggregateRootRepository, IEventSourcedAggregateRootRepositoryWithCache>(); 
             registry.BindToRegisteredInterface<IEventSourcedAggregateRootRepositoryCacheCleaner, IEventSourcedAggregateRootRepositoryWithCache>(); 
             registry.BindAsSingleton<ILiteEventRegistry, LiteEventRegistry>();
-            registry.Bind<ILiteEventBus, LiteEventBus>();
             registry.Bind<IPlainAggregateRootRepository, PlainAggregateRootRepository>();
             registry.BindAsSingleton<IAggregateLock, AggregateLock>();
             registry.BindAsSingleton<ICommandsMonitoring, TraceCommandsMonitoring>();
