@@ -53,7 +53,8 @@ namespace WB.Enumerator.Native.WebInterview
         IEventHandler<InterviewerAssigned>,
         IEventHandler<AreaQuestionAnswered>,
         IEventHandler<AudioQuestionAnswered>,
-        IEventHandler<AnswerCommented>
+        IEventHandler<AnswerCommented>,
+        IEventHandler<AnswerCommentResolved>
 
     {
         public override object[] Writers => new object[0];
@@ -280,6 +281,11 @@ namespace WB.Enumerator.Native.WebInterview
         }
 
         public void Handle(IPublishedEvent<AnswerCommented> evnt)
+        {
+            this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
+        }
+
+        public void Handle(IPublishedEvent<AnswerCommentResolved> evnt)
         {
             this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
         }

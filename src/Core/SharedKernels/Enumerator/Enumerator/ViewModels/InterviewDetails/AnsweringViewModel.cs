@@ -55,8 +55,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
-        /// <exception cref="InterviewException">All consumers of this method should gracefully handle InterviewException's</exception>
-        /// <exception cref="Exception">All other exceptions will be wrapped into Exception with readable message</exception>
         public virtual async Task SendAnswerQuestionCommandAsync(AnswerQuestionCommand answerCommand)
         {
             try
@@ -77,7 +75,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             return MeasureCommandTime(() => this.ExecuteCommandAsync(command));
         }
 
-        public async Task ExecuteActionAsync(Func<CancellationToken, Task> action, CancellationToken cancellationToken = default(CancellationToken))
+        private async Task ExecuteActionAsync(Func<CancellationToken, Task> action, CancellationToken cancellationToken = default)
         {
             CancellationTokenSource cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
@@ -145,13 +143,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.UpdateInProgressFlag(false);
         }
 
-        readonly ActionThrottler trottler = new ActionThrottler();
+        readonly ActionThrottler throttler = new ActionThrottler();
 
         private void UpdateInProgressFlag(bool useDelay)
         {
             if (Delay != TimeSpan.Zero && useDelay && this.inProgress == false && this.inProgressDepth > 0)
             {
-                this.trottler.RunDelayed(() => this.InProgress = this.inProgressDepth > 0, Delay).ConfigureAwait(false);
+                this.throttler.RunDelayed(() => this.InProgress = this.inProgressDepth > 0, Delay).ConfigureAwait(false);
             }
             else
             {

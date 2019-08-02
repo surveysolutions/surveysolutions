@@ -14,6 +14,7 @@
             (VersionNT64 &gt;= v6.3) 
         </bal:Condition>
         
+        <!--Search for old product written with InstallSuit? (or something like that) -->
         <util:ProductSearch 
             Id="OldProductSearch" 
             UpgradeCode="0C543B8A-9023-4486-89C9-421D875F5AFA" 

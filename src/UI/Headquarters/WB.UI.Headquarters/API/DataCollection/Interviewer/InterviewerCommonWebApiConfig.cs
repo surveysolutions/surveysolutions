@@ -22,7 +22,9 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
             config.TypedRoute(@"api/interviewer/v2/tabletInfo", c => c.Action<InterviewerApiController>(x => x.PostTabletInformation()));
 
             config.TypedRoute(@"api/interviewer/compatibility/{deviceid}/{deviceSyncProtocolVersion}",
-                c => c.Action<InterviewerApiController>(x => x.CheckCompatibility(Param.Any<string>(), Param.Any<int>())));
+                c => c.Action<InterviewerApiController>(x => x.CheckCompatibility(Param.Any<string>(), 
+                    Param.Any<int>(),
+                    Param.Any<string>())));
         }
 
 #pragma warning restore 4014

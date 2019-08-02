@@ -397,6 +397,18 @@
         <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
     </style>
 
+  <style name="Interview_Button_Link">
+      <item name="android:layout_width">wrap_content</item>
+      <item name="android:layout_height">wrap_content</item>
+      <item name="android:fontFamily">Arial</item>
+      <item name="android:textSize">@dimen/textsize_14</item>
+      <item name="android:textColor">@color/sections_list_text_color</item>
+      <item name="android:paddingTop">@dimen/Interview_Question_InputButton_padding_vertical</item>
+      <item name="android:paddingBottom">@dimen/Interview_Question_InputButton_padding_vertical</item>
+      <item name="android:letterSpacing">0.1</item>
+      <item name="android:textAllCaps">true</item>
+      <item name="android:background">@drawable/link_button_bg</item>
+  </style>
   <style name="Interview_Question_InputButton" parent="Interview_Button">
     <item name="android:background">@drawable/question_input_button</item>
     <item name="android:textColor">@color/editorHintTextColor</item>

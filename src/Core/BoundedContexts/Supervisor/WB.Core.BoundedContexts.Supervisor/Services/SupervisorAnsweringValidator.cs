@@ -1,5 +1,6 @@
 ﻿using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -10,7 +11,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services
     {
         public void Validate(StatefulInterview aggregate, QuestionCommand command)
         {
-            if (aggregate.GetQuestion(command.Question).IsSupervisors)
+            if (aggregate.GetQuestion(command.Question).IsSupervisors || command is ResolveCommentAnswerCommand)
                 return;
 
             throw new AnswerNotAcceptedException(InterviewMessages.NotAllowedAnswеringNonSupervisor);

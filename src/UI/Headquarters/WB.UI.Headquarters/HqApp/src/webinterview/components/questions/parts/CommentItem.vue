@@ -1,11 +1,15 @@
 <template>
-    <div :class="{'enumerators-comment': isInterviewersComment}">
-        <h6>{{ commentTitle }}</h6>
-        <p :class="{'overloaded': isCollapsed}"> <span v-html="text"></span><button v-if="isCollapsed" type="button" v-on:click="toggle()" class="btn btn-link btn-horizontal-hamburger"><span></span></button></p>
+    <div :class="{'resolved-comment': resolved, 'enumerators-comment': isInterviewersComment }">
+        <h6>{{ commentTitle }} <span class="publication-date" :title="this.commentedAtDate">({{this.commentedAt}})</span></h6> 
+        <p :class="{'overloaded': isCollapsed}"> <span v-html="text"></span>
+            <button v-if="isCollapsed" type="button" v-on:click="toggle()" class="btn btn-link btn-horizontal-hamburger"><span></span></button>
+        </p>
     </div>
 </template>
 
 <script lang="js">
+    import { DateFormats } from "~/shared/helpers"
+
     export default {
         props: {
             userRole: {
@@ -20,6 +24,13 @@
                 required: true,
                 type: Boolean
             },
+            resolved: {
+                required: true,
+                type: Boolean
+            },
+            date: {
+                type: String
+            }
         },
         data() {
             return {
@@ -27,7 +38,7 @@
             };
         },
         computed: {
-            isInterviewersComment(){
+            isInterviewersComment() {
                 return this.userRole == 4 /*'Interviewer'*/;
             },
             commentTitle() {
@@ -48,10 +59,16 @@
                 }
 
                 return this.$t("WebInterviewUI.Comment") //'Comment';
-            }           
+            },
+            commentedAt() {
+                return moment.utc(this.date).fromNow()
+            },
+            commentedAtDate() {
+                return moment.utc(this.date).format(DateFormats.dateTime)
+            }
         },
         methods: {
-            toggle(){
+            toggle() {
                 this.isCollapsed = !this.isCollapsed;
             }
         }

@@ -345,22 +345,8 @@ namespace WB.Tests.Abc.TestFactories
             return string.Concat(Enumerable.Repeat(result, (int) Math.Ceiling(length / (double) result.Length))).Substring(0, 32);
         }
 
-        public InterviewTreeIntegerQuestion InterviewTreeIntegerQuestion(int answer = 42)
-            => new InterviewTreeIntegerQuestion(answer);
-
         public InterviewBinaryDataDescriptor InterviewBinaryDataDescriptor(Guid? interviewId = null, string fileName = null)
             => new InterviewBinaryDataDescriptor(interviewId ?? Guid.NewGuid(), fileName ?? "test.jpeg", null, () => new byte[0]);
-
-        public InterviewComment InterviewComment(string comment = null)
-            => new InterviewComment { Comment = comment };
-        
-        public InterviewCommentaries InterviewCommentaries(Guid? questionnaireId = null, long? questionnaireVersion = null, params InterviewComment[] comments)
-            => new InterviewCommentaries
-            {
-                QuestionnaireId = (questionnaireId ?? Guid.NewGuid()).FormatGuid(),
-                QuestionnaireVersion = questionnaireVersion ?? 1,
-                Commentaries = new List<InterviewComment>(comments)
-            };
 
         public InterviewCommentedStatus InterviewCommentedStatus(
             InterviewExportedAction status = InterviewExportedAction.ApprovedBySupervisor,

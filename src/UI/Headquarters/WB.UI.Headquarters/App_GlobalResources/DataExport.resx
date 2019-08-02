@@ -352,7 +352,7 @@
     <value>Previously generated export sets</value>
   </data>
   <data name="GeneratedDataSets_Desc" xml:space="preserve">
-    <value>Every set is a zip archive with all collected interview data and DDI XML structure you an download previously generated reports</value>
+    <value>Data is exported in a zip archive containing the data files of specified content and type. Below is a list of previously exported data files.</value>
   </data>
   <data name="NoDataSets" xml:space="preserve">
     <value>No generated data sets yet</value>

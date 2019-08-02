@@ -4,8 +4,10 @@ using FluentAssertions;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Ncqrs.Eventing;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Tests.Abc;
 
 
@@ -18,29 +20,29 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
         {
             Guid ignoredEventSource = Guid.NewGuid();
 
-            var secondEventHandlerMock = new Mock<IEventHandler>();
-            var secondOldSchoolEventHandlerMock = secondEventHandlerMock.As<IEventHandler<IEvent>>();
-            var ncqrCompatibleEventDispatcher = CreateNcqrCompatibleEventDispatcher(new EventBusSettings()
+            var secondEventHandlerMock = new Mock<TestDenormalzier>();
+            var denormalizerRegistry = Create.Service.DenormalizerRegistry();
+            denormalizerRegistry.Register<TestDenormalzier>();
+            var serviceLocator = Mock.Of<IServiceLocator>(x =>
+                x.GetInstance(typeof(TestDenormalzier)) == secondEventHandlerMock.Object);
+
+            var ncqrCompatibleEventDispatcher = CreateNcqrCompatibleEventDispatcher(new EventBusSettings
             {
                 IgnoredAggregateRoots = new List<string>(new[] { ignoredEventSource.FormatGuid() })
-            });
-
-            ncqrCompatibleEventDispatcher.Register(secondEventHandlerMock.Object);
+            }, serviceLocator, denormalizerRegistry);
 
             // Act
             ncqrCompatibleEventDispatcher.Publish(new[] { Create.Fake.PublishableEvent(eventSourceId: ignoredEventSource) });
 
             // Assert
-            secondOldSchoolEventHandlerMock.Verify(x => x.Handle(
-                    Moq.It.IsAny<IPublishedEvent<IEvent>>()),
-                Times.Never);
+            secondEventHandlerMock.Verify(x => x.Handle(It.IsAny<IPublishedEvent<InterviewCreated>>()), Times.Never);
         }
 
         [ReceivesIgnoredEvents]
-        public class CustomHandler : IEventHandler, IEventHandler<IEvent>
+        public class CustomHandler : IEventHandler, IEventHandler<InterviewCreated>
         {
             public bool HandleCalled = false;
-            public void Handle(IPublishedEvent<IEvent> _)
+            public void Handle(IPublishedEvent<InterviewCreated> _)
             {
                 HandleCalled = true;
             }
@@ -55,16 +57,21 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
         {
             Guid ignoredEventSource = Guid.NewGuid();
 
+            var customHandler = new CustomHandler();
+
+            var denormalizerRegistry = Create.Service.DenormalizerRegistry();
+            denormalizerRegistry.Register<CustomHandler>();
+
+            var serviceLocator = Mock.Of<IServiceLocator>(x =>
+                x.GetInstance(typeof(CustomHandler)) == customHandler);
+
             var ncqrCompatibleEventDispatcher = CreateNcqrCompatibleEventDispatcher(new EventBusSettings()
             {
                 IgnoredAggregateRoots = new List<string>(new[] { ignoredEventSource.FormatGuid() })
-            });
-
-            var customHandler = new CustomHandler();
-            ncqrCompatibleEventDispatcher.Register(customHandler);
+            }, serviceLocator, denormalizerRegistry);
 
             // Act
-            ncqrCompatibleEventDispatcher.Publish(new[] { Create.Fake.PublishableEvent(eventSourceId: ignoredEventSource) });
+            ncqrCompatibleEventDispatcher.Publish(new[] { Create.PublishedEvent.InterviewCreated(interviewId: ignoredEventSource) });
 
             // Assert
             customHandler.HandleCalled.Should().BeTrue();

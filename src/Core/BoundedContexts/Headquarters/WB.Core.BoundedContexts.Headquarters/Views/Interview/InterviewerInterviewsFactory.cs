@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
@@ -42,8 +43,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             var processigPackages = this.incomingSyncPackagesQueue.GetAllPackagesInterviewIds();
 
             var inProgressInterviews =  this.reader.Query(interviews =>
-                interviews.Where(interview => interview.ResponsibleId == interviewerId && 
-                                              (interview.Status == InterviewStatus.InterviewerAssigned || interview.Status == InterviewStatus.RejectedBySupervisor))
+                interviews
+                    .Where(ForInterviewer)
+                    .Where(interview => interview.ResponsibleId == interviewerId)
                     .Select(x => new 
                     {
                         x.InterviewId, 
@@ -74,6 +76,37 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 }).ToList();
             
             return filteredInterviews;
+        }
+
+        private readonly Expression<Func<InterviewSummary, bool>> ForInterviewer = summary => summary.Status == InterviewStatus.InterviewerAssigned ||
+                                                                                     summary.Status == InterviewStatus.RejectedBySupervisor;
+        public bool HasAnyInterviewsInProgressWithResolvedCommentsForInterviewer(Guid authorizedUserId)
+        {
+            var summary = this.reader.Query(interviews =>
+                interviews
+                    .Where(ForInterviewer)
+                    .Where(interview => interview.ResponsibleId == authorizedUserId
+                                        && interview.HasResolvedComments)
+                    .Select(x => x.SummaryId)
+                    .FirstOrDefault());
+            return summary != null;
+        }
+
+        public bool HasAnyInterviewsInProgressWithResolvedCommentsForSupervisor(Guid authorizedUserId)
+        {
+            var summary = this.reader.Query(interviews =>
+                interviews.Where(interview => ( // assigned on supervisor
+                                                  interview.ResponsibleId == authorizedUserId &&
+                                                  (interview.Status == InterviewStatus.SupervisorAssigned || interview.Status == InterviewStatus.RejectedByHeadquarters)
+                                              ) ||
+                                              ( // assigned on interviewers on his team
+                                                  interview.TeamLeadId == authorizedUserId &&
+                                                  (interview.Status == InterviewStatus.InterviewerAssigned || interview.Status == InterviewStatus.RejectedBySupervisor || interview.Status == InterviewStatus.RejectedByHeadquarters)
+                                              )
+                                              && interview.HasResolvedComments)
+                    .Select(x => x.SummaryId)
+                    .FirstOrDefault());
+            return summary != null;
         }
 
         public IEnumerable<InterviewInformation> GetInProgressInterviewsForSupervisor(Guid supervisorId)
