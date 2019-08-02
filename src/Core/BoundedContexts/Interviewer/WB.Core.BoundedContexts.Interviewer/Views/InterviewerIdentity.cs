@@ -15,6 +15,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public string PasswordHash { get; set; }
 
         public Guid UserId { get; set; }
+
         public Guid SupervisorId { get; set; }
 
         public string Token { get; set; }
@@ -25,5 +26,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public string Email { get; set; }
 
         public string SecurityStamp { get; set; }
+
+        public string TenantId { get; set; }
     }
 }

@@ -41,10 +41,5 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         protected virtual bool Handles(IUncommittedEvent evt)
             => typeof(IUpdateOrRemoveHandler<,>).MakeGenericType(typeof(TEntity), evt.Payload.GetType()).GetTypeInfo().IsInstanceOfType(this);
-
-        public void RegisterHandlersInOldFashionNcqrsBus(InProcessEventBus oldEventBus)
-        {
-            //no need in current implementation
-        }
     }
 }

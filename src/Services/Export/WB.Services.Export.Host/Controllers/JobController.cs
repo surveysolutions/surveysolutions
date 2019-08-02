@@ -200,13 +200,13 @@ namespace WB.Services.Export.Host.Controllers
 
         [HttpGet]
         [Route("api/v1/job/running")]
-        public async Task<List<string>> GetRunningJobsList(TenantInfo tenant)
+        public async Task<List<long>> GetRunningJobsList(TenantInfo tenant)
         {
             var jobs = await this.exportProcessesService.GetAllProcesses(tenant);
 
             return jobs
                 .Where(j => j.Status.IsRunning)
-                .Select(j => j.ExportSettings.QuestionnaireId.ToString())
+                .Select(j => j.ProcessId)
                 .ToList();
         }
 
@@ -219,9 +219,9 @@ namespace WB.Services.Export.Host.Controllers
 
             foreach (var job in jobs)
             {
-                var questionnaire =
-                    await this.questionnaireStorage.GetQuestionnaireAsync(job.ExportSettings.QuestionnaireId);
-                if (!questionnaire.IsDeleted)
+                var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(job.ExportSettings.QuestionnaireId);
+
+                if (!questionnaire?.IsDeleted ?? false)
                 {
                     filteredJobList.Add(job);
                 }

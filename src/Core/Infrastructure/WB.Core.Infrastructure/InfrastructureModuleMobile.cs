@@ -8,6 +8,7 @@ using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.Implementation.Aggregates;
+using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.WriteSide;
 
@@ -28,6 +29,7 @@ namespace WB.Core.Infrastructure
             registry.Bind<IPlainAggregateRootRepository, PlainAggregateRootRepository>();
             registry.BindAsSingleton<IAggregateLock, AggregateLock>();
             registry.BindAsSingleton<ICommandsMonitoring, TraceCommandsMonitoring>();
+            registry.BindAsSingleton<IDenormalizerRegistry, DenormalizerRegistry>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)

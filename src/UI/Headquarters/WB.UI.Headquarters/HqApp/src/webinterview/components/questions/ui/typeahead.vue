@@ -29,10 +29,10 @@
                    v-html="highlight(option.title, searchTerm)"
                    @keydown.up="onOptionUpKey"></a>
             </li>
-            <li v-if="isLoading">
+            <li v-if="isLoading" id="th_LoadingOptions">
                 <a>{{ $t("WebInterviewUI.Loading") }}</a>
             </li>
-            <li v-if="!isLoading && options.length === 0">
+            <li v-if="!isLoading && options.length === 0" id="th_NoResults">
                 <a>{{ $t("WebInterviewUI.NoResultsFound") }}</a>
             </li>
         </ul>

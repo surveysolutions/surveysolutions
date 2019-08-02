@@ -8,6 +8,8 @@
         ResumeInvitation,
         WebSurveyHeader,
         FinishInterview,
-        SurveyName
+        SurveyName,
+        CompleteNoteToSupervisor,
+        CompleteButton
     }
 }

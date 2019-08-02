@@ -74,6 +74,7 @@ namespace WB.UI.Headquarters.API
                 UserRole = request.UserRole,
                 ReceivedByTablet = request.ReceivedByTablet,
                 SupervisorId = request.TeamId,
+                Id = request.Id
             };
 
             if (this.authorizedUser.IsSupervisor)
@@ -300,6 +301,8 @@ namespace WB.UI.Headquarters.API
             public DateTime? DateEnd { get; set; }
             public UserRoles? UserRole { get; set; }
             public AssignmentReceivedState ReceivedByTablet { get; set; }
+
+            public int? Id { get; set; }
         }
     }
 }
