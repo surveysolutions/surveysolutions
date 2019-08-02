@@ -496,14 +496,16 @@ export default {
                 .then(response => {
                     self.updateInProgress = false;
                     self.exportServiceIsUnavailable = response.data == null;
+                    if(response.data)
+                    {
+                      response.data.forEach(function(jobId, index, array) {
+                          if (self.exportResults.some(job => job.id == jobId)) return;
 
-                    response.data.forEach(function(jobId, index, array) {
-                        if (self.exportResults.some(job => job.id == jobId)) return;
-
-                        self.exportResults.splice(index, 0, {
-                            id: jobId
-                        });
-                    });
+                          self.exportResults.splice(index, 0, {
+                              id: jobId
+                          });
+                      });
+                    }
                 })
                 .catch(function(error) {
                     Vue.config.errorHandler(error, self);
