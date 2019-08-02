@@ -55,6 +55,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
         private readonly IPlainStorage<PrefilledQuestionView> prefilledQuestions;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IAnswerToStringConverter answerToStringConverter;
+        private readonly ILiteEventRegistry liteEventRegistry;
 
         public InterviewDashboardEventHandler(IPlainStorage<InterviewView> interviewViewRepository, 
             IPlainStorage<PrefilledQuestionView> prefilledQuestions,
@@ -66,8 +67,9 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
             this.prefilledQuestions = prefilledQuestions;
             this.questionnaireRepository = questionnaireRepository;
             this.answerToStringConverter = answerToStringConverter;
+            this.liteEventRegistry = liteEventRegistry;
 
-            liteEventRegistry.Subscribe(this);
+            this.liteEventRegistry.Subscribe(this);
         }
 
         public override object[] Writers => new object[] { this.interviewViewRepository };

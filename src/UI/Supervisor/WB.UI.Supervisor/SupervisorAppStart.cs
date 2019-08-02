@@ -14,14 +14,19 @@ namespace WB.UI.Supervisor
 {
     public class SupervisorAppStart : MvxAppStart
     {
+        private readonly ILogger logger;
         private readonly IViewModelNavigationService viewModelNavigation;
         private readonly IPlainStorage<SupervisorIdentity> users;
         private readonly IApplicationCypher applicationCypher;
 
+        //preserve link and saving object to avoid collection with GC
+        private static InterviewDashboardEventHandler interviewDashboardEventHandler = null;
+
         public SupervisorAppStart(IMvxApplication application, IMvxNavigationService navigationService,
             IViewModelNavigationService viewModelNavigation,
             IPlainStorage<SupervisorIdentity> users,
-            IApplicationCypher applicationCypher
+            IApplicationCypher applicationCypher,
+            ILogger logger
         ) : base(application, navigationService)
         {
             this.viewModelNavigation = viewModelNavigation;
@@ -29,9 +34,20 @@ namespace WB.UI.Supervisor
             this.applicationCypher = applicationCypher;
         }
 
+        public override void ResetStart()
+        {
+            if (interviewDashboardEventHandler == null)
+            {
+                logger.Warn("Instance if InterviewDashboardEventHandler was lost!");
+                interviewDashboardEventHandler = Mvx.IoCProvider.GetSingleton<InterviewDashboardEventHandler>();
+            }
+
+            base.ResetStart();
+        }
+
         protected override Task<object> ApplicationStartup(object hint = null)
         {
-            Mvx.IoCProvider.GetSingleton<InterviewDashboardEventHandler>();
+            interviewDashboardEventHandler = Mvx.IoCProvider.GetSingleton<InterviewDashboardEventHandler>();
 
             var logger = Mvx.IoCProvider.Resolve<ILoggerProvider>().GetFor<SupervisorAppStart>();
             logger.Info($"Application started. Version: {typeof(SplashActivity).Assembly.GetName().Version}");
