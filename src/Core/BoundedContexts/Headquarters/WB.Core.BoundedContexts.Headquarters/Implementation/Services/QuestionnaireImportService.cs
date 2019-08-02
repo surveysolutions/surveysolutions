@@ -73,6 +73,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         {
             try
             {
+                var query = this.unitOfWork.Session.CreateSQLQuery("select pg_advisory_xact_lock(51658156)"); // prevent 2 concurrent requests from importing
+                await query.ExecuteUpdateAsync();
+
                 var supportedVersion = this.supportedVersionProvider.GetSupportedQuestionnaireVersion();
 
                 var credentials = this.designerUserCredentials.Get();
@@ -112,8 +115,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                             attachmentContent.ContentType, attachmentContent.FileName, attachmentContent.Content);
                     }
                 }
-                var query = this.unitOfWork.Session.CreateSQLQuery("select pg_advisory_xact_lock(51658156)"); // prevent 2 concurrent requests from importing with same version
-                await query.ExecuteUpdateAsync();
 
                 var questionnaireVersion = this.questionnaireVersionProvider.GetNextVersion(questionnaire.PublicKey);
 
