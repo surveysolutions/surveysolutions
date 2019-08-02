@@ -59,7 +59,8 @@ namespace WB.Tests.Integration.TeamViewFactoryTests
                     typeof(InterviewStatisticsReportRowMap),
                     typeof(TimeSpanBetweenStatusesMap),
                     typeof(CumulativeReportStatusChangeMap),
-                    typeof(InterviewCommentedStatusMap)
+                    typeof(InterviewCommentedStatusMap),
+                    typeof(InterviewCommentMap)
                 }, true, new UnitOfWorkConnectionSettings().ReadSideSchemaName);
 
             Abc.SetUp.InstanceToMockedServiceLocator<IEntitySerializer<int[][]>>(new EntitySerializer<int[][]>());

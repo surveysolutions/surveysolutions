@@ -183,4 +183,10 @@
   <data name="WebInterviewUserMessages_WelcomeText" xml:space="preserve">
     <value>Welcome Header</value>
   </data>
+  <data name="WebInterviewUserMessages_CompleteNoteToSupervisor" xml:space="preserve">
+    <value>Note for Supervisor</value>
+  </data>
+  <data name="WebInterviewUserMessages_CompleteButton" xml:space="preserve">
+    <value>Complete</value>
+  </data>
 </root>

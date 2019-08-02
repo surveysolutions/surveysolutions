@@ -8,6 +8,7 @@ using Microsoft.AspNet.SignalR.Hubs;
 using Owin;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Modularity;
 using WB.Enumerator.Native.WebInterview.Services;
 
@@ -22,6 +23,7 @@ namespace WB.Enumerator.Native.WebInterview
             registry.BindAsSingletonWithConstructorArgument<IConnectionLimiter, ConnectionLimiter>("connectionsLimit",
                 ConfigurationManager.AppSettings["MaxWebInterviewsCount"].ToInt(100));
 
+            registry.BindInPerLifetimeScope<InterviewLifecycleEventHandler, InterviewLifecycleEventHandler>();
             registry.BindToConstant<IJavaScriptMinifier>(() => new SignalRHubMinifier());
 
             registry.BindToMethodInSingletonScope<IWebInterviewInvoker>(_ =>
@@ -36,6 +38,9 @@ namespace WB.Enumerator.Native.WebInterview
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
+            var registry = serviceLocator.GetInstance<IDenormalizerRegistry>();
+            registry.Register<InterviewLifecycleEventHandler>();
+
             return Task.CompletedTask;
         }
 

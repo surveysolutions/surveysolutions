@@ -192,10 +192,11 @@
 </template>
 
 <script>
-import Vue from "vue"
-import ExportProcessCard from "./ExportProcessCard"
-import {mixin as VueTimers} from 'vue-timers'
-import queryString from 'query-string';
+import Vue from "vue";
+import ExportProcessCard from "./ExportProcessCard";
+import { mixin as VueTimers } from "vue-timers";
+import queryString from "query-string";
+import { last } from "lodash";
 
 const dataFormatNum = { Tabular: 1, Stata: 2, Spss: 3, Binary: 4, Ddi: 5, Paradata: 6 };
 const ExternalStorageType = { dropbox: 1, oneDrive: 2, googleDrive: 3 };
@@ -218,36 +219,31 @@ export default {
             hasBinaryData: false,
             externalStoragesSettings: (this.$config.model.externalStoragesSettings || {}).oAuth2 || {},
             pageState: {},
-            updateInProgress: false
+            updateInProgress: false,
+            allJobs: [],
+            jobsLoadingBatchCount: 5
         };
     },
-
     timers: {
-      updateExportCards: { time: 5000, autostart: true, repeat: true }
+        updateExportCards: { time: 5000, autostart: true, repeat: true }
     },
 
     created() {
         var self = this;
         self.$store.dispatch("showProgress");
 
-        this.$http.get(this.$config.model.api.statusUrl)
-            .then(function (response) {
+        this.$http
+            .get(this.$config.model.api.statusUrl)
+            .then(function(response) {
+                if (response.data) self.exportServiceIsUnavailable = false;
 
-              if (response.data)
-                self.exportServiceIsUnavailable = false;
-
-              let exportIds = response.data || [];
-              for(let i = 0;i< exportIds.length;i++)
-              {
-                self.exportResults.push({ 
-                  id: exportIds[i]
-                });
-              }
+                self.allJobs = response.data || [];
+                self.addJobs();
             })
-            .catch(function (error) {
+            .catch(function(error) {
                 Vue.config.errorHandler(error, self);
             })
-            .then(function () {
+            .then(function() {
                 self.$store.dispatch("hideProgress");
             });
     },
@@ -280,237 +276,246 @@ export default {
             return null;
         }
     },
+    mounted() {
+        window.addEventListener("scroll", this.onscroll);
+    },
 
     methods: {
-      onOptionsFetch(a,b,c,d,e) {
-        console.log(a,b,c,d,e);
-      },
+        onscroll: async function(event) {
+            const scrollY = window.scrollY;
+            const visible = document.documentElement.clientHeight;
+            const pageHeight = document.documentElement.scrollHeight;
+            const bottomOfPage = visible + scrollY >= pageHeight;
 
-      resetForm() {
-        this.dataType = "surveyData",
-        this.dataFormat = "Tabular";
-        this.dataDestination = "zip";
-        this.questionnaireId = null;
-        this.questionnaireVersion = null;
-        this.status = null;
-        this.hasInterviews = false;
-        this.hasBinaryData = false;
-      },
-
-      removeProcessCard(id) {
-        this.exportResults = _.reject(this.exportResults, { id })
-      },
-
-      updateExportCards(){
-        var self = this;
-
-        if(this.updateInProgress) return;
-
-        this.updateInProgress = true;
-        this.$http.get(this.$config.model.api.statusUrl)
-            .then((response) => {
-              self.updateInProgress = false;
-              self.exportServiceIsUnavailable = response.data == null;
-
-              let exportIds = response.data || [];
-              if (exportIds.length > 0)
-              {
-                var existingJobIndex = 0;
-                var incomingJobIndex = 0;
-                while(incomingJobIndex < exportIds.length && existingJobIndex < self.exportResults.length)
-                {
-                  var existingProcessId = self.exportResults[existingJobIndex].id;
-                  var newProcessId = exportIds[incomingJobIndex];
-                  if (existingProcessId == newProcessId)
-                  {
-                    existingJobIndex++;
-                    incomingJobIndex++;
-                  }
-                  else if (existingProcessId < newProcessId)
-                  {
-                    self.exportResults.splice(existingJobIndex, 0, { id: newProcessId})
-                    existingJobIndex++;
-                    incomingJobIndex++;
-                  }
-                  else{
-                    existingJobIndex++;
-                  }
-                }
-                for(let i=incomingJobIndex;i<exportIds.length;i++)
-                {
-                  self.exportResults.push({ id: exportIds[i]});
-                }
-              }
-            })
-            .catch(function (error) {
-                Vue.config.errorHandler(error, self);
-            })
-            .then(function () {
-                self.updateInProgress = false;
-                self.$store.dispatch("hideProgress");
+            if (bottomOfPage || pageHeight < visible) {
+                this.addJobs();
+            }
+        },
+        addJobs() {
+            let lastUiJob = last(this.exportResults);
+            let indexOfLastUiJobInAllJobs = lastUiJob == undefined ? 0 : this.allJobs.lastIndexOf(lastUiJob.id) + 1;
+            let jobsToInsert = this.allJobs.slice(
+                indexOfLastUiJobInAllJobs,
+                indexOfLastUiJobInAllJobs + this.jobsLoadingBatchCount
+            );
+            jobsToInsert.forEach(jobId => {
+                this.exportResults.push({
+                    id: jobId
+                });
             });
-      },
+        },
 
-      async queueExport(){
-        if (this.dataDestination != "zip")
-        {
-          this.redirectToExternalStorage();
-          return;
-        }
+        resetForm() {
+            (this.dataType = "surveyData"), (this.dataFormat = "Tabular");
+            this.dataDestination = "zip";
+            this.questionnaireId = null;
+            this.questionnaireVersion = null;
+            this.status = null;
+            this.hasInterviews = false;
+            this.hasBinaryData = false;
+        },
 
-        var self = this;
-        var validationResult = await this.$validator.validateAll();
-        if (validationResult)
-        {
-            const exportParams = self.getExportParams(
-              self.questionnaireId.key,
-              self.questionnaireVersion.key,
-              self.dataType,
-              self.dataFormat,
-              self.dataDestination,
-              self.status
+        removeProcessCard(id) {
+            this.exportResults = _.reject(this.exportResults, { id });
+        },
+
+        async queueExport() {
+            if (this.dataDestination != "zip") {
+                this.redirectToExternalStorage();
+                return;
+            }
+
+            var self = this;
+            var validationResult = await this.$validator.validateAll();
+            if (validationResult) {
+                const exportParams = self.getExportParams(
+                    self.questionnaireId.key,
+                    self.questionnaireVersion.key,
+                    self.dataType,
+                    self.dataFormat,
+                    self.dataDestination,
+                    self.status
+                );
+
+                self.$store.dispatch("showProgress");
+
+                this.$http
+                    .post(this.$config.model.api.updateSurveyDataUrl, null, { params: exportParams })
+                    .then(function(response) {
+                        self.$validator.reset();
+                        const jobId = (response.data || { JobId: 0 }).JobId;
+                        self.allJobs.splice(0, 0, jobId);
+                        self.exportResults.splice(0, 0, {
+                            id: jobId
+                        });
+                    })
+                    .catch(function(error) {
+                        Vue.config.errorHandler(error, self);
+                    })
+                    .then(function() {
+                        self.$store.dispatch("hideProgress");
+                    });
+            } else {
+                var fieldName = this.errors.items[0].field;
+                const $firstFieldWithError = $("#" + fieldName);
+                $firstFieldWithError.focus();
+            }
+        },
+
+        redirectToExternalStorage() {
+            const exportParams = this.getExportParams(
+                this.questionnaireId.key,
+                this.questionnaireVersion.key,
+                this.dataType,
+                this.dataFormat,
+                this.dataDestination,
+                this.status
             );
 
-            self.$store.dispatch("showProgress");
+            var state = {
+                questionnaireIdentity: {
+                    questionnaireId: exportParams.id,
+                    version: exportParams.version
+                },
+                format: exportParams.format,
+                interviewStatus: exportParams.status,
+                type: ExternalStorageType[this.dataDestination]
+            };
 
-            this.$http.post(this.$config.model.api.updateSurveyDataUrl, null, { params: exportParams })
-                .then(function (response) {
-                    self.$validator.reset();
-                    const jobId = (response.data || { JobId: 0 }).JobId;
-                    self.exportResults.splice(0, 0,{ 
-                      id: jobId
-                    });
-                    self.questionnaireId = null;
-                    self.questionnaireVersion = null;
-                    self.status = null;
-                    self.resetDataAvalability();
+            let storageSettings = this.externalStoragesSettings[this.dataDestination];
+
+            const jsonState = JSON.stringify(state);
+
+            var request = {
+                response_type: this.externalStoragesSettings.responseType,
+                redirect_uri: encodeURIComponent(this.externalStoragesSettings.redirectUri),
+                client_id: storageSettings.clientId,
+                state: window.btoa(
+                    window.location.href + ";" + this.$config.model.api.exportToExternalStorageUrl + ";" + jsonState
+                ),
+                scope: storageSettings.scope
+            };
+
+            window.location = storageSettings.authorizationUri + "?" + decodeURIComponent($.param(request));
+        },
+
+        getExportParams(questionnaireId, questionnaireVersion, dataType, dataFormat, dataDestination, statusOption) {
+            var format = dataFormatNum.Tabular;
+
+            switch (dataType) {
+                case "surveyData":
+                    format = dataFormatNum[dataFormat];
+                    break;
+                case "binaryData":
+                    format = dataFormatNum.Binary;
+                    break;
+                case "ddiData":
+                    format = dataFormatNum.Ddi;
+                    break;
+                case "paraData":
+                    format = dataFormatNum.Paradata;
+                    break;
+            }
+
+            const status = (statusOption || { key: null }).key;
+
+            return {
+                id: questionnaireId,
+                version: questionnaireVersion,
+                format,
+                status
+            };
+        },
+
+        restorePageState(state) {
+            this.pageState = {
+                id: state.i,
+                version: state.v,
+                status: state.s
+            };
+
+            this.dataType = state.t;
+            this.dataFormat = state.f;
+            this.dataDestination = state.d;
+        },
+
+        statusSelected(newValue) {
+            this.status = newValue;
+        },
+        questionnaireSelected(newValue) {
+            this.questionnaireId = newValue;
+            if (!newValue) {
+                this.resetDataAvalability();
+            }
+        },
+        questionnaireVersionSelected(newValue) {
+            this.questionnaireVersion = newValue;
+            if (this.questionnaireVersion) this.updateDataAvalability();
+            else {
+                this.resetDataAvalability();
+            }
+        },
+        resetDataAvalability() {
+            this.hasInterviews = null;
+            this.hasBinaryData = null;
+            this.dataType = null;
+        },
+        updateDataAvalability() {
+            this.isUpdatingDataAvailability = true;
+
+            this.$http
+                .get(this.$config.model.api.dataAvailabilityUrl, {
+                    params: {
+                        id: this.questionnaireId.key,
+                        version: this.questionnaireVersion.key
+                    }
                 })
-                .catch(function (error) {
+                .then(response => {
+                    this.hasInterviews = response.data.hasInterviews;
+                    this.hasBinaryData = response.data.hasBinaryData;
+                    if (this.dataType == null) {
+                        this.dataType = this.hasInterviews ? "surveyData" : "ddi";
+                    }
+                })
+                .catch(error => {
                     Vue.config.errorHandler(error, self);
                 })
-                .then(function () {
+                .then(() => {
+                    this.isUpdatingDataAvailability = false;
+                });
+        },
+
+        updateExportCards() {
+            var self = this;
+
+            if (this.updateInProgress) return;
+
+            this.updateInProgress = true;
+            this.$http
+                .get(this.$config.model.api.runningJobsUrl)
+                .then(response => {
+                    self.updateInProgress = false;
+                    self.exportServiceIsUnavailable = response.data == null;
+                    if(response.data)
+                    {
+                      response.data.forEach(function(jobId, index, array) {
+                          if (self.exportResults.some(job => job.id == jobId)) return;
+
+                          self.exportResults.splice(index, 0, {
+                              id: jobId
+                          });
+                      });
+                    }
+                })
+                .catch(function(error) {
+                    Vue.config.errorHandler(error, self);
+                })
+                .then(function() {
+                    self.updateInProgress = false;
                     self.$store.dispatch("hideProgress");
                 });
-        } else {
-            var fieldName = this.errors.items[0].field;
-            const $firstFieldWithError = $("#"+fieldName);
-            $firstFieldWithError.focus();
         }
-      },
-
-      redirectToExternalStorage(){
-        const exportParams = this.getExportParams(
-            this.questionnaireId.key,
-            this.questionnaireVersion.key,
-            this.dataType,
-            this.dataFormat,
-            this.dataDestination,
-            this.status
-          );
-
-        var state = {
-          questionnaireIdentity: {
-              questionnaireId: exportParams.id,
-              version: exportParams.version,
-          },
-          format: exportParams.format,
-          interviewStatus: exportParams.status,
-          type: ExternalStorageType[this.dataDestination]
-        };
-
-        let storageSettings = this.externalStoragesSettings[this.dataDestination];
-
-        const jsonState = JSON.stringify(state);
-
-        var request = {
-          response_type: this.externalStoragesSettings.responseType,
-          redirect_uri: encodeURIComponent(this.externalStoragesSettings.redirectUri),
-          client_id: storageSettings.clientId,
-          state: window.btoa(window.location.href + ";" + this.$config.model.api.exportToExternalStorageUrl + ";" + jsonState),
-          scope: storageSettings.scope
-        };
-
-        window.location = storageSettings.authorizationUri + "?" + decodeURIComponent($.param(request));
-      },
-
-      getExportParams(questionnaireId, questionnaireVersion, dataType, dataFormat, dataDestination, statusOption){
-       
-        var format = dataFormatNum.Tabular;
-
-        switch(dataType)
-        {
-          case "surveyData": format = dataFormatNum[dataFormat]; break;
-          case "binaryData": format = dataFormatNum.Binary; break;
-          case "ddiData": format = dataFormatNum.Ddi; break;
-          case "paraData":  format = dataFormatNum.Paradata; break;
-        }
-
-        const status = (statusOption || { key : null }).key
-
-        return {
-          id: questionnaireId,
-          version: questionnaireVersion,
-          format, status
-        };
-      },
-
-      restorePageState(state) {
-          this.pageState = {
-              id:      state.i,
-              version: state.v,
-              status:  state.s
-          };
-
-          this.dataType = state.t;
-          this.dataFormat = state.f;
-          this.dataDestination = state.d;
-      },
-
-      statusSelected(newValue) {
-          this.status = newValue;
-      },
-      questionnaireSelected(newValue) {
-          this.questionnaireId = newValue;
-          if (!newValue)
-          {
-            this.resetDataAvalability();
-          }
-      },
-      questionnaireVersionSelected(newValue) {
-          this.questionnaireVersion = newValue;
-          if (this.questionnaireVersion)
-            this.updateDataAvalability();
-          else{
-             this.resetDataAvalability();
-          }
-      },
-      resetDataAvalability(){
-        this.hasInterviews = null;
-        this.hasBinaryData = null;
-        this.dataType = null;
-      },
-      updateDataAvalability(){
-        this.isUpdatingDataAvailability = true;
-        
-        this.$http.get(this.$config.model.api.dataAvailabilityUrl, { params: {
-          id: this.questionnaireId.key,
-          version: this.questionnaireVersion.key
-        } })
-          .then((response) => {
-            this.hasInterviews = response.data.hasInterviews;
-            this.hasBinaryData = response.data.hasBinaryData;
-            if(this.dataType == null) {
-              this.dataType = this.hasInterviews ? "surveyData" : "ddi";
-            }
-          })
-          .catch((error) => {
-              Vue.config.errorHandler(error, self);
-          })
-          .then(() => {
-              this.isUpdatingDataAvailability = false;
-          });
-      }
     },
-    components: {ExportProcessCard}
+    components: { ExportProcessCard }
 };
 </script>

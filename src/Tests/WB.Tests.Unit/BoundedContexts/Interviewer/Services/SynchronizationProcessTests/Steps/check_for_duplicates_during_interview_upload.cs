@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             fixture.Register<IPlainStorage<InterviewView>>(() => interviewStorage);
             fixture.GetMock<IInterviewerInterviewAccessor>()
-                .Setup(iia => iia.GetInteviewEventsPackageOrNull(interviewId))
+                .Setup(iia => iia.GetInterviewEventsPackageOrNull(interviewId))
                 .Returns(new InterviewPackageApiView());
         }
 

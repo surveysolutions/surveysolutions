@@ -235,4 +235,10 @@
   <data name="Invitations_SendAction" xml:space="preserve">
     <value>Send {{count}} invitations</value>
   </data>
+  <data name="WebInterviewUserMessages_CompleteButton_Descr" xml:space="preserve">
+    <value>Complete</value>
+  </data>
+  <data name="WebInterviewUserMessages_CompleteNoteToSupervisor_Descr" xml:space="preserve">
+    <value>Note for Supervisor</value>
+  </data>
 </root>

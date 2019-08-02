@@ -38,6 +38,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
             return new UsersController(
                 logger ?? Mock.Of<ILogger>(),
                 userViewViewFactory ?? Mock.Of<IUserViewFactory>(),
+                null,
                 null);
         }
 

@@ -1,18 +1,36 @@
 ﻿using System;
 using System.Windows.Input;
+using Android.OS;
 using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
+using Java.Lang;
 using MvvmCross;
 using MvvmCross.Binding;
 using MvvmCross.Commands;
 using MvvmCross.Platforms.Android;
 using WB.UI.Shared.Enumerator.Activities;
+using Object = Java.Lang.Object;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class EditTextFocusValueChangedBinding : BaseBinding<EditText, ICommand>
     {
+        private class InnerRunnable : Object, IRunnable
+        {
+            private readonly Action action;
+
+            public InnerRunnable(Action action)
+            {
+                this.action = action;
+            }
+
+            public void Run()
+            {
+                this.action.Invoke();
+            }
+        }
+
         private ICommand command;
 
         private string oldEditTextValue;
@@ -76,8 +94,14 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                 return;
             }
 
-            this.command.Execute(this.Target.Text);
-            this.oldEditTextValue = this.Target.Text;
+            var newValue = this.Target.Text;
+            var fixCommand = this.command;
+
+            this.Target.Post(new InnerRunnable( 
+                () => {
+                    fixCommand.Execute(newValue);
+                    this.oldEditTextValue = newValue;
+                }));
         }
 
         protected override void SetValueToView(EditText control, ICommand value)

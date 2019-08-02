@@ -9,11 +9,14 @@ using Microsoft.AspNet.Identity;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Headquarters.Code;
@@ -34,7 +37,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
         private readonly IClientApkProvider clientApkProvider;
         private readonly HqSignInManager signInManager;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
-
+        private readonly IInterviewInformationFactory interviewFactory;
+        
         public enum ClientVersionFromUserAgent
         {
             Unknown = 0,
@@ -49,10 +53,12 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
             IProductVersion productVersion,
             HqSignInManager signInManager,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
+            IInterviewInformationFactory interviewFactory,
             IAssignmentsService assignmentsService,
             IClientApkProvider clientApkProvider,
-            IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage)
-            : base(interviewerSettingsStorage)
+            IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage,
+            IPlainKeyValueStorage<TenantSettings> tenantSettings)
+            : base(interviewerSettingsStorage, tenantSettings)
         {
             this.tabletInformationService = tabletInformationService;
             this.userViewFactory = userViewFactory;
@@ -61,9 +67,10 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
             this.productVersion = productVersion;
             this.signInManager = signInManager;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
+            this.interviewFactory = interviewFactory;
             this.assignmentsService = assignmentsService;
             this.clientApkProvider = clientApkProvider;
-        }
+         }
         
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetApk)]
@@ -168,13 +175,18 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
         [WriteToSyncLog(SynchronizationLogType.CanSynchronize)]
         [HttpGet]
         [ApiNoCache]
-        public virtual HttpResponseMessage CheckCompatibility(string deviceId, int deviceSyncProtocolVersion)
+        public virtual HttpResponseMessage CheckCompatibility(string deviceId, int deviceSyncProtocolVersion, string tenantId = null)
         {
             int serverSyncProtocolVersion = this.syncVersionProvider.GetProtocolVersion();
             int lastNonUpdatableSyncProtocolVersion = this.syncVersionProvider.GetLastNonUpdatableVersion();
 
             if (deviceSyncProtocolVersion < lastNonUpdatableSyncProtocolVersion)
                 return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
+
+            if (!UserIsFromThisTenant(tenantId))
+            {
+                return this.Request.CreateResponse(HttpStatusCode.Conflict);
+            }
 
             var currentVersion = new Version(this.productVersion.ToString().Split(' ')[0]);
             var interviewerVersion = this.Request.GetProductVersionFromUserAgent(@"org.worldbank.solutions.interviewer");
@@ -189,6 +201,14 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
                 return this.Request.CreateResponse(HttpStatusCode.NotAcceptable);
             }
 
+            if (deviceSyncProtocolVersion < InterviewerSyncProtocolVersionProvider.ResolvedCommentsIntroduced)
+            {
+                if (this.interviewFactory.HasAnyInterviewsInProgressWithResolvedCommentsForInterviewer(this.authorizedUser.Id))
+                {
+                    return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
+                }
+            }
+
             if (deviceSyncProtocolVersion < InterviewerSyncProtocolVersionProvider.AudioRecordingIntroduced)
             {
                 if (this.assignmentsService.HasAssignmentWithAudioRecordingEnabled(this.authorizedUser.Id))
@@ -197,7 +217,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
                 }
             }
 
-            if (deviceSyncProtocolVersion == 7080) // release previous to audio recording enabled that is allowed to be synchronized
+            if (deviceSyncProtocolVersion == 7080 || deviceSyncProtocolVersion == InterviewerSyncProtocolVersionProvider.AudioRecordingIntroduced) 
+                // release previous to audio recording enabled that is allowed to be synchronized
             {
             }
             else if (deviceSyncProtocolVersion == 7070) // KP-11462

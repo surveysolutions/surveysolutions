@@ -24,8 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         private readonly IEmailService emailService;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         private readonly IPlainKeyValueStorage<EmailParameters> emailParamsStorage;
-        private readonly IHttpClientFactory httpClientFactory;
-        private readonly IHttpStatistician httpStatistician;
+        private readonly IWebInterviewEmailRenderer webInterviewEmailRenderer;
 
         public SendRemindersJob(
             ILogger logger, 
@@ -33,16 +32,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             IEmailService emailService,
             IWebInterviewConfigProvider webInterviewConfigProvider,
             IPlainKeyValueStorage<EmailParameters> emailParamsStorage, 
-            IHttpClientFactory httpClientFactory, 
-            IHttpStatistician httpStatistician)
+            IWebInterviewEmailRenderer webInterviewEmailRenderer)
         {
             this.logger = logger;
             this.invitationService = invitationService;
             this.emailService = emailService;
             this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.emailParamsStorage = emailParamsStorage;
-            this.httpClientFactory = httpClientFactory;
-            this.httpStatistician = httpStatistician;
+            this.webInterviewEmailRenderer = webInterviewEmailRenderer;
         }
 
         public Task Execute(IJobExecutionContext context)
@@ -128,6 +125,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 var emailParamsId = $"{Guid.NewGuid().FormatGuid()}-{invitationId}";
                 var emailParams = new EmailParameters
                 {
+                    Id = emailParamsId,
                     AssignmentId = invitation.AssignmentId,
                     InvitationId = invitation.Id,
                     Subject = emailContent.Subject,
@@ -142,13 +140,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 };
                 emailParamsStorage.Store(emailParams, emailParamsId);
 
-                var client = httpClientFactory.CreateClient(httpStatistician);
-                var htmlMessage = client.GetStringAsync($"{baseUrl}/WebEmails/Html/{emailParamsId}").Result ?? string.Empty;
-                var textMessage = client.GetStringAsync($"{baseUrl}/WebEmails/Text/{emailParamsId}/").Result ?? string.Empty;
+                var interviewEmail = webInterviewEmailRenderer.RenderEmail(emailParams);
 
                 try
                 {
-                    var sendEmailTask = emailService.SendEmailAsync(address, emailParams.Subject, htmlMessage, textMessage);
+                    var sendEmailTask = emailService.SendEmailAsync(address, emailParams.Subject, interviewEmail.MessageHtml, interviewEmail.MessageText);
 
                     var emailId = sendEmailTask.Result;
 

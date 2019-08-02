@@ -11,6 +11,7 @@
         <footer :class="{'footer-adaptive-content': sidebarHidden}">
             <slot name="footer"></slot>
         </footer>
+        <span id="loadingPixel" style="display:none" :data-loading="isLoading"></span>
     </div>
 </template>
 <script lang="js">
@@ -20,6 +21,9 @@
         computed: {
             sidebarHidden() {
                 return this.$store.state.webinterview.sidebar.sidebarHidden
+            },
+            isLoading() {
+                return this.$store.getters.loadingProgress === true ? "true" : "false"
             }
         },
         mounted() {

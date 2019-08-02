@@ -636,9 +636,6 @@
   <data name="WB0260_GroupTitleIsTooLong" xml:space="preserve">
     <value>Le titre est trop long. Il ne devrait pas dépasser les caractères {0}.</value>
   </data>
-  <data name="WB0261_RosterStructureTooExplosive" xml:space="preserve">
-    <value>Le questionnaire contient des rosters dont le nombre d'instances de roster dépasse les limites du système.</value>
-  </data>
   <data name="WB0262_RosterHasTooBigPropagation" xml:space="preserve">
     <value>Le roster a atteint la taille limite. Réduire la taille du roster ou réduire l'imbrication.</value>
   </data>

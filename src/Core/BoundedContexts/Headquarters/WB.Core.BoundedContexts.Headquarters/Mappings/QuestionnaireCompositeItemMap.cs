@@ -24,21 +24,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.StatExportCaption, p => p.Column("stata_export_caption"));
             Property(x => x.VariableLabel, p => p.Column("variable_label"));
             Property(x => x.QuestionText, p => p.Column("question_text"));
-
-            Set(x => x.Answers, mapper =>
-            {
-                mapper.Lazy(CollectionLazy.Extra);
-                mapper.Table("questionnaire_entities_answers");
-                mapper.Key(k => k.Column("entity_id"));
-                mapper.Cascade(Cascade.All);
-            }, r => r.Component(c =>
-            {
-                c.Property(x => x.Text);
-                c.Property(x => x.Value);
-                c.Property(x => x.Parent);
-                c.Property(x => x.AnswerCode, p => p.Column("answer_code"));
-                c.Property(x => x.ParentCode, p => p.Column("parent_code"));
-            }));
         }
     }
 

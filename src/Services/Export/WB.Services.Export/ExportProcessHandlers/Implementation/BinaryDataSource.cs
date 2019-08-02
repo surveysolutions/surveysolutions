@@ -91,16 +91,17 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                         {
                             case MultimediaType.Image:
                                 var imageContent = await api.GetInterviewImageAsync(answer.InterviewId, answer.Answer);
-                                data.Content = await imageContent.ReadAsStreamAsync();
-                                data.ContentLength = imageContent.Headers.ContentLength ?? 0;
+                                var imageStream = new MemoryStream(await imageContent.ReadAsByteArrayAsync());
+                                data.Content = imageStream;
+                                data.ContentLength = imageStream.Length;
                                 data.Type = BinaryDataType.Image;
-                                
 
                                 break;
                             case MultimediaType.Audio:
                                 var audioContent = await api.GetInterviewAudioAsync(answer.InterviewId, answer.Answer);
-                                data.Content = await audioContent.ReadAsStreamAsync();
-                                data.ContentLength = audioContent.Headers.ContentLength ?? 0;
+                                var audioStream = new MemoryStream(await audioContent.ReadAsByteArrayAsync());
+                                data.Content = audioStream;
+                                data.ContentLength = audioStream.Length;
                                 data.Type = BinaryDataType.Audio;
                                 
                                 break;
@@ -131,15 +132,15 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                         try
                         {
                             var audioContent = await api.GetAudioAuditAsync(audioAuditInfo.InterviewId, fileName);
-                            var content = await audioContent.ReadAsStreamAsync();
+                            var memoryStream = new MemoryStream(await audioContent.ReadAsByteArrayAsync());
 
                             await binaryDataAction(new BinaryData
                             {
                                 InterviewId = audioAuditInfo.InterviewId,
                                 InterviewKey = interviewsKeyMap[audioAuditInfo.InterviewId],
                                 FileName = fileName,
-                                Content = content,
-                                ContentLength = audioContent.Headers.ContentLength ?? 0,
+                                Content = memoryStream,
+                                ContentLength = memoryStream.Length,
                                 Type = BinaryDataType.AudioAudit
                             });
 

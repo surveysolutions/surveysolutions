@@ -264,6 +264,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 );
             }
 
+            if (input.Id.HasValue)
+            {
+                items = items.Where(x => x.Id == input.Id);
+            }
+
             return items;
         }
     }

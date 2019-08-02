@@ -28,14 +28,21 @@
                             <span class="tick"></span>
                         </label>
                         <span>{{option.title}}</span>
-                        <button type="submit" v-if="$me.acceptAnswer && !isProtected(option.value)" class="btn btn-link btn-clear" @click="clearAnswer(option.value)">
+                        <button type="submit" 
+                                v-if="$me.acceptAnswer && !isProtected(option.value)" 
+                                class="btn btn-link btn-clear"
+                                @click="clearAnswer(option.value)"
+                               :id="`btn_${$me.id}_removeAnswer_opt_${option.value}`">
                             <span></span>
                         </button>
                         <div class="badge" v-if="$me.ordered">{{ getAnswerOrder(option.value)}}</div>
                         <div class="lock"></div>
                     </div>
                 </div>
-                <button type="button" class="btn btn-link btn-horizontal-hamburger" @click="toggleOptions" v-if="shouldShowAnsweredOptionsOnly && !showAllOptions">
+                <button type="button" class="btn btn-link btn-horizontal-hamburger" 
+                    @click="toggleOptions"
+                     v-if="shouldShowAnsweredOptionsOnly && !showAllOptions"
+                     :id="`btn_${$me.id}_ShowAllOptions`">
                     <span></span>
                 </button>
                 <wb-lock />

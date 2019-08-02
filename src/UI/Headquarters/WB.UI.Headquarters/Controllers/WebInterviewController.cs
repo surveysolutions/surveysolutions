@@ -153,7 +153,16 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             LogResume(interview);
-            return this.View("Index");
+            return this.View("Index", GetInterviewModel(webInterviewConfig));
+        }
+
+        private WebInterviewIndexPageModel GetInterviewModel(WebInterviewConfig webInterviewConfig)
+        {
+            return new WebInterviewIndexPageModel
+            {
+                AskForEmail = Request.Cookies.Get(AskForEmail)?.Value ?? "false",
+                CustomMessages = webInterviewConfig.CustomMessages
+            };
         }
 
         public string GenerateUrl(string action, string interviewId, string sectionId = null)
@@ -366,7 +375,7 @@ namespace WB.UI.Headquarters.Controllers
 
             LogResume(interview);
 
-            return View("Index");
+            return View("Index", GetInterviewModel(webInterviewConfig));
         }
 
         private void LogResume(IStatefulInterview statefulInterview)
@@ -469,7 +478,7 @@ namespace WB.UI.Headquarters.Controllers
                 return this.RedirectToAction("Resume", routeValues: new { id, returnUrl });
             }
 
-            return View("Index");
+            return View("Index", GetInterviewModel(webInterviewConfig));
         }
 
         [HttpPost]
