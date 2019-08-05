@@ -13,18 +13,14 @@ namespace WB.UI.Supervisor
 {
     public class SupervisorAppStart : MvxAppStart
     {
-        private readonly ILogger logger;
         private readonly IViewModelNavigationService viewModelNavigation;
         private readonly IPlainStorage<SupervisorIdentity> users;
         private readonly IApplicationCypher applicationCypher;
 
-
         public SupervisorAppStart(IMvxApplication application, IMvxNavigationService navigationService,
             IViewModelNavigationService viewModelNavigation,
             IPlainStorage<SupervisorIdentity> users,
-            IApplicationCypher applicationCypher,
-            ILogger logger
-        ) : base(application, navigationService)
+            IApplicationCypher applicationCypher) : base(application, navigationService)
         {
             this.viewModelNavigation = viewModelNavigation;
             this.users = users;
