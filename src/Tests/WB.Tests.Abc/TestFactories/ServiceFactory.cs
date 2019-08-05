@@ -244,7 +244,8 @@ namespace WB.Tests.Abc.TestFactories
         public LiteEventBus LiteEventBus(ILiteEventRegistry liteEventRegistry = null, IEventStore eventStore = null)
             => new LiteEventBus(
                 liteEventRegistry ?? Stub<ILiteEventRegistry>.WithNotEmptyValues,
-                eventStore ?? Mock.Of<IEventStore>());
+                eventStore ?? Mock.Of<IEventStore>(),
+                Mock.Of<IGlobalLiteEventHandler>());
 
         public LiteEventRegistry LiteEventRegistry()
             => new LiteEventRegistry();
