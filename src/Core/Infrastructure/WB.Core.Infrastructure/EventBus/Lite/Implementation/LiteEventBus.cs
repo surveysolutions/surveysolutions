@@ -11,11 +11,16 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
     {
         private readonly ILiteEventRegistry liteEventRegistry;
         private readonly IEventStore eventStore;
+        private readonly IGlobalLiteEventHandler globalEventHandler;
 
-        public LiteEventBus(ILiteEventRegistry liteEventRegistry, IEventStore eventStore)
+        public LiteEventBus(ILiteEventRegistry liteEventRegistry, IEventStore eventStore, IGlobalLiteEventHandler handler)
         {
             this.liteEventRegistry = liteEventRegistry;
             this.eventStore = eventStore;
+            this.globalEventHandler = handler;
+
+            if (!this.liteEventRegistry.IsSubscribed(this.globalEventHandler))
+                this.liteEventRegistry.Subscribe(this.globalEventHandler);
         }
 
         public IEnumerable<CommittedEvent> CommitUncommittedEvents(IEventSourcedAggregateRoot aggregateRoot, string origin)

@@ -4,7 +4,6 @@ using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.UI.Shared.Enumerator.Services;
@@ -19,8 +18,6 @@ namespace WB.UI.Supervisor
         private readonly IPlainStorage<SupervisorIdentity> users;
         private readonly IApplicationCypher applicationCypher;
 
-        //preserve link and saving object to avoid collection with GC
-        private static InterviewDashboardEventHandler interviewDashboardEventHandler = null;
 
         public SupervisorAppStart(IMvxApplication application, IMvxNavigationService navigationService,
             IViewModelNavigationService viewModelNavigation,
@@ -34,21 +31,8 @@ namespace WB.UI.Supervisor
             this.applicationCypher = applicationCypher;
         }
 
-        public override void ResetStart()
-        {
-            if (interviewDashboardEventHandler == null)
-            {
-                logger.Warn("Instance if InterviewDashboardEventHandler was lost!");
-                interviewDashboardEventHandler = Mvx.IoCProvider.GetSingleton<InterviewDashboardEventHandler>();
-            }
-
-            base.ResetStart();
-        }
-
         protected override Task<object> ApplicationStartup(object hint = null)
         {
-            interviewDashboardEventHandler = Mvx.IoCProvider.GetSingleton<InterviewDashboardEventHandler>();
-
             var logger = Mvx.IoCProvider.Resolve<ILoggerProvider>().GetFor<SupervisorAppStart>();
             logger.Info($"Application started. Version: {typeof(SplashActivity).Assembly.GetName().Version}");
 
