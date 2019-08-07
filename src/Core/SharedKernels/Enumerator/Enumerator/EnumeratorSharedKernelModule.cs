@@ -3,6 +3,8 @@ using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection;
@@ -33,6 +35,8 @@ namespace WB.Core.SharedKernels.Enumerator
     {
         public void Load(IIocRegistry registry)
         {
+            registry.Bind<ILiteEventBus, LiteEventBus>();
+
             registry.Bind<IEntitiesListViewModelFactory, EntitiesListViewModelFactory>();
             registry.Bind<IDynamicTextViewModelFactory, DynamicTextViewModelFactory>();
             registry.Bind<ISubstitutionTextFactory, SubstitutionTextFactory>();
