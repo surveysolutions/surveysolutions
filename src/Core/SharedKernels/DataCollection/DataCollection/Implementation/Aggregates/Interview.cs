@@ -784,21 +784,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected List<CategoricalOption> FilteredCategoricalOptions(Identity questionIdentity, int itemsCount,
             IEnumerable<CategoricalOption> unfilteredOptionsForQuestion)
         {
-            // too much
             IInterviewExpressionStorage expressionStorage = this.GetExpressionStorage();
 
             var interviewPropertiesForExpressions = new InterviewPropertiesForExpressions(new InterviewProperties(this.EventSourceId), this.properties);
-
             expressionStorage.Initialize(new InterviewStateForExpressions(this.tree, interviewPropertiesForExpressions));
-
             var question = this.tree.GetQuestion(questionIdentity);
+
+            if (question == null)
+                throw new InterviewException($"Question was not found in Tree: question {questionIdentity}, interview {EventSourceId}");
 
             var nearestRoster = question.Parents.OfType<InterviewTreeRoster>().LastOrDefault()?.Identity ??
                                 new Identity(this.QuestionnaireIdentity.QuestionnaireId, RosterVector.Empty);
-
+            
             var level = expressionStorage.GetLevel(nearestRoster);
             var categoricalFilter = level.GetCategoricalFilter(questionIdentity);
-
             return unfilteredOptionsForQuestion
                 .Where(x => RunOptionFilter(categoricalFilter, x.Value))
                 .Take(itemsCount)
