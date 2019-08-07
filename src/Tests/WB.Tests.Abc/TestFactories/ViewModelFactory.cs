@@ -313,7 +313,8 @@ namespace WB.Tests.Abc.TestFactories
             var questionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
             var interviewRepository = Create.Fake.StatefulInterviewRepositoryWith(statefulInterview);
 
-            var result = new FilteredOptionsViewModel(questionnaireRepository, interviewRepository, new AnswerNotifier(Create.Service.LiteEventRegistry()));
+            var result = new FilteredOptionsViewModel(questionnaireRepository, interviewRepository, new AnswerNotifier(Create.Service.LiteEventRegistry()),
+                Mock.Of<ILogger>());
             result.Init(statefulInterview.Id.FormatGuid(), questionId, 30);
             return result;
         }
