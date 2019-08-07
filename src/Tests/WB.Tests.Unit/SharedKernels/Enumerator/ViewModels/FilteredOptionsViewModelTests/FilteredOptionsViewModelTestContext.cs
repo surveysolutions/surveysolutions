@@ -1,8 +1,9 @@
 ﻿using Moq;
+
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
-
+using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredOptionsViewModelTests
 {
@@ -16,7 +17,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredOptionsViewM
             return new FilteredOptionsViewModel(
                 questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                answerNotifier ?? Mock.Of<AnswerNotifier>());
+                answerNotifier ?? Mock.Of<AnswerNotifier>(),
+                Mock.Of<ILogger>());
         }
     }
 }
