@@ -126,7 +126,7 @@ namespace WB.UI.Designer.Controllers
 
             this.questionWithOptionsViewModel = withOptionsViewModel;
 
-            return this.View(withOptionsViewModel.Options);
+            return this.View(questionWithOptionsViewModel);
         }
 
         [HttpPost]

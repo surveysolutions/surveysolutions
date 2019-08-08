@@ -11,11 +11,16 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
     {
         private readonly ILiteEventRegistry liteEventRegistry;
         private readonly IEventStore eventStore;
+        private readonly IGlobalLiteEventHandler globalEventHandler;
 
-        public LiteEventBus(ILiteEventRegistry liteEventRegistry, IEventStore eventStore)
+        public LiteEventBus(ILiteEventRegistry liteEventRegistry, IEventStore eventStore, IGlobalLiteEventHandler handler)
         {
             this.liteEventRegistry = liteEventRegistry;
             this.eventStore = eventStore;
+            this.globalEventHandler = handler;
+
+            if (!this.liteEventRegistry.IsSubscribed(this.globalEventHandler))
+                this.liteEventRegistry.Subscribe(this.globalEventHandler);
         }
 
         public IEnumerable<CommittedEvent> CommitUncommittedEvents(IEventSourcedAggregateRoot aggregateRoot, string origin)
@@ -48,7 +53,11 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
                 if (exceptions.Count > 0)
                 {
                     var message = string.Format("{0} handler(s) failed to handle published event '{1}' of type '{4} by event source '{2}' with sequence '{3}'.", 
-                        exceptions.Count, uncommittedChange.EventIdentifier, uncommittedChange.EventSourceId, uncommittedChange.EventSequence, uncommittedChange.Payload.GetType().Name);
+                        exceptions.Count, 
+                        uncommittedChange.EventIdentifier, 
+                        uncommittedChange.EventSourceId, 
+                        uncommittedChange.EventSequence, 
+                        uncommittedChange.Payload.GetType().Name);
                     throw new AggregateException(message, exceptions);
                 }
             }
