@@ -27,7 +27,7 @@ using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    public partial class Interview : AggregateRootMappedByConvention
+    public class Interview : AggregateRootMappedByConvention
     {
         public Interview(IInterviewTreeBuilder treeBuilder)
         {
@@ -71,8 +71,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public override Guid EventSourceId
         {
-            get { return base.EventSourceId; }
-
+            get => base.EventSourceId;
             protected set
             {
                 base.EventSourceId = value;
@@ -123,18 +122,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ServiceLocatorInstance.GetInstance<IInterviewExpressionStatePrototypeProvider>();
         private readonly ISubstitutionTextFactory substitutionTextFactory;
         private readonly IInterviewTreeBuilder treeBuilder;
-        public IQuestionOptionsRepository questionOptionsRepository => 
-            ServiceLocatorInstance.GetInstance<IQuestionOptionsRepository>();
 
         protected InterviewKey interviewKey;
 
         public Interview(
             ISubstitutionTextFactory substitutionTextFactory,
-            IInterviewTreeBuilder treeBuilder
+            IInterviewTreeBuilder treeBuilder,
+            IQuestionOptionsRepository optionsRepository
             )
         {
             this.substitutionTextFactory = substitutionTextFactory;
             this.treeBuilder = treeBuilder;
+            this.questionOptionsRepository = optionsRepository ?? throw new ArgumentNullException(nameof(optionsRepository));
         }
 
         #region Apply (state restore) methods
@@ -722,6 +721,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected IQuestionnaire GetQuestionnaireOrThrow() => this.GetQuestionnaireOrThrow(this.Language);
 
         private Dictionary<string, IQuestionnaire> questionnairesCache = new Dictionary<string, IQuestionnaire>();
+        private IQuestionOptionsRepository questionOptionsRepository;
 
         private IQuestionnaire GetQuestionnaireOrThrow(string language)
         {
