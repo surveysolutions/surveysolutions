@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Events;
@@ -24,8 +25,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
     {
         public StatefulInterview(
             ISubstitutionTextFactory substitutionTextFactory,
-            IInterviewTreeBuilder treeBuilder)
-            : base(substitutionTextFactory, treeBuilder)
+            IInterviewTreeBuilder treeBuilder,
+            IQuestionOptionsRepository optionsRepository)
+            : base(substitutionTextFactory, treeBuilder, optionsRepository)
         {
         }
 
