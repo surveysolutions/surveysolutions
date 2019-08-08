@@ -48,11 +48,11 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
 
             var view = controller.EditCascadingOptions(postedFile) as ViewResult;
 
-            var model = (IEnumerable<QuestionnaireCategoricalOption>)view.Model;
-            model.Count().Should().Be(1);
-            model.First().Value.Should().Be(1);
-            model.First().Title.Should().Be("Street 1");
-            model.First().ParentValue.Should().Be(2);
+            var model = (QuestionnaireController.EditOptionsViewModel)view.Model;
+            model.Options.Count().Should().Be(1);
+            model.Options.First().Value.Should().Be(1);
+            model.Options.First().Title.Should().Be("Street 1");
+            model.Options.First().ParentValue.Should().Be(2);
         }
     }
 }
