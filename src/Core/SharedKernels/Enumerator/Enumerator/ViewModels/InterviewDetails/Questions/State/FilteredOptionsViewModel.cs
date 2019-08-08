@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
@@ -14,6 +14,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly AnswerNotifier answerNotifier;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
+        private readonly ILogger logger;
 
         private IStatefulInterview interview;
         private List<CategoricalOption> Options { get; set; }
@@ -43,11 +44,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public FilteredOptionsViewModel (IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
-            AnswerNotifier answerNotifier)
+            AnswerNotifier answerNotifier,
+            ILogger logger)
         {
             if (questionnaireRepository == null) throw new ArgumentNullException(nameof(questionnaireRepository));
             if (interviewRepository == null) throw new ArgumentNullException(nameof(interviewRepository));
-
+            this.logger = logger;
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
 
@@ -113,10 +115,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void AnswerNotifierOnQuestionAnswered(object sender, EventArgs eventArgs)
         {
-            var newOptions = interview.GetTopFilteredOptionsForQuestion(questionIdentity, ParentValue, Filter, Count)
-                                .ToList();
+            //temporary fix for KP-13068
+            //if view model was created for item in roster
+            //and trigger is changed and item is gone
+            // getting options could fail
+            if (interview.GetQuestion(questionIdentity) == null)
+            {
+                logger.Warn($"Trying to reload options on question {questionIdentity} that doesn't exist in interview {interview.Id}");
+                return;
+            }
 
-            var listOfNewOptions = newOptions.ToList();
+            var listOfNewOptions = interview.GetTopFilteredOptionsForQuestion(questionIdentity, ParentValue, Filter, Count).ToList(); 
 
             var existingOptions = this.Options;
             if (existingOptions == null || !listOfNewOptions.SequenceEqual(existingOptions, new CategoricalOptionEqualityComparer()))
