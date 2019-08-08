@@ -150,7 +150,7 @@
           <br />
           <input
             type="checkbox"
-            id="reassignReceivedByInterviewer"            
+            id="reassignReceivedByInterviewer"
             v-model="isReassignReceivedByInterviewer"
             class="checkbox-filter"
           />
@@ -222,27 +222,35 @@
     <ModalFrame ref="rejectModal">
       <form onsubmit="return false;">
         <div class="action-container">
-          <p
+          <p v-if="!config.isSupervisor"
             v-html="$t('Interviews.RejectConfirmMessageHQ', {count: this.getFilteredToReject().length, status1: 'Completed', status2: 'ApprovedBySupervisor'} )"
+          ></p>
+          <p v-if="config.isSupervisor"
+            v-html="$t('Interviews.RejectConfirmMessage', {count: this.getFilteredToReject().length, status1: 'Completed', status2: 'RejectedByHeadquarters'} )"
           ></p>
         </div>
 
-        <div v-if="config.isSupervisor && isNeedShowAssignInterviewers()">                            
-                <label
-            class="control-label"
-            for="newResponsibleId">{{$t('Interviews.ChooseResponsibleInterviewer')}}</label>
-          <Typeahead
-            control-id="newResponsibleId"
-            :placeholder="$t('Common.Responsible')"
-            :value="newResponsibleId"
-            :ajax-params="{ }"
-            @selected="newResponsibleSelected"
-            :fetch-url="config.api.responsible">
-            </Typeahead>
+        <div v-if="config.isSupervisor && isNeedShowAssignInterviewers()">
+          <p>
+            <label
+              class="control-label"
+              for="newResponsibleId"
+            >{{$t('Interviews.ChooseResponsibleInterviewer')}}</label>
+            <Typeahead
+              control-id="newResponsibleId"
+              :placeholder="$t('Common.Responsible')"
+              :value="newResponsibleId"
+              :ajax-params="{ }"
+              @selected="newResponsibleSelected"
+              :fetch-url="config.api.responsible"
+            ></Typeahead>
+          </p>
         </div>
 
         <div>
-          <label for="txtStatusChangeComment">{{$t("Pages.ApproveRejectPartialView_CommentLabel")}} :</label>
+          <label
+            for="txtStatusChangeComment"
+          >{{$t("Pages.ApproveRejectPartialView_CommentLabel")}} :</label>
           <textarea
             class="form-control"
             rows="10"
@@ -286,11 +294,14 @@
       <div class="action-container">
         <p>
           <a class="interview-id title-row" @click="viewInterview" href="#">{{interviewKey}}</a> by
-          <span :class="getResponsibleClass" href="#">{{responsibleName}}</span>
+          <span :class="getResponsibleClass" v-html="responsibleLink"></span>
         </p>
       </div>
       <div class="table-with-scroll">
-        <table class="table table-striped table-condensed table-hover table-break-words history" id="statustable">
+        <table
+          class="table table-striped table-condensed table-hover table-break-words history"
+          id="statustable"
+        >
           <thead>
             <tr>
               <td>{{ $t("Pages.HistoryOfStatuses_State")}}</td>
@@ -368,8 +379,18 @@ export default {
         interviewKey() {
             return this.selectedRowWithMenu != undefined ? this.selectedRowWithMenu.key : ''
         },
-        responsibleName() {
-            return this.selectedRowWithMenu != undefined ? this.selectedRowWithMenu.responsibleName : ''
+        responsibleLink() {
+            if (this.selectedRowWithMenu == undefined) return ''
+
+            return this.selectedRowWithMenu.responsibleRole.toLowerCase() == 'interviewer'
+                ? '<a href="' +
+                      this.config.profileUrl +
+                      '/' +
+                      this.selectedRowWithMenu.responsibleId +
+                      '">' +
+                      this.selectedRowWithMenu.responsibleName +
+                      '</a>'
+                : this.selectedRowWithMenu.responsibleName
         },
         getResponsibleClass() {
             return this.selectedRowWithMenu != undefined
@@ -543,8 +564,12 @@ export default {
                 return !isNaN(value) && value
             })
         },
-        isNeedShowAssignInterviewers(){
-            return this.arrayFilter(this.getFilteredToReject(), function (item) { return item.isNeedInterviewerAssign}).length > 0;
+        isNeedShowAssignInterviewers() {
+            return (
+                this.arrayFilter(this.getFilteredToReject(), function(item) {
+                    return item.isNeedInterviewerAssign
+                }).length > 0
+            )
         },
         CountReceivedByInterviewerItems() {
             return this.getFileredItems(function(item) {
@@ -587,7 +612,7 @@ export default {
             if (!this.isReassignReceivedByInterviewer) {
                 filteredItems = this.arrayFilter(filteredItems, function(item) {
                     return item.receivedByInterviewer === false
-                });
+                })
             }
 
             if (filteredItems.length == 0) {
@@ -677,86 +702,98 @@ export default {
         },
 
         rejectInterviews() {
-            const self = this;
-            
+            const self = this
+
             var filteredItems = this.getFilteredToReject()
 
             if (filteredItems.length == 0) {
                 this.$refs.rejectModal.hide()
-                return;
-            };
-                        
-            if(!self.config.isSupervisor)
-            {
-              var command = this.getCommand('HqRejectInterviewCommand',
-                _.map(filteredItems, question => {
-                    return question.interviewId
-                }),
-                this.statusChangeComment);
-
-              this.executeCommand(
-                command,
-                function() {},
-                function() {
-                    self.$refs.rejectModal.hide()
-                    self.reloadTable()
-                })                
+                return
             }
-            else{
-            
-                var noReassignInterviews = this.arrayFilter(filteredItems, function (item) { return !item.isNeedInterviewerAssign});
 
-                if(noReassignInterviews.length>0){
+            if (!self.config.isSupervisor) {
+                var command = this.getCommand(
+                    'HqRejectInterviewCommand',
+                    _.map(filteredItems, question => {
+                        return question.interviewId
+                    }),
+                    this.statusChangeComment
+                )
+
+                this.executeCommand(
+                    command,
+                    function() {},
+                    function() {
+                        self.$refs.rejectModal.hide()
+                        self.reloadTable()
+                    }
+                )
+            } else {
+                var noReassignInterviews = this.arrayFilter(filteredItems, function(item) {
+                    return !item.isNeedInterviewerAssign
+                })
+
+                if (noReassignInterviews.length > 0) {
                     var command = this.getCommand(
-                    "RejectInterviewCommand",
+                        'RejectInterviewCommand',
                         _.map(noReassignInterviews, question => {
                             return question.interviewId
-                    }),
-                    this.statusChangeComment);
+                        }),
+                        this.statusChangeComment
+                    )
 
                     this.executeCommand(
-                    command,
-                    function() {},
-                    function() {
-                        self.$refs.rejectModal.hide()
-                        self.reloadTable()
-                    })
+                        command,
+                        function() {},
+                        function() {
+                            self.$refs.rejectModal.hide()
+                            self.reloadTable()
+                        }
+                    )
                 }
 
-                var toReassignInterviews = this.arrayFilter(filteredItems, function (item) { return item.isNeedInterviewerAssign});
+                var toReassignInterviews = this.arrayFilter(filteredItems, function(item) {
+                    return item.isNeedInterviewerAssign
+                })
 
-                if(toReassignInterviews.length > 0 && self.newResponsibleId != null){
-
-                    var commands = this.arrayMap(_.map(toReassignInterviews, question => {return question.interviewId}), 
-                    function(rowId) {
-                        var item = {InterviewId: rowId, InterviewerId: self.newResponsibleId.key, Comment: self.statusChangeComment}
-                        return JSON.stringify(item)
-                    })
+                if (toReassignInterviews.length > 0 && self.newResponsibleId != null) {
+                    var commands = this.arrayMap(
+                        _.map(toReassignInterviews, question => {
+                            return question.interviewId
+                        }),
+                        function(rowId) {
+                            var item = {
+                                InterviewId: rowId,
+                                InterviewerId: self.newResponsibleId.key,
+                                Comment: self.statusChangeComment,
+                            }
+                            return JSON.stringify(item)
+                        }
+                    )
 
                     var command = {
-                        type: "RejectInterviewToInterviewerCommand",
+                        type: 'RejectInterviewToInterviewerCommand',
                         commands: commands,
-                    };                    
+                    }
 
                     this.executeCommand(
-                    command,
-                    function() {},
-                    function() {
-                        self.$refs.rejectModal.hide()
-                        self.reloadTable()
-                    })
+                        command,
+                        function() {},
+                        function() {
+                            self.$refs.rejectModal.hide()
+                            self.reloadTable()
+                        }
+                    )
 
-                    return;
+                    return
                 }
 
-                self.$refs.rejectModal.hide();
-            }   
-
-            
+                self.$refs.rejectModal.hide()
+            }
         },
         rejectInterview() {
-            this.statusChangeComment = null;
-            this.newResponsibleId = null;
+            this.statusChangeComment = null
+            this.newResponsibleId = null
             this.$refs.rejectModal.modal({
                 keyboard: false,
             })
@@ -805,9 +842,9 @@ export default {
             var command = {
                 type: commandName,
                 commands: commands,
-            };
+            }
 
-            return command;
+            return command
         },
 
         unapproveInterviews() {
@@ -898,8 +935,24 @@ export default {
                                             .format('MMM DD, YYYY HH:mm')
                                     },
                                 },
-                                {data: 'Responsible'},
-                                {data: 'Assignee'},
+                                {
+                                    data: 'Responsible',
+                                    render: function(data, type, row) {
+                                        var resultString = '<span class="' + row.ResponsibleRole.toLowerCase() + '">'
+                                        resultString += data
+                                        resultString += '</span>'
+                                        return resultString
+                                    },
+                                },
+                                {
+                                    data: 'Assignee',
+                                    render: function(data, type, row) {
+                                        var resultString = '<span class="' + row.AssigneeRole.toLowerCase() + '">'
+                                        resultString += data
+                                        resultString += '</span>'
+                                        return resultString
+                                    },
+                                },
                                 {data: 'Comment'},
                             ],
                         })
