@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -135,10 +136,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 totalRow = queryForTotalRow.FirstOrDefault();
             }
 
-            int totalCount = this.interviewSummaryReader.Query(_ => FilterByResponsibleOrTeamLead(_, responsible, teamLead, input.QuestionnaireId)
-                .Select(x => input.QuestionnaireId.HasValue ? x.QuestionnaireIdentity : x.QuestionnaireId.ToString())
-                .Distinct()
-                .Count());
+            int totalCount = this.interviewSummaryReader.Query(_ =>
+            {
+                var filterByResponsibleOrTeamLead = FilterByResponsibleOrTeamLead(_, responsible, teamLead, input.QuestionnaireId);
+                if (input.QuestionnaireId.HasValue)
+                {
+                    return filterByResponsibleOrTeamLead
+                        .Select(x => x.QuestionnaireIdentity)
+                        .Distinct()
+                        .Count();
+                }
+                else
+                {
+                    return filterByResponsibleOrTeamLead
+                        .Select(x => x.QuestionnaireId)
+                        .Distinct()
+                        .Count();
+                }
+            });
 
             // doesn't workm, but should. Should be faster than distinct
             //var totalCount = this.interviewSummaryReader.CountDistinctWithRecursiveIndex(_ => _.Where(this.CreateFilterExpression(input)).Select(x => x.QuestionnaireIdentity));
