@@ -23,6 +23,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         ILiteEventHandler<GroupsDisabled>,
         IDisposable
     {
+        private List<IInterviewEntityViewModel> createdEntities = new List<IInterviewEntityViewModel>();
+
         private CompositeCollection<ICompositeEntity> items;
         public CompositeCollection<ICompositeEntity> Items
         {
@@ -126,6 +128,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 {
                     this.Items.ToArray().ForEach(ie => ie.DisposeIfDisposable());
                     this.Items = newEntities;
+
+                    this.createdEntities.ToArray().ForEach(ie => ie.DisposeIfDisposable());
+                    this.createdEntities = entities;
                 });
             }
             finally
@@ -138,6 +143,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             this.liteEventRegistry.Unsubscribe(this);
             this.Items.ToArray().ForEach(ie => ie.DisposeIfDisposable());
+            this.createdEntities.ToArray().ForEach(ie => ie.DisposeIfDisposable());
             this.Name.Dispose();
         }
 

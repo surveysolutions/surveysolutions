@@ -886,13 +886,6 @@ namespace WB.Tests.Abc.TestFactories
                 Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>())
             };
 
-        public QuestionnaireDocument QuestionnaireDocument(Guid? id = null, bool usesCSharp = false, IEnumerable<IComposite> children = null)
-            => new QuestionnaireDocument
-            {
-                PublicKey = id ?? Guid.NewGuid(),
-                Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>()),
-            };
-
         public QuestionnaireDocument QuestionnaireDocumentWithAttachments(Guid? chapterId = null, params Attachment[] attachments)
             => new QuestionnaireDocument
             {
@@ -901,16 +894,6 @@ namespace WB.Tests.Abc.TestFactories
                     new Group("Chapter") { PublicKey = chapterId.GetValueOrDefault() }
                 }.ToReadOnlyCollection(),
                 Attachments = attachments.ToList()
-            };
-
-        public QuestionnaireDocument QuestionnaireDocumentWithTranslations(Guid? chapterId = null, params Translation[] translations)
-            => new QuestionnaireDocument
-            {
-                Children = new List<IComposite>
-                {
-                    new Group("Chapter") { PublicKey = chapterId.GetValueOrDefault() }
-                }.ToReadOnlyCollection(),
-                Translations = translations.ToList()
             };
 
         public QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? chapterId = null, params IComposite[] children)
@@ -923,6 +906,7 @@ namespace WB.Tests.Abc.TestFactories
             => new QuestionnaireDocument
             {
                 PublicKey = Guid.NewGuid(),
+                IsUsingExpressionStorage = true,
                 Children = new List<IComposite>
                 {
                     new Group("Chapter")
@@ -940,6 +924,7 @@ namespace WB.Tests.Abc.TestFactories
             => new QuestionnaireDocument
             {
                 PublicKey = Guid.NewGuid(),
+                IsUsingExpressionStorage = true,
                 Children = new List<IComposite>
                 {
                     new Group("Chapter")
@@ -957,6 +942,7 @@ namespace WB.Tests.Abc.TestFactories
             {
                 Title = "Questionnaire",
                 VariableName = "MyQuestionnaire",
+                IsUsingExpressionStorage = true,
                 PublicKey = id ?? Guid.NewGuid(),
                 Children = new List<IComposite>
                 {
