@@ -1610,7 +1610,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.SwitchTranslation(new SwitchTranslation(this.EventSourceId, defaultTranslation, command.UserId));
             }
 
-            var expressionState = this.ExpressionProcessorStatePrototype; // make sure expression state is cached 
+            // make sure expression state is cached 
+            if (questionnaire.IsUsingExpressionStorage())
+            {
+                this.GetExpressionStorage();
+            }
+            else
+            {
+                var _ = this.ExpressionProcessorStatePrototype;
+            }
 
             this.ApplyEvents(treeDifference, command.UserId);
         }
