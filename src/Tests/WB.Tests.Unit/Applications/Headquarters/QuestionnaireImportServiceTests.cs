@@ -5,7 +5,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
+using Microsoft.AspNetCore.Http;
 using Moq;
+using NHibernate;
 using NSubstitute.ExceptionExtensions;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
@@ -18,6 +20,7 @@ using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.Questionnaire;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Applications.Headquarters
@@ -227,6 +230,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 designerUserCredentials = mockOfUserCredentials.Object;
             }
 
+            var session = Mock.Of<NHibernate.ISession>(s => s.CreateSQLQuery(It.IsAny<string>()) == Mock.Of<ISQLQuery>());
+            var unitOfWork = Mock.Of<IUnitOfWork>(x => x.Session == session);
             IQuestionnaireImportService questionnaireImportService = new QuestionnaireImportService(
                 supportedVersionProvider ?? Mock.Of<ISupportedVersionProvider>(),
                 service,
@@ -238,6 +243,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 commandService ?? Mock.Of<ICommandService>(),
                 Mock.Of<ILogger>(),
                 Mock.Of<IAuditLog>(),
+                unitOfWork,
                 globalInfoProvider,
                 designerUserCredentials);
             return questionnaireImportService;
