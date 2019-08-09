@@ -2,6 +2,8 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <AndroidUseAapt2>false</AndroidUseAapt2>
+    <AndroidEnableMultiDex>false</AndroidEnableMultiDex>
+    <AndroidDexTool>d8</AndroidDexTool>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
@@ -47,7 +49,7 @@
     <MandroidI18n>CJK,Mideast,Rare,West,Other</MandroidI18n>
     <JavaMaximumHeapSize>1G</JavaMaximumHeapSize>
     <Debugger>Xamarin</Debugger>
-    <AndroidEnableMultiDex>true</AndroidEnableMultiDex>
+
     <DevInstrumentationEnabled>True</DevInstrumentationEnabled>
     <AotAssemblies>false</AotAssemblies>
     <EnableLLVM>false</EnableLLVM>
@@ -58,13 +60,13 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
+    <!-- <AndroidEnableProfiledAot>true</AndroidEnableProfiledAot> -->
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>$(Constants)</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>3</WarningLevel>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
-    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
+    <AndroidLinkMode>Full</AndroidLinkMode>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <AndroidLinkSkip>mscorlib;System.Runtime;System.Runtime.Extensions;System.Linq;System.Collections;System.Text.RegularExpressions;netstandard</AndroidLinkSkip>
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
@@ -76,8 +78,6 @@
     <Debugger>Xamarin</Debugger>
     <AotAssemblies>false</AotAssemblies>
     <EnableLLVM>false</EnableLLVM>
-    <AndroidEnableMultiDex>true</AndroidEnableMultiDex>
-    <EnableProguard>False</EnableProguard>
     <DevInstrumentationEnabled>False</DevInstrumentationEnabled>
     <DebugSymbols>False</DebugSymbols>
     <AndroidEnableSGenConcurrent>true</AndroidEnableSGenConcurrent>
