@@ -1,5 +1,6 @@
 using Android.App;
 using Android.Views;
+using Java.Interop;
 using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.UI.Shared.Enumerator.Activities;
@@ -49,5 +50,11 @@ namespace WB.UI.Tester.Activities
                 TesterUIResources.MenuItem_Title_Language_Original
             },
         };
+        
+        [Export("StartInterviewApi")]
+        public void StartInterviewApi()
+        {
+            this.ViewModel.StartInterviewAsync().Wait();
+        }
     }
 }
