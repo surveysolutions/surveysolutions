@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Domain;
@@ -1613,7 +1612,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             // make sure expression state is cached 
             if (questionnaire.IsUsingExpressionStorage())
             {
-                this.GetExpressionStorage();
+                var _ = this.GetExpressionStorage();
             }
             else
             {
