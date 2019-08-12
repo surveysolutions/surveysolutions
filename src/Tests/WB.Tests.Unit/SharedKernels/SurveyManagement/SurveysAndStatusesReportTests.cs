@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
@@ -7,16 +8,17 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement
 {
     [TestOf(typeof(SurveysAndStatusesReport))]
-    internal class SurveysAndStatusesReportTests
+    internal class SurveysAndStatusesReportTests : SurveysAndStatusesReportTestsContext
     {
         private static SurveysAndStatusesReport CreateSurveysAndStatusesReport(INativeReadSideStorage<InterviewSummary> summariesRepository = null)
         {
-            return new SurveysAndStatusesReport(summariesRepository ?? Stub.ReadSideRepository<InterviewSummary>());
+            return SurveysAndStatusesReportTestsContext.CreateSurveysAndStatusesReport(summariesRepository);
         }
 
         [Test]
