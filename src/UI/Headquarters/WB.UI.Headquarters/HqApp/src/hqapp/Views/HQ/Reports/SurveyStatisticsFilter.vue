@@ -360,7 +360,6 @@ export default {
                     result += " " + question.QuestionText;
                 }
 
-                result += question.QuestionText;
                 return result;
             }
 

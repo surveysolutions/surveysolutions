@@ -87,6 +87,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             base.InitializeFromHistory(eventSourceId, history);
             this.changedTree = null;
+            if (history.Any())
+            {
+                this.GetQuestionnaireOrThrow();
+                this.GetExpressionStorage();
+            }
         }
 
         private ILatestInterviewExpressionState expressionProcessorStatePrototype = null;
