@@ -152,8 +152,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
         private int GetTotalRowsCount(SurveysAndStatusesReportInputModel input)
         {
-            int totalCount;
-
             // https://github.com/nhibernate/nhibernate-core/issues/1123 cannot be done with linq. Projection queryover also fails
             #region Projection example
             //int totalCount = this.interviewSummaryReader.QueryOver(qo =>
