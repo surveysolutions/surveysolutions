@@ -2074,7 +2074,7 @@
     <Compile Include="API\WebInterview\LinksExportController.cs" />
     <Compile Include="API\PagedApiResponse.cs" />
     <Compile Include="API\WebInterview\Pipeline\WebInterviewAuthorizeAttribute.cs" />
-    <Compile Include="API\WebInterview\Pipeline\WebInterviewStateManager.cs" />
+    <Compile Include="API\WebInterview\Pipeline\HandlePauseEventPipelineModule.cs" />
     <Compile Include="API\WebInterview\SearchResults.cs" />
     <Compile Include="API\WebInterview\Services\HqWebInterviewInterviewEntityFactory.cs" />
     <Compile Include="API\WebInterview\IInterviewOverviewService.cs" />
