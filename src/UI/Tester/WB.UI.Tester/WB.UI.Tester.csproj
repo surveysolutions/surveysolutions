@@ -53,7 +53,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
-    <!-- <AndroidEnableProfiledAot>true</AndroidEnableProfiledAot> -->
+    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>

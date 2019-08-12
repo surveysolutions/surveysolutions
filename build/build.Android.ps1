@@ -49,7 +49,7 @@ try {
             -NoCleanUp `
             -ExcludeExtra $true | % { if (-not $_) { Exit } }
     }
-
+    
     if ($noSupervisor.IsPresent -eq $False) {
         $SuperPackageName = 'Supervisor.apk'
         . "$scriptFolder\build-android-package.ps1" `
