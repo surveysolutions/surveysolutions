@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using NHibernate.Persister.Entity;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
@@ -204,7 +205,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 query += "(questionnaireid, questionnairetitle))";
             }
 
-            query += Environment.NewLine + "FROM readside.interviewsummaries" + Environment.NewLine;
+
+            var fullTableName = this.uow.Session.GetFullTableName<InterviewSummary>();
+            query += Environment.NewLine + $"FROM {fullTableName}" + Environment.NewLine;
 
             query += "WHERE 1 = 1 ";
 
