@@ -1,23 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Infrastructure.Native.Storage;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Utils;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 {
     internal class SurveysAndStatusesReport : ISurveysAndStatusesReport
     {
-        private readonly INativeReadSideStorage<InterviewSummary> interviewSummaryReader;
+        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader;
+        private readonly IUnitOfWork uow;
 
-        public SurveysAndStatusesReport(INativeReadSideStorage<InterviewSummary> interviewSummaryReader)
+        public SurveysAndStatusesReport(IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader,
+            IUnitOfWork uow)
         {
             this.interviewSummaryReader = interviewSummaryReader;
+            this.uow = uow;
         }
 
         public SurveysAndStatusesReportView Load(SurveysAndStatusesReportInputModel input)
@@ -136,27 +139,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 totalRow = queryForTotalRow.FirstOrDefault();
             }
 
-            int totalCount = this.interviewSummaryReader.Query(_ =>
-            {
-                var filterByResponsibleOrTeamLead = FilterByResponsibleOrTeamLead(_, responsible, teamLead, input.QuestionnaireId);
-                if (input.QuestionnaireId.HasValue)
-                {
-                    return filterByResponsibleOrTeamLead
-                        .Select(x => x.QuestionnaireIdentity)
-                        .Distinct()
-                        .Count();
-                }
-                else
-                {
-                    return filterByResponsibleOrTeamLead
-                        .Select(x => x.QuestionnaireId)
-                        .Distinct()
-                        .Count();
-                }
-            });
 
-            // doesn't workm, but should. Should be faster than distinct
-            //var totalCount = this.interviewSummaryReader.CountDistinctWithRecursiveIndex(_ => _.Where(this.CreateFilterExpression(input)).Select(x => x.QuestionnaireIdentity));
+            int totalCount = GetTotalRowsCount(input);
 
             return new SurveysAndStatusesReportView
             {
@@ -164,6 +148,89 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 Items = reportLines,
                 TotalRow = totalRow 
             };
+        }
+
+        private int GetTotalRowsCount(SurveysAndStatusesReportInputModel input)
+        {
+            int totalCount;
+
+            // https://github.com/nhibernate/nhibernate-core/issues/1123 cannot be done with linq. Projection queryover also fails
+            #region Projection example
+            //int totalCount = this.interviewSummaryReader.QueryOver(qo =>
+            //{
+            //    var query = qo;
+            //    if (!string.IsNullOrWhiteSpace(responsible))
+            //        query = query.WhereRestrictionOn(x => x.ResponsibleName).IsInsensitiveLike(responsible);
+
+            //    if (!string.IsNullOrWhiteSpace(teamLead))
+            //        query = query.WhereRestrictionOn(x => x.TeamLeadName).IsInsensitiveLike(teamLead);
+            //    if (input.QuestionnaireId.HasValue)
+            //    {
+            //        query = query.Where(x => x.QuestionnaireId == input.QuestionnaireId);
+            //    }
+
+            //    ProjectionList selectedColumns;
+            //    if (input.QuestionnaireId.HasValue)
+            //    {
+            //        selectedColumns = Projections.ProjectionList()
+            //            .Add(Projections.Property(nameof(InterviewSummary.QuestionnaireId)))
+            //            .Add(Projections.Property(nameof(InterviewSummary.QuestionnaireVersion)))
+            //            .Add(Projections.Property(nameof(InterviewSummary.QuestionnaireTitle)));
+            //    }
+            //    else
+            //    {
+            //        selectedColumns = Projections.ProjectionList()
+            //            .Add(Projections.GroupProperty(nameof(InterviewSummary.QuestionnaireId)), null)
+            //            .Add(Projections.GroupProperty(nameof(InterviewSummary.QuestionnaireTitle)), null);
+            //    }
+            //    query = query.Select(
+            //        Projections.Count(
+            //            Projections.Distinct(
+            //                selectedColumns
+            //            )
+            //        )
+            //    );
+
+            //    return query.List<int>()[0];
+            //});
+            #endregion
+
+            string query = "SELECT COUNT(DISTINCT ";
+
+            if (input.QuestionnaireId.HasValue)
+            {
+                query += "(questionnaireid, questionnairetitle, questionnaireversion))";
+            }
+            else
+            {
+                query += "(questionnaireid, questionnairetitle))";
+            }
+
+            query += Environment.NewLine + "FROM readside.interviewsummaries" + Environment.NewLine;
+
+            query += "WHERE 1 = 1 ";
+
+            if (!string.IsNullOrWhiteSpace(input.ResponsibleName))
+                query += "AND responsiblename ILIKE :responsible" + Environment.NewLine;
+
+            if (!string.IsNullOrWhiteSpace(input.TeamLeadName))
+                query += "AND teamleadname ILIKE :teamlead" + Environment.NewLine;
+
+            if (input.QuestionnaireId.HasValue)
+            {
+                query += "AND questionnaireid = :questionnaireId" + Environment.NewLine;;
+            }
+
+            var sqlQuery = this.uow.Session.CreateSQLQuery(query);
+
+            if (!string.IsNullOrWhiteSpace(input.ResponsibleName))
+                sqlQuery.SetParameter("responsible", input.ResponsibleName);
+            if (!string.IsNullOrWhiteSpace(input.TeamLeadName))
+                sqlQuery.SetParameter("teamlead", input.TeamLeadName);
+            if (input.QuestionnaireId.HasValue)
+                sqlQuery.SetParameter("questionnaireId", input.QuestionnaireId);
+
+            return (int) sqlQuery.UniqueResult<long>();
         }
 
         private static IQueryable<InterviewSummary> FilterByResponsibleOrTeamLead(IQueryable<InterviewSummary> _,
