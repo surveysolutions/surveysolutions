@@ -77,7 +77,7 @@ namespace WB.Tests.Integration.ReportTests
                 {
                     reader = reportContext.SetupAndCreateInterviewSummaryRepository();
                 }
-                return new SurveysAndStatusesReport(reader);
+                return new SurveysAndStatusesReport(reader, reportContext.UnitOfWork);
             }
 
             internal SurveysAndStatusesReport SurveyAndStatuses(List<InterviewSummary> interviews)
@@ -112,7 +112,7 @@ namespace WB.Tests.Integration.ReportTests
                 {
                     reader = reportContext.SetupAndCreateInterviewSummaryRepository();
                 }
-                return new SurveysAndStatusesReport(reader);
+                return new SurveysAndStatusesReport(reader, reportContext.UnitOfWork);
             }
 
             public SurveysAndStatusesReport SurveyAndStatuses(List<InterviewSummary> interviews)
