@@ -23,7 +23,6 @@ namespace WB.Tests.Integration.ReportTests.SurveyAndStatusesTests
             Assert.That(view.TotalCount, Is.EqualTo(0));
         }
 
-
         [Test]
         public void When_2_questionnaires_has_some_interviews()
         {
