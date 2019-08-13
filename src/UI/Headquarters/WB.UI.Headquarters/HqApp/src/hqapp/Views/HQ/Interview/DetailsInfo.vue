@@ -5,35 +5,35 @@
             <div class="about-questionnaire clearfix">
                 <div class="about-questionnaire-details clearfix">
                     <ul class="main-info-column list-unstyled pull-left">
-                        <li>{{this.$t('Common.InterviewKey')}}: {{$config.model.key}}({{this.$t('Common.Assignment')}} #{{this.$config.model.assignmentId}})</li>
-                        <li class="questionnaire-title">[ver.{{this.$config.model.questionnaireVersion}}] {{this.$config.model.questionnaireTitle}}</li>
+                        <li id="detailsInfo_interviewKeyListItem">{{this.$t('Common.InterviewKey')}}: {{$config.model.key}}({{this.$t('Common.Assignment')}} #{{this.$config.model.assignmentId}})</li>
+                        <li id="detailsInfo_qusetionnaireTitleListItem" class="questionnaire-title">[ver.{{this.$config.model.questionnaireVersion}}] {{this.$config.model.questionnaireTitle}}</li>
                     </ul>
                     <ul class="list-unstyled pull-left table-info">
-                        <li v-if="this.$config.model.interviewDuration">
+                        <li id="detailsInfo_interviewDurationListItem" v-if="this.$config.model.interviewDuration">
                             <span class="data-label">{{this.$t('Details.Duration')}}:</span>
                             <span class="data">{{this.$config.model.interviewDuration}}</span>
                         </li>
-                        <li>
+                        <li id="detailsInfo_responsibleListItem">
                             <span class="data-label">{{this.$t('Details.Responsible')}}: </span>
                             <span v-if="isInterviewerResponsible" class="data">
                                 <a :class="responsibleRole" :href="this.$config.model.responsibleProfileUrl">{{this.$config.model.responsible}}</a>
                             </span>
                             <span v-else class="data supervisor">{{this.$config.model.responsible}}</span>
                         </li>
-                        <li>
+                        <li id="detailsInfo_supervisorListItem">
                             <span class="data-label">{{this.$t('Users.Supervisor')}}: </span>
                             <span class="data supervisor">{{this.$config.model.supervisor}}</span>
                         </li>
                     </ul>
                     <ul class="list-unstyled pull-left table-info">
-                        <li><span class="data-label">{{this.$t('Details.Status')}}</span> 
+                        <li id="detailsInfo_StatusListItem"><span class="data-label">{{this.$t('Details.Status')}}</span> 
                             <span class="data">{{this.$config.model.statusName}}</span>
                             <button type="button" class="btn btn-link gray-action-unit" @click="showStatusesHistory">{{$t("Common.ShowStatusHistory")}}</button>
                             
                         </li>
-                        <li><span class="data-label">{{this.$t('Details.LastUpdated')}}:</span> 
+                        <li id="detailsInfo_lastUpdatedListItem"><span class="data-label">{{this.$t('Details.LastUpdated')}}:</span> 
                             <span class="data">{{lastUpdateDate}}</span>                            
-                            <button type="button" class="btn btn-link gray-action-unit" @click="showOverview">{{$t("Details.Overview")}}</button>
+                            <button id="btn_ShowOverview" type="button" class="btn btn-link gray-action-unit" @click="showOverview">{{$t("Details.Overview")}}</button>
                         </li>
                     </ul>
                 </div>
@@ -41,13 +41,13 @@
             <div class="questionnaire-details-actions clearfix" >
                 <SwitchLanguage v-if="canChangeLanguage" :disabled="changeLanguageDisabled"/>
                 <div class="buttons-container">
-                  <button type="button" class="btn btn-success" v-if="showApproveButton" @click="approve" :disabled="changeStatusDisabled">
+                  <button id="btn_approve" type="button" class="btn btn-success" v-if="showApproveButton" @click="approve" :disabled="changeStatusDisabled">
                       {{$t("Pages.ApproveRejectPartialView_ApproveAction")}}
                   </button>
-                  <button type="button" class="btn btn-default btn-lg reject" v-if="showRejectButton" @click="reject" :disabled="changeStatusDisabled">
+                  <button id="btn_reject" type="button" class="btn btn-default btn-lg reject" v-if="showRejectButton" @click="reject" :disabled="changeStatusDisabled">
                       {{$t("Pages.ApproveRejectPartialView_RejectAction")}}
                   </button>
-                  <button type="button" class="btn btn-default btn-lg reject" v-if="showUnapproveButton" @click="reject">
+                  <button  id="btn_unapprove" type="button" class="btn btn-default btn-lg reject" v-if="showUnapproveButton" @click="reject">
                       {{$t("Pages.ApproveRejectPartialView_UnapproveAction")}}
                   </button>
                 </div>
