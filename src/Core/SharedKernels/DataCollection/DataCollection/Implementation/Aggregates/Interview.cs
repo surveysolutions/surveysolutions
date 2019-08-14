@@ -1609,17 +1609,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.SwitchTranslation(new SwitchTranslation(this.EventSourceId, defaultTranslation, command.UserId));
             }
 
-            // make sure expression state is cached 
-            if (questionnaire.IsUsingExpressionStorage())
+            this.ApplyEvents(treeDifference, command.UserId);
+        }
+
+        private bool cacheInitialized = false;
+        public void WarmUpCache()
+        {
+            if (!cacheInitialized)
             {
-                var _ = this.GetExpressionStorage();
-            }
-            else
-            {
-                var _ = this.ExpressionProcessorStatePrototype;
+                var questionnaire = this.GetQuestionnaireOrThrow();
+                if (questionnaire.IsUsingExpressionStorage())
+                {
+                    this.GetExpressionStorage();
+                }
+                else
+                {
+                    var _ = ExpressionProcessorStatePrototype;
+                }
             }
 
-            this.ApplyEvents(treeDifference, command.UserId);
+            this.cacheInitialized = true;
         }
 
         private void ProtectAnswers(InterviewTree changedInterviewTree, List<string> protectedAnswers)
