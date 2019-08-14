@@ -28,8 +28,7 @@
                     <ul class="list-unstyled pull-left table-info">
                         <li id="detailsInfo_StatusListItem"><span class="data-label">{{this.$t('Details.Status')}}</span> 
                             <span class="data">{{this.$config.model.statusName}}</span>
-                            <button type="button" id="showStatusesHistory" class="btn btn-link gray-action-unit" @click="showStatusesHistory">{{$t("Common.ShowStatusHistory")}}</button>
-                            
+                            <button type="button" class="btn btn-link gray-action-unit" @click="showStatusesHistory">{{$t("Common.ShowStatusHistory")}}</button>
                         </li>
                         <li id="detailsInfo_lastUpdatedListItem"><span class="data-label">{{this.$t('Details.LastUpdated')}}:</span> 
                             <span class="data">{{lastUpdateDate}}</span>                            
