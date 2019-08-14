@@ -382,6 +382,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             
             CommandRegistry.Configure<StatefulInterview, InterviewCommand>(configuration => 
                 configuration
+                .PreProcessBy<InterviewCacheWarmupPreProcessor>()
                 .PostProcessBy<InterviewSummaryErrorsCountPostProcessor>()
                     .SkipPostProcessFor<HardDeleteInterview>()
                     .SkipPostProcessFor<DeleteInterviewCommand>()
