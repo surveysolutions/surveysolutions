@@ -360,7 +360,10 @@ namespace WB.Core.Infrastructure.CommandBus
 
                 if(!commandType.IsAssignableFrom(registeredExistingCommand)) continue;
 
-                commandDescriptor.AppendPreProcessors(configuration.GetPreProcessors());
+                if (!configuration.GetSkipPreProcessCommands().Contains(registeredExistingCommand))
+                {
+                    commandDescriptor.AppendPreProcessors(configuration.GetPreProcessors());
+                }
 
                 if (!configuration.GetSkipValidationCommands().Contains(registeredExistingCommand))
                 {
