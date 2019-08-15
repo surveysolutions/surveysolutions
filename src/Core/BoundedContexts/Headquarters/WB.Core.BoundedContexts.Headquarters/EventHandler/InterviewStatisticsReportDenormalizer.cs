@@ -154,7 +154,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             if (question.CascadeFromQuestionId != null) return false;
             if (question.LinkedToQuestionId != null || question.LinkedToRosterId != null) return false;
             if (question.IsFilteredCombobox == true) return false;
-            if (question is SingleQuestion || question is NumericQuestion) return true;
+            if (question is SingleQuestion || question is NumericQuestion || question is MultyOptionsQuestion) return true;
             return false;
         }
 
