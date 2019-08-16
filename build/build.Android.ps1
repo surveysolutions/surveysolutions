@@ -47,7 +47,7 @@ try {
             -CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
             -OutFileName "$artifactsFolder\$PackageName" `
             -NoCleanUp `
-            -ExcludeExtra $true | % { if (-not $_) { Exit } }
+            -ExcludeExtra:$true | % { if (-not $_) { Exit } }
     }
     
     if ($noSupervisor.IsPresent -eq $False) {
@@ -62,7 +62,7 @@ try {
             -CapiProject 'src\UI\Supervisor\WB.UI.Supervisor\WB.UI.Supervisor.csproj' `
             -OutFileName "$artifactsFolder\$SuperPackageName" `
             -NoCleanUp `
-            -ExcludeExtra $false | % { if (-not $_) { Exit } }
+            -ExcludeExtra:$false | % { if (-not $_) { Exit } }
     }
 
     if ($noExtInterviewer.IsPresent -eq $False) {
@@ -78,7 +78,7 @@ try {
             -OutFileName "$artifactsFolder\$ExtPackageName" `
             -branch $branch `
             -NoCleanUp `
-            -ExcludeExtra $false | % { if (-not $_) { Exit } }
+            -ExcludeExtra:$false | % { if (-not $_) { Exit } }
     }
 
     Write-Host "##teamcity[publishArtifacts '$artifactsFolder']"

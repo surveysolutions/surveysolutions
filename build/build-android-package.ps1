@@ -6,7 +6,7 @@ param([string]$VersionName = $null,
 [string]$KeystoreAlias,
 [string]$CapiProject,
 [string]$OutFileName,
-[bool]$ExcludeExtra,
+[switch]$ExcludeExtra,
 [string]$branch,
 [string]$PlatformsOverride,
 [Switch]$NoCleanUp)
@@ -88,7 +88,7 @@ Log-Block "Building Android Package: $(GetPackageName $CapiProject)" {
             Remove-Item $OutFileName -Force
         }
 
-        BuildAndroidApp $CapiProject $BuildConfiguration $ExcludeExtra -VersionCode "$VersionCode" -OutFileName $OutFileName | %{ if (-not $_) { Exit } }
+        BuildAndroidApp $CapiProject $BuildConfiguration -ExcludeExtensions $ExcludeExtra -VersionCode "$VersionCode" -OutFileName $OutFileName | %{ if (-not $_) { Exit } }
     }
     else
     {
@@ -102,7 +102,7 @@ Log-Block "Building Android Package: $(GetPackageName $CapiProject)" {
                 Remove-Item "$TargetAbi$OutFileName" -Force
             }
 #to build several abis and upload to store version per apk should be different
-            BuildAndroidApp $CapiProject $BuildConfiguration $ExcludeExtra $TargetAbi -VersionCode "$VersionCode$IndexToAdd" -OutFileName "$TargetAbi$OutFileName" | %{ if (-not $_) { Exit } }    
+            BuildAndroidApp $CapiProject $BuildConfiguration -ExcludeExtensions $ExcludeExtra $TargetAbi -VersionCode "$VersionCode$IndexToAdd" -OutFileName "$TargetAbi$OutFileName" | %{ if (-not $_) { Exit } }    
         }
     }
 }
