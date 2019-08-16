@@ -56,5 +56,6 @@ namespace WB.UI.Supervisor.Activities.Interview
         {
             this.ViewModel.StartInterviewAsync().Wait();
         }
+
     }
 }
