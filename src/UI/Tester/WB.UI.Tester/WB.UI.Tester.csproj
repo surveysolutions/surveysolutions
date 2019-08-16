@@ -62,9 +62,9 @@
     <AndroidLinkSkip>mscorlib;System.Runtime;System.Runtime.Extensions;System.Linq;System.Collections;System.Text.RegularExpressions;netstandard;WB.Core.SharedKernels.Enumerator</AndroidLinkSkip>
     <AndroidLinkMode>SdkOnly</AndroidLinkMode>
     <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
-    <BundleAssemblies>False</BundleAssemblies>
+    <BundleAssemblies>false</BundleAssemblies>
     <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
-    <AndroidSupportedAbis>armeabi-v7a;x86;arm64-v8a</AndroidSupportedAbis>
+    <AndroidSupportedAbis>armeabi-v7a;x86;x86_64;arm64-v8a</AndroidSupportedAbis>
     <MandroidI18n>CJK,Mideast,Rare,West,Other</MandroidI18n>
     <JavaMaximumHeapSize>1G</JavaMaximumHeapSize>
     <Debugger>Xamarin</Debugger>
@@ -472,8 +472,8 @@
   </Target>
   -->
   <Target Name="FixGuava" AfterTargets="_AddAndroidCustomMetaData">
-  <ItemGroup>
-    <_MonoAndroidReferencePath Include="@(_ReferencePath);@(_ReferenceDependencyPaths)" Condition=" '%(Filename)' == 'Xamarin.Google.Guava.ListenableFuture' " />
-  </ItemGroup>
-</Target>
+    <ItemGroup>
+      <_MonoAndroidReferencePath Include="@(_ReferencePath);@(_ReferenceDependencyPaths)" Condition=" '%(Filename)' == 'Xamarin.Google.Guava.ListenableFuture' " />
+    </ItemGroup>
+  </Target>
 </Project>
