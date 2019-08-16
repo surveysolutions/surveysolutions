@@ -86,7 +86,7 @@ try {
                 -CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
                 -OutFileName "$(Split-Path $ProjectHeadquarters)\Client\$PackageName" `
                 -NoCleanUp `
-                -ExcludeExtra $true | % { if (-not $_) { Exit } }
+                -ExcludeExtra:$true | % { if (-not $_) { Exit } }
 
             $ExtPackageName = 'WBCapi.Ext.apk'
             . "$scriptFolder\build-android-package.ps1" `
@@ -100,7 +100,7 @@ try {
                 -OutFileName "$(Split-Path $ProjectHeadquarters)\Client\$ExtPackageName" `
                 -branch $branch `
                 -NoCleanUp `
-                -ExcludeExtra $false | % { if (-not $_) { Exit } }
+                -ExcludeExtra:$false | % { if (-not $_) { Exit } }
 
             $SuperPackageName = 'Supervisor.apk'
             . "$scriptFolder\build-android-package.ps1" `
@@ -113,7 +113,7 @@ try {
                 -CapiProject 'src\UI\Supervisor\WB.UI.Supervisor\WB.UI.Supervisor.csproj' `
                 -OutFileName "$(Split-Path $ProjectHeadquarters)\Client\$SuperPackageName" `
                 -NoCleanUp `
-                -ExcludeExtra $false | % { if (-not $_) { Exit } }
+                -ExcludeExtra:$false | % { if (-not $_) { Exit } }
         }
 
         Log-Block "Building web packages and support tool" {
