@@ -52,7 +52,9 @@ namespace WB.UI.Interviewer
         protected override Task<object> ApplicationStartup(object hint = null)
         {
             auditLogService.Write(new OpenApplicationAuditLogEntity());
-            
+
+            this.serviceLocator.GetInstance<IDenormalizerRegistry>()
+                .RegisterDenormalizer(this.serviceLocator.GetInstance<InterviewDashboardEventHandler>());
 
             logger.Info($"Application started. Version: {typeof(SplashActivity).Assembly.GetName().Version}");
 

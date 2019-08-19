@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
         {
             ncqrsStyleEventHandlerMock = new Mock<TestDenormalzier>();
 
-            var denormalizerRegistry = Create.Service.DenormalizerRegistry();
+            var denormalizerRegistry = Create.Service.DenormalizerRegistryNative();
             denormalizerRegistry.Register<TestDenormalzier>();
             var serviceLocator = Mock.Of<IServiceLocator>(x =>
                 x.GetInstance(typeof(TestDenormalzier)) == ncqrsStyleEventHandlerMock.Object);
