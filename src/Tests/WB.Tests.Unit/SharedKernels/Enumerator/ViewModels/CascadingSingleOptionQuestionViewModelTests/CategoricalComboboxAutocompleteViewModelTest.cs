@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -51,7 +52,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             var filtered = new FilteredOptionsViewModel(
                 questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 interviewRepository,
-                Mock.Of<AnswerNotifier>());
+                Mock.Of<AnswerNotifier>(),
+                Mock.Of<ILogger>());
 
             filtered.Init(interviewId, questionIdentity, 50);
 

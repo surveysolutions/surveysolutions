@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaire = Create.Entity.QuestionnaireDocument(
-                children: new List<IComposite>
+                children: new IComposite[]
                 {
                     Create.Entity.Group(groupId: chapterId, children: new List<IComposite>
                     {

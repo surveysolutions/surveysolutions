@@ -35,7 +35,7 @@ namespace WB.UI.Tester.ServiceLocation
                 new EnumeratorSharedKernelModule()
                 );
 
-            kernel.InitAsync(false).Wait();
+            kernel.InitAsync(true).Wait();
 
             return new AutofacMvxIocProvider(kernel.Container);
         }

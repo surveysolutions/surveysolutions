@@ -27,10 +27,12 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Dashboard
             var supervisorId = Id.gA;
             var supervisorName = "supervisor";
 
-            var principal = Mock.Of<IPrincipal>(x =>
-                x.CurrentUserIdentity == Create.Other.SupervisorIdentity(supervisorId.FormatGuid(), supervisorName, null));
+            var principal = 
+                Mock.Of<IPrincipal>(x =>
+                    x.IsAuthenticated == true &&
+                    x.CurrentUserIdentity == Create.Other.SupervisorIdentity(supervisorId.FormatGuid(), supervisorName, null, supervisorId));
 
-            var interview = Create.Entity.InterviewView(interviewId: interviewId);
+            var interview = Create.Entity.InterviewView(interviewId: interviewId, responsibleId: supervisorId);
 
             var viewModel = Create.ViewModel.SupervisorDashboardInterviewViewModel(principal: principal);
 

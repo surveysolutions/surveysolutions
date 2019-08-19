@@ -4,7 +4,7 @@
     :questionCssClassName="$me.ordered ? 'ordered-question' : 'multiselect-question'"
     :noAnswer="noOptions"
   >
-    <button class="section-blocker" disabled="disabled" v-if="$me.fetching"></button>
+    <button class="section-blocker" disabled="disabled" v-if="inFetchState"></button>
     <div class="question-unit">
       <div class="options-group" v-bind:class="{ 'dotted': noOptions }">
         <div
@@ -38,6 +38,7 @@
           type="button"
           class="btn btn-link btn-horizontal-hamburger"
           @click="toggleOptions"
+          :id="`btn_${$me.id}_ShowAllOptions`"
           v-if="shouldShowAnsweredOptionsOnly && !showAllOptions"
         >
           <span></span>
@@ -62,11 +63,10 @@
                 answer: []
             }
         },
-
-        watch: {
-            "$me.answer"(to, from) {
+        created(){
+            this.$watch('$me.answer', (to, from) => {
                 this.answer = to
-            }
+            }, { immediate: true });
         },
         
         computed: {

@@ -242,6 +242,19 @@ namespace WB.Core.SharedKernels.Enumerator.Views
             }
         }
 
+        public List<Guid> GetListOfAllItemsIds()
+        {
+            if (!Directory.Exists(this.settings.PathToInterviewsDirectory))
+                return new List<Guid>();
+
+            Guid item = Guid.Empty;
+            var files = Directory.GetFiles(this.settings.PathToInterviewsDirectory, "*.sqlite3")
+                .Select(fn => Path.GetFileNameWithoutExtension(fn))
+                .Where(x => Guid.TryParse(x, out item)).Select(x => item).ToList();
+
+            return files;
+        }
+
         public int GetLastEventKnownToHq(Guid interviewId)
         {
             var connection = this.GetOrCreateConnection(interviewId);

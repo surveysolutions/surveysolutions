@@ -12,12 +12,12 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
-using WB.UI.Headquarters.API.DataCollection;
 using WB.UI.Headquarters.API.DataCollection.Interviewer;
 
 namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
@@ -38,6 +38,31 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
 
             // Assert
             Assert.That(response, Has.Property(nameof(HttpResponseMessage.StatusCode)).EqualTo(HttpStatusCode.Conflict));
+        }
+
+        [Test]
+        public void when_resolved_comment_exists_and_client_has_7090_protocol_Should_not_allow_to_synchronize()
+        {
+            var productVersion = Mock.Of<IProductVersion>(x => x.ToString() == "18.06.0.0 (build 0)");
+
+            var synchronizedUserId = Id.gA;
+            var interviews =
+                Mock.Of<IInterviewInformationFactory>(x => x.HasAnyInterviewsInProgressWithResolvedCommentsForInterviewer(synchronizedUserId) == true);
+
+            var deviceId = "device";
+            var authorizedUser = Mock.Of<IAuthorizedUser>(x => x.DeviceId == deviceId && x.Id == synchronizedUserId);
+
+            var interviewerApiController = Create.Controller.InterviewerApiController(
+                syncVersionProvider: new InterviewerSyncProtocolVersionProvider(),
+                productVersion: productVersion,
+                interviewInformationFactory: interviews,
+                authorizedUser: authorizedUser);
+
+            // Act
+            HttpResponseMessage httpResponseMessage = interviewerApiController.CheckCompatibility(deviceId, 7090);
+
+            // Assert
+            Assert.That(httpResponseMessage.StatusCode, Is.EqualTo(HttpStatusCode.UpgradeRequired));
         }
 
         [Test]

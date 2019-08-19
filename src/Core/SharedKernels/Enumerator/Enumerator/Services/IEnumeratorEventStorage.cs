@@ -13,5 +13,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         List<CommittedEvent> GetPendingEvents(Guid interviewId);
         bool HasEventsAfterSpecifiedSequenceWithAnyOfSpecifiedTypes(long sequence, Guid eventSourceId, params string[] typeNames);
         int GetMaxSequenceForAnyEvent(Guid interviewId, params string[] typeNames);
+
+        List<Guid> GetListOfAllItemsIds();
     }
 }

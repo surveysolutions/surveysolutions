@@ -43,7 +43,8 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests
                 typeof(TimeSpanBetweenStatusesMap),
                 typeof(QuestionAnswerMap),
                 typeof(InterviewStatisticsReportRowMap),
-                typeof(InterviewCommentedStatusMap)
+                typeof(InterviewCommentedStatusMap),
+                typeof(InterviewCommentMap)
             }, true);
 
             UnitOfWork = IntegrationCreate.UnitOfWork(sessionFactory);

@@ -20,7 +20,7 @@ using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.SharedKernels.Enumerator.Denormalizer
 {
-    public class InterviewDashboardEventHandler : BaseDenormalizer,
+    public class InterviewDashboardEventHandler : BaseDenormalizer, IGlobalLiteEventHandler,
                                          IEventHandler<InterviewCreated>,
                                          IEventHandler<SynchronizationMetadataApplied>,
                                          IEventHandler<InterviewSynchronized>,
@@ -56,6 +56,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
         private readonly IPlainStorage<PrefilledQuestionView> prefilledQuestions;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IAnswerToStringConverter answerToStringConverter;
+        private readonly ILiteEventRegistry liteEventRegistry;
 
         public InterviewDashboardEventHandler(IPlainStorage<InterviewView> interviewViewRepository, 
             IPlainStorage<PrefilledQuestionView> prefilledQuestions,

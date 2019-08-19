@@ -7,6 +7,7 @@ using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
@@ -36,7 +37,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
 
             var multiOptionAnswer = Create.Entity.InterviewTreeMultiOptionQuestion(new[] { 1m });
 
-            var interview = Mock.Of<IStatefulInterview>(x => x.GetMultiOptionQuestion(questionId) == multiOptionAnswer);
+            var interview = Mock.Of<IStatefulInterview>(x => x.GetMultiOptionQuestion(questionId) == multiOptionAnswer
+                                                             && x.GetQuestionComments(questionId, It.IsAny<bool>()) == new List<AnswerComment>());
 
             var questionnaireStorage = new Mock<IQuestionnaireStorage>();
             var interviewRepository = new Mock<IStatefulInterviewRepository>();
