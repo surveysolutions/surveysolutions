@@ -5,7 +5,6 @@ using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -20,7 +19,7 @@ using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.SharedKernels.Enumerator.Denormalizer
 {
-    public class InterviewDashboardEventHandler : BaseDenormalizer, IGlobalLiteEventHandler,
+    public class InterviewDashboardEventHandler : BaseDenormalizer, 
                                          IEventHandler<InterviewCreated>,
                                          IEventHandler<SynchronizationMetadataApplied>,
                                          IEventHandler<InterviewSynchronized>,
@@ -56,12 +55,10 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
         private readonly IPlainStorage<PrefilledQuestionView> prefilledQuestions;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IAnswerToStringConverter answerToStringConverter;
-        private readonly ILiteEventRegistry liteEventRegistry;
 
         public InterviewDashboardEventHandler(IPlainStorage<InterviewView> interviewViewRepository, 
             IPlainStorage<PrefilledQuestionView> prefilledQuestions,
             IQuestionnaireStorage questionnaireRepository,
-            IDenormalizerRegistry denormalizerRegistry,
             IAnswerToStringConverter answerToStringConverter)
         {
             this.interviewViewRepository = interviewViewRepository;
