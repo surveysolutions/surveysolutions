@@ -86,7 +86,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool WasAnswered(Identity entityIdentity);
 
-        IEnumerable<AnswerComment> GetQuestionComments(Identity entityIdentity);
+        List<AnswerComment> GetQuestionComments(Identity entityIdentity, bool includeResolved = false);
 
         string GetRosterTitle(Identity rosterIdentity);
 
@@ -158,7 +158,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Identity> GetCommentedBySupervisorQuestionsVisibleToInterviewer();
 
-        IEnumerable<Identity> GetCommentedBySupervisorAllQuestions();
+        IEnumerable<Identity> GetCommentedBySupervisorNonResolvedQuestions();
 
         IEnumerable<Identity> GetAllCommentedEnabledQuestions();
 

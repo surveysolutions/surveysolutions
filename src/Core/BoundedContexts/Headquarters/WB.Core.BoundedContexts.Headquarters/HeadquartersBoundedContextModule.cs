@@ -78,6 +78,7 @@ using WB.Enumerator.Native.Questionnaire.Impl;
 using WB.Enumerator.Native.WebInterview;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
@@ -234,7 +235,6 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.RegisterDenormalizer<InterviewSummaryCompositeDenormalizer>();
             registry.RegisterDenormalizer<InterviewLifecycleEventHandler>();
-            registry.RegisterDenormalizer<InterviewExportedCommentariesDenormalizer>();
             registry.RegisterDenormalizer<CumulativeChartDenormalizer>();
 
             registry.Bind<IInterviewPackagesService, IInterviewBrokenPackagesService, InterviewPackagesService>();
@@ -317,6 +317,10 @@ namespace WB.Core.BoundedContexts.Headquarters
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
+            var registry = serviceLocator.GetInstance<IDenormalizerRegistry>();
+            registry.RegisterFunctional<InterviewSummaryCompositeDenormalizer>();
+            registry.RegisterFunctional<CumulativeChartDenormalizer>();
+
             CommandRegistry
                 .Setup<Questionnaire>()
                 .ResolvesIdFrom<QuestionnaireCommand>(command => command.QuestionnaireId)
@@ -355,6 +359,7 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .Handles<AssignSupervisorCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AssignSupervisor(command.UserId,command.SupervisorId,command.OriginDate))
                 .Handles<MoveInterviewToTeam>(command => command.InterviewId, (command, aggregate) => aggregate.MoveInterviewToTeam(command))
                 .Handles<AssignResponsibleCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AssignResponsible(command))
+                .Handles<ResolveCommentAnswerCommand>(command => command.InterviewId, (command, aggregate) => aggregate.ResolveComment(command))
                 .Handles<CommentAnswerCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CommentAnswer(command.UserId, command.QuestionId, command.RosterVector, command.OriginDate, command.Comment))
                 .Handles<DeleteInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.Delete(command.UserId, command.OriginDate))
                 .Handles<HqApproveInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.HqApprove(command.UserId, command.Comment, command.OriginDate))
@@ -377,6 +382,12 @@ namespace WB.Core.BoundedContexts.Headquarters
             
             CommandRegistry.Configure<StatefulInterview, InterviewCommand>(configuration => 
                 configuration
+                .PreProcessBy<InterviewCacheWarmupPreProcessor>()
+                    .SkipPreProcessFor<HardDeleteInterview>()
+                    .SkipPreProcessFor<DeleteInterviewCommand>()
+                    .SkipPreProcessFor<MarkInterviewAsReceivedByInterviewer>()
+                    .SkipPreProcessFor<AssignInterviewerCommand>()
+                    .SkipPreProcessFor<AssignSupervisorCommand>()
                 .PostProcessBy<InterviewSummaryErrorsCountPostProcessor>()
                     .SkipPostProcessFor<HardDeleteInterview>()
                     .SkipPostProcessFor<DeleteInterviewCommand>()

@@ -14,7 +14,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             this.serializer = serializer;
         }
 
-        public async Task<T> FromPayloadAsync<T>(byte[] payload)
+        public Task<T> FromPayloadAsync<T>(byte[] payload)
         {
             using (var ms = new MemoryStream(payload))
             {
@@ -22,14 +22,15 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 {
                     using (var sr = new StreamReader(zip))
                     {
-                        var json = await sr.ReadToEndAsync();
-                        return this.serializer.Deserialize<T>(json);
+                        // TODO: Fix to async as soon https://github.com/xamarin/xamarin-android/issues/3397 fixed
+                        var json = sr.ReadToEnd();
+                        return Task.FromResult(this.serializer.Deserialize<T>(json));
                     }
                 }
             }
         }
         
-        public async Task<byte[]> ToPayloadAsync<T>(T message)
+        public Task<byte[]> ToPayloadAsync<T>(T message)
         {
             using (var ms = new MemoryStream())
             {
@@ -38,11 +39,13 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                     using (var sw = new StreamWriter(zip))
                     {
                         var json = this.serializer.Serialize(message);
-                        await sw.WriteAsync(json);
+                        
+                        // TODO: Fix to async as soon https://github.com/xamarin/xamarin-android/issues/3397 fixed
+                        sw.Write(json);
                     }
                 }
 
-                return ms.ToArray();
+                return Task.FromResult(ms.ToArray());
             }
         }
     }

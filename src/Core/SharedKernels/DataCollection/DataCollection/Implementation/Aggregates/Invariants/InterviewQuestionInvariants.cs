@@ -20,21 +20,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             public static readonly string InterviewId = "Interview ID";
             public static readonly string QuestionId = "Question ID";
             public static readonly string Variable = "Variable";
-            public static readonly string ProvidedAnswerValue= "ProvidedAnswer";
+            public static readonly string ProvidedAnswerValue = "ProvidedAnswer";
             public static readonly string AvailableAnswersList = "AvailableAnswers";
             public static readonly string MaxAnswersCount = "MaxAnswersCount";
             public static readonly string AnswersCount = "AnswersCount";
             public static readonly string DecimalPlacesAllowed = "DecimalPlacesAllowed";
             public static readonly string MaxRosterRowCount = "MaxRosterRowCount";
             public static readonly string AvailableRosterVectors = "AvailableRosterVectors";
+            public static readonly string CommentId = "CommentId";
             public static readonly string ParentValue = "ParentValue";
             public static readonly string ProtectedAnswer = "ProtectedAnswer";
         }
 
         private readonly IQuestionOptionsRepository questionOptionsRepository;
 
-        public InterviewQuestionInvariants(Identity questionIdentity, 
-            IQuestionnaire questionnaire, 
+        public InterviewQuestionInvariants(Identity questionIdentity,
+            IQuestionnaire questionnaire,
             InterviewTree interviewTree,
             IQuestionOptionsRepository questionOptionsRepository)
         {
@@ -404,7 +405,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
         {
             if (answers.Any(x => string.IsNullOrWhiteSpace(x.Item2)))
                 throw new InterviewException(
-                    $"String values should be not empty or whitespaces for question"){
+                    $"String values should be not empty or whitespaces for question")
+                {
                     Data =
                     {
                         {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
@@ -483,7 +485,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             return this;
         }
 
-        
+
 
         private InterviewQuestionInvariants RequireOptionsExist(IReadOnlyCollection<int> values)
         {
@@ -547,7 +549,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
             if (maxAnswersCountLimit.HasValue && answers.Length > maxAnswersCountLimit.Value)
                 throw new InterviewException(
-                    $"Answers exceed MaxAnswerCount limit") {
+                    $"Answers exceed MaxAnswerCount limit")
+                {
                     Data =
                     {
                         {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
@@ -797,5 +800,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             => JoinUsingCommas(values.Select(value => value.ToString(CultureInfo.InvariantCulture)));
 
         private static string JoinUsingCommas(IEnumerable<string> values) => string.Join(", ", values);
+
+        public void RequireCommentExists()
+        {
+            var question = this.InterviewTree.GetQuestion(this.QuestionIdentity);
+            bool comment = question.AnswerComments.Any(x => !x.Resolved);
+
+            if (!comment)
+            {
+                throw new InterviewException("All question comments are already resolved", InterviewDomainExceptionType.QuestionIsMissing)
+                {
+                    Data =
+                    {
+                        {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
+                        {ExceptionKeys.QuestionId, this.QuestionIdentity.ToString()}
+                    }
+                };
+            }
+        }
     }
 }

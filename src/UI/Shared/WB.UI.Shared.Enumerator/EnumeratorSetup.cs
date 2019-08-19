@@ -103,7 +103,7 @@ namespace WB.UI.Shared.Enumerator
 
             registry.AddOrOverwrite("EnumToString", new EnumToStringConverter());
             registry.AddOrOverwrite("GroupStateToColor", new GroupStateToColorConverter());
-            registry.AddOrOverwrite("IsCurrentUserCommentToColor", new IsCurrentUserCommentToColorConverter());
+            registry.AddOrOverwrite("CommentStateToColor", new IsCurrentUserCommentToColorConverter());
             registry.AddOrOverwrite("ToGoogleMapUrl", new ToGoogleMapUrlConverter());
             registry.AddOrOverwrite("InMemoryImageValueWithDefault", new InMemoryImageValueWithDefaultConverter());
             registry.AddOrOverwrite("QuestionLayoutStyleBackground", new QuestionLayoutStyleBackgroundConverter());

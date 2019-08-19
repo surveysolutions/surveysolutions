@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Moq;
-using Ncqrs.Domain;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using NSubstitute;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -58,7 +56,9 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 
         }
 
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp]
+        public void context()
+        {
             publishableEvent = Create.Fake.PublishableEvent(payload: new FunctionalEventHandlerEvent());
 
             var failingFunctionalEventHandler = new FailingFunctionalEventHandler(Mock.Of<IReadSideStorage<IReadSideRepositoryEntity>>());
@@ -67,6 +67,10 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
             var serviceLocator = new Mock<IServiceLocator>();
             serviceLocator.Setup(x => x.GetInstance(secondFunctionalEventHandler.GetType())).Returns(secondFunctionalEventHandler);
             serviceLocator.Setup(x => x.GetInstance(failingFunctionalEventHandler.GetType())).Returns(failingFunctionalEventHandler);
+
+            var denormalizerRegistry = Create.Service.DenormalizerRegistry();
+            denormalizerRegistry.RegisterFunctional<FailingFunctionalEventHandler>();
+            denormalizerRegistry.RegisterFunctional<FunctionalEventHandler>();
 
             eventDispatcher = Create.Service.NcqrCompatibleEventDispatcher(logger: loggerMock.Object,
                 eventBusSettings: new EventBusSettings()
@@ -77,12 +81,8 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
                     },
                     DisabledEventHandlerTypes = new Type[0]
                 },
-                serviceLocator: serviceLocator.Object);
-            eventDispatcher.OnCatchingNonCriticalEventHandlerException +=
-                (e) => { handledNonCriticalEventHandlerException = e; };
+                serviceLocator: serviceLocator.Object, denormalizerRegistry: denormalizerRegistry);
 
-            eventDispatcher.Register(failingFunctionalEventHandler);
-            eventDispatcher.Register(secondFunctionalEventHandler);
             BecauseOf();
         }
 
@@ -90,25 +90,21 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
             aggregateException = Assert.Throws<AggregateException>(() =>
                 eventDispatcher.Publish(publishableEvent.ToEnumerable().ToArray()));
 
-        [NUnit.Framework.Test] public void should_throw_AggregateException () =>
+        [NUnit.Framework.Test]
+        public void should_throw_AggregateException() =>
             aggregateException.Should().NotBeNull();
 
-        [NUnit.Framework.Test] public void should_put_1_exception_to_AggregateException () =>
+        [NUnit.Framework.Test]
+        public void should_put_1_exception_to_AggregateException() =>
             aggregateException.InnerExceptions.Count.Should().Be(1);
 
-        [NUnit.Framework.Test] public void should_log_catched_exception () =>
+        [NUnit.Framework.Test]
+        public void should_log_catched_exception() =>
             loggerMock.Verify(x => x.Error(Moq.It.IsAny<string>(), Moq.It.IsAny<Exception>()), Times.Once);
-
-        [NUnit.Framework.Test] public void should_be_handled_event_handler_exception () =>
-            handledNonCriticalEventHandlerException.Should().NotBeNull();
-
-        [NUnit.Framework.Test] public void should_not_event_handler_exception_be_critical () =>
-            handledNonCriticalEventHandlerException.IsCritical.Should().BeFalse();
 
         private static NcqrCompatibleEventDispatcher eventDispatcher;
         private static IPublishableEvent publishableEvent;
         private static AggregateException aggregateException;
-        private static EventHandlerException handledNonCriticalEventHandlerException;
         private static readonly Mock<ILogger> loggerMock = new Mock<ILogger>();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -169,15 +170,26 @@ namespace WB.UI.Headquarters.API.PublicApi
             return this.Ok();
         }
 
+        /// <summary>
+        /// Returns audit log records for interviewer.
+        /// You can specify "start" and "end" parameters in query string to get range results.
+        /// </summary>
+        /// <param name="id">User id</param>
+        /// <param name="start" >Start datetime. If isn't specified then return data for last 7 days.</param>
+        /// <param name="end">End datetime. If isn't specified then get data for 7 days from start data.</param>
         [HttpGet]
         [Route("interviewers/{id:guid}/actions-log")]
-        public HttpResponseMessage ActionsLog(Guid id)
+        public AuditLogRecordApiView[] ActionsLog(Guid id, DateTime? start = null, DateTime? end = null)
         {
-            var fileContent = auditLogService.GenerateTabFile(id, showErrorMessage: false);
-            HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
-            result.Content = new StreamContent(new MemoryStream(fileContent));
-            result.Content.Headers.ContentType = new MediaTypeHeaderValue("text/csv");
-            return result;
+            DateTime startDate = start ?? DateTime.UtcNow.AddDays(-7);
+            DateTime endDate = end ?? startDate.AddDays(7);
+
+            var records = auditLogService.GetRecords(id, startDate, endDate, showErrorMessage: false);
+            return records.Select(record => new AuditLogRecordApiView()
+            {
+                Time = record.Time,
+                Message = record.Message,
+            }).ToArray();
         }
     }
 }

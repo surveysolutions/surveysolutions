@@ -4,7 +4,6 @@ using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -22,8 +21,7 @@ namespace WB.UI.Supervisor
         public SupervisorAppStart(IMvxApplication application, IMvxNavigationService navigationService,
             IViewModelNavigationService viewModelNavigation,
             IPlainStorage<SupervisorIdentity> users,
-            IApplicationCypher applicationCypher
-        ) : base(application, navigationService)
+            IApplicationCypher applicationCypher) : base(application, navigationService)
         {
             this.viewModelNavigation = viewModelNavigation;
             this.users = users;
@@ -32,9 +30,6 @@ namespace WB.UI.Supervisor
 
         protected override Task<object> ApplicationStartup(object hint = null)
         {
-            Mvx.IoCProvider.GetSingleton<IDenormalizerRegistry>()
-                .RegisterDenormalizer(Mvx.IoCProvider.GetSingleton<InterviewDashboardEventHandler>());
-
             var logger = Mvx.IoCProvider.Resolve<ILoggerProvider>().GetFor<SupervisorAppStart>();
             logger.Info($"Application started. Version: {typeof(SplashActivity).Assembly.GetName().Version}");
 
