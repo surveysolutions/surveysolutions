@@ -149,12 +149,21 @@ export default {
         dispatch("fetchSearchResults")
     }, 200),
 
-    refreshSectionState: debounce(({ dispatch }) => {
-        dispatch("fetchSectionEnabledStatus")
-        dispatch("fetchBreadcrumbs")
-        dispatch("fetchEntity", { id: "NavigationButton", source: "server" })
-        dispatch("fetchSidebar")
-        dispatch("fetchInterviewStatus")
+    refreshSectionState({ commit, dispatch }) {
+        commit("SET_LOADING_PROGRESS", true);
+        dispatch("_refreshSectionState");
+    },
+
+    _refreshSectionState: debounce(({ dispatch, commit }) => {
+        try {
+            dispatch("fetchSectionEnabledStatus");
+            dispatch("fetchBreadcrumbs");
+            dispatch("fetchEntity", { id: "NavigationButton", source: "server" });
+            dispatch("fetchSidebar");
+            dispatch("fetchInterviewStatus");
+        } finally {
+            commit("SET_LOADING_PROGRESS", false);
+        }
     }, 200),
 
     fetchSectionEntities: debounce(async ({ dispatch, commit, rootState }) => {
