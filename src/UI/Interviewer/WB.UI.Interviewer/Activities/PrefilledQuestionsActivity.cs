@@ -1,5 +1,6 @@
 using Android.App;
 using Android.Views;
+using Java.Interop;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator.Activities;
@@ -22,6 +23,12 @@ namespace WB.UI.Interviewer.Activities
         {
             await this.ViewModel.NavigateBack();
             this.Finish();
+        }
+
+        [Export("StartInterviewApi")]
+        public void StartInterviewApi()
+        {
+            this.ViewModel.StartInterviewAsync().Wait();
         }
 
         protected override MenuDescription MenuDescriptor => new MenuDescription

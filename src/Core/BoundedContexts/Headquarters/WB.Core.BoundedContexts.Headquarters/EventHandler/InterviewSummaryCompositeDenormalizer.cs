@@ -21,6 +21,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             InterviewStatusTimeSpanDenormalizer statusTimeSpanDenormalizer,
             IInterviewStatisticsReportDenormalizer statisticsReportDenormalizer, 
             InterviewGeoLocationAnswersDenormalizer geoLocationAnswersDenormalizer, 
+            InterviewExportedCommentariesDenormalizer commentsDenormalizer,
             IMemoryCache memoryCache) : base(readSideStorage)
         {
             this.summaries = summaries;
@@ -31,7 +32,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 historyDenormalizerFunctional,
                 statusTimeSpanDenormalizer,
                 geoLocationAnswersDenormalizer,
-                statisticsReportDenormalizer
+                statisticsReportDenormalizer,
+                commentsDenormalizer
             };
         }
 

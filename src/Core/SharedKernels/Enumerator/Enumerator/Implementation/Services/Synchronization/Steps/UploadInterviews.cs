@@ -83,7 +83,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
                     if (!uploadState.IsEventsUploaded)
                     {
-                        var interviewPackage = this.interviewFactory.GetInteviewEventsPackageOrNull(completedInterview.InterviewId);
+                        var interviewPackage = this.interviewFactory.GetInterviewEventsPackageOrNull(completedInterview.InterviewId);
 
                         if (interviewPackage != null)
                         {
@@ -115,7 +115,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 }
             }
         }
-
         private async Task UploadImagesByCompletedInterviewAsync(Guid interviewId, InterviewUploadState uploadState,
             IProgress<SyncProgressInfo> progress,
             CancellationToken cancellationToken)

@@ -185,7 +185,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 }
                 else if (ex.Call.Response != null)
                 {
-                    var reasonPhrase = await GetReasonPhrase(ex);
+                    var reasonPhrase = GetReasonPhrase(ex);
                     throw new RestException(reasonPhrase, statusCode: ex.Call.Response.StatusCode, innerException: ex);
                 }
                 else
@@ -211,12 +211,12 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             }
         }
 
-        private async Task<string> GetReasonPhrase(ExtendedMessageHandlerException ex)
+        private string GetReasonPhrase(ExtendedMessageHandlerException ex)
         {
             try
             {
                 var responseMessage = ex.Call.Response;
-                var responseContent = await responseMessage.Content.ReadAsByteArrayAsync();
+                var responseContent = responseMessage.Content.ReadAsByteArrayAsync().Result;
                 var restContentCompressionType = this.GetContentCompressionType(responseMessage.Content.Headers);
                 var decompressedContent = DecompressedContentFromHttpResponseMessage(restContentCompressionType, responseContent);
                 var jsonFromHttpResponseMessage = this.synchronizationSerializer.Deserialize<ResponseWithErrorMessage>(decompressedContent);

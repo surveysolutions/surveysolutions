@@ -2011,6 +2011,7 @@
     <Compile Include="API\DataCollection\AssignmentsControllerBase.cs" />
     <Compile Include="API\DataCollection\AuditLogControllerBase.cs" />
     <Compile Include="API\DataCollection\AppApiControllerBase.cs" />
+    <Compile Include="API\PublicApi\Models\AuditLogApiView.cs" />
     <Compile Include="Services\ClientApkProvider.cs" />
     <Compile Include="Services\IClientApkProvider.cs" />
     <Compile Include="API\DataCollection\Interviewer\InterviewerCommonWebApiConfig.cs" />
@@ -2073,7 +2074,7 @@
     <Compile Include="API\WebInterview\LinksExportController.cs" />
     <Compile Include="API\PagedApiResponse.cs" />
     <Compile Include="API\WebInterview\Pipeline\WebInterviewAuthorizeAttribute.cs" />
-    <Compile Include="API\WebInterview\Pipeline\WebInterviewStateManager.cs" />
+    <Compile Include="API\WebInterview\Pipeline\HandlePauseEventPipelineModule.cs" />
     <Compile Include="API\WebInterview\SearchResults.cs" />
     <Compile Include="API\WebInterview\Services\HqWebInterviewInterviewEntityFactory.cs" />
     <Compile Include="API\WebInterview\IInterviewOverviewService.cs" />

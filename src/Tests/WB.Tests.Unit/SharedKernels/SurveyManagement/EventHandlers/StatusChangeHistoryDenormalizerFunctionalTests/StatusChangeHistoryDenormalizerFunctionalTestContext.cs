@@ -30,6 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
                 new InterviewStatusTimeSpanDenormalizer(), 
                 Mock.Of<IInterviewStatisticsReportDenormalizer>(),
                 new InterviewGeoLocationAnswersDenormalizer(null, questionnaireStorage),
+                new InterviewExportedCommentariesDenormalizer(userViewFactory, questionnaireStorage), 
                 Create.Storage.NewMemoryCache());
         }
 

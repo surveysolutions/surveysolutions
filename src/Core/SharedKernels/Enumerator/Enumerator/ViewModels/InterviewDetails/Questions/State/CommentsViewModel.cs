@@ -7,12 +7,14 @@ using Main.Core.Entities.SubEntities;
 using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
@@ -21,26 +23,37 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
-    public class CommentsViewModel : MvxNotifyPropertyChanged,
-        ICompositeEntity
+    public enum CommentState
     {
-        public event EventHandler<EventArgs> CommentsInputShown; 
+        OwnComment = 0,
+        ResolvedComment = 1,
+        OtherUserComment = 2
+    }
+
+    public class CommentsViewModel : MvxNotifyPropertyChanged,
+        ILiteEventHandler<AnswerCommentResolved>,
+        ICompositeEntity,
+        IDisposable
+    {
+        public event EventHandler<EventArgs> CommentsInputShown;
 
         public class CommentViewModel
         {
             public string Comment { get; set; }
 
-            public string CommentCaption  { get; set; }
-
-            public bool IsCurrentUserComment { get; set; }
+            public string CommentCaption { get; set; }
 
             public Identity Identity { get; set; }
+
+            public CommentState CommentState { get; set; }
+            public UserRoles UserRole { get; set; }
         }
 
         private readonly IStatefulInterviewRepository interviewRepository;
         private IStatefulInterview interview;
         private readonly ICommandService commandService;
-        private readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
+        private readonly ILiteEventRegistry eventRegistry;
+        private readonly IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher;
         private readonly IPrincipal principal;
 
         protected CommentsViewModel() { }
@@ -49,12 +62,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterviewRepository interviewRepository,
             IPrincipal principal,
             ICommandService commandService,
-            IMvxMainThreadAsyncDispatcher mainThreadDispatcher)
+            ILiteEventRegistry eventRegistry,
+            IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher)
         {
             this.interviewRepository = interviewRepository;
             this.principal = principal;
             this.commandService = commandService;
-            this.mainThreadDispatcher = mainThreadDispatcher;
+            this.eventRegistry = eventRegistry;
+            this.mvxMainThreadDispatcher = mvxMainThreadDispatcher;
         }
 
         private string interviewId;
@@ -62,24 +77,39 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
+            this.eventRegistry.Subscribe(this, interviewId);
             this.interviewId = interviewId ?? throw new ArgumentNullException(nameof(interviewId));
             this.Identity = entityIdentity ?? throw new ArgumentNullException(nameof(entityIdentity));
 
             this.interview = this.interviewRepository.Get(interviewId);
-            this.UpdateCommentsFromInterview().WaitAndUnwrapException();
 
+            var questionComments = interview.GetQuestionComments(this.Identity, true);
+            var anyResolvedCommentsExists = questionComments.Any(x => x.Resolved);
+            this.ShowResolvedCommentsVisible = anyResolvedCommentsExists;
+            this.ShowResolvedComments = false;
             this.HasComments = !string.IsNullOrWhiteSpace(this.InterviewerComment);
         }
 
-        private async Task UpdateCommentsFromInterview()
+        private void UpdateCommentsFromInterview(bool showResolved = false)
         {
-            var comments = interview.GetQuestionComments(this.Identity) ?? new List<AnswerComment>();
+            var allQuestionComments = interview.GetQuestionComments(this.Identity, true) ?? new List<AnswerComment>();
+            var visibleComments = allQuestionComments.Where(x => x.Resolved == showResolved).ToList();
 
-            await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
-            {
-                this.Comments.Clear();
-                comments.Select(this.ToViewModel).ForEach(x => this.Comments.Add(x));
-            });
+            this.ShowResolvedCommentsVisible = allQuestionComments.Any(x => x.Resolved);
+            this.Comments.Clear();
+            visibleComments.Select(this.ToViewModel).ForEach(x => this.Comments.Add(x));
+            ShowHideResolveButton();
+        }
+
+        private void ShowHideResolveButton()
+        {
+            var principalCurrentUserIdentity = this.principal.CurrentUserIdentity;
+            bool anyHqComment = this.Comments.Any(x => x.CommentState != CommentState.ResolvedComment
+                                                        && x.UserRole == UserRoles.Headquarter || x.UserRole == UserRoles.Administrator);
+
+            this.ResolveCommentsButtonVisible = principalCurrentUserIdentity.UserId == this.interview.SupervisorId
+                                                && this.Comments.Any(x => x.CommentState != CommentState.ResolvedComment)
+                                                && !anyHqComment;
         }
 
         private CommentViewModel ToViewModel(AnswerComment comment)
@@ -87,12 +117,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var isCurrentUserComment = comment.UserId == this.principal.CurrentUserIdentity.UserId;
             var commentCaption = GetCommentCaption(comment);
 
+            CommentState commentState;
+            if (comment.Resolved)
+            {
+                commentState = CommentState.ResolvedComment;
+            }
+            else
+            {
+                commentState = isCurrentUserComment ? CommentState.OwnComment : CommentState.OtherUserComment;
+            }
+
             return new CommentViewModel
             {
                 Comment = comment.Comment,
-                IsCurrentUserComment = isCurrentUserComment,
                 CommentCaption = commentCaption,
-                Identity = this.Identity
+                Identity = this.Identity,
+                CommentState = commentState,
+                UserRole = comment.UserRole
             };
         }
 
@@ -120,6 +161,43 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public int MaxTextLength => AnswerUtils.TextAnswerMaxLength;
 
+        public string ShowResolvedCommentsBtnText
+        {
+            get => showResolvedCommentsBtnText;
+            set => SetProperty(ref showResolvedCommentsBtnText, value);
+        }
+
+        public bool ShowResolvedCommentsVisible
+        {
+            get => showResolvedCommentsVisible;
+            private set => SetProperty(ref showResolvedCommentsVisible, value);
+        }
+
+        public bool ResolveCommentsButtonVisible
+        {
+            get => resolveCommentsButtonVisible;
+            private set => SetProperty(ref resolveCommentsButtonVisible, value);
+        }
+
+        private bool ShowResolvedComments
+        {
+            get => showResolvedComments;
+            set
+            {
+                if (value)
+                {
+                    ShowResolvedCommentsBtnText = UIResources.Interview_Question_HideResolvedComments;
+                }
+                else
+                {
+                    ShowResolvedCommentsBtnText = UIResources.Interview_Question_ShowResolvedComments;
+                }
+
+                UpdateCommentsFromInterview(value);
+                this.showResolvedComments = value;
+            }
+        }
+
         private bool hasComments;
         public bool HasComments
         {
@@ -140,6 +218,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         private string interviewerComment;
+        private string showResolvedCommentsBtnText;
+        private bool showResolvedComments;
+        private bool resolveCommentsButtonVisible;
+        private bool showResolvedCommentsVisible;
+
         public string InterviewerComment
         {
             get { return this.interviewerComment; }
@@ -157,6 +240,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public IMvxAsyncCommand InterviewerCommentChangeCommand => new MvxAsyncCommand(async () =>
             await this.SendCommentQuestionCommandAsync(), () => this.principal.IsAuthenticated);
 
+        public IMvxCommand ToggleShowResolvedComments => new MvxCommand(() =>
+        {
+            this.ShowResolvedComments = !this.ShowResolvedComments;
+        });
+
+        public IMvxAsyncCommand ResolveComments => new MvxAsyncCommand(async () =>
+        {
+            await this.commandService.ExecuteAsync(
+                    new ResolveCommentAnswerCommand(
+                        interviewId: Guid.Parse(this.interviewId),
+                        userId: this.principal.CurrentUserIdentity.UserId,
+                        questionId: this.Identity.Id,
+                        rosterVector: this.Identity.RosterVector))
+                .ConfigureAwait(false);
+        });
+
         private async Task SendCommentQuestionCommandAsync()
         {
             await this.commandService.ExecuteAsync(
@@ -165,10 +264,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     userId: this.principal.CurrentUserIdentity.UserId,
                     questionId: this.Identity.Id,
                     rosterVector: this.Identity.RosterVector,
-                    comment: this.InterviewerComment)).ConfigureAwait(false);
+                    comment: this.InterviewerComment))
+                .ConfigureAwait(false);
 
-            await this.UpdateCommentsFromInterview();
+            await this.mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() => UpdateCommentsFromInterview());
 
+            ShowHideResolveButton();
             this.InterviewerComment = "";
             this.IsCommentInEditMode = false;
         }
@@ -180,5 +281,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         protected virtual void OnCommentsInputShown() => this.CommentsInputShown?.Invoke(this, EventArgs.Empty);
+
+        public void Handle(AnswerCommentResolved @event)
+        {
+            if (@event.QuestionId == this.Identity.Id &&
+                @event.RosterVector.Identical(this.Identity.RosterVector))
+            {
+                this.mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() => UpdateCommentsFromInterview(this.showResolvedComments));
+            }
+        }
+
+        public void Dispose()
+        {
+            this.eventRegistry.Unsubscribe(this);
+        }
     }
 }
