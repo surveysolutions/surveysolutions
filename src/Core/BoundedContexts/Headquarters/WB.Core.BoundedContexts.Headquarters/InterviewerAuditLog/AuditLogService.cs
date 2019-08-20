@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
 using System.Linq;
-using CsvHelper;
-using CsvHelper.Configuration;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -16,99 +12,53 @@ namespace WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog
 {
     public class AuditLogService: IAuditLogService
     {
-        private readonly IUserViewFactory usersRepository;
         private readonly IAuditLogFactory auditLogFactory;
         private readonly IAuthorizedUser authorizedUser;
 
-        public AuditLogService(IUserViewFactory usersRepository,
-            IAuditLogFactory auditLogFactory,
+        public AuditLogService(IAuditLogFactory auditLogFactory,
             IAuthorizedUser authorizedUser)
         {
-            this.usersRepository = usersRepository;
             this.auditLogFactory = auditLogFactory;
             this.authorizedUser = authorizedUser;
         }
 
-        public InterviewerAuditLogResult GetLastExisted7DaysRecords(Guid id, DateTime? startDateTime = null, bool showErrorMessage = false)
+        public AuditLogQueryResult GetLastExisted7DaysRecords(Guid id, DateTime? startDateTime = null, bool showErrorMessage = false)
         {
             if (!startDateTime.HasValue)
                 startDateTime = DateTime.UtcNow.AddDays(1);
 
-            var records = auditLogFactory.GetLastExisted7DaysRecords(id, startDateTime.Value);
+            var result = auditLogFactory.GetLastExisted7DaysRecords(id, startDateTime.Value);
 
-            var recordsByDate = new Dictionary<DateTime, List<AuditLogRecord>>();
-            foreach (var record in records.Records)
+            return new AuditLogQueryResult()
             {
-                if (!recordsByDate.ContainsKey(record.Time.Date))
-                    recordsByDate.Add(record.Time.Date, new List<AuditLogRecord>());
-
-                recordsByDate[record.Time.Date].Add(record);
-            }
-
-            return new InterviewerAuditLogResult()
-            {
-                NextBatchRecordDate = records.NextBatchRecordDate,
-                Records = recordsByDate.Select(kv => new InterviewerAuditLogDateRecords()
-                {
-                    Date = kv.Key,
-                    RecordsByDate = kv.Value.Select(r => new InterviewerAuditLogRecord()
-                    {
-                        Time = r.Time,
-                        Type = r.Type,
-                        Message = GetUserMessage(r, showErrorMessage),
-                        Description = GetMessageDescription(r, showErrorMessage)
-                    }).OrderByDescending(i => i.Time).ToArray()
-                }).OrderByDescending(i => i.Date).ToArray()
-            }; 
-        }
-
-        public byte[] GenerateTabFile(Guid id, bool showErrorMessage = false)
-        {
-            var userView = usersRepository.GetUser(new UserViewInputModel(id));
-            if (userView == null || (!userView.IsInterviewer() && !userView.IsSupervisor()))
-                throw new InvalidOperationException($"User with id: {id} don't found");
-
-            var records = auditLogFactory.GetRecords(id);
-
-            var csvConfiguration = new Configuration
-            {
-                HasHeaderRecord = true,
-                TrimOptions = TrimOptions.Trim,
-                IgnoreQuotes = false,
-                Delimiter = "\t",
-                MissingFieldFound = null,
+                NextBatchRecordDate = result.NextBatchRecordDate,
+                Items = GetAuditLogRecordItems(result.Records, showErrorMessage).ToArray()
             };
-
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                using (StreamWriter streamWriter = new StreamWriter(memoryStream))
-                using (CsvWriter csvWriter = new CsvWriter(streamWriter, csvConfiguration))
-                {
-                    csvWriter.WriteField("Timestamp");
-                    csvWriter.WriteField("Action");
-                    csvWriter.NextRecord();
-
-                    foreach (var record in records)
-                    {
-                        csvWriter.WriteField(record.Time.ToString(CultureInfo.InvariantCulture));
-                        var message = GetUserMessage(record, showErrorMessage);
-                        if (showErrorMessage && authorizedUser.IsAdministrator)
-                        {
-                            message += "\r\n" + GetMessageDescription(record, showErrorMessage);
-                        }
-                        csvWriter.WriteField(message);
-                        csvWriter.NextRecord();
-                    }
-
-                    csvWriter.Flush();
-                    streamWriter.Flush();
-
-                    var fileContent = memoryStream.ToArray();
-                    return fileContent;
-                }
-            }
         }
 
+        public IEnumerable<AuditLogRecordItem> GetAllRecords(Guid id, bool showErrorMessage = false)
+        {
+            var records = auditLogFactory.GetRecords(id);
+            return GetAuditLogRecordItems(records, showErrorMessage);
+        }
+
+        public IEnumerable<AuditLogRecordItem> GetRecords(Guid id, DateTime start, DateTime end, bool showErrorMessage = false)
+        {
+            var records = auditLogFactory.GetRecords(id, start, end);
+            return GetAuditLogRecordItems(records, showErrorMessage);
+        }
+
+        IEnumerable<AuditLogRecordItem> GetAuditLogRecordItems(IEnumerable<AuditLogRecord> records, bool showErrorMessage)
+        {
+            return records.Select(record => new AuditLogRecordItem()
+            {
+                Time = record.Time,
+                Type = record.Type,
+                Message = GetUserMessage(record, showErrorMessage),
+                Description = GetMessageDescription(record, showErrorMessage),
+            });
+        }
+        
         private string GetUserMessage(AuditLogRecord record, bool showErrorMessage)
         {
             switch (record.Type)

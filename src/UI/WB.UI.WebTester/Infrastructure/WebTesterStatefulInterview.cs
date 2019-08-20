@@ -3,6 +3,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.UI.WebTester.Services;
 
@@ -16,11 +17,13 @@ namespace WB.UI.WebTester.Infrastructure
             ISubstitutionTextFactory substitutionTextFactory,
             IAppdomainsPerInterviewManager appdomainsPerInterviewManager,
             IInterviewTreeBuilder treeBuilder,
+            IQuestionOptionsRepository optionsRepository,
             IServiceLocator serviceLocator
             ) 
             : base(
                 substitutionTextFactory, 
-                treeBuilder
+                treeBuilder,
+                optionsRepository
                 )
         {
             this.appdomainsPerInterviewManager = appdomainsPerInterviewManager;

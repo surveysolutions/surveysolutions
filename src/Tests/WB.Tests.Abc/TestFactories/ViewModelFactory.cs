@@ -259,7 +259,7 @@ namespace WB.Tests.Abc.TestFactories
             IQuestionnaireStorage questionnaireStorage = null) where T : QuestionAnswered
         {
             var questionnaireRepository = questionnaireStorage ?? Stub<IQuestionnaireStorage>.WithNotEmptyValues;
-            liteEventRegistry = liteEventRegistry ?? Stub<ILiteEventRegistry>.WithNotEmptyValues;
+            liteEventRegistry = liteEventRegistry ?? Create.Service.LiteEventRegistry();
             interviewRepository = interviewRepository ?? Stub<IStatefulInterviewRepository>.WithNotEmptyValues;
 
             var headerViewModel = new QuestionHeaderViewModel(
@@ -281,7 +281,8 @@ namespace WB.Tests.Abc.TestFactories
             var commentsViewModel = new CommentsViewModel(interviewRepository: interviewRepository,
                                     commandService: Stub<ICommandService>.WithNotEmptyValues,
                                     principal: Stub<IPrincipal>.WithNotEmptyValues,
-                                    mainThreadDispatcher: Stub.MvxMainThreadAsyncDispatcher());
+                                    eventRegistry: liteEventRegistry,
+                                    mvxMainThreadDispatcher: Stub.MvxMainThreadAsyncDispatcher());
 
             var answersRemovedNotifier = new AnswersRemovedNotifier(liteEventRegistry);
 
@@ -313,7 +314,8 @@ namespace WB.Tests.Abc.TestFactories
             var questionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
             var interviewRepository = Create.Fake.StatefulInterviewRepositoryWith(statefulInterview);
 
-            var result = new FilteredOptionsViewModel(questionnaireRepository, interviewRepository, new AnswerNotifier(Create.Service.LiteEventRegistry()));
+            var result = new FilteredOptionsViewModel(questionnaireRepository, interviewRepository, new AnswerNotifier(Create.Service.LiteEventRegistry()),
+                Mock.Of<ILogger>());
             result.Init(statefulInterview.Id.FormatGuid(), questionId, 30);
             return result;
         }
@@ -493,7 +495,7 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IServiceLocator>(),
                 Mock.Of<IAuditLogService>(),
                 Mock.Of<IViewModelNavigationService>(),
-                principal ?? Mock.Of<IPrincipal>(x => x.CurrentUserIdentity == Create.Other.SupervisorIdentity(null, null, null)),
+                principal ?? Mock.Of<IPrincipal>(x => x.CurrentUserIdentity == Create.Other.SupervisorIdentity(null, null, null, null)),
                 interviewers ?? new InMemoryPlainStorage<InterviewerDocument>());
 
             if (interviewId.HasValue)
@@ -517,7 +519,7 @@ namespace WB.Tests.Abc.TestFactories
             ISerializer serializer = null,
             IUserInteractionService userInteractionService = null)
             => new FinishInstallationViewModel(viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>(),
-                principal ?? Mock.Of<IPrincipal>(x => x.CurrentUserIdentity == Create.Other.SupervisorIdentity(null, null, null)),
+                principal ?? Mock.Of<IPrincipal>(x => x.CurrentUserIdentity == Create.Other.SupervisorIdentity(null, null, null, null)),
                 passwordHasher?? Mock.Of<IPasswordHasher>(),
                 interviewersPlainStorage ?? Mock.Of<IPlainStorage<SupervisorIdentity>>(),
                 deviceSettings ?? Mock.Of <IDeviceSettings>(),

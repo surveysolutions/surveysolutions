@@ -30,6 +30,7 @@ using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
+using WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog;
 using WB.Core.BoundedContexts.Headquarters.InterviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
@@ -110,6 +111,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.WebInterview;
+using WB.Enumerator.Native.WebInterview.Models;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
@@ -121,6 +123,7 @@ using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Services;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
+using IAuditLogService = WB.Core.SharedKernels.Enumerator.Services.IAuditLogService;
 
 namespace WB.Tests.Abc.TestFactories
 {
@@ -215,7 +218,9 @@ namespace WB.Tests.Abc.TestFactories
             IPlainStorage<InterviewMultimediaView> interviewMultimediaViewRepository = null,
             IPlainStorage<InterviewFileView> interviewFileViewRepository = null,
             IPlainStorage<InterviewSequenceView, Guid> interviewSequenceStorage = null,
-            IInterviewEventStreamOptimizer eventStreamOptimizer = null)
+            IInterviewEventStreamOptimizer eventStreamOptimizer = null,
+            ILiteEventBus eventBus = null,
+            ILogger logger = null)
             => new InterviewerInterviewAccessor(
                 questionnaireRepository ?? Mock.Of<IPlainStorage<QuestionnaireView>>(),
                 Mock.Of<IPlainStorage<PrefilledQuestionView>>(),
@@ -229,7 +234,9 @@ namespace WB.Tests.Abc.TestFactories
                 synchronizationSerializer ?? Mock.Of<IJsonAllTypesSerializer>(),
                 eventStreamOptimizer ?? Mock.Of<IInterviewEventStreamOptimizer>(),
                 Mock.Of<ILiteEventRegistry>(),
-                interviewSequenceStorage ?? Mock.Of<IPlainStorage<InterviewSequenceView, Guid>>());
+                interviewSequenceStorage ?? Mock.Of<IPlainStorage<InterviewSequenceView, Guid>>(),
+                eventBus ?? Mock.Of<ILiteEventBus>(),
+                logger?? Mock.Of<ILogger>());
 
         public InterviewEventStreamOptimizer InterviewEventStreamOptimizer()
             => new InterviewEventStreamOptimizer();
@@ -240,7 +247,8 @@ namespace WB.Tests.Abc.TestFactories
         public LiteEventBus LiteEventBus(ILiteEventRegistry liteEventRegistry = null, IEventStore eventStore = null)
             => new LiteEventBus(
                 liteEventRegistry ?? Stub<ILiteEventRegistry>.WithNotEmptyValues,
-                eventStore ?? Mock.Of<IEventStore>());
+                eventStore ?? Mock.Of<IEventStore>(),
+                Mock.Of<IGlobalLiteEventHandler>());
 
         public LiteEventRegistry LiteEventRegistry()
             => new LiteEventRegistry();
@@ -248,14 +256,14 @@ namespace WB.Tests.Abc.TestFactories
         public NcqrCompatibleEventDispatcher NcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null,
             ILogger logger = null,
             IServiceLocator serviceLocator = null,
-            params IEventHandler[] handlers)
+            IDenormalizerRegistry denormalizerRegistry = null)
             => new NcqrCompatibleEventDispatcher(
                 eventStore: Mock.Of<IEventStore>(),
                 inMemoryEventStore: Mock.Of<IInMemoryEventStore>(),
                 serviceLocator: serviceLocator ?? Mock.Of<IServiceLocator>(),
                 eventBusSettings: eventBusSettings ?? Create.Entity.EventBusSettings(),
                 logger: logger ?? Mock.Of<ILogger>(),
-                eventHandlers: handlers);
+                denormalizerRegistry: denormalizerRegistry ?? Create.Service.DenormalizerRegistry());
 
         public QuestionnaireKeyValueStorage QuestionnaireKeyValueStorage(
             IPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository = null)
@@ -269,7 +277,7 @@ namespace WB.Tests.Abc.TestFactories
                 Stub<IPlainStorageAccessor<QuestionnaireBrowseItem>>.WithNotEmptyValues);
 
         public IStatefulInterviewRepository StatefulInterviewRepository(
-            IEventSourcedAggregateRootRepository aggregateRootRepository, ILiteEventBus liteEventBus = null)
+            IEventSourcedAggregateRootRepository aggregateRootRepository)
             => new StatefulInterviewRepository(
                 aggregateRootRepository: aggregateRootRepository ?? Mock.Of<IEventSourcedAggregateRootRepository>());
 
@@ -376,8 +384,7 @@ namespace WB.Tests.Abc.TestFactories
             ICsvWriterService csvWriterService = null,
             ICsvWriter csvWriter = null,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses = null,
-            QuestionnaireExportStructure questionnaireExportStructure = null,
-            IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentaries = null)
+            QuestionnaireExportStructure questionnaireExportStructure = null)
             => new ReadSideToTabularFormatExportService(fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 csvWriter ?? Mock.Of<ICsvWriter>(_
                     => _.OpenCsvWriter(It.IsAny<Stream>(), It.IsAny<string>()) ==
@@ -912,7 +919,7 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewsToExportViewFactory InterviewsToExportViewFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries)
         {
-            return new InterviewsToExportViewFactory(new InMemoryReadSideRepositoryAccessor<InterviewCommentaries>());
+            return new InterviewsToExportViewFactory(new InMemoryReadSideRepositoryAccessor<InterviewComment>());
         }
 
         public AttachmentContentStorage AttachmentContentStorage(
@@ -1118,6 +1125,46 @@ namespace WB.Tests.Abc.TestFactories
             IWebInterviewInvoker webInterviewInvoker)
         {
             return new WebInterviewNotificationService(statefulInterviewRepository, questionnaireStorage, webInterviewInvoker);
+        }
+
+        public IDenormalizerRegistry DenormalizerRegistry()
+        {
+            return new DenormalizerRegistry();
+        }
+
+        public IServiceLocator ServiceLocatorService(params object[] instances)
+        {
+            var result = new Mock<IServiceLocator>();
+
+            foreach (var instance in instances)
+            {
+                result.Setup(x => x.GetInstance(instance.GetType()))
+                    .Returns(instance);
+            }
+
+            return result.Object;
+        }
+        
+        public HqWebInterviewInterviewEntityFactory HqWebInterviewInterviewEntityFactory(
+            IAuthorizedUser authorizedUser = null)
+        {
+            var autoMapperConfig = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new WebInterviewAutoMapProfile());
+            });
+
+            return new HqWebInterviewInterviewEntityFactory(autoMapperConfig.CreateMapper(),
+                authorizedUser ?? Mock.Of<IAuthorizedUser>(),
+                new EnumeratorGroupGroupStateCalculationStrategy(), 
+                new SupervisorGroupStateCalculationStrategy(), 
+                Create.Service.WebNavigationService());
+        }
+        
+        public  WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog.IAuditLogService AuditLogService(
+            IAuditLogFactory auditLogFactory,
+            IAuthorizedUser authorizedUser = null)
+        {
+            return new AuditLogService(auditLogFactory, authorizedUser ?? Mock.Of<IAuthorizedUser>());
         }
     }
 

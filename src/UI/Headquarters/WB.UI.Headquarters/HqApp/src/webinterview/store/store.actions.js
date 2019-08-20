@@ -83,6 +83,9 @@ export default {
         commit("POSTING_COMMENT", { questionId: questionId })
         await Vue.$api.call(api => api.sendNewComment(questionId, comment))
     },
+    async resolveComment({ dispatch }, { questionId, commentId }) {
+        await Vue.$api.call(api => api.resolveComment(questionId))
+    },
 
     setAnswerAsNotSaved({ commit }, { id, message }) {
         commit("SET_ANSWER_NOT_SAVED", { id, message })
@@ -146,12 +149,21 @@ export default {
         dispatch("fetchSearchResults")
     }, 200),
 
-    refreshSectionState: debounce(({ dispatch }) => {
-        dispatch("fetchSectionEnabledStatus")
-        dispatch("fetchBreadcrumbs")
-        dispatch("fetchEntity", { id: "NavigationButton", source: "server" })
-        dispatch("fetchSidebar")
-        dispatch("fetchInterviewStatus")
+    refreshSectionState({ commit, dispatch }) {
+        commit("SET_LOADING_PROGRESS", true);
+        dispatch("_refreshSectionState");
+    },
+
+    _refreshSectionState: debounce(({ dispatch, commit }) => {
+        try {
+            dispatch("fetchSectionEnabledStatus");
+            dispatch("fetchBreadcrumbs");
+            dispatch("fetchEntity", { id: "NavigationButton", source: "server" });
+            dispatch("fetchSidebar");
+            dispatch("fetchInterviewStatus");
+        } finally {
+            commit("SET_LOADING_PROGRESS", false);
+        }
     }, 200),
 
     fetchSectionEntities: debounce(async ({ dispatch, commit, rootState }) => {
