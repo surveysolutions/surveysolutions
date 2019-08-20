@@ -9,7 +9,7 @@
                     ><span></span>{{ $t('WebInterviewUI.AudioClickRecord')}}</button>
                 <div class="field answered" v-if="$me.isAnswered">
                     <ul class="block-with-data list-unstyled">
-                        <li>{{ $t("WebInterviewUI.AudioRecordingDuration", { humanizedLength: humanizedLength, formattedLength }) }}</li>
+                        <li :id="answerHolderId">{{ $t("WebInterviewUI.AudioRecordingDuration", { humanizedLength: humanizedLength, formattedLength }) }}</li>
                     </ul>
                     <wb-remove-answer />
                 </div>
@@ -82,6 +82,9 @@ export default {
         }
     },
     computed: {
+            answerHolderId(){
+                return `audio_answer_${this.$me.id}`
+            },
             modalId(){
                 return `audio_dialog_${this.$me.id}`
             },
