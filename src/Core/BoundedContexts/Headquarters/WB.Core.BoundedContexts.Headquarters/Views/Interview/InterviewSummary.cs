@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
@@ -15,6 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             this.AnswersToFeaturedQuestions = new List<QuestionAnswer>();
             this.InterviewCommentedStatuses = new List<InterviewCommentedStatus>();
             this.TimeSpansBetweenStatuses = new HashSet<TimeSpanBetweenStatuses>();
+            this.Comments = new HashSet<InterviewComment>();
         }
 
         public InterviewSummary(QuestionnaireDocument questionnaire) : this()
@@ -94,6 +96,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public virtual ISet<TimeSpanBetweenStatuses> TimeSpansBetweenStatuses { get; set; }
         public virtual ISet<InterviewStatisticsReportRow> StatisticsReport { get; set; } = new HashSet<InterviewStatisticsReportRow>();
+
+        public virtual ISet<InterviewComment> Comments { get; protected set; }
 
         public virtual int CommentedEntitiesCount { get; set; }
 

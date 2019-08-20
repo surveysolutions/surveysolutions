@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
             questionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             
             var questionnaire = Create.Entity.QuestionnaireDocument(
-                children: new List<IComposite>
+                children: new IComposite[]
                 {
                     Create.Entity.SingleQuestion(id:questionId,isFilteredCombobox:false, options:answers)
                 });

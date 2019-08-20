@@ -1811,6 +1811,7 @@
     <Content Include="Scripts\viewmodels\pagebase.js" />
     <Content Include="Scripts\viewmodels\pages\controlpanel\brokeninterviewpackages.js" />
     <Content Include="Scripts\viewmodels\pages\controlpanel\readside.js" />
+    <Content Include="Scripts\viewmodels\pages\controlpanel\systemlog.js" />
     <Content Include="Scripts\viewmodels\pages\controlpanel\synchronizationlog.js" />
     <Content Include="Scripts\viewmodels\pages\create-interviewer.js" />
     <Content Include="Scripts\viewmodels\pages\mapusers.js" />
@@ -2085,7 +2086,7 @@
     <Compile Include="API\WebInterview\LinksExportController.cs" />
     <Compile Include="API\PagedApiResponse.cs" />
     <Compile Include="API\WebInterview\Pipeline\WebInterviewAuthorizeAttribute.cs" />
-    <Compile Include="API\WebInterview\Pipeline\WebInterviewStateManager.cs" />
+    <Compile Include="API\WebInterview\Pipeline\HandlePauseEventPipelineModule.cs" />
     <Compile Include="API\WebInterview\SearchResults.cs" />
     <Compile Include="API\WebInterview\Services\HqWebInterviewInterviewEntityFactory.cs" />
     <Compile Include="API\WebInterview\IInterviewOverviewService.cs" />

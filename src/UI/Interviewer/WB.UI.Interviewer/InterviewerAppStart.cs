@@ -25,7 +25,7 @@ namespace WB.UI.Interviewer
         private readonly IServiceLocator serviceLocator;
         private readonly IApplicationCypher applicationCypher;
         private IEnumeratorSettings enumeratorSettings;
-
+        
         public InterviewerAppStart(IMvxApplication application, 
             IMvxNavigationService navigationService,
             IAuditLogService auditLogService,
@@ -46,14 +46,13 @@ namespace WB.UI.Interviewer
             //temp fix of KP-11583
             //
             //base.ResetStart();
-            this.serviceLocator.GetInstance<InterviewDashboardEventHandler>();
             logger.Warn("Ignored application reset start");
         }
 
         protected override Task<object> ApplicationStartup(object hint = null)
         {
             auditLogService.Write(new OpenApplicationAuditLogEntity());
-            this.serviceLocator.GetInstance<InterviewDashboardEventHandler>();
+            
 
             logger.Info($"Application started. Version: {typeof(SplashActivity).Assembly.GetName().Version}");
 

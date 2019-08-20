@@ -22,6 +22,7 @@
     export default {
         name: 'QRBarcode',
         mixins: [entityDetails],
+        props: ['noComments'],
         computed: {
             noAnswerWatermark() {
                 return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') : this.$t('WebInterviewUI.TextEnter')

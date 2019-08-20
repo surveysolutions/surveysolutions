@@ -31,6 +31,8 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
         private readonly Guid sexQuestion = Id.g3;
         private readonly Guid numericIntQuestion = Id.g4;
         private readonly Guid numericRealQuestion = Id.g5;
+        private readonly Guid pastDwellingsMultyQuestion = Id.g6;
+
         private Guid interviewId;
         private SurveyStatisticsReport reporter;
 
@@ -41,6 +43,7 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
                 Create.Entity.NumericIntegerQuestion(numericIntQuestion),
                 Create.Entity.NumericRealQuestion(numericRealQuestion),
                 Create.Entity.SingleOptionQuestion(dwellingQuestion, "dwelling", answers: GetAnswersFromEnum<Dwelling>()),
+                Create.Entity.MultyOptionsQuestion(pastDwellingsMultyQuestion, variable: "pastDwelling", options: GetAnswersFromEnum<Dwelling>()),
                 Create.Entity.Roster(Id.gA, variable: "hh_member", children: new[]
                 {
                     Create.Entity.SingleOptionQuestion(relationQuestion, variable: "relation", answers: GetAnswersFromEnum<Relation>()),
@@ -54,6 +57,40 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
 
             this.denormalizer = new InterviewStatisticsReportDenormalizer(questionnaireStorage);
             this.reporter = new SurveyStatisticsReport(new InterviewReportDataRepository(UnitOfWork));
+        }
+
+        [Test]
+        public void when_multy_answer_given_should_insert_into_database()
+        {
+            var summary = new InterviewSummary(questionnaire)
+            {
+                InterviewId = interviewId,
+                Status = InterviewStatus.Completed,
+                ResponsibleName = "responsible",
+                ResponsibleId = Id.gC,
+                QuestionnaireId = questionnaire.PublicKey,
+                QuestionnaireVersion = 1,
+                TeamLeadId = Id.gE,
+                TeamLeadName = "test"
+            };
+
+            StoreInterviewSummary(summary, new QuestionnaireIdentity(questionnaire.PublicKey, 1));
+
+            denormalizer.Update(summary, Create.PublishedEvent.MultyOptionQuestionAnswered(interviewId,
+                pastDwellingsMultyQuestion,
+                new[] {(decimal) Dwelling.Barrack, (decimal) Dwelling.Hole}));
+            
+            UnitOfWork.Session.Flush();
+
+            var report = reporter.GetReport(new SurveyStatisticsReportInputModel
+            {
+                QuestionnaireId = questionnaire.PublicKey.FormatGuid(),
+
+                Question = questionnaire.Find<MultyOptionsQuestion>(pastDwellingsMultyQuestion)
+            });
+
+            AssertReportHasTotal(report, Dwelling.Barrack, 1);
+            AssertReportHasTotal(report, Dwelling.Hole, 1);
         }
 
         [Test]

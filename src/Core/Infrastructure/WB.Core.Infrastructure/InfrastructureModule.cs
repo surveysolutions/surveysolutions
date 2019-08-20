@@ -6,6 +6,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.DependencyInjection;
 using WB.Core.Infrastructure.Implementation.Aggregates;
+using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Modularity;
 
 namespace WB.Core.Infrastructure
@@ -18,6 +19,7 @@ namespace WB.Core.Infrastructure
             registry.BindAsSingleton<IAggregateLock, AggregateLock>();
             registry.BindInPerLifetimeScope<ICommandService, CommandService>();
             registry.Bind<IPlainAggregateRootRepository, PlainAggregateRootRepository>();
+            registry.BindAsSingleton<IDenormalizerRegistry, DenormalizerRegistry>();
         }
 
         public void Load(IDependencyRegistry registry)

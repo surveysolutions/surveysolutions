@@ -78,6 +78,7 @@ using WB.Enumerator.Native.Questionnaire.Impl;
 using WB.Enumerator.Native.WebInterview;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
@@ -234,7 +235,6 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.RegisterDenormalizer<InterviewSummaryCompositeDenormalizer>();
             registry.RegisterDenormalizer<InterviewLifecycleEventHandler>();
-            registry.RegisterDenormalizer<InterviewExportedCommentariesDenormalizer>();
             registry.RegisterDenormalizer<CumulativeChartDenormalizer>();
 
             registry.Bind<IInterviewPackagesService, IInterviewBrokenPackagesService, InterviewPackagesService>();
@@ -283,7 +283,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAssignmentViewFactory, AssignmentViewFactory>();
             registry.Bind<IAssignmentsService, AssignmentsService>();
             registry.Bind<IAssignmetnsDeletionService, AssignmetnsDeletionService>();
-            registry.Bind<IAuditLog, Services.Internal.AuditLog>();
+            registry.Bind<ISystemLog, Services.Internal.SystemLog>();
             registry.Bind<IAuditLogReader, AuditLogReader>();
 
             registry.BindAsSingleton<IPauseResumeQueue, PauseResumeQueue>();
@@ -297,6 +297,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAssignmentPasswordGenerator, AssignmentPasswordGenerator>();
             registry.Bind<IInterviewReportDataRepository, InterviewReportDataRepository>();
 
+            registry.Bind<ISystemLogViewFactory, SystemLogViewFactory>();
+            
             if (fileSystemEmailServiceSettings?.IsEnabled ?? false)
             {
                 registry.Bind<IEmailService, FileSystemEmailService>(new ConstructorArgument("settings", _ => fileSystemEmailServiceSettings));
@@ -317,6 +319,10 @@ namespace WB.Core.BoundedContexts.Headquarters
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
+            var registry = serviceLocator.GetInstance<IDenormalizerRegistry>();
+            registry.RegisterFunctional<InterviewSummaryCompositeDenormalizer>();
+            registry.RegisterFunctional<CumulativeChartDenormalizer>();
+
             CommandRegistry
                 .Setup<Questionnaire>()
                 .ResolvesIdFrom<QuestionnaireCommand>(command => command.QuestionnaireId)
@@ -378,6 +384,12 @@ namespace WB.Core.BoundedContexts.Headquarters
             
             CommandRegistry.Configure<StatefulInterview, InterviewCommand>(configuration => 
                 configuration
+                .PreProcessBy<InterviewCacheWarmupPreProcessor>()
+                    .SkipPreProcessFor<HardDeleteInterview>()
+                    .SkipPreProcessFor<DeleteInterviewCommand>()
+                    .SkipPreProcessFor<MarkInterviewAsReceivedByInterviewer>()
+                    .SkipPreProcessFor<AssignInterviewerCommand>()
+                    .SkipPreProcessFor<AssignSupervisorCommand>()
                 .PostProcessBy<InterviewSummaryErrorsCountPostProcessor>()
                     .SkipPostProcessFor<HardDeleteInterview>()
                     .SkipPostProcessFor<DeleteInterviewCommand>()

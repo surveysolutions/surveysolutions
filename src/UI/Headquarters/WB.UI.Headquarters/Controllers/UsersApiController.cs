@@ -335,7 +335,10 @@ namespace WB.UI.Headquarters.Controllers
             {
                 var importUserErrors = this.userImportService.VerifyAndSaveIfNoErrors(request.File.FileBytes, request.File.FileName)
                     .Take(8).Select(ToImportError).ToArray();
-                await this.userImportService.ScheduleRunUserImportAsync();
+
+                if (!importUserErrors.Any())
+                    await this.userImportService.ScheduleRunUserImportAsync();
+
                 return this.Ok(importUserErrors);
             }
             catch (PreloadingException e)

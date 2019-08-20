@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                  xmlns:local="http://schemas.android.com/apk/res-auto"
+                 android:id="@+id/sidebar"
                  style="@style/Interview_Sidebar_Body">
 
-  <LinearLayout style="@style/Interview_Sidebar_Header">
+  <LinearLayout style="@style/Interview_Sidebar_Header" android:id="@+id/sidebarHeader">
     <TextView style="@style/Interview_Sidebar_Title"
               local:MvxBind="Text InterviewKey; Visible InterviewKey;" />
     <TextView style="@style/Interview_Sidebar_Title"
