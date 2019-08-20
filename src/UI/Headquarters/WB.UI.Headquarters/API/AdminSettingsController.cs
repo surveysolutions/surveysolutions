@@ -7,7 +7,6 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.UserProfile;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Views;
@@ -50,7 +49,7 @@ namespace WB.UI.Headquarters.API
         private readonly IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage;
         
         private readonly IEmailService emailService;
-        private readonly IAuditLog auditLog;
+        private readonly ISystemLog auditLog;
         private readonly IWebInterviewEmailRenderer emailRenderer;
 
         public AdminSettingsController(
@@ -58,7 +57,7 @@ namespace WB.UI.Headquarters.API
             IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage, 
             IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage,
             IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage,
-            IEmailService emailService, IAuditLog auditLog, 
+            IEmailService emailService, ISystemLog auditLog, 
             IWebInterviewEmailRenderer emailRenderer)
         {
             this.appSettingsStorage = appSettingsStorage ?? throw new ArgumentNullException(nameof(appSettingsStorage));

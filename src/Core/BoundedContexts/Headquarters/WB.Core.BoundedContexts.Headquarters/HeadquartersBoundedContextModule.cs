@@ -297,7 +297,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAssignmentPasswordGenerator, AssignmentPasswordGenerator>();
             registry.Bind<IInterviewReportDataRepository, InterviewReportDataRepository>();
 
-            registry.Bind<IInterviewStateFixer, InterviewStateFixer>();
             registry.Bind<ISystemLogViewFactory, SystemLogViewFactory>();
             
             if (fileSystemEmailServiceSettings?.IsEnabled ?? false)
