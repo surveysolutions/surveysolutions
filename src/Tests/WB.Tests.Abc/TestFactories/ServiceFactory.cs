@@ -247,7 +247,8 @@ namespace WB.Tests.Abc.TestFactories
         public LiteEventBus LiteEventBus(ILiteEventRegistry liteEventRegistry = null, IEventStore eventStore = null)
             => new LiteEventBus(
                 liteEventRegistry ?? Stub<ILiteEventRegistry>.WithNotEmptyValues,
-                eventStore ?? Mock.Of<IEventStore>());
+                eventStore ?? Mock.Of<IEventStore>(),
+                Mock.Of<IGlobalLiteEventHandler>());
 
         public LiteEventRegistry LiteEventRegistry()
             => new LiteEventRegistry();
@@ -255,14 +256,14 @@ namespace WB.Tests.Abc.TestFactories
         public NcqrCompatibleEventDispatcher NcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null,
             ILogger logger = null,
             IServiceLocator serviceLocator = null,
-            params IEventHandler[] handlers)
+            IDenormalizerRegistry denormalizerRegistry = null)
             => new NcqrCompatibleEventDispatcher(
                 eventStore: Mock.Of<IEventStore>(),
                 inMemoryEventStore: Mock.Of<IInMemoryEventStore>(),
                 serviceLocator: serviceLocator ?? Mock.Of<IServiceLocator>(),
                 eventBusSettings: eventBusSettings ?? Create.Entity.EventBusSettings(),
                 logger: logger ?? Mock.Of<ILogger>(),
-                eventHandlers: handlers);
+                denormalizerRegistry: denormalizerRegistry ?? Create.Service.DenormalizerRegistry());
 
         public QuestionnaireKeyValueStorage QuestionnaireKeyValueStorage(
             IPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository = null)
@@ -276,7 +277,7 @@ namespace WB.Tests.Abc.TestFactories
                 Stub<IPlainStorageAccessor<QuestionnaireBrowseItem>>.WithNotEmptyValues);
 
         public IStatefulInterviewRepository StatefulInterviewRepository(
-            IEventSourcedAggregateRootRepository aggregateRootRepository, ILiteEventBus liteEventBus = null)
+            IEventSourcedAggregateRootRepository aggregateRootRepository)
             => new StatefulInterviewRepository(
                 aggregateRootRepository: aggregateRootRepository ?? Mock.Of<IEventSourcedAggregateRootRepository>());
 
@@ -383,8 +384,7 @@ namespace WB.Tests.Abc.TestFactories
             ICsvWriterService csvWriterService = null,
             ICsvWriter csvWriter = null,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses = null,
-            QuestionnaireExportStructure questionnaireExportStructure = null,
-            IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentaries = null)
+            QuestionnaireExportStructure questionnaireExportStructure = null)
             => new ReadSideToTabularFormatExportService(fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 csvWriter ?? Mock.Of<ICsvWriter>(_
                     => _.OpenCsvWriter(It.IsAny<Stream>(), It.IsAny<string>()) ==
@@ -919,7 +919,7 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewsToExportViewFactory InterviewsToExportViewFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries)
         {
-            return new InterviewsToExportViewFactory(new InMemoryReadSideRepositoryAccessor<InterviewCommentaries>());
+            return new InterviewsToExportViewFactory(new InMemoryReadSideRepositoryAccessor<InterviewComment>());
         }
 
         public AttachmentContentStorage AttachmentContentStorage(
@@ -1127,6 +1127,24 @@ namespace WB.Tests.Abc.TestFactories
             return new WebInterviewNotificationService(statefulInterviewRepository, questionnaireStorage, webInterviewInvoker);
         }
 
+        public IDenormalizerRegistry DenormalizerRegistry()
+        {
+            return new DenormalizerRegistry();
+        }
+
+        public IServiceLocator ServiceLocatorService(params object[] instances)
+        {
+            var result = new Mock<IServiceLocator>();
+
+            foreach (var instance in instances)
+            {
+                result.Setup(x => x.GetInstance(instance.GetType()))
+                    .Returns(instance);
+            }
+
+            return result.Object;
+        }
+        
         public HqWebInterviewInterviewEntityFactory HqWebInterviewInterviewEntityFactory(
             IAuthorizedUser authorizedUser = null)
         {

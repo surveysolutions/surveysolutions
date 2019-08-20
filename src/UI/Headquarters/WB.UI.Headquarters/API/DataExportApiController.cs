@@ -36,7 +36,7 @@ namespace WB.UI.Headquarters.API
         private readonly IExportServiceApi exportServiceApi;
         private readonly IExportSettings exportSettings;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
-        private readonly IAuditLog auditLog;
+        private readonly ISystemLog auditLog;
         private readonly ISerializer serializer;
         private readonly ExternalStoragesSettings externalStoragesSettings;
 
@@ -48,7 +48,7 @@ namespace WB.UI.Headquarters.API
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IExportFileNameService exportFileNameService,
             IExportServiceApi exportServiceApi,
-            IAuditLog auditLog, ExternalStoragesSettings externalStoragesSettings)
+            ISystemLog auditLog, ExternalStoragesSettings externalStoragesSettings)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.dataExportStatusReader = dataExportStatusReader;
@@ -70,6 +70,21 @@ namespace WB.UI.Headquarters.API
             {
                 var jobs = (await this.exportServiceApi.GetAllJobsList()).OrderByDescending(x => x).ToList();
                 return jobs;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        [HttpGet]
+        [ObserverNotAllowedApi]
+        [ApiNoCache]
+        public async Task<List<long>> GetRunningJobs()
+        {
+            try
+            {
+                return (await this.exportServiceApi.GetRunningExportJobs()).OrderByDescending(x => x).ToList();
             }
             catch (Exception)
             {

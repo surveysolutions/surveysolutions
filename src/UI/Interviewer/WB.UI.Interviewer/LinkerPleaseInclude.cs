@@ -8,7 +8,11 @@ using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using System;
 using System.Collections.Specialized;
+using System.Net;
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.UI.LinkerInclusion
 {
@@ -69,6 +73,20 @@ namespace WB.UI.LinkerInclusion
         {
             //fix for Thai calendar (KP-6403)
             var thai = new System.Globalization.ThaiBuddhistCalendar();
+        }
+
+        public void Include(RestException re)
+        {
+           var r = new RestException("message", HttpStatusCode.Forbidden, RestExceptionType.Unexpected)
+           {
+               
+           }.ToSynchronizationException();
+       
+        }
+
+        public void Include(AsyncTaskMethodBuilder<RestException> a)
+        {
+            var ass = a.Task;
         }
 
         public void Include(Switch @switch)

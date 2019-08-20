@@ -12,6 +12,7 @@
                 </div>
             </div>
             <IdleTimeoutService />
+            <span id="loadingPixel" style="display:none" :data-loading="isLoading"></span>
         </main>
 </template>
 
@@ -44,6 +45,9 @@ export default {
         "fullscreen-hidden-filters": !smallOrMedioumScreenWidth && sidebar.facetHidden,
         "filters-results-are-shown": !sidebar.searchResultsHidden
       };
+    },
+    isLoading() {
+        return this.$store.getters.loadingProgress === true ? "true" : "false"
     }
   },
 

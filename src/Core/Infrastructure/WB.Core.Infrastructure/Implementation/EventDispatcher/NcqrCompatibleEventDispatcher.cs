@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using Ncqrs.Domain;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -17,69 +14,32 @@ using WB.Core.Infrastructure.EventHandlers;
 
 namespace WB.Core.Infrastructure.Implementation.EventDispatcher
 {
-    public class NcqrCompatibleEventDispatcher : IEventDispatcher
+    public class NcqrCompatibleEventDispatcher : IEventBus
     {
-        private readonly Dictionary<Type, EventHandlerWrapper> registredHandlers = new Dictionary<Type, EventHandlerWrapper>();
         private readonly Type[] handlersToIgnore;
-        private readonly Func<InProcessEventBus> getInProcessEventBus;
-        
+
         private readonly EventBusSettings eventBusSettings;
         private readonly ILogger logger;
         private readonly IServiceLocator serviceLocator;
         private readonly IEventStore eventStore;
         private readonly IInMemoryEventStore inMemoryEventStore;
+        private readonly IDenormalizerRegistry denormalizerRegistry;
 
         public NcqrCompatibleEventDispatcher(
             IServiceLocator serviceLocator,
-            EventBusSettings eventBusSettings, 
+            EventBusSettings eventBusSettings,
             ILogger logger,
             IEventStore eventStore,
             IInMemoryEventStore inMemoryEventStore,
-            IEnumerable<IEventHandler> eventHandlers)
+            IDenormalizerRegistry denormalizerRegistry)
         {
             this.eventBusSettings = eventBusSettings;
             this.logger = logger;
             this.handlersToIgnore = eventBusSettings.DisabledEventHandlerTypes;
-            this.getInProcessEventBus = () => new InProcessEventBus(eventStore, eventBusSettings, logger);
             this.eventStore = eventStore;
             this.inMemoryEventStore = inMemoryEventStore;
+            this.denormalizerRegistry = denormalizerRegistry;
             this.serviceLocator = serviceLocator;
-
-            foreach (var handler in eventHandlers)
-            {
-                Register(handler);
-            }
-        }
-
-        public event EventHandlerExceptionDelegate OnCatchingNonCriticalEventHandlerException;
-
-        public void Publish(IPublishableEvent eventMessage)
-        {
-            var occurredExceptions = new List<Exception>();
-
-            foreach (EventHandlerWrapper handler in this.registredHandlers.Values.ToList())
-            {
-                handler.Bus.OnCatchingNonCriticalEventHandlerException +=
-                        this.OnCatchingNonCriticalEventHandlerException;
-                try
-                {
-                    handler.Bus.Publish(eventMessage);
-                }
-                catch (Exception exception)
-                {
-                    occurredExceptions.Add(exception);
-                }
-                finally
-                {
-                    handler.Bus.OnCatchingNonCriticalEventHandlerException -=
-                        this.OnCatchingNonCriticalEventHandlerException;
-                }
-            }
-
-            if (occurredExceptions.Count > 0)
-                throw new AggregateException(
-                    $"{occurredExceptions.Count} handler(s) failed to handle published event '{eventMessage.EventIdentifier}' by event source '{eventMessage.EventSourceId}' with sequence '{eventMessage.EventSequence}'.",
-                    occurredExceptions);
         }
 
         public void Publish(IEnumerable<IPublishableEvent> eventMessages)
@@ -89,24 +49,16 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
             if (!events.Any())
                 return;
 
-            var functionalHandlers =
-               this.registredHandlers.Values.Where(h => typeof(IFunctionalEventHandler).IsAssignableFrom(h.Handler)).ToList();
-
-            var oldStyleHandlers =
-               this.registredHandlers.Values.Except(functionalHandlers).ToList();
-
             Guid firstEventSourceId = events.First().EventSourceId;
 
             var errorsDuringHandling = new List<Exception>();
 
             if (!this.eventBusSettings.IsIgnoredAggregate(firstEventSourceId))
             {
-                foreach (var functionalEventHandler in functionalHandlers)
+                foreach (var functionalEventHandler in denormalizerRegistry.FunctionalDenormalizers)
                 {
-                    var handler = (IFunctionalEventHandler)this.serviceLocator.GetInstance(functionalEventHandler.Handler);
+                    var handler = (IFunctionalEventHandler)this.serviceLocator.GetInstance(functionalEventHandler);
 
-                    functionalEventHandler.Bus.OnCatchingNonCriticalEventHandlerException +=
-                        this.OnCatchingNonCriticalEventHandlerException;
                     try
                     {
                         handler.Handle(events, firstEventSourceId);
@@ -127,49 +79,93 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
                                 $"Failed to handle {eventHandlerException.EventType.Name} in {eventHandlerException.EventHandlerType} by event source '{firstEventSourceId}'.",
                                 eventHandlerException);
 
-                            this.OnCatchingNonCriticalEventHandlerException?.Invoke(
-                                eventHandlerException);
                         }
                         else
                         {
                             errorsDuringHandling.Add(eventHandlerException);
                         }
                     }
-                    finally
-                    {
-                        functionalEventHandler.Bus.OnCatchingNonCriticalEventHandlerException -=
-                            this.OnCatchingNonCriticalEventHandlerException;
-                    }
                 }
             }
 
             foreach (IPublishableEvent publishableEvent in events)
             {
-                foreach (EventHandlerWrapper handler in oldStyleHandlers)
+                foreach (Type handler in denormalizerRegistry.SequentialDenormalizers.Where(x => !handlersToIgnore.Contains(x)))
                 {
-                    if (!handler.Bus.CanHandleEvent(publishableEvent))
+                    if (!denormalizerRegistry.CanHandleEvent(handler, publishableEvent))
                         continue;
 
-                    handler.Bus.OnCatchingNonCriticalEventHandlerException += this.OnCatchingNonCriticalEventHandlerException;
                     try
                     {
-                        handler.Bus.Publish(publishableEvent);
+                        if (publishableEvent?.Payload == null)
+                        {
+                            continue;
+                        }
+
+                        bool isIgnoredAggregate =
+                            this.eventBusSettings.IsIgnoredAggregate(publishableEvent.EventSourceId);
+
+                        var eventType = publishableEvent.Payload.GetType();
+                        var eventHandlerMethod = denormalizerRegistry.HandlerMethod(handler, eventType);
+
+                        if (isIgnoredAggregate && !eventHandlerMethod.ReceivesIgnoredEvents)
+                        {
+                            continue;
+                        }
+
+                        var publishedEventClosedType = typeof(PublishedEvent<>).MakeGenericType(eventType);
+                        var publishedEvent = Activator.CreateInstance(publishedEventClosedType, publishableEvent);
+
+                        List<Exception> occurredExceptions = null;
+                        try
+                        {
+                            var denormalizerInstance = this.serviceLocator.GetInstance(handler);
+                            eventHandlerMethod.Handle.Invoke(denormalizerInstance, new[] {publishedEvent});
+                        }
+                        catch (Exception exception)
+                        {
+                            var shouldIgnoreException =
+                                this.eventBusSettings.EventHandlerTypesWithIgnoredExceptions.Contains(handler);
+
+                            var eventHandlerException = new EventHandlerException(eventHandlerType: handler,
+                                eventType: eventType,
+                                isCritical: !shouldIgnoreException,
+                                innerException: exception);
+
+                            if (shouldIgnoreException)
+                            {
+                                this.logger.Error(
+                                    $"Failed to handle {eventHandlerException.EventType.Name} in {eventHandlerException.EventHandlerType} for event '{publishableEvent.EventIdentifier}' by event source '{publishableEvent.EventSourceId}' with sequence '{publishableEvent.EventSequence}'.",
+                                    eventHandlerException);
+                            }
+                            else
+                            {
+                                if (occurredExceptions == null)
+                                {
+                                    occurredExceptions = new List<Exception>();
+                                }
+
+                                occurredExceptions.Add(eventHandlerException);
+                            }
+                        }
+
+                        if (occurredExceptions?.Count > 0)
+                        {
+                            throw new AggregateException(
+                                $"{occurredExceptions.Count} handler(s) failed to handle published event '{publishableEvent.EventIdentifier}' by event source '{publishableEvent.EventSourceId}' with sequence '{publishableEvent.EventSequence}'.",
+                                occurredExceptions);
+                        }
                     }
                     catch (Exception exception)
                     {
                         errorsDuringHandling.Add(exception);
-                    }
-                    finally
-                    {
-                        handler.Bus.OnCatchingNonCriticalEventHandlerException -= this.OnCatchingNonCriticalEventHandlerException;
                     }
                 }
             }
 
             if (errorsDuringHandling.Count > 0)
                 throw new AggregateException(
-                    string.Format("One or more handlers failed when publishing {0} events. First event source id: {1}.",
-                        events.Count, firstEventSourceId.FormatGuid()),
+                    $"One or more handlers failed when publishing {events.Count} events. First event source id: {firstEventSourceId.FormatGuid()}.",
                     errorsDuringHandling);
         }
 
@@ -185,85 +181,5 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
         }
 
         public void PublishCommittedEvents(IEnumerable<CommittedEvent> committedEvents) => this.Publish(committedEvents);
-
-        public void PublishEventToHandlers(IPublishableEvent eventMessage,
-            IReadOnlyDictionary<IEventHandler, Stopwatch> handlersWithStopwatch)
-        {
-            var occurredExceptions = new ConcurrentBag<Exception>();
-
-            foreach (var handlerWithStopwatch in handlersWithStopwatch)
-            {
-                this.PublishEventToHandlerWithStopwatch(eventMessage, handlerWithStopwatch.Key, handlerWithStopwatch.Value, occurredExceptions);
-            }
-
-            if (occurredExceptions.Count > 0)
-                throw new AggregateException(
-                    $"{occurredExceptions.Count} handler(s) failed to handle published event '{eventMessage.EventIdentifier}' by event source '{eventMessage.EventSourceId}' with sequence '{eventMessage.EventSequence}'.",
-                    occurredExceptions);
-        }
-
-        private void PublishEventToHandlerWithStopwatch(IPublishableEvent eventMessage, IEventHandler handler, Stopwatch stopwatch, ConcurrentBag<Exception> occurredExceptions)
-        {
-            var handlerType = handler.GetType();
-
-            if (!this.registredHandlers.ContainsKey(handlerType))
-                return;
-
-            var bus = this.registredHandlers[handlerType].Bus;
-
-            stopwatch.Start();
-
-            bus.OnCatchingNonCriticalEventHandlerException += this.OnCatchingNonCriticalEventHandlerException;
-            try
-            {
-                bus.Publish(eventMessage);
-            }
-            catch (Exception exception)
-            {
-                occurredExceptions.Add(exception);
-            }
-            finally
-            {
-                bus.OnCatchingNonCriticalEventHandlerException -= this.OnCatchingNonCriticalEventHandlerException;
-            }
-
-            stopwatch.Stop();
-        }
-
-        static readonly ConcurrentDictionary<Type, List<Type>> ieventHandlersCache = new ConcurrentDictionary<Type, List<Type>>();
-
-        public void Register(IEventHandler handler)
-        {
-            if (handlersToIgnore.Any(h => h.GetTypeInfo().IsInstanceOfType(handler)))
-                return;
-
-            var inProcessBus = this.getInProcessEventBus();
-
-            var ieventHandlers = ieventHandlersCache.GetOrAdd(handler.GetType(),
-                type => type.GetTypeInfo().ImplementedInterfaces.Where(IsIEventHandlerInterface).ToList());
-            
-            foreach (Type ieventHandler in ieventHandlers)
-            {
-                inProcessBus.RegisterHandler(handler, ieventHandler.GenericTypeArguments[0]);
-            }
-
-            if (handler is IFunctionalEventHandler functionalDenormalizer)
-            {
-                functionalDenormalizer.RegisterHandlersInOldFashionNcqrsBus(inProcessBus);
-            }
-
-            this.registredHandlers.Add(handler.GetType(), new EventHandlerWrapper(handler.GetType(), inProcessBus));
-        }
-
-        public void Unregister(IEventHandler handler)
-        {
-            this.registredHandlers.Remove(handler.GetType());
-        }
-
-        private static bool IsIEventHandlerInterface(Type type)
-        {
-            var typeInfo = type.GetTypeInfo();
-            return typeInfo.IsInterface && typeInfo.IsGenericType && typeInfo.GetGenericTypeDefinition() == typeof(IEventHandler<>);
-        }
     }
 }

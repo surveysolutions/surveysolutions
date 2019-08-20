@@ -50,7 +50,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                 if (filter.SortOrder == null)
                 {
-                    filter.SortOrder = new[] { new OrderRequestItem() { Field = "LogDate", Direction = OrderDirection.Desc} };
+                    filter.SortOrder = new[] { new OrderRequestItem() { Field = "Id", Direction = OrderDirection.Desc} };
                 }
 
                 var totalCount = query.LongCount();

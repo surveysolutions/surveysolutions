@@ -26,8 +26,10 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult Index()
         {
             var model = new AuditLogModel();
-            model.ServerFilePathLocation = this.logReader.GetServerFilePath();
-            model.Log = this.logReader.Read();
+            
+            if (this.logReader.LogExists())
+                model.Log = this.logReader.Read();
+
             return View(model);
         }
     }
