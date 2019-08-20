@@ -146,15 +146,13 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
         public ExtractedFile GetFileFromArchive(string archiveFilePath, string fileName)
         {
             if (string.IsNullOrEmpty(fileName)) throw new ArgumentNullException(nameof(fileName));
-
-            var lowerFileName = fileName.ToLower();
-
+            
             using (var zips = ZipFile.Read(archiveFilePath))
             {
                 foreach (var zip in zips)
                 {
                     if (zip.IsDirectory) continue;
-                    if (!zip.FileName.ToLower().Contains(lowerFileName)) continue;
+                    if (!zip.FileName.Contains(fileName)) continue;
 
                     using (var memoryStream = new MemoryStream())
                     {
