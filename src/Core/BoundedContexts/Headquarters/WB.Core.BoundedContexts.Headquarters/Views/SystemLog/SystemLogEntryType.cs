@@ -10,6 +10,7 @@
         UserCreated = 5,
         AssignmentSizeChanged = 6,
         ExportEncryptionChanged = 7,
-        UserMovedToAnotherTeam = 8
+        UserMovedToAnotherTeam = 8,
+        EmailProviderChanged = 9
     }
 }

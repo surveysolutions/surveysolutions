@@ -38,6 +38,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
             this.Append(LogEntryType.AssignmentsUpgradeStarted, "Assignments", "Upgrade", $"From (ver. {fromVersion}) to (ver. {toVersion}) {title}");
         }
 
+        public void EmailProviderWasChanged(string previousProvider, string currentProvider)
+        {
+            this.Append(LogEntryType.EmailProviderChanged, "Update", $"Previous provider was {previousProvider}, current provider is {currentProvider}");
+        }
+
         public void UserCreated(UserRoles role, string userName)
         {
             this.Append(LogEntryType.UserCreated, $"{role} user '{userName}'", "created");
@@ -66,7 +71,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
 
         private void AppendLogEntry(Guid? userid, string userName, LogEntryType type, string log)
         {
-            InScopeExecutor.Current.ExecuteActionInScope((serviceLocator) =>
+            InScopeExecutor.Current.Execute(serviceLocator =>
             {
                 var logEntry = new SystemLogEntry
                 {
