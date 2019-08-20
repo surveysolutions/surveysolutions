@@ -4,10 +4,12 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.Core.BoundedContexts.Designer.MembershipProvider.Roles;
 using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Code;
@@ -16,6 +18,7 @@ using WB.UI.Designer.Models;
 
 namespace WB.UI.Designer.Areas.Admin.Pages
 {
+    [Authorize(Roles = nameof(SimpleRoleEnum.Administrator))]
     public class UserDetailsModel : PageModel
     {
         private readonly UserManager<DesignerIdentityUser> users;

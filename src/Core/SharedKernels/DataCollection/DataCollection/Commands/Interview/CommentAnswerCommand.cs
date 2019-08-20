@@ -7,8 +7,8 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
     {
         public string Comment { get; private set; }
 
-        public CommentAnswerCommand(Guid interviewId, Guid userId, Guid questionId, 
-            decimal[] rosterVector, string comment)
+        public CommentAnswerCommand(Guid interviewId, Guid userId, Guid questionId,
+            RosterVector rosterVector, string comment)
             : base(interviewId, userId, questionId, rosterVector)
         {
             this.Comment = comment;

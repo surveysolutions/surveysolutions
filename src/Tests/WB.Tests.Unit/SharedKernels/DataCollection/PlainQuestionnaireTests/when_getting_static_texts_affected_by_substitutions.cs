@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
             rosterTitleid = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             substitutionTargetStaticTextId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             var questionnaire = Create.Entity.QuestionnaireDocument(
-                children: new List<IComposite>
+                children: new IComposite[]
                 {
                     Create.Entity.NumericIntegerQuestion(rosterSizeId),
                     Create.Entity.Roster(

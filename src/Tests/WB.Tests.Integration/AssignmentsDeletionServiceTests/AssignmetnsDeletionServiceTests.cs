@@ -39,7 +39,8 @@ namespace WB.Tests.Integration.AssignmentsDeletionServiceTests
                     typeof(InterviewSummaryMap),
                     typeof(QuestionAnswerMap),
                     typeof(InterviewCommentedStatusMap),
-                    typeof(TimeSpanBetweenStatusesMap)
+                    typeof(TimeSpanBetweenStatusesMap),
+                    typeof(InterviewCommentMap)
 
                 }, true, "plainstore");
 
