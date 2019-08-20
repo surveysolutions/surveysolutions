@@ -37,9 +37,16 @@ const store = safeStore({
                 }
             })
 
-            const totalCount = state.entities != null
-                ? state.entities.length : 0
-                
+            if (state.coverInfo && state.coverInfo.identifyingQuestions) {
+                state.coverInfo.identifyingQuestions.forEach(question => {
+                    if (question.isReadonly) {
+                        loadedCount = loadedCount + 1;
+                    }
+                })
+            }
+
+            const totalCount = state.entities != null ? state.entities.length : 0
+
             const result = (loadedCount === 0 && totalCount > 0) || (loadedCount < totalCount) || state.fetch.loadingProgress;
            
             return result;
