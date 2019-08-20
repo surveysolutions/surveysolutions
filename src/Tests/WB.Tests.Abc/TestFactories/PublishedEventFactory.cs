@@ -124,6 +124,11 @@ namespace WB.Tests.Abc.TestFactories
             => new SingleOptionQuestionAnswered(ToGuid(userId) ?? Guid.NewGuid(), questionId ?? Guid.NewGuid(), 
                     new decimal[0], originDate ?? DateTimeOffset.Now, answer)
                 .ToPublishedEvent(eventSourceId: interviewId);
+        public IPublishedEvent<MultipleOptionsQuestionAnswered> MultyOptionQuestionAnswered(Guid? interviewId = null, 
+            Guid? questionId = null, decimal[] answers = null, string userId = null, DateTimeOffset? originDate = null)
+            => new MultipleOptionsQuestionAnswered(ToGuid(userId) ?? Guid.NewGuid(), questionId ?? Guid.NewGuid(), 
+                    new decimal[0], originDate ?? DateTimeOffset.Now, answers ?? Array.Empty<decimal>())
+                .ToPublishedEvent(eventSourceId: interviewId);
 
         private static Guid? ToGuid(string stringGuid)
             => string.IsNullOrEmpty(stringGuid)

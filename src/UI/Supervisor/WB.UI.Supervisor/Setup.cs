@@ -104,8 +104,7 @@ namespace WB.UI.Supervisor
                 new EnumeratorSharedKernelModule(),
                 new SupervisorInfrastructureModule(),
                 new SupervisorBoundedContextModule(), 
-                new SupervisorUiModule(),
-                };
+                new SupervisorUiModule()};
 
             ContainerBuilder builder = new ContainerBuilder();
             builder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
@@ -124,8 +123,7 @@ namespace WB.UI.Supervisor
                 .WithParameter("backupFolder", AndroidPathUtils.GetPathToSupervisorSubfolderInExternalDirectory("Backup"))
                 .WithParameter("restoreFolder", AndroidPathUtils.GetPathToSupervisorSubfolderInExternalDirectory("Restore"));
 
-            builder.RegisterType<InterviewDashboardEventHandler>().SingleInstance();
-
+            
             var container = builder.Build();
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
 

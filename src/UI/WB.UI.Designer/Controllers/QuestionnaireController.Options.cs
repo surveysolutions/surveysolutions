@@ -44,7 +44,7 @@ namespace WB.UI.Designer.Controllers
         public IActionResult EditOptions(string id, Guid questionId)
         {
             this.SetupViewModel(id, questionId);
-            return this.View(this.questionWithOptionsViewModel.Options);
+            return this.View(this.questionWithOptionsViewModel);
         }
 
         public IActionResult EditCascadingOptions(string id, Guid questionId)
@@ -126,7 +126,7 @@ namespace WB.UI.Designer.Controllers
 
             this.questionWithOptionsViewModel = withOptionsViewModel;
 
-            return this.View(withOptionsViewModel.Options);
+            return this.View(questionWithOptionsViewModel);
         }
 
         [HttpPost]

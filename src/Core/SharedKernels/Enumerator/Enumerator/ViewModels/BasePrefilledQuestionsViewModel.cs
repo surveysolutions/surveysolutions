@@ -62,6 +62,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public override string CurrentLanguage => this.currentLanguage;
 
         private IReadOnlyCollection<string> availableLanguages;
+        private StartInterviewViewModel startButton;
         public override IReadOnlyCollection<string> AvailableLanguages => this.availableLanguages;
 
         public override async Task Initialize()
@@ -85,7 +86,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             var visibleSectionItems = this.compositeCollectionInflationService.GetInflatedCompositeCollection(questions);
             
-            var startButton = this.interviewViewModelFactory.GetNew<StartInterviewViewModel>();
+            this.startButton = this.interviewViewModelFactory.GetNew<StartInterviewViewModel>();
             startButton.InterviewStarted += (sender, args) => this.Dispose();
             startButton.Init(InterviewId);
 
@@ -107,6 +108,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             return this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
         }
+
+        public Task StartInterviewAsync() => this.startButton.StartInterviewCommand.ExecuteAsync();
 
         public override void Dispose()
         {

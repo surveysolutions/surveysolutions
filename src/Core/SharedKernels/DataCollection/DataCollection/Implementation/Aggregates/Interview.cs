@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Domain;
@@ -27,7 +26,7 @@ using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    public partial class Interview : AggregateRootMappedByConvention
+    public class Interview : AggregateRootMappedByConvention
     {
         public Interview(IInterviewTreeBuilder treeBuilder)
         {
@@ -71,8 +70,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public override Guid EventSourceId
         {
-            get { return base.EventSourceId; }
-
+            get => base.EventSourceId;
             protected set
             {
                 base.EventSourceId = value;
@@ -123,18 +121,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ServiceLocatorInstance.GetInstance<IInterviewExpressionStatePrototypeProvider>();
         private readonly ISubstitutionTextFactory substitutionTextFactory;
         private readonly IInterviewTreeBuilder treeBuilder;
-        public IQuestionOptionsRepository questionOptionsRepository => 
-            ServiceLocatorInstance.GetInstance<IQuestionOptionsRepository>();
 
         protected InterviewKey interviewKey;
 
         public Interview(
             ISubstitutionTextFactory substitutionTextFactory,
-            IInterviewTreeBuilder treeBuilder
+            IInterviewTreeBuilder treeBuilder,
+            IQuestionOptionsRepository optionsRepository
             )
         {
             this.substitutionTextFactory = substitutionTextFactory;
             this.treeBuilder = treeBuilder;
+            this.questionOptionsRepository = optionsRepository ?? throw new ArgumentNullException(nameof(optionsRepository));
         }
 
         #region Apply (state restore) methods
@@ -722,6 +720,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected IQuestionnaire GetQuestionnaireOrThrow() => this.GetQuestionnaireOrThrow(this.Language);
 
         private Dictionary<string, IQuestionnaire> questionnairesCache = new Dictionary<string, IQuestionnaire>();
+        private IQuestionOptionsRepository questionOptionsRepository;
 
         private IQuestionnaire GetQuestionnaireOrThrow(string language)
         {
@@ -784,21 +783,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected List<CategoricalOption> FilteredCategoricalOptions(Identity questionIdentity, int itemsCount,
             IEnumerable<CategoricalOption> unfilteredOptionsForQuestion)
         {
-            // too much
             IInterviewExpressionStorage expressionStorage = this.GetExpressionStorage();
 
             var interviewPropertiesForExpressions = new InterviewPropertiesForExpressions(new InterviewProperties(this.EventSourceId), this.properties);
-
             expressionStorage.Initialize(new InterviewStateForExpressions(this.tree, interviewPropertiesForExpressions));
-
             var question = this.tree.GetQuestion(questionIdentity);
+
+            if (question == null)
+                throw new InterviewException($"Question was not found in Tree: question {questionIdentity}, interview {EventSourceId}");
 
             var nearestRoster = question.Parents.OfType<InterviewTreeRoster>().LastOrDefault()?.Identity ??
                                 new Identity(this.QuestionnaireIdentity.QuestionnaireId, RosterVector.Empty);
-
+            
             var level = expressionStorage.GetLevel(nearestRoster);
             var categoricalFilter = level.GetCategoricalFilter(questionIdentity);
-
             return unfilteredOptionsForQuestion
                 .Where(x => RunOptionFilter(categoricalFilter, x.Value))
                 .Take(itemsCount)
@@ -1612,6 +1610,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
 
             this.ApplyEvents(treeDifference, command.UserId);
+        }
+
+        private bool cacheInitialized = false;
+        public void WarmUpCache()
+        {
+            if (!cacheInitialized)
+            {
+                var questionnaire = this.GetQuestionnaireOrThrow();
+                if (questionnaire.IsUsingExpressionStorage())
+                {
+                    this.GetExpressionStorage();
+                }
+                else
+                {
+                    var _ = ExpressionProcessorStatePrototype;
+                }
+            }
+
+            this.cacheInitialized = true;
         }
 
         private void ProtectAnswers(InterviewTree changedInterviewTree, List<string> protectedAnswers)

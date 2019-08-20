@@ -182,7 +182,8 @@ namespace WB.Tests.Integration.InterviewTests
 
             var interview = new StatefulInterview(
                 Create.Service.SubstitutionTextFactory(),
-                Create.Service.InterviewTreeBuilder()
+                Create.Service.InterviewTreeBuilder(),
+                Create.Storage.QuestionnaireQuestionOptionsRepository()
                 );
 
             interview.ServiceLocatorInstance = serviceLocatorMock.Object;

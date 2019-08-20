@@ -1,8 +1,11 @@
-param([string]$VersionPrefix,
-    [INT]$BuildNumber,
+param(
+    [INT]   $BuildNumber,
     [string]$KeystorePassword,
     [string]$BuildConfiguration = "Release",
-    [string]$branch = "master")
+    [string]$branch = "master",
+    [switch]$noSupervisor,
+    [switch]$noLiteInterviewer,
+    [switch]$noExtInterviewer)
 
 $ErrorActionPreference = "Stop"
 
@@ -32,53 +35,53 @@ New-Item $artifactsFolder -Type Directory -Force | Out-Null
 
 try {
 
-    Log-Block "Run configuration transformations" {
-        RunConfigTransform $ProjectHeadquarters $BuildConfiguration
-        RunConfigTransform $ProjectWebTester $BuildConfiguration
+    if ($noLiteInterviewer.IsPresent -eq $False) {
+        $PackageName = 'WBCapi.apk'
+        . "$scriptFolder\build-android-package.ps1" `
+            -VersionName $versionString `
+            -VersionCode $BuildNumber `
+            -BuildConfiguration $BuildConfiguration `
+            -KeystorePassword $KeystorePassword `
+            -KeystoreName 'WBCapi.keystore' `
+            -KeystoreAlias 'wbcapipublish' `
+            -CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
+            -OutFileName "$artifactsFolder\$PackageName" `
+            -NoCleanUp `
+            -ExcludeExtra:$true | % { if (-not $_) { Exit } }
+    }
+    
+    if ($noSupervisor.IsPresent -eq $False) {
+        $SuperPackageName = 'Supervisor.apk'
+        . "$scriptFolder\build-android-package.ps1" `
+            -VersionName $versionString `
+            -VersionCode $BuildNumber `
+            -BuildConfiguration $BuildConfiguration `
+            -KeystorePassword $KeystorePassword `
+            -KeystoreName 'WBCapi.keystore' `
+            -KeystoreAlias 'wbcapipublish' `
+            -CapiProject 'src\UI\Supervisor\WB.UI.Supervisor\WB.UI.Supervisor.csproj' `
+            -OutFileName "$artifactsFolder\$SuperPackageName" `
+            -NoCleanUp `
+            -ExcludeExtra:$false | % { if (-not $_) { Exit } }
     }
 
-    $PackageName = 'WBCapi.apk'
-    . "$scriptFolder\build-android-package.ps1" `
-        -VersionName $versionString `
-        -VersionCode $BuildNumber `
-        -BuildConfiguration $BuildConfiguration `
-        -KeystorePassword $KeystorePassword `
-        -KeystoreName 'WBCapi.keystore' `
-        -KeystoreAlias 'wbcapipublish' `
-        -CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
-        -OutFileName "$artifactsFolder\$PackageName" `
-        -NoCleanUp `
-        -ExcludeExtra $true | % { if (-not $_) { Exit } }
-
-    $SuperPackageName = 'Supervisor.apk'
-    . "$scriptFolder\build-android-package.ps1" `
-        -VersionName $versionString `
-        -VersionCode $BuildNumber `
-        -BuildConfiguration $BuildConfiguration `
-        -KeystorePassword $KeystorePassword `
-        -KeystoreName 'WBCapi.keystore' `
-        -KeystoreAlias 'wbcapipublish' `
-        -CapiProject 'src\UI\Supervisor\WB.UI.Supervisor\WB.UI.Supervisor.csproj' `
-        -OutFileName "$artifactsFolder\$SuperPackageName" `
-        -NoCleanUp `
-        -ExcludeExtra $false | % { if (-not $_) { Exit } }
-
-    $ExtPackageName = 'WBCapi.Ext.apk'
-    . "$scriptFolder\build-android-package.ps1" `
-        -VersionName $versionString `
-        -VersionCode $BuildNumber `
-        -BuildConfiguration $BuildConfiguration `
-        -KeystorePassword $KeystorePassword `
-        -KeystoreName 'WBCapi.keystore' `
-        -KeystoreAlias 'wbcapipublish' `
-        -CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
-        -OutFileName "$artifactsFolder\$ExtPackageName" `
-        -branch $branch `
-        -NoCleanUp `
-        -ExcludeExtra $false | % { if (-not $_) { Exit } }
+    if ($noExtInterviewer.IsPresent -eq $False) {
+        $ExtPackageName = 'WBCapi.Ext.apk'
+        . "$scriptFolder\build-android-package.ps1" `
+            -VersionName $versionString `
+            -VersionCode $BuildNumber `
+            -BuildConfiguration $BuildConfiguration `
+            -KeystorePassword $KeystorePassword `
+            -KeystoreName 'WBCapi.keystore' `
+            -KeystoreAlias 'wbcapipublish' `
+            -CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
+            -OutFileName "$artifactsFolder\$ExtPackageName" `
+            -branch $branch `
+            -NoCleanUp `
+            -ExcludeExtra:$false | % { if (-not $_) { Exit } }
+    }
 
     Write-Host "##teamcity[publishArtifacts '$artifactsFolder']"
-    
 }
 catch {
     Log-Error Unexpected error occurred

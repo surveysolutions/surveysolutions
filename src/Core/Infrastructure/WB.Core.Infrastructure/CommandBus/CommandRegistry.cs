@@ -43,6 +43,7 @@ namespace WB.Core.Infrastructure.CommandBus
 
             public void AppendValidators(List<Type> validators) => this.Validators.AddRange(validators);
             public void AppendPostProcessors(List<Type> postProcessors) => this.PostProcessors.AddRange(postProcessors);
+            public void AppendPreProcessors(List<Type> preProcessors) => this.PreProcessors.AddRange(preProcessors);
 
             private static AggregateKind DetermineAggregateKind(Type aggregateType)
             {
@@ -274,7 +275,7 @@ namespace WB.Core.Infrastructure.CommandBus
         {
             var handlerDescriptor = GetHandlerDescriptor(command);
             return GetProcessors(handlerDescriptor.PreProcessors, command, serviceLocator);
-        }
+        } 
         public static IEnumerable<Action<IAggregateRoot, ICommand>> GetProcessors(List<Type> processors, ICommand command, IServiceLocator serviceLocator)
         {
             var handlerDescriptor = GetHandlerDescriptor(command);
@@ -359,7 +360,12 @@ namespace WB.Core.Infrastructure.CommandBus
 
                 if(!commandType.IsAssignableFrom(registeredExistingCommand)) continue;
 
-                if (!configuration.GetSkipCommands().Contains(registeredExistingCommand))
+                if (!configuration.GetSkipPreProcessCommands().Contains(registeredExistingCommand))
+                {
+                    commandDescriptor.AppendPreProcessors(configuration.GetPreProcessors());
+                }
+
+                if (!configuration.GetSkipValidationCommands().Contains(registeredExistingCommand))
                 {
                     commandDescriptor.AppendValidators(configuration.GetValidators());
                 }

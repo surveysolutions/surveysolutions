@@ -40,21 +40,21 @@ namespace WB.Services.Export.Questionnaire
                     switch (@event.Payload)
                     {
                         case InterviewCreated interviewCreated:
-                            reference = AddInterviewReference(@event, interviewCreated.QuestionnaireIdentity);
+                            reference = await AddInterviewReferenceAsync(@event, interviewCreated.QuestionnaireIdentity);
                             break;
                         case InterviewOnClientCreated interviewOnClientCreated:
-                            reference = AddInterviewReference(@event,interviewOnClientCreated.QuestionnaireIdentity);
+                            reference = await AddInterviewReferenceAsync(@event,interviewOnClientCreated.QuestionnaireIdentity);
                             break;
                         case InterviewFromPreloadedDataCreated fromPreloaded:
-                            reference = AddInterviewReference(@event, fromPreloaded.QuestionnaireIdentity);
+                            reference = await AddInterviewReferenceAsync(@event, fromPreloaded.QuestionnaireIdentity);
                             break;
                         case InterviewDeleted _:
                         case InterviewHardDeleted _:
-                            reference = this.dbContext.InterviewReferences.Find(@event.EventSourceId);
+                            reference = await this.dbContext.InterviewReferences.FindAsync(@event.EventSourceId);
                             reference.DeletedAtUtc = @event.EventTimeStamp;
                             break;
                         default:
-                            reference = this.dbContext.InterviewReferences.Find(@event.EventSourceId);
+                            reference = await this.dbContext.InterviewReferences.FindAsync(@event.EventSourceId);
                             break;
                     }
 
@@ -90,18 +90,16 @@ namespace WB.Services.Export.Questionnaire
             return result;
         }
 
-        private InterviewReference AddInterviewReference(Event @event, string questionnaireIdentity)
+        private async Task<InterviewReference> AddInterviewReferenceAsync(Event @event, string questionnaireIdentity)
         {
-            InterviewReference reference = this.dbContext.InterviewReferences.Find(@event.EventSourceId);
+            InterviewReference reference = await this.dbContext.InterviewReferences.FindAsync(@event.EventSourceId);
             if (reference == null)
             {
                 reference = new InterviewReference { QuestionnaireId = questionnaireIdentity, InterviewId = @event.EventSourceId };
 
-                this.dbContext.Add(reference);
+                await this.dbContext.AddAsync(reference);
             }
 
-            reference.QuestionnaireId = questionnaireIdentity;
-            reference.InterviewId = @event.EventSourceId;
             return reference;
         }
     }
