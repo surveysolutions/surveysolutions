@@ -117,7 +117,7 @@ namespace WB.Tests.Abc.TestFactories
             return optionsRepository;
         }
 
-        public IStatefulInterviewRepository InterviewRepository(StatefulInterview interview)
+        public IStatefulInterviewRepository InterviewRepository(IStatefulInterview interview)
         {
             var result = new Mock<IStatefulInterviewRepository>();
             result.Setup(x => x.Get(It.IsAny<string>()))

@@ -5,18 +5,23 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
+using WB.Tests.Abc;
 
 
 namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 {
     internal class whent_publish_0_events_on_bus_with_functional_style_denormalizer_registred : NcqrCompatibleEventDispatcherTestContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp]
+        public void context()
+        {
             var ncqrsStyleDenormalizerMock = new Mock<IEventHandler>();
             functionalStyleEventHandlerMock = ncqrsStyleDenormalizerMock.As<IFunctionalEventHandler>();
 
-            ncqrCompatibleEventDispatcher = CreateNcqrCompatibleEventDispatcher();
-            ncqrCompatibleEventDispatcher.Register(ncqrsStyleDenormalizerMock.Object);
+            var denormalizerRegistry = Create.Service.DenormalizerRegistry();
+            denormalizerRegistry.RegisterFunctional<IFunctionalEventHandler>();
+
+            ncqrCompatibleEventDispatcher = CreateNcqrCompatibleEventDispatcher(denormalizerRegistry: denormalizerRegistry);
 
             eventSourceId = Guid.NewGuid();
             eventsToPublish = new IPublishableEvent[0];
@@ -24,7 +29,8 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 
         public void BecauseOf() => ncqrCompatibleEventDispatcher.Publish(eventsToPublish);
 
-        [NUnit.Framework.Test] public void should_functional_denormalizer_method_handle_be_called_once_with_whole_published_stream () =>
+        [NUnit.Framework.Test]
+        public void should_functional_denormalizer_method_handle_be_called_once_with_whole_published_stream() =>
             functionalStyleEventHandlerMock.Verify(x => x.Handle(eventsToPublish, eventSourceId), Times.Never());
 
         private static NcqrCompatibleEventDispatcher ncqrCompatibleEventDispatcher;

@@ -1,15 +1,24 @@
 using System;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
 {
-    public class InterviewComment
+    public class InterviewComment : IReadSideRepositoryEntity
     {
-        public InterviewComment()
+        protected InterviewComment()
         {
-            this.RosterVector = new decimal[0];
+            this.RosterVector = Array.Empty<decimal>();
         }
 
+        public InterviewComment(InterviewSummary summary)
+        {
+            this.InterviewCommentaries = summary;
+        }
+
+        public virtual int Id { get; set; }
         public virtual int CommentSequence { get; set; }
         public virtual string OriginatorName { get; set; }
         public virtual Guid OriginatorUserId { get; set; }
@@ -20,6 +29,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
         public virtual decimal[] RosterVector { get; set; }
         public virtual string Comment { get; set; }
 
-        public virtual InterviewCommentaries InterviewCommentaries { get; set; }
+        public virtual InterviewSummary InterviewCommentaries { get; set; }
     }
 }

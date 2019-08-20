@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Web.Mvc;
+using CsvHelper;
+using CsvHelper.Configuration;
 using WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -21,19 +26,22 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IDeviceSyncInfoRepository deviceSyncInfoRepository;
         private readonly IInterviewerVersionReader interviewerVersionReader;
         private readonly IAuditLogService auditLogService;
+        private readonly IAuthorizedUser authorizedUser;
 
         public InterviewerAuditLogController(ICommandService commandService, 
             ILogger logger, 
             IUserViewFactory usersRepository,
             IDeviceSyncInfoRepository deviceSyncInfoRepository,
             IInterviewerVersionReader interviewerVersionReader,
-            IAuditLogService auditLogService) 
+            IAuditLogService auditLogService,
+            IAuthorizedUser authorizedUser) 
             : base(commandService, logger)
         {
             this.usersRepository = usersRepository;
             this.deviceSyncInfoRepository = deviceSyncInfoRepository;
             this.interviewerVersionReader = interviewerVersionReader;
             this.auditLogService = auditLogService;
+            this.authorizedUser = authorizedUser;
         }
 
         public ActionResult Index(Guid id, DateTime? startDateTime = null, bool showErrorMessage = false)
@@ -45,21 +53,32 @@ namespace WB.UI.Headquarters.Controllers
             if (!startDateTime.HasValue)
                 startDateTime = DateTime.UtcNow.AddDays(1);
 
-            var records = auditLogService.GetLastExisted7DaysRecords(id, startDateTime.Value, showErrorMessage);
+            var result = auditLogService.GetLastExisted7DaysRecords(id, startDateTime.Value, showErrorMessage);
+
+            var recordsByDate = new Dictionary<DateTime, List<AuditLogRecordItem>>();
+            foreach (var record in result.Items)
+            {
+                if (!recordsByDate.ContainsKey(record.Time.Date))
+                    recordsByDate.Add(record.Time.Date, new List<AuditLogRecordItem>());
+
+                recordsByDate[record.Time.Date].Add(record);
+            }
+
+            var isNeedShowErrors = showErrorMessage && authorizedUser.IsAdministrator;
 
             var model = new InterviewerAuditLogModel();
             model.InterviewerName = userView.UserName;
             model.InterviewerId = userView.PublicKey;
-            model.StartDateTime = records.NextBatchRecordDate;
-            model.RecordsByDate = records.Records.Select(kv => new InterviewerAuditLogDateRecordsModel()
+            model.StartDateTime = result.NextBatchRecordDate;
+            model.RecordsByDate = recordsByDate.Select(kv => new InterviewerAuditLogDateRecordsModel()
             {
-                Date = kv.Date,
-                RecordsByDate = kv.RecordsByDate.Select(r => new InterviewerAuditLogRecordModel()
+                Date = kv.Key,
+                RecordsByDate = kv.Value.Select(r => new InterviewerAuditLogRecordModel()
                 {
                     Time = r.Time,
                     Type = r.Type,
                     Message = r.Message,
-                    Description = r.Description
+                    Description = isNeedShowErrors ? r.Description : null
                 }).OrderByDescending(i => i.Time).ToArray()
             }).OrderByDescending(i => i.Date).ToArray();
 
@@ -84,8 +103,45 @@ namespace WB.UI.Headquarters.Controllers
             if (userView == null || (!userView.IsInterviewer() && !userView.IsSupervisor()))
                 throw new InvalidOperationException($"User with id: {id} don't found");
 
-            var fileContent = auditLogService.GenerateTabFile(id, showErrorMessage);
-            return File(fileContent, "text/csv", $"actions_log_{userView.UserName}.tab");
+            var records = auditLogService.GetAllRecords(id);
+
+            var csvConfiguration = new Configuration
+            {
+                HasHeaderRecord = true,
+                TrimOptions = TrimOptions.Trim,
+                IgnoreQuotes = false,
+                Delimiter = "\t",
+                MissingFieldFound = null,
+            };
+
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                using (StreamWriter streamWriter = new StreamWriter(memoryStream))
+                using (CsvWriter csvWriter = new CsvWriter(streamWriter, csvConfiguration))
+                {
+                    csvWriter.WriteField("Timestamp");
+                    csvWriter.WriteField("Action");
+                    csvWriter.NextRecord();
+
+                    foreach (var record in records)
+                    {
+                        csvWriter.WriteField(record.Time.ToString(CultureInfo.InvariantCulture));
+                        var message = record.Message;
+                        if (showErrorMessage && authorizedUser.IsAdministrator)
+                        {
+                            message += "\r\n" + record.Description;
+                        }
+                        csvWriter.WriteField(message);
+                        csvWriter.NextRecord();
+                    }
+
+                    csvWriter.Flush();
+                    streamWriter.Flush();
+
+                    var fileContent = memoryStream.ToArray();
+                    return File(fileContent, "text/csv", $"actions_log_{userView.UserName}.tab");
+                }
+            }
         }
     }
 

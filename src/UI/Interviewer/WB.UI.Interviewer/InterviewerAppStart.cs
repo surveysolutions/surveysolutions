@@ -8,6 +8,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.UI.Interviewer.Activities;
 using WB.UI.Shared.Enumerator.Migrations;
@@ -22,7 +23,7 @@ namespace WB.UI.Interviewer
         private readonly IAuditLogService auditLogService;
         private readonly IServiceLocator serviceLocator;
         private IEnumeratorSettings enumeratorSettings;
-
+        
         public InterviewerAppStart(IMvxApplication application, 
             IMvxNavigationService navigationService,
             IAuditLogService auditLogService,
@@ -49,7 +50,7 @@ namespace WB.UI.Interviewer
         protected override Task<object> ApplicationStartup(object hint = null)
         {
             auditLogService.Write(new OpenApplicationAuditLogEntity());
-            this.serviceLocator.GetInstance<InterviewDashboardEventHandler>();
+            
 
             logger.Info($"Application started. Version: {typeof(SplashActivity).Assembly.GetName().Version}");
 
@@ -58,8 +59,16 @@ namespace WB.UI.Interviewer
             Mvx.IoCProvider.Resolve<IAudioAuditService>().CheckAndProcessAllAuditFiles();
             
             this.UpdateNotificationsWorker();
-           
+
+            this.CheckAndProcessInterviewsWithoutViews();
+
             return base.ApplicationStartup(hint);
+        }
+
+        private void CheckAndProcessInterviewsWithoutViews()
+        {
+            var interviewsAccessor = Mvx.IoCProvider.Resolve<IInterviewerInterviewAccessor>();
+            interviewsAccessor.CheckAndProcessInterviewsWithoutViews();
         }
 
         private void UpdateNotificationsWorker()

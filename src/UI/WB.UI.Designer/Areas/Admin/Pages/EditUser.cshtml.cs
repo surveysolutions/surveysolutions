@@ -3,10 +3,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.Core.BoundedContexts.Designer.MembershipProvider.Roles;
 using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
@@ -14,6 +16,7 @@ using WB.UI.Designer.Resources;
 
 namespace WB.UI.Designer.Areas.Admin.Pages
 {
+    [Authorize(Roles = nameof(SimpleRoleEnum.Administrator))]
     public class EditUserModel : PageModel
     {
         private readonly UserManager<DesignerIdentityUser> userManager;
