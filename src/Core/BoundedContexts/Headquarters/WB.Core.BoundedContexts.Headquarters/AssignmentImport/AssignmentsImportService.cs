@@ -182,8 +182,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 AssignedTo = process.AssignedTo
             };
 
-            if (!this.importAssignmentsRepository.Query(x => x.Any())) return status;
-
             var statistics = this.importAssignmentsRepository.Query(x =>
                 x.Select(_ =>
                         new
@@ -195,7 +193,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                             AssignedToInterviewer = _.Interviewer != null ? 1 : 0,
                             AssignedToSupervisor = _.Interviewer == null && _.Supervisor != null ? 1 : 0
                         })
-                    .GroupBy(_ => 1)
+                    .GroupBy(_ => _.Total)
+                    .Where(_=>_.Count() > 0)
                     .Select(_ => new
                     {
                         Total = _.Sum(y => y.Total),
@@ -206,12 +205,15 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     })
                     .FirstOrDefault());
 
-            status.WithErrorsCount = statistics.WithErrors;
-            status.VerifiedCount = statistics.Verified;
-            status.AssignedToInterviewersCount = statistics.AssignedToInterviewers;
-            status.AssignedToSupervisorsCount = statistics.AssignedToSupervisors;
-            status.InQueueCount = statistics.Total;
-            status.ProcessedCount = process.TotalCount - statistics.Total;
+            if (statistics != null)
+            {
+                status.WithErrorsCount = statistics.WithErrors;
+                status.VerifiedCount = statistics.Verified;
+                status.AssignedToInterviewersCount = statistics.AssignedToInterviewers;
+                status.AssignedToSupervisorsCount = statistics.AssignedToSupervisors;
+                status.InQueueCount = statistics.Total;
+                status.ProcessedCount = process.TotalCount - statistics.Total;
+            }
 
             return status;
 
