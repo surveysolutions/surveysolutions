@@ -57,6 +57,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 };
 
                 WriteAuditLogRecord(auditLogEntityView);
+
+                this.logger.Info($"{entity.GetType().Name.Replace("AuditLogEntity", "")} {this.serializer.SerializeWithoutTypes(entity)}");
             }
             catch (Exception e)
             {

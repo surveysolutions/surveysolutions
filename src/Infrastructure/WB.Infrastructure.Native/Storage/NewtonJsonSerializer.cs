@@ -23,7 +23,9 @@ namespace WB.Infrastructure.Native.Storage
         {
             return JsonConvert.SerializeObject(item, jsonSerializerSettings);
         }
-        
+
+        public string SerializeWithoutTypes(object item) => JsonConvert.SerializeObject(item, new JsonSerializerSettings());
+
         public T Deserialize<T>(string payload)
         {
             return JsonConvert.DeserializeObject<T>(payload, jsonSerializerSettings);
