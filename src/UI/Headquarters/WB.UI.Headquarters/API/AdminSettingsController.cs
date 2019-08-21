@@ -57,7 +57,9 @@ namespace WB.UI.Headquarters.API
             IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage, 
             IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage,
             IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage,
-            IEmailService emailService, ISystemLog auditLog, 
+            IEmailService emailService, 
+            ISystemLog auditLog, 
+            ISystemLogViewFactory systemLogViewFactory,
             IWebInterviewEmailRenderer emailRenderer)
         {
             this.appSettingsStorage = appSettingsStorage ?? throw new ArgumentNullException(nameof(appSettingsStorage));
