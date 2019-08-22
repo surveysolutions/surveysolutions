@@ -1236,7 +1236,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 categoricalOneAnswerQuestion.LinkedToQuestionId,
                 categoricalOneAnswerQuestion.LinkedToRosterId,
                 null, null, null, 
-                ((IMultyOptionsQuestion)categoricalOneAnswerQuestion)?.MaxAllowedAnswers, 
+                (categoricalOneAnswerQuestion as IMultyOptionsQuestion)?.MaxAllowedAnswers, 
                 null,
                 categoricalOneAnswerQuestion.IsFilteredCombobox,
                 categoricalOneAnswerQuestion.CascadeFromQuestionId,
