@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -72,6 +73,8 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<IImageFileStorage, InterviewerImageFileStorage>();
             registry.Bind<IAudioAuditFileStorage, InterviewerAudioAuditFileStorage>();
             registry.BindAsSingleton<IAuditLogService, EnumeratorAuditLogService>();
+            registry.Bind<IServiceProvider, MvxServiceProvider>();
+            registry.Bind<IMigrationRunner, MigrationRunner>();
 
             registry.BindAsSingleton<IViewModelEventRegistry, ViewModelEventRegistry>();
             registry.BindAsSingleton<IDenormalizerRegistry, DenormalizerRegistry>();

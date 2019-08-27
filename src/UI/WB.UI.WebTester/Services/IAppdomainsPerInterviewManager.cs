@@ -19,8 +19,8 @@ namespace WB.UI.WebTester.Services
 
         List<CommittedEvent> Execute(ICommand command);
         
-        List<CategoricalOption> GetFirstTopFilteredOptionsForQuestion(Guid interviewId, Identity questionIdentity, 
-            int? parentQuestionValue, string filter, int itemsCount = 200);
+        List<CategoricalOption> GetFirstTopFilteredOptionsForQuestion(Guid interviewId, Identity questionIdentity,
+            int? parentQuestionValue, string filter, int itemsCount = 200, int[] excludedOptionIds = null);
 
         int? GetLastEventSequence(Guid interviewId);
 

@@ -550,10 +550,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return option.Title;
         }
         
-        public IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, int? parentQuestionValue, string filter)
-        {
-            return this.Questionnaire.GetOptionsForQuestion(questionId, parentQuestionValue, filter);
-        }
+        public IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, int? parentQuestionValue, string filter) 
+            => this.Questionnaire.GetOptionsForQuestion(questionId, parentQuestionValue, filter, null);
 
         public IEnumerable<IInterviewTreeNode> GetAllNodesInEnumeratorOrder() =>
             this.Sections.Cast<IInterviewTreeNode>().TreeToEnumerableDepthFirst(node => node.Children);

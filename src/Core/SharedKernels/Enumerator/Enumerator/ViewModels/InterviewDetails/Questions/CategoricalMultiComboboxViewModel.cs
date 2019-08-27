@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
@@ -64,7 +65,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.comboboxViewModel.ExcludeOptions(answeredOptions);
 
                 var hasNoOptionsForAnswers = answeredOptions.Length == this.maxAllowedAnswers ||
-                                             answeredOptions.Length == this.filteredOptionsViewModel.GetOptions().Count;
+                                             answeredOptions.Length == Constants.MaxLongRosterRowCount;
 
                 if (hasNoOptionsForAnswers && this.comboboxCollection.Contains(this.comboboxViewModel))
                     this.comboboxCollection.Remove(this.comboboxViewModel);
@@ -93,11 +94,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var answeredOptions = this.GetAnsweredOptionsFromInterview(interview);
             if(answeredOptions == null) yield break;
 
-            var allOptions = this.filteredOptionsViewModel.GetOptions();
-
             foreach (var optionCode in answeredOptions)
             {
-                var categoricalOption = allOptions.Find(x => x.Value == optionCode);
+                var categoricalOption = interview.GetOptionForQuestionWithoutFilter(this.Identity, optionCode);
 
                 var vm = new CategoricalMultiComboboxOptionViewModel(this.userInteraction);
 

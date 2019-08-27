@@ -157,7 +157,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                     ParentValue = 2,
                     Title = "Опция значения 2"
                 }
-                && x.GetOptionsForQuestion(Moq.It.IsAny<IQuestionnaire>(), cascadingIdentity.Id, 2, "", Moq.It.IsAny<Translation>()) == new CategoricalOption
+                && x.GetOptionsForQuestion(Moq.It.IsAny<IQuestionnaire>(), cascadingIdentity.Id, 2, "", Moq.It.IsAny<Translation>(), null) == new CategoricalOption
                 {
                     Value = 2,
                     ParentValue = 2,
