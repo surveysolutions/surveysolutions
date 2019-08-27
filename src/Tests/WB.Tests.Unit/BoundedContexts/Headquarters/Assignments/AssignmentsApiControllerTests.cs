@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 Mock.Of<IAuthorizedUser>(au => au.IsInterviewer == true && au.Id == Id.gA),
                 Mock.Of<IPlainStorageAccessor<Assignment>>(),
                 Mock.Of<IQuestionnaireStorage>(),
-                Mock.Of<IAuditLog>(),
+                Mock.Of<ISystemLog>(),
                 new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>(),
                 Mock.Of<IInvitationService>(),
                 Mock.Of<IStatefulInterviewRepository>(),
