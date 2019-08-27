@@ -283,7 +283,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAssignmentViewFactory, AssignmentViewFactory>();
             registry.Bind<IAssignmentsService, AssignmentsService>();
             registry.Bind<IAssignmetnsDeletionService, AssignmetnsDeletionService>();
-            registry.Bind<IAuditLog, Services.Internal.AuditLog>();
+            registry.Bind<ISystemLog, Services.Internal.SystemLog>();
             registry.Bind<IAuditLogReader, AuditLogReader>();
 
             registry.BindAsSingleton<IPauseResumeQueue, PauseResumeQueue>();
@@ -297,6 +297,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAssignmentPasswordGenerator, AssignmentPasswordGenerator>();
             registry.Bind<IInterviewReportDataRepository, InterviewReportDataRepository>();
 
+            registry.Bind<ISystemLogViewFactory, SystemLogViewFactory>();
+            
             if (fileSystemEmailServiceSettings?.IsEnabled ?? false)
             {
                 registry.Bind<IEmailService, FileSystemEmailService>(new ConstructorArgument("settings", _ => fileSystemEmailServiceSettings));

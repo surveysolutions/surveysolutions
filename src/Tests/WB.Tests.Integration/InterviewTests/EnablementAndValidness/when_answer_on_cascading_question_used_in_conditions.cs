@@ -56,7 +56,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                     ParentValue = 1,
                     Title = "1"
                 }
-                && x.GetOptionsForQuestion(Moq.It.IsAny<IQuestionnaire>(), cascadingQuestionId, 1, "", Moq.It.IsAny<Core.SharedKernels.SurveySolutions.Documents.Translation>()) == new CategoricalOption
+                && x.GetOptionsForQuestion(Moq.It.IsAny<IQuestionnaire>(), cascadingQuestionId, 1, "", Moq.It.IsAny<Core.SharedKernels.SurveySolutions.Documents.Translation>(), null) == new CategoricalOption
                 {
                     Value = 1,
                     ParentValue = 1,
