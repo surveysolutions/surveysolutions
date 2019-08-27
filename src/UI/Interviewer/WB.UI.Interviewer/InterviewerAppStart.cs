@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MvvmCross;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
@@ -11,9 +10,8 @@ using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Interviewer.Activities;
-using WB.UI.Shared.Enumerator.Services;
+using WB.UI.Shared.Enumerator.Migrations;
 using WB.UI.Shared.Enumerator.Services.Notifications;
 
 namespace WB.UI.Interviewer
@@ -21,9 +19,9 @@ namespace WB.UI.Interviewer
     public class InterviewerAppStart : MvxAppStart
     {
         private readonly ILogger logger;
+        private readonly IMigrationRunner migrationRunner;
         private readonly IAuditLogService auditLogService;
         private readonly IServiceLocator serviceLocator;
-        private readonly IApplicationCypher applicationCypher;
         private IEnumeratorSettings enumeratorSettings;
         
         public InterviewerAppStart(IMvxApplication application, 
@@ -31,13 +29,13 @@ namespace WB.UI.Interviewer
             IAuditLogService auditLogService,
             IEnumeratorSettings enumeratorSettings, 
             IServiceLocator serviceLocator,
-            IApplicationCypher applicationCypher,
-            ILogger logger) : base(application, navigationService)
+            ILogger logger,
+            IMigrationRunner migrationRunner) : base(application, navigationService)
         {
             this.auditLogService = auditLogService;
             this.serviceLocator = serviceLocator;
-            this.applicationCypher = applicationCypher;
             this.logger = logger;
+            this.migrationRunner = migrationRunner;
             this.enumeratorSettings = enumeratorSettings;
         }
 
@@ -58,12 +56,10 @@ namespace WB.UI.Interviewer
 
             logger.Info($"Application started. Version: {typeof(SplashActivity).Assembly.GetName().Version}");
 
-            applicationCypher.EncryptAppData();
+            migrationRunner.MigrateUp(this.GetType().Assembly, typeof(Encrypt_Data).Assembly);
 
-            this.BackwardCompatibility();
-
-            this.CheckAndProcessAudit();
-
+            Mvx.IoCProvider.Resolve<IAudioAuditService>().CheckAndProcessAllAuditFiles();
+            
             this.UpdateNotificationsWorker();
 
             this.CheckAndProcessInterviewsWithoutViews();
@@ -100,55 +96,6 @@ namespace WB.UI.Interviewer
             {
                 await viewModelNavigationService.NavigateToLoginAsync();
             }
-        }
-
-
-        [Conditional("RELEASE")]
-        private void BackwardCompatibility()
-        {
-            this.UpdateAssignmentsWithInterviewsCount();
-            this.AddTitleToOptionViewForSearching();
-        }
-
-        private void UpdateAssignmentsWithInterviewsCount()
-        {
-            var assignmentStorage = Mvx.IoCProvider.Resolve<IAssignmentDocumentsStorage>();
-
-            var hasEmptyInterviewsCounts = assignmentStorage.Count(x => x.CreatedInterviewsCount == null) > 0;
-            
-            if (!hasEmptyInterviewsCounts) return;
-
-            var interviewStorage = Mvx.IoCProvider.Resolve<IPlainStorage<InterviewView>>();
-            
-            var assignments = assignmentStorage.LoadAll();
-
-            foreach (var assignment in assignments)
-            {
-                assignment.CreatedInterviewsCount = interviewStorage.Count(x => x.CanBeDeleted && x.Assignment == assignment.Id);
-                assignmentStorage.Store(assignment);
-            }
-        }
-
-        private void AddTitleToOptionViewForSearching()
-        {
-            var optionsStorage = Mvx.IoCProvider.Resolve<IPlainStorage<OptionView>>();
-
-            var hasEmptySearchTitles = optionsStorage.Count(x => x.SearchTitle == null) > 0;
-            if (!hasEmptySearchTitles) return;
-
-            var allOptions = optionsStorage.LoadAll();
-
-            foreach (var optionView in allOptions)
-                optionView.SearchTitle = optionView.Title.ToLower();
-            
-            optionsStorage.Store(allOptions);
-
-        }
-
-        private void CheckAndProcessAudit()
-        {
-            var auditService = Mvx.IoCProvider.Resolve<IAudioAuditService>();
-            auditService.CheckAndProcessAllAuditFiles();
         }
     }
 }

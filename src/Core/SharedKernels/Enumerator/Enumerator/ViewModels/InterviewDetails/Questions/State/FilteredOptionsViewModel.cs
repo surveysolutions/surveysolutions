@@ -19,13 +19,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private IStatefulInterview interview;
         private List<CategoricalOption> Options { get; set; }
         private string Filter { get; set; } = String.Empty;
-        public int Count { get; protected set; } = 200;
+        public int Count { get; protected set; } = 20;
 
         public virtual event Func<object, EventArgs, Task> OptionsChanged;
 
         public int? ParentValue { set; get; }
 
         private Identity questionIdentity;
+        private int[] excludedOptionIds;
 
         private class CategoricalOptionEqualityComparer : IEqualityComparer<CategoricalOption>
         {
@@ -71,7 +72,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             if (!questionnaire.IsQuestionFilteredCombobox(entityIdentity.Id))
             {
-                this.Options = interview.GetTopFilteredOptionsForQuestion(entityIdentity, ParentValue, Filter, this.Count);
+                this.Options = interview.GetTopFilteredOptionsForQuestion(entityIdentity, ParentValue, Filter, this.Count, null);
             }
 
             if (questionnaire.IsSupportFilteringForOptions(entityIdentity.Id))
@@ -97,10 +98,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public virtual List<CategoricalOption> GetOptions(string filter = "")
+        public virtual List<CategoricalOption> GetOptions(string filter = "", int[] excludedOptionIds = null)
         {
             this.Filter = filter;
-            this.Options = this.interview.GetTopFilteredOptionsForQuestion(this.questionIdentity, ParentValue, filter, this.Count).ToList();
+            this.excludedOptionIds = excludedOptionIds;
+            this.Options = this.interview.GetTopFilteredOptionsForQuestion(this.questionIdentity, ParentValue, filter, this.Count, excludedOptionIds).ToList();
             return Options;
         }
 
@@ -125,7 +127,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 return;
             }
 
-            var listOfNewOptions = interview.GetTopFilteredOptionsForQuestion(questionIdentity, ParentValue, Filter, Count).ToList(); 
+            var listOfNewOptions = interview.GetTopFilteredOptionsForQuestion(questionIdentity, ParentValue, Filter, Count, this.excludedOptionIds).ToList(); 
 
             var existingOptions = this.Options;
             if (existingOptions == null || !listOfNewOptions.SequenceEqual(existingOptions, new CategoricalOptionEqualityComparer()))

@@ -24,13 +24,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
 
     internal class AssignmentsUpgradeService : IAssignmentsUpgradeService
     {
-        private readonly IAuditLog auditLog;
+        private readonly ISystemLog auditLog;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private static readonly Dictionary<Guid, AssignmentUpgradeProgressDetails> progressReporting = new Dictionary<Guid, AssignmentUpgradeProgressDetails>();
         private static readonly ConcurrentQueue<QueuedUpgrade> upgradeQueue = new ConcurrentQueue<QueuedUpgrade>();
         private readonly Dictionary<Guid, CancellationTokenSource> cancellationTokens = new Dictionary<Guid, CancellationTokenSource>();
 
-        public AssignmentsUpgradeService(IAuditLog auditLog, IQuestionnaireStorage questionnaireStorage)
+        public AssignmentsUpgradeService(ISystemLog auditLog, IQuestionnaireStorage questionnaireStorage)
         {
             this.auditLog = auditLog;
             this.questionnaireStorage = questionnaireStorage;

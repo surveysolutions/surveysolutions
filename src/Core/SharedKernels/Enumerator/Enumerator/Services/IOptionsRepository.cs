@@ -11,12 +11,14 @@ namespace WB.Core.SharedKernels.Enumerator.Services
     public interface IOptionsRepository
     {
         IEnumerable<CategoricalOption> GetFilteredQuestionOptions(QuestionnaireIdentity questionnaireId, 
-            Guid questionId, int? parentValue, string filter, Guid? translationId);
+            Guid questionId, int? parentValue, string filter, Guid? translationId, int[] excludedOptionIds = null);
 
         CategoricalOption GetQuestionOption(QuestionnaireIdentity questionnaireId, Guid questionId, string optionText, int? parentQuestionValue, Guid? translationId);
 
         CategoricalOption GetQuestionOptionByValue(QuestionnaireIdentity questionnaireId, Guid questionId, 
             decimal optionValue, Guid? translationId);
+
+        CategoricalOption[] GetOptionsByValues(QuestionnaireIdentity questionnaireId, Guid questionId, int[] optionValues);
 
         void RemoveOptionsForQuestionnaire(QuestionnaireIdentity questionnaireId);
 

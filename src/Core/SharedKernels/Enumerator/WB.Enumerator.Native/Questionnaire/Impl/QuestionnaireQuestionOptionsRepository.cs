@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -9,10 +10,11 @@ namespace WB.Enumerator.Native.Questionnaire.Impl
 {
     public class QuestionnaireQuestionOptionsRepository : IQuestionOptionsRepository
     {
-        public IEnumerable<CategoricalOption> GetOptionsForQuestion(IQuestionnaire questionnaire, 
-            Guid questionId, int? parentQuestionValue, string searchFor, Translation translation)
+        public IEnumerable<CategoricalOption> GetOptionsForQuestion(IQuestionnaire questionnaire,
+            Guid questionId, int? parentQuestionValue, string searchFor, Translation translation,
+            int[] excludedOptionIds = null)
         {
-            return questionnaire.GetOptionsForQuestionFromStructure(questionId, parentQuestionValue, searchFor);
+            return questionnaire.GetOptionsForQuestionFromStructure(questionId, parentQuestionValue, searchFor, excludedOptionIds);
         }
 
         public CategoricalOption GetOptionForQuestionByOptionText(IQuestionnaire questionnaire, Guid questionId, string optionText, int? parentQuestionValue, Translation translation)
@@ -25,5 +27,8 @@ namespace WB.Enumerator.Native.Questionnaire.Impl
         {
             return questionnaire.GetOptionForQuestionByOptionValueFromStructure(questionId, optionValue);
         }
+
+        public IEnumerable<CategoricalOption> GetOptionsByOptionValues(IQuestionnaire questionnaire, Guid questionId, int[] optionsValues) => 
+            questionnaire.GetOptionsForQuestion(questionId, null, null, null).Where(x => optionsValues.Contains(x.Value));
     }
 }
