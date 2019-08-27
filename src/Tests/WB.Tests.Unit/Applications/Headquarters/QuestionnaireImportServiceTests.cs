@@ -242,7 +242,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 lookupStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireLookupTable>>(),
                 commandService ?? Mock.Of<ICommandService>(),
                 Mock.Of<ILogger>(),
-                Mock.Of<IAuditLog>(),
+                Mock.Of<ISystemLog>(),
                 unitOfWork,
                 globalInfoProvider,
                 designerUserCredentials);
