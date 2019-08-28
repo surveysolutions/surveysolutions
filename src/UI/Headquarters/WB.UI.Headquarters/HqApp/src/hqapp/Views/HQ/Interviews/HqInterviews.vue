@@ -187,12 +187,11 @@
         <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
       </div>
     </ModalFrame>
-
     <ModalFrame ref="approveModal">
       <form onsubmit="return false;">
         <div class="action-container">
           <p
-            v-html="$t('Interviews.ApproveConfirmMessageHQ', {count: this.getFilteredToApprove().length, status1: 'Completed', status2: 'ApprovedBySupervisor'} )"
+            v-html="this.config.isSupervisor ? $t('Interviews.ApproveConfirmMessage', {count: this.getFilteredToApprove().length, status1: 'Completed', status2: 'RejectedbyHeadquarters'} ) : $t('Interviews.ApproveConfirmMessageHQ', {count: this.getFilteredToApprove().length, status1: 'Completed', status2: 'ApprovedBySupervisor'} )"
           ></p>
         </div>
         <div>
@@ -394,9 +393,7 @@ export default {
         },
         getResponsibleClass() {
             return this.selectedRowWithMenu != undefined
-                ? this.selectedRowWithMenu.isResponsibleInterviewer
-                    ? 'interviewer'
-                    : 'supervisor'
+                ? this.selectedRowWithMenu.responsibleRole.toLowerCase()                    
                 : ''
         },
         tableColumns() {
@@ -1094,7 +1091,7 @@ export default {
 
             if (this.status) queryString.status = this.status.key
 
-            this.$router.push({query: queryString})
+            this.$router.push({ query: queryString });
         },
     },
 
