@@ -16,7 +16,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class CascadingSingleOptionQuestionViewModel : BaseComboboxQuestionViewModel, 
-         ILiteEventHandler<SingleOptionQuestionAnswered>
+         IViewModelEventHandler<SingleOptionQuestionAnswered>
     {
         private readonly ThrottlingViewModel throttlingModel;
 
@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private int defaultCascadingAsListThreshold = 50;
 
         public CascadingSingleOptionQuestionViewModel(IStatefulInterviewRepository interviewRepository,
-            ILiteEventRegistry eventRegistry, 
+            IViewModelEventRegistry eventRegistry, 
             IPrincipal principal,
             IQuestionnaireStorage questionnaireRepository,
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel, 

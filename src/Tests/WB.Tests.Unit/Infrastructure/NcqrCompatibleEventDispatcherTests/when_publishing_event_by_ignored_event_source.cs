@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
             Guid ignoredEventSource = Guid.NewGuid();
 
             var secondEventHandlerMock = new Mock<TestDenormalzier>();
-            var denormalizerRegistry = Create.Service.DenormalizerRegistry();
+            var denormalizerRegistry = Create.Service.DenormalizerRegistryNative();
             denormalizerRegistry.Register<TestDenormalzier>();
             var serviceLocator = Mock.Of<IServiceLocator>(x =>
                 x.GetInstance(typeof(TestDenormalzier)) == secondEventHandlerMock.Object);
@@ -59,7 +59,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 
             var customHandler = new CustomHandler();
 
-            var denormalizerRegistry = Create.Service.DenormalizerRegistry();
+            var denormalizerRegistry = Create.Service.DenormalizerRegistryNative();
             denormalizerRegistry.Register<CustomHandler>();
 
             var serviceLocator = Mock.Of<IServiceLocator>(x =>

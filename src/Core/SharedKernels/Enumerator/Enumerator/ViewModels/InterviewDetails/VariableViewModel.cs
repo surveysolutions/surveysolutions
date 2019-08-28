@@ -6,6 +6,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
@@ -13,14 +14,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
     public class VariableViewModel : 
         MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
-        ILiteEventHandler<VariablesChanged>,
+        IViewModelEventHandler<VariablesChanged>,
         IDisposable
     {
         public Identity Identity { get; private set; }
 
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly ILiteEventRegistry registry;
+        private readonly IViewModelEventRegistry registry;
 
         private string variableName;
         private string variableLabel;
@@ -28,7 +29,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public VariableViewModel(IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
-            ILiteEventRegistry registry)
+            IViewModelEventRegistry registry)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;

@@ -3,6 +3,7 @@ using Moq;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Tests.Abc;
 
@@ -16,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
         {
             //arrange
             var interviewId = Guid.Parse("11111111111111111111111111111111").FormatGuid();
-            var mockOfEventRegistry = new Mock<ILiteEventRegistry>();
+            var mockOfEventRegistry = new Mock<IViewModelEventRegistry>();
             var vibrationViewModel = Create.ViewModel.VibrationViewModel(mockOfEventRegistry.Object);
             //act
             vibrationViewModel.Initialize(interviewId);

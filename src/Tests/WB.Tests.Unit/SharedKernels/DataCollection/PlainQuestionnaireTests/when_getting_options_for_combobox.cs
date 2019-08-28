@@ -36,14 +36,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
             var optionsFromRepository = new List<CategoricalOption>();
             var questionOptionsRepository = new Mock<IQuestionOptionsRepository>();
             questionOptionsRepository.Setup(x =>
-                    x.GetOptionsForQuestion(Moq.It.IsAny<IQuestionnaire>(), questionId, null, String.Empty, null))
+                    x.GetOptionsForQuestion(Moq.It.IsAny<IQuestionnaire>(), questionId, null, String.Empty, null, null))
                 .Returns(optionsFromRepository);
 
 
             plainQuestionnaire = Create.Entity.PlainQuestionnaire(document: questionnaire, 1, questionOptionsRepository: questionOptionsRepository.Object);
 
             // Act
-            categoricalOptions = plainQuestionnaire.GetOptionsForQuestion(questionId, null, String.Empty);
+            categoricalOptions = plainQuestionnaire.GetOptionsForQuestion(questionId, null, String.Empty, null);
 
             // assert
             categoricalOptions.Should().BeSameAs(optionsFromRepository);

@@ -3,6 +3,7 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Tests.Abc;
@@ -14,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
     {
         public static StaticTextViewModel CreateViewModel(IQuestionnaireStorage questionnaireRepository = null, 
             IStatefulInterviewRepository interviewRepository = null, 
-            ILiteEventRegistry registry = null,
+            IViewModelEventRegistry registry = null,
             AttachmentViewModel attachmentViewModel = null,
             StaticTextStateViewModel questionState = null)
         {

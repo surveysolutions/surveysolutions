@@ -22,12 +22,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class IntegerQuestionViewModel :
         MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
-        ILiteEventHandler<AnswersRemoved>,
+        IAsyncViewModelEventHandler<AnswersRemoved>,
         ICompositeQuestionWithChildren,
         IDisposable
     {
         private readonly IPrincipal principal;
-        private readonly ILiteEventRegistry liteEventRegistry;
+        private readonly IViewModelEventRegistry liteEventRegistry;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IUserInteractionService userInteractionService;
@@ -110,7 +110,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IUserInteractionService userInteractionService,
             AnsweringViewModel answering,
             QuestionInstructionViewModel instructionViewModel,
-            ILiteEventRegistry liteEventRegistry,
+            IViewModelEventRegistry liteEventRegistry,
             SpecialValuesViewModel specialValues, 
             ThrottlingViewModel throttlingModel)
         {
@@ -314,7 +314,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.throttlingModel.Dispose();
         }
 
-        public async void Handle(AnswersRemoved @event)
+        public async Task HandleAsync(AnswersRemoved @event)
         {
             foreach (var question in @event.Questions)
             {

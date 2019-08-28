@@ -280,7 +280,7 @@
                         command.linkedFilterExpression = question.linkedFilterExpression;
                         command.yesNoView = question.yesNoView;
                         command.isFilteredCombobox = question.isFilteredCombobox || false;
-                        command.options = _.isEmpty(command.linkedToEntityId) ? question.options : null;
+                        command.options = !_.isEmpty(command.linkedToEntityId) || command.isFilteredCombobox ? null : question.options;
                         break;
                     case "Numeric":
                         command.isInteger = question.isInteger;

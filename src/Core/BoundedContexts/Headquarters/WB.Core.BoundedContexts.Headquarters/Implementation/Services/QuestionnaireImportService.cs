@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly ITranslationManagementService translationManagementService;
         private readonly ICommandService commandService;
         private readonly ILogger logger;
-        private readonly IAuditLog auditLog;
+        private readonly ISystemLog auditLog;
         private readonly IUnitOfWork unitOfWork;
         private readonly IAuthorizedUser authorizedUser;
         private readonly DesignerUserCredentials designerUserCredentials;
@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             IPlainKeyValueStorage<QuestionnaireLookupTable> lookupTablesStorage,
             ICommandService commandService,
             ILogger logger,
-            IAuditLog auditLog,
+            ISystemLog auditLog,
             IUnitOfWork unitOfWork,
             IAuthorizedUser authorizedUser,
             DesignerUserCredentials designerUserCredentials)
