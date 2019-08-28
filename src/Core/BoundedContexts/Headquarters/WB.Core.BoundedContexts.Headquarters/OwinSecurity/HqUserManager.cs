@@ -243,13 +243,33 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             }
 
             userToUnarchive.IsArchived = false;
-            return await this.UpdateUserAsync(userToUnarchive, null);
+            var result = await this.UpdateUserAsync(userToUnarchive, null);
+
+            if (result.Succeeded)
+            {
+                if (userToUnarchive.IsInRole(UserRoles.Supervisor))
+                    this.auditLog.SupervisorUnArchived(userToUnarchive.UserName);
+                else if (userToUnarchive.IsInRole(UserRoles.Interviewer))
+                    this.auditLog.InterviewerUnArchived(userToUnarchive.UserName);
+            }
+
+            return result;
         }
 
         private async Task<IdentityResult> ArchiveUserAsync(HqUser userToArchive)
         {
             userToArchive.IsArchived = true;
-            return await this.UpdateUserAsync(userToArchive, null);
+            var result =  await this.UpdateUserAsync(userToArchive, null);
+
+            if (result.Succeeded)
+            {
+                if (userToArchive.IsInRole(UserRoles.Supervisor))
+                    this.auditLog.SupervisorArchived(userToArchive.UserName);
+                else if (userToArchive.IsInRole(UserRoles.Interviewer))
+                    this.auditLog.InterviewerArchived(userToArchive.UserName);
+            }
+
+            return result;
         }
 
         public Task<bool> IsExistAnyUser()
