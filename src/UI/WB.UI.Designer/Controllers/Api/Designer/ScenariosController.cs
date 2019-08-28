@@ -32,7 +32,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         [Route("{id:int}")]
         public async Task<IActionResult> UpdateScenario(Guid questionnaireId, int id, [FromBody] UpdateScenarioModel model)
         {
-            var hasUserAccess = viewFactory.HasUserAccessToQuestionnaire(questionnaireId, User.GetId());
+            var hasUserAccess = viewFactory.HasUserAccessToRevertQuestionnaire(questionnaireId, User.GetId());
             if (!hasUserAccess)
                 return Forbid();
 
@@ -51,7 +51,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         [HttpPatch]
         public async Task<IActionResult> Patch(Guid questionnaireId, int scenarioId, [FromBody]UpdateStepsModel content)
         {
-            var hasUserAccess = viewFactory.HasUserAccessToQuestionnaire(questionnaireId, User.GetId());
+            var hasUserAccess = viewFactory.HasUserAccessToRevertQuestionnaire(questionnaireId, User.GetId());
             if (!hasUserAccess)
                 return Forbid();
 
@@ -69,7 +69,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         [Route("{id:int}")]
         public async Task<IActionResult> DeleteScenario(Guid questionnaireId, int id)
         {
-            var hasUserAccess = viewFactory.HasUserAccessToQuestionnaire(questionnaireId, User.GetId());
+            var hasUserAccess = viewFactory.HasUserAccessToRevertQuestionnaire(questionnaireId, User.GetId());
             if (!hasUserAccess)
                 return Forbid();
 
