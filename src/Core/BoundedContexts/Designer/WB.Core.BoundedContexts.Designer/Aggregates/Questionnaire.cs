@@ -1058,6 +1058,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ExtractLinkedQuestionValues(command.LinkedToEntityId, out linkedQuestionId, out linkedRosterId);
 
+            var answers = command.Options == null && command.IsFilteredCombobox
+                ? this.GetQuestion(command.QuestionId).Answers.ToArray()
+                : ConvertOptionsToAnswers(command.Options);
 
             var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
             IQuestion newQuestion = CreateQuestion(
@@ -1073,7 +1076,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 command.Instructions,
                 command.Properties,
                 null,
-                ConvertOptionsToAnswers(command.Options),
+                answers,
                 linkedQuestionId,
                 linkedRosterId,
                 null,
@@ -1235,7 +1238,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ConvertOptionsToAnswers(options),
                 categoricalOneAnswerQuestion.LinkedToQuestionId,
                 categoricalOneAnswerQuestion.LinkedToRosterId,
-                null, null, null, null, null,
+                null, null, null, 
+                (categoricalOneAnswerQuestion as IMultyOptionsQuestion)?.MaxAllowedAnswers, 
+                null,
                 categoricalOneAnswerQuestion.IsFilteredCombobox,
                 categoricalOneAnswerQuestion.CascadeFromQuestionId,
                 null,

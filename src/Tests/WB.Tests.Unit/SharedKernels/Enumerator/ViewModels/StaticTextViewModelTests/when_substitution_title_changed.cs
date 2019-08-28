@@ -6,6 +6,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Tests.Abc;
 
@@ -54,7 +55,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
         static Guid interviewerId;
         static Identity substitedQuestionIdentity;
         static double answerOnDoubleQuestion;
-        static ILiteEventRegistry eventRegistry;
+        static IViewModelEventRegistry eventRegistry;
     }
 }
 

@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.Services.Implementation;
 using WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSyncHandlers;
@@ -10,7 +9,6 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -88,7 +86,7 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.Bind<IAreaEditService, WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditService>();
 #endif
 
-            registry.BindAsSingleton<IGlobalLiteEventHandler, InterviewDashboardEventHandler>();
+            registry.BindAsSingleton<InterviewDashboardEventHandler, InterviewDashboardEventHandler>();
         }
 
         private void BindOfflineServices(IIocRegistry registry)

@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedToL
             //act
             interview.AnswerMultipleOptionsQuestion(Guid.NewGuid(), multiOptionQuestionId, RosterVector.Empty,
                 DateTime.UtcNow, new[] {3, 1});
-            viewModel.Handle(Create.Event.MultipleOptionsQuestionAnswered(multiOptionQuestionId, RosterVector.Empty, new[] {3m, 1m}));
+            viewModel.HandleAsync(Create.Event.MultipleOptionsQuestionAnswered(multiOptionQuestionId, RosterVector.Empty, new[] {3m, 1m}));
             //assert
             Assert.That(viewModel.Options[0].CheckedOrder, Is.EqualTo(2));
             Assert.That(viewModel.Options[1].CheckedOrder, Is.Null);

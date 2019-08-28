@@ -5,12 +5,13 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
-using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.UserProfile;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
+using WB.Core.BoundedContexts.Headquarters.Views.SystemLog;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.UI.Headquarters.Code;
 
@@ -19,6 +20,8 @@ namespace WB.UI.Headquarters.API
     [Authorize(Roles = "Administrator")]
     public class AdminSettingsController : ApiController
     {
+        private readonly ISystemLogViewFactory systemLogViewFactory;
+
         public class GlobalNoticeModel
         {
             public string GlobalNotice { get; set; }
@@ -46,7 +49,7 @@ namespace WB.UI.Headquarters.API
         private readonly IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage;
         
         private readonly IEmailService emailService;
-        private readonly IAuditLog auditLog;
+        private readonly ISystemLog auditLog;
         private readonly IWebInterviewEmailRenderer emailRenderer;
 
         public AdminSettingsController(
@@ -54,11 +57,14 @@ namespace WB.UI.Headquarters.API
             IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage, 
             IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage,
             IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage,
-            IEmailService emailService, IAuditLog auditLog, 
+            IEmailService emailService, 
+            ISystemLog auditLog, 
+            ISystemLogViewFactory systemLogViewFactory,
             IWebInterviewEmailRenderer emailRenderer)
         {
             this.appSettingsStorage = appSettingsStorage ?? throw new ArgumentNullException(nameof(appSettingsStorage));
             this.interviewerSettingsStorage = interviewerSettingsStorage ?? throw new ArgumentNullException(nameof(interviewerSettingsStorage));
+            this.systemLogViewFactory = systemLogViewFactory ?? throw new ArgumentNullException(nameof(systemLogViewFactory));
             this.emailProviderSettingsStorage = emailProviderSettingsStorage ?? throw new ArgumentNullException(nameof(emailProviderSettingsStorage));
             this.profileSettingsStorage = profileSettingsStorage ?? throw new ArgumentNullException(nameof(profileSettingsStorage));
             this.emailService = emailService;
@@ -191,5 +197,9 @@ namespace WB.UI.Headquarters.API
                 });
             }
         }
+
+        [HttpPost]
+        public SystemLog GetSystemLog(SystemLogFilter filter) => this.systemLogViewFactory.GetLog(filter);
+
     }
 }

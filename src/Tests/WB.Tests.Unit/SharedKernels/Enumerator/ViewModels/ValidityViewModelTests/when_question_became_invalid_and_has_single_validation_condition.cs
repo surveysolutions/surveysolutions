@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTes
 
         public void BecauseOf() 
         {
-            viewModel.Handle(
+            viewModel.HandleAsync(
                 Create.Event.AnswersDeclaredInvalid(new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>
                 {
                     {

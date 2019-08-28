@@ -33,14 +33,14 @@ namespace WB.UI.Headquarters.API.PublicApi
         private readonly IExportServiceApi exportServiceApi;
         private readonly IDataExportStatusReader dataExportStatusReader;
         private readonly IExportSettings exportSettings;
-        private readonly IAuditLog auditLog;
+        private readonly ISystemLog auditLog;
 
         public ExportController(
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IDataExportStatusReader dataExportStatusReader,
             IExportServiceApi exportServiceApi,
             IExportSettings exportSettings,
-            IAuditLog auditLog)
+            ISystemLog auditLog)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.dataExportStatusReader = dataExportStatusReader;

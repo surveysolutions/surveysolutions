@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextQuestionViewMode
                 questionStateViewModel: QuestionStateMock.Object,
                 answering: AnsweringViewModelMock.Object,
                 instructionViewModel: Mock.Of<QuestionInstructionViewModel>(),
-                liteEventRegistry: Mock.Of<ILiteEventRegistry>());
+                liteEventRegistry: Mock.Of<IViewModelEventRegistry>());
         }
 
         protected static void SetUp()
@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextQuestionViewMode
             navigationState = Create.Other.NavigationState();
             QuestionStateMock = new Mock<QuestionStateViewModel<TextQuestionAnswered>> { DefaultValue = DefaultValue.Mock };
             AnsweringViewModelMock = new Mock<AnsweringViewModel> { DefaultValue = DefaultValue.Mock };
-            EventRegistry = new Mock<ILiteEventRegistry>();
+            EventRegistry = new Mock<IViewModelEventRegistry>();
         }
 
         protected static IQuestionnaireStorage SetupQuestionnaireRepositoryWithNumericQuestion(bool isRosterSize = true)
@@ -71,7 +71,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextQuestionViewMode
 
         protected static Mock<AnsweringViewModel> AnsweringViewModelMock;
 
-        protected static Mock<ILiteEventRegistry> EventRegistry;
+        protected static Mock<IViewModelEventRegistry> EventRegistry;
 
         protected static readonly string interviewId = "Some interviewId";
 

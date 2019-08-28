@@ -6,7 +6,7 @@ namespace WB.Core.Infrastructure.EventBus.Lite
 {
     public interface ILiteEventBus
     {
-        IEnumerable<CommittedEvent> CommitUncommittedEvents(IEventSourcedAggregateRoot aggregateRoot, string origin);
-        void PublishCommittedEvents(IEnumerable<CommittedEvent> committedEvents);
+        IReadOnlyCollection<CommittedEvent> CommitUncommittedEvents(IEventSourcedAggregateRoot aggregateRoot, string origin);
+        void PublishCommittedEvents(IReadOnlyCollection<CommittedEvent> committedEvents);
     }
 }

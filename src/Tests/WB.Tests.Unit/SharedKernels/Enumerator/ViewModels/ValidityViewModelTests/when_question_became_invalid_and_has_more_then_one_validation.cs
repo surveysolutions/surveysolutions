@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTes
             BecauseOf();
         }
 
-        public void BecauseOf() => viewModel.Handle(answersDeclaredInvalid);
+        public void BecauseOf() => viewModel.HandleAsync(answersDeclaredInvalid);
 
         [NUnit.Framework.Test] public void should_show_all_failed_validation_messages () => viewModel.Error.ValidationErrors.Count.Should().Be(2);
 

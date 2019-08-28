@@ -25,7 +25,7 @@ namespace WB.UI.Headquarters.API
         private readonly IAuthorizedUser authorizedUser;
         private readonly IPlainStorageAccessor<Assignment> assignmentsStorage;
         private readonly IQuestionnaireStorage questionnaireStorage;
-        private readonly IAuditLog auditLog;
+        private readonly ISystemLog auditLog;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires;
         private readonly IInvitationService invitationService;
         private readonly IStatefulInterviewRepository interviews;
@@ -35,7 +35,7 @@ namespace WB.UI.Headquarters.API
             IAuthorizedUser authorizedUser,
             IPlainStorageAccessor<Assignment> assignmentsStorage,
             IQuestionnaireStorage questionnaireStorage,
-            IAuditLog auditLog, 
+            ISystemLog auditLog,
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires, 
             IInvitationService invitationService,
             IStatefulInterviewRepository interviews, 

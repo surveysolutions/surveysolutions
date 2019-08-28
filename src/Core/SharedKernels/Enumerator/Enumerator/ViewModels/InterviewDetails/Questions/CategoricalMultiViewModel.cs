@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Base;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
@@ -18,7 +17,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class CategoricalMultiViewModel : CategoricalMultiViewModelBase<int, int>,
-        ILiteEventHandler<MultipleOptionsQuestionAnswered>
+        IAsyncViewModelEventHandler<MultipleOptionsQuestionAnswered>
     {
         protected readonly IUserInteractionService userInteraction;
         protected readonly FilteredOptionsViewModel filteredOptionsViewModel;
@@ -26,7 +25,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public CategoricalMultiViewModel(
             QuestionStateViewModel<MultipleOptionsQuestionAnswered> questionStateViewModel,
             IQuestionnaireStorage questionnaireRepository,
-            ILiteEventRegistry eventRegistry,
+            IViewModelEventRegistry eventRegistry,
             IStatefulInterviewRepository interviewRepository,
             IPrincipal principal,
             IUserInteractionService userInteraction,
@@ -36,7 +35,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             ThrottlingViewModel throttlingModel,
             IMvxMainThreadAsyncDispatcher mainThreadDispatcher) : base(questionStateViewModel, questionnaireRepository, eventRegistry,
             interviewRepository, principal, answering, instructionViewModel,
-            throttlingModel, mainThreadDispatcher)
+            throttlingModel)
         {
             this.userInteraction = userInteraction;
             this.filteredOptionsViewModel = filteredOptionsViewModel;
@@ -82,15 +81,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         protected override int[] GetAnsweredOptionsFromInterview(IStatefulInterview interview) 
             => interview.GetMultiOptionQuestion(this.Identity).GetAnswer()?.CheckedValues?.ToArray();
         
-        public virtual void Handle(MultipleOptionsQuestionAnswered @event)
+        public virtual async Task HandleAsync(MultipleOptionsQuestionAnswered @event)
         {
             if (@event.QuestionId != this.Identity.Id || !@event.RosterVector.Identical(this.Identity.RosterVector)) return;
 
-            this.UpdateViewModelsByAnsweredOptionsInMainThread(@event.SelectedValues?.Select(Convert.ToInt32)?.ToArray());
+            await this.UpdateViewModelsByAnsweredOptionsAsync(@event.SelectedValues?.Select(Convert.ToInt32)?.ToArray());
         }
 
         private async Task FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs e)
-            => await this.UpdateViewModelsInMainThreadAsync();
+            => await this.UpdateViewModelsAsync();
 
         public override void Dispose()
         {

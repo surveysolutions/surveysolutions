@@ -442,6 +442,11 @@ namespace WB.Enumerator.Native.WebInterview
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @Combobox.vue")]
         public virtual DropdownItem[] GetTopFilteredOptionsForQuestion(string id, string filter, int count)
+            => this.GetTopFilteredOptionsForQuestion(id, filter, count, null);
+        
+
+        [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @MultiCombobox.vue")]
+        public virtual DropdownItem[] GetTopFilteredOptionsForQuestion(string id, string filter, int count, int[] excludedOptionIds)
         {
             var questionIdentity = Identity.Parse(id);
             var statefulInterview = this.GetCallerInterview();
@@ -453,7 +458,7 @@ namespace WB.Enumerator.Native.WebInterview
                 ? parentCascadingQuestion.GetAnswer()?.SelectedValue
                 : null;
 
-            var topFilteredOptionsForQuestion = statefulInterview.GetTopFilteredOptionsForQuestion(questionIdentity, parentCascadingQuestionAnswer, filter, count);
+            var topFilteredOptionsForQuestion = statefulInterview.GetTopFilteredOptionsForQuestion(questionIdentity, parentCascadingQuestionAnswer, filter, count, excludedOptionIds);
             return topFilteredOptionsForQuestion.Select(x => new DropdownItem(x.Value, x.Title)).ToArray();
         }
 

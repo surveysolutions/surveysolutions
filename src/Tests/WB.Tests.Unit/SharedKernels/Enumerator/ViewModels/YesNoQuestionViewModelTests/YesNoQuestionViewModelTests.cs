@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             viewModel.Init(interview.Id.FormatGuid(), Create.Identity(Id.g1), Create.Other.NavigationState(interviewRepository));
 
             // Act
-            viewModel.Handle(Create.Event.YesNoQuestionAnswered(Id.g1, new[]
+            viewModel.HandleAsync(Create.Event.YesNoQuestionAnswered(Id.g1, new[]
             {
                 Create.Entity.AnsweredYesNoOption(1, true)
             }));
