@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -18,12 +19,15 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
         private readonly IServiceLocator serviceLocator;
         private readonly ILogger logger;
         private readonly IUserImportService userImportService;
+        private readonly ISystemLog systemLog;
 
-        public UsersImportJob(IServiceLocator serviceLocator, ILogger logger, IUserImportService userImportService)
+        public UsersImportJob(IServiceLocator serviceLocator, ILogger logger, IUserImportService userImportService,
+            ISystemLog systemLog)
         {
             this.serviceLocator = serviceLocator;
             this.logger = logger;
             this.userImportService = userImportService;
+            this.systemLog = systemLog;
         }
 
         public Task Execute(IJobExecutionContext context)
@@ -45,7 +49,9 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                     userImportService.RemoveImportedUser(userToImport);
 
                 } while (userToImport != null);
-                
+
+                var status = userImportService.GetImportCompleteStatus();
+                this.systemLog.UsersImported(status.SupervisorsCount, status.InterviewersCount);
             }
             catch (Exception ex)
             {
