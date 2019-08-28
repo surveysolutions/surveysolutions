@@ -129,14 +129,14 @@
                         <ul ng-model="scenarios">
                             <li class="macroses-panel-item" ng-repeat="scenario in scenarios">
                                 <ng-form name="scenario.form">
-                                    <a href ng-click="deleteScenario($index)" class="btn delete-btn" tabindex="-1"></a>
+                                    <a href="javascript:void(0)" ng-if="!questionnaire.isReadOnlyForUser" ng-click="deleteScenario($index)" class="btn delete-btn" tabindex="-1"></a>
                                     <div class="input-group macroses-name">
                                         <input focus-on-out="focusScenario{{scenario.id}}" ng-i18next="[placeholder]SideBarScenarioName" maxlength="32" spellcheck="false" ng-model="scenario.title" name="name" class="form-control" type="text" />
                                     </div>
                                     <div class="divider"></div>
                                     <button type="button" class="btn lighter-hover" ng-click="runScenario(scenario)" ng-i18next>Run</button>
                                     <button type="button" class="btn lighter-hover" ng-click="showScenarioEditor(scenario.id)" ng-i18next>Edit</button>
-                                    <div class="actions" ng-show="scenario.form.$dirty">
+                                    <div class="actions" ng-show="scenario.form.$dirty" ng-if="!questionnaire.isReadOnlyForUser">
                                         <button type="submit" ng-disabled="scenario.form.$invalid" class="btn lighter-hover" ng-click="saveScenario(scenario)" ng-i18next>Save</button>
                                         <button type="button" class="btn lighter-hover" ng-click="cancel(scenario)" ng-i18next>Cancel</button>
                                     </div>
