@@ -11,6 +11,12 @@
         AssignmentSizeChanged = 6,
         ExportEncryptionChanged = 7,
         UserMovedToAnotherTeam = 8,
-        EmailProviderChanged = 9
+        EmailProviderChanged = 9,
+        UsersImported = 10,
+        AssignmentsImported = 11,
+        InterviewerArchived = 12,
+        InterviewerUnArchived = 13,
+        SupervisorArchived = 14,
+        SupervisorUnarchived = 15
     }
 }

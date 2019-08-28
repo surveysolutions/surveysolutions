@@ -15,5 +15,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         void UserMovedToAnotherTeam(string interviewerName, string newSupervisorName, string previousSupervisorName);
         void AssignmentsUpgradeStarted(string title, long fromVersion, long toVersion);
         void EmailProviderWasChanged(string previousProvider, string currentProvider);
+        void UsersImported(int importedUsersCount, int importedSupervisors, int importedInterviewers);
+        void AssignmentsImported(int assignmentsCount, string questionnaireTitle, int lastAssignmentId);
+        void InterviewerArchived(string interviewerName, bool unArchive);
+        void SupervisorArchived(string supervisorName, bool unArchive);
+
     }
 }
