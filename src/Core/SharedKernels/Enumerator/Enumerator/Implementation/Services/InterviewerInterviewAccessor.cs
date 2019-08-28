@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         private readonly IEventSourcedAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache;
         private readonly IJsonAllTypesSerializer synchronizationSerializer;
         private readonly IInterviewEventStreamOptimizer eventStreamOptimizer;
-        private readonly ILiteEventRegistry eventRegistry;
+        private readonly IViewModelEventRegistry eventRegistry;
         private readonly IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository;
         private readonly ILiteEventBus eventBus;
         private readonly ILogger logger;
@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             IEventSourcedAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache,
             IJsonAllTypesSerializer synchronizationSerializer,
             IInterviewEventStreamOptimizer eventStreamOptimizer,
-            ILiteEventRegistry eventRegistry, 
+            IViewModelEventRegistry eventRegistry, 
             IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository,
             ILiteEventBus eventBus,
             ILogger logger)

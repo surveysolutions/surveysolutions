@@ -16,7 +16,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class DateTimeQuestionViewModel :
         MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
-        ILiteEventHandler<AnswersRemoved>,
+        IViewModelEventHandler<AnswersRemoved>,
         ICompositeQuestion,
         IDisposable
     {
@@ -28,7 +28,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private Identity questionIdentity;
         private string interviewId;
 
-        private readonly ILiteEventRegistry liteEventRegistry;
+        private readonly IViewModelEventRegistry liteEventRegistry;
         private readonly IQuestionnaireStorage questionnaireRepository;
         public AnsweringViewModel Answering { get; private set; }
 
@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionStateViewModel<DateTimeQuestionAnswered> questionStateViewModel, 
             AnsweringViewModel answering,
             QuestionInstructionViewModel instructionViewModel, 
-            ILiteEventRegistry liteEventRegistry,
+            IViewModelEventRegistry liteEventRegistry,
             IQuestionnaireStorage questionnaireRepository)
         {
             this.principal = principal;

@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
@@ -55,7 +56,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             optionsRepository.RemoveOptionsForQuestionnaire(questionnaireIdentity);
 
-            var questionsWithLongOptionsList = serializedQuestionnaireDocument.Find<SingleQuestion>(
+            var questionsWithLongOptionsList = serializedQuestionnaireDocument.Find<ICategoricalQuestion>(
                 x => x.CascadeFromQuestionId.HasValue || (x.IsFilteredCombobox ?? false)).ToList();
 
             foreach (var question in questionsWithLongOptionsList)

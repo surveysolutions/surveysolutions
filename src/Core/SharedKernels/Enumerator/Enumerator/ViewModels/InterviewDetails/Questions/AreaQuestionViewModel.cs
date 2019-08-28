@@ -20,8 +20,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class AreaQuestionViewModel : MvxNotifyPropertyChanged, 
         IInterviewEntityViewModel, 
-        ILiteEventHandler<AnswersRemoved>,
-        ILiteEventHandler<AreaQuestionAnswered>,
+        IViewModelEventHandler<AnswersRemoved>,
+        IViewModelEventHandler<AreaQuestionAnswered>,
         ICompositeQuestion,
         IDisposable
     {
@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly Guid userId;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IAreaEditService areaEditService;
-        private readonly ILiteEventRegistry eventRegistry;
+        private readonly IViewModelEventRegistry eventRegistry;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private string interviewId;
         private readonly QuestionStateViewModel<AreaQuestionAnswered> questionState;
@@ -41,7 +41,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IPrincipal principal,
             IStatefulInterviewRepository interviewRepository,
             IAreaEditService areaEditService,
-            ILiteEventRegistry eventRegistry,
+            IViewModelEventRegistry eventRegistry,
             IUserInteractionService userInteractionService,
             IQuestionnaireStorage questionnaireRepository,
             QuestionStateViewModel<AreaQuestionAnswered> questionStateViewModel,

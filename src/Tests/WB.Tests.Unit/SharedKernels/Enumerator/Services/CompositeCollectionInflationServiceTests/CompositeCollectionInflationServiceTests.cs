@@ -214,7 +214,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.CompositeCollectionInf
             var questionInvalidEvent = Create.Event.AnswersDeclaredInvalid(new[] { invalidQuestionIdentity });
             statefulInterview.Apply(questionInvalidEvent);
             statefulInterview.Apply(Create.Event.TextQuestionAnswered(invalidQuestionIdentity.Id, invalidQuestionIdentity.RosterVector, "some answer"));
-            invalidQuestionViewModel.QuestionState.Validity.Handle(questionInvalidEvent);
+            invalidQuestionViewModel.QuestionState.Validity.HandleAsync(questionInvalidEvent);
 
             //Assert
             Assert.That(inflatedViewModels, Contains.Item(invalidQuestionViewModel.QuestionState.Validity));

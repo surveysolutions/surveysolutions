@@ -68,7 +68,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
             serviceLocator.Setup(x => x.GetInstance(secondFunctionalEventHandler.GetType())).Returns(secondFunctionalEventHandler);
             serviceLocator.Setup(x => x.GetInstance(failingFunctionalEventHandler.GetType())).Returns(failingFunctionalEventHandler);
 
-            var denormalizerRegistry = Create.Service.DenormalizerRegistry();
+            var denormalizerRegistry = Create.Service.DenormalizerRegistryNative();
             denormalizerRegistry.RegisterFunctional<FailingFunctionalEventHandler>();
             denormalizerRegistry.RegisterFunctional<FunctionalEventHandler>();
 

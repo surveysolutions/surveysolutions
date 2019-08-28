@@ -11,17 +11,18 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public class SideBarSectionsViewModel : MvxNotifyPropertyChanged,
-        ILiteEventHandler<GroupsEnabled>,
-        ILiteEventHandler<GroupsDisabled>,
-        ILiteEventHandler<RosterInstancesRemoved>,
+        IViewModelEventHandler<GroupsEnabled>,
+        IViewModelEventHandler<GroupsDisabled>,
+        IViewModelEventHandler<RosterInstancesRemoved>,
         IDisposable
     {
-        private readonly ILiteEventRegistry eventRegistry;
+        private readonly IViewModelEventRegistry eventRegistry;
         private readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
         private NavigationState navigationState;
 
@@ -44,7 +45,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IStatefulInterviewRepository statefulInterviewRepository,
             IQuestionnaireStorage questionnaireRepository,
             ISideBarSectionViewModelsFactory modelsFactory,
-            ILiteEventRegistry eventRegistry,
+            IViewModelEventRegistry eventRegistry,
             IMvxMainThreadAsyncDispatcher mainThreadDispatcher)
         {
             this.questionnaireRepository = questionnaireRepository;

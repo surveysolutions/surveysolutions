@@ -56,7 +56,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
 
         public void BecauseOf() 
         {
-            viewModel.Handle(new MultipleOptionsQuestionAnswered(Guid.NewGuid(), Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), Empty.RosterVector, DateTime.Now, new[] { 2m, 1m }));
+            viewModel.HandleAsync(new MultipleOptionsQuestionAnswered(Guid.NewGuid(), Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), Empty.RosterVector, DateTime.Now, new[] { 2m, 1m }));
         }
 
         [Test] 

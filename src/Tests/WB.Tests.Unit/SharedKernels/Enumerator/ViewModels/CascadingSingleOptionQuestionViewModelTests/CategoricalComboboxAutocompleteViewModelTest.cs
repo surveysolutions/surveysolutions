@@ -39,8 +39,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             interview.Setup(x => x.GetOptionForQuestionWithoutFilter(questionIdentity, 3, 1))
                 .Returns(new CategoricalOption() {Title = "3", Value = 3, ParentValue = 1});
             interview.Setup(x => x.GetTopFilteredOptionsForQuestion(Moq.It.IsAny<Identity>(), Moq.It.IsAny<int?>(),
-                    Moq.It.IsAny<string>(), Moq.It.IsAny<int>()))
-                .Returns((Identity identity, int? value, string filter, int count) => Options.Where(x =>
+                    Moq.It.IsAny<string>(), Moq.It.IsAny<int>(), It.IsAny<int[]>()))
+                .Returns((Identity identity, int? value, string filter, int count, int[] excludedOptions) => Options.Where(x =>
                         x.ParentValue == 1 && x.Title.IndexOf(filter ?? string.Empty, StringComparison.OrdinalIgnoreCase) >= 0)
                     .ToList());
 

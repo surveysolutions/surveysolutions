@@ -10,10 +10,12 @@ using NHibernate;
 using NSubstitute;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Main.Core.Events;
+using Ncqrs.Eventing;
 using NHibernate.Linq;
 using Quartz;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -68,19 +70,21 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.DenormalizerStorage;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
+using WB.Core.Infrastructure.Implementation.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Services;
 using WB.Core.Infrastructure.TopologicalSorter;
 using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernels.DataCollection;
@@ -123,7 +127,9 @@ using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Services;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
+using DenormalizerRegistry = WB.Core.SharedKernels.Enumerator.Services.Infrastructure.DenormalizerRegistry;
 using IAuditLogService = WB.Core.SharedKernels.Enumerator.Services.IAuditLogService;
+using IDenormalizerRegistry = WB.Core.SharedKernels.Enumerator.Services.Infrastructure.IDenormalizerRegistry;
 
 namespace WB.Tests.Abc.TestFactories
 {
@@ -165,7 +171,6 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewDashboardEventHandler DashboardDenormalizer(
             IPlainStorage<InterviewView> interviewViewRepository = null,
             IQuestionnaireStorage questionnaireStorage = null,
-            ILiteEventRegistry liteEventRegistry = null,
             IPlainStorage<PrefilledQuestionView> prefilledQuestions = null,
             IAnswerToStringConverter answerToStringConverter = null
         )
@@ -173,7 +178,6 @@ namespace WB.Tests.Abc.TestFactories
                 interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>(),
                 prefilledQuestions ?? new InMemoryPlainStorage<PrefilledQuestionView>(),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
-                liteEventRegistry ?? Mock.Of<ILiteEventRegistry>(),
                 answerToStringConverter ?? Mock.Of<IAnswerToStringConverter>());
 
         public DomainRepository DomainRepository(
@@ -233,7 +237,7 @@ namespace WB.Tests.Abc.TestFactories
                 aggregateRootRepositoryWithCache ?? Mock.Of<IEventSourcedAggregateRootRepositoryWithCache>(),
                 synchronizationSerializer ?? Mock.Of<IJsonAllTypesSerializer>(),
                 eventStreamOptimizer ?? Mock.Of<IInterviewEventStreamOptimizer>(),
-                Mock.Of<ILiteEventRegistry>(),
+                Mock.Of<IViewModelEventRegistry>(),
                 interviewSequenceStorage ?? Mock.Of<IPlainStorage<InterviewSequenceView, Guid>>(),
                 eventBus ?? Mock.Of<ILiteEventBus>(),
                 logger?? Mock.Of<ILogger>());
@@ -244,26 +248,49 @@ namespace WB.Tests.Abc.TestFactories
         public KeywordsProvider KeywordsProvider()
             => new KeywordsProvider(Create.Service.SubstitutionService());
 
-        public LiteEventBus LiteEventBus(ILiteEventRegistry liteEventRegistry = null, IEventStore eventStore = null)
-            => new LiteEventBus(
-                liteEventRegistry ?? Stub<ILiteEventRegistry>.WithNotEmptyValues,
-                eventStore ?? Mock.Of<IEventStore>(),
-                Mock.Of<IGlobalLiteEventHandler>());
+        public LiteEventBus LiteEventBus(IViewModelEventRegistry liteEventRegistry = null,
+            IEventStore eventStore = null,
+            IDenormalizerRegistry denormalizerRegistry = null,
+            IAsyncEventQueue viewModelEventQueue = null)
+        {
+            liteEventRegistry = liteEventRegistry ?? LiteEventRegistry();
 
-        public LiteEventRegistry LiteEventRegistry()
-            => new LiteEventRegistry();
+            var viewModelEventPublisher = new AsyncEventDispatcher(liteEventRegistry, Mock.Of<ILogger>(),
+                Mock.Of<ICurrentViewModelPresenter>());
+
+            var mockOfViewModelEventQueue = new Mock<IAsyncEventQueue>();
+            mockOfViewModelEventQueue.Setup(x => x.Enqueue(Moq.It.IsAny<IReadOnlyCollection<CommittedEvent>>()))
+                .Callback<IReadOnlyCollection<CommittedEvent>>(@events =>
+                    viewModelEventPublisher.ExecuteAsync(@events).WaitAndUnwrapException());
+
+            return new LiteEventBus(eventStore ?? Mock.Of<IEventStore>(),
+                denormalizerRegistry ?? Stub<IDenormalizerRegistry>.WithNotEmptyValues,
+                viewModelEventQueue ?? mockOfViewModelEventQueue.Object);
+        }
+
+        public ViewModelEventRegistry LiteEventRegistry()
+            => new ViewModelEventRegistry();
+
+        public DenormalizerRegistry DenormalizerRegistry() => new DenormalizerRegistry();
+
+        public WB.Core.Infrastructure.Implementation.EventDispatcher.DenormalizerRegistry DenormalizerRegistryNative() 
+            => new WB.Core.Infrastructure.Implementation.EventDispatcher.DenormalizerRegistry();
+
+        public AsyncEventQueue ViewModelEventQueue(IViewModelEventRegistry liteEventRegistry) =>
+            new AsyncEventQueue(new AsyncEventDispatcher(liteEventRegistry,
+                Mock.Of<ILogger>(), Mock.Of<ICurrentViewModelPresenter>()), Mock.Of<ILogger>());
 
         public NcqrCompatibleEventDispatcher NcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null,
             ILogger logger = null,
             IServiceLocator serviceLocator = null,
-            IDenormalizerRegistry denormalizerRegistry = null)
+            WB.Core.Infrastructure.Implementation.EventDispatcher.IDenormalizerRegistry denormalizerRegistry = null)
             => new NcqrCompatibleEventDispatcher(
                 eventStore: Mock.Of<IEventStore>(),
                 inMemoryEventStore: Mock.Of<IInMemoryEventStore>(),
                 serviceLocator: serviceLocator ?? Mock.Of<IServiceLocator>(),
                 eventBusSettings: eventBusSettings ?? Create.Entity.EventBusSettings(),
                 logger: logger ?? Mock.Of<ILogger>(),
-                denormalizerRegistry: denormalizerRegistry ?? Create.Service.DenormalizerRegistry());
+                denormalizerRegistry: denormalizerRegistry ?? Create.Service.DenormalizerRegistryNative());
 
         public QuestionnaireKeyValueStorage QuestionnaireKeyValueStorage(
             IPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository = null)
@@ -1127,11 +1154,12 @@ namespace WB.Tests.Abc.TestFactories
             return new WebInterviewNotificationService(statefulInterviewRepository, questionnaireStorage, webInterviewInvoker);
         }
 
-        public IDenormalizerRegistry DenormalizerRegistry()
-        {
-            return new DenormalizerRegistry();
-        }
-
+        public AsyncEventDispatcher InterviewViewModelEventsPublisher(IViewModelEventRegistry viewModelEventRegistry = null,
+            ILogger logger = null,
+            ICurrentViewModelPresenter currentViewModelPresenter = null) =>
+            new AsyncEventDispatcher(viewModelEventRegistry ?? Mock.Of<IViewModelEventRegistry>(),
+                logger ?? Mock.Of<ILogger>(), currentViewModelPresenter ?? Mock.Of<ICurrentViewModelPresenter>());
+        
         public IServiceLocator ServiceLocatorService(params object[] instances)
         {
             var result = new Mock<IServiceLocator>();

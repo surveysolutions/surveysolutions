@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
             BecauseOf();
         }
 
-        public void BecauseOf() => viewModel.Handle(Create.Event.LinkedOptionsChanged(new[]
+        public void BecauseOf() => viewModel.HandleAsync(Create.Event.LinkedOptionsChanged(new[]
         {
             new ChangedLinkedOptions(linkedQuestionId, new[] { Create.Entity.RosterVector(1) })
         }));

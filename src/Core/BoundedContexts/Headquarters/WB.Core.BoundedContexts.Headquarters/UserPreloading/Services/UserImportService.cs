@@ -150,9 +150,12 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             if (!hasErrors) this.Save(fileName, usersToImport); 
         }
 
-        public Task ScheduleRunUserImportAsync()
+        public async Task ScheduleRunUserImportAsync()
         {
-            return usersImportTask.ScheduleRunAsync();
+            if (this.usersImportTask.IsJobRunning())
+                throw new PreloadingException(UserPreloadingServiceMessages.HasUsersToImport);
+
+            await usersImportTask.ScheduleRunAsync();
         }
 
         private string[] GetRequiredUserProperties() => this.GetUserProperties().Take(4).ToArray();
