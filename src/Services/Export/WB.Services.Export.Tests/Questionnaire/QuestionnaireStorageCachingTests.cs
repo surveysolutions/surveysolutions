@@ -49,8 +49,8 @@ namespace WB.Services.Export.Tests.Questionnaire
 
             this.cache = new QuestionnaireStorageCache(db, memoryCache, tenantContext);
 
-            this.dbSchema = new DatabaseSchemaService(this.schemaGeneratorMock.Object, db);
-            this.storage = new QuestionnaireStorage(cache, dbSchema, tenantContext, new NullLogger<QuestionnaireStorage>());
+            this.storage = new QuestionnaireStorage(cache, tenantContext, new NullLogger<QuestionnaireStorage>());
+            this.dbSchema = new DatabaseSchemaService(this.schemaGeneratorMock.Object, db, this.storage);
         }
 
         [Test]
