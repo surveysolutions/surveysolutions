@@ -98,7 +98,7 @@ namespace WB.Services.Export.InterviewDataStorage.Services
             var columns = new List<CreateTableColumnInfo>();
             columns.Add(new CreateTableColumnInfo(InterviewDatabaseConstants.InterviewId, InterviewDatabaseConstants.SqlTypes.Guid, isPrimaryKey: true));
             if (group.IsRoster)
-                columns.Add(new CreateTableColumnInfo(InterviewDatabaseConstants.RosterVector, $"int4[]", isPrimaryKey: true));
+                columns.Add(new CreateTableColumnInfo(InterviewDatabaseConstants.RosterVector, InterviewDatabaseConstants.SqlTypes.IntArray, isPrimaryKey: true));
 
             var questions = group.DataColumns.Where(entity => entity is Question).Cast<Question>();
             foreach (var question in questions)

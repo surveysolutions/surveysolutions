@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Questionnaire;
+using WB.Services.Export.Questionnaire.Services;
 
 namespace WB.Services.Export.InterviewDataStorage.Services
 {
@@ -9,13 +12,22 @@ namespace WB.Services.Export.InterviewDataStorage.Services
     {
         private readonly IQuestionnaireSchemaGenerator questionnaireSchemaGenerator;
         private readonly TenantDbContext dbContext;
+        private readonly IQuestionnaireStorage questionnaireStorage;
 
         public DatabaseSchemaService(
             IQuestionnaireSchemaGenerator questionnaireSchemaGenerator,
-            TenantDbContext dbContext)
+            TenantDbContext dbContext,
+            IQuestionnaireStorage questionnaireStorage)
         {
             this.questionnaireSchemaGenerator = questionnaireSchemaGenerator;
             this.dbContext = dbContext;
+            this.questionnaireStorage = questionnaireStorage;
+        }
+
+        public async Task CreateQuestionnaireDbStructureAsync(QuestionnaireId questionnaireId, CancellationToken cancellationToken)
+        {
+            var questionnaireDocument = await questionnaireStorage.GetQuestionnaireAsync(questionnaireId, cancellationToken);
+            CreateQuestionnaireDbStructure(questionnaireDocument);
         }
 
         public void CreateQuestionnaireDbStructure(QuestionnaireDocument questionnaireDocument)

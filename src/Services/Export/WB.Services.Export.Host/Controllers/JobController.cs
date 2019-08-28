@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WB.Services.Export.Interview;
+using WB.Services.Export.InterviewDataStorage;
 using WB.Services.Export.Jobs;
 using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire;
@@ -24,17 +25,21 @@ namespace WB.Services.Export.Host.Controllers
         private readonly IExportArchiveHandleService archiveHandleService;
         private readonly IJobService jobService;
         private readonly IQuestionnaireStorage questionnaireStorage;
+        private readonly IDatabaseSchemaService databaseSchemaService;
 
         public JobController(IDataExportProcessesService exportProcessesService,
             IJobsStatusReporting jobsStatusReporting,
             IExportArchiveHandleService archiveHandleService,
-            IJobService jobService, IQuestionnaireStorage questionnaireStorage)
+            IJobService jobService, 
+            IQuestionnaireStorage questionnaireStorage,
+            IDatabaseSchemaService databaseSchemaService)
         {
             this.exportProcessesService = exportProcessesService ?? throw new ArgumentNullException(nameof(exportProcessesService));
             this.jobsStatusReporting = jobsStatusReporting ?? throw new ArgumentNullException(nameof(jobsStatusReporting));
             this.archiveHandleService = archiveHandleService ?? throw new ArgumentNullException(nameof(archiveHandleService));
             this.jobService = jobService ?? throw new ArgumentNullException(nameof(jobService));
             this.questionnaireStorage = questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
+            this.databaseSchemaService = databaseSchemaService ?? throw new ArgumentNullException(nameof(databaseSchemaService)); ;
         }
 
         [HttpPut]
@@ -221,9 +226,16 @@ namespace WB.Services.Export.Host.Controllers
             {
                 var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(job.ExportSettings.QuestionnaireId);
 
-                if (!questionnaire?.IsDeleted ?? false)
+                if (questionnaire != null)
                 {
-                    filteredJobList.Add(job);
+                    if (!questionnaire.IsDeleted)
+                    {
+                        filteredJobList.Add(job);
+                    }
+                    else
+                    {
+                        databaseSchemaService.TryDropQuestionnaireDbStructure(questionnaire);
+                    }
                 }
             }
 
