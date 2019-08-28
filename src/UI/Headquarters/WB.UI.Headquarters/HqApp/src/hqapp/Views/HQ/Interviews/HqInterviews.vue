@@ -991,6 +991,11 @@ export default {
                 })
             }
 
+            menu.push({
+                    name: self.$t('Common.OpenAssignment'),
+                    callback: () => (window.location = self.config.assignmentsUrl + '?id=' + rowData.assignmentId),
+            });            
+
             if (!self.config.isObserving) {
                 menu.push({
                     className: 'context-menu-separator context-menu-not-selectable',
