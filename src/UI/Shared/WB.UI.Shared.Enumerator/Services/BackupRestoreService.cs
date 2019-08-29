@@ -89,7 +89,7 @@ namespace WB.UI.Shared.Enumerator.Services
             {
                 this.CreateDeviceInfoFile();
 
-                await Task.Run(() => this.BackupSqliteDbs()).ConfigureAwait(false);
+                await Task.Run(this.BackupSqliteDbs).ConfigureAwait(false);
 
                 this.fileSystemAccessor.CopyFileOrDirectory(this.privateStorage, backupTempFolder, false,
                     new[] {".log", ".dll", ".back", ".info", ".dat", ".attachment"});
@@ -104,6 +104,7 @@ namespace WB.UI.Shared.Enumerator.Services
             catch (Exception ex)
             {
                 this.logger.Error(ex.Message, ex);
+                throw;
             }
             finally
             {
