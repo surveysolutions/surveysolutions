@@ -15,6 +15,8 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
                             from readside.interviewsummaries sr 
                             where sr.interviewid = s.interviewid::uuid");
 
+            Execute.Sql(@"delete from readside.commentaries where summary_id is null");
+
             Delete.Column("interviewid").FromTable("commentaries");
             Delete.Column("position").FromTable("commentaries");
 
