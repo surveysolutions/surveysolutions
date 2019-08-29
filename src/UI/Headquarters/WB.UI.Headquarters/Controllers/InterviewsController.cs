@@ -100,7 +100,9 @@ namespace WB.UI.Headquarters.Controllers
                     : Url.RouteUrl("DefaultApiWithAction",
                         new {httproute = "", controller = "Teams", action = "ResponsiblesCombobox"}),
                 InterviewStatuses = Url.RouteUrl("DefaultApiWithAction", 
-                    new { httproute = "", controller = "InterviewApi", action = "ChangeStateHistory" })
+                    new { httproute = "", controller = "InterviewApi", action = "ChangeStateHistory" }),
+                QuestionnaireByIdUrl = Url.RouteUrl("DefaultApiWithAction",
+                    new { httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesComboboxById" })
 
             };
 
@@ -130,6 +132,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             public string Responsible { get; set; }
             public string InterviewStatuses { get; set; }
+            public string QuestionnaireByIdUrl { get; internal set; }
         }
 
 
