@@ -353,24 +353,6 @@ export default {
         }
     },
 
-    watch: {
-        questionnaireId: function() {
-            this.reloadTable()
-        },
-        questionnaireVersion: function() {
-            this.reloadTable()
-        },
-        assignmentId: function() {
-            this.reloadTable()
-        },
-        responsibleId: function() {
-            this.reloadTable()
-        },
-        status: function() {
-            this.reloadTable()
-        },
-    },
-
     computed: {
         title() {
             return this.$config.title
@@ -1072,7 +1054,11 @@ export default {
                 (navigator.languages && navigator.languages[0]) || navigator.language || navigator.userLanguage
             return value.toLocaleString(language)
         },
+        startWatchers(props, watcher) {
+            var iterator = prop => this.$watch(prop, watcher);
 
+            props.forEach(iterator, this);
+        },
         reloadTable() {
             this.isLoading = true
             this.selectedRows.splice(0, this.selectedRows.length)
@@ -1098,29 +1084,79 @@ export default {
 
             this.$router.push({ query: queryString });
         },
+
+        async loadResponsibleIdByName(onDone) {
+            if (this.$route.query.responsible != undefined) {
+                const requestParams = _.assign(
+                    {
+                        query: this.$route.query.responsible,
+                        pageSize: 1,
+                        cache: false
+                    },
+                    this.ajaxParams
+                );
+
+                const response = await this.$http.get(this.config.api.responsible, { params: requestParams });
+
+                onDone(response.data.options.length > 0 ? response.data.options[0].key : undefined);
+            } else onDone();
+        },
+
+        async loadQuestionnaireId(onDone) {
+            let requestParams = null;
+
+            const questionnaireId = this.$route.query.templateId;
+            const version = this.$route.query.templateVersion;            
+
+            if (questionnaireId != undefined && version != undefined) {
+                requestParams = _.assign(
+                    { questionnaireIdentity: questionnaireId + "$" + version, cache: false },
+                    this.ajaxParams
+                );
+                const response = await this.$http.get(this.config.api.questionnaireByIdUrl, { params: requestParams });
+
+                if (response.data) {
+                    onDone(response.data.id, response.data.title, response.data.version);
+                }
+            } else onDone();
+        },
     },
 
     mounted() {
-        this.unactiveDateStart = this.$route.query.unactiveDateStart
-        this.unactiveDateEnd = this.$route.query.unactiveDateEnd
+        var self = this;
 
-        // load url params
+        this.unactiveDateStart = this.$route.query.unactiveDateStart;
+        this.unactiveDateEnd = this.$route.query.unactiveDateEnd;
+        this.assignmentId = this.$route.query.assignmentId;
 
-        //this.unactiveDateStart = this.$route.query.unactiveDateStart;
+        if(this.$route.query.status != undefined)
+        {
+            self.status =  self.statuses.find(o => o.key === self.$route.query.status);
+        }
 
-        /* 
-        self.Url.query['templateId'] = self.QueryString['templateId'] || "";
-        self.Url.query['templateVersion'] = self.QueryString['templateVersion'] || "";
-        self.Url.query['status'] = self.QueryString['status'] || "";
-        self.Url.query['responsible'] = self.QueryString['responsible'] || "";
-        self.Url.query['searchBy'] = self.QueryString['searchBy'] || "";
-        self.Url.query['assignmentId'] = self.QueryString['assignmentId'] || "";
-        self.Url.query['unactiveDateStart'] = decodeURIComponent(self.QueryString['unactiveDateStart'] || "");
-        self.Url.query['unactiveDateEnd'] = decodeURIComponent(self.QueryString['unactiveDateEnd'] || "");
-        self.Url.query['teamId'] = self.QueryString['teamId'] || "";
-*/
+        self.loadQuestionnaireId((questionnaireId, questionnaireTitle, version) => {
+            if (questionnaireId != undefined) {
+                self.questionnaireId = {
+                    key: questionnaireId,
+                    value: questionnaireTitle
+                };
+                self.questionnaireVersion = {
+                    key: version,
+                    value: version
+                };
+            }
 
-        this.reloadTable()
+            self.loadResponsibleIdByName(responsibleId => {
+                if (responsibleId != undefined)
+                    self.responsibleId = { key: responsibleId, value: self.$route.query.responsible };
+
+                self.reloadTable();
+                self.startWatchers(
+                    ["responsibleId", "questionnaireId", "status", "assignmentId", "questionnaireVersion"],
+                    self.reloadTable.bind(self)
+                );
+            });
+        });
     },
 }
 </script>
