@@ -211,9 +211,16 @@ namespace WB.UI.Shared.Enumerator.Services.Internals.FileSystem
 
         public void MoveFile(string pathToFile, string newPathToFile)
         {
-            if (File.Exists(newPathToFile))
-                File.Delete(newPathToFile);
-            File.Move(pathToFile, newPathToFile);
+            MoveFileAsync(pathToFile,newPathToFile).Wait();
+        }
+
+        private async Task MoveFileAsync(string pathToFile, string newPathToFile)
+        {
+            //File.Copy throws exception
+
+            var sourceFile = await PCLStorage.FileSystem.Current.GetFileFromPathAsync(pathToFile);
+
+            await sourceFile.MoveAsync(newPathToFile, NameCollisionOption.ReplaceExisting);
         }
     }
 }
