@@ -6,8 +6,6 @@ namespace WB.Services.Export.InterviewDataStorage
 {
     public interface IDatabaseSchemaService
     {
-        Task CreateQuestionnaireDbStructureAsync(QuestionnaireId questionnaireId, CancellationToken cancellationToken);
-        void CreateQuestionnaireDbStructure(QuestionnaireDocument questionnaireDocument);
-        bool TryDropQuestionnaireDbStructure(QuestionnaireDocument questionnaireDocument);
+        void CreateOrRemoveSchema(QuestionnaireDocument questionnaire);
     }
 }

@@ -16,13 +16,12 @@ namespace WB.Services.Export.Jobs
         private readonly IServiceProvider serviceProvider;
         private readonly IEventProcessor processor;
         private readonly IExportProcessHandler<DataExportProcessArgs> exportProcessHandler;
-        private readonly IDatabaseSchemaService databaseSchemaService;
         private readonly ILogger<ExportJob> logger;
 
         public ExportJob(IServiceProvider serviceProvider,
             IEventProcessor processor,
-            ILogger<ExportJob> logger, IExportProcessHandler<DataExportProcessArgs> exportProcessHandler,
-            IDatabaseSchemaService databaseSchemaService)
+            ILogger<ExportJob> logger, 
+            IExportProcessHandler<DataExportProcessArgs> exportProcessHandler)
         {
             logger.LogTrace("Constructed instance of ExportJob");
 
@@ -30,7 +29,6 @@ namespace WB.Services.Export.Jobs
             this.processor = processor;
             this.logger = logger;
             this.exportProcessHandler = exportProcessHandler;
-            this.databaseSchemaService = databaseSchemaService;
         }
 
         public async Task ExecuteAsync(DataExportProcessArgs pendingExportProcess, CancellationToken cancellationToken)
@@ -40,8 +38,6 @@ namespace WB.Services.Export.Jobs
             try
             {
                 serviceProvider.SetTenant(pendingExportProcess.ExportSettings.Tenant);
-
-                await databaseSchemaService.CreateQuestionnaireDbStructureAsync(pendingExportProcess.ExportSettings.QuestionnaireId, cancellationToken);
 
                 await processor.HandleNewEvents(pendingExportProcess.ProcessId, cancellationToken);
 

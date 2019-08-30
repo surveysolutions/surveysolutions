@@ -232,10 +232,6 @@ namespace WB.Services.Export.Host.Controllers
                     {
                         filteredJobList.Add(job);
                     }
-                    else
-                    {
-                        databaseSchemaService.TryDropQuestionnaireDbStructure(questionnaire);
-                    }
                 }
             }
 

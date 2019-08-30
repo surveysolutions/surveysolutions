@@ -12,25 +12,16 @@ namespace WB.Services.Export.InterviewDataStorage.Services
     {
         private readonly IQuestionnaireSchemaGenerator questionnaireSchemaGenerator;
         private readonly TenantDbContext dbContext;
-        private readonly IQuestionnaireStorage questionnaireStorage;
 
         public DatabaseSchemaService(
             IQuestionnaireSchemaGenerator questionnaireSchemaGenerator,
-            TenantDbContext dbContext,
-            IQuestionnaireStorage questionnaireStorage)
+            TenantDbContext dbContext)
         {
             this.questionnaireSchemaGenerator = questionnaireSchemaGenerator;
             this.dbContext = dbContext;
-            this.questionnaireStorage = questionnaireStorage;
         }
 
-        public async Task CreateQuestionnaireDbStructureAsync(QuestionnaireId questionnaireId, CancellationToken cancellationToken)
-        {
-            var questionnaireDocument = await questionnaireStorage.GetQuestionnaireAsync(questionnaireId, cancellationToken);
-            CreateQuestionnaireDbStructure(questionnaireDocument);
-        }
-
-        public void CreateQuestionnaireDbStructure(QuestionnaireDocument questionnaireDocument)
+        private void CreateQuestionnaireDbStructure(QuestionnaireDocument questionnaireDocument)
         {
             if (this.dbContext.Database.IsNpgsql())
             {
@@ -47,7 +38,7 @@ namespace WB.Services.Export.InterviewDataStorage.Services
             questionnaireSchemaGenerator.CreateQuestionnaireDbStructure(questionnaireDocument);
         }
 
-        public bool TryDropQuestionnaireDbStructure(QuestionnaireDocument questionnaireDocument)
+        private bool TryDropQuestionnaireDbStructure(QuestionnaireDocument questionnaireDocument)
         {
             var reference = this.dbContext.GeneratedQuestionnaires.Find(questionnaireDocument.QuestionnaireId.ToString());
 
@@ -67,6 +58,14 @@ namespace WB.Services.Export.InterviewDataStorage.Services
             }
 
             return false;
+        }
+
+        public void CreateOrRemoveSchema(QuestionnaireDocument questionnaire)
+        {
+            if (questionnaire.IsDeleted)
+                TryDropQuestionnaireDbStructure(questionnaire);
+            else
+                CreateQuestionnaireDbStructure(questionnaire);
         }
     }
 }
