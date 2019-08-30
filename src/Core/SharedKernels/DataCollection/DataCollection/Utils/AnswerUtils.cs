@@ -109,7 +109,7 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
                 {
                     Value = Convert.ToInt32(answer.AnswerCode.Value),
                     Title = answer.AnswerText,
-                    ParentValue = answer.ParentCode.HasValue ? Convert.ToInt32(answer.AnswerCode.Value) : (int?) null
+                    ParentValue = answer.ParentCode.HasValue ? Convert.ToInt32(answer.ParentCode.Value) : (int?) null
                 };
 
             filter = filter ?? string.Empty;
