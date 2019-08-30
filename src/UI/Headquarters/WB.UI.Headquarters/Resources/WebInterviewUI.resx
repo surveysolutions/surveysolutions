@@ -462,4 +462,16 @@ Contact support for assistance.</value>
   <data name="ShowResolved" xml:space="preserve">
     <value>Show resolved</value>
   </data>
+  <data name="SaveScenarioOptions" xml:space="preserve">
+    <value>Select existing to update or leave empty to save new one</value>
+  </data>
+  <data name="SaveScenarioDesignerLogin" xml:space="preserve">
+    <value>Session on Designer applicaton has expired. Sign in on Designer application to be able to save.</value>
+  </data>
+  <data name="SaveScenarioGoToDesigner" xml:space="preserve">
+    <value>Open Designer</value>
+  </data>
+  <data name="NoQuestionnaireAccess" xml:space="preserve">
+    <value>You have no access to questionnaire</value>
+  </data>
 </root>
