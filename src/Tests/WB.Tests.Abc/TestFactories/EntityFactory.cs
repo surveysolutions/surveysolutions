@@ -770,6 +770,14 @@ namespace WB.Tests.Abc.TestFactories
                 ParentValue = parentValue
             };
 
+        public Answer OptionByCode(int value, string text = null, decimal? parentCode = null)
+            => new Answer
+            {
+                AnswerText = text ?? $"Option {value}",
+                AnswerCode = value,
+                ParentCode = parentCode
+            };
+
         public IEnumerable<Answer> Options(params int[] values)
         {
             return values.Select(value => Create.Entity.Option(value));
