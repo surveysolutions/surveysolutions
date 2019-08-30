@@ -211,20 +211,15 @@ namespace WB.UI.Shared.Enumerator.Services.Internals.FileSystem
 
         public void MoveFile(string pathToFile, string newPathToFile)
         {
-            MoveFileAsync(pathToFile,newPathToFile).Wait();
-        }
-
-        private async Task MoveFileAsync(string pathToFile, string newPathToFile)
-        {
             //File.Copy throws exception
             //https://github.com/xamarin/xamarin-android/issues/3426
             //workaround
-            
+
             File.Delete(newPathToFile);
 
             using (FileStream sourceStream = new FileStream(pathToFile, FileMode.Open))
             {
-                byte[] buffer = new byte[1024 * 1024]; 
+                byte[] buffer = new byte[1024 * 1024];
                 using (FileStream destStream = new FileStream(newPathToFile, FileMode.Create))
                 {
                     int i;
