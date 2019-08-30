@@ -32,7 +32,7 @@ namespace WB.Services.Export.Questionnaire
         {
             var filterWatch = Stopwatch.StartNew();
             List<Event> result = new List<Event>();
-            HashSet<string> questionnaireIds = new HashSet<string>();
+            HashSet<QuestionnaireId> questionnaireIds = new HashSet<QuestionnaireId>();
 
             foreach (var @event in feed)
             {
@@ -77,7 +77,7 @@ namespace WB.Services.Export.Questionnaire
                         result.Add(@event);
                     }
 
-                    questionnaireIds.Add(questionnaire.Id);
+                    questionnaireIds.Add(questionnaire.QuestionnaireId);
                 }
                 catch (Exception e)
                 {
@@ -91,7 +91,7 @@ namespace WB.Services.Export.Questionnaire
 
             foreach (var questionnaireId in questionnaireIds)
             {
-                var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(new QuestionnaireId(questionnaireId));
+                var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(questionnaireId);
                 databaseSchemaService.CreateOrRemoveSchema(questionnaire);
             }
 
