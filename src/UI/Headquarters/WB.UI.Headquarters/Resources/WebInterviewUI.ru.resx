@@ -452,4 +452,16 @@ Oбратитесь в тех. поддержку за помощью</value>
   <data name="ShowResolved" xml:space="preserve">
     <value>Показать решённые</value>
   </data>
+  <data name="SaveScenarioDesignerLogin" xml:space="preserve">
+    <value>Сессия в приложение Designer завершилась. Войдите, чтобы сохранить сценарий.</value>
+  </data>
+  <data name="SaveScenarioGoToDesigner" xml:space="preserve">
+    <value>Открыть Designer</value>
+  </data>
+  <data name="SaveScenarioOptions" xml:space="preserve">
+    <value>Выберите существующий сценарий для обновления или оставьте пустым для сохранения нового</value>
+  </data>
+  <data name="NoQuestionnaireAccess" xml:space="preserve">
+    <value>У Вас нет доступа к опроснику</value>
+  </data>
 </root>
