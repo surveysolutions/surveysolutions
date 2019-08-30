@@ -6,9 +6,7 @@ angular.module('designerApp')
 
             $scope.aceLoaded = function (_editor) {
                 // Options
-                if (isReadOnlyForUser) {
-                    _editor.setReadOnly(true);
-                }
+                _editor.setReadOnly(true);
                 _editor.setOptions({
                     maxLines: 35
                 });
