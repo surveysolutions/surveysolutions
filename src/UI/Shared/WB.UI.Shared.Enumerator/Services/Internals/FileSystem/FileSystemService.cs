@@ -217,10 +217,25 @@ namespace WB.UI.Shared.Enumerator.Services.Internals.FileSystem
         private async Task MoveFileAsync(string pathToFile, string newPathToFile)
         {
             //File.Copy throws exception
+            //https://github.com/xamarin/xamarin-android/issues/3426
+            //workaround
+            
+            File.Delete(newPathToFile);
 
-            var sourceFile = await PCLStorage.FileSystem.Current.GetFileFromPathAsync(pathToFile);
+            using (FileStream sourceStream = new FileStream(pathToFile, FileMode.Open))
+            {
+                byte[] buffer = new byte[1024 * 1024]; 
+                using (FileStream destStream = new FileStream(newPathToFile, FileMode.Create))
+                {
+                    int i;
+                    while ((i = sourceStream.Read(buffer, 0, buffer.Length)) > 0)
+                    {
+                        destStream.Write(buffer, 0, i);
+                    }
+                }
+            }
 
-            await sourceFile.MoveAsync(newPathToFile, NameCollisionOption.ReplaceExisting);
+            File.Delete(pathToFile);
         }
     }
 }
