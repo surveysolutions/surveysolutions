@@ -4,6 +4,7 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
+using Java.Interop;
 using WB.Core.BoundedContexts.Supervisor.ViewModel;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -45,6 +46,7 @@ namespace WB.UI.Supervisor.Activities
             menu.LocalizeMenuItem(Resource.Id.menu_diagnostics, EnumeratorUIResources.MenuItem_Title_Diagnostics);
             return base.OnCreateOptionsMenu(menu);
         }
+
         public override bool OnOptionsItemSelected(IMenuItem item)
         {
             switch (item.ItemId)
@@ -58,6 +60,16 @@ namespace WB.UI.Supervisor.Activities
                     break;
             }
             return base.OnOptionsItemSelected(item);
+        }
+
+        
+        [Export("FinishInstallation")]
+        public void FinishInstallation(string url, string username, string password)
+        {
+            this.ViewModel.Endpoint = url;
+            this.ViewModel.UserName = username;
+            this.ViewModel.Password = password;
+            this.ViewModel.SignInCommand.ExecuteAsync();
         }
     }
 }
