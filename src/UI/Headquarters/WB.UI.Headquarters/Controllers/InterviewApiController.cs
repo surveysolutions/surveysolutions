@@ -40,32 +40,6 @@ namespace WB.UI.Headquarters.Controllers
             this.interviewSummaryViewFactory = interviewSummaryViewFactory;
         }
 
-        [HttpPost]
-        public AllInterviewsView AllInterviews(DocumentListViewModel data)
-        {
-            var input = new AllInterviewsInputModel
-            {
-                Page = data.PageIndex,
-                PageSize = data.PageSize,
-                Orders = data.SortOrder,
-                QuestionnaireId = data.TemplateId,
-                QuestionnaireVersion = data.TemplateVersion,
-                SupervisorOrInterviewerName = data.ResponsibleName,
-                Statuses = data.Status.HasValue ? new [] {data.Status.Value} : null,
-                SearchBy = data.SearchBy,
-                AssignmentId = data.AssignmentId,
-                UnactiveDateStart = data.UnactiveDateStart?.ToUniversalTime(),
-                UnactiveDateEnd = data.UnactiveDateEnd?.ToUniversalTime(),
-                TeamId = data.TeamId
-            };
-
-            var allInterviews = this.allInterviewsViewFactory.Load(input);
-
-            foreach (var x in allInterviews.Items) foreach (var y in x.FeaturedQuestions) y.Question = y.Question.RemoveHtmlTags();
-
-            return allInterviews;
-        }
-
         [HttpGet]
         [CamelCase]
         public InterviewsDataTableResponse Interviews([FromUri] InterviewsDataTableRequest request)
@@ -136,33 +110,7 @@ namespace WB.UI.Headquarters.Controllers
 
             return response;
         }
-
-        [HttpPost]
-        public TeamInterviewsView TeamInterviews(DocumentListViewModel data)
-        {
-            var input = new TeamInterviewsInputModel
-            {
-                Page = data.PageIndex,
-                PageSize = data.PageSize,
-                Orders = data.SortOrder,
-                QuestionnaireId = data.TemplateId,
-                QuestionnaireVersion = data.TemplateVersion,
-                SearchBy = data.SearchBy,
-                Status = data.Status,
-                ResponsibleName = data.ResponsibleName,
-                ViewerId = this.authorizedUser.Id,
-                UnactiveDateStart = data.UnactiveDateStart?.ToUniversalTime(),
-                UnactiveDateEnd = data.UnactiveDateEnd?.ToUniversalTime(),
-                AssignmentId = data.AssignmentId
-            };
-
-            var teamInterviews =  this.teamInterviewViewFactory.Load(input);
-
-            foreach (var x in teamInterviews.Items) foreach (var y in x.FeaturedQuestions) y.Question = y.Question.RemoveHtmlTags();
-
-            return teamInterviews;
-        }
-
+        
         [HttpGet]
         [CamelCase]
         public TeamInterviewsDataTableResponse GetTeamInterviews([FromUri] InterviewsDataTableRequest request)
