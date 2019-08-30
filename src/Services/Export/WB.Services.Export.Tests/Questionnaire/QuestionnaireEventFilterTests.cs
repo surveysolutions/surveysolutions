@@ -239,6 +239,46 @@ namespace WB.Services.Export.Tests.Questionnaire
             questionnaireSchemaGenerator.Verify(q => q.CreateQuestionnaireDbStructure(questionnaire), Times.Once);
         }
 
+        [Test]
+        public async Task should_invalidate_questionnaire_storage_when_received_interview_deleted_flag()
+        {
+            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(id: Id.gA);
+            questionnaire.QuestionnaireId = new QuestionnaireId($"{Id.gA:N}$1");
+            questionnaire.Id = questionnaire.QuestionnaireId.ToString();
+
+            var eventFeed = CrateEventFeedWith3InterviewCreatedEvents(questionnaire);
+
+            var questionnaireStorage = Create.QuestionnaireStorage(questionnaire);
+            var questionnaireSchemaGenerator = new Mock<IQuestionnaireSchemaGenerator>();
+            var databaseSchemaService = Create.DatabaseSchemaService(questionnaireSchemaGenerator.Object, dbContext);
+
+            var filter = CreateFilter(questionnaireStorage: questionnaireStorage, databaseSchemaService: databaseSchemaService);
+            await filter.FilterAsync(eventFeed);
+
+            questionnaireSchemaGenerator.Verify(q => q.CreateQuestionnaireDbStructure(questionnaire), Times.Once);
+
+            // mark questionnaire as deleted on 
+            questionnaire.IsDeleted = true;
+
+            // Act
+            await filter.FilterAsync(new List<Event>
+            {
+                new Event
+                {
+                    EventSourceId = Id.g1,
+                    Payload = new InterviewHardDeleted()
+                },
+                new Event
+                {
+                    EventSourceId = Id.g2,
+                    Payload = new InterviewHardDeleted()
+                }
+            });
+
+            Mock.Get(questionnaireStorage).Verify(q => q.InvalidateQuestionnaire(questionnaire.QuestionnaireId), Times.Exactly(2));
+            questionnaireSchemaGenerator.Verify(q => q.DropQuestionnaireDbStructure(questionnaire), Times.Once);
+        }
+
 
         [Test]
         public void should_drop_schema_only_once_by_database_schema_service()
