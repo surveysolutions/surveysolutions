@@ -51,16 +51,21 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
                 logger.LogDebug("Got questionnaire document from tenant: {tenantName}. {questionnaireId} [{tableName}]",
                     this.tenantContext.Tenant.Name, questionnaire.QuestionnaireId, questionnaire.TableName);
 
-                if (!questionnaire.IsDeleted)
-                {
-                    cache.Set(questionnaireId, questionnaire);
-                }
+                cache.Set(questionnaireId, questionnaire);
 
                 return questionnaire;
             }
             finally
             {
                 CacheLock.Release();
+            }
+        }
+
+        public void InvalidateQuestionnaire(QuestionnaireId questionnaireId)
+        {
+            if (cache.TryGetValue(questionnaireId, out var questionnaire) && !questionnaire.IsDeleted)
+            {
+                cache.Remove(questionnaireId);
             }
         }
     }

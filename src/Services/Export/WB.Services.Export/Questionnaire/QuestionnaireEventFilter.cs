@@ -10,25 +10,30 @@ using WB.Services.Infrastructure.EventSourcing;
 
 namespace WB.Services.Export.Questionnaire
 {
-    public class DeletedQuestionnaireEventFilter : IEventsFilter
+    public class QuestionnaireEventFilter : IEventsFilter
     {
         private readonly ITenantContext tenantContext;
         private readonly TenantDbContext dbContext;
         private readonly IQuestionnaireStorage questionnaireStorage;
+        private readonly IDatabaseSchemaService databaseSchemaService;
 
-        public DeletedQuestionnaireEventFilter(ITenantContext tenantContext,
+        public QuestionnaireEventFilter(ITenantContext tenantContext,
             TenantDbContext dbContext,
-            IQuestionnaireStorage questionnaireStorage)
+            IQuestionnaireStorage questionnaireStorage,
+            IDatabaseSchemaService databaseSchemaService)
         {
             this.tenantContext = tenantContext;
             this.dbContext = dbContext;
             this.questionnaireStorage = questionnaireStorage;
+            this.databaseSchemaService = databaseSchemaService;
         }
 
         public async Task<List<Event>> FilterAsync(ICollection<Event> feed)
         {
             var filterWatch = Stopwatch.StartNew();
             List<Event> result = new List<Event>();
+            HashSet<string> questionnaireIds = new HashSet<string>();
+
             foreach (var @event in feed)
             {
                 try
@@ -52,6 +57,7 @@ namespace WB.Services.Export.Questionnaire
                         case InterviewHardDeleted _:
                             reference = await this.dbContext.InterviewReferences.FindAsync(@event.EventSourceId);
                             reference.DeletedAtUtc = @event.EventTimeStamp;
+                            questionnaireStorage.InvalidateQuestionnaire(new QuestionnaireId(reference.QuestionnaireId));
                             break;
                         default:
                             reference = await this.dbContext.InterviewReferences.FindAsync(@event.EventSourceId);
@@ -70,6 +76,8 @@ namespace WB.Services.Export.Questionnaire
                     {
                         result.Add(@event);
                     }
+
+                    questionnaireIds.Add(questionnaire.Id);
                 }
                 catch (Exception e)
                 {
@@ -79,6 +87,12 @@ namespace WB.Services.Export.Questionnaire
 
                     throw;
                 }
+            }
+
+            foreach (var questionnaireId in questionnaireIds)
+            {
+                var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(new QuestionnaireId(questionnaireId));
+                databaseSchemaService.CreateOrRemoveSchema(questionnaire);
             }
 
             this.dbContext.SaveChanges();

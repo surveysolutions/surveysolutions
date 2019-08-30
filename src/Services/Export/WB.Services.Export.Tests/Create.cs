@@ -19,6 +19,7 @@ using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.InterviewDataStorage;
+using WB.Services.Export.InterviewDataStorage.Services;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services;
@@ -615,6 +616,15 @@ namespace WB.Services.Export.Tests
         }
 
         public static ValueVector<Guid> ValueVector(params Guid[] rosterIds) => new ValueVector<Guid>(rosterIds);
+
+        public static IDatabaseSchemaService DatabaseSchemaService(
+            IQuestionnaireSchemaGenerator questionnaireSchemaGenerator = null,
+            TenantDbContext dbContext = null)
+        {
+            return new DatabaseSchemaService(
+                questionnaireSchemaGenerator ?? Mock.Of<IQuestionnaireSchemaGenerator>(),
+                dbContext ?? Mock.Of<TenantDbContext>());
+        }
     }
 
     public class EventsFactory
