@@ -16,6 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views
     {
         public string Key { get; set; }
         public string Value { get; set; }
+        public string Alias { get; set; }
     }
 
     public class QuestionnaireVersionsComboboxViewItem : ComboboxViewItem

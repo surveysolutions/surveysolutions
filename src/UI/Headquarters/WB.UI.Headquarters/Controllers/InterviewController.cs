@@ -111,7 +111,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 ResponsibleProfileUrl = interviewSummary.ResponsibleRole == UserRoles.Interviewer ?
                                             Url.Action("Profile", "Interviewer", new {id = interviewSummary.ResponsibleId}) : 
                                             "javascript:void(0);",
-                InterviewsUrl = authorizedUser.IsSupervisor ? Url.Action("Interviews", "Survey") : Url.Action("Interviews", "HQ")
+                InterviewsUrl = Url.Action("Index", "Interviews")
             });
         }
 

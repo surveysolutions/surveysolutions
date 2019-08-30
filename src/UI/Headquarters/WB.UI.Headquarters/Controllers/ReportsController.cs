@@ -78,7 +78,7 @@ namespace WB.UI.Headquarters.Controllers
                     new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesWithVersions"}),
                 QuestionnaireByIdUrl = Url.RouteUrl("DefaultApiWithAction",
                     new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesComboboxById"}),
-                InterviewsUrl = Url.Action("Interviews", "HQ"),
+                InterviewsUrl = Url.Action("Index", "Interviews"),
                 AllTeamsTitle = Strings.AllTeams,
                 TeamTitle = Users.Supervisors,
                 ReportName = Reports.TeamsAndStatuses,
@@ -105,7 +105,7 @@ namespace WB.UI.Headquarters.Controllers
                     new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesWithVersions"}),
                 QuestionnaireByIdUrl = Url.RouteUrl("DefaultApiWithAction",
                     new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesComboboxById"}),
-                InterviewsUrl = Url.Action("Interviews", "Survey"),
+                InterviewsUrl = Url.Action("Index", "Interviews"),
                 AllTeamsTitle = Strings.AllInterviewers,
                 TeamTitle = Pages.TeamMember,
                 ReportName = Reports.Report_Team_Members_and_Statuses,
@@ -152,7 +152,7 @@ namespace WB.UI.Headquarters.Controllers
                         controller = "ReportDataApi",
                         action = "StatusDuration"
                     }),
-                InterviewsBaseUrl = Url.Action("Interviews", "HQ"),
+                InterviewsBaseUrl = Url.Action("Index", "Interviews"),
                 AssignmentsBaseUrl = Url.Action("Index", "Assignments"),
                 QuestionnairesUrl = Url.RouteUrl("DefaultApiWithAction",
                     new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesWithVersions"}),
@@ -177,7 +177,7 @@ namespace WB.UI.Headquarters.Controllers
                         action = "TeamStatusDuration"
                     }),
 
-                InterviewsBaseUrl = Url.Action("Interviews", "Survey"),
+                InterviewsBaseUrl = Url.Action("Index", "Interviews"),
                 AssignmentsBaseUrl = Url.Action("Index", "Assignments"),
                 QuestionnairesUrl = Url.RouteUrl("DefaultApiWithAction",
                     new { httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesWithVersions" }),
