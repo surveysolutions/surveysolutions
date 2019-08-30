@@ -122,7 +122,8 @@ namespace WB.Services.Export.Tests.Questionnaire
         public async Task should_generate_schema_for_questionnaire_once_on_questionnaire_request()
         {
             var questionnaire = Create.QuestionnaireDocumentWithOneChapter(id: Id.gA);
-            questionnaire.Id = $"{Id.gA:N}$1";
+            questionnaire.QuestionnaireId = new QuestionnaireId($"{Id.gA:N}$1");
+            questionnaire.Id = questionnaire.QuestionnaireId.ToString();
 
             var eventFeed = CrateEventFeedWith3InterviewCreatedEvents(questionnaire);
 
@@ -143,7 +144,8 @@ namespace WB.Services.Export.Tests.Questionnaire
         public async Task should_drop_schema_for_questionnaire_once_questionnaire_is_deleted()
         {
             var questionnaire = Create.QuestionnaireDocumentWithOneChapter(id: Id.gA);
-            questionnaire.Id = $"{Id.gA:N}$1";
+            questionnaire.QuestionnaireId = new QuestionnaireId($"{Id.gA:N}$1");
+            questionnaire.Id = questionnaire.QuestionnaireId.ToString();
 
             var eventFeed = CrateEventFeedWith3InterviewCreatedEvents(questionnaire);
 
