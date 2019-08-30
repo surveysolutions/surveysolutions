@@ -87,7 +87,7 @@ namespace WB.UI.Headquarters.Controllers
                 ProfileUrl = Url.Action("Profile", "Interviewer"),
                 CommandsUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" }),
                 Statuses = statuses
-                    .Select(item => new ComboboxViewItem { Key = ((int)item.Status).ToString(), Value = item.Status.ToLocalizeString() })
+                    .Select(item => new ComboboxViewItem { Key = ((int)item.Status).ToString(), Value = item.Status.ToLocalizeString(), Alias = item.Status.ToString() })
                     .ToArray(),
                 Questionnaires = questionnaires
             };

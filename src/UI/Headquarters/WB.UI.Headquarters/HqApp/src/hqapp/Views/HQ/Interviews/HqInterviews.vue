@@ -1080,7 +1080,7 @@ export default {
             if (this.responsibleId) queryString.responsible = this.responsibleId.value
             if (this.assignmentId) queryString.assignmentId = this.assignmentId
 
-            if (this.status) queryString.status = this.status.key
+            if (this.status) queryString.status = this.status.alias
 
             this.$router.push({ query: queryString });
         },
@@ -1131,7 +1131,7 @@ export default {
 
         if(this.$route.query.status != undefined)
         {
-            self.status =  self.statuses.find(o => o.key === self.$route.query.status);
+            self.status =  self.statuses.find(o => o.alias === self.$route.query.status);
         }
 
         self.loadQuestionnaireId((questionnaireId, questionnaireTitle, version) => {
