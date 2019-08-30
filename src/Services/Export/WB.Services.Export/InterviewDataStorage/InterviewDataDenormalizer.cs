@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -67,6 +68,7 @@ namespace WB.Services.Export.InterviewDataStorage
         private readonly ILogger<InterviewDataDenormalizer> logger;
         private readonly IInterviewReferencesStorage interviewReferencesStorage;
         private readonly ICommandExecutor commandExecutor;
+        private readonly IDatabaseSchemaService databaseSchemaService;
 
         private readonly InterviewDataState state;
 
@@ -76,7 +78,8 @@ namespace WB.Services.Export.InterviewDataStorage
             IInterviewDataExportBulkCommandBuilder commandBuilder,
             ILogger<InterviewDataDenormalizer> logger,
             IInterviewReferencesStorage interviewReferencesStorage,
-            ICommandExecutor commandExecutor)
+            ICommandExecutor commandExecutor,
+            IDatabaseSchemaService databaseSchemaService)
         {
             this.tenantContext = tenantContext;
             this.questionnaireStorage = questionnaireStorage;
@@ -85,6 +88,7 @@ namespace WB.Services.Export.InterviewDataStorage
             this.logger = logger;
             this.interviewReferencesStorage = interviewReferencesStorage;
             this.commandExecutor = commandExecutor;
+            this.databaseSchemaService = databaseSchemaService;
 
             state = new InterviewDataState();
         }
@@ -605,6 +609,7 @@ namespace WB.Services.Export.InterviewDataStorage
         public async Task SaveStateAsync(CancellationToken cancellationToken)
         {
             var sw = Stopwatch.StartNew();
+
             using (var command = commandBuilder.BuildCommandsInExecuteOrderFromState(state))
             {
                 logger.LogDebug("Save state command with {parameters} parameters generated in {time}.", command.Parameters.Count, sw.Elapsed);

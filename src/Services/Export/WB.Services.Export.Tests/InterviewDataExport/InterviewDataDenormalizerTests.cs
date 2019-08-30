@@ -20,6 +20,7 @@ using WB.Services.Export.Events.Interview;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.InterviewDataStorage;
 using WB.Services.Export.InterviewDataStorage.InterviewDataExport;
+using WB.Services.Export.InterviewDataStorage.Services;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Infrastructure.EventSourcing;
@@ -325,8 +326,9 @@ namespace WB.Services.Export.Tests.InterviewDataExport
             commandExecutor.Setup(c => c.ExecuteNonQueryAsync(It.IsAny<DbCommand>(), It.IsAny<CancellationToken>()))
                 .Returns<DbCommand, CancellationToken>((c, ct)  => Task.CompletedTask)
                 .Callback((DbCommand c, CancellationToken ct) => funcToSaveCommand.Invoke(c));
+            IDatabaseSchemaService databaseSchemaService = Mock.Of<IDatabaseSchemaService>();
 
-            return new InterviewDataDenormalizer(tenantContext, questionnaireStorage, memoryCache, commandBuilder, logger, interviewReferencesStorage, commandExecutor.Object);
+            return new InterviewDataDenormalizer(tenantContext, questionnaireStorage, memoryCache, commandBuilder, logger, interviewReferencesStorage, commandExecutor.Object, databaseSchemaService);
         }
 
         private QuestionnaireDocument SetupQuestionnaireDocumentWithAllEntities()
