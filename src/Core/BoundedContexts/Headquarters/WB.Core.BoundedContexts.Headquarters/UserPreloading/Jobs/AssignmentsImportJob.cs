@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
@@ -19,14 +21,20 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
         private readonly IServiceLocator serviceLocator;
         private readonly ILogger logger;
         private readonly IAssignmentsImportService assignmentsImportService;
+        private readonly ISystemLog systemLog;
+        private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
 
-        public AssignmentsImportJob(IServiceLocator serviceLocator, ILogger logger, IAssignmentsImportService assignmentsImportService)
+        public AssignmentsImportJob(IServiceLocator serviceLocator, ILogger logger,
+            IAssignmentsImportService assignmentsImportService, ISystemLog systemLog,
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory)
         {
             this.serviceLocator = serviceLocator;
             this.logger = logger;
             this.assignmentsImportService = assignmentsImportService;
+            this.systemLog = systemLog;
+            this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
         }
-        
+
         public Task Execute(IJobExecutionContext context)
         {
             try
@@ -46,6 +54,9 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                 var sw = new Stopwatch();
                 sw.Start();
 
+                int? lastImportedAssignmentId = null;
+                int? firstImportedAssignmentId = null;
+
                 Parallel.ForEach(allAssignmentIds,
                     new ParallelOptions { MaxDegreeOfParallelism = sampleImportSettings.InterviewsImportParallelTasksLimit },
                     assignmentId =>
@@ -61,12 +72,23 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                                 return;
                             }
 
-                            threadImportAssignmentsService.ImportAssignment(assignmentId, importProcessStatus.AssignedTo, questionnaire);
+                            var newAssignmentId = threadImportAssignmentsService.ImportAssignment(assignmentId, importProcessStatus.AssignedTo, questionnaire);
+                            if (!firstImportedAssignmentId.HasValue)
+                                firstImportedAssignmentId = newAssignmentId;
+                            else
+                                lastImportedAssignmentId = newAssignmentId;
+
                             threadImportAssignmentsService.RemoveAssignmentToImport(assignmentId);
                         });
                     });
 
                 assignmentsImportService.SetImportProcessStatus(AssignmentsImportProcessStatus.ImportCompleted);
+
+                var questionnaireTitle = this.questionnaireBrowseViewFactory.GetById(importProcessStatus.QuestionnaireIdentity).Title;
+                var questionnaireVersion = importProcessStatus.QuestionnaireIdentity.Version;
+
+                this.systemLog.AssignmentsImported(importProcessStatus.TotalCount, questionnaireTitle,
+                    questionnaireVersion, firstImportedAssignmentId ?? 0, lastImportedAssignmentId, importProcessStatus.ResponsibleName);
                 
                 sw.Stop();
                 this.logger.Debug($"Assignments import job: Finished. Elapsed time: {sw.Elapsed}");

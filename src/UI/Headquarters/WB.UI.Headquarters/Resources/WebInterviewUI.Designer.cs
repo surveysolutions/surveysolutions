@@ -729,6 +729,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have no access to questionnaire.
+        /// </summary>
+        internal static string NoQuestionnaireAccess {
+            get {
+                return ResourceManager.GetString("NoQuestionnaireAccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No results found.
         /// </summary>
         internal static string NoResultsFound {
@@ -896,6 +905,33 @@ namespace WB.UI.Headquarters.Resources {
         internal static string SaveScenario {
             get {
                 return ResourceManager.GetString("SaveScenario", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Session on Designer applicaton has expired. Sign in on Designer application to be able to save..
+        /// </summary>
+        internal static string SaveScenarioDesignerLogin {
+            get {
+                return ResourceManager.GetString("SaveScenarioDesignerLogin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Designer.
+        /// </summary>
+        internal static string SaveScenarioGoToDesigner {
+            get {
+                return ResourceManager.GetString("SaveScenarioGoToDesigner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select existing to update or leave empty to save new one.
+        /// </summary>
+        internal static string SaveScenarioOptions {
+            get {
+                return ResourceManager.GetString("SaveScenarioOptions", resourceCulture);
             }
         }
         

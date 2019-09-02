@@ -239,7 +239,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         public IEnumerable<string> GetImportAssignmentsErrors()
             => this.importAssignmentsRepository.Query(x => x.Where(_ => _.Error != null).Select(_ => _.Error));
 
-        public void ImportAssignment(int assignmentId, Guid defaultResponsible, IQuestionnaire questionnaire)
+        public int ImportAssignment(int assignmentId, Guid defaultResponsible, IQuestionnaire questionnaire)
         {
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version);
             var assignmentToImport = this.GetAssignmentById(assignmentId);
@@ -269,6 +269,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             this.interviewCreatorFromAssignment.CreateInterviewIfQuestionnaireIsOld(responsibleId,
                 questionnaireIdentity, assignment.Id, assignmentToImport.Answers);
+
+            return assignment.Id;
         }
 
         public void SetVerifiedToAssignment(int assignmentId, string errorMessage = null)

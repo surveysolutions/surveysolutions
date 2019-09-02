@@ -54,12 +54,70 @@
                         </button>
                     </li>
                     <li v-if="this.$config.inWebTesterMode && this.$config.saveScenarioUrl">
-                        <form method="POST" :action="saveScenarioUrl" ref="scenarioForm">
-                            <input type="hidden" ref="scenarioTextInput" name="ScenarioText"/>
-                            <button  type="button" class="btn btn-default btn-link btn-icon" @click="saveScenario" :title="$t('WebInterviewUI.SaveScenario')">
-                                <span class="glyphicon glyphicon-floppy-disk"></span>
-                            </button>
-                        </form>
+                        <button
+                            type="button"
+                            class="btn btn-default btn-link btn-icon"
+                            @click="showSaveScenario"
+                            :title="$t('WebInterviewUI.SaveScenario')"
+                        >
+                            <span class="glyphicon glyphicon-floppy-disk"></span>
+                        </button>
+                        <div
+                            class="modal fade"
+                            id="saveScenarioModal"
+                            ref="saveScenarioModalRef"
+                            tabindex="-1"
+                            role="dialog"
+                        >
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h2>{{this.$t('WebInterviewUI.SaveScenario')}}</h2>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form onsubmit="return false;" action="javascript:void(0)" v-if="!this.designerCredentialsExpired">
+                                            <div class="form-group">
+                                                <label
+                                                    for="slScenarioSaveOption"
+                                                    class="control-label"
+                                                >{{this.$t('WebInterviewUI.SaveScenarioOptions')}}</label>
+                                                <select
+                                                    id="slScenarioSaveOption"
+                                                    class="form-control"
+                                                    v-model="selectedScenarioOption"
+                                                >
+                                                    <option value="-1"></option>
+                                                    <option
+                                                        v-for="s in designerScenarios"
+                                                        :value="s.id"
+                                                        :key="s.id"
+                                                    >{{s.title}}</option>
+                                                </select>
+                                            </div>
+                                        </form>
+                                        <div v-else>
+                                            <p>{{this.$t('WebInterviewUI.SaveScenarioDesignerLogin')}}</p>
+                                            <a :href="this.$config.designerUrl" target="_blank">
+                                                {{this.$t('WebInterviewUI.SaveScenarioGoToDesigner')}}
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer" v-if="!this.designerCredentialsExpired">
+                                        <button
+                                            type="button"
+                                            class="btn btn-primary"
+                                            :disabled="scenarioSaving"
+                                            @click="saveScenario"
+                                        >{{$t("Common.Save")}}</button>
+                                        <button
+                                            type="button"
+                                            class="btn btn-link"
+                                            @click="hideScenarioSave"
+                                        >{{$t("Common.Cancel")}}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -77,7 +135,11 @@
         data() {
             return {
                 showEmailPersonalLink: this.$config.askForEmail,
-                scenarioText: null
+                scenarioText: null,
+                designerScenarios: [],
+                selectedScenarioOption: -1,
+                scenarioSaving: false,
+                designerCredentialsExpired: false
             }
         },
         beforeMount() {
@@ -150,6 +212,9 @@
             }
         },
         methods: {
+            hideScenarioSave() {
+                $(this.$refs.saveScenarioModalRef).modal("hide");
+            },
             emailPersonalLink(){
                 var self = this;
                 let prompt = modal.prompt({
@@ -205,10 +270,62 @@
             reloadQuestionnaire() {
                 window.location = this.$config.reloadQuestionnaireUrl;
             },
+            async showSaveScenario() {
+                this.scenarioSaving = true;
+                this.designerCredentialsExpired = false;
+                $(this.$refs.saveScenarioModalRef).appendTo("body").modal("show");
+                try {
+                    this.designerScenarios = []
+                    var getScenarios = await axios.get(this.saveScenarioUrl, {
+                        crossDomain: true,
+                        withCredentials: true
+                    })
+
+                    this.designerScenarios = getScenarios.data
+                }
+                catch(error) {
+                    this.handleDesignerApiResponse(error)
+                }
+                finally{
+                    this.scenarioSaving = false;
+                }
+            },
             async saveScenario() {
-                const scenario = await axios.get(`${this.getScenarioUrl}/${this.$route.params.interviewId}`);
-                this.$refs.scenarioTextInput.value = scenario.data;
-                this.$refs.scenarioForm.submit();
+                this.scenarioSaving = true;
+                try {
+                    const scenarioContentResponse = await axios.get(`${this.getScenarioUrl}/${this.$route.params.interviewId}`)
+                    const scenario = scenarioContentResponse.data
+                    await axios({
+                            method: "POST",
+                            url: this.saveScenarioUrl,
+                            data: { 
+                                scenarioText: scenario,
+                                scenarioId: this.selectedScenarioOption
+                            },
+                            crossDomain: true,
+                            withCredentials: true
+                        })
+
+                    this.hideScenarioSave()
+                } catch (error) {
+                    this.handleDesignerApiResponse(error)
+                }
+                finally {
+                    this.scenarioSaving = false
+                }
+            },
+            handleDesignerApiResponse(error) {
+                if(error.isAxiosError)
+                    if(error.response.status === 401) {
+                        this.designerCredentialsExpired = true
+                    }
+                    if (error.response.status === 403) {
+                        this.hideScenarioSave()
+                        throw this.$t('WebInterviewUI.NoQuestionnaireAccess')
+                    }
+                else {
+                    throw error
+                }
             }
         }
     }

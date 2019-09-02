@@ -1280,27 +1280,33 @@
     <value>Да</value>
   </data>
   <data name="SideBarScenarioCounter" xml:space="preserve">
-      <value>{{count}} Сценарий:</value>
-      <comment>{{count}} Сценарий:</comment>
+    <value>{{count}} Сценарий:</value>
+    <comment>{{count}} Сценарий:</comment>
   </data>
   <data name="SideBarScenarioCounter_plural" xml:space="preserve">
-      <value>{{count}} Сценарии:</value>
-      <comment>{{count}} Сценарии:</comment>
+    <value>{{count}} Сценарии:</value>
+    <comment>{{count}} Сценарии:</comment>
   </data>
   <data name="SideBarScenarioEmptyLine1" xml:space="preserve">
-      <value>На этой вкладке вы можите видеть ваши сценарии.</value>
-      <comment>На этой вкладке вы можите видеть ваши сценарии.</comment>
+    <value>На этой вкладке вы можите видеть ваши сценарии.</value>
+    <comment>На этой вкладке вы можите видеть ваши сценарии.</comment>
   </data>
   <data name="SideBarScenarioEmptyLine2" xml:space="preserve">
-      <value>Сценарий это снимок текущего состояния на тестере, вы можите сохранить сценарий нажав "Сохранить сценарий" на тестере. </value>
-      <comment>Сценарий это снимок текущего состояния на тестере, вы можите сохранить сценарий нажав "Сохранить сценарий" на тестере. </comment>
+    <value>Сценарий это снимок текущего состояния на тестере, вы можите сохранить сценарий нажав "Сохранить сценарий" на тестере. </value>
+    <comment>Сценарий это снимок текущего состояния на тестере, вы можите сохранить сценарий нажав "Сохранить сценарий" на тестере. </comment>
   </data>
   <data name="SideBarScenarioTitle" xml:space="preserve">
-      <value>Сценарии</value>
-      <comment>заголовок сценария</comment>
+    <value>Сценарии</value>
+    <comment>заголовок сценария</comment>
   </data>
   <data name="SideBarScenarioName" xml:space="preserve">
-      <value>заголовок сценария</value>
-      <comment>заголовок сценария</comment>
+    <value>заголовок сценария</value>
+    <comment>заголовок сценария</comment>
+  </data>
+  <data name="Run" xml:space="preserve">
+    <value>Выполнить</value>
+  </data>
+  <data name="View" xml:space="preserve">
+    <value>Просмотреть</value>
   </data>
 </root>

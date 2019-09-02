@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Npgsql;
 using WB.Services.Export.Events;
 using WB.Services.Export.ExportProcessHandlers;
+using WB.Services.Export.InterviewDataStorage;
 using WB.Services.Export.Models;
 
 namespace WB.Services.Export.Jobs
@@ -19,7 +20,8 @@ namespace WB.Services.Export.Jobs
 
         public ExportJob(IServiceProvider serviceProvider,
             IEventProcessor processor,
-            ILogger<ExportJob> logger, IExportProcessHandler<DataExportProcessArgs> exportProcessHandler)
+            ILogger<ExportJob> logger, 
+            IExportProcessHandler<DataExportProcessArgs> exportProcessHandler)
         {
             logger.LogTrace("Constructed instance of ExportJob");
 
