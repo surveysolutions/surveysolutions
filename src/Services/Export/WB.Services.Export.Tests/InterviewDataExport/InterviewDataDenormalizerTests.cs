@@ -326,9 +326,8 @@ namespace WB.Services.Export.Tests.InterviewDataExport
             commandExecutor.Setup(c => c.ExecuteNonQueryAsync(It.IsAny<DbCommand>(), It.IsAny<CancellationToken>()))
                 .Returns<DbCommand, CancellationToken>((c, ct)  => Task.CompletedTask)
                 .Callback((DbCommand c, CancellationToken ct) => funcToSaveCommand.Invoke(c));
-            IDatabaseSchemaService databaseSchemaService = Mock.Of<IDatabaseSchemaService>();
 
-            return new InterviewDataDenormalizer(tenantContext, questionnaireStorage, memoryCache, commandBuilder, logger, interviewReferencesStorage, commandExecutor.Object, databaseSchemaService);
+            return new InterviewDataDenormalizer(tenantContext, questionnaireStorage, memoryCache, commandBuilder, logger, interviewReferencesStorage, commandExecutor.Object);
         }
 
         private QuestionnaireDocument SetupQuestionnaireDocumentWithAllEntities()
