@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using System.IO.Compression;
 using System.Text;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -12,7 +11,6 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -43,6 +41,7 @@ namespace WB.UI.Designer
 {
     public class Startup
     {
+        internal const string WebTesterCorsPolicy = "_webTester";
         private readonly IHostingEnvironment hostingEnvironment;
 
         public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
@@ -103,6 +102,22 @@ namespace WB.UI.Designer
                     options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                     options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
                 });
+
+            services.AddCors(corsOpt =>
+            {
+                corsOpt.AddPolicy(WebTesterCorsPolicy, b =>
+                {
+                    var st = Configuration.GetSection("WebTester").GetValue<string>("BaseUri");
+                    Uri uri = new Uri(st);
+                    var webTesterOrigin = uri.Scheme + Uri.SchemeDelimiter + uri.Host;
+                    if (Regex.IsMatch(st, ":\\d+")) 
+                    {
+                        webTesterOrigin += ":" + uri.Port;
+                    }
+
+                    b.WithOrigins(webTesterOrigin).AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+                });
+            });
 
             // this code need to run lazy load KnownStoreTypes property
             if (!ErrorStore.KnownStoreTypes.Contains(typeof(PostgreSqlErrorStore)))
@@ -211,6 +226,7 @@ namespace WB.UI.Designer
             app.UseCookiePolicy();
             app.UseSession();
             app.UseAuthentication();
+            app.UseCors(WebTesterCorsPolicy);
             
             app.UseRequestLocalization(opt =>
             {

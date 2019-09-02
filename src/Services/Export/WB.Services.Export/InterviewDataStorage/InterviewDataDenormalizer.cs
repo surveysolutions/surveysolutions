@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -605,6 +606,7 @@ namespace WB.Services.Export.InterviewDataStorage
         public async Task SaveStateAsync(CancellationToken cancellationToken)
         {
             var sw = Stopwatch.StartNew();
+
             using (var command = commandBuilder.BuildCommandsInExecuteOrderFromState(state))
             {
                 logger.LogDebug("Save state command with {parameters} parameters generated in {time}.", command.Parameters.Count, sw.Elapsed);
