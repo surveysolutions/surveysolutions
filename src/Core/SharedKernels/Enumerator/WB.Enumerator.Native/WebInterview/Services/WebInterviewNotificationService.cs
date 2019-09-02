@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Enumerator.Native.WebInterview.Services
 {
@@ -233,6 +234,19 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 var identities = interview.GetAllIdentitiesForEntityId(entityId).ToArray();
                 this.RefreshEntities(interviewId, identities);
             }
+        }
+
+        public void RefreshCascadingOptions(Guid interviewId, Identity identity)
+        {
+            var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
+            if (interview == null) return;
+
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, null);
+
+            var dependentQuestionIds = questionnaire.GetCascadingQuestionsThatDependUponQuestion(identity.Id);
+            var dependentQuestionIdentities = dependentQuestionIds.SelectMany(x => interview.GetAllIdentitiesForEntityId(x)).ToArray();
+
+            this.RefreshEntities(interviewId, dependentQuestionIdentities);
         }
 
         public virtual void RefreshLinkedToListQuestions(Guid interviewId, Identity[] identities)
