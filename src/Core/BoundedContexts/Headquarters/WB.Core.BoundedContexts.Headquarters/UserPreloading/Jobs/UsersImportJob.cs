@@ -37,30 +37,39 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
             var sw = new Stopwatch();
             sw.Start();
 
+            ImportUsers();
+
+            sw.Stop();
+            logger.Info($"User import job: Finished. Elapsed time: {sw.Elapsed}");
+            return Task.CompletedTask;
+        }
+
+        private void ImportUsers()
+        {
             try
             {
-                UserToImport userToImport = null;
+                var userToImport = this.userImportService.GetUserToImport();
+                if (userToImport == null) return;
+
                 do
                 {
-                    userToImport = userImportService.GetUserToImport();
-                    if (userToImport == null) break;
                     this.CreateUserOrUnarchiveAndUpdateAsync(userToImport).WaitAndUnwrapException();
 
                     userImportService.RemoveImportedUser(userToImport);
 
+                    userToImport = userImportService.GetUserToImport();
+
                 } while (userToImport != null);
 
-                var status = userImportService.GetImportCompleteStatus();
-                this.systemLog.UsersImported(status.SupervisorsCount, status.InterviewersCount);
+                var completeStatus = userImportService.GetImportCompleteStatus();
+                var status = userImportService.GetImportStatus();
+
+                this.systemLog.UsersImported(completeStatus.SupervisorsCount, completeStatus.InterviewersCount, status.Responsible);
             }
             catch (Exception ex)
             {
                 logger.Error($"User import job: FAILED. Reason: {ex.Message} ", ex);
             }
-
-            sw.Stop();
-            logger.Info($"User import job: Finished. Elapsed time: {sw.Elapsed}");
-            return Task.CompletedTask;
         }
 
         private async Task CreateUserOrUnarchiveAndUpdateAsync(UserToImport userToCreate)

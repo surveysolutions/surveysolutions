@@ -8,7 +8,6 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
-using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -89,7 +88,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                 var questionnaireVersion = importProcessStatus.QuestionnaireIdentity.Version;
 
                 this.systemLog.AssignmentsImported(importProcessStatus.TotalCount, questionnaireTitle,
-                    questionnaireVersion, firstImportedAssignmentId ?? 0, lastImportedAssignmentId ?? 0);
+                    questionnaireVersion, firstImportedAssignmentId ?? 0, lastImportedAssignmentId, importProcessStatus.ResponsibleName);
                 
                 sw.Stop();
                 this.logger.Debug($"Assignments import job: Finished. Elapsed time: {sw.Elapsed}");
