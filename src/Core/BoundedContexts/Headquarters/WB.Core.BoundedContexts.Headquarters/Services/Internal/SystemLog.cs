@@ -43,15 +43,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
             this.Append(LogEntryType.EmailProviderChanged, "Update", $"Previous provider was {previousProvider}, current provider is {currentProvider}");
         }
 
-        public void UsersImported(int importedSupervisors, int importedInterviewers)
+        public void UsersImported(int importedSupervisors, int importedInterviewers, string responsibleName)
             => this.Append(LogEntryType.UsersImported, "Users", "Import",
-                $"User {this.authorizedUser.UserName} created {importedSupervisors + importedInterviewers} users in batch mode, " +
-                $"of which {importedInterviewers} are interviewers and {importedSupervisors} supervisors");
+                $"User {responsibleName} created {importedSupervisors + importedInterviewers} users in batch mode, " +
+                $"of which {importedInterviewers} are interviewers and {importedSupervisors} supervisors",
+                responsibleName:responsibleName);
 
         public void AssignmentsImported(long assignmentsCount, string questionnaireTitle, long questionnaireVersion,
-            int firstAssignmentId, int lastAssignmentId)
+            int firstAssignmentId, int? lastAssignmentId, string responsibleName)
             => this.Append(LogEntryType.AssignmentsImported, "Assignments", "Import",
-                $"User {this.authorizedUser.UserName} created {assignmentsCount} assignments {firstAssignmentId}-{lastAssignmentId} for {questionnaireTitle} (v{questionnaireVersion})");
+                $"User {responsibleName} created {assignmentsCount} assignment(s) {firstAssignmentId}-{lastAssignmentId ?? firstAssignmentId} " +
+                $"for {questionnaireTitle} (v{questionnaireVersion})",
+                responsibleName: responsibleName);
 
         public void InterviewerArchived(string interviewerName)
             => this.Append(LogEntryType.InterviewerArchived, "Interviewer", "Archive",
@@ -89,9 +92,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
             this.Append(LogEntryType.UserMovedToAnotherTeam, $"User {interviewerName}", "moved", $"From team {previousSupervisorName}' to {newSupervisorName}");
         }
 
-        private void Append(LogEntryType type, string target, string action, string args = null)
+        private void Append(LogEntryType type, string target, string action, string args = null, string responsibleName = null)
         {
-            AppendLogEntry(this.authorizedUser.Id, this.authorizedUser.UserName,
+            AppendLogEntry(this.authorizedUser.Id, responsibleName ?? this.authorizedUser.UserName,
                 type, $"{target}: {action}; {args ?? string.Empty}");
         }
 
