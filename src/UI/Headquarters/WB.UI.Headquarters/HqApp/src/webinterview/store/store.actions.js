@@ -5,6 +5,12 @@ import { batchedAction } from "../helpers"
 
 import modal from "../components/modal"
 
+function getAnswer(state, questionId){
+    const question = state.entityDetails[questionId]
+    if(question == null || question.answer == null) return null;
+    return question.answer.value;
+}
+
 export default {
     async loadInterview({ commit }) {
         const info = await Vue.$api.call(api => api.getInterviewDetails())
@@ -28,7 +34,9 @@ export default {
         })
     }, "fetch", /* limit */ 100),
 
-    answerSingleOptionQuestion({ dispatch }, { answer, questionId }) {
+    answerSingleOptionQuestion({ dispatch, state }, { answer, questionId }) {
+        if(getAnswer(state, questionId) == answer) return; // skip answer on same question
+        
         Vue.$api.callAndFetch(questionId, api => api.answerSingleOptionQuestion(answer, questionId))
     },
     answerTextQuestion({ dispatch }, { identity, text }) {
