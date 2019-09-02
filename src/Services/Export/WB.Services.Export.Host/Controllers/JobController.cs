@@ -25,21 +25,18 @@ namespace WB.Services.Export.Host.Controllers
         private readonly IExportArchiveHandleService archiveHandleService;
         private readonly IJobService jobService;
         private readonly IQuestionnaireStorage questionnaireStorage;
-        private readonly IDatabaseSchemaService databaseSchemaService;
 
         public JobController(IDataExportProcessesService exportProcessesService,
             IJobsStatusReporting jobsStatusReporting,
             IExportArchiveHandleService archiveHandleService,
             IJobService jobService, 
-            IQuestionnaireStorage questionnaireStorage,
-            IDatabaseSchemaService databaseSchemaService)
+            IQuestionnaireStorage questionnaireStorage)
         {
             this.exportProcessesService = exportProcessesService ?? throw new ArgumentNullException(nameof(exportProcessesService));
             this.jobsStatusReporting = jobsStatusReporting ?? throw new ArgumentNullException(nameof(jobsStatusReporting));
             this.archiveHandleService = archiveHandleService ?? throw new ArgumentNullException(nameof(archiveHandleService));
             this.jobService = jobService ?? throw new ArgumentNullException(nameof(jobService));
             this.questionnaireStorage = questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
-            this.databaseSchemaService = databaseSchemaService ?? throw new ArgumentNullException(nameof(databaseSchemaService)); ;
         }
 
         [HttpPut]
