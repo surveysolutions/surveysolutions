@@ -88,7 +88,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                 var questionnaireVersion = importProcessStatus.QuestionnaireIdentity.Version;
 
                 this.systemLog.AssignmentsImported(importProcessStatus.TotalCount, questionnaireTitle,
-                    questionnaireVersion, firstImportedAssignmentId ?? 0, lastImportedAssignmentId, importProcessStatus.ResponsibleName);
+                    questionnaireVersion, firstImportedAssignmentId ?? 0, lastImportedAssignmentId ?? firstImportedAssignmentId ?? 0, importProcessStatus.ResponsibleName);
                 
                 sw.Stop();
                 this.logger.Debug($"Assignments import job: Finished. Elapsed time: {sw.Elapsed}");
