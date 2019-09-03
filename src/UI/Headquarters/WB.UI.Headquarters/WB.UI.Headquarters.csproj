@@ -2008,6 +2008,7 @@
     <Compile Include="API\AdminSettingsController.cs" />
     <Compile Include="API\AssignmentsApiController.cs" />
     <Compile Include="API\AssignmentsUpgradeApiController.cs" />
+    <Compile Include="API\Automation\QuestionnaireAutomationController.cs" />
     <Compile Include="API\DataCollection\AttachmentsControllerBase.cs" />
     <Compile Include="API\DataCollection\AssignmentsControllerBase.cs" />
     <Compile Include="API\DataCollection\AuditLogControllerBase.cs" />
