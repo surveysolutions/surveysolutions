@@ -104,6 +104,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         {
             var interviewerRoleId = UserRoles.Interviewer.ToUserId();
             var supervisorRoleId = UserRoles.Supervisor.ToUserId();
+            var hqRoleId = UserRoles.Headquarter.ToUserId();
 
             return this.userRepository.Users
                 .Where(x => userNames.Contains(x.UserName) && !x.IsArchived)
@@ -111,7 +112,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 {
                     IsLocked = x.IsLockedByHeadquaters || x.IsLockedBySupervisor,
                     SupervisorId = x.Roles.Any(role => role.RoleId == supervisorRoleId) ? x.Id : x.Profile.SupervisorId,
-                    InterviewerId = x.Roles.Any(role => role.RoleId == interviewerRoleId) ? x.Id : (Guid?)null
+                    InterviewerId = x.Roles.Any(role => role.RoleId == interviewerRoleId) ? x.Id : (Guid?)null,
+                    HeadquartersId = x.Roles.Any(role => role.RoleId == hqRoleId) ? x.Id : (Guid?)null
                 }).ToArray();
         }
 
