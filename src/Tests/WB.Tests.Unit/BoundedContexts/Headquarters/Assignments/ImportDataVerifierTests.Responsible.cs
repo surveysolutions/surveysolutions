@@ -75,7 +75,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_verify_answers_and_responsible_not_supervisor_and_not_interviewer_should_return_PL0028_error()
+        public void when_verify_answers_and_responsible_not_headquarters_not_supervisor_and_not_interviewer_should_return_PL0028_error()
         {
             // arrange
             var fileName = "mainfile.tab";
@@ -96,6 +96,26 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(errors[0].Code, Is.EqualTo("PL0028"));
             Assert.That(errors[0].References.First().Content, Is.EqualTo(responsibleName));
             Assert.That(errors[0].References.First().DataFile, Is.EqualTo(fileName));
+        }
+
+        [Test]
+        public void when_verify_answers_and_responsible_is_headquarters_should_return_empty_errors()
+        {
+            // arrange
+            var fileName = "mainfile.tab";
+            var responsibleName = "john doe";
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion()));
+
+            var preloadingRow = Create.Entity.PreloadingAssignmentRow(fileName, Create.Entity.AssignmentResponsible(responsibleName, Create.Entity.UserToVerify(hqId: Guid.NewGuid())));
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors, Is.Empty);
         }
     }
 }

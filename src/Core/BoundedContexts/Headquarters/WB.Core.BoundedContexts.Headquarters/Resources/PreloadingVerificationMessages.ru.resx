@@ -177,9 +177,6 @@
   <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
     <value>Ответственный помечен заблокированный.</value>
   </data>
-  <data name="PL0028_UserIsNotSupervisorOrInterviewer" xml:space="preserve">
-    <value>Пользователь не является супервизором или интервьюером.</value>
-  </data>
   <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
     <value>Ответ на вопрос о размере списка не может превышать {0}.</value>
   </data>
