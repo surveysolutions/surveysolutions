@@ -173,7 +173,7 @@
     <value>Заполните все или несколько идентификационных полей</value>
   </data>
   <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
-    <value>Выберите ответственного (Супервизора или Интервьюера) для задания</value>
+    <value>Выберите ответственного (Хедквотера, Супервизора или Интервьюера) для задания</value>
   </data>
   <data name="CreateInterview" xml:space="preserve">
     <value>Начать новое интервью</value>

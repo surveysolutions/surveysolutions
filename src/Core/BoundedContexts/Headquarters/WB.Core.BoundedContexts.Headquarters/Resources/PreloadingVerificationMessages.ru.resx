@@ -252,4 +252,8 @@
     <value>Пароль не уникален. Пароль для задания в веб режиме с количеством интервью равным 1 должен быть уникален</value>
     <comment></comment>
   </data>
+  <data name="PL0028_UserIsNotHQOrSupervisorOrInterviewer" xml:space="preserve">
+      <value>Пользователь не является хедквотером, супервизором или интервьюером.</value>
+      <comment>Пользователь не является хедквотером, супервизором или интервьюером.</comment>
+  </data>
 </root>

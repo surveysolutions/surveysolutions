@@ -205,7 +205,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select responsible (Supervisor or Interviewer) for this assignment.
+        ///   Looks up a localized string similar to Select responsible (Headquarters or Supervisor or Interviewer) for this assignment.
         /// </summary>
         public static string CreateAssignment_ResponsibleInstruction {
             get {
