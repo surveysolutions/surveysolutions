@@ -184,7 +184,7 @@
     <value>Fill all or some of the identifying fields</value>
   </data>
   <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
-    <value>Select responsible (Supervisor or Interviewer) for this assignment</value>
+    <value>Select responsible (Headquarters or Supervisor or Interviewer) for this assignment</value>
   </data>
   <data name="Questionnaire" xml:space="preserve">
     <value>Questionnaire</value>
