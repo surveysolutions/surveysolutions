@@ -372,4 +372,7 @@
   <data name="QuestionnaireVersion" xml:space="preserve">
     <value>ver. {{version}}</value>
   </data>
+  <data name="AssignmentId" xml:space="preserve">
+    <value>Assignment ID</value>
+  </data>
 </root>

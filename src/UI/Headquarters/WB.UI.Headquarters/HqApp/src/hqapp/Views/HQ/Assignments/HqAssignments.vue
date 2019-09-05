@@ -243,7 +243,7 @@ export default {
                     responsivePriority: 2,
                     render(data, type, row) {
                         var result =
-                            "<a href='" + self.config.api.assignmentsPage + "?id=" + row.id + "'>" + data + "</a>";
+                            "<a href='Assignments/" + row.id + "'>" + data + "</a>";
                         return result;
                     },
                 },
