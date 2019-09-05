@@ -3,6 +3,7 @@
     <Filters slot="filters">
       <FilterBlock :title="$t('Common.Questionnaire')">
         <Typeahead
+          ref="questionnaireIdControl"
           control-id="questionnaireId"
           fuzzy
           data-vv-name="questionnaireId"
@@ -16,6 +17,7 @@
 
       <FilterBlock :title="$t('Common.QuestionnaireVersion')">
         <Typeahead
+          ref="questionnaireVersionControl"
           control-id="questionnaireVersion"
           fuzzy
           data-vv-name="questionnaireVersion"
@@ -1102,23 +1104,13 @@ export default {
             } else onDone();
         },
 
-        async loadQuestionnaireId(onDone) {
+        loadQuestionnaireId(onDone) {
             let requestParams = null;
 
             const questionnaireId = this.$route.query.templateId;
             const version = this.$route.query.templateVersion;            
 
-            if (questionnaireId != undefined && version != undefined) {
-                requestParams = _.assign(
-                    { questionnaireIdentity: questionnaireId + "$" + version, cache: false },
-                    this.ajaxParams
-                );
-                const response = await this.$http.get(this.config.api.questionnaireByIdUrl, { params: requestParams });
-
-                if (response.data) {
-                    onDone(questionnaireId, response.data.title, response.data.version);
-                }
-            } else onDone();
+            onDone(questionnaireId, version);            
         },
     },
 
@@ -1134,16 +1126,13 @@ export default {
             self.status =  self.statuses.find(o => o.alias === self.$route.query.status);
         }
 
-        self.loadQuestionnaireId((questionnaireId, questionnaireTitle, version) => {
+        self.loadQuestionnaireId((questionnaireId, version) => {
             if (questionnaireId != undefined) {
-                self.questionnaireId = {
-                    key: questionnaireId,
-                    value: questionnaireTitle
-                };
-                self.questionnaireVersion = {
-                    key: version,
-                    value: version
-                };
+                self.questionnaireId = self.$config.model.questionnaires.find(q => q.key == questionnaireId);
+                if (version != undefined)
+                {
+                    self.questionnaireVersion = self.questionnaireId.versions.find(v => v.key == version);
+                }
             }
 
             self.loadResponsibleIdByName(responsibleId => {
