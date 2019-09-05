@@ -1989,6 +1989,7 @@
     <Content Include="Views\WebInterview\_StartOrResumeForm.cshtml" />
     <Content Include="Views\Shared\_PoweredBy.cshtml" />
     <Content Include="Views\DataExport\New.cshtml" />
+    <Content Include="Views\Assignments\Details.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
