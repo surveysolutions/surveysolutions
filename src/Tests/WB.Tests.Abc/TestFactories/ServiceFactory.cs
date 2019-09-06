@@ -578,7 +578,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public IAssignmentsService AssignmentService(params Assignment[] assignments)
         {
-            IPlainStorageAccessor<Assignment> accessor = new TestPlainStorage<Assignment>();
+            IQueryableReadSideRepositoryReader<Assignment> accessor = new TestPlainStorage<Assignment>();
             foreach (var assignment in assignments)
             {
                 accessor.Store(assignment, assignment.Id);
@@ -713,16 +713,16 @@ namespace WB.Tests.Abc.TestFactories
             IInterviewTreeBuilder interviewTreeBuilder = null,
             IUserViewFactory userViewFactory = null,
             IQuestionOptionsRepository optionsRepository = null,
-            IPlainStorageAccessor<Assignment> assignmentsRepository = null)
+            IQueryableReadSideRepositoryReader<Assignment> assignmentsRepository = null)
             => new ImportDataVerifier(fileSystem ?? new FileSystemIOAccessor(),
                 interviewTreeBuilder ?? Mock.Of<IInterviewTreeBuilder>(),
                 userViewFactory ?? Mock.Of<IUserViewFactory>(),
                 optionsRepository ?? Mock.Of<IQuestionOptionsRepository>(),
-                assignmentsRepository ?? Mock.Of<IPlainStorageAccessor<Assignment>>());
+                assignmentsRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<Assignment>>());
 
         public IAssignmentsUpgrader AssignmentsUpgrader(IPreloadedDataVerifier importService = null,
             IQuestionnaireStorage questionnaireStorage = null,
-            IPlainStorageAccessor<Assignment> assignments = null,
+            IQueryableReadSideRepositoryReader<Assignment> assignments = null,
             IAssignmentsUpgradeService upgradeService = null)
         {
             return new AssignmentsUpgrader(assignments ?? new TestPlainStorage<Assignment>(),
@@ -757,7 +757,7 @@ namespace WB.Tests.Abc.TestFactories
             IPlainStorageAccessor<AssignmentsImportProcess> importAssignmentsProcessRepository = null,
             IPlainStorageAccessor<AssignmentToImport> importAssignmentsRepository = null,
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment = null,
-            IPlainStorageAccessor<Assignment> assignmentsStorage = null,
+            IQueryableReadSideRepositoryReader<Assignment> assignmentsStorage = null,
             IAssignmentsImportFileConverter assignmentsImportFileConverter = null,
             IInvitationService invitationService = null)
         {
@@ -775,7 +775,7 @@ namespace WB.Tests.Abc.TestFactories
                 importAssignmentsProcessRepository ?? Mock.Of<IPlainStorageAccessor<AssignmentsImportProcess>>(),
                 importAssignmentsRepository ?? Mock.Of<IPlainStorageAccessor<AssignmentToImport>>(),
                 interviewCreatorFromAssignment ?? Mock.Of<IInterviewCreatorFromAssignment>(),
-                assignmentsStorage ?? Mock.Of<IPlainStorageAccessor<Assignment>>(),
+                assignmentsStorage ?? Mock.Of<IQueryableReadSideRepositoryReader<Assignment>>(),
                 assignmentsImportFileConverter ?? AssignmentsImportFileConverter(userViewFactory: userViewFactory),
                 Create.Service.AssignmentFactory(),
                 invitationService ?? Mock.Of<IInvitationService>(),
@@ -1138,7 +1138,7 @@ namespace WB.Tests.Abc.TestFactories
         }
 
         public AssignmentPasswordGenerator AssignmentPasswordGenerator(
-            IPlainStorageAccessor<Assignment> assignments = null, 
+            IQueryableReadSideRepositoryReader<Assignment> assignments = null, 
             IPlainStorageAccessor<AssignmentToImport> importAssignments = null)
         {
             return new AssignmentPasswordGenerator(

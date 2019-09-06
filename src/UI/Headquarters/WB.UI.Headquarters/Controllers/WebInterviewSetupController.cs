@@ -13,6 +13,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -45,7 +46,7 @@ namespace WB.UI.Headquarters.Controllers
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IWebInterviewConfigurator configurator,
             IWebInterviewConfigProvider webInterviewConfigProvider,
-            IPlainStorageAccessor<Assignment> assignments,
+            IQueryableReadSideRepositoryReader<Assignment> assignments,
             IAssignmentsService assignmentsService,
             IWebInterviewNotificationService webInterviewNotificationService, 
             IInvitationService invitationService, 

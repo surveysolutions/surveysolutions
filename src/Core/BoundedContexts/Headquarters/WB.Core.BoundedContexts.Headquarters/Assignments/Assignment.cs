@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             this.WebMode = webMode;
         }
 
-        public virtual Guid AggregateRootId { get; set; }
+        public virtual Guid PublicKey { get; set; }
 
         public virtual int Id { get; set; }
 
@@ -65,9 +65,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public virtual string Password { get; set; }
         public virtual bool? WebMode { get; set; }
 
-        public virtual IList<IdentifyingAnswer> IdentifyingData { get; protected set; }
+        public virtual IList<IdentifyingAnswer> IdentifyingData { get; set; }
 
-        public virtual IList<InterviewAnswer> Answers { get; protected set; }
+        public virtual IList<InterviewAnswer> Answers { get; set; }
 
         public virtual QuestionnaireLiteViewItem Questionnaire { get; set; }
 
@@ -87,7 +87,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public virtual bool IsCompleted => this.InterviewsNeeded <= 0;
 
 
-        public virtual void SetAudioRecordingEnabled(bool enabled, DateTime utcDateTime)
+        /*public virtual void SetAudioRecordingEnabled(bool enabled, DateTime utcDateTime)
         {
             this.IsAudioRecordingEnabled = enabled;
             this.UpdatedAtUtc = utcDateTime;
@@ -149,7 +149,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         {
             this.WebMode = mode;
             this.UpdatedAtUtc = DateTime.UtcNow;
-        }
+        }*/
 
         public virtual bool InPrivateWebMode()
         {

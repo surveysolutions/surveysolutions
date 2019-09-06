@@ -53,11 +53,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         {
             return this.assignmentsAccessor.Query(x =>
                 x.Where(assignment => assignment.ResponsibleId == responsibleId)
-                .Select(assignment => assignment.AggregateRootId)
+                .Select(assignment => assignment.PublicKey)
                 .ToList());
         }
 
-        public Assignment GetAssignment(Guid id)
+        public Assignment GetAssignment(int id)
+        {
+            var assignment = this.assignmentsAccessor.Query(_ => _.Where(a => a.Id == id));
+            return assignment.SingleOrDefault();
+        }
+
+        public Assignment GetAssignmentByAggregateRootId(Guid id)
         {
             return this.assignmentsAccessor.GetById(id);
         }
@@ -84,9 +90,35 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             return result;
         }
 
+        public int GetNextDisplayId()
+        {
+            var maxId = this.assignmentsAccessor.Query(_ => _.Max(a => a.Id));
+            return maxId + 1;
+        }
+
+        public bool DoesExistPasswordInDb(QuestionnaireIdentity questionnaireIdentity, string password)
+        {
+            var hasPasswordInDb = this.assignmentsAccessor.Query(x =>
+                x.Any(y => y.Quantity == 1 &&
+                           (y.WebMode == null || y.WebMode == true) &&
+                           y.QuestionnaireId == questionnaireIdentity &&
+                           (y.Email == null || y.Email == "") &&
+                           y.Password == password));
+
+            return hasPasswordInDb;
+        }
+
+        public List<int> GetAllAssignmentIdsForMigrateToNewVersion(QuestionnaireIdentity questionnaireIdentity)
+        {
+            var idsToMigrate = assignmentsAccessor.Query(_ =>
+                _.Where(x => x.QuestionnaireId.Id == questionnaireIdentity.Id && x.QuestionnaireId.Version == questionnaireIdentity.Version && !x.Archived)
+                    .Select(x => x.Id).ToList());
+            return idsToMigrate;
+        }
+
         public bool HasAssignmentWithProtectedVariables(Guid responsibleId)
         {
-            List<List<string>> listOfProtectedValiablesFromAssignments = this.assignmentsAccessor.Query(_ => _
+            List<List<string>> listOfProtectedVariablesFromAssignments = this.assignmentsAccessor.Query(_ => _
                 .Where(assignment =>
                     assignment.ResponsibleId == responsibleId
                     && !assignment.Archived
@@ -94,9 +126,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 .Select(x => x.ProtectedVariables)
                 .ToList());
 
-            bool result = listOfProtectedValiablesFromAssignments.Any(x => (x?.Count ?? 0) > 0);
+            bool result = listOfProtectedVariablesFromAssignments.Any(x => (x?.Count ?? 0) > 0);
             return result;
         }
+
+
 
         public List<Assignment> GetAssignmentsReadyForWebInterview(QuestionnaireIdentity questionnaireId)
         {
@@ -145,7 +179,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             var assignmentApiView = new AssignmentApiDocument
             {
                 Id = assignment.Id,
-                PublicId = assignment.AggregateRootId,
+                PublicId = assignment.PublicKey,
                 QuestionnaireId = assignment.QuestionnaireId,
                 Quantity = assignment.InterviewsNeeded,
                 CreatedAtUtc = assignment.CreatedAtUtc,

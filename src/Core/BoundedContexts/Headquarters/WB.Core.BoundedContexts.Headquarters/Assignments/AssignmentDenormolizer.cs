@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Assignment;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
@@ -17,12 +19,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         IUpdateHandler<Assignment, AssignmentEmailUpdated>,
         IUpdateHandler<Assignment, AssignmentPasswordUpdated>,
         IUpdateHandler<Assignment, AssignmentWebModeUpdated>,
+        IUpdateHandler<Assignment, AssignmentAnswersChanged>,
         IUpdateHandler<Assignment, AssignmentProtectedVariablesUpdated>
     {
+        private readonly IQuestionnaireStorage questionnaireStorage;
 
-
-        public AssignmentDenormalizer(IReadSideStorage<Assignment> readSideStorage) : base(readSideStorage)
+        public AssignmentDenormalizer(IReadSideStorage<Assignment> readSideStorage,
+            IQuestionnaireStorage questionnaireStorage)
+            : base(readSideStorage)
         {
+            this.questionnaireStorage = questionnaireStorage;
         }
 
 
@@ -85,6 +91,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         {
             state.ProtectedVariables = @event.Payload.ProtectedVariables;
             state.UpdatedAtUtc = @event.Payload.OriginDate.UtcDateTime;
+            return state;
+        }
+
+        public Assignment Update(Assignment state, IPublishedEvent<AssignmentAnswersChanged> @event)
+        {
+            var questionnaire = questionnaireStorage.GetQuestionnaire(state.QuestionnaireId, null);
+            var answers = @event.Payload.Answers;
+            var identifyingQuestionIds = Enumerable.ToHashSet(questionnaire.GetPrefilledQuestions());
+
+            var identifyingAnswers = answers
+                .Where(x => identifyingQuestionIds.Contains(x.Identity.Id)).Select(a =>
+                    IdentifyingAnswer.Create(state, questionnaire, a.Answer.ToString(), a.Identity))
+                .ToList();
+
+            state.IdentifyingData = identifyingAnswers;
+            state.Answers = answers;
+            state.UpdatedAtUtc = @event.Payload.OriginDate.UtcDateTime;
+
             return state;
         }
     }

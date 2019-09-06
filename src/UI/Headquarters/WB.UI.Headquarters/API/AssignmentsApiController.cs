@@ -26,7 +26,7 @@ namespace WB.UI.Headquarters.API
     {
         private readonly IAssignmentViewFactory assignmentViewFactory;
         private readonly IAuthorizedUser authorizedUser;
-        private readonly IQueryableReadSideRepositoryReader<Assignment> assignmentsStorage;
+        private readonly IAssignmentsService assignmentsStorage;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly ISystemLog auditLog;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires;
@@ -37,7 +37,7 @@ namespace WB.UI.Headquarters.API
 
         public AssignmentsApiController(IAssignmentViewFactory assignmentViewFactory,
             IAuthorizedUser authorizedUser,
-            IQueryableReadSideRepositoryReader<Assignment> assignmentsStorage,
+            IAssignmentsService assignmentsStorage,
             IQuestionnaireStorage questionnaireStorage,
             ISystemLog auditLog,
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires, 
@@ -119,8 +119,8 @@ namespace WB.UI.Headquarters.API
 
             foreach (var id in ids)
             {
-                Assignment assignment = this.assignmentsStorage.GetById(id);
-                commandService.Execute(new ArchiveAssignment(assignment.AggregateRootId, authorizedUser.Id));
+                Assignment assignment = this.assignmentsStorage.GetAssignment(id);
+                commandService.Execute(new ArchiveAssignment(assignment.PublicKey, authorizedUser.Id));
             }
 
             return this.Ok();
@@ -136,8 +136,8 @@ namespace WB.UI.Headquarters.API
             
             foreach (var id in ids)
             {
-                Assignment assignment = this.assignmentsStorage.GetById(id);
-                commandService.Execute(new UnarchiveAssignment(assignment.AggregateRootId, authorizedUser.Id));
+                Assignment assignment = this.assignmentsStorage.GetAssignment(id);
+                commandService.Execute(new UnarchiveAssignment(assignment.PublicKey, authorizedUser.Id));
             }
 
             return this.Ok();
@@ -151,8 +151,8 @@ namespace WB.UI.Headquarters.API
             if (request?.Ids == null) return this.BadRequest();
             foreach (var idToAssign in request.Ids)
             {
-                Assignment assignment = this.assignmentsStorage.GetById(idToAssign);
-                commandService.Execute(new ReassignAssignment(assignment.AggregateRootId, authorizedUser.Id, request.ResponsibleId));
+                Assignment assignment = this.assignmentsStorage.GetAssignment(idToAssign);
+                commandService.Execute(new ReassignAssignment(assignment.PublicKey, authorizedUser.Id, request.ResponsibleId));
             }
 
             return this.Ok();
@@ -164,7 +164,7 @@ namespace WB.UI.Headquarters.API
         [ObserverNotAllowedApi]
         public IHttpActionResult SetQuantity(int id, [FromBody] UpdateAssignmentRequest request)
         {
-            var assignment = this.assignmentsStorage.GetById(id);
+            var assignment = this.assignmentsStorage.GetAssignment(id);
 
             if (request.Quantity < -1)
                 return this.BadRequest(WB.UI.Headquarters.Resources.Assignments.InvalidSize);
@@ -172,7 +172,7 @@ namespace WB.UI.Headquarters.API
             if(!string.IsNullOrEmpty(assignment.Email) || !string.IsNullOrEmpty(assignment.Password))
                 return this.BadRequest(WB.UI.Headquarters.Resources.Assignments.WebMode);
 
-            commandService.Execute(new UpdateAssignmentQuantity(assignment.AggregateRootId, authorizedUser.Id, request.Quantity));
+            commandService.Execute(new UpdateAssignmentQuantity(assignment.PublicKey, authorizedUser.Id, request.Quantity));
             this.auditLog.AssignmentSizeChanged(id, request.Quantity);
             return this.Ok();
         }
@@ -230,12 +230,7 @@ namespace WB.UI.Headquarters.API
             if (quantity == 1 && (request.WebMode == null || request.WebMode == true) &&
                 string.IsNullOrEmpty(request.Email) && !string.IsNullOrEmpty(password))
             {
-                var hasPasswordInDb = this.assignmentsStorage.Query(x =>
-                    x.Any(y => y.Quantity == 1 &&
-                               (y.WebMode == null || y.WebMode == true) &&
-                               y.QuestionnaireId == interview.QuestionnaireIdentity &&
-                               (y.Email == null || y.Email == "") &&
-                               y.Password == password));
+                var hasPasswordInDb = this.assignmentsStorage.DoesExistPasswordInDb(interview.QuestionnaireIdentity, password);
 
                 if (hasPasswordInDb)
                     return this.BadRequest(Assignments.DuplicatePasswordByWebModeWithQuantity1);
@@ -244,21 +239,16 @@ namespace WB.UI.Headquarters.API
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, null);
             var assignment = Assignment.PrefillFromInterview(interview, questionnaire);
 
-            commandService.Execute(new UpdateAssignmentQuantity(assignment.AggregateRootId, authorizedUser.Id, request.Quantity));
-            commandService.Execute(new ReassignAssignment(assignment.AggregateRootId, authorizedUser.Id, request.ResponsibleId));
+            commandService.Execute(new UpdateAssignmentQuantity(assignment.PublicKey, authorizedUser.Id, request.Quantity));
+            commandService.Execute(new ReassignAssignment(assignment.PublicKey, authorizedUser.Id, request.ResponsibleId));
 
             bool isAudioRecordingEnabled = request.IsAudioRecordingEnabled ?? this.questionnaires.Query(_ => _
                 .Where(q => q.Id == interview.QuestionnaireIdentity.ToString())
                 .Select(q => q.IsAudioRecordingEnabled).FirstOrDefault());
-            commandService.Execute(new UpdateAssignmentAudioRecording(assignment.AggregateRootId, authorizedUser.Id, isAudioRecordingEnabled));
+            commandService.Execute(new UpdateAssignmentAudioRecording(assignment.PublicKey, authorizedUser.Id, isAudioRecordingEnabled));
 
-            commandService.Execute(new UpdateAssignmentWebMode(assignment.AggregateRootId, authorizedUser.Id, request.WebMode));
-
-            if (request.WebMode == true)
-            {
-                assignment.UpdateEmail(request.Email);
-                assignment.UpdatePassword(password);
-            }
+            commandService.Execute(new UpdateAssignmentWebSettings(assignment.PublicKey, authorizedUser.Id, 
+                request.WebMode, request.Email, password));
 
             this.invitationService.CreateInvitationForWebInterview(assignment);
 
