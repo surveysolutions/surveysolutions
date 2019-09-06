@@ -148,12 +148,7 @@ export default {
             return "../Interviewer/Profile/" + this.model.responsible.id;
         },
         interviewsUrl() {
-            var url;
-
-            if (this.model.isHeadquarters) url = "../HQ/Interviews";
-            else url = "../Survey/Interviews";
-
-            return url + "?assignmentId=" + this.model.id;
+            return "../Interviews?assignmentId=" + this.model.id;
         },
         quantity() {
             return this.model.quantity == null ? this.$t("Assignments.Unlimited") : this.model.quantity;
