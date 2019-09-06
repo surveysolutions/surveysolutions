@@ -7,7 +7,9 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
 {
     public class AssignmentApiDocument
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
+
+        public int DisplayId { get; set; }
 
         public QuestionnaireIdentity QuestionnaireId { get; set; }
 

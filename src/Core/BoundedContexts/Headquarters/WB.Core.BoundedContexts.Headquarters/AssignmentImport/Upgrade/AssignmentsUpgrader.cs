@@ -5,7 +5,9 @@ using System.Threading;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
@@ -13,7 +15,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
 {
     public interface IAssignmentsUpgrader
     {
-        void Upgrade(Guid processId, QuestionnaireIdentity migrateFrom, QuestionnaireIdentity migrateTo, CancellationToken cancellationToken);
+        void Upgrade(Guid processId, Guid userId, QuestionnaireIdentity migrateFrom, QuestionnaireIdentity migrateTo, CancellationToken cancellationToken);
     }
 
     internal class AssignmentsUpgrader : IAssignmentsUpgrader
@@ -24,13 +26,15 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
        private readonly IAssignmentsUpgradeService upgradeService;
        private readonly IAssignmentFactory assignmentFactory;
        private readonly IInvitationService invitationService;
+       private readonly ICommandService commandService;
 
        public AssignmentsUpgrader(IPlainStorageAccessor<Assignment> assignments,
             IPreloadedDataVerifier importService,
             IQuestionnaireStorage questionnaireStorage,
             IAssignmentsUpgradeService upgradeService,
             IAssignmentFactory assignmentFactory,
-            IInvitationService invitationService
+            IInvitationService invitationService,
+            ICommandService commandService
            )
         {
             this.assignments = assignments ?? throw new ArgumentNullException(nameof(assignments));
@@ -39,9 +43,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
             this.upgradeService = upgradeService;
             this.assignmentFactory = assignmentFactory;
             this.invitationService = invitationService;
+            this.commandService = commandService;
         }
 
-        public void Upgrade(Guid processId, QuestionnaireIdentity migrateFrom, QuestionnaireIdentity migrateTo, CancellationToken cancellation)
+        public void Upgrade(Guid processId, Guid userId, QuestionnaireIdentity migrateFrom, QuestionnaireIdentity migrateTo, CancellationToken cancellation)
         { 
             var idsToMigrate = assignments.Query(_ =>
                 _.Where(x => x.QuestionnaireId.Id == migrateFrom.Id && x.QuestionnaireId.Version == migrateFrom.Version && !x.Archived)
@@ -65,7 +70,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
                                 targetQuestionnaire);
                         if (assignmentVerification == null)
                         {
-                            oldAssignment.Archive();
+                            //oldAssignment.Archive();
+                            commandService.Execute(new ArchiveAssignment(oldAssignment.Id, userId));
 
                             var newAssignment = assignmentFactory.CreateAssignment(migrateTo, 
                                 oldAssignment.ResponsibleId,
