@@ -11,9 +11,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         List<Assignment> GetAssignmentsForSupervisor(Guid supervisorId);
 
-        List<int> GetAllAssignmentIds(Guid responsibleId);
+        List<Guid> GetAllAssignmentIds(Guid responsibleId);
         
-        Assignment GetAssignment(int id);
+        Assignment GetAssignment(Guid id);
 
         List<Assignment> GetAssignmentsReadyForWebInterview(QuestionnaireIdentity questionnaireId);
         
@@ -22,8 +22,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         int GetCountOfAssignments(QuestionnaireIdentity questionnaireId);
         
         AssignmentApiDocument MapAssignment(Assignment assignment);
-
-        void Reassign(int assignmentId, Guid responsibleId);
 
         bool HasAssignmentWithProtectedVariables(Guid responsibleId);
         bool HasAssignmentWithAudioRecordingEnabled(Guid responsible);
