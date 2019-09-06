@@ -80,6 +80,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
@@ -331,6 +332,15 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .InitializesWith<DeleteQuestionnaire>(aggregate => aggregate.DeleteQuestionnaire)
                 .InitializesWith<DisableQuestionnaire>(aggregate => aggregate.DisableQuestionnaire)
                 .InitializesWith<CloneQuestionnaire>(aggregate => aggregate.CloneQuestionnaire, config => config.ValidatedBy<QuestionnaireValidator>());
+
+            CommandRegistry
+                .Setup<AssignmentAggregateRoot>()
+                .ResolvesIdFrom<AssignmentCommand>(command => command.AssignmentId)
+                .InitializesWith<CreateAssignment>(aggregate => aggregate.CreateAssignment)
+
+                .Handles<ReassignAssignment>(aggregate => aggregate.Reassign)
+                .Handles<ArchiveAssignment>(aggregate => aggregate.Archive)
+                .Handles<UnarchiveAssignment>(aggregate => aggregate.Unarchive);
 
             CommandRegistry
                 .Setup<StatefulInterview>()
