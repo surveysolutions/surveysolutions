@@ -1761,7 +1761,6 @@ namespace WB.Tests.Abc.TestFactories
         }
 
         public Assignment Assignment(int? id = null,
-            Guid? publicKey = null,
             QuestionnaireIdentity questionnaireIdentity = null,
             int? quantity = null,
             Guid? assigneeSupervisorId = null,
@@ -1774,7 +1773,9 @@ namespace WB.Tests.Abc.TestFactories
             string email = null,
             string password = null,
             bool? webMode = null,
-            bool isArchived = false)
+            bool isArchived = false,
+            Guid? publicKey = null
+            )
         {
             var result = new Assignment();
             
