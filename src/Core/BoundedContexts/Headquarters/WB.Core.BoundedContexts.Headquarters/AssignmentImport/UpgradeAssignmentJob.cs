@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             var processToRun = assignmentsUpgradeService.DequeueUpgrade();
             if (processToRun != null)
             {
-                assignmentsUpgrader.Upgrade(processToRun.ProcessId, processToRun.From, processToRun.To,
+                assignmentsUpgrader.Upgrade(processToRun.ProcessId, processToRun.UserId, processToRun.From, processToRun.To,
                     assignmentsUpgradeService.GetCancellationToken(processToRun.ProcessId));
             }
 

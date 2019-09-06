@@ -39,9 +39,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             this.WebMode = webMode;
         }
 
-        public virtual Guid Id { get; set; }
+        public virtual Guid AggregateRootId { get; set; }
 
-        public virtual int DisplayId { get; set; }
+        public virtual int Id { get; set; }
 
         public virtual Guid ResponsibleId { get; set; }
 
