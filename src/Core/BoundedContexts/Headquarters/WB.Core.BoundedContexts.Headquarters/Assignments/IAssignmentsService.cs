@@ -13,7 +13,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         List<Guid> GetAllAssignmentIds(Guid responsibleId);
         
-        Assignment GetAssignment(Guid id);
+        Assignment GetAssignment(int id);
+        Assignment GetAssignmentByAggregateRootId(Guid id);
 
         List<Assignment> GetAssignmentsReadyForWebInterview(QuestionnaireIdentity questionnaireId);
         
@@ -26,5 +27,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         bool HasAssignmentWithProtectedVariables(Guid responsibleId);
         bool HasAssignmentWithAudioRecordingEnabled(Guid responsible);
         bool HasAssignmentWithAudioRecordingEnabled(QuestionnaireIdentity questionnaireIdentity);
+        int GetNextDisplayId();
+        bool DoesExistPasswordInDb(QuestionnaireIdentity questionnaireIdentity, string password);
+        List<int> GetAllAssignmentIdsForMigrateToNewVersion(QuestionnaireIdentity questionnaireIdentity);
     }
 }

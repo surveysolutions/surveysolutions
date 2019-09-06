@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Controllers
         public async Task<ActionResult> EmailLink(string interviewId, string email)
         {
             var assignmentId = interviewSummary.GetById(interviewId)?.AssignmentId ?? 0;
-            var assignment = assignments.GetById(assignmentId);
+            var assignment = assignments.GetAssignment(assignmentId);
 
             int invitationId = invitationService.CreateInvitationForPublicLink(assignment, interviewId);
             

@@ -89,7 +89,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public AssignmentsController AssignmentsPublicApiController(
             IAssignmentViewFactory assignmentViewFactory = null,
-            IPlainStorageAccessor<Assignment> assignmentsStorage = null,
+            IQueryableReadSideRepositoryReader<Assignment> assignmentsStorage = null,
             IMapper mapper = null,
             HqUserManager userManager = null,
             IQuestionnaireStorage questionnaireStorage = null,
