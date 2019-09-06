@@ -53,7 +53,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         {
             return this.assignmentsAccessor.Query(x =>
                 x.Where(assignment => assignment.ResponsibleId == responsibleId)
-                .Select(assignment => assignment.Id)
+                .Select(assignment => assignment.AggregateRootId)
                 .ToList());
         }
 
@@ -145,7 +145,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             var assignmentApiView = new AssignmentApiDocument
             {
                 Id = assignment.Id,
-                DisplayId = assignment.DisplayId,
+                PublicId = assignment.AggregateRootId,
                 QuestionnaireId = assignment.QuestionnaireId,
                 Quantity = assignment.InterviewsNeeded,
                 CreatedAtUtc = assignment.CreatedAtUtc,

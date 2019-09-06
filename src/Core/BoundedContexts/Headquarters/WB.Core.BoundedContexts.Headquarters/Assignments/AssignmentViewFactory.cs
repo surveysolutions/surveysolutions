@@ -18,11 +18,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
     internal class AssignmentViewFactory : IAssignmentViewFactory
     {
-        private readonly IPlainStorageAccessor<Assignment> assignmentsStorage;
+        private readonly IQueryableReadSideRepositoryReader<Assignment> assignmentsStorage;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> summaries;
         private readonly IQuestionnaireStorage questionnaireStorage;
 
-        public AssignmentViewFactory(IPlainStorageAccessor<Assignment> assignmentsStorage,
+        public AssignmentViewFactory(IQueryableReadSideRepositoryReader<Assignment> assignmentsStorage,
             IQueryableReadSideRepositoryReader<InterviewSummary> summaries,
             IQuestionnaireStorage questionnaireStorage)
         {

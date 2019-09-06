@@ -71,7 +71,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
                         if (assignmentVerification == null)
                         {
                             //oldAssignment.Archive();
-                            commandService.Execute(new ArchiveAssignment(oldAssignment.Id, userId));
+                            commandService.Execute(new ArchiveAssignment(oldAssignment.AggregateRootId, userId));
 
                             var newAssignment = assignmentFactory.CreateAssignment(migrateTo, 
                                 oldAssignment.ResponsibleId,
