@@ -1118,7 +1118,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If no responsible assigned in batch file use this supervisor/interviewer account:.
+        ///   Looks up a localized string similar to If no responsible assigned in batch file use this headquarters/supervisor/interviewer account:.
         /// </summary>
         internal static string Select_Responsible_Description {
             get {
@@ -1232,7 +1232,7 @@ namespace Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to Upload a file with identifying data to create new assignments.
-        ///Specify usernames for supervisors or interviewers to make batch assignments..
+        ///Specify usernames for headquarters, supervisors or interviewers to make batch assignments..
         /// </summary>
         internal static string UploadDescription {
             get {

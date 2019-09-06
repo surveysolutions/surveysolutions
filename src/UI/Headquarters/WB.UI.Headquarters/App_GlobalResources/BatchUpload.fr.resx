@@ -525,9 +525,6 @@
   <data name="SupervisorMustBeSelected" xml:space="preserve">
     <value>Le superviseur ou L'Enquêteur doit être sélectionné</value>
   </data>
-  <data name="UploadDescription" xml:space="preserve">
-    <value>Importer un fichier avec des données d'identification pour créer de nouvelles affectations. Spécifiez les noms d'utilisateur pour les superviseurs ou les enquêteurs afin d'effectuer des affectations par lots.</value>
-  </data>
   <data name="UploadTabFile" xml:space="preserve">
     <value>Importer le fichier .tab</value>
   </data>
