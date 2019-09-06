@@ -1987,6 +1987,7 @@
     <Content Include="Views\Shared\_PoweredBy.cshtml" />
     <Content Include="Views\DataExport\New.cshtml" />
     <Content Include="Views\Interviews\Index.cshtml" />
+    <Content Include="Views\Assignments\Details.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -2006,6 +2007,7 @@
     <Compile Include="API\AdminSettingsController.cs" />
     <Compile Include="API\AssignmentsApiController.cs" />
     <Compile Include="API\AssignmentsUpgradeApiController.cs" />
+    <Compile Include="API\Automation\QuestionnaireAutomationController.cs" />
     <Compile Include="API\DataCollection\AttachmentsControllerBase.cs" />
     <Compile Include="API\DataCollection\AssignmentsControllerBase.cs" />
     <Compile Include="API\DataCollection\AuditLogControllerBase.cs" />
