@@ -459,9 +459,18 @@ Oбратитесь в тех. поддержку за помощью</value>
     <value>Открыть Designer</value>
   </data>
   <data name="SaveScenarioOptions" xml:space="preserve">
-    <value>Выберите существующий сценарий для обновления или оставьте пустым для сохранения нового</value>
+    <value>Выберите существующий сценарий для обновления</value>
   </data>
   <data name="NoQuestionnaireAccess" xml:space="preserve">
     <value>У Вас нет доступа к опроснику</value>
+  </data>
+  <data name="SaveScenarioName" xml:space="preserve">
+    <value>Название</value>
+  </data>
+  <data name="SaveScenarioOptions_ReplaceExisting" xml:space="preserve">
+    <value>Заменить существующий</value>
+  </data>
+  <data name="SaveScenarioOptions_SaveNew" xml:space="preserve">
+    <value>Сохранить новый</value>
   </data>
 </root>

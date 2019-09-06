@@ -225,17 +225,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             this.sessionProvider.Session.Query<AssignmentsImportProcess>().Delete();
         }
 
-        public void SetResponsibleToAllImportedAssignments(Guid responsibleId)
-        {
-            var responsible = this.userViewFactory.GetUser(new UserViewInputModel(responsibleId));
-
-            this.sessionProvider.Session.Query<AssignmentToImport>()
-                .UpdateBuilder()
-                .Set(c => c.Interviewer, c => responsible.IsInterviewer() ? responsible.PublicKey : (Guid?) null)
-                .Set(c => c.Supervisor, c => responsible.IsInterviewer() ? responsible.Supervisor.Id : responsible.PublicKey)
-                .Update();
-        }
-
         public IEnumerable<string> GetImportAssignmentsErrors()
             => this.importAssignmentsRepository.Query(x => x.Where(_ => _.Error != null).Select(_ => _.Error));
 
@@ -244,7 +233,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version);
             var assignmentToImport = this.GetAssignmentById(assignmentId);
 
-            var responsibleId = assignmentToImport.Interviewer ?? assignmentToImport.Supervisor ?? defaultResponsible;
+            var responsibleId = assignmentToImport.Interviewer ?? assignmentToImport.Supervisor ?? assignmentToImport.Headquarters ?? defaultResponsible;
             var identifyingQuestionIds = questionnaire.GetPrefilledQuestions().ToHashSet();
 
             var assignment = this.assignmentFactory.CreateAssignment(questionnaireIdentity, 
@@ -358,6 +347,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 Answers = answers.ToList(),
                 Interviewer = responsible?.InterviewerId,
                 Supervisor = responsible?.SupervisorId,
+                Headquarters = responsible?.HeadquartersId,
                 Verified = false,
                 ProtectedVariables = protectedQuestions,
                 Email = email,
