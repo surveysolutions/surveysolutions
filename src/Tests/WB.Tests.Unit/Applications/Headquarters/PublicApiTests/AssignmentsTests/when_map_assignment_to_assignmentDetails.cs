@@ -24,11 +24,11 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                     new InterviewSummary()
                 });
 
-            this.Assignment.SetIdentifyingData(new List<IdentifyingAnswer>
+            this.Assignment.IdentifyingData = new List<IdentifyingAnswer>
             {
                 Create.Entity.IdentifyingAnswer(this.Assignment, answer: "Test22", identity: Create.Identity(Id.g2)),
                 Create.Entity.IdentifyingAnswer(this.Assignment, answer: "Test33", identity: Create.Identity(Id.g3))
-            });
+            };
         }
 
         public override void Because()

@@ -18,6 +18,11 @@ namespace WB.Core.Infrastructure.DenormalizerStorage
             this.repository = new Dictionary<string, TView>();
         }
 
+        public InMemoryReadSideRepositoryAccessor(Dictionary<string, TView> entities)
+        {
+            this.repository = entities ?? new Dictionary<string, TView>();
+        }
+
         public int Count()
         {
             return this.repository.Count;

@@ -4,8 +4,10 @@ using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.API;
@@ -25,13 +27,14 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var controller = new AssignmentsApiController(
                 viewFactory.Object,
                 Mock.Of<IAuthorizedUser>(au => au.IsInterviewer == true && au.Id == Id.gA),
-                Mock.Of<IQueryableReadSideRepositoryReader<Assignment>>(),
+                Mock.Of<IAssignmentsService>(),
                 Mock.Of<IQuestionnaireStorage>(),
                 Mock.Of<ISystemLog>(),
                 new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>(),
                 Mock.Of<IInvitationService>(),
                 Mock.Of<IStatefulInterviewRepository>(),
-                Mock.Of<IAssignmentPasswordGenerator>()
+                Mock.Of<IAssignmentPasswordGenerator>(),
+                Mock.Of<ICommandService>()
             );
 
             controller.Get(new AssignmentsApiController.AssignmentsDataTableRequest

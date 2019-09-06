@@ -8,6 +8,7 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Tests.Abc;
@@ -38,7 +39,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             var authorizedUser = new Mock<IAuthorizedUser>();
 
-            var controller = new AssignmentsApiV2Controller(authorizedUser.Object, assignmentService);
+            var controller = new AssignmentsApiV2Controller(authorizedUser.Object, assignmentService, Mock.Of<ICommandService>());
 
             var assignments = await controller.GetAssignmentsAsync(new CancellationToken());
 
