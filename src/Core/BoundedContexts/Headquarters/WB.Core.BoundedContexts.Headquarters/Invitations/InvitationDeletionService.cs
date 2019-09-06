@@ -18,10 +18,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             var queryText = $"DELETE FROM plainstore.invitations as i " +
                             $"USING plainstore.assignments as a " +
                             $"WHERE i.assignmentid = a.id " +
-                            $"  AND a.questionnaireid = '{questionnaireIdentity.QuestionnaireId}' " +
-                            $"  AND a.questionnaireversion = {questionnaireIdentity.Version}";
+                            $"  AND a.questionnaireid = :questionnaireId " +
+                            $"  AND a.questionnaireversion = :questionnaireVersion ";
 
             var query = sessionFactory.Session.CreateSQLQuery(queryText);
+            query.SetParameter("questionnaireId", questionnaireIdentity.QuestionnaireId);
+            query.SetParameter("questionnaireVersion", questionnaireIdentity.Version);
             query.ExecuteUpdate();
         }
     }
