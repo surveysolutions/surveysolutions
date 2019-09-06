@@ -19,6 +19,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Versions;
@@ -89,18 +90,20 @@ namespace WB.Tests.Abc.TestFactories
 
         public AssignmentsController AssignmentsPublicApiController(
             IAssignmentViewFactory assignmentViewFactory = null,
-            IQueryableReadSideRepositoryReader<Assignment> assignmentsStorage = null,
+            IAssignmentsService assignmentsService = null,
             IMapper mapper = null,
             HqUserManager userManager = null,
             IQuestionnaireStorage questionnaireStorage = null,
             ISystemLog auditLog = null,
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment = null,
             IPreloadedDataVerifier verifier = null,
-            ICommandTransformator commandTransformator = null
+            ICommandTransformator commandTransformator = null,
+            ICommandService commandService = null,
+            IAuthorizedUser authorizedUser = null
             )
         {
             var result = new AssignmentsController(assignmentViewFactory,
-                assignmentsStorage,
+                assignmentsService,
                 mapper,
                 userManager,
                 Mock.Of<ILogger>(),
@@ -111,7 +114,10 @@ namespace WB.Tests.Abc.TestFactories
                 commandTransformator,
                 Create.Service.AssignmentFactory(),
                 Mock.Of<IInvitationService>(),
-                Mock.Of<IAssignmentPasswordGenerator>());
+                Mock.Of<IAssignmentPasswordGenerator>(),
+                commandService ?? Mock.Of<ICommandService>(),
+                authorizedUser ?? Mock.Of<IAuthorizedUser>()
+                );
             result.Request = new HttpRequestMessage();
             result.Request.SetConfiguration(new HttpConfiguration());
 
