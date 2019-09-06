@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         {
             var fixture = NewFixture();
 
-            fixture.Register<IPlainStorageAccessor<Assignment>>(() => new TestPlainStorage<Assignment>(
+            fixture.Register<IQueryableReadSideRepositoryReader<Assignment>>(() => new TestPlainStorage<Assignment>(
                 new Dictionary<object, Assignment>
                 {
                     { 1, Create.Entity.Assignment(1, Create.Entity.QuestionnaireIdentity(Id.gA, 1))},
@@ -58,7 +58,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         {
             var fixture = NewFixture();
 
-            fixture.Register<IPlainStorageAccessor<Assignment>>(() => new TestPlainStorage<Assignment>(
+            fixture.Register<IQueryableReadSideRepositoryReader<Assignment>>(() => new TestPlainStorage<Assignment>(
                 new Dictionary<object, Assignment>
                 {
                     { 1, Create.Entity.Assignment(1, Create.Entity.QuestionnaireIdentity(Id.gA, 1), questionnaireTitle: "Aaaaa")},
@@ -88,7 +88,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var assignment = Create.Entity.Assignment(1);
             assignment.MarkAsReceivedByTablet();
 
-            fixture.Register<IPlainStorageAccessor<Assignment>>(() => 
+            fixture.Register<IQueryableReadSideRepositoryReader<Assignment>>(() => 
                 new TestPlainStorage<Assignment>(
                     new Dictionary<object, Assignment>
                     {

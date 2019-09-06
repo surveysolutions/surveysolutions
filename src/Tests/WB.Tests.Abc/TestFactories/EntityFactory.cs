@@ -1761,6 +1761,7 @@ namespace WB.Tests.Abc.TestFactories
         }
 
         public Assignment Assignment(int? id = null,
+            Guid? publicKey = null,
             QuestionnaireIdentity questionnaireIdentity = null,
             int? quantity = null,
             Guid? assigneeSupervisorId = null,
@@ -1772,14 +1773,17 @@ namespace WB.Tests.Abc.TestFactories
             List<string> protectedVariables = null,
             string email = null,
             string password = null,
-            bool? webMode = null)
+            bool? webMode = null,
+            bool isArchived = false)
         {
             var result = new Assignment();
             
             var asDynamic = result.AsDynamic();
             asDynamic.Quantity = quantity;
             asDynamic.Id = id ?? 0;
+            result.PublicKey = publicKey ?? Guid.NewGuid();
             result.QuestionnaireId = questionnaireIdentity;
+            result.Archived = isArchived;
 
             var readonlyUser = new ReadonlyUser() { RoleIds = { UserRoles.Interviewer.ToUserId() } };
             var readonlyProfile = new ReadonlyProfile();
