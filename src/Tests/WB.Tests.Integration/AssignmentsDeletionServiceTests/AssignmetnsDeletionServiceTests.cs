@@ -8,7 +8,10 @@ using Npgsql;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Abc;
@@ -57,10 +60,10 @@ namespace WB.Tests.Integration.AssignmentsDeletionServiceTests
             Assignment assignment = Create.Entity.Assignment(questionnaireIdentity: questionnaireIdentity);
             assignment.IdentifyingData.Add(Create.Entity.IdentifyingAnswer(assignment, Create.Entity.Identity(Guid.NewGuid())));
             assignment.IdentifyingData.Add(Create.Entity.IdentifyingAnswer(assignment, Create.Entity.Identity(Guid.NewGuid())));
-            assignment.SetAnswers(null);
-            assignment.SetProtectedVariables(null);
+            assignment.Answers = null;
+            assignment.ProtectedVariables = null;
 
-            IPlainStorageAccessor<Assignment> assignments = new PostgresPlainStorageRepository<Assignment>(UnitOfWork);
+            var assignments = new PostgreReadSideStorage<Assignment>(UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
 
             assignments.Store(assignment, null);
 

@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var controller = new AssignmentsApiController(
                 viewFactory.Object,
                 Mock.Of<IAuthorizedUser>(au => au.IsInterviewer == true && au.Id == Id.gA),
-                Mock.Of<IPlainStorageAccessor<Assignment>>(),
+                Mock.Of<IQueryableReadSideRepositoryReader<Assignment>>(),
                 Mock.Of<IQuestionnaireStorage>(),
                 Mock.Of<ISystemLog>(),
                 new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>(),
