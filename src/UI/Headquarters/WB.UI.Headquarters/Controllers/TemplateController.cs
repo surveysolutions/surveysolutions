@@ -35,12 +35,17 @@ namespace WB.UI.Headquarters.Controllers
         private readonly DesignerUserCredentials designerUserCredentials;
         private readonly IAllUsersAndQuestionnairesFactory questionnaires;
         private readonly IAssignmentsUpgradeService upgradeService;
+        private readonly IAuthorizedUser authorizedUser;
 
-        public TemplateController(ICommandService commandService, ILogger logger,
-            IRestService designerQuestionnaireApiRestService, IQuestionnaireVersionProvider questionnaireVersionProvider,
-            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory, IQuestionnaireImportService importService,
-            DesignerUserCredentials designerUserCredentials, IAllUsersAndQuestionnairesFactory questionnaires,
-            IAssignmentsUpgradeService upgradeService)
+        public TemplateController(ICommandService commandService, 
+            ILogger logger,
+            IRestService designerQuestionnaireApiRestService, 
+            IQuestionnaireVersionProvider questionnaireVersionProvider,
+            IQuestionnaireImportService importService,
+            DesignerUserCredentials designerUserCredentials, 
+            IAllUsersAndQuestionnairesFactory questionnaires,
+            IAssignmentsUpgradeService upgradeService,
+            IAuthorizedUser authorizedUser)
             : base(commandService, logger)
         {
             this.designerQuestionnaireApiRestService = designerQuestionnaireApiRestService;
@@ -49,6 +54,8 @@ namespace WB.UI.Headquarters.Controllers
             this.designerUserCredentials = designerUserCredentials;
             this.questionnaires = questionnaires;
             this.upgradeService = upgradeService;
+            this.authorizedUser = authorizedUser;
+
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
 
             if (AppSettings.Instance.AcceptUnsignedCertificate)
@@ -107,7 +114,7 @@ namespace WB.UI.Headquarters.Controllers
 
                         var processId = Guid.NewGuid();
                         var sourceQuestionnaireId = new QuestionnaireIdentity(questionnaireId, version);
-                        this.upgradeService.EnqueueUpgrade(processId, sourceQuestionnaireId, result.Identity);
+                        this.upgradeService.EnqueueUpgrade(processId, authorizedUser.Id, sourceQuestionnaireId, result.Identity);
                         return RedirectToAction("UpgradeProgress", "SurveySetup", new {id = processId});
                     }
 
