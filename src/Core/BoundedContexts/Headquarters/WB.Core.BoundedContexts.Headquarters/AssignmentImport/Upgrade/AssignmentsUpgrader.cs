@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -20,22 +21,21 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
 
     internal class AssignmentsUpgrader : IAssignmentsUpgrader
     {
-        private readonly IPlainStorageAccessor<Assignment> assignments;
+        private readonly IAssignmentsService assignments;
         private readonly IPreloadedDataVerifier importService;
         private readonly IQuestionnaireStorage questionnaireStorage;
-       private readonly IAssignmentsUpgradeService upgradeService;
-       private readonly IAssignmentFactory assignmentFactory;
-       private readonly IInvitationService invitationService;
-       private readonly ICommandService commandService;
+        private readonly IAssignmentsUpgradeService upgradeService;
+        private readonly IAssignmentFactory assignmentFactory;
+        private readonly IInvitationService invitationService;
+        private readonly ICommandService commandService;
 
-       public AssignmentsUpgrader(IPlainStorageAccessor<Assignment> assignments,
+        public AssignmentsUpgrader(IAssignmentsService assignments,
             IPreloadedDataVerifier importService,
             IQuestionnaireStorage questionnaireStorage,
             IAssignmentsUpgradeService upgradeService,
             IAssignmentFactory assignmentFactory,
             IInvitationService invitationService,
-            ICommandService commandService
-           )
+            ICommandService commandService)
         {
             this.assignments = assignments ?? throw new ArgumentNullException(nameof(assignments));
             this.importService = importService ?? throw new ArgumentNullException(nameof(importService));
@@ -48,9 +48,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
 
         public void Upgrade(Guid processId, Guid userId, QuestionnaireIdentity migrateFrom, QuestionnaireIdentity migrateTo, CancellationToken cancellation)
         { 
-            var idsToMigrate = assignments.Query(_ =>
-                _.Where(x => x.QuestionnaireId.Id == migrateFrom.Id && x.QuestionnaireId.Version == migrateFrom.Version && !x.Archived)
-                    .Select(x => x.Id).ToList());
+            var idsToMigrate = assignments.GetAllAssignmentIdsForMigrateToNewVersion(migrateFrom);
 
             var targetQuestionnaire = this.questionnaireStorage.GetQuestionnaire(migrateTo, null);
             int migratedSuccessfully = 0;
@@ -62,7 +60,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
                 {
                     cancellation.ThrowIfCancellationRequested();
 
-                    var oldAssignment = assignments.GetById(assignmentId);
+                    var oldAssignment = assignments.GetAssignment(assignmentId);
                     if (!oldAssignment.IsCompleted)
                     {
                         var assignmentVerification =
@@ -70,34 +68,23 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
                                 targetQuestionnaire);
                         if (assignmentVerification == null)
                         {
-                            //oldAssignment.Archive();
-                            commandService.Execute(new ArchiveAssignment(oldAssignment.AggregateRootId, userId));
+                            commandService.Execute(new ArchiveAssignment(oldAssignment.PublicKey, userId));
 
-                            var newAssignment = assignmentFactory.CreateAssignment(migrateTo, 
+                            var newAssignment = assignmentFactory.CreateAssignment(
+                                userId,
+                                migrateTo, 
                                 oldAssignment.ResponsibleId,
                                 oldAssignment.InterviewsNeeded, 
                                 oldAssignment.Email, 
                                 oldAssignment.Password, 
                                 oldAssignment.WebMode,
-                                oldAssignment.IsAudioRecordingEnabled);
-
-                            newAssignment.SetAnswers(oldAssignment.Answers.ToList());
-                            var newIdentifyingData = new List<IdentifyingAnswer>();
-                            foreach (var oldIdentifyingQuestion in oldAssignment.IdentifyingData)
-                            {
-                                newIdentifyingData.Add(IdentifyingAnswer.Create(newAssignment,
-                                    targetQuestionnaire,
-                                    oldIdentifyingQuestion.Answer,
-                                    oldIdentifyingQuestion.Identity,
-                                    oldIdentifyingQuestion.VariableName));
-                            }
-
-                            newAssignment.SetIdentifyingData(newIdentifyingData);
-                            newAssignment.SetProtectedVariables(oldAssignment.ProtectedVariables);
-                            assignments.Store(newAssignment, null);
+                                oldAssignment.IsAudioRecordingEnabled,
+                                oldAssignment.Answers.ToList(),
+                                oldAssignment.ProtectedVariables);
 
                             invitationService.MigrateInvitationToNewAssignment(assignmentId, newAssignment.Id);
-                            oldAssignment.UpdateMode(false);
+                            commandService.Execute(new UpdateAssignmentWebSettings(oldAssignment.PublicKey,
+                                userId, false, oldAssignment.Email, oldAssignment.Password));
 
                             migratedSuccessfully++;
                         }

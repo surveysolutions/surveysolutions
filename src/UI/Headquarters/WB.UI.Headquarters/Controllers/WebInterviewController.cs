@@ -26,6 +26,7 @@ using Microsoft.AspNet.Identity;
 using StackExchange.Exceptional;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Services;
@@ -46,7 +47,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IUserViewFactory usersRepository;
         private readonly IInterviewUniqueKeyGenerator keyGenerator;
         private readonly ICaptchaProvider captchaProvider;
-        private readonly IPlainStorageAccessor<Assignment> assignments;
+        private readonly IAssignmentsService assignments;
         private readonly IImageProcessingService imageProcessingService;
         private readonly IConnectionLimiter connectionLimiter;
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
@@ -105,7 +106,7 @@ namespace WB.UI.Headquarters.Controllers
             ILogger logger, IUserViewFactory usersRepository,
             IInterviewUniqueKeyGenerator keyGenerator,
             ICaptchaProvider captchaProvider,
-            IPlainStorageAccessor<Assignment> assignments,
+            IAssignmentsService assignments,
             IAudioFileStorage audioFileStorage,
             IAudioProcessingService audioProcessingService,
             IPauseResumeQueue pauseResumeQueue,
@@ -431,7 +432,7 @@ namespace WB.UI.Headquarters.Controllers
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
 
             var assignmentId = interview.GetAssignmentId();
-            var assignment = assignmentId.HasValue ? this.assignments.GetById(assignmentId.Value) : null;
+            var assignment = assignmentId.HasValue ? this.assignments.GetAssignment(assignmentId.Value) : null;
 
             if (webInterviewConfig.UseCaptcha && !this.IsAuthorizedUser(interview.CurrentResponsibleId) ||
                 !string.IsNullOrEmpty(assignment?.Password))
@@ -511,7 +512,7 @@ namespace WB.UI.Headquarters.Controllers
             var assignmentId = interview.GetAssignmentId();
             if (assignmentId.HasValue)
             {
-                var assignment = this.assignments.GetById(assignmentId);
+                var assignment = this.assignments.GetAssignment(assignmentId.Value);
                 if (!string.IsNullOrWhiteSpace(assignment?.Password))
                 {
                     bool isValidPassword = assignment.Password.Equals(password, StringComparison.InvariantCultureIgnoreCase);
@@ -578,7 +579,7 @@ namespace WB.UI.Headquarters.Controllers
 
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
             var assignmentId = interview.GetAssignmentId();
-            var assignment = assignmentId.HasValue ? this.assignments.GetById(assignmentId.Value) : null;
+            var assignment = assignmentId.HasValue ? this.assignments.GetAssignment(assignmentId.Value) : null;
 
             var model = this.GetStartModel(interview.QuestionnaireIdentity, webInterviewConfig, assignment);
 

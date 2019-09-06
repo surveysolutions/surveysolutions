@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -32,7 +33,7 @@ namespace WB.UI.Headquarters.Controllers
             IStatefulInterviewRepository interviews,
             IQuestionnaireStorage questionnaireStorage,
             IAuthorizedUser currentUser, 
-            IPlainStorageAccessor<Assignment> assignmentsStorage, 
+            IQueryableReadSideRepositoryReader<Assignment> assignmentsStorage, 
             IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory, 
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires, 
             IInvitationService invitationService)
