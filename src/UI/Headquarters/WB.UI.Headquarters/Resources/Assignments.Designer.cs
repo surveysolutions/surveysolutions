@@ -106,6 +106,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assignment ID.
+        /// </summary>
+        public static string AssignmentId {
+            get {
+                return ResourceManager.GetString("AssignmentId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Assignments.
         /// </summary>
         public static string AssignmentsHeader {
@@ -205,7 +214,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select responsible (Supervisor or Interviewer) for this assignment.
+        ///   Looks up a localized string similar to Select responsible (Headquarters or Supervisor or Interviewer) for this assignment.
         /// </summary>
         public static string CreateAssignment_ResponsibleInstruction {
             get {

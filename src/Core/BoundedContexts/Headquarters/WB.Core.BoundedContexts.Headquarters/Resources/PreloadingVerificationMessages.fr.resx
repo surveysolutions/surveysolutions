@@ -165,9 +165,6 @@
   <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
     <value>Le Responsable est un utilisateur verrouillé pour 1 ou plusieurs observations.</value>
   </data>
-  <data name="PL0028_UserIsNotSupervisorOrInterviewer" xml:space="preserve">
-    <value>L'utilisateur n'est pas un Chef d'équipe ou un Enquêteur pour une ou plusieurs observations.</value>
-  </data>
   <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
     <value>La réponse à la question sur la taille du tableau ne peut pas être supérieure à {0}.</value>
   </data>

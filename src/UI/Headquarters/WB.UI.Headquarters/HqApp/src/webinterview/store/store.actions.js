@@ -7,8 +7,8 @@ import modal from "../components/modal"
 
 function getAnswer(state, questionId){
     const question = state.entityDetails[questionId]
-    if(question == null || question.answer == null) return null;
-    return question.answer.value;
+    if(question == null) return null;
+    return question.answer;
 }
 
 export default {
@@ -34,12 +34,15 @@ export default {
         })
     }, "fetch", /* limit */ 100),
 
-    answerSingleOptionQuestion({ dispatch, state }, { answer, questionId }) {
-        if(getAnswer(state, questionId) == answer) return; // skip answer on same question
+    answerSingleOptionQuestion({ state }, { answer, questionId }) {
+        const storedAnswer = getAnswer(state, questionId)
+        if(storedAnswer != null && storedAnswer.value == answer) return; // skip answer on same question
         
         Vue.$api.callAndFetch(questionId, api => api.answerSingleOptionQuestion(answer, questionId))
     },
-    answerTextQuestion({ dispatch }, { identity, text }) {
+    answerTextQuestion({ state }, { identity, text }) {
+        if(getAnswer(state, identity) == text) return; // skip answer on same question
+
         Vue.$api.callAndFetch(identity, api => api.answerTextQuestion(identity, text))
     },
     answerMultiOptionQuestion({ dispatch }, { answer, questionId }) {
@@ -57,7 +60,8 @@ export default {
     answerGpsQuestion({ dispatch }, { identity, answer }) {
         Vue.$api.callAndFetch(identity, api => api.answerGpsQuestion(identity, answer))
     },
-    answerDateQuestion({ dispatch }, { identity, date }) {
+    answerDateQuestion({ state }, { identity, date }) {
+        if(getAnswer(state, identity) == date) return; // skip answer on same question
         Vue.$api.callAndFetch(identity, api => api.answerDateQuestion(identity, date))
     },
     answerTextListQuestion({ dispatch }, { identity, rows }) {

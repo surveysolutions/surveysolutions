@@ -84,7 +84,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(assignmentRows[0].Responsible.Value, Is.EqualTo(responsible));
             Assert.That(assignmentRows[0].Responsible.Responsible.InterviewerId, Is.EqualTo(interviewerId));
             Assert.That(assignmentRows[0].Responsible.Responsible.SupervisorId, Is.EqualTo(supervisorId));
-            Assert.That(assignmentRows[0].Responsible.Responsible.IsSupervisorOrInterviewer, Is.EqualTo(true));
+            Assert.That(assignmentRows[0].Responsible.Responsible.IsHQOrSupervisorOrInterviewer, Is.EqualTo(true));
             Assert.That(assignmentRows[0].Responsible.Responsible.IsLocked, Is.EqualTo(true));
             Assert.That(assignmentRows[0].Responsible.Column, Is.EqualTo(column));
         }

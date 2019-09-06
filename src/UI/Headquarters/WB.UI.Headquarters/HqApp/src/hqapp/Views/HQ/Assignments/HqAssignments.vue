@@ -243,7 +243,7 @@ export default {
                     responsivePriority: 2,
                     render(data, type, row) {
                         var result =
-                            "<a href='" + self.config.api.assignmentsPage + "?id=" + row.id + "'>" + data + "</a>";
+                            "<a href='Assignments/" + row.id + "'>" + data + "</a>";
                         return result;
                     },
                 },
@@ -254,12 +254,12 @@ export default {
                     tooltip: this.$t("Assignments.Tooltip_Table_Responsible"),
                     responsivePriority: 3,
                     render(data, type, row) {
-                        var resultString = '<span class="' + row.responsibleRole.toLowerCase() + '">';
-                        if (row.responsibleRole === "Interviewer") {
-                            resultString +=
-                                '<a href="' + self.config.api.profile + "/" + row.responsibleId + '">' + data + "</a>";
+                        var isInterviewerRole = row.responsibleRole === "Interviewer";
+                        var resultString = "";
+                        if (isInterviewerRole) {
+                            resultString += '<span class="interviewer"><a href="' + self.config.api.profile + "/" + row.responsibleId + '">' + data + "</a>";
                         } else {
-                            resultString += data;
+                            resultString += '<span class="supervisor">' + data;
                         }
                         resultString += "</span>";
                         return resultString;

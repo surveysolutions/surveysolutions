@@ -2141,11 +2141,12 @@ namespace WB.Tests.Abc.TestFactories
             Column = ServiceColumns.InterviewId
         };
 
-        public UserToVerify UserToVerify(bool isLocked = false, Guid? interviewerId = null, Guid? supervisorId = null) => new UserToVerify
+        public UserToVerify UserToVerify(bool isLocked = false, Guid? interviewerId = null, Guid? supervisorId = null, Guid? hqId = null) => new UserToVerify
         {
             IsLocked = isLocked,
             InterviewerId = interviewerId,
-            SupervisorId = supervisorId
+            SupervisorId = supervisorId,
+            HeadquartersId = hqId
         };
 
         public AssignmentTextAnswer AssignmentTextAnswer(string column, string value) => new AssignmentTextAnswer
