@@ -20,7 +20,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         IUpdateHandler<Assignment, AssignmentPasswordUpdated>,
         IUpdateHandler<Assignment, AssignmentWebModeUpdated>,
         IUpdateHandler<Assignment, AssignmentAnswersChanged>,
-        IUpdateHandler<Assignment, AssignmentProtectedVariablesUpdated>
+        IUpdateHandler<Assignment, AssignmentProtectedVariablesUpdated>,
+        IUpdateHandler<Assignment, AssignmentReceivedByTablet>
     {
         private readonly IQuestionnaireStorage questionnaireStorage;
 
@@ -63,6 +64,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         {
             state.ResponsibleId = @event.Payload.ResponsibleId;
             state.UpdatedAtUtc = @event.Payload.OriginDate.UtcDateTime;
+            state.ReceivedByTabletAtUtc = null;
             return state;
         }
 
@@ -109,6 +111,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             state.Answers = answers;
             state.UpdatedAtUtc = @event.Payload.OriginDate.UtcDateTime;
 
+            return state;
+        }
+
+        public Assignment Update(Assignment state, IPublishedEvent<AssignmentReceivedByTablet> @event)
+        {
+            state.ReceivedByTabletAtUtc = @event.Payload.OriginDate.UtcDateTime;
             return state;
         }
     }
