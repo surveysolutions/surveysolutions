@@ -37,7 +37,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
                 {
                     QuestionnaireId = id, 
                     Steps = model.ScenarioText, 
-                    Title = "New scenario"
+                    Title = model.ScenarioTitle ?? "New scenario"
                 };
                 await this.dbContext.Scenarios.AddAsync(newScenario);
             }
@@ -87,5 +87,6 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
     {
         public string ScenarioText { get; set; }
         public int? ScenarioId { get; set; }
+        public string ScenarioTitle { get; set; }
     }
 }
