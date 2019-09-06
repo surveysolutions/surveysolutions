@@ -381,7 +381,7 @@ _record_audio - audio recording is enabled for interviews (1 - enabled, 0 - disa
   </data>
   <data name="UploadDescription" xml:space="preserve">
     <value>Upload a file with identifying data to create new assignments.
-Specify usernames for supervisors or interviewers to make batch assignments.</value>
+Specify usernames for headquarters, supervisors or interviewers to make batch assignments.</value>
   </data>
   <data name="FileTypeDescription" xml:space="preserve">
     <value>Save file in UTF8 encoding for support language specific texts.</value>
@@ -604,7 +604,7 @@ Specify usernames for supervisors or interviewers to make batch assignments.</va
     <value>Select default responsible (required)</value>
   </data>
   <data name="Select_Responsible_Description" xml:space="preserve">
-    <value>If no responsible assigned in batch file use this supervisor/interviewer account:</value>
+    <value>If no responsible assigned in batch file use this headquarters/supervisor/interviewer account:</value>
   </data>
   <data name="RequiredField" xml:space="preserve">
     <value>This field is mandatory</value>

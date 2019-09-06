@@ -474,9 +474,6 @@
   <data name="UploadDate" xml:space="preserve">
     <value>Fecha de carga</value>
   </data>
-  <data name="UploadDescription" xml:space="preserve">
-    <value>Cargue un archivo con datos de identificación para crear nuevas asignaciones. Especifique nombres de usuario para supervisores o enumeradores para realizar asignaciones por lotes</value>
-  </data>
   <data name="Uploaded" xml:space="preserve">
     <value>Cargado</value>
   </data>
