@@ -160,7 +160,7 @@ namespace WB.UI.Headquarters.Controllers
                 responsiblesUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "ResponsiblesCombobox"}),
                 createNewAssignmentUrl = Url.Content(@"~/api/Assignments/Create"),
                 maxInterviewsByAssignment = Constants.MaxInterviewsCountByAssignment,
-                assignmentsUrl = Url.Action("Index", "Assignments")
+                assignmentsUrl = Url.Action("Index", "Assignments", new { id = (int?)null })
             });
         }
         
