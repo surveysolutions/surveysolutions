@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Controllers;
+using WB.UI.Headquarters.Models.Api;
 
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTests
@@ -45,16 +46,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTes
         }
 
         public void BecauseOf() =>
-            viewModel = controller.TeamInterviews(new DocumentListViewModel());
+            viewModel = controller.GetTeamInterviews(new InterviewsDataTableRequest() { Length = 10, Search = new DataTableRequest.SearchInfo() });
 
         [NUnit.Framework.Test] public void should_view_model_not_be_null () =>
             viewModel.Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_question_title_have_removed_tags () =>
-            viewModel.Items.SingleOrDefault(x => x.InterviewId == interviewId).FeaturedQuestions.First().Question.Should().Be("test");
+            viewModel.Data.SingleOrDefault(x => x.InterviewId == interviewId).FeaturedQuestions.First().Question.Should().Be("test");
 
         private static InterviewApiController controller;
-        private static TeamInterviewsView viewModel;
+        private static TeamInterviewsDataTableResponse viewModel;
         private static Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         private static string titleWithTags = "<i>test</i>";
     }

@@ -68,7 +68,7 @@ namespace WB.UI.Headquarters.Controllers
                     ? Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "InterviewersCombobox"})
                     : Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "ResponsiblesCombobox"}),
                 Assignments = Url.Content(@"~/api/Assignments"),
-                Interviews = model.IsSupervisor ? Url.Action("Interviews", "Survey") : Url.Action("Interviews", "HQ"),
+                Interviews = Url.Action("Index", "Interviews"),
                 AssignmentsPage = Url.Action("Index", "Assignments"),
                 Profile = Url.Action("Profile", "Interviewer"),
                 SurveySetup = model.IsSupervisor ? "" : Url.Action("Index", "SurveySetup")

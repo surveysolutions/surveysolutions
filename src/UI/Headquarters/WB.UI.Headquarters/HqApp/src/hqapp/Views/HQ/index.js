@@ -8,6 +8,7 @@ import SurveySetup from "./SurveySetup"
 import Profile from "./Profile"
 import Admin from "./Admin"
 import Export from "./Export"
+import Interviews from "./Interviews"
 
 export default [
     Assignments,
@@ -19,5 +20,6 @@ export default [
     SurveySetup,
     Profile,
     Admin,
-    Export
+    Export,
+    Interviews
 ]
