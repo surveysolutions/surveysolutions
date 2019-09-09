@@ -36,19 +36,6 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_reassigned_should_recet_received_by_tablet()
-        {
-            var assignment = Create.Entity.Assignment(quantity: null);
-            assignment.MarkAsReceivedByTablet();
-
-            Assert.That(assignment.ReceivedByTabletAtUtc, Is.Not.Null);
-
-            assignment.Reassign(Guid.NewGuid());
-
-            Assert.That(assignment.ReceivedByTabletAtUtc, Is.Null);
-        }
-
-        [Test]
         public void should_fill_itself_from_interview()
         {
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity(Id.gA, 24);
