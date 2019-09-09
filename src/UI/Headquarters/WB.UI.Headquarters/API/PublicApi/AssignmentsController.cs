@@ -310,7 +310,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             }
 
             interviewCreatorFromAssignment.CreateInterviewIfQuestionnaireIsOld(responsible.Id, questionnaireId, assignment.Id, answers);
-            assignment = this.assignmentsStorage.GetAssignment(assignment.Id);
+            assignment = this.assignmentsStorage.GetAssignmentByAggregateRootId(assignment.PublicKey);
 
             this.invitationService.CreateInvitationForWebInterview(assignment);
             
