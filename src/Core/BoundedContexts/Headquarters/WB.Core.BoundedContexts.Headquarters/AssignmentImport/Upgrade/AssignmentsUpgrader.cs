@@ -83,8 +83,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
                                 oldAssignment.ProtectedVariables);
 
                             invitationService.MigrateInvitationToNewAssignment(assignmentId, newAssignment.Id);
-                            commandService.Execute(new UpdateAssignmentWebSettings(oldAssignment.PublicKey,
-                                userId, false, oldAssignment.Email, oldAssignment.Password));
+                            commandService.Execute(new UpdateAssignmentWebMode(oldAssignment.PublicKey, userId, false));
 
                             migratedSuccessfully++;
                         }

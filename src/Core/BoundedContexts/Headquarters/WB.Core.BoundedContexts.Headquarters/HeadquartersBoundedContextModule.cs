@@ -340,7 +340,11 @@ namespace WB.Core.BoundedContexts.Headquarters
 
                 .Handles<ReassignAssignment>(aggregate => aggregate.Reassign)
                 .Handles<ArchiveAssignment>(aggregate => aggregate.Archive)
-                .Handles<UnarchiveAssignment>(aggregate => aggregate.Unarchive);
+                .Handles<UnarchiveAssignment>(aggregate => aggregate.Unarchive)
+                .Handles<MarkAssignmentAsReceivedByTablet>(aggregate => aggregate.MarkAssignmentAsReceivedByTablet)
+                .Handles<UpdateAssignmentAudioRecording>(aggregate => aggregate.UpdateAssignmentAudioRecording)
+                .Handles<UpdateAssignmentQuantity>(aggregate => aggregate.UpdateAssignmentQuantity)
+                .Handles<UpdateAssignmentWebMode>(aggregate => aggregate.UpdateAssignmentWebMode);
 
             CommandRegistry
                 .Setup<StatefulInterview>()
