@@ -34,7 +34,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 Mock.Of<IInvitationService>(),
                 Mock.Of<IStatefulInterviewRepository>(),
                 Mock.Of<IAssignmentPasswordGenerator>(),
-                Mock.Of<ICommandService>()
+                Mock.Of<ICommandService>(),
+                Mock.Of<IAssignmentFactory>()
             );
 
             controller.Get(new AssignmentsApiController.AssignmentsDataTableRequest
