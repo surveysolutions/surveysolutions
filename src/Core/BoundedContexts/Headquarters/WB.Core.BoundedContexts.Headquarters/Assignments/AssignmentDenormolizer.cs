@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         IUpdateHandler<Assignment, AssignmentReassigned>,
         IUpdateHandler<Assignment, AssignmentEmailUpdated>,
         IUpdateHandler<Assignment, AssignmentPasswordUpdated>,
-        IUpdateHandler<Assignment, AssignmentWebModeUpdated>,
+        IUpdateHandler<Assignment, AssignmentWebModeChanged>,
         IUpdateHandler<Assignment, AssignmentAnswersChanged>,
         IUpdateHandler<Assignment, AssignmentProtectedVariablesUpdated>,
         IUpdateHandler<Assignment, AssignmentReceivedByTablet>
@@ -82,7 +82,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             return state;
         }
 
-        public Assignment Update(Assignment state, IPublishedEvent<AssignmentWebModeUpdated> @event)
+        public Assignment Update(Assignment state, IPublishedEvent<AssignmentWebModeChanged> @event)
         {
             state.WebMode = @event.Payload.WebMode;
             state.UpdatedAtUtc = @event.Payload.OriginDate.UtcDateTime;

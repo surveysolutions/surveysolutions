@@ -50,12 +50,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.Email = @event.Email;
             this.Password = @event.Password;
             this.WebMode = @event.WebMode;
+            this.Answers = @event.Answers;
+            this.ProtectedVariables = @event.ProtectedVariables;
 
             this.CreatedAt = @event.OriginDate;
             this.UpdatedAt = @event.OriginDate;
-
-            this.Answers = new List<InterviewAnswer>();
-            this.ProtectedVariables = new List<string>();
         }
 
         protected void Apply(AssignmentAudioRecordingChanged @event)
@@ -64,9 +63,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.UpdatedAt = @event.OriginDate;
         }
 
-        protected void Apply(AssignmentSizeChanged @event)
+        protected void Apply(AssignmentQuantityChanged @event)
         {
-            this.Quantity = @event.Size;
+            this.Quantity = @event.Quantity;
             this.UpdatedAt = @event.OriginDate;
         }
 
@@ -75,12 +74,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ResponsibleId = @event.ResponsibleId;
             this.UpdatedAt = @event.OriginDate;
             this.ReceivedByTabletAt = null;
-        }
-
-        protected void Apply(AssignmentAnswersChanged @event)
-        {
-            this.Answers = @event.Answers;
-            this.UpdatedAt = @event.OriginDate;
         }
 
         protected void Apply(AssignmentArchived @event)
@@ -95,30 +88,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.UpdatedAt = @event.OriginDate;
         }
 
-        protected void Apply(AssignmentProtectedVariablesUpdated @event)
-        {
-            this.ProtectedVariables = @event.ProtectedVariables;
-            this.UpdatedAt = @event.OriginDate;
-        }
-
-        protected void Apply(AssignmentMarkAsReceivedByTablet @event)
+        protected void Apply(AssignmentReceivedByTablet @event)
         {
             this.ReceivedByTabletAt = @event.OriginDate;
         }
 
-        protected void Apply(AssignmentEmailUpdated @event)
-        {
-            this.Email = @event.Email;
-            this.UpdatedAt = @event.OriginDate;
-        }
-
-        protected void Apply(AssignmentPasswordUpdated @event)
-        {
-            this.Password = @event.Password;
-            this.UpdatedAt = @event.OriginDate;
-        }
-
-        protected void Apply(AssignmentWebModeUpdated @event)
+        protected void Apply(AssignmentWebModeChanged @event)
         {
             this.WebMode = @event.WebMode;
             this.UpdatedAt = @event.OriginDate;
@@ -137,7 +112,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 command.IsAudioRecordingEnabled,
                 command.Email,
                 command.Password,
-                command.WebMode));
+                command.WebMode,
+                command.Answers,
+                command.ProtectedVariables));
         }
 
         public void Archive(ArchiveAssignment command)
@@ -155,6 +132,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ApplyEvent(new AssignmentReassigned(command.UserId, command.OriginDate, command.ResponsibleId));
         }
 
+        public void MarkAssignmentAsReceivedByTablet(MarkAssignmentAsReceivedByTablet command)
+        {
+            ApplyEvent(new AssignmentReceivedByTablet(command.UserId, command.OriginDate));
+        }
 
+        public void UpdateAssignmentAudioRecording(UpdateAssignmentAudioRecording command)
+        {
+            ApplyEvent(new AssignmentAudioRecordingChanged(command.UserId, command.OriginDate, command.IsAudioRecordingEnabled));
+        }
+
+        public void UpdateAssignmentQuantity(UpdateAssignmentQuantity command)
+        {
+            ApplyEvent(new AssignmentQuantityChanged(command.UserId, command.OriginDate, command.Quantity));
+        }
+
+        public void UpdateAssignmentWebMode(UpdateAssignmentWebMode command)
+        {
+            ApplyEvent(new AssignmentWebModeChanged(command.UserId, command.OriginDate, command.WebMode));
+        }
     }
 }

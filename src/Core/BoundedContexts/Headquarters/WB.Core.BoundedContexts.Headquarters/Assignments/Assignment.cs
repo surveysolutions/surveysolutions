@@ -156,11 +156,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             return (WebMode == null || WebMode == true) && Quantity == 1;
         }
 
-        public static Assignment PrefillFromInterview(IStatefulInterview interview, IQuestionnaire questionnaire)
+        public static List<InterviewAnswer> GetAnswersFromInterview(IStatefulInterview interview, IQuestionnaire questionnaire)
         {
-            Assignment result = new Assignment();
+            var answers = new List<InterviewAnswer>();
 
-            result.QuestionnaireId = interview.QuestionnaireIdentity;
             var prefilledQuestions = questionnaire.GetPrefilledQuestions();
             foreach (var prefilledQuestion in prefilledQuestions)
             {
@@ -169,15 +168,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 var question = interview.GetQuestion(questionIdentity);
                 if (question.IsAnswered())
                 {
-                    var answer = interview.GetAnswerAsString(questionIdentity);
-                    if (question.IsSingleFixedOption)
-                    {
-                        answer = question.GetAsInterviewTreeSingleOptionQuestion().GetAnswer().SelectedValue.ToString();
-                    }
-
-                    result.IdentifyingData.Add(IdentifyingAnswer.Create(result, questionnaire, answer, questionIdentity));
-
-                    result.Answers.Add(
+                    answers.Add(
                         new InterviewAnswer
                         {
                             Identity = questionIdentity,
@@ -186,7 +177,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 }
             }
 
-            return result;
+            return answers;
         }
     }
 

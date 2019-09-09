@@ -34,6 +34,7 @@ namespace WB.UI.Headquarters.API
         private readonly IStatefulInterviewRepository interviews;
         private readonly IAssignmentPasswordGenerator passwordGenerator;
         private readonly ICommandService commandService;
+        private readonly IAssignmentFactory assignmentFactory;
 
         public AssignmentsApiController(IAssignmentViewFactory assignmentViewFactory,
             IAuthorizedUser authorizedUser,
@@ -44,7 +45,8 @@ namespace WB.UI.Headquarters.API
             IInvitationService invitationService,
             IStatefulInterviewRepository interviews, 
             IAssignmentPasswordGenerator passwordGenerator,
-            ICommandService commandService)
+            ICommandService commandService,
+            IAssignmentFactory assignmentFactory)
         {
             this.assignmentViewFactory = assignmentViewFactory;
             this.authorizedUser = authorizedUser;
@@ -56,6 +58,7 @@ namespace WB.UI.Headquarters.API
             this.interviews = interviews;
             this.passwordGenerator = passwordGenerator;
             this.commandService = commandService;
+            this.assignmentFactory = assignmentFactory;
         }
         
         [Route("")]
@@ -237,18 +240,22 @@ namespace WB.UI.Headquarters.API
             }
 
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, null);
-            var assignment = Assignment.PrefillFromInterview(interview, questionnaire);
-
-            commandService.Execute(new UpdateAssignmentQuantity(assignment.PublicKey, authorizedUser.Id, request.Quantity));
-            commandService.Execute(new ReassignAssignment(assignment.PublicKey, authorizedUser.Id, request.ResponsibleId));
-
+            var answers = Assignment.GetAnswersFromInterview(interview, questionnaire);
             bool isAudioRecordingEnabled = request.IsAudioRecordingEnabled ?? this.questionnaires.Query(_ => _
-                .Where(q => q.Id == interview.QuestionnaireIdentity.ToString())
-                .Select(q => q.IsAudioRecordingEnabled).FirstOrDefault());
-            commandService.Execute(new UpdateAssignmentAudioRecording(assignment.PublicKey, authorizedUser.Id, isAudioRecordingEnabled));
+                                               .Where(q => q.Id == interview.QuestionnaireIdentity.ToString())
+                                               .Select(q => q.IsAudioRecordingEnabled).FirstOrDefault());
 
-            commandService.Execute(new UpdateAssignmentWebSettings(assignment.PublicKey, authorizedUser.Id, 
-                request.WebMode, request.Email, password));
+            var assignment = assignmentFactory.CreateAssignment(authorizedUser.Id,
+                interview.QuestionnaireIdentity,
+                request.ResponsibleId,
+                request.Quantity,
+                request.Email,
+                password,
+                request.WebMode,
+                isAudioRecordingEnabled,
+                answers,
+                null
+            );
 
             this.invitationService.CreateInvitationForWebInterview(assignment);
 
