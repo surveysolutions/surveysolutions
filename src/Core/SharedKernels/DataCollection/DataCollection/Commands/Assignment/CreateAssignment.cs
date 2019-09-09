@@ -7,7 +7,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Assignment
 {
     public class CreateAssignment : AssignmentCommand
     {
-        public int DisplayId { get; }
+        public int Id { get; }
         public QuestionnaireIdentity QuestionnaireId { get; }
         public Guid ResponsibleId { get; }
         public int? Quantity { get; }
@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Assignment
         public List<string> ProtectedVariables { get; }
 
         public CreateAssignment(Guid assignmentId,
-            int displayId,
+            int id,
             Guid userId,
             QuestionnaireIdentity questionnaireId,
             Guid responsibleId,
@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Assignment
             ) 
             : base(assignmentId, userId)
         {
-            DisplayId = displayId;
+            Id = id;
             QuestionnaireId = questionnaireId;
             ResponsibleId = responsibleId;
             Quantity = quantity;
