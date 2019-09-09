@@ -196,6 +196,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string Close {
+            get {
+                return ResourceManager.GetString("Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Count.
         /// </summary>
         public static string Count {
@@ -385,6 +394,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {{count}} selected assignments are going to be closed. Size will be set to currently collected interviews count..
+        /// </summary>
+        public static string MultipleAssignmentsClose {
+            get {
+                return ResourceManager.GetString("MultipleAssignmentsClose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New Assignment.
         /// </summary>
         public static string NewAssignment {
@@ -525,6 +543,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string ShowArchived {
             get {
                 return ResourceManager.GetString("ShowArchived", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected assignment &apos;{{id}}&apos; current size {{quantity}} will changed to {{collected}}.
+        /// </summary>
+        public static string SingleAssignmentCloseConfirm {
+            get {
+                return ResourceManager.GetString("SingleAssignmentCloseConfirm", resourceCulture);
             }
         }
         

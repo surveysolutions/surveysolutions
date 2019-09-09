@@ -48,7 +48,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public virtual ReadonlyUser Responsible { get; protected set; }
 
         public virtual int? Quantity { get; protected set; }
-                
+
+        public virtual bool QuantityCanBeChanged => !this.Archived && this.WebMode != true;
+
         public virtual bool Archived { get; protected set; }
 
         public virtual DateTime CreatedAtUtc { get; protected set; }
@@ -193,6 +195,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             }
 
             return result;
+        }
+
+        public virtual void Close()
+        {
+            this.UpdateQuantity(this.InterviewSummaries.Count);
         }
     }
 

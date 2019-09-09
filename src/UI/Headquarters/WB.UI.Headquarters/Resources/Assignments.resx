@@ -375,4 +375,13 @@
   <data name="AssignmentId" xml:space="preserve">
     <value>Assignment ID</value>
   </data>
+  <data name="MultipleAssignmentsClose" xml:space="preserve">
+    <value>{{count}} selected assignments are going to be closed. Size will be set to currently collected interviews count.</value>
+  </data>
+  <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
+    <value>Selected assignment '{{id}}' current size {{quantity}} will changed to {{collected}}</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
 </root>

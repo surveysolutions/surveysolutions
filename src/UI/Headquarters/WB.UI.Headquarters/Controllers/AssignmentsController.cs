@@ -71,7 +71,8 @@ namespace WB.UI.Headquarters.Controllers
                 Interviews = Url.Action("Index", "Interviews"),
                 AssignmentsPage = Url.Action("Index", "Assignments"),
                 Profile = Url.Action("Profile", "Interviewer"),
-                SurveySetup = model.IsSupervisor ? "" : Url.Action("Index", "SurveySetup")
+                SurveySetup = model.IsSupervisor ? "" : Url.Action("Index", "SurveySetup"),
+                AssignmentsApi = Url.Content("~/api/v1/assignments")
             };
 
             return View(model);
@@ -200,6 +201,7 @@ namespace WB.UI.Headquarters.Controllers
 
             public string SurveySetup { get; set; }
             public string AssignmentsPage { get; set; }
+            public string AssignmentsApi { get; set; }
         }
     }
 }

@@ -369,7 +369,15 @@
     <value>вер. {{version}}</value>
   </data>
   <data name="AssignmentId" xml:space="preserve">
-      <value>Задание №</value>
-      <comment>Задание №</comment>
+    <value>Задание №</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Завершить</value>
+  </data>
+  <data name="MultipleAssignmentsClose" xml:space="preserve">
+    <value>{{count}} выбранных заданий будет завершено. Размер будет установлен в текущее количество собранных интервью.</value>
+  </data>
+  <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
+    <value>Для задания '{{id}}' текущий размер {{quantity}} будет установлен в {{collected}}</value>
   </data>
 </root>
