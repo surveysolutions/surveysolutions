@@ -11,41 +11,42 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     public class AssignmentAggregateRoot : AggregateRootMappedByConvention
     {
-        public virtual int Id { get; protected set; }
+        public int Id { get; protected set; }
 
-        public virtual Guid ResponsibleId { get; protected set; }
+        public Guid ResponsibleId { get; protected set; }
 
-        public virtual int? Quantity { get; protected set; }
+        public int? Quantity { get; protected set; }
 
-        public virtual bool Archived { get; protected set; }
+        public bool Archived { get; protected set; }
 
-        public virtual DateTimeOffset CreatedAt { get; protected set; }
+        public DateTimeOffset CreatedAt { get; protected set; }
 
-        public virtual DateTimeOffset UpdatedAt { get; protected set; }
+        public DateTimeOffset UpdatedAt { get; protected set; }
 
-        public virtual DateTimeOffset? ReceivedByTabletAt { get; protected set; }
+        public DateTimeOffset? ReceivedByTabletAt { get; protected set; }
 
-        public virtual QuestionnaireIdentity QuestionnaireId { get; set; }
+        public QuestionnaireIdentity QuestionnaireId { get; set; }
 
-        public virtual bool IsAudioRecordingEnabled { get; protected set; }
+        public bool IsAudioRecordingEnabled { get; protected set; }
 
-        public virtual string Email { get; protected set; }
+        public string Email { get; protected set; }
 
-        public virtual string Password { get; protected set; }
+        public string Password { get; protected set; }
 
-        public virtual bool? WebMode { get; protected set; }
+        public bool? WebMode { get; protected set; }
 
-        public virtual IList<InterviewAnswer> Answers { get; protected set; }
+        public IList<InterviewAnswer> Answers { get; protected set; }
 
-        public virtual List<string> ProtectedVariables { get; protected set; }
+        public IList<string> ProtectedVariables { get; protected set; }
 
 
         #region Apply
         protected void Apply(AssignmentCreated @event)
         {
+            this.Id = @event.Id;
             this.ResponsibleId = @event.ResponsibleId;
             this.Quantity = @event.Quantity;
-            this.QuestionnaireId = @event.QuestionnaireId;
+            this.QuestionnaireId = @event.QuestionnaireIdentity;
             this.IsAudioRecordingEnabled = @event.IsAudioRecordingEnabled;
             this.Email = @event.Email;
             this.Password = @event.Password;
@@ -105,16 +106,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             ApplyEvent(new AssignmentCreated(
                 command.UserId,
+                command.Id,
                 command.OriginDate,
-                command.QuestionnaireId,
+                command.QuestionnaireId.QuestionnaireId,
+                command.QuestionnaireId.Version,
                 command.ResponsibleId,
                 command.Quantity,
                 command.IsAudioRecordingEnabled,
                 command.Email,
                 command.Password,
                 command.WebMode,
-                command.Answers,
-                command.ProtectedVariables));
+                command.Answers.ToArray(),
+                command.ProtectedVariables.ToArray()));
         }
 
         public void Archive(ArchiveAssignment command)
