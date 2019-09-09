@@ -69,18 +69,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 .Returns("text");
 
             // Act
-            Assignment assignment = Assignment.PrefillFromInterview(interview.Object, Create.Entity.PlainQuestionnaire(questionnaire));
+            var answers = Assignment.GetAnswersFromInterview(interview.Object, Create.Entity.PlainQuestionnaire(questionnaire));
 
             // Assert
-            Assert.That(assignment, Has.Property(nameof(assignment.QuestionnaireId)).EqualTo(questionnaireIdentity));
-
-            Assert.That(assignment.IdentifyingData, Has.Count.EqualTo(2));
-            Assert.That(assignment.IdentifyingData[0].AnswerAsString, Is.EqualTo("text"));
-            Assert.That(assignment.IdentifyingData[1].AnswerAsString, Is.EqualTo("one"));
-
-            Assert.That(assignment.Answers, Has.Count.EqualTo(2));
-            Assert.That(assignment.Answers[0].Answer.ToString(), Is.EqualTo("text"));
-            Assert.That(assignment.Answers[1].Answer.ToString(), Is.EqualTo("1"));
+            Assert.That(answers, Has.Count.EqualTo(2));
+            Assert.That(answers[0].Answer.ToString(), Is.EqualTo("text"));
+            Assert.That(answers[1].Answer.ToString(), Is.EqualTo("1"));
         }
     }
 }
