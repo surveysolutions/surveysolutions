@@ -27,17 +27,17 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
 
             this.controller.Archive(1);
 
-            this.commandService.Verify(x => x.Execute(It.Is<ArchiveAssignment>(a => a.AssignmentId == Id.g7)), Times.Once);
+            this.commandService.Verify(x => x.Execute(It.Is<ArchiveAssignment>(a => a.AssignmentId == Id.g7), null), Times.Once);
         }
 
         [Test]
         public void should_store_updated_unarchive_status()
         {
-            this.SetupAssignment(Create.Entity.Assignment(id: 1, quantity: 10));
+            this.SetupAssignment(Create.Entity.Assignment(id: 1, publicKey: Id.g7, quantity: 10));
 
             this.controller.Unarchive(1);
 
-            this.assignmentsStorage.Verify(x => x.Store(It.Is<Assignment>(a => a.Archived == false), 1), Times.Once);
+            this.commandService.Verify(c => c.Execute(It.Is<UnarchiveAssignment>(a => a.AssignmentId == Id.g7), null), Times.Once);
         }
     }
 }
