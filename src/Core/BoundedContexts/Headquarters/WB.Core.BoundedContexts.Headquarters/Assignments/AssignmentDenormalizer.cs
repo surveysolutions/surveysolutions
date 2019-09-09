@@ -7,6 +7,8 @@ using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Assignment;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
@@ -34,7 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public Assignment Update(Assignment state, IPublishedEvent<AssignmentCreated> @event)
         {
             state = new Assignment(
-                @event.Payload.QuestionnaireId, 
+                @event.Payload.QuestionnaireIdentity, 
                 @event.Payload.ResponsibleId,
                 @event.Payload.Quantity,
                 @event.Payload.IsAudioRecordingEnabled,
@@ -42,7 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 @event.Payload.Password,
                 @event.Payload.WebMode);
 
-            state.ProtectedVariables = @event.Payload.ProtectedVariables;
+            state.ProtectedVariables = @event.Payload.ProtectedVariables.ToList();
 
             var questionnaire = questionnaireStorage.GetQuestionnaire(state.QuestionnaireId, null);
             var answers = @event.Payload.Answers;

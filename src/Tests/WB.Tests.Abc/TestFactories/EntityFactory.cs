@@ -1806,7 +1806,7 @@ namespace WB.Tests.Abc.TestFactories
 
             if (!string.IsNullOrWhiteSpace(questionnaireTitle))
             {
-                result.Questionnaire = new QuestionnaireLiteViewItem
+                result.AsDynamic().Questionnaire = new QuestionnaireLiteViewItem
                 {
                     Id = questionnaireIdentity?.Id,
                     Title = questionnaireTitle

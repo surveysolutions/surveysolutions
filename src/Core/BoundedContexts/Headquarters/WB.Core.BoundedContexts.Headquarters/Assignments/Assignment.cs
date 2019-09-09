@@ -69,11 +69,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public virtual IList<InterviewAnswer> Answers { get; set; }
 
-        public virtual QuestionnaireLiteViewItem Questionnaire { get; set; }
+        public virtual List<string> ProtectedVariables { get; set; }
+
+        public virtual QuestionnaireLiteViewItem Questionnaire { get; protected set; }
 
         public virtual ISet<InterviewSummary> InterviewSummaries { get; protected set; }
 
-        public virtual List<string> ProtectedVariables { get; set; }
 
         public virtual int InterviewsProvided =>
             InterviewSummaries.Count(i => i.Status == InterviewStatus.InterviewerAssigned ||
