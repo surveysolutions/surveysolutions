@@ -5,6 +5,7 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.API.PublicApi.Models;
 
@@ -59,7 +60,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         [Test]
         public void should_store_assignment_with_new_assignee()
         {
-            this.SetupAssignment(Create.Entity.Assignment(id: 42));
+            this.SetupAssignment(Create.Entity.Assignment(id: 42, publicKey: Id.g7));
 
             var user = Create.Entity.HqUser(userId: Id.g1, role: UserRoles.Interviewer);
             this.SetupResponsibleUser(user);
@@ -69,7 +70,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 Responsible = "any"
             });
 
-            this.assignmentsStorage.Verify(ass => ass.Store(It.Is<Assignment>(a => a.ResponsibleId == Id.g1), 42), Times.Once );
+            this.commandService.Verify(ass => ass.Execute(It.Is<ReassignAssignment>(a => a.ResponsibleId == Id.g1 && a.AssignmentId == Id.g7), null), Times.Once );
         }
     }
 }
