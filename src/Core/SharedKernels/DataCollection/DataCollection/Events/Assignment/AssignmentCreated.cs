@@ -8,30 +8,36 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Assignment
     public class AssignmentCreated : AssignmentEvent
     {
         public int Id { get; }
-        public QuestionnaireIdentity QuestionnaireId { get; }
+        public Guid QuestionnaireId { get; }
+        public long QuestionnaireVersion { get; }
+        public QuestionnaireIdentity QuestionnaireIdentity => new QuestionnaireIdentity(QuestionnaireId, QuestionnaireVersion);
         public Guid ResponsibleId { get; }
         public int? Quantity { get; }
         public bool IsAudioRecordingEnabled { get; }
         public string Email { get; }
         public string Password { get; }
         public bool? WebMode { get; }
-        public List<InterviewAnswer> Answers { get; }
-        public List<string> ProtectedVariables { get; }
+        public InterviewAnswer[] Answers { get; }
+        public string[] ProtectedVariables { get; }
 
         public AssignmentCreated(Guid userId, 
+            int id,
             DateTimeOffset originDate,
-            QuestionnaireIdentity questionnaireId,
+            Guid questionnaireId,
+            long questionnaireVersion,
             Guid responsibleId,
             int? quantity,
             bool isAudioRecordingEnabled,
             string email,
             string password,
             bool? webMode, 
-            List<InterviewAnswer> answers, 
-            List<string> protectedVariables) 
+            InterviewAnswer[] answers, 
+            string[] protectedVariables) 
             : base(userId, originDate)
         {
+            Id = id;
             QuestionnaireId = questionnaireId;
+            QuestionnaireVersion = questionnaireVersion;
             ResponsibleId = responsibleId;
             Quantity = quantity;
             IsAudioRecordingEnabled = isAudioRecordingEnabled;
