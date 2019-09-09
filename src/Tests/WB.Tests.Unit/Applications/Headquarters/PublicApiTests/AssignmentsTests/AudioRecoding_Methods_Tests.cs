@@ -1,12 +1,15 @@
 ﻿using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.DenormalizerStorage;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.API.PublicApi.Models;
 
@@ -63,15 +66,16 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
             assignments.Store(assignment, assignment.PublicKey);
             
             var assignmentsService = Create.Service.AssignmentsService(assignments);
+            var commandService = Mock.Of<ICommandService>();
 
-            var controller = Create.Controller.AssignmentsPublicApiController(assignmentsService: assignmentsService);
+            var controller = Create.Controller.AssignmentsPublicApiController(assignmentsService: assignmentsService, commandService: commandService);
 
             // Act
             var response = controller.AudioRecodingPatch(15, new UpdateRecordingRequest{Enabled = true});
 
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
-            Assert.That(assignment.IsAudioRecordingEnabled, Is.True);
+            Mock.Get(commandService).Verify(c => c.Execute(It.Is<UpdateAssignmentAudioRecording>(a => a.AssignmentId == assignment.PublicKey), null), Times.Once);
         }
     }
 }

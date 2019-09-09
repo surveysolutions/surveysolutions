@@ -11,8 +11,10 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.DenormalizerStorage;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
@@ -113,9 +115,23 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var questionnaires = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(migrateTo.QuestionnaireId,
                 questionnaireVersion: migrateTo.Version
                 );
-
+            var commandService = new Mock<ICommandService>();
+            commandService.Setup(cs => cs.Execute(It.IsAny<CreateAssignment>(), null))
+                .Callback<ICommand, string>((commandArgs, origin) =>
+                {
+                    var c = (CreateAssignment) commandArgs;
+                    var assignment = Create.Entity.Assignment(publicKey: c.AssignmentId, id: c.DisplayId, quantity: c.Quantity, questionnaireIdentity: c.QuestionnaireId);
+                    assignmentsStorage.Store(assignment, c.AssignmentId.FormatGuid());
+                });
+            commandService.Setup(cs => cs.Execute(It.IsAny<ArchiveAssignment>(), null))
+                .Callback<ICommand, string>((commandArgs, origin) =>
+                {
+                    var c = (ArchiveAssignment) commandArgs;
+                    assignmentsStorage.GetById(c.AssignmentId.FormatGuid()).Archived = true;
+                });
             var assignmentsService = Create.Service.AssignmentsService(assignmentsStorage);
-            var service = Create.Service.AssignmentsUpgrader(assignments: assignmentsService, questionnaireStorage: questionnaires);
+            var service = Create.Service.AssignmentsUpgrader(assignments: assignmentsService, questionnaireStorage: questionnaires,
+                commandService: commandService.Object);
 
             // Act
             service.Upgrade(new Guid(), Guid.NewGuid(), migrateFrom, migrateTo, CancellationToken.None);
@@ -174,9 +190,33 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                         Create.Entity.TextQuestion(questionId: prefilledInterviewAnswerId.Id, preFilled: true)
                     }
                 )));
+            var commandService = new Mock<ICommandService>();
+            commandService.Setup(cs => cs.Execute(It.IsAny<CreateAssignment>(), null))
+                .Callback<ICommand, string>((commandArgs, origin) =>
+                {
+                    var c = (CreateAssignment)commandArgs;
+                    var assignment = Create.Entity.Assignment(publicKey: c.AssignmentId, 
+                        id: c.DisplayId, 
+                        quantity: c.Quantity, 
+                        questionnaireIdentity: c.QuestionnaireId,
+                        protectedVariables: c.ProtectedVariables,
+                        answers: c.Answers,
+                        isAudioRecordingEnabled: c.IsAudioRecordingEnabled,
+                        identifyingAnswers: assignmentToMigrate.IdentifyingData.ToList()
+                        );
+                    assignmentsStorage.Store(assignment, c.AssignmentId.FormatGuid());
+                });
+            commandService.Setup(cs => cs.Execute(It.IsAny<ArchiveAssignment>(), null))
+                .Callback<ICommand, string>((commandArgs, origin) =>
+                {
+                    var c = (ArchiveAssignment)commandArgs;
+                    assignmentsStorage.GetById(c.AssignmentId.FormatGuid()).Archived = true;
+                });
+
 
             var assignmentsService = Create.Service.AssignmentsService(assignmentsStorage);
-            var service = Create.Service.AssignmentsUpgrader(assignments: assignmentsService, questionnaireStorage: questionnaires);
+            var service = Create.Service.AssignmentsUpgrader(assignments: assignmentsService, questionnaireStorage: questionnaires,
+                commandService: commandService.Object);
 
             // Act
             service.Upgrade(new Guid(), Guid.NewGuid(), migrateFrom, migrateTo, CancellationToken.None);
