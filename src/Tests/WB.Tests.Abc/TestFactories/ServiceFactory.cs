@@ -726,13 +726,22 @@ namespace WB.Tests.Abc.TestFactories
             IAssignmentsUpgradeService upgradeService = null,
             ICommandService commandService = null)
         {
-            return new AssignmentsUpgrader(assignments ?? Mock.Of<IAssignmentsService>(),
+            var commands = commandService ?? Mock.Of<ICommandService>();
+            var assignmentsService = assignments;
+            if (assignmentsService == null)
+            {
+                var assignment = Create.Entity.Assignment();
+                assignmentsService = Mock.Of<IAssignmentsService>(s =>
+                    s.GetAssignmentByAggregateRootId(It.IsAny<Guid>()) == assignment);
+            }
+
+            return new AssignmentsUpgrader(assignmentsService,
                 importService ?? Mock.Of<IPreloadedDataVerifier>(s => s.VerifyWithInterviewTree(It.IsAny<List<InterviewAnswer>>(), It.IsAny<Guid?>(), It.IsAny<IQuestionnaire>()) == null),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 upgradeService ?? Mock.Of<IAssignmentsUpgradeService>(),
-                Create.Service.AssignmentFactory(),
+                Create.Service.AssignmentFactory(commands, assignmentsService),
                 Mock.Of<IInvitationService>(),
-                commandService ?? Mock.Of<ICommandService>());
+                commands);
         }
 
         public IAssignmentFactory AssignmentFactory(ICommandService commandService = null, IAssignmentsService assignmentsService = null)

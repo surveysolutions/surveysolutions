@@ -1,3 +1,4 @@
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -44,6 +45,10 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         {
             this.PrepareMocks();
 
+            var assignment = Create.Entity.Assignment();
+            var assignmentsService = Mock.Of<IAssignmentsService>(s =>
+                s.GetAssignmentByAggregateRootId(It.IsAny<Guid>()) == assignment);
+
             this.controller = new AssignmentsController(
                 this.assignmentViewFactory.Object,
                 this.assignmentsStorage.Object,
@@ -55,7 +60,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 Mock.Of<IInterviewCreatorFromAssignment>(),
                 this.interviewImportService.Object,
                 Mock.Of<ICommandTransformator>(),
-                Create.Service.AssignmentFactory(),
+                Create.Service.AssignmentFactory(commandService.Object, assignmentsService),
                 Mock.Of<IInvitationService>(),
                 Mock.Of<IAssignmentPasswordGenerator>(),
                 commandService.Object,
@@ -74,6 +79,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
             this.interviewImportService = new Mock<IPreloadedDataVerifier>();
             this.questionnaireStorage = new Mock<IQuestionnaireStorage>();
             this.logger = new Mock<ILogger>();
+            this.commandService = new Mock<ICommandService>();
+            this.authorizedUser = new Mock<IAuthorizedUser>();
         }
 
         protected void SetupResponsibleUser(HqUser user)
