@@ -16,11 +16,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         IUpdateHandler<Assignment, AssignmentArchived>,
         IUpdateHandler<Assignment, AssignmentUnarchived>,
         IUpdateHandler<Assignment, AssignmentReassigned>,
-        IUpdateHandler<Assignment, AssignmentEmailUpdated>,
-        IUpdateHandler<Assignment, AssignmentPasswordUpdated>,
         IUpdateHandler<Assignment, AssignmentWebModeChanged>,
-        IUpdateHandler<Assignment, AssignmentAnswersChanged>,
-        IUpdateHandler<Assignment, AssignmentProtectedVariablesUpdated>,
+        IUpdateHandler<Assignment, AssignmentAudioRecordingChanged>,
+        IUpdateHandler<Assignment, AssignmentQuantityChanged>,
         IUpdateHandler<Assignment, AssignmentReceivedByTablet>
     {
         private readonly IQuestionnaireStorage questionnaireStorage;
@@ -43,6 +41,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 @event.Payload.Email,
                 @event.Payload.Password,
                 @event.Payload.WebMode);
+
+            state.ProtectedVariables = @event.Payload.ProtectedVariables;
+
+            var questionnaire = questionnaireStorage.GetQuestionnaire(state.QuestionnaireId, null);
+            var answers = @event.Payload.Answers;
+            var identifyingQuestionIds = Enumerable.ToHashSet(questionnaire.GetPrefilledQuestions());
+
+            var identifyingAnswers = answers
+                .Where(x => identifyingQuestionIds.Contains(x.Identity.Id)).Select(a =>
+                    IdentifyingAnswer.Create(state, questionnaire, a.Answer.ToString(), a.Identity))
+                .ToList();
+
+            state.IdentifyingData = identifyingAnswers;
+            state.Answers = answers;
+            state.UpdatedAtUtc = @event.Payload.OriginDate.UtcDateTime;
+
+
             return state;
         }
 
@@ -68,20 +83,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             return state;
         }
 
-        public Assignment Update(Assignment state, IPublishedEvent<AssignmentEmailUpdated> @event)
-        {
-            state.Email = @event.Payload.Email;
-            state.UpdatedAtUtc = @event.Payload.OriginDate.UtcDateTime;
-            return state;
-        }
-
-        public Assignment Update(Assignment state, IPublishedEvent<AssignmentPasswordUpdated> @event)
-        {
-            state.Password = @event.Payload.Password;
-            state.UpdatedAtUtc = @event.Payload.OriginDate.UtcDateTime;
-            return state;
-        }
-
         public Assignment Update(Assignment state, IPublishedEvent<AssignmentWebModeChanged> @event)
         {
             state.WebMode = @event.Payload.WebMode;
@@ -89,34 +90,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             return state;
         }
 
-        public Assignment Update(Assignment state, IPublishedEvent<AssignmentProtectedVariablesUpdated> @event)
-        {
-            state.ProtectedVariables = @event.Payload.ProtectedVariables;
-            state.UpdatedAtUtc = @event.Payload.OriginDate.UtcDateTime;
-            return state;
-        }
-
-        public Assignment Update(Assignment state, IPublishedEvent<AssignmentAnswersChanged> @event)
-        {
-            var questionnaire = questionnaireStorage.GetQuestionnaire(state.QuestionnaireId, null);
-            var answers = @event.Payload.Answers;
-            var identifyingQuestionIds = Enumerable.ToHashSet(questionnaire.GetPrefilledQuestions());
-
-            var identifyingAnswers = answers
-                .Where(x => identifyingQuestionIds.Contains(x.Identity.Id)).Select(a =>
-                    IdentifyingAnswer.Create(state, questionnaire, a.Answer.ToString(), a.Identity))
-                .ToList();
-
-            state.IdentifyingData = identifyingAnswers;
-            state.Answers = answers;
-            state.UpdatedAtUtc = @event.Payload.OriginDate.UtcDateTime;
-
-            return state;
-        }
-
         public Assignment Update(Assignment state, IPublishedEvent<AssignmentReceivedByTablet> @event)
         {
             state.ReceivedByTabletAtUtc = @event.Payload.OriginDate.UtcDateTime;
+            return state;
+        }
+
+        public Assignment Update(Assignment state, IPublishedEvent<AssignmentAudioRecordingChanged> @event)
+        {
+            state.IsAudioRecordingEnabled = @event.Payload.IsAudioRecordingEnabled;
+            state.UpdatedAtUtc = @event.Payload.OriginDate.UtcDateTime;
+            return state;
+        }
+
+        public Assignment Update(Assignment state, IPublishedEvent<AssignmentQuantityChanged> @event)
+        {
+            state.Quantity = @event.Payload.Quantity;
+            state.UpdatedAtUtc = @event.Payload.OriginDate.UtcDateTime;
             return state;
         }
     }

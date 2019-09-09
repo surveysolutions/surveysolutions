@@ -120,7 +120,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 .Callback<ICommand, string>((commandArgs, origin) =>
                 {
                     var c = (CreateAssignment) commandArgs;
-                    var assignment = Create.Entity.Assignment(publicKey: c.AssignmentId, id: c.DisplayId, quantity: c.Quantity, questionnaireIdentity: c.QuestionnaireId);
+                    var assignment = Create.Entity.Assignment(publicKey: c.AssignmentId, id: c.Id, quantity: c.Quantity, questionnaireIdentity: c.QuestionnaireId);
                     assignmentsStorage.Store(assignment, c.AssignmentId.FormatGuid());
                 });
             commandService.Setup(cs => cs.Execute(It.IsAny<ArchiveAssignment>(), null))
@@ -196,7 +196,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 {
                     var c = (CreateAssignment)commandArgs;
                     var assignment = Create.Entity.Assignment(publicKey: c.AssignmentId, 
-                        id: c.DisplayId, 
+                        id: c.Id, 
                         quantity: c.Quantity, 
                         questionnaireIdentity: c.QuestionnaireId,
                         protectedVariables: c.ProtectedVariables,
