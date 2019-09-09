@@ -501,8 +501,32 @@ namespace WB.UI.Headquarters.API.PublicApi
 
             return new AssignmentQuantitySettings
             {
-                CanChangeQuantity = assignment.WebMode != true 
+                CanChangeQuantity = assignment.QuantityCanBeChanged
             };
+        }
+
+        /// <summary>
+        /// Closes assignment by setting Size to the amount of collected interviews
+        /// </summary>
+        /// <param name="id">Assignment id</param>
+        /// <response code="200">Assignment closed</response>
+        /// <response code="404">Assignment not found</response>
+        /// <response code="409">Quantity cannot be changed. Assignment either archived or has web mode enabled</response>
+        [HttpPost]
+        [Route("{id:int}/close")]
+        [ObserverNotAllowedApi]
+        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
+        public HttpResponseMessage Close(int id)
+        {
+            var assignment = assignmentsStorage.GetById(id);
+            if (assignment == null)
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            if (!assignment.QuantityCanBeChanged)
+                return Request.CreateResponse(HttpStatusCode.Conflict);
+
+            assignment.Close();
+
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
     }
 }
