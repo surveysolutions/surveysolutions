@@ -76,6 +76,10 @@
                             v-if="!showArchive.key"
                             @click="assignSelected">{{ $t("Common.Assign") }}</button>
 
+                    <button class="btn btn-lg btn-warning" id="btnCloseSelected"
+                            v-if="config.isHeadquarter && !showArchive.key"
+                            @click="closeSelected">{{ $t("Assignments.Close") }}</button>
+
                     <button class="btn btn-lg btn-danger" id="btnArchiveSelected"
                             v-if="!showArchive.key && config.isHeadquarter"
                             @click="archiveSelected">{{ $t("Assignments.Archive") }}</button>
@@ -110,10 +114,25 @@
             </div>
         </ModalFrame>
 
-        <ModalFrame
-      ref="editAudioEnabledModal"
-      :title="$t('Assignments.ChangeAudioRecordingModalTitle', {id: editedRowId} )"
-    >
+        <ModalFrame ref="closeModal"
+                    :title="$t('Pages.ConfirmationNeededTitle')">
+            <p v-if="selectedRows.length === 1">
+                {{singleCloseMessage}}
+            </p>
+            <p v-else>{{ $t("Assignments.MultipleAssignmentsClose", {count: selectedRows.length} )}}</p>
+           
+            <div slot="actions">
+                <button type="button"
+                        class="btn btn-primary"
+                        @click="close">{{ $t("Assignments.Close") }}</button>
+                <button type="button"
+                        class="btn btn-link"
+                        data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+            </div>
+        </ModalFrame>
+
+        <ModalFrame ref="editAudioEnabledModal"
+            :title="$t('Assignments.ChangeAudioRecordingModalTitle', {id: editedRowId} )">
       <p>{{ $t("Assignments.AudioRecordingExplanation")}}</p>
       <form onsubmit="return false;">
         <div class="form-group">
@@ -200,6 +219,15 @@ export default {
     },
 
     computed: {
+        singleCloseMessage() {
+            const dataRow = this.$refs.table.table.rows({selected: true}).data()[0]
+            const result = this.$t("Assignments.SingleAssignmentCloseConfirm", {
+                id: this.selectedRows[0],
+                quantity: dataRow.quantity,
+                collected: dataRow.interviewsCount
+            })
+            return result;
+        },
         quantityValidations(){
             return {
                 regex: "^-?([0-9]+)$",
@@ -537,6 +565,23 @@ export default {
             this.$refs.assignModal.modal({
                 keyboard: false
             });
+        },
+
+        
+        closeSelected() {
+            this.$refs.closeModal.modal({
+                keyboard: false
+            });
+        },
+
+        async close() {
+            const self = this
+            await Promise.all(_.map(self.selectedRows, row => {
+                const url = `${self.config.api.assignmentsApi}/${row}/close`
+                return self.$http.post(url)
+            }))
+            this.$refs.closeModal.hide()
+            this.reloadTable()
         },
 
         async assign() {
