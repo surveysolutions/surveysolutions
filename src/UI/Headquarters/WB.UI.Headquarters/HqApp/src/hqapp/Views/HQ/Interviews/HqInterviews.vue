@@ -1098,9 +1098,11 @@ export default {
                     this.ajaxParams
                 );
 
-                const response = await this.$http.get(this.config.api.responsible, { params: requestParams });
+                const response = await this.$http.get(this.config.api.responsible, { params: requestParams });               
 
-                onDone(response.data.options.length > 0 ? response.data.options[0].key : undefined);
+                onDone((response.data.options.length > 0 && response.data.options[0].value == this.$route.query.responsible) 
+                    ? response.data.options[0].key 
+                    : undefined);
             } else onDone();
         },
 
