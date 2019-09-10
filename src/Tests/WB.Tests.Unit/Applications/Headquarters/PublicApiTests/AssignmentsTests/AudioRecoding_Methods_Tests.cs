@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Moq;
@@ -22,7 +23,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         {
             var assignment = Create.Entity.Assignment(id: 15);
 
-            var assignments = new InMemoryReadSideRepositoryAccessor<Assignment>();
+            var assignments = new InMemoryReadSideRepositoryAccessor<Assignment, Guid>();
             assignments.Store(assignment, assignment.PublicKey);
 
             var assignmentsService = Create.Service.AssignmentsService(assignments);
@@ -41,7 +42,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         {
             var assignment = Create.Entity.Assignment(id: 15, isArchived: true);
 
-            var assignments = new InMemoryReadSideRepositoryAccessor<Assignment>();
+            var assignments = new InMemoryReadSideRepositoryAccessor<Assignment, Guid>();
             assignments.Store(assignment, assignment.PublicKey);
 
             var assignmentsService = Create.Service.AssignmentsService(assignments);
@@ -62,7 +63,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         {
             var assignment = Create.Entity.Assignment(id: 15);
 
-            var assignments = new InMemoryReadSideRepositoryAccessor<Assignment>();
+            var assignments = new InMemoryReadSideRepositoryAccessor<Assignment, Guid>();
             assignments.Store(assignment, assignment.PublicKey);
             
             var assignmentsService = Create.Service.AssignmentsService(assignments);

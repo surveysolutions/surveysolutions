@@ -32,14 +32,14 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var migratedAssignmentId = 45;
             var migratedAssignmentQuantity = 2;
 
-            var assignmentsStorage = new InMemoryReadSideRepositoryAccessor<Assignment>();
+            var assignmentsStorage = new InMemoryReadSideRepositoryAccessor<Assignment, Guid>();
             var assignmentToMigrate = Create.Entity.Assignment(id: migratedAssignmentId,
                 publicKey: Id.g7,
                 quantity: migratedAssignmentQuantity,
                 questionnaireIdentity: migrateFrom);
             assignmentToMigrate.Archived = true;
 
-            assignmentsStorage.Store(assignmentToMigrate, Id.g7.FormatGuid());
+            assignmentsStorage.Store(assignmentToMigrate, Id.g7);
             var importService = Mock.Of<IPreloadedDataVerifier>(s =>
                 s.VerifyWithInterviewTree(It.IsAny<List<InterviewAnswer>>(), It.IsAny<Guid?>(), It.IsAny<IQuestionnaire>()) ==
                 new InterviewImportError("Some code", "Generic error"));
@@ -52,7 +52,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             service.Upgrade(new Guid(), Guid.NewGuid(), migrateFrom, migrateTo, CancellationToken.None);
 
             // Assert
-            Assignment oldAssignment = assignmentsStorage.GetById(Id.g7.FormatGuid());
+            Assignment oldAssignment = assignmentsStorage.GetById(Id.g7);
             Assert.That(oldAssignment, Has.Property(nameof(oldAssignment.Archived)).EqualTo(true));
             Assert.That(oldAssignment, Has.Property(nameof(oldAssignment.QuestionnaireId)).EqualTo(migrateFrom));
 
@@ -68,13 +68,13 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var migratedAssignmentId = 45;
             var migratedAssignmentQuantity = 2;
 
-            var assignmentsStorage = new InMemoryReadSideRepositoryAccessor<Assignment>();
+            var assignmentsStorage = new InMemoryReadSideRepositoryAccessor<Assignment, Guid>();
             var assignmentToMigrate = Create.Entity.Assignment(id: migratedAssignmentId,
                 publicKey: Id.g7,
                 quantity: migratedAssignmentQuantity,
                 questionnaireIdentity: migrateFrom);
 
-            assignmentsStorage.Store(assignmentToMigrate, assignmentToMigrate.PublicKey.FormatGuid());
+            assignmentsStorage.Store(assignmentToMigrate, assignmentToMigrate.PublicKey);
             var importService = Mock.Of<IPreloadedDataVerifier>(s =>
                 s.VerifyWithInterviewTree(It.IsAny<List<InterviewAnswer>>(), It.IsAny<Guid?>(), It.IsAny<IQuestionnaire>()) ==
                 new InterviewImportError("Some code", "Generic error"));
@@ -87,7 +87,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             service.Upgrade(new Guid(), Guid.NewGuid(), migrateFrom, migrateTo, CancellationToken.None);
 
             // Assert
-            Assignment oldAssignment = assignmentsStorage.GetById(Id.g7.FormatGuid());
+            Assignment oldAssignment = assignmentsStorage.GetById(Id.g7);
             Assert.That(oldAssignment, Has.Property(nameof(oldAssignment.Archived)).EqualTo(false));
             Assert.That(oldAssignment, Has.Property(nameof(oldAssignment.QuestionnaireId)).EqualTo(migrateFrom));
 
@@ -103,14 +103,14 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var migratedAssignmentId = 45;
             var migratedAssignmentQuantity = 3;
 
-            var assignmentsStorage = new InMemoryReadSideRepositoryAccessor<Assignment>();
+            var assignmentsStorage = new InMemoryReadSideRepositoryAccessor<Assignment, Guid>();
             var assignmentToMigrate = Create.Entity.Assignment(id: migratedAssignmentId,
                 publicKey: Id.g7,
                 quantity: migratedAssignmentQuantity,
                 questionnaireIdentity: migrateFrom);
             assignmentToMigrate.InterviewSummaries.Add(Create.Entity.InterviewSummary());
 
-            assignmentsStorage.Store(assignmentToMigrate, Id.g7.FormatGuid());
+            assignmentsStorage.Store(assignmentToMigrate, Id.g7);
 
             var questionnaires = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(migrateTo.QuestionnaireId,
                 questionnaireVersion: migrateTo.Version
@@ -121,13 +121,13 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 {
                     var c = (CreateAssignment) commandArgs;
                     var assignment = Create.Entity.Assignment(publicKey: c.AssignmentId, id: c.Id, quantity: c.Quantity, questionnaireIdentity: c.QuestionnaireId);
-                    assignmentsStorage.Store(assignment, c.AssignmentId.FormatGuid());
+                    assignmentsStorage.Store(assignment, c.AssignmentId);
                 });
             commandService.Setup(cs => cs.Execute(It.IsAny<ArchiveAssignment>(), null))
                 .Callback<ICommand, string>((commandArgs, origin) =>
                 {
                     var c = (ArchiveAssignment) commandArgs;
-                    assignmentsStorage.GetById(c.AssignmentId.FormatGuid()).Archived = true;
+                    assignmentsStorage.GetById(c.AssignmentId).Archived = true;
                 });
             var assignmentsService = Create.Service.AssignmentsService(assignmentsStorage);
             var service = Create.Service.AssignmentsUpgrader(assignments: assignmentsService, questionnaireStorage: questionnaires,
@@ -137,7 +137,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             service.Upgrade(new Guid(), Guid.NewGuid(), migrateFrom, migrateTo, CancellationToken.None);
 
             // Assert
-            Assignment oldAssignment = assignmentsStorage.GetById(Id.g7.FormatGuid());
+            Assignment oldAssignment = assignmentsStorage.GetById(Id.g7);
             Assert.That(oldAssignment, Has.Property(nameof(oldAssignment.Archived)).EqualTo(true), "Existing assignment on old questionnaire should be archived");
             Assert.That(oldAssignment, Has.Property(nameof(oldAssignment.QuestionnaireId)).EqualTo(migrateFrom));
 
@@ -156,7 +156,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var migratedAssignmentId = 45;
             var migratedAssignmentQuantity = quantity;
 
-            var assignmentsStorage = new InMemoryReadSideRepositoryAccessor<Assignment>();
+            var assignmentsStorage = new InMemoryReadSideRepositoryAccessor<Assignment, Guid>();
             var assignmentToMigrate = Create.Entity.Assignment(id: migratedAssignmentId,
                 quantity: migratedAssignmentQuantity,
                 questionnaireIdentity: migrateFrom);
@@ -179,7 +179,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             };
             assignmentToMigrate.IsAudioRecordingEnabled = true;
 
-            assignmentsStorage.Store(assignmentToMigrate, assignmentToMigrate.PublicKey.FormatGuid());
+            assignmentsStorage.Store(assignmentToMigrate, assignmentToMigrate.PublicKey);
 
             var questionnaires = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(migrateTo.QuestionnaireId,
                 questionnaireVersion: migrateTo.Version,
@@ -204,13 +204,13 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                         isAudioRecordingEnabled: c.IsAudioRecordingEnabled,
                         identifyingAnswers: assignmentToMigrate.IdentifyingData.ToList()
                         );
-                    assignmentsStorage.Store(assignment, c.AssignmentId.FormatGuid());
+                    assignmentsStorage.Store(assignment, c.AssignmentId);
                 });
             commandService.Setup(cs => cs.Execute(It.IsAny<ArchiveAssignment>(), null))
                 .Callback<ICommand, string>((commandArgs, origin) =>
                 {
                     var c = (ArchiveAssignment)commandArgs;
-                    assignmentsStorage.GetById(c.AssignmentId.FormatGuid()).Archived = true;
+                    assignmentsStorage.GetById(c.AssignmentId).Archived = true;
                 });
 
 
@@ -222,7 +222,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             service.Upgrade(new Guid(), Guid.NewGuid(), migrateFrom, migrateTo, CancellationToken.None);
 
             // Assert
-            Assignment oldAssignment = assignmentsStorage.GetById(assignmentToMigrate.PublicKey.FormatGuid());
+            Assignment oldAssignment = assignmentsStorage.GetById(assignmentToMigrate.PublicKey);
             Assert.That(oldAssignment, Has.Property(nameof(oldAssignment.Archived)).EqualTo(true), "Existing assignment on old questionnaire should be archived");
             Assert.That(oldAssignment, Has.Property(nameof(oldAssignment.QuestionnaireId)).EqualTo(migrateFrom));
 
@@ -243,9 +243,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var migrateTo = Create.Entity.QuestionnaireIdentity(Id.g2, 2);
             var assignmentId = 45;
 
-            var assignmentsStorage = new InMemoryReadSideRepositoryAccessor<Assignment>();
+            var assignmentsStorage = new InMemoryReadSideRepositoryAccessor<Assignment, Guid>();
             assignmentsStorage.Store(Create.Entity.Assignment(id: assignmentId, publicKey: Id.g7, quantity: 0, questionnaireIdentity: migrateFrom),
-                Id.g7.FormatGuid());
+                Id.g7);
 
             var assignmentsService = Create.Service.AssignmentsService(assignmentsStorage);
             var service = Create.Service.AssignmentsUpgrader(assignments: assignmentsService);
@@ -254,7 +254,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             service.Upgrade(new Guid(), Guid.NewGuid(), migrateFrom, migrateTo, CancellationToken.None);
 
             // Assert
-            Assignment oldAssignment = assignmentsStorage.GetById(Id.g7.FormatGuid());
+            Assignment oldAssignment = assignmentsStorage.GetById(Id.g7);
             Assert.That(oldAssignment, Has.Property(nameof(oldAssignment.Archived)).EqualTo(false));
 
             var newAssignment = assignmentsStorage.Query(_ => _.FirstOrDefault(x => x.Id != assignmentId));
@@ -268,9 +268,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var migrateTo = Create.Entity.QuestionnaireIdentity(Id.g2, 2);
 
             var assignmentId = 45;
-            var assignmentsStorage = new InMemoryReadSideRepositoryAccessor<Assignment>();
+            var assignmentsStorage = new InMemoryReadSideRepositoryAccessor<Assignment, Guid>();
             assignmentsStorage.Store(Create.Entity.Assignment(id: assignmentId, publicKey: Id.g7, quantity: 0, questionnaireIdentity: migrateFrom),
-                Id.g7.FormatGuid());
+                Id.g7);
 
             var upgradeServiceMock = new Mock<IAssignmentsUpgradeService>();
 

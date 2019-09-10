@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         private readonly IPlainStorageAccessor<AssignmentsImportProcess> importAssignmentsProcessRepository;
         private readonly IPlainStorageAccessor<AssignmentToImport> importAssignmentsRepository;
         private readonly IInterviewCreatorFromAssignment interviewCreatorFromAssignment;
-        private readonly IQueryableReadSideRepositoryReader<Assignment> assignmentsStorage;
+        private readonly IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsStorage;
         private readonly IAssignmentsImportFileConverter assignmentsImportFileConverter;
         private readonly IAssignmentFactory assignmentFactory;
         private readonly IInvitationService invitationService;
@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             IPlainStorageAccessor<AssignmentsImportProcess> importAssignmentsProcessRepository,
             IPlainStorageAccessor<AssignmentToImport> importAssignmentsRepository,
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment,
-            IQueryableReadSideRepositoryReader<Assignment> assignmentsStorage,
+            IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsStorage,
             IAssignmentsImportFileConverter assignmentsImportFileConverter,
             IAssignmentFactory assignmentFactory,
             IInvitationService invitationService, 

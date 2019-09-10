@@ -16,11 +16,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
     internal class AssignmentsService : IAssignmentsService
     {
-        private readonly IQueryableReadSideRepositoryReader<Assignment> assignmentsAccessor;
+        private readonly IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsAccessor;
         private readonly IInterviewAnswerSerializer answerSerializer;
 
         public AssignmentsService(
-            IQueryableReadSideRepositoryReader<Assignment> assignmentsAccessor,
+            IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsAccessor,
             IInterviewAnswerSerializer answerSerializer)
         {
             this.assignmentsAccessor = assignmentsAccessor;
@@ -92,8 +92,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public int GetNextDisplayId()
         {
-            var maxId = this.assignmentsAccessor.Query(_ => _.Max(a => a.Id));
-            return maxId + 1;
+            var maxId = this.assignmentsAccessor.Query(_ => _.Max(a => (int?)a.Id));
+            return maxId ?? 0 + 1;
         }
 
         public bool DoesExistPasswordInDb(QuestionnaireIdentity questionnaireIdentity, string password)

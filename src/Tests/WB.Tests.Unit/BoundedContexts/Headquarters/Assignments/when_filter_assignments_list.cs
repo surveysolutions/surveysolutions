@@ -34,12 +34,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         {
             var fixture = NewFixture();
 
-            fixture.Register<IQueryableReadSideRepositoryReader<Assignment>>(() => new InMemoryReadSideRepositoryAccessor<Assignment>(
-                new Dictionary<string, Assignment>
+            fixture.Register<IQueryableReadSideRepositoryReader<Assignment, Guid>>(() => new InMemoryReadSideRepositoryAccessor<Assignment, Guid>(
+                new Dictionary<Guid, Assignment>
                 {
-                    { Id.g1.FormatGuid(), Create.Entity.Assignment(1, Create.Entity.QuestionnaireIdentity(Id.gA, 1))},
-                    { Id.g2.FormatGuid(), Create.Entity.Assignment(2, Create.Entity.QuestionnaireIdentity(Id.gB, 1))},
-                    { Id.g3.FormatGuid(), Create.Entity.Assignment(3, Create.Entity.QuestionnaireIdentity(Id.gA, 2), 
+                    { Id.g1, Create.Entity.Assignment(1, Create.Entity.QuestionnaireIdentity(Id.gA, 1))},
+                    { Id.g2, Create.Entity.Assignment(2, Create.Entity.QuestionnaireIdentity(Id.gB, 1))},
+                    { Id.g3, Create.Entity.Assignment(3, Create.Entity.QuestionnaireIdentity(Id.gA, 2), 
                             updatedAt: DateTime.UtcNow.AddDays(1)) }
                 }
             ));
@@ -60,12 +60,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         {
             var fixture = NewFixture();
 
-            fixture.Register<IQueryableReadSideRepositoryReader<Assignment>>(() => new InMemoryReadSideRepositoryAccessor<Assignment>(
-                new Dictionary<string, Assignment>
+            fixture.Register<IQueryableReadSideRepositoryReader<Assignment, Guid>>(() => new InMemoryReadSideRepositoryAccessor<Assignment, Guid>(
+                new Dictionary<Guid, Assignment>
                 {
-                    { Id.g1.FormatGuid(), Create.Entity.Assignment(1, Create.Entity.QuestionnaireIdentity(Id.gA, 1), questionnaireTitle: "Aaaaa")},
-                    { Id.g2.FormatGuid(), Create.Entity.Assignment(2, Create.Entity.QuestionnaireIdentity(Id.gB, 1), questionnaireTitle: "CCCCCC")},
-                    { Id.g3.FormatGuid(), Create.Entity.Assignment(3, Create.Entity.QuestionnaireIdentity(Id.gA, 2), questionnaireTitle: "Asterix")}
+                    { Id.g1, Create.Entity.Assignment(1, Create.Entity.QuestionnaireIdentity(Id.gA, 1), questionnaireTitle: "Aaaaa")},
+                    { Id.g2, Create.Entity.Assignment(2, Create.Entity.QuestionnaireIdentity(Id.gB, 1), questionnaireTitle: "CCCCCC")},
+                    { Id.g3, Create.Entity.Assignment(3, Create.Entity.QuestionnaireIdentity(Id.gA, 2), questionnaireTitle: "Asterix")}
                 }
             ));
 
@@ -90,12 +90,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var assignment = Create.Entity.Assignment(1);
             assignment.ReceivedByTabletAtUtc = DateTime.UtcNow;
 
-            fixture.Register<IQueryableReadSideRepositoryReader<Assignment>>(() => 
-                new InMemoryReadSideRepositoryAccessor<Assignment>(
-                    new Dictionary<string, Assignment>
+            fixture.Register<IQueryableReadSideRepositoryReader<Assignment, Guid>>(() => 
+                new InMemoryReadSideRepositoryAccessor<Assignment, Guid>(
+                    new Dictionary<Guid, Assignment>
                     {
-                        {Id.g1.FormatGuid(), assignment},
-                        {Id.g2.FormatGuid(), Create.Entity.Assignment(2)}
+                        {Id.g1, assignment},
+                        {Id.g2, Create.Entity.Assignment(2)}
                     }
             ));
 

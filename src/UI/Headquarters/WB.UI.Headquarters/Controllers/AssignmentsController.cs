@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
@@ -30,13 +31,8 @@ namespace WB.UI.Headquarters.Controllers
 
         public AssignmentsController(ICommandService commandService,
             ILogger logger,
-            IStatefulInterviewRepository interviews,
-            IQuestionnaireStorage questionnaireStorage,
             IAuthorizedUser currentUser, 
-            IQueryableReadSideRepositoryReader<Assignment> assignmentsStorage, 
-            IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory, 
-            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires, 
-            IInvitationService invitationService)
+            IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory)
             : base(commandService, logger)
         {
             this.currentUser = currentUser;
