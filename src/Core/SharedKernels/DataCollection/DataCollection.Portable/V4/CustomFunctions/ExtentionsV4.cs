@@ -11,40 +11,42 @@ namespace WB.Core.SharedKernels.DataCollection.V4.CustomFunctions
             return r.NextDouble();
         }
 
-        public static int GenerateHash(Guid id)
+        private static int GenerateHash(Guid id)
         {
-            //hash 
+            //hash from .net
             //return this._a ^ (this._b << 16 | (ushort)this._c) ^ (this._f << 24 | this._k);
 
-            //return this._a ^ *Unsafe.Add<int>(ref this._a, 1) ^ *Unsafe.Add<int>(ref this._a, 2) ^ *Unsafe.Add<int>(ref this._a, 3);
+            //portable
+            //return _a ^ Unsafe.Add(ref _a, 1) ^ Unsafe.Add(ref _a, 2) ^ Unsafe.Add(ref _a, 3);
 
             var b = id.ToByteArray();
 
+            return CalculateHashAsPortableNet(b);
+        }
+
+        private static int CalculateHashAsNet(byte[] b)
+        {
             int _a = (int)b[3] << 24 | (int)b[2] << 16 | (int)b[1] << 8 | (int)b[0];
+
             short _b = (short)((int)b[5] << 8 | (int)b[4]);
             short _c = (short)((int)b[7] << 8 | (int)b[6]);
-            //var _d = b[8];
-            //var _e = b[9];
             var _f = b[10];
-            //var _g = b[11];
-            //var _h = b[12];
-            //var _i = b[13];
-            //var _j = b[14];
             var _k = b[15];
 
-
             int result = _a ^ (_b | _c) ^ (_f | _k);
-
-            //int result = _a ^ *Unsafe.Add<int>(ref _a, 1) ^ *Unsafe.Add<int>(ref _a, 2) ^ *Unsafe.Add<int>(ref _a, 3);
             return result;
         }
 
-        /*internal static class Unsafe
+        private static int CalculateHashAsPortableNet(byte[] b)
         {
-            public unsafe static T* Add<T>(ref T source, int elementOffset)
+            int[] ints = new int[4];
+            for (int i = 0; i < 4; i++)
             {
-                return ref source + (IntPtr) elementOffset * (IntPtr) sizeof(T);
+                ints[i] = BitConverter.ToInt32(b, i * 4);
             }
-        }*/
+
+            var result = ints[0] ^ ints[1] ^ ints[2] ^ ints[3];
+            return result;
+        }
     }
 }
