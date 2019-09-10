@@ -22,7 +22,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             this.ProtectedVariables = new List<string>();
         }
 
-        internal Assignment(QuestionnaireIdentity questionnaireId,
+        internal Assignment(
+            Guid publicKey,
+            int id,
+            QuestionnaireIdentity questionnaireId,
             Guid responsibleId, 
             int? quantity,
             bool isAudioRecordingEnabled,
@@ -30,6 +33,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             string password,
             bool? webMode) : this()
         {
+            this.PublicKey = publicKey;
+            this.Id = id;
             this.ResponsibleId = responsibleId;
             this.Quantity = quantity;
             this.QuestionnaireId = questionnaireId;
