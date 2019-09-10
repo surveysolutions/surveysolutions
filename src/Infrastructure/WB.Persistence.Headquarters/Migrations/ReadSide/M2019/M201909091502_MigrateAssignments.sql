@@ -13,7 +13,7 @@ SELECT NEWID(), -- id
 	publickey,  -- eventsourceid
 	'{
 		"id": ' + id + ',
-		"userId": "2cd2f813-0994-4d04-b0b6-d040f35b473b",
+		"userId": "00000000-0000-0000-0000-000000000001", -- admin id for first user on site
 		"originDate": "' + createdatutc + '",
 		"assignmentId": ' + id + ',
 		"creationTime": "' + createdatutc + '",
@@ -22,5 +22,5 @@ SELECT NEWID(), -- id
 		"isAudioRecordingEnabled": ' + isaudiorecordingenabled + '
 	}',         -- value
 	1,          -- eventsequence
-	AssignmentCreated --eventtype
+	'AssignmentCreated' --eventtype
 FROM readside.assignments;

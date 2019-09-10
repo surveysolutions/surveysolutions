@@ -41,8 +41,8 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Assignment
             Email = email;
             Password = password;
             WebMode = webMode;
-            Answers = answers;
-            ProtectedVariables = protectedVariables;
+            Answers = answers ?? new List<InterviewAnswer>();
+            ProtectedVariables = protectedVariables ?? new List<string>();
         }
     }
 }
