@@ -10,7 +10,6 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Assignment
         public int Id { get; }
         public Guid QuestionnaireId { get; }
         public long QuestionnaireVersion { get; }
-        public QuestionnaireIdentity QuestionnaireIdentity => new QuestionnaireIdentity(QuestionnaireId, QuestionnaireVersion);
         public Guid ResponsibleId { get; }
         public int? Quantity { get; }
         public bool IsAudioRecordingEnabled { get; }

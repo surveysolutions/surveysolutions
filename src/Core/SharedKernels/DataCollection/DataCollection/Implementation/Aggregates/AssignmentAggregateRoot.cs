@@ -46,7 +46,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.Id = @event.Id;
             this.ResponsibleId = @event.ResponsibleId;
             this.Quantity = @event.Quantity;
-            this.QuestionnaireId = @event.QuestionnaireIdentity;
+            this.QuestionnaireId = new QuestionnaireIdentity(@event.QuestionnaireId, @event.QuestionnaireVersion);
             this.IsAudioRecordingEnabled = @event.IsAudioRecordingEnabled;
             this.Email = @event.Email;
             this.Password = @event.Password;
