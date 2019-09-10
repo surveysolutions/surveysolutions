@@ -234,6 +234,8 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.Bind<IExportFactory, ExportFactory>();
 
+            registry.RegisterDenormalizer<AssignmentDenormalizer>();
+
             registry.RegisterDenormalizer<InterviewSummaryCompositeDenormalizer>();
             registry.RegisterDenormalizer<InterviewLifecycleEventHandler>();
             registry.RegisterDenormalizer<CumulativeChartDenormalizer>();
@@ -323,6 +325,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             var registry = serviceLocator.GetInstance<IDenormalizerRegistry>();
             registry.RegisterFunctional<InterviewSummaryCompositeDenormalizer>();
             registry.RegisterFunctional<CumulativeChartDenormalizer>();
+            registry.RegisterFunctional<AssignmentDenormalizer>();
 
             CommandRegistry
                 .Setup<Questionnaire>()
