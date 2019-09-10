@@ -379,9 +379,12 @@
     <value>{{count}} selected assignments are going to be closed. Size will be set to currently collected interviews count.</value>
   </data>
   <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
-    <value>Selected assignment '{{id}}' current size {{quantity}} will changed to {{collected}}</value>
+    <value>Size '{{quantity}}' of the selected assignment {{id}}  will be changed to {{collected}} (number of currently collected interviews)</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Close</value>
+  </data>
+  <data name="AssignmentCloseWebMode" xml:space="preserve">
+    <value>Assignment {{id}} cannot be closed since it has web mode enabled</value>
   </data>
 </root>

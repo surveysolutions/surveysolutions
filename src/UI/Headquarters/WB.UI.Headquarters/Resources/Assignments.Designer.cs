@@ -106,6 +106,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assignment {{id}} cannot be closed since it has web mode enabled.
+        /// </summary>
+        public static string AssignmentCloseWebMode {
+            get {
+                return ResourceManager.GetString("AssignmentCloseWebMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Assignment ID.
         /// </summary>
         public static string AssignmentId {
@@ -547,7 +556,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Selected assignment &apos;{{id}}&apos; current size {{quantity}} will changed to {{collected}}.
+        ///   Looks up a localized string similar to Size &apos;{{quantity}}&apos; of the selected assignment {{id}}  will be changed to {{collected}} (number of currently collected interviews).
         /// </summary>
         public static string SingleAssignmentCloseConfirm {
             get {
