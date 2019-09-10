@@ -42,13 +42,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         private readonly IInterviewTreeBuilder interviewTreeBuilder;
         private readonly IUserViewFactory userViewFactory;
         private readonly IQuestionOptionsRepository questionOptionsRepository;
-        private readonly IQueryableReadSideRepositoryReader<Assignment> assignmentsRepository;
+        private readonly IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsRepository;
 
         public ImportDataVerifier(IFileSystemAccessor fileSystem,
             IInterviewTreeBuilder interviewTreeBuilder,
             IUserViewFactory userViewFactory,
             IQuestionOptionsRepository questionOptionsRepository,
-            IQueryableReadSideRepositoryReader<Assignment> assignmentsRepository)
+            IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsRepository)
         {
             this.fileSystem = fileSystem;
             this.interviewTreeBuilder = interviewTreeBuilder;
