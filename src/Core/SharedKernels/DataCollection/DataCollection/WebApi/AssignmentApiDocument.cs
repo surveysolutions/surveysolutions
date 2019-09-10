@@ -26,6 +26,7 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
 
         public DateTime CreatedAtUtc { get; set; }
         public List<string> ProtectedVariables { get; set; }
+        public string Comments { get; set; }
 
         public class InterviewSerializedAnswer
         {
