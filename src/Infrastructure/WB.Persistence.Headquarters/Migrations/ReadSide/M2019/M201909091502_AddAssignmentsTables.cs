@@ -1,47 +1,66 @@
-﻿using FluentMigrator;
+﻿using System.Data;
+using FluentMigrator;
 
-namespace WB.Persistence.Headquarters.Migrations.PlainStore
+namespace WB.Persistence.Headquarters.Migrations.ReadSide
 {
     [Migration(201909091502)]
     public class M201909091502_AddAssignmentsTables : Migration
     {
-        const string assignmentsprefilledanswers = "assignmentsprefilledanswers";
+        const string assignmentsidentifyinganswers = "assignmentsidentifyinganswers";
         const string assignments = "assignments";
 
         public override void Up()
         {
             Create.Table(assignments)
-                .WithColumn("id").AsInt32().PrimaryKey().Identity()
+                .WithColumn("publickey").AsGuid().PrimaryKey().Identity()
+                .WithColumn("id").AsInt32().Unique()
                 .WithColumn("responsibleid").AsGuid().NotNullable()
-                .WithColumn("capacity").AsInt32().Nullable()
+                .WithColumn("quantity").AsInt32().Nullable()
                 .WithColumn("archived").AsBoolean().NotNullable()
                 .WithColumn("createdatutc").AsDateTime().NotNullable()
                 .WithColumn("updatedatutc").AsDateTime().NotNullable()
                 .WithColumn("questionnaireid").AsGuid().NotNullable()
-                .WithColumn("questionnaireversion").AsInt32().NotNullable();
+                .WithColumn("questionnaireversion").AsInt32().NotNullable()
+                .WithColumn("questionnaire").AsString(255).Nullable()
+                .WithColumn("answers").AsCustom("jsonb").Nullable()
+                .WithColumn("protectedvariables").AsCustom("jsonb").Nullable()
+                .WithColumn("receivedbytabletatutc").AsDateTime().Nullable()
+                .WithColumn("isaudiorecordingenabled").AsBoolean().NotNullable().WithDefaultValue(false)
+                .WithColumn("email").AsString().Nullable()
+                .WithColumn("password").AsString().Nullable()
+                .WithColumn("webmode").AsBoolean().Nullable();
 
-            Create.Table(assignmentsprefilledanswers)
+            Create.Table(assignmentsidentifyinganswers)
                 .WithColumn("assignmentid").AsInt32().NotNullable()
                 .WithColumn("position").AsInt32().NotNullable()
                 .WithColumn("questionid").AsGuid().NotNullable()
-                .WithColumn("answer").AsString().Nullable();
+                .WithColumn("answer").AsString().Nullable()
+                .WithColumn("answerasstring").AsString().Nullable()
+                .WithColumn("rostervector").AsCustom("integer[]").NotNullable();
 
-            Create.Index("assignmentsprefilledanswers_assignments")
-                .OnTable(assignmentsprefilledanswers)
+            Create.Index(assignmentsidentifyinganswers + "_" + assignments)
+                .OnTable(assignmentsidentifyinganswers)
                 .OnColumn("assignmentid")
                 .Ascending();
 
-            MigrateExistedAssignments();
+            Create.Index().OnTable(assignments).OnColumn("responsibleid");
+
+            Create.ForeignKey(assignments + "_" + assignmentsidentifyinganswers)
+                .FromTable(assignmentsidentifyinganswers).ForeignColumn("assignmentid")
+                .ToTable(assignments).PrimaryColumn("id")
+                .OnDelete(Rule.Cascade);
+
+            //MigrateExistedAssignments();
         }
 
         private void MigrateExistedAssignments()
         {
-            Execute.EmbeddedScript(@"WB.Persistence.Headquarters.Migrations.PlainStore.M2019.M201909091502_MigrateAssignments.sql");
+            Execute.EmbeddedScript(@"WB.Persistence.Headquarters.Migrations.ReadSide.M2019.M201909091502_MigrateAssignments.sql");
         }
 
         public override void Down()
         {
-            Delete.Table(assignmentsprefilledanswers);
+            Delete.Table(assignmentsidentifyinganswers);
             Delete.Table(assignments);
         }
     }
