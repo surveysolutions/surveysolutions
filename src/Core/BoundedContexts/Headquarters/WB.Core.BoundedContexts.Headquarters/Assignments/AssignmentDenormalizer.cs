@@ -9,6 +9,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Assignment;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
@@ -38,7 +39,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             state = new Assignment(
                 @event.EventSourceId,
                 @event.Payload.Id,
-                @event.Payload.QuestionnaireIdentity, 
+                new QuestionnaireIdentity(@event.Payload.QuestionnaireId, @event.Payload.QuestionnaireVersion), 
                 @event.Payload.ResponsibleId,
                 @event.Payload.Quantity,
                 @event.Payload.IsAudioRecordingEnabled,
