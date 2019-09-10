@@ -380,4 +380,7 @@
   <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
     <value>Для задания '{{id}}' текущий размер {{quantity}} будет установлен в {{collected}}</value>
   </data>
+  <data name="AssignmentCloseWebMode" xml:space="preserve">
+    <value>Задание {{id}} не может быть закрыто, так как включён веб режим</value>
+  </data>
 </root>

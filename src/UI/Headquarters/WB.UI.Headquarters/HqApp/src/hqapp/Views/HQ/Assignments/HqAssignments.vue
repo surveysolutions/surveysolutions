@@ -124,6 +124,7 @@
             <div slot="actions">
                 <button type="button"
                         class="btn btn-primary"
+                        :disabled="isWebModeAssignmentSelected"
                         @click="close">{{ $t("Assignments.Close") }}</button>
                 <button type="button"
                         class="btn btn-link"
@@ -196,6 +197,9 @@
 </template>
 
 <script>
+
+import * as toastr from "toastr";
+
 export default {
     data() {
         return {
@@ -219,7 +223,19 @@ export default {
     },
 
     computed: {
+        isWebModeAssignmentSelected() {
+            if (this.selectedRows.length !== 1) return false
+
+            const data = this.$refs.table.table.rows({selected: true}).data()
+            return data[0].webMode
+        },
         singleCloseMessage() {
+            if(this.isWebModeAssignmentSelected) {
+                return this.$t("Assignments.AssignmentCloseWebMode", {
+                    id: this.selectedRows[0]
+                })
+            }
+
             const dataRow = this.$refs.table.table.rows({selected: true}).data()[0]
             const result = this.$t("Assignments.SingleAssignmentCloseConfirm", {
                 id: this.selectedRows[0],
@@ -578,7 +594,15 @@ export default {
             const self = this
             await Promise.all(_.map(self.selectedRows, row => {
                 const url = `${self.config.api.assignmentsApi}/${row}/close`
-                return self.$http.post(url)
+                return self.$http.post(url).catch(error => {
+                    if(error.isAxiosError && error.response.status === 409) {
+                        const msg = this.$t("Assignments.AssignmentCloseWebMode", {
+                            id: row
+                        })
+
+                        toastr.warning(msg);
+                    }
+                })
             }))
             this.$refs.closeModal.hide()
             this.reloadTable()
