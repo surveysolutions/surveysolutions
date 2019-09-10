@@ -1224,6 +1224,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Leave comment for a new responsible.
+        /// </summary>
+        public static string Interviewer_Reassign_Comment {
+            get {
+                return ResourceManager.GetString("Interviewer_Reassign_Comment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Interviewer_RelinkDevice_Cancel {
