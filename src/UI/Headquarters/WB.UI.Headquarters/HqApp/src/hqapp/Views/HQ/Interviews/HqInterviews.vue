@@ -1129,7 +1129,7 @@ export default {
         self.loadQuestionnaireId((questionnaireId, version) => {
             if (questionnaireId != undefined) {
                 self.questionnaireId = self.$config.model.questionnaires.find(q => q.key == questionnaireId);
-                if (version != undefined)
+                if (version != undefined && self.questionnaireId != undefined)
                 {
                     self.questionnaireVersion = self.questionnaireId.versions.find(v => v.key == version);
                 }
