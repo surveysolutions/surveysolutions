@@ -13,7 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
-    public class AssignmentDenormalizer : AbstractFunctionalEventHandler<Assignment, IReadSideStorage<Assignment>>,
+    public class AssignmentDenormalizer : AbstractFunctionalEventHandlerOnGuid<Assignment, IReadSideRepositoryWriter<Assignment, Guid>>,
         IUpdateHandler<Assignment, AssignmentCreated>,
         IUpdateHandler<Assignment, AssignmentArchived>,
         IUpdateHandler<Assignment, AssignmentUnarchived>,
@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
     {
         private readonly IQuestionnaireStorage questionnaireStorage;
 
-        public AssignmentDenormalizer(IReadSideStorage<Assignment> readSideStorage,
+        public AssignmentDenormalizer(IReadSideRepositoryWriter<Assignment, Guid> readSideStorage,
             IQuestionnaireStorage questionnaireStorage)
             : base(readSideStorage)
         {
@@ -36,6 +36,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public Assignment Update(Assignment state, IPublishedEvent<AssignmentCreated> @event)
         {
             state = new Assignment(
+                @event.EventSourceId,
+                @event.Payload.Id,
                 @event.Payload.QuestionnaireIdentity, 
                 @event.Payload.ResponsibleId,
                 @event.Payload.Quantity,
@@ -44,21 +46,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 @event.Payload.Password,
                 @event.Payload.WebMode);
 
-            state.ProtectedVariables = @event.Payload.ProtectedVariables.ToList();
-
             var questionnaire = questionnaireStorage.GetQuestionnaire(state.QuestionnaireId, null);
-            var answers = @event.Payload.Answers;
-            var identifyingQuestionIds = Enumerable.ToHashSet(questionnaire.GetPrefilledQuestions());
+            var identifyingQuestionIds = questionnaire.GetPrefilledQuestions().ToHashSet();
 
-            var identifyingAnswers = answers
-                .Where(x => identifyingQuestionIds.Contains(x.Identity.Id)).Select(a =>
-                    IdentifyingAnswer.Create(state, questionnaire, a.Answer.ToString(), a.Identity))
+            var identifyingAnswers = @event.Payload.Answers
+                .Where(x => identifyingQuestionIds.Contains(x.Identity.Id))
+                .Select(a => IdentifyingAnswer.Create(state, questionnaire, a.Answer.ToString(), a.Identity))
                 .ToList();
 
             state.IdentifyingData = identifyingAnswers;
-            state.Answers = answers;
-            state.UpdatedAtUtc = @event.Payload.OriginDate.UtcDateTime;
+            state.Answers = @event.Payload.Answers;
+            state.ProtectedVariables = @event.Payload.ProtectedVariables.ToList();
 
+            state.CreatedAtUtc = @event.Payload.OriginDate.UtcDateTime;
+            state.UpdatedAtUtc = @event.Payload.OriginDate.UtcDateTime;
 
             return state;
         }

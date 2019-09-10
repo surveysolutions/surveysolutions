@@ -12,7 +12,7 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
         public override void Up()
         {
             Create.Table(assignments)
-                .WithColumn("publickey").AsGuid().PrimaryKey().Identity()
+                .WithColumn("publickey").AsGuid().PrimaryKey().Indexed()
                 .WithColumn("id").AsInt32().Unique()
                 .WithColumn("responsibleid").AsGuid().NotNullable()
                 .WithColumn("quantity").AsInt32().Nullable()
@@ -31,7 +31,7 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
                 .WithColumn("webmode").AsBoolean().Nullable();
 
             Create.Table(assignmentsidentifyinganswers)
-                .WithColumn("assignmentid").AsInt32().NotNullable()
+                .WithColumn("assignmentid").AsGuid().NotNullable()
                 .WithColumn("position").AsInt32().NotNullable()
                 .WithColumn("questionid").AsGuid().NotNullable()
                 .WithColumn("answer").AsString().Nullable()
@@ -47,7 +47,7 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
 
             Create.ForeignKey(assignments + "_" + assignmentsidentifyinganswers)
                 .FromTable(assignmentsidentifyinganswers).ForeignColumn("assignmentid")
-                .ToTable(assignments).PrimaryColumn("id")
+                .ToTable(assignments).PrimaryColumn("publickey")
                 .OnDelete(Rule.Cascade);
 
             //MigrateExistedAssignments();
