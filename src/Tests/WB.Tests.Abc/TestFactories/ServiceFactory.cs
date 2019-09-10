@@ -578,7 +578,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public IAssignmentsService AssignmentService(params Assignment[] assignments)
         {
-            var accessor = new TestInMemoryWriter<Assignment>();
+            var accessor = new TestInMemoryWriter<Assignment, Guid>();
             foreach (var assignment in assignments)
             {
                 accessor.Store(assignment, assignment.PublicKey);
@@ -713,12 +713,12 @@ namespace WB.Tests.Abc.TestFactories
             IInterviewTreeBuilder interviewTreeBuilder = null,
             IUserViewFactory userViewFactory = null,
             IQuestionOptionsRepository optionsRepository = null,
-            IQueryableReadSideRepositoryReader<Assignment> assignmentsRepository = null)
+            IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsRepository = null)
             => new ImportDataVerifier(fileSystem ?? new FileSystemIOAccessor(),
                 interviewTreeBuilder ?? Mock.Of<IInterviewTreeBuilder>(),
                 userViewFactory ?? Mock.Of<IUserViewFactory>(),
                 optionsRepository ?? Mock.Of<IQuestionOptionsRepository>(),
-                assignmentsRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<Assignment>>());
+                assignmentsRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<Assignment, Guid>>());
 
         public IAssignmentsUpgrader AssignmentsUpgrader(IPreloadedDataVerifier importService = null,
             IQuestionnaireStorage questionnaireStorage = null,
@@ -770,7 +770,7 @@ namespace WB.Tests.Abc.TestFactories
             IPlainStorageAccessor<AssignmentsImportProcess> importAssignmentsProcessRepository = null,
             IPlainStorageAccessor<AssignmentToImport> importAssignmentsRepository = null,
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment = null,
-            IQueryableReadSideRepositoryReader<Assignment> assignmentsStorage = null,
+            IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsStorage = null,
             IAssignmentsImportFileConverter assignmentsImportFileConverter = null,
             IInvitationService invitationService = null)
         {
@@ -788,7 +788,7 @@ namespace WB.Tests.Abc.TestFactories
                 importAssignmentsProcessRepository ?? Mock.Of<IPlainStorageAccessor<AssignmentsImportProcess>>(),
                 importAssignmentsRepository ?? Mock.Of<IPlainStorageAccessor<AssignmentToImport>>(),
                 interviewCreatorFromAssignment ?? Mock.Of<IInterviewCreatorFromAssignment>(),
-                assignmentsStorage ?? Mock.Of<IQueryableReadSideRepositoryReader<Assignment>>(),
+                assignmentsStorage ?? Mock.Of<IQueryableReadSideRepositoryReader<Assignment, Guid>>(),
                 assignmentsImportFileConverter ?? AssignmentsImportFileConverter(userViewFactory: userViewFactory),
                 Create.Service.AssignmentFactory(),
                 invitationService ?? Mock.Of<IInvitationService>(),
@@ -1151,11 +1151,11 @@ namespace WB.Tests.Abc.TestFactories
         }
 
         public AssignmentPasswordGenerator AssignmentPasswordGenerator(
-            IQueryableReadSideRepositoryReader<Assignment> assignments = null, 
+            IQueryableReadSideRepositoryReader<Assignment, Guid> assignments = null, 
             IPlainStorageAccessor<AssignmentToImport> importAssignments = null)
         {
             return new AssignmentPasswordGenerator(
-                assignments ?? new InMemoryReadSideRepositoryAccessor<Assignment>(),
+                assignments ?? new InMemoryReadSideRepositoryAccessor<Assignment, Guid>(),
                 importAssignments ?? new InMemoryPlainStorageAccessor<AssignmentToImport>());
         }
 
@@ -1208,7 +1208,7 @@ namespace WB.Tests.Abc.TestFactories
             return new AuditLogService(auditLogFactory, authorizedUser ?? Mock.Of<IAuthorizedUser>());
         }
 
-        public IAssignmentsService AssignmentsService(IQueryableReadSideRepositoryReader<Assignment> assignments,
+        public IAssignmentsService AssignmentsService(IQueryableReadSideRepositoryReader<Assignment, Guid> assignments,
             IInterviewAnswerSerializer interviewAnswerSerializer = null)
         {
             return new AssignmentsService(assignments, 

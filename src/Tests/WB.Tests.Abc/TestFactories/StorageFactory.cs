@@ -46,7 +46,8 @@ namespace WB.Tests.Abc.TestFactories
     public class StorageFactory
     {
         public IPlainStorageAccessor<TEntity> InMemoryPlainStorage<TEntity>() where TEntity : class => new InMemoryPlainStorageAccessor<TEntity>();
-        public TestInMemoryWriter<TEntity> InMemoryReadeSideStorage<TEntity>() where TEntity : class, IReadSideRepositoryEntity => new TestInMemoryWriter<TEntity>();
+        public TestInMemoryWriter<TEntity> InMemoryReadSideStorage<TEntity>() where TEntity : class, IReadSideRepositoryEntity => new TestInMemoryWriter<TEntity>();
+        public TestInMemoryWriter<TEntity, TKey> InMemoryReadSideStorage<TEntity, TKey>() where TEntity : class, IReadSideRepositoryEntity => new TestInMemoryWriter<TEntity, TKey>();
 
         public IUserViewFactory UserViewFactory(params HqUser[] users) => new UserViewFactory(
             this.UserRepository(users), NewMemoryCache());

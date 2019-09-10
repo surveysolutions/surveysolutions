@@ -46,7 +46,7 @@ namespace WB.UI.Headquarters.Controllers
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IWebInterviewConfigurator configurator,
             IWebInterviewConfigProvider webInterviewConfigProvider,
-            IQueryableReadSideRepositoryReader<Assignment> assignments,
+            IQueryableReadSideRepositoryReader<Assignment, Guid> assignments,
             IAssignmentsService assignmentsService,
             IWebInterviewNotificationService webInterviewNotificationService, 
             IInvitationService invitationService, 
