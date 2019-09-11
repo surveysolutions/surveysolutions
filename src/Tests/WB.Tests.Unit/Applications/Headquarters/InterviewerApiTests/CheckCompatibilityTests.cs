@@ -25,6 +25,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
     [TestOf(nameof(InterviewerApiController.CheckCompatibility))]
     public class CheckCompatibilityTests
     {
+        private const string InterviewerUserAgent = "org.worldbank.solutions.interviewer/{0} (QuestionnaireVersion/27.0.0)";
+
         [Test]
         public void when_user_is_linked_to_another_server_should_not_allow_to_synchronize()
         {
@@ -176,9 +178,11 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
         [TestCase("18.06.0.0 (build 0)", "18.06.0.0", HttpStatusCode.OK)]
         [TestCase("18.06.0.1 (build 0)", "18.06.0.0", HttpStatusCode.OK)]
         [TestCase("18.06.0.4 (build 0)", "18.06.0.4", HttpStatusCode.OK)]
+        [TestCase("19.08.0 (build 0)", "19.08.2 (build 25689)", HttpStatusCode.NotAcceptable)]
         public void when_set_setting_to_autoUpdateEnabled_to_false_should_return_correct_upgrade_result(
             string hqVersion, string appVersion, HttpStatusCode result)
         {
+            var interviewerUserAgent = string.Format(InterviewerUserAgent, appVersion);
             var productVersionObj = Mock.Of<IProductVersion>(x => x.ToString() == hqVersion);
 
             var deviceId = "device";
@@ -192,7 +196,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
                 productVersion: productVersionObj,
                 authorizedUser: authorizedUser,
                 interviewerSettings: interviewerSettingsStorage);
-            interviewerApiController.Request.Headers.UserAgent.Add(new ProductInfoHeaderValue("org.worldbank.solutions.interviewer", appVersion));;
+            interviewerApiController.Request.Headers.UserAgent.ParseAdd(interviewerUserAgent);
 
             // Act
             HttpResponseMessage httpResponseMessage = interviewerApiController.CheckCompatibility(deviceId, 7060);
@@ -205,9 +209,12 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
         [TestCase("18.06.0.0 (build 0)", "18.06.0.0", HttpStatusCode.OK)]
         [TestCase("18.06.0.1 (build 0)", "18.06.0.0", HttpStatusCode.UpgradeRequired)]
         [TestCase("18.06.0.4 (build 0)", "18.06.0.4", HttpStatusCode.OK)]
+        [TestCase("19.08.0 (build 0)", "19.08.2 (build 25689)", HttpStatusCode.NotAcceptable)]
         public void when_set_setting_autoUpdateEnabled_to_true_should_return_correct_upgrade_result(
             string hqVersion, string appVersion, HttpStatusCode result)
         {
+            var interviewerUserAgent = string.Format(InterviewerUserAgent, appVersion);
+
             var productVersionObj = Mock.Of<IProductVersion>(x => x.ToString() == hqVersion);
 
             var deviceId = "device";
@@ -221,13 +228,13 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
                 productVersion: productVersionObj,
                 authorizedUser: authorizedUser,
                 interviewerSettings: interviewerSettingsStorage);
-            interviewerApiController.Request.Headers.UserAgent.Add(new ProductInfoHeaderValue("org.worldbank.solutions.interviewer", appVersion)); ;
+
+            interviewerApiController.Request.Headers.UserAgent.ParseAdd(interviewerUserAgent);
 
             // Act
             HttpResponseMessage httpResponseMessage = interviewerApiController.CheckCompatibility(deviceId, 7060);
 
             Assert.That(httpResponseMessage.StatusCode, Is.EqualTo(result));
         }
-
     }
 }
