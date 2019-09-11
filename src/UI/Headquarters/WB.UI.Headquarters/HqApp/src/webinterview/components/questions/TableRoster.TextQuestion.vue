@@ -27,7 +27,7 @@
         }, 
         computed: {
             hasMask(){
-                return this.$me.mask!=null;
+                return this.$me.mask != null
             },
             noAnswerWatermark() {
                 return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') : 
@@ -65,9 +65,6 @@
                     }
                 })
             }
-        },
-        created() {
-
         },
         mounted() {
             Vue.nextTick(() => {
