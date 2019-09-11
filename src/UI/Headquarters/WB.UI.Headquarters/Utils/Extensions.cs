@@ -55,7 +55,7 @@ namespace WB.UI.Headquarters.Utils
         {
             foreach (var product in request.Headers?.UserAgent)
             {
-                if ((product.Product?.Name.Equals(productName, StringComparison.OrdinalIgnoreCase) ?? false)
+                if ((product.Product?.Name.StartsWith(productName, StringComparison.OrdinalIgnoreCase) ?? false)
                     && Version.TryParse(product.Product.Version, out Version version))
                 {
                     return version;
