@@ -50,7 +50,7 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
                 .ToTable(assignments).PrimaryColumn("publickey")
                 .OnDelete(Rule.Cascade);
 
-            //MigrateExistedAssignments();
+            MigrateExistedAssignments();
         }
 
         private void MigrateExistedAssignments()
