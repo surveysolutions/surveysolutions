@@ -55,8 +55,6 @@
                         return
                     }
 
-                    this.$me.answer = answer
-
                     if (this.$me.mask && !target.data("maskCompleted")) {
                         this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.TextRequired"))
                     }

@@ -70,8 +70,6 @@
                         return
                     }
                     
-                    this.$me.answer = answer
-
                     if (answer > 999999999999999 || answer < -999999999999999) {
                         this.markAnswerAsNotSavedWithMessage($t("WebInterviewUI.DecimalCannotParse"))
                         return
