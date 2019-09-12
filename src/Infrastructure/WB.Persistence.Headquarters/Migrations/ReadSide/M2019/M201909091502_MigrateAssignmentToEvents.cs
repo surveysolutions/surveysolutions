@@ -4,12 +4,27 @@ using FluentMigrator;
 namespace WB.Persistence.Headquarters.Migrations.ReadSide
 {
     [Migration(201909091502)]
-    public class M201909091502_AddAssignmentsTables : Migration
+    public class M201909091502_MigrateAssignmentToEvents : Migration
     {
         const string assignmentsidentifyinganswers = "assignmentsidentifyinganswers";
         const string assignments = "assignments";
 
         public override void Up()
+        {
+            CreateAssignmentTables();
+
+            MigrateExistedAssignments();
+
+            CreateSequenceForAssignmentId();
+        }
+
+        private void CreateSequenceForAssignmentId()
+        {
+            Execute.Sql("CREATE SEQUENCE plainstore.assignment_id_sequence; " +
+                        "SELECT setval('plainstore.assignment_id_sequence', COALESCE(max(id), 1)) FROM readside.assignments; ");
+        }
+
+        private void CreateAssignmentTables()
         {
             Create.Table(assignments)
                 .WithColumn("publickey").AsGuid().PrimaryKey().Indexed()
@@ -49,8 +64,6 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
                 .FromTable(assignmentsidentifyinganswers).ForeignColumn("assignmentid")
                 .ToTable(assignments).PrimaryColumn("publickey")
                 .OnDelete(Rule.Cascade);
-
-            MigrateExistedAssignments();
         }
 
         private void MigrateExistedAssignments()

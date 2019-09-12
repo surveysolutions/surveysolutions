@@ -283,10 +283,11 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IWebInterviewConfigProvider, WebInterviewConfigProvider>();
             
             registry.Bind<IDeviceSyncInfoRepository, DeviceSyncInfoRepository>();
+            registry.Bind<IAssignmentIdGenerator, AssignmentIdGenerator>();
             registry.Bind<IAssignmentViewFactory, AssignmentViewFactory>();
             registry.Bind<IAssignmentsService, AssignmentsService>();
             registry.Bind<IAssignmetnsDeletionService, AssignmetnsDeletionService>();
-            registry.Bind<ISystemLog, Services.Internal.SystemLog>();
+            registry.Bind<ISystemLog, SystemLog>();
             registry.Bind<IAuditLogReader, AuditLogReader>();
 
             registry.BindAsSingleton<IPauseResumeQueue, PauseResumeQueue>();

@@ -27,7 +27,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         bool HasAssignmentWithProtectedVariables(Guid responsibleId);
         bool HasAssignmentWithAudioRecordingEnabled(Guid responsible);
         bool HasAssignmentWithAudioRecordingEnabled(QuestionnaireIdentity questionnaireIdentity);
-        int GetNextDisplayId();
         bool DoesExistPasswordInDb(QuestionnaireIdentity questionnaireIdentity, string password);
         List<int> GetAllAssignmentIdsForMigrateToNewVersion(QuestionnaireIdentity questionnaireIdentity);
     }

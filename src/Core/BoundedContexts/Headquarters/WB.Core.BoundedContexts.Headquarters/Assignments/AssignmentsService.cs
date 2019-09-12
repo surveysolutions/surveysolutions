@@ -90,12 +90,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             return result;
         }
 
-        public int GetNextDisplayId()
-        {
-            var maxId = this.assignmentsAccessor.Query(_ => _.Max(a => (int?)a.Id));
-            return (maxId ?? 0) + 1;
-        }
-
         public bool DoesExistPasswordInDb(QuestionnaireIdentity questionnaireIdentity, string password)
         {
             var hasPasswordInDb = this.assignmentsAccessor.Query(x =>
