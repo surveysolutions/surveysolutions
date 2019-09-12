@@ -41,6 +41,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 var preloadingPassword = preloadingValues.FirstOrDefault(x => x.VariableOrCodeOrPropertyName == ServiceColumns.PasswordColumnName);
                 var preloadingWebMode = preloadingValues.FirstOrDefault(x => x.VariableOrCodeOrPropertyName == ServiceColumns.WebModeColumnName);
                 var preloadingRecordAudio = preloadingValues.FirstOrDefault(x => x.VariableOrCodeOrPropertyName == ServiceColumns.RecordAudioColumnName);
+                var preloadingComments = preloadingValues.FirstOrDefault(x => x.VariableOrCodeOrPropertyName == ServiceColumns.CommentsColumnName);
 
                 yield return new PreloadingAssignmentRow
                 {
@@ -64,6 +65,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     },
                     WebMode = preloadingWebMode == null ? null : ToAssignmentWebMode(preloadingWebMode),
                     RecordAudio = preloadingRecordAudio == null ? null : ToAssignmentRecordAudio(preloadingRecordAudio),
+                    Comments = preloadingComments == null ? null : ToAssignmentComments(preloadingComments)
                 };
             }
         }
@@ -322,6 +324,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 Value = answer.Value
             };
         }
+
+        private static AssignmentComments ToAssignmentComments(PreloadingValue answer) =>
+            new AssignmentComments
+            {
+                Column = answer.Column,
+                Value = answer.Value
+            };
 
         private readonly Dictionary<string, UserToVerify> users = new Dictionary<string, UserToVerify>();
         private AssignmentResponsible ToAssignmentResponsible(PreloadingValue answer)
