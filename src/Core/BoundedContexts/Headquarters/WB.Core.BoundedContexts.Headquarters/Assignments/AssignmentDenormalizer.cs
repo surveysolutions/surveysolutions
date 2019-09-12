@@ -41,7 +41,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 @event.Payload.IsAudioRecordingEnabled,
                 @event.Payload.Email,
                 @event.Payload.Password,
-                @event.Payload.WebMode);
+                @event.Payload.WebMode,
+                @event.Payload.Comment);
 
             var questionnaire = questionnaireStorage.GetQuestionnaire(state.QuestionnaireId, null);
             var identifyingQuestionIds = questionnaire.GetPrefilledQuestions().ToHashSet();
@@ -80,6 +81,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             state.ResponsibleId = @event.Payload.ResponsibleId;
             state.UpdatedAtUtc = @event.Payload.OriginDate.UtcDateTime;
             state.ReceivedByTabletAtUtc = null;
+
+            if (!string.IsNullOrEmpty(@event.Payload.Comment))
+                state.Comments = @event.Payload.Comment;
+
             return state;
         }
 

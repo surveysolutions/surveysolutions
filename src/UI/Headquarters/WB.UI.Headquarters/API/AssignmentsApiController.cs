@@ -155,10 +155,7 @@ namespace WB.UI.Headquarters.API
             foreach (var idToAssign in request.Ids)
             {
                 Assignment assignment = this.assignmentsStorage.GetAssignment(idToAssign);
-                commandService.Execute(new ReassignAssignment(assignment.PublicKey, authorizedUser.Id, request.ResponsibleId));
-
-                if (!string.IsNullOrEmpty(request.Comments))
-                    assignment.SetComments(request.Comments);
+                commandService.Execute(new ReassignAssignment(assignment.PublicKey, authorizedUser.Id, request.ResponsibleId, request.Comments));
             }
 
             return this.Ok();

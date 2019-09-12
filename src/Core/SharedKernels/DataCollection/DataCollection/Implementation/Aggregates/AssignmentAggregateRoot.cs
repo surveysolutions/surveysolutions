@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Ncqrs.Domain;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.Events.Assignment;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.AssignmentInfrastructure;
@@ -29,6 +28,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.properties.WebMode = @event.WebMode;
             this.properties.Answers = @event.Answers;
             this.properties.ProtectedVariables = @event.ProtectedVariables;
+            this.properties.Comment = @event.Comment;
 
             this.properties.CreatedAt = @event.OriginDate;
             this.properties.UpdatedAt = @event.OriginDate;
@@ -56,6 +56,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.properties.ResponsibleId = @event.ResponsibleId;
             this.properties.UpdatedAt = @event.OriginDate;
             this.properties.ReceivedByTabletAt = null;
+
+            if (!string.IsNullOrEmpty(@event.Comment))
+                this.properties.Comment = @event.Comment;
         }
 
         protected void Apply(AssignmentArchived @event)
@@ -98,7 +101,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 command.Password,
                 command.WebMode,
                 command.Answers.ToArray(),
-                command.ProtectedVariables.ToArray()));
+                command.ProtectedVariables.ToArray(),
+                command.Comment));
         }
 
         public void DeleteAssignment(DeleteAssignment command)
@@ -127,7 +131,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             AssignmentPropertiesInvariants invariants = new AssignmentPropertiesInvariants(this.properties);
             invariants.ThrowIfAssignmentDeleted();
 
-            ApplyEvent(new AssignmentReassigned(command.UserId, command.OriginDate, command.ResponsibleId));
+            ApplyEvent(new AssignmentReassigned(command.UserId, command.OriginDate, command.ResponsibleId, command.Comment));
         }
 
         public void MarkAssignmentAsReceivedByTablet(MarkAssignmentAsReceivedByTablet command)

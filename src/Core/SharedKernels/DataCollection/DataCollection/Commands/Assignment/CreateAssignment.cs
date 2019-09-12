@@ -17,6 +17,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Assignment
         public bool? WebMode { get; }
         public List<InterviewAnswer> Answers { get; }
         public List<string> ProtectedVariables { get; }
+        public string Comment { get; }
 
         public CreateAssignment(Guid assignmentId,
             int id,
@@ -29,8 +30,8 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Assignment
             string password,
             bool? webMode,
             List<InterviewAnswer> answers, 
-            List<string> protectedVariables
-            ) 
+            List<string> protectedVariables,
+            string comment) 
             : base(assignmentId, userId)
         {
             Id = id;
@@ -43,6 +44,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Assignment
             WebMode = webMode;
             Answers = answers ?? new List<InterviewAnswer>();
             ProtectedVariables = protectedVariables ?? new List<string>();
+            Comment = comment;
         }
     }
 }
