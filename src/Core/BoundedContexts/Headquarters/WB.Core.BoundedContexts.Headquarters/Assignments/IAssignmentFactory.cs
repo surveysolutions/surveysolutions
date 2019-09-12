@@ -13,7 +13,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
     {
         Assignment CreateAssignment(Guid userId, QuestionnaireIdentity questionnaireId, Guid responsibleId, 
             int? quantity, string email, string password, bool? webMode, bool? isAudioRecordingEnabled,
-            List<InterviewAnswer> answers, List<string> protectedVariables);
+            List<InterviewAnswer> answers, List<string> protectedVariables, string comment);
     }
 
     class AssignmentFactory : IAssignmentFactory
@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public Assignment CreateAssignment(Guid userId, QuestionnaireIdentity questionnaireId, Guid responsibleId, 
             int? quantity, string email, string password, bool? webMode, bool? isAudioRecordingEnabled,
-            List<InterviewAnswer> answers, List<string> protectedVariables)
+            List<InterviewAnswer> answers, List<string> protectedVariables, string comment)
         {
             var assignmentId = Guid.NewGuid();
 
@@ -58,8 +58,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 password,
                 webMode,
                 answers,
-                protectedVariables
-                ));
+                protectedVariables,
+                comment));
 
             return assignmentsService.GetAssignmentByAggregateRootId(assignmentId);
         }

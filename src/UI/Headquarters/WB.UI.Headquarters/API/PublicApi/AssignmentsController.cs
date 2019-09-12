@@ -290,7 +290,7 @@ namespace WB.UI.Headquarters.API.PublicApi
 
             var assignment = this.assignmentFactory.CreateAssignment(authorizedUser.Id, questionnaireId, responsible.Id, quantity,
                 createItem.Email, password, createItem.WebMode, createItem.IsAudioRecordingEnabled,
-                answers, protectedVariables: null);
+                answers, protectedVariables: null, createItem.Comments);
 
             var result = verifier.VerifyWithInterviewTree(answers, responsible.Id, questionnaire);
 

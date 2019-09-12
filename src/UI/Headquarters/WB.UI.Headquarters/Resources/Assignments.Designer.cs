@@ -214,6 +214,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Comment(not required).
+        /// </summary>
+        public static string Comments {
+            get {
+                return ResourceManager.GetString("Comments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Count.
         /// </summary>
         public static string Count {
@@ -277,6 +286,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Comment.
+        /// </summary>
+        public static string DetailsComments {
+            get {
+                return ResourceManager.GetString("DetailsComments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password by assignment for web mode with quantity 1 should be unique.
         /// </summary>
         public static string DuplicatePasswordByWebModeWithQuantity1 {
@@ -300,6 +318,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string EmailExplanation {
             get {
                 return ResourceManager.GetString("EmailExplanation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter your comment here.
+        /// </summary>
+        public static string EnterComments {
+            get {
+                return ResourceManager.GetString("EnterComments", resourceCulture);
             }
         }
         

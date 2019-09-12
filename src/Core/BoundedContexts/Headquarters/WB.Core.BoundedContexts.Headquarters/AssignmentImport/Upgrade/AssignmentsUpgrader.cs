@@ -80,7 +80,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
                                 oldAssignment.WebMode,
                                 oldAssignment.IsAudioRecordingEnabled,
                                 oldAssignment.Answers.ToList(),
-                                oldAssignment.ProtectedVariables);
+                                oldAssignment.ProtectedVariables,
+                                oldAssignment.Comments);
 
                             invitationService.MigrateInvitationToNewAssignment(assignmentId, newAssignment.Id);
                             commandService.Execute(new UpdateAssignmentWebMode(oldAssignment.PublicKey, userId, false));
