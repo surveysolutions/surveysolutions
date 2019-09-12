@@ -173,7 +173,7 @@
     <value>Заполните все или несколько идентификационных полей</value>
   </data>
   <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
-    <value>Выберите ответственного (Супервизора или Интервьюера) для задания</value>
+    <value>Выберите ответственного (Хедквотера, Супервизора или Интервьюера) для задания</value>
   </data>
   <data name="CreateInterview" xml:space="preserve">
     <value>Начать новое интервью</value>
@@ -367,5 +367,20 @@
   </data>
   <data name="QuestionnaireVersion" xml:space="preserve">
     <value>вер. {{version}}</value>
+  </data>
+  <data name="AssignmentId" xml:space="preserve">
+    <value>Задание №</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Завершить</value>
+  </data>
+  <data name="MultipleAssignmentsClose" xml:space="preserve">
+    <value>{{count}} выбранных заданий будет завершено. Размер будет установлен в текущее количество собранных интервью.</value>
+  </data>
+  <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
+    <value>Для задания '{{id}}' текущий размер {{quantity}} будет установлен в {{collected}}</value>
+  </data>
+  <data name="AssignmentCloseWebMode" xml:space="preserve">
+    <value>Задание {{id}} не может быть закрыто, так как включён веб режим</value>
   </data>
 </root>

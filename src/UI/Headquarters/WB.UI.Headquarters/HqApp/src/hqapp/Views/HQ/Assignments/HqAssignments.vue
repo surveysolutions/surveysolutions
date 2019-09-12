@@ -76,6 +76,10 @@
                             v-if="!showArchive.key"
                             @click="assignSelected">{{ $t("Common.Assign") }}</button>
 
+                    <button class="btn btn-lg btn-warning" id="btnCloseSelected"
+                            v-if="config.isHeadquarter && !showArchive.key"
+                            @click="closeSelected">{{ $t("Assignments.Close") }}</button>
+
                     <button class="btn btn-lg btn-danger" id="btnArchiveSelected"
                             v-if="!showArchive.key && config.isHeadquarter"
                             @click="archiveSelected">{{ $t("Assignments.Archive") }}</button>
@@ -110,10 +114,26 @@
             </div>
         </ModalFrame>
 
-        <ModalFrame
-      ref="editAudioEnabledModal"
-      :title="$t('Assignments.ChangeAudioRecordingModalTitle', {id: editedRowId} )"
-    >
+        <ModalFrame ref="closeModal"
+                    :title="$t('Pages.ConfirmationNeededTitle')">
+            <p v-if="selectedRows.length === 1">
+                {{singleCloseMessage}}
+            </p>
+            <p v-else>{{ $t("Assignments.MultipleAssignmentsClose", {count: selectedRows.length} )}}</p>
+           
+            <div slot="actions">
+                <button type="button"
+                        class="btn btn-primary"
+                        :disabled="isWebModeAssignmentSelected"
+                        @click="close">{{ $t("Assignments.Close") }}</button>
+                <button type="button"
+                        class="btn btn-link"
+                        data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+            </div>
+        </ModalFrame>
+
+        <ModalFrame ref="editAudioEnabledModal"
+            :title="$t('Assignments.ChangeAudioRecordingModalTitle', {id: editedRowId} )">
       <p>{{ $t("Assignments.AudioRecordingExplanation")}}</p>
       <form onsubmit="return false;">
         <div class="form-group">
@@ -177,6 +197,9 @@
 </template>
 
 <script>
+
+import * as toastr from "toastr";
+
 export default {
     data() {
         return {
@@ -200,6 +223,27 @@ export default {
     },
 
     computed: {
+        isWebModeAssignmentSelected() {
+            if (this.selectedRows.length !== 1) return false
+
+            const data = this.$refs.table.table.rows({selected: true}).data()
+            return data[0].webMode
+        },
+        singleCloseMessage() {
+            if(this.isWebModeAssignmentSelected) {
+                return this.$t("Assignments.AssignmentCloseWebMode", {
+                    id: this.selectedRows[0]
+                })
+            }
+
+            const dataRow = this.$refs.table.table.rows({selected: true}).data()[0]
+            const result = this.$t("Assignments.SingleAssignmentCloseConfirm", {
+                id: this.selectedRows[0],
+                quantity: dataRow.quantity,
+                collected: dataRow.interviewsCount
+            })
+            return result;
+        },
         quantityValidations(){
             return {
                 regex: "^-?([0-9]+)$",
@@ -243,7 +287,7 @@ export default {
                     responsivePriority: 2,
                     render(data, type, row) {
                         var result =
-                            "<a href='" + self.config.api.assignmentsPage + "?id=" + row.id + "'>" + data + "</a>";
+                            "<a href='Assignments/" + row.id + "'>" + data + "</a>";
                         return result;
                     },
                 },
@@ -254,12 +298,12 @@ export default {
                     tooltip: this.$t("Assignments.Tooltip_Table_Responsible"),
                     responsivePriority: 3,
                     render(data, type, row) {
-                        var resultString = '<span class="' + row.responsibleRole.toLowerCase() + '">';
-                        if (row.responsibleRole === "Interviewer") {
-                            resultString +=
-                                '<a href="' + self.config.api.profile + "/" + row.responsibleId + '">' + data + "</a>";
+                        var isInterviewerRole = row.responsibleRole === "Interviewer";
+                        var resultString = "";
+                        if (isInterviewerRole) {
+                            resultString += '<span class="interviewer"><a href="' + self.config.api.profile + "/" + row.responsibleId + '">' + data + "</a>";
                         } else {
-                            resultString += data;
+                            resultString += '<span class="supervisor">' + data;
                         }
                         resultString += "</span>";
                         return resultString;
@@ -537,6 +581,31 @@ export default {
             this.$refs.assignModal.modal({
                 keyboard: false
             });
+        },
+
+        
+        closeSelected() {
+            this.$refs.closeModal.modal({
+                keyboard: false
+            });
+        },
+
+        async close() {
+            const self = this
+            await Promise.all(_.map(self.selectedRows, row => {
+                const url = `${self.config.api.assignmentsApi}/${row}/close`
+                return self.$http.post(url).catch(error => {
+                    if(error.isAxiosError && error.response.status === 409) {
+                        const msg = this.$t("Assignments.AssignmentCloseWebMode", {
+                            id: row
+                        })
+
+                        toastr.warning(msg);
+                    }
+                })
+            }))
+            this.$refs.closeModal.hide()
+            this.reloadTable()
         },
 
         async assign() {

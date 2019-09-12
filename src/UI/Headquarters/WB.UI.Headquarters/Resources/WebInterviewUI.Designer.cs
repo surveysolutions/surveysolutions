@@ -927,11 +927,38 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select existing to update or leave empty to save new one.
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        internal static string SaveScenarioName {
+            get {
+                return ResourceManager.GetString("SaveScenarioName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select scenario to replace.
         /// </summary>
         internal static string SaveScenarioOptions {
             get {
                 return ResourceManager.GetString("SaveScenarioOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace existing.
+        /// </summary>
+        internal static string SaveScenarioOptions_ReplaceExisting {
+            get {
+                return ResourceManager.GetString("SaveScenarioOptions_ReplaceExisting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save new.
+        /// </summary>
+        internal static string SaveScenarioOptions_SaveNew {
+            get {
+                return ResourceManager.GetString("SaveScenarioOptions_SaveNew", resourceCulture);
             }
         }
         

@@ -61,7 +61,6 @@
                     }
 
                     const previousAnswer = this.$me.answer
-                    this.$me.answer = answer
                     
                     if (answer > 2147483647 || answer < -2147483648 || answer % 1 !== 0) {
                         this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.NumberCannotParse"))

@@ -36,13 +36,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         public ActionResult Interviews()
         {
-            this.ViewBag.ActivePage = MenuItem.Docs;
-            this.ViewBag.CurrentUser = new UsersViewItem
-            {
-                UserId = this.authorizedUser.Id,
-                UserName = this.authorizedUser.UserName
-            };
-            return this.View(this.Filters());
+            return RedirectToActionPermanent("Index", "Interviews");
         }
 
         private DocumentFilter Filters()

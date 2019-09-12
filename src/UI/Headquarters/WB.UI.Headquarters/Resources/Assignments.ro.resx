@@ -147,9 +147,6 @@
   <data name="CreateAssignment_AnswersInstruction" xml:space="preserve">
     <value>Completează total sau parțial câmpurile de identificare</value>
   </data>
-  <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
-    <value>Selectați responsabil (controlor sau anchetator) pentru acest interviu alocat</value>
-  </data>
   <data name="CreatedAt" xml:space="preserve">
     <value>Creat pe data de</value>
   </data>

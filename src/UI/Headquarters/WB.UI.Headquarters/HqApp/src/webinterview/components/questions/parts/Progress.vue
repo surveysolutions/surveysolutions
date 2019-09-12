@@ -36,6 +36,9 @@
                 timerId: null
             }
         },
+        created() {
+            this.isVisible = this.visible
+        },
         computed: {
             progress() {
                 return Math.round((this.valuenow / this.valuemax) * 100)
