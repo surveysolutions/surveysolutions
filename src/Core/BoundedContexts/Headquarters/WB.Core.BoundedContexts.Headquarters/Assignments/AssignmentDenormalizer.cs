@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.Infrastructure.EventHandlers;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Assignment;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
@@ -16,6 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
     public class AssignmentDenormalizer : AbstractFunctionalEventHandlerOnGuid<Assignment, IReadSideRepositoryWriter<Assignment, Guid>>,
         IUpdateHandler<Assignment, AssignmentCreated>,
+        IUpdateHandler<Assignment, AssignmentDeleted>,
         IUpdateHandler<Assignment, AssignmentArchived>,
         IUpdateHandler<Assignment, AssignmentUnarchived>,
         IUpdateHandler<Assignment, AssignmentReassigned>,
@@ -112,6 +108,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             state.Quantity = @event.Payload.Quantity;
             state.UpdatedAtUtc = @event.Payload.OriginDate.UtcDateTime;
             return state;
+        }
+
+        public Assignment Update(Assignment state, IPublishedEvent<AssignmentDeleted> @event)
+        {
+            return null;
         }
     }
 }
