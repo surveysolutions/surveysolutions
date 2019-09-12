@@ -210,6 +210,30 @@
             </div>
           </wb-question>
 
+          <wb-question
+            :question="commentsQuestion"
+            noValidation="true"
+            noComments="true"
+            questionCssClassName="text-question"
+          >
+            <h5>{{ this.$t("Assignments.Comments") }}</h5>
+            <div class="question-unit">
+              <div class="options-group">
+                <div class="form-group">
+                  <div class="field answered">
+                    <textarea
+                      v-model="commentsQuestion.answer"
+                      :placeholder="$t('Assignments.EnterComments')"
+                      name="comments"
+                      rows="6"
+                      maxlength="500"
+                      class="form-control" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </wb-question>
+
           <div class="action-container">
             <button
               type="button"
@@ -309,7 +333,16 @@ export default {
                 validity: {
                     isValid: true
                 }
-            }
+            },
+            commentsQuestion: {
+                id: "comments",
+                acceptAnswer: true,
+                isAnswered: true,
+                answer: null,
+                validity: {
+                    isValid: true
+                }
+            },
         };
     },
     computed: {
@@ -383,7 +416,8 @@ export default {
                         email: this.emailQuestion.answer,
                         password: this.passwordQuestion.answer,
                         webMode: this.webMode.answer,
-                        isAudioRecordingEnabled: this.isAudioRecordingEnabled.answer
+                        isAudioRecordingEnabled: this.isAudioRecordingEnabled.answer,
+                        comments: this.commentsQuestion.answer
                     })
                     .then(response => {
                          window.location.href = self.config.assignmentsUrl

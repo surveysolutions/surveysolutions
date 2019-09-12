@@ -25,12 +25,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         }
 
         internal Assignment(QuestionnaireIdentity questionnaireId,
-            Guid responsibleId, 
+            Guid responsibleId,
             int? quantity,
             bool isAudioRecordingEnabled,
             string email,
             string password,
-            bool? webMode) : this()
+            bool? webMode, 
+            string comments) : this()
         {
             this.ResponsibleId = responsibleId;
             this.Quantity = quantity;
@@ -39,6 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             this.Email = email;
             this.Password = password;
             this.WebMode = webMode;
+            this.Comments = comments;
         }
 
         public virtual int Id { get; protected set; }
@@ -88,7 +90,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public virtual bool IsCompleted => this.InterviewsNeeded <= 0;
 
-        public virtual string Comments { get; set; }
+        public virtual string Comments { get; protected set; }
 
         public virtual void SetAudioRecordingEnabled(bool enabled)
         {
@@ -201,6 +203,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public virtual void Close()
         {
             this.UpdateQuantity(this.InterviewSummaries.Count);
+        }
+
+        public virtual void SetComments(string comments)
+        {
+            this.Comments = comments;
+            this.UpdatedAtUtc = DateTime.UtcNow;
         }
     }
 
