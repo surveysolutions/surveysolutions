@@ -743,5 +743,27 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(assignmentRows[0].WebMode.Value, Is.EqualTo(columnValue));
             Assert.That(assignmentRows[0].WebMode.WebMode, Is.EqualTo(null));
         }
+
+        [Test]
+        public void when_getting_assignment_row_and_file_has_comment_value_should_return_row_with_comment_preloading_value()
+        {
+            //arrange
+            var comment = "some comment about assignment";
+            var column = "_Comment";
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion()));
+
+            var file = Create.Entity.PreloadedFile(rows: Create.Entity.PreloadingRow(Create.Entity.PreloadingValue(column, comment)));
+
+            var converter = Create.Service.AssignmentsImportFileConverter();
+            //act
+            var assignmentRows = converter.GetAssignmentRows(file, questionnaire).ToArray();
+            //assert
+            Assert.That(assignmentRows, Has.One.Items);
+            Assert.That(assignmentRows[0].Comments, Is.Not.Null);
+            Assert.That(assignmentRows[0].Comments.Value, Is.EqualTo(comment));
+            Assert.That(assignmentRows[0].Comments.Column, Is.EqualTo(column));
+        }
     }
 }
