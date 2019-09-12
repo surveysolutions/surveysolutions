@@ -18,16 +18,20 @@ namespace WB.UI.Headquarters.API.Automation
         private readonly IQuestionnaireImportService importService;
         private readonly IAssignmentsUpgradeService upgradeService;
         private readonly IQuestionnaireStorage questionnaireStorage;
+        private readonly IAuthorizedUser user;
 
         public QuestionnaireAutomationController(
             DesignerUserCredentials designerUserCredentials,
             IQuestionnaireImportService importService,
-            IAssignmentsUpgradeService upgradeService, IQuestionnaireStorage questionnaireStorage)
+            IAssignmentsUpgradeService upgradeService, 
+            IQuestionnaireStorage questionnaireStorage,
+            IAuthorizedUser user)
         {
             this.designerUserCredentials = designerUserCredentials;
             this.importService = importService;
             this.upgradeService = upgradeService;
             this.questionnaireStorage = questionnaireStorage;
+            this.user = user;
         }
 
         [HttpPost]
@@ -53,7 +57,7 @@ namespace WB.UI.Headquarters.API.Automation
 
                     var processId = Guid.NewGuid();
                     var sourceQuestionnaireId = new QuestionnaireIdentity(questionnaireId, version);
-                    this.upgradeService.EnqueueUpgrade(processId, sourceQuestionnaireId, result.Identity);
+                    this.upgradeService.EnqueueUpgrade(processId, this.user.Id, sourceQuestionnaireId, result.Identity);
                 }
 
                 return result.Identity;
