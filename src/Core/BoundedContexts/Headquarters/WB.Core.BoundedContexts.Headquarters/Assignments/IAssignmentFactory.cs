@@ -21,14 +21,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires;
         private readonly ICommandService commandService;
         private readonly IAssignmentsService assignmentsService;
+        private readonly IAssignmentIdGenerator assignmentIdGenerator;
 
         public AssignmentFactory(IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires,
             ICommandService commandService,
-            IAssignmentsService assignmentsService)
+            IAssignmentsService assignmentsService,
+            IAssignmentIdGenerator assignmentIdGenerator)
         {
             this.questionnaires = questionnaires;
             this.commandService = commandService;
             this.assignmentsService = assignmentsService;
+            this.assignmentIdGenerator = assignmentIdGenerator;
         }
 
         public Assignment CreateAssignment(Guid userId, QuestionnaireIdentity questionnaireId, Guid responsibleId, 
@@ -41,7 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 .Where(q => q.Id == questionnaireId.ToString())
                 .Select(q => q.IsAudioRecordingEnabled).FirstOrDefault());
 
-            var displayId = assignmentsService.GetNextDisplayId();
+            var displayId = assignmentIdGenerator.GetNextDisplayId();
 
             commandService.Execute(new SharedKernels.DataCollection.Commands.Assignment.CreateAssignment(
                 assignmentId,

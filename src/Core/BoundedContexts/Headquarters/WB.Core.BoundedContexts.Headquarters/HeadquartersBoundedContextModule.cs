@@ -283,10 +283,11 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IWebInterviewConfigProvider, WebInterviewConfigProvider>();
             
             registry.Bind<IDeviceSyncInfoRepository, DeviceSyncInfoRepository>();
+            registry.Bind<IAssignmentIdGenerator, AssignmentIdGenerator>();
+            registry.Bind<IAssignmentsToDeleteFactory, AssignmentsToDeleteFactory>();
             registry.Bind<IAssignmentViewFactory, AssignmentViewFactory>();
             registry.Bind<IAssignmentsService, AssignmentsService>();
-            registry.Bind<IAssignmetnsDeletionService, AssignmetnsDeletionService>();
-            registry.Bind<ISystemLog, Services.Internal.SystemLog>();
+            registry.Bind<ISystemLog, SystemLog>();
             registry.Bind<IAuditLogReader, AuditLogReader>();
 
             registry.BindAsSingleton<IPauseResumeQueue, PauseResumeQueue>();
@@ -340,6 +341,7 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .Setup<AssignmentAggregateRoot>()
                 .ResolvesIdFrom<AssignmentCommand>(command => command.AssignmentId)
                 .InitializesWith<CreateAssignment>(aggregate => aggregate.CreateAssignment)
+                .StatelessHandles<DeleteAssignment>(aggregate => aggregate.DeleteAssignment)
 
                 .Handles<ReassignAssignment>(aggregate => aggregate.Reassign)
                 .Handles<ArchiveAssignment>(aggregate => aggregate.Archive)
