@@ -97,7 +97,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public virtual bool IsCompleted => this.InterviewsNeeded <= 0;
 
-        public virtual string Comments { get; protected set; }
+        public virtual string Comments { get; set; }
 
         /*public virtual void SetAudioRecordingEnabled(bool enabled, DateTime utcDateTime)
         {
@@ -161,6 +161,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         {
             this.WebMode = mode;
             this.UpdatedAtUtc = DateTime.UtcNow;
+        }
+        public virtual void SetComments(string comments)
+        {
+            this.Comments = comments;
+            this.UpdatedAtUtc = DateTime.UtcNow;
         }*/
 
         public virtual bool InPrivateWebMode()
@@ -190,12 +195,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             }
 
             return answers;
-        }
-
-        public virtual void SetComments(string comments)
-        {
-            this.Comments = comments;
-            this.UpdatedAtUtc = DateTime.UtcNow;
         }
     }
 

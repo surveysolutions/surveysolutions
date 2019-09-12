@@ -340,7 +340,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             this.VerifyAssigneeInRoles(responsibleUser, assigneeRequest?.Responsible, UserRoles.Interviewer,
                 UserRoles.Supervisor);
 
-            commandService.Execute(new ReassignAssignment(assignment.PublicKey, authorizedUser.Id, responsibleUser.Id));
+            commandService.Execute(new ReassignAssignment(assignment.PublicKey, authorizedUser.Id, responsibleUser.Id, assignment.Comments));
 
             return this.mapper.Map<AssignmentDetails>(assignmentsStorage.GetAssignment(id));
         }

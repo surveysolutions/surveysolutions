@@ -18,6 +18,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Assignment
         public bool? WebMode { get; }
         public InterviewAnswer[] Answers { get; }
         public string[] ProtectedVariables { get; }
+        public string Comment { get; }
 
         public AssignmentCreated(Guid userId, 
             int id,
@@ -31,7 +32,8 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Assignment
             string password,
             bool? webMode, 
             InterviewAnswer[] answers, 
-            string[] protectedVariables) 
+            string[] protectedVariables,
+            string comment) 
             : base(userId, originDate)
         {
             Id = id;
@@ -45,6 +47,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Assignment
             WebMode = webMode;
             Answers = answers;
             ProtectedVariables = protectedVariables;
+            Comment = comment;
         }
     }
 }
