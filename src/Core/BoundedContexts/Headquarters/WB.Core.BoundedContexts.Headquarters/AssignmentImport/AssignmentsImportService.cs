@@ -341,6 +341,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             var password = assignment.Select(_ => _.Password).FirstOrDefault(_ => _ != null)?.Value;
             var webMode = assignment.Select(_ => _.WebMode).FirstOrDefault(_ => _ != null)?.WebMode;
             var isAudioRecordingEnabled = assignment.Select(_ => _.RecordAudio).FirstOrDefault(_ => _ != null)?.DoesNeedRecord;
+            var comments = assignment.Select(_ => _.Comments).FirstOrDefault(_ => _ != null)?.Value;
 
             return new AssignmentToImport
             {
@@ -355,6 +356,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 Password = password,
                 WebMode = webMode ?? false,
                 IsAudioRecordingEnabled = isAudioRecordingEnabled,
+                Comments = comments
             };
         }
 
