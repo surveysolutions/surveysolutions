@@ -1668,8 +1668,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        //todo should respect changes calculated in ExpressionState
-        public void ReevaluateSynchronizedInterview(Guid responsibleId)
+        
+        public void ReevaluateInterview(Guid responsibleId)
         {
             InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
 
