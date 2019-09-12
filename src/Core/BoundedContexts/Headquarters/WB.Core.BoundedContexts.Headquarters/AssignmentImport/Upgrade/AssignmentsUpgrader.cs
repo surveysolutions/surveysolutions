@@ -73,7 +73,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
                                 oldAssignment.Email, 
                                 oldAssignment.Password, 
                                 oldAssignment.WebMode,
-                                oldAssignment.IsAudioRecordingEnabled);
+                                oldAssignment.IsAudioRecordingEnabled,
+                                oldAssignment.Comments);
 
                             newAssignment.SetAnswers(oldAssignment.Answers.ToList());
                             var newIdentifyingData = new List<IdentifyingAnswer>();

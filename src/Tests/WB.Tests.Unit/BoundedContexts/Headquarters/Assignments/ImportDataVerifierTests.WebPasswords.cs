@@ -64,7 +64,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                     questionnaireId: questionnaireIdentity.QuestionnaireId), questionnaireIdentity.Version);
 
             var assignmentsRepository = Create.Storage.InMemoryPlainStorage<Assignment>();
-            assignmentsRepository.Store(new Assignment(questionnaireIdentity, assignmentId, 1, false, "", password, true), assignmentId);
+            assignmentsRepository.Store(new Assignment(questionnaireIdentity, assignmentId, 1, false, "", password, true, null), assignmentId);
 
             var verifier = Create.Service.ImportDataVerifier(assignmentsRepository: assignmentsRepository);
 
@@ -106,7 +106,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                     questionnaireId: questionnaireIdentity.QuestionnaireId), questionnaireIdentity.Version);
 
             var assignmentsRepository = Create.Storage.InMemoryPlainStorage<Assignment>();
-            assignmentsRepository.Store(new Assignment(questionnaireIdentity, assignmentId, 1, false, "", password, true), assignmentId);
+            assignmentsRepository.Store(new Assignment(questionnaireIdentity, assignmentId, 1, false, "", password, true, null), assignmentId);
 
             var verifier = Create.Service.ImportDataVerifier(assignmentsRepository: assignmentsRepository);
 

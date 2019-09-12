@@ -119,7 +119,8 @@ namespace WB.UI.Headquarters.Controllers
                 },
                 UpdatedAtUtc = assignment.UpdatedAtUtc,
                 WebMode = assignment.WebMode,
-                IsHeadquarters = this.currentUser.IsAdministrator || this.currentUser.IsHeadquarter
+                IsHeadquarters = this.currentUser.IsAdministrator || this.currentUser.IsHeadquarter,
+                Comments = assignment.Comments
             });
         }
     }
@@ -158,6 +159,7 @@ namespace WB.UI.Headquarters.Controllers
 
         public bool IsCompleted { get; set; }
         public bool IsHeadquarters { get; set; }
+        public string Comments { get; set; }
     }
 
     public class AssignmentQuestionnaireDto

@@ -8,8 +8,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
     public interface IAssignmentFactory
     {
-        Assignment CreateAssignment(QuestionnaireIdentity questionnaireId, Guid responsibleId, 
-            int? quantity, string email, string password, bool? webMode, bool? isAudioRecordingEnabled);
+        Assignment CreateAssignment(QuestionnaireIdentity questionnaireId, Guid responsibleId,
+            int? quantity, string email, string password, bool? webMode, bool? isAudioRecordingEnabled,
+            string comments);
     }
 
     class AssignmentFactory : IAssignmentFactory
@@ -21,14 +22,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             this.questionnaires = questionnaires;
         }
 
-        public Assignment CreateAssignment(QuestionnaireIdentity questionnaireId, Guid responsibleId, 
-            int? quantity, string email, string password, bool? webMode, bool? isAudioRecordingEnabled)
+        public Assignment CreateAssignment(QuestionnaireIdentity questionnaireId, Guid responsibleId,
+            int? quantity, string email, string password, bool? webMode, bool? isAudioRecordingEnabled,
+            string comments)
         {
             bool isAudioRecordingEnabledValue = isAudioRecordingEnabled ?? this.questionnaires.Query(_ => _
                 .Where(q => q.Id == questionnaireId.ToString())
                 .Select(q => q.IsAudioRecordingEnabled).FirstOrDefault());
 
-            return new Assignment(questionnaireId, responsibleId, quantity, isAudioRecordingEnabledValue, email, password, webMode);
+            return new Assignment(questionnaireId, responsibleId, quantity, isAudioRecordingEnabledValue, email, password, webMode, comments);
         }
     }
 }
