@@ -198,5 +198,6 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         [DataMember] public bool? WebMode { get; set; }
 
         [DataMember] public bool? IsAudioRecordingEnabled { get; set; }
+        [DataMember] public string Comments { get; set; }
     }
 }

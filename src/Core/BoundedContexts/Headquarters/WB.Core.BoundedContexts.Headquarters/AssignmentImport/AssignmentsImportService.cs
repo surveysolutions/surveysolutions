@@ -247,7 +247,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 assignmentToImport.WebMode,
                 assignmentToImport.IsAudioRecordingEnabled,
                 assignmentToImport.Answers,
-                assignmentToImport.ProtectedVariables);
+                assignmentToImport.ProtectedVariables,
+                assignmentToImport.Comments);
 
             this.invitationService.CreateInvitationForWebInterview(assignment);
 
