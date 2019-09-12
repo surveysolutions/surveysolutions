@@ -189,11 +189,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
             return answers;
         }
-
-        public virtual void Close()
-        {
-            this.UpdateQuantity(this.InterviewSummaries.Count);
-        }
     }
 
     public class QuestionnaireLiteViewItem

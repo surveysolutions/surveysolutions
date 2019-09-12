@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         public void should_return_409_for_archived_assignment()
         {
             var assignment = Create.Entity.Assignment(id: 4, quantity: 5);
-            assignment.Archive();
+            assignment.Archived = true;
             this.SetupAssignment(assignment);
 
             var httpResponseMessage = this.controller.Close(assignment.Id);
