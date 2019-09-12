@@ -86,7 +86,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
         string GetLookupKey(QuestionnaireIdentity questionnaireIdentity, Guid lookupId) => LookupStorageHelpers.GetLookupKey(null, questionnaireIdentity, lookupId);
         
         [Test]
-        public void when_delete_questionnaire_and_one_interview()
+        public async Task when_delete_questionnaire_and_one_interview()
         {
             Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
             long questionnaireVersion = 5;
@@ -124,7 +124,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
                                 Version = questionnaireVersion
                             }));
 
-            deleteQuestionnaireService.DisableQuestionnaire(questionnaireId, questionnaireVersion, userId);
+            await deleteQuestionnaireService.DisableQuestionnaire(questionnaireId, questionnaireVersion, userId);
             deleteQuestionnaireService.DeleteInterviewsAndQuestionnaireAfter(questionnaireId, questionnaireVersion, userId);
 
             commandServiceMock.Received(1).Execute(
@@ -145,7 +145,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
         }
 
         [Test]
-        public void when_delete_questionnaire_and_one_assignment()
+        public async Task when_delete_questionnaire_and_one_assignment()
         {
             Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
             long questionnaireVersion = 5;
@@ -183,7 +183,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
                                 Version = questionnaireVersion
                             }));
 
-            deleteQuestionnaireService.DisableQuestionnaire(questionnaireId, questionnaireVersion, userId);
+            await deleteQuestionnaireService.DisableQuestionnaire(questionnaireId, questionnaireVersion, userId);
             deleteQuestionnaireService.DeleteInterviewsAndQuestionnaireAfter(questionnaireId, questionnaireVersion, userId);
 
             commandServiceMock.Received(1).Execute(
