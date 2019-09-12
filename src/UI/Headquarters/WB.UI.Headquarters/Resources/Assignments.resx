@@ -387,4 +387,13 @@
   <data name="AssignmentCloseWebMode" xml:space="preserve">
     <value>Assignment {{id}} cannot be closed since it has web mode enabled</value>
   </data>
+  <data name="DetailsComments" xml:space="preserve">
+      <value>Comment</value>
+  </data>
+  <data name="Comments" xml:space="preserve">
+      <value>Comment(not required)</value>
+  </data>
+  <data name="EnterComments" xml:space="preserve">
+    <value>Enter your comment here</value>
+  </data>
 </root>

@@ -19,5 +19,6 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto
         public virtual bool? WebMode { set; get; }
         public virtual bool? IsAudioRecordingEnabled { set; get; }
         public virtual Guid? Headquarters { get; set; }
+        public virtual string Comments { get; set; }
     }
 }

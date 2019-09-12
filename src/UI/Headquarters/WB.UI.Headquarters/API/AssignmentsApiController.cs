@@ -147,6 +147,9 @@ namespace WB.UI.Headquarters.API
             {
                 Assignment assignment = this.assignmentsStorage.GetById(idToAssign);
                 assignment.Reassign(request.ResponsibleId);
+
+                if (!string.IsNullOrEmpty(request.Comments))
+                    assignment.SetComments(request.Comments);
             }
 
             return this.Ok();
@@ -240,6 +243,7 @@ namespace WB.UI.Headquarters.API
 
             assignment.UpdateQuantity(quantity);
             assignment.Reassign(request.ResponsibleId);
+            assignment.SetComments(request.Comments);
 
             bool isAudioRecordingEnabled = request.IsAudioRecordingEnabled ?? this.questionnaires.Query(_ => _
                 .Where(q => q.Id == interview.QuestionnaireIdentity.ToString())
@@ -270,6 +274,7 @@ namespace WB.UI.Headquarters.API
             public string Password { get; set; }
             public bool? WebMode { get; set; }
             public bool? IsAudioRecordingEnabled { get; set; }
+            public string Comments { get; set; }
         }
 
         public class UpdateAssignmentRequest
@@ -280,6 +285,7 @@ namespace WB.UI.Headquarters.API
         public class AssignRequest
         {
             public Guid ResponsibleId { get; set; }
+            public string Comments { get; set; }
 
             public int[] Ids { get; set; }
         }

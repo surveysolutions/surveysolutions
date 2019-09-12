@@ -101,6 +101,10 @@
                                 <td class="text-nowrap">{{this.$t("Assignments.WebMode")}}</td>
                                 <td>{{isWebMode}}</td>
                             </tr>
+                            <tr>
+                                <td class="text-nowrap">{{this.$t("Assignments.DetailsComments")}}</td>
+                                <td>{{model.comments}}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

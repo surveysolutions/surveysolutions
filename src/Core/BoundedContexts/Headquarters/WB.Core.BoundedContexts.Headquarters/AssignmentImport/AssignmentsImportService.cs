@@ -242,7 +242,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 assignmentToImport.Email, 
                 assignmentToImport.Password, 
                 assignmentToImport.WebMode,
-                assignmentToImport.IsAudioRecordingEnabled);
+                assignmentToImport.IsAudioRecordingEnabled,
+                assignmentToImport.Comments);
             var identifyingAnswers = assignmentToImport.Answers
                 .Where(x => identifyingQuestionIds.Contains(x.Identity.Id)).Select(a =>
                     IdentifyingAnswer.Create(assignment, questionnaire, a.Answer.ToString(), a.Identity))
