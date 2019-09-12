@@ -59,7 +59,7 @@ namespace WB.UI.Headquarters.Controllers
                 UnactiveDateStart = request.UnactiveDateStart?.ToUniversalTime(),
                 UnactiveDateEnd = request.UnactiveDateEnd?.ToUniversalTime(),
                 AssignmentId = request.AssignmentId,
-                ResponsibleId = request.ResponsibleId
+                //ResponsibleId = request.ResponsibleId
             };
 
             var allInterviews = this.allInterviewsViewFactory.Load(input);

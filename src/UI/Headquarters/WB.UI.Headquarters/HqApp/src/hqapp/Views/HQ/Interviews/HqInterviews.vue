@@ -385,22 +385,23 @@ export default {
             return [
                 {
                     data: 'key',
-                    name: 'Key',
+                    name: 'Key',                    
                     title: this.$t('Common.InterviewKey'),
                     orderable: true,
                     searchable: true,
                     responsivePriority: 2,
-                    class: 'interview-id title-row',
+                    className: 'interview-id title-row',
                     render(data, type, row) {
                         var result =
                             "<a href='" + self.config.interviewReviewUrl + '/' + row.interviewId + "'>" + data + '</a>'
                         return result
                     },
+                    createdCell(td, cellData, rowData, row, col) { $(td).attr('role', 'key'); }                        
                 },
                 {
-                    data: 'featuredQuestions',
+                    data: 'featuredQuestions',                    
                     title: this.$t('Assignments.IdentifyingQuestions'),
-                    class: 'prefield-column first-identifying last-identifying sorting_disabled visible',
+                    className: 'prefield-column first-identifying last-identifying sorting_disabled visible',
                     orderable: false,
                     searchable: false,
                     render(data) {
@@ -409,18 +410,20 @@ export default {
                         })
                         return _.join(questionsWithTitles, ', ')
                     },
+                    createdCell(td, cellData, rowData, row, col) { $(td).attr('role', 'prefield'); }
                 },
                 {
                     data: 'responsibleName',
                     name: 'ResponsibleName',
-                    title: this.$t('Common.Responsible'),
+                    title: this.$t('Common.Responsible'),                    
                     orderable: true,
+                    createdCell(td, cellData, rowData, row, col) { $(td).attr('role', 'responsible'); }
                 },
                 {
                     data: 'lastEntryDateUtc',
                     name: 'UpdateDate',
                     title: this.$t('Assignments.UpdatedAt'),
-                    class: 'date last-update',
+                    className: 'date last-update',                    
                     searchable: false,
                     render(data) {
                         return moment
@@ -428,21 +431,24 @@ export default {
                             .local()
                             .format(DateFormats.dateTimeInList)
                     },
+                    createdCell(td, cellData, rowData, row, col) { $(td).attr('role', 'updated'); }
                 },
                 {
                     data: 'errorsCount',
                     name: 'ErrorsCount',
-                    title: this.$t('Interviews.Errors'),
+                    title: this.$t('Interviews.Errors'),                    
                     orderable: true,
                     render(data) {
                         return data > 0 ? "<span style='color:red;'>" + data + '</span>' : '0'
                     },
+                    createdCell(td, cellData, rowData, row, col) { $(td).attr('role', 'errors'); }
                 },
                 {
                     data: 'status',
                     name: 'Status',
                     title: this.$t('Common.Status'),
                     orderable: true,
+                    createdCell(td, cellData, rowData, row, col) { $(td).attr('role', 'status'); }
                 },
                 {
                     data: 'receivedByInterviewer',
@@ -451,6 +457,7 @@ export default {
                     render(data) {
                         return data ? self.$t('Common.Yes') : self.$t('Common.No')
                     },
+                    createdCell(td, cellData, rowData, row, col) { $(td).attr('role', 'received'); }
                 },
                 {
                     data: 'assignmentId',
@@ -458,6 +465,7 @@ export default {
                     title: this.$t('Common.Assignment'),
                     orderable: true,
                     searchable: false,
+                    createdCell(td, cellData, rowData, row, col) { $(td).attr('role', 'assignment'); }
                 },
             ]
         },
@@ -1031,7 +1039,7 @@ export default {
             data.status = (this.status || {}).key
             data.questionnaireId = (this.questionnaireId || {}).key
             data.questionnaireVersion = (this.questionnaireVersion || {}).key
-            data.responsibleId = (this.responsibleId || {}).key
+            //data.responsibleId = (this.responsibleId || {}).key
             data.responsibleName = (this.responsibleId || {}).value
 
             if (this.assignmentId) {
