@@ -1,6 +1,8 @@
 ﻿using System.Net;
 using System.Net.Http;
+using Moq;
 using NUnit.Framework;
+using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTests
@@ -36,16 +38,17 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         }
 
         [Test]
-        public void should_update_quantity_and_return_200_for_closed_assignment()
+        public void should_publish_command_update_quantity_and_return_200_for_closed_assignment()
         {
             var assignment = Create.Entity.Assignment(id: 4, quantity: 5);
             assignment.InterviewSummaries.Add(Create.Entity.InterviewSummary());
             this.SetupAssignment(assignment);
-
+            
             var httpResponseMessage = this.controller.Close(assignment.Id);
 
-            Assert.That(assignment, Has.Property(nameof(assignment.Quantity)).EqualTo(1), 
-                $"{nameof(assignment.Quantity)} should be set to collected interviews count");
+            commandService.Verify(x => 
+                x.Execute(It.Is<UpdateAssignmentQuantity>(c => c.Quantity == 1 && c.AssignmentId == assignment.PublicKey), null),
+                Times.Once);
             Assert.That(httpResponseMessage, Has.Property(nameof(HttpResponseMessage.StatusCode)).EqualTo(HttpStatusCode.OK));
         }
     }
