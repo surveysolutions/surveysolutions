@@ -184,7 +184,7 @@
     <value>Fill all or some of the identifying fields</value>
   </data>
   <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
-    <value>Select responsible (Supervisor or Interviewer) for this assignment</value>
+    <value>Select responsible (Headquarters or Supervisor or Interviewer) for this assignment</value>
   </data>
   <data name="Questionnaire" xml:space="preserve">
     <value>Questionnaire</value>
@@ -371,5 +371,20 @@
   </data>
   <data name="QuestionnaireVersion" xml:space="preserve">
     <value>ver. {{version}}</value>
+  </data>
+  <data name="AssignmentId" xml:space="preserve">
+    <value>Assignment ID</value>
+  </data>
+  <data name="MultipleAssignmentsClose" xml:space="preserve">
+    <value>{{count}} selected assignments are going to be closed. Size will be set to currently collected interviews count.</value>
+  </data>
+  <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
+    <value>Size '{{quantity}}' of the selected assignment {{id}}  will be changed to {{collected}} (number of currently collected interviews)</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="AssignmentCloseWebMode" xml:space="preserve">
+    <value>Assignment {{id}} cannot be closed since it has web mode enabled</value>
   </data>
 </root>

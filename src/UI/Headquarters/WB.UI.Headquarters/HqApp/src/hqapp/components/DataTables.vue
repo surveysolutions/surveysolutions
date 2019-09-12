@@ -258,6 +258,11 @@ export default {
                 self.rowsDeselected(e, dt, type, indexes)
             });
 
+            this.table.on('preXhr.dt', (e, diff, edit) => {
+                self.table.rows().deselect();
+                $(self.table.rows).find(".checkbox-filter").prop('checked', false);
+            });
+           
             this.table.on('draw', () => {
                 self.$emit("draw")
             })
@@ -292,7 +297,10 @@ export default {
 
         selectRowAndGetData(selectedItem) {
             this.table.rows().deselect();
-            var rowIndex = selectedItem.parent().children().index(selectedItem);
+            $(this.table.rows).find(".checkbox-filter").prop('checked', false);
+
+            var parent = selectedItem.parent();
+            var rowIndex = parent.parent().children().index(parent);
             this.table.row(rowIndex).select();
             const rowData = this.table.rows({ selected: true }).data()[0];
 
@@ -362,7 +370,7 @@ export default {
         initContextMenu() {
             if (this.contextMenuItems == null) return;
             var contextMenuOptions = {
-                selector: "#" + this.$refs.table.attributes.id.value + " tbody tr",
+                selector: "#" + this.$refs.table.attributes.id.value + " tbody tr td:not(.checkbox-cell)",
                 autoHide: false,
                 build: ($trigger) => {
                     var selectedRow = this.selectRowAndGetData($trigger);
@@ -386,9 +394,9 @@ export default {
                 if (delimiterPosition !== -1)
                     rowId = rowId.substring(delimiterPosition+1);
                                 
-                var parsedId = parseInt(rowId);
-                if (!_.includes(this.selectedRows, parsedId)) {
-                    this.selectedRows.push(parsedId);
+                //var parsedId = parseInt(rowId);
+                if (!_.includes(this.selectedRows, rowId)) {
+                    this.selectedRows.push(rowId);
                 }
             }
 
@@ -403,8 +411,8 @@ export default {
                 if (delimiterPosition !== -1)
                     rowId = rowId.substring(delimiterPosition+1);
 
-                var parsedId = parseInt(rowId);
-                this.selectedRows = _.without(this.selectedRows, parsedId);
+                //var parsedId = parseInt(rowId);
+                this.selectedRows = _.without(this.selectedRows, rowId);
             }
 
             this.$emit("selectedRowsChanged", this.selectedRows)

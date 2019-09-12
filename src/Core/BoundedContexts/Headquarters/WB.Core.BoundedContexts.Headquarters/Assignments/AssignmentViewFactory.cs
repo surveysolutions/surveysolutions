@@ -121,7 +121,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             return result;
         }
 
-        private List<AssignmentIdentifyingQuestionRow> GetIdentifyingColumnText(Assignment assignment)
+        public List<AssignmentIdentifyingQuestionRow> GetIdentifyingColumnText(Assignment assignment)
         {
             QuestionnaireIdentity assignmentQuestionnaireId = assignment.QuestionnaireId;
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(assignmentQuestionnaireId, null);

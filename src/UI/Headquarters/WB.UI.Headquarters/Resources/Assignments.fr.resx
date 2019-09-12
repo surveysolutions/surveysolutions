@@ -147,9 +147,6 @@
   <data name="CreateAssignment_AnswersInstruction" xml:space="preserve">
     <value>Remplissez tout ou en partie des champs d'identification</value>
   </data>
-  <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
-    <value>Sélectionnez le responsable (Chef d'équipe ou Enquêteur) pour cette tâche</value>
-  </data>
   <data name="CreatedAt" xml:space="preserve">
     <value>Créé sur</value>
   </data>

@@ -53,8 +53,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public virtual ReadonlyUser Responsible { get; protected set; }
 
         public virtual int? Quantity { get; set; }
-                
+
         public virtual bool Archived { get; set; }
+        
+        public virtual bool QuantityCanBeChanged => !this.Archived && this.WebMode != true;
+
 
         public virtual DateTime CreatedAtUtc { get; set; }
 
@@ -92,6 +95,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public virtual bool IsCompleted => this.InterviewsNeeded <= 0;
 
+        public virtual string Comments { get; set; }
 
         /*public virtual void SetAudioRecordingEnabled(bool enabled, DateTime utcDateTime)
         {
@@ -184,6 +188,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             }
 
             return answers;
+        }
+
+        public virtual void Close()
+        {
+            this.UpdateQuantity(this.InterviewSummaries.Count);
         }
     }
 

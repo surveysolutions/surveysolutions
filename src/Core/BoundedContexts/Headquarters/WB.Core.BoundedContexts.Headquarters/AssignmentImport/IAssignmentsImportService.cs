@@ -23,7 +23,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         int[] GetAllAssignmentIdsToImport();
         AssignmentsImportStatus GetImportStatus();
         void RemoveAllAssignmentsToImport();
-        void SetResponsibleToAllImportedAssignments(Guid responsibleId);
         IEnumerable<string> GetImportAssignmentsErrors();
         void SetVerifiedToAssignment(int assignmentId, string errorMessage);
         void RemoveAssignmentToImport(int assignmentId);

@@ -177,9 +177,6 @@
   <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
     <value>Ответственный помечен заблокированный.</value>
   </data>
-  <data name="PL0028_UserIsNotSupervisorOrInterviewer" xml:space="preserve">
-    <value>Пользователь не является супервизором или интервьюером.</value>
-  </data>
   <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
     <value>Ответ на вопрос о размере списка не может превышать {0}.</value>
   </data>
@@ -254,5 +251,9 @@
     <data name="PL0061_DuplicatePasswordWithQuantity1" xml:space="preserve">
     <value>Пароль не уникален. Пароль для задания в веб режиме с количеством интервью равным 1 должен быть уникален</value>
     <comment></comment>
+  </data>
+  <data name="PL0028_UserIsNotHQOrSupervisorOrInterviewer" xml:space="preserve">
+      <value>Пользователь не является хедквотером, супервизором или интервьюером.</value>
+      <comment>Пользователь не является хедквотером, супервизором или интервьюером.</comment>
   </data>
 </root>

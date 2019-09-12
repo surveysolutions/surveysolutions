@@ -49,7 +49,7 @@ function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtension
             }
             
             if($ExcludeExtensions -eq $True) {
-                "/p:ExcludeExtensions=$ExcludeExtensions;DefineConstants=EXCLUDEEXTENSIONS"
+                "/p:ExcludeExtensions=$ExcludeExtensions"
             }
 
             if([string]::IsNullOrWhiteSpace($KeystorePassword) -eq $False) {
@@ -57,7 +57,6 @@ function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtension
                 $PathToKeystore = (Join-Path (Get-Location).Path "Security/KeyStore/$KeyStoreName")
                 '/p:AndroidUseApkSigner=true'
                 '/p:AndroidKeyStore=True'
-                "/p:GIT_BRANCH=$branch"
                 "/p:AndroidSigningKeyAlias=$KeystoreAlias"
                 "/p:AndroidSigningKeyPass=$KeystorePassword"
                 "/p:AndroidSigningKeyStore=$PathToKeystore"
@@ -66,6 +65,9 @@ function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtension
 
             if($null -eq $env:GIT_BRANCH) {
                 "/p:GIT_BRANCH=$branch"
+            }
+            Else {
+                "/p:GIT_BRANCH=$env:GIT_BRANCH"
             }
 
             if([string]::IsNullOrWhiteSpace($TargetAbi) -eq $False)
