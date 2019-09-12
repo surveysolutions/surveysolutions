@@ -60,7 +60,7 @@ namespace WB.Core.BoundedContexts.Headquarters.MoveUserToAnotherTeam
                 try
                 {
                     result.AssignmentsProcessed++;
-                    commandService.Execute(new ReassignAssignment(assignmentId, userId, previousSupervisorId));
+                    commandService.Execute(new ReassignAssignment(assignmentId, userId, previousSupervisorId, null));
                 }
                 catch (Exception exception)
                 {
