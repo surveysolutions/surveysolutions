@@ -50,7 +50,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
             Set(x => x.InterviewSummaries, set =>
             {
-                set.Key(key => key.Column("assignmentid"));
+                set.Key(key =>
+                {
+                    key.PropertyRef(a => a.Id);
+                    key.Column("assignmentid");
+                });
                 set.Lazy(CollectionLazy.Extra);
                 set.Cascade(Cascade.None);
                 set.Schema(new UnitOfWorkConnectionSettings().ReadSideSchemaName);
@@ -102,6 +106,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         }
     }
 
+    [PlainStorage]
     public class QuestionnaireLiteViewItemMap : ClassMapping<QuestionnaireLiteViewItem>
     {
         public QuestionnaireLiteViewItemMap()
