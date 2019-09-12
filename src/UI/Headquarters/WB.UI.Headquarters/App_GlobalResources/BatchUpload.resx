@@ -338,7 +338,7 @@
 All data files must contain variable interview__id with a unique string or numeric identifier of the interview. Links within rosters and nested rosters established the same way as in exported data.&lt;br/&gt;
 &lt;br/&gt;
 Optionally can specify the following columns in the main interview level file:&lt;br/&gt;
-_responsible - username of a supervisor or an interviewer who will be responsible for the assignment;&lt;br/&gt;
+_responsible - username of a headquarters, supervisor or an interviewer who will be responsible for the assignment;&lt;br/&gt;
 _quantity - capacity of the assignment;&lt;br/&gt;
 _email - email of the respondent (for web-interviews only);&lt;br/&gt;
 _password - password to start an interview (for web-interviews only);&lt;br/&gt;
@@ -368,7 +368,7 @@ _record_audio - audio recording is enabled for interviews (1 - enabled, 0 - disa
     <value>Upload tab separated file with values for questions in the interview level only. Include values for identifying questions and other questions at the main interview level. Does not allow preloading values inside rosters.&lt;br/&gt;
 &lt;br/&gt;
 Optionally can specify the following columns:&lt;br/&gt;
-_responsible - username of a supervisor or an interviewer who will be responsible for the assignment;&lt;br/&gt;
+_responsible - username of a headquarters, supervisor or an interviewer who will be responsible for the assignment;&lt;br/&gt;
 _quantity - capacity of the assignment;&lt;br/&gt;
 _email - email of the respondent (for web-interviews only);&lt;br/&gt;
 _password - password to start an interview (for web-interviews only);&lt;br/&gt;
@@ -381,7 +381,7 @@ _record_audio - audio recording is enabled for interviews (1 - enabled, 0 - disa
   </data>
   <data name="UploadDescription" xml:space="preserve">
     <value>Upload a file with identifying data to create new assignments.
-Specify usernames for supervisors or interviewers to make batch assignments.</value>
+Specify usernames for headquarters, supervisors or interviewers to make batch assignments.</value>
   </data>
   <data name="FileTypeDescription" xml:space="preserve">
     <value>Save file in UTF8 encoding for support language specific texts.</value>
@@ -604,7 +604,7 @@ Specify usernames for supervisors or interviewers to make batch assignments.</va
     <value>Select default responsible (required)</value>
   </data>
   <data name="Select_Responsible_Description" xml:space="preserve">
-    <value>If no responsible assigned in batch file use this supervisor/interviewer account:</value>
+    <value>If no responsible assigned in batch file use this headquarters/supervisor/interviewer account:</value>
   </data>
   <data name="RequiredField" xml:space="preserve">
     <value>This field is mandatory</value>

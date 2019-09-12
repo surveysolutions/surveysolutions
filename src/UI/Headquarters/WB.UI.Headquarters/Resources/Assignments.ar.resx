@@ -144,9 +144,6 @@
   <data name="CreateAssignment_AnswersInstruction" xml:space="preserve">
     <value>املأ كل أو بعض حقول التحديد</value>
   </data>
-  <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
-    <value>اختار مسؤول (مشرف أو باحث) لهده المهمة</value>
-  </data>
   <data name="CreatedAt" xml:space="preserve">
     <value>تم انشاءه على</value>
   </data>

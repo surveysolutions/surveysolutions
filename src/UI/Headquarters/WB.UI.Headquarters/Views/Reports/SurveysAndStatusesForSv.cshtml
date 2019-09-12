@@ -14,7 +14,7 @@
     @Scripts.Render("~/js/common")
 
     <script type="text/javascript">
-        var $interviewsUrl = '@Url.Action("Interviews", "Survey")';
+        var $interviewsUrl = '@Url.Action("Index", "Interviews")';
         var $allQuestionnaires = '@HttpUtility.JavaScriptStringEncode(Strings.AllQuestionnaires)';
         var $selfUrl = '@Url.Action("SurveysAndStatusesForSv")';
         var totalRowClass = 'total-row';

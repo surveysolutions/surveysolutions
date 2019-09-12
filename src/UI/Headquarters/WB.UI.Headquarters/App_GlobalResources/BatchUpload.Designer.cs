@@ -1118,7 +1118,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If no responsible assigned in batch file use this supervisor/interviewer account:.
+        ///   Looks up a localized string similar to If no responsible assigned in batch file use this headquarters/supervisor/interviewer account:.
         /// </summary>
         internal static string Select_Responsible_Description {
             get {
@@ -1130,10 +1130,9 @@ namespace Resources {
         ///   Looks up a localized string similar to Upload tab separated file with values for questions in the interview level only. Include values for identifying questions and other questions at the main interview level. Does not allow preloading values inside rosters.&lt;br/&gt;
         ///&lt;br/&gt;
         ///Optionally can specify the following columns:&lt;br/&gt;
-        ///_responsible - username of a supervisor or an interviewer who will be responsible for the assignment;&lt;br/&gt;
+        ///_responsible - username of a headquarters, supervisor or an interviewer who will be responsible for the assignment;&lt;br/&gt;
         ///_quantity - capacity of the assignment;&lt;br/&gt;
-        ///_email - email of the respondent (for web-interviews only);&lt;br/&gt;
-        ///_passwo [rest of string was truncated]&quot;;.
+        ///_email - email of the respondent (for web-interviews only); [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string SimpleDescription {
             get {
@@ -1233,7 +1232,7 @@ namespace Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to Upload a file with identifying data to create new assignments.
-        ///Specify usernames for supervisors or interviewers to make batch assignments..
+        ///Specify usernames for headquarters, supervisors or interviewers to make batch assignments..
         /// </summary>
         internal static string UploadDescription {
             get {

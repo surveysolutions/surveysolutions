@@ -61,8 +61,8 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be approved.&lt;/h3&gt;
-        ///&lt;b&gt;Note!&lt;/b&gt; You can approve interviews with the following statuses only: &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt;..
+        ///   Looks up a localized string similar to &lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; interview(s) will be approved.&lt;/h3&gt;
+        ///&lt;b&gt;Note!&lt;/b&gt; You can approve interviews with the following statuses only: &lt;i&gt;{{status1}}&lt;/i&gt; and &lt;i&gt;{{status2}}&lt;/i&gt;..
         /// </summary>
         public static string ApproveConfirmMessage {
             get {
@@ -71,8 +71,8 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be approved.&lt;/h3&gt;
-        ///&lt;b&gt;Note!&lt;/b&gt; You can approve interviews with the following status only: &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt;..
+        ///   Looks up a localized string similar to &lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; interview(s) will be approved.&lt;/h3&gt;
+        ///&lt;b&gt;Note!&lt;/b&gt; You can approve interviews with the following status only: &lt;i&gt;{{status1}}&lt;/i&gt; and &lt;i&gt;{{status2}}&lt;/i&gt;..
         /// </summary>
         public static string ApproveConfirmMessageHQ {
             get {
@@ -81,8 +81,8 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) selected for reassign.&lt;/h3&gt;
-        ///&lt;b&gt;Note!&lt;/b&gt; You can assign interviews with the following statuses only: &lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2} (only on another interviewer)&lt;/i&gt; and &lt;i&gt;{3}&lt;/i&gt;..
+        ///   Looks up a localized string similar to &lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; interview(s) selected for reassign.&lt;/h3&gt;
+        ///&lt;b&gt;Note!&lt;/b&gt; You can assign interviews with the following statuses only: &lt;i&gt;{{status1}}&lt;/i&gt;, &lt;i&gt;{{status2}} (only on another interviewer)&lt;/i&gt; and &lt;i&gt;{{status3}}&lt;/i&gt;..
         /// </summary>
         public static string AssignConfirmMessage {
             get {
@@ -100,7 +100,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Apply on {0} interview(s) which Interviewer already received.
+        ///   Looks up a localized string similar to Apply on {{count}} interview(s) which Interviewer already received.
         /// </summary>
         public static string AssignReceivedConfirm {
             get {
@@ -109,8 +109,8 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be assigned.&lt;/h3&gt;
-        ///&lt;b&gt;Note!&lt;/b&gt; Only interviews that are not in status &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt; could be reassigned..
+        ///   Looks up a localized string similar to &lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; interview(s) will be assigned.&lt;/h3&gt;
+        ///&lt;b&gt;Note!&lt;/b&gt; Only interviews that are not in status &lt;i&gt;{{status1}}&lt;/i&gt; and &lt;i&gt;{{status2}}&lt;/i&gt; could be reassigned..
         /// </summary>
         public static string AssignToOtherTeamConfirmMessage {
             get {
@@ -173,8 +173,8 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be deleted.&lt;/h3&gt;
-        ///&lt;b&gt;Note!&lt;/b&gt; You can delete interviews not received by Interviewer with the following statuses only: &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt;..
+        ///   Looks up a localized string similar to &lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; interview(s) will be deleted.&lt;/h3&gt;
+        ///&lt;b&gt;Note!&lt;/b&gt; You can delete interviews not received by Interviewer with the following statuses only: &lt;i&gt;{{status1}}&lt;/i&gt; and &lt;i&gt;{{status2}}&lt;/i&gt;..
         /// </summary>
         public static string DeleteConfirmMessageHQ {
             get {
@@ -192,8 +192,8 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be rejected.&lt;/h3&gt;
-        ///&lt;b&gt;Note!&lt;/b&gt; You can reject interviews with the following statuses only: &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt;..
+        ///   Looks up a localized string similar to &lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; interview(s) will be rejected.&lt;/h3&gt;
+        ///&lt;b&gt;Note!&lt;/b&gt; You can reject interviews with the following statuses only: &lt;i&gt;{{status1}}&lt;/i&gt; and &lt;i&gt;{{status2}}&lt;/i&gt;..
         /// </summary>
         public static string RejectConfirmMessage {
             get {
@@ -202,8 +202,8 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be rejected.&lt;/h3&gt;
-        ///&lt;b&gt;Note!&lt;/b&gt; You can reject interviews with the following status only: &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt;..
+        ///   Looks up a localized string similar to &lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; interview(s) will be rejected.&lt;/h3&gt;
+        ///&lt;b&gt;Note!&lt;/b&gt; You can reject interviews with the following status only: &lt;i&gt;{{status1}}&lt;/i&gt; and &lt;i&gt;{{status2}}&lt;/i&gt;..
         /// </summary>
         public static string RejectConfirmMessageHQ {
             get {
@@ -329,8 +329,8 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be unapproved.&lt;/h3&gt;
-        ///&lt;b&gt;Note!&lt;/b&gt; You can unapprove interviews with the following status only: &lt;i&gt;{1}&lt;/i&gt;..
+        ///   Looks up a localized string similar to &lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; interview(s) will be unapproved.&lt;/h3&gt;
+        ///&lt;b&gt;Note!&lt;/b&gt; You can unapprove interviews with the following status only: &lt;i&gt;{{status1}}&lt;/i&gt;..
         /// </summary>
         public static string UnapproveConfirmMessageHQ {
             get {

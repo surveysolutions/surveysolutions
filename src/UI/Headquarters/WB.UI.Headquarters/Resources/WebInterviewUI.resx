@@ -463,7 +463,7 @@ Contact support for assistance.</value>
     <value>Show resolved</value>
   </data>
   <data name="SaveScenarioOptions" xml:space="preserve">
-    <value>Select existing to update or leave empty to save new one</value>
+    <value>Select scenario to replace</value>
   </data>
   <data name="SaveScenarioDesignerLogin" xml:space="preserve">
     <value>Session on Designer applicaton has expired. Sign in on Designer application to be able to save.</value>
@@ -473,5 +473,14 @@ Contact support for assistance.</value>
   </data>
   <data name="NoQuestionnaireAccess" xml:space="preserve">
     <value>You have no access to questionnaire</value>
+  </data>
+  <data name="SaveScenarioName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="SaveScenarioOptions_ReplaceExisting" xml:space="preserve">
+    <value>Replace existing</value>
+  </data>
+  <data name="SaveScenarioOptions_SaveNew" xml:space="preserve">
+    <value>Save new</value>
   </data>
 </root>

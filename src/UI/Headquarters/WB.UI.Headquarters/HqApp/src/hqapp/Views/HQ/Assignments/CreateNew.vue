@@ -332,7 +332,7 @@ export default {
         },
         passwordValidations() {
             return {
-                regex: "^([0-9A-Z]{6,})|\\?$"
+                regex: /^([0-9A-Z]{6,})$|^(\?)$/
             };
         },
         entities() {

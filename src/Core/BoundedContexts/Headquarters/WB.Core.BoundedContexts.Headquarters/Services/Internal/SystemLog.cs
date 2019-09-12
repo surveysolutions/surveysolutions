@@ -50,9 +50,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
                 responsibleName:responsibleName);
 
         public void AssignmentsImported(long assignmentsCount, string questionnaireTitle, long questionnaireVersion,
-            int firstAssignmentId, int? lastAssignmentId, string responsibleName)
+            int firstAssignmentId, int lastAssignmentId, string responsibleName)
             => this.Append(LogEntryType.AssignmentsImported, "Assignments", "Import",
-                $"User {responsibleName} created {assignmentsCount} assignment(s) {firstAssignmentId}-{lastAssignmentId ?? firstAssignmentId} " +
+                $"User {responsibleName} created {assignmentsCount} assignment(s) {firstAssignmentId}-{lastAssignmentId} " +
                 $"for {questionnaireTitle} (v{questionnaireVersion})",
                 responsibleName: responsibleName);
 

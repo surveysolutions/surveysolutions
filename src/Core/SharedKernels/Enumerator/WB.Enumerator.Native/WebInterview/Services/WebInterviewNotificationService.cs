@@ -71,15 +71,9 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     }
 
                     var parent = this.GetParentIdentity(currentEntity, interview);
-                    if (questionnaire.IsTableRoster(currentEntity.Id))
-                    {
-                        var tableClientRosterIdentity = new Identity(currentEntity.Id, currentEntity.RosterVector.Shrink());
-                        entitiesToRefresh.Add((WebInterview.GetConnectedClientSectionKey(parent, interview.Id), tableClientRosterIdentity));
-                    }
-
                     if (parent != null)
                     {
-                        if (questionnaire.IsFlatRoster(parent.Id))
+                        if (questionnaire.IsFlatRoster(parent.Id) || questionnaire.IsTableRoster(parent.Id))
                         {
                             var parentGroupIdentity = GetParentIdentity(parent, interview);
                             var connectedClientSectionKey = WebInterview.GetConnectedClientSectionKey(parentGroupIdentity, interview.Id);

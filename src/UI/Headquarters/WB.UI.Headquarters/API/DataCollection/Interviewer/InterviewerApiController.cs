@@ -191,14 +191,14 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
             var currentVersion = new Version(this.productVersion.ToString().Split(' ')[0]);
             var interviewerVersion = this.Request.GetProductVersionFromUserAgent(@"org.worldbank.solutions.interviewer");
 
-            if (IsNeedUpdateAppBySettings(interviewerVersion, currentVersion))
-            {
-                return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
-            }
-
             if (interviewerVersion != null && interviewerVersion > currentVersion)
             {
                 return this.Request.CreateResponse(HttpStatusCode.NotAcceptable);
+            }
+
+            if (IsNeedUpdateAppBySettings(interviewerVersion, currentVersion))
+            {
+                return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
             }
 
             if (deviceSyncProtocolVersion < InterviewerSyncProtocolVersionProvider.ResolvedCommentsIntroduced)
