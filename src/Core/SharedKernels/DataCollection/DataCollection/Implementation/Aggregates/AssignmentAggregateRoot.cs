@@ -38,6 +38,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public IList<InterviewAnswer> Answers { get; protected set; }
 
         public IList<string> ProtectedVariables { get; protected set; }
+        public bool IsDeleted { get; protected set; }
 
 
         #region Apply
@@ -56,6 +57,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.CreatedAt = @event.OriginDate;
             this.UpdatedAt = @event.OriginDate;
+        }
+
+        protected void Apply(AssignmentDeleted @event)
+        {
+            this.IsDeleted = true;
         }
 
         protected void Apply(AssignmentAudioRecordingChanged @event)
@@ -118,6 +124,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 command.WebMode,
                 command.Answers.ToArray(),
                 command.ProtectedVariables.ToArray()));
+        }
+
+        public void DeleteAssignment(DeleteAssignment command)
+        {
+            ApplyEvent(new AssignmentDeleted(command.UserId, command.OriginDate));
         }
 
         public void Archive(ArchiveAssignment command)

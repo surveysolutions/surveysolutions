@@ -744,11 +744,15 @@ namespace WB.Tests.Abc.TestFactories
                 commands);
         }
 
-        public IAssignmentFactory AssignmentFactory(ICommandService commandService = null, IAssignmentsService assignmentsService = null)
+        public IAssignmentFactory AssignmentFactory(
+            ICommandService commandService = null, 
+            IAssignmentsService assignmentsService = null,
+            IAssignmentIdGenerator assignmentIdGenerator = null)
         {
             var result = new AssignmentFactory(new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>(),
                 commandService ?? Mock.Of<ICommandService>(),
-                assignmentsService ?? Mock.Of<IAssignmentsService>());
+                assignmentsService ?? Mock.Of<IAssignmentsService>(),
+                assignmentIdGenerator ?? Mock.Of<IAssignmentIdGenerator>());
             return result;
         }
 

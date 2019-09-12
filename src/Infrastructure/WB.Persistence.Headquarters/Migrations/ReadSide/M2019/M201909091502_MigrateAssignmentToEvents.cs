@@ -4,12 +4,21 @@ using FluentMigrator;
 namespace WB.Persistence.Headquarters.Migrations.ReadSide
 {
     [Migration(201909091502)]
-    public class M201909091502_AddAssignmentsTables : Migration
+    public class M201909091502_MigrateAssignmentToEvents : Migration
     {
         const string assignmentsidentifyinganswers = "assignmentsidentifyinganswers";
         const string assignments = "assignments";
 
         public override void Up()
+        {
+            CreateAssignmentTables();
+
+            MigrateExistedAssignments();
+
+            CreateSequenceForAssignmentId();
+        }
+
+        private void CreateAssignmentTables()
         {
             Create.Table(assignments)
                 .WithColumn("publickey").AsGuid().PrimaryKey().Indexed()
@@ -49,13 +58,26 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
                 .FromTable(assignmentsidentifyinganswers).ForeignColumn("assignmentid")
                 .ToTable(assignments).PrimaryColumn("publickey")
                 .OnDelete(Rule.Cascade);
-
-            MigrateExistedAssignments();
         }
 
         private void MigrateExistedAssignments()
         {
-            Execute.EmbeddedScript(@"WB.Persistence.Headquarters.Migrations.ReadSide.M2019.M201909091502_MigrateAssignments.sql");
+            if (this.Schema.Schema("plainstore").Table(assignments).Exists()
+                && this.Schema.Schema("events").Table("events").Exists())
+            {
+                Execute.EmbeddedScript(@"WB.Persistence.Headquarters.Migrations.ReadSide.M2019.M201909091502_MigrateAssignments.sql");
+            }
+        }
+
+        private void CreateSequenceForAssignmentId()
+        {
+            if (this.Schema.Schema("plainstore").Exists())
+            {
+                Execute.Sql("CREATE SEQUENCE IF NOT EXISTS plainstore.assignment_id_sequence; ");
+
+                if (this.Schema.Table(assignments).Exists())
+                    Execute.Sql("SELECT setval('plainstore.assignment_id_sequence', COALESCE(max(id), 1)) FROM readside.assignments; ");
+            }
         }
 
         public override void Down()
