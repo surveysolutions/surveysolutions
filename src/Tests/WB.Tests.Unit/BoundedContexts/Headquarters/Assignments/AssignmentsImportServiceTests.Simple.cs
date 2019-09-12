@@ -1316,5 +1316,34 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(savedAssignments, Has.One.Items);
             Assert.That(savedAssignments[0].IsAudioRecordingEnabled, Is.EqualTo(result));
         }
+
+        [Test]
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_comment_column_should_be_saved_assignment_with_specified_comments()
+        {
+            //arrange 
+            var comment = "some comment about assignment";
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter());
+
+            var preloadedFile = Create.Entity.PreloadedFile(rows: new[]
+                {Create.Entity.PreloadingRow(Create.Entity.PreloadingValue("_comment", comment))});
+
+            var importAssignmentsRepository = Create.Storage.InMemoryPlainStorage<AssignmentToImport>();
+
+            var service = Create.Service.AssignmentsImportService(
+                importAssignmentsRepository: importAssignmentsRepository);
+
+            //act
+            var errors = service.VerifySimpleAndSaveIfNoErrors(preloadedFile, Guid.Empty, questionnaire);
+
+            //assert
+            Assert.That(errors, Is.Empty);
+
+            var savedAssignments = importAssignmentsRepository.Query(x => x.ToArray());
+
+            Assert.That(savedAssignments, Has.One.Items);
+            Assert.That(savedAssignments[0].Comments, Is.EqualTo(comment));
+        }
     }
 }
