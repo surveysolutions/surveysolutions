@@ -29,6 +29,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             Property(x => x.Password);
             Property(x => x.Email);
             Property(x => x.WebMode);
+            Property(x => x.Comments);
 
             Component(x => x.QuestionnaireId, cmp =>
             {

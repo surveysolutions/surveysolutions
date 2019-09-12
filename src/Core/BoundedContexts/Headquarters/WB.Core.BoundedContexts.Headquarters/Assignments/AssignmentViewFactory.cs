@@ -104,7 +104,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                         Email = x.Email,
                         Password = x.Password,
                         WebMode = x.WebMode,
-                        ReceivedByTabletAtUtc = x.ReceivedByTabletAtUtc
+                        ReceivedByTabletAtUtc = x.ReceivedByTabletAtUtc,
+                        Comments = x.Comments
                     };
 
                     if (input.ShowQuestionnaireTitle)
