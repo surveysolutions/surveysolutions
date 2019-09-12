@@ -27,19 +27,21 @@ namespace WB.UI.Headquarters.Controllers
     public class AssignmentsController : BaseController
     {
         private readonly IAuthorizedUser currentUser;
-        private readonly IPlainStorageAccessor<Assignment> assignmentsStorage;
         private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
+        private readonly IAssignmentsService assignments;
         private readonly IAssignmentViewFactory assignmentViewFactory;
 
         public AssignmentsController(ICommandService commandService,
             ILogger logger,
             IAuthorizedUser currentUser, 
-            IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory)
+            IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory, 
+            IAssignmentsService assignments, 
+            IAssignmentViewFactory assignmentViewFactory)
             : base(commandService, logger)
         {
             this.currentUser = currentUser;
-            this.assignmentsStorage = assignmentsStorage;
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
+            this.assignments = assignments;
             this.assignmentViewFactory = assignmentViewFactory;
         }
         
@@ -79,7 +81,7 @@ namespace WB.UI.Headquarters.Controllers
 
         private ActionResult GetAssignmentDetails(int assignmentId)
         {
-            var assignment = this.assignmentsStorage.GetById(assignmentId);
+            var assignment = this.assignments.GetAssignment(assignmentId);
             if (assignment == null) return new HttpNotFoundResult();
 
             return View("Details", new AssignmentDto

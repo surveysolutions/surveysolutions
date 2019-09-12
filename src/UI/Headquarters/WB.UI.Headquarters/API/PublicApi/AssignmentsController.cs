@@ -504,13 +504,15 @@ namespace WB.UI.Headquarters.API.PublicApi
         [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
         public HttpResponseMessage Close(int id)
         {
-            var assignment = assignmentsStorage.GetById(id);
+            var assignment = assignmentsStorage.GetAssignment(id);
             if (assignment == null)
                 return Request.CreateResponse(HttpStatusCode.NotFound);
             if (!assignment.QuantityCanBeChanged)
                 return Request.CreateResponse(HttpStatusCode.Conflict);
 
-            assignment.Close();
+            this.commandService.Execute(new UpdateAssignmentQuantity(assignment.PublicKey,
+                this.authorizedUser.Id,
+                assignment.InterviewSummaries.Count));
 
             return Request.CreateResponse(HttpStatusCode.OK);
         }
