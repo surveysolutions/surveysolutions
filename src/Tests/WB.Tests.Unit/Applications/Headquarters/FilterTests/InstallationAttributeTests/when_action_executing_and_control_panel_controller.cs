@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.FilterTests.InstallationAttrib
                 new ControlPanelController(null, 
                 null, null, null, null, null, null,
                 assignmentsService: null, interviewPackagesService: null, userViewFactory: null, serializer: null
-                , clientApkProvider: null)));
+                , clientApkProvider: null, currentUser:null)));
         }
     }
 }
