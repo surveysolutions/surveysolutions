@@ -124,6 +124,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Detailed assignment info.
+        /// </summary>
+        public static string AssignmentInfo {
+            get {
+                return ResourceManager.GetString("AssignmentInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Assignments.
         /// </summary>
         public static string AssignmentsHeader {

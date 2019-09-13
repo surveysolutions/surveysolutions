@@ -26,6 +26,7 @@ namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
         void Store(TEntity view, TKey id);
 
         void BulkStore(List<Tuple<TEntity, TKey>> bulk);
+
         void Flush();
     }
 }
