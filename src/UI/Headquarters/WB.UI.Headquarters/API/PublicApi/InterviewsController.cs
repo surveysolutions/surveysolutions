@@ -143,6 +143,7 @@ namespace WB.UI.Headquarters.API.PublicApi
 
                 InterviewId = diagnosticsInfo.InterviewId,
                 InterviewKey = diagnosticsInfo.InterviewKey,
+                AssignmentId = interview.GetAssignmentId(),
                 Status = diagnosticsInfo.Status.ToString(),
                 ResponsibleId = diagnosticsInfo.ResponsibleId,
                 ResponsibleName = diagnosticsInfo.ResponsibleName,
