@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 new QuestionnaireIdentity(@event.Payload.QuestionnaireId, @event.Payload.QuestionnaireVersion), 
                 @event.Payload.ResponsibleId,
                 @event.Payload.Quantity,
-                @event.Payload.IsAudioRecordingEnabled,
+                @event.Payload.AudioRecording,
                 @event.Payload.Email,
                 @event.Payload.Password,
                 @event.Payload.WebMode,
