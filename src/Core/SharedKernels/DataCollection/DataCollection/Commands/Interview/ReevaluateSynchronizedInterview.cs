@@ -3,9 +3,9 @@ using Ncqrs.Commanding;
 
 namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 {
-    public class ReevaluateSynchronizedInterview : CommandBase
+    public class ReevaluateInterview : CommandBase
     {
-        public ReevaluateSynchronizedInterview(Guid interviewId, Guid userId)
+        public ReevaluateInterview(Guid interviewId, Guid userId)
             : base(interviewId)
         {
             this.InterviewId = interviewId;
