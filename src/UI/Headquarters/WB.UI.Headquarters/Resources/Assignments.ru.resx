@@ -386,14 +386,65 @@
     <value>Информация о задании</value>
   </data>
   <data name="DetailsComments" xml:space="preserve">
-      <value>Комментарий</value>
+    <value>Комментарий</value>
   </data>
   <data name="Comments" xml:space="preserve">
-      <value>Комментарий(не обязательно)</value>
-      <comment>Комментарий</comment>
+    <value>Комментарий(не обязательно)</value>
+    <comment>Комментарий</comment>
   </data>
   <data name="EnterComments" xml:space="preserve">
-      <value>Оставьте свой комментарий здесь</value>
-      <comment>Оставьте свой комментарий здесь</comment>
+    <value>Оставьте свой комментарий здесь</value>
+    <comment>Оставьте свой комментарий здесь</comment>
+  </data>
+  <data name="Action" xml:space="preserve">
+    <value>Действие</value>
+  </data>
+  <data name="Action_Archived" xml:space="preserve">
+    <value>Заархивировано</value>
+  </data>
+  <data name="Action_AudioRecordingChanged" xml:space="preserve">
+    <value>Изменён аудио аудит</value>
+  </data>
+  <data name="Action_AudioRecordingChanged_False" xml:space="preserve">
+    <value>Аудио аудит выключен</value>
+  </data>
+  <data name="Action_AudioRecordingChanged_True" xml:space="preserve">
+    <value>Аудио аудит включен</value>
+  </data>
+  <data name="Action_Created" xml:space="preserve">
+    <value>Создано</value>
+  </data>
+  <data name="Action_Deleted" xml:space="preserve">
+    <value>Удалено</value>
+  </data>
+  <data name="Action_QuantityChanged" xml:space="preserve">
+    <value>Размер изменён</value>
+  </data>
+  <data name="Action_QuantityChanged_To" xml:space="preserve">
+    <value>Размер изменён на {{quantity}}</value>
+  </data>
+  <data name="Action_Reassigned" xml:space="preserve">
+    <value>Назначено</value>
+  </data>
+  <data name="Action_Reassigned_To" xml:space="preserve">
+    <value>Назначено на {{newResponsible}}</value>
+  </data>
+  <data name="Action_Reassigned_To_Comment" xml:space="preserve">
+    <value>Комментарий: {{comment}}</value>
+  </data>
+  <data name="Action_ReceivedByTablet" xml:space="preserve">
+    <value>Получено планшетом</value>
+  </data>
+  <data name="Action_UnArchived" xml:space="preserve">
+    <value>Разархивировано</value>
+  </data>
+  <data name="Action_WebModeChanged" xml:space="preserve">
+    <value>Web режим изменён</value>
+  </data>
+  <data name="Action_WebModeChanged_False" xml:space="preserve">
+    <value>Web режим выключен</value>
+  </data>
+  <data name="Action_WebModeChanged_True" xml:space="preserve">
+    <value>Web режим включен</value>
   </data>
 </root>
