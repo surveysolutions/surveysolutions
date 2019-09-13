@@ -23,5 +23,6 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         public int NumberRejectionsBySupervisor { get; set; }
         public int NumberRejectionsByHq { get; set; }
         public TimeSpan? InterviewDuration { get; set; }
+        public int? AssignmentId { get; set; }
     }
 }
