@@ -202,5 +202,11 @@ namespace WB.Tests.Abc.TestFactories
 
             return defaultExpressionStatePrototypeProvider;
         }
+
+        public AssignmentAggregateRoot AssignmentAggregateRoot()
+        {
+            return new AssignmentAggregateRoot();
+
+        }
     }
 }

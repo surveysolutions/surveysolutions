@@ -199,7 +199,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
                         _.ResponsibleId == userId), Arg.Any<string>());
 
             commandServiceMock.Received(1)
-                .Execute(Arg.Is<DeleteAssignment>(_ => _.AssignmentId == assignmentId && _.UserId == userId),
+                .Execute(Arg.Is<DeleteAssignment>(_ => _.PublicKey == assignmentId && _.UserId == userId),
                     It.IsAny<string>());
         }
     }

@@ -120,14 +120,14 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 .Callback<ICommand, string>((commandArgs, origin) =>
                 {
                     var c = (CreateAssignment) commandArgs;
-                    var assignment = Create.Entity.Assignment(publicKey: c.AssignmentId, id: c.Id, quantity: c.Quantity, questionnaireIdentity: c.QuestionnaireId);
-                    assignmentsStorage.Store(assignment, c.AssignmentId);
+                    var assignment = Create.Entity.Assignment(publicKey: c.PublicKey, id: c.Id, quantity: c.Quantity, questionnaireIdentity: c.QuestionnaireId);
+                    assignmentsStorage.Store(assignment, c.PublicKey);
                 });
             commandService.Setup(cs => cs.Execute(It.IsAny<ArchiveAssignment>(), null))
                 .Callback<ICommand, string>((commandArgs, origin) =>
                 {
                     var c = (ArchiveAssignment) commandArgs;
-                    assignmentsStorage.GetById(c.AssignmentId).Archived = true;
+                    assignmentsStorage.GetById(c.PublicKey).Archived = true;
                 });
             var assignmentsService = Create.Service.AssignmentsService(assignmentsStorage);
             var service = Create.Service.AssignmentsUpgrader(assignments: assignmentsService, questionnaireStorage: questionnaires,
@@ -195,22 +195,22 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 .Callback<ICommand, string>((commandArgs, origin) =>
                 {
                     var c = (CreateAssignment)commandArgs;
-                    var assignment = Create.Entity.Assignment(publicKey: c.AssignmentId, 
+                    var assignment = Create.Entity.Assignment(publicKey: c.PublicKey, 
                         id: c.Id, 
                         quantity: c.Quantity, 
                         questionnaireIdentity: c.QuestionnaireId,
                         protectedVariables: c.ProtectedVariables,
                         answers: c.Answers,
-                        isAudioRecordingEnabled: c.IsAudioRecordingEnabled,
+                        isAudioRecordingEnabled: c.AudioRecording,
                         identifyingAnswers: assignmentToMigrate.IdentifyingData.ToList()
                         );
-                    assignmentsStorage.Store(assignment, c.AssignmentId);
+                    assignmentsStorage.Store(assignment, c.PublicKey);
                 });
             commandService.Setup(cs => cs.Execute(It.IsAny<ArchiveAssignment>(), null))
                 .Callback<ICommand, string>((commandArgs, origin) =>
                 {
                     var c = (ArchiveAssignment)commandArgs;
-                    assignmentsStorage.GetById(c.AssignmentId).Archived = true;
+                    assignmentsStorage.GetById(c.PublicKey).Archived = true;
                 });
 
 
