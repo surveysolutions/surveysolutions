@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Assignm
 
         public QuestionnaireIdentity QuestionnaireId { get; set; }
 
-        public bool IsAudioRecordingEnabled { get; set; }
+        public bool AudioRecording { get; set; }
 
         public string Email { get; set; }
 
