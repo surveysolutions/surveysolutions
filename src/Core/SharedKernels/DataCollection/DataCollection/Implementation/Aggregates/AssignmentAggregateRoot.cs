@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.properties.ResponsibleId = @event.ResponsibleId;
             this.properties.Quantity = @event.Quantity;
             this.properties.QuestionnaireId = new QuestionnaireIdentity(@event.QuestionnaireId, @event.QuestionnaireVersion);
-            this.properties.IsAudioRecordingEnabled = @event.IsAudioRecordingEnabled;
+            this.properties.AudioRecording = @event.IsAudioRecordingEnabled;
             this.properties.Email = @event.Email;
             this.properties.Password = @event.Password;
             this.properties.WebMode = @event.WebMode;
@@ -41,7 +41,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         protected void Apply(AssignmentAudioRecordingChanged @event)
         {
-            this.properties.IsAudioRecordingEnabled = @event.IsAudioRecordingEnabled;
+            this.properties.AudioRecording = @event.AudioRecording;
             this.properties.UpdatedAt = @event.OriginDate;
         }
 
