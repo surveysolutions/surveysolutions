@@ -4,11 +4,11 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Assignment
 {
     public class UpdateAssignmentAudioRecording : AssignmentCommand
     {
-        public bool IsAudioRecordingEnabled { get; }
+        public bool AudioRecording { get; }
 
-        public UpdateAssignmentAudioRecording(Guid assignmentId, Guid userId, bool isAudioRecordingEnabled) : base(assignmentId, userId)
+        public UpdateAssignmentAudioRecording(Guid assignmentId, Guid userId, bool audioRecording) : base(assignmentId, userId)
         {
-            IsAudioRecordingEnabled = isAudioRecordingEnabled;
+            AudioRecording = audioRecording;
         }
     }
 }

@@ -4,12 +4,12 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Assignment
 {
     public class AssignmentAudioRecordingChanged : AssignmentEvent
     {
-        public bool IsAudioRecordingEnabled { get; }
+        public bool AudioRecording { get; }
 
-        public AssignmentAudioRecordingChanged(Guid userId, DateTimeOffset originDate, bool isAudioRecordingEnabled) 
+        public AssignmentAudioRecordingChanged(Guid userId, DateTimeOffset originDate, bool audioRecording) 
             : base(userId, originDate)
         {
-            IsAudioRecordingEnabled = isAudioRecordingEnabled;
+            this.AudioRecording = audioRecording;
         }
     }
 }
