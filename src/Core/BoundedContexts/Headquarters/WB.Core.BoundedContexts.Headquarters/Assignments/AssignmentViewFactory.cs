@@ -2,12 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.Serialization;
+using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
+using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Events.Assignment;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Fetching;
@@ -16,19 +20,72 @@ using WB.Infrastructure.Native.Utils;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
+    public class AssignmentHistory
+    {
+        public AssignmentHistory()
+        {
+            this.History = new List<AssignmentHistoryItem>();
+        }
+
+        public List<AssignmentHistoryItem> History { get; set; }
+
+        public int RecordsFiltered { get; set; }
+    }
+
+    public class AssignmentHistoryItem
+    {
+        public AssignmentHistoryItem(AssignmentHistoryAction action, string actor, DateTime utcDate)
+        {
+            this.Action = action;
+            this.ActorName = actor;
+            this.UtcDate = utcDate;
+        }
+
+        [DataMember(IsRequired = true)]
+        public AssignmentHistoryAction Action { get; set; }
+
+        [DataMember(IsRequired = true)]
+        public string ActorName { get; set; }
+
+        [DataMember(IsRequired = true)]
+        public DateTime UtcDate { get; set; }
+
+        public object AdditionalData { get; set; }
+    }
+
+    public enum AssignmentHistoryAction
+    {
+        Unknown = 0,
+        Created = 1,
+        Archived = 2,
+        Deleted = 3,
+        ReceivedByTablet = 4,
+        UnArchived = 5,
+        AudioRecordingChanged = 6,
+        Reassigned = 7,
+        QuantityChanged = 8,
+        WebModeChanged = 9
+    }
+
     internal class AssignmentViewFactory : IAssignmentViewFactory
     {
         private readonly IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsStorage;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> summaries;
         private readonly IQuestionnaireStorage questionnaireStorage;
+        private readonly IHeadquartersEventStore hqEventStore;
+        private readonly IUserViewFactory userViewFactory;
 
         public AssignmentViewFactory(IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsStorage,
             IQueryableReadSideRepositoryReader<InterviewSummary> summaries,
-            IQuestionnaireStorage questionnaireStorage)
+            IQuestionnaireStorage questionnaireStorage,
+            IHeadquartersEventStore hqEventStore,
+            IUserViewFactory userViewFactory)
         {
             this.assignmentsStorage = assignmentsStorage;
             this.summaries = summaries;
             this.questionnaireStorage = questionnaireStorage;
+            this.hqEventStore = hqEventStore ?? throw new ArgumentNullException(nameof(hqEventStore));
+            this.userViewFactory = userViewFactory;
         }
 
         public AssignmentsWithoutIdentifingData Load(AssignmentsInputModel input)
@@ -137,6 +194,77 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                                     x.Identity))
                           .ToList();
             return identifyingColumnText;
+        }
+
+        public async Task<AssignmentHistory> LoadHistoryAsync(Guid assignmentPublicKey, int offset, int limit)
+        {
+            var events = await this.hqEventStore.GetEventsInReverseOrderAsync(assignmentPublicKey, offset, limit);
+            var result = new AssignmentHistory();
+
+            var totalLength = await this.hqEventStore.TotalEventsCountAsync(assignmentPublicKey);
+            result.RecordsFiltered = totalLength;
+
+            foreach (IEvent committedEvent in events.Select(x => x.Payload))
+            {
+                var assignmentEvent = (AssignmentEvent) committedEvent;
+                var historyItem = new AssignmentHistoryItem(AssignmentHistoryAction.Unknown,
+                    userViewFactory.GetUser(assignmentEvent.UserId).UserName, 
+                    assignmentEvent.OriginDate.UtcDateTime);
+
+                switch (committedEvent)
+                {
+                    case AssignmentCreated _:
+                        historyItem.Action = AssignmentHistoryAction.Created;
+                        break;
+                    case AssignmentArchived _:
+                        historyItem.Action = AssignmentHistoryAction.Archived;
+                        break;
+                    case AssignmentDeleted _:
+                        historyItem.Action = AssignmentHistoryAction.Deleted;
+                        break;
+                    case AssignmentReceivedByTablet _:
+                        historyItem.Action = AssignmentHistoryAction.ReceivedByTablet;
+                        break;
+                    case AssignmentUnarchived _:
+                        historyItem.Action = AssignmentHistoryAction.UnArchived;
+                        break;
+                    case AssignmentAudioRecordingChanged a:
+                        historyItem.Action = AssignmentHistoryAction.AudioRecordingChanged;
+                        historyItem.AdditionalData = new
+                        {
+                            a.AudioRecording
+                        };
+                        break;
+                    case AssignmentQuantityChanged q:
+                        historyItem.Action = AssignmentHistoryAction.QuantityChanged;
+                        historyItem.AdditionalData = new
+                        {
+                            q.Quantity
+                        };
+                        break;
+                    case AssignmentReassigned r:
+                        historyItem.Action = AssignmentHistoryAction.Reassigned;
+                        var targetLogin =
+                            this.userViewFactory.GetUser(r.ResponsibleId)?.UserName ?? "Unknown";
+                        historyItem.AdditionalData = new
+                        {
+                            NewResponsible = targetLogin,
+                            r.Comment
+                        };
+                        break;
+                    case AssignmentWebModeChanged w:
+                        historyItem.Action = AssignmentHistoryAction.WebModeChanged;
+                        historyItem.AdditionalData = new
+                        {
+                            w.WebMode
+                        };
+                        break;
+                }
+
+                result.History.Add(historyItem);
+            }
+
+            return result;
         }
 
         private IQueryable<Assignment> DefineOrderBy(IQueryable<Assignment> query, AssignmentsInputModel model)
