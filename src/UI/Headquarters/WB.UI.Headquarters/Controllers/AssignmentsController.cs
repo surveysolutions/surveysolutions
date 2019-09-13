@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -26,21 +27,21 @@ namespace WB.UI.Headquarters.Controllers
     public class AssignmentsController : BaseController
     {
         private readonly IAuthorizedUser currentUser;
-        private readonly IPlainStorageAccessor<Assignment> assignmentsStorage;
         private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
+        private readonly IAssignmentsService assignments;
         private readonly IAssignmentViewFactory assignmentViewFactory;
 
         public AssignmentsController(ICommandService commandService,
             ILogger logger,
             IAuthorizedUser currentUser, 
-            IPlainStorageAccessor<Assignment> assignmentsStorage, 
-            IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory,
+            IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory, 
+            IAssignmentsService assignments, 
             IAssignmentViewFactory assignmentViewFactory)
             : base(commandService, logger)
         {
             this.currentUser = currentUser;
-            this.assignmentsStorage = assignmentsStorage;
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
+            this.assignments = assignments;
             this.assignmentViewFactory = assignmentViewFactory;
         }
         
@@ -80,7 +81,7 @@ namespace WB.UI.Headquarters.Controllers
 
         private ActionResult GetAssignmentDetails(int assignmentId)
         {
-            var assignment = this.assignmentsStorage.GetById(assignmentId);
+            var assignment = this.assignments.GetAssignment(assignmentId);
             if (assignment == null) return new HttpNotFoundResult();
 
             return View("Details", new AssignmentDto
@@ -160,6 +161,7 @@ namespace WB.UI.Headquarters.Controllers
         public bool IsCompleted { get; set; }
         public bool IsHeadquarters { get; set; }
         public string Comments { get; set; }
+        public string HistoryUrl { get; set; }
     }
 
     public class AssignmentQuestionnaireDto

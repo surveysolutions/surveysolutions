@@ -1772,20 +1772,27 @@ namespace WB.Tests.Abc.TestFactories
             List<string> protectedVariables = null,
             string email = null,
             string password = null,
-            bool? webMode = null)
+            bool? webMode = null,
+            bool isArchived = false,
+            Guid? publicKey = null,
+            bool isAudioRecordingEnabled = false,
+            List<InterviewAnswer> answers = null,
+            List<IdentifyingAnswer> identifyingAnswers = null
+            )
         {
             var result = new Assignment();
-            
-            var asDynamic = result.AsDynamic();
-            asDynamic.Quantity = quantity;
-            asDynamic.Id = id ?? 0;
+
+            result.Quantity = quantity;
+            result.Id = id ?? 0;
+            result.PublicKey = publicKey ?? Guid.NewGuid();
             result.QuestionnaireId = questionnaireIdentity;
+            result.Archived = isArchived;
 
             var readonlyUser = new ReadonlyUser() { RoleIds = { UserRoles.Interviewer.ToUserId() } };
             var readonlyProfile = new ReadonlyProfile();
             
             readonlyUser.AsDynamic().ReadonlyProfile = readonlyProfile;
-            asDynamic.Responsible = readonlyUser;
+            result.AsDynamic().Responsible = readonlyUser;
 
             if (assigneeSupervisorId.HasValue)
             {
@@ -1799,7 +1806,7 @@ namespace WB.Tests.Abc.TestFactories
 
             if (!string.IsNullOrWhiteSpace(questionnaireTitle))
             {
-                result.Questionnaire = new QuestionnaireLiteViewItem
+                result.AsDynamic().Questionnaire = new QuestionnaireLiteViewItem
                 {
                     Id = questionnaireIdentity?.Id,
                     Title = questionnaireTitle
@@ -1812,15 +1819,18 @@ namespace WB.Tests.Abc.TestFactories
             }
 
             if(interviewSummary != null)
-                asDynamic.InterviewSummaries = interviewSummary;
+                result.AsDynamic().InterviewSummaries = interviewSummary;
             if (responsibleId.HasValue)
             {
-                asDynamic.ResponsibleId = responsibleId.Value;
+                result.ResponsibleId = responsibleId.Value;
             }
-            asDynamic.ProtectedVariables = protectedVariables;
-            asDynamic.Email = email;
-            asDynamic.Password = password;
-            asDynamic.WebMode = webMode;
+            result.ProtectedVariables = protectedVariables;
+            result.Email = email;
+            result.Password = password;
+            result.WebMode = webMode;
+            result.IsAudioRecordingEnabled = isAudioRecordingEnabled;
+            result.Answers = answers ?? new List<InterviewAnswer>();
+            result.IdentifyingData = identifyingAnswers ?? new List<IdentifyingAnswer>();
 
             return result;
         }

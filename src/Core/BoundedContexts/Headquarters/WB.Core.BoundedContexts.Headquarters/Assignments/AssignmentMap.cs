@@ -5,17 +5,20 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
-    [PlainStorage]
     public class AssignmentMap : ClassMapping<Assignment>
     {
         public AssignmentMap()
         {
-            Id(x => x.Id, mapper => mapper.Generator(Generators.Identity));
             DynamicUpdate(true);
+
+            Id(x => x.PublicKey, mapper => mapper.Column("PublicKey"));
+            Property(x => x.Id, mapper => mapper.Unique(true));
+
             Property(x => x.ResponsibleId);
             Property(x => x.Quantity);
             Property(x => x.Archived);
@@ -48,7 +51,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
             Set(x => x.InterviewSummaries, set =>
             {
-                set.Key(key => key.Column("assignmentid"));
+                set.Key(key =>
+                {
+                    key.PropertyRef(a => a.Id);
+                    key.Column("assignmentid");
+                });
                 set.Lazy(CollectionLazy.Extra);
                 set.Cascade(Cascade.None);
                 set.Schema(new UnitOfWorkConnectionSettings().ReadSideSchemaName);

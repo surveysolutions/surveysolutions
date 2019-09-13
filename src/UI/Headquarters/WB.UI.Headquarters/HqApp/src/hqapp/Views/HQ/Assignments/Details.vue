@@ -13,8 +13,17 @@
         </div>
         <div class="container-fluid">
             <div class="row">
-                <div class="col-sm-8">
-                    <h3>Detailed assignment info</h3>
+                <div class="col-sm-6">
+                    <h3>{{$t('Assignments.AssignmentHistory')}}</h3>
+                    <DataTables ref="table"
+                            :tableOptions="tableOptions"
+                            :noSearch="true"
+                            :wrapperClass=" { 'table-wrapper': true }">
+                    </DataTables>
+                </div>    
+               
+                <div class="col-sm-6">
+                    <h3>{{$t('Assignments.AssignmentInfo')}}</h3>
                     <table class="table table-striped table-bordered">
                         <tbody>
                             <tr>
@@ -116,6 +125,8 @@
 
 <script>
 import Vue from "vue";
+import { DateFormats } from "~/shared/helpers";
+
 export default {
     computed: {
         model() {
@@ -156,6 +167,79 @@ export default {
         },
         quantity() {
             return this.model.quantity == null ? this.$t("Assignments.Unlimited") : this.model.quantity;
+        },
+        
+        tableOptions() {
+            var self = this;
+            const columns = [
+                {
+                    data: "action",
+                    title: self.$t("Assignments.Action"),
+                    render(data) {
+                        return self.$t('Assignments.Action_' + data)
+                    }
+                },
+                {
+                    data: "actorName",
+                    title: self.$t("Assignments.Actor")
+                },
+                {
+                    data: "utcDate",
+                    width: "180px",
+                    title: self.$t("Assignments.Date"),
+                    render(data) {
+                        return moment.utc(data).local().format(DateFormats.dateTimeInList)
+                    }
+                },
+                {
+                    data: "additionalData",
+                    title: '',
+                    width: '50%',
+                    render(data, type, row) {
+                        switch(row.action) {
+                            case 'AudioRecordingChanged':
+                                if(data.audioRecording) {
+                                    return self.$t('Assignments.Action_AudioRecordingChanged_True')
+                                }
+                                else {
+                                     return self.$t('Assignments.Action_AudioRecordingChanged_False')
+                                }
+                            case 'Reassigned':
+                                let result = self.$t('Assignments.Action_Reassigned_To', {newResponsible: data.newResponsible})
+                                if(data.comment){
+                                    result += "<br/>"
+                                    result += self.$t('Assignments.Action_Reassigned_To_Comment', {comment: data.comment})
+                                }
+                                return result
+                            case 'QuantityChanged':
+                                return self.$t('Assignments.Action_QuantityChanged_To', {quantity: data.quantity})
+                            case 'WebModeChanged':
+                                if(data.webMode) {
+                                    return self.$t('Assignments.Action_WebModeChanged_True')
+                                } else {
+                                    return self.$t('Assignments.Action_WebModeChanged_False')
+                                }
+                        }
+                        return ''
+                    }
+                }
+            ];
+
+            var tableOptions = {
+                rowId: function(row){
+                    return `row_${row.id}`
+                },
+                deferLoading: 0,
+                columns,
+                ordering: false,
+                ajax: { 
+                    url: `${this.$router.options.base}api/v1/assignments/${this.model.id}/history`,
+                    type: "GET",
+                    dataSrc: "history"
+                }
+            }
+
+            return tableOptions
         }
     },
     mounted() {

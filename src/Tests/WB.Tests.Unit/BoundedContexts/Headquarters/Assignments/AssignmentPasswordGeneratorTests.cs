@@ -1,8 +1,11 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.DenormalizerStorage;
 using WB.Core.Infrastructure.Implementation;
 using WB.Tests.Abc;
 
@@ -14,7 +17,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         [Test]
         public void When_generating_unique_one_letter_password()
         {
-            var assignments = new InMemoryPlainStorageAccessor<Assignment>();
+            var assignments = new InMemoryReadSideRepositoryAccessor<Assignment, Guid>();
             var importAssignments = new InMemoryPlainStorageAccessor<AssignmentToImport>();
             for (int i = 0; i < RandomStringGenerator.Encode_32_Chars.Length-1; i++)
             {
@@ -22,7 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 if (i % 2 == 0)
                 {
                     var assignment = Create.Entity.Assignment(id: i + 1, password:  p);
-                    assignments.Store(assignment, assignment.Id);
+                    assignments.Store(assignment, assignment.PublicKey);
                 }
                 else
                 {

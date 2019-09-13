@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 
@@ -59,7 +60,7 @@ namespace WB.Core.BoundedContexts.Headquarters.MoveUserToAnotherTeam
                 try
                 {
                     result.AssignmentsProcessed++;
-                    assignmentsService.Reassign(assignmentId, previousSupervisorId);
+                    commandService.Execute(new ReassignAssignment(assignmentId, userId, previousSupervisorId, null));
                 }
                 catch (Exception exception)
                 {

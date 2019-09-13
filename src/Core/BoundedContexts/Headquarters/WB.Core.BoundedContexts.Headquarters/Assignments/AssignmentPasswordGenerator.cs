@@ -1,19 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
     public sealed class AssignmentPasswordGenerator : RandomStringGenerator, IAssignmentPasswordGenerator
     {
-        private readonly IPlainStorageAccessor<Assignment> assignments;
+        private readonly IQueryableReadSideRepositoryReader<Assignment, Guid> assignments;
         private readonly IPlainStorageAccessor<AssignmentToImport> importAssignments;
 
         public AssignmentPasswordGenerator(
-            IPlainStorageAccessor<Assignment> assignments, 
+            IQueryableReadSideRepositoryReader<Assignment, Guid> assignments, 
             IPlainStorageAccessor<AssignmentToImport> importAssignments)
         {
             this.assignments = assignments;
