@@ -161,6 +161,7 @@ namespace WB.UI.Headquarters.Controllers
         public bool IsCompleted { get; set; }
         public bool IsHeadquarters { get; set; }
         public string Comments { get; set; }
+        public string HistoryUrl { get; set; }
     }
 
     public class AssignmentQuestionnaireDto

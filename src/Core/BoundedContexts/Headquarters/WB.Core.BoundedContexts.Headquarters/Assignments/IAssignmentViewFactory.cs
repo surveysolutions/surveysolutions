@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
@@ -6,5 +8,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
     {
         AssignmentsWithoutIdentifingData Load(AssignmentsInputModel input);
         List<AssignmentIdentifyingQuestionRow> GetIdentifyingColumnText(Assignment assignment);
+        Task<AssignmentHistory> LoadHistoryAsync(Guid assignmentId, int offset, int limit);
     }
 }
