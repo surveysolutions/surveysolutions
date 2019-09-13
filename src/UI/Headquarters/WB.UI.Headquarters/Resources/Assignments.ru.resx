@@ -447,4 +447,13 @@
   <data name="Action_WebModeChanged_True" xml:space="preserve">
     <value>Web режим включен</value>
   </data>
+  <data name="Actor" xml:space="preserve">
+    <value>Исполнитель</value>
+  </data>
+  <data name="AssignmentHistory" xml:space="preserve">
+    <value>История</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Дата</value>
+  </data>
 </root>
