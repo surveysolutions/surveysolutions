@@ -47,6 +47,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IAssignmentsUpgradeService upgradeService;
         private readonly IAllUsersAndQuestionnairesFactory questionnairesFactory;
         private readonly IExportFileNameService exportFileNameService;
+        private readonly IAuthorizedUser authorizedUser;
 
         public SurveySetupController(
             ICommandService commandService,
@@ -63,7 +64,8 @@ namespace WB.UI.Headquarters.Controllers
             IPreloadedDataVerifier dataVerifier,
             IAssignmentsUpgradeService upgradeService,
             IAllUsersAndQuestionnairesFactory questionnairesFactory, 
-            IExportFileNameService exportFileNameService)
+            IExportFileNameService exportFileNameService,
+            IAuthorizedUser authorizedUser)
             : base(commandService, logger)
         {
             this.preloadingTemplateService = preloadingTemplateService;
@@ -78,6 +80,7 @@ namespace WB.UI.Headquarters.Controllers
             this.upgradeService = upgradeService;
             this.questionnairesFactory = questionnairesFactory;
             this.exportFileNameService = exportFileNameService;
+            this.authorizedUser = authorizedUser;
             this.sampleUploadViewFactory = sampleUploadViewFactory;
         }
 
@@ -138,7 +141,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             var processId = Guid.NewGuid();
             var sourceQuestionnaireId = QuestionnaireIdentity.Parse(Request["sourceQuestionnaireId"]);
-            this.upgradeService.EnqueueUpgrade(processId, sourceQuestionnaireId, new QuestionnaireIdentity(id, version));
+            this.upgradeService.EnqueueUpgrade(processId, authorizedUser.Id, sourceQuestionnaireId, new QuestionnaireIdentity(id, version));
             return RedirectToAction("UpgradeProgress", new {id = processId});
         }
 

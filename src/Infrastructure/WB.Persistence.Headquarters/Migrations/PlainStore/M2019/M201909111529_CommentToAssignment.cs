@@ -8,7 +8,6 @@ namespace WB.Persistence.Headquarters.Migrations.PlainStore
         public override void Up()
         {
             Create.Column("comments").OnTable("assignmenttoimport").AsString().Nullable();
-            Create.Column("comments").OnTable("assignments").AsString().Nullable();
         }
     }
 }

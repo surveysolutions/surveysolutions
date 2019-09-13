@@ -1,21 +1,33 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.Implementation.StorageStrategy
 {
-    internal class InMemoryViewWriter<TEntity> : IReadSideStorage<TEntity>, IDisposable
+    internal class InMemoryViewWriter<TEntity> : InMemoryViewWriter<TEntity, string>,
+        IReadSideStorage<TEntity>, 
+        IDisposable
+        where TEntity : class, IReadSideRepositoryEntity
+    {
+        public InMemoryViewWriter(IReadSideStorage<TEntity> readSideRepositoryWriter, Guid viewId)
+            : base(readSideRepositoryWriter, viewId.FormatGuid())
+        {
+        }
+    }
+
+    internal class InMemoryViewWriter<TEntity, TKey> : IReadSideStorage<TEntity, TKey>, IDisposable
         where TEntity : class, IReadSideRepositoryEntity
     {
         private TEntity view;
-        private readonly Guid viewId;
-        private readonly IReadSideStorage<TEntity> readSideRepositoryWriter;
+        private readonly TKey viewId;
+        private readonly IReadSideStorage<TEntity, TKey> readSideRepositoryWriter;
 
         private bool IsDisposed { get; set; }
 
-        public InMemoryViewWriter(IReadSideStorage<TEntity> readSideRepositoryWriter, Guid viewId)
+        public InMemoryViewWriter(IReadSideStorage<TEntity, TKey> readSideRepositoryWriter, TKey viewId)
         {
             this.IsDisposed = false;
             this.readSideRepositoryWriter = readSideRepositoryWriter;
@@ -23,17 +35,17 @@ namespace WB.Core.Infrastructure.Implementation.StorageStrategy
             this.view = readSideRepositoryWriter.GetById(viewId);
         }
 
-        public TEntity GetById(string id)
+        public TEntity GetById(TKey id)
         {
             return this.view;
         }
 
-        public void Store(TEntity projection, string id)
+        public void Store(TEntity projection, TKey id)
         {
             this.view = projection;
         }
 
-        public void BulkStore(List<Tuple<TEntity, string>> bulk)
+        public void BulkStore(List<Tuple<TEntity, TKey>> bulk)
         {
             foreach (var tuple in bulk)
             {
@@ -46,7 +58,7 @@ namespace WB.Core.Infrastructure.Implementation.StorageStrategy
             
         }
 
-        public void Remove(string id)
+        public void Remove(TKey id)
         {
             this.view = null;
         }

@@ -9,6 +9,8 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
     {
         public int Id { get; set; }
 
+        public Guid PublicId { get; set; }
+
         public QuestionnaireIdentity QuestionnaireId { get; set; }
 
         public int? Quantity { get; set; }

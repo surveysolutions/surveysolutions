@@ -15,6 +15,7 @@ using NSubstitute;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTests
@@ -125,7 +126,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 Responsible = "any"
             });
 
-            this.assignmentsStorage.Verify(ass => ass.Store(It.IsAny<Assignment>(), null), Times.Once);
+            this.commandService.Verify(ass => ass.Execute(It.IsAny<CreateAssignment>(), null), Times.Once);
         }
 
         [Test]
@@ -153,7 +154,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 Quantity = -1
             });
 
-            this.assignmentsStorage.Verify(ass => ass.Store(It.Is<Assignment>(x=>x.Quantity == null), null), Times.Once);
+            this.commandService.Verify(ass => ass.Execute(It.Is<CreateAssignment>(x=>x.Quantity == null), null), Times.Once);
         }
     }
 }

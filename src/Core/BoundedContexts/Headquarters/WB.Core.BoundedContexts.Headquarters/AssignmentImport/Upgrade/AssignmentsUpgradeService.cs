@@ -11,13 +11,15 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
 {
     public class QueuedUpgrade
     {
-        public QueuedUpgrade(Guid processId, QuestionnaireIdentity @from, QuestionnaireIdentity to)
+        public QueuedUpgrade(Guid processId, Guid userId, QuestionnaireIdentity @from, QuestionnaireIdentity to)
         {
             ProcessId = processId;
+            UserId = userId;
             From = @from;
             To = to;
         }
         public Guid ProcessId { get; }
+        public Guid UserId { get; }
         public QuestionnaireIdentity From { get; }
         public QuestionnaireIdentity To { get; }
     }
@@ -36,13 +38,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
             this.questionnaireStorage = questionnaireStorage;
         }
 
-        public void EnqueueUpgrade(Guid processId, QuestionnaireIdentity migrateFrom, QuestionnaireIdentity migrateTo)
+        public void EnqueueUpgrade(Guid processId, Guid userId, QuestionnaireIdentity migrateFrom, QuestionnaireIdentity migrateTo)
         {
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(migrateTo, null);
 
             this.auditLog.AssignmentsUpgradeStarted(questionnaire.Title, migrateFrom.Version, migrateTo.Version);
 
-            upgradeQueue.Enqueue(new QueuedUpgrade(processId, migrateFrom, migrateTo));
+            upgradeQueue.Enqueue(new QueuedUpgrade(processId, userId, migrateFrom, migrateTo));
             progressReporting[processId] = new AssignmentUpgradeProgressDetails(migrateFrom, migrateTo, 0, 0, new List<AssignmentUpgradeError>(), AssignmentUpgradeStatus.Queued);
         }
 
