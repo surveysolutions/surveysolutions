@@ -12,7 +12,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Assignment
         public long QuestionnaireVersion { get; }
         public Guid ResponsibleId { get; }
         public int? Quantity { get; }
-        public bool IsAudioRecordingEnabled { get; }
+        public bool AudioRecording { get; }
         public string Email { get; }
         public string Password { get; }
         public bool? WebMode { get; }
@@ -27,7 +27,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Assignment
             long questionnaireVersion,
             Guid responsibleId,
             int? quantity,
-            bool isAudioRecordingEnabled,
+            bool audioRecording,
             string email,
             string password,
             bool? webMode, 
@@ -41,7 +41,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Assignment
             QuestionnaireVersion = questionnaireVersion;
             ResponsibleId = responsibleId;
             Quantity = quantity;
-            IsAudioRecordingEnabled = isAudioRecordingEnabled;
+            AudioRecording = audioRecording;
             Email = email;
             Password = password;
             WebMode = webMode;

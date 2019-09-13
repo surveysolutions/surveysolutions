@@ -7,7 +7,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Assignment
         public Guid ResponsibleId { get; }
         public string Comment { get; }
 
-        public ReassignAssignment(Guid assignmentId, Guid userId, Guid responsibleId, string comment) : base(assignmentId, userId)
+        public ReassignAssignment(Guid publicKey, Guid userId, Guid responsibleId, string comment) : base(publicKey, userId)
         {
             ResponsibleId = responsibleId;
             Comment = comment;

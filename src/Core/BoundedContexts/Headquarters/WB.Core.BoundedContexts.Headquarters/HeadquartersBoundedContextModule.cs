@@ -339,7 +339,7 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             CommandRegistry
                 .Setup<AssignmentAggregateRoot>()
-                .ResolvesIdFrom<AssignmentCommand>(command => command.AssignmentId)
+                .ResolvesIdFrom<AssignmentCommand>(command => command.PublicKey)
                 .InitializesWith<CreateAssignment>(aggregate => aggregate.CreateAssignment)
                 .StatelessHandles<DeleteAssignment>(aggregate => aggregate.DeleteAssignment)
 

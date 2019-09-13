@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
             var httpResponseMessage = this.controller.Close(assignment.Id);
 
             commandService.Verify(x => 
-                x.Execute(It.Is<UpdateAssignmentQuantity>(c => c.Quantity == 1 && c.AssignmentId == assignment.PublicKey), null),
+                x.Execute(It.Is<UpdateAssignmentQuantity>(c => c.Quantity == 1 && c.PublicKey == assignment.PublicKey), null),
                 Times.Once);
             Assert.That(httpResponseMessage, Has.Property(nameof(HttpResponseMessage.StatusCode)).EqualTo(HttpStatusCode.OK));
         }
