@@ -4,10 +4,12 @@ using System.Threading.Tasks;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -35,7 +37,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
         }
 
-        public Task Execute(IJobExecutionContext context)
+        public async Task Execute(IJobExecutionContext context)
         {
             try
             {
@@ -43,12 +45,20 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
 
                 AssignmentsImportStatus importProcessStatus = assignmentsImportService.GetImportStatus();
                 if (importProcessStatus?.ProcessStatus != AssignmentsImportProcessStatus.Import)
-                    return Task.CompletedTask;
+                    return;
 
                 var allAssignmentIds = assignmentsImportService.GetAllAssignmentIdsToImport();
                 
                 if (importProcessStatus?.ProcessStatus != AssignmentsImportProcessStatus.Import)
-                    return Task.CompletedTask;
+                    return;
+
+                Guid responsibleId;
+
+                using (var userManager = serviceLocator.GetInstance<HqUserManager>())
+                {
+                    responsibleId = (await userManager
+                        .FindByNameAsync(importProcessStatus.ResponsibleName)).Id;
+                }
 
                 this.logger.Debug("Assignments import job: Started");
                 var sw = new Stopwatch();
@@ -72,7 +82,9 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                                 return;
                             }
 
-                            var newAssignmentId = threadImportAssignmentsService.ImportAssignment(assignmentId, importProcessStatus.AssignedTo, questionnaire);
+                            var newAssignmentId = threadImportAssignmentsService.ImportAssignment(assignmentId,
+                                importProcessStatus.AssignedTo, questionnaire, responsibleId);
+
                             if (!firstImportedAssignmentId.HasValue)
                                 firstImportedAssignmentId = newAssignmentId;
                             else
@@ -97,8 +109,6 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
             {
                 this.logger.Error($"Assignments import job: FAILED. Reason: {ex.Message} ", ex);
             }
-
-            return Task.CompletedTask;
         }
     }
 }
