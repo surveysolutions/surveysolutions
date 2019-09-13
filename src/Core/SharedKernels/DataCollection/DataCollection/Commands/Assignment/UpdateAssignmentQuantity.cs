@@ -6,7 +6,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Assignment
     {
         public int? Quantity { get; }
 
-        public UpdateAssignmentQuantity(Guid assignmentId, Guid userId, int? quantity) : base(assignmentId, userId)
+        public UpdateAssignmentQuantity(Guid publicKey, Guid userId, int? quantity) : base(publicKey, userId)
         {
             Quantity = quantity;
         }

@@ -6,7 +6,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Assignment
     {
         public bool AudioRecording { get; }
 
-        public UpdateAssignmentAudioRecording(Guid assignmentId, Guid userId, bool audioRecording) : base(assignmentId, userId)
+        public UpdateAssignmentAudioRecording(Guid publicKey, Guid userId, bool audioRecording) : base(publicKey, userId)
         {
             AudioRecording = audioRecording;
         }

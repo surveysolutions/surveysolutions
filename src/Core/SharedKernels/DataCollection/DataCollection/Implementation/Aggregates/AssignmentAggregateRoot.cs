@@ -11,8 +11,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     public class AssignmentAggregateRoot : AggregateRootMappedByConvention
     {
-        readonly AssignmentProperties properties = new AssignmentProperties();
+        internal readonly AssignmentProperties properties = new AssignmentProperties();
 
+        public override Guid EventSourceId
+        {
+            get => base.EventSourceId;
+            protected set
+            {
+                base.EventSourceId = value;
+                this.properties.PublicKey = value;
+            }
+        }
 
         #region Apply
         protected void Apply(AssignmentCreated @event)
@@ -22,7 +31,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.properties.ResponsibleId = @event.ResponsibleId;
             this.properties.Quantity = @event.Quantity;
             this.properties.QuestionnaireId = new QuestionnaireIdentity(@event.QuestionnaireId, @event.QuestionnaireVersion);
-            this.properties.AudioRecording = @event.IsAudioRecordingEnabled;
+            this.properties.AudioRecording = @event.AudioRecording;
             this.properties.Email = @event.Email;
             this.properties.Password = @event.Password;
             this.properties.WebMode = @event.WebMode;
@@ -96,7 +105,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 command.QuestionnaireId.Version,
                 command.ResponsibleId,
                 command.Quantity,
-                command.IsAudioRecordingEnabled,
+                command.AudioRecording,
                 command.Email,
                 command.Password,
                 command.WebMode,
