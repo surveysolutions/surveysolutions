@@ -14,6 +14,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -41,13 +42,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         private readonly IInterviewTreeBuilder interviewTreeBuilder;
         private readonly IUserViewFactory userViewFactory;
         private readonly IQuestionOptionsRepository questionOptionsRepository;
-        private readonly IPlainStorageAccessor<Assignment> assignmentsRepository;
+        private readonly IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsRepository;
 
         public ImportDataVerifier(IFileSystemAccessor fileSystem,
             IInterviewTreeBuilder interviewTreeBuilder,
             IUserViewFactory userViewFactory,
             IQuestionOptionsRepository questionOptionsRepository,
-            IPlainStorageAccessor<Assignment> assignmentsRepository)
+            IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsRepository)
         {
             this.fileSystem = fileSystem;
             this.interviewTreeBuilder = interviewTreeBuilder;

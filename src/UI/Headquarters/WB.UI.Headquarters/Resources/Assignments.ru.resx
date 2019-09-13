@@ -284,7 +284,7 @@
     <value>Назначить на</value>
   </data>
   <data name="CreatingNewAssignment" xml:space="preserve">
-    <value>Создание новой задачи для опросника {{questionnaire}}</value>
+    <value>Создание нового задания для опросника {{questionnaire}}</value>
   </data>
   <data name="Tooltip_Filter_QuestionnaireVersion" xml:space="preserve">
     <value>Выберите версию опросника, чтобы посмотреть созданные по нему задания. Выберите "Любая версия", чтобы увидеть задания по всем версиям опросника</value>
@@ -363,7 +363,6 @@
   </data>
   <data name="DuplicatePasswordByWebModeWithQuantity1" xml:space="preserve">
     <value>Пароль для задания в веб режиме с количеством интервью равным 1 должен быть уникален</value>
-    <comment>Пароль для задания в веб режиме с количеством интервью равным 1 должен быть уникален</comment>
   </data>
   <data name="QuestionnaireVersion" xml:space="preserve">
     <value>вер. {{version}}</value>
@@ -382,6 +381,9 @@
   </data>
   <data name="AssignmentCloseWebMode" xml:space="preserve">
     <value>Задание {{id}} не может быть закрыто, так как включён веб режим</value>
+  </data>
+  <data name="AssignmentInfo" xml:space="preserve">
+    <value>Информация о задании</value>
   </data>
   <data name="DetailsComments" xml:space="preserve">
       <value>Комментарий</value>

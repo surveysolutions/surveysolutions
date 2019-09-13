@@ -80,6 +80,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
@@ -233,6 +234,8 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.Bind<IExportFactory, ExportFactory>();
 
+            registry.RegisterDenormalizer<AssignmentDenormalizer>();
+
             registry.RegisterDenormalizer<InterviewSummaryCompositeDenormalizer>();
             registry.RegisterDenormalizer<InterviewLifecycleEventHandler>();
             registry.RegisterDenormalizer<CumulativeChartDenormalizer>();
@@ -280,10 +283,11 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IWebInterviewConfigProvider, WebInterviewConfigProvider>();
             
             registry.Bind<IDeviceSyncInfoRepository, DeviceSyncInfoRepository>();
+            registry.Bind<IAssignmentIdGenerator, AssignmentIdGenerator>();
+            registry.Bind<IAssignmentsToDeleteFactory, AssignmentsToDeleteFactory>();
             registry.Bind<IAssignmentViewFactory, AssignmentViewFactory>();
             registry.Bind<IAssignmentsService, AssignmentsService>();
-            registry.Bind<IAssignmetnsDeletionService, AssignmetnsDeletionService>();
-            registry.Bind<ISystemLog, Services.Internal.SystemLog>();
+            registry.Bind<ISystemLog, SystemLog>();
             registry.Bind<IAuditLogReader, AuditLogReader>();
 
             registry.BindAsSingleton<IPauseResumeQueue, PauseResumeQueue>();
@@ -322,6 +326,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             var registry = serviceLocator.GetInstance<IDenormalizerRegistry>();
             registry.RegisterFunctional<InterviewSummaryCompositeDenormalizer>();
             registry.RegisterFunctional<CumulativeChartDenormalizer>();
+            registry.RegisterFunctional<AssignmentDenormalizer>();
 
             CommandRegistry
                 .Setup<Questionnaire>()
@@ -331,6 +336,20 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .InitializesWith<DeleteQuestionnaire>(aggregate => aggregate.DeleteQuestionnaire)
                 .InitializesWith<DisableQuestionnaire>(aggregate => aggregate.DisableQuestionnaire)
                 .InitializesWith<CloneQuestionnaire>(aggregate => aggregate.CloneQuestionnaire, config => config.ValidatedBy<QuestionnaireValidator>());
+
+            CommandRegistry
+                .Setup<AssignmentAggregateRoot>()
+                .ResolvesIdFrom<AssignmentCommand>(command => command.AssignmentId)
+                .InitializesWith<CreateAssignment>(aggregate => aggregate.CreateAssignment)
+                .StatelessHandles<DeleteAssignment>(aggregate => aggregate.DeleteAssignment)
+
+                .Handles<ReassignAssignment>(aggregate => aggregate.Reassign)
+                .Handles<ArchiveAssignment>(aggregate => aggregate.Archive)
+                .Handles<UnarchiveAssignment>(aggregate => aggregate.Unarchive)
+                .Handles<MarkAssignmentAsReceivedByTablet>(aggregate => aggregate.MarkAssignmentAsReceivedByTablet)
+                .Handles<UpdateAssignmentAudioRecording>(aggregate => aggregate.UpdateAssignmentAudioRecording)
+                .Handles<UpdateAssignmentQuantity>(aggregate => aggregate.UpdateAssignmentQuantity)
+                .Handles<UpdateAssignmentWebMode>(aggregate => aggregate.UpdateAssignmentWebMode);
 
             CommandRegistry
                 .Setup<StatefulInterview>()

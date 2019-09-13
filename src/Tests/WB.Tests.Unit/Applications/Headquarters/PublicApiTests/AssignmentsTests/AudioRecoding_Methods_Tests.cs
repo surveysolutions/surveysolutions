@@ -1,10 +1,16 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.DenormalizerStorage;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.API.PublicApi.Models;
 
@@ -17,10 +23,12 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         {
             var assignment = Create.Entity.Assignment(id: 15);
 
-            IPlainStorageAccessor<Assignment> assignments = new InMemoryPlainStorageAccessor<Assignment>();
-            assignments.Store(assignment, assignment.Id);
-            
-            var controller = Create.Controller.AssignmentsPublicApiController(assignmentsStorage: assignments);
+            var assignments = new InMemoryReadSideRepositoryAccessor<Assignment, Guid>();
+            assignments.Store(assignment, assignment.PublicKey);
+
+            var assignmentsService = Create.Service.AssignmentsService(assignments);
+
+            var controller = Create.Controller.AssignmentsPublicApiController(assignmentsService: assignmentsService);
 
             // Act
             var response = controller.AudioRecoding(15);
@@ -32,13 +40,14 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         [Test]
         public void should_throw_404_when_assignment_archived()
         {
-            var assignment = Create.Entity.Assignment(id: 15);
+            var assignment = Create.Entity.Assignment(id: 15, isArchived: true);
 
-            IPlainStorageAccessor<Assignment> assignments = new InMemoryPlainStorageAccessor<Assignment>();
-            assignments.Store(assignment, assignment.Id);
-            assignment.Archive();
-            
-            var controller = Create.Controller.AssignmentsPublicApiController(assignmentsStorage: assignments);
+            var assignments = new InMemoryReadSideRepositoryAccessor<Assignment, Guid>();
+            assignments.Store(assignment, assignment.PublicKey);
+
+            var assignmentsService = Create.Service.AssignmentsService(assignments);
+
+            var controller = Create.Controller.AssignmentsPublicApiController(assignmentsService: assignmentsService);
 
             // Act
             TestDelegate act = () => controller.AudioRecoding(15);
@@ -54,17 +63,20 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         {
             var assignment = Create.Entity.Assignment(id: 15);
 
-            IPlainStorageAccessor<Assignment> assignments = new InMemoryPlainStorageAccessor<Assignment>();
-            assignments.Store(assignment, assignment.Id);
+            var assignments = new InMemoryReadSideRepositoryAccessor<Assignment, Guid>();
+            assignments.Store(assignment, assignment.PublicKey);
             
-            var controller = Create.Controller.AssignmentsPublicApiController(assignmentsStorage: assignments);
+            var assignmentsService = Create.Service.AssignmentsService(assignments);
+            var commandService = Mock.Of<ICommandService>();
+
+            var controller = Create.Controller.AssignmentsPublicApiController(assignmentsService: assignmentsService, commandService: commandService);
 
             // Act
             var response = controller.AudioRecodingPatch(15, new UpdateRecordingRequest{Enabled = true});
 
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
-            Assert.That(assignment.IsAudioRecordingEnabled, Is.True);
+            Mock.Get(commandService).Verify(c => c.Execute(It.Is<UpdateAssignmentAudioRecording>(a => a.AssignmentId == assignment.PublicKey), null), Times.Once);
         }
     }
 }

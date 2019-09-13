@@ -8,7 +8,10 @@ using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
@@ -23,23 +26,27 @@ namespace WB.UI.Headquarters.API
     {
         private readonly IAssignmentViewFactory assignmentViewFactory;
         private readonly IAuthorizedUser authorizedUser;
-        private readonly IPlainStorageAccessor<Assignment> assignmentsStorage;
+        private readonly IAssignmentsService assignmentsStorage;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly ISystemLog auditLog;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires;
         private readonly IInvitationService invitationService;
         private readonly IStatefulInterviewRepository interviews;
         private readonly IAssignmentPasswordGenerator passwordGenerator;
+        private readonly ICommandService commandService;
+        private readonly IAssignmentFactory assignmentFactory;
 
         public AssignmentsApiController(IAssignmentViewFactory assignmentViewFactory,
             IAuthorizedUser authorizedUser,
-            IPlainStorageAccessor<Assignment> assignmentsStorage,
+            IAssignmentsService assignmentsStorage,
             IQuestionnaireStorage questionnaireStorage,
             ISystemLog auditLog,
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires, 
             IInvitationService invitationService,
             IStatefulInterviewRepository interviews, 
-            IAssignmentPasswordGenerator passwordGenerator)
+            IAssignmentPasswordGenerator passwordGenerator,
+            ICommandService commandService,
+            IAssignmentFactory assignmentFactory)
         {
             this.assignmentViewFactory = assignmentViewFactory;
             this.authorizedUser = authorizedUser;
@@ -50,6 +57,8 @@ namespace WB.UI.Headquarters.API
             this.invitationService = invitationService;
             this.interviews = interviews;
             this.passwordGenerator = passwordGenerator;
+            this.commandService = commandService;
+            this.assignmentFactory = assignmentFactory;
         }
         
         [Route("")]
@@ -113,8 +122,8 @@ namespace WB.UI.Headquarters.API
 
             foreach (var id in ids)
             {
-                Assignment assignment = this.assignmentsStorage.GetById(id);
-                assignment.Archive();
+                Assignment assignment = this.assignmentsStorage.GetAssignment(id);
+                commandService.Execute(new ArchiveAssignment(assignment.PublicKey, authorizedUser.Id));
             }
 
             return this.Ok();
@@ -130,8 +139,8 @@ namespace WB.UI.Headquarters.API
             
             foreach (var id in ids)
             {
-                Assignment assignment = this.assignmentsStorage.GetById(id);
-                assignment.Unarchive();
+                Assignment assignment = this.assignmentsStorage.GetAssignment(id);
+                commandService.Execute(new UnarchiveAssignment(assignment.PublicKey, authorizedUser.Id));
             }
 
             return this.Ok();
@@ -145,8 +154,8 @@ namespace WB.UI.Headquarters.API
             if (request?.Ids == null) return this.BadRequest();
             foreach (var idToAssign in request.Ids)
             {
-                Assignment assignment = this.assignmentsStorage.GetById(idToAssign);
-                assignment.Reassign(request.ResponsibleId);
+                Assignment assignment = this.assignmentsStorage.GetAssignment(idToAssign);
+                commandService.Execute(new ReassignAssignment(assignment.PublicKey, authorizedUser.Id, request.ResponsibleId, request.Comments));
 
                 if (!string.IsNullOrEmpty(request.Comments))
                     assignment.SetComments(request.Comments);
@@ -161,7 +170,7 @@ namespace WB.UI.Headquarters.API
         [ObserverNotAllowedApi]
         public IHttpActionResult SetQuantity(int id, [FromBody] UpdateAssignmentRequest request)
         {
-            var assignment = this.assignmentsStorage.GetById(id);
+            var assignment = this.assignmentsStorage.GetAssignment(id);
 
             if (request.Quantity < -1)
                 return this.BadRequest(WB.UI.Headquarters.Resources.Assignments.InvalidSize);
@@ -169,7 +178,7 @@ namespace WB.UI.Headquarters.API
             if(!string.IsNullOrEmpty(assignment.Email) || !string.IsNullOrEmpty(assignment.Password))
                 return this.BadRequest(WB.UI.Headquarters.Resources.Assignments.WebMode);
 
-            assignment.UpdateQuantity(request.Quantity);
+            commandService.Execute(new UpdateAssignmentQuantity(assignment.PublicKey, authorizedUser.Id, request.Quantity));
             this.auditLog.AssignmentSizeChanged(id, request.Quantity);
             return this.Ok();
         }
@@ -227,38 +236,30 @@ namespace WB.UI.Headquarters.API
             if (quantity == 1 && (request.WebMode == null || request.WebMode == true) &&
                 string.IsNullOrEmpty(request.Email) && !string.IsNullOrEmpty(password))
             {
-                var hasPasswordInDb = this.assignmentsStorage.Query(x =>
-                    x.Any(y => y.Quantity == 1 &&
-                               (y.WebMode == null || y.WebMode == true) &&
-                               y.QuestionnaireId == interview.QuestionnaireIdentity &&
-                               (y.Email == null || y.Email == "") &&
-                               y.Password == password));
+                var hasPasswordInDb = this.assignmentsStorage.DoesExistPasswordInDb(interview.QuestionnaireIdentity, password);
 
                 if (hasPasswordInDb)
                     return this.BadRequest(Assignments.DuplicatePasswordByWebModeWithQuantity1);
             }
 
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, null);
-            var assignment = Assignment.PrefillFromInterview(interview, questionnaire);
-
-            assignment.UpdateQuantity(quantity);
-            assignment.Reassign(request.ResponsibleId);
-            assignment.SetComments(request.Comments);
-
+            var answers = Assignment.GetAnswersFromInterview(interview, questionnaire);
             bool isAudioRecordingEnabled = request.IsAudioRecordingEnabled ?? this.questionnaires.Query(_ => _
-                .Where(q => q.Id == interview.QuestionnaireIdentity.ToString())
-                .Select(q => q.IsAudioRecordingEnabled).FirstOrDefault());
-            assignment.SetAudioRecordingEnabled(isAudioRecordingEnabled);
+                                               .Where(q => q.Id == interview.QuestionnaireIdentity.ToString())
+                                               .Select(q => q.IsAudioRecordingEnabled).FirstOrDefault());
 
-            assignment.UpdateMode(request.WebMode);
-
-            if (request.WebMode == true)
-            {
-                assignment.UpdateEmail(request.Email);
-                assignment.UpdatePassword(password);
-            }
-
-            this.assignmentsStorage.Store(assignment, null);
+            var assignment = assignmentFactory.CreateAssignment(authorizedUser.Id,
+                interview.QuestionnaireIdentity,
+                request.ResponsibleId,
+                request.Quantity,
+                request.Email,
+                password,
+                request.WebMode,
+                isAudioRecordingEnabled,
+                answers,
+                null,
+                request.Comments
+            );
 
             this.invitationService.CreateInvitationForWebInterview(assignment);
 

@@ -15,6 +15,7 @@ using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -33,7 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         private readonly IPlainStorageAccessor<AssignmentsImportProcess> importAssignmentsProcessRepository;
         private readonly IPlainStorageAccessor<AssignmentToImport> importAssignmentsRepository;
         private readonly IInterviewCreatorFromAssignment interviewCreatorFromAssignment;
-        private readonly IPlainStorageAccessor<Assignment> assignmentsStorage;
+        private readonly IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsStorage;
         private readonly IAssignmentsImportFileConverter assignmentsImportFileConverter;
         private readonly IAssignmentFactory assignmentFactory;
         private readonly IInvitationService invitationService;
@@ -46,7 +47,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             IPlainStorageAccessor<AssignmentsImportProcess> importAssignmentsProcessRepository,
             IPlainStorageAccessor<AssignmentToImport> importAssignmentsRepository,
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment,
-            IPlainStorageAccessor<Assignment> assignmentsStorage,
+            IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsStorage,
             IAssignmentsImportFileConverter assignmentsImportFileConverter,
             IAssignmentFactory assignmentFactory,
             IInvitationService invitationService, 
@@ -228,32 +229,25 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         public IEnumerable<string> GetImportAssignmentsErrors()
             => this.importAssignmentsRepository.Query(x => x.Where(_ => _.Error != null).Select(_ => _.Error));
 
-        public int ImportAssignment(int assignmentId, Guid defaultResponsible, IQuestionnaire questionnaire)
+        public int ImportAssignment(int assignmentId, Guid defaultAssignedTo, IQuestionnaire questionnaire, Guid responsibleId)
         {
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version);
             var assignmentToImport = this.GetAssignmentById(assignmentId);
 
-            var responsibleId = assignmentToImport.Interviewer ?? assignmentToImport.Supervisor ?? assignmentToImport.Headquarters ?? defaultResponsible;
-            var identifyingQuestionIds = questionnaire.GetPrefilledQuestions().ToHashSet();
+            var assignedTo = assignmentToImport.Interviewer ?? assignmentToImport.Supervisor ?? assignmentToImport.Headquarters ?? defaultAssignedTo;
 
-            var assignment = this.assignmentFactory.CreateAssignment(questionnaireIdentity, 
-                responsibleId, 
+            var assignment = this.assignmentFactory.CreateAssignment(
+                responsibleId,
+                questionnaireIdentity,
+                assignedTo, 
                 assignmentToImport.Quantity,
                 assignmentToImport.Email, 
                 assignmentToImport.Password, 
                 assignmentToImport.WebMode,
                 assignmentToImport.IsAudioRecordingEnabled,
+                assignmentToImport.Answers,
+                assignmentToImport.ProtectedVariables,
                 assignmentToImport.Comments);
-            var identifyingAnswers = assignmentToImport.Answers
-                .Where(x => identifyingQuestionIds.Contains(x.Identity.Id)).Select(a =>
-                    IdentifyingAnswer.Create(assignment, questionnaire, a.Answer.ToString(), a.Identity))
-                .ToList();
-
-            assignment.SetIdentifyingData(identifyingAnswers);
-            assignment.SetAnswers(assignmentToImport.Answers);
-            assignment.SetProtectedVariables(assignmentToImport.ProtectedVariables);
-
-            this.assignmentsStorage.Store(assignment, null);
 
             this.invitationService.CreateInvitationForWebInterview(assignment);
 

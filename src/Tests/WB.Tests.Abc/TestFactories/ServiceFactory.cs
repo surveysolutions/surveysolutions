@@ -578,10 +578,10 @@ namespace WB.Tests.Abc.TestFactories
 
         public IAssignmentsService AssignmentService(params Assignment[] assignments)
         {
-            IPlainStorageAccessor<Assignment> accessor = new TestPlainStorage<Assignment>();
+            var accessor = new TestInMemoryWriter<Assignment, Guid>();
             foreach (var assignment in assignments)
             {
-                accessor.Store(assignment, assignment.Id);
+                accessor.Store(assignment, assignment.PublicKey);
             }
 
             var service = new AssignmentsService(accessor, Mock.Of<IInterviewAnswerSerializer>());
@@ -713,29 +713,46 @@ namespace WB.Tests.Abc.TestFactories
             IInterviewTreeBuilder interviewTreeBuilder = null,
             IUserViewFactory userViewFactory = null,
             IQuestionOptionsRepository optionsRepository = null,
-            IPlainStorageAccessor<Assignment> assignmentsRepository = null)
+            IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsRepository = null)
             => new ImportDataVerifier(fileSystem ?? new FileSystemIOAccessor(),
                 interviewTreeBuilder ?? Mock.Of<IInterviewTreeBuilder>(),
                 userViewFactory ?? Mock.Of<IUserViewFactory>(),
                 optionsRepository ?? Mock.Of<IQuestionOptionsRepository>(),
-                assignmentsRepository ?? Mock.Of<IPlainStorageAccessor<Assignment>>());
+                assignmentsRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<Assignment, Guid>>());
 
         public IAssignmentsUpgrader AssignmentsUpgrader(IPreloadedDataVerifier importService = null,
             IQuestionnaireStorage questionnaireStorage = null,
-            IPlainStorageAccessor<Assignment> assignments = null,
-            IAssignmentsUpgradeService upgradeService = null)
+            IAssignmentsService assignments = null,
+            IAssignmentsUpgradeService upgradeService = null,
+            ICommandService commandService = null)
         {
-            return new AssignmentsUpgrader(assignments ?? new TestPlainStorage<Assignment>(),
+            var commands = commandService ?? Mock.Of<ICommandService>();
+            var assignmentsService = assignments;
+            if (assignmentsService == null)
+            {
+                var assignment = Create.Entity.Assignment();
+                assignmentsService = Mock.Of<IAssignmentsService>(s =>
+                    s.GetAssignmentByAggregateRootId(It.IsAny<Guid>()) == assignment);
+            }
+
+            return new AssignmentsUpgrader(assignmentsService,
                 importService ?? Mock.Of<IPreloadedDataVerifier>(s => s.VerifyWithInterviewTree(It.IsAny<List<InterviewAnswer>>(), It.IsAny<Guid?>(), It.IsAny<IQuestionnaire>()) == null),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 upgradeService ?? Mock.Of<IAssignmentsUpgradeService>(),
-                Create.Service.AssignmentFactory(),
-                Mock.Of<IInvitationService>());
+                Create.Service.AssignmentFactory(commands, assignmentsService),
+                Mock.Of<IInvitationService>(),
+                commands);
         }
 
-        public IAssignmentFactory AssignmentFactory()
+        public IAssignmentFactory AssignmentFactory(
+            ICommandService commandService = null, 
+            IAssignmentsService assignmentsService = null,
+            IAssignmentIdGenerator assignmentIdGenerator = null)
         {
-            var result = new AssignmentFactory(new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>());
+            var result = new AssignmentFactory(new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>(),
+                commandService ?? Mock.Of<ICommandService>(),
+                assignmentsService ?? Mock.Of<IAssignmentsService>(),
+                assignmentIdGenerator ?? Mock.Of<IAssignmentIdGenerator>());
             return result;
         }
 
@@ -757,7 +774,7 @@ namespace WB.Tests.Abc.TestFactories
             IPlainStorageAccessor<AssignmentsImportProcess> importAssignmentsProcessRepository = null,
             IPlainStorageAccessor<AssignmentToImport> importAssignmentsRepository = null,
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment = null,
-            IPlainStorageAccessor<Assignment> assignmentsStorage = null,
+            IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsStorage = null,
             IAssignmentsImportFileConverter assignmentsImportFileConverter = null,
             IInvitationService invitationService = null)
         {
@@ -775,7 +792,7 @@ namespace WB.Tests.Abc.TestFactories
                 importAssignmentsProcessRepository ?? Mock.Of<IPlainStorageAccessor<AssignmentsImportProcess>>(),
                 importAssignmentsRepository ?? Mock.Of<IPlainStorageAccessor<AssignmentToImport>>(),
                 interviewCreatorFromAssignment ?? Mock.Of<IInterviewCreatorFromAssignment>(),
-                assignmentsStorage ?? Mock.Of<IPlainStorageAccessor<Assignment>>(),
+                assignmentsStorage ?? Mock.Of<IQueryableReadSideRepositoryReader<Assignment, Guid>>(),
                 assignmentsImportFileConverter ?? AssignmentsImportFileConverter(userViewFactory: userViewFactory),
                 Create.Service.AssignmentFactory(),
                 invitationService ?? Mock.Of<IInvitationService>(),
@@ -1138,11 +1155,11 @@ namespace WB.Tests.Abc.TestFactories
         }
 
         public AssignmentPasswordGenerator AssignmentPasswordGenerator(
-            IPlainStorageAccessor<Assignment> assignments = null, 
+            IQueryableReadSideRepositoryReader<Assignment, Guid> assignments = null, 
             IPlainStorageAccessor<AssignmentToImport> importAssignments = null)
         {
             return new AssignmentPasswordGenerator(
-                assignments ?? new InMemoryPlainStorageAccessor<Assignment>(),
+                assignments ?? new InMemoryReadSideRepositoryAccessor<Assignment, Guid>(),
                 importAssignments ?? new InMemoryPlainStorageAccessor<AssignmentToImport>());
         }
 
@@ -1193,6 +1210,13 @@ namespace WB.Tests.Abc.TestFactories
             IAuthorizedUser authorizedUser = null)
         {
             return new AuditLogService(auditLogFactory, authorizedUser ?? Mock.Of<IAuthorizedUser>());
+        }
+
+        public IAssignmentsService AssignmentsService(IQueryableReadSideRepositoryReader<Assignment, Guid> assignments,
+            IInterviewAnswerSerializer interviewAnswerSerializer = null)
+        {
+            return new AssignmentsService(assignments, 
+                interviewAnswerSerializer ?? Mock.Of<IInterviewAnswerSerializer>());
         }
     }
 

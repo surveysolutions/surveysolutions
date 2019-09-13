@@ -387,13 +387,76 @@
   <data name="AssignmentCloseWebMode" xml:space="preserve">
     <value>Assignment {{id}} cannot be closed since it has web mode enabled</value>
   </data>
+  <data name="AssignmentInfo" xml:space="preserve">
+    <value>Detailed assignment info</value>
+  </data>
+  <data name="Action_Archived" xml:space="preserve">
+    <value>Archived</value>
+  </data>
   <data name="DetailsComments" xml:space="preserve">
-      <value>Comment</value>
+    <value>Comment</value>
   </data>
   <data name="Comments" xml:space="preserve">
-      <value>Comment(not required)</value>
+    <value>Comment(not required)</value>
+  </data>
+  <data name="Action_AudioRecordingChanged" xml:space="preserve">
+    <value>Audio recording changed</value>
   </data>
   <data name="EnterComments" xml:space="preserve">
     <value>Enter your comment here</value>
+  </data>
+  <data name="Action_Created" xml:space="preserve">
+    <value>Created</value>
+  </data>
+  <data name="Action_Deleted" xml:space="preserve">
+    <value>Deleted</value>
+  </data>
+  <data name="Action_QuantityChanged" xml:space="preserve">
+    <value>Size changed</value>
+  </data>
+  <data name="Action_ReceivedByTablet" xml:space="preserve">
+    <value>Received by tablet</value>
+  </data>
+  <data name="Action_UnArchived" xml:space="preserve">
+    <value>Unarchived </value>
+  </data>
+  <data name="Action_Reassigned" xml:space="preserve">
+    <value>Reassigned</value>
+  </data>
+  <data name="Action_WebModeChanged" xml:space="preserve">
+    <value>Web mode changed</value>
+  </data>
+  <data name="Action" xml:space="preserve">
+    <value>Action</value>
+  </data>
+  <data name="Actor" xml:space="preserve">
+    <value>Actor</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="Action_AudioRecordingChanged_False" xml:space="preserve">
+    <value>Audio recording disabled</value>
+  </data>
+  <data name="Action_AudioRecordingChanged_True" xml:space="preserve">
+    <value>Audio recording enabled</value>
+  </data>
+  <data name="Action_WebModeChanged_False" xml:space="preserve">
+    <value>Web Mode disabled</value>
+  </data>
+  <data name="Action_WebModeChanged_True" xml:space="preserve">
+    <value>Web Mode enabled</value>
+  </data>
+  <data name="Action_QuantityChanged_To" xml:space="preserve">
+    <value>Size changed to {{quantity}}</value>
+  </data>
+  <data name="Action_Reassigned_To" xml:space="preserve">
+    <value>Reassigned to {{newResponsible}}</value>
+  </data>
+  <data name="Action_Reassigned_To_Comment" xml:space="preserve">
+    <value>Comment: {{comment}}</value>
+  </data>
+  <data name="AssignmentHistory" xml:space="preserve">
+    <value>History</value>
   </data>
 </root>

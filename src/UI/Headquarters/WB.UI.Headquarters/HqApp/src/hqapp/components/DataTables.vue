@@ -190,18 +190,20 @@ export default {
             }
 
             if(options.ajax != null) {
-                options.ajax.dataSrc = (json) => {
-                    if(json.data) {
-                        if (json.data.length > 0 && json.totalRow) {
-                            var totalRow = json.totalRow;
-                            totalRow.DT_RowClass = "total-row";
-                            json.data.unshift(totalRow);
+                if(!options.ajax.dataSrc) {
+                    options.ajax.dataSrc = (json) => {
+                        if(json.data) {
+                            if (json.data.length > 0 && json.totalRow) {
+                                var totalRow = json.totalRow;
+                                totalRow.DT_RowClass = "total-row";
+                                json.data.unshift(totalRow);
+                            }
+                            return json.data
+                        } else {
+                            return json
                         }
-                        return json.data
-                    } else {
-                        return json
-                    }
-                };
+                    };
+                }
                         
                 options.ajax.data = (d) => {                    
                     this.addParamsToRequest(d);
