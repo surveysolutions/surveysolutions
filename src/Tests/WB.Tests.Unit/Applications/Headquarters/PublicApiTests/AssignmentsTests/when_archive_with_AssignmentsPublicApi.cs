@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
 
             this.controller.Archive(1);
 
-            this.commandService.Verify(x => x.Execute(It.Is<ArchiveAssignment>(a => a.AssignmentId == Id.g7), null), Times.Once);
+            this.commandService.Verify(x => x.Execute(It.Is<ArchiveAssignment>(a => a.PublicKey == Id.g7), null), Times.Once);
         }
 
         [Test]
@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
 
             this.controller.Unarchive(1);
 
-            this.commandService.Verify(c => c.Execute(It.Is<UnarchiveAssignment>(a => a.AssignmentId == Id.g7), null), Times.Once);
+            this.commandService.Verify(c => c.Execute(It.Is<UnarchiveAssignment>(a => a.PublicKey == Id.g7), null), Times.Once);
         }
     }
 }
