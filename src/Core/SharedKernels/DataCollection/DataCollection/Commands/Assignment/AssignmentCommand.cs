@@ -5,7 +5,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Assignment
 {
     public abstract class AssignmentCommand : CommandBase
     {
-        public Guid AssignmentId { get; }
+        public Guid PublicKey { get; }
 
         private Guid userId;
         public Guid UserId
@@ -21,10 +21,10 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Assignment
             private set => this.userId = value;
         }
 
-        protected AssignmentCommand(Guid assignmentId, Guid userId)
-            : base(assignmentId)
+        protected AssignmentCommand(Guid publicKey, Guid userId)
+            : base(publicKey)
         {
-            this.AssignmentId = assignmentId;
+            this.PublicKey = publicKey;
             this.UserId = userId;
 
             this.OriginDate = DateTimeOffset.Now;

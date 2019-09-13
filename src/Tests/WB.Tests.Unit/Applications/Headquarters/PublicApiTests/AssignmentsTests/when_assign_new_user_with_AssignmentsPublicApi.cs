@@ -70,7 +70,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 Responsible = "any"
             });
 
-            this.commandService.Verify(ass => ass.Execute(It.Is<ReassignAssignment>(a => a.ResponsibleId == Id.g1 && a.AssignmentId == Id.g7), null), Times.Once );
+            this.commandService.Verify(ass => ass.Execute(It.Is<ReassignAssignment>(a => a.ResponsibleId == Id.g1 && a.PublicKey == Id.g7), null), Times.Once );
         }
     }
 }

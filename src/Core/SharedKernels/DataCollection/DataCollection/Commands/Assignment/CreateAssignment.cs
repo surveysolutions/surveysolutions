@@ -11,7 +11,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Assignment
         public QuestionnaireIdentity QuestionnaireId { get; }
         public Guid ResponsibleId { get; }
         public int? Quantity { get; }
-        public bool IsAudioRecordingEnabled { get; }
+        public bool AudioRecording { get; }
         public string Email { get; }
         public string Password { get; }
         public bool? WebMode { get; }
@@ -19,26 +19,26 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Assignment
         public List<string> ProtectedVariables { get; }
         public string Comment { get; }
 
-        public CreateAssignment(Guid assignmentId,
+        public CreateAssignment(Guid publicKey,
             int id,
             Guid userId,
             QuestionnaireIdentity questionnaireId,
             Guid responsibleId,
             int? quantity,
-            bool isAudioRecordingEnabled,
+            bool audioRecording,
             string email,
             string password,
             bool? webMode,
             List<InterviewAnswer> answers, 
             List<string> protectedVariables,
             string comment) 
-            : base(assignmentId, userId)
+            : base(publicKey, userId)
         {
             Id = id;
             QuestionnaireId = questionnaireId;
             ResponsibleId = responsibleId;
             Quantity = quantity;
-            IsAudioRecordingEnabled = isAudioRecordingEnabled;
+            AudioRecording = audioRecording;
             Email = email;
             Password = password;
             WebMode = webMode;

@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
 
             this.controller.ChangeQuantity(1, 30);
 
-            this.commandService.Verify(x => x.Execute(It.Is<UpdateAssignmentQuantity>(a => a.Quantity == 30 && a.AssignmentId == Id.g1), null), Times.Once);
+            this.commandService.Verify(x => x.Execute(It.Is<UpdateAssignmentQuantity>(a => a.Quantity == 30 && a.PublicKey == Id.g1), null), Times.Once);
         }
     }
 }

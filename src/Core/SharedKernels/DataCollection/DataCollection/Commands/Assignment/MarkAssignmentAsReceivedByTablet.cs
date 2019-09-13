@@ -4,7 +4,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Assignment
 {
     public class MarkAssignmentAsReceivedByTablet : AssignmentCommand
     {
-        public MarkAssignmentAsReceivedByTablet(Guid assignmentId, Guid userId) : base(assignmentId, userId)
+        public MarkAssignmentAsReceivedByTablet(Guid publicKey, Guid userId) : base(publicKey, userId)
         {
         }
     }
