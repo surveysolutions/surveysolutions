@@ -147,7 +147,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             AssignmentPropertiesInvariants invariants = new AssignmentPropertiesInvariants(this.properties);
             invariants.ThrowIfAssignmentDeleted();
 
-            ApplyEvent(new AssignmentAudioRecordingChanged(command.UserId, command.OriginDate, command.IsAudioRecordingEnabled));
+            ApplyEvent(new AssignmentAudioRecordingChanged(command.UserId, command.OriginDate, command.AudioRecording));
         }
 
         public void UpdateAssignmentQuantity(UpdateAssignmentQuantity command)

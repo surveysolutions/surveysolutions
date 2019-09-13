@@ -101,7 +101,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         /*public virtual void SetAudioRecordingEnabled(bool enabled, DateTime utcDateTime)
         {
-            this.IsAudioRecordingEnabled = enabled;
+            this.AudioRecording = enabled;
             this.UpdatedAtUtc = utcDateTime;
         }
 
