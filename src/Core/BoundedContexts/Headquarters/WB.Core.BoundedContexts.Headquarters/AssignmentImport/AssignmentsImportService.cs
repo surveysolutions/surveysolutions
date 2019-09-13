@@ -229,18 +229,17 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         public IEnumerable<string> GetImportAssignmentsErrors()
             => this.importAssignmentsRepository.Query(x => x.Where(_ => _.Error != null).Select(_ => _.Error));
 
-        public int ImportAssignment(int assignmentId, Guid defaultResponsible, IQuestionnaire questionnaire)
+        public int ImportAssignment(int assignmentId, Guid defaultAssignedTo, IQuestionnaire questionnaire, Guid responsibleId)
         {
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version);
             var assignmentToImport = this.GetAssignmentById(assignmentId);
 
-            var responsibleId = assignmentToImport.Interviewer ?? assignmentToImport.Supervisor ?? assignmentToImport.Headquarters ?? defaultResponsible;
-            var identifyingQuestionIds = questionnaire.GetPrefilledQuestions().ToHashSet();
+            var assignedTo = assignmentToImport.Interviewer ?? assignmentToImport.Supervisor ?? assignmentToImport.Headquarters ?? defaultAssignedTo;
 
             var assignment = this.assignmentFactory.CreateAssignment(
-                authorizedUser.Id,
-                questionnaireIdentity, 
-                responsibleId, 
+                responsibleId,
+                questionnaireIdentity,
+                assignedTo, 
                 assignmentToImport.Quantity,
                 assignmentToImport.Email, 
                 assignmentToImport.Password, 
