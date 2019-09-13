@@ -61,6 +61,159 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Action.
+        /// </summary>
+        public static string Action {
+            get {
+                return ResourceManager.GetString("Action", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Archived.
+        /// </summary>
+        public static string Action_Archived {
+            get {
+                return ResourceManager.GetString("Action_Archived", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Audio recording changed.
+        /// </summary>
+        public static string Action_AudioRecordingChanged {
+            get {
+                return ResourceManager.GetString("Action_AudioRecordingChanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Audio recording disabled.
+        /// </summary>
+        public static string Action_AudioRecordingChanged_False {
+            get {
+                return ResourceManager.GetString("Action_AudioRecordingChanged_False", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Audio recording enabled.
+        /// </summary>
+        public static string Action_AudioRecordingChanged_True {
+            get {
+                return ResourceManager.GetString("Action_AudioRecordingChanged_True", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Created.
+        /// </summary>
+        public static string Action_Created {
+            get {
+                return ResourceManager.GetString("Action_Created", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deleted.
+        /// </summary>
+        public static string Action_Deleted {
+            get {
+                return ResourceManager.GetString("Action_Deleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Size changed.
+        /// </summary>
+        public static string Action_QuantityChanged {
+            get {
+                return ResourceManager.GetString("Action_QuantityChanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Size changed to {{quantity}}.
+        /// </summary>
+        public static string Action_QuantityChanged_To {
+            get {
+                return ResourceManager.GetString("Action_QuantityChanged_To", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reassigned.
+        /// </summary>
+        public static string Action_Reassigned {
+            get {
+                return ResourceManager.GetString("Action_Reassigned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reassigned to {{newResponsible}}.
+        /// </summary>
+        public static string Action_Reassigned_To {
+            get {
+                return ResourceManager.GetString("Action_Reassigned_To", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comment: {{comment}}.
+        /// </summary>
+        public static string Action_Reassigned_To_Comment {
+            get {
+                return ResourceManager.GetString("Action_Reassigned_To_Comment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Received by tablet.
+        /// </summary>
+        public static string Action_ReceivedByTablet {
+            get {
+                return ResourceManager.GetString("Action_ReceivedByTablet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unarchived .
+        /// </summary>
+        public static string Action_UnArchived {
+            get {
+                return ResourceManager.GetString("Action_UnArchived", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Web mode changed.
+        /// </summary>
+        public static string Action_WebModeChanged {
+            get {
+                return ResourceManager.GetString("Action_WebModeChanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Web Mode disabled.
+        /// </summary>
+        public static string Action_WebModeChanged_False {
+            get {
+                return ResourceManager.GetString("Action_WebModeChanged_False", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Web Mode enabled.
+        /// </summary>
+        public static string Action_WebModeChanged_True {
+            get {
+                return ResourceManager.GetString("Action_WebModeChanged_True", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Activated.
         /// </summary>
         public static string Activated {
@@ -75,6 +228,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Active {
             get {
                 return ResourceManager.GetString("Active", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Actor.
+        /// </summary>
+        public static string Actor {
+            get {
+                return ResourceManager.GetString("Actor", resourceCulture);
             }
         }
         
@@ -111,6 +273,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string AssignmentCloseWebMode {
             get {
                 return ResourceManager.GetString("AssignmentCloseWebMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to History.
+        /// </summary>
+        public static string AssignmentHistory {
+            get {
+                return ResourceManager.GetString("AssignmentHistory", resourceCulture);
             }
         }
         
@@ -291,6 +462,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string CreatingNewAssignment {
             get {
                 return ResourceManager.GetString("CreatingNewAssignment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date.
+        /// </summary>
+        public static string Date {
+            get {
+                return ResourceManager.GetString("Date", resourceCulture);
             }
         }
         
