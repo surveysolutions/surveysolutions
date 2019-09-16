@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -128,6 +129,10 @@ namespace WB.UI.Headquarters.API.PublicApi
 
             var statistics = this.statefullInterviewSearcher.GetStatistics(interview);
             var diagnosticsInfo = diagnosticsFactory.GetById(id);
+            var interviewSummary = this.allInterviewsViewFactory.Load(new AllInterviewsInputModel
+            {
+                InterviewId = id
+            });
 
             return new InterviewApiStatistics
             {
@@ -150,7 +155,8 @@ namespace WB.UI.Headquarters.API.PublicApi
                 NumberOfInterviewers = diagnosticsInfo.NumberOfInterviewers,
                 NumberRejectionsBySupervisor = diagnosticsInfo.NumberRejectionsBySupervisor,
                 NumberRejectionsByHq = diagnosticsInfo.NumberRejectionsByHq,
-                InterviewDuration = diagnosticsInfo.InterviewDuration != null ? new TimeSpan(diagnosticsInfo.InterviewDuration.Value) : (TimeSpan?)null
+                InterviewDuration = diagnosticsInfo.InterviewDuration != null ? new TimeSpan(diagnosticsInfo.InterviewDuration.Value) : (TimeSpan?)null,
+                UpdatedAtUtc = interviewSummary.Items.First().LastEntryDateUtc
             };
         }
 
