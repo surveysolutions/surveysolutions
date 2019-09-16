@@ -160,7 +160,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             {
                 var assignmentEvent = (AssignmentEvent) committedEvent;
                 var historyItem = new AssignmentHistoryItem(AssignmentHistoryAction.Unknown,
-                    userViewFactory.GetUser(assignmentEvent.UserId).UserName, 
+                    userViewFactory.GetUser(assignmentEvent.UserId)?.UserName ?? "Unknown", 
                     assignmentEvent.OriginDate.UtcDateTime);
 
                 switch (committedEvent)
