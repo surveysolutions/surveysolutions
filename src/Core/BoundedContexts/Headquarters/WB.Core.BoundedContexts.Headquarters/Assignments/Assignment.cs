@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             QuestionnaireIdentity questionnaireId,
             Guid responsibleId,
             int? quantity,
-            bool isAudioRecordingEnabled,
+            bool audioRecording,
             string email,
             string password,
             bool? webMode, 
@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             this.ResponsibleId = responsibleId;
             this.Quantity = quantity;
             this.QuestionnaireId = questionnaireId;
-            this.IsAudioRecordingEnabled = isAudioRecordingEnabled;
+            this.AudioRecording = audioRecording;
             this.Email = email;
             this.Password = password;
             this.WebMode = webMode;
@@ -69,7 +69,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public virtual QuestionnaireIdentity QuestionnaireId { get; set; }
 
-        public virtual bool IsAudioRecordingEnabled { get; set; }
+        public virtual bool AudioRecording { get; set; }
 
         public virtual string Email { get; set; }
         public virtual string Password { get; set; }

@@ -99,7 +99,7 @@ namespace WB.UI.Headquarters.Controllers
                     }),
                 InterviewsNeeded = assignment.InterviewsNeeded,
                 InterviewsProvided = assignment.InterviewsProvided,
-                IsAudioRecordingEnabled = assignment.IsAudioRecordingEnabled,
+                IsAudioRecordingEnabled = assignment.AudioRecording,
                 IsCompleted = assignment.IsCompleted,
                 Password = assignment.Password,
                 ProtectedVariables = assignment.ProtectedVariables,
