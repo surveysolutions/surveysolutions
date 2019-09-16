@@ -64,60 +64,75 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public Assignment Update(Assignment state, IPublishedEvent<AssignmentArchived> @event)
         {
-            state.Archived = true;
-            state.UpdatedAtUtc = @event.Payload.OriginDate.UtcDateTime;
-            return state;
+            return UpdateAssignment(state, @event.Payload.OriginDate.UtcDateTime,
+                assignment => assignment.Archived = true);
         }
 
         public Assignment Update(Assignment state, IPublishedEvent<AssignmentUnarchived> @event)
         {
-            state.Archived = false;
-            state.UpdatedAtUtc = @event.Payload.OriginDate.UtcDateTime;
-            return state;
+            return UpdateAssignment(state, @event.Payload.OriginDate.UtcDateTime,
+                assignment => assignment.Archived = false);
         }
 
         public Assignment Update(Assignment state, IPublishedEvent<AssignmentReassigned> @event)
         {
-            state.ResponsibleId = @event.Payload.ResponsibleId;
-            state.UpdatedAtUtc = @event.Payload.OriginDate.UtcDateTime;
-            state.ReceivedByTabletAtUtc = null;
+            return UpdateAssignment(state, @event.Payload.OriginDate.UtcDateTime,
+                assignment =>
+                {
+                    assignment.ResponsibleId = @event.Payload.ResponsibleId;
+                    assignment.ReceivedByTabletAtUtc = null;
 
-            if (!string.IsNullOrEmpty(@event.Payload.Comment))
-                state.Comments = @event.Payload.Comment;
-
-            return state;
+                    if (!string.IsNullOrEmpty(@event.Payload.Comment))
+                        assignment.Comments = @event.Payload.Comment;
+                });
         }
 
         public Assignment Update(Assignment state, IPublishedEvent<AssignmentWebModeChanged> @event)
         {
-            state.WebMode = @event.Payload.WebMode;
-            state.UpdatedAtUtc = @event.Payload.OriginDate.UtcDateTime;
-            return state;
+            return UpdateAssignment(state, @event.Payload.OriginDate.UtcDateTime,
+                assignment =>
+                {
+                    assignment.WebMode = @event.Payload.WebMode;
+                });
         }
 
         public Assignment Update(Assignment state, IPublishedEvent<AssignmentReceivedByTablet> @event)
         {
-            state.ReceivedByTabletAtUtc = @event.Payload.OriginDate.UtcDateTime;
-            return state;
+            return UpdateAssignment(state, @event.Payload.OriginDate.UtcDateTime,
+                assignment =>
+                {
+                    assignment.ReceivedByTabletAtUtc = @event.Payload.OriginDate.UtcDateTime;
+                });
         }
 
         public Assignment Update(Assignment state, IPublishedEvent<AssignmentAudioRecordingChanged> @event)
         {
-            state.AudioRecording = @event.Payload.AudioRecording;
-            state.UpdatedAtUtc = @event.Payload.OriginDate.UtcDateTime;
-            return state;
+            return UpdateAssignment(state, @event.Payload.OriginDate.UtcDateTime,
+                assignment =>
+                {
+                    assignment.AudioRecording = @event.Payload.AudioRecording;
+                });
         }
 
         public Assignment Update(Assignment state, IPublishedEvent<AssignmentQuantityChanged> @event)
         {
-            state.Quantity = @event.Payload.Quantity;
-            state.UpdatedAtUtc = @event.Payload.OriginDate.UtcDateTime;
-            return state;
+            return UpdateAssignment(state, @event.Payload.OriginDate.UtcDateTime,
+                assignment =>
+                {
+                    assignment.Quantity = @event.Payload.Quantity;
+                });
         }
 
         public Assignment Update(Assignment state, IPublishedEvent<AssignmentDeleted> @event)
         {
             return null;
+        }
+
+        private Assignment UpdateAssignment(Assignment assignment, DateTimeOffset dateTimeOffset, Action<Assignment> updater)
+        {
+            updater.Invoke(assignment);
+            assignment.UpdatedAtUtc = dateTimeOffset.UtcDateTime;
+            return assignment;
         }
     }
 }
