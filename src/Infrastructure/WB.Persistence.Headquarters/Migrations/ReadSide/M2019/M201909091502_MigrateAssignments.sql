@@ -21,7 +21,7 @@ FROM plainstore.assignments;
 	
 INSERT INTO readside.assignmentsidentifyinganswers(assignmentid, "position", questionid, answer, answerasstring, rostervector)
 SELECT 
-	(SELECT ass.publickey FROM readside.assignments ass WHERE ass.id = ans.assignmentid), --assignmentid, 
+	ans.assignmentid, --assignmentid, 
 	ans."position", 
 	ans.questionid, 
 	ans.answer, 
