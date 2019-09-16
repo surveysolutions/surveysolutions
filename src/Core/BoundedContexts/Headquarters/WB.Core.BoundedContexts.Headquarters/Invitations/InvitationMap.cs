@@ -1,5 +1,6 @@
 ﻿using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.PlainStorage;
 
@@ -25,6 +26,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             ManyToOne(x => x.Assignment, mto =>
             {
                 mto.Column("AssignmentId");
+                mto.PropertyRef(nameof(Assignment.Id));
                 mto.Cascade(Cascade.None);
                 mto.Update(false);
                 mto.Insert(false);
