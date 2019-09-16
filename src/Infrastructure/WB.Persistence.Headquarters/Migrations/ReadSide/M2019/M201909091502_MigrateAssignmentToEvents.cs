@@ -12,8 +12,6 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
 
         public override void Up()
         {
-            Thread.Sleep(5000);
-
             CreateAssignmentTables();
 
             MigrateExistedAssignments();
