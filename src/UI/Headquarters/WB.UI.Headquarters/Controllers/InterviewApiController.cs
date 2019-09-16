@@ -11,6 +11,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Infrastructure.Native.Sanitizer;
 using WB.UI.Headquarters.Code;
@@ -64,7 +65,14 @@ namespace WB.UI.Headquarters.Controllers
 
             var allInterviews = this.allInterviewsViewFactory.Load(input);
 
-            foreach (var x in allInterviews.Items) foreach (var y in x.FeaturedQuestions) y.Question = y.Question.RemoveHtmlTags();
+            foreach (var x in allInterviews.Items)
+            {
+                Enum.TryParse(x.Status, out InterviewStatus myStatus);
+                x.Status = myStatus.ToLocalizeString();
+
+                foreach (var y in x.FeaturedQuestions)
+                    y.Question = y.Question.RemoveHtmlTags();
+            }
 
             var response = new InterviewsDataTableResponse
             {
