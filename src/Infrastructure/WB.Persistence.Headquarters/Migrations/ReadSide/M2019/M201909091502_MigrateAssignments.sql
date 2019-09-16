@@ -53,21 +53,6 @@ SELECT
 FROM readside.assignments;
 
 
-
-INSERT INTO events.events (id, origin, "timestamp", eventsourceid, eventsequence, eventtype, value)
-SELECT 
-	uuid_in(md5(random()::text || clock_timestamp()::text)::cstring),      -- id
-	null,                -- origin
-	updatedatutc,        -- "timestamp"
-	publickey,           -- eventsourceid
-	2,                   -- eventsequence
-	'AssignmentArchived', -- eventtype
-	concat('{ 
-		   "id": ', id, ', 
-		   "userId": "00000000-0000-0000-0000-000000000001" 
-	}')::jsonb          -- value
-FROM readside.assignments WHERE archived = true;
-
 INSERT INTO events.events (id, origin, "timestamp", eventsourceid, eventsequence, eventtype, value)
 SELECT 
 	uuid_in(md5(random()::text || clock_timestamp()::text)::cstring),      -- id
@@ -81,4 +66,19 @@ SELECT
 		   "userId": "00000000-0000-0000-0000-000000000001"
 	}')::jsonb          -- value
 FROM readside.assignments  WHERE receivedbytabletatutc is not null;
+
+INSERT INTO events.events (id, origin, "timestamp", eventsourceid, eventsequence, eventtype, value)
+SELECT 
+	uuid_in(md5(random()::text || clock_timestamp()::text)::cstring),      -- id
+	null,                -- origin
+	updatedatutc,        -- "timestamp"
+	publickey,           -- eventsourceid
+	(SELECT MAX(eventsequence) + 1 FROM events.events es WHERE es.eventsourceid = publickey),             -- eventsequence,                   -- eventsequence
+	'AssignmentArchived', -- eventtype
+	concat('{ 
+		   "id": ', id, ', 
+		   "userId": "00000000-0000-0000-0000-000000000001" 
+	}')::jsonb          -- value
+FROM readside.assignments WHERE archived = true;
+
 
