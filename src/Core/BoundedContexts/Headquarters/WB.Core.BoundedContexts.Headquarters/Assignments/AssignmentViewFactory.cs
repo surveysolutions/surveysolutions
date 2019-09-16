@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.Storage;
@@ -20,53 +19,6 @@ using WB.Infrastructure.Native.Utils;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
-    public class AssignmentHistory
-    {
-        public AssignmentHistory()
-        {
-            this.History = new List<AssignmentHistoryItem>();
-        }
-
-        public List<AssignmentHistoryItem> History { get; set; }
-
-        public int RecordsFiltered { get; set; }
-    }
-
-    public class AssignmentHistoryItem
-    {
-        public AssignmentHistoryItem(AssignmentHistoryAction action, string actor, DateTime utcDate)
-        {
-            this.Action = action;
-            this.ActorName = actor;
-            this.UtcDate = utcDate;
-        }
-
-        [DataMember(IsRequired = true)]
-        public AssignmentHistoryAction Action { get; set; }
-
-        [DataMember(IsRequired = true)]
-        public string ActorName { get; set; }
-
-        [DataMember(IsRequired = true)]
-        public DateTime UtcDate { get; set; }
-
-        public object AdditionalData { get; set; }
-    }
-
-    public enum AssignmentHistoryAction
-    {
-        Unknown = 0,
-        Created = 1,
-        Archived = 2,
-        Deleted = 3,
-        ReceivedByTablet = 4,
-        UnArchived = 5,
-        AudioRecordingChanged = 6,
-        Reassigned = 7,
-        QuantityChanged = 8,
-        WebModeChanged = 9
-    }
-
     internal class AssignmentViewFactory : IAssignmentViewFactory
     {
         private readonly IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsStorage;
