@@ -103,7 +103,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public Assignment Update(Assignment state, IPublishedEvent<AssignmentAudioRecordingChanged> @event)
         {
-            state.IsAudioRecordingEnabled = @event.Payload.AudioRecording;
+            state.AudioRecording = @event.Payload.AudioRecording;
             state.UpdatedAtUtc = @event.Payload.OriginDate.UtcDateTime;
             return state;
         }

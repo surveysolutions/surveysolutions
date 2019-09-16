@@ -1,4 +1,4 @@
-﻿INSERT INTO readside.assignments (publickey, id, responsibleid, quantity, archived, createdatutc, updatedatutc, questionnaireid, questionnaireversion, answers, questionnaire, protectedvariables, receivedbytabletatutc, isaudiorecordingenabled, email, password, webmode)
+﻿INSERT INTO readside.assignments (publickey, id, responsibleid, quantity, archived, createdatutc, updatedatutc, questionnaireid, questionnaireversion, answers, questionnaire, protectedvariables, receivedbytabletatutc, audiorecording, email, password, webmode)
 SELECT 
     uuid_in(md5(random()::text || clock_timestamp()::text)::cstring),
 	id,
