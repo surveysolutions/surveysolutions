@@ -10,9 +10,9 @@ namespace WB.Infrastructure.Native.Storage
     [Obsolete]
     public class OldToNewAssemblyRedirectSerializationBinder : MainCoreAssemblyRedirectSerializationBaseBinder
     {
-        protected readonly Dictionary<string, Type> nameToType = new Dictionary<string, Type>();
+        protected static readonly Dictionary<string, Type> nameToType = new Dictionary<string, Type>();
 
-        public OldToNewAssemblyRedirectSerializationBinder()
+        static OldToNewAssemblyRedirectSerializationBinder()
         {
             var interviewAnswerType = typeof(InterviewAnswer);
             var assembly = interviewAnswerType.Assembly;
