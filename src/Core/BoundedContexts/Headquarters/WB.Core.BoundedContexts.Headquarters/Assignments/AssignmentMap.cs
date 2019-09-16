@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -54,7 +55,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 set.Key(key =>
                 {
                     key.PropertyRef(a => a.Id);
-                    key.Column("assignmentid");
+                    key.Column(nameof(InterviewSummary.AssignmentId));
                 });
                 set.Lazy(CollectionLazy.Extra);
                 set.Cascade(Cascade.None);
@@ -64,7 +65,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             List(x => x.IdentifyingData, mapper =>
             {
                 mapper.Table("AssignmentsIdentifyingAnswers");
-                mapper.Key(k => k.Column("AssignmentId"));
+                mapper.Key(key =>
+                {
+                    key.PropertyRef(a => a.Id);
+                    key.Column("AssignmentId");
+                });
                 mapper.Index(i => i.Column("Position"));
                 mapper.Cascade(Cascade.All);
             }, r => r.Component(c =>

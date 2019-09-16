@@ -42,7 +42,7 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
                 .WithColumn("comments").AsString().Nullable();
 
             Create.Table(assignmentsidentifyinganswers)
-                .WithColumn("assignmentid").AsGuid().NotNullable()
+                .WithColumn("assignmentid").AsInt32().NotNullable()
                 .WithColumn("position").AsInt32().NotNullable()
                 .WithColumn("questionid").AsGuid().NotNullable()
                 .WithColumn("answer").AsString().Nullable()
@@ -58,7 +58,7 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
 
             Create.ForeignKey(assignments + "_" + assignmentsidentifyinganswers)
                 .FromTable(assignmentsidentifyinganswers).ForeignColumn("assignmentid")
-                .ToTable(assignments).PrimaryColumn("publickey")
+                .ToTable(assignments).PrimaryColumn("id")
                 .OnDelete(Rule.Cascade);
         }
 
