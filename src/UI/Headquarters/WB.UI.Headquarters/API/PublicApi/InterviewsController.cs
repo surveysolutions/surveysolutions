@@ -184,6 +184,8 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <returns></returns>
         [HttpPost]
         [Route("{id:guid}/comment-by-variable/{variable}")]
+        [ApiBasicAuth(new [] {UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Headquarter, UserRoles.ApiUser, UserRoles.Administrator }, 
+            TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
         public HttpResponseMessage CommentByVariable(Guid id, string variable, RosterVector rosterVector, string comment)
         {
             var questionnaireIdentity = this.GetQuestionnaireIdByInterviewOrThrow(id);
@@ -208,6 +210,8 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <returns></returns>
         [HttpPost]
         [Route("{id:guid}/comment/{questionId}")]
+        [ApiBasicAuth(new [] {UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Headquarter, UserRoles.ApiUser, UserRoles.Administrator }, 
+            TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
         public HttpResponseMessage CommentByIdentity(Guid id, string questionId, string comment)
         {
             this.GetQuestionnaireIdByInterviewOrThrow(id);
