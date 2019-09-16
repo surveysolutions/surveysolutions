@@ -35,7 +35,7 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
                 .WithColumn("answers").AsCustom("jsonb").Nullable()
                 .WithColumn("protectedvariables").AsCustom("jsonb").Nullable()
                 .WithColumn("receivedbytabletatutc").AsDateTime().Nullable()
-                .WithColumn("isaudiorecordingenabled").AsBoolean().NotNullable().WithDefaultValue(false)
+                .WithColumn("audiorecording").AsBoolean().NotNullable().WithDefaultValue(false)
                 .WithColumn("email").AsString().Nullable()
                 .WithColumn("password").AsString().Nullable()
                 .WithColumn("webmode").AsBoolean().Nullable()

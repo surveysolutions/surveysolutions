@@ -446,7 +446,7 @@ namespace WB.UI.Headquarters.API.PublicApi
 
             return new AssignmentAudioRecordingEnabled
             {
-                Enabled = assignment.IsAudioRecordingEnabled
+                Enabled = assignment.AudioRecording
             };
         }
 

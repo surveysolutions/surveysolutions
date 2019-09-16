@@ -114,7 +114,7 @@ namespace WB.UI.Headquarters.Controllers
                 interviewer.PublicKey,
                 this.keyGenerator.Get(),
                 assignment.Id,
-                assignment.IsAudioRecordingEnabled);
+                assignment.AudioRecording);
 
             this.commandService.Execute(createInterviewCommand);
             return interviewId.FormatGuid();

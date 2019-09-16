@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 .Any(a =>
                     a.ResponsibleId == responsible
                     && !a.Archived
-                    && a.IsAudioRecordingEnabled));
+                    && a.AudioRecording));
 
             return result;
         }
@@ -85,7 +85,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 .Any(a =>
                     a.QuestionnaireId == questionnaireIdentity
                     && !a.Archived
-                    && a.IsAudioRecordingEnabled));
+                    && a.AudioRecording));
 
             return result;
         }
@@ -180,7 +180,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 ProtectedVariables = assignment.ProtectedVariables,
                 ResponsibleId = assignment.ResponsibleId,
                 ResponsibleName = assignment.Responsible.Name,
-                IsAudioRecordingEnabled = assignment.IsAudioRecordingEnabled,
+                IsAudioRecordingEnabled = assignment.AudioRecording,
                 Comments = assignment.Comments
             };
 

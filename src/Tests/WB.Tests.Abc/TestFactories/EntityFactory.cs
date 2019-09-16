@@ -1828,7 +1828,7 @@ namespace WB.Tests.Abc.TestFactories
             result.Email = email;
             result.Password = password;
             result.WebMode = webMode;
-            result.IsAudioRecordingEnabled = isAudioRecordingEnabled;
+            result.AudioRecording = isAudioRecordingEnabled;
             result.Answers = answers ?? new List<InterviewAnswer>();
             result.IdentifyingData = identifyingAnswers ?? new List<IdentifyingAnswer>();
 
