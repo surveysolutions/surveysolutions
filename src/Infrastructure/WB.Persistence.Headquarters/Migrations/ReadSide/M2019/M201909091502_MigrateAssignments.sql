@@ -48,7 +48,7 @@ SELECT
 		   "protectedVariables": ', coalesce(protectedVariables::text, '[]'), ',
 		   "questionnaireId": "', questionnaireid, '",
 		   "questionnaireVersion": ', questionnaireversion, ',
-		   "audioRecording": ', isaudiorecordingenabled::text, '
+		   "audioRecording": ', audiorecording::text, '
 	}')::jsonb          -- value
 FROM readside.assignments;
 
