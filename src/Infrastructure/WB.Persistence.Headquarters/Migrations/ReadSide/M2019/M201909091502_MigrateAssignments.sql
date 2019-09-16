@@ -53,6 +53,7 @@ SELECT
 FROM readside.assignments;
 
 
+
 INSERT INTO events.events (id, origin, "timestamp", eventsourceid, eventsequence, eventtype, value)
 SELECT 
 	uuid_in(md5(random()::text || clock_timestamp()::text)::cstring),      -- id
@@ -65,8 +66,7 @@ SELECT
 		   "id": ', id, ', 
 		   "userId": "00000000-0000-0000-0000-000000000001" 
 	}')::jsonb          -- value
-FROM readside.assignments;
-
+FROM readside.assignments WHERE archived = true;
 
 INSERT INTO events.events (id, origin, "timestamp", eventsourceid, eventsequence, eventtype, value)
 SELECT 
@@ -80,5 +80,5 @@ SELECT
 		   "id": ', id, ', 
 		   "userId": "00000000-0000-0000-0000-000000000001"
 	}')::jsonb          -- value
-FROM readside.assignments;
+FROM readside.assignments  WHERE receivedbytabletatutc is not null;
 

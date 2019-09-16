@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public virtual IList<InterviewAnswer> Answers { get; set; }
 
-        public virtual IList<string> ProtectedVariables { get; set; }
+        public virtual List<string> ProtectedVariables { get; set; }
 
         public virtual QuestionnaireLiteViewItem Questionnaire { get; protected set; }
 
