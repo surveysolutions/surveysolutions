@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public virtual IList<InterviewAnswer> Answers { get; set; }
 
-        public virtual List<string> ProtectedVariables { get; set; }
+        public virtual IList<string> ProtectedVariables { get; set; }
 
         public virtual QuestionnaireLiteViewItem Questionnaire { get; protected set; }
 
@@ -98,75 +98,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public virtual bool IsCompleted => this.InterviewsNeeded <= 0;
 
         public virtual string Comments { get; set; }
-
-        /*public virtual void SetAudioRecordingEnabled(bool enabled, DateTime utcDateTime)
-        {
-            this.AudioRecording = enabled;
-            this.UpdatedAtUtc = utcDateTime;
-        }
-
-        public virtual void UpdateQuantity(int? quantity, DateTime utcDateTime)
-        {
-            this.Quantity = quantity == -1 ? null : quantity;
-            this.UpdatedAtUtc = utcDateTime;
-        }
-
-        public virtual void Reassign(Guid responsibleId, DateTime utcDateTime)
-        {
-            this.ResponsibleId = responsibleId;
-            this.UpdatedAtUtc = utcDateTime;
-            this.ReceivedByTabletAtUtc = null;
-        }
-
-        public virtual void SetIdentifyingData(IList<IdentifyingAnswer> identifyingAnswers)
-        {
-            this.IdentifyingData = identifyingAnswers;
-            this.UpdatedAtUtc = DateTime.UtcNow;
-        }
-
-        public virtual void SetAnswers(IList<InterviewAnswer> answers)
-        {
-            this.Answers = answers;
-            this.UpdatedAtUtc = DateTime.UtcNow;
-        }
-
-        public virtual void Unarchive()
-        {
-            this.Archived = false;
-            this.UpdatedAtUtc = DateTime.UtcNow;
-        }
-
-        public virtual void SetProtectedVariables(List<string> protectedVariables)
-        {
-            this.ProtectedVariables = protectedVariables;
-            this.UpdatedAtUtc = DateTime.UtcNow;
-        }
-
-        public virtual void MarkAsReceivedByTablet()
-        {
-            this.ReceivedByTabletAtUtc = DateTime.UtcNow;
-        }
-
-        public virtual void UpdateEmail(string email)
-        {
-            this.Email = email;
-            this.UpdatedAtUtc = DateTime.UtcNow;
-        }
-        public virtual void UpdatePassword(string password)
-        {
-            this.Password = password?.ToUpperInvariant();
-            this.UpdatedAtUtc = DateTime.UtcNow;
-        }
-        public virtual void UpdateMode(bool? mode)
-        {
-            this.WebMode = mode;
-            this.UpdatedAtUtc = DateTime.UtcNow;
-        }
-        public virtual void SetComments(string comments)
-        {
-            this.Comments = comments;
-            this.UpdatedAtUtc = DateTime.UtcNow;
-        }*/
 
         public virtual bool InPrivateWebMode()
         {
