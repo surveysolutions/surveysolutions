@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Threading;
 using FluentMigrator;
 
 namespace WB.Persistence.Headquarters.Migrations.ReadSide
@@ -11,6 +12,8 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
 
         public override void Up()
         {
+            Thread.Sleep(5000);
+
             CreateAssignmentTables();
 
             MigrateExistedAssignments();
@@ -37,7 +40,8 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
                 .WithColumn("isaudiorecordingenabled").AsBoolean().NotNullable().WithDefaultValue(false)
                 .WithColumn("email").AsString().Nullable()
                 .WithColumn("password").AsString().Nullable()
-                .WithColumn("webmode").AsBoolean().Nullable();
+                .WithColumn("webmode").AsBoolean().Nullable()
+                .WithColumn("comments").AsString().Nullable();
 
             Create.Table(assignmentsidentifyinganswers)
                 .WithColumn("assignmentid").AsGuid().NotNullable()
