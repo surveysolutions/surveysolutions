@@ -42,7 +42,7 @@ SELECT
 		   "userId": "00000000-0000-0000-0000-000000000001", 
 		   "answers": ', coalesce(answers::text, '[]'), ', 
 		   "webMode": ', coalesce(webmode::text, 'null'), ',
-		   "quantity": ', coalesce(quantity, 'null'), ',
+		   "quantity": ', coalesce(quantity::text, 'null'), ',
 		   "originDate": "', createdatutc, '",
 		   "responsibleId": "', responsibleId, '",
 		   "protectedVariables": ', coalesce(protectedVariables::text, '[]'), ',
