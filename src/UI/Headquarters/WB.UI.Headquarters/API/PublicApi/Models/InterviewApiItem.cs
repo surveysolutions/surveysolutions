@@ -15,6 +15,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         public InterviewApiItem(Guid interviewId,
             Guid questionnaireId, 
             long questionnaireVersion, 
+            int?  assignmentId,
             Guid responsibleId,
             string responsibleName, 
             int errorsCount, 
@@ -25,6 +26,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
             this.InterviewId = interviewId;
             this.QuestionnaireId = questionnaireId;
             this.QuestionnaireVersion = questionnaireVersion;
+            this.AssignmentId = assignmentId;
             this.ResponsibleId = responsibleId;
             this.ResponsibleName = responsibleName;
             this.ErrorsCount = errorsCount;
@@ -47,6 +49,9 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         [DataMember]
         [Required]
         public long QuestionnaireVersion { set; get; }
+
+        [DataMember]
+        public int? AssignmentId { get; }
 
         [DataMember]
         [Required]
