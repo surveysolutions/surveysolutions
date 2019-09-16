@@ -2,11 +2,8 @@
 @model UserEditModel
 @{
     ViewBag.ActivePage = MenuItem.Interviewers;
-    if (!string.IsNullOrEmpty(Model.UserName))
-    {
-        ViewBag.Title = Pages.Profile_InterviewerEditFormat.FormatString(Model.UserName).RemoveHtmlTags();
-        ViewBag.PageTitle = Pages.Profile_InterviewerEditFormat.FormatString(Html.Encode(Model.UserName));
-    }
+    ViewBag.Title = Pages.Profile_InterviewerEditFormat.FormatString(Model.UserName).RemoveHtmlTags();
+    ViewBag.PageTitle = Pages.Profile_InterviewerEditFormat.FormatString(Html.Encode(Model.UserName));
     Layout = "~/Views/Shared/Profile/_UserEditorLayout.cshtml";
 }
 @section Breadcrumbs
