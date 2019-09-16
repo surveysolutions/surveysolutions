@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             DynamicUpdate(true);
 
             Id(x => x.PublicKey, mapper => mapper.Column("PublicKey"));
-            Property(x => x.Id, mapper => mapper.Unique(true));
+            NaturalId(mapping => mapping.Property(x => x.Id, mapper => mapper.Unique(true)));
 
             Property(x => x.ResponsibleId);
             Property(x => x.Quantity);
