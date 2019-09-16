@@ -2,11 +2,16 @@
 
 namespace WB.Persistence.Headquarters.Migrations.ReadSide
 {
-    [Migration(2019070215544)]
-    public class M2019070215544_RemoveInterviewCommentariesTable : Migration
+    [Migration(201907021554)]
+    public class M201907021554_RemoveInterviewCommentariesTable : Migration
     {
         public override void Up()
         {
+            // this check need to don't allow second execute, because we change number of migration
+            // from 2019070215544 to 201907021554, to correct migration run order 
+            if (Schema.Table("commentaries").Column("summary_id").Exists())
+                return;
+
             Create.Column("summary_id").OnTable("commentaries").AsInt32().Nullable();
 
             Execute.Sql(@"update readside.commentaries s
