@@ -144,7 +144,7 @@
         </div>
         <div id="pnlAssignToOtherTeamConfirmMessage">
           <p
-            v-html="this.config.isSupervisor ? $t('Interviews.AssignConfirmMessage', {count: this.getFilteredToAssign().length, status1: 'SupervisorAssigned', status2: 'InterviewerAssigned', status3: 'RejectedBySupervisor'} ) : $t('Interviews.AssignToOtherTeamConfirmMessage', {count: this.getFilteredToAssign().length, status1: 'ApprovedBySupervisor', status2: 'ApprovedByHQ'} )"
+            v-html="this.config.isSupervisor ? $t('Interviews.AssignConfirmMessage', {count: this.getFilteredToAssign().length, status1: 'Supervisor assigned', status2: 'Interviewer assigned', status3: 'Rejected by Supervisor'} ) : $t('Interviews.AssignToOtherTeamConfirmMessage', {count: this.getFilteredToAssign().length, status1: 'Approved by Supervisor', status2: 'Approved by Headquarters'} )"
           ></p>
         </div>
 
@@ -154,8 +154,7 @@
             type="checkbox"
             id="reassignReceivedByInterviewer"
             v-model="isReassignReceivedByInterviewer"
-            class="checkbox-filter"
-          />
+            class="checkbox-filter"/>
           <label for="reassignReceivedByInterviewer" style="font-weight: normal">
             <span class="tick"></span>
             {{$t("Interviews.AssignReceivedConfirm", CountReceivedByInterviewerItems())}}
@@ -166,34 +165,36 @@
         <button
           type="button"
           class="btn btn-primary"
+          role="confirm"
           @click="assign"
           :disabled="!newResponsibleId || getFilteredToAssign().length == 0"
         >{{ $t("Common.Assign") }}</button>
-        <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+        <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">{{ $t("Common.Cancel") }}</button>
       </div>
     </ModalFrame>
 
     <ModalFrame ref="deleteModal">
       <div class="action-container">
         <p
-          v-html="$t('Interviews.DeleteConfirmMessageHQ', {count: this.getFilteredToDelete().length, status1: 'SupervisorAssigned', status2: 'InterviewerAssigned'})"
+          v-html="$t('Interviews.DeleteConfirmMessageHQ', {count: this.getFilteredToDelete().length, status1: 'Supervisor assigned', status2: 'Interviewer assigned'})"
         ></p>
       </div>
       <div slot="actions">
         <button
           type="button"
           class="btn btn-primary"
+          role="confirm"
           @click="deleteInterviews"
           :disabled="getFilteredToDelete().length==0"
         >{{ $t("Common.Delete") }}</button>
-        <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+        <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">{{ $t("Common.Cancel") }}</button>
       </div>
     </ModalFrame>
     <ModalFrame ref="approveModal">
       <form onsubmit="return false;">
         <div class="action-container">
           <p
-            v-html="this.config.isSupervisor ? $t('Interviews.ApproveConfirmMessage', {count: this.getFilteredToApprove().length, status1: 'Completed', status2: 'RejectedbyHeadquarters'} ) : $t('Interviews.ApproveConfirmMessageHQ', {count: this.getFilteredToApprove().length, status1: 'Completed', status2: 'ApprovedBySupervisor'} )"
+            v-html="this.config.isSupervisor ? $t('Interviews.ApproveConfirmMessage', {count: this.getFilteredToApprove().length, status1: 'Completed', status2: 'Rejected by Headquarters'} ) : $t('Interviews.ApproveConfirmMessageHQ', {count: this.getFilteredToApprove().length, status1: 'Completed', status2: 'Approved by Supervisor'} )"
           ></p>
         </div>
         <div>
@@ -213,10 +214,11 @@
         <button
           type="button"
           class="btn btn-primary"
+          role="confirm"
           @click="approveInterviews"
           :disabled="getFilteredToApprove().length==0"
         >{{ $t("Common.Approve") }}</button>
-        <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+        <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">{{ $t("Common.Cancel") }}</button>
       </div>
     </ModalFrame>
 
@@ -224,10 +226,10 @@
       <form onsubmit="return false;">
         <div class="action-container">
           <p v-if="!config.isSupervisor"
-            v-html="$t('Interviews.RejectConfirmMessageHQ', {count: this.getFilteredToReject().length, status1: 'Completed', status2: 'ApprovedBySupervisor'} )"
+            v-html="$t('Interviews.RejectConfirmMessageHQ', {count: this.getFilteredToReject().length, status1: 'Completed', status2: 'Approved by Supervisor'} )"
           ></p>
           <p v-if="config.isSupervisor"
-            v-html="$t('Interviews.RejectConfirmMessage', {count: this.getFilteredToReject().length, status1: 'Completed', status2: 'RejectedByHeadquarters'} )"
+            v-html="$t('Interviews.RejectConfirmMessage', {count: this.getFilteredToReject().length, status1: 'Completed', status2: 'Rejected by Headquarters'} )"
           ></p>
         </div>
 
@@ -265,10 +267,11 @@
         <button
           type="button"
           class="btn btn-primary"
+          role="confirm"
           @click="rejectInterviews"
           :disabled="getFilteredToReject().length==0"
         >{{ $t("Common.Reject") }}</button>
-        <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+        <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">{{ $t("Common.Cancel") }}</button>
       </div>
     </ModalFrame>
 
@@ -276,7 +279,7 @@
       <form onsubmit="return false;">
         <div class="action-container">
           <p
-            v-html="$t('Interviews.UnapproveConfirmMessageHQ', {count : this.getFilteredToUnApprove().length, status1: 'ApprovedByHeadquarters'})"
+            v-html="$t('Interviews.UnapproveConfirmMessageHQ', {count : this.getFilteredToUnApprove().length, status1: 'Approved by Headquarters'})"
           ></p>
         </div>
       </form>
@@ -284,10 +287,11 @@
         <button
           type="button"
           class="btn btn-primary"
+          role="confirm"
           @click="unapproveInterviews"
           :disabled="getFilteredToUnApprove().length==0"
         >{{ $t("Common.Unapprove") }}</button>
-        <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+        <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">{{ $t("Common.Cancel") }}</button>
       </div>
     </ModalFrame>
 
@@ -318,9 +322,10 @@
         <button
           type="button"
           class="btn btn-link"
+          role="confirm"
           @click="viewInterview"
         >{{ $t("Pages.HistoryOfStatuses_ViewInterview") }}</button>
-        <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+        <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">{{ $t("Common.Cancel") }}</button>
       </div>
     </ModalFrame>
   </HqLayout>
