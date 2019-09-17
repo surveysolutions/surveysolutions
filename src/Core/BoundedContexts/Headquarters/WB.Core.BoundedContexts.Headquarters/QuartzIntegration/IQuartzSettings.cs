@@ -29,6 +29,14 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
                 instanceid = Environment.MachineName;
             }
 
+            if (!IsClustered)
+            {
+                return new NameValueCollection
+                {
+                    ["quartz.jobStore.type"] = "Quartz.Simpl.RAMJobStore, Quartz"
+                };
+            }
+
             var properties = new NameValueCollection
             {
                 ["quartz.jobStore.type"] = "Quartz.Impl.AdoJobStore.JobStoreTX, Quartz",
@@ -39,10 +47,12 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
                 ["quartz.jobStore.tablePrefix"] = "quartz.",
                 ["quartz.serializer.type"] = "binary",
                 ["quartz.scheduler.instanceId"] = instanceid,
-                ["quartz.jobStore.clustered"] = ConfigurationManager.AppSettings["Scheduler.IsClustered"]
+                ["quartz.jobStore.clustered"] = IsClustered.ToString()
             };
 
             return properties;
         }
+
+        public bool IsClustered => ConfigurationManager.AppSettings["Scheduler.IsClustered"].ToBool(false);
     }
 }
