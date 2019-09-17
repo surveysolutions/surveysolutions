@@ -11,6 +11,7 @@
             :defaultColDef="defaultColDef"
             :columnDefs="columnDefs"
             :rowData="rowData"
+            :grid-options="gridOptions"
 
             @grid-ready="onGridReady"
             @column-resized="autosizeHeaders"
@@ -88,7 +89,11 @@
         },
 
         computed: {
-                      
+            gridOptions() {
+                return {
+                    stopEditingWhenGridLosesFocus: true
+                }
+            }
         },
         methods : {
             initQuestionAsColumns() {
