@@ -331,9 +331,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Services\WebInterview\" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Update="Resources\CommandValidatorsMessages.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
