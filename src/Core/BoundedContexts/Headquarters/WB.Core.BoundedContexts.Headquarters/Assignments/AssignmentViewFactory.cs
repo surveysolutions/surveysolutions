@@ -159,8 +159,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             foreach (IEvent committedEvent in events.Select(x => x.Payload))
             {
                 var assignmentEvent = (AssignmentEvent) committedEvent;
+                var userName = userViewFactory.GetUser(new UserViewInputModel(assignmentEvent.UserId))?.UserName ?? "Unknown";
+
                 var historyItem = new AssignmentHistoryItem(AssignmentHistoryAction.Unknown,
-                    userViewFactory.GetUser(assignmentEvent.UserId)?.UserName ?? "Unknown", 
+                    userName, 
                     assignmentEvent.OriginDate.UtcDateTime);
 
                 switch (committedEvent)
