@@ -76,7 +76,7 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
             if (this.Schema.Schema("plainstore").Exists())
             {
                 Execute.Sql("CREATE SEQUENCE IF NOT EXISTS plainstore.assignment_id_sequence; "
-                          + "SELECT setval('plainstore.assignment_id_sequence', COALESCE(max(id), 1)) FROM readside.assignments; ");
+                          + "SELECT setval('plainstore.assignment_id_sequence', COALESCE(max(id), 0)) FROM readside.assignments; ");
             }
         }
 
