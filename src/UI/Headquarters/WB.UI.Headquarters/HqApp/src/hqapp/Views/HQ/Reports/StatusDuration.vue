@@ -288,7 +288,7 @@ export default {
 
             if (this.questionnaireId != undefined){
                 var questionnaireId = this.questionnaireId.key;
-                var questionnaireVersion = this.questionnaireId.key.split('$')[1];
+                var questionnaireVersion = (this.questionnaireVersion || {}).key;
                 urlParams['questionnaireId'] = questionnaireId;
                 urlParams['version'] = questionnaireVersion;
             }
