@@ -269,8 +269,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             //registry.Bind<IDataExportProcessesService, DataExportProcessesService>();
 
             registry.Bind<ITabularFormatExportService, ReadSideToTabularFormatExportService>();
-            registry.Bind<ICsvWriterService, CsvWriterService>();
-            registry.Bind<ICsvWriter, CsvWriter>();
             registry.Bind<ICsvReader, CsvReader>();
             
             registry.Bind<IExportQuestionService, ExportQuestionService>();
