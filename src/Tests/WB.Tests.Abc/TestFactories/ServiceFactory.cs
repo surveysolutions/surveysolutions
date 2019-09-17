@@ -408,15 +408,10 @@ namespace WB.Tests.Abc.TestFactories
 
         public ReadSideToTabularFormatExportService ReadSideToTabularFormatExportService(
             IFileSystemAccessor fileSystemAccessor = null,
-            ICsvWriterService csvWriterService = null,
             ICsvWriter csvWriter = null,
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses = null,
             QuestionnaireExportStructure questionnaireExportStructure = null)
             => new ReadSideToTabularFormatExportService(fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
-                csvWriter ?? Mock.Of<ICsvWriter>(_
-                    => _.OpenCsvWriter(It.IsAny<Stream>(), It.IsAny<string>()) ==
-                       (csvWriterService ?? Mock.Of<ICsvWriterService>())),
-                Mock.Of<ILogger>(),
+                csvWriter ?? Mock.Of<ICsvWriter>(),
                 Mock.Of<IQuestionnaireExportStructureStorage>(_
                     => _.GetQuestionnaireExportStructure(It.IsAny<QuestionnaireIdentity>()) ==
                        questionnaireExportStructure));
