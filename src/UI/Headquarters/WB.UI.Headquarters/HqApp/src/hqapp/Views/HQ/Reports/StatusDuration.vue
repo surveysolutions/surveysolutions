@@ -308,8 +308,8 @@ export default {
 
             var urlParams = {  };
 
-            urlParams['templateId'] = this.questionnaireId == undefined ? '' : this.formatGuid(this.questionnaireId.key.split('$')[0]);
-            urlParams['templateVersion'] = this.questionnaireId == undefined ? '' : this.questionnaireId.key.split('$')[1];
+            urlParams['templateId'] = this.questionnaireId == undefined ? '' : this.formatGuid(this.questionnaireId.key);
+            urlParams['templateVersion'] = this.questionnaireVersion == undefined ? '' : this.questionnaireVersion.key;
 
             if (row.startDate != undefined)
                 urlParams['unactiveDateStart'] = row.startDate;
