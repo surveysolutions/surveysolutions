@@ -266,13 +266,9 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.Bind<IDataExportFileAccessor, DataExportFileAccessor>();
          
-            //registry.Bind<IDataExportProcessesService, DataExportProcessesService>();
-
             registry.Bind<ITabularFormatExportService, ReadSideToTabularFormatExportService>();
             registry.Bind<ICsvReader, CsvReader>();
             
-            registry.Bind<IExportQuestionService, ExportQuestionService>();
-
             registry.Bind<IRosterStructureService, RosterStructureService>();
             registry.Bind<IQuestionnaireImportService, QuestionnaireImportService>();
             registry.Bind<DesignerUserCredentials>();

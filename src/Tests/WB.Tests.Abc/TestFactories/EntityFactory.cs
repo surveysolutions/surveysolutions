@@ -1938,11 +1938,6 @@ namespace WB.Tests.Abc.TestFactories
             return exportViewFactory.CreateQuestionnaireExportStructure(questionnaire, new QuestionnaireIdentity(Guid.NewGuid(), 1));
         }
 
-        public ExportQuestionService ExportQuestionService()
-        {
-            return new ExportQuestionService();
-        }
-
         public AudioQuestion AudioQuestion(Guid qId, string variable)
         {
             return new AudioQuestion
