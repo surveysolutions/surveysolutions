@@ -10,7 +10,7 @@ namespace WB.Persistence.Headquarters.Migrations.PlainStore
             Execute.Sql("CREATE SEQUENCE IF NOT EXISTS plainstore.assignment_id_sequence; ");
 
             if (Schema.Table("assignments").Exists())
-                Execute.Sql("SELECT setval('plainstore.assignment_id_sequence', COALESCE(max(id), 0)) FROM plainstore.assignments; ");
+                Execute.Sql("SELECT setval('plainstore.assignment_id_sequence', COALESCE(max(id), 1)) FROM plainstore.assignments; ");
         }
 
         public override void Down()
