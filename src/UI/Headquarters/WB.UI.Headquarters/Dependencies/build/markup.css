@@ -8921,6 +8921,7 @@ body > .ui-pnotify {
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#FFEFF4F8', GradientType=1); }
 
 .table-with-checkboxes thead tr td.checkbox-cell, .table-with-checkboxes thead tr th.checkbox-cell, .table-with-checkboxes tbody tr td.checkbox-cell, .table-with-checkboxes tbody tr th.checkbox-cell {
+  max-width: 40px;
   text-align: center;
   padding: 15px 3px 15px 10px;
   outline: none; }
