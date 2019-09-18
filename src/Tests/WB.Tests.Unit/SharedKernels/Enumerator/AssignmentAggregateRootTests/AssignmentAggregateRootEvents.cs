@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Moq;
 using Ncqrs.Spec;
 using NUnit.Framework;
+using WB.Core.SharedKernels.DataCollection.Events.Assignment;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -222,6 +223,22 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.AssignmentAggregateRootTests
             var assignmentException = exception as AssignmentException;
             Assert.That(assignmentException, Is.Not.Null);
             Assert.That(assignmentException.ExceptionType, Is.EqualTo(AssignmentDomainExceptionType.AssignmentDeleted));
+        }
+
+        [Test]
+        public void when_upgrade_assignment_occurs_Should_raise_events()
+        {
+            var assignment = Create.AggregateRoot.AssignmentAggregateRoot();
+
+            //act
+            using (var eventContext = new EventContext())
+            {
+                assignment.UpgradeAssignment(Create.Command.UpgradeAssignment());
+
+                // Assert
+                eventContext.ShouldContainEvent<AssignmentArchived>();
+                eventContext.ShouldContainEvent<AssignmentWebModeChanged>(e => e.WebMode == false);
+            }
         }
     }
 }

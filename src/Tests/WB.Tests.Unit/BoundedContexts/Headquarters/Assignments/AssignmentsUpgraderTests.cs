@@ -7,17 +7,14 @@ using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.DenormalizerStorage;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Tests.Abc;
-using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 {
@@ -123,10 +120,10 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                     var assignment = Create.Entity.Assignment(publicKey: c.PublicKey, id: c.Id, quantity: c.Quantity, questionnaireIdentity: c.QuestionnaireId);
                     assignmentsStorage.Store(assignment, c.PublicKey);
                 });
-            commandService.Setup(cs => cs.Execute(It.IsAny<ArchiveAssignment>(), null))
+            commandService.Setup(cs => cs.Execute(It.IsAny<UpgradeAssignmentCommand>(), null))
                 .Callback<ICommand, string>((commandArgs, origin) =>
                 {
-                    var c = (ArchiveAssignment) commandArgs;
+                    var c = (UpgradeAssignmentCommand) commandArgs;
                     assignmentsStorage.GetById(c.PublicKey).Archived = true;
                 });
             var assignmentsService = Create.Service.AssignmentsService(assignmentsStorage);
@@ -138,6 +135,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             // Assert
             Assignment oldAssignment = assignmentsStorage.GetById(Id.g7);
+
             Assert.That(oldAssignment, Has.Property(nameof(oldAssignment.Archived)).EqualTo(true), "Existing assignment on old questionnaire should be archived");
             Assert.That(oldAssignment, Has.Property(nameof(oldAssignment.QuestionnaireId)).EqualTo(migrateFrom));
 
@@ -206,10 +204,10 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                         );
                     assignmentsStorage.Store(assignment, c.PublicKey);
                 });
-            commandService.Setup(cs => cs.Execute(It.IsAny<ArchiveAssignment>(), null))
+            commandService.Setup(cs => cs.Execute(It.IsAny<UpgradeAssignmentCommand>(), null))
                 .Callback<ICommand, string>((commandArgs, origin) =>
                 {
-                    var c = (ArchiveAssignment)commandArgs;
+                    var c = (UpgradeAssignmentCommand)commandArgs;
                     assignmentsStorage.GetById(c.PublicKey).Archived = true;
                 });
 

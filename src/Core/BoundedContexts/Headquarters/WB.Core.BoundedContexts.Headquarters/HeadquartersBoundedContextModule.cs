@@ -345,6 +345,7 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .Handles<MarkAssignmentAsReceivedByTablet>(aggregate => aggregate.MarkAssignmentAsReceivedByTablet)
                 .Handles<UpdateAssignmentAudioRecording>(aggregate => aggregate.UpdateAssignmentAudioRecording)
                 .Handles<UpdateAssignmentQuantity>(aggregate => aggregate.UpdateAssignmentQuantity)
+                .Handles<UpgradeAssignmentCommand>(aggregate => aggregate.UpgradeAssignment)
                 .Handles<UpdateAssignmentWebMode>(aggregate => aggregate.UpdateAssignmentWebMode);
 
             CommandRegistry
