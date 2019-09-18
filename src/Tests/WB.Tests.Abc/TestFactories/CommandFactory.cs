@@ -422,5 +422,10 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new UpdateAssignmentQuantity(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), quantity);
         }
+
+        public UpgradeAssignmentCommand UpgradeAssignment()
+        {
+            return new UpgradeAssignmentCommand(Id.g1, Id.g2);
+        }
     }
 }
