@@ -448,7 +448,7 @@
     <value>Web режим включен</value>
   </data>
   <data name="Actor" xml:space="preserve">
-    <value>Исполнитель</value>
+    <value>Кем</value>
   </data>
   <data name="AssignmentHistory" xml:space="preserve">
     <value>История</value>

@@ -232,7 +232,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Actor.
+        ///   Looks up a localized string similar to By.
         /// </summary>
         public static string Actor {
             get {
@@ -772,7 +772,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Size &apos;{{quantity}}&apos; of the selected assignment {{id}}  will be changed to {{collected}} (number of currently collected interviews).
+        ///   Looks up a localized string similar to Size of the selected assignment {{id}} will be changed form {{quantity}} to {{collected}} (number of currently collected interviews).
         /// </summary>
         public static string SingleAssignmentCloseConfirm {
             get {
