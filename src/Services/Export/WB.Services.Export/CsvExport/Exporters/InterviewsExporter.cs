@@ -473,6 +473,8 @@ namespace WB.Services.Export.CsvExport.Exporters
                     return interview.InterviewId.GetRandomDouble().ToString(CultureInfo.InvariantCulture);
                 case ServiceVariableType.InterviewKey:
                     return interview.InterviewKey ?? string.Empty;
+                case ServiceVariableType.AssignmentId:
+                    return interview.AssignmentId?.ToString(CultureInfo.InvariantCulture) ?? string.Empty;
             }
 
             return String.Empty;

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Npgsql;
+using WB.Services.Export.Assignment;
 using WB.Services.Export.InterviewDataStorage;
 using WB.Services.Export.InterviewDataStorage.EfMappings;
 using WB.Services.Infrastructure.Storage;
@@ -44,6 +45,8 @@ namespace WB.Services.Export.Infrastructure
         public DbSet<InterviewReference> InterviewReferences { get; set; }
         public DbSet<Metadata> MetadataSet { get; set; }
         public DbSet<GeneratedQuestionnaireReference> GeneratedQuestionnaires { get; set; }
+        public DbSet<AssignmentAction> AssignmentActions { get; set; }
+        public DbSet<Assignment.Assignment> Assignments { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

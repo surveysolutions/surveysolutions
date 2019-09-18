@@ -16,6 +16,7 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
         private readonly ICommentsExporter commentsExporter;
         private readonly IInterviewErrorsExporter interviewErrorsExporter;
         private readonly IDiagnosticsExporter diagnosticsExporter;
+        private readonly IAssignmentActionsExporter assignmentActionsExporter;
 
         public StataEnvironmentContentService(
             IFileSystemAccessor fileSystemAccessor,
@@ -23,7 +24,8 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
             IInterviewActionsExporter interviewActionsExporter,
             ICommentsExporter commentsExporter,
             IInterviewErrorsExporter interviewErrorsExporter,
-            IDiagnosticsExporter diagnosticsExporter)
+            IDiagnosticsExporter diagnosticsExporter,
+            IAssignmentActionsExporter assignmentActionsExporter)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.questionnaireLabelFactory = questionnaireLabelFactory;
@@ -31,6 +33,7 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
             this.commentsExporter = commentsExporter;
             this.interviewErrorsExporter = interviewErrorsExporter;
             this.diagnosticsExporter = diagnosticsExporter;
+            this.assignmentActionsExporter = assignmentActionsExporter;
         }
 
         public void CreateEnvironmentFiles(QuestionnaireExportStructure questionnaireExportStructure, string folderPath, CancellationToken cancellationToken)
@@ -50,6 +53,7 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
             commentsExporter.ExportDoFile(questionnaireExportStructure, folderPath);
             interviewErrorsExporter.ExportDoFile(questionnaireExportStructure, folderPath);
             diagnosticsExporter.ExportDoFile(questionnaireExportStructure, folderPath);
+            assignmentActionsExporter.ExportDoFile(questionnaireExportStructure, folderPath);
         }
 
         private void CreateContentOfAdditionalFile(QuestionnaireLevelLabels questionnaireLevelLabels, string dataFileName, string basePath)

@@ -24,6 +24,7 @@ using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services;
 using WB.Services.Export.Services.Processing;
+using WB.Services.Export.User;
 using WB.Services.Infrastructure;
 using WB.Services.Infrastructure.EventSourcing;
 using WB.Services.Infrastructure.Tenant;
@@ -191,7 +192,8 @@ namespace WB.Services.Export.Tests
                 Mock.Of<IQuestionnaireStorage>(),
                 
                 Mock.Of<IProductVersion>(),
-                fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>());
+                fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
+                Mock.Of<IAssignmentActionsExporter>());
         }
 
         public static CommentsExporter CommentsExporter()
@@ -624,6 +626,16 @@ namespace WB.Services.Export.Tests
             return new DatabaseSchemaService(
                 questionnaireSchemaGenerator ?? Mock.Of<IQuestionnaireSchemaGenerator>(),
                 dbContext ?? Mock.Of<TenantDbContext>());
+        }
+
+        public static IAssignmentActionsExporter AssignmentActionsExporter(ICsvWriter csvWriter = null,
+            TenantDbContext dbContext = null,
+            IUserStorage userStorage = null)
+        {
+            return new AssignmentActionsExporter(InterviewDataExportSettings(),
+                csvWriter ?? Mock.Of<ICsvWriter>(),
+                dbContext ?? Mock.Of<TenantDbContext>(),
+                userStorage ?? Mock.Of<IUserStorage>());
         }
     }
 

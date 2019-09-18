@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using WB.Services.Export.Assignment;
 
 namespace WB.Services.Export.InterviewDataStorage.EfMappings
 {
@@ -48,6 +49,36 @@ namespace WB.Services.Export.InterviewDataStorage.EfMappings
         public void Configure(EntityTypeBuilder<Metadata> builder)
         {
             builder.ToTable("metadata", schema);
+        }
+    }
+
+    public class AssignmentTypeConfiguration : IEntityTypeConfiguration<Assignment.Assignment>
+    {
+        private readonly string schema;
+
+        public AssignmentTypeConfiguration(string schema)
+        {
+            this.schema = schema;
+        }
+
+        public void Configure(EntityTypeBuilder<Assignment.Assignment> builder)
+        {
+            builder.ToTable("assignment", schema);
+        }
+    }
+
+    public class AssignmentActionTypeConfiguration : IEntityTypeConfiguration<AssignmentAction>
+    {
+        private readonly string schema;
+
+        public AssignmentActionTypeConfiguration(string schema)
+        {
+            this.schema = schema;
+        }
+
+        public void Configure(EntityTypeBuilder<AssignmentAction> builder)
+        {
+            builder.ToTable("assignment__action", schema);
         }
     }
 }
