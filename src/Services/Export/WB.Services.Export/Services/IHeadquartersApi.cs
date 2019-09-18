@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Refit;
+using WB.Services.Export.Assignment;
 using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.Events;
 using WB.Services.Export.Interview;
@@ -49,5 +50,8 @@ namespace WB.Services.Export.Services
 
         [Get("/api/export/v1/interview/events")]
         Task<EventsFeed> GetInterviewEvents([AliasAs("sequence")] long sequence, int pageSize = 500);
+
+        [Get("/api/export/v1/user/{id}")]
+        Task<User.User> GetUser([AliasAs("id")] Guid userId);
     }
 }

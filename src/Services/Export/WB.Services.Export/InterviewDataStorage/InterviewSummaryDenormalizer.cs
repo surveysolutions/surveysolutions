@@ -46,17 +46,29 @@ namespace WB.Services.Export.InterviewDataStorage
 
         public void Handle(PublishedEvent<InterviewCreated> @event)
         {
-            EnlistChange(@event.EventSourceId, @event.EventTimeStamp, s=> s.Status = InterviewStatus.Created);
+            EnlistChange(@event.EventSourceId, @event.EventTimeStamp, s=>
+            {
+                s.AssignmentId = @event.Event.AssignmentId;
+                s.Status = InterviewStatus.Created;
+            });
         }
 
         public void Handle(PublishedEvent<InterviewOnClientCreated> @event)
         {
-            EnlistChange(@event.EventSourceId, @event.EventTimeStamp, s => s.Status = InterviewStatus.Created);
+            EnlistChange(@event.EventSourceId, @event.EventTimeStamp, s =>
+            {
+                s.AssignmentId = @event.Event.AssignmentId;
+                s.Status = InterviewStatus.Created;
+            });
         }
 
         public void Handle(PublishedEvent<InterviewFromPreloadedDataCreated> @event)
         {
-            EnlistChange(@event.EventSourceId, @event.EventTimeStamp, s => s.Status = InterviewStatus.Created);
+            EnlistChange(@event.EventSourceId, @event.EventTimeStamp, s =>
+            {
+                s.AssignmentId = @event.Event.AssignmentId;
+                s.Status = InterviewStatus.Created;
+            });
         }
 
         public void Handle(PublishedEvent<InterviewDeleted> @event)

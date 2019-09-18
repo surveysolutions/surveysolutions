@@ -20,7 +20,8 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
                 Create.InterviewActionsExporter(Create.HeadquartersApi()),
                 Create.CommentsExporter(),
                 Create.InterviewErrorsExporter(),
-                Create.DiagnosticsExporter());
+                Create.DiagnosticsExporter(),
+                Create.AssignmentActionsExporter());
         }
 
         protected static IFileSystemAccessor CreateFileSystemAccessor(Action<string> returnContentAction)
