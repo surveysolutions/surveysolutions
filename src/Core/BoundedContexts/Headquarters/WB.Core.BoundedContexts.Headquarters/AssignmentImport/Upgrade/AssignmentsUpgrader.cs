@@ -68,8 +68,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
                                 targetQuestionnaire);
                         if (assignmentVerification == null)
                         {
-                            commandService.Execute(new ArchiveAssignment(oldAssignment.PublicKey, userId));
-
                             var newAssignment = assignmentFactory.CreateAssignment(
                                 userId,
                                 migrateTo, 
@@ -84,7 +82,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
                                 oldAssignment.Comments);
 
                             invitationService.MigrateInvitationToNewAssignment(assignmentId, newAssignment.Id);
-                            commandService.Execute(new UpdateAssignmentWebMode(oldAssignment.PublicKey, userId, false));
+                            commandService.Execute(new UpgradeAssignmentCommand(oldAssignment.PublicKey, userId));
 
                             migratedSuccessfully++;
                         }
