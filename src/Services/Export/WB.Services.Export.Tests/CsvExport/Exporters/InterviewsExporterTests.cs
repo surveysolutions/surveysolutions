@@ -48,7 +48,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             var questionnaireExportStructure = Create.QuestionnaireExportStructure(questionnaire);
             var interviewIdsToExport = new List<InterviewToExport>
             {
-                new InterviewToExport(interviewId, interviewKey, InterviewStatus.Completed)
+                new InterviewToExport(interviewId, interviewKey, InterviewStatus.Completed, 1)
             };
 
             string[][] answers = { new string[1] };
