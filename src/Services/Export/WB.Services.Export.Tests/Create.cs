@@ -634,7 +634,7 @@ namespace WB.Services.Export.Tests
         {
             return new AssignmentActionsExporter(InterviewDataExportSettings(),
                 csvWriter ?? Mock.Of<ICsvWriter>(),
-                dbContext ?? Mock.Of<TenantDbContext>(),
+                dbContext ?? Create.TenantDbContext(),
                 userStorage ?? Mock.Of<IUserStorage>());
         }
     }
