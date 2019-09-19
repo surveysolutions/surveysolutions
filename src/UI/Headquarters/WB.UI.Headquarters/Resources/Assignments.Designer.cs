@@ -412,7 +412,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Comment(not required).
+        ///   Looks up a localized string similar to Comment.
         /// </summary>
         public static string Comments {
             get {
