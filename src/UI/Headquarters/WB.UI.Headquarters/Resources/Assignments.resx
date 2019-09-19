@@ -379,7 +379,7 @@
     <value>{{count}} selected assignments are going to be closed. Size will be set to currently collected interviews count.</value>
   </data>
   <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
-    <value>Size '{{quantity}}' of the selected assignment {{id}}  will be changed to {{collected}} (number of currently collected interviews)</value>
+    <value>Size of the selected assignment {{id}} will be changed form {{quantity}} to {{collected}} (number of currently collected interviews)</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Close</value>
@@ -430,7 +430,7 @@
     <value>Action</value>
   </data>
   <data name="Actor" xml:space="preserve">
-    <value>Actor</value>
+    <value>By</value>
   </data>
   <data name="Date" xml:space="preserve">
     <value>Date</value>
@@ -458,5 +458,15 @@
   </data>
   <data name="AssignmentHistory" xml:space="preserve">
     <value>History</value>
+  </data>
+  <data name="Details_Column" xml:space="preserve">
+    <value>Details</value>
+    <comment>Detailed info about action in assignment history page</comment>
+  </data>
+  <data name="Action_Created_Comment" xml:space="preserve">
+    <value>Comment: {{comment}}</value>
+  </data>
+  <data name="Action_Created_Responsible" xml:space="preserve">
+    <value>Assigned to {{responsible}}</value>
   </data>
 </root>

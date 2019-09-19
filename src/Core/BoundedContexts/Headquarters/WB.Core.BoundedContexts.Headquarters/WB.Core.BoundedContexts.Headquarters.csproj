@@ -65,7 +65,7 @@
     <PackageReference Include="NHibernate" Version="5.2.5" />
     <PackageReference Include="Owin" Version="1.0" />
     <PackageReference Include="Quartz" Version="3.0.7" />
-    <PackageReference Include="refit" Version="4.7.9" />
+    <PackageReference Include="refit" Version="4.7.51" />
     <PackageReference Include="Sendgrid" Version="9.11.0" />
     <PackageReference Include="SuperclusterBox" Version="0.1.16" />
   </ItemGroup>

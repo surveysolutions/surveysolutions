@@ -115,6 +115,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Comment: {{comment}}.
+        /// </summary>
+        public static string Action_Created_Comment {
+            get {
+                return ResourceManager.GetString("Action_Created_Comment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assigned to {{responsible}}.
+        /// </summary>
+        public static string Action_Created_Responsible {
+            get {
+                return ResourceManager.GetString("Action_Created_Responsible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Deleted.
         /// </summary>
         public static string Action_Deleted {
@@ -232,7 +250,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Actor.
+        ///   Looks up a localized string similar to By.
         /// </summary>
         public static string Actor {
             get {
@@ -471,6 +489,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Date {
             get {
                 return ResourceManager.GetString("Date", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Details.
+        /// </summary>
+        public static string Details_Column {
+            get {
+                return ResourceManager.GetString("Details_Column", resourceCulture);
             }
         }
         
@@ -772,7 +799,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Size &apos;{{quantity}}&apos; of the selected assignment {{id}}  will be changed to {{collected}} (number of currently collected interviews).
+        ///   Looks up a localized string similar to Size of the selected assignment {{id}} will be changed form {{quantity}} to {{collected}} (number of currently collected interviews).
         /// </summary>
         public static string SingleAssignmentCloseConfirm {
             get {
