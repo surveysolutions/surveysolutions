@@ -123,24 +123,18 @@ namespace WB.Services.Export.CsvExport.Exporters
                     assignmentAction.Timestamp.ToString(ExportFormatSettings.ExportDateFormat, CultureInfo.InvariantCulture),
                     assignmentAction.Timestamp.ToString("T", CultureInfo.InvariantCulture),
                     ((int)assignmentAction.Status).ToString(CultureInfo.InvariantCulture),
-                    await GetUserNameAsync(tenantInfo, assignmentAction.OriginatorId),
-                    ExportHelper.GetUserRoleDisplayValue(await GetUserRoleAsync(tenantInfo, assignmentAction.OriginatorId)),
-                    await GetUserNameAsync(tenantInfo, assignmentAction.ResponsibleId),
-                    ExportHelper.GetUserRoleDisplayValue(await GetUserRoleAsync(tenantInfo, assignmentAction.OriginatorId))
+                    await GetUserNameAsync(assignmentAction.OriginatorId),
+                    ExportHelper.GetUserRoleDisplayValue(await GetUserRoleAsync(assignmentAction.OriginatorId)),
+                    await GetUserNameAsync(assignmentAction.ResponsibleId),
+                    ExportHelper.GetUserRoleDisplayValue(await GetUserRoleAsync(assignmentAction.OriginatorId))
                 };
                 result.Add(resultRow.ToArray());
             }
             return result;
         }
 
-        private Task<UserRoles> GetUserRoleAsync(TenantInfo tenantInfo, Guid userId)
-        {
-            return userStorage.GetUserRoleAsync(tenantInfo, userId);
-        }
+        private Task<UserRoles> GetUserRoleAsync(Guid userId) => userStorage.GetUserRoleAsync(userId);
 
-        private Task<string> GetUserNameAsync(TenantInfo tenantInfo, Guid userId)
-        {
-            return userStorage.GetUserNameAsync(tenantInfo, userId);
-        }
+        private Task<string> GetUserNameAsync(Guid userId) => userStorage.GetUserNameAsync(userId);
     }
 }
