@@ -30,7 +30,7 @@ namespace WB.Services.Export.Assignment
 
         private readonly Dictionary<Guid, Assignment> assignments = new Dictionary<Guid, Assignment>();
         private readonly Dictionary<Guid, Assignment> assignmentsFromDb = new Dictionary<Guid, Assignment>();
-        private readonly HashSet<AssignmentAction> actions = new HashSet<AssignmentAction>();
+        private readonly List<AssignmentAction> actions = new List<AssignmentAction>();
 
         public Task Handle(PublishedEvent<AssignmentCreated> @event, CancellationToken cancellationToken = default)
         {
@@ -41,22 +41,22 @@ namespace WB.Services.Export.Assignment
                 ResponsibleId = @event.Event.ResponsibleId,
             });
 
-            return AddRecord(@event.EventSourceId, @event.Event.UserId, @event.Event.OriginDate.UtcDateTime, AssignmentExportedAction.Created, cancellationToken);
+            return AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate.UtcDateTime, AssignmentExportedAction.Created, cancellationToken);
         }
 
         public Task Handle(PublishedEvent<AssignmentArchived> @event, CancellationToken cancellationToken = default)
         {
-            return AddRecord(@event.EventSourceId, @event.Event.UserId, @event.Event.OriginDate.UtcDateTime, AssignmentExportedAction.Archived, cancellationToken);
+            return AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate.UtcDateTime, AssignmentExportedAction.Archived, cancellationToken);
         }
 
         public Task Handle(PublishedEvent<AssignmentUnarchived> @event, CancellationToken cancellationToken = default)
         {
-            return AddRecord(@event.EventSourceId, @event.Event.UserId, @event.Event.OriginDate.UtcDateTime, AssignmentExportedAction.Unarchived, cancellationToken);
+            return AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate.UtcDateTime, AssignmentExportedAction.Unarchived, cancellationToken);
         }
 
         public Task Handle(PublishedEvent<AssignmentDeleted> @event, CancellationToken cancellationToken = default)
         {
-            return AddRecord(@event.EventSourceId, @event.Event.UserId, @event.Event.OriginDate.UtcDateTime, AssignmentExportedAction.Deleted, cancellationToken);
+            return AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate.UtcDateTime, AssignmentExportedAction.Deleted, cancellationToken);
         }
 
         public async Task Handle(PublishedEvent<AssignmentReassigned> @event, CancellationToken cancellationToken = default)
@@ -64,36 +64,37 @@ namespace WB.Services.Export.Assignment
             var assignment = await GetAssignmentAsync(@event.EventSourceId, cancellationToken);
             assignment.ResponsibleId = @event.Event.ResponsibleId;
 
-            await AddRecord(@event.EventSourceId, @event.Event.UserId, @event.Event.OriginDate.UtcDateTime, AssignmentExportedAction.Reassigned, cancellationToken);
+            await AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate.UtcDateTime, AssignmentExportedAction.Reassigned, cancellationToken);
         }
 
         public Task Handle(PublishedEvent<AssignmentReceivedByTablet> @event, CancellationToken cancellationToken = default)
         {
-            return AddRecord(@event.EventSourceId, @event.Event.UserId, @event.Event.OriginDate.UtcDateTime, AssignmentExportedAction.ReceivedByTablet, cancellationToken);
+            return AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate.UtcDateTime, AssignmentExportedAction.ReceivedByTablet, cancellationToken);
         }
 
         public Task Handle(PublishedEvent<AssignmentAudioRecordingChanged> @event, CancellationToken cancellationToken = default)
         {
-            return AddRecord(@event.EventSourceId, @event.Event.UserId, @event.Event.OriginDate.UtcDateTime, AssignmentExportedAction.AudioRecordingChanged, cancellationToken);
+            return AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate.UtcDateTime, AssignmentExportedAction.AudioRecordingChanged, cancellationToken);
         }
 
         public Task Handle(PublishedEvent<AssignmentWebModeChanged> @event, CancellationToken cancellationToken = default)
         {
-            return AddRecord(@event.EventSourceId, @event.Event.UserId, @event.Event.OriginDate.UtcDateTime, AssignmentExportedAction.WebModeChanged, cancellationToken);
+            return AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate.UtcDateTime, AssignmentExportedAction.WebModeChanged, cancellationToken);
         }
 
         public Task Handle(PublishedEvent<AssignmentQuantityChanged> @event, CancellationToken cancellationToken = default)
         {
-            return AddRecord(@event.EventSourceId, @event.Event.UserId, @event.Event.OriginDate.UtcDateTime, AssignmentExportedAction.QuantityChanged, cancellationToken);
+            return AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate.UtcDateTime, AssignmentExportedAction.QuantityChanged, cancellationToken);
         }
 
-        private async Task AddRecord(Guid publicKey, Guid actorId, DateTime dateTime, AssignmentExportedAction action, CancellationToken cancellationToken)
+        private async Task AddRecord(Guid publicKey, long globalSequence, Guid actorId, DateTime dateTime, AssignmentExportedAction action, CancellationToken cancellationToken)
         {
             var assignment = await GetAssignmentAsync(publicKey, cancellationToken);
 
             var assignmentAction = new AssignmentAction()
             {
-                Id = assignment.Id,
+                SequenceIndex = globalSequence,
+                AssignmentId = assignment.Id,
                 Timestamp = dateTime,
                 Status = action,
                 OriginatorId = actorId,
