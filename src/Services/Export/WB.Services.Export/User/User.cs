@@ -7,6 +7,6 @@ namespace WB.Services.Export.User
     {
         public Guid Id { get; set; }
         public string UserName { get; set; }
-        public UserRoles UserRole { get; set; }
+        public UserRoles[] Roles { get; set; }
     }
 }

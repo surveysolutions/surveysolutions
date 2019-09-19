@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using WB.Services.Export.Infrastructure;
@@ -28,7 +29,7 @@ namespace WB.Services.Export.User
         public async Task<UserRoles> GetUserRoleAsync(Guid userId)
         {
             var user = await GetUserAsync(userId);
-            return user.UserRole;
+            return user.Roles.Single();
         }
 
         private Task<User> GetUserAsync(Guid userId)
