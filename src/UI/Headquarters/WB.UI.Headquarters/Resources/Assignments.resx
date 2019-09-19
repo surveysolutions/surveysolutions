@@ -459,4 +459,8 @@
   <data name="AssignmentHistory" xml:space="preserve">
     <value>History</value>
   </data>
+  <data name="Details_Column" xml:space="preserve">
+    <value>Details</value>
+    <comment>Detailed info about action in assignment history page</comment>
+  </data>
 </root>
