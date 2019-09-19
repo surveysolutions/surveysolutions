@@ -11,7 +11,7 @@ using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.API.Export
 {
-    [RoutePrefix("api/export/v1")]
+    //[RoutePrefix("api/export/v1")]
     public class UserApiController : ApiController
     {
         private readonly IUserRepository userRepository;
@@ -21,14 +21,15 @@ namespace WB.UI.Headquarters.API.Export
             this.userRepository = userRepository;
         }
 
-        [Route("user/{id}")]
+        [Route("api/export/v1/user/{id}")]
         [ServiceApiKeyAuthorization]
         [HttpGet]
-        [ApiNoCache]
-        public HttpResponseMessage GetInterviewHistory([FromUri] Guid id)
+        //[ApiNoCache]
+        public HttpResponseMessage Get(string id)
         {
+            var userId = Guid.Parse(id);
             var userModel = this.userRepository.Users
-                .Where(user => user.Id == id)
+                .Where(user => user.Id == userId)
                 .Select(user => new
                 {
                     Id = user.Id,

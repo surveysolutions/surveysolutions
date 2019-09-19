@@ -102,7 +102,7 @@ namespace WB.Services.Export.CsvExport.Implementation
                 this.interviewActionsExporter.ExportAsync(tenant, questionnaireIdentity, interviewIdsToExport, tempPath, exportInterviewActionsProgress, cancellationToken),
                 this.interviewsExporter.ExportAsync(tenant, questionnaireExportStructure, questionnaire, interviewsToExport, tempPath, exportInterviewsProgress, cancellationToken),
                 this.diagnosticsExporter.ExportAsync(interviewIdsToExport, tempPath, tenant, exportDiagnosticsProgress, cancellationToken),
-                this.assignmentActionsExporter.ExportAsync(assignmentIdsToExport, tempPath, exportAssignmentActionsProgress, cancellationToken)
+                this.assignmentActionsExporter.ExportAsync(assignmentIdsToExport, tenant, tempPath, exportAssignmentActionsProgress, cancellationToken)
             );
 
             exportWatch.Stop();
