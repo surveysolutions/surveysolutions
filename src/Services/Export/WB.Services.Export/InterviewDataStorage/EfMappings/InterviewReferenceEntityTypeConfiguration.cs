@@ -17,8 +17,6 @@ namespace WB.Services.Export.InterviewDataStorage.EfMappings
         {
             builder.ToTable("interview__references", schema);
             builder.HasKey(x => x.InterviewId);
-
-            builder.HasOne(a => a.Assignment).WithMany(a => a.InterviewReferences);
         }
     }
 
@@ -70,7 +68,6 @@ namespace WB.Services.Export.InterviewDataStorage.EfMappings
             builder.HasAlternateKey(a => a.PublicKey);
 
             builder.HasMany(a => a.Actions).WithOne(a => a.Assignment);
-            builder.HasMany(a => a.InterviewReferences).WithOne(a => a.Assignment);
         }
     }
 
