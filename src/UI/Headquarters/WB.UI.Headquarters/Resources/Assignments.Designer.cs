@@ -475,6 +475,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Details.
+        /// </summary>
+        public static string Details_Column {
+            get {
+                return ResourceManager.GetString("Details_Column", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comment.
         /// </summary>
         public static string DetailsComments {
