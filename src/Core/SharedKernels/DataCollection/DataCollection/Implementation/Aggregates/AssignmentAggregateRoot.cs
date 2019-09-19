@@ -178,10 +178,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void UpgradeAssignment(UpgradeAssignmentCommand command)
         {
-            ApplyEvent(new AssignmentArchived(command.UserId, command.OriginDate));
-
             if (properties.WebMode != false)
                 ApplyEvent(new AssignmentWebModeChanged(command.UserId, command.OriginDate, false));
+
+            ApplyEvent(new AssignmentArchived(command.UserId, command.OriginDate));
         }
     }
 }
