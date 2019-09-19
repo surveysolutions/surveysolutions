@@ -7,7 +7,7 @@ namespace WB.Services.Export.User
 {
     public interface IUserStorage
     {
-        Task<string> GetUserNameAsync(TenantInfo tenantInfo, Guid userId);
-        Task<UserRoles> GetUserRoleAsync(TenantInfo tenantInfo, Guid userId);
+        Task<string> GetUserNameAsync(Guid userId);
+        Task<UserRoles> GetUserRoleAsync(Guid userId);
     }
 }

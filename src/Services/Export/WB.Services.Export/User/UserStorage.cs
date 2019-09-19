@@ -11,35 +11,33 @@ namespace WB.Services.Export.User
     class UserStorage : IUserStorage
     {
         private readonly IMemoryCache memoryCache;
-        private readonly ITenantApi<IHeadquartersApi> tenantApi;
+        private readonly ITenantContext tenantContext;
 
-        public UserStorage(IMemoryCache memoryCache, ITenantApi<IHeadquartersApi> tenantApi)
+        public UserStorage(IMemoryCache memoryCache, ITenantContext tenantContext)
         {
             this.memoryCache = memoryCache;
-            this.tenantApi = tenantApi;
+            this.tenantContext = tenantContext;
         }
 
-        public async Task<string> GetUserNameAsync(TenantInfo tenantInfo, Guid userId)
+        public async Task<string> GetUserNameAsync(Guid userId)
         {
-            var headquartersApi = tenantApi.For(tenantInfo);
-            var user = await GetUserAsync(headquartersApi, userId);
+            var user = await GetUserAsync(userId);
             return user.UserName;
         }
 
-        public async Task<UserRoles> GetUserRoleAsync(TenantInfo tenantInfo, Guid userId)
+        public async Task<UserRoles> GetUserRoleAsync(Guid userId)
         {
-            var headquartersApi = tenantApi.For(tenantInfo);
-            var user = await GetUserAsync(headquartersApi, userId);
+            var user = await GetUserAsync(userId);
             return user.UserRole;
         }
 
-        private Task<User> GetUserAsync(IHeadquartersApi headquartersApi, Guid userId)
+        private Task<User> GetUserAsync(Guid userId)
         {
             return memoryCache.GetOrCreateAsync(userId,
                 async entry =>
                 {
                     entry.SlidingExpiration = TimeSpan.FromMinutes(3);
-                    User user = await headquartersApi.GetUser(userId);
+                    User user = await tenantContext.Api.GetUser(userId);
                     return user;
                 });
         }
