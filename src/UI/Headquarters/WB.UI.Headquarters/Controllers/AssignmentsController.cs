@@ -98,7 +98,7 @@ namespace WB.UI.Headquarters.Controllers
                         Answer = x.Answer
                     }),
                 InterviewsNeeded = assignment.InterviewsNeeded,
-                InterviewsProvided = assignment.InterviewsProvided,
+                InterviewsProvided = assignment.InterviewSummaries.Count,
                 IsAudioRecordingEnabled = assignment.AudioRecording,
                 IsCompleted = assignment.IsCompleted,
                 Password = assignment.Password,
