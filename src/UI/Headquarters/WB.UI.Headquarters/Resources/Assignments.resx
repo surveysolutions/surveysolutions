@@ -397,7 +397,7 @@
     <value>Comment</value>
   </data>
   <data name="Comments" xml:space="preserve">
-    <value>Comment(not required)</value>
+    <value>Comment</value>
   </data>
   <data name="Action_AudioRecordingChanged" xml:space="preserve">
     <value>Audio recording changed</value>

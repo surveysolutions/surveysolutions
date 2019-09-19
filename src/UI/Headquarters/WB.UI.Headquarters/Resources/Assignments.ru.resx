@@ -389,7 +389,7 @@
     <value>Комментарий</value>
   </data>
   <data name="Comments" xml:space="preserve">
-    <value>Комментарий(не обязательно)</value>
+    <value>Комментарий</value>
     <comment>Комментарий</comment>
   </data>
   <data name="EnterComments" xml:space="preserve">
