@@ -463,4 +463,10 @@
     <value>Details</value>
     <comment>Detailed info about action in assignment history page</comment>
   </data>
+  <data name="Action_Created_Comment" xml:space="preserve">
+    <value>Comment: {{comment}}</value>
+  </data>
+  <data name="Action_Created_Responsible" xml:space="preserve">
+    <value>Assigned to {{responsible}}</value>
+  </data>
 </root>
