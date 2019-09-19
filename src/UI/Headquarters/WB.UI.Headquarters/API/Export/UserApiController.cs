@@ -3,31 +3,26 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using Microsoft.AspNet.Identity;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
-using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.UI.Headquarters.API.Filters;
-using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.API.Export
 {
-    //[RoutePrefix("api/export/v1")]
+    [RoutePrefix("api/export/v1")]
     public class UserApiController : ApiController
     {
         private readonly IUserRepository userRepository;
 
         public UserApiController(IUserRepository userRepository)
         {
-            this.userRepository = userRepository;
+            this.userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         }
 
-        [Route("api/export/v1/user/{id}")]
+        [Route("user/{userId}")]
         [ServiceApiKeyAuthorization]
         [HttpGet]
-        //[ApiNoCache]
-        public HttpResponseMessage Get(string id)
+        public HttpResponseMessage Get(Guid userId)
         {
-            var userId = Guid.Parse(id);
             var userModel = this.userRepository.Users
                 .Where(user => user.Id == userId)
                 .Select(user => new

@@ -37,7 +37,7 @@ namespace WB.Services.Export.User
                 async entry =>
                 {
                     entry.SlidingExpiration = TimeSpan.FromMinutes(3);
-                    User user = await tenantContext.Api.GetUser(userId);
+                    User user = await tenantContext.Api.GetUserAsync(userId);
                     return user;
                 });
         }
