@@ -45,11 +45,10 @@ namespace WB.UI.Interviewer
 {
     public class Setup : EnumeratorSetup<InterviewerMvxApplication>
     {
-        protected override void InitializeViewLookup()
+        protected override IMvxViewsContainer InitializeViewLookup(IDictionary<Type, Type> viewModelViewLookup)
         {
-            base.InitializeViewLookup();
-            
-            var viewModelViewLookup = new Dictionary<Type, Type>()
+            var lookup = base.InitializeViewLookup(viewModelViewLookup);
+            lookup.AddAll(new Dictionary<Type, Type>()
             {
                 {typeof(LoginViewModel), typeof(LoginActivity)},
                 {typeof(FinishInstallationViewModel), typeof(FinishInstallationActivity)},
@@ -67,10 +66,9 @@ namespace WB.UI.Interviewer
 #if !EXCLUDEEXTENSIONS
                 ,{typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
 #endif
-            };
+            });
 
-            var container = Mvx.IoCProvider.Resolve<IMvxViewsContainer>();
-            container.AddAll(viewModelViewLookup);
+            return lookup;
         }
 
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
