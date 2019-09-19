@@ -179,7 +179,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void UpgradeAssignment(UpgradeAssignmentCommand command)
         {
             ApplyEvent(new AssignmentArchived(command.UserId, command.OriginDate));
-            ApplyEvent(new AssignmentWebModeChanged(command.UserId, command.OriginDate, false));
+
+            if (properties.WebMode != false)
+                ApplyEvent(new AssignmentWebModeChanged(command.UserId, command.OriginDate, false));
         }
     }
 }
