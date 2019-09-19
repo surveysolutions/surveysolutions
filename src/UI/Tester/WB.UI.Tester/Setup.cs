@@ -27,11 +27,11 @@ namespace WB.UI.Tester
             return IoCAdapterSetup.CreateIocProvider();
         }
 
-        protected override void InitializeViewLookup()
+        protected override IMvxViewsContainer InitializeViewLookup(IDictionary<Type, Type> viewModelViewLookup)
         {
-            base.InitializeViewLookup();
+            var result = base.InitializeViewLookup(viewModelViewLookup);
 
-            var viewModelViewLookup = new Dictionary<Type, Type>()
+            var viewModelViewLookup1 = new Dictionary<Type, Type>()
             {
                 {typeof (LoginViewModel), typeof (LoginActivity)},
                 {typeof (InterviewViewModel), typeof (InterviewActivity)},
@@ -44,8 +44,8 @@ namespace WB.UI.Tester
 #endif
             };
 
-            var container = Mvx.Resolve<IMvxViewsContainer>();
-            container.AddAll(viewModelViewLookup);
+            result.AddAll(viewModelViewLookup1);
+            return result;
         }
 
         protected override void FillValueConverters(IMvxValueConverterRegistry registry)

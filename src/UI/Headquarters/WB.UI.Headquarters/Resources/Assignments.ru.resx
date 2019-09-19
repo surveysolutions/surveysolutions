@@ -448,12 +448,21 @@
     <value>Web режим включен</value>
   </data>
   <data name="Actor" xml:space="preserve">
-    <value>Исполнитель</value>
+    <value>Кем</value>
   </data>
   <data name="AssignmentHistory" xml:space="preserve">
     <value>История</value>
   </data>
   <data name="Date" xml:space="preserve">
     <value>Дата</value>
+  </data>
+  <data name="Details_Column" xml:space="preserve">
+    <value>Детали</value>
+  </data>
+  <data name="Action_Created_Comment" xml:space="preserve">
+    <value>Комментарий: {{comment}}</value>
+  </data>
+  <data name="Action_Created_Responsible" xml:space="preserve">
+    <value>Ответственный: {{responsible}}</value>
   </data>
 </root>

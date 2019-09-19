@@ -193,10 +193,16 @@ export default {
                 },
                 {
                     data: "additionalData",
-                    title: '',
+                    title: self.$t('Assignments.Details_Column'),
                     width: '50%',
                     render(data, type, row) {
                         switch(row.action) {
+                            case 'Created':
+                                let createdText = self.$t('Assignments.Action_Created_Responsible', {responsible: data.responsible})
+                                if (data.comment) {
+                                   createdText += "<br/>" + self.$t('Assignments.Action_Created_Comment', {comment: data.comment})
+                                }
+                                return createdText
                             case 'AudioRecordingChanged':
                                 if(data.audioRecording) {
                                     return self.$t('Assignments.Action_AudioRecordingChanged_True')
