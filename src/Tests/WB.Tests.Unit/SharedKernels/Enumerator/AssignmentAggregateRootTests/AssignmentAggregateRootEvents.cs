@@ -15,20 +15,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.AssignmentAggregateRootTests
     [TestOf(typeof(AssignmentAggregateRoot))]
     public class AssignmentAggregateRootEvents : AssignmentAggregateRootTestContext
     {
-        EventContext eventContext;
-
-        public void SetupEventContext()
-        {
-            eventContext = new EventContext();
-        }
-
-        [TearDown]
-        public void CleanTests()
-        {
-            eventContext?.Dispose();
-            eventContext = null;
-        }
-
         [Test]
         public void when_create_assignment()
         {
@@ -192,6 +178,23 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.AssignmentAggregateRootTests
 
             //assert
             Assert.That(assignment.properties.Quantity, Is.EqualTo(7));
+        }
+
+        [Test]
+        public void when_update_quantity_received_minus_one_should_publish_null_quantity()
+        {
+            var command = Create.Command.UpdateAssignmentQuantity(quantity: -1);
+            var assignment = Create.AggregateRoot.AssignmentAggregateRoot();
+
+            //act
+            using (var context = new EventContext())
+            {
+                assignment.UpdateAssignmentQuantity(command);
+
+                //assert
+                Assert.That(assignment.properties.Quantity, Is.Null);
+                context.ShouldContainEvent<AssignmentQuantityChanged>(e => e.Quantity == null);
+            }
         }
 
         [Test]

@@ -164,7 +164,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             AssignmentPropertiesInvariants invariants = new AssignmentPropertiesInvariants(this.properties);
             invariants.ThrowIfAssignmentDeleted();
 
-            ApplyEvent(new AssignmentQuantityChanged(command.UserId, command.OriginDate, command.Quantity));
+            var actualQuantity = command.Quantity == -1 ? null : command.Quantity;
+            ApplyEvent(new AssignmentQuantityChanged(command.UserId, command.OriginDate, actualQuantity));
         }
 
         public void UpdateAssignmentWebMode(UpdateAssignmentWebMode command)
