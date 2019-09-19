@@ -167,8 +167,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
                 switch (committedEvent)
                 {
-                    case AssignmentCreated _:
+                    case AssignmentCreated c:
                         historyItem.Action = AssignmentHistoryAction.Created;
+
+                        var responsible = userViewFactory.GetUser(new UserViewInputModel(c.ResponsibleId))?.UserName ?? "Unknown";
+                        historyItem.AdditionalData = new
+                        {
+                            c.Comment,
+                            Responsible = responsible
+                        };
                         break;
                     case AssignmentArchived _:
                         historyItem.Action = AssignmentHistoryAction.Archived;
