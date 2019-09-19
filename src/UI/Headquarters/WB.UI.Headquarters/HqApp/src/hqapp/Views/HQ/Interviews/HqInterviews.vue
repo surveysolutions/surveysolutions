@@ -990,7 +990,7 @@ export default {
 
             menu.push({
                     name: self.$t('Common.OpenAssignment'),
-                    callback: () => (window.location = self.config.assignmentsUrl + '?id=' + rowData.assignmentId),
+                    callback: () => (window.location = `${self.config.assignmentsUrl}/${rowData.assignmentId}`),
             });            
 
             if (!self.config.isObserving) {
