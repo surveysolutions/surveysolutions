@@ -110,14 +110,14 @@ namespace WB.Services.Export.CsvExport.Exporters
 
         private async Task<List<string[]>> QueryActionsChunkFromReadSide(int[] assignmentIds)
         {
-            var assignments = dbContext.AssignmentActions.Where(selector => assignmentIds.Contains(selector.Id));
+            var assignments = dbContext.AssignmentActions.Where(selector => assignmentIds.Contains(selector.AssignmentId));
             var result = new List<string[]>();
 
             foreach (AssignmentAction assignmentAction in assignments)
             {
                 var resultRow = new List<string>
                 {
-                    assignmentAction.Id.ToString(CultureInfo.InvariantCulture),
+                    assignmentAction.AssignmentId.ToString(CultureInfo.InvariantCulture),
                     //assignmentAction.PublicKey.FormatGuid(),
                     assignmentAction.Timestamp.ToString(ExportFormatSettings.ExportDateFormat, CultureInfo.InvariantCulture),
                     assignmentAction.Timestamp.ToString("T", CultureInfo.InvariantCulture),

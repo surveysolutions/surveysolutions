@@ -17,6 +17,8 @@ namespace WB.Services.Export.InterviewDataStorage.EfMappings
         {
             builder.ToTable("interview__references", schema);
             builder.HasKey(x => x.InterviewId);
+
+            builder.HasOne(a => a.Assignment).WithMany(a => a.InterviewReferences);
         }
     }
 
@@ -63,7 +65,12 @@ namespace WB.Services.Export.InterviewDataStorage.EfMappings
 
         public void Configure(EntityTypeBuilder<Assignment.Assignment> builder)
         {
-            builder.ToTable("assignment", schema);
+            builder.ToTable("__assignment", schema);
+            builder.HasKey(a => a.Id);
+            builder.HasAlternateKey(a => a.PublicKey);
+
+            builder.HasMany(a => a.Actions).WithOne(a => a.Assignment);
+            builder.HasMany(a => a.InterviewReferences).WithOne(a => a.Assignment);
         }
     }
 
@@ -78,7 +85,14 @@ namespace WB.Services.Export.InterviewDataStorage.EfMappings
 
         public void Configure(EntityTypeBuilder<AssignmentAction> builder)
         {
-            builder.ToTable("assignment__action", schema);
+            builder.ToTable("__assignment__action", schema);
+            builder.HasKey(aa => aa.SequenceIndex);
+            builder.HasIndex(aa => aa.AssignmentId);
+
+            builder.HasOne(a => a.Assignment)
+                .WithMany(a => a.Actions)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
