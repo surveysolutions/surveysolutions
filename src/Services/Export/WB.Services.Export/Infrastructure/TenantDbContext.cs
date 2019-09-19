@@ -90,6 +90,8 @@ namespace WB.Services.Export.Infrastructure
             modelBuilder.ApplyConfiguration(new InterviewReferenceEntityTypeConfiguration(schema));
             modelBuilder.ApplyConfiguration(new MetadataTypeConfiguration(schema));
             modelBuilder.ApplyConfiguration(new DeletedQuestionnaireReferenceTypeConfiguration(schema));
+            modelBuilder.ApplyConfiguration(new AssignmentTypeConfiguration(schema));
+            modelBuilder.ApplyConfiguration(new AssignmentActionTypeConfiguration(schema));
         }
     }
 }
