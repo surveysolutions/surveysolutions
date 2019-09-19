@@ -193,7 +193,7 @@ export default {
                 },
                 {
                     data: "additionalData",
-                    title: '',
+                    title: self.$t('Assignmetns.Details_Column'),
                     width: '50%',
                     render(data, type, row) {
                         switch(row.action) {
