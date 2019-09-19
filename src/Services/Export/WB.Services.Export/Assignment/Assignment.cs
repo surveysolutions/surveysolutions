@@ -12,6 +12,5 @@ namespace WB.Services.Export.Assignment
         public Guid PublicKey { get; set; }
         public Guid ResponsibleId { get; set; }
         public ICollection<AssignmentAction> Actions { get; set; }
-        public ICollection<InterviewReference> InterviewReferences { get; set; }
     }
 }

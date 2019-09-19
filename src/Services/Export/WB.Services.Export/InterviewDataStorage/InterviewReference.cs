@@ -19,7 +19,6 @@ namespace WB.Services.Export.InterviewDataStorage
         public DateTime? DeletedAtUtc { get; set; }
 
         public int? AssignmentId { get; set; }
-        public Assignment.Assignment Assignment { get; set; }
     }
 
     public class GeneratedQuestionnaireReference
