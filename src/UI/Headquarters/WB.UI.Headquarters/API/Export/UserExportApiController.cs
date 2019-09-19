@@ -9,30 +9,31 @@ using WB.UI.Headquarters.API.Filters;
 namespace WB.UI.Headquarters.API.Export
 {
     [RoutePrefix("api/export/v1")]
-    public class UserApiController : ApiController
+    public class UserExportApiController : ApiController
     {
         private readonly IUserRepository userRepository;
 
-        public UserApiController(IUserRepository userRepository)
+        public UserExportApiController(IUserRepository userRepository)
         {
             this.userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         }
 
-        [Route("user/{userId}")]
+        [Route("user/{id}")]
         [ServiceApiKeyAuthorization]
         [HttpGet]
-        public HttpResponseMessage Get(Guid userId)
+        public HttpResponseMessage Get(string id)
         {
+            var userId = Guid.Parse(id);
             var userModel = this.userRepository.Users
                 .Where(user => user.Id == userId)
-                .Select(user => new
-                {
-                    Id = user.Id,
-                    UserName = user.UserName,
-                    UserRole = user.Roles.Single()
-                });
+                .Single();
 
-            return Request.CreateResponse(HttpStatusCode.OK, userModel);
+            return Request.CreateResponse(HttpStatusCode.OK, new
+            {
+                Id = userModel.Id,
+                UserName = userModel.UserName,
+                Roles = userModel.Roles.Select(r => r.Role.ToString()).ToArray()
+            });
         }
     }
 }

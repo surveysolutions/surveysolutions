@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Services.Export.CsvExport.Exporters;
@@ -59,12 +60,12 @@ namespace WB.Services.Export.Assignment
             return AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate.UtcDateTime, AssignmentExportedAction.Deleted, cancellationToken);
         }
 
-        public async Task Handle(PublishedEvent<AssignmentReassigned> @event, CancellationToken cancellationToken = default)
+        public Task Handle(PublishedEvent<AssignmentReassigned> @event, CancellationToken cancellationToken = default)
         {
-            var assignment = await GetAssignmentAsync(@event.EventSourceId, cancellationToken);
+            var assignment = GetAssignment(@event.EventSourceId);
             assignment.ResponsibleId = @event.Event.ResponsibleId;
 
-            await AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate.UtcDateTime, AssignmentExportedAction.Reassigned, cancellationToken);
+            return AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate.UtcDateTime, AssignmentExportedAction.Reassigned, cancellationToken);
         }
 
         public Task Handle(PublishedEvent<AssignmentReceivedByTablet> @event, CancellationToken cancellationToken = default)
@@ -87,9 +88,9 @@ namespace WB.Services.Export.Assignment
             return AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate.UtcDateTime, AssignmentExportedAction.QuantityChanged, cancellationToken);
         }
 
-        private async Task AddRecord(Guid publicKey, long globalSequence, Guid actorId, DateTime dateTime, AssignmentExportedAction action, CancellationToken cancellationToken)
+        private Task AddRecord(Guid publicKey, long globalSequence, Guid actorId, DateTime dateTime, AssignmentExportedAction action, CancellationToken cancellationToken)
         {
-            var assignment = await GetAssignmentAsync(publicKey, cancellationToken);
+            var assignment = GetAssignment(publicKey);
 
             var assignmentAction = new AssignmentAction()
             {
@@ -101,9 +102,10 @@ namespace WB.Services.Export.Assignment
                 ResponsibleId = assignment.ResponsibleId,
             };
             actions.Add(assignmentAction);
+            return Task.CompletedTask;
         }
 
-        private async Task<Assignment> GetAssignmentAsync(Guid publicKey, CancellationToken cancellationToken)
+        private Assignment GetAssignment(Guid publicKey)
         {
             if (assignments.TryGetValue(publicKey, out Assignment assignment))
                 return assignment;
@@ -111,7 +113,8 @@ namespace WB.Services.Export.Assignment
             if (assignmentsFromDb.TryGetValue(publicKey, out Assignment assignmentFromDbCached))
                 return assignmentFromDbCached;
 
-            var assignmentFromDb = await dbContext.Assignments.FindAsync(publicKey, cancellationToken);
+            //var assignmentFromDb = await dbContext.Assignments.FindAsync(publicKey, cancellationToken);
+            var assignmentFromDb = dbContext.Assignments.Where(ass => ass.PublicKey == publicKey).First();
             assignmentsFromDb.Add(publicKey, assignmentFromDb);
             return assignmentFromDb;
         }
