@@ -12,6 +12,7 @@ using WB.Services.Export.Interview;
 using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.User;
+using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.CsvExport.Exporters
 {
@@ -56,7 +57,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             this.userStorage = userStorage;
         }
 
-        public async Task ExportAsync(List<int> assignmentIdsToExport, string basePath, ExportProgress progress, CancellationToken cancellationToken)
+        public async Task ExportAsync(List<int> assignmentIdsToExport, TenantInfo tenantInfo, string basePath, ExportProgress progress, CancellationToken cancellationToken)
         {
             var actionFilePath = Path.Combine(basePath, Path.ChangeExtension(this.AssignmentActionsFileName, this.dataFileExtension));
             var batchSize = this.dataExportSettings.Value.MaxRecordsCountPerOneExportQuery;
@@ -72,7 +73,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 var interviewIdsStrings = assignmentsBatch.ToArray();
-                var actionsChunk = await this.QueryActionsChunkFromReadSide(interviewIdsStrings);
+                var actionsChunk = await this.QueryActionsChunkFromReadSide(tenantInfo, interviewIdsStrings);
                 cancellationToken.ThrowIfCancellationRequested();
                 this.csvWriter.WriteData(actionFilePath, actionsChunk, ExportFileSettings.DataFileSeparator.ToString());
 
@@ -108,7 +109,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             File.WriteAllText(contentFilePath, doContent.ToString());
         }
 
-        private async Task<List<string[]>> QueryActionsChunkFromReadSide(int[] assignmentIds)
+        private async Task<List<string[]>> QueryActionsChunkFromReadSide(TenantInfo tenantInfo, int[] assignmentIds)
         {
             var assignments = dbContext.AssignmentActions.Where(selector => assignmentIds.Contains(selector.AssignmentId));
             var result = new List<string[]>();
@@ -122,24 +123,24 @@ namespace WB.Services.Export.CsvExport.Exporters
                     assignmentAction.Timestamp.ToString(ExportFormatSettings.ExportDateFormat, CultureInfo.InvariantCulture),
                     assignmentAction.Timestamp.ToString("T", CultureInfo.InvariantCulture),
                     ((int)assignmentAction.Status).ToString(CultureInfo.InvariantCulture),
-                    await GetUserNameAsync(assignmentAction.OriginatorId),
-                    ExportHelper.GetUserRoleDisplayValue(await GetUserRoleAsync(assignmentAction.OriginatorId)),
-                    await GetUserNameAsync(assignmentAction.ResponsibleId),
-                    ExportHelper.GetUserRoleDisplayValue(await GetUserRoleAsync(assignmentAction.OriginatorId))
+                    await GetUserNameAsync(tenantInfo, assignmentAction.OriginatorId),
+                    ExportHelper.GetUserRoleDisplayValue(await GetUserRoleAsync(tenantInfo, assignmentAction.OriginatorId)),
+                    await GetUserNameAsync(tenantInfo, assignmentAction.ResponsibleId),
+                    ExportHelper.GetUserRoleDisplayValue(await GetUserRoleAsync(tenantInfo, assignmentAction.OriginatorId))
                 };
                 result.Add(resultRow.ToArray());
             }
             return result;
         }
 
-        private Task<UserRoles> GetUserRoleAsync(Guid userId)
+        private Task<UserRoles> GetUserRoleAsync(TenantInfo tenantInfo, Guid userId)
         {
-            return userStorage.GetUserRoleAsync(userId);
+            return userStorage.GetUserRoleAsync(tenantInfo, userId);
         }
 
-        private Task<string> GetUserNameAsync(Guid userId)
+        private Task<string> GetUserNameAsync(TenantInfo tenantInfo, Guid userId)
         {
-            return userStorage.GetUserNameAsync(userId);
+            return userStorage.GetUserNameAsync(tenantInfo, userId);
         }
     }
 }
