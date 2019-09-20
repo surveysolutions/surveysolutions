@@ -1094,8 +1094,9 @@ export default {
 
             if (this.responsibleId) queryString.responsible = this.responsibleId.value
             if (this.assignmentId) queryString.assignmentId = this.assignmentId
-
             if (this.status) queryString.status = this.status.alias
+            if (this.unactiveDateStart) queryString.unactiveDateStart = this.unactiveDateStart
+            if (this.unactiveDateEnd) queryString.unactiveDateEnd = this.unactiveDateEnd
 
             this.$router.push({ query: queryString });
         },
