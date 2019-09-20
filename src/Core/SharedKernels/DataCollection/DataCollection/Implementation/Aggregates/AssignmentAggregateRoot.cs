@@ -104,7 +104,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 command.QuestionnaireId.QuestionnaireId,
                 command.QuestionnaireId.Version,
                 command.ResponsibleId,
-                command.Quantity,
+                command.Quantity == -1 ? null : command.Quantity,
                 command.AudioRecording,
                 command.Email,
                 command.Password,
