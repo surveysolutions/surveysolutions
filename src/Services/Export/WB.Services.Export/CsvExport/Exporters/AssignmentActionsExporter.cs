@@ -24,7 +24,6 @@ namespace WB.Services.Export.CsvExport.Exporters
         public DoExportFileHeader[] ActionFileColumns => new []
         {
             new DoExportFileHeader("assignment__id", "Assignment id (identifier in numeric format)", ExportValueType.NumericInt),
-            //new DoExportFileHeader("assignment__key", "Unique 32-character long identifier of the assignment", ExportValueType.String),
             new DoExportFileHeader("date", "Date when the action was taken", ExportValueType.String),
             new DoExportFileHeader("time", "Time when the action was taken", ExportValueType.String),
             new DoExportFileHeader("action", "Type of action taken", ExportValueType.NumericInt, 
@@ -119,9 +118,8 @@ namespace WB.Services.Export.CsvExport.Exporters
                 var resultRow = new List<string>
                 {
                     assignmentAction.AssignmentId.ToString(CultureInfo.InvariantCulture),
-                    //assignmentAction.PublicKey.FormatGuid(),
-                    assignmentAction.Timestamp.ToString(ExportFormatSettings.ExportDateFormat, CultureInfo.InvariantCulture),
-                    assignmentAction.Timestamp.ToString("T", CultureInfo.InvariantCulture),
+                    assignmentAction.TimestampUtc.ToString(ExportFormatSettings.ExportDateFormat, CultureInfo.InvariantCulture),
+                    assignmentAction.TimestampUtc.ToString("T", CultureInfo.InvariantCulture),
                     ((int)assignmentAction.Status).ToString(CultureInfo.InvariantCulture),
                     await GetUserNameAsync(assignmentAction.OriginatorId),
                     ExportHelper.GetUserRoleDisplayValue(await GetUserRoleAsync(assignmentAction.OriginatorId)),
