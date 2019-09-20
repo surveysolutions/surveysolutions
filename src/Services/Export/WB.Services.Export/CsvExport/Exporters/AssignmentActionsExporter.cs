@@ -72,7 +72,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 var interviewIdsStrings = assignmentsBatch.ToArray();
-                var actionsChunk = await this.QueryActionsChunkFromReadSide(tenantInfo, interviewIdsStrings);
+                var actionsChunk = await this.QueryActionsChunkFromReadSide(interviewIdsStrings);
                 cancellationToken.ThrowIfCancellationRequested();
                 this.csvWriter.WriteData(actionFilePath, actionsChunk, ExportFileSettings.DataFileSeparator.ToString());
 
@@ -108,7 +108,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             File.WriteAllText(contentFilePath, doContent.ToString());
         }
 
-        private async Task<List<string[]>> QueryActionsChunkFromReadSide(TenantInfo tenantInfo, int[] assignmentIds)
+        private async Task<List<string[]>> QueryActionsChunkFromReadSide(int[] assignmentIds)
         {
             var assignments = dbContext.AssignmentActions.Where(selector => assignmentIds.Contains(selector.AssignmentId));
             var result = new List<string[]>();
@@ -124,7 +124,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                     await GetUserNameAsync(assignmentAction.OriginatorId),
                     ExportHelper.GetUserRoleDisplayValue(await GetUserRoleAsync(assignmentAction.OriginatorId)),
                     await GetUserNameAsync(assignmentAction.ResponsibleId),
-                    ExportHelper.GetUserRoleDisplayValue(await GetUserRoleAsync(assignmentAction.OriginatorId))
+                    ExportHelper.GetUserRoleDisplayValue(await GetUserRoleAsync(assignmentAction.ResponsibleId))
                 };
                 result.Add(resultRow.ToArray());
             }
