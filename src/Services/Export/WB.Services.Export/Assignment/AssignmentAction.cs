@@ -11,7 +11,7 @@ namespace WB.Services.Export.Assignment
         public long SequenceIndex { get; set; }
         public int AssignmentId { get; set; }
         public AssignmentExportedAction Status { get; set; }
-        public DateTime Timestamp { get; set; }
+        public DateTime TimestampUtc { get; set; }
         public Guid OriginatorId { get; set; }
         public Guid ResponsibleId { get; set; }
 
