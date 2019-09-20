@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
+using WB.Services.Export.Assignment;
 using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.CsvExport.Implementation;
 using WB.Services.Export.CsvExport.Implementation.DoFiles;
@@ -636,6 +637,19 @@ namespace WB.Services.Export.Tests
                 csvWriter ?? Mock.Of<ICsvWriter>(),
                 dbContext ?? Create.TenantDbContext(),
                 userStorage ?? Mock.Of<IUserStorage>());
+        }
+
+        public static AssignmentAction AssignmentAction(long sequenceIndex, int assignmentId, DateTime timestampUtc, AssignmentExportedAction exportedAction, Guid originatorId, Guid responsibleId)
+        {
+            return new AssignmentAction()
+            {
+                SequenceIndex = sequenceIndex,
+                AssignmentId = assignmentId,
+                Status = exportedAction,
+                TimestampUtc = timestampUtc,
+                OriginatorId = originatorId,
+                ResponsibleId = responsibleId,
+            };
         }
     }
 
