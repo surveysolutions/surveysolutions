@@ -42,22 +42,22 @@ namespace WB.Services.Export.Assignment
                 ResponsibleId = @event.Event.ResponsibleId,
             });
 
-            AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate.UtcDateTime, AssignmentExportedAction.Created);
+            AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate, AssignmentExportedAction.Created);
         }
 
         public void Handle(PublishedEvent<AssignmentArchived> @event)
         {
-            AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate.UtcDateTime, AssignmentExportedAction.Archived);
+            AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate, AssignmentExportedAction.Archived);
         }
 
         public void Handle(PublishedEvent<AssignmentUnarchived> @event)
         {
-            AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate.UtcDateTime, AssignmentExportedAction.Unarchived);
+            AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate, AssignmentExportedAction.Unarchived);
         }
 
         public void Handle(PublishedEvent<AssignmentDeleted> @event)
         {
-            AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate.UtcDateTime, AssignmentExportedAction.Deleted);
+            AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate, AssignmentExportedAction.Deleted);
         }
 
         public void Handle(PublishedEvent<AssignmentReassigned> @event)
@@ -65,30 +65,30 @@ namespace WB.Services.Export.Assignment
             var assignment = GetAssignment(@event.EventSourceId);
             assignment.ResponsibleId = @event.Event.ResponsibleId;
 
-            AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate.UtcDateTime, AssignmentExportedAction.Reassigned);
+            AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate, AssignmentExportedAction.Reassigned);
         }
 
         public void Handle(PublishedEvent<AssignmentReceivedByTablet> @event)
         {
-            AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate.UtcDateTime, AssignmentExportedAction.ReceivedByTablet);
+            AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate, AssignmentExportedAction.ReceivedByTablet);
         }
 
         public void Handle(PublishedEvent<AssignmentAudioRecordingChanged> @event)
         {
-            AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate.UtcDateTime, AssignmentExportedAction.AudioRecordingChanged);
+            AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate, AssignmentExportedAction.AudioRecordingChanged);
         }
 
         public void Handle(PublishedEvent<AssignmentWebModeChanged> @event)
         {
-            AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate.UtcDateTime, AssignmentExportedAction.WebModeChanged);
+            AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate, AssignmentExportedAction.WebModeChanged);
         }
 
         public void Handle(PublishedEvent<AssignmentQuantityChanged> @event)
         {
-            AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate.UtcDateTime, AssignmentExportedAction.QuantityChanged);
+            AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate, AssignmentExportedAction.QuantityChanged);
         }
 
-        private void AddRecord(Guid publicKey, long globalSequence, Guid actorId, DateTime dateTime, AssignmentExportedAction action)
+        private void AddRecord(Guid publicKey, long globalSequence, Guid actorId, DateTimeOffset dateTimeOffset, AssignmentExportedAction action)
         {
             var assignment = GetAssignment(publicKey);
 
@@ -96,7 +96,7 @@ namespace WB.Services.Export.Assignment
             {
                 SequenceIndex = globalSequence,
                 AssignmentId = assignment.Id,
-                Timestamp = dateTime,
+                TimestampUtc = dateTimeOffset.UtcDateTime,
                 Status = action,
                 OriginatorId = actorId,
                 ResponsibleId = assignment.ResponsibleId,
