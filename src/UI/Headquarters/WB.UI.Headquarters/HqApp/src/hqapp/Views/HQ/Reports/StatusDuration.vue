@@ -308,9 +308,13 @@ export default {
 
             var urlParams = {  };
 
-            urlParams['templateId'] = this.questionnaireId == undefined ? '' : this.formatGuid(this.questionnaireId.key);
-            urlParams['templateVersion'] = this.questionnaireVersion == undefined ? '' : this.questionnaireVersion.key;
-
+            if(this.questionnaireId != undefined)
+            {
+                urlParams['templateId'] = this.formatGuid(this.questionnaireId.key);
+                if(this.questionnaireVersion != undefined)
+                    urlParams['templateVersion'] = this.questionnaireVersion.key;
+            }
+            
             if (row.startDate != undefined)
                 urlParams['unactiveDateStart'] = row.startDate;
             if (row.endDate != undefined)
@@ -319,7 +323,7 @@ export default {
             urlParams['status'] = status;
             
             if (this.supervisorId != undefined)
-                urlParams['teamId'] = this.supervisorId.key;
+                urlParams['responsible'] = this.supervisorId.value;
 
             var querystring = this.encodeQueryData(urlParams);
 
