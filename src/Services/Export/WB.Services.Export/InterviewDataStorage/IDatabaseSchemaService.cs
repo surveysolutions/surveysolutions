@@ -6,6 +6,6 @@ namespace WB.Services.Export.InterviewDataStorage
 {
     public interface IDatabaseSchemaService
     {
-        void CreateOrRemoveSchema(QuestionnaireDocument questionnaire);
+        Task CreateOrRemoveSchema(QuestionnaireDocument questionnaire);
     }
 }
