@@ -160,6 +160,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Size changed to Unlimited.
+        /// </summary>
+        public static string Action_QuantityChanged_To_Unlimited {
+            get {
+                return ResourceManager.GetString("Action_QuantityChanged_To_Unlimited", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reassigned.
         /// </summary>
         public static string Action_Reassigned {
