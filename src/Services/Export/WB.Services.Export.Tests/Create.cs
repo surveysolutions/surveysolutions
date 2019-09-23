@@ -643,7 +643,7 @@ namespace WB.Services.Export.Tests
         {
             return new AssignmentAction()
             {
-                SequenceIndex = sequenceIndex,
+                Sequence = sequenceIndex,
                 AssignmentId = assignmentId,
                 Status = exportedAction,
                 TimestampUtc = timestampUtc,
