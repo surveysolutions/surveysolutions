@@ -47,25 +47,25 @@ namespace WB.Services.Export.Assignment
                 Comment = @event.Event.Comment,
             });
 
-            AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate, AssignmentExportedAction.Created, null, null, @event.Event.Comment);
-            AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate, AssignmentExportedAction.QuantityChanged, null, ToQuantityString(@event.Event.Quantity), null);
-            AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate, AssignmentExportedAction.WebModeChanged, null, ToWebModeString(@event.Event.WebMode), null);
-            AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate, AssignmentExportedAction.AudioRecordingChanged, null, ToAudioRecordingString(@event.Event.AudioRecording), null);
+            AddRecord(@event.EventSourceId, @event.Event.UserId, @event.Event.OriginDate, AssignmentExportedAction.Created, null, null, @event.Event.Comment);
+            AddRecord(@event.EventSourceId, @event.Event.UserId, @event.Event.OriginDate, AssignmentExportedAction.QuantityChanged, null, ToQuantityString(@event.Event.Quantity), null);
+            AddRecord(@event.EventSourceId, @event.Event.UserId, @event.Event.OriginDate, AssignmentExportedAction.WebModeChanged, null, ToWebModeString(@event.Event.WebMode), null);
+            AddRecord(@event.EventSourceId, @event.Event.UserId, @event.Event.OriginDate, AssignmentExportedAction.AudioRecordingChanged, null, ToAudioRecordingString(@event.Event.AudioRecording), null);
         }
 
         public void Handle(PublishedEvent<AssignmentArchived> @event)
         {
-            AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate, AssignmentExportedAction.Archived, null, null, null);
+            AddRecord(@event.EventSourceId, @event.Event.UserId, @event.Event.OriginDate, AssignmentExportedAction.Archived, null, null, null);
         }
 
         public void Handle(PublishedEvent<AssignmentUnarchived> @event)
         {
-            AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate, AssignmentExportedAction.Unarchived, null, null, null);
+            AddRecord(@event.EventSourceId, @event.Event.UserId, @event.Event.OriginDate, AssignmentExportedAction.Unarchived, null, null, null);
         }
 
         public void Handle(PublishedEvent<AssignmentDeleted> @event)
         {
-            AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate, AssignmentExportedAction.Deleted, null, null, null);
+            AddRecord(@event.EventSourceId, @event.Event.UserId, @event.Event.OriginDate, AssignmentExportedAction.Deleted, null, null, null);
         }
 
         public void Handle(PublishedEvent<AssignmentReassigned> @event)
@@ -74,19 +74,19 @@ namespace WB.Services.Export.Assignment
             assignment.ResponsibleId = @event.Event.ResponsibleId;
             assignment.Comment = @event.Event.Comment;
 
-            AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate, AssignmentExportedAction.Reassigned, null, null, @event.Event.Comment);
+            AddRecord(@event.EventSourceId, @event.Event.UserId, @event.Event.OriginDate, AssignmentExportedAction.Reassigned, null, null, @event.Event.Comment);
         }
 
         public void Handle(PublishedEvent<AssignmentReceivedByTablet> @event)
         {
-            AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate, AssignmentExportedAction.ReceivedByTablet, null, null, null);
+            AddRecord(@event.EventSourceId, @event.Event.UserId, @event.Event.OriginDate, AssignmentExportedAction.ReceivedByTablet, null, null, null);
         }
 
         public void Handle(PublishedEvent<AssignmentAudioRecordingChanged> @event)
         {
             var assignment = GetAssignment(@event.EventSourceId);
 
-            AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate, AssignmentExportedAction.AudioRecordingChanged, 
+            AddRecord(@event.EventSourceId, @event.Event.UserId, @event.Event.OriginDate, AssignmentExportedAction.AudioRecordingChanged, 
                 ToAudioRecordingString(assignment.AudioRecording), ToAudioRecordingString(@event.Event.AudioRecording), null);
 
             assignment.AudioRecording = @event.Event.AudioRecording;
@@ -96,7 +96,7 @@ namespace WB.Services.Export.Assignment
         {
             var assignment = GetAssignment(@event.EventSourceId);
 
-            AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate, AssignmentExportedAction.WebModeChanged,
+            AddRecord(@event.EventSourceId, @event.Event.UserId, @event.Event.OriginDate, AssignmentExportedAction.WebModeChanged,
                 ToWebModeString(assignment.WebMode), ToWebModeString(@event.Event.WebMode), null);
 
             assignment.WebMode = @event.Event.WebMode;
@@ -106,20 +106,19 @@ namespace WB.Services.Export.Assignment
         {
             var assignment = GetAssignment(@event.EventSourceId);
 
-            AddRecord(@event.EventSourceId, @event.GlobalSequence, @event.Event.UserId, @event.Event.OriginDate, AssignmentExportedAction.QuantityChanged,
+            AddRecord(@event.EventSourceId, @event.Event.UserId, @event.Event.OriginDate, AssignmentExportedAction.QuantityChanged,
                 ToQuantityString(assignment.Quantity), ToQuantityString(@event.Event.Quantity), null);
 
             assignment.Quantity = @event.Event.Quantity;
         }
 
-        private void AddRecord(Guid publicKey, long globalSequence, Guid actorId, DateTimeOffset dateTimeOffset, AssignmentExportedAction action, 
+        private void AddRecord(Guid publicKey, Guid actorId, DateTimeOffset dateTimeOffset, AssignmentExportedAction action, 
             string oldValue, string newValue, string comment)
         {
             var assignment = GetAssignment(publicKey);
 
             var assignmentAction = new AssignmentAction()
             {
-                Sequence = globalSequence,
                 AssignmentId = assignment.Id,
                 TimestampUtc = dateTimeOffset.UtcDateTime,
                 Status = action,
