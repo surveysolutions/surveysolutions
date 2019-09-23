@@ -39,7 +39,7 @@ SELECT
 	'AssignmentCreated', -- eventtype
 	concat('{ 
 		   "id": ', id, ', 
-		   "userId": "00000000-0000-0000-0000-000000000001", 
+		   "userId": ', (SELECT "UserId" FROM users.userroles r inner join users.users u on r."UserId"=u."Id" where "RoleId"='00000000-0000-0000-0000-000000000001' limit 1), ', 
 		   "answers": ', coalesce(answers::text, '[]'), ', 
 		   "webMode": ', coalesce(webmode::text, 'null'), ',
 		   "quantity": ', coalesce(quantity::text, 'null'), ',
@@ -63,7 +63,7 @@ SELECT
 	'AssignmentReceivedByTablet', -- eventtype
 	concat('{ 
 		   "originDate": "', updatedatutc, '",
-		   "userId": "00000000-0000-0000-0000-000000000001"
+		   "userId": ', (SELECT "UserId" FROM users.userroles r inner join users.users u on r."UserId"=u."Id" where "RoleId"='00000000-0000-0000-0000-000000000001' limit 1), '
 	}')::jsonb          -- value
 FROM readside.assignments  WHERE receivedbytabletatutc is not null;
 
@@ -77,7 +77,7 @@ SELECT
 	'AssignmentArchived', -- eventtype
 	concat('{ 
 		   "originDate": "', updatedatutc, '",
-		   "userId": "00000000-0000-0000-0000-000000000001" 
+		   "userId": ', (SELECT "UserId" FROM users.userroles r inner join users.users u on r."UserId"=u."Id" where "RoleId"='00000000-0000-0000-0000-000000000001' limit 1), '
 	}')::jsonb          -- value
 FROM readside.assignments WHERE archived = true;
 
