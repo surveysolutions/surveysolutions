@@ -62,7 +62,7 @@ SELECT
 	(SELECT MAX(eventsequence) + 1 FROM events.events es WHERE es.eventsourceid = publickey),             -- eventsequence
 	'AssignmentReceivedByTablet', -- eventtype
 	concat('{ 
-		   "id": ', id, ', 
+		   "originDate": "', updatedatutc, '",
 		   "userId": "00000000-0000-0000-0000-000000000001"
 	}')::jsonb          -- value
 FROM readside.assignments  WHERE receivedbytabletatutc is not null;
@@ -76,7 +76,7 @@ SELECT
 	(SELECT MAX(eventsequence) + 1 FROM events.events es WHERE es.eventsourceid = publickey),             -- eventsequence,                   -- eventsequence
 	'AssignmentArchived', -- eventtype
 	concat('{ 
-		   "id": ', id, ', 
+		   "originDate": "', updatedatutc, '",
 		   "userId": "00000000-0000-0000-0000-000000000001" 
 	}')::jsonb          -- value
 FROM readside.assignments WHERE archived = true;
