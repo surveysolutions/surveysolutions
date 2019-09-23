@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WB.Services.Infrastructure.Tenant;
 
