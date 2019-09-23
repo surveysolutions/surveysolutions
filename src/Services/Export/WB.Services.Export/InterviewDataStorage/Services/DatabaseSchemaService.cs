@@ -21,12 +21,12 @@ namespace WB.Services.Export.InterviewDataStorage.Services
             this.dbContext = dbContext;
         }
 
-        private void CreateQuestionnaireDbStructure(QuestionnaireDocument questionnaireDocument)
+        private async Task CreateQuestionnaireDbStructure(QuestionnaireDocument questionnaireDocument)
         {
-            if (this.dbContext.Database.IsNpgsql())
+            /*if (this.dbContext.Database.IsNpgsql())
             {
-                this.dbContext.Database.Migrate();
-            }
+               await this.dbContext.CheckSchemaVersionAndMigrate();
+            }*/
             var reference = this.dbContext.GeneratedQuestionnaires.Find(questionnaireDocument.QuestionnaireId.ToString());
 
             if (reference != null)
@@ -60,12 +60,12 @@ namespace WB.Services.Export.InterviewDataStorage.Services
             return false;
         }
 
-        public void CreateOrRemoveSchema(QuestionnaireDocument questionnaire)
+        public async Task CreateOrRemoveSchema(QuestionnaireDocument questionnaire)
         {
             if (questionnaire.IsDeleted)
                 TryDropQuestionnaireDbStructure(questionnaire);
             else
-                CreateQuestionnaireDbStructure(questionnaire);
+                await CreateQuestionnaireDbStructure(questionnaire);
         }
     }
 }

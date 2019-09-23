@@ -88,6 +88,25 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.AssignmentAggregateRootTests
         }
 
         [Test]
+        public void when_created_with_minus_one_as_quantity()
+        {
+            
+            var command = Create.Command.CreateAssignment(
+                quantity: -1
+                );
+
+            var assignment = Create.AggregateRoot.AssignmentAggregateRoot();
+
+            //act
+            using (var eventContext = new EventContext())
+            {
+                assignment.CreateAssignment(command);
+                Assert.That(assignment.properties.Quantity, Is.Null);
+                eventContext.ShouldContainEvent<AssignmentCreated>(x => x.Quantity == null);
+            }
+        }
+
+        [Test]
         public void when_archive_assignment()
         {
             var command = Create.Command.ArchiveAssignment();
