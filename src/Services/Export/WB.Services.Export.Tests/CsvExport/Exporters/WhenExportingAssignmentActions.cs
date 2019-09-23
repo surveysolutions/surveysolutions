@@ -29,15 +29,15 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
 
             var assignmentActions = new List<AssignmentAction>
             {
-                Create.AssignmentAction(1, AssignmentId, timestampUtc, AssignmentExportedAction.Created,          headquarters, supervisor),
-                Create.AssignmentAction(2, AssignmentId, timestampUtc, AssignmentExportedAction.QuantityChanged,  headquarters, supervisor),
-                Create.AssignmentAction(3, AssignmentId, timestampUtc, AssignmentExportedAction.Reassigned,       supervisor,   interviewer),
-                Create.AssignmentAction(4, AssignmentId, timestampUtc, AssignmentExportedAction.ReceivedByTablet, supervisor,   interviewer),
-                Create.AssignmentAction(5, AssignmentId, timestampUtc, AssignmentExportedAction.AudioRecordingChanged, headquarters, interviewer),
-                Create.AssignmentAction(6, AssignmentId, timestampUtc, AssignmentExportedAction.Archived,         headquarters, interviewer),
-                Create.AssignmentAction(7, AssignmentId, timestampUtc, AssignmentExportedAction.Unarchived,       headquarters, interviewer),
-                Create.AssignmentAction(8, AssignmentId, timestampUtc, AssignmentExportedAction.WebModeChanged,   headquarters, interviewer),
-                Create.AssignmentAction(9, AssignmentId, timestampUtc, AssignmentExportedAction.Deleted,          headquarters, interviewer),
+                Create.AssignmentAction(AssignmentId, timestampUtc, AssignmentExportedAction.Created,          headquarters, supervisor, comment: "created"),
+                Create.AssignmentAction(AssignmentId, timestampUtc, AssignmentExportedAction.QuantityChanged,  headquarters, supervisor, oldValue: "1", newValue: "20"),
+                Create.AssignmentAction(AssignmentId, timestampUtc, AssignmentExportedAction.Reassigned,       supervisor,   interviewer, comment: "do it"),
+                Create.AssignmentAction(AssignmentId, timestampUtc, AssignmentExportedAction.ReceivedByTablet, supervisor,   interviewer),
+                Create.AssignmentAction(AssignmentId, timestampUtc, AssignmentExportedAction.AudioRecordingChanged, headquarters, interviewer, "0", "1"),
+                Create.AssignmentAction(AssignmentId, timestampUtc, AssignmentExportedAction.Archived,         headquarters, interviewer),
+                Create.AssignmentAction(AssignmentId, timestampUtc, AssignmentExportedAction.Unarchived,       headquarters, interviewer),
+                Create.AssignmentAction(AssignmentId, timestampUtc, AssignmentExportedAction.WebModeChanged,   headquarters, interviewer, "0", "1"),
+                Create.AssignmentAction(AssignmentId, timestampUtc, AssignmentExportedAction.Deleted,          headquarters, interviewer),
             };
 
             foreach (var assignmentAction in assignmentActions)
@@ -87,7 +87,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             await actionsExporter.ExportAsync(assignmentIds, tenant, "", new ExportProgress(), CancellationToken.None);
 
             Assert.That(fileData[0], Is.EqualTo(new []{ "assignment__id", "date", "time", "action",
-                "originator", "role", "responsible__name", "responsible__role"}));
+                "originator", "role", "responsible__name", "responsible__role", "old__value", "new__value", "comment"}));
         }
 
         [Test]
@@ -95,7 +95,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         {
             await actionsExporter.ExportAsync(assignmentIds, tenant, "", new ExportProgress(), CancellationToken.None);
 
-            Assert.That(fileData[1], Is.EqualTo(new[] { AssignmentId.ToString(), "2019-09-20", "11:15:30", "1", "headquarters", "3", "supervisor", "2"}));
+            Assert.That(fileData[1], Is.EqualTo(new[] { AssignmentId.ToString(), "2019-09-20", "11:15:30", "1", "headquarters", "3", "supervisor", "2", null, null, "created" }));
         }
 
         [Test]
@@ -103,7 +103,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         {
             await actionsExporter.ExportAsync(assignmentIds, tenant, "", new ExportProgress(), CancellationToken.None);
 
-            Assert.That(fileData[2], Is.EqualTo(new[] { AssignmentId.ToString(), "2019-09-20", "11:15:30", "8", "headquarters", "3", "supervisor", "2" }));
+            Assert.That(fileData[2], Is.EqualTo(new[] { AssignmentId.ToString(), "2019-09-20", "11:15:30", "8", "headquarters", "3", "supervisor", "2", "1", "20", null }));
         }
 
         [Test]
@@ -111,7 +111,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         {
             await actionsExporter.ExportAsync(assignmentIds, tenant, "", new ExportProgress(), CancellationToken.None);
 
-            Assert.That(fileData[3], Is.EqualTo(new[] { AssignmentId.ToString(), "2019-09-20", "11:15:30", "3", "supervisor", "2", "interviewer", "1" }));
+            Assert.That(fileData[3], Is.EqualTo(new[] { AssignmentId.ToString(), "2019-09-20", "11:15:30", "3", "supervisor", "2", "interviewer", "1", null, null, "do it" }));
         }
 
         [Test]
@@ -119,7 +119,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         {
             await actionsExporter.ExportAsync(assignmentIds, tenant, "", new ExportProgress(), CancellationToken.None);
 
-            Assert.That(fileData[4], Is.EqualTo(new[] { AssignmentId.ToString(), "2019-09-20", "11:15:30", "4", "supervisor", "2", "interviewer", "1" }));
+            Assert.That(fileData[4], Is.EqualTo(new[] { AssignmentId.ToString(), "2019-09-20", "11:15:30", "4", "supervisor", "2", "interviewer", "1", null, null, null }));
         }
 
 
@@ -128,7 +128,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         {
             await actionsExporter.ExportAsync(assignmentIds, tenant, "", new ExportProgress(), CancellationToken.None);
 
-            Assert.That(fileData[5], Is.EqualTo(new[] { AssignmentId.ToString(), "2019-09-20", "11:15:30", "7", "headquarters", "3", "interviewer", "1" }));
+            Assert.That(fileData[5], Is.EqualTo(new[] { AssignmentId.ToString(), "2019-09-20", "11:15:30", "7", "headquarters", "3", "interviewer", "1", "0", "1", null }));
         }
 
         [Test]
@@ -136,7 +136,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         {
             await actionsExporter.ExportAsync(assignmentIds, tenant, "", new ExportProgress(), CancellationToken.None);
 
-            Assert.That(fileData[6], Is.EqualTo(new[] { AssignmentId.ToString(), "2019-09-20", "11:15:30", "5", "headquarters", "3", "interviewer", "1" }));
+            Assert.That(fileData[6], Is.EqualTo(new[] { AssignmentId.ToString(), "2019-09-20", "11:15:30", "5", "headquarters", "3", "interviewer", "1", null, null, null }));
         }
 
         [Test]
@@ -144,7 +144,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         {
             await actionsExporter.ExportAsync(assignmentIds, tenant, "", new ExportProgress(), CancellationToken.None);
 
-            Assert.That(fileData[7], Is.EqualTo(new[] { AssignmentId.ToString(), "2019-09-20", "11:15:30", "6", "headquarters", "3", "interviewer", "1" }));
+            Assert.That(fileData[7], Is.EqualTo(new[] { AssignmentId.ToString(), "2019-09-20", "11:15:30", "6", "headquarters", "3", "interviewer", "1", null, null, null }));
         }
 
         [Test]
@@ -152,14 +152,14 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         {
             await actionsExporter.ExportAsync(assignmentIds, tenant, "", new ExportProgress(), CancellationToken.None);
 
-            Assert.That(fileData[8], Is.EqualTo(new[] { AssignmentId.ToString(), "2019-09-20", "11:15:30", "9", "headquarters", "3", "interviewer", "1" }));
+            Assert.That(fileData[8], Is.EqualTo(new[] { AssignmentId.ToString(), "2019-09-20", "11:15:30", "9", "headquarters", "3", "interviewer", "1", "0", "1", null }));
         }
 
         [Test]
         public async Task should_record_about_delete()
         {
             await actionsExporter.ExportAsync(assignmentIds, tenant, "", new ExportProgress(), CancellationToken.None);
-            Assert.That(fileData[9], Is.EqualTo(new[] { AssignmentId.ToString(), "2019-09-20", "11:15:30", "2", "headquarters", "3", "interviewer", "1" }));
+            Assert.That(fileData[9], Is.EqualTo(new[] { AssignmentId.ToString(), "2019-09-20", "11:15:30", "2", "headquarters", "3", "interviewer", "1", null, null, null }));
         }
 
 
