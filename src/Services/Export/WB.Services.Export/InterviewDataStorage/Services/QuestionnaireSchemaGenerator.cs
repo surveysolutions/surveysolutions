@@ -19,6 +19,8 @@ namespace WB.Services.Export.InterviewDataStorage.Services
 {
     public class QuestionnaireSchemaGenerator : IQuestionnaireSchemaGenerator
     {
+        private const int schemaVersion = 1;
+
         private readonly ITenantContext tenantContext;
         private readonly TenantDbContext dbContext;
         private readonly IDatabaseSchemaCommandBuilder commandBuilder;
@@ -213,62 +215,14 @@ namespace WB.Services.Export.InterviewDataStorage.Services
             connection.Execute(commandBuilder.GenerateCreateSchema(tenant));
         }
 
+        private void DropSchema(DbConnection connection, TenantInfo tenant)
+        {
+            connection.Execute(commandBuilder.GenerateDropSchema(tenant.SchemaName()));
+        }
+
         public async Task DropTenantSchemaAsync(string tenant, CancellationToken cancellationToken = default)
         {
-            List<string> tablesToDelete = new List<string>();
-
-            using (var db = new NpgsqlConnection(connectionSettings.Value.DefaultConnection))
-            {
-                await db.OpenAsync();
-
-                logger.LogInformation("Start drop tenant scheme: {tenant}", tenant);
-
-                var schemas = (await db.QueryAsync<string>(
-                    "select nspname from pg_catalog.pg_namespace n " +
-                    "join pg_catalog.pg_description d on d.objoid = n.oid " +
-                    "where d.description = @tenant",
-                    new
-                    {
-                        tenant 
-                    })).ToList();
-
-                foreach (var schema in schemas)
-                {
-                    var tables = await db.QueryAsync<string>(
-                        "select tablename from pg_tables where schemaname= @schema",
-                        new { schema });
-
-                    foreach (var table in tables)
-                    {
-                        tablesToDelete.Add($@"""{schema}"".""{table}""");
-                    }
-                }
-
-                foreach (var tables in tablesToDelete.Batch(30))
-                {
-                    using (var tr = db.BeginTransaction())
-                    {
-                        foreach (var table in tables)
-                        {
-                            await db.ExecuteAsync($@"drop table if exists {table}");
-                            logger.LogInformation("Dropped {table}", table);
-                        }
-
-                        await tr.CommitAsync();
-                    }
-                }
-
-                using (var tr = db.BeginTransaction())
-                {
-                    foreach (var schema in schemas)
-                    {
-                        await db.ExecuteAsync($@"drop schema if exists ""{schema}""");
-                        logger.LogInformation("Dropped schema {schema}.", schema);
-                    }
-
-                    await tr.CommitAsync();
-                }
-            }
+            await dbContext.DropTenantSchemaAsync(tenant, cancellationToken);
         }
 
 

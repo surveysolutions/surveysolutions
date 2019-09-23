@@ -378,7 +378,7 @@ namespace WB.Tests.Abc.TestFactories
                 assignmentId ?? Guid.NewGuid(), 
                 id ?? 11,
                 userId ?? Guid.NewGuid(), 
-                questionnaireId,
+                questionnaireId ?? Create.Entity.QuestionnaireIdentity(),
                 responsibleId ?? Guid.NewGuid(),
                 quantity,
                 audioRecording ?? false,

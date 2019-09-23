@@ -104,7 +104,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 command.QuestionnaireId.QuestionnaireId,
                 command.QuestionnaireId.Version,
                 command.ResponsibleId,
-                command.Quantity,
+                command.Quantity == -1 ? null : command.Quantity,
                 command.AudioRecording,
                 command.Email,
                 command.Password,
@@ -178,8 +178,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void UpgradeAssignment(UpgradeAssignmentCommand command)
         {
+            if (properties.WebMode != false)
+                ApplyEvent(new AssignmentWebModeChanged(command.UserId, command.OriginDate, false));
+
             ApplyEvent(new AssignmentArchived(command.UserId, command.OriginDate));
-            ApplyEvent(new AssignmentWebModeChanged(command.UserId, command.OriginDate, false));
         }
     }
 }

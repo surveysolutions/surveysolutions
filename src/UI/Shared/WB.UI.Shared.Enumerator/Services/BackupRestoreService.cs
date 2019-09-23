@@ -183,8 +183,8 @@ namespace WB.UI.Shared.Enumerator.Services
                 try
                 {
                     string destDBPath;
-                    var backupConnectionString = new SQLiteConnectionString(dbPathToBackup, true, null);
-                    using (var connection = new SQLiteConnectionWithLock(backupConnectionString, openFlags: SQLiteOpenFlags.ReadOnly))
+                    var backupConnectionString = new SQLiteConnectionString(dbPathToBackup, SQLiteOpenFlags.ReadOnly, true, null);
+                    using (var connection = new SQLiteConnectionWithLock(backupConnectionString))
                     {
                         destDBPath = $"{connection.DatabasePath}.{DateTime.UtcNow:yyyy-MM-dd_HH-mm-ss-fff}";
 
