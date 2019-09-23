@@ -92,7 +92,7 @@ namespace WB.Services.Export.Questionnaire
             foreach (var questionnaireId in questionnaireIds)
             {
                 var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(questionnaireId);
-                await databaseSchemaService.CreateOrRemoveSchema(questionnaire);
+                databaseSchemaService.CreateOrRemoveSchema(questionnaire);
             }
 
             this.dbContext.SaveChanges();

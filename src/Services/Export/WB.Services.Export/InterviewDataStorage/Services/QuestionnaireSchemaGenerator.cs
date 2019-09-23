@@ -2,14 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Npgsql;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.InterviewDataStorage.InterviewDataExport;
 using WB.Services.Export.Questionnaire;
@@ -19,8 +17,6 @@ namespace WB.Services.Export.InterviewDataStorage.Services
 {
     public class QuestionnaireSchemaGenerator : IQuestionnaireSchemaGenerator
     {
-        private const int schemaVersion = 1;
-
         private readonly ITenantContext tenantContext;
         private readonly TenantDbContext dbContext;
         private readonly IDatabaseSchemaCommandBuilder commandBuilder;
@@ -214,17 +210,10 @@ namespace WB.Services.Export.InterviewDataStorage.Services
         {
             connection.Execute(commandBuilder.GenerateCreateSchema(tenant));
         }
-
-        private void DropSchema(DbConnection connection, TenantInfo tenant)
+        
+        public Task DropTenantSchemaAsync(string tenant, CancellationToken cancellationToken = default)
         {
-            connection.Execute(commandBuilder.GenerateDropSchema(tenant.SchemaName()));
+            return dbContext.DropTenantSchemaAsync(tenant, cancellationToken);
         }
-
-        public async Task DropTenantSchemaAsync(string tenant, CancellationToken cancellationToken = default)
-        {
-            await dbContext.DropTenantSchemaAsync(tenant, cancellationToken);
-        }
-
-
     }
 }
