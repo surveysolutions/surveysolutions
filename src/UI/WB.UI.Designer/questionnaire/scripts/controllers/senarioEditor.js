@@ -8,7 +8,7 @@ angular.module('designerApp')
                 // Options
                 _editor.setReadOnly(true);
                 _editor.setOptions({
-                    maxLines: 35
+                    maxLines: 40
                 });
                 _editor.setShowPrintMargin(false);
             };
