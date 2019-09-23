@@ -450,6 +450,9 @@
   <data name="Action_QuantityChanged_To" xml:space="preserve">
     <value>Size changed to {{quantity}}</value>
   </data>
+  <data name="Action_QuantityChanged_To_Unlimited" xml:space="preserve">
+    <value>Size changed to Unlimited</value>
+  </data>
   <data name="Action_Reassigned_To" xml:space="preserve">
     <value>Reassigned to {{newResponsible}}</value>
   </data>
