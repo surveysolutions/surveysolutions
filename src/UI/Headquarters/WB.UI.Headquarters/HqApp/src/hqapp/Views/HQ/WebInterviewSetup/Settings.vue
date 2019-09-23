@@ -611,6 +611,12 @@
                             <span class="tick"></span>{{$t('WebInterviewSetup.UseCaptcha')}}
                         </label>
                     </div>
+                     <div class="form-group mb-20">
+                        <input class="checkbox-filter" v-validate="''" data-vv-name="singleResponse" id="singleResponse" type="checkbox" v-model="singleResponseIsEnabled">
+                        <label for="singleResponse">
+                            <span class="tick"></span>{{$t('WebInterviewSetup.SingleResponse')}}
+                        </label>
+                    </div>
                     <div class="notification-block mb-20">
                         <div class="mb-1">
                             {{$t('WebInterviewSettings.SendWithNoResponse')}}
@@ -667,6 +673,7 @@ export default {
       emailTemplates: [],
       webInterviewPageMessages: [],
       spamProtectionIsEnabled: false,
+      singleResponseIsEnabled: true,
       started: false,
       reminderAfterDaysIfNoResponse: 3,
       reminderAfterDaysIfPartialResponse: 3,
@@ -682,11 +689,13 @@ export default {
     self.questionnaireTitle = this.$config.model.questionnaireTitle;
     self.started = this.$config.model.started;
     self.spamProtectionIsEnabled = this.$config.model.useCaptcha;
+    self.singleResponseIsEnabled = this.$config.model.singleResponse;
     self.reminderAfterDaysIfNoResponse = this.$config.model.reminderAfterDaysIfNoResponse;
     self.reminderAfterDaysIfPartialResponse = this.$config.model.reminderAfterDaysIfPartialResponse;
     self.cancelSpamProtectionIsEnabled = this.$config.model.useCaptcha;
     self.cancelReminderAfterDaysIfNoResponse = this.$config.model.reminderAfterDaysIfNoResponse;
     self.cancelReminderAfterDaysIfPartialResponse = this.$config.model.reminderAfterDaysIfPartialResponse;
+    self.cancelSingleResponseIsEnabled = this.$config.model.singleResponse;
     self.logoUrl = this.$config.model.logoUrl;
     self.hasLogo = this.$config.model.hasLogo;
 
@@ -862,11 +871,16 @@ export default {
     async saveAdditionalSettings() {
         var self = this;
         self.$store.dispatch("showProgress");
-        await this.$hq.WebInterviewSettings.updateAdditionalSettings(this.questionnaireId, this.spamProtectionIsEnabled, this.reminderAfterDaysIfNoResponse, this.reminderAfterDaysIfPartialResponse)
+        await this.$hq.WebInterviewSettings.updateAdditionalSettings(this.questionnaireId,
+             this.spamProtectionIsEnabled,
+             this.reminderAfterDaysIfNoResponse,
+             this.reminderAfterDaysIfPartialResponse,
+             this.singleResponseIsEnabled)
         .then(function (response) {
             self.cancelSpamProtectionIsEnabled = self.spamProtectionIsEnabled;
             self.cancelReminderAfterDaysIfNoResponse = self.reminderAfterDaysIfNoResponse;
             self.cancelReminderAfterDaysIfPartialResponse = self.reminderAfterDaysIfPartialResponse;
+            self.cancelSingleResponseIsEnabled = self.singleResponseIsEnabled;
             self.$validator.reset('additionalSettings');
         })
         .catch(function (error) {
@@ -880,6 +894,7 @@ export default {
         this.spamProtectionIsEnabled = this.cancelSpamProtectionIsEnabled;
         this.reminderAfterDaysIfNoResponse = this.cancelReminderAfterDaysIfNoResponse;
         this.reminderAfterDaysIfPartialResponse = this.cancelReminderAfterDaysIfPartialResponse;
+        this.singleResponseIsEnabled = this.cancelSingleResponseIsEnabled;
         this.$validator.reset('additionalSettings');
     }, 
     previewText(text) {

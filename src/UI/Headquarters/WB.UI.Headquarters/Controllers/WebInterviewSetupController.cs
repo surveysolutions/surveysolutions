@@ -192,6 +192,7 @@ namespace WB.UI.Headquarters.Controllers
             model.ReminderAfterDaysIfPartialResponse = config.ReminderAfterDaysIfPartialResponse;
             model.Started = config.Started;
             model.UseCaptcha = config.UseCaptcha;
+            model.SingleResponse = config.SingleResponse;
 
             return View(model);
         }
@@ -253,6 +254,7 @@ namespace WB.UI.Headquarters.Controllers
         public int? ReminderAfterDaysIfNoResponse { get; set; } 
         public int? ReminderAfterDaysIfPartialResponse { get; set; }
         public bool Started { get; set; }
+        public bool SingleResponse { get; set; }
     }
 
     public class EmailTextTemplateViewModel
