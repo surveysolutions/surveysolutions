@@ -65,7 +65,8 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
         private void MigrateExistedAssignments()
         {
             if (this.Schema.Schema("plainstore").Table(assignments).Exists()
-                && this.Schema.Schema("events").Table("events").Exists())
+                && this.Schema.Schema("events").Table("events").Exists()
+                && this.Schema.Schema("users").Table("users").Exists())
             {
                 Execute.EmbeddedScript(@"WB.Persistence.Headquarters.Migrations.ReadSide.M2019.M201909091502_MigrateAssignments.sql");
             }
