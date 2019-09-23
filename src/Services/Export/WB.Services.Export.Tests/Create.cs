@@ -639,16 +639,19 @@ namespace WB.Services.Export.Tests
                 userStorage ?? Mock.Of<IUserStorage>());
         }
 
-        public static AssignmentAction AssignmentAction(long sequenceIndex, int assignmentId, DateTime timestampUtc, AssignmentExportedAction exportedAction, Guid originatorId, Guid responsibleId)
+        public static AssignmentAction AssignmentAction(int assignmentId, DateTime timestampUtc, AssignmentExportedAction exportedAction, 
+            Guid originatorId, Guid responsibleId, string oldValue = null, string newValue = null, string comment = null)
         {
             return new AssignmentAction()
             {
-                Sequence = sequenceIndex,
                 AssignmentId = assignmentId,
                 Status = exportedAction,
                 TimestampUtc = timestampUtc,
                 OriginatorId = originatorId,
                 ResponsibleId = responsibleId,
+                OldValue = oldValue,
+                NewValue = newValue,
+                Comment = comment,
             };
         }
     }
