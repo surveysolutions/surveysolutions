@@ -465,4 +465,7 @@
   <data name="Action_Created_Responsible" xml:space="preserve">
     <value>Ответственный: {{responsible}}</value>
   </data>
+  <data name="Action_QuantityChanged_To_Unlimited" xml:space="preserve">
+    <value>Размер изменён на Не ограничено</value>
+  </data>
 </root>
