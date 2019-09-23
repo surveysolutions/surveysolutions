@@ -85,7 +85,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public virtual ISet<InterviewSummary> InterviewSummaries { get; protected set; }
 
-
         public virtual int? InterviewsNeeded => this.Quantity.HasValue
             ? this.Quantity - this.InterviewSummaries.Count
             : null;
