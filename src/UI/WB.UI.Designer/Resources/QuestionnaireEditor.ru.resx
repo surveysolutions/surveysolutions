@@ -1309,4 +1309,7 @@
   <data name="View" xml:space="preserve">
     <value>Просмотреть</value>
   </data>
+  <data name="ScenarioDetails" xml:space="preserve">
+    <value>Сценарий</value>
+  </data>
 </root>
