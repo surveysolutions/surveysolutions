@@ -164,7 +164,7 @@ namespace WB.Services.Export.Assignment
         }
 
         private string ToQuantityString(int? quantity) => quantity.HasValue ? quantity.Value.ToString(CultureInfo.InvariantCulture) : "-1";
-        private string ToWebModeString(bool? webMode) => webMode == false ? "0" : "1";
+        private string ToWebModeString(bool? webMode) => webMode == false ? "0" : (webMode == true ? "1" : null);
         private string ToAudioRecordingString(bool audioRecording) => audioRecording == false ? "0" : "1";
     }
 }
