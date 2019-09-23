@@ -67,6 +67,11 @@ namespace WB.Services.Export.InterviewDataStorage.EfMappings
             builder.HasKey(a => a.Id);
             builder.HasAlternateKey(a => a.PublicKey);
 
+            builder.Property(a => a.WebMode).IsRequired(false);
+            builder.Property(a => a.AudioRecording).IsRequired(true);
+            builder.Property(a => a.Quantity).IsRequired(false);
+            builder.Property(a => a.Comment).IsRequired(false);
+
             builder.HasMany(a => a.Actions).WithOne(a => a.Assignment);
         }
     }
@@ -83,8 +88,12 @@ namespace WB.Services.Export.InterviewDataStorage.EfMappings
         public void Configure(EntityTypeBuilder<AssignmentAction> builder)
         {
             builder.ToTable("__assignment__action", schema);
-            builder.HasKey(aa => aa.SequenceIndex);
+            builder.HasKey(aa => aa.Sequence);
             builder.HasIndex(aa => aa.AssignmentId);
+
+            builder.Property(a => a.OldValue).IsRequired(false);
+            builder.Property(a => a.NewValue).IsRequired(false);
+            builder.Property(a => a.Comment).IsRequired(false);
 
             builder.HasOne(a => a.Assignment)
                 .WithMany(a => a.Actions)

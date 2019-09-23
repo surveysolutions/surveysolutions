@@ -24,8 +24,8 @@ namespace WB.Services.Export.CsvExport.Exporters
         public DoExportFileHeader[] ActionFileColumns => new []
         {
             new DoExportFileHeader("assignment__id", "Assignment id (identifier in numeric format)", ExportValueType.NumericInt),
-            new DoExportFileHeader("date", "Date when the action was taken", ExportValueType.String),
-            new DoExportFileHeader("time", "Time when the action was taken", ExportValueType.String),
+            new DoExportFileHeader("date", "Utc Date when the action was taken", ExportValueType.String),
+            new DoExportFileHeader("time", "Utc Time when the action was taken", ExportValueType.String),
             new DoExportFileHeader("action", "Type of action taken", ExportValueType.NumericInt, 
                 Enum.GetValues(typeof(AssignmentExportedAction))
                     .Cast<AssignmentExportedAction>()
@@ -36,8 +36,10 @@ namespace WB.Services.Export.CsvExport.Exporters
                     .Select(x => new VariableValueLabel(x.Key.ToString(CultureInfo.InvariantCulture), x.Value)).ToArray()),
             new DoExportFileHeader("responsible__name", "Login name of the person now responsible for the assignment", ExportValueType.String),
             new DoExportFileHeader("responsible__role", "System role of the person now responsible for the assignment", ExportValueType.NumericInt,
-                ExportHelper.RolesMap
-                    .Select(x => new VariableValueLabel(x.Key.ToString(CultureInfo.InvariantCulture), x.Value)).ToArray())
+                ExportHelper.RolesMap.Select(x => new VariableValueLabel(x.Key.ToString(CultureInfo.InvariantCulture), x.Value)).ToArray()),
+            new DoExportFileHeader("old__value", "Value before changes", ExportValueType.String),
+            new DoExportFileHeader("new__value", "Value after changes", ExportValueType.String),
+            new DoExportFileHeader("comment", "Text of the comment", ExportValueType.String),
         };
 
         private readonly string dataFileExtension = "tab";
@@ -124,7 +126,10 @@ namespace WB.Services.Export.CsvExport.Exporters
                     await GetUserNameAsync(assignmentAction.OriginatorId),
                     ExportHelper.GetUserRoleDisplayValue(await GetUserRoleAsync(assignmentAction.OriginatorId)),
                     await GetUserNameAsync(assignmentAction.ResponsibleId),
-                    ExportHelper.GetUserRoleDisplayValue(await GetUserRoleAsync(assignmentAction.ResponsibleId))
+                    ExportHelper.GetUserRoleDisplayValue(await GetUserRoleAsync(assignmentAction.ResponsibleId)),
+                    assignmentAction.OldValue,
+                    assignmentAction.NewValue,
+                    assignmentAction.Comment,
                 };
                 result.Add(resultRow.ToArray());
             }

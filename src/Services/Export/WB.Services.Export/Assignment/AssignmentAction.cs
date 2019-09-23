@@ -8,13 +8,15 @@ namespace WB.Services.Export.Assignment
 {
     public class AssignmentAction
     {
-        public long SequenceIndex { get; set; }
+        public long Sequence { get; set; }
         public int AssignmentId { get; set; }
         public AssignmentExportedAction Status { get; set; }
         public DateTime TimestampUtc { get; set; }
         public Guid OriginatorId { get; set; }
         public Guid ResponsibleId { get; set; }
-
         public Assignment Assignment { get; set; }
+        public string OldValue { get; set; }
+        public string NewValue { get; set; }
+        public string Comment { get; set; }
     }
 }
