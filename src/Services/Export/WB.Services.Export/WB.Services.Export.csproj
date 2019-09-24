@@ -17,6 +17,8 @@
     <Compile Remove="Migrations\20190919091406_AddAssignmentTracking.Designer.cs" />
     <Compile Remove="Migrations\20190919094536_AddAssignmentTracking.cs" />
     <Compile Remove="Migrations\20190919094536_AddAssignmentTracking.Designer.cs" />
+    <Compile Remove="Migrations\20190923164334_AddedPositionToActions.cs" />
+    <Compile Remove="Migrations\20190923164334_AddedPositionToActions.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
