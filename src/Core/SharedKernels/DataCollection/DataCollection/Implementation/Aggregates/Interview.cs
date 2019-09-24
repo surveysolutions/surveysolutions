@@ -112,7 +112,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private IInterviewExpressionStorage expressionStorageCached = null;
         protected IInterviewExpressionStorage GetExpressionStorage()
         {
-            return expressionStorageCached ?? (expressionStorageCached = this.expressionProcessorStatePrototypeProvider.GetExpressionStorage(this.QuestionnaireIdentity));
+            var cached = expressionStorageCached;
+            if (cached != null)
+            {
+                return cached;
+            }
+
+            var questionnaire = this.GetQuestionnaireOrThrow(this.Language);
+            var initialExpressionState = Activator.CreateInstance(questionnaire.ExpressionStorageType) as IInterviewExpressionStorage;
+            expressionStorageCached = initialExpressionState;
+
+            return expressionStorageCached;
         }
 
         public IServiceLocator ServiceLocatorInstance { get; set; }

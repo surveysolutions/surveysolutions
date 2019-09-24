@@ -96,6 +96,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
 
         public IInterviewExpressionStorage GetExpressionStorage(QuestionnaireIdentity questionnaireIdentity)
         {
+            Type interviewExpressionStateType = GetExpressionStorageType(questionnaireIdentity);
+
+            try
+            {
+                var initialExpressionState = Activator.CreateInstance(interviewExpressionStateType) as IInterviewExpressionStorage;
+                return initialExpressionState;
+            }
+            catch (Exception e)
+            {
+                logger.Error(
+                    $"Error on activating interview expression state. Cannot cast to created object to {nameof(IInterviewExpressionState)}",
+                    e);
+                return null;
+            }
+        }
+
+        public Type GetExpressionStorageType(QuestionnaireIdentity questionnaireIdentity)
+        {
             var assemblyExists = this.questionnaireAssemblyFileAccessor.IsQuestionnaireAssemblyExists(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
 
             if (!assemblyExists)
@@ -115,16 +133,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
                     throw new Exception($"Type implementing {nameof(IInterviewExpressionState)} was not found");
 
                 Type interviewExpressionStateType = interviewExpressionStateTypeInfo.AsType();
-                try
-                {
-                    var initialExpressionState = Activator.CreateInstance(interviewExpressionStateType) as IInterviewExpressionStorage;
-                    return initialExpressionState;
-                }
-                catch (Exception e)
-                {
-                    logger.Error($"Error on activating interview expression state. Cannot cast to created object to {nameof(IInterviewExpressionState)}", e);
-                    return null;
-                }
+                return interviewExpressionStateType;
+                
             }
             catch (Exception exception)
             {
