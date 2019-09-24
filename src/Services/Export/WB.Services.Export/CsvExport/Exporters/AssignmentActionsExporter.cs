@@ -112,10 +112,15 @@ namespace WB.Services.Export.CsvExport.Exporters
 
         private async Task<List<string[]>> QueryActionsChunkFromReadSide(int[] assignmentIds)
         {
-            var assignments = dbContext.AssignmentActions.Where(selector => assignmentIds.Contains(selector.AssignmentId));
+            var assignmentActions = dbContext.AssignmentActions
+                .Where(selector => assignmentIds.Contains(selector.AssignmentId))
+                .OrderBy(a => a.AssignmentId)
+                .ThenBy(a => a.GlobalSequence)
+                .ThenBy(a => a.Position);
+
             var result = new List<string[]>();
 
-            foreach (AssignmentAction assignmentAction in assignments)
+            foreach (AssignmentAction assignmentAction in assignmentActions)
             {
                 var resultRow = new List<string>
                 {
