@@ -223,6 +223,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             {
                 Levels = interviewFactory.GetInterviewDataLevels(questionnaire, interview),
                 InterviewId = interviewToExport.Id,
+                AssignmentId = interviewToExport.AssignmentId,
                 ErrorsCount = errorsCount
             };
             InterviewDataExportView interviewDataExportView = CreateInterviewDataExportView(exportStructure, interviewData, questionnaire);

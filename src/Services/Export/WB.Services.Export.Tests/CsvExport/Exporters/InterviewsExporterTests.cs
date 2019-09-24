@@ -40,6 +40,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             //arrange
             Guid interviewId = Id.g1;
             var interviewKey = "11-11-11-11";
+            var assignmentId = 11;
 
             var questionnaire = Create.QuestionnaireDocument(
                 variableName: "MyQuestionnaire"
@@ -48,7 +49,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             var questionnaireExportStructure = Create.QuestionnaireExportStructure(questionnaire);
             var interviewIdsToExport = new List<InterviewToExport>
             {
-                new InterviewToExport(interviewId, interviewKey, InterviewStatus.Completed, 1)
+                new InterviewToExport(interviewId, interviewKey, InterviewStatus.Completed, assignmentId)
             };
 
             string[][] answers = { new string[1] };
@@ -75,6 +76,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
 
             Assert.That(dataInCsvFile[0].File, Is.EqualTo("MyQuestionnaire.tab"));
 
+            Assert.That(dataInCsvFile[0].Data[0].Length, Is.EqualTo(6));
             Assert.That(dataInCsvFile[0].Data[0], Has.Length.EqualTo(dataInCsvFile[1].Data[0].Length),
                 "Length of header columns should be equal to data columns length");
 
@@ -90,6 +92,9 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
 
             Assert.That(dataInCsvFile[0].Data[0][4], Is.EqualTo(ServiceColumns.InterviewStatus));
             Assert.That(dataInCsvFile[1].Data[0][4], Is.EqualTo(((int)InterviewStatus.Completed).ToString()));
+
+            Assert.That(dataInCsvFile[0].Data[0][5], Is.EqualTo(ServiceColumns.AssignmentId));
+            Assert.That(dataInCsvFile[1].Data[0][5], Is.EqualTo(assignmentId.ToString()));
         }
 
         private List<Create.CsvData> dataInCsvFile;
