@@ -26,7 +26,10 @@ namespace WB.UI.Headquarters.API.Export
             var userId = Guid.Parse(id);
             var userModel = this.userRepository.Users
                 .Where(user => user.Id == userId)
-                .Single();
+                .SingleOrDefault();
+
+            if (userModel == null)
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, $"User with id {id} not found");
 
             return Request.CreateResponse(HttpStatusCode.OK, new
             {

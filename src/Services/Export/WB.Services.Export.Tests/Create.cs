@@ -639,11 +639,12 @@ namespace WB.Services.Export.Tests
                 userStorage ?? Mock.Of<IUserStorage>());
         }
 
-        public static AssignmentAction AssignmentAction(int assignmentId, DateTime timestampUtc, AssignmentExportedAction exportedAction, 
+        public static AssignmentAction AssignmentAction(long globalSequence, int assignmentId, DateTime timestampUtc, AssignmentExportedAction exportedAction, 
             Guid originatorId, Guid responsibleId, string oldValue = null, string newValue = null, string comment = null)
         {
             return new AssignmentAction()
             {
+                GlobalSequence = globalSequence,
                 AssignmentId = assignmentId,
                 Status = exportedAction,
                 TimestampUtc = timestampUtc,
