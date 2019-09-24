@@ -129,9 +129,9 @@ namespace WB.Services.Export.CsvExport.Exporters
                     assignmentAction.TimestampUtc.ToString("T", CultureInfo.InvariantCulture),
                     ((int)assignmentAction.Status).ToString(CultureInfo.InvariantCulture),
                     await GetUserNameAsync(assignmentAction.OriginatorId),
-                    ExportHelper.GetUserRoleDisplayValue(await GetUserRoleAsync(assignmentAction.OriginatorId)),
+                    await GetUserRoleAsync(assignmentAction.OriginatorId),
                     await GetUserNameAsync(assignmentAction.ResponsibleId),
-                    ExportHelper.GetUserRoleDisplayValue(await GetUserRoleAsync(assignmentAction.ResponsibleId)),
+                    await GetUserRoleAsync(assignmentAction.ResponsibleId),
                     assignmentAction.OldValue,
                     assignmentAction.NewValue,
                     assignmentAction.Comment,
@@ -141,8 +141,29 @@ namespace WB.Services.Export.CsvExport.Exporters
             return result;
         }
 
-        private Task<UserRoles> GetUserRoleAsync(Guid userId) => userStorage.GetUserRoleAsync(userId);
+        private async Task<string> GetUserNameAsync(Guid userId)
+        {
+            try
+            {
+                return await userStorage.GetUserNameAsync(userId);
+            }
+            catch
+            {
+                return "<UNKNOWN USER>";
+            }
+        }
 
-        private Task<string> GetUserNameAsync(Guid userId) => userStorage.GetUserNameAsync(userId);
+        private async Task<string> GetUserRoleAsync(Guid userId)
+        {
+            try
+            {
+                var userRole = await userStorage.GetUserRoleAsync(userId);
+                return ExportHelper.GetUserRoleDisplayValue(userRole);
+            }
+            catch
+            {
+                return "<UNKNOWN ROLE>";
+            }
+        }
     }
 }

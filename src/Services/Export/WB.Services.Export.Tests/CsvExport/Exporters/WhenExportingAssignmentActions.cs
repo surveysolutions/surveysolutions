@@ -29,15 +29,15 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
 
             var assignmentActions = new List<AssignmentAction>
             {
-                Create.AssignmentAction(AssignmentId, timestampUtc, AssignmentExportedAction.Created,          headquarters, supervisor, comment: "created"),
-                Create.AssignmentAction(AssignmentId, timestampUtc, AssignmentExportedAction.QuantityChanged,  headquarters, supervisor, oldValue: "1", newValue: "20"),
-                Create.AssignmentAction(AssignmentId, timestampUtc, AssignmentExportedAction.Reassigned,       supervisor,   interviewer, comment: "do it"),
-                Create.AssignmentAction(AssignmentId, timestampUtc, AssignmentExportedAction.ReceivedByTablet, supervisor,   interviewer),
-                Create.AssignmentAction(AssignmentId, timestampUtc, AssignmentExportedAction.AudioRecordingChanged, headquarters, interviewer, "0", "1"),
-                Create.AssignmentAction(AssignmentId, timestampUtc, AssignmentExportedAction.Archived,         headquarters, interviewer),
-                Create.AssignmentAction(AssignmentId, timestampUtc, AssignmentExportedAction.Unarchived,       headquarters, interviewer),
-                Create.AssignmentAction(AssignmentId, timestampUtc, AssignmentExportedAction.WebModeChanged,   headquarters, interviewer, "0", "1"),
-                Create.AssignmentAction(AssignmentId, timestampUtc, AssignmentExportedAction.Deleted,          headquarters, interviewer),
+                Create.AssignmentAction(1, AssignmentId, timestampUtc, AssignmentExportedAction.Created,          headquarters, supervisor, comment: "created"),
+                Create.AssignmentAction(2, AssignmentId, timestampUtc, AssignmentExportedAction.QuantityChanged,  headquarters, supervisor, oldValue: "1", newValue: "20"),
+                Create.AssignmentAction(3, AssignmentId, timestampUtc, AssignmentExportedAction.Reassigned,       supervisor,   interviewer, comment: "do it"),
+                Create.AssignmentAction(4, AssignmentId, timestampUtc, AssignmentExportedAction.ReceivedByTablet, supervisor,   interviewer),
+                Create.AssignmentAction(5, AssignmentId, timestampUtc, AssignmentExportedAction.AudioRecordingChanged, headquarters, interviewer, "0", "1"),
+                Create.AssignmentAction(6, AssignmentId, timestampUtc, AssignmentExportedAction.Archived,         headquarters, interviewer),
+                Create.AssignmentAction(7, AssignmentId, timestampUtc, AssignmentExportedAction.Unarchived,       headquarters, interviewer),
+                Create.AssignmentAction(8, AssignmentId, timestampUtc, AssignmentExportedAction.WebModeChanged,   headquarters, interviewer, "0", "1"),
+                Create.AssignmentAction(9, AssignmentId, timestampUtc, AssignmentExportedAction.Deleted,          headquarters, interviewer),
             };
 
             foreach (var assignmentAction in assignmentActions)
