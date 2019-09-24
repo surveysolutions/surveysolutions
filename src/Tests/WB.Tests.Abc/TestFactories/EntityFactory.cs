@@ -801,8 +801,11 @@ namespace WB.Tests.Abc.TestFactories
                     ?? Create.Service.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(
                     document.AsReadOnly().AssignMissingVariables());
             }
-            return new PlainQuestionnaire(document, version, questionOptionsRepository ?? Mock.Of<IQuestionOptionsRepository>(), 
+
+            var plainQuestionnaire = new PlainQuestionnaire(document, version, questionOptionsRepository ?? Mock.Of<IQuestionOptionsRepository>(), 
                 substitutionService ?? Mock.Of<ISubstitutionService>(), translation ?? document.Translations.FirstOrDefault());
+            plainQuestionnaire.ExpressionStorageType = typeof(DummyInterviewExpressionStorage);
+            return plainQuestionnaire;
         }
 
         public QRBarcodeQuestion QRBarcodeQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
