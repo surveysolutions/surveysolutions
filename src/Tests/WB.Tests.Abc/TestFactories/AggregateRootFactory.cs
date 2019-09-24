@@ -118,6 +118,8 @@ namespace WB.Tests.Abc.TestFactories
                 questionnaire ?? Create.Entity.QuestionnaireDocumentWithOneQuestion(), 1,
                 questionOptionsRepository: questionOptionsRepository);
 
+            plainQuestionnaire.ExpressionStorageType = typeof(DummyInterviewExpressionStorage);
+
             var questionnaireRepository = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(plainQuestionnaire, questionnaire ?? 
                 Create.Entity.QuestionnaireDocumentWithOneQuestion());
 
@@ -129,7 +131,6 @@ namespace WB.Tests.Abc.TestFactories
                 .Returns(CreateDefaultInterviewExpressionStateProvider(setupLevel));
 
             serviceLocator.Setup(x => x.GetInstance<IQuestionOptionsRepository>()).Returns(questionOptionsRepository);
-
 
             var statefulInterview = new StatefulInterview(
                 Create.Service.SubstitutionTextFactory(),

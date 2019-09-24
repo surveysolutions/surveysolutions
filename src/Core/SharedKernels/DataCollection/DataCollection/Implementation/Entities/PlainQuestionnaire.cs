@@ -237,6 +237,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public Translation Translation => this.translation;
         public string VariableName => this.innerDocument.VariableName;
+        public Type ExpressionStorageType { get; set; }
 
         public IQuestion GetQuestionByVariable(string variable)
         {
