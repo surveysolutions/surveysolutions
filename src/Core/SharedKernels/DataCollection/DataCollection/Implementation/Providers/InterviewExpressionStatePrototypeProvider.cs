@@ -119,7 +119,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
             if (!assemblyExists)
             {
                 logger.Error($"Assembly was not found. Questionnaire={questionnaireIdentity}");
-                throw new InterviewException("Interview loading error. Code EC0003");
+                return null;
             }
 
             try
