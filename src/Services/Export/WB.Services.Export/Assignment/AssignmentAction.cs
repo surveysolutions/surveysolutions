@@ -8,7 +8,8 @@ namespace WB.Services.Export.Assignment
 {
     public class AssignmentAction
     {
-        public long Sequence { get; set; }
+        public long GlobalSequence { get; set; }
+        public int Position { get; set; }
         public int AssignmentId { get; set; }
         public AssignmentExportedAction Status { get; set; }
         public DateTime TimestampUtc { get; set; }

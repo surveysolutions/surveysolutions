@@ -88,7 +88,7 @@ namespace WB.Services.Export.InterviewDataStorage.EfMappings
         public void Configure(EntityTypeBuilder<AssignmentAction> builder)
         {
             builder.ToTable("__assignment__action", schema);
-            builder.HasKey(aa => aa.Sequence);
+            builder.HasKey(aa => new { aa.GlobalSequence, aa.Position });
             builder.HasIndex(aa => aa.AssignmentId);
 
             builder.Property(a => a.OldValue).IsRequired(false);
