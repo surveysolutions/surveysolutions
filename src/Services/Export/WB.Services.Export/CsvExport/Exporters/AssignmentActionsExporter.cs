@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
+using Refit;
 using WB.Services.Export.Assignment;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
@@ -147,7 +149,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             {
                 return await userStorage.GetUserNameAsync(userId);
             }
-            catch
+            catch(ApiException e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
                 return "<UNKNOWN USER>";
             }
@@ -160,7 +162,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                 var userRole = await userStorage.GetUserRoleAsync(userId);
                 return ExportHelper.GetUserRoleDisplayValue(userRole);
             }
-            catch
+            catch (ApiException e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
                 return "<UNKNOWN ROLE>";
             }
