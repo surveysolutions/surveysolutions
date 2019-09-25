@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -101,7 +102,7 @@ namespace WB.UI.Headquarters.Controllers
             var model = await this.GetImportModel(id);
             if (model.QuestionnaireInfo != null)
             {
-                var result = await this.importService.Import(id, model.QuestionnaireInfo?.Name, false);
+                var result = await this.importService.Import(id, model.QuestionnaireInfo?.Name, false, Request.Url.ToString());
                 model.ErrorMessage = result.ImportError;
 
                 if (result.IsSuccess)
