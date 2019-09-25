@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiTests
         }
 
         public Task<T> GetAsync<T>(string url, IProgress<TransferProgress> transferProgress = null, object queryString = null,
-            RestCredentials credentials = null, CancellationToken? token = null)
+            RestCredentials credentials = null, Dictionary<string, string> customHeaders = null, CancellationToken ? token = null)
         {
             AddUrl(url);
             return Task.FromResult(default(T));

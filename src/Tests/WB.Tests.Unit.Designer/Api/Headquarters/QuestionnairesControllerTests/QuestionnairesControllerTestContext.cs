@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Designer.Api.Headquarters;
 using WB.UI.Designer.Controllers.Api.Headquarters;
 
@@ -35,7 +36,9 @@ namespace WB.Tests.Unit.Designer.Api.Headquarters.QuestionnairesControllerTests
                 zipUtils: zipUtils ?? Mock.Of<IStringCompressor>(),
                 listItemStorage: Create.InMemoryDbContext(),
                 expressionsPlayOrderProvider: expressionsPlayOrderProvider ?? Substitute.For<IExpressionsPlayOrderProvider>(),
-                questionnaireCompilationVersionService: questionnaireCompilationVersionService ?? Mock.Of<IQuestionnaireCompilationVersionService>());
+                questionnaireCompilationVersionService: questionnaireCompilationVersionService ?? Mock.Of<IQuestionnaireCompilationVersionService>(),
+                commandService: Mock.Of<ICommandService>(),
+                ipAddressProvider: Mock.Of<IIpAddressProvider>());
 
             return hqQuestionnairesController;
         }

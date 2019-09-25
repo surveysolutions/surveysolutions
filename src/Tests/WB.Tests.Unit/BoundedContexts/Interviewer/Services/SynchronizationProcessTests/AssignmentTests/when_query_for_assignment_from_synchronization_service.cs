@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,7 +30,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 .Build();
 
             var restService = Mock.Of<IRestService>(
-                x => x.GetAsync<AssignmentApiDocument>(It.IsAny<string>(), null, null, It.IsAny<RestCredentials>(),
+                x => x.GetAsync<AssignmentApiDocument>(It.IsAny<string>(), null, null, It.IsAny<RestCredentials>(), It.IsAny<Dictionary<string, string>>(),
                          It.IsAny<CancellationToken>()) == Task.FromResult( this.assignment));
 
             this.synchronizationService = Create.Service.SynchronizationService(restService: restService);
