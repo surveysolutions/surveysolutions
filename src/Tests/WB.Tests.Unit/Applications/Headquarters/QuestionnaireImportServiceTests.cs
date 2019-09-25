@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 supportedVersionProvider: versionProvider, restService: mockOfRestService);
 
             //Act
-            var importResult = await service.Import(Guid.NewGuid(), "null", false);
+            var importResult = await service.Import(Guid.NewGuid(), "null", false, null);
 
             //Assert
             Assert.That(importResult.ImportError, Is.EqualTo(exprectedErrorMessageFromServer));
@@ -70,14 +70,16 @@ namespace WB.Tests.Unit.Applications.Headquarters
             restServiceMock.Setup(x => x.GetAsync<QuestionnaireCommunicationPackage>(It.IsAny<string>(),
                     It.IsAny<IProgress<TransferProgress>>(),
                     It.IsAny<object>(), 
-                    It.IsAny<RestCredentials>(), It.IsAny<CancellationToken?>()))
+                    It.IsAny<RestCredentials>(),
+                    It.IsAny<Dictionary<string, string>>(),
+                    It.IsAny<CancellationToken?>()))
                 .Returns(Task.FromResult(new QuestionnaireCommunicationPackage()));
 
             var service = CreateIQuestionnaireImportService(commandService: commandService.Object,
                 supportedVersionProvider: versionProvider, zipUtils: zipUtilsMock, restService: restServiceMock.Object);
 
             // Act-assert
-            var exception = Assert.ThrowsAsync<Exception>(async () => await service.Import(Guid.NewGuid(), "null", false));
+            var exception = Assert.ThrowsAsync<Exception>(async () => await service.Import(Guid.NewGuid(), "null", false, null));
             Assert.That(exception, Is.SameAs(commandServiceException));
         }
 
@@ -98,7 +100,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
             var mockOfRestService = new Mock<IRestService>();
             mockOfRestService.Setup(x =>
                 x.DownloadFileAsync(It.IsAny<string>(), null, It.IsAny<RestCredentials>(), null, null)).Returns(Task.FromResult(new RestFile(new byte[] { 1 }, "image/png", "content id", 0, "file.png", HttpStatusCode.OK)));
-            mockOfRestService.Setup(x => x.GetAsync<QuestionnaireCommunicationPackage>(It.IsAny<string>(), It.IsAny<IProgress<TransferProgress>>(), It.IsAny<object>(), It.IsAny<RestCredentials>(), It.IsAny<CancellationToken?>()))
+            mockOfRestService.Setup(x => x.GetAsync<QuestionnaireCommunicationPackage>(It.IsAny<string>(), It.IsAny<IProgress<TransferProgress>>(), It.IsAny<object>(), It.IsAny<RestCredentials>(), It.IsAny<Dictionary<string, string>>(), It.IsAny<CancellationToken?>()))
                 .Returns(Task.FromResult(new QuestionnaireCommunicationPackage()));
 
             var mockOfAttachmentContentService = new Mock<IAttachmentContentService>();
@@ -110,7 +112,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 supportedVersionProvider: versionProvider, zipUtils: zipUtils, restService: mockOfRestService.Object);
 
             // Act
-            await service.Import(Guid.NewGuid(), "null", false);
+            await service.Import(Guid.NewGuid(), "null", false, null);
 
             // Assert
             mockOfRestService.Verify(x => x.DownloadFileAsync(It.IsAny<string>(), null, It.IsAny<RestCredentials>(), null, null), Times.Exactly(2));
@@ -142,7 +144,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
             var mockOfRestService = new Mock<IRestService>();
             mockOfRestService.Setup(x =>
                 x.DownloadFileAsync(It.IsAny<string>(), null, It.IsAny<RestCredentials>(), null, null)).Returns(Task.FromResult(new RestFile(new byte[] { 1 }, "image/png", "content id", 0, "file.png", HttpStatusCode.OK)));
-            mockOfRestService.Setup(x => x.GetAsync<QuestionnaireCommunicationPackage>(It.IsAny<string>(), It.IsAny<IProgress<TransferProgress>>(), It.IsAny<object>(), It.IsAny<RestCredentials>(), It.IsAny<CancellationToken?>()))
+            mockOfRestService.Setup(x => x.GetAsync<QuestionnaireCommunicationPackage>(It.IsAny<string>(), It.IsAny<IProgress<TransferProgress>>(), It.IsAny<object>(), It.IsAny<RestCredentials>(), It.IsAny<Dictionary<string, string>>(), It.IsAny<CancellationToken?>()))
                 .Returns(Task.FromResult(new QuestionnaireCommunicationPackage()));
 
             void SetupLookupQuery((Guid id, string content) lookup)
@@ -150,7 +152,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 mockOfRestService
                     .Setup(x => x.GetAsync<QuestionnaireLookupTable>(
                         It.Is<string>(s => s.EndsWith(lookup.id.ToString())), 
-                        It.IsAny<IProgress<TransferProgress>>(), It.IsAny<object>(), It.IsAny<RestCredentials>(), It.IsAny<CancellationToken?>()))
+                        It.IsAny<IProgress<TransferProgress>>(), It.IsAny<object>(), It.IsAny<RestCredentials>(), It.IsAny<Dictionary<string, string>>(), It.IsAny<CancellationToken?>()))
                     .Returns(Task.FromResult(new QuestionnaireLookupTable
                     {
                         Content = lookup.content,
@@ -165,7 +167,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 supportedVersionProvider: versionProvider, zipUtils: zipUtils, restService: mockOfRestService.Object, lookupStorage: lookupStorage);
 
             // Act
-            await service.Import(Guid.NewGuid(), "null", false);
+            await service.Import(Guid.NewGuid(), "null", false, null);
 
             // Assert
 
@@ -191,6 +193,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                         It.IsAny<IProgress<TransferProgress>>(),
                         It.IsAny<object>(),
                         It.IsAny<RestCredentials>(),
+                        It.IsAny<Dictionary<string, string>>(),
                         It.IsAny<CancellationToken?>()))
                 .Throws(new RestException(someFaultReason, HttpStatusCode.Unauthorized));
 
@@ -199,7 +202,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 supportedVersionProvider: versionProvider.Object);
 
             // Act
-            var result = await importService.Import(questionnaireId, "null", false);
+            var result = await importService.Import(questionnaireId, "null", false, null);
 
             // Assert
             Assert.That(result.IsSuccess, Is.False);

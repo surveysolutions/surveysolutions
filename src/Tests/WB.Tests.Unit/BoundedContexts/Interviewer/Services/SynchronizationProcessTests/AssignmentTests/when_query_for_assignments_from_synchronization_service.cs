@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             this.assignment = Create.Entity.AssignmentApiView(1, 5, Create.Entity.QuestionnaireIdentity(Id.g1));
 
             var restService = Mock.Of<IRestService>(
-                x => x.GetAsync<List<AssignmentApiView>>(It.IsAny<string>(), null, null, It.IsAny<RestCredentials>(),
+                x => x.GetAsync<List<AssignmentApiView>>(It.IsAny<string>(), null, null, It.IsAny<RestCredentials>(), It.IsAny<Dictionary<string, string>>(),
                          It.IsAny<CancellationToken>()) == Task.FromResult(new List<AssignmentApiView> { this.assignment }));
 
             synchronizationService = Create.Service.SynchronizationService(restService: restService);

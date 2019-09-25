@@ -327,4 +327,8 @@
   <data name="Questionnaire_Move" xml:space="preserve">
     <value>Опросник передан новому владельцу с email "{0}"</value>
   </data>
+  <data name="Questionnaire_ImportToHq" xml:space="preserve">
+      <value>Пользователь {1} заимпортил опросник на хедквотер ({0}) </value>
+      <comment>Пользователь {1} заимпортил опросник на хедквотер ({0}) </comment>
+  </data>
 </root>

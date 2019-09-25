@@ -69,7 +69,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.lookupTablesStorage = lookupTablesStorage;
         }
 
-        public async Task<QuestionnaireImportResult> Import(Guid questionnaireId, string name, bool isCensusMode)
+        public async Task<QuestionnaireImportResult> Import(Guid questionnaireId, string name, bool isCensusMode, string requestUrl)
         {
             try
             {
@@ -87,6 +87,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     };
                 }
 
+                var customHeaders = new Dictionary<string, string>();
+                if (!requestUrl.IsNullOrEmpty())
+                    customHeaders.Add("referer", requestUrl);
+
                 var questionnairePackage = await this.restService.GetAsync<QuestionnaireCommunicationPackage>(
                     url: $"{this.apiPrefix}/{this.apiVersion}/questionnaires/{questionnaireId}",
                     credentials: credentials,
@@ -94,7 +98,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     {
                         clientQuestionnaireContentVersion = supportedVersion,
                         minSupportedQuestionnaireVersion = this.supportedVersionProvider.GetMinVerstionSupportedByInterviewer()
-                    });
+                    },
+                    customHeaders: customHeaders);
 
                 QuestionnaireDocument questionnaire = this.zipUtils.DecompressString<QuestionnaireDocument>(questionnairePackage.Questionnaire);
                 var questionnaireContentVersion = questionnairePackage.QuestionnaireContentVersion;

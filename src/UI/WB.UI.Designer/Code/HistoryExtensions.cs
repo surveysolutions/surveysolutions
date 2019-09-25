@@ -97,9 +97,20 @@ namespace WB.UI.Designer.Code
                                 );
                                 break;
                         }
-
                     }
                     break;
+                case QuestionnaireActionType.ImportToHq:
+                {
+                    var siteHost = record.TargetNewTitle;
+                    var ipAddress = record.TargetTitle;
+                    var indexOfOurDomain = siteHost?.IndexOf(".mysurvey.solutions");
+                    siteHost = indexOfOurDomain > 0
+                        ? siteHost.Substring(0, indexOfOurDomain.Value)
+                        : null;
+
+                    text = string.Format(QuestionnaireHistoryResources.Questionnaire_ImportToHq, siteHost ?? ipAddress, record.UserName);
+                }
+                break;
             }
             return new HtmlString(text);
         }

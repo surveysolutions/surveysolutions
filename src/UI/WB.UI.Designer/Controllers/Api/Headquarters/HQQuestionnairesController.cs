@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Linq;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.Core.BoundedContexts.Designer.MembershipProvider.Roles;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -13,6 +16,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Attributes;
@@ -35,6 +39,8 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
         private readonly IStringCompressor zipUtils;
         private readonly IExpressionsPlayOrderProvider expressionsPlayOrderProvider;
         private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersionService;
+        private readonly ICommandService commandService;
+        private readonly IIpAddressProvider ipAddressProvider;
 
 
         public HQQuestionnairesController(
@@ -47,7 +53,9 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             IStringCompressor zipUtils,
             DesignerDbContext listItemStorage,
             IExpressionsPlayOrderProvider expressionsPlayOrderProvider,
-            IQuestionnaireCompilationVersionService questionnaireCompilationVersionService)
+            IQuestionnaireCompilationVersionService questionnaireCompilationVersionService,
+            ICommandService commandService,
+            IIpAddressProvider ipAddressProvider)
         {
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.questionnaireVerifier = questionnaireVerifier;
@@ -59,6 +67,8 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             this.listItemStorage = listItemStorage;
             this.expressionsPlayOrderProvider = expressionsPlayOrderProvider;
             this.questionnaireCompilationVersionService = questionnaireCompilationVersionService;
+            this.commandService = commandService;
+            this.ipAddressProvider = ipAddressProvider;
         }
 
         [HttpGet]
@@ -163,6 +173,9 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             }
 
             var questionnaire = questionnaireView.Source.Clone();
+
+            LogInHistoryImportQuestionnaireToHq(questionnaire);
+
             questionnaire.IsUsingExpressionStorage = versionToCompileAssembly > 19;
             var readOnlyQuestionnaireDocument = questionnaireView.Source.AsReadOnly();
             questionnaire.ExpressionsPlayOrder = this.expressionsPlayOrderProvider.GetExpressionsPlayOrder(readOnlyQuestionnaireDocument);
@@ -175,6 +188,27 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
                 QuestionnaireAssembly = resultAssembly,
                 QuestionnaireContentVersion = versionToCompileAssembly
             });
+        }
+
+        private void LogInHistoryImportQuestionnaireToHq(QuestionnaireDocument questionnaireDocument)
+        {
+            if (User.IsInRole(SimpleRoleEnum.Administrator.ToString()))
+                return;
+
+            var userId = User.GetId();
+            var site = GetDomainFromReferer();
+            var ipAddress = ipAddressProvider.GetClientIpAddress();
+            var command = new ImportQuestionnaireToHq(userId, site, ipAddress.ToString(), questionnaireDocument);
+            commandService.Execute(command);
+        }
+
+        private string GetDomainFromReferer()
+        {
+            var referer = Request.GetTypedHeaders()?.Referer?.ToString();
+            if (string.IsNullOrWhiteSpace(referer))
+                return null;
+            var uri = new Uri(referer);
+            return uri.Host + (!uri.IsDefaultPort ? ":" + uri.Port : "" );
         }
 
         [HttpGet]

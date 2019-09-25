@@ -76,7 +76,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, UpdateAreaQuestion>,
         ICommandPostProcessor<Questionnaire, UpdateAudioQuestion>,
         ICommandPostProcessor<Questionnaire, UpdateMetadata>,
-        ICommandPostProcessor<Questionnaire, PassOwnershipFromQuestionnaire>
+        ICommandPostProcessor<Questionnaire, PassOwnershipFromQuestionnaire>,
+        ICommandPostProcessor<Questionnaire, ImportQuestionnaireToHq>
     {
         private readonly DesignerDbContext dbContext;
         private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
@@ -180,6 +181,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 QuestionnaireActionType.Update,
                 QuestionnaireItemType.Metadata, command.QuestionnaireId, command.Title, aggregate.QuestionnaireDocument);
         }
+
+        public void Process(Questionnaire aggregate, ImportQuestionnaireToHq command)
+        {
+            var questionnaireId = command.QuestionnaireId;
+
+            this.AddQuestionnaireChangeItem(questionnaireId, command.ResponsibleId,
+                QuestionnaireActionType.ImportToHq, QuestionnaireItemType.Questionnaire, 
+                command.QuestionnaireId, command.IpAddress, command.Site, 
+                null, null, aggregate.QuestionnaireDocument);
+        }
+
         #endregion
 
         #region Shared persons
