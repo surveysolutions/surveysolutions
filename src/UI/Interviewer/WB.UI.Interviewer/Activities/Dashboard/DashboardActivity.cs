@@ -280,6 +280,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         {
             this.communicator?.StopAll();
             this.GoogleApi?.Disconnect();
+            this.ViewModel.OnOfflineSynchronizationStarted -= OnOfflineSynchronizationStarted;
             if (this.bluetoothReceiver != null)
             {
                 UnregisterReceiver(this.bluetoothReceiver);
