@@ -9,7 +9,6 @@ namespace WB.Tests.Integration
 {
     internal abstract class NpgsqlTestContext
     {
-        protected NpgsqlConnection pgSqlConnection;
         protected static NpgsqlConnectionStringBuilder connectionStringBuilder;
         protected static string TestConnectionString;
         private static string databaseName;
