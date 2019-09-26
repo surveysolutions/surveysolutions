@@ -196,6 +196,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         {
             base.OnViewModelSet();
             this.ViewModel.Synchronization.SyncBgService = this;
+            this.ViewModel.OnOfflineSynchronizationStarted -= OnOfflineSynchronizationStarted;
             this.ViewModel.OnOfflineSynchronizationStarted += OnOfflineSynchronizationStarted;
             this.ViewModel.PropertyChanged += OnPropertyChanged;
         }
@@ -281,7 +282,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         {
             this.communicator?.StopAll();
             this.GoogleApi?.Disconnect();
-            this.ViewModel.OnOfflineSynchronizationStarted -= OnOfflineSynchronizationStarted;
+            
             if (this.bluetoothReceiver != null)
             {
                 UnregisterReceiver(this.bluetoothReceiver);
