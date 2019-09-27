@@ -784,10 +784,10 @@ accord@^0.29.0:
     uglify-js "^2.8.22"
     when "^3.7.8"
 
-ace-builds@^1.4.4:
-  version "1.4.5"
-  resolved "https://registry.yarnpkg.com/ace-builds/-/ace-builds-1.4.5.tgz#f442b2e0b2fc3f83739617f184805fb0677cfda7"
-  integrity sha512-wotVzxv5YClvwOjiuXNyGm4j/CnKoFIoTnnXNmi1nTHjr7hXMMjQeytcnbFua4thaJ5vvpVEDv0utmjqsrp3Jw==
+ace-builds@^1.4.6:
+  version "1.4.6"
+  resolved "https://registry.yarnpkg.com/ace-builds/-/ace-builds-1.4.6.tgz#ff6abd5f31472f33c1958ab99e0de6b63db3c964"
+  integrity sha512-JpuzcHQxTO6Nk8Q1Y8fVQAaxpimziAvVe/CX4h39ig0iHTtBNuySOGHUxmno8mNe4IMbjO8RJICmsrQKTdTWpQ==
 
 acorn@5.X, acorn@^5.0.3:
   version "5.7.3"
