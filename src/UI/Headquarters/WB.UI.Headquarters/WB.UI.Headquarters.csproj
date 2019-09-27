@@ -1987,6 +1987,7 @@
     <Content Include="Views\Shared\_PoweredBy.cshtml" />
     <Content Include="Views\DataExport\New.cshtml" />
     <Content Include="Views\Interviews\Index.cshtml" />
+    <Content Include="Views\ControlPanel\ReevaluateInterview.cshtml" />
     <Content Include="Views\Assignments\Details.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
