@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.Tests.Abc;
+using WB.Tests.Web;
 using WB.UI.Headquarters.API.WebInterview;
 
 namespace WB.Tests.Unit.Applications.Headquarters.WebInterview

@@ -6,6 +6,7 @@ using Moq;
 using NSubstitute;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Tests.Abc;
+using WB.Tests.Web;
 using WB.UI.Headquarters.Filters;
 
 namespace WB.Tests.Unit.Applications.Headquarters.FilterTests.InstallationAttributeTests

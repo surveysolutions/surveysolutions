@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Tests.Abc;
+using WB.Tests.Web;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.API.WebInterview.Services;
 

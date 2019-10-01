@@ -12,6 +12,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.DenormalizerStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Tests.Abc;
+using WB.Tests.Web;
 using WB.UI.Headquarters.API.PublicApi;
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests

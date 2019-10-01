@@ -12,6 +12,7 @@ using WB.Tests.Abc;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Utils;
+using WB.Tests.Web;
 
 namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
 {

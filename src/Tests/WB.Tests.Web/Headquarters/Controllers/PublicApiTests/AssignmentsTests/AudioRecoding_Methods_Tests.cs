@@ -12,6 +12,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Tests.Abc;
+using WB.Tests.Web;
 using WB.UI.Headquarters.API.PublicApi.Models;
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTests

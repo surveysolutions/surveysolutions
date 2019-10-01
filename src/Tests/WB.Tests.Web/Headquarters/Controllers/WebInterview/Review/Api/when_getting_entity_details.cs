@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.Tests.Abc;
+using WB.Tests.Web;
 using WB.UI.Headquarters.API.WebInterview.Services;
 
 namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api

@@ -2,6 +2,7 @@ using System;
 using FluentAssertions;
 using NUnit.Framework;
 using WB.Tests.Abc;
+using WB.Tests.Web;
 using WB.UI.Headquarters.API.PublicApi;
 using WB.UI.Headquarters.API.PublicApi.Models;
 
