@@ -13,7 +13,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.UI.Headquarters.Code.CommandTransformation;
 
 namespace WB.Tests.Abc.TestFactories
 {
@@ -153,12 +152,6 @@ namespace WB.Tests.Abc.TestFactories
                 newTitle ?? "New Title of Cloned Copy",
                 newQuestionnaireVersion??42,
                 Guid.NewGuid());
-
-        public CreateInterviewControllerCommand CreateInterviewControllerCommand()
-            => new CreateInterviewControllerCommand
-            {
-                AnswersToFeaturedQuestions = new List<UntypedQuestionAnswer>()
-            };
 
         public ImportFromDesigner ImportFromDesigner(Guid? questionnaireId = null, string title = "Questionnaire X",
             Guid? responsibleId = null, string base64StringOfAssembly = "<base64>assembly</base64> :)",
