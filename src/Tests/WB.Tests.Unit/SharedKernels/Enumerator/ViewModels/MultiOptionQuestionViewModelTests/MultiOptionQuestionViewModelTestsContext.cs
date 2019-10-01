@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
     {
         protected static CategoricalMultiViewModel CreateViewModel(IUserInteractionService userInteractionService = null, 
             IQuestionnaireStorage questionnaireStorage = null, 
-            ILiteEventRegistry eventRegistry = null, 
+            IViewModelEventRegistry eventRegistry = null, 
             IStatefulInterviewRepository interviewRepository = null, 
             IPrincipal principal = null, 
             AnsweringViewModel answeringViewModel = null, 
@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
             var questionnaireRepository = questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>();
             var statefulInterviewRepository = interviewRepository ?? Mock.Of<IStatefulInterviewRepository>();
 
-            var liteEventRegistry = eventRegistry ?? Mock.Of<ILiteEventRegistry>();
+            var liteEventRegistry = eventRegistry ?? Mock.Of<IViewModelEventRegistry>();
 
             return new CategoricalMultiViewModel(
                 questionStateViewmodel ?? Create.ViewModel.QuestionState<MultipleOptionsQuestionAnswered>(liteEventRegistry, statefulInterviewRepository, questionnaireStorage),

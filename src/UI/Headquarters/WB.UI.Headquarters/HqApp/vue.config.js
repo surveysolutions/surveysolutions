@@ -27,6 +27,7 @@ const pages = {
             "DataTables",
             "Common",
             "Users",
+            "Interviews",
             "Assignments",
             "Strings",
             "Report",

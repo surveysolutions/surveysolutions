@@ -15,6 +15,7 @@ using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -33,7 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         private readonly IPlainStorageAccessor<AssignmentsImportProcess> importAssignmentsProcessRepository;
         private readonly IPlainStorageAccessor<AssignmentToImport> importAssignmentsRepository;
         private readonly IInterviewCreatorFromAssignment interviewCreatorFromAssignment;
-        private readonly IPlainStorageAccessor<Assignment> assignmentsStorage;
+        private readonly IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsStorage;
         private readonly IAssignmentsImportFileConverter assignmentsImportFileConverter;
         private readonly IAssignmentFactory assignmentFactory;
         private readonly IInvitationService invitationService;
@@ -46,7 +47,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             IPlainStorageAccessor<AssignmentsImportProcess> importAssignmentsProcessRepository,
             IPlainStorageAccessor<AssignmentToImport> importAssignmentsRepository,
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment,
-            IPlainStorageAccessor<Assignment> assignmentsStorage,
+            IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsStorage,
             IAssignmentsImportFileConverter assignmentsImportFileConverter,
             IAssignmentFactory assignmentFactory,
             IInvitationService invitationService, 
@@ -182,8 +183,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 AssignedTo = process.AssignedTo
             };
 
-            if (!this.importAssignmentsRepository.Query(x => x.Any())) return status;
-
             var statistics = this.importAssignmentsRepository.Query(x =>
                 x.Select(_ =>
                         new
@@ -195,7 +194,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                             AssignedToInterviewer = _.Interviewer != null ? 1 : 0,
                             AssignedToSupervisor = _.Interviewer == null && _.Supervisor != null ? 1 : 0
                         })
-                    .GroupBy(_ => 1)
+                    .GroupBy(_ => _.Total)
+                    .Where(_=>_.Count() > 0)
                     .Select(_ => new
                     {
                         Total = _.Sum(y => y.Total),
@@ -206,12 +206,15 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     })
                     .FirstOrDefault());
 
-            status.WithErrorsCount = statistics.WithErrors;
-            status.VerifiedCount = statistics.Verified;
-            status.AssignedToInterviewersCount = statistics.AssignedToInterviewers;
-            status.AssignedToSupervisorsCount = statistics.AssignedToSupervisors;
-            status.InQueueCount = statistics.Total;
-            status.ProcessedCount = process.TotalCount - statistics.Total;
+            if (statistics != null)
+            {
+                status.WithErrorsCount = statistics.WithErrors;
+                status.VerifiedCount = statistics.Verified;
+                status.AssignedToInterviewersCount = statistics.AssignedToInterviewers;
+                status.AssignedToSupervisorsCount = statistics.AssignedToSupervisors;
+                status.InQueueCount = statistics.Total;
+                status.ProcessedCount = process.TotalCount - statistics.Total;
+            }
 
             return status;
 
@@ -223,50 +226,35 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             this.sessionProvider.Session.Query<AssignmentsImportProcess>().Delete();
         }
 
-        public void SetResponsibleToAllImportedAssignments(Guid responsibleId)
-        {
-            var responsible = this.userViewFactory.GetUser(new UserViewInputModel(responsibleId));
-
-            this.sessionProvider.Session.Query<AssignmentToImport>()
-                .UpdateBuilder()
-                .Set(c => c.Interviewer, c => responsible.IsInterviewer() ? responsible.PublicKey : (Guid?) null)
-                .Set(c => c.Supervisor, c => responsible.IsInterviewer() ? responsible.Supervisor.Id : responsible.PublicKey)
-                .Update();
-        }
-
         public IEnumerable<string> GetImportAssignmentsErrors()
             => this.importAssignmentsRepository.Query(x => x.Where(_ => _.Error != null).Select(_ => _.Error));
 
-        public void ImportAssignment(int assignmentId, Guid defaultResponsible, IQuestionnaire questionnaire)
+        public int ImportAssignment(int assignmentId, Guid defaultAssignedTo, IQuestionnaire questionnaire, Guid responsibleId)
         {
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version);
             var assignmentToImport = this.GetAssignmentById(assignmentId);
 
-            var responsibleId = assignmentToImport.Interviewer ?? assignmentToImport.Supervisor ?? defaultResponsible;
-            var identifyingQuestionIds = questionnaire.GetPrefilledQuestions().ToHashSet();
+            var assignedTo = assignmentToImport.Interviewer ?? assignmentToImport.Supervisor ?? assignmentToImport.Headquarters ?? defaultAssignedTo;
 
-            var assignment = this.assignmentFactory.CreateAssignment(questionnaireIdentity, 
-                responsibleId, 
+            var assignment = this.assignmentFactory.CreateAssignment(
+                responsibleId,
+                questionnaireIdentity,
+                assignedTo, 
                 assignmentToImport.Quantity,
                 assignmentToImport.Email, 
                 assignmentToImport.Password, 
                 assignmentToImport.WebMode,
-                assignmentToImport.IsAudioRecordingEnabled);
-            var identifyingAnswers = assignmentToImport.Answers
-                .Where(x => identifyingQuestionIds.Contains(x.Identity.Id)).Select(a =>
-                    IdentifyingAnswer.Create(assignment, questionnaire, a.Answer.ToString(), a.Identity))
-                .ToList();
-
-            assignment.SetIdentifyingData(identifyingAnswers);
-            assignment.SetAnswers(assignmentToImport.Answers);
-            assignment.SetProtectedVariables(assignmentToImport.ProtectedVariables);
-
-            this.assignmentsStorage.Store(assignment, null);
+                assignmentToImport.IsAudioRecordingEnabled,
+                assignmentToImport.Answers,
+                assignmentToImport.ProtectedVariables,
+                assignmentToImport.Comments);
 
             this.invitationService.CreateInvitationForWebInterview(assignment);
 
             this.interviewCreatorFromAssignment.CreateInterviewIfQuestionnaireIsOld(responsibleId,
                 questionnaireIdentity, assignment.Id, assignmentToImport.Answers);
+
+            return assignment.Id;
         }
 
         public void SetVerifiedToAssignment(int assignmentId, string errorMessage = null)
@@ -347,6 +335,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             var password = assignment.Select(_ => _.Password).FirstOrDefault(_ => _ != null)?.Value;
             var webMode = assignment.Select(_ => _.WebMode).FirstOrDefault(_ => _ != null)?.WebMode;
             var isAudioRecordingEnabled = assignment.Select(_ => _.RecordAudio).FirstOrDefault(_ => _ != null)?.DoesNeedRecord;
+            var comments = assignment.Select(_ => _.Comments).FirstOrDefault(_ => _ != null)?.Value;
 
             return new AssignmentToImport
             {
@@ -354,12 +343,14 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 Answers = answers.ToList(),
                 Interviewer = responsible?.InterviewerId,
                 Supervisor = responsible?.SupervisorId,
+                Headquarters = responsible?.HeadquartersId,
                 Verified = false,
                 ProtectedVariables = protectedQuestions,
                 Email = email,
                 Password = password,
                 WebMode = webMode ?? false,
                 IsAudioRecordingEnabled = isAudioRecordingEnabled,
+                Comments = comments
             };
         }
 

@@ -1,4 +1,4 @@
-![Link Text](http://build.mysurvey.solutions/app/rest/builds/buildType:`(id:CI)`/statusIcon)
+![Link Text](http://build.mysurvey.solutions/app/rest/builds/buildType:(id:CI)/statusIcon)
 # 19.07
  - .net framework 4.8 is required for HQ application
 

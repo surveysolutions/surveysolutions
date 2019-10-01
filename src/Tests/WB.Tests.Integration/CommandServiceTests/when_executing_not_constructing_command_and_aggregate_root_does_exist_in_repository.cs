@@ -53,7 +53,7 @@ namespace WB.Tests.Integration.CommandServiceTests
                 });
 
             eventBusMock
-                .Setup(bus => bus.PublishCommittedEvents(Moq.It.IsAny<IEnumerable<CommittedEvent>>()))
+                .Setup(bus => bus.PublishCommittedEvents(Moq.It.IsAny<IReadOnlyCollection<CommittedEvent>>()))
                 .Callback<IEnumerable<CommittedEvent>>(events =>
                 {
                     publishedEvents = events;

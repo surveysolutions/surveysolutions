@@ -92,51 +92,37 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
             return answer.ToString();
         }
 
-        public static IEnumerable<CategoricalOption> GetCategoricalOptionsFromQuestion(IQuestion question, int? parentQuestionValue, string filter)
+        public static IEnumerable<CategoricalOption> GetCategoricalOptionsFromQuestion(IQuestion question, int? parentQuestionValue, string filter, int[] excludeOptionIds = null)
         {
+            CategoricalOption ToOptionByValue(Answer answer) =>
+                new CategoricalOption
+                {
+                    Value = Convert.ToInt32(ParseAnswerOptionValueOrThrow(answer.AnswerValue, question.PublicKey)),
+                    Title = answer.AnswerText,
+                    ParentValue = string.IsNullOrEmpty(answer.ParentValue)
+                        ? (int?)null
+                        : Convert.ToInt32(ParseAnswerOptionParentValueOrThrow(answer.ParentValue, question.PublicKey))
+                };
+
+            CategoricalOption ToOptionByCode(Answer answer) =>
+                new CategoricalOption
+                {
+                    Value = Convert.ToInt32(answer.AnswerCode.Value),
+                    Title = answer.AnswerText,
+                    ParentValue = answer.ParentCode.HasValue ? Convert.ToInt32(answer.ParentCode.Value) : (int?) null
+                };
+
             filter = filter ?? string.Empty;
 
-            if (question.Answers.Any(x => x.AnswerCode.HasValue))
+            foreach (var answer in question.Answers)
             {
-                foreach (var answer in question.Answers)
-                {
-                    if (answer.AnswerText.IndexOf(filter, StringComparison.OrdinalIgnoreCase) < 0) continue;
+                if (answer.AnswerText.IndexOf(filter, StringComparison.OrdinalIgnoreCase) < 0) continue;
 
-                    var categoricalOption = new CategoricalOption
-                    {
-                        Value = Convert.ToInt32(answer.AnswerCode.Value),
-                        Title = answer.AnswerText,
-                        ParentValue = answer.ParentCode.HasValue ? Convert.ToInt32(answer.AnswerCode.Value) : (int?)null
-                    };
+                var categoricalOption = answer.AnswerCode.HasValue ? ToOptionByCode(answer) : ToOptionByValue(answer);
 
-                    if (answer.ParentCode == parentQuestionValue)
-                        yield return categoricalOption;
-                    else if (parentQuestionValue == null)
-                        yield return categoricalOption;
-                }
-            }
-            else
-            {
-                foreach (var answer in question.Answers)
-                {
-                    var parentOption = string.IsNullOrEmpty(answer.ParentValue)
-                        ? (int?)null
-                        : Convert.ToInt32(ParseAnswerOptionParentValueOrThrow(answer.ParentValue, question.PublicKey));
-
-                    if (answer.AnswerText.IndexOf(filter, StringComparison.OrdinalIgnoreCase) < 0) continue;
-
-                    var categoricalOption = new CategoricalOption
-                    {
-                        Value = Convert.ToInt32(ParseAnswerOptionValueOrThrow(answer.AnswerValue, question.PublicKey)),
-                        Title = answer.AnswerText,
-                        ParentValue = parentOption
-                    };
-
-                    if (parentOption == parentQuestionValue)
-                        yield return categoricalOption;
-                    else if (parentQuestionValue == null)
-                        yield return categoricalOption;
-                }
+                if(excludeOptionIds?.Contains(categoricalOption.Value) ?? false) continue;
+                if (categoricalOption.ParentValue == parentQuestionValue || parentQuestionValue == null)
+                    yield return categoricalOption;
             }
         }
 

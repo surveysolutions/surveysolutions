@@ -25,16 +25,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class SingleOptionLinkedQuestionViewModel : MvxNotifyPropertyChanged, 
         IInterviewEntityViewModel,
-        ILiteEventHandler<AnswersRemoved>,
-        ILiteEventHandler<LinkedOptionsChanged>,
-        ILiteEventHandler<RosterInstancesTitleChanged>,
+        IViewModelEventHandler<AnswersRemoved>,
+        IAsyncViewModelEventHandler<LinkedOptionsChanged>,
+        IAsyncViewModelEventHandler<RosterInstancesTitleChanged>,
         ICompositeQuestionWithChildren,
         IDisposable
     {
         private readonly Guid userId;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly ILiteEventRegistry eventRegistry;
+        private readonly IViewModelEventRegistry eventRegistry;
         private readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
         protected IStatefulInterview interview;
         private readonly ThrottlingViewModel throttlingModel;
@@ -43,7 +43,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IPrincipal principal,
             IQuestionnaireStorage questionnaireStorage,
             IStatefulInterviewRepository interviewRepository,
-            ILiteEventRegistry eventRegistry,
+            IViewModelEventRegistry eventRegistry,
             IMvxMainThreadAsyncDispatcher mainThreadDispatcher,
             QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> questionStateViewModel,
             QuestionInstructionViewModel instructionViewModel,
@@ -259,7 +259,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public async void Handle(LinkedOptionsChanged @event)
+        public async Task HandleAsync(LinkedOptionsChanged @event)
         {
             ChangedLinkedOptions changedLinkedQuestion = @event.ChangedLinkedQuestions.SingleOrDefault(x => x.QuestionId == this.Identity);
 
@@ -269,7 +269,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public async void Handle(RosterInstancesTitleChanged @event)
+        public async Task HandleAsync(RosterInstancesTitleChanged @event)
         {
             var optionListShouldBeUpdated = @event.ChangedInstances.Any(x => this.parentRosterIds.Contains(x.RosterInstance.GroupId));
             if (optionListShouldBeUpdated)

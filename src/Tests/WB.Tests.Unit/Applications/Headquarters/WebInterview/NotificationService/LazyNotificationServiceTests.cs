@@ -83,6 +83,16 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.NotificationServi
         }
 
         [Test]
+        public void RefreshCascadingOptionsShouldBeCalledEventually()
+        {
+            var interviewId = Guid.NewGuid();
+
+            Subj.RefreshCascadingOptions(interviewId, Identity.Create(Guid.Empty, RosterVector.Empty));
+
+            Assert.That(GetStatefulInterviewCallResult(), Is.EqualTo(interviewId.FormatGuid()));
+        }
+
+        [Test]
         public void RefreshLinkedToListQuestionsShouldBeCalledEventually()
         {
             var interviewId = Guid.NewGuid();

@@ -36,12 +36,12 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
             ));
 
             this.assignment = Create.Entity.Assignment(1, Create.Entity.QuestionnaireIdentity(Id.g1), 10, Id.g2, "int", summary);
-            this.assignment.SetIdentifyingData(new List<IdentifyingAnswer>
+            this.assignment.IdentifyingData = new List<IdentifyingAnswer>
             {
                 IdentifyingAnswer.Create(assignment, questionnaire, "test", Create.Identity(Id.g7)),
                 IdentifyingAnswer.Create(assignment, questionnaire, "test", Create.Identity(Id.g3)),
-            });
-            this.assignment.SetAnswers(new List<InterviewAnswer>
+            };
+            this.assignment.Answers = new List<InterviewAnswer>
             {
                 new InterviewAnswer
                 {
@@ -58,7 +58,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
                     Identity = Create.Identity(Id.g3),
                     Answer = GpsAnswer.FromGeoPosition(new GeoPosition(10.0, 20.0, 10, 10, DateTimeOffset.MaxValue))
                 }
-            });
+            };
 
             var service = new AssignmentsService(null, answerSerializer);
 
@@ -124,12 +124,12 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
             this.assignment = Create.Entity.Assignment(1, Create.Entity.QuestionnaireIdentity(Id.g1),
                     quantity: null, assigneeSupervisorId: Id.g2, responsibleName: "int", interviewSummary: summary);
 
-            this.assignment.SetIdentifyingData(new List<IdentifyingAnswer>
+            this.assignment.IdentifyingData = new List<IdentifyingAnswer>
             {
                 IdentifyingAnswer.Create(assignment, questionnaire, "test", Create.Identity(Id.g7)),
                 IdentifyingAnswer.Create(assignment, questionnaire, "test", Create.Identity(Id.g3)),
-            });
-            this.assignment.SetAnswers(new List<InterviewAnswer>
+            };
+            this.assignment.Answers = new List<InterviewAnswer>
             {
                 new InterviewAnswer
                 {
@@ -146,7 +146,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
                     Identity = Create.Identity(Id.g3),
                     Answer = GpsAnswer.FromGeoPosition(new GeoPosition(10.0, 20.0, 10, 10, DateTimeOffset.MaxValue))
                 }
-            });
+            };
 
             var service = new AssignmentsService(null, answerSerializer);
 

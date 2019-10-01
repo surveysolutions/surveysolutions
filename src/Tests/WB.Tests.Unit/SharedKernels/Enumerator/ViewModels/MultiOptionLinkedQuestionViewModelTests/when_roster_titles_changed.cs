@@ -52,7 +52,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             BecauseOf();
         }
 
-        public void BecauseOf() => viewModel.Handle(Create.Event.RosterInstancesTitleChanged(rosterId: topRosterId));
+        public void BecauseOf() => viewModel.HandleAsync(Create.Event.RosterInstancesTitleChanged(rosterId: topRosterId));
 
         [NUnit.Framework.Test] public void should_refresh_list_of_options () => viewModel.Options.Count.Should().Be(1);
 

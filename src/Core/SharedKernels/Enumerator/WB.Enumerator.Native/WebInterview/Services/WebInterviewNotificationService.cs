@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Enumerator.Native.WebInterview.Services
 {
@@ -70,15 +71,9 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     }
 
                     var parent = this.GetParentIdentity(currentEntity, interview);
-                    if (questionnaire.IsTableRoster(currentEntity.Id))
-                    {
-                        var tableClientRosterIdentity = new Identity(currentEntity.Id, currentEntity.RosterVector.Shrink());
-                        entitiesToRefresh.Add((WebInterview.GetConnectedClientSectionKey(parent, interview.Id), tableClientRosterIdentity));
-                    }
-
                     if (parent != null)
                     {
-                        if (questionnaire.IsFlatRoster(parent.Id))
+                        if (questionnaire.IsFlatRoster(parent.Id) || questionnaire.IsTableRoster(parent.Id))
                         {
                             var parentGroupIdentity = GetParentIdentity(parent, interview);
                             var connectedClientSectionKey = WebInterview.GetConnectedClientSectionKey(parentGroupIdentity, interview.Id);
@@ -233,6 +228,19 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 var identities = interview.GetAllIdentitiesForEntityId(entityId).ToArray();
                 this.RefreshEntities(interviewId, identities);
             }
+        }
+
+        public void RefreshCascadingOptions(Guid interviewId, Identity identity)
+        {
+            var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
+            if (interview == null) return;
+
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, null);
+
+            var dependentQuestionIds = questionnaire.GetCascadingQuestionsThatDependUponQuestion(identity.Id);
+            var dependentQuestionIdentities = dependentQuestionIds.SelectMany(x => interview.GetAllIdentitiesForEntityId(x)).ToArray();
+
+            this.RefreshEntities(interviewId, dependentQuestionIdentities);
         }
 
         public virtual void RefreshLinkedToListQuestions(Guid interviewId, Identity[] identities)

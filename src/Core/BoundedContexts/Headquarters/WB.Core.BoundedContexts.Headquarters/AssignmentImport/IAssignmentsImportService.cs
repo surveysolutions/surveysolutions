@@ -16,14 +16,12 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         IEnumerable<PanelImportVerificationError> VerifyPanelAndSaveIfNoErrors(string originalFileName, PreloadedFile[] allImportedFiles,
             Guid defaultResponsibleId, PreloadedFile protectedVariablesFile, IQuestionnaire questionnaire);
 
-        void ImportAssignment(int assignmentId, Guid defaultResponsible, IQuestionnaire questionnaire);
+        int ImportAssignment(int assignmentId, Guid defaultAssignedTo, IQuestionnaire questionnaire, Guid responsibleId);
 
         AssignmentToImport GetAssignmentById(int assignmentId);
         int[] GetAllAssignmentIdsToVerify();
         int[] GetAllAssignmentIdsToImport();
         AssignmentsImportStatus GetImportStatus();
-        void RemoveAllAssignmentsToImport();
-        void SetResponsibleToAllImportedAssignments(Guid responsibleId);
         IEnumerable<string> GetImportAssignmentsErrors();
         void SetVerifiedToAssignment(int assignmentId, string errorMessage);
         void RemoveAssignmentToImport(int assignmentId);

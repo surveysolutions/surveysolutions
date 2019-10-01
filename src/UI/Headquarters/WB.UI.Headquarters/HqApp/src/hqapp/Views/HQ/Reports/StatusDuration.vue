@@ -288,7 +288,7 @@ export default {
 
             if (this.questionnaireId != undefined){
                 var questionnaireId = this.questionnaireId.key;
-                var questionnaireVersion = this.questionnaireId.key.split('$')[1];
+                var questionnaireVersion = (this.questionnaireVersion || {}).key;
                 urlParams['questionnaireId'] = questionnaireId;
                 urlParams['version'] = questionnaireVersion;
             }
@@ -308,9 +308,13 @@ export default {
 
             var urlParams = {  };
 
-            urlParams['templateId'] = this.questionnaireId == undefined ? '' : this.formatGuid(this.questionnaireId.key.split('$')[0]);
-            urlParams['templateVersion'] = this.questionnaireId == undefined ? '' : this.questionnaireId.key.split('$')[1];
-
+            if(this.questionnaireId != undefined)
+            {
+                urlParams['templateId'] = this.formatGuid(this.questionnaireId.key);
+                if(this.questionnaireVersion != undefined)
+                    urlParams['templateVersion'] = this.questionnaireVersion.key;
+            }
+            
             if (row.startDate != undefined)
                 urlParams['unactiveDateStart'] = row.startDate;
             if (row.endDate != undefined)
@@ -319,7 +323,7 @@ export default {
             urlParams['status'] = status;
             
             if (this.supervisorId != undefined)
-                urlParams['teamId'] = this.supervisorId.key;
+                urlParams['responsible'] = this.supervisorId.value;
 
             var querystring = this.encodeQueryData(urlParams);
 

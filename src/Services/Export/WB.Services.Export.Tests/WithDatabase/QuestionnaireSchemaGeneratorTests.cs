@@ -2,8 +2,10 @@
 using System.Threading.Tasks;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
+using Moq;
 using Npgsql;
 using NUnit.Framework;
 using WB.Services.Export.Infrastructure;
@@ -24,9 +26,6 @@ namespace WB.Services.Export.Tests.WithDatabase
                 DefaultConnection = DatabaseFixture.ConnectionString
             });
 
-            var optionsBuilder = new DbContextOptionsBuilder<TenantDbContext>();
-            optionsBuilder.UseNpgsql(connectionOptions.Value.DefaultConnection);
-
             var tenant = new TenantInfo("http://example", Guid.NewGuid().FormatGuid(), "testTenant");
 
             var ctx = new TenantContext(null)
@@ -34,9 +33,13 @@ namespace WB.Services.Export.Tests.WithDatabase
                 Tenant = tenant,
             };
 
-            var db = new TenantDbContext(ctx, connectionOptions, optionsBuilder.Options);
+            var optionsBuilder = new DbContextOptionsBuilder<TenantDbContext>();
+            optionsBuilder.UseNpgsql(connectionOptions.Value.DefaultConnection,
+                b => { b.MigrationsHistoryTable("__migrations", tenant.SchemaName());});
+            var db = new TenantDbContext(ctx, connectionOptions, optionsBuilder.Options, Mock.Of<ILogger<TenantDbContext>>());
             var generator = new QuestionnaireSchemaGenerator(ctx, db, new DatabaseSchemaCommandBuilder(),
                   new NullLogger<DatabaseSchemaService>(), connectionOptions);
+
             using (var tr = db.Database.BeginTransaction())
             {
                 generator.CreateQuestionnaireDbStructure(Create.QuestionnaireDocument());

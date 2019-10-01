@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -30,6 +31,7 @@ namespace WB.Services.Export.CsvExport.Implementation
 
         private readonly IProductVersion productVersion;
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly IAssignmentActionsExporter assignmentActionsExporter;
         private readonly IInterviewsExporter interviewsExporter;
 
         public TabularFormatExportService(
@@ -42,7 +44,8 @@ namespace WB.Services.Export.CsvExport.Implementation
             IQuestionnaireExportStructureFactory exportStructureFactory,
             IQuestionnaireStorage questionnaireStorage,
             IProductVersion productVersion, 
-            IFileSystemAccessor fileSystemAccessor)
+            IFileSystemAccessor fileSystemAccessor,
+            IAssignmentActionsExporter assignmentActionsExporter)
         {
             this.logger = logger;
             this.interviewsToExportSource = interviewsToExportSource;
@@ -54,6 +57,7 @@ namespace WB.Services.Export.CsvExport.Implementation
             this.questionnaireStorage = questionnaireStorage;
             this.productVersion = productVersion;
             this.fileSystemAccessor = fileSystemAccessor;
+            this.assignmentActionsExporter = assignmentActionsExporter;
         }
 
         public async Task ExportInterviewsInTabularFormatAsync(
@@ -76,17 +80,20 @@ namespace WB.Services.Export.CsvExport.Implementation
             var exportCommentsProgress = new ExportProgress();
             var exportInterviewActionsProgress = new ExportProgress();
             var exportDiagnosticsProgress = new ExportProgress();
+            var exportAssignmentActionsProgress = new ExportProgress();
 
             ProgressAggregator progressAggregator = new ProgressAggregator();
             progressAggregator.Add(exportInterviewsProgress, 0.4);
-            progressAggregator.Add(exportCommentsProgress, 0.2);
+            progressAggregator.Add(exportCommentsProgress, 0.1);
             progressAggregator.Add(exportInterviewActionsProgress, 0.2);
-            progressAggregator.Add(exportDiagnosticsProgress, 0.2);
+            progressAggregator.Add(exportDiagnosticsProgress, 0.1);
+            progressAggregator.Add(exportAssignmentActionsProgress, 0.2);
 
             progressAggregator.ProgressChanged += (sender, overallProgress) => progress.Report(overallProgress);
 
             var interviewsToExport = this.interviewsToExportSource.GetInterviewsToExport(questionnaireIdentity, status, fromDate, toDate);
             var interviewIdsToExport = interviewsToExport.Select(x => x.Id).ToList();
+            var assignmentIdsToExport = new HashSet<int>(interviewsToExport.Where(x => x.AssignmentId.HasValue).Select(x => x.AssignmentId.Value)).ToList();
 
             Stopwatch exportWatch = Stopwatch.StartNew();
 
@@ -94,7 +101,8 @@ namespace WB.Services.Export.CsvExport.Implementation
                 this.commentsExporter.ExportAsync(questionnaireExportStructure, interviewIdsToExport, tempPath, tenant, exportCommentsProgress, cancellationToken),
                 this.interviewActionsExporter.ExportAsync(tenant, questionnaireIdentity, interviewIdsToExport, tempPath, exportInterviewActionsProgress, cancellationToken),
                 this.interviewsExporter.ExportAsync(tenant, questionnaireExportStructure, questionnaire, interviewsToExport, tempPath, exportInterviewsProgress, cancellationToken),
-                this.diagnosticsExporter.ExportAsync(interviewIdsToExport, tempPath, tenant, exportDiagnosticsProgress, cancellationToken)
+                this.diagnosticsExporter.ExportAsync(interviewIdsToExport, tempPath, tenant, exportDiagnosticsProgress, cancellationToken),
+                this.assignmentActionsExporter.ExportAsync(assignmentIdsToExport, tenant, tempPath, exportAssignmentActionsProgress, cancellationToken)
             );
 
             exportWatch.Stop();

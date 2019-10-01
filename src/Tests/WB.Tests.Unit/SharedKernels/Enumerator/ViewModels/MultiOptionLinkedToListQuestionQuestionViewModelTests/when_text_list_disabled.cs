@@ -33,11 +33,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedToL
 
             interview.AnswerMultipleOptionsQuestion(Guid.NewGuid(), multiOptionQuestionId, RosterVector.Empty, DateTime.UtcNow, new[] { 3, 1 });
 
-            viewModel.Handle(Create.Event.MultipleOptionsQuestionAnswered(multiOptionQuestionId, RosterVector.Empty, new[] { 3m, 1m }));
+            viewModel.HandleAsync(Create.Event.MultipleOptionsQuestionAnswered(multiOptionQuestionId, RosterVector.Empty, new[] { 3m, 1m }));
             interview.Apply(Create.Event.QuestionsDisabled(textListQuestionId, RosterVector.Empty));
 
             //act
-            viewModel.Handle(Create.Event.QuestionsDisabled(textListQuestionId, RosterVector.Empty));
+            viewModel.HandleAsync(Create.Event.QuestionsDisabled(textListQuestionId, RosterVector.Empty));
             //assert
             Assert.That(viewModel.Options, Is.Empty);
         }

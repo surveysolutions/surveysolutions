@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
+using WB.Services.Export.Assignment;
 using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.CsvExport.Implementation;
 using WB.Services.Export.CsvExport.Implementation.DoFiles;
@@ -19,10 +20,12 @@ using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.InterviewDataStorage;
+using WB.Services.Export.InterviewDataStorage.Services;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services;
 using WB.Services.Export.Services.Processing;
+using WB.Services.Export.User;
 using WB.Services.Infrastructure;
 using WB.Services.Infrastructure.EventSourcing;
 using WB.Services.Infrastructure.Tenant;
@@ -190,7 +193,8 @@ namespace WB.Services.Export.Tests
                 Mock.Of<IQuestionnaireStorage>(),
                 
                 Mock.Of<IProductVersion>(),
-                fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>());
+                fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
+                Mock.Of<IAssignmentActionsExporter>());
         }
 
         public static CommentsExporter CommentsExporter()
@@ -615,6 +619,42 @@ namespace WB.Services.Export.Tests
         }
 
         public static ValueVector<Guid> ValueVector(params Guid[] rosterIds) => new ValueVector<Guid>(rosterIds);
+
+        public static IDatabaseSchemaService DatabaseSchemaService(
+            IQuestionnaireSchemaGenerator questionnaireSchemaGenerator = null,
+            TenantDbContext dbContext = null)
+        {
+            return new DatabaseSchemaService(
+                questionnaireSchemaGenerator ?? Mock.Of<IQuestionnaireSchemaGenerator>(),
+                dbContext ?? Mock.Of<TenantDbContext>());
+        }
+
+        public static IAssignmentActionsExporter AssignmentActionsExporter(ICsvWriter csvWriter = null,
+            TenantDbContext dbContext = null,
+            IUserStorage userStorage = null)
+        {
+            return new AssignmentActionsExporter(InterviewDataExportSettings(),
+                csvWriter ?? Mock.Of<ICsvWriter>(),
+                dbContext ?? Create.TenantDbContext(),
+                userStorage ?? Mock.Of<IUserStorage>());
+        }
+
+        public static AssignmentAction AssignmentAction(long globalSequence, int assignmentId, DateTime timestampUtc, AssignmentExportedAction exportedAction, 
+            Guid originatorId, Guid responsibleId, string oldValue = null, string newValue = null, string comment = null)
+        {
+            return new AssignmentAction()
+            {
+                GlobalSequence = globalSequence,
+                AssignmentId = assignmentId,
+                Status = exportedAction,
+                TimestampUtc = timestampUtc,
+                OriginatorId = originatorId,
+                ResponsibleId = responsibleId,
+                OldValue = oldValue,
+                NewValue = newValue,
+                Comment = comment,
+            };
+        }
     }
 
     public class EventsFactory

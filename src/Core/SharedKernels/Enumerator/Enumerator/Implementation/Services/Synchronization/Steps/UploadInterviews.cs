@@ -67,10 +67,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         }
                     });
 
-                    var eventStreamSignatureTag = this.interviewFactory.GetInterviewEventStreamCheckData(completedInterview.InterviewId);
+                    var interviewEventStreamContainer = this.interviewFactory.GetInterviewEventStreamContainer(completedInterview.InterviewId);
 
                     var uploadState = await this.synchronizationService.GetInterviewUploadState(completedInterview.InterviewId,
-                        eventStreamSignatureTag, Context.CancellationToken);
+                        interviewEventStreamContainer.Tag, Context.CancellationToken);
 
                     await this.UploadImagesByCompletedInterviewAsync(completedInterview.InterviewId, uploadState,
                         Context.Progress, Context.CancellationToken);
@@ -83,7 +83,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
                     if (!uploadState.IsEventsUploaded)
                     {
-                        var interviewPackage = this.interviewFactory.GetInterviewEventsPackageOrNull(completedInterview.InterviewId);
+                        var interviewPackage = this.interviewFactory.GetInterviewEventsPackageOrNull(interviewEventStreamContainer);
 
                         if (interviewPackage != null)
                         {

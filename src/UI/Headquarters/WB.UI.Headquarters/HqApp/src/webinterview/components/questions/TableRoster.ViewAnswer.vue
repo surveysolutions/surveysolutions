@@ -1,5 +1,5 @@
 <template>
-    <div :class="questionStyle" :id='questionId'>
+    <div :class="questionStyle" :id='`tr_view_${questionId}`'>
         <popover :enable="question.validity.messages.length > 0 || question.validity.warnings.length > 0" trigger="hover-focus" append-to="body">
             <a class="cell-content has-tooltip" type="primary" data-role="trigger">
                 <span v-if="(questionType == 'Integer' || questionType == 'Double') && question.useFormatting">
@@ -7,8 +7,9 @@
                 </span>
                 <span v-else>{{question.answer}}</span>
             </a>
+            
             <template slot="popover">
-                <div class="error-tooltip" v-if="!question.validity.isValid">        
+                <div class="error-tooltip" v-if="!question.validity.isValid">
                     <h6 style="text-transform:uppercase;" v-if="question.validity.errorMessage">{{ $t("WebInterviewUI.AnswerWasNotSaved") }}</h6>
                     <template v-for="message in question.validity.messages">
                         <span v-dateTimeFormatting v-html="message" :key="message"></span>
@@ -21,7 +22,7 @@
                 </div>
             </template>
         </popover>
-        <wb-progress :visible="isFetchInProgress" :valuenow="valuenow" :valuemax="valuemax" />
+        <wb-progress :visible="isFetchInProgress" />
     </div>
 </template>
 
@@ -49,7 +50,6 @@
             $watchedQuestion() {
                 return this.$store.state.webinterview.entityDetails[this.questionId] 
             },
-
             questionStyle() {
                 return [{
                     'disabled-question' : this.question.isDisabled,
@@ -68,19 +68,8 @@
                 return false
             },
             isFetchInProgress() {
-                return this.$store.state.webinterview.fetch.state[this.question.id] != null
-            },
-            valuenow() {
-                if (this.question.fetchState) {
-                    return this.question.fetchState.uploaded
-                }
-                return 100
-            },
-            valuemax() {
-                if (this.question.fetchState) {
-                    return this.question.fetchState.total
-                }
-                return 100
+                const result = this.$store.state.webinterview.fetch.state[this.questionId]
+                return result
             }
         },
         methods: {

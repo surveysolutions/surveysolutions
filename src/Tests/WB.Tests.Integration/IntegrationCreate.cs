@@ -40,6 +40,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.SurveySolutions;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -155,7 +156,8 @@ namespace WB.Tests.Integration
 
             var interview = new Interview(
                 Create.Service.SubstitutionTextFactory(),
-                Create.Service.InterviewTreeBuilder()
+                Create.Service.InterviewTreeBuilder(),
+                optionsRepository
                 );
             interview.ServiceLocatorInstance = serviceLocator.Object;
 
@@ -192,7 +194,8 @@ namespace WB.Tests.Integration
 
             var interview = new StatefulInterview(
                 Create.Service.SubstitutionTextFactory(),
-                Create.Service.InterviewTreeBuilder()
+                Create.Service.InterviewTreeBuilder(),
+                Create.Storage.QuestionnaireQuestionOptionsRepository()
                 );
 
             interview.ServiceLocatorInstance = serviceLocator.Object;
@@ -228,7 +231,6 @@ namespace WB.Tests.Integration
 
         public static StatefulInterview StatefulInterview(QuestionnaireIdentity questionnaireIdentity,
             IQuestionnaireStorage questionnaireRepository = null, 
-            IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null,
             List<InterviewAnswer> answersOnPrefilledQuestions = null,
             IQuestionOptionsRepository questionOptionsRepository = null)
         {
@@ -238,18 +240,14 @@ namespace WB.Tests.Integration
             serviceLocatorMock.Setup(x => x.GetInstance<IQuestionnaireStorage>())
                 .Returns(qRepository);
 
-            var expressionsProvider = expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>();
-            serviceLocatorMock.Setup(x => x.GetInstance<IInterviewExpressionStatePrototypeProvider>())
-                .Returns(expressionsProvider);
-
-            
             var optionsRepository = questionOptionsRepository ?? Mock.Of<IQuestionOptionsRepository>();
             serviceLocatorMock.Setup(x => x.GetInstance<IQuestionOptionsRepository>())
                 .Returns(optionsRepository);
 
             var interview = new StatefulInterview(
                 Create.Service.SubstitutionTextFactory(),
-                Create.Service.InterviewTreeBuilder()
+                Create.Service.InterviewTreeBuilder(),
+                optionsRepository
                  );
             interview.ServiceLocatorInstance = serviceLocatorMock.Object;
 
@@ -431,7 +429,7 @@ namespace WB.Tests.Integration
                 Mock.Of<IServiceLocator>());
         }
 
-        public static AnswerNotifier AnswerNotifier(ILiteEventRegistry registry = null)
+        public static AnswerNotifier AnswerNotifier(IViewModelEventRegistry registry = null)
             => new AnswerNotifier(registry ?? Abc.Create.Service.LiteEventRegistry());
 
         public static IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> FailedValidationCondition(Identity questionIdentity)

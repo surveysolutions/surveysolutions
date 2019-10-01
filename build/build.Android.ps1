@@ -1,10 +1,11 @@
 param(
-    [INT]$BuildNumber,
+    [INT]   $BuildNumber,
     [string]$KeystorePassword,
     [string]$BuildConfiguration = "Release",
     [string]$branch = "master",
-    [switch] $noSupervisor,
-    [switch] $noLiteInterviewer)
+    [switch]$noSupervisor,
+    [switch]$noLiteInterviewer,
+    [switch]$noExtInterviewer)
 
 $ErrorActionPreference = "Stop"
 
@@ -81,7 +82,6 @@ try {
     }
 
     Write-Host "##teamcity[publishArtifacts '$artifactsFolder']"
-    
 }
 catch {
     Log-Error Unexpected error occurred

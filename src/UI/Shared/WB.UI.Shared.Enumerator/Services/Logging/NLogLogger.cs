@@ -14,7 +14,7 @@ namespace WB.UI.Shared.Enumerator.Services.Logging
             : this(string.Empty) { }
 
         public NLogLogger(Type type)
-            : this(type.FullName) { }
+            : this(type.Name) { }
 
         public NLogLogger(string name)
         {
