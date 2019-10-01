@@ -350,7 +350,7 @@ function Load-DevEnvVariables() {
 function Execute-MSBuild($ProjectFile, $Configuration, $buildArgs = $null, $logId = '.') {
     $build = @(
         $ProjectFile
-        "/p:Configuration=$Configuration", '/nologo', "/v:$verbosity", '/m:4'
+        "/p:Configuration=$Configuration", '/nologo', "/v:$verbosity", '/m'
         '/p:DebugSymbols=false;CodeContractsRunCodeAnalysis=false;ExcludeGeneratedDebugSymbol=true',
         '/flp2:errorsonly;logfile=msbuild.err'
     )
