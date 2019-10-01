@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Tests.Abc;
+using WB.Tests.Web;
 
 
 namespace WB.Tests.Unit.Applications.Shared.Web.AttachmentsControllerTests

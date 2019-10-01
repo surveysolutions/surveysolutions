@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using WB.UI.Headquarters.Code.CommandTransformation;
 
-namespace WB.Tests.Abc.TestFactories
+namespace WB.Tests.Web.TestFactories
 {
     public class CommandFactory
     {

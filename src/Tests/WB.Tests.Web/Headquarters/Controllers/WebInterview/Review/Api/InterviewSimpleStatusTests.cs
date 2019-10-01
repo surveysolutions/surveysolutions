@@ -5,6 +5,7 @@ using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.Tests.Abc;
+using WB.Tests.Web;
 
 namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
 {

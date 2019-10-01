@@ -16,6 +16,7 @@ using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Tests.Abc;
+using WB.Tests.Web;
 using WB.UI.Headquarters.Code;
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests

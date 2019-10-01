@@ -10,9 +10,10 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.WebInterview;
+using WB.Tests.Abc;
 using WB.UI.WebTester.Hub;
 
-namespace WB.Tests.Abc.TestFactories
+namespace WB.Tests.Web.TestFactories
 {
     public class OtherFactory
     {

@@ -6,6 +6,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.Tests.Abc;
+using WB.Tests.Web;
 using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 
 namespace WB.Tests.Unit.Applications.Headquarters.WebInterview

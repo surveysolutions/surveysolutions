@@ -6,6 +6,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Tests.Abc;
+using WB.Tests.Web;
 using WB.UI.Headquarters.Controllers;
 
 namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests

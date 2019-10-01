@@ -9,6 +9,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Tests.Abc;
 using WB.Tests.Integration.InterviewTests;
+using WB.Tests.Web;
 using WB.UI.WebTester.Services.Implementation;
 
 namespace WB.Tests.Integration.WebTester.Services

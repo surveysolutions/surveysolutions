@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Tests.Abc;
+using WB.Tests.Web;
 
 namespace WB.Tests.Integration.WebTester.Services
 {
