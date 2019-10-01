@@ -116,7 +116,7 @@ namespace WB.UI.Headquarters.Controllers
             catch (Exception e) 
             {
                 if(filename != null)
-                    this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, filename);
+                    await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, filename);
 
                 webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, questionId, WebInterview.GetUiMessageFromException(e));
                 throw;

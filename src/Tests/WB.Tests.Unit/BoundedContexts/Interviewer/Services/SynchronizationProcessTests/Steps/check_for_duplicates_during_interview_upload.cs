@@ -88,7 +88,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             fixture.GetMock<IAudioFileStorage>()
                 .Setup(s => s.GetBinaryFilesForInterview(interviewId))
-                .Returns(new List<InterviewBinaryDataDescriptor>
+                .ReturnsAsync(new List<InterviewBinaryDataDescriptor>
                 {
                     Create.Entity.InterviewBinaryDataDescriptor(interviewId, "audio1.flac"),
                     Create.Entity.InterviewBinaryDataDescriptor(interviewId, "audio2.mp3")

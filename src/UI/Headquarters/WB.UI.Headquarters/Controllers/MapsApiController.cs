@@ -357,9 +357,9 @@ namespace WB.UI.Headquarters.Controllers
         [ObserverNotAllowedApi]
         [HttpDelete]
         [Authorize(Roles = "Administrator, Headquarter")]
-        public JsonCommandResponse DeleteMap(DeleteMapRequestModel request)
+        public async Task<JsonCommandResponse> DeleteMap(DeleteMapRequestModel request)
         {
-            this.mapStorageService.DeleteMap(request.Map);
+            await this.mapStorageService.DeleteMap(request.Map);
             return new JsonCommandResponse() { IsSuccess = true };
         }
 

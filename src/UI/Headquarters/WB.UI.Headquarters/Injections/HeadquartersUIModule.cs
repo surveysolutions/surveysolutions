@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using ASP;
+using Microsoft.Owin.Security;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
@@ -17,6 +18,7 @@ using WB.UI.Shared.Web.Filters;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.InterviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.MoveUserToAnotherTeam;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
@@ -112,6 +114,11 @@ namespace WB.UI.Headquarters.Injections
             registry.Bind<IQRCodeHelper, QRCodeHelper>();
 
             registry.BindAsSingleton<ILocalExportServiceRunner, LocalExportServiceRunner>();
+            registry.BindAsSingleton<IApplicationPathResolver, AspNetAppPathResolver>();
+            registry.Bind<IDesignerUserCredentials, DesignerUserCredentials>();
+
+            registry.BindToMethodInRequestScope<IAuthenticationManager>(context => HttpContext.Current.GetOwinContext().Authentication);
+            registry.Bind<HqSignInManager>();
 
             registry.BindToMethod<IExportServiceApi>(ctx =>
             {

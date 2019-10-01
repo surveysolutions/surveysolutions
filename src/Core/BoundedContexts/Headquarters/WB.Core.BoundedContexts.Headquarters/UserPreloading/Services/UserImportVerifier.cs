@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 {

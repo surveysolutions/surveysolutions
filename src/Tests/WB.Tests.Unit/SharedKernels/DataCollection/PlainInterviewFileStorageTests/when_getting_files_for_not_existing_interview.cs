@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using WB.Core.Infrastructure.FileSystem;
@@ -11,12 +12,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainInterviewFileStorageTe
 {
     internal class when_getting_files_for_not_existing_interview : ImageQuestionFileStorageTestContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp] public async Task context () {
             imageFileRepository = CreatePlainFileRepository(fileSystemAccessor: FileSystemAccessorMock.Object);
-            BecauseOf();
+            await BecauseOf();
         }
 
-        public void BecauseOf() => result = imageFileRepository.GetBinaryFilesForInterview(interviewId);
+        public async Task BecauseOf() => result = await imageFileRepository.GetBinaryFilesForInterview(interviewId);
 
         [NUnit.Framework.Test] public void should_0_files_be_returned () =>
             result.Count.Should().Be(0);

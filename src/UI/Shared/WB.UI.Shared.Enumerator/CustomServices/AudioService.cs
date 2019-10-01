@@ -91,7 +91,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                 this.mediaPlayer.Reset();
                 this.fileSystemAccessor.DeleteFile(this.tempFileName);
 
-                var interviewBinaryData = this.audioFileStorage.GetInterviewBinaryData(interviewId, fileName);
+                var interviewBinaryData = this.audioFileStorage.GetInterviewBinaryData(interviewId, fileName).Result;
                 this.fileSystemAccessor.WriteAllBytes(this.tempFileName, interviewBinaryData);
                 
                 this.mediaPlayer.SetDataSource(this.tempFileName);

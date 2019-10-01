@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
@@ -26,6 +27,6 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
 
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetMap)]
-        public override HttpResponseMessage GetMapContent([FromUri] string id) => base.GetMapContent(id);
+        public override Task<HttpResponseMessage> GetMapContent([FromUri] string id) => base.GetMapContent(id);
     }
 }
