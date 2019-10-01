@@ -81,7 +81,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                         sw.Stop();
 
                         // cache for up to 10 minute depending on how long it took to read out map data
-                        var cacheTime = TimeSpan.FromMilliseconds(sw.ElapsedMilliseconds * 5);
+                        var cacheTime = TimeSpan.FromMilliseconds(sw.ElapsedMilliseconds * 5 + 1);
 
                         Cache.Set(key, cacheLine, cacheTime);
                     }
