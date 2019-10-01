@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
@@ -13,7 +14,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -397,7 +397,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             var enumerableRows = allRowsByAllFiles
                 .Where(x => IsQuestionnaireFile(x.QuestionnaireOrRosterName, questionnaire))
                 .Select(x => x.InterviewIdValue.Value);
-            var allInterviewIdsFromMainFile = Enumerable.ToHashSet(enumerableRows);
+            var allInterviewIdsFromMainFile = enumerableRows.ToImmutableHashSet();
 
             var allInterviewsIdsFromFirstLevelRoster = allRowsByAllFiles
                 .Where(x => x.RosterInstanceCodes.Length == 1)
@@ -471,7 +471,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             var enumerableVariables = numericRosterSizeQuestions
                 .SelectMany(questionnaire.GetRosterGroupsByRosterSizeQuestion)
                 .Select(questionnaire.GetRosterVariableName);
-            var rosterNamesByNumericRosters = Enumerable.ToHashSet(enumerableVariables);
+            var rosterNamesByNumericRosters = enumerableVariables.ToImmutableHashSet();
 
             var rowsByNumericRosters = allRowsByAllFiles.GroupBy(z => z.QuestionnaireOrRosterName)
                 .Where(x => rosterNamesByNumericRosters.Contains(x.Key));
