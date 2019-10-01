@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
         {
             var filePath = this.GetPathToFile(interviewId, fileName);
             if (!fileSystemAccessor.IsFileExists(filePath))
-                return null;
+                return Task.FromResult((byte[])null);
             return Task.FromResult(fileSystemAccessor.ReadAllBytes(filePath));
         }
 
