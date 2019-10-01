@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using Ncqrs.Eventing.Storage;
 using Plugin.Permissions.Abstractions;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -8,7 +7,6 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection;
@@ -93,7 +91,7 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<ICheckVersionUriProvider, CheckForExtendedVersionUriProvider>();
             registry.Bind<IAreaEditService, WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditService>();
 #endif
-            registry.BindAsSingleton<IGlobalLiteEventHandler, InterviewDashboardEventHandler>();
+            registry.BindAsSingleton<InterviewDashboardEventHandler, InterviewDashboardEventHandler>();
             
             RegisterViewModels(registry);
         }

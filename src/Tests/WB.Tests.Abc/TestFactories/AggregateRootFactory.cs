@@ -52,7 +52,8 @@ namespace WB.Tests.Abc.TestFactories
 
             var interview = new Interview(
                 textFactory ?? textFactoryMock.Object,
-                Create.Service.InterviewTreeBuilder()
+                Create.Service.InterviewTreeBuilder(),
+                Create.Storage.QuestionnaireQuestionOptionsRepository()
                 );
 
             interview.ServiceLocatorInstance = serviceLocator.Object;
@@ -117,6 +118,8 @@ namespace WB.Tests.Abc.TestFactories
                 questionnaire ?? Create.Entity.QuestionnaireDocumentWithOneQuestion(), 1,
                 questionOptionsRepository: questionOptionsRepository);
 
+            plainQuestionnaire.ExpressionStorageType = typeof(DummyInterviewExpressionStorage);
+
             var questionnaireRepository = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(plainQuestionnaire, questionnaire ?? 
                 Create.Entity.QuestionnaireDocumentWithOneQuestion());
 
@@ -129,10 +132,10 @@ namespace WB.Tests.Abc.TestFactories
 
             serviceLocator.Setup(x => x.GetInstance<IQuestionOptionsRepository>()).Returns(questionOptionsRepository);
 
-
             var statefulInterview = new StatefulInterview(
                 Create.Service.SubstitutionTextFactory(),
-                Create.Service.InterviewTreeBuilder());
+                Create.Service.InterviewTreeBuilder(),
+                Create.Storage.QuestionnaireQuestionOptionsRepository());
 
             statefulInterview.ServiceLocatorInstance = serviceLocator.Object;
 
@@ -169,7 +172,8 @@ namespace WB.Tests.Abc.TestFactories
 
             var statefulInterview = new StatefulInterview(
                 Create.Service.SubstitutionTextFactory(),
-                Create.Service.InterviewTreeBuilder()
+                Create.Service.InterviewTreeBuilder(),
+                Create.Storage.QuestionnaireQuestionOptionsRepository()
                 );
             statefulInterview.ServiceLocatorInstance = serviceLocator.Object;
 
@@ -198,6 +202,12 @@ namespace WB.Tests.Abc.TestFactories
                 && _.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == expressionState);
 
             return defaultExpressionStatePrototypeProvider;
+        }
+
+        public AssignmentAggregateRoot AssignmentAggregateRoot()
+        {
+            return new AssignmentAggregateRoot();
+
         }
     }
 }

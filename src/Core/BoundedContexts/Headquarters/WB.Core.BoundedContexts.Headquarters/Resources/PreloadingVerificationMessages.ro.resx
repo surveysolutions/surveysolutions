@@ -168,9 +168,6 @@
   <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
     <value>Responsabilul este blocat pentru una sau mai multe observații. </value>
   </data>
-  <data name="PL0028_UserIsNotSupervisorOrInterviewer" xml:space="preserve">
-    <value>Utilizatorul nu este Controlor sau Anchetator pentru una sau mai multe observații.</value>
-  </data>
   <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
     <value>Răspunsul privind dimensiunea Listei nu poate fi mai mare de {0}.</value>
   </data>

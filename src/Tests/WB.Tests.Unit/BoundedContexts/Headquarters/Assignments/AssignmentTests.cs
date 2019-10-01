@@ -36,19 +36,6 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_reassigned_should_recet_received_by_tablet()
-        {
-            var assignment = Create.Entity.Assignment(quantity: null);
-            assignment.MarkAsReceivedByTablet();
-
-            Assert.That(assignment.ReceivedByTabletAtUtc, Is.Not.Null);
-
-            assignment.Reassign(Guid.NewGuid());
-
-            Assert.That(assignment.ReceivedByTabletAtUtc, Is.Null);
-        }
-
-        [Test]
         public void should_fill_itself_from_interview()
         {
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity(Id.gA, 24);
@@ -82,18 +69,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 .Returns("text");
 
             // Act
-            Assignment assignment = Assignment.PrefillFromInterview(interview.Object, Create.Entity.PlainQuestionnaire(questionnaire));
+            var answers = Assignment.GetAnswersFromInterview(interview.Object, Create.Entity.PlainQuestionnaire(questionnaire));
 
             // Assert
-            Assert.That(assignment, Has.Property(nameof(assignment.QuestionnaireId)).EqualTo(questionnaireIdentity));
-
-            Assert.That(assignment.IdentifyingData, Has.Count.EqualTo(2));
-            Assert.That(assignment.IdentifyingData[0].AnswerAsString, Is.EqualTo("text"));
-            Assert.That(assignment.IdentifyingData[1].AnswerAsString, Is.EqualTo("one"));
-
-            Assert.That(assignment.Answers, Has.Count.EqualTo(2));
-            Assert.That(assignment.Answers[0].Answer.ToString(), Is.EqualTo("text"));
-            Assert.That(assignment.Answers[1].Answer.ToString(), Is.EqualTo("1"));
+            Assert.That(answers, Has.Count.EqualTo(2));
+            Assert.That(answers[0].Answer.ToString(), Is.EqualTo("text"));
+            Assert.That(answers[1].Answer.ToString(), Is.EqualTo("1"));
         }
     }
 }

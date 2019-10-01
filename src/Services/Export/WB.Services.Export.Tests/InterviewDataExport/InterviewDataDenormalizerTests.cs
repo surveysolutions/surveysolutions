@@ -20,6 +20,7 @@ using WB.Services.Export.Events.Interview;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.InterviewDataStorage;
 using WB.Services.Export.InterviewDataStorage.InterviewDataExport;
+using WB.Services.Export.InterviewDataStorage.Services;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Infrastructure.EventSourcing;

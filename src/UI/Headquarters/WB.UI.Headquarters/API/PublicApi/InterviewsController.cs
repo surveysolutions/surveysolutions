@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -128,6 +129,10 @@ namespace WB.UI.Headquarters.API.PublicApi
 
             var statistics = this.statefullInterviewSearcher.GetStatistics(interview);
             var diagnosticsInfo = diagnosticsFactory.GetById(id);
+            var interviewSummary = this.allInterviewsViewFactory.Load(new AllInterviewsInputModel
+            {
+                InterviewId = id
+            });
 
             return new InterviewApiStatistics
             {
@@ -143,13 +148,15 @@ namespace WB.UI.Headquarters.API.PublicApi
 
                 InterviewId = diagnosticsInfo.InterviewId,
                 InterviewKey = diagnosticsInfo.InterviewKey,
+                AssignmentId = interview.GetAssignmentId(),
                 Status = diagnosticsInfo.Status.ToString(),
                 ResponsibleId = diagnosticsInfo.ResponsibleId,
                 ResponsibleName = diagnosticsInfo.ResponsibleName,
                 NumberOfInterviewers = diagnosticsInfo.NumberOfInterviewers,
                 NumberRejectionsBySupervisor = diagnosticsInfo.NumberRejectionsBySupervisor,
                 NumberRejectionsByHq = diagnosticsInfo.NumberRejectionsByHq,
-                InterviewDuration = diagnosticsInfo.InterviewDuration != null ? new TimeSpan(diagnosticsInfo.InterviewDuration.Value) : (TimeSpan?)null
+                InterviewDuration = diagnosticsInfo.InterviewDuration != null ? new TimeSpan(diagnosticsInfo.InterviewDuration.Value) : (TimeSpan?)null,
+                UpdatedAtUtc = interviewSummary.Items.First().LastEntryDateUtc
             };
         }
 
@@ -177,6 +184,8 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <returns></returns>
         [HttpPost]
         [Route("{id:guid}/comment-by-variable/{variable}")]
+        [ApiBasicAuth(new [] {UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Headquarter, UserRoles.ApiUser, UserRoles.Administrator }, 
+            TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
         public HttpResponseMessage CommentByVariable(Guid id, string variable, RosterVector rosterVector, string comment)
         {
             var questionnaireIdentity = this.GetQuestionnaireIdByInterviewOrThrow(id);
@@ -201,6 +210,8 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <returns></returns>
         [HttpPost]
         [Route("{id:guid}/comment/{questionId}")]
+        [ApiBasicAuth(new [] {UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Headquarter, UserRoles.ApiUser, UserRoles.Administrator }, 
+            TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
         public HttpResponseMessage CommentByIdentity(Guid id, string questionId, string comment)
         {
             this.GetQuestionnaireIdByInterviewOrThrow(id);

@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             denormalizer.ImportQuestionnaire(userId, questionnaireDocument);
 
             // Assert
-            documentStorage.GetById(questionnaireDocument.PublicKey).Macros.Keys.Should().ContainSingle(x => x == macrosWithBefore);
+            documentStorage.GetById(questionnaireDocument.PublicKey.FormatGuid()).Macros.Keys.Should().ContainSingle(x => x == macrosWithBefore);
         }
     }
 }

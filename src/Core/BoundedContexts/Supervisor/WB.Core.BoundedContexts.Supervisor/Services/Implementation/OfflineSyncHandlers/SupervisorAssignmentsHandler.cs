@@ -69,7 +69,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                 LocationLatitude = assignment.LocationLatitude,
                 LocationLongitude = assignment.LocationLongitude,
                 LocationQuestionId = assignment.LocationQuestionId,
-                IsAudioRecordingEnabled = assignment.IsAudioRecordingEnabled
+                IsAudioRecordingEnabled = assignment.IsAudioRecordingEnabled,
+                Comments = assignment.Comments
             };
 
             foreach (var answer in assignment.Answers ?? Enumerable.Empty<AssignmentDocument.AssignmentAnswer>())

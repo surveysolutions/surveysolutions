@@ -28,6 +28,7 @@ using WB.Services.Export.Services;
 using WB.Services.Export.Services.Implementation;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Export.Storage;
+using WB.Services.Export.User;
 using WB.Services.Infrastructure.EventSourcing;
 using WB.Services.Infrastructure.FileSystem;
 
@@ -44,7 +45,7 @@ namespace WB.Services.Export
             // Transients
             services.AddTransient<IFileSystemAccessor, FileSystemAccessor>();
             services.AddTransient<IEventsHandler, EventsHandler>();
-            services.AddTransient<IEventsFilter, DeletedQuestionnaireEventFilter>();
+            services.AddTransient<IEventsFilter, QuestionnaireEventFilter>();
             services.AddTransient<IInterviewsToExportSource, InterviewsToExportSource>();
             services.AddTransient<IQuestionnaireStorageCache, QuestionnaireStorageCache>();
             services.AddTransient<IQuestionnaireSchemaGenerator, QuestionnaireSchemaGenerator>();
@@ -55,6 +56,7 @@ namespace WB.Services.Export
             services.AddTransient<IQuestionnaireExportStructureFactory, QuestionnaireExportStructureFactory>();
             services.AddTransient<IDiagnosticsExporter, DiagnosticsExporter>();
             services.AddTransient<IQuestionnaireStorage, QuestionnaireStorage>();
+            services.AddTransient<IAssignmentActionsExporter, AssignmentActionsExporter>();
             services.AddTransient<IInterviewActionsExporter, InterviewActionsExporter>();
             services.AddTransient<IInterviewsExporter, InterviewsExporter>();
             services.AddTransient<IInterviewFactory, InterviewFactory>();
@@ -68,9 +70,7 @@ namespace WB.Services.Export
             services.AddTransient<IExportFileNameService, ExportExportFileNameService>();
             services.AddTransient<IArchiveUtils, ZipArchiveUtils>();
             services.AddTransient<IExternalArtifactsStorage, S3ArtifactsStorage>();
-            services
-                .AddTransient<ITabularDataToExternalStatPackageExportService,
-                    TabularDataToExternalStatPackageExportService>();
+            services.AddTransient<ITabularDataToExternalStatPackageExportService, TabularDataToExternalStatPackageExportService>();
             services.AddTransient<ITabFileReader, TabFileReader>();
             services.AddTransient<IDatasetWriterFactory, DatasetWriterFactory>();
             services.AddTransient<IDataQueryFactory, DataQueryFactory>();
@@ -88,6 +88,7 @@ namespace WB.Services.Export
             services.AddTransient<ICommandExecutor, CommandExecutor>();
             services.AddTransient<IInterviewReferencesStorage, InterviewReferencesStorage>();
             services.AddTransient<IDatabaseSchemaCommandBuilder, DatabaseSchemaCommandBuilder>();
+            services.AddTransient<IUserStorage, UserStorage>();
 
             services.AddTransient<IEventProcessor, EventsProcessor>();
             services.AddScoped<ITenantContext, TenantContext>();
@@ -111,7 +112,5 @@ namespace WB.Services.Export
                 .WithTransientLifetime()
             );
         }
-
     }
-
 }

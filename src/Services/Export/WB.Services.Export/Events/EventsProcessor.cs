@@ -40,22 +40,24 @@ namespace WB.Services.Export.Events
         private const double BatchSizeMultiplier = 1;
         private const string ApiEventsQueryMonitoringKey = "api_events_query";
 
-        private void EnsureMigrated()
+        private async Task EnsureMigrated()
         {
             using (var scope = serviceProvider.CreateScope())
             {
                 scope.PropagateTenantContext(tenant);
 
-                var db = scope.ServiceProvider.GetService<TenantDbContext>();
-                if (db.Database.IsNpgsql())
-                    db.Database.Migrate();
+                var tenantDbContext = scope.ServiceProvider.GetService<TenantDbContext>();
+                if (tenantDbContext.Database.IsNpgsql())
+                {
+                   await tenantDbContext.CheckSchemaVersionAndMigrate();
+                }
             }
         }
 
         public async Task HandleNewEvents(long exportProcessId, CancellationToken token = default)
         {
             long sequenceToStartFrom;
-            EnsureMigrated();
+            await EnsureMigrated();
             using (var scope = serviceProvider.CreateScope())
             {
                 scope.PropagateTenantContext(tenant);

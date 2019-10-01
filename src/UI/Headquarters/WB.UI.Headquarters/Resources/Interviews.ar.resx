@@ -118,23 +118,24 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ApproveConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; ستتم الموافقة على المقابلات (المقابلة). &lt;/ h3&gt;&lt;b&gt; ملاحظة! &lt;/ b&gt; يمكنك الموافقة على المقابلات مع الحالات التالية فقط: &lt;i&gt; {1} &lt;/ i&gt; و &lt;i&gt; {2} &lt;/ i&gt;. </value>
+    <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt; ستتم الموافقة على المقابلات (المقابلة). &lt;/ h3&gt;&lt;b&gt; ملاحظة! &lt;/ b&gt; يمكنك الموافقة على المقابلات مع الحالات التالية فقط: &lt;i&gt; {{status1}} &lt;/ i&gt; و &lt;i&gt; {{status2}} &lt;/ i&gt;. </value>
   </data>
   <data name="ApproveConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; ستتم الموافقة على المقابلات (المقابلة). &lt;/ h3&gt;&lt;b&gt; ملاحظة! &lt;/ b&gt; يمكنك الموافقة على المقابلات مع الحالة التالية فقط: &lt;i&gt; {1} &lt;/ i&gt; و &lt;i&gt; {2} &lt;/ i&gt;. </value>
+    <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt; ستتم الموافقة على المقابلات (المقابلة). &lt;/ h3&gt;&lt;b&gt; ملاحظة! &lt;/ b&gt; يمكنك الموافقة على المقابلات مع الحالة التالية فقط: &lt;i&gt; {{status1}} &lt;/ i&gt; و &lt;i&gt; {{status2}} &lt;/ i&gt;. </value>
   </data>
   <data name="AssignConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt;المقابلات (المقابلة) التي تم اختيارها لإعادة تعيينها. &lt;/ h3&gt;&lt;b&gt; ملاحظة! &lt;/ b&gt; يمكنك تعيين مقابلات مع الحالات التالية فقط: &lt;i&gt; {1} &lt;/ i&gt; و &lt;i&gt; {2} (فقط على باحث اخر) &lt;/ i&gt; و &lt;i&gt; {3} &lt;/ I&gt;. </value>
+    <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt;المقابلات (المقابلة) التي تم اختيارها لإعادة تعيينها. &lt;/ h3&gt;&lt;b&gt; ملاحظة! &lt;/ b&gt; يمكنك تعيين مقابلات مع الحالات التالية فقط: &lt;i&gt; {{status1}} &lt;/ i&gt; و &lt;i&gt; {{status2}} (فقط على باحث اخر) &lt;/ i&gt; و &lt;i&gt; {{status3}} &lt;/ I&gt;. </value>
   </data>
   <data name="Assignment" xml:space="preserve">
     <value>مهمة</value>
   </data>
   <data name="AssignReceivedConfirm" xml:space="preserve">
-    <value>تطبيق على {0} مقابلة (مقابلات) أجراها الباحث</value>
+    <value>تطبيق على {{count}} مقابلة (مقابلات) أجراها الباحث</value>
   </data>
   <data name="AssignToOtherTeamConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; سيتم تعيين مقابلة (مقابلات). &lt;/ h3&gt;
-&lt;b&gt; ملاحظة! &lt;/ b&gt; يمكن فقط إعادة تعيين المقابلات التي ليست في وضع &lt;i&gt; {1} &lt;/ i&gt; و &lt;i&gt; {2} &lt;/ i&gt;.</value>
+    <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt; سيتم تعيين مقابلة (مقابلات). &lt;/ h3&gt;
+
+&lt;b&gt; ملاحظة! &lt;/ b&gt; يمكن فقط إعادة تعيين المقابلات التي ليست في وضع &lt;i&gt; {{status1}} &lt;/ i&gt; و &lt;i&gt; {{status2}} &lt;/ i&gt;.</value>
   </data>
   <data name="ChooseResponsible" xml:space="preserve">
     <value>لم يتم اختيار المسؤول عن بعض المقابلات (المقابلة). الرجاء اختيار مشرف او باحث مسؤول.</value>
@@ -155,16 +156,19 @@
     <value>هل تريد الاستمرار؟</value>
   </data>
   <data name="DeleteConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; سيتم حذف المقابلات. &lt;/ h3&gt;
-&lt;b&gt; ملاحظة! &lt;/ b&gt; يمكنك حذف المقابلات مع الحالات التالية فقط: &lt;i&gt; {1} &lt;/ i&gt; و &lt;i&gt; {2} &lt;/ i&gt;. </value>
+    <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt; سيتم حذف المقابلات. &lt;/ h3&gt;
+
+&lt;b&gt; ملاحظة! &lt;/ b&gt; يمكنك حذف المقابلات مع الحالات التالية فقط: &lt;i&gt; {{status1}} &lt;/ i&gt; و &lt;i&gt; {{status2}} &lt;/ i&gt;. </value>
   </data>
   <data name="RejectConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; سيتم رفض المقابلات. &lt;/ h3&gt;
-&lt;b&gt; ملاحظة! &lt;/ b&gt; يمكنك رفض المقابلات مع الحالات التالية فقط: &lt;i&gt; {1} &lt;/ i&gt; و &lt;i&gt; {2} &lt;/ i&gt;. </value>
+    <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt; سيتم رفض المقابلات. &lt;/ h3&gt;
+
+&lt;b&gt; ملاحظة! &lt;/ b&gt; يمكنك رفض المقابلات مع الحالات التالية فقط: &lt;i&gt; {{status1}} &lt;/ i&gt; و &lt;i&gt; {{status2}} &lt;/ i&gt;. </value>
   </data>
   <data name="RejectConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; سيتم رفض المقابلات. &lt;/ h3&gt;
-&lt;b&gt; ملاحظة! &lt;/ b&gt; يمكنك رفض المقابلات مع الحالة التالية فقط: &lt;i&gt; {1} &lt;/ i&gt;و &lt;i&gt; {2} &lt;/ i&gt;. </value>
+    <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt; سيتم رفض المقابلات. &lt;/ h3&gt;
+
+&lt;b&gt; ملاحظة! &lt;/ b&gt; يمكنك رفض المقابلات مع الحالة التالية فقط: &lt;i&gt; {{status1}} &lt;/ i&gt;و &lt;i&gt; {{status2}} &lt;/ i&gt;. </value>
   </data>
   <data name="Tooltip_Filter_Assignment" xml:space="preserve">
     <value>معرف المهمة. انقر في الحقل لكتابة رقم التعريف الكامل.</value>
@@ -200,7 +204,7 @@
     <value>حالة المقابلة في سير العمل الاستقصائي. انقر على رمز الفرز للتصنيف حسب الحالة.</value>
   </data>
   <data name="UnapproveConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; سيتم إلغاء الموافقة على المقابلات.&lt;/h3&gt;
-&lt;b&gt;Note!&lt;/b&gt;لا يمكنك الموافقة على المقابلات مع الحالة التالية فقط: &lt;i&gt;{1}&lt;/i&gt;.</value>
+    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; سيتم إلغاء الموافقة على المقابلات.&lt;/h3&gt;
+&lt;b&gt;Note!&lt;/b&gt;لا يمكنك الموافقة على المقابلات مع الحالة التالية فقط: &lt;i&gt;{{status1}}&lt;/i&gt;.</value>
   </data>
 </root>

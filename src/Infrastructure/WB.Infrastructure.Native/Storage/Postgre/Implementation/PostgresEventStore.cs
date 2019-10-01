@@ -21,7 +21,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
     public class PostgresEventStore  : IHeadquartersEventStore
     {
         private readonly PostgreConnectionSettings connectionSettings;
-        private static readonly object lockObject = new object();
         private readonly IEventTypeResolver eventTypeResolver;
         
         private static int BatchSize = 4096;
@@ -288,6 +287,50 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                     new { minVersion = startWithGlobalSequence, batchSize = pageSize }, buffered: false);
 
             return rawEventsData;
+        }
+
+        public async Task<List<CommittedEvent>> GetEventsInReverseOrderAsync(Guid aggregateRootId, int offset, int limit)
+        {
+            List<CommittedEvent> result = new List<CommittedEvent>();
+            using (NpgsqlConnection connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
+            {
+                await connection.OpenAsync();
+                {
+                    var rawEvents = await connection.QueryAsync<RawEvent>(
+                        $"SELECT id, eventsourceid, origin, eventsequence, timestamp, globalsequence, eventtype, value::text " +
+                        $"FROM {tableNameWithSchema} " +
+                        "WHERE eventsourceid = @sourceId " +
+                        "ORDER BY eventsequence DESC LIMIT @limit OFFSET @offset",
+                        new
+                        {
+                            sourceId = aggregateRootId,
+                            limit = limit,
+                            offset = offset
+                        });
+
+                    foreach (var committedEvent in ToCommittedEvent(rawEvents))
+                    {
+                        result.Add(committedEvent);
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public async Task<int> TotalEventsCountAsync(Guid aggregateRootId)
+        {
+            using (var connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
+            {
+                var result = await connection.ExecuteScalarAsync<int?>(
+                    $"SELECT COUNT(id) FROM {tableNameWithSchema} WHERE eventsourceid=:sourceId",
+                    new
+                    {
+                        sourceId = aggregateRootId
+                    });
+
+                return result.GetValueOrDefault();
+            }
         }
 
         public async Task<long> GetMaximumGlobalSequence()

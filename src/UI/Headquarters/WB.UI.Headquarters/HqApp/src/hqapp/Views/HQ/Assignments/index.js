@@ -1,5 +1,7 @@
+import Layout from "./Layout"
 import Assignments from "./HqAssignments"
 import CreateNew from "./CreateNew"
+import Details from "./Details"
 import localStore from "./store"
 
 
@@ -10,16 +12,20 @@ export default class AssignmentsComponent {
     }
 
     get routes() {
-        return [{
-                name: "assignments",
-                path: '/Assignments/',
-                component: Assignments
-            },
+        return[
             {
                 path: '/HQ/TakeNewAssignment/:interviewId',
                 component: CreateNew                
-            }
-        ]
+            },
+            {
+                path: '/Assignments', component: Layout,
+                children: [
+                    {
+                        path: '', component: Assignments
+                    },
+                    {
+                        path: ':assignmentId', component: Details
+                    }]}];
     }
 
     initialize() {

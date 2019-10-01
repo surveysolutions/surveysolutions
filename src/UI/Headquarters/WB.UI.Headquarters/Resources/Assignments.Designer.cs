@@ -61,6 +61,186 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Action.
+        /// </summary>
+        public static string Action {
+            get {
+                return ResourceManager.GetString("Action", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Archived.
+        /// </summary>
+        public static string Action_Archived {
+            get {
+                return ResourceManager.GetString("Action_Archived", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Audio recording changed.
+        /// </summary>
+        public static string Action_AudioRecordingChanged {
+            get {
+                return ResourceManager.GetString("Action_AudioRecordingChanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Audio recording disabled.
+        /// </summary>
+        public static string Action_AudioRecordingChanged_False {
+            get {
+                return ResourceManager.GetString("Action_AudioRecordingChanged_False", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Audio recording enabled.
+        /// </summary>
+        public static string Action_AudioRecordingChanged_True {
+            get {
+                return ResourceManager.GetString("Action_AudioRecordingChanged_True", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Created.
+        /// </summary>
+        public static string Action_Created {
+            get {
+                return ResourceManager.GetString("Action_Created", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comment: {{comment}}.
+        /// </summary>
+        public static string Action_Created_Comment {
+            get {
+                return ResourceManager.GetString("Action_Created_Comment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assigned to {{responsible}}.
+        /// </summary>
+        public static string Action_Created_Responsible {
+            get {
+                return ResourceManager.GetString("Action_Created_Responsible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deleted.
+        /// </summary>
+        public static string Action_Deleted {
+            get {
+                return ResourceManager.GetString("Action_Deleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Size changed.
+        /// </summary>
+        public static string Action_QuantityChanged {
+            get {
+                return ResourceManager.GetString("Action_QuantityChanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Size changed to {{quantity}}.
+        /// </summary>
+        public static string Action_QuantityChanged_To {
+            get {
+                return ResourceManager.GetString("Action_QuantityChanged_To", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Size changed to Unlimited.
+        /// </summary>
+        public static string Action_QuantityChanged_To_Unlimited {
+            get {
+                return ResourceManager.GetString("Action_QuantityChanged_To_Unlimited", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reassigned.
+        /// </summary>
+        public static string Action_Reassigned {
+            get {
+                return ResourceManager.GetString("Action_Reassigned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reassigned to {{newResponsible}}.
+        /// </summary>
+        public static string Action_Reassigned_To {
+            get {
+                return ResourceManager.GetString("Action_Reassigned_To", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comment: {{comment}}.
+        /// </summary>
+        public static string Action_Reassigned_To_Comment {
+            get {
+                return ResourceManager.GetString("Action_Reassigned_To_Comment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Received by tablet.
+        /// </summary>
+        public static string Action_ReceivedByTablet {
+            get {
+                return ResourceManager.GetString("Action_ReceivedByTablet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unarchived .
+        /// </summary>
+        public static string Action_UnArchived {
+            get {
+                return ResourceManager.GetString("Action_UnArchived", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Web mode changed.
+        /// </summary>
+        public static string Action_WebModeChanged {
+            get {
+                return ResourceManager.GetString("Action_WebModeChanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Web Mode disabled.
+        /// </summary>
+        public static string Action_WebModeChanged_False {
+            get {
+                return ResourceManager.GetString("Action_WebModeChanged_False", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Web Mode enabled.
+        /// </summary>
+        public static string Action_WebModeChanged_True {
+            get {
+                return ResourceManager.GetString("Action_WebModeChanged_True", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Activated.
         /// </summary>
         public static string Activated {
@@ -75,6 +255,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Active {
             get {
                 return ResourceManager.GetString("Active", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to By.
+        /// </summary>
+        public static string Actor {
+            get {
+                return ResourceManager.GetString("Actor", resourceCulture);
             }
         }
         
@@ -102,6 +291,42 @@ namespace WB.UI.Headquarters.Resources {
         public static string Archived {
             get {
                 return ResourceManager.GetString("Archived", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assignment {{id}} cannot be closed since it has web mode enabled.
+        /// </summary>
+        public static string AssignmentCloseWebMode {
+            get {
+                return ResourceManager.GetString("AssignmentCloseWebMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to History.
+        /// </summary>
+        public static string AssignmentHistory {
+            get {
+                return ResourceManager.GetString("AssignmentHistory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assignment ID.
+        /// </summary>
+        public static string AssignmentId {
+            get {
+                return ResourceManager.GetString("AssignmentId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Detailed assignment info.
+        /// </summary>
+        public static string AssignmentInfo {
+            get {
+                return ResourceManager.GetString("AssignmentInfo", resourceCulture);
             }
         }
         
@@ -187,6 +412,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string Close {
+            get {
+                return ResourceManager.GetString("Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comment.
+        /// </summary>
+        public static string Comments {
+            get {
+                return ResourceManager.GetString("Comments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Count.
         /// </summary>
         public static string Count {
@@ -205,7 +448,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select responsible (Supervisor or Interviewer) for this assignment.
+        ///   Looks up a localized string similar to Select responsible (Headquarters or Supervisor or Interviewer) for this assignment.
         /// </summary>
         public static string CreateAssignment_ResponsibleInstruction {
             get {
@@ -250,6 +493,33 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Date.
+        /// </summary>
+        public static string Date {
+            get {
+                return ResourceManager.GetString("Date", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Details.
+        /// </summary>
+        public static string Details_Column {
+            get {
+                return ResourceManager.GetString("Details_Column", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comment.
+        /// </summary>
+        public static string DetailsComments {
+            get {
+                return ResourceManager.GetString("DetailsComments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password by assignment for web mode with quantity 1 should be unique.
         /// </summary>
         public static string DuplicatePasswordByWebModeWithQuantity1 {
@@ -273,6 +543,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string EmailExplanation {
             get {
                 return ResourceManager.GetString("EmailExplanation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter your comment here.
+        /// </summary>
+        public static string EnterComments {
+            get {
+                return ResourceManager.GetString("EnterComments", resourceCulture);
             }
         }
         
@@ -372,6 +651,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string IsAudioRecordingEnabled {
             get {
                 return ResourceManager.GetString("IsAudioRecordingEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{count}} selected assignments are going to be closed. Size will be set to currently collected interviews count..
+        /// </summary>
+        public static string MultipleAssignmentsClose {
+            get {
+                return ResourceManager.GetString("MultipleAssignmentsClose", resourceCulture);
             }
         }
         
@@ -516,6 +804,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string ShowArchived {
             get {
                 return ResourceManager.GetString("ShowArchived", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Size of the selected assignment {{id}} will be changed form {{quantity}} to {{collected}} (number of currently collected interviews).
+        /// </summary>
+        public static string SingleAssignmentCloseConfirm {
+            get {
+                return ResourceManager.GetString("SingleAssignmentCloseConfirm", resourceCulture);
             }
         }
         

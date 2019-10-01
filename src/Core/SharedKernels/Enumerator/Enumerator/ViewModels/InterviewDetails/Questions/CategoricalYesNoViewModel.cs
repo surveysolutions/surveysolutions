@@ -19,7 +19,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class CategoricalYesNoViewModel : CategoricalMultiViewModelBase<decimal, AnsweredYesNoOption>,
-        ILiteEventHandler<YesNoQuestionAnswered>
+        IAsyncViewModelEventHandler<YesNoQuestionAnswered>
     {
         private readonly IUserInteractionService userInteraction;
         private readonly FilteredOptionsViewModel filteredOptionsViewModel;
@@ -28,12 +28,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private AnsweredYesNoOption[] selectedOptionsToSave;
         
         public CategoricalYesNoViewModel(QuestionStateViewModel<YesNoQuestionAnswered> questionStateViewModel,
-            IQuestionnaireStorage questionnaireRepository, ILiteEventRegistry eventRegistry,
+            IQuestionnaireStorage questionnaireRepository, IViewModelEventRegistry eventRegistry,
             IStatefulInterviewRepository interviewRepository, IPrincipal principal, IUserInteractionService userInteraction,
             AnsweringViewModel answering, QuestionInstructionViewModel instructionViewModel, ThrottlingViewModel throttlingModel,
             FilteredOptionsViewModel filteredOptionsViewModel, IMvxMainThreadAsyncDispatcher mainThreadDispatcher)
             : base(questionStateViewModel, questionnaireRepository, eventRegistry, interviewRepository, principal,
-                answering, instructionViewModel, throttlingModel, mainThreadDispatcher)
+                answering, instructionViewModel, throttlingModel)
         {
             this.userInteraction = userInteraction;
             this.filteredOptionsViewModel = filteredOptionsViewModel;
@@ -51,7 +51,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             filteredOptionsViewModel.OptionsChanged += FilteredOptionsViewModelOnOptionsChanged;
         }
         private async Task FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs e)
-            => await this.UpdateViewModelsInMainThreadAsync();
+            => await this.UpdateViewModelsAsync();
 
         protected override void SaveAnsweredOptionsForThrottling(IOrderedEnumerable<CategoricalMultiOptionViewModel<decimal>> answeredViewModels) 
             => this.selectedOptionsToSave = answeredViewModels.Select(x => new AnsweredYesNoOption(x.Value, x.Checked)).ToArray();
@@ -88,10 +88,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public void Handle(YesNoQuestionAnswered @event)
+        public async Task HandleAsync(YesNoQuestionAnswered @event)
         {
             if (@event.QuestionId != this.Identity.Id || !@event.RosterVector.Identical(this.Identity.RosterVector)) return;
-            this.UpdateViewModelsByAnsweredOptionsInMainThread(@event.AnsweredOptions);
+            await this.UpdateViewModelsByAnsweredOptionsAsync(@event.AnsweredOptions);
         }
 
         public override void Dispose()

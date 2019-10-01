@@ -2,12 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
+using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Events.Assignment;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Fetching;
@@ -18,17 +21,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
     internal class AssignmentViewFactory : IAssignmentViewFactory
     {
-        private readonly IPlainStorageAccessor<Assignment> assignmentsStorage;
+        private readonly IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsStorage;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> summaries;
         private readonly IQuestionnaireStorage questionnaireStorage;
+        private readonly IHeadquartersEventStore hqEventStore;
+        private readonly IUserViewFactory userViewFactory;
 
-        public AssignmentViewFactory(IPlainStorageAccessor<Assignment> assignmentsStorage,
+        public AssignmentViewFactory(IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsStorage,
             IQueryableReadSideRepositoryReader<InterviewSummary> summaries,
-            IQuestionnaireStorage questionnaireStorage)
+            IQuestionnaireStorage questionnaireStorage,
+            IHeadquartersEventStore hqEventStore,
+            IUserViewFactory userViewFactory)
         {
             this.assignmentsStorage = assignmentsStorage;
             this.summaries = summaries;
             this.questionnaireStorage = questionnaireStorage;
+            this.hqEventStore = hqEventStore ?? throw new ArgumentNullException(nameof(hqEventStore));
+            this.userViewFactory = userViewFactory;
         }
 
         public AssignmentsWithoutIdentifingData Load(AssignmentsInputModel input)
@@ -100,11 +109,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                         Responsible = x.Responsible.Name,
                         ResponsibleRole = x.Responsible.RoleIds.First().ToUserRole().ToString(),
                         IdentifyingQuestions = this.GetIdentifyingColumnText(x),
-                        IsAudioRecordingEnabled = x.IsAudioRecordingEnabled,
+                        IsAudioRecordingEnabled = x.AudioRecording,
                         Email = x.Email,
                         Password = x.Password,
                         WebMode = x.WebMode,
-                        ReceivedByTabletAtUtc = x.ReceivedByTabletAtUtc
+                        ReceivedByTabletAtUtc = x.ReceivedByTabletAtUtc,
+                        Comments = x.Comments
                     };
 
                     if (input.ShowQuestionnaireTitle)
@@ -121,7 +131,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             return result;
         }
 
-        private List<AssignmentIdentifyingQuestionRow> GetIdentifyingColumnText(Assignment assignment)
+        public List<AssignmentIdentifyingQuestionRow> GetIdentifyingColumnText(Assignment assignment)
         {
             QuestionnaireIdentity assignmentQuestionnaireId = assignment.QuestionnaireId;
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(assignmentQuestionnaireId, null);
@@ -136,6 +146,86 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                                     x.Identity))
                           .ToList();
             return identifyingColumnText;
+        }
+
+        public async Task<AssignmentHistory> LoadHistoryAsync(Guid assignmentPublicKey, int offset, int limit)
+        {
+            var events = await this.hqEventStore.GetEventsInReverseOrderAsync(assignmentPublicKey, offset, limit);
+            var result = new AssignmentHistory();
+
+            var totalLength = await this.hqEventStore.TotalEventsCountAsync(assignmentPublicKey);
+            result.RecordsFiltered = totalLength;
+
+            foreach (IEvent committedEvent in events.Select(x => x.Payload))
+            {
+                var assignmentEvent = (AssignmentEvent) committedEvent;
+                var userName = userViewFactory.GetUser(new UserViewInputModel(assignmentEvent.UserId))?.UserName ?? "Unknown";
+
+                var historyItem = new AssignmentHistoryItem(AssignmentHistoryAction.Unknown,
+                    userName, 
+                    assignmentEvent.OriginDate.UtcDateTime);
+
+                switch (committedEvent)
+                {
+                    case AssignmentCreated c:
+                        historyItem.Action = AssignmentHistoryAction.Created;
+
+                        var responsible = userViewFactory.GetUser(new UserViewInputModel(c.ResponsibleId))?.UserName ?? "Unknown";
+                        historyItem.AdditionalData = new
+                        {
+                            c.Comment,
+                            Responsible = responsible
+                        };
+                        break;
+                    case AssignmentArchived _:
+                        historyItem.Action = AssignmentHistoryAction.Archived;
+                        break;
+                    case AssignmentDeleted _:
+                        historyItem.Action = AssignmentHistoryAction.Deleted;
+                        break;
+                    case AssignmentReceivedByTablet _:
+                        historyItem.Action = AssignmentHistoryAction.ReceivedByTablet;
+                        break;
+                    case AssignmentUnarchived _:
+                        historyItem.Action = AssignmentHistoryAction.UnArchived;
+                        break;
+                    case AssignmentAudioRecordingChanged a:
+                        historyItem.Action = AssignmentHistoryAction.AudioRecordingChanged;
+                        historyItem.AdditionalData = new
+                        {
+                            a.AudioRecording
+                        };
+                        break;
+                    case AssignmentQuantityChanged q:
+                        historyItem.Action = AssignmentHistoryAction.QuantityChanged;
+                        historyItem.AdditionalData = new
+                        {
+                            q.Quantity
+                        };
+                        break;
+                    case AssignmentReassigned r:
+                        historyItem.Action = AssignmentHistoryAction.Reassigned;
+                        var targetLogin =
+                            this.userViewFactory.GetUser(r.ResponsibleId)?.UserName ?? "Unknown";
+                        historyItem.AdditionalData = new
+                        {
+                            NewResponsible = targetLogin,
+                            r.Comment
+                        };
+                        break;
+                    case AssignmentWebModeChanged w:
+                        historyItem.Action = AssignmentHistoryAction.WebModeChanged;
+                        historyItem.AdditionalData = new
+                        {
+                            w.WebMode
+                        };
+                        break;
+                }
+
+                result.History.Add(historyItem);
+            }
+
+            return result;
         }
 
         private IQueryable<Assignment> DefineOrderBy(IQueryable<Assignment> query, AssignmentsInputModel model)

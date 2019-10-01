@@ -6,16 +6,21 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.DenormalizerStorage
 {
-    public class InMemoryReadSideRepositoryAccessor<TView> : IQueryableReadSideRepositoryReader<TView>, 
-        IReadSideRepositoryWriter<TView>, 
-        IReadSideKeyValueStorage<TView> 
+    public class InMemoryReadSideRepositoryAccessor<TView, TKey> : IQueryableReadSideRepositoryReader<TView, TKey>,
+        IReadSideRepositoryWriter<TView, TKey>,
+        IReadSideKeyValueStorage<TView, TKey>
         where TView : class, IReadSideRepositoryEntity
     {
-        private readonly Dictionary<string, TView> repository;
+        private readonly Dictionary<TKey, TView> repository;
         private object locker = new object();
         public InMemoryReadSideRepositoryAccessor()
         {
-            this.repository = new Dictionary<string, TView>();
+            this.repository = new Dictionary<TKey, TView>();
+        }
+
+        public InMemoryReadSideRepositoryAccessor(Dictionary<TKey, TView> entities)
+        {
+            this.repository = entities ?? new Dictionary<TKey, TView>();
         }
 
         public int Count()
@@ -23,7 +28,7 @@ namespace WB.Core.Infrastructure.DenormalizerStorage
             return this.repository.Count;
         }
 
-        public TView GetById(string id)
+        public TView GetById(TKey id)
         {
             if (!this.repository.ContainsKey(id))
             {
@@ -38,7 +43,7 @@ namespace WB.Core.Infrastructure.DenormalizerStorage
             return query.Invoke(this.repository.Values.AsQueryable());
         }
 
-        public void Remove(string id)
+        public void Remove(TKey id)
         {
             lock (locker)
             {
@@ -46,7 +51,7 @@ namespace WB.Core.Infrastructure.DenormalizerStorage
             }
         }
 
-        public void Store(TView view, string id)
+        public void Store(TView view, TKey id)
         {
             lock (locker)
             {
@@ -61,7 +66,7 @@ namespace WB.Core.Infrastructure.DenormalizerStorage
             }
         }
 
-        public void BulkStore(List<Tuple<TView, string>> bulk)
+        public void BulkStore(List<Tuple<TView, TKey>> bulk)
         {
             foreach (var tuple in bulk)
             {
@@ -71,13 +76,13 @@ namespace WB.Core.Infrastructure.DenormalizerStorage
 
         public void Flush()
         {
-            
+
         }
 
         public void Clear()
         {
-           this.repository.Clear();
-       }
+            this.repository.Clear();
+        }
 
         public Type ViewType
         {
@@ -88,5 +93,14 @@ namespace WB.Core.Infrastructure.DenormalizerStorage
         {
             return "in-memory-2";
         }
+    }
+
+
+    public class InMemoryReadSideRepositoryAccessor<TView> : InMemoryReadSideRepositoryAccessor<TView, string>,
+        IQueryableReadSideRepositoryReader<TView>,
+        IReadSideRepositoryWriter<TView>,
+        IReadSideKeyValueStorage<TView>
+        where TView : class, IReadSideRepositoryEntity
+    {
     }
 }

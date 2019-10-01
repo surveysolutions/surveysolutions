@@ -11,38 +11,40 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
 {
     public class QueuedUpgrade
     {
-        public QueuedUpgrade(Guid processId, QuestionnaireIdentity @from, QuestionnaireIdentity to)
+        public QueuedUpgrade(Guid processId, Guid userId, QuestionnaireIdentity @from, QuestionnaireIdentity to)
         {
             ProcessId = processId;
+            UserId = userId;
             From = @from;
             To = to;
         }
         public Guid ProcessId { get; }
+        public Guid UserId { get; }
         public QuestionnaireIdentity From { get; }
         public QuestionnaireIdentity To { get; }
     }
 
     internal class AssignmentsUpgradeService : IAssignmentsUpgradeService
     {
-        private readonly IAuditLog auditLog;
+        private readonly ISystemLog auditLog;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private static readonly Dictionary<Guid, AssignmentUpgradeProgressDetails> progressReporting = new Dictionary<Guid, AssignmentUpgradeProgressDetails>();
         private static readonly ConcurrentQueue<QueuedUpgrade> upgradeQueue = new ConcurrentQueue<QueuedUpgrade>();
         private readonly Dictionary<Guid, CancellationTokenSource> cancellationTokens = new Dictionary<Guid, CancellationTokenSource>();
 
-        public AssignmentsUpgradeService(IAuditLog auditLog, IQuestionnaireStorage questionnaireStorage)
+        public AssignmentsUpgradeService(ISystemLog auditLog, IQuestionnaireStorage questionnaireStorage)
         {
             this.auditLog = auditLog;
             this.questionnaireStorage = questionnaireStorage;
         }
 
-        public void EnqueueUpgrade(Guid processId, QuestionnaireIdentity migrateFrom, QuestionnaireIdentity migrateTo)
+        public void EnqueueUpgrade(Guid processId, Guid userId, QuestionnaireIdentity migrateFrom, QuestionnaireIdentity migrateTo)
         {
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(migrateTo, null);
 
             this.auditLog.AssignmentsUpgradeStarted(questionnaire.Title, migrateFrom.Version, migrateTo.Version);
 
-            upgradeQueue.Enqueue(new QueuedUpgrade(processId, migrateFrom, migrateTo));
+            upgradeQueue.Enqueue(new QueuedUpgrade(processId, userId, migrateFrom, migrateTo));
             progressReporting[processId] = new AssignmentUpgradeProgressDetails(migrateFrom, migrateTo, 0, 0, new List<AssignmentUpgradeError>(), AssignmentUpgradeStatus.Queued);
         }
 

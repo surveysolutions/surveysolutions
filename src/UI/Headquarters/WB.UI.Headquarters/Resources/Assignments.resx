@@ -184,7 +184,7 @@
     <value>Fill all or some of the identifying fields</value>
   </data>
   <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
-    <value>Select responsible (Supervisor or Interviewer) for this assignment</value>
+    <value>Select responsible (Headquarters or Supervisor or Interviewer) for this assignment</value>
   </data>
   <data name="Questionnaire" xml:space="preserve">
     <value>Questionnaire</value>
@@ -371,5 +371,105 @@
   </data>
   <data name="QuestionnaireVersion" xml:space="preserve">
     <value>ver. {{version}}</value>
+  </data>
+  <data name="AssignmentId" xml:space="preserve">
+    <value>Assignment ID</value>
+  </data>
+  <data name="MultipleAssignmentsClose" xml:space="preserve">
+    <value>{{count}} selected assignments are going to be closed. Size will be set to currently collected interviews count.</value>
+  </data>
+  <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
+    <value>Size of the selected assignment {{id}} will be changed form {{quantity}} to {{collected}} (number of currently collected interviews)</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="AssignmentCloseWebMode" xml:space="preserve">
+    <value>Assignment {{id}} cannot be closed since it has web mode enabled</value>
+  </data>
+  <data name="AssignmentInfo" xml:space="preserve">
+    <value>Detailed assignment info</value>
+  </data>
+  <data name="Action_Archived" xml:space="preserve">
+    <value>Archived</value>
+  </data>
+  <data name="DetailsComments" xml:space="preserve">
+    <value>Comment</value>
+  </data>
+  <data name="Comments" xml:space="preserve">
+    <value>Comment</value>
+  </data>
+  <data name="Action_AudioRecordingChanged" xml:space="preserve">
+    <value>Audio recording changed</value>
+  </data>
+  <data name="EnterComments" xml:space="preserve">
+    <value>Enter your comment here</value>
+  </data>
+  <data name="Action_Created" xml:space="preserve">
+    <value>Created</value>
+  </data>
+  <data name="Action_Deleted" xml:space="preserve">
+    <value>Deleted</value>
+  </data>
+  <data name="Action_QuantityChanged" xml:space="preserve">
+    <value>Size changed</value>
+  </data>
+  <data name="Action_ReceivedByTablet" xml:space="preserve">
+    <value>Received by tablet</value>
+  </data>
+  <data name="Action_UnArchived" xml:space="preserve">
+    <value>Unarchived </value>
+  </data>
+  <data name="Action_Reassigned" xml:space="preserve">
+    <value>Reassigned</value>
+  </data>
+  <data name="Action_WebModeChanged" xml:space="preserve">
+    <value>Web mode changed</value>
+  </data>
+  <data name="Action" xml:space="preserve">
+    <value>Action</value>
+  </data>
+  <data name="Actor" xml:space="preserve">
+    <value>By</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="Action_AudioRecordingChanged_False" xml:space="preserve">
+    <value>Audio recording disabled</value>
+  </data>
+  <data name="Action_AudioRecordingChanged_True" xml:space="preserve">
+    <value>Audio recording enabled</value>
+  </data>
+  <data name="Action_WebModeChanged_False" xml:space="preserve">
+    <value>Web Mode disabled</value>
+  </data>
+  <data name="Action_WebModeChanged_True" xml:space="preserve">
+    <value>Web Mode enabled</value>
+  </data>
+  <data name="Action_QuantityChanged_To" xml:space="preserve">
+    <value>Size changed to {{quantity}}</value>
+  </data>
+  <data name="Action_QuantityChanged_To_Unlimited" xml:space="preserve">
+    <value>Size changed to Unlimited</value>
+  </data>
+  <data name="Action_Reassigned_To" xml:space="preserve">
+    <value>Reassigned to {{newResponsible}}</value>
+  </data>
+  <data name="Action_Reassigned_To_Comment" xml:space="preserve">
+    <value>Comment: {{comment}}</value>
+  </data>
+  <data name="AssignmentHistory" xml:space="preserve">
+    <value>History</value>
+  </data>
+  <data name="Details_Column" xml:space="preserve">
+    <value>Details</value>
+    <comment>Detailed info about action in assignment history page</comment>
+  </data>
+  <data name="Action_Created_Comment" xml:space="preserve">
+    <value>Comment: {{comment}}</value>
+  </data>
+  <data name="Action_Created_Responsible" xml:space="preserve">
+    <value>Assigned to {{responsible}}</value>
   </data>
 </root>

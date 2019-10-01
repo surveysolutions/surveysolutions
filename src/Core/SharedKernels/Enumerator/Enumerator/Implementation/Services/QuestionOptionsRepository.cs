@@ -22,9 +22,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         }
 
         public IEnumerable<CategoricalOption> GetOptionsForQuestion(IQuestionnaire questionnaire,
-            Guid questionId, int? parentQuestionValue, string filter, Translation translation)
+            Guid questionId, int? parentQuestionValue, string filter, Translation translation,
+            int[] excludedOptionIds = null)
         {
-            return this.optionsRepository.GetFilteredQuestionOptions(new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version), questionId, parentQuestionValue, filter, translation?.Id);
+            return this.optionsRepository.GetFilteredQuestionOptions(
+                new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version), questionId,
+                parentQuestionValue, filter, translation?.Id, excludedOptionIds);
         }
 
         public CategoricalOption GetOptionForQuestionByOptionText(IQuestionnaire questionnaire, Guid questionId, string optionText, int? parentQuestionValue, Translation translation)
@@ -37,5 +40,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             return this.optionsRepository.GetQuestionOptionByValue(new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version), questionId, optionValue, translation?.Id);
         }
+
+        public IEnumerable<CategoricalOption> GetOptionsByOptionValues(IQuestionnaire questionnaire, Guid questionId,
+            int[] optionsValues) => this.optionsRepository.GetOptionsByValues(
+            new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version), questionId, optionsValues);
     }
 }

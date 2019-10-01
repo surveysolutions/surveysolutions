@@ -131,6 +131,7 @@ namespace WB.UI.WebTester.Controllers
             {
                 interviewPageModel.GetScenarioUrl = Url.Content("~/api/ScenariosApi");
                 interviewPageModel.SaveScenarioUrl = saveScenarioDesignerUrl;
+                interviewPageModel.DesignerUrl = ConfigurationSource.Configuration["DesignerAddress"];
             }
             
             return interviewPageModel;
@@ -180,6 +181,7 @@ namespace WB.UI.WebTester.Controllers
         public string SaveScenarioUrl { get; set; }
         public string GetScenarioUrl { get; set; }
         public int? ScenarioId { get; set; }
+        public string DesignerUrl { get; set; }
     }
 
     public class ApiTestModel

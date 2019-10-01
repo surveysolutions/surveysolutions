@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class GpsCoordinatesQuestionViewModel :
         MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
-        ILiteEventHandler<AnswersRemoved>,
+        IViewModelEventHandler<AnswersRemoved>,
         ICompositeQuestion,
         IDisposable
     {
@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly ILogger logger;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IEnumeratorSettings settings;
-        private readonly ILiteEventRegistry liteEventRegistry;
+        private readonly IViewModelEventRegistry liteEventRegistry;
         private readonly IGpsLocationService locationService;
         private readonly IUserInterfaceStateService userInterfaceStateService;
 
@@ -64,7 +64,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IUserInterfaceStateService userInterfaceStateService,
             AnsweringViewModel answering,
             QuestionInstructionViewModel instructionViewModel,
-            ILiteEventRegistry liteEventRegistry,
+            IViewModelEventRegistry liteEventRegistry,
             ILogger logger)
         {
             this.userId = principal.CurrentUserIdentity.UserId;

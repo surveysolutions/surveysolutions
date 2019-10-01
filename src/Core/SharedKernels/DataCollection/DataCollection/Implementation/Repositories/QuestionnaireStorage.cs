@@ -7,6 +7,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using System.Collections.Concurrent;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
@@ -23,21 +24,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 
         private readonly IQuestionOptionsRepository questionOptionsRepository;
         private readonly ISubstitutionService substitutionService;
+        private readonly IInterviewExpressionStatePrototypeProvider expressionStatePrototypeProvider;
 
         public QuestionnaireStorage(IPlainKeyValueStorage<QuestionnaireDocument> repository, 
             ITranslationStorage translationStorage, 
             IQuestionnaireTranslator translator,
             IQuestionOptionsRepository questionOptionsRepository,
-            ISubstitutionService substitutionService)
+            ISubstitutionService substitutionService,
+            IInterviewExpressionStatePrototypeProvider expressionStatePrototypeProvider)
         {
             this.repository = repository;
             this.translationStorage = translationStorage;
             this.translator = translator;
             this.questionOptionsRepository = questionOptionsRepository;
             this.substitutionService = substitutionService;
+            this.expressionStatePrototypeProvider = expressionStatePrototypeProvider ?? throw new ArgumentNullException(nameof(expressionStatePrototypeProvider));
         }
 
-        public IQuestionnaire GetQuestionnaire(QuestionnaireIdentity identity, string language)
+        public virtual IQuestionnaire GetQuestionnaire(QuestionnaireIdentity identity, string language)
         {
             string questionnaireCacheKey = language != null ? $"{identity}${language}" : $"{identity}";
 
@@ -67,6 +71,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
                 questionOptionsRepository, substitutionService,translationId);
 
             plainQuestionnaire.WarmUpPriorityCaches();
+
+            var usingExpressionStorage = plainQuestionnaire.IsUsingExpressionStorage();
+            if (usingExpressionStorage)
+            {
+                plainQuestionnaire.ExpressionStorageType = this.expressionStatePrototypeProvider.GetExpressionStorageType(identity);
+            }
 
             return plainQuestionnaire;
         }

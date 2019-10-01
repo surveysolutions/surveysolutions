@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class AudioQuestionViewModel :
         MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
-        ILiteEventHandler<AnswersRemoved>,
+        IViewModelEventHandler<AnswersRemoved>,
         ICompositeQuestion,
         IDisposable
     {
@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private Guid interviewId;
         private string variableName;
 
-        private readonly ILiteEventRegistry liteEventRegistry;
+        private readonly IViewModelEventRegistry liteEventRegistry;
         private readonly IPermissionsService permissions;
         private readonly IAudioDialog audioDialog;
         private readonly IAudioFileStorage audioFileStorage;
@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionStateViewModel<AudioQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering,
             QuestionInstructionViewModel instructionViewModel,
-            ILiteEventRegistry liteEventRegistry,
+            IViewModelEventRegistry liteEventRegistry,
             IPermissionsService permissions,
             IAudioDialog audioDialog,
             IAudioFileStorage audioFileStorage,

@@ -73,12 +73,12 @@ namespace WB.UI.WebTester.Services.Implementation
 
         public List<CategoricalOption> GetFirstTopFilteredOptionsForQuestion(Guid interviewId,
             Identity questionIdentity,
-            int? parentQuestionValue, string filter, int itemsCount = 200)
+            int? parentQuestionValue, string filter, int itemsCount = 200, int[] excludedOptionIds = null)
         {
             if (appDomains.TryGetValue(interviewId, out var interview))
             {
                 logger.Debug($"Execute remote interview GetFirstTopFilteredOptionsForQuestion: {interviewId}");
-                return interview.Value.GetFirstTopFilteredOptionsForQuestion(questionIdentity, parentQuestionValue, filter, itemsCount);
+                return interview.Value.GetFirstTopFilteredOptionsForQuestion(questionIdentity, parentQuestionValue, filter, itemsCount, excludedOptionIds);
             }
 
             throw new ArgumentException("Cannot get first top filtered options. No remote domain were setted up");
