@@ -273,7 +273,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             
             registry.Bind<IRosterStructureService, RosterStructureService>();
             registry.Bind<IQuestionnaireImportService, QuestionnaireImportService>();
-            registry.Bind<DesignerUserCredentials>();
 
             registry.Bind<IWebInterviewConfigurator, WebInterviewConfigurator>();
             registry.Bind<IWebInterviewConfigProvider, WebInterviewConfigProvider>();

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Threading.Tasks;
 using Amazon.Runtime;
 using Amazon.S3;
 using Amazon.S3.Model;
@@ -49,7 +50,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Storage
                     ResponseStream = new MemoryStream()
                 });
 
-            this.storage.GetBinary("somePath");
+            this.storage.GetBinaryAsync("somePath");
 
             var expectedKey = this.settings.BasePath + "/somePath";
 
@@ -65,7 +66,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Storage
             client.Setup(c => c.GetObject(It.IsAny<GetObjectRequest>()))
                 .Throws(new AmazonS3Exception("Error", ErrorType.Sender, "NoSuchKey", "", HttpStatusCode.NotFound));
 
-            Assert.DoesNotThrow(() => Assert.IsNull(this.storage.GetBinary("somePath")));
+            Assert.DoesNotThrow(() => Assert.IsNull(this.storage.GetBinaryAsync("somePath")));
         }
 
         [Test]
@@ -77,7 +78,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Storage
                     S3Objects = new List<S3Object>()
                 });
 
-            this.storage.List("somePath");
+            this.storage.ListAsync("somePath");
 
             var expectedKey = this.settings.BasePath + "/somePath";
 
@@ -100,7 +101,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Storage
                     }
                 });
 
-            var result = this.storage.List("");
+            var result = this.storage.ListAsync("");
 
             Assert.That(result, Has.One.Property(nameof(FileObject.Path)).EqualTo("one"));
             Assert.That(result, Has.One.Property(nameof(FileObject.Path)).EqualTo("two"));
@@ -149,34 +150,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Storage
         }
 
         [Test]
-        public void should_use_proper_key_for_exists_check()
-        {
-            client.Setup(c => c.GetObjectMetadata(It.IsAny<string>(), It.IsAny<string>())).Returns(new GetObjectMetadataResponse
-            {
-                HttpStatusCode = HttpStatusCode.OK
-            });
-
-            Assert.That(this.storage.IsExist("somePath"), Is.EqualTo(true));
-
-            client.Verify(c => c.GetObjectMetadata(settings.BucketName, settings.BasePath + "/somePath"), Times.Once);
-        }
-
-
-        [Test]
-        public void should_return_false_if_no_key_for_exists_check()
-        {
-            client.Setup(c => c.GetObjectMetadata(It.IsAny<string>(), It.IsAny<string>()))
-                .Throws(new AmazonS3Exception("Error", ErrorType.Sender, "NoSuchKey", "", HttpStatusCode.NotFound));
-
-            Assert.DoesNotThrow(() => Assert.That(this.storage.IsExist("somePath"), Is.EqualTo(false)));
-        }
-
-        [Test]
-        public void should_use_proper_key_for_deletion()
+        public async Task should_use_proper_key_for_deletion()
         {
             client.Setup(c => c.DeleteObject(It.IsAny<string>(), It.IsAny<string>())).Returns(new DeleteObjectResponse());
 
-            this.storage.Remove("somePath");
+            await this.storage.RemoveAsync("somePath");
 
             client.Verify(c => c.DeleteObject(settings.BucketName, settings.BasePath + "/somePath"), Times.Once);
         }
