@@ -96,17 +96,21 @@ namespace WB.UI.Headquarters.API.Export
                 var results = audioAuditRecords.Select(descriptor =>
                     new 
                     {
-                        FileName = descriptor.FileName,
-                        ContentType = descriptor.ContentType
+                        descriptor.FileName,
+                        descriptor.ContentType
                     }
                 ).OrderBy(x => x.FileName).ToArray();
 
                 response.Add((interviewId, results));
             }
 
-            var audioAuditInfo = response.OrderBy(x => x.InterviewId).ToArray();
+            var audioAuditInfo = response.OrderBy(x => x.InterviewId);
 
-            return Request.CreateResponse(HttpStatusCode.OK, audioAuditInfo);
+            return Request.CreateResponse(HttpStatusCode.OK, audioAuditInfo.Select(x => new
+            {
+                InterviewId = x.InterviewId,
+                Files = x.Files
+            }));
         }
 
         [Route("api/export/v1/interview/{interviewId}/audioAudit/{fileName}")]

@@ -60,7 +60,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             }
         }
 
-        public IMvxCommand TogglePlayback => new MvxCommand(() =>
+        public IMvxCommand TogglePlayback => new MvxAsyncCommand(async () =>
         {
             if (this.IsPlaying)
             {
@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             }
             else
             {
-                this.audioService.Play(this.interviewId, this.questionIdentity, fileName);
+                await this.audioService.Play(this.interviewId, this.questionIdentity, fileName);
                 this.IsPlaying = true;
             }
         }, () => CanBePlayed);
