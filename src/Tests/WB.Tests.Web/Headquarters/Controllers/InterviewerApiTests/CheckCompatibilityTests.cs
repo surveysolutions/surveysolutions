@@ -17,7 +17,6 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Tests.Abc;
-using WB.Tests.Abc.Storage;
 using WB.Tests.Web;
 using WB.UI.Headquarters.API.DataCollection.Interviewer;
 
