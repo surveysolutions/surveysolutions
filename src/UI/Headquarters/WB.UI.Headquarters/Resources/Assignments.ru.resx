@@ -173,7 +173,7 @@
     <value>Заполните все или несколько идентификационных полей</value>
   </data>
   <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
-    <value>Выберите ответственного (Супервизора или Интервьюера) для задания</value>
+    <value>Выберите ответственного (Хедквотера, Супервизора или Интервьюера) для задания</value>
   </data>
   <data name="CreateInterview" xml:space="preserve">
     <value>Начать новое интервью</value>
@@ -284,7 +284,7 @@
     <value>Назначить на</value>
   </data>
   <data name="CreatingNewAssignment" xml:space="preserve">
-    <value>Создание новой задачи для опросника {{questionnaire}}</value>
+    <value>Создание нового задания для опросника {{questionnaire}}</value>
   </data>
   <data name="Tooltip_Filter_QuestionnaireVersion" xml:space="preserve">
     <value>Выберите версию опросника, чтобы посмотреть созданные по нему задания. Выберите "Любая версия", чтобы увидеть задания по всем версиям опросника</value>
@@ -363,9 +363,109 @@
   </data>
   <data name="DuplicatePasswordByWebModeWithQuantity1" xml:space="preserve">
     <value>Пароль для задания в веб режиме с количеством интервью равным 1 должен быть уникален</value>
-    <comment>Пароль для задания в веб режиме с количеством интервью равным 1 должен быть уникален</comment>
   </data>
   <data name="QuestionnaireVersion" xml:space="preserve">
     <value>вер. {{version}}</value>
+  </data>
+  <data name="AssignmentId" xml:space="preserve">
+    <value>Задание №</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Завершить</value>
+  </data>
+  <data name="MultipleAssignmentsClose" xml:space="preserve">
+    <value>{{count}} выбранных заданий будет завершено. Размер будет установлен в текущее количество собранных интервью.</value>
+  </data>
+  <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
+    <value>Для задания '{{id}}' текущий размер {{quantity}} будет установлен в {{collected}}</value>
+  </data>
+  <data name="AssignmentCloseWebMode" xml:space="preserve">
+    <value>Задание {{id}} не может быть закрыто, так как включён веб режим</value>
+  </data>
+  <data name="AssignmentInfo" xml:space="preserve">
+    <value>Информация о задании</value>
+  </data>
+  <data name="DetailsComments" xml:space="preserve">
+    <value>Комментарий</value>
+  </data>
+  <data name="Comments" xml:space="preserve">
+    <value>Комментарий</value>
+    <comment>Комментарий</comment>
+  </data>
+  <data name="EnterComments" xml:space="preserve">
+    <value>Оставьте свой комментарий здесь</value>
+    <comment>Оставьте свой комментарий здесь</comment>
+  </data>
+  <data name="Action" xml:space="preserve">
+    <value>Действие</value>
+  </data>
+  <data name="Action_Archived" xml:space="preserve">
+    <value>Заархивировано</value>
+  </data>
+  <data name="Action_AudioRecordingChanged" xml:space="preserve">
+    <value>Изменён аудио аудит</value>
+  </data>
+  <data name="Action_AudioRecordingChanged_False" xml:space="preserve">
+    <value>Аудио аудит выключен</value>
+  </data>
+  <data name="Action_AudioRecordingChanged_True" xml:space="preserve">
+    <value>Аудио аудит включен</value>
+  </data>
+  <data name="Action_Created" xml:space="preserve">
+    <value>Создано</value>
+  </data>
+  <data name="Action_Deleted" xml:space="preserve">
+    <value>Удалено</value>
+  </data>
+  <data name="Action_QuantityChanged" xml:space="preserve">
+    <value>Размер изменён</value>
+  </data>
+  <data name="Action_QuantityChanged_To" xml:space="preserve">
+    <value>Размер изменён на {{quantity}}</value>
+  </data>
+  <data name="Action_Reassigned" xml:space="preserve">
+    <value>Назначено</value>
+  </data>
+  <data name="Action_Reassigned_To" xml:space="preserve">
+    <value>Назначено на {{newResponsible}}</value>
+  </data>
+  <data name="Action_Reassigned_To_Comment" xml:space="preserve">
+    <value>Комментарий: {{comment}}</value>
+  </data>
+  <data name="Action_ReceivedByTablet" xml:space="preserve">
+    <value>Получено планшетом</value>
+  </data>
+  <data name="Action_UnArchived" xml:space="preserve">
+    <value>Разархивировано</value>
+  </data>
+  <data name="Action_WebModeChanged" xml:space="preserve">
+    <value>Web режим изменён</value>
+  </data>
+  <data name="Action_WebModeChanged_False" xml:space="preserve">
+    <value>Web режим выключен</value>
+  </data>
+  <data name="Action_WebModeChanged_True" xml:space="preserve">
+    <value>Web режим включен</value>
+  </data>
+  <data name="Actor" xml:space="preserve">
+    <value>Кем</value>
+  </data>
+  <data name="AssignmentHistory" xml:space="preserve">
+    <value>История</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Дата</value>
+  </data>
+  <data name="Details_Column" xml:space="preserve">
+    <value>Детали</value>
+  </data>
+  <data name="Action_Created_Comment" xml:space="preserve">
+    <value>Комментарий: {{comment}}</value>
+  </data>
+  <data name="Action_Created_Responsible" xml:space="preserve">
+    <value>Ответственный: {{responsible}}</value>
+  </data>
+  <data name="Action_QuantityChanged_To_Unlimited" xml:space="preserve">
+    <value>Размер изменён на Не ограничено</value>
   </data>
 </root>

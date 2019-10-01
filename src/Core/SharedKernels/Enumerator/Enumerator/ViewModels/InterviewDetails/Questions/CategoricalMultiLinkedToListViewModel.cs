@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MvvmCross.Base;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -17,22 +18,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class CategoricalMultiLinkedToListViewModel : 
         CategoricalMultiViewModelBase<int, int>,
-        ILiteEventHandler<TextListQuestionAnswered>,
-        ILiteEventHandler<LinkedToListOptionsChanged>,
-        ILiteEventHandler<MultipleOptionsQuestionAnswered>,
-        ILiteEventHandler<QuestionsEnabled>,
-        ILiteEventHandler<QuestionsDisabled>
+        IViewModelEventHandler<TextListQuestionAnswered>,
+        IAsyncViewModelEventHandler<LinkedToListOptionsChanged>,
+        IAsyncViewModelEventHandler<MultipleOptionsQuestionAnswered>,
+        IAsyncViewModelEventHandler<QuestionsEnabled>,
+        IAsyncViewModelEventHandler<QuestionsDisabled>
     {
         private int[] selectedOptionsToSave;
         private Guid linkedToQuestionId;
 
         public CategoricalMultiLinkedToListViewModel(
             QuestionStateViewModel<MultipleOptionsQuestionAnswered> questionStateViewModel,
-            IQuestionnaireStorage questionnaireRepository, ILiteEventRegistry eventRegistry,
+            IQuestionnaireStorage questionnaireRepository, IViewModelEventRegistry eventRegistry,
             IStatefulInterviewRepository interviewRepository, IPrincipal principal, AnsweringViewModel answering,
             QuestionInstructionViewModel instructionViewModel, ThrottlingViewModel throttlingModel, IMvxMainThreadAsyncDispatcher mainThreadDispatcher) : base(
             questionStateViewModel, questionnaireRepository, eventRegistry, interviewRepository, principal, answering,
-            instructionViewModel, throttlingModel, mainThreadDispatcher)
+            instructionViewModel, throttlingModel)
         {
             this.Options = new CovariantObservableCollection<CategoricalMultiOptionViewModel<int>>();
         }
@@ -88,42 +89,42 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             });
         }
 
-        public async void Handle(LinkedToListOptionsChanged @event)
+        public async Task HandleAsync(LinkedToListOptionsChanged @event)
         {
             if (@event.ChangedLinkedQuestions.All(x => x.QuestionId != this.Identity)) return;
 
-            await this.UpdateViewModelsInMainThreadAsync();
+            await this.UpdateViewModelsAsync();
         }
 
-        public void Handle(MultipleOptionsQuestionAnswered @event)
+        public async Task HandleAsync(MultipleOptionsQuestionAnswered @event)
         {
             if (@event.QuestionId != this.Identity.Id || !@event.RosterVector.Identical(this.Identity.RosterVector)) return;
 
-            this.UpdateViewModelsByAnsweredOptionsInMainThread(@event.SelectedValues.Select(Convert.ToInt32).ToArray());
+            await this.UpdateViewModelsByAnsweredOptionsAsync(@event.SelectedValues.Select(Convert.ToInt32).ToArray());
         }
 
-        public async void Handle(QuestionsEnabled @event)
+        public async Task HandleAsync(QuestionsEnabled @event)
         {
             if (@event.Questions.All(x => x.Id != this.linkedToQuestionId)) return;
 
-            await this.UpdateViewModelsInMainThreadAsync();
+            await this.UpdateViewModelsAsync();
         }
 
-        public async void Handle(QuestionsDisabled @event)
+        public async Task HandleAsync(QuestionsDisabled @event)
         {
             if (@event.Questions.All(x => x.Id != this.linkedToQuestionId))
                 return;
 
-            await this.UpdateViewModelsInMainThreadAsync();
+            await this.UpdateViewModelsAsync();
         }
 
-        public override async void Handle(AnswersRemoved @event)
+        public override async Task HandleAsync(AnswersRemoved @event)
         {
             if (@event.Questions.Contains(this.Identity))
-                this.UpdateViewModelsByAnsweredOptionsInMainThread(Array.Empty<int>());
+                await this.UpdateViewModelsByAnsweredOptionsAsync(Array.Empty<int>());
 
             if (@event.Questions.Any(question => question.Id == this.linkedToQuestionId))
-                await this.UpdateViewModelsInMainThreadAsync();
+                await this.UpdateViewModelsAsync();
         }
     }
 }

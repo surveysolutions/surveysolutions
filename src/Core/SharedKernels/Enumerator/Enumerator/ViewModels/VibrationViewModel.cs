@@ -2,20 +2,21 @@ using System;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
     public class VibrationViewModel : 
-        ILiteEventHandler<AnswersDeclaredInvalid>,
-        ILiteEventHandler<StaticTextsDeclaredInvalid>,
+        IViewModelEventHandler<AnswersDeclaredInvalid>,
+        IViewModelEventHandler<StaticTextsDeclaredInvalid>,
         IDisposable
     {
-        private readonly ILiteEventRegistry eventRegistry;
+        private readonly IViewModelEventRegistry eventRegistry;
         private readonly IEnumeratorSettings settings;
         private readonly IVirbationService virbationService;
 
         public VibrationViewModel(
-            ILiteEventRegistry eventRegistry,
+            IViewModelEventRegistry eventRegistry,
             IEnumeratorSettings settings,
             IVirbationService virbationService)
         {

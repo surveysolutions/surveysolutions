@@ -93,6 +93,14 @@
           app:layout_constraintRight_toRightOf="@+id/right_guideline"
           app:layout_constraintTop_toBottomOf="@+id/subtitle" />
 
+    <TextView
+        android:id="@+id/comments"
+        app:MvxBind="Visible Comments; Text Comments;"
+        style="@style/Dashboard_InterviewItem_SubTitle"
+        app:layout_constraintLeft_toLeftOf="@+id/subtitle"
+        app:layout_constraintRight_toRightOf="@+id/right_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/responsible" />
+
     <TextView android:id="@+id/assignmentId"
         app:MvxBind="Text AssignmentIdLabel"
               
@@ -107,7 +115,7 @@
         
         app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
         app:layout_constraintRight_toRightOf="@+id/right_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/responsible"
+        app:layout_constraintTop_toBottomOf="@+id/comments"
         style="@style/dashboard_prefilledQuestion_container"/>
 
     <ImageView app:MvxBind="Visible And(HasExpandedView, Not(IsExpanded));"

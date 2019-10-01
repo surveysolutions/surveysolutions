@@ -37,8 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         }
 
         public IEnumerable<CategoricalOption> GetFilteredQuestionOptions(QuestionnaireIdentity questionnaireId,
-            Guid questionId,
-            int? parentValue, string filter, Guid? translationId)
+            Guid questionId, int? parentValue, string filter, Guid? translationId, int[] excludedOptionIds = null)
         {
             var questionnaireIdAsString = questionnaireId.ToString();
             var questionIdAsString = questionId.FormatGuid();
@@ -46,6 +45,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             filter = (filter ?? String.Empty).ToLower();
             decimal? parentValueAsDecimal = parentValue;
+            decimal[] excludedOptionIdsAsDecimal = excludedOptionIds?.Select(x => (decimal) x)?.ToArray() ?? Array.Empty<decimal>();
 
             int take = 50;
             int skip = 0;
@@ -60,7 +60,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                                   @where.QuestionId == questionIdAsString &&
                                   (parentValueAsDecimal == null || @where.ParentValue == parentValueAsDecimal) &&
                                   (filter == "" || filter == null || @where.SearchTitle.Contains(filter)) &&
-                                  (@where.TranslationId == translationIdAsString || @where.TranslationId == null),
+                                  (@where.TranslationId == translationIdAsString || @where.TranslationId == null) &&
+                                  !excludedOptionIdsAsDecimal.Contains(@where.Value),
                         @order => @order.SortOrder,
                         @select => new Option
                         {
@@ -167,6 +168,27 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 Title = categoricalQuestionOption.Title
             };
         }
+
+        public CategoricalOption[] GetOptionsByValues(QuestionnaireIdentity questionnaireId, Guid questionId, int[] optionValues)
+        {
+            var questionnaireIdAsString = questionnaireId.ToString();
+            var questionIdAsString = questionId.FormatGuid();
+            var values = optionValues.Select(Convert.ToDecimal).ToArray();
+
+            return this.optionsStorage
+                .Where(x => x.QuestionnaireId == questionnaireIdAsString &&
+                            x.QuestionId == questionIdAsString &&
+                            values.Contains(x.Value))
+                .Select(ToCategoricalOption)
+                .ToArray();
+        }
+
+        private CategoricalOption ToCategoricalOption(OptionView option) => new CategoricalOption
+        {
+            ParentValue = option.ParentValue.HasValue ? Convert.ToInt32(option.ParentValue) : (int?) null,
+            Value = Convert.ToInt32(option.Value),
+            Title = option.Title
+        };
 
         public void RemoveOptionsForQuestionnaire(QuestionnaireIdentity questionnaireId)
         {

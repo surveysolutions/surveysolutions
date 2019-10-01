@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Runtime.Caching;
 using System.Threading;
 using Ncqrs.Domain.Storage;
@@ -86,7 +87,7 @@ namespace WB.Infrastructure.Native.Storage
             return cachedAggregate;
         }
 
-        static MemoryCache Cache = new MemoryCache("AR memory cache");
+        static readonly MemoryCache Cache = MemoryCache.Default;
 
         protected virtual TimeSpan Expiration => TimeSpan.FromMinutes(5);
 
@@ -97,7 +98,7 @@ namespace WB.Infrastructure.Native.Storage
             CacheCountTracker.AddOrUpdate(key, true, (k, old) => true);
             CommonMetrics.StateFullInterviewsCount.Set(CacheCountTracker.Count);
 
-            Cache.Add(key, aggregateRoot, new CacheItemPolicy
+            Cache.Set(key, aggregateRoot, new CacheItemPolicy
             {
                 RemovedCallback = OnUpdateCallback,
                 SlidingExpiration = Expiration
@@ -109,7 +110,7 @@ namespace WB.Infrastructure.Native.Storage
             CacheItemRemoved(arguments.CacheItem.Key);
         }
 
-        protected virtual string Key(Guid id) => $"aggregateRoot_" + id.ToString();
+        protected virtual string Key(Guid id) => "aggregateRoot_" + id;
         
         protected virtual void CacheItemRemoved(string key)
         {

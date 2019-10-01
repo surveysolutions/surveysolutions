@@ -43,6 +43,7 @@ namespace WB.Core.Infrastructure.CommandBus
 
             public void AppendValidators(List<Type> validators) => this.Validators.AddRange(validators);
             public void AppendPostProcessors(List<Type> postProcessors) => this.PostProcessors.AddRange(postProcessors);
+            public void AppendPreProcessors(List<Type> preProcessors) => this.PreProcessors.AddRange(preProcessors);
 
             private static AggregateKind DetermineAggregateKind(Type aggregateType)
             {
@@ -196,6 +197,19 @@ namespace WB.Core.Infrastructure.CommandBus
                 Register(command => this.aggregateRootIdResolver.Invoke(command), commandHandler, isInitializer: false, isStateless: false, configurer: null);
                 return this;
             }
+
+            public AggregateWithCommandSetup<TAggregate, TAggregateCommand> StatelessHandles<TCommand>(Action<TCommand, TAggregate> commandHandler)
+                where TCommand : TAggregateCommand
+            {
+                Register(command => this.aggregateRootIdResolver.Invoke(command), commandHandler, isInitializer: false, isStateless: true, configurer: null);
+                return this;
+            }
+
+            public AggregateWithCommandSetup<TAggregate, TAggregateCommand> StatelessHandles<TCommand>(Func<TAggregate, Action<TCommand>> commandHandler)
+                where TCommand : TAggregateCommand
+            {
+                return StatelessHandles<TCommand>((command, aggregate) => commandHandler(aggregate)(command));
+            }
         }
 
         public static AggregateSetup<TAggregate> Setup<TAggregate>()
@@ -274,7 +288,7 @@ namespace WB.Core.Infrastructure.CommandBus
         {
             var handlerDescriptor = GetHandlerDescriptor(command);
             return GetProcessors(handlerDescriptor.PreProcessors, command, serviceLocator);
-        }
+        } 
         public static IEnumerable<Action<IAggregateRoot, ICommand>> GetProcessors(List<Type> processors, ICommand command, IServiceLocator serviceLocator)
         {
             var handlerDescriptor = GetHandlerDescriptor(command);
@@ -359,7 +373,12 @@ namespace WB.Core.Infrastructure.CommandBus
 
                 if(!commandType.IsAssignableFrom(registeredExistingCommand)) continue;
 
-                if (!configuration.GetSkipCommands().Contains(registeredExistingCommand))
+                if (!configuration.GetSkipPreProcessCommands().Contains(registeredExistingCommand))
+                {
+                    commandDescriptor.AppendPreProcessors(configuration.GetPreProcessors());
+                }
+
+                if (!configuration.GetSkipValidationCommands().Contains(registeredExistingCommand))
                 {
                     commandDescriptor.AppendValidators(configuration.GetValidators());
                 }

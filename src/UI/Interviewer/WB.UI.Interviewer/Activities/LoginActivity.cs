@@ -3,6 +3,7 @@ using Android.Content;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
+using Java.Interop;
 using MvvmCross;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -63,6 +64,13 @@ namespace WB.UI.Interviewer.Activities
          
             var notificationsPublisher = Mvx.IoCProvider.Resolve<INotificationPublisher>();
             notificationsPublisher.CancelAllNotifications(this);
+        }
+        
+        [Export("FastLogin")]
+        public void FastLogin(string password)
+        {
+            this.ViewModel.Password = password;
+            this.ViewModel.SignInCommand.ExecuteAsync();
         }
     }
 }

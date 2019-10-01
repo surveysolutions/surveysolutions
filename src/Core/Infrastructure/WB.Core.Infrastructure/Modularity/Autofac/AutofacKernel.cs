@@ -85,14 +85,14 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
             }
             catch (InitializationException ie)  when(ie.Subsystem == Subsystem.Database)
             {
-                status.Error(Modules.ErrorDuringRunningMigrations);
+                status.Error(Modules.ErrorDuringRunningMigrations, ie);
                 container.Resolve<ILogger>().Fatal("Exception during running migrations", 
                     ie.WithFatalType(FatalExceptionType.HqErrorDuringRunningMigrations));
                 ScheduleAppReboot();
             }
             catch(Exception e)
             {
-                status.Error(Modules.ErrorDuringSiteInitialization);
+                status.Error(Modules.ErrorDuringSiteInitialization, e);
                 
                 container.Resolve<ILogger>().Fatal("Exception during site initialization",
                     e.WithFatalType(FatalExceptionType.HqErrorDuringSiteInitialization));

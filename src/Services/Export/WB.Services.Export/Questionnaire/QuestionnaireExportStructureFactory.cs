@@ -158,6 +158,8 @@ namespace WB.Services.Export.Questionnaire
                 {
                     exportedHeaderItem.QuestionSubType = QuestionSubtype.MultiOptionOrdered;
                 }
+                else if (multiOptionQuestion.IsFilteredCombobox ?? false)
+                    exportedHeaderItem.QuestionSubType = QuestionSubtype.MultyOption_Combobox;
             }
 
             if (question is DateTimeQuestion dateTimeQuestion)
@@ -262,6 +264,10 @@ namespace WB.Services.Export.Questionnaire
             QuestionnaireDocument questionnaire,
             int? lengthOfRosterVectorWhichNeedToBeExported)
         {
+            var isQuestionLinked = IsQuestionLinked(question);
+            var asCategorical = question as MultyOptionsQuestion;
+            var isMultiCombobox = asCategorical?.IsFilteredCombobox ?? false;
+
             var exportedHeaderItem = this.CreateExportedQuestionHeaderItem(question, questionnaire, lengthOfRosterVectorWhichNeedToBeExported);
             this.ThrowIfQuestionIsNotMultiSelectOrTextList(question);
 
@@ -272,7 +278,12 @@ namespace WB.Services.Export.Questionnaire
             {
                 HeaderColumn headerColumn = new HeaderColumn();
 
-                if (!IsQuestionLinked(question) && question is MultyOptionsQuestion)
+                
+                if (isQuestionLinked || isMultiCombobox || asCategorical == null)
+                {
+                    headerColumn.Name = string.Format(GeneratedTitleExportFormat, question.VariableName, i);
+                }
+                else
                 {
                     var columnValue = int.Parse(question.Answers[i].AnswerValue);
 
@@ -281,12 +292,8 @@ namespace WB.Services.Export.Questionnaire
 
                     exportedHeaderItem.ColumnValues[i] = columnValue;
                 }
-                else
-                {
-                    headerColumn.Name = string.Format(GeneratedTitleExportFormat, question.VariableName, i);
-                }
 
-                if (!IsQuestionLinked(question))
+                if (!isQuestionLinked && !isMultiCombobox)
                 {
                     var questionLabel =
                         string.IsNullOrEmpty(question.VariableLabel) ? question.QuestionText : question.VariableLabel;
@@ -526,8 +533,11 @@ namespace WB.Services.Export.Questionnaire
         private void AddHeadersForMultiOptions(IDictionary<Guid, IExportedHeaderItem> headerItems, Question question,
             QuestionnaireDocument questionnaire)
         {
+            var typedQuestion = question as MultyOptionsQuestion;
+            var columnCount = typedQuestion?.IsFilteredCombobox ?? false ? Constants.MaxLongRosterRowCount : question.Answers.Count;
+
             headerItems.Add(question.PublicKey,
-                this.CreateExportedQuestionHeaderForMultiColumnItem(question, question.Answers.Count,
+                this.CreateExportedQuestionHeaderForMultiColumnItem(question, columnCount,
                     questionnaire,
                     this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire)));
         }

@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     }
 
     public class CommentsViewModel : MvxNotifyPropertyChanged,
-        ILiteEventHandler<AnswerCommentResolved>,
+        IViewModelEventHandler<AnswerCommentResolved>,
         ICompositeEntity,
         IDisposable
     {
@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IStatefulInterviewRepository interviewRepository;
         private IStatefulInterview interview;
         private readonly ICommandService commandService;
-        private readonly ILiteEventRegistry eventRegistry;
+        private readonly IViewModelEventRegistry eventRegistry;
         private readonly IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher;
         private readonly IPrincipal principal;
 
@@ -62,7 +62,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterviewRepository interviewRepository,
             IPrincipal principal,
             ICommandService commandService,
-            ILiteEventRegistry eventRegistry,
+            IViewModelEventRegistry eventRegistry,
             IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher)
         {
             this.interviewRepository = interviewRepository;

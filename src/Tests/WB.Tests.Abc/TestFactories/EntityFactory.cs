@@ -49,7 +49,6 @@ using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
@@ -73,6 +72,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization.Steps;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -770,6 +770,14 @@ namespace WB.Tests.Abc.TestFactories
                 ParentValue = parentValue
             };
 
+        public Answer OptionByCode(int value, string text = null, decimal? parentCode = null)
+            => new Answer
+            {
+                AnswerText = text ?? $"Option {value}",
+                AnswerCode = value,
+                ParentCode = parentCode
+            };
+
         public IEnumerable<Answer> Options(params int[] values)
         {
             return values.Select(value => Create.Entity.Option(value));
@@ -793,8 +801,11 @@ namespace WB.Tests.Abc.TestFactories
                     ?? Create.Service.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(
                     document.AsReadOnly().AssignMissingVariables());
             }
-            return new PlainQuestionnaire(document, version, questionOptionsRepository ?? Mock.Of<IQuestionOptionsRepository>(), 
+
+            var plainQuestionnaire = new PlainQuestionnaire(document, version, questionOptionsRepository ?? Mock.Of<IQuestionOptionsRepository>(), 
                 substitutionService ?? Mock.Of<ISubstitutionService>(), translation ?? document.Translations.FirstOrDefault());
+            plainQuestionnaire.ExpressionStorageType = typeof(DummyInterviewExpressionStorage);
+            return plainQuestionnaire;
         }
 
         public QRBarcodeQuestion QRBarcodeQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
@@ -886,13 +897,6 @@ namespace WB.Tests.Abc.TestFactories
                 Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>())
             };
 
-        public QuestionnaireDocument QuestionnaireDocument(Guid? id = null, bool usesCSharp = false, IEnumerable<IComposite> children = null)
-            => new QuestionnaireDocument
-            {
-                PublicKey = id ?? Guid.NewGuid(),
-                Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>()),
-            };
-
         public QuestionnaireDocument QuestionnaireDocumentWithAttachments(Guid? chapterId = null, params Attachment[] attachments)
             => new QuestionnaireDocument
             {
@@ -901,16 +905,6 @@ namespace WB.Tests.Abc.TestFactories
                     new Group("Chapter") { PublicKey = chapterId.GetValueOrDefault() }
                 }.ToReadOnlyCollection(),
                 Attachments = attachments.ToList()
-            };
-
-        public QuestionnaireDocument QuestionnaireDocumentWithTranslations(Guid? chapterId = null, params Translation[] translations)
-            => new QuestionnaireDocument
-            {
-                Children = new List<IComposite>
-                {
-                    new Group("Chapter") { PublicKey = chapterId.GetValueOrDefault() }
-                }.ToReadOnlyCollection(),
-                Translations = translations.ToList()
             };
 
         public QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? chapterId = null, params IComposite[] children)
@@ -923,6 +917,7 @@ namespace WB.Tests.Abc.TestFactories
             => new QuestionnaireDocument
             {
                 PublicKey = Guid.NewGuid(),
+                IsUsingExpressionStorage = true,
                 Children = new List<IComposite>
                 {
                     new Group("Chapter")
@@ -940,6 +935,7 @@ namespace WB.Tests.Abc.TestFactories
             => new QuestionnaireDocument
             {
                 PublicKey = Guid.NewGuid(),
+                IsUsingExpressionStorage = true,
                 Children = new List<IComposite>
                 {
                     new Group("Chapter")
@@ -957,6 +953,7 @@ namespace WB.Tests.Abc.TestFactories
             {
                 Title = "Questionnaire",
                 VariableName = "MyQuestionnaire",
+                IsUsingExpressionStorage = true,
                 PublicKey = id ?? Guid.NewGuid(),
                 Children = new List<IComposite>
                 {
@@ -1635,7 +1632,7 @@ namespace WB.Tests.Abc.TestFactories
         public SampleUploadView SampleUploadView(Guid? questionnaireId = null, int? version = null, List<FeaturedQuestionItem> featuredQuestionItems = null) 
             => new SampleUploadView(questionnaireId ?? Guid.NewGuid(), version ?? 1, featuredQuestionItems, null, null);
 
-        public AnswerNotifier AnswerNotifier(LiteEventRegistry liteEventRegistry)
+        public AnswerNotifier AnswerNotifier(ViewModelEventRegistry liteEventRegistry)
             => new AnswerNotifier(liteEventRegistry);
 
         public ChangedVariable ChangedVariable(Identity changedVariable, object newValue)
@@ -1778,20 +1775,27 @@ namespace WB.Tests.Abc.TestFactories
             List<string> protectedVariables = null,
             string email = null,
             string password = null,
-            bool? webMode = null)
+            bool? webMode = null,
+            bool isArchived = false,
+            Guid? publicKey = null,
+            bool isAudioRecordingEnabled = false,
+            List<InterviewAnswer> answers = null,
+            List<IdentifyingAnswer> identifyingAnswers = null
+            )
         {
             var result = new Assignment();
-            
-            var asDynamic = result.AsDynamic();
-            asDynamic.Quantity = quantity;
-            asDynamic.Id = id ?? 0;
+
+            result.Quantity = quantity;
+            result.Id = id ?? 0;
+            result.PublicKey = publicKey ?? Guid.NewGuid();
             result.QuestionnaireId = questionnaireIdentity;
+            result.Archived = isArchived;
 
             var readonlyUser = new ReadonlyUser() { RoleIds = { UserRoles.Interviewer.ToUserId() } };
             var readonlyProfile = new ReadonlyProfile();
             
             readonlyUser.AsDynamic().ReadonlyProfile = readonlyProfile;
-            asDynamic.Responsible = readonlyUser;
+            result.AsDynamic().Responsible = readonlyUser;
 
             if (assigneeSupervisorId.HasValue)
             {
@@ -1805,7 +1809,7 @@ namespace WB.Tests.Abc.TestFactories
 
             if (!string.IsNullOrWhiteSpace(questionnaireTitle))
             {
-                result.Questionnaire = new QuestionnaireLiteViewItem
+                result.AsDynamic().Questionnaire = new QuestionnaireLiteViewItem
                 {
                     Id = questionnaireIdentity?.Id,
                     Title = questionnaireTitle
@@ -1818,15 +1822,18 @@ namespace WB.Tests.Abc.TestFactories
             }
 
             if(interviewSummary != null)
-                asDynamic.InterviewSummaries = interviewSummary;
+                result.AsDynamic().InterviewSummaries = interviewSummary;
             if (responsibleId.HasValue)
             {
-                asDynamic.ResponsibleId = responsibleId.Value;
+                result.ResponsibleId = responsibleId.Value;
             }
-            asDynamic.ProtectedVariables = protectedVariables;
-            asDynamic.Email = email;
-            asDynamic.Password = password;
-            asDynamic.WebMode = webMode;
+            result.ProtectedVariables = protectedVariables;
+            result.Email = email;
+            result.Password = password;
+            result.WebMode = webMode;
+            result.AudioRecording = isAudioRecordingEnabled;
+            result.Answers = answers ?? new List<InterviewAnswer>();
+            result.IdentifyingData = identifyingAnswers ?? new List<IdentifyingAnswer>();
 
             return result;
         }
@@ -1932,11 +1939,6 @@ namespace WB.Tests.Abc.TestFactories
                 new RosterStructureService(),
                 Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>());
             return exportViewFactory.CreateQuestionnaireExportStructure(questionnaire, new QuestionnaireIdentity(Guid.NewGuid(), 1));
-        }
-
-        public ExportQuestionService ExportQuestionService()
-        {
-            return new ExportQuestionService();
         }
 
         public AudioQuestion AudioQuestion(Guid qId, string variable)
@@ -2147,11 +2149,12 @@ namespace WB.Tests.Abc.TestFactories
             Column = ServiceColumns.InterviewId
         };
 
-        public UserToVerify UserToVerify(bool isLocked = false, Guid? interviewerId = null, Guid? supervisorId = null) => new UserToVerify
+        public UserToVerify UserToVerify(bool isLocked = false, Guid? interviewerId = null, Guid? supervisorId = null, Guid? hqId = null) => new UserToVerify
         {
             IsLocked = isLocked,
             InterviewerId = interviewerId,
-            SupervisorId = supervisorId
+            SupervisorId = supervisorId,
+            HeadquartersId = hqId
         };
 
         public AssignmentTextAnswer AssignmentTextAnswer(string column, string value) => new AssignmentTextAnswer

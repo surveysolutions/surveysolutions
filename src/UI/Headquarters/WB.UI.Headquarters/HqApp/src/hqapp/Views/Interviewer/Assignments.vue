@@ -117,6 +117,13 @@ export default {
                         var date = moment.utc(data);
                         return date.local().format(DateFormats.dateTimeInList);
                     }
+                },
+                {
+                    data: "comments",
+                    name: "Comments",
+                    title: this.$t("Assignments.DetailsComments"),
+                    searchable: false,
+                    orderable: true
                 }]
 
             return columns

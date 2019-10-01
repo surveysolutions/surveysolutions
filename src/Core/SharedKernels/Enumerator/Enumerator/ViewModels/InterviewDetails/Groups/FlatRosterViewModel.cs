@@ -10,19 +10,20 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 {
     public class FlatRosterViewModel : MvxNotifyPropertyChanged,
-        ILiteEventHandler<RosterInstancesAdded>,
-        ILiteEventHandler<RosterInstancesRemoved>,
+        IViewModelEventHandler<RosterInstancesAdded>,
+        IViewModelEventHandler<RosterInstancesRemoved>,
         IInterviewEntityViewModel,
         IDisposable
     {
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IInterviewViewModelFactory viewModelFactory;
-        private readonly ILiteEventRegistry eventRegistry;
+        private readonly IViewModelEventRegistry eventRegistry;
         private readonly ICompositeCollectionInflationService compositeCollectionInflationService;
         private string interviewId;
         private NavigationState navigationState;
@@ -31,7 +32,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         public FlatRosterViewModel(IStatefulInterviewRepository interviewRepository,
             IInterviewViewModelFactory viewModelFactory,
-            ILiteEventRegistry eventRegistry,
+            IViewModelEventRegistry eventRegistry,
             ICompositeCollectionInflationService compositeCollectionInflationService)
         {
             this.interviewRepository = interviewRepository;

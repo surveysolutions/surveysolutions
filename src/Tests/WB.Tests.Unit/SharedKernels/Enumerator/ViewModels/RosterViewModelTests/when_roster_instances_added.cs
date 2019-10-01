@@ -18,6 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
             var rosterId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var chapterId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             var rosterSizeQuestion = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            var interviewId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE").ToString("N");
 
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(chapterId,
                 Create.Entity.MultyOptionsQuestion(rosterSizeQuestion,
@@ -37,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
             var navigationState = Create.Other.NavigationState(statefulInterviewRepository);
 
             await navigationState.NavigateTo(Create.Entity.NavigationIdentity(Identity.Create(chapterId, RosterVector.Empty)));
-            viewModel.Init(null, Create.Entity.Identity(rosterId), navigationState);
+            viewModel.Init(interviewId, Create.Entity.Identity(rosterId), navigationState);
 
             interview.AnswerMultipleOptionsQuestion(Guid.NewGuid(), rosterSizeQuestion, RosterVector.Empty,
                 DateTime.UtcNow, new[] { 1, 3 });
@@ -52,6 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
             var rosterId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var chapterId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             var rosterSizeQuestion = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            var interviewId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE").ToString("N");
 
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(chapterId,
                 Create.Entity.MultyOptionsQuestion(rosterSizeQuestion,
@@ -71,7 +73,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
             var navigationState = Create.Other.NavigationState(statefulInterviewRepository);
 
             await navigationState.NavigateTo(Create.Entity.NavigationIdentity(Identity.Create(chapterId, RosterVector.Empty)));
-            viewModel.Init(null, Create.Entity.Identity(rosterId), navigationState);
+            viewModel.Init(interviewId, Create.Entity.Identity(rosterId), navigationState);
 
             interview.AnswerMultipleOptionsQuestion(Guid.NewGuid(), rosterSizeQuestion, RosterVector.Empty,
                 DateTime.UtcNow, new[] { 1, 2, 3 });

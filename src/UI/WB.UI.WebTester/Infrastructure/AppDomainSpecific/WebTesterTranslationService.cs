@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Main.Core.Documents;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.Questionnaire;
 
@@ -30,10 +28,13 @@ namespace WB.UI.WebTester.Infrastructure
             this.storage.Store(translations);
         }
 
-        public PlainQuestionnaire Translate(QuestionnaireDocument questionnaire, long version, string language)
+        public PlainQuestionnaire Translate(PlainQuestionnaire questionnaire, long version, string language)
         {
-            QuestionnaireDocument result = storage.GetTranslated(questionnaire, version, language, out Translation translation);
-            return new PlainQuestionnaire(result, version, questionOptionsRepository, substitutionService, translation);
+            QuestionnaireDocument result = storage.GetTranslated(questionnaire.QuestionnaireDocument, version, language, out Translation translation);
+            var plainQuestionnaire = new PlainQuestionnaire(result, version, questionOptionsRepository, substitutionService, translation);
+            plainQuestionnaire.ExpressionStorageType = questionnaire.ExpressionStorageType;
+            plainQuestionnaire.WarmUpPriorityCaches();
+            return plainQuestionnaire;
         }
     }
 }

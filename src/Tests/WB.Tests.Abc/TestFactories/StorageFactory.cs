@@ -40,13 +40,14 @@ namespace WB.Tests.Abc.TestFactories
             Mock.Of<IHashCompatibilityProvider>(),
             Mock.Of<IPasswordHasher>(),
             Mock.Of<IIdentityValidator<string>>(),
-            Mock.Of<IAuditLog>()) { }
+            Mock.Of<ISystemLog>()) { }
     }
 
     public class StorageFactory
     {
         public IPlainStorageAccessor<TEntity> InMemoryPlainStorage<TEntity>() where TEntity : class => new InMemoryPlainStorageAccessor<TEntity>();
-        public TestInMemoryWriter<TEntity> InMemoryReadeSideStorage<TEntity>() where TEntity : class, IReadSideRepositoryEntity => new TestInMemoryWriter<TEntity>();
+        public TestInMemoryWriter<TEntity> InMemoryReadSideStorage<TEntity>() where TEntity : class, IReadSideRepositoryEntity => new TestInMemoryWriter<TEntity>();
+        public TestInMemoryWriter<TEntity, TKey> InMemoryReadSideStorage<TEntity, TKey>() where TEntity : class, IReadSideRepositoryEntity => new TestInMemoryWriter<TEntity, TKey>();
 
         public IUserViewFactory UserViewFactory(params HqUser[] users) => new UserViewFactory(
             this.UserRepository(users), NewMemoryCache());
@@ -60,12 +61,12 @@ namespace WB.Tests.Abc.TestFactories
             IHashCompatibilityProvider hashCompatibilityProvider = null,
             IPasswordHasher passwordHasher = null,
             IIdentityValidator<string> identityValidator = null,
-            IAuditLog logger = null)
+            ISystemLog logger = null)
             => new HqUserManager(userStore ?? Mock.Of<IUserStore<HqUser, Guid>>(),
                 hashCompatibilityProvider,
                 passwordHasher ?? Mock.Of<IPasswordHasher>(),
                 identityValidator ?? Mock.Of<IIdentityValidator<string>>(),
-                logger ?? Mock.Of<IAuditLog>());
+                logger ?? Mock.Of<ISystemLog>());
 
         public IAssignmentDocumentsStorage AssignmentDocumentsInmemoryStorage()
         {
@@ -76,8 +77,7 @@ namespace WB.Tests.Abc.TestFactories
         }
 
         public SQLiteConnectionWithLock InMemorySqLiteConnection =>
-            new SQLiteConnectionWithLock(new SQLiteConnectionString(":memory:", true, null),
-                openFlags: SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex);
+            new SQLiteConnectionWithLock(new SQLiteConnectionString(":memory:", SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex, true));
 
         public InMemoryCacheStorage<MultimediaFile, string> MediaStorage()
         {

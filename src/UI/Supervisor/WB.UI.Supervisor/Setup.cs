@@ -47,11 +47,11 @@ namespace WB.UI.Supervisor
 {
     public class Setup : EnumeratorSetup<SupervisorMvxApplication>
     {
-        protected override void InitializeViewLookup()
+        protected override IMvxViewsContainer InitializeViewLookup(IDictionary<Type, Type> viewModelViewLookup)
         {
-            base.InitializeViewLookup();
+            var lookup = base.InitializeViewLookup(viewModelViewLookup);
 
-            var viewModelViewLookup = new Dictionary<Type, Type>()
+            var our = new Dictionary<Type, Type>()
             {
                 {typeof(LoginViewModel), typeof(LoginActivity)},
                 {typeof(FinishInstallationViewModel), typeof(FinishInstallationActivity)},
@@ -68,8 +68,8 @@ namespace WB.UI.Supervisor
 #endif
             };
 
-            var container = Mvx.Resolve<IMvxViewsContainer>();
-            container.AddAll(viewModelViewLookup);
+            lookup.AddAll(our);
+            return lookup;
         }
 
         protected override void FillValueConverters(IMvxValueConverterRegistry registry)

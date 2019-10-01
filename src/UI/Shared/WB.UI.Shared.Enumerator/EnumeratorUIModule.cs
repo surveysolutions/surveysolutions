@@ -109,6 +109,7 @@ namespace WB.UI.Shared.Enumerator
             
             registry.Bind<INotificationPublisher, NotificationPublisher>();
             registry.Bind<IEnumeratorWorkerManager, EnumeratorWorkerManager>();
+            registry.Bind<ICurrentViewModelPresenter, CurrentViewModelPresenter>();
             
             SetupLoggingFacility(registry);
         }

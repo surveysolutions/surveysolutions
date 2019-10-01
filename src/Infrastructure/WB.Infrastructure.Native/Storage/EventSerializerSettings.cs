@@ -15,7 +15,8 @@ namespace WB.Infrastructure.Native.Storage
             TypeNameHandling = TypeNameHandling.Auto,
             ContractResolver = new CamelCasePropertyNamesContractResolver(),
             Converters = new JsonConverter[] { new StringEnumConverter(), new IdentityJsonConverter(), new RosterVectorConverter() },
-            SerializationBinder = new OldToNewAssemblyRedirectSerializationBinder()
+            SerializationBinder = new OldToNewAssemblyRedirectSerializationBinder(),
+            MetadataPropertyHandling = MetadataPropertyHandling.ReadAhead // TextListAnswerRow for some reason has $type at the end of json. This property needed to deserialize it
         };
 
         public static readonly JsonSerializerSettings SyncronizationJsonSerializerSettings = new JsonSerializerSettings

@@ -5,6 +5,12 @@ import { batchedAction } from "../helpers"
 
 import modal from "../components/modal"
 
+function getAnswer(state, questionId){
+    const question = state.entityDetails[questionId]
+    if(question == null) return null;
+    return question.answer;
+}
+
 export default {
     async loadInterview({ commit }) {
         const info = await Vue.$api.call(api => api.getInterviewDetails())
@@ -28,10 +34,16 @@ export default {
         })
     }, "fetch", /* limit */ 100),
 
-    answerSingleOptionQuestion({ dispatch }, { answer, questionId }) {
+    answerSingleOptionQuestion({ state }, { answer, questionId }) {
+        const storedAnswer = getAnswer(state, questionId)
+        if(storedAnswer != null && storedAnswer.value == answer) return; // skip same answer on same question
+        
         Vue.$api.callAndFetch(questionId, api => api.answerSingleOptionQuestion(answer, questionId))
     },
-    answerTextQuestion({ dispatch }, { identity, text }) {
+    answerTextQuestion({ state, commit }, { identity, text }) {
+        if(getAnswer(state, identity) == text) return; // skip same answer on same question
+
+        commit("SET_ANSWER", {identity, answer: text}) // to prevent answer blinking in TableRoster
         Vue.$api.callAndFetch(identity, api => api.answerTextQuestion(identity, text))
     },
     answerMultiOptionQuestion({ dispatch }, { answer, questionId }) {
@@ -40,16 +52,19 @@ export default {
     answerYesNoQuestion({ dispatch }, { questionId, answer }) {
         Vue.$api.callAndFetch(questionId, api => api.answerYesNoQuestion(questionId, answer))
     },
-    answerIntegerQuestion({ dispatch }, { identity, answer }) {
+    answerIntegerQuestion({ commit }, { identity, answer }) {
+        commit("SET_ANSWER", {identity, answer: answer}) // to prevent answer blinking in TableRoster
         Vue.$api.callAndFetch(identity, api => api.answerIntegerQuestion(identity, answer))
     },
-    answerDoubleQuestion({ dispatch }, { identity, answer }) {
+    answerDoubleQuestion({ commit }, { identity, answer }) {
+        commit("SET_ANSWER", {identity, answer: answer}) // to prevent answer blinking in TableRoster
         Vue.$api.callAndFetch(identity, api => api.answerDoubleQuestion(identity, answer))
     },
     answerGpsQuestion({ dispatch }, { identity, answer }) {
         Vue.$api.callAndFetch(identity, api => api.answerGpsQuestion(identity, answer))
     },
-    answerDateQuestion({ dispatch }, { identity, date }) {
+    answerDateQuestion({ state }, { identity, date }) {
+        if(getAnswer(state, identity) == date) return; // skip answer on same question
         Vue.$api.callAndFetch(identity, api => api.answerDateQuestion(identity, date))
     },
     answerTextListQuestion({ dispatch }, { identity, rows }) {
@@ -149,12 +164,21 @@ export default {
         dispatch("fetchSearchResults")
     }, 200),
 
-    refreshSectionState: debounce(({ dispatch }) => {
-        dispatch("fetchSectionEnabledStatus")
-        dispatch("fetchBreadcrumbs")
-        dispatch("fetchEntity", { id: "NavigationButton", source: "server" })
-        dispatch("fetchSidebar")
-        dispatch("fetchInterviewStatus")
+    refreshSectionState({ commit, dispatch }) {
+        commit("SET_LOADING_PROGRESS", true);
+        dispatch("_refreshSectionState");
+    },
+
+    _refreshSectionState: debounce(({ dispatch, commit }) => {
+        try {
+            dispatch("fetchSectionEnabledStatus");
+            dispatch("fetchBreadcrumbs");
+            dispatch("fetchEntity", { id: "NavigationButton", source: "server" });
+            dispatch("fetchSidebar");
+            dispatch("fetchInterviewStatus");
+        } finally {
+            commit("SET_LOADING_PROGRESS", false);
+        }
     }, 200),
 
     fetchSectionEntities: debounce(async ({ dispatch, commit, rootState }) => {

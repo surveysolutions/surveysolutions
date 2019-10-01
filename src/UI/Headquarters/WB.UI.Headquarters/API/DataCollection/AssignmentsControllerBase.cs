@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 
 namespace WB.UI.Headquarters.API.DataCollection
@@ -15,12 +17,15 @@ namespace WB.UI.Headquarters.API.DataCollection
     {
         protected readonly IAuthorizedUser authorizedUser;
         private readonly IAssignmentsService assignmentsService;
+        private readonly ICommandService commandService;
 
         protected AssignmentsControllerBase(IAuthorizedUser authorizedUser,
-            IAssignmentsService assignmentsService)
+            IAssignmentsService assignmentsService,
+            ICommandService commandService)
         {
             this.authorizedUser = authorizedUser;
             this.assignmentsService = assignmentsService;
+            this.commandService = commandService;
         }
 
         public virtual Task<AssignmentApiDocument> GetAssignmentAsync(int id, CancellationToken cancellationToken)
@@ -56,7 +61,7 @@ namespace WB.UI.Headquarters.API.DataCollection
                     QuestionnaireId = assignment.QuestionnaireId,
                     ResponsibleId = assignment.ResponsibleId,
                     ResponsibleName = assignment.Responsible.Name,
-                    IsAudioRecordingEnabled = assignment.IsAudioRecordingEnabled
+                    IsAudioRecordingEnabled = assignment.AudioRecording
                 });
             }
 
@@ -78,7 +83,8 @@ namespace WB.UI.Headquarters.API.DataCollection
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Assignment was reassigned");
             }
 
-            assignment.MarkAsReceivedByTablet();
+            commandService.Execute(new MarkAssignmentAsReceivedByTablet(assignment.PublicKey, authorizedUserId));
+
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 

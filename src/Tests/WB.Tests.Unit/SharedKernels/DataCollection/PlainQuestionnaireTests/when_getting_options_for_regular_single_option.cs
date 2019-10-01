@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
             questionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             
             var questionnaire = Create.Entity.QuestionnaireDocument(
-                children: new List<IComposite>
+                children: new IComposite[]
                 {
                     Create.Entity.SingleQuestion(id:questionId,isFilteredCombobox:false, options:answers)
                 });
@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
             BecauseOf();
         }  
 
-        public void BecauseOf() => categoricalOptions = plainQuestionnaire.GetOptionsForQuestion(questionId, null, String.Empty);
+        public void BecauseOf() => categoricalOptions = plainQuestionnaire.GetOptionsForQuestion(questionId, null, String.Empty, null);
 
         [NUnit.Framework.Test] public void should_find_roster_title_substitutions () =>
             categoricalOptions.Count().Should().Be(2);

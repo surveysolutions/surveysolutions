@@ -9,6 +9,8 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
     {
         public int Id { get; set; }
 
+        public Guid PublicId { get; set; }
+
         public QuestionnaireIdentity QuestionnaireId { get; set; }
 
         public int? Quantity { get; set; }
@@ -26,6 +28,7 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
 
         public DateTime CreatedAtUtc { get; set; }
         public List<string> ProtectedVariables { get; set; }
+        public string Comments { get; set; }
 
         public class InterviewSerializedAnswer
         {

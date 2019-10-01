@@ -27,7 +27,7 @@
         },
         methods: {
             getValue() {
-                return this.question;
+                return this.question
             },
             isCancelBeforeStart() {
                 if (this.$me.isDisabled || this.$me.isLocked || !this.$me.acceptAnswer)
@@ -51,7 +51,7 @@
             }
         },
         created() {
-            this.question = this.params.value;
+            this.question = this.params.value
         }
     }
 </script>

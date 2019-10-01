@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class MultimediaQuestionViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
-        ILiteEventHandler<AnswersRemoved>,
+        IViewModelEventHandler<AnswersRemoved>,
         ICompositeQuestion,
         IDisposable
     {
@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IPictureChooser pictureChooser;
         private readonly IUserInteractionService userInteractionService;
         private readonly IInterviewFileStorage imageFileStorage;
-        private readonly ILiteEventRegistry eventRegistry;
+        private readonly IViewModelEventRegistry eventRegistry;
         private readonly IViewModelNavigationService viewModelNavigationService;
         private Guid interviewId;
         private Identity questionIdentity;
@@ -44,7 +44,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IPrincipal principal,
             IStatefulInterviewRepository interviewRepository,
             IImageFileStorage imageFileStorage,
-            ILiteEventRegistry eventRegistry,
+            IViewModelEventRegistry eventRegistry,
             IQuestionnaireStorage questionnaireStorage,
             IPictureChooser pictureChooser,
             IUserInteractionService userInteractionService,

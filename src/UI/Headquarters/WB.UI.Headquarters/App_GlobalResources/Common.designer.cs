@@ -421,6 +421,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open assignment.
+        /// </summary>
+        internal static string OpenAssignment {
+            get {
+                return ResourceManager.GetString("OpenAssignment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open responsible&apos;s profile.
         /// </summary>
         internal static string OpenResponsiblesProfile {

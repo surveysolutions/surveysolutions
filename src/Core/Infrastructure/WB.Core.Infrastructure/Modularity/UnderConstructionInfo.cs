@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace WB.Core.Infrastructure.Modularity
 {
@@ -14,14 +15,16 @@ namespace WB.Core.Infrastructure.Modularity
             Status = UnderConstructionStatus.Finished;
         }
 
-        public void Error(string message)
+        public void Error(string message, Exception exception)
         {
             Status = UnderConstructionStatus.Error;
             Message = message;
+            Exception = exception;
         }
 
         public UnderConstructionStatus Status { get; private set; } = UnderConstructionStatus.NotStarted;
         public string Message { get; set; }
+        private Exception Exception { get; set; }
 
         public void ClearMessage()
         {

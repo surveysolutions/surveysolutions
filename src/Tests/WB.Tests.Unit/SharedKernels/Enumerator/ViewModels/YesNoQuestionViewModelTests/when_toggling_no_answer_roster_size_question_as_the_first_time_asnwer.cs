@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Tests.Abc;
@@ -89,6 +90,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
         private static Identity questionId;
         private static Mock<AnsweringViewModel> answeringViewModelMock;
         private static StatefulInterview interview;
-        private static ILiteEventRegistry eventRegistry;
+        private static IViewModelEventRegistry eventRegistry;
     }
 }

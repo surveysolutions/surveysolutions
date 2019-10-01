@@ -5,5 +5,9 @@ namespace WB.Core.SharedKernels.DataCollection
         public int Value { get; set; }
         public int? ParentValue { get; set; }
         public string Title { get; set; }
+
+        public override bool Equals(object obj) => obj is CategoricalOption option && Value == option.Value;
+
+        public override int GetHashCode() => -1937169414 + Value.GetHashCode();
     }
 }

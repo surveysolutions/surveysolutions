@@ -63,12 +63,12 @@ namespace WB.UI.Designer.DependencyInjection
             }
             catch (InitializationException ie)  when(ie.Subsystem == Subsystem.Database)
             {
-                status.Error(Core.Infrastructure.Resources.Modules.ErrorDuringRunningMigrations);
+                status.Error(Core.Infrastructure.Resources.Modules.ErrorDuringRunningMigrations, ie);
                 serviceProvider.GetService<ILogger<AspCoreKernel>>().LogError(ie, "Exception during running migrations");
             }
             catch(Exception e)
             {
-                status.Error(Core.Infrastructure.Resources.Modules.ErrorDuringSiteInitialization);
+                status.Error(Core.Infrastructure.Resources.Modules.ErrorDuringSiteInitialization, e);
                 serviceProvider.GetService<ILogger<AspCoreKernel>>().LogError(e, "Exception during site initialization");
             }
         }

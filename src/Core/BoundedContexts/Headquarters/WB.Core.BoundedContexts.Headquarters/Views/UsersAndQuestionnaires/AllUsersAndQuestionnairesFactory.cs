@@ -31,12 +31,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesReader;
-        private readonly IPlainStorageAccessor<Assignment> assignments;
+        private readonly IQueryableReadSideRepositoryReader<Assignment, Guid> assignments;
 
         public AllUsersAndQuestionnairesFactory(
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesReader,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader,
-            IPlainStorageAccessor<Assignment> assignments)
+            IQueryableReadSideRepositoryReader<Assignment, Guid> assignments)
         {
             this.questionnairesReader = questionnairesReader;
             this.interviewSummaryReader = interviewSummaryReader;

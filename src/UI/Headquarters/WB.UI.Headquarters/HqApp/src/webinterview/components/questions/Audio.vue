@@ -9,7 +9,7 @@
                     ><span></span>{{ $t('WebInterviewUI.AudioClickRecord')}}</button>
                 <div class="field answered" v-if="$me.isAnswered">
                     <ul class="block-with-data list-unstyled">
-                        <li>{{ $t("WebInterviewUI.AudioRecordingDuration", { humanizedLength: humanizedLength, formattedLength }) }}</li>
+                        <li :id="answerHolderId">{{ $t("WebInterviewUI.AudioRecordingDuration", { humanizedLength: humanizedLength, formattedLength }) }}</li>
                     </ul>
                     <wb-remove-answer />
                 </div>
@@ -18,18 +18,13 @@
                         style="width:300px" 
                         :src="audioRecordPath">
                     </audio>
-                    <button v-if="!isRecording" 
-                        v-on:click="startRecording" 
-                        :disabled="!$me.acceptAnswer" 
-                        type="button"
-                        class="btn btn-default btn-lg btn-action-questionnaire"><span></span>{{ $t("WebInterviewUI.AudioRecordNew") }}</button>
                 </div>
                 <wb-lock />
             </div>
         </div>
         <div class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
-                <div class="modal-content">
+                <div class="modal-content" :id="modalId">
                     <div class="modal-header">
                         <button type="button" v-on:click="cancelRecording" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true"></span>
@@ -82,6 +77,12 @@ export default {
         }
     },
     computed: {
+            answerHolderId(){
+                return `audio_answer_${this.$me.id}`
+            },
+            modalId(){
+                return `audio_dialog_${this.$me.id}`
+            },
             audioRecordPath() {
                 return api.resources.audioRecordUri(this.interviewId, this.$me.filename) + "#" + this.$me.updatedAt.getTime()
             },

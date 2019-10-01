@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
-using WB.Core.BoundedContexts.Headquarters.Assignments;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
 
@@ -198,5 +196,6 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         [DataMember] public bool? WebMode { get; set; }
 
         [DataMember] public bool? IsAudioRecordingEnabled { get; set; }
+        [DataMember] public string Comments { get; set; }
     }
 }

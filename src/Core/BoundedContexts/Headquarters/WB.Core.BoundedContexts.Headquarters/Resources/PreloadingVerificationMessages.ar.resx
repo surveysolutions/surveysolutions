@@ -162,9 +162,6 @@
   <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
     <value>المسؤول هو مستخدم مقفل لواحد أو أكثر من الملاحظات</value>
   </data>
-  <data name="PL0028_UserIsNotSupervisorOrInterviewer" xml:space="preserve">
-    <value>المستخدم ليس المشرف أو الباحث ل 1 أو أكثر من الملاحظات</value>
-  </data>
   <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
     <value>لا يمكن أن تكون الإجابة على سؤال حجم القائمة أكبر من {0}.</value>
   </data>

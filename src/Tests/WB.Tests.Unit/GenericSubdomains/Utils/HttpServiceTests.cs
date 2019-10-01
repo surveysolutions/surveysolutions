@@ -62,7 +62,7 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils
         
 
         [Test]
-        public async Task when_if_add_ifnonematch_header_should_not_trhow()
+        public async Task when_if_add_if_none_match_header_should_not_throw()
         {
             var testUserAgent = "SurveySolutions/11";
             var settings = Mock.Of<IRestServiceSettings>(x => x.Endpoint == "http://localhost/hq" 

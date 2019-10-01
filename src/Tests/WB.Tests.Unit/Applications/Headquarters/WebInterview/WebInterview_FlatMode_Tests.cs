@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
                 Create.Entity.CategoricalQuestionOption(8, title: "8", parentValue: 2),
                 Create.Entity.CategoricalQuestionOption(9, title: "9", parentValue: 2)
             };
-            var optionsRepository = Mock.Of<IQuestionOptionsRepository>(x => x.GetOptionsForQuestion(It.IsAny<IQuestionnaire>(), Id.g3, 2, null, null) == options);
+            var optionsRepository = Mock.Of<IQuestionOptionsRepository>(x => x.GetOptionsForQuestion(It.IsAny<IQuestionnaire>(), Id.g3, 2, null, null, null) == options);
 
             var interview = Create.AggregateRoot.StatefulInterview(userId: Id.gA, questionnaire: questionnaire, optionsRepository: optionsRepository);
             interview.AnswerSingleOptionQuestion(Id.gA, Id.g2, RosterVector.Empty, DateTime.UtcNow, 2);
@@ -65,7 +65,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
                 Create.Entity.CategoricalQuestionOption(3, title: "3", parentValue: 2),
                 Create.Entity.CategoricalQuestionOption(4, title: "4", parentValue: 2)
             };
-            var optionsRepository = Mock.Of<IQuestionOptionsRepository>(x => x.GetOptionsForQuestion(It.IsAny<IQuestionnaire>(), Id.g3, 2, null, null) == options);
+            var optionsRepository = Mock.Of<IQuestionOptionsRepository>(x => x.GetOptionsForQuestion(It.IsAny<IQuestionnaire>(), Id.g3, 2, null, null, null) == options);
 
             var interview = Create.AggregateRoot.StatefulInterview(userId: Id.gA, questionnaire: questionnaire, optionsRepository: optionsRepository);
             interview.AnswerSingleOptionQuestion(Id.gA, Id.g2, RosterVector.Empty, DateTime.UtcNow, 2);

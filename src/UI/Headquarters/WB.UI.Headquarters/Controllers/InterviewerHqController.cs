@@ -13,6 +13,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -35,7 +36,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IAuthorizedUser authorizedUser;
         private readonly IUserViewFactory usersRepository;
         private readonly IPlainStorageAccessor<InterviewSummary> interviewSummaryReader;
-        private readonly IPlainStorageAccessor<Assignment> assignments;
+        private readonly IAssignmentsService assignments;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IInterviewUniqueKeyGenerator keyGenerator;
 
@@ -45,7 +46,7 @@ namespace WB.UI.Headquarters.Controllers
             IAuthorizedUser authorizedUser,
             IUserViewFactory usersRepository,
             IPlainStorageAccessor<InterviewSummary> interviewSummaryReader,
-            IPlainStorageAccessor<Assignment> assignments,
+            IAssignmentsService assignments,
             IInterviewUniqueKeyGenerator keyGenerator,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory) : base(commandService, logger)
         {
@@ -113,7 +114,7 @@ namespace WB.UI.Headquarters.Controllers
                 interviewer.PublicKey,
                 this.keyGenerator.Get(),
                 assignment.Id,
-                assignment.IsAudioRecordingEnabled);
+                assignment.AudioRecording);
 
             this.commandService.Execute(createInterviewCommand);
             return interviewId.FormatGuid();
@@ -122,7 +123,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         public ActionResult StartNewInterview(int id)
         {
-            var assignment = this.assignments.GetById(id);
+            var assignment = this.assignments.GetAssignment(id);
 
             var interviewId = CreateInterview(assignment);
             TempData[WebInterviewController.LastCreatedInterviewIdKey] = interviewId;
