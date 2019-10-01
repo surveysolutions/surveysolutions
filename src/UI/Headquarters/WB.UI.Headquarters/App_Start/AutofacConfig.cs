@@ -199,7 +199,17 @@ namespace WB.UI.Headquarters
             var trackingSettings = GetTrackingSettings(settingsProvider);
 
             var owinSecurityModule = new OwinSecurityModule();
-            
+
+            var isS3Enabled = settingsProvider.AppSettings["Storage.S3.Enable"].ToBool(true);
+            string bucketName = null, region=null, prefix = null, endpoint = null;
+
+            if (isS3Enabled)
+            {
+                region = settingsProvider.AppSettings["Storage.S3.Region"];
+                bucketName = settingsProvider.AppSettings["Storage.S3.BucketName"];
+                prefix = settingsProvider.AppSettings["Storage.S3.Prefix"];
+                endpoint = settingsProvider.AppSettings["Storage.S3.Endpoint"];
+            }
             autofacKernel.Load(new NLogLoggingModule(),
                 
                 new OrmModule(connectionSettings),
@@ -215,8 +225,10 @@ namespace WB.UI.Headquarters
 
                 eventStoreModule,
                 new DataCollectionSharedKernelModule(),
-                new FileStorageModule(basePath),
-                new QuartzModule(typeof(M201905151013_AddQuartzTables).Assembly, typeof(M201905151013_AddQuartzTables).Namespace),
+                new FileStorageModule(basePath, isS3Enabled, bucketName, region, prefix, endpoint),
+                new QuartzModule(typeof(M201905151013_AddQuartzTables).Assembly, typeof(M201905151013_AddQuartzTables).Namespace, 
+                    settingsProvider.AppSettings["Scheduler.InstanceId"], 
+                    settingsProvider.AppSettings["Scheduler.IsClustered"].ToBool(false)),
                 new WebInterviewModule(),
                 new HqWebInterviewModule(),
                 owinSecurityModule,

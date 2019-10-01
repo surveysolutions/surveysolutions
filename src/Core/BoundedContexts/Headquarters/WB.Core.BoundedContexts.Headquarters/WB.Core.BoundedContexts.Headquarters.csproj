@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AWSSDK.S3" Version="3.3.104.31" />
-    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.101.50" />
+    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.101.52" />
     <PackageReference Include="CsvHelper" Version="12.1.2" />
     <PackageReference Include="Dapper" Version="2.0.4" />
     <PackageReference Include="Dropbox.Api" Version="4.9.4" />
