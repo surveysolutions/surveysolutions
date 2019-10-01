@@ -16,11 +16,18 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
     {
         private readonly Assembly migrationsAssembly;
         private readonly string nameSpace;
+        private readonly string instanceId;
+        private readonly bool isClustered;
 
-        public QuartzModule(Assembly migrationsAssembly, string nameSpace)
+        public QuartzModule(Assembly migrationsAssembly, 
+            string nameSpace,
+            string instanceId,
+            bool isClustered)
         {
             this.migrationsAssembly = migrationsAssembly;
             this.nameSpace = nameSpace;
+            this.instanceId = instanceId;
+            this.isClustered = isClustered;
         }
 
         public void Load(IIocRegistry registry)
@@ -39,7 +46,11 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
                 UseParameterNamePrefixInParameterCollection = true
             });
 
-            registry.Bind<IQuartzSettings, QuartzSettings>();
+            registry.BindToMethod<IQuartzSettings>(c =>
+            {
+                var con = c.Get<UnitOfWorkConnectionSettings>();
+                return new QuartzSettings(con, instanceId, isClustered);
+            });
             registry.BindAsSingleton<ISchedulerFactory, AutofacSchedulerFactory>();
             registry.BindToMethodInSingletonScope<IScheduler>(ctx => ctx.Get<ISchedulerFactory>().GetScheduler().Result);
         }
