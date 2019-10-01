@@ -11,12 +11,13 @@ using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.Enumerator.Native.WebInterview.Services;
+using WB.Tests.Abc;
 using WB.UI.Headquarters.API.WebInterview.Services;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Services;
 
-namespace WB.Tests.Abc.TestFactories
+namespace WB.Tests.Web.TestFactories
 {
     public class ServiceFactory
     {

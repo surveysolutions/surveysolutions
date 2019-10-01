@@ -26,14 +26,14 @@ using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Tests.Abc.Storage;
+using WB.Tests.Abc;
 using WB.UI.Headquarters.API.DataCollection.Interviewer;
 using WB.UI.Headquarters.Code.CommandTransformation;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Services;
 using AssignmentsController = WB.UI.Headquarters.API.PublicApi.AssignmentsController;
 
-namespace WB.Tests.Abc.TestFactories
+namespace WB.Tests.Web.TestFactories
 {
     internal class ControllerFactory
     {

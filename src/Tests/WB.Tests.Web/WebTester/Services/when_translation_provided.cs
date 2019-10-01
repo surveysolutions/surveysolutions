@@ -7,6 +7,7 @@ using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Tests.Abc;
+using WB.Tests.Web;
 using WB.UI.WebTester.Services.Implementation;
 
 namespace WB.Tests.Integration.WebTester.Services

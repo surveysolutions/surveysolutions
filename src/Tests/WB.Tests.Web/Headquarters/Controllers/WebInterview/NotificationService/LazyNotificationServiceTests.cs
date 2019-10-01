@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.Tests.Abc;
+using WB.Tests.Web;
 using WB.UI.WebTester.Infrastructure;
 
 namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.NotificationService

@@ -1,7 +1,7 @@
 ﻿using WB.UI.WebTester.Services;
 using WB.UI.WebTester.Services.Implementation;
 
-namespace WB.Tests.Abc.TestFactories
+namespace WB.Tests.Web.TestFactories
 {
     public class StorageFactory
     {

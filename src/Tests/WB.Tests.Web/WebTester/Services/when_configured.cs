@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Tests.Abc;
+using WB.Tests.Web;
 using WB.UI.WebTester.Services.Implementation;
 
 namespace WB.Tests.Integration.WebTester.Services

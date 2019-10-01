@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Tests.Abc;
+using WB.Tests.Web;
 using WB.UI.Headquarters.API.DataCollection.Supervisor.v1;
 
 namespace WB.Tests.Unit.Applications.Headquarters.Api.DataCollection.Supervisor
