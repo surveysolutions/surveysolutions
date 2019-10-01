@@ -10,7 +10,6 @@ namespace WB.Tests.Abc
         public static readonly EntityFactory Entity = new EntityFactory();
 
         public static readonly ServiceFactory Service = new ServiceFactory();
-        public static readonly ControllerFactory Controller = new ControllerFactory();
         public static readonly ViewModelFactory ViewModel = new ViewModelFactory();
 
         public static readonly CommandFactory Command = new CommandFactory();

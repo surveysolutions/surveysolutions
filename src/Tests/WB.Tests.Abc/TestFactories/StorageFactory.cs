@@ -29,8 +29,6 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.SurveySolutions;
 using WB.Enumerator.Native.Questionnaire.Impl;
 using WB.Tests.Abc.Storage;
-using WB.UI.WebTester.Services;
-using WB.UI.WebTester.Services.Implementation;
 
 namespace WB.Tests.Abc.TestFactories
 {
@@ -78,11 +76,6 @@ namespace WB.Tests.Abc.TestFactories
 
         public SQLiteConnectionWithLock InMemorySqLiteConnection =>
             new SQLiteConnectionWithLock(new SQLiteConnectionString(":memory:", SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex, true));
-
-        public InMemoryCacheStorage<MultimediaFile, string> MediaStorage()
-        {
-            return new InMemoryCacheStorage<MultimediaFile, string>();
-        }
 
         public S3FileStorage S3FileStorage(AmazonS3Settings s3Settings, IAmazonS3 client, ITransferUtility transferUtility, ILoggerProvider loggerProvider)
         {
