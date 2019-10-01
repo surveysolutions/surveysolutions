@@ -23,6 +23,9 @@
     <None Remove="Services\WebInterview\**" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Remove="Resources\WebInterviewResources.ru.resx" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="Views\Reposts\Factories\DevicesInterviewersForSupervisor.sql" />
   </ItemGroup>
   <ItemGroup>
@@ -34,12 +37,14 @@
     <EmbeddedResource Include="Views\Reposts\Factories\DeviceInterviewersReport.sql" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\WebInterviewResources.ru.resx" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj" />
     <ProjectReference Include="..\..\..\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj" />
     <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj" />
     <ProjectReference Include="..\..\..\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj" />
     <ProjectReference Include="..\..\..\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj" />
-    <ProjectReference Include="..\..\..\SharedKernels\Enumerator\WB.Enumerator.Native\WB.Enumerator.Native.csproj" />
     <ProjectReference Include="..\..\..\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
   </ItemGroup>
   <ItemGroup>
@@ -332,6 +337,10 @@
     <EmbeddedResource Update="Resources\UserPreloadingServiceMessages.zh.resx">
       <DependentUpon>UserPreloadingServiceMessages.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\WebInterviewResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WebInterviewResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Resources\CommandValidatorsMessages.Designer.cs">
@@ -393,6 +402,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>UserPreloadingServiceMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\WebInterviewResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>WebInterviewResources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
 </Project>
