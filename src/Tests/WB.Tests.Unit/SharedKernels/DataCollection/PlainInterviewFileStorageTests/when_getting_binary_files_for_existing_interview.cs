@@ -30,8 +30,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainInterviewFileStorageTe
         [NUnit.Framework.Test] public void should_name_of_returned_file_be_equal_to_file1 () =>
            result[0].FileName.Should().Be(file1);
 
-        [NUnit.Framework.Test] public void should_data_of_returned_file_be_equal_to_data1 () =>
-            result[0].GetData().Should().BeEquivalentTo(data1);
+        [NUnit.Framework.Test] public async Task should_data_of_returned_file_be_equal_to_data1 ()
+        {
+            var data = await result[0].GetData();
+            data.Should().BeEquivalentTo(data1);
+        }
 
         private static ImageFileStorage imageFileRepository;
 
