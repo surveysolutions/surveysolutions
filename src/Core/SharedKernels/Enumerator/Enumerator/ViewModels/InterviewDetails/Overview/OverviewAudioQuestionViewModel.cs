@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
                 fileName = audioQuestion.GetAnswer().FileName;
 
                 this.Audio = audioFileStorage.GetInterviewBinaryData(interviewId,
-                    fileName);
+                    fileName).Result;
                 this.audioService.WeakSubscribe<IAudioService, PlaybackCompletedEventArgs>(nameof(audioService.OnPlaybackCompleted), PlaybackCompleted);
             }
         }

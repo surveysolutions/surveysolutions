@@ -18,6 +18,11 @@
     <WarningLevel>3</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Services\WebInterview\**" />
+    <EmbeddedResource Remove="Services\WebInterview\**" />
+    <None Remove="Services\WebInterview\**" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="Views\Reposts\Factories\DevicesInterviewersForSupervisor.sql" />
   </ItemGroup>
   <ItemGroup>
@@ -63,6 +68,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="NHibernate" Version="5.2.6" />
     <PackageReference Include="Owin" Version="1.0" />
+    <PackageReference Include="PasswordGenerator" Version="2.0.1" />
     <PackageReference Include="Quartz" Version="3.0.7" />
     <PackageReference Include="refit" Version="4.7.51" />
     <PackageReference Include="Sendgrid" Version="9.12.0" />
@@ -326,9 +332,6 @@
     <EmbeddedResource Update="Resources\UserPreloadingServiceMessages.zh.resx">
       <DependentUpon>UserPreloadingServiceMessages.resx</DependentUpon>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Services\WebInterview\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Resources\CommandValidatorsMessages.Designer.cs">
