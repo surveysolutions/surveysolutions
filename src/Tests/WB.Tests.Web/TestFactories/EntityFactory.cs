@@ -4,7 +4,6 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -69,9 +68,9 @@ namespace WB.Tests.Web.TestFactories
                 QuestionnaireVersion = qVersion,
                 Status = status.GetValueOrDefault(),
                 ResponsibleId = responsibleId.GetValueOrDefault(),
-                ResponsibleName = string.IsNullOrWhiteSpace(responsibleName) ? responsibleId.FormatGuid() : responsibleName,
+                ResponsibleName = string.IsNullOrWhiteSpace(responsibleName) ? responsibleId?.ToString("N") : responsibleName,
                 TeamLeadId = teamLeadId.GetValueOrDefault(),
-                TeamLeadName = string.IsNullOrWhiteSpace(teamLeadName) ? teamLeadId.FormatGuid() : teamLeadName,
+                TeamLeadName = string.IsNullOrWhiteSpace(teamLeadName) ? teamLeadId?.ToString("N") : teamLeadName,
                 ResponsibleRole = role,
                 Key = key,
                 UpdateDate = updateDate ?? new DateTime(2017, 3, 23),
@@ -82,7 +81,7 @@ namespace WB.Tests.Web.TestFactories
                 WasCompleted = wasCompleted,
                 InterviewDuration = interviewingTotalTime,
                 InterviewCommentedStatuses = statuses?.ToList() ?? new List<InterviewCommentedStatus>(),
-                TimeSpansBetweenStatuses = timeSpans != null ? timeSpans.ToHashSet() : new HashSet<TimeSpanBetweenStatuses>()
+                TimeSpansBetweenStatuses = timeSpans != null ?  timeSpans.ToHashSet() : new HashSet<TimeSpanBetweenStatuses>()
             };
         }
 

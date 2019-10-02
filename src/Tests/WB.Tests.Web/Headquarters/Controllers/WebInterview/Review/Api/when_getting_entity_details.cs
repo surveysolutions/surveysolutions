@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.Tests.Abc;
-using WB.Tests.Web;
+
 using WB.UI.Headquarters.API.WebInterview.Services;
 
 namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
         public void Setup()
         {
             user = new Mock<IAuthorizedUser>();
-            service = Create.Service.HqWebInterviewInterviewEntityFactory(user.Object);
+            service = Web.Create.Service.HqWebInterviewInterviewEntityFactory(user.Object);
             document = GetDocument();
             interview = Create.AggregateRoot.StatefulInterview(questionnaire: document, supervisorId: supervisorId, userId: interviewerId);
             interview.CommentAnswer(interviewerId, commentedQuestionId, RosterVector.Empty, DateTimeOffset.UtcNow, "test");

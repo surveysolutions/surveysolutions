@@ -4,7 +4,6 @@ using Moq;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.Tests.Abc;
 using WB.UI.Headquarters.Controllers;
 
 
@@ -14,7 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PeriodicStatusReportTests
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             var authorizedUser = Mock.Of<IAuthorizedUser>(x => x.IsHeadquarter == true);
-            reportController = Create.Controller.ReportsController(authorizedUser: authorizedUser);
+            reportController = Tests.Web.Create.Controller.ReportsController(authorizedUser: authorizedUser);
             BecauseOf();
         }
 
