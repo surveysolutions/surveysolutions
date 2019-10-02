@@ -2,18 +2,16 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Tests.Abc;
-using WB.UI.WebTester.Infrastructure.AppDomainSpecific;
 
 namespace WB.Tests.Unit.Infrastructure
 {
     public class CommandSerializer
     {
         [Test]
-        public void test_name()
+        public void create_interview_command_should_set_interview_id()
         {
             var command = new CreateInterview(
                 interviewId: Id.g1,
