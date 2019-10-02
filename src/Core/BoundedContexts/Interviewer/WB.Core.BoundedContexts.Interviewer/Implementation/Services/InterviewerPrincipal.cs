@@ -46,6 +46,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             var user = this.usersStorage.GetById(interviewer.Id);
             
+            if(user == null)
+                interviewer.Created = DateTime.Now;
+
             interviewer.LastUpdated = DateTime.Now;
             this.usersStorage.Store(interviewer);
             

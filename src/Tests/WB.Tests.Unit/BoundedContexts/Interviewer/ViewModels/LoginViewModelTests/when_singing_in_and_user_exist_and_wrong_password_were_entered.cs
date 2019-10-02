@@ -23,7 +23,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
             var principal = new Mock<IInterviewerPrincipal>();
             principal.Setup(x => x.SignIn(userName, userPasswordHash, true)).Returns(true);
             principal.Setup(x => x.SignIn(userName, wrongPassword, true)).Returns(false);
-            
+            principal.Setup(x => x.DoesIdentityExist()).Returns(true);
+
             viewModel = CreateLoginViewModel(
                 viewModelNavigationService: ViewModelNavigationServiceMock.Object,
                 passwordHasher: passwordHasher,
