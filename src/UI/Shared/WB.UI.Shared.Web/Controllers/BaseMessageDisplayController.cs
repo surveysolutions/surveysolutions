@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
 using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Shared.Web.Controllers
@@ -31,9 +31,9 @@ namespace WB.UI.Shared.Web.Controllers
             }
         }
 
-        protected void AddErrors(IdentityResult result)
+        protected void AddErrors(IEnumerable<string> result)
         {
-            foreach (var error in result.Errors)
+            foreach (var error in result)
             {
                 ModelState.AddModelError(string.Empty, error);
             }
