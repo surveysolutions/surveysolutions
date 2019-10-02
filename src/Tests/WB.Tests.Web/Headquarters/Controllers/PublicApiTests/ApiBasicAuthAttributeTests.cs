@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
     internal class ApiBasicAuthAttributeTests
     {
         [Test]
-        public async Task when_both_authorizations_supply_user_should_be_identified_by_cookie()
+        public void when_both_authorizations_supply_user_should_be_identified_by_cookie()
         {
             var subject = new ApiBasicAuthAttribute(UserRoles.ApiUser, UserRoles.Administrator)
             {
@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
         }
 
         [Test]
-        public async Task when_basic_auth_supplied_should_be_identified_by_cookie()
+        public void when_basic_auth_supplied_should_be_identified_by_cookie()
         {
             var subject = new ApiBasicAuthAttribute(UserRoles.ApiUser, UserRoles.Administrator)
             {
