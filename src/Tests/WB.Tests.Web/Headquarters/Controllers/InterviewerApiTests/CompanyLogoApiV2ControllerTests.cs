@@ -9,8 +9,6 @@ using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Services;
-using WB.Tests.Abc;
-
 using WB.UI.Headquarters.API.DataCollection.Interviewer.v2;
 using WB.UI.Headquarters.Models.CompanyLogo;
 
@@ -36,7 +34,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
         [Test]
         public async Task when_there_is_logo_on_headquarters_and_no_etag_provided()
         {
-            CompanyLogo logo = Create.Entity.HqCompanyLogo();
+            CompanyLogo logo = Web.Create.Entity.HqCompanyLogo();
             IPlainKeyValueStorage<CompanyLogo> logoStorage = new InMemoryKeyValueStorage<CompanyLogo>();
             logoStorage.Store(logo, CompanyLogo.CompanyLogoStorageKey);
 
@@ -58,7 +56,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
         [Test]
         public void when_company_logo_has_not_changed_Should_return_NotModified_response()
         {
-            CompanyLogo logo = Create.Entity.HqCompanyLogo();
+            CompanyLogo logo = Web.Create.Entity.HqCompanyLogo();
             IPlainKeyValueStorage<CompanyLogo> logoStorage = new InMemoryKeyValueStorage<CompanyLogo>();
             logoStorage.Store(logo, CompanyLogo.CompanyLogoStorageKey);
 
