@@ -30,7 +30,6 @@
     <ProjectReference Include="..\..\Core\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj" />
     <ProjectReference Include="..\..\Core\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj" />
     <ProjectReference Include="..\..\Core\SharedKernels\Enumerator\Enumerator\WB.Core.SharedKernels.Enumerator.csproj" />
-    <ProjectReference Include="..\..\Core\SharedKernels\Enumerator\WB.Enumerator.Native\WB.Enumerator.Native.csproj" />
     <ProjectReference Include="..\..\Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
     <ProjectReference Include="..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj" />
     <ProjectReference Include="..\WB.Tests.Abc\WB.Tests.Abc.csproj" />
