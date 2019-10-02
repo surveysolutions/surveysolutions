@@ -77,7 +77,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                     this.Success(Pages.InterviewerController_InterviewerCreationSuccess);
                     return this.Back();
                 }
-                AddErrors(creationResult);
+                AddErrors(creationResult.Errors);
             }
 
             // If we got this far, something failed, redisplay form
@@ -200,7 +200,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                     this.Success(string.Format(Pages.InterviewerController_EditSuccess, model.UserName));
                     return this.RedirectToAction(nameof(this.Profile), new { id = model.Id });
                 }
-                AddErrors(updateResult);
+                AddErrors(updateResult.Errors);
             }
 
             model.CancelAction = @"Profile";
