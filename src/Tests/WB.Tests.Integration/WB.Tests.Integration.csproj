@@ -64,6 +64,5 @@
     <PackageReference Include="SQLitePCLRaw.provider.e_sqlite3.net45" Version="1.1.13" />
     <PackageReference Include="System.Collections.Immutable" Version="1.6.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.3.0" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.6.0" />
   </ItemGroup>
 </Project>
