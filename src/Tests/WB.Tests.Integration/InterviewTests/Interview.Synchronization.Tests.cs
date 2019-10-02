@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AppDomainToolkit;
+
 using Ncqrs.Spec;
 using NUnit.Framework;
 using WB.Core.Infrastructure.EventBus;

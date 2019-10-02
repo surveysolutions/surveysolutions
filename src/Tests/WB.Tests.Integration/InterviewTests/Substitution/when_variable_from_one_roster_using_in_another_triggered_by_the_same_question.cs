@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using AppDomainToolkit;
+
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
@@ -14,7 +14,7 @@ namespace WB.Tests.Integration.InterviewTests.Substitution
 {
     internal class when_variable_from_one_roster_using_in_another_triggered_by_the_same_question: InterviewTestsContext
     {
-        private AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        private AppDomainContext appDomainContext;
 
         [OneTimeSetUp]
         public void SetupTest()

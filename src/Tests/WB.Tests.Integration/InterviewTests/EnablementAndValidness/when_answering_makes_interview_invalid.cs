@@ -1,5 +1,5 @@
 ﻿using System;
-using AppDomainToolkit;
+
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using NUnit.Framework;
@@ -16,7 +16,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
             appDomainContext = null;
         }
 
-        protected static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        protected static AppDomainContext appDomainContext;
 
         private InvokeResults results;
 
