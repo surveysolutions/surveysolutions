@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
-using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Abc.Storage;
 
@@ -17,6 +17,27 @@ namespace WB.Tests.Web.TestFactories
 {
     public class AssemblyCompiler
     {
+        public static IInterviewExpressionStorage GetInterviewExpressionStorage(QuestionnaireDocument questionnaireDocument)
+        {
+            var compiledAssembly = CompileAssembly(questionnaireDocument);
+
+            var ass = Assembly.Load(Convert.FromBase64String(compiledAssembly));
+
+            Type interviewExpressionStorageType =
+                ass.GetTypes()
+                    .FirstOrDefault(type => type.GetInterfaces().Contains(typeof(IInterviewExpressionStorage)));
+
+            if (interviewExpressionStorageType == null)
+                throw new Exception("Type InterviewExpressionState was not found");
+
+
+            if (!(Activator.CreateInstance(interviewExpressionStorageType) is IInterviewExpressionStorage interviewExpressionStorage))
+                throw new Exception("Error on IInterviewExpressionState generation");
+
+            return interviewExpressionStorage;
+        }
+
+
         public static string CompileAssembly(QuestionnaireDocument questionnaireDocument)
         {
             var expressionProcessorGenerator =

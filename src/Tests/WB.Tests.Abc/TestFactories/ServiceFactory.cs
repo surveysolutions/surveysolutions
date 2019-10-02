@@ -531,7 +531,7 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new ExpressionsPlayOrderProvider(
                 new ExpressionsGraphProvider(
-                    expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
+                    expressionProcessor ?? new RoslynExpressionProcessor(),
                     macrosSubstitutionService ?? Create.Service.DefaultMacrosSubstitutionService()));
         }
 
