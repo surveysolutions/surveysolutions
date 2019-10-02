@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.UI.Headquarters.Models.CompanyLogo;
 
 namespace WB.Tests.Web.TestFactories
 {
@@ -111,6 +112,12 @@ namespace WB.Tests.Web.TestFactories
             user.Roles.Add(new HqUserRole { UserId = user.Id, RoleId = role.ToUserId() });
 
             return user;
+        }
+
+        public CompanyLogo HqCompanyLogo()
+        {
+            var hqCompanyLogo = new CompanyLogo();
+            return hqCompanyLogo;
         }
     }
 }

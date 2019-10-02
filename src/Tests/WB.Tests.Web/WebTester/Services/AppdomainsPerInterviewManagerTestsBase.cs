@@ -8,7 +8,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Tests.Integration.WebInterviewTests;
-
+using WB.Tests.Web.TestFactories;
 using WB.UI.WebTester.Services.Implementation;
 
 namespace WB.Tests.Integration.WebTester.Services
@@ -35,7 +35,7 @@ namespace WB.Tests.Integration.WebTester.Services
             questionnaire.DependencyGraph = playOrderProvider.GetDependencyGraph(readOnlyQuestionnaireDocument);
             questionnaire.ValidationDependencyGraph = playOrderProvider.GetValidationDependencyGraph(readOnlyQuestionnaireDocument);
 
-            var supportingAssembly = IntegrationCreate.CompileAssembly(questionnaire);
+            var supportingAssembly = AssemblyCompiler.CompileAssembly(questionnaire);
             manager.SetupForInterview(interviewId, questionnaire, translations, supportingAssembly);
             manager.Execute(Abc.Create.Command.CreateInterview(interviewId: interviewId,
                 userId: interviewId,
