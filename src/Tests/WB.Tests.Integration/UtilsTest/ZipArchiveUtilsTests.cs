@@ -7,12 +7,15 @@ using Ionic.Zlib;
 using NUnit.Framework;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 
-namespace WB.Tests.Unit.Infrastructure
+namespace WB.Tests.Integration.UtilsTest
 {
     [TestOf(typeof(ZipArchiveUtils))]
     [TestFixture]
     internal class ZipArchiveUtilsTests
     {
+        [OneTimeSetUp]
+        public void SetUp() => Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
         [Test]
         public void When_ProtectZipWithPassword_Then_each_file_in_zip_should_not_be_extracted_without_password()
         {
