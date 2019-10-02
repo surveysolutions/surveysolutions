@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.Applications.WebTester.Services
         {
             string fileName = Id.g1.ToString();
             
-            var subj = Create.Storage.MediaStorage();
+            var subj = Web.Create.Storage.MediaStorage();
 
             subj.Store(new MultimediaFile
             {
@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.Applications.WebTester.Services
         [Test]
         public void should_add_multiple_items_per_interview_to_cache()
         {
-            var subj = Create.Storage.MediaStorage();
+            var subj = Web.Create.Storage.MediaStorage();
 
             var interviewA = Id.gA;
             var interviewB = Id.gB;
@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.Applications.WebTester.Services
         [Test]
         public void should_remove_items_from_cache_by_area()
         {
-            InMemoryCacheStorage<MultimediaFile, string> subj = Create.Storage.MediaStorage();
+            InMemoryCacheStorage<MultimediaFile, string> subj = Web.Create.Storage.MediaStorage();
 
             var interviewA = Id.gA;
             var interviewB = Id.gB;
