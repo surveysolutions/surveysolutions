@@ -27,6 +27,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
+using WB.Tests.Abc.Storage;
 using WB.UI.Headquarters.API.DataCollection.Interviewer;
 using WB.UI.Headquarters.Code.CommandTransformation;
 using WB.UI.Headquarters.Controllers;
@@ -72,7 +73,7 @@ namespace WB.Tests.Web.TestFactories
                 syncVersionProvider ?? Mock.Of<IInterviewerSyncProtocolVersionProvider>(),
                 authorizedUser ?? Mock.Of<IAuthorizedUser>(),
                 productVersion ?? Mock.Of<IProductVersion>(),
-                signInManager ?? new HqSignInManager(Create.Storage.HqUserManager(), Mock.Of<IAuthenticationManager>(),
+                signInManager ?? new HqSignInManager(Abc.Create.Storage.HqUserManager(), Mock.Of<IAuthenticationManager>(),
                     Mock.Of<IHashCompatibilityProvider>()),
                 questionnaireBrowseViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(x =>
                     x.GetByIds(It.IsAny<QuestionnaireIdentity[]>()) == new List<QuestionnaireBrowseItem>()),
@@ -112,7 +113,7 @@ namespace WB.Tests.Web.TestFactories
                 interviewCreatorFromAssignment,
                 verifier,
                 commandTransformator,
-                Create.Service.AssignmentFactory(),
+                Abc.Create.Service.AssignmentFactory(),
                 Mock.Of<IInvitationService>(),
                 Mock.Of<IAssignmentPasswordGenerator>(),
                 commandService ?? Mock.Of<ICommandService>(),
