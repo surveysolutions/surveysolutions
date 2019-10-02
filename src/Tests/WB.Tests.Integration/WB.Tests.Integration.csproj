@@ -65,12 +65,4 @@
     <PackageReference Include="System.Collections.Immutable" Version="1.6.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.3.0" />
   </ItemGroup>
-  <ItemGroup>
-    <Reference Include="MvvmCross.Tests">
-      <HintPath>C:\Users\slava\.nuget\packages\mvvmcross.tests\6.2.0\lib\netstandard2.0\MvvmCross.Tests.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.Windows" />
-    <Reference Include="WindowsBase" />
-  </ItemGroup>
 </Project>
