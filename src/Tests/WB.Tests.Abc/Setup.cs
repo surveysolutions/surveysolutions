@@ -174,10 +174,14 @@ namespace WB.Tests.Abc
             return InterviewerPrincipal(interviewerIdentity);
         }
 
-        public static IInterviewerPrincipal InterviewerPrincipal(IInterviewerUserIdentity interviewerIdentity)
+        public static IInterviewerPrincipal InterviewerPrincipal(InterviewerIdentity interviewerIdentity)
         {
             var interviewerPrincipal = new Mock<IInterviewerPrincipal>();
             interviewerPrincipal.Setup(x => x.CurrentUserIdentity).Returns(interviewerIdentity);
+            interviewerPrincipal.Setup(x => x.DoesIdentityExist()).Returns(true);
+            interviewerPrincipal.Setup(x => x.GetExistingIdentityNameOrNull()).Returns(interviewerIdentity.Name);
+            interviewerPrincipal.Setup(x => x.GetInterviewerByName(interviewerIdentity.Name)).Returns(interviewerIdentity);
+            
             interviewerPrincipal.As<IPrincipal>().Setup(x => x.CurrentUserIdentity).Returns(interviewerIdentity);
             return interviewerPrincipal.Object;
         }
