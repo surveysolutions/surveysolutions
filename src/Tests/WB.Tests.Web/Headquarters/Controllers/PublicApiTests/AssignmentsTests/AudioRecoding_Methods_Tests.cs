@@ -7,12 +7,9 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.DenormalizerStorage;
-using WB.Core.Infrastructure.Implementation;
-using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
-using WB.Tests.Abc;
 using WB.Tests.Web;
+
 using WB.UI.Headquarters.API.PublicApi.Models;
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTests
@@ -22,12 +19,12 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         [Test]
         public void should_return_assignment_audio_recording_settings()
         {
-            var assignment = Create.Entity.Assignment(id: 15);
+            var assignment = Abc.Create.Entity.Assignment(id: 15);
 
             var assignments = new InMemoryReadSideRepositoryAccessor<Assignment, Guid>();
             assignments.Store(assignment, assignment.PublicKey);
 
-            var assignmentsService = Create.Service.AssignmentsService(assignments);
+            var assignmentsService = Abc.Create.Service.AssignmentsService(assignments);
 
             var controller = Create.Controller.AssignmentsPublicApiController(assignmentsService: assignmentsService);
 
@@ -41,12 +38,12 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         [Test]
         public void should_throw_404_when_assignment_archived()
         {
-            var assignment = Create.Entity.Assignment(id: 15, isArchived: true);
+            var assignment = Abc.Create.Entity.Assignment(id: 15, isArchived: true);
 
             var assignments = new InMemoryReadSideRepositoryAccessor<Assignment, Guid>();
             assignments.Store(assignment, assignment.PublicKey);
 
-            var assignmentsService = Create.Service.AssignmentsService(assignments);
+            var assignmentsService = Abc.Create.Service.AssignmentsService(assignments);
 
             var controller = Create.Controller.AssignmentsPublicApiController(assignmentsService: assignmentsService);
 
@@ -62,12 +59,12 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         [Test]
         public void should_set_audio_recording_enabled()
         {
-            var assignment = Create.Entity.Assignment(id: 15);
+            var assignment = Abc.Create.Entity.Assignment(id: 15);
 
             var assignments = new InMemoryReadSideRepositoryAccessor<Assignment, Guid>();
             assignments.Store(assignment, assignment.PublicKey);
             
-            var assignmentsService = Create.Service.AssignmentsService(assignments);
+            var assignmentsService = Abc.Create.Service.AssignmentsService(assignments);
             var commandService = Mock.Of<ICommandService>();
 
             var controller = Create.Controller.AssignmentsPublicApiController(assignmentsService: assignmentsService, commandService: commandService);

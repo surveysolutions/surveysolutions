@@ -12,7 +12,6 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.DenormalizerStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Tests.Abc;
-using WB.Tests.Web;
 using WB.UI.Headquarters.API.PublicApi;
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
@@ -21,7 +20,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             var interviewReferences = new InMemoryReadSideRepositoryAccessor<InterviewSummary>();
-            interviewReferences.Store(Create.Entity.InterviewSummary(interviewId, Guid.NewGuid(), questionnaireVersion: 1), interviewId.FormatGuid());
+            interviewReferences.Store(Abc.Create.Entity.InterviewSummary(interviewId, Guid.NewGuid(), questionnaireVersion: 1), interviewId.FormatGuid());
 
             var userViewFactory =
                 Mock.Of<IUserViewFactory>(

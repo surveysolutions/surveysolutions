@@ -7,7 +7,7 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
-using WB.Tests.Web;
+
 using WB.UI.Headquarters.API.PublicApi;
 using It = Moq.It;
 

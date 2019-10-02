@@ -4,7 +4,7 @@ using Moq;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Tests.Abc;
-using WB.Tests.Web;
+
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTests
 {

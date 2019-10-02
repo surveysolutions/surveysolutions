@@ -10,7 +10,7 @@ using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Tests.Abc;
-using WB.Tests.Web;
+
 using WB.UI.Headquarters.API.DataCollection.Interviewer.v2;
 using WB.UI.Headquarters.Models.CompanyLogo;
 
@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
     public class CompanyLogoApiV2ControllerTests
     {
         [Test]
-        public void when_headquarters_has_no_logo_Should_return_NoContent_reponse()
+        public void when_headquarters_has_no_logo_Should_return_NoContent_response()
         {
             var controller = this.GetController();
 

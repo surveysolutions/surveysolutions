@@ -13,7 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.Tests.Abc;
-using WB.Tests.Web;
+
 using static WB.Enumerator.Native.WebInterview.WebInterview;
 
 namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.NotificationService
@@ -103,7 +103,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.NotificationServi
             var localInterview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire, shouldBeInitialized: true);
             var localHubMock = new Mock<IWebInterviewInvoker>();
 
-            var service = Create.Service.WebInterviewNotificationService(Create.Storage.InterviewRepository(localInterview), 
+            var service = Web.Create.Service.WebInterviewNotificationService(Create.Storage.InterviewRepository(localInterview), 
                 Create.Storage.QuestionnaireStorage(questionnaire), localHubMock.Object);
 
             // act

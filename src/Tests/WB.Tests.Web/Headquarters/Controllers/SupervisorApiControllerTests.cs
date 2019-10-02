@@ -9,7 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Tests.Abc;
-using WB.Tests.Web;
+
 using WB.UI.Headquarters.API.DataCollection.Supervisor.v1;
 
 namespace WB.Tests.Unit.Applications.Headquarters.Api.DataCollection.Supervisor
@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.Api.DataCollection.Supervisor
 
             fixture.Inject(interviewInformationFactory);
             fixture.Inject(authorizedUser);
-            fixture.Freeze<HqSignInManager>(cst => cst.FromFactory(() => Create.Other.HqSignInManager()));
+            fixture.Freeze<HqSignInManager>(cst => cst.FromFactory(() => Web.Create.Other.HqSignInManager()));
 
             SupervisorApiController controller = fixture.Create<SupervisorApiController>();
 

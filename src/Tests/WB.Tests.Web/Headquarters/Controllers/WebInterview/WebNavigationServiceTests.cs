@@ -6,7 +6,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.Tests.Abc;
-using WB.Tests.Web;
+
 using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 
 namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
 
             var interview = SetUp.StatefulInterview(questionnaireDocument);
-            var webNavigationService = Create.Service.WebNavigationService();
+            var webNavigationService = Web.Create.Service.WebNavigationService();
 
             // act
             var textWithLink = webNavigationService.MakeNavigationLinks(string.Format(questionTitleFormat, systemVariable),
@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
 
             var interview = SetUp.StatefulInterview(questionnaireDocument);
-            var webNavigationService = Create.Service.WebNavigationService();
+            var webNavigationService = Web.Create.Service.WebNavigationService();
 
             // act
             var textWithLink = webNavigationService.MakeNavigationLinks(questionnaireTitle,
@@ -86,7 +86,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
 
             var interview = SetUp.StatefulInterview(questionnaireDocument);
-            var webNavigationService = Create.Service.WebNavigationService();
+            var webNavigationService = Web.Create.Service.WebNavigationService();
 
             // act
             var textWithLink = webNavigationService.MakeNavigationLinks(questionnaireTitle,
@@ -119,7 +119,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
 
             var interview = SetUp.StatefulInterview(questionnaireDocument);
-            var webNavigationService = Create.Service.WebNavigationService();
+            var webNavigationService = Web.Create.Service.WebNavigationService();
 
             // act
             var textWithLink = webNavigationService.MakeNavigationLinks(questionTitle,
@@ -156,7 +156,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
 
             var interview = SetUp.StatefulInterview(questionnaireDocument);
-            var webNavigationService = Create.Service.WebNavigationService();
+            var webNavigationService = Web.Create.Service.WebNavigationService();
 
             // act
             var textWithLink = webNavigationService.MakeNavigationLinks(questionTitle,
@@ -189,7 +189,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
 
             var interview = SetUp.StatefulInterview(questionnaireDocument);
-            var webNavigationService = Create.Service.WebNavigationService();
+            var webNavigationService = Web.Create.Service.WebNavigationService();
 
             // act
             var textWithLink = webNavigationService.MakeNavigationLinks(questionTitle,
