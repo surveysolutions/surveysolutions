@@ -4,7 +4,7 @@
       <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
       <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
       <Configurations>Debug;Release;Debug-ESRI</Configurations>
-      <LangVersion>7.3</LangVersion>
+      <LangVersion>latest</LangVersion>
       <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
   <ItemGroup>
@@ -103,6 +103,6 @@
     <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Applications\Shared\Web\" />
+    <Folder Include="SharedKernels\SurveyManagement\Web\" />
   </ItemGroup>
 </Project>
