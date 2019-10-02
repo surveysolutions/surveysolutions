@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using AppDomainToolkit;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -12,15 +11,18 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.WebInterview;
-using WB.Tests.Abc;
-using WB.Tests.Integration.InterviewTests;
 using WB.UI.Headquarters.API.WebInterview;
 
 namespace WB.Tests.Integration.WebInterviewTests
 {
+    public class InterviewTestsContext
+    {
+    }
+
     [TestOf(typeof(WebInterviewHub))]
     public class WebInterview_FlatMode_Tests : InterviewTestsContext
     {
@@ -32,52 +34,52 @@ namespace WB.Tests.Integration.WebInterviewTests
             var intQuestionId = Guid.NewGuid();
             var currentUserId = Guid.NewGuid();
 
-            var appDomainContext = AppDomainContext.Create();
 
-            var completeInfo = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
-            {
-                SetUp.MockedServiceLocator();
-
-                var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(sectionId,
-                    new IComposite[]
+            var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(sectionId,
+                new IComposite[]
+                {
+                    Abc.Create.Entity.Group(groupId, children: new IComposite[]
                     {
-                        Create.Entity.Group(groupId, children: new IComposite[]
-                        {
-                            Create.Entity.FixedRoster(displayMode: RosterDisplayMode.Flat, fixedTitles: new FixedRosterTitle[]
+                        Abc.Create.Entity.FixedRoster(displayMode: RosterDisplayMode.Flat,
+                            fixedTitles: new FixedRosterTitle[]
                             {
-                                Create.Entity.FixedTitle(1, "1"),
-                                Create.Entity.FixedTitle(2, "2"),
+                                Abc.Create.Entity.FixedTitle(1, "1"),
+                                Abc.Create.Entity.FixedTitle(2, "2"),
                             }, children: new IComposite[]
                             {
-                                Create.Entity.NumericIntegerQuestion(intQuestionId,
-                                    validationConditions: new[] {Create.Entity.ValidationCondition("self > 100")}
+                                Abc.Create.Entity.NumericIntegerQuestion(intQuestionId,
+                                    validationConditions: new[] {Abc.Create.Entity.ValidationCondition("self > 100")}
                                 )
                             })
-                        })
-                    });
+                    })
+                });
 
-                var statefulInterview = SetupStatefullInterview(questionnaireDocument);
+            StatefulInterview statefulInterview = Abc.Create.AggregateRoot.StatefulInterview(questionnaire: questionnaireDocument);
 
-                statefulInterview.AnswerNumericIntegerQuestion(currentUserId, intQuestionId, Create.RosterVector(1),
-                    DateTimeOffset.UtcNow, 5);
-                var webInterview = CreateWebInterview(statefulInterview, questionnaireDocument);
+            statefulInterview.AnswerNumericIntegerQuestion(
+                Abc.Create.Command.AnswerNumericIntegerQuestionCommand(
+                    interviewId: statefulInterview.Id,
+                    userId: currentUserId,
+                    questionId: intQuestionId,
+                    answer: 5,
+                    Abc.Create.RosterVector(1)));
+            var webInterview = CreateWebInterview(statefulInterview, questionnaireDocument);
 
-                return webInterview.GetCompleteInfo();
-            });
+            var completeInfo = webInterview.GetCompleteInfo();
 
 
             Assert.That(completeInfo.EntitiesWithError.Length, Is.EqualTo(1));
             Assert.That(completeInfo.EntitiesWithError.Single().Id,
-                Is.EqualTo(Create.Identity(intQuestionId, Create.RosterVector(1)).ToString()));
+                Is.EqualTo(Abc.Create.Identity(intQuestionId, Abc.Create.RosterVector(1)).ToString()));
             Assert.That(completeInfo.EntitiesWithError.Single().ParentId, Is.EqualTo(groupId.FormatGuid()));
         }
 
         private WebInterviewHub CreateWebInterview(IStatefulInterview statefulInterview,
             QuestionnaireDocument questionnaireDocument)
         {
-            var statefulInterviewRepository = Create.Fake.StatefulInterviewRepositoryWith(statefulInterview);
-            var questionnaireStorage = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireDocument);
-            var webInterviewInterviewEntityFactory = Create.Service.WebInterviewInterviewEntityFactory();
+            var statefulInterviewRepository = Abc.Create.Fake.StatefulInterviewRepositoryWith(statefulInterview);
+            var questionnaireStorage = Abc.Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireDocument);
+            var webInterviewInterviewEntityFactory = Web.Create.Service.WebInterviewInterviewEntityFactory();
 
             var serviceLocator = Mock.Of<IServiceLocator>(sl =>
                 sl.GetInstance<IStatefulInterviewRepository>() == statefulInterviewRepository

@@ -1,6 +1,4 @@
-﻿using System;
-using WB.Core.SharedKernels.DataCollection;
-using WB.Tests.Web.TestFactories;
+﻿using WB.Tests.Web.TestFactories;
 
 namespace WB.Tests.Web
 {
@@ -17,8 +15,7 @@ namespace WB.Tests.Web
 
         public static readonly StorageFactory Storage = new StorageFactory();
 
-        public static Identity Identity(Guid? id = null, params int[] rosterVector) => Entity.Identity(id, rosterVector);
+        public static readonly ControllerFactory Controller = new ControllerFactory();
 
-        public static RosterVector RosterVector(params int[] coordinates) => Entity.RosterVector(coordinates);
     }
 }

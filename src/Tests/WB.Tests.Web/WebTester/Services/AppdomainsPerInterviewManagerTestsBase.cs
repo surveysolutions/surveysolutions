@@ -7,8 +7,7 @@ using System.IO;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Questionnaire.Translations;
-using WB.Tests.Abc;
-using WB.Tests.Integration.InterviewTests;
+using WB.Tests.Integration.WebInterviewTests;
 using WB.Tests.Web;
 using WB.UI.WebTester.Services.Implementation;
 
@@ -31,16 +30,16 @@ namespace WB.Tests.Integration.WebTester.Services
         {
             questionnaire.IsUsingExpressionStorage = true;
             var readOnlyQuestionnaireDocument = questionnaire.AsReadOnly();
-            var playOrderProvider = Create.Service.ExpressionsPlayOrderProvider();
+            var playOrderProvider = Abc.Create.Service.ExpressionsPlayOrderProvider();
             questionnaire.ExpressionsPlayOrder = playOrderProvider.GetExpressionsPlayOrder(readOnlyQuestionnaireDocument);
             questionnaire.DependencyGraph = playOrderProvider.GetDependencyGraph(readOnlyQuestionnaireDocument);
             questionnaire.ValidationDependencyGraph = playOrderProvider.GetValidationDependencyGraph(readOnlyQuestionnaireDocument);
 
             var supportingAssembly = IntegrationCreate.CompileAssembly(questionnaire);
             manager.SetupForInterview(interviewId, questionnaire, translations, supportingAssembly);
-            manager.Execute(Create.Command.CreateInterview(interviewId: interviewId,
+            manager.Execute(Abc.Create.Command.CreateInterview(interviewId: interviewId,
                 userId: interviewId,
-                questionnaireIdentity: Create.Entity.QuestionnaireIdentity(questionnaire.PublicKey, 1)));
+                questionnaireIdentity: Abc.Create.Entity.QuestionnaireIdentity(questionnaire.PublicKey, 1)));
         }
     }
 }
