@@ -24,7 +24,6 @@
     <PackageReference Include="Castle.Core" Version="4.4.0" />
     <PackageReference Include="EntityFramework" Version="6.2.0" />
     <PackageReference Include="Iesi.Collections" Version="4.0.4" />
-    <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.2" />
     <PackageReference Include="Microsoft.AspNet.Identity.EntityFramework" Version="2.2.2" />
     <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.7" />
     <PackageReference Include="microsoft.AspNet.WebApi" Version="5.2.7" />
