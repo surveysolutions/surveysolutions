@@ -2,14 +2,13 @@
 using MvvmCross;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.UI.Interviewer.Activities;
 using WB.UI.Shared.Enumerator.Migrations;
 using WB.UI.Shared.Enumerator.Services.Notifications;
@@ -22,7 +21,7 @@ namespace WB.UI.Interviewer
         private readonly IMigrationRunner migrationRunner;
         private readonly IAuditLogService auditLogService;
         private readonly IServiceLocator serviceLocator;
-        private IEnumeratorSettings enumeratorSettings;
+        private readonly IEnumeratorSettings enumeratorSettings;
         
         public InterviewerAppStart(IMvxApplication application, 
             IMvxNavigationService navigationService,
@@ -86,9 +85,9 @@ namespace WB.UI.Interviewer
         protected override async Task NavigateToFirstViewModel(object hint = null)
         {
             var viewModelNavigationService = Mvx.IoCProvider.Resolve<IViewModelNavigationService>();
-            var interviewersPlainStorage = Mvx.IoCProvider.Resolve<IPlainStorage<InterviewerIdentity>>();
-            InterviewerIdentity currentInterviewer = interviewersPlainStorage.FirstOrDefault();
-            if (currentInterviewer == null)
+            var interviewerPrincipal = Mvx.IoCProvider.Resolve<IInterviewerPrincipal>();
+            
+            if (!interviewerPrincipal.DoesIdentityExist())
             {
                 await viewModelNavigationService.NavigateToFinishInstallationAsync();
             }

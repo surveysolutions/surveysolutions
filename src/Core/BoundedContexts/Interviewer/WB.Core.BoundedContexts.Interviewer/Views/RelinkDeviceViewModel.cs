@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using Newtonsoft.Json;
+using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -20,21 +20,20 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
     public class RelinkDeviceViewModel : BaseViewModel<RelinkDeviceViewModelArg>
     {
         private readonly ISynchronizationService synchronizationService;
-        private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
         private readonly IAuditLogService auditLogService;
         private const string StateKey = "interviewerIdentity";
+        private readonly IInterviewerPrincipal interviewerPrincipal;
 
         public RelinkDeviceViewModel(
-            IPrincipal principal,
+            IInterviewerPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
             ISynchronizationService synchronizationService,
-            IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
             IAuditLogService auditLogService)
             : base(principal, viewModelNavigationService)
         {
             this.synchronizationService = synchronizationService;
-            this.interviewersPlainStorage = interviewersPlainStorage;
             this.auditLogService = auditLogService;
+            this.interviewerPrincipal = principal;
         }
 
         protected override bool IsAuthenticationRequired => false;
@@ -98,8 +97,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     },
                     token: this.cancellationTokenSource.Token).ConfigureAwait(false);
 
-                this.interviewersPlainStorage.Store(this.userIdentityToRelink);
-                this.Principal.SignIn(this.userIdentityToRelink.Id, true);
+                this.interviewerPrincipal.SaveInterviewer(this.userIdentityToRelink);
+                this.interviewerPrincipal.SignIn(this.userIdentityToRelink.Id, true);
                 auditLogService.Write( new RelinkAuditLogEntity());
                 await this.viewModelNavigationService.NavigateToDashboardAsync();
             }
