@@ -443,7 +443,6 @@ namespace WB.Tests.Abc.TestFactories
 
         public InterviewerOnlineSynchronizationProcess SynchronizationProcess(
             IPlainStorage<InterviewView> interviewViewRepository = null,
-            IPlainStorage<InterviewerIdentity> interviewersPlainStorage = null,
             IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage = null,
             IPlainStorage<InterviewFileView> interviewFileViewStorage = null,
             IOnlineSynchronizationService synchronizationService = null,
@@ -473,7 +472,6 @@ namespace WB.Tests.Abc.TestFactories
 
         public InterviewerOfflineSynchronizationProcess OfflineSynchronizationProcess(
             IPlainStorage<InterviewView> interviewViewRepository = null,
-            IPlainStorage<InterviewerIdentity> interviewersPlainStorage = null,
             ILogger logger = null,
             IPasswordHasher passwordHasher = null,
             IInterviewerPrincipal principal = null,

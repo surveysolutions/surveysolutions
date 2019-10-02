@@ -24,7 +24,9 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
 
             Principal.Setup(x => x.SignIn(userName, newUserPassword, true)).Returns(true);
             Principal.Setup(x => x.GetInterviewerByName(It.IsAny<string>())).Returns(interviewer);
-            
+            Principal.Setup(x => x.DoesIdentityExist()).Returns(true);
+            Principal.Setup(x => x.GetExistingIdentityNameOrNull()).Returns(userName);
+
             synchronizationServiceMock
               .Setup(x => x.LoginAsync(
                   Moq.It.IsAny<LogonInfo>(),
