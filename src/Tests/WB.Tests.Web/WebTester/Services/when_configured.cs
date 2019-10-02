@@ -6,7 +6,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Tests.Abc;
-
+using WB.Tests.Web.TestFactories;
 using WB.UI.WebTester.Services.Implementation;
 
 namespace WB.Tests.Integration.WebTester.Services
@@ -31,7 +31,7 @@ namespace WB.Tests.Integration.WebTester.Services
             questionnaire.IsUsingExpressionStorage = true;
             questionnaire.ExpressionsPlayOrder = Create.Service.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(new ReadOnlyQuestionnaireDocument(questionnaire));
 
-            var supportingAssembly = IntegrationCreate.CompileAssembly(questionnaire);
+            var supportingAssembly = AssemblyCompiler.CompileAssembly(questionnaire);
 
             // act
             manager.SetupForInterview(interviewId, questionnaire, null, supportingAssembly);
