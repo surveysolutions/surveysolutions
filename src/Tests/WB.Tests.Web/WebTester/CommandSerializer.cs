@@ -5,6 +5,7 @@ using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Tests.Abc;
+using WB.UI.WebTester.Infrastructure.AppDomainSpecific;
 
 namespace WB.Tests.Unit.Infrastructure
 {

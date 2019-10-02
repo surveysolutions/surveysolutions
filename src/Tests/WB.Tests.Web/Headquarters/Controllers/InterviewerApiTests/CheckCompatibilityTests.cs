@@ -17,6 +17,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Tests.Abc;
+using WB.Tests.Abc.Storage;
 using WB.Tests.Web;
 using WB.UI.Headquarters.API.DataCollection.Interviewer;
 
@@ -33,7 +34,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
             var tenantSettings = new TestInMemoryKeyValueStorage<TenantSettings>();
             tenantSettings.Store(new TenantSettings{ TenantPublicId = "server id"}, AppSetting.TenantSettingsKey);
 
-            var controller = Create.Controller.InterviewerApiController(tenantSettings: tenantSettings);
+            var controller = Web.Create.Controller.InterviewerApiController(tenantSettings: tenantSettings);
 
             // Act 
             var response  = controller.CheckCompatibility("device", 1, "client id");
@@ -54,7 +55,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
             var deviceId = "device";
             var authorizedUser = Mock.Of<IAuthorizedUser>(x => x.DeviceId == deviceId && x.Id == synchronizedUserId);
 
-            var interviewerApiController = Create.Controller.InterviewerApiController(
+            var interviewerApiController = Web.Create.Controller.InterviewerApiController(
                 syncVersionProvider: new InterviewerSyncProtocolVersionProvider(),
                 productVersion: productVersion,
                 interviewInformationFactory: interviews,
@@ -80,11 +81,11 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
 
             var deviceId = "device";
             var authorizedUser = Mock.Of<IAuthorizedUser>(x => x.DeviceId == deviceId);
-            var interviewerSettings = Create.Entity.InterviewerSettings(autoUpdateEnabled: false);
+            var interviewerSettings = Abc.Create.Entity.InterviewerSettings(autoUpdateEnabled: false);
             var interviewerSettingsStorage = Mock.Of<IPlainKeyValueStorage<InterviewerSettings>>(m =>
                 m.GetById(AppSetting.InterviewerSettings) == interviewerSettings);
 
-            var interviewerApiController = Create.Controller.InterviewerApiController(syncVersionProvider: syncProtocolVersionProvider,
+            var interviewerApiController = Web.Create.Controller.InterviewerApiController(syncVersionProvider: syncProtocolVersionProvider,
                 productVersion: productVersion,
                 assignmentsService: assignments,
                 authorizedUser: authorizedUser,
@@ -109,7 +110,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
             var deviceId = "device";
             var authorizedUser = Mock.Of<IAuthorizedUser>(x => x.DeviceId == deviceId && x.Id == synchronizedUserId);
 
-            var interviewerApiController = Create.Controller.InterviewerApiController(
+            var interviewerApiController = Web.Create.Controller.InterviewerApiController(
                 syncVersionProvider: new InterviewerSyncProtocolVersionProvider(),
                 productVersion: productVersion,
                 assignmentsService: assignments,
@@ -132,7 +133,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
             var deviceId = "device";
             var authorizedUser = Mock.Of<IAuthorizedUser>(x => x.DeviceId == deviceId && x.Id == synchronizedUserId);
 
-            var interviewerApiController = Create.Controller.InterviewerApiController(
+            var interviewerApiController = Web.Create.Controller.InterviewerApiController(
                 syncVersionProvider: new InterviewerSyncProtocolVersionProvider(),
                 productVersion: productVersion,
                 authorizedUser: authorizedUser);
@@ -161,7 +162,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
             var deviceId = "device";
             var authorizedUser = Mock.Of<IAuthorizedUser>(x => x.DeviceId == deviceId);
 
-            var interviewerApiController = Create.Controller.InterviewerApiController(syncVersionProvider: syncProtocolVersionProvider,
+            var interviewerApiController = Web.Create.Controller.InterviewerApiController(syncVersionProvider: syncProtocolVersionProvider,
                 productVersion: productVersion,
                 assignmentsService: assignments,
                 authorizedUser: authorizedUser);
@@ -188,11 +189,11 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
             var deviceId = "device";
             var authorizedUser = Mock.Of<IAuthorizedUser>(x => x.DeviceId == deviceId);
 
-            var interviewerSettings = Create.Entity.InterviewerSettings(autoUpdateEnabled: false);
+            var interviewerSettings = Abc.Create.Entity.InterviewerSettings(autoUpdateEnabled: false);
             var interviewerSettingsStorage = Mock.Of<IPlainKeyValueStorage<InterviewerSettings>>(m =>
                     m.GetById(AppSetting.InterviewerSettings) == interviewerSettings);
 
-            var interviewerApiController = Create.Controller.InterviewerApiController(
+            var interviewerApiController = Web.Create.Controller.InterviewerApiController(
                 productVersion: productVersionObj,
                 authorizedUser: authorizedUser,
                 interviewerSettings: interviewerSettingsStorage);
@@ -220,11 +221,11 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
             var deviceId = "device";
             var authorizedUser = Mock.Of<IAuthorizedUser>(x => x.DeviceId == deviceId);
 
-            var interviewerSettings = Create.Entity.InterviewerSettings(autoUpdateEnabled: true);
+            var interviewerSettings = Abc.Create.Entity.InterviewerSettings(autoUpdateEnabled: true);
             var interviewerSettingsStorage = Mock.Of<IPlainKeyValueStorage<InterviewerSettings>>(m =>
                 m.GetById(AppSetting.InterviewerSettings) == interviewerSettings);
 
-            var interviewerApiController = Create.Controller.InterviewerApiController(
+            var interviewerApiController = Web.Create.Controller.InterviewerApiController(
                 productVersion: productVersionObj,
                 authorizedUser: authorizedUser,
                 interviewerSettings: interviewerSettingsStorage);
