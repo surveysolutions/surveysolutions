@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AppDomainToolkit;
+
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -93,7 +93,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
             results.WasAnyGrandChildQuestionDisabled.Should().BeTrue();
 
         private static InvokeResults results;
-        private AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        private AppDomainContext appDomainContext;
 
         [Serializable]
         internal class InvokeResults

@@ -1,5 +1,5 @@
 ﻿using System;
-using AppDomainToolkit;
+
 using Main.Core.Entities.Composite;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
@@ -11,7 +11,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
 {
     internal class when_removing_answer_from_yesno_question : InterviewTestsContext
     {
-        private AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        private AppDomainContext appDomainContext;
 
         [SetUp]
         public void BeforeTest() => this.appDomainContext = AppDomainContext.Create();
