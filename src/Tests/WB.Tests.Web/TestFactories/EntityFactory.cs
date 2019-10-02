@@ -117,6 +117,7 @@ namespace WB.Tests.Web.TestFactories
         public CompanyLogo HqCompanyLogo()
         {
             var hqCompanyLogo = new CompanyLogo();
+            hqCompanyLogo.Logo = new byte[]{1, 2,12, 45, 15};
             return hqCompanyLogo;
         }
     }
