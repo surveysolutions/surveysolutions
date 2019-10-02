@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.Tests.Abc;
-using WB.Tests.Web;
+
 using WB.UI.Headquarters.API.WebInterview;
 
 namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
@@ -101,7 +101,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             var questionnaireStorage = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(Create.Entity.PlainQuestionnaire(questionnaireDocument));
             var statefulInterview = SetUp.StatefulInterview(questionnaireDocument);
             var mapper = SetupMapper();
-            var webInterview = Create.Other.WebInterviewHub(statefulInterview, questionnaireStorage, mapper: mapper);
+            var webInterview = Web.Create.Other.WebInterviewHub(statefulInterview, questionnaireStorage, mapper: mapper);
             var ids = Identity.Create(rosterId, RosterVector.Empty).ToString().ToEnumerable().ToArray();
 
             var entities = webInterview.GetEntitiesDetails(ids);
@@ -183,7 +183,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             QuestionnaireDocument questionnaireDocument,
             string sectionId = null)
         {
-            return Create.Other.WebInterviewHub(statefulInterview,  SetUp.QuestionnaireRepositoryWithOneQuestionnaire(Create.Entity.PlainQuestionnaire(questionnaireDocument)), sectionId);
+            return Web.Create.Other.WebInterviewHub(statefulInterview,  SetUp.QuestionnaireRepositoryWithOneQuestionnaire(Create.Entity.PlainQuestionnaire(questionnaireDocument)), sectionId);
         }      
         
         private IMapper SetupMapper()

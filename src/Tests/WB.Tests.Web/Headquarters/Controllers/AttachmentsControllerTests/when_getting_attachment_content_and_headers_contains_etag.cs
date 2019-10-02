@@ -6,9 +6,6 @@ using Moq;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
-using WB.Tests.Abc;
-using WB.Tests.Web;
-
 
 namespace WB.Tests.Unit.Applications.Shared.Web.AttachmentsControllerTests
 {
@@ -17,7 +14,7 @@ namespace WB.Tests.Unit.Applications.Shared.Web.AttachmentsControllerTests
         [NUnit.Framework.OneTimeSetUp] public void context () {
             mockOfAttachmentContentService.Setup(x => x.GetAttachmentContent(attachmentContentId)).Returns(expectedAttachmentContent);
 
-            controller = Create.Controller.AttachmentsController(mockOfAttachmentContentService.Object);
+            controller = Tests.Web.Create.Controller.AttachmentsController(mockOfAttachmentContentService.Object);
             controller.Request = new HttpRequestMessage
             {
                 Headers =

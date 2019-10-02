@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Tests.Abc;
-using WB.Tests.Web;
+
 
 namespace WB.Tests.Integration.WebTester.Services
 {

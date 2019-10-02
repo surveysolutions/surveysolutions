@@ -2,7 +2,7 @@ using System.Web.Mvc;
 using FluentAssertions;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.Tests.Abc;
+using WB.Tests.Web;
 using WB.UI.Headquarters.Controllers;
 
 

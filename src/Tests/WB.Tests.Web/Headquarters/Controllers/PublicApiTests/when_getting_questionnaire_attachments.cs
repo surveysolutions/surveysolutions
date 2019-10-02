@@ -9,7 +9,6 @@ using Moq;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Abc;
-using WB.Tests.Web;
 using WB.UI.Headquarters.API.DataCollection.Interviewer.v2;
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests

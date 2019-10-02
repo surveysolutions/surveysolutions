@@ -12,7 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.Tests.Abc;
-using WB.Tests.Web;
+
 using WB.UI.Headquarters.API.WebInterview;
 
 namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             var interview = Create.AggregateRoot.StatefulInterview(userId: Id.gA, questionnaire: questionnaire, optionsRepository: optionsRepository);
             interview.AnswerSingleOptionQuestion(Id.gA, Id.g2, RosterVector.Empty, DateTime.UtcNow, 2);
 
-            var webInterview = Create.Other.WebInterviewHub(interview, interview.ServiceLocatorInstance.GetInstance<IQuestionnaireStorage>());
+            var webInterview = Web.Create.Other.WebInterviewHub(interview, interview.ServiceLocatorInstance.GetInstance<IQuestionnaireStorage>());
             
             //act
             var entities = webInterview.GetSectionEntities(Id.g1.FormatGuid());
@@ -71,7 +71,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             var interview = Create.AggregateRoot.StatefulInterview(userId: Id.gA, questionnaire: questionnaire, optionsRepository: optionsRepository);
             interview.AnswerSingleOptionQuestion(Id.gA, Id.g2, RosterVector.Empty, DateTime.UtcNow, 2);
 
-            var webInterview = Create.Other.WebInterviewHub(interview, interview.ServiceLocatorInstance.GetInstance<IQuestionnaireStorage>());
+            var webInterview = Web.Create.Other.WebInterviewHub(interview, interview.ServiceLocatorInstance.GetInstance<IQuestionnaireStorage>());
             
             //act
             var entities = webInterview.GetSectionEntities(Id.g1.FormatGuid());
@@ -188,7 +188,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             QuestionnaireDocument questionnaireDocument,
             string sectionId = null)
         {
-            return Create.Other.WebInterviewHub(statefulInterview,  SetUp.QuestionnaireRepositoryWithOneQuestionnaire(Create.Entity.PlainQuestionnaire(questionnaireDocument)), sectionId);
+            return Web.Create.Other.WebInterviewHub(statefulInterview,  SetUp.QuestionnaireRepositoryWithOneQuestionnaire(Create.Entity.PlainQuestionnaire(questionnaireDocument)), sectionId);
         }
     }
 }

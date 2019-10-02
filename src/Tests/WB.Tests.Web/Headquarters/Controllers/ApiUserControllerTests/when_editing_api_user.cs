@@ -6,7 +6,7 @@ using Microsoft.AspNet.Identity;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Tests.Abc;
-using WB.Tests.Web;
+
 using WB.Tests.Web.TestFactories;
 using WB.UI.Headquarters.Controllers;
 

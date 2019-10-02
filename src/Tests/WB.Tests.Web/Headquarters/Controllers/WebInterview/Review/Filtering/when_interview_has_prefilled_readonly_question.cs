@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Tests.Abc;
-using WB.Tests.Web;
+
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.API.WebInterview.Services;
 
@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Filtering
                     Create.Entity.InterviewAnswer(Create.Identity(prefilledReadonlyQuestionId), Create.Entity.NumericIntegerAnswer(5))
                 }));
 
-            var searcher = Create.Service.StatefullInterviewSearcher();
+            var searcher = Web.Create.Service.StatefullInterviewSearcher();
 
             // Act
             SearchResults searchResult = searcher.Search(interview, questionnaire, new[] {FilterOption.ForInterviewer}, 0, 10);

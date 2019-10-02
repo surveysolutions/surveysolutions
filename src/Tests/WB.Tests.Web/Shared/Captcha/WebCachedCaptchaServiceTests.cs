@@ -1,8 +1,8 @@
 ﻿using System;
 using FluentAssertions;
 using NUnit.Framework;
-using WB.Tests.Abc;
 using WB.Tests.Web;
+
 
 namespace WB.Tests.Unit.Applications.Shared.Web.Captcha
 {

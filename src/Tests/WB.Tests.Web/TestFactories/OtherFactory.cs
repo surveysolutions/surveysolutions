@@ -12,7 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.WebInterview;
 using WB.Tests.Abc;
-using WB.UI.WebTester.Hub;
+using WB.UI.Headquarters.API.WebInterview;
 
 namespace WB.Tests.Web.TestFactories
 {
