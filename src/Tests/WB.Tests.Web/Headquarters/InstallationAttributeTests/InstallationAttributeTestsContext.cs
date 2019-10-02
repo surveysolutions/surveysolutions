@@ -27,7 +27,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.FilterTests.InstallationAttrib
             var controllerContext = new ControllerContext(requestContext,
                 specifiedController ?? Mock.Of<ControllerBase>());
 
-            SetUp.InstanceToMockedServiceLocator(userRepository ?? Create.Storage.UserRepository());
             var users = userRepository ?? Create.Storage.UserRepository();
             
             var dependencyResolver = Substitute.For<IDependencyResolver>();
