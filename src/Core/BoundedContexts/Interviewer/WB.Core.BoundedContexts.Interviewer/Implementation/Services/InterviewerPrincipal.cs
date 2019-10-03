@@ -27,8 +27,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private InterviewerIdentity GetInterviewerIdentity()
         {
             return this.usersStorage
-                .Where(x => x.Id != null)
-                .OrderByDescending(x => x.Name)
+                //.Where(x => x.Id != null)
+                //.OrderByDescending(x => x.Name)
                 .FirstOrDefault();
         }
 
