@@ -1,4 +1,7 @@
 ﻿using System.Dynamic;
+using System.Web.Http.Controllers;
+using AutoFixture;
+using AutoFixture.AutoMoq;
 using AutoMapper;
 using Microsoft.AspNet.SignalR.Hosting;
 using Microsoft.AspNet.SignalR.Hubs;
@@ -18,6 +21,23 @@ namespace WB.Tests.Web.TestFactories
 {
     public class OtherFactory
     {
+        private class ApiControllerCustomization : ICustomization
+        {
+            public void Customize(IFixture fixture)
+            {
+                fixture.Inject(new HttpControllerContext());
+                fixture.Inject(new HttpRequestContext());
+            }
+        }
+
+        public Fixture WebApiAutoFixture()
+        {
+            var autoFixture = new Fixture();
+            autoFixture.Customize(new ApiControllerCustomization());
+            autoFixture.Customize(new AutoMoqCustomization());
+            return autoFixture;
+        }
+
         public WebInterviewHub WebInterviewHub(IStatefulInterview statefulInterview, IQuestionnaireStorage questionnaire, string sectionId = null, IMapper mapper = null)
         {
             var statefulInterviewRepository = SetUp.StatefulInterviewRepository(statefulInterview);
