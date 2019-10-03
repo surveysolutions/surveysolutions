@@ -63,8 +63,9 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                             Abc.Create.Entity.NumericIntegerQuestion(id: linkedToQuestionId, variable: "link_source"),
                         })
                 });
+            appDomainContext = AppDomainContext.Create();
 
-            interview = SetupInterview(questionnaireDocument);
+            interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
             interview.AnswerNumericIntegerQuestion(userId, linkedToQuestionId, linkedOption1Vector, DateTime.Now,
                 linkedOption1Answer);
@@ -78,6 +79,13 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
             interview.AnswerSingleOptionLinkedQuestion(userId, questionId, rosterVector, DateTime.Now,
                 linkedOption2Vector);
+        }
+
+        [OneTimeTearDown]
+        public void Down()
+        {
+            eventContext.Dispose();
+            appDomainContext.Dispose();
         }
 
         [Test]
@@ -110,6 +118,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 .SelectMany(@event => @event.ChangedInstances.Select(x=>x.Title))
                 .Should().OnlyContain(title => title == linkedOption2TextInvariantCulture);
 
+        private static AppDomainContext appDomainContext;
         private static EventContext eventContext;
         private static Interview interview;
         private static Guid userId;

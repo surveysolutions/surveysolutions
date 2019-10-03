@@ -33,7 +33,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                     Create.Entity.Variable(variableId, VariableType.LongInteger, expression: "hhAssets.Missing.Length")
                 });
 
-                var interview = SetupStatefullInterview(questionnaireDocument);
+                var interview = SetupStatefullInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(
                     questionId: questionId,

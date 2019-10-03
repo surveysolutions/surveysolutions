@@ -46,7 +46,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                             options: new List<Answer> {IntegrationCreate.Answer("111", 111, 11), IntegrationCreate.Answer("211", 211, 21)})
                     });
 
-                interview = SetupInterview(questionnaire);
+                interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaire);
                 interview.AnswerSingleOptionQuestion(userId, parentCascadingQuestion, RosterVector.Empty, DateTime.Now, 2);
                 interview.AnswerSingleOptionQuestion(userId, childCascadingQuestionId, RosterVector.Empty, DateTime.Now, 21);
                 interview.AnswerSingleOptionQuestion(userId, childOfChildCascadingQuestionId, RosterVector.Empty, DateTime.Now, 211);

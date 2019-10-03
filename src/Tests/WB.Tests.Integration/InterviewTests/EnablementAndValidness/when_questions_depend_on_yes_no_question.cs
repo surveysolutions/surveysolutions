@@ -36,7 +36,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                     Create.Entity.TextListQuestion(q3Id, variable: "q3", enablementCondition: "q2.Yes.Contains(9)")
                 );
 
-                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument, new object[] { });
+                var interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument, new object[] { });
 
                 interview.AnswerNumericIntegerQuestion(Create.Command.AnswerNumericIntegerQuestionCommand(questionId: q1Id, answer: 10));
                 interview.AnswerYesNoQuestion(

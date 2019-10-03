@@ -32,7 +32,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                         }),
                 });
 
-                var interview = SetupStatefullInterview(questionnaireDocument);
+                var interview = SetupStatefullInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 return new InvokeResults
                 {

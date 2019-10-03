@@ -36,7 +36,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                     Abc.Create.Entity.NumericRealQuestion(questionCId, "c", enablementCondition: "gps.Latitude < 0")
                 );
 
-                var interview = SetupInterview(questionnaireDocument, new List<object>
+                var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument, new List<object>
                 {
                     Abc.Create.Event.QuestionsEnabled(new []
                     {

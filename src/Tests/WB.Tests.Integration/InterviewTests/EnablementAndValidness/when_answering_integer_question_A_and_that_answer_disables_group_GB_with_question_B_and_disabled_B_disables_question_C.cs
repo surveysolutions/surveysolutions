@@ -38,7 +38,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                     Abc.Create.Entity.NumericIntegerQuestion(questionCId, "c", enablementCondition: "b > 0")
                 );
 
-                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument, new List<object>
+                var interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument, new List<object>
                 {
                     Abc.Create.Event.QuestionsEnabled(DateTimeOffset.Now, new []
                     {

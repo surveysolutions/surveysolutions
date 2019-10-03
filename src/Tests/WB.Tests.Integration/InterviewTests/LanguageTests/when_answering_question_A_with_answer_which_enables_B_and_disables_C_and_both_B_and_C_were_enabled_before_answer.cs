@@ -26,6 +26,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 var questionC = Guid.Parse("cccccccccccccccccccccccccccccccc");
 
                 var interview = SetupInterview(
+                    appDomainContext.AssemblyLoadContext,
                     Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
                     {
                         Abc.Create.Entity.Group(null, "Chapter X", null, null, false, new IComposite[]
