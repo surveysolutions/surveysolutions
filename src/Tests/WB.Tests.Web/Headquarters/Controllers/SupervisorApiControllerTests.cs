@@ -9,7 +9,6 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Tests.Abc;
-
 using WB.UI.Headquarters.API.DataCollection.Supervisor.v1;
 
 namespace WB.Tests.Unit.Applications.Headquarters.Api.DataCollection.Supervisor
@@ -22,7 +21,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.Api.DataCollection.Supervisor
         {
             Guid authorizedUserId = Id.gA;
 
-            var fixture = Create.Other.WebApiAutoFixture();
+            var fixture = Web.Create.Other.WebApiAutoFixture();
 
             var interviewInformationFactory = Mock.Of<IInterviewInformationFactory>(x =>
                 x.HasAnyInterviewsInProgressWithResolvedCommentsForSupervisor(authorizedUserId) == true);

@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Web.Http.Controllers;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using Moq;
@@ -26,26 +25,9 @@ namespace WB.Tests.Abc.TestFactories
 {
     internal class OtherFactory
     {
-        private class ApiControllerCustomization : ICustomization
-        {
-            public void Customize(IFixture fixture)
-            {
-                fixture.Inject(new HttpControllerContext());
-                fixture.Inject(new HttpRequestContext());
-            }
-        }
-
         public Fixture AutoFixture()
         {
             var autoFixture = new Fixture();
-            autoFixture.Customize(new AutoMoqCustomization());
-            return autoFixture;
-        }
-
-        public Fixture WebApiAutoFixture()
-        {
-            var autoFixture = new Fixture();
-            autoFixture.Customize(new ApiControllerCustomization());
             autoFixture.Customize(new AutoMoqCustomization());
             return autoFixture;
         }
