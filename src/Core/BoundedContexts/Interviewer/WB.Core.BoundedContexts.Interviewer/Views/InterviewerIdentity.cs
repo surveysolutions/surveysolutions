@@ -32,5 +32,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public DateTime? Created { get; set; }
 
         public DateTime? LastUpdated { get; set; }
+
+        public bool? IsDeleted { get; set; } 
     }
 }

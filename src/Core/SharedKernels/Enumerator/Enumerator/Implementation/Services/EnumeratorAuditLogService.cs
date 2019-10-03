@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using SQLite;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
@@ -83,6 +84,16 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             var settingsView = auditLogSettingsStorage.GetById(AuditLogSettingsKey);
             int lastSyncedEntityId = settingsView?.LastSyncedEntityId ?? -1;
             foreach (var logItem in auditLogStorage.Where(kv => kv.Id > lastSyncedEntityId))
+            {
+                var entity = serializer.Deserialize<AuditLogEntityView>(logItem.Json);
+                entity.Id = logItem.Id.Value;
+                yield return entity;
+            }
+        }
+
+        public IEnumerable<AuditLogEntityView> GetAllAuditLogEntities()
+        {
+            foreach (var logItem in auditLogStorage.Where(kv => kv.Id>0).OrderBy(x=> x.Id))
             {
                 var entity = serializer.Deserialize<AuditLogEntityView>(logItem.Json);
                 entity.Id = logItem.Id.Value;

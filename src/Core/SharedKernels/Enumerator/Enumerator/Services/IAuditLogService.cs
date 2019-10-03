@@ -10,5 +10,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         void UpdateLastSyncIndex(int id);
         IEnumerable<AuditLogEntityView> GetAuditLogEntitiesForSync();
         void WriteAuditLogRecord(AuditLogEntityView auditLogEntityView);
+
+        IEnumerable<AuditLogEntityView> GetAllAuditLogEntities();
     }
 }

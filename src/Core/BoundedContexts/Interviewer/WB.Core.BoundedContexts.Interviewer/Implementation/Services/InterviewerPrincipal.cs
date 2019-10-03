@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private InterviewerIdentity GetInterviewerIdentity()
         {
             return this.usersStorage
-                //.Where(x => x.Id != null)
+                .Where(x => x.IsDeleted == null || x.IsDeleted == false)
                 //.OrderByDescending(x => x.Name)
                 .FirstOrDefault();
         }

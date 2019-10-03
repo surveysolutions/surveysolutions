@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross;
 using MvvmCross.Navigation;
@@ -9,6 +10,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Denormalizer;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -74,28 +76,50 @@ namespace WB.UI.Interviewer
 
         private void CheckAndProcessUserLogins()
         {
+            //fix of KP-13229 
+
             var interviewersStorage = Mvx.IoCProvider.Resolve<IPlainStorage<InterviewerIdentity>>();
             
-            var users = interviewersStorage.LoadAll().ToList();
+            var users = interviewersStorage.Where(x => x.IsDeleted == null || x.IsDeleted == false).ToList();
             if (users.Count > 1)
             {
-                var interviewViewRepository = Mvx.IoCProvider.Resolve<IPlainStorage<InterviewView>>();
                 var assignmentViewRepository = Mvx.IoCProvider.Resolve<IAssignmentDocumentsStorage>();
-
-                foreach (var interviewerIdentity in users)
+                var auditLog = Mvx.IoCProvider.Resolve<IAuditLogService>();
+                
+                //getting first user from audit log
+                Guid firstUserId = Guid.Empty;
+                foreach (var auditLogEntityView in auditLog.GetAllAuditLogEntities())
                 {
-                    var interviewsCount =
-                        interviewViewRepository.Count(x => x.ResponsibleId == interviewerIdentity.UserId);
-
-                    if(interviewsCount > 0)
-                        continue;
-                    var assignmentsCount =
-                        assignmentViewRepository.Count(x => x.ResponsibleId == interviewerIdentity.UserId);
-
-                    if (assignmentsCount == 0)
+                    if (auditLogEntityView.ResponsibleId != null)
                     {
-                        logger.Warn($"Removing extra user {interviewerIdentity.Name}, Id: {interviewerIdentity.Id}");
-                        interviewersStorage.Remove(interviewerIdentity.Id);
+                        firstUserId = auditLogEntityView.ResponsibleId.Value;
+                        break;
+                    }
+                }
+
+                if (firstUserId == Guid.Empty)
+                {
+                    var assignmentResponsibles = assignmentViewRepository.LoadAll().Select(x => x.ResponsibleId)
+                        .Distinct().ToList();
+                    //assuming only original user pulled assignments
+                    if (assignmentResponsibles.Count == 1)
+                    {
+                        firstUserId = assignmentResponsibles.First();
+                    }
+                }
+
+                if (firstUserId != Guid.Empty)
+                {
+                    foreach (var interviewerIdentity in users)
+                    {
+                        if (interviewerIdentity.UserId != firstUserId)
+                        {
+                            logger.Warn(
+                                $"Marking as deleted extra user {interviewerIdentity.Name}, Id: {interviewerIdentity.Id}");
+
+                            interviewerIdentity.IsDeleted = true;
+                            interviewersStorage.Store(interviewerIdentity);
+                        }
                     }
                 }
             }
