@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using AppDomainToolkit;
+
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
@@ -75,7 +75,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
         [NUnit.Framework.Test] public void should_raise_QuestionsDisabled_event_with_question_C_only () =>
             result.QuestionsDisabledQuestionIds.Should().BeEquivalentTo(Guid.Parse("cccccccccccccccccccccccccccccccc"));
 
-        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        private static AppDomainContext appDomainContext;
         private static InvokeResult result;
 
         [Serializable]

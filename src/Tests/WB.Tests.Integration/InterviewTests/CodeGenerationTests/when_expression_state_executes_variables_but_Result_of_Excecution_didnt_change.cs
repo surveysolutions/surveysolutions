@@ -1,5 +1,5 @@
 using System;
-using AppDomainToolkit;
+
 using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -54,7 +54,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
             appDomainContext = null;
         }
 
-        static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        static AppDomainContext appDomainContext;
         static InvokeResults results;
 
         [Serializable]

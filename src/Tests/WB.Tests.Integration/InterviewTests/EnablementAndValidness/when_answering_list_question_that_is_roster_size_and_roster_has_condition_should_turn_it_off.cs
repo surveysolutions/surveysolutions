@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AppDomainToolkit;
+
 using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
@@ -67,7 +67,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         }
 
         private static InvokeResults results;
-        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        private static AppDomainContext appDomainContext;
 
         [Serializable]
         internal class InvokeResults

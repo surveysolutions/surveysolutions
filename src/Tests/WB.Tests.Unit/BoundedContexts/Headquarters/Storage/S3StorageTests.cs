@@ -154,7 +154,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Storage
         [Test]
         public async Task should_use_proper_key_for_deletion()
         {
-            client.Setup(c => c.DeleteObject(It.IsAny<string>(), It.IsAny<string>())).Returns(new DeleteObjectResponse());
+            client.Setup(c => c.DeleteObjectAsync(It.IsAny<DeleteObjectRequest>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new DeleteObjectResponse());
 
             await this.storage.RemoveAsync("somePath");
 

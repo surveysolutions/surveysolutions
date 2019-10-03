@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using AppDomainToolkit;
+
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -72,7 +72,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
         }
 
         private static InvokeResults results;
-        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        private static AppDomainContext appDomainContext;
         private static readonly Guid questionnaireId = Guid.Parse("77778888000000000000000000000000");
         private static readonly Guid q1Id = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
