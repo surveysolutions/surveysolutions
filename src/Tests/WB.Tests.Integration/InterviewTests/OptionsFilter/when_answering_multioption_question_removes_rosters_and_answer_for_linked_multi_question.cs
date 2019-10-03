@@ -40,7 +40,7 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                     Create.Entity.MultyOptionsQuestion(q4Id, variable: "q4", linkedToRosterId: rosterId)
                 });
 
-                var interview = SetupInterview(questionnaireDocument);
+                var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 interview.AnswerMultipleOptionsQuestion(userId, q2Id, RosterVector.Empty, DateTime.Now, new[] { 2 });
                 interview.AnswerMultipleOptionsQuestion(userId, q2Id, RosterVector.Empty, DateTime.Now, new[] { 2, 22 });

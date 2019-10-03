@@ -39,7 +39,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                         Abc.Create.Entity.MultyOptionsQuestion(id: linkedMultioptionQuestion, variable: "lnkMul", linkedToQuestionId: listQuestionId),
                     });
 
-                var interview = SetupInterview(questionnaireDocument);
+                var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 interview.AnswerNumericIntegerQuestion(userId, intQuestionId, RosterVector.Empty, DateTime.Now, 1);
                 interview.AnswerTextListQuestion(userId, listQuestionId, RosterVector.Empty, DateTime.Now, new[] { Tuple.Create(0m, "one") });

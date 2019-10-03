@@ -41,7 +41,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                         hideIfDisabled: true)
                 });
                 
-                interview = SetupInterview(questionnaireDocument);
+                interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 interview.AnswerNumericIntegerQuestion(userId, rosterSource, RosterVector.Empty, DateTime.Now, 1);
 
