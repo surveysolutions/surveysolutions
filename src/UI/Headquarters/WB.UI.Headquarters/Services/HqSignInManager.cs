@@ -1,11 +1,12 @@
 using System;
+using System.Data.Entity.Utilities;
+using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
@@ -15,8 +16,22 @@ using WB.Core.BoundedContexts.Headquarters.OwinSecurity.Providers;
 
 namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 {
-    public class HqSignInManager : SignInManager<HqUser, Guid>
+    public enum SignInStatus
     {
+        Success,
+        Failure,
+        LockedOut
+    }
+
+    public interface ISignInManager
+    {
+        Task<SignInStatus> SignInAsync(string userName, string password, bool isPersistent = false);
+    }
+
+    public class HqSignInManager : ISignInManager
+    {
+        private readonly HqUserManager UserManager;
+        private readonly IAuthenticationManager AuthenticationManager;
         private readonly IHashCompatibilityProvider hashCompatibilityProvider;
         private IApiTokenProvider<Guid> ApiTokenProvider { get; set; }
 
@@ -24,9 +39,10 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             IAuthenticationManager authenticationManager,
             IHashCompatibilityProvider hashCompatibilityProvider,
             IApiTokenProvider<Guid> tokenProvider = null)
-            : base(userManager, authenticationManager)
         {
             this.ApiTokenProvider = tokenProvider ?? new ApiAuthTokenProvider<HqUser, Guid>(userManager);
+            this.UserManager = userManager;
+            this.AuthenticationManager = authenticationManager;
             this.hashCompatibilityProvider = hashCompatibilityProvider;
         }
 
@@ -160,6 +176,24 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             SetPrincipal(identity);
 
             return SignInStatus.Success;
+        }
+
+        private async Task SignInAsync(HqUser user, bool isPersistent, bool rememberBrowser)
+        {
+            var userIdentity = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie).WithCurrentCulture();
+            // Clear any partial cookies from external or two factor partial sign ins
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie, DefaultAuthenticationTypes.TwoFactorCookie);
+            if (rememberBrowser)
+            {
+                var rememberBrowserIdentity = new ClaimsIdentity(DefaultAuthenticationTypes.TwoFactorRememberBrowserCookie);
+                rememberBrowserIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, Convert.ToString(user.Id, CultureInfo.InvariantCulture)));
+
+                AuthenticationManager.SignIn(new AuthenticationProperties { IsPersistent = isPersistent }, userIdentity, rememberBrowserIdentity);
+            }
+            else
+            {
+                AuthenticationManager.SignIn(new AuthenticationProperties { IsPersistent = isPersistent }, userIdentity);
+            }
         }
         
         private void SetPrincipal(ClaimsIdentity identity)

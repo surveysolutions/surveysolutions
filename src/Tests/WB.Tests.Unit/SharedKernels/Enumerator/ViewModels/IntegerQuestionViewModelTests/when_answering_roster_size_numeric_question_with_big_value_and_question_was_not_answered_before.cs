@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -10,10 +11,10 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewModelTests
 {
     [TestOf(typeof(IntegerQuestionViewModel))]
-    internal class when_answering_roster_size_numeric_question_with_big_value_and_question_was_not_answered_before : IntegerQuestionViewModelTestContext
+    public class when_answering_roster_size_numeric_question_with_big_value_and_question_was_not_answered_before : IntegerQuestionViewModelTestContext
     {
-        [SetUp]
-        public void Context()
+        [Test]
+        public async Task should_not_send_answer_command()
         {
             SetUp();
 
@@ -27,28 +28,24 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
 
             var questionnaireRepository = SetupQuestionnaireRepositoryWithNumericQuestion();
 
-            integerModel = CreateIntegerQuestionViewModel(
+            var integerModel = CreateIntegerQuestionViewModel(
                 interviewRepository: interviewRepository,
                 questionnaireRepository: questionnaireRepository);
 
             integerModel.Init(interviewId, questionIdentity, navigationState);
-        
+
             integerModel.Answer = 70;
-            integerModel.ValueChangeCommand.Execute();
+            // Act
+            await integerModel.ValueChangeCommand.ExecuteAsync();
+
+            // Assert
+            ValidityModelMock.Verify(x => x.MarkAnswerAsNotSavedWithMessage("Answer '70' is incorrect because answer is greater than Roster upper bound '60'."),
+                Times.Once);
+
+            AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(It.IsAny<AnswerNumericIntegerQuestionCommand>()), Times.Never);
+
+            integerModel.Answer.Should().Be(70);
         }
 
-        [Test]
-        public void  should_mark_question_as_invalid_with_message() =>
-            ValidityModelMock.Verify(x => x.MarkAnswerAsNotSavedWithMessage("Answer '70' is incorrect because answer is greater than Roster upper bound '60'."), Times.Once);
-
-        [Test]
-        public void  should_not_send_answer_command() =>
-            AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerNumericIntegerQuestionCommand>()), Times.Never);
-
-        [Test]
-        public void  should_not_reset_AnswerAsString_to_previous_value() =>
-            integerModel.Answer.Should().Be(70);
-
-        private static IntegerQuestionViewModel integerModel;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Reflection;
 using Npgsql;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
@@ -23,7 +24,7 @@ namespace WB.Tests.Integration.PostgreSQLTests
         [OneTimeSetUp]
         public void create_empty_database()
         {
-            var TestConnectionString = ConfigurationManager.ConnectionStrings["TestConnection"].ConnectionString;
+            var TestConnectionString = TestsConfigurationManager.ConnectionString;
             var databaseName = "testdb_" + Guid.NewGuid().FormatGuid();
             var connectionStringBuilder = new NpgsqlConnectionStringBuilder(TestConnectionString)
             {

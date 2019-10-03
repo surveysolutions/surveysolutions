@@ -5,9 +5,10 @@ namespace WB.Tests.Abc
 {
     internal class Id
     {
-        public static readonly Guid gA = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-        public static readonly Guid gB = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
-        public static readonly Guid gC = Guid.Parse("cccccccccccccccccccccccccccccccc");
+        
+        public static readonly Guid gA = Guid.Parse("aaaaaaaa-aaaa-4aaa-aaaa-aaaaaaaaaaaa");
+        public static readonly Guid gB = Guid.Parse("bbbbbbbb-bbbb-4bbb-bbbb-bbbbbbbbbbbb");
+        public static readonly Guid gC = Guid.Parse("cccccccc-cccc-4ccc-cccc-cccccccccccc");
         public static readonly Guid gD = Guid.Parse("dddddddddddddddddddddddddddddddd");
         public static readonly Guid gE = Guid.Parse("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
         public static readonly Guid gF = Guid.Parse("ffffffffffffffffffffffffffffffff");
