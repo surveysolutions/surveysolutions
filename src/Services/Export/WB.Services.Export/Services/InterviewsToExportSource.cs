@@ -52,7 +52,7 @@ namespace WB.Services.Export.Services
                 var filteredToDate = toDate.Value;
                 queryable = queryable.Where(x => x.UpdateDateUtc < filteredToDate);
             }
-            var result = queryable.Select(x => new InterviewToExport(x.InterviewId, x.Key, x.Status)).ToList();
+            var result = queryable.Select(x => new InterviewToExport(x.InterviewId, x.Key, x.Status, x.AssignmentId)).ToList();
 
             this.logger.LogTrace("Get Interviews to Export: {questionnaire} Status: {status}. {from}-{to}. Got {count} interviews",
                 questionnaireIdentity.ToString(), status, fromDate, toDate, result.Count);

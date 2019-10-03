@@ -7,10 +7,12 @@ using Dapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Npgsql;
+using WB.Services.Export.Assignment;
 using WB.Services.Export.InterviewDataStorage;
 using WB.Services.Export.InterviewDataStorage.EfMappings;
 using WB.Services.Infrastructure.Storage;
 using WB.Services.Infrastructure.Tenant;
+using Microsoft.Extensions.Logging;
 
 namespace WB.Services.Export.Infrastructure
 {
@@ -30,14 +32,17 @@ namespace WB.Services.Export.Infrastructure
 
         private const long ContextSchemaVersion = 1;
 
-        private IOptions<DbConnectionSettings> connectionSettings;
+        private readonly IOptions<DbConnectionSettings> connectionSettings;
+        private readonly ILogger<TenantDbContext> logger;
 
         public TenantDbContext(ITenantContext tenantContext,
             IOptions<DbConnectionSettings> connectionSettings,
-            DbContextOptions options) : base(options)
+            DbContextOptions options,
+            ILogger<TenantDbContext> logger = null) : base(options)
         {
             this.TenantContext = tenantContext;
             this.connectionSettings = connectionSettings;
+            this.logger = logger;
 
             // failing later provide much much much more information on who and why injected this without ITenantContext
             // otherwise there will 2 step stack trace starting from one of the registered middleware
@@ -58,6 +63,8 @@ namespace WB.Services.Export.Infrastructure
         public DbSet<InterviewReference> InterviewReferences { get; set; }
         public DbSet<Metadata> MetadataSet { get; set; }
         public DbSet<GeneratedQuestionnaireReference> GeneratedQuestionnaires { get; set; }
+        public DbSet<AssignmentAction> AssignmentActions { get; set; }
+        public DbSet<Assignment.Assignment> Assignments { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -110,8 +117,11 @@ namespace WB.Services.Export.Infrastructure
                 {
                     schemaVersion = SchemaVersion.AsLong;
                 }
-                catch (Exception e)
+                catch (PostgresException postgressException)
                 {
+                    //if relation doesn't exist or incorrect for old schema
+                    //ignoring and dropping schema
+                    logger?.LogWarning("Version Check failed. {messageText}", postgressException.MessageText);
                 }
 
                 if (schemaVersion < ContextSchemaVersion)
@@ -145,6 +155,8 @@ namespace WB.Services.Export.Infrastructure
             modelBuilder.ApplyConfiguration(new InterviewReferenceEntityTypeConfiguration(schema));
             modelBuilder.ApplyConfiguration(new MetadataTypeConfiguration(schema));
             modelBuilder.ApplyConfiguration(new DeletedQuestionnaireReferenceTypeConfiguration(schema));
+            modelBuilder.ApplyConfiguration(new AssignmentTypeConfiguration(schema));
+            modelBuilder.ApplyConfiguration(new AssignmentActionTypeConfiguration(schema));
         }
 
         public async Task DropTenantSchemaAsync(string tenant, CancellationToken cancellationToken = default)

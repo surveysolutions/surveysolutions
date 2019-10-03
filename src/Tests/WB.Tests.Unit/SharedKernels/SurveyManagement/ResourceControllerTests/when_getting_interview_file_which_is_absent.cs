@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using FluentAssertions;
 using NUnit.Framework;
@@ -9,14 +10,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ResourceControllerTests
     internal class when_getting_interview_file_which_is_absent : ResourceControllerTestContext
     {
         [OneTimeSetUp]
-        public void context()
+        public async Task context()
         {
             controller = CreateController();
-            Becauseof();
+            await Becauseof();
         }
 
-        public void Becauseof() =>
-            actionResult = controller.InterviewFile(interviewId, fileName);
+        public async Task Becauseof() =>
+            actionResult = await controller.InterviewFile(interviewId, fileName);
 
         [Test]
         public void should_return_file_stream_result() =>

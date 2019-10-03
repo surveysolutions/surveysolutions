@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Infrastructure.Native.Storage;
 
 namespace WB.Core.BoundedContexts.Headquarters.Repositories
@@ -28,8 +29,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
             IReadSideRepositoryWriter<QuestionnaireCompositeItem, int> questionnaireItemsWriter,
             INativeReadSideStorage<QuestionnaireCompositeItem, int> questionnaireItemsReader,
             IQuestionOptionsRepository questionOptionsRepository,
-            ISubstitutionService substitutionService)
-            : base(repository, translationStorage, translator, questionOptionsRepository, substitutionService)
+            ISubstitutionService substitutionService,
+            IInterviewExpressionStatePrototypeProvider expressionStatePrototypeProvider)
+            : base(repository, translationStorage, translator, questionOptionsRepository, substitutionService, expressionStatePrototypeProvider)
         {
             this.questionnaireItemsWriter = questionnaireItemsWriter;
             this.questionnaireItemsReader = questionnaireItemsReader;

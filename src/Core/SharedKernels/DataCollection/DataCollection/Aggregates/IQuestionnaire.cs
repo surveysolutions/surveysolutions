@@ -22,6 +22,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         Translation Translation { get; }
 
         string VariableName { get; }
+        Type ExpressionStorageType { get; set; }
 
         IQuestion GetQuestionByVariable(string variable);
 

@@ -28,6 +28,7 @@ using WB.Services.Export.Services;
 using WB.Services.Export.Services.Implementation;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Export.Storage;
+using WB.Services.Export.User;
 using WB.Services.Infrastructure.EventSourcing;
 using WB.Services.Infrastructure.FileSystem;
 
@@ -55,6 +56,7 @@ namespace WB.Services.Export
             services.AddTransient<IQuestionnaireExportStructureFactory, QuestionnaireExportStructureFactory>();
             services.AddTransient<IDiagnosticsExporter, DiagnosticsExporter>();
             services.AddTransient<IQuestionnaireStorage, QuestionnaireStorage>();
+            services.AddTransient<IAssignmentActionsExporter, AssignmentActionsExporter>();
             services.AddTransient<IInterviewActionsExporter, InterviewActionsExporter>();
             services.AddTransient<IInterviewsExporter, InterviewsExporter>();
             services.AddTransient<IInterviewFactory, InterviewFactory>();
@@ -86,6 +88,7 @@ namespace WB.Services.Export
             services.AddTransient<ICommandExecutor, CommandExecutor>();
             services.AddTransient<IInterviewReferencesStorage, InterviewReferencesStorage>();
             services.AddTransient<IDatabaseSchemaCommandBuilder, DatabaseSchemaCommandBuilder>();
+            services.AddTransient<IUserStorage, UserStorage>();
 
             services.AddTransient<IEventProcessor, EventsProcessor>();
             services.AddScoped<ITenantContext, TenantContext>();

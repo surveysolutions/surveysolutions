@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Refit;
+using WB.Services.Export.Assignment;
 using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.Events;
 using WB.Services.Export.Interview;
@@ -16,12 +17,10 @@ namespace WB.Services.Export.Services
     public interface IHeadquartersApi
     {
         [Get("/api/export/v1/questionnaire/{id}")]
-        
         Task<QuestionnaireDocument> GetQuestionnaireAsync([AliasAs("id")] QuestionnaireId questionnaireId);
 
         [Get("/api/export/v1/interview/batch/diagnosticsInfo")]
-        Task<InterviewDiagnosticsInfo[]> GetInterviewDiagnosticsInfoBatchAsync(
-            [Query(CollectionFormat.Multi), AliasAs("id")] Guid[] interviewIds);
+        Task<InterviewDiagnosticsInfo[]> GetInterviewDiagnosticsInfoBatchAsync([Query(CollectionFormat.Multi), AliasAs("id")] Guid[] interviewIds);
 
         [Get("/api/export/v1/interview/batch/commentaries")]
         Task<List<InterviewComment>> GetInterviewCommentsBatchAsync([Query(CollectionFormat.Multi), AliasAs("id")] Guid[] interviewIds);
@@ -49,5 +48,8 @@ namespace WB.Services.Export.Services
 
         [Get("/api/export/v1/interview/events")]
         Task<EventsFeed> GetInterviewEvents([AliasAs("sequence")] long sequence, int pageSize = 500);
+
+        [Get("/api/export/v1/user/{userId}")]
+        Task<User.User> GetUserAsync(Guid userId);
     }
 }

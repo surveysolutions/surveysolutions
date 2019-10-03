@@ -207,17 +207,17 @@ namespace WB.Tests.Unit.Applications.Headquarters
         }
 
         protected static IQuestionnaireImportService CreateIQuestionnaireImportService(
-      ICommandService commandService = null,
-      IAuthorizedUser authorizedUser = null,
-      IStringCompressor zipUtils = null,
-      ILogger logger = null,
-      IRestService restService = null,
-      ISupportedVersionProvider supportedVersionProvider = null,
-      IAttachmentContentService attachmentContentService = null,
-      IPlainStorageAccessor<TranslationInstance> translationInstances = null,
-      IQuestionnaireVersionProvider questionnaireVersionProvider = null,
-      DesignerUserCredentials designerUserCredentials = null,
-      IPlainKeyValueStorage<QuestionnaireLookupTable> lookupStorage = null
+          ICommandService commandService = null,
+          IAuthorizedUser authorizedUser = null,
+          IStringCompressor zipUtils = null,
+          ILogger logger = null,
+          IRestService restService = null,
+          ISupportedVersionProvider supportedVersionProvider = null,
+          IAttachmentContentService attachmentContentService = null,
+          IPlainStorageAccessor<TranslationInstance> translationInstances = null,
+          IQuestionnaireVersionProvider questionnaireVersionProvider = null,
+          DesignerUserCredentials designerUserCredentials = null,
+          IPlainKeyValueStorage<QuestionnaireLookupTable> lookupStorage = null
       )
         {
             var service = restService ?? Mock.Of<IRestService>();

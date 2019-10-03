@@ -7,6 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20190918154818_AddAssignmentTracking.cs" />
+    <Compile Remove="Migrations\20190918154818_AddAssignmentTracking.Designer.cs" />
+    <Compile Remove="Migrations\20190919084034_AddAssignmentTracking.cs" />
+    <Compile Remove="Migrations\20190919084034_AddAssignmentTracking.Designer.cs" />
+    <Compile Remove="Migrations\20190919084534_AddAssignmentTracking.cs" />
+    <Compile Remove="Migrations\20190919084534_AddAssignmentTracking.Designer.cs" />
+    <Compile Remove="Migrations\20190919091406_AddAssignmentTracking.cs" />
+    <Compile Remove="Migrations\20190919091406_AddAssignmentTracking.Designer.cs" />
+    <Compile Remove="Migrations\20190919094536_AddAssignmentTracking.cs" />
+    <Compile Remove="Migrations\20190919094536_AddAssignmentTracking.Designer.cs" />
+    <Compile Remove="Migrations\20190923164334_AddedPositionToActions.cs" />
+    <Compile Remove="Migrations\20190923164334_AddedPositionToActions.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AWSSDK.Core" Version="3.3.103.3" />
     <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.3.100.1" />
     <PackageReference Include="AWSSDK.S3" Version="3.3.102.20" />
@@ -21,6 +36,10 @@
     <PackageReference Include="Humanizer.Core" Version="2.6.2" />
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="2.2.0" />
