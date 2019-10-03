@@ -16,8 +16,80 @@ namespace WB.Services.Export.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasAnnotation("ProductVersion", "2.2.2-servicing-10034")
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
+
+            modelBuilder.Entity("WB.Services.Export.Assignment.Assignment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id");
+
+                    b.Property<bool>("AudioRecording")
+                        .HasColumnName("audio_recording");
+
+                    b.Property<string>("Comment")
+                        .HasColumnName("comment");
+
+                    b.Property<Guid>("PublicKey")
+                        .HasColumnName("public_key");
+
+                    b.Property<int?>("Quantity")
+                        .HasColumnName("quantity");
+
+                    b.Property<Guid>("ResponsibleId")
+                        .HasColumnName("responsible_id");
+
+                    b.Property<bool?>("WebMode")
+                        .HasColumnName("web_mode");
+
+                    b.HasKey("Id")
+                        .HasName("pk_assignments");
+
+                    b.HasAlternateKey("PublicKey");
+
+                    b.ToTable("__assignment");
+                });
+
+            modelBuilder.Entity("WB.Services.Export.Assignment.AssignmentAction", b =>
+                {
+                    b.Property<long>("GlobalSequence")
+                        .HasColumnName("global_sequence");
+
+                    b.Property<int>("Position")
+                        .HasColumnName("position");
+
+                    b.Property<int>("AssignmentId")
+                        .HasColumnName("assignment_id");
+
+                    b.Property<string>("Comment")
+                        .HasColumnName("comment");
+
+                    b.Property<string>("NewValue")
+                        .HasColumnName("new_value");
+
+                    b.Property<string>("OldValue")
+                        .HasColumnName("old_value");
+
+                    b.Property<Guid>("OriginatorId")
+                        .HasColumnName("originator_id");
+
+                    b.Property<Guid>("ResponsibleId")
+                        .HasColumnName("responsible_id");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("status");
+
+                    b.Property<DateTime>("TimestampUtc")
+                        .HasColumnName("timestamp_utc");
+
+                    b.HasKey("GlobalSequence", "Position");
+
+                    b.HasIndex("AssignmentId")
+                        .HasName("ix_assignment_actions_assignment_id");
+
+                    b.ToTable("__assignment__action");
+                });
 
             modelBuilder.Entity("WB.Services.Export.InterviewDataStorage.GeneratedQuestionnaireReference", b =>
                 {
@@ -39,6 +111,9 @@ namespace WB.Services.Export.Migrations
                     b.Property<Guid>("InterviewId")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("interview_id");
+
+                    b.Property<int?>("AssignmentId")
+                        .HasColumnName("assignment_id");
 
                     b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnName("deleted_at_utc");
@@ -73,6 +148,15 @@ namespace WB.Services.Export.Migrations
                         .HasName("pk_metadata");
 
                     b.ToTable("metadata");
+                });
+
+            modelBuilder.Entity("WB.Services.Export.Assignment.AssignmentAction", b =>
+                {
+                    b.HasOne("WB.Services.Export.Assignment.Assignment", "Assignment")
+                        .WithMany("Actions")
+                        .HasForeignKey("AssignmentId")
+                        .HasConstraintName("fk_assignment_actions_assignments_assignment_id")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

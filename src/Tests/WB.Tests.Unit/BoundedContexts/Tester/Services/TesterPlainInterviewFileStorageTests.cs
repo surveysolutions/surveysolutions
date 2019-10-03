@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
@@ -29,7 +30,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.Services
         }
 
         [Test]
-        public void When_StoreInterviewBinaryData_with_image_data_for_one_interview_Then_should_we_get_this_image_by_name_for_different_interview()
+        public async Task When_StoreInterviewBinaryData_with_image_data_for_one_interview_Then_should_we_get_this_image_by_name_for_different_interview()
         {
             //arrange
             var interviewId1 = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
@@ -48,7 +49,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.Services
             interviewerPlainInterviewFileStorage.StoreInterviewBinaryData(interviewId1, imageName, imageFileBytes, null);
 
             //act
-            var resImage = interviewerPlainInterviewFileStorage.GetInterviewBinaryData(interviewId2, imageName);
+            var resImage = await interviewerPlainInterviewFileStorage.GetInterviewBinaryData(interviewId2, imageName);
 
             //assert
             Mock.Get(fileSystemAccessor).Verify(x => x.WriteAllBytes(filePathToImage, imageFileBytes), Times.Once);

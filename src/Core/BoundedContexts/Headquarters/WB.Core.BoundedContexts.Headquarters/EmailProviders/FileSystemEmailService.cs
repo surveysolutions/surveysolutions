@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using System.Web;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 
 namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
@@ -29,6 +29,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
     public class FileSystemEmailService : IEmailService
     {
         private readonly FileSystemEmailServiceSettings settings;
+        private readonly IApplicationPathResolver pathResolver;
 
         public class FileSystemSenderInformation : ISenderInformation
         {
@@ -38,9 +39,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
             public string Address { get; set; }
         }
 
-        public FileSystemEmailService(FileSystemEmailServiceSettings settings)
+        public FileSystemEmailService(FileSystemEmailServiceSettings settings,
+            IApplicationPathResolver pathResolver)
         {
             this.settings = settings;
+            this.pathResolver = pathResolver;
         }
 
         public Task<string> SendEmailAsync(string to, string subject, string htmlBody, string textBody)
@@ -49,7 +52,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
                 throw new ArgumentException();
 
             var directory = settings.EmailFolder.StartsWith("~")
-                ? HttpContext.Current.Server.MapPath(settings.EmailFolder)
+                ? pathResolver.MapPath(settings.EmailFolder)
                 : Path.GetFullPath(settings.EmailFolder);
 
             if (!Directory.Exists(directory))

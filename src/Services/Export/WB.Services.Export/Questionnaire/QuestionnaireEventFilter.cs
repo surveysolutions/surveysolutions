@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using WB.Services.Export.Events.Assignment.Base;
 using WB.Services.Export.Events.Interview;
+using WB.Services.Export.Events.Interview.Base;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.InterviewDataStorage;
 using WB.Services.Export.Questionnaire.Services;
@@ -39,6 +41,13 @@ namespace WB.Services.Export.Questionnaire
                 try
                 {
                     if (@event.Payload == null) continue;
+
+                    var isInterviewEvent = @event.Payload is InterviewActiveEvent || @event.Payload is InterviewPassiveEvent;
+                    if (!isInterviewEvent)
+                    {
+                        result.Add(@event);
+                        continue;
+                    }
 
                     InterviewReference reference;
                     
@@ -92,7 +101,7 @@ namespace WB.Services.Export.Questionnaire
             foreach (var questionnaireId in questionnaireIds)
             {
                 var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(questionnaireId);
-                await databaseSchemaService.CreateOrRemoveSchema(questionnaire);
+                databaseSchemaService.CreateOrRemoveSchema(questionnaire);
             }
 
             this.dbContext.SaveChanges();

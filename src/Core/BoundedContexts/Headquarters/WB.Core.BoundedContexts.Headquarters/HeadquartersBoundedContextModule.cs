@@ -237,7 +237,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.RegisterDenormalizer<AssignmentDenormalizer>();
 
             registry.RegisterDenormalizer<InterviewSummaryCompositeDenormalizer>();
-            registry.RegisterDenormalizer<InterviewLifecycleEventHandler>();
             registry.RegisterDenormalizer<CumulativeChartDenormalizer>();
 
             registry.Bind<IInterviewPackagesService, IInterviewBrokenPackagesService, InterviewPackagesService>();
@@ -273,7 +272,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             
             registry.Bind<IRosterStructureService, RosterStructureService>();
             registry.Bind<IQuestionnaireImportService, QuestionnaireImportService>();
-            registry.Bind<DesignerUserCredentials>();
 
             registry.Bind<IWebInterviewConfigurator, WebInterviewConfigurator>();
             registry.Bind<IWebInterviewConfigProvider, WebInterviewConfigProvider>();

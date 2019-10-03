@@ -2,8 +2,10 @@
 using System.Threading.Tasks;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
+using Moq;
 using Npgsql;
 using NUnit.Framework;
 using WB.Services.Export.Infrastructure;
@@ -34,7 +36,7 @@ namespace WB.Services.Export.Tests.WithDatabase
             var optionsBuilder = new DbContextOptionsBuilder<TenantDbContext>();
             optionsBuilder.UseNpgsql(connectionOptions.Value.DefaultConnection,
                 b => { b.MigrationsHistoryTable("__migrations", tenant.SchemaName());});
-            var db = new TenantDbContext(ctx, connectionOptions, optionsBuilder.Options);
+            var db = new TenantDbContext(ctx, connectionOptions, optionsBuilder.Options, Mock.Of<ILogger<TenantDbContext>>());
             var generator = new QuestionnaireSchemaGenerator(ctx, db, new DatabaseSchemaCommandBuilder(),
                   new NullLogger<DatabaseSchemaService>(), connectionOptions);
 
