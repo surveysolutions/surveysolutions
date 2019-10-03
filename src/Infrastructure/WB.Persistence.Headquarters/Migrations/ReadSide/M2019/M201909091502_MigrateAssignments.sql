@@ -39,7 +39,7 @@ SELECT
 	'AssignmentCreated', -- eventtype
 	concat('{ 
 		   "id": ', id, ', 
-		   "userId": "00000000-0000-0000-0000-000000000001", 
+		   "userId": "', (SELECT "UserId"::text FROM users.userroles r inner join users.users u on r."UserId"=u."Id" where "RoleId"='00000000-0000-0000-0000-000000000001' limit 1), '", 
 		   "answers": ', coalesce(answers::text, '[]'), ', 
 		   "webMode": ', coalesce(webmode::text, 'null'), ',
 		   "quantity": ', coalesce(quantity::text, 'null'), ',
@@ -62,8 +62,8 @@ SELECT
 	(SELECT MAX(eventsequence) + 1 FROM events.events es WHERE es.eventsourceid = publickey),             -- eventsequence
 	'AssignmentReceivedByTablet', -- eventtype
 	concat('{ 
-		   "id": ', id, ', 
-		   "userId": "00000000-0000-0000-0000-000000000001"
+		   "originDate": "', updatedatutc, '",
+		   "userId": "', (SELECT "UserId"::text FROM users.userroles r inner join users.users u on r."UserId"=u."Id" where "RoleId"='00000000-0000-0000-0000-000000000001' limit 1), '"
 	}')::jsonb          -- value
 FROM readside.assignments  WHERE receivedbytabletatutc is not null;
 
@@ -73,11 +73,11 @@ SELECT
 	null,                -- origin
 	updatedatutc,        -- "timestamp"
 	publickey,           -- eventsourceid
-	(SELECT MAX(eventsequence) + 1 FROM events.events es WHERE es.eventsourceid = publickey),             -- eventsequence,                   -- eventsequence
+	(SELECT MAX(eventsequence) + 1 FROM events.events es WHERE es.eventsourceid = publickey),             -- eventsequence
 	'AssignmentArchived', -- eventtype
 	concat('{ 
-		   "id": ', id, ', 
-		   "userId": "00000000-0000-0000-0000-000000000001" 
+		   "originDate": "', updatedatutc, '",
+		   "userId": "', (SELECT "UserId"::text FROM users.userroles r inner join users.users u on r."UserId"=u."Id" where "RoleId"='00000000-0000-0000-0000-000000000001' limit 1), '"
 	}')::jsonb          -- value
 FROM readside.assignments WHERE archived = true;
 

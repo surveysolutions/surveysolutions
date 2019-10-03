@@ -156,14 +156,14 @@ namespace WB.UI.WebTester.Services
                     this.commandService.Execute(existingInterviewCommand);
                 }
 
-                foreach (var image in this.imageFileStorage.GetBinaryFilesForInterview(originalInterviewId))
+                foreach (var image in await this.imageFileStorage.GetBinaryFilesForInterview(originalInterviewId))
                 {
-                    var imageBytes = this.imageFileStorage.GetInterviewBinaryData(image.InterviewId, image.FileName);
+                    var imageBytes = await this.imageFileStorage.GetInterviewBinaryData(image.InterviewId, image.FileName);
 
                     this.imageFileStorage.StoreInterviewBinaryData(designerToken, image.FileName, imageBytes,
                         image.ContentType);
 
-                    this.imageFileStorage.RemoveInterviewBinaryData(originalInterviewId, image.FileName);
+                    await this.imageFileStorage.RemoveInterviewBinaryData(originalInterviewId, image.FileName);
                 }
 
                 return CreationResult.DataRestored;

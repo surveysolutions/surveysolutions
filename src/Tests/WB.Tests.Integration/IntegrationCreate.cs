@@ -231,7 +231,6 @@ namespace WB.Tests.Integration
 
         public static StatefulInterview StatefulInterview(QuestionnaireIdentity questionnaireIdentity,
             IQuestionnaireStorage questionnaireRepository = null, 
-            IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null,
             List<InterviewAnswer> answersOnPrefilledQuestions = null,
             IQuestionOptionsRepository questionOptionsRepository = null)
         {
@@ -241,11 +240,6 @@ namespace WB.Tests.Integration
             serviceLocatorMock.Setup(x => x.GetInstance<IQuestionnaireStorage>())
                 .Returns(qRepository);
 
-            var expressionsProvider = expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>();
-            serviceLocatorMock.Setup(x => x.GetInstance<IInterviewExpressionStatePrototypeProvider>())
-                .Returns(expressionsProvider);
-
-            
             var optionsRepository = questionOptionsRepository ?? Mock.Of<IQuestionOptionsRepository>();
             serviceLocatorMock.Setup(x => x.GetInstance<IQuestionOptionsRepository>())
                 .Returns(optionsRepository);

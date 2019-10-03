@@ -67,10 +67,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         }
                     });
 
-                    var eventStreamSignatureTag = this.interviewFactory.GetInterviewEventStreamCheckData(completedInterview.InterviewId);
+                    var interviewEventStreamContainer = this.interviewFactory.GetInterviewEventStreamContainer(completedInterview.InterviewId);
 
                     var uploadState = await this.synchronizationService.GetInterviewUploadState(completedInterview.InterviewId,
-                        eventStreamSignatureTag, Context.CancellationToken);
+                        interviewEventStreamContainer.Tag, Context.CancellationToken);
 
                     await this.UploadImagesByCompletedInterviewAsync(completedInterview.InterviewId, uploadState,
                         Context.Progress, Context.CancellationToken);
@@ -83,7 +83,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
                     if (!uploadState.IsEventsUploaded)
                     {
-                        var interviewPackage = this.interviewFactory.GetInterviewEventsPackageOrNull(completedInterview.InterviewId);
+                        var interviewPackage = this.interviewFactory.GetInterviewEventsPackageOrNull(interviewEventStreamContainer);
 
                         if (interviewPackage != null)
                         {
@@ -131,12 +131,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 await this.synchronizationService.UploadInterviewImageAsync(
                     imageView.InterviewId,
                     imageView.FileName,
-                    this.imagesStorage.GetInterviewBinaryData(interviewId, imageView.FileName),
+                    await this.imagesStorage.GetInterviewBinaryData(interviewId, imageView.FileName),
                     transferProgress,
                     cancellationToken);
 
                 this.interviewMultimediaViewStorage.Remove(imageView.Id);
-                this.imagesStorage.RemoveInterviewBinaryData(interviewId, imageView.FileName);
+                await this.imagesStorage.RemoveInterviewBinaryData(interviewId, imageView.FileName);
             }
         }
         
@@ -144,7 +144,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             IProgress<SyncProgressInfo> progress,
             CancellationToken cancellationToken)
         {
-            var auditFiles = this.audioAuditFileStorage.GetBinaryFilesForInterview(interviewId);
+            var auditFiles = await this.audioAuditFileStorage.GetBinaryFilesForInterview(interviewId);
             var transferProgress = progress.AsTransferReport();
 
             foreach (var auditFile in auditFiles)
@@ -152,7 +152,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 if (uploadState.AudioFilesNames.Contains(auditFile.FileName)) continue;
 
                 cancellationToken.ThrowIfCancellationRequested();
-                var fileData = auditFile.GetData();
+                var fileData = await auditFile.GetData();
 
                 await this.synchronizationService.UploadInterviewAudioAuditAsync(
                     auditFile.InterviewId,
@@ -162,7 +162,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     transferProgress,
                     cancellationToken);
 
-                this.audioAuditFileStorage.RemoveInterviewBinaryData(auditFile.InterviewId, auditFile.FileName);
+                await this.audioAuditFileStorage.RemoveInterviewBinaryData(auditFile.InterviewId, auditFile.FileName);
             }
         }
 
@@ -170,7 +170,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             IProgress<SyncProgressInfo> progress,
             CancellationToken cancellationToken)
         {
-            var audioFiles = this.audioFileStorage.GetBinaryFilesForInterview(interviewId);
+            var audioFiles = await this.audioFileStorage.GetBinaryFilesForInterview(interviewId);
             var transferProgress = progress.AsTransferReport();
 
             foreach (var audioFile in audioFiles)
@@ -178,7 +178,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 if (uploadState.AudioFilesNames.Contains(audioFile.FileName)) continue;
 
                 cancellationToken.ThrowIfCancellationRequested();
-                var fileData = audioFile.GetData();
+                var fileData = await audioFile.GetData();
 
                 await this.synchronizationService.UploadInterviewAudioAsync(
                     audioFile.InterviewId,
@@ -188,7 +188,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     transferProgress,
                     cancellationToken);
 
-                this.audioFileStorage.RemoveInterviewBinaryData(audioFile.InterviewId, audioFile.FileName);
+                await this.audioFileStorage.RemoveInterviewBinaryData(audioFile.InterviewId, audioFile.FileName);
             }
         }
 

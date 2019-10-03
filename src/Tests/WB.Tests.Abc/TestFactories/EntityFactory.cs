@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -346,7 +347,8 @@ namespace WB.Tests.Abc.TestFactories
         }
 
         public InterviewBinaryDataDescriptor InterviewBinaryDataDescriptor(Guid? interviewId = null, string fileName = null)
-            => new InterviewBinaryDataDescriptor(interviewId ?? Guid.NewGuid(), fileName ?? "test.jpeg", null, () => new byte[0]);
+            => new InterviewBinaryDataDescriptor(interviewId ?? Guid.NewGuid(), fileName ?? "test.jpeg", null, 
+                () => Task.FromResult(Array.Empty<byte>()));
 
         public InterviewCommentedStatus InterviewCommentedStatus(
             InterviewExportedAction status = InterviewExportedAction.ApprovedBySupervisor,
@@ -801,8 +803,11 @@ namespace WB.Tests.Abc.TestFactories
                     ?? Create.Service.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(
                     document.AsReadOnly().AssignMissingVariables());
             }
-            return new PlainQuestionnaire(document, version, questionOptionsRepository ?? Mock.Of<IQuestionOptionsRepository>(), 
+
+            var plainQuestionnaire = new PlainQuestionnaire(document, version, questionOptionsRepository ?? Mock.Of<IQuestionOptionsRepository>(), 
                 substitutionService ?? Mock.Of<ISubstitutionService>(), translation ?? document.Translations.FirstOrDefault());
+            plainQuestionnaire.ExpressionStorageType = typeof(DummyInterviewExpressionStorage);
+            return plainQuestionnaire;
         }
 
         public QRBarcodeQuestion QRBarcodeQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,

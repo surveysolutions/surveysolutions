@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Web.Caching;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Main.Core.Entities.SubEntities;
+using Microsoft.Extensions.Caching.Memory;
 using Supercluster;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -59,7 +59,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             return questions;
         }
 
-        protected static Cache Cache => System.Web.HttpContext.Current?.Cache;
+        protected static IMemoryCache Cache => new MemoryCache(new MemoryCacheOptions());
         protected static object locker = new object();
 
         public MapReportView Load(MapReportInputModel input)
@@ -81,10 +81,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                         sw.Stop();
 
                         // cache for up to 10 minute depending on how long it took to read out map data
-                        var cacheTime = TimeSpan.FromMilliseconds(sw.ElapsedMilliseconds * 5);
+                        var cacheTime = TimeSpan.FromMilliseconds(sw.ElapsedMilliseconds * 5 + 1);
 
-                        Cache?.Add(key, cacheLine, null, DateTime.UtcNow.Add(cacheTime), Cache.NoSlidingExpiration,
-                        CacheItemPriority.Default, null);
+                        Cache.Set(key, cacheLine, cacheTime);
                     }
                 }
             }

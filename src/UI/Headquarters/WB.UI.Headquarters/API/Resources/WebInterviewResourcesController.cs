@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
@@ -92,7 +93,7 @@ namespace WB.UI.Headquarters.API.Resources
         }
 
         [HttpGet]
-        public HttpResponseMessage Image([FromUri] string interviewId, [FromUri] string questionId,
+        public async Task<HttpResponseMessage> Image([FromUri] string interviewId, [FromUri] string questionId,
             [FromUri] string filename)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId);
@@ -104,7 +105,7 @@ namespace WB.UI.Headquarters.API.Resources
                 return this.Request.CreateResponse(HttpStatusCode.NoContent);
             }
 
-            var file = this.imageFileStorage.GetInterviewBinaryData(interview.Id, filename);
+            var file = await this.imageFileStorage.GetInterviewBinaryData(interview.Id, filename);
 
             if (file == null || file.Length == 0)
                 return this.Request.CreateResponse(HttpStatusCode.NoContent);
