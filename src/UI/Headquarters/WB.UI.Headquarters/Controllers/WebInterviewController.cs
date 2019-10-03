@@ -261,15 +261,7 @@ namespace WB.UI.Headquarters.Controllers
 
             var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig, assignment);
             model.ServerUnderLoad = !this.connectionLimiter.CanConnect();
-            if (pendingInterviewId != Guid.Empty)
-            {
-                var interview = statefulInterviewRepository.Get(pendingInterviewId.FormatGuid());
-                if (interview.Status == InterviewStatus.InterviewerAssigned)
-                {
-                    model.PendingInterviewId = pendingInterviewId;
-                }
-            }
-
+          
             return this.View(model);
         }
 
@@ -627,6 +619,16 @@ namespace WB.UI.Headquarters.Controllers
                 CustomMessages = webInterviewConfig.CustomMessages,
                 HasPassword = !string.IsNullOrWhiteSpace(assignment?.Password ?? String.Empty)
             };
+
+            var interviewIdCookie = Request.Cookies[$"InterviewId-{assignment.Id}"];
+            if (Guid.TryParse(interviewIdCookie?.Value, out Guid pendingInterviewId))
+            {
+                var interview = statefulInterviewRepository.Get(pendingInterviewId.FormatGuid());
+                if (interview.Status == InterviewStatus.InterviewerAssigned)
+                {
+                    view.PendingInterviewId = pendingInterviewId;
+                }
+            }
 
             return view;
         }
