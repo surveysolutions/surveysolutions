@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using AppDomainToolkit;
+
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
@@ -24,7 +24,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
             appDomainContext = null;
         }
 
-        protected static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        protected static AppDomainContext appDomainContext;
 
         public void BecauseOf() => result = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
         {

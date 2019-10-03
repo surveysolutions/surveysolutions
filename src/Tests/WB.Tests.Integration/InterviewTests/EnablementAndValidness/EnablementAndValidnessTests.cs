@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AppDomainToolkit;
+
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
@@ -18,7 +18,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         [Test]
         public void when_using_IsAnswered_with_Geography_question()
         {
-            AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext = AppDomainContext.Create();
+            AppDomainContext appDomainContext = AppDomainContext.Create();
 
             InvokeResults results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
@@ -59,7 +59,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         [Test]
         public void when_using_IsSectionAnswered_with_Enablement_Condition()
         {
-            AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext = AppDomainContext.Create();
+            AppDomainContext appDomainContext = AppDomainContext.Create();
 
             InvokeResults results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
@@ -106,7 +106,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         [Test]
         public void when_using_IsSectionAnswered_of_section_containing_roster_with_Enablement_Condition()
         {
-            AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext = AppDomainContext.Create();
+            AppDomainContext appDomainContext = AppDomainContext.Create();
 
             InvokeResults results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
@@ -169,7 +169,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         [Test]
         public void when_using_IsSectionAnswered_with_Validation_Condition()
         {
-            AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext = AppDomainContext.Create();
+            AppDomainContext appDomainContext = AppDomainContext.Create();
 
             InvokeResults results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {

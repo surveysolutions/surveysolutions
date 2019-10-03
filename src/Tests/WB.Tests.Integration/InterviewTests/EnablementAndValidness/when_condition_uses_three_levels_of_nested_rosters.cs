@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using AppDomainToolkit;
+
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -86,7 +86,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         [NUnit.Framework.Test] public void should_enable_final_question () =>
             result.FinalQuestionWasEnabled.Should().BeTrue();
 
-        static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        static AppDomainContext appDomainContext;
         static InvokeResult result;
 
         [Serializable]

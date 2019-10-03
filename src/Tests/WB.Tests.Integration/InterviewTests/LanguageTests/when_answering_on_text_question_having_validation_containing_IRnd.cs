@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using AppDomainToolkit;
+
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
@@ -67,7 +67,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
         public void should_raise_VariablesChanged_event_for_Precalculated() =>
             result.PrecalculatedIRndValue.Should().Be(precalculatedRandom);
 
-        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        private static AppDomainContext appDomainContext;
         private static InvokeResult result;
         private static readonly Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid variableId = Guid.Parse("21111111111111111111111111111111");

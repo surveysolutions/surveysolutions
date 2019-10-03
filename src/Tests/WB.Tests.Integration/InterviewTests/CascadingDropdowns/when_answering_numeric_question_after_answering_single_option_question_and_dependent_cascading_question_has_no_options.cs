@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AppDomainToolkit;
 using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
@@ -76,7 +75,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
         }
 
         private static InvokeResults results;
-        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        private static AppDomainContext appDomainContext;
 
         private static readonly Guid childCascadedComboboxId = Guid.Parse("11111111111111111111111111111111");
 

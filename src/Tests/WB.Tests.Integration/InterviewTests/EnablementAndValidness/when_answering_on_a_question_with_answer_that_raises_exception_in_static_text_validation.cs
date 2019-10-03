@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using AppDomainToolkit;
+
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
@@ -75,7 +75,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         [NUnit.Framework.Test] public void should_raise_StaticTextsDeclaredInvalid_event () =>
             result.StaticTextsDeclaredInvalidCount.Should().Be(1);
 
-        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        private static AppDomainContext appDomainContext;
         private static InvokeResult result;
 
         [Serializable]

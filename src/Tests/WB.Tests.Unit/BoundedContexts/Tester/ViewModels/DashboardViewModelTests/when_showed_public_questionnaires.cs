@@ -6,7 +6,6 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Tester.Services;
-using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.BoundedContexts.Tester.Views;
 using WB.Tests.Abc.Storage;
 
@@ -17,13 +16,13 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
         [Test]
         public async Task should_contain_only_public_questionnaires()
         {
-            var awaiterForQuestionnaires = new SemaphoreSlim(0);
+            var awaiterForQuestionnaires1 = new TaskCompletionSource<bool>();
 
             var designerApiService = new Mock<IDesignerApiService>();
             designerApiService.Setup(x => x.GetQuestionnairesAsync(It.IsAny<CancellationToken>()))
                 .ReturnsAsync(() =>
                 {
-                    awaiterForQuestionnaires.Release();
+                    awaiterForQuestionnaires1.SetResult(true);
                     return Questionnaires;
                 });
 
@@ -33,7 +32,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                 designerApiService: designerApiService.Object);
             await viewModel.Initialize();
 
-            await awaiterForQuestionnaires.WaitAsync();
+            await awaiterForQuestionnaires1.Task;
 
             viewModel.ShowPublicQuestionnairesCommand.Execute();
 
