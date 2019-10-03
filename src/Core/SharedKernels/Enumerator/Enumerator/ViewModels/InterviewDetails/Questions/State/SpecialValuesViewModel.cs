@@ -185,7 +185,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             });
         }
 
-        public async Task SetAnswerAsync(decimal? answeredOrSelectedValue)
+        public virtual async Task SetAnswerAsync(decimal? answeredOrSelectedValue)
         {
             IsSpecialValue = IsSpecialValueSelected(answeredOrSelectedValue);
 

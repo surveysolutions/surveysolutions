@@ -6,9 +6,9 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Tests.Abc;
 
-namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewModelTests
+namespace WB.Tests.Integration.InterviewTests.Variables
 {
-    internal class when_variable_value_and_substitution_title_changed : QuestionHeaderViewModelTestsContext
+    internal class when_variable_value_and_substitution_title_changed : InterviewTestsContext
     {
         [OneTimeSetUp]
         public void SetUp()
@@ -26,14 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
                     expression: "(var1*100)/20")
             );
 
-            statefullInterview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire,
-                setupLevel: level =>
-                {
-                    level.Setup(x => x.GetVariableExpression(Create.Identity(substitutedVariableIdentity.Id)))
-                        .Returns(() => 10);
-                });
-            statefullInterview.Apply(
-                Create.Event.VariablesChanged(new ChangedVariable(substitutedVariableIdentity, 10)));
+            statefullInterview = SetupStatefullInterview(questionnaire);
 
             statefullInterview.AnswerNumericIntegerQuestion(interviewerId, substitutedQuestionId, RosterVector.Empty,
                 DateTime.UtcNow, 2);
