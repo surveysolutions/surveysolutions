@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -13,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
     internal class when_answering_roster_size_numeric_question_with_big_value_and_question_was_not_answered_before : IntegerQuestionViewModelTestContext
     {
         [SetUp]
-        public void Context()
+        public async Task Context()
         {
             SetUp();
 
@@ -34,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
             integerModel.Init(interviewId, questionIdentity, navigationState);
         
             integerModel.Answer = 70;
-            integerModel.ValueChangeCommand.Execute();
+            await integerModel.ValueChangeCommand.ExecuteAsync();
         }
 
         [Test]
