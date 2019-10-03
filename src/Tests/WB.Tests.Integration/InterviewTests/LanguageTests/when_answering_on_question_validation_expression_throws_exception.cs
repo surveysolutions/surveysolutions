@@ -30,7 +30,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                     Abc.Create.Entity.NumericIntegerQuestion(question2Id, "q2", validationExpression: "1/q1 == 1")
                     );
 
-                var interview = SetupInterview(questionnaireDocument, new List<object>
+                var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument, new List<object>
                 {
                     Abc.Create.Event.NumericIntegerQuestionAnswered(
                         question1Id, null, 0, null, null

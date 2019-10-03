@@ -11,6 +11,8 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
     [TestFixture]
     internal class when_answering_question_with_validation_refering_nested_rosters_from_the_same_level : InterviewTestsContext
     {
+        private AppDomainContext appDomainContext;
+
         [OneTimeSetUp]
         public void Setup()
         {
@@ -33,8 +35,9 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                     })
                 })
             );
+            appDomainContext = AppDomainContext.Create();
 
-            var interview = SetupInterview(questionnaireDocument);
+            var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
             interview.AnswerMultipleOptionsQuestion(userId, unitsId, Create.RosterVector(1), DateTime.Now, new[] { 10, 11, 12 });
             interview.AnswerNumericIntegerQuestion(userId, priceId, Create.RosterVector(1, 10), DateTime.Now, 10);
@@ -50,6 +53,11 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 results.MiddlePriceIsInvalid = invalidQuestions.Contains(Create.Identity(priceId, Create.RosterVector(1, 11)));
                 results.HighestPriceIsInvalid = invalidQuestions.Contains(Create.Identity(priceId, Create.RosterVector(1, 12)));
             }
+        }
+
+        public void TearDown()
+        {
+            appDomainContext.Dispose();
         }
 
         [Test]

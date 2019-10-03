@@ -59,7 +59,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
 
                 questionnaire.LookupTables.Add(lookupId, Create.Entity.LookupTable("price"));
 
-                var interview = SetupInterview(questionnaire);
+                var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaire);
 
                 using (var eventContext = new EventContext())
                 {

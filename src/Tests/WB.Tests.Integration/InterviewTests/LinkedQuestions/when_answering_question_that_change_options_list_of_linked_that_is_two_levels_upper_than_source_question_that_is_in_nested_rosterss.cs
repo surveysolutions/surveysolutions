@@ -44,7 +44,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                     })
                 });
 
-                var interview = SetupStatefullInterview(questionnaireDocument);
+                var interview = SetupStatefullInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 interview.AnswerMultipleOptionsQuestion(userId, q1Id, Abc.Create.Entity.RosterVector(new[] {1, 1}), DateTime.Now, new[] { 1, 2, 3 });
                 interview.AnswerMultipleOptionsQuestion(userId, q1Id, Abc.Create.Entity.RosterVector(new[] {1, 2}), DateTime.Now, new[] { 1, 3, 4 });

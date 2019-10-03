@@ -45,7 +45,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                         })
                     );
 
-                var interview = SetupInterviewWithExpressionStorage(questionnaire, new List<object>
+                var interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaire, new List<object>
                 {
                     Create.Event.SingleOptionQuestionAnswered(
                         parentSingleOptionQuestionId, new decimal[] { }, 1, null, null

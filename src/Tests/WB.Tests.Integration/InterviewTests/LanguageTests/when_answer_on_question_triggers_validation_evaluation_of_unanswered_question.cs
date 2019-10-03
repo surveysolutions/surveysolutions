@@ -31,7 +31,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                     Abc.Create.Entity.NumericIntegerQuestion(dependentOnAnsweredQuestionId, "q2", validationExpression: "q1 + q2 > 0")
                );
 
-                var interview = SetupInterview(questionnaireDocument, new List<object>()
+                var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument, new List<object>()
                 {
                     Abc.Create.Event.AnswersDeclaredInvalid(IntegrationCreate.FailedValidationCondition(Abc.Create.Identity(dependentOnAnsweredQuestionId))),
                     Abc.Create.Event.NumericIntegerQuestionAnswered(

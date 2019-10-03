@@ -65,7 +65,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                        })
                    );
 
-               var interview = SetupInterviewWithExpressionStorage(questionnaireDocument);
+               var interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                interview.AnswerNumericIntegerQuestion(userId, numericQuestionId, RosterVector.Empty, DateTime.Now, 1);
                interview.AnswerNumericIntegerQuestion(userId, petsQuestionId, new decimal[] { 0 }, DateTime.Now, 2);
