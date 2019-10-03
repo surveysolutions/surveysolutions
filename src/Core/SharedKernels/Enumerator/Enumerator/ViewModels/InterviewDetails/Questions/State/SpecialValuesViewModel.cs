@@ -78,7 +78,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 IsSpecialValue = true;
         }
 
-        public bool IsSpecialValueSelected(decimal? value)
+        public virtual bool IsSpecialValueSelected(decimal? value)
         {
             if (!value.HasValue)
                 return false;

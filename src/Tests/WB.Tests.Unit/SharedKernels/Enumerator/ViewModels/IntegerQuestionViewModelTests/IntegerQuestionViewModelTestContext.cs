@@ -18,7 +18,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewModelTests
 {
-    internal class IntegerQuestionViewModelTestContext : MvxIoCSupportingTest
+    public class IntegerQuestionViewModelTestContext : MvxIoCSupportingTest
     {
         public IntegerQuestionViewModelTestContext()
         {
