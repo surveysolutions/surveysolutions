@@ -51,7 +51,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                         })
                     );
 
-                var interview = SetupInterviewWithExpressionStorage(questionnaire);
+                var interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaire);
 
                 using (var eventContext = new EventContext())
                 {

@@ -68,7 +68,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 
                 using (var eventContext = new EventContext())
                 {
-                    SetupInterview(questionnaire);
+                    SetupInterview(appDomainContext.AssemblyLoadContext, questionnaire);
 
                     return new InvokeResults
                     {

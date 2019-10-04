@@ -42,7 +42,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         })
                     }));
 
-                var interview = SetupStatefullInterview(questionnaireDocument);
+                var interview = SetupStatefullInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
                 interview.AnswerNumericIntegerQuestion(Create.Command.AnswerNumericIntegerQuestionCommand(interview.Id, userId, numId, 1));
                 interview.AnswerTextListQuestion(userId, list1Id, RosterVector.Empty, DateTime.Now, new[] { Tuple.Create(1m, "Hello") });
                 interview.AnswerTextListQuestion(userId, list2Id, Create.Entity.RosterVector(new[] {1}), DateTime.Now, new[] { Tuple.Create(1m, "World") });

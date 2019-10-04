@@ -36,7 +36,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         })
                 });
 
-                var interview = SetupStatefullInterview(questionnaire);
+                var interview = SetupStatefullInterview(appDomainContext.AssemblyLoadContext, questionnaire);
 
                 interview.AnswerTextQuestion(Id.gB, Id.gA, RosterVector.Empty, DateTime.UtcNow, "a");
 

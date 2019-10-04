@@ -37,7 +37,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                     Create.Entity.Option("12", "child 2 for parent option 1", "1")
                 }), Create.Entity.NumericIntegerQuestion(numericId, "numeric"));
 
-                var interview = SetupInterviewWithExpressionStorage(questionnaire, new object[]{});
+                var interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaire, new object[]{});
 
                 interview.AnswerSingleOptionQuestion(actorId, parentSingleOptionQuestionId, new decimal[] { }, DateTime.Now, 1);
                 interview.AnswerSingleOptionQuestion(actorId, childCascadedComboboxId, new decimal[] { }, DateTime.Now, 11);

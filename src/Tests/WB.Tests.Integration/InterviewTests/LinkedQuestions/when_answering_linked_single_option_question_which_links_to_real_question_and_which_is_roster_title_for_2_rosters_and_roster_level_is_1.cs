@@ -13,6 +13,8 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         : InterviewTestsContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
+            appDomainContext = AppDomainContext.Create();
+
             userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFF1111111111");
             var questionnaireId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDD0000000000");
 
@@ -49,7 +51,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 })
             });
 
-            interview = SetupInterview(questionnaireDocument: questionnaireDocument);
+            interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument: questionnaireDocument);
             interview.AnswerNumericRealQuestion(userId, linkedToQuestionId, linkedOption1Vector, DateTime.Now, linkedOption1Answer);
             interview.AnswerNumericRealQuestion(userId, linkedToQuestionId, linkedOption2Vector, DateTime.Now, linkedOption2Answer);
             interview.AnswerNumericRealQuestion(userId, linkedToQuestionId, linkedOption3Vector, DateTime.Now, linkedOption3Answer);
@@ -66,6 +68,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         {
             eventContext.Dispose();
             eventContext = null;
+            appDomainContext.Dispose();
         }
 
         [NUnit.Framework.Test] public void should_raise_SingleOptionLinkedQuestionAnswered_event () =>
@@ -90,6 +93,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             eventContext.GetEvents<RosterInstancesTitleChanged>().SelectMany(@event => @event.ChangedInstances.Select(x => x.Title))
                 .Should().OnlyContain(title => title == linkedOption2TextInvariantCulture);
 
+        private static AppDomainContext appDomainContext;
         private static EventContext eventContext;
         private static Interview interview;
         private static Guid userId;

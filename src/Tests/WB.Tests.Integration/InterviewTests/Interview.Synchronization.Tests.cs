@@ -41,7 +41,7 @@ namespace WB.Tests.Integration.InterviewTests
                     })
                 );
 
-                var interview = SetupStatefullInterview(questionnaireDocument, new List<object>());
+                var interview = SetupStatefullInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument, new List<object>());
                 interview.AssignInterviewer(userId, userId, DateTime.UtcNow);
 
                 using (var eventContext = new EventContext())

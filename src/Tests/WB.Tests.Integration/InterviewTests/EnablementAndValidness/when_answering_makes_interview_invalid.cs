@@ -29,7 +29,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
             {
                 var q1 = Id.g1;
 
-                var interview = SetupInterviewWithExpressionStorage(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+                var interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
                 {
                     Create.Entity.NumericIntegerQuestion(q1, "q1", validationExpression: "self > 10"),
                 }));

@@ -35,7 +35,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                      Abc.Create.Entity.DateTimeQuestion(questionCId, variable: "c", enablementCondition: "b > new DateTime(2015, 9, 9 )")
                 );
 
-                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument, new List<object>
+                var interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument, new List<object>
                 {
                     Abc.Create.Event.QuestionsEnabled(new []
                     {

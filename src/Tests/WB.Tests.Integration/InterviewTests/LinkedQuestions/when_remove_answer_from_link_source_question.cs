@@ -28,8 +28,9 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                         }),
                     Abc.Create.Entity.SingleQuestion(id: linkedQuestionId, linkedToQuestionId: sourceOfLinkQuestionId, variable:"link")
                 });
+            appDomainContext = AppDomainContext.Create();
 
-            interview = SetupInterview(questionnaire);
+            interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaire);
             interview.AnswerTextQuestion(userId, sourceOfLinkQuestionId, new decimal[] {0}, DateTime.Now, "a");
             interview.AnswerSingleOptionLinkedQuestion(userId, linkedQuestionId, new decimal[0], DateTime.Now, new decimal[] {0});
             eventContext = new EventContext();
@@ -41,6 +42,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         {
             eventContext.Dispose();
             eventContext = null;
+            appDomainContext.Dispose();
         }
 
         public void BecauseOf() =>
@@ -59,6 +61,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 => @event.ChangedLinkedQuestions.Count(q => q.QuestionId.Id == linkedQuestionId && !q.Options.Any()) == 1);
 
 
+        private static AppDomainContext appDomainContext;
         private static EventContext eventContext;
         private static Interview interview;
         private static Guid userId;

@@ -39,7 +39,7 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                     Create.Entity.SingleQuestion(q3Id, "q3", options: options, enablementCondition: "r1.Count() < 2")
                 }));
 
-                var interview = SetupInterview(questionnaireDocument);
+                var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 interview.AnswerNumericIntegerQuestion(userId, q1Id, RosterVector.Empty, DateTime.Now, 10);
                 interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(questionId: q2Id, rosterVector: Create.Entity.RosterVector(new[] {1}),

@@ -36,7 +36,7 @@ namespace WB.Tests.Integration.InterviewTests
                     Abc.Create.Entity.SingleOptionQuestion(singleLinkedQuestionId, variable: "sl", linkedToRosterId: rosterId)
                 );
 
-                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument, new List<object>());
+                var interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument, new List<object>());
                 interview.AnswerTextListQuestion(userId, textListQuestionId, RosterVector.Empty, DateTime.UtcNow, answers: new Tuple<decimal, string>[]
                 {
                     new Tuple<decimal, string>(1, "1"), 
@@ -98,7 +98,7 @@ namespace WB.Tests.Integration.InterviewTests
                     })
                 );
 
-                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument, new List<object>());
+                var interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument, new List<object>());
                 interview.AnswerTextListQuestion(userId, textListQuestionId, RosterVector.Empty, DateTime.UtcNow, answers: new Tuple<decimal, string>[]
                 {
                     new Tuple<decimal, string>(1, "1"), 
@@ -163,7 +163,7 @@ namespace WB.Tests.Integration.InterviewTests
                     })
                 );
 
-                var interview = SetupStatefullInterviewWithExpressionStorage(questionnaireDocument);
+                var interview = SetupStatefullInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument);
                 interview.AnswerTextListQuestion(userId, textListQuestionId, RosterVector.Empty, DateTime.UtcNow, answers: new Tuple<decimal, string>[]
                 {
                     new Tuple<decimal, string>(1, "1"), 
