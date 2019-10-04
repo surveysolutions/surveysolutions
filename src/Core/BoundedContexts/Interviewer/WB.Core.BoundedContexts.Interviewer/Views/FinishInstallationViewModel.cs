@@ -37,17 +37,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         protected override async Task RelinkUserToAnotherDeviceAsync(RestCredentials credentials, CancellationToken token)
         {
-            await this.SaveUserToLocalStorageAsync(credentials, token);
-            var interviewerIdentity = this.interviewerPrincipal.GetInterviewerByName(credentials.Login);
+            var identity = await GenerateInterviewerIdentity(credentials, token);
 
             await this.viewModelNavigationService
                 .NavigateToAsync<RelinkDeviceViewModel, RelinkDeviceViewModelArg>(
-                    new RelinkDeviceViewModelArg { Identity = interviewerIdentity });
+                    new RelinkDeviceViewModelArg { Identity = identity });
         }
 
         protected override async Task SaveUserToLocalStorageAsync(RestCredentials credentials, CancellationToken token)
         {
-            var interviewer = await this.synchronizationService.GetInterviewerAsync(credentials, token: token).ConfigureAwait(false);
+            var interviewerIdentity = await GenerateInterviewerIdentity(credentials, token);
+
+            this.interviewerPrincipal.SaveInterviewer(interviewerIdentity);
+        }
+
+        private async Task<InterviewerIdentity> GenerateInterviewerIdentity(RestCredentials credentials, CancellationToken token)
+        {
+            var interviewer = await this.synchronizationService.GetInterviewerAsync(credentials, token: token)
+                .ConfigureAwait(false);
             var tenantId = await this.synchronizationService.GetTenantId(credentials, token).ConfigureAwait(false);
 
             var interviewerIdentity = new InterviewerIdentity
@@ -61,8 +68,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 SecurityStamp = interviewer.SecurityStamp,
                 TenantId = tenantId
             };
-
-            this.interviewerPrincipal.SaveInterviewer(interviewerIdentity);
+            return interviewerIdentity;
         }
     }
 }
