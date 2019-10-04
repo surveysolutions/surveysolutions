@@ -45,7 +45,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                     })
                 });
 
-                var interview = SetupInterview(questionnaireDocument);
+                var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 interview.AnswerMultipleOptionsQuestion(userId, q1Id, Create.RosterVector(1), DateTime.Now, new[] { 1, 2 });
                 interview.AnswerMultipleOptionsQuestion(userId, q1Id, Create.RosterVector(2), DateTime.Now, new[] { 1, 3 });

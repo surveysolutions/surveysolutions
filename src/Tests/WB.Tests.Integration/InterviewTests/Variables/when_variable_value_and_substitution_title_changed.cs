@@ -10,8 +10,8 @@ namespace WB.Tests.Integration.InterviewTests.Variables
 {
     internal class when_variable_value_and_substitution_title_changed : InterviewTestsContext
     {
-        [OneTimeSetUp]
-        public void SetUp()
+        [Test]
+        public void should_change_item_title()
         {
             staticTextWithSubstitutionIdentity =
                 Identity.Create(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), RosterVector.Empty);
@@ -26,16 +26,17 @@ namespace WB.Tests.Integration.InterviewTests.Variables
                     expression: "(var1*100)/20")
             );
 
-            statefullInterview = SetupStatefullInterview(questionnaire);
+            using (var appDomainContext = AppDomainContext.Create())
+            {
+                statefullInterview = SetupStatefullInterview(appDomainContext.AssemblyLoadContext, questionnaire);
 
-            statefullInterview.AnswerNumericIntegerQuestion(interviewerId, substitutedQuestionId, RosterVector.Empty,
-                DateTime.UtcNow, 2);
+                statefullInterview.AnswerNumericIntegerQuestion(interviewerId, substitutedQuestionId, RosterVector.Empty,
+                    DateTime.UtcNow, 2);
+
+                statefullInterview.GetTitleText(staticTextWithSubstitutionIdentity).Should().Be($"Your answer on question is 2 and variable is 10");
+            }
         }
 
-        [Test]
-        public void should_change_item_title() => statefullInterview.GetTitleText(staticTextWithSubstitutionIdentity)
-            .Should().Be($"Your answer on question is 2 and variable is 10");
-        
         static StatefulInterview statefullInterview;
         static Guid interviewerId = Guid.Parse("11111111111111111111111111111111");
         static Guid substitutedQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");

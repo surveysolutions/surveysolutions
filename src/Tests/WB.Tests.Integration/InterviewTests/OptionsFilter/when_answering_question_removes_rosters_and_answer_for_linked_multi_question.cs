@@ -44,7 +44,7 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                     Create.Entity.TextQuestion(q5Id, variable: "q5", enablementCondition: "q4.Length > 2")
                 });
 
-                var interview = SetupInterview(questionnaireDocument);
+                var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 interview.AnswerNumericIntegerQuestion(userId, q1Id, RosterVector.Empty, DateTime.Now, 10);
                 interview.AnswerMultipleOptionsQuestion(userId, q2Id, RosterVector.Empty, DateTime.Now, new[] { 1, 2, 3 });

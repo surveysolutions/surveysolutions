@@ -39,6 +39,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
             Guid userId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 
             var interview = SetupInterview(
+                appDomainContext.AssemblyLoadContext,
                 questionnaireDocument: Create.Entity.QuestionnaireDocumentWithOneChapter(
                     children: new IComposite[]
                     {

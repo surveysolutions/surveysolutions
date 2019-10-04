@@ -38,7 +38,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 
                 using (var eventContext = new EventContext())
                 {
-                    var interview = SetupInterview(questionnaireDocument);
+                    var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
                     interview.AnswerTextQuestion(userId, questionId, RosterVector.Empty, DateTime.Now, "test");
 
                     return new InvokeResult

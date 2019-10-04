@@ -65,7 +65,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                 var result = new InvokeResults();
 
-                var interview = SetupInterview(questionnaireDocument, new List<object>() { });
+                var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument, new List<object>() { });
                 interview.AnswerNumericIntegerQuestion(userId, sourceQuestionId, new decimal[1] { 1 }, DateTime.Now, 17);
                 interview.AnswerNumericIntegerQuestion(userId, sourceQuestionId, new decimal[1] { 2 }, DateTime.Now, 66);
 
