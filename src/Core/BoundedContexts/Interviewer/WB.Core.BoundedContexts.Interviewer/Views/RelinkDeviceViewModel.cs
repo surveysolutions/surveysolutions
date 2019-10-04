@@ -10,7 +10,6 @@ using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -99,7 +98,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                 this.interviewerPrincipal.SaveInterviewer(this.userIdentityToRelink);
                 this.interviewerPrincipal.SignIn(this.userIdentityToRelink.Id, true);
-                auditLogService.Write( new RelinkAuditLogEntity());
+                auditLogService.Write(new RelinkAuditLogEntity());
                 await this.viewModelNavigationService.NavigateToDashboardAsync();
             }
             catch (SynchronizationException ex)
