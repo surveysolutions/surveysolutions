@@ -58,7 +58,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                                  })
                     );
 
-                var interview = SetupInterview(questionnaire, new List<object>());
+                var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaire, new List<object>());
 
                 interview.AnswerSingleOptionQuestion(userId, parentSingleOptionQuestionId, new decimal[] { }, DateTime.Now, 1);
                 interview.AnswerSingleOptionQuestion(userId, childCascadedComboboxId, new decimal[] { }, DateTime.Now, 12);

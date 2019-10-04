@@ -49,7 +49,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 
                 using (var eventContext = new EventContext())
                 {
-                    SetupInterview(questionnaire, new List<object>());
+                    SetupInterview(appDomainContext.AssemblyLoadContext, questionnaire, new List<object>());
 
                     return new InvokeResults
                     {

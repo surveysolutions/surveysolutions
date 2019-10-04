@@ -51,7 +51,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         })
                     );
 
-                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument);
+                var interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 interview.AnswerSingleOptionQuestion(userId, rosterSwitcherQuestionId, new decimal[0], DateTime.Now, 1);
                 interview.AnswerTextListQuestion(userId, rosterSizeQuestionId, new decimal[0], DateTime.Now, new[] { new Tuple<decimal, string>(1, "The World Bank") });

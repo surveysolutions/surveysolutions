@@ -37,7 +37,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         Create.Entity.Group(groupId, "Group X", null, $"IsAnswered({geogrphyQuestionVariable})", false, null)
                     });
 
-                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument);
+                var interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 using (var eventContext = new EventContext())
                 {
@@ -85,7 +85,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         )
                     });
 
-                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument);
+                var interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 using (var eventContext = new EventContext())
                 {
@@ -142,7 +142,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         )
                     });
 
-                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument);
+                var interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 interview.AnswerNumericIntegerQuestion(
                     Create.Command.AnswerNumericIntegerQuestionCommand(interviewId: interview.EventSourceId,
@@ -195,7 +195,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         )
                     });
 
-                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument);
+                var interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 interview.AnswerAreaQuestion(Create.Command.AnswerGeographyQuestionCommand(interviewId: interview.EventSourceId, questionId: geogrphyQuestionId));
 

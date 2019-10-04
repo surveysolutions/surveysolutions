@@ -45,7 +45,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                     })
                 );
 
-                var interview = SetupInterview(questionnaireDocument);
+                var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 interview.AnswerTextListQuestion(userId, listQuestionId, RosterVector.Empty, DateTime.Now, Create.Entity.ListAnswer(2,4,5).ToTupleArray());
                 interview.AnswerSingleOptionQuestion(userId, statusQuestionId, Create.RosterVector(2), DateTime.Now, 1);

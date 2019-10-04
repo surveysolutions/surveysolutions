@@ -26,7 +26,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                 using (var eventContext = new EventContext())
                 {
-                    SetupInterviewWithExpressionStorage(questionnaireDocument);
+                    SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument);
                     return new InvokeResults()
                     {
                         GroupDisabled =

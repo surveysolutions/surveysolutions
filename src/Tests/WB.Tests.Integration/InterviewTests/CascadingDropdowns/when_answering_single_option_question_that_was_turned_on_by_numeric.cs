@@ -52,7 +52,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                         })
                     );
 
-                var interview = SetupInterview(questionnaire);
+                var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaire);
                 interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), numericQuestionId, new decimal[] { }, DateTime.Now, 20);
 
                 using (var eventContext = new EventContext())
