@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -35,11 +35,11 @@ namespace WB.UI.WebTester.Controllers
             this.interviewFactory = interviewFactory;
         }
 
-        public ActionResult Run(Guid id, string sid, string saveScenarioAvailable, int? scenarioId = null)
+        public IActionResult Run(Guid id, string sid, string saveScenarioAvailable, int? scenarioId = null)
         {
             if (!string.IsNullOrEmpty(saveScenarioAvailable) && bool.TryParse(saveScenarioAvailable, out var saveScenarioAvailableBool))
             {
-                Session[SaveScenarioSessionKey] = saveScenarioAvailableBool;
+                this.HttpContext.Session.SetInt32(SaveScenarioSessionKey, saveScenarioAvailableBool ? 1 : 0);
             }
 
             return this.View(new InterviewPageModel
@@ -50,7 +50,7 @@ namespace WB.UI.WebTester.Controllers
             });
         }
 
-        public async Task<ActionResult> Redirect(Guid id, string originalInterviewId, string scenarioId)
+        public async Task<IActionResult> Redirect(Guid id, string originalInterviewId, string scenarioId)
         {
             if (this.statefulInterviewRepository.Get(id.FormatGuid()) != null)
             {
@@ -88,19 +88,19 @@ namespace WB.UI.WebTester.Controllers
             return this.Redirect($"~/WebTester/Interview/{id.FormatGuid()}/Cover");
         }
 
-        public ActionResult Interview(string id)
+        public IActionResult Interview(string id)
         {
             try
             {
                 var interviewPageModel = GetInterviewPageModel(id);
                 if (interviewPageModel == null)
-                    throw new HttpException(404, string.Empty);
+                    return StatusCode(StatusCodes.Status404NotFound, string.Empty);
 
                 return View(interviewPageModel);
             }
             catch (ApiException e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
-                throw new HttpException(404, string.Empty);
+                return StatusCode(StatusCodes.Status404NotFound, string.Empty);
             }
         }
 
@@ -127,7 +127,8 @@ namespace WB.UI.WebTester.Controllers
                 GoogleMapsKey = ConfigurationSource.Configuration["GoogleMapApiKey"],
                 ReloadQuestionnaireUrl = reloadQuestionnaireUrl
             };
-            if (Session[SaveScenarioSessionKey] != null && (bool)Session[SaveScenarioSessionKey])
+            var saveFlagInt = this.HttpContext.Session.GetInt32(SaveScenarioSessionKey);
+            if (saveFlagInt.HasValue && saveFlagInt == 1)
             {
                 interviewPageModel.GetScenarioUrl = Url.Content("~/api/ScenariosApi");
                 interviewPageModel.SaveScenarioUrl = saveScenarioDesignerUrl;
@@ -137,13 +138,13 @@ namespace WB.UI.WebTester.Controllers
             return interviewPageModel;
         }
 
-        public ActionResult Section(string id, string sectionId)
+        public IActionResult Section(string id, string sectionId)
         {
             var interview = this.statefulInterviewRepository.Get(id);
 
             if (interview == null)
             {
-                throw new HttpException(404, string.Empty);
+                return StatusCode(StatusCodes.Status404NotFound, string.Empty);
             }
 
             var targetSectionIsEnabled = interview?.IsEnabled(Identity.Parse(sectionId));
@@ -158,7 +159,7 @@ namespace WB.UI.WebTester.Controllers
             var model = GetInterviewPageModel(id);
             if (model == null)
             {
-                throw new HttpException(404, string.Empty);
+                return StatusCode(StatusCodes.Status404NotFound, string.Empty);
             }
 
             return this.View("Interview", model);
