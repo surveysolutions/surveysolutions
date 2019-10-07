@@ -9,7 +9,7 @@ using WB.UI.WebTester.Services;
 
 namespace WB.UI.WebTester.Hub
 {
-    [HubName(@"interview")]
+    /*[HubName(@"interview")]
     public class WebInterviewHub : WebInterview
     {
         private IEvictionNotifier evictionNotify => this.ServiceLocator.GetInstance<IEvictionNotifier>();
@@ -19,5 +19,5 @@ namespace WB.UI.WebTester.Hub
             var interviewId = Guid.Parse(this.CallerInterviewId);
             evictionNotify.Evict(interviewId);
         }
-    }
+    }*/
 }
