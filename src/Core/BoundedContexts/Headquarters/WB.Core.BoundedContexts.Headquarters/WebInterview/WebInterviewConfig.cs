@@ -15,6 +15,10 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
             this.EmailTemplates = new Dictionary<EmailTextTemplateType, EmailTextTemplate>();
         }
 
+        [DefaultValue(true)]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
+        public bool SingleResponse { get; set; }
+
         public QuestionnaireIdentity QuestionnaireId { get; set; }
         public bool Started { get; set; }
         public bool UseCaptcha { get; set; }
