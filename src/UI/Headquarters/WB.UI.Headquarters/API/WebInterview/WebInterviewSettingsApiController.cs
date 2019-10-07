@@ -125,6 +125,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             public bool SpamProtection { get; set; } 
             public int? ReminderAfterDaysIfNoResponse { get; set; } 
             public int? ReminderAfterDaysIfPartialResponse { get; set; } 
+            public bool SingleResponse { get; set; }
         }
 
         [Route(@"{id}/additionalSettings")]
@@ -142,6 +143,8 @@ namespace WB.UI.Headquarters.API.WebInterview
             config.UseCaptcha = updateModel.SpamProtection;
             config.ReminderAfterDaysIfNoResponse = updateModel.ReminderAfterDaysIfNoResponse;
             config.ReminderAfterDaysIfPartialResponse = updateModel.ReminderAfterDaysIfPartialResponse;
+            config.SingleResponse = updateModel.SingleResponse;
+
             this.webInterviewConfigProvider.Store(questionnaireIdentity, config);
 
             return Ok();
