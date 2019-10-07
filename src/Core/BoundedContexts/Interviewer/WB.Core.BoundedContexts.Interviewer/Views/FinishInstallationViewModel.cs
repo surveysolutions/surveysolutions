@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.interviewersPlainStorage = interviewersPlainStorage;
             this.synchronizationService = synchronizationService;
         }
-
+         
         protected override async Task RelinkUserToAnotherDeviceAsync(RestCredentials credentials, CancellationToken token)
         {
             await this.SaveUserToLocalStorageAsync(credentials, token);
