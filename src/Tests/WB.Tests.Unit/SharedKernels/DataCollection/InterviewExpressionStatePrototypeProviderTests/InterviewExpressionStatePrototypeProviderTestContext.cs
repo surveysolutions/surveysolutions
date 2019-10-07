@@ -27,14 +27,5 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewExpressionStatePro
 
             return result;
         }
-
-        protected static void RunInAnotherAppDomain(CrossAppDomainDelegate actionToRun)
-        {
-            var dom = AppDomain.CreateDomain("test", AppDomain.CurrentDomain.Evidence,
-                           AppDomain.CurrentDomain.BaseDirectory, string.Empty, false);
-
-            dom.DoCallBack(actionToRun);
-            AppDomain.Unload(dom);
-        }
     }
 }

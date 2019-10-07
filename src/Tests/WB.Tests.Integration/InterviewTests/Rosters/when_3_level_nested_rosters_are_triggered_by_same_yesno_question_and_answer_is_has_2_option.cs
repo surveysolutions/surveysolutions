@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AppDomainToolkit;
+
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -67,7 +67,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                 var result = new InvokeResults();
 
-                var interview = SetupInterview(questionnaireDocument, new List<object>() { });
+                var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument, new List<object>() { });
 
                 interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(questionId: rosterSizeQuestionId, 
                     answeredOptions: new [] { Yes(30), Yes(10) }));
@@ -109,7 +109,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
         }
 
         private static InvokeResults results;
-        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        private static AppDomainContext appDomainContext;
 
         [Serializable]
         internal class InvokeResults

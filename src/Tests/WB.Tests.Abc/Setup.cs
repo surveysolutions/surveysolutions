@@ -9,7 +9,6 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
-using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
@@ -19,9 +18,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.Aggregates;
-using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -73,30 +70,6 @@ namespace WB.Tests.Abc
             questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>())).Returns(questionnaireDocument);
 
             return questionnaireMockStorage.Object;// Stub<IQuestionnaireStorage>.Returning(questionnaire);
-        }
-
-        public static IEventHandler FailingFunctionalEventHandlerHavingUniqueType<TUniqueType>()
-        {
-            var uniqueEventHandlerMock = new Mock<IEnumerable<TUniqueType>>();
-            var eventHandlerMock = uniqueEventHandlerMock.As<IEventHandler>();
-            var eventHandlerAsFunctional = eventHandlerMock.As<IFunctionalEventHandler>();
-            eventHandlerAsFunctional
-                .Setup(_ => _.Handle(It.IsAny<IEnumerable<IPublishableEvent>>(), It.IsAny<Guid>()))
-                .Throws<Exception>();
-
-            return eventHandlerMock.Object;
-        }
-
-        public static IEventHandler FailingOldSchoolEventHandlerHavingUniqueType<TUniqueType>()
-        {
-            var uniqueEventHandlerMock = new Mock<IEnumerable<TUniqueType>>();
-            var eventHandlerMock = uniqueEventHandlerMock.As<IEventHandler>();
-            var eventHandlerAsOldSchool = eventHandlerMock.As<IEventHandler<IEvent>>();
-            eventHandlerAsOldSchool
-                .Setup(_ => _.Handle(It.IsAny<IPublishedEvent<IEvent>>()))
-                .Throws<Exception>();
-
-            return eventHandlerMock.Object;
         }
 
         public static IStatefulInterviewRepository StatefulInterviewRepository(IStatefulInterview interview)
@@ -174,10 +147,14 @@ namespace WB.Tests.Abc
             return InterviewerPrincipal(interviewerIdentity);
         }
 
-        public static IInterviewerPrincipal InterviewerPrincipal(IInterviewerUserIdentity interviewerIdentity)
+        public static IInterviewerPrincipal InterviewerPrincipal(InterviewerIdentity interviewerIdentity)
         {
             var interviewerPrincipal = new Mock<IInterviewerPrincipal>();
             interviewerPrincipal.Setup(x => x.CurrentUserIdentity).Returns(interviewerIdentity);
+            interviewerPrincipal.Setup(x => x.DoesIdentityExist()).Returns(true);
+            interviewerPrincipal.Setup(x => x.GetExistingIdentityNameOrNull()).Returns(interviewerIdentity.Name);
+            interviewerPrincipal.Setup(x => x.GetInterviewerByName(interviewerIdentity.Name)).Returns(interviewerIdentity);
+            
             interviewerPrincipal.As<IPrincipal>().Setup(x => x.CurrentUserIdentity).Returns(interviewerIdentity);
             return interviewerPrincipal.Object;
         }
@@ -196,7 +173,7 @@ namespace WB.Tests.Abc
                 .ToList();
 
             Mock<FilteredOptionsViewModel> filteredOptionsViewModel = new Mock<FilteredOptionsViewModel>();
-            filteredOptionsViewModel.Setup(x => x.GetOptions(It.IsAny<string>(), It.IsAny<int[]>())).Returns<string, int[]>((filter, excludedOptions)=>options.FindAll(x=>x.Title.Contains(filter)));
+            filteredOptionsViewModel.Setup(x => x.GetOptions(It.IsAny<string>(), It.IsAny<int[]>(), It.IsAny<int?>())).Returns<string, int[], int?>((filter, excludedOptions, count)=>options.FindAll(x=>x.Title.Contains(filter)));
             filteredOptionsViewModel.Setup(x => x.Init(It.IsAny<string>(), It.IsAny<Identity>(), It.IsAny<int>()));
 
             return filteredOptionsViewModel.Object;
@@ -214,7 +191,7 @@ namespace WB.Tests.Abc
             };
 
             Mock<FilteredOptionsViewModel> filteredOptionsViewModel = new Mock<FilteredOptionsViewModel>();
-            filteredOptionsViewModel.Setup(x => x.GetOptions(It.IsAny<string>(), It.IsAny<int[]>())).Returns<string, int[]>((filter, excludedOptions) =>options.FindAll(x=>x.Title.Contains(filter??string.Empty)));
+            filteredOptionsViewModel.Setup(x => x.GetOptions(It.IsAny<string>(), It.IsAny<int[]>(), It.IsAny<int?>())).Returns<string, int[], int?>((filter, excludedOptions, count) =>options.FindAll(x=>x.Title.Contains(filter??string.Empty)));
             filteredOptionsViewModel.Setup(x => x.Init(It.IsAny<string>(), It.IsAny<Identity>(), It.IsAny<int>()));
             filteredOptionsViewModel.Setup(x => x.GetAnsweredOption(It.IsAny<int>())).Returns<int>(filter => options.Find(x => x.Value == filter ));
             

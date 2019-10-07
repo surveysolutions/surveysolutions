@@ -28,18 +28,20 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                         Abc.Create.Entity.NumericRealQuestion(id: titleQuestionId, variable: "link_source")
                     })
             });
+            using (var appDomainContext = AppDomainContext.Create())
+            {
+                interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument: questionnaireDocument);
 
-            interview = SetupInterview(questionnaireDocument: questionnaireDocument);
+                interview.AnswerNumericIntegerQuestion(userId: userId, questionId: triggerQuestionId,
+                    originDate: DateTimeOffset.Now, rosterVector: new decimal[0], answer: 1);
+                interview.AnswerNumericRealQuestion(userId: userId, questionId: titleQuestionId,
+                    originDate: DateTimeOffset.Now, rosterVector: new decimal[] { 0 }, answer: 2.3);
 
-            interview.AnswerNumericIntegerQuestion(userId: userId, questionId: triggerQuestionId,
-                 originDate: DateTimeOffset.Now, rosterVector: new decimal[0], answer: 1);
-            interview.AnswerNumericRealQuestion(userId: userId, questionId: titleQuestionId,
-                originDate: DateTimeOffset.Now, rosterVector: new decimal[] { 0 }, answer: 2.3);
+                var exception = Assert.Throws<InterviewException>(() => interview.AnswerMultipleOptionsLinkedQuestion(userId: userId, questionId: linkedToQuestionId,
+                    originDate: DateTimeOffset.Now, rosterVector: RosterVector.Empty, selectedRosterVectors: new RosterVector[] { new decimal[] { 1 } }));
 
-            var exception = Assert.Throws<InterviewException>(() => interview.AnswerMultipleOptionsLinkedQuestion(userId: userId, questionId: linkedToQuestionId,
-                originDate: DateTimeOffset.Now, rosterVector: RosterVector.Empty, selectedRosterVectors: new RosterVector[] { new decimal[] { 1 } }));
-
-            Assert.That(exception, Has.Property(nameof(exception.Message)).EqualTo("Answer on linked categorical question cannot be saved. Specified option is absent"));
+                Assert.That(exception, Has.Property(nameof(exception.Message)).EqualTo("Answer on linked categorical question cannot be saved. Specified option is absent"));
+            }
         }
 
         private static Interview interview;

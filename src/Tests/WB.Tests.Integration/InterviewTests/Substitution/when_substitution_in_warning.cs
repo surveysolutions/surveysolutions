@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AppDomainToolkit;
+
 using FluentAssertions;
 using Ncqrs.Spec;
 using NUnit.Framework;
@@ -14,7 +14,7 @@ namespace WB.Tests.Integration.InterviewTests.Substitution
 {
     public class when_substitution_in_warning : InterviewTestsContext
     {
-        private AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        private AppDomainContext appDomainContext;
 
         [SetUp]
         public void SetupTest()
@@ -41,7 +41,7 @@ namespace WB.Tests.Integration.InterviewTests.Substitution
 
                 var result = new InvokeResults();
 
-                var interview = SetupStatefullInterview(questionnaireDocument);
+                var interview = SetupStatefullInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 using (var eventContext = new EventContext())
                 {

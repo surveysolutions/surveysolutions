@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AppDomainToolkit;
+
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
@@ -18,7 +18,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         [Test]
         public void when_using_IsAnswered_with_Geography_question()
         {
-            AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext = AppDomainContext.Create();
+            AppDomainContext appDomainContext = AppDomainContext.Create();
 
             InvokeResults results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
@@ -37,7 +37,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         Create.Entity.Group(groupId, "Group X", null, $"IsAnswered({geogrphyQuestionVariable})", false, null)
                     });
 
-                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument);
+                var interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 using (var eventContext = new EventContext())
                 {
@@ -59,7 +59,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         [Test]
         public void when_using_IsSectionAnswered_with_Enablement_Condition()
         {
-            AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext = AppDomainContext.Create();
+            AppDomainContext appDomainContext = AppDomainContext.Create();
 
             InvokeResults results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
@@ -85,7 +85,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         )
                     });
 
-                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument);
+                var interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 using (var eventContext = new EventContext())
                 {
@@ -106,7 +106,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         [Test]
         public void when_using_IsSectionAnswered_of_section_containing_roster_with_Enablement_Condition()
         {
-            AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext = AppDomainContext.Create();
+            AppDomainContext appDomainContext = AppDomainContext.Create();
 
             InvokeResults results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
@@ -142,7 +142,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         )
                     });
 
-                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument);
+                var interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 interview.AnswerNumericIntegerQuestion(
                     Create.Command.AnswerNumericIntegerQuestionCommand(interviewId: interview.EventSourceId,
@@ -169,7 +169,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         [Test]
         public void when_using_IsSectionAnswered_with_Validation_Condition()
         {
-            AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext = AppDomainContext.Create();
+            AppDomainContext appDomainContext = AppDomainContext.Create();
 
             InvokeResults results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
@@ -195,7 +195,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         )
                     });
 
-                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument);
+                var interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 interview.AnswerAreaQuestion(Create.Command.AnswerGeographyQuestionCommand(interviewId: interview.EventSourceId, questionId: geogrphyQuestionId));
 

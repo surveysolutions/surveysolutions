@@ -1,5 +1,5 @@
 using System;
-using AppDomainToolkit;
+
 using FluentAssertions;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
@@ -24,7 +24,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                     Abc.Create.Entity.GpsCoordinateQuestion(questionId, "gps", enablementCondition: null, validationExpression: "false"),
                 });
 
-                var interview = SetupInterview(questionnaireDocument);
+                var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
                 interview.AnswerGeoLocationQuestion(Guid.NewGuid(), questionId, RosterVector.Empty, DateTime.Now, 1, 1, 1, 1, DateTimeOffset.Now);
 
                 using (var eventContext = new EventContext())
@@ -48,7 +48,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
         [NUnit.Framework.Test] public void should_mark_gps_question_as_valid () => 
             result.AnswersDeclaredValidEventCount.Should().Be(1);
 
-        static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        static AppDomainContext appDomainContext;
         static InvokeResult result;
 
         [Serializable]
