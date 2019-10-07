@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using AppDomainToolkit;
+
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Moq;
@@ -59,7 +59,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
 
                 questionnaire.LookupTables.Add(lookupId, Create.Entity.LookupTable("price"));
 
-                var interview = SetupInterview(questionnaire);
+                var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaire);
 
                 using (var eventContext = new EventContext())
                 {
@@ -96,7 +96,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
         [NUnit.Framework.Test] public void should_raise_AnswersDeclaredInvalid_event_for_questiona_b_3 () =>
             result.IsQuestionB3InValid.Should().BeTrue();
 
-        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        private static AppDomainContext appDomainContext;
         private static InvokeResult result;
 
         [Serializable]

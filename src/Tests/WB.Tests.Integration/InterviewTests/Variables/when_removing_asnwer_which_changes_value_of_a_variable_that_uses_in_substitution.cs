@@ -20,8 +20,9 @@ namespace WB.Tests.Integration.InterviewTests.Variables
                     Create.Entity.Variable(variableId, VariableType.LongInteger, "v1", "n1+n2"),
                     Create.Entity.NumericIntegerQuestion(n3Id, "n3", questionText: "title with %v1%")
                 });
+            appDomainContext = AppDomainContext.Create();
 
-            interview = SetupStatefullInterview(questionnaire);
+            interview = SetupStatefullInterview(appDomainContext.AssemblyLoadContext, questionnaire);
             interview.AnswerNumericIntegerQuestion(userId, n1Id, new decimal[0], DateTime.Now, 1);
             interview.AnswerNumericIntegerQuestion(userId, n2Id, new decimal[0], DateTime.Now, 2);
             eventContext = new EventContext();
@@ -33,6 +34,7 @@ namespace WB.Tests.Integration.InterviewTests.Variables
         {
             eventContext.Dispose();
             eventContext = null;
+            appDomainContext.Dispose();
         }
 
         public void BecauseOf() =>
@@ -41,6 +43,7 @@ namespace WB.Tests.Integration.InterviewTests.Variables
         [NUnit.Framework.Test] public void should_update_title_of_question_n3 () =>
             interview.GetTitleText(Create.Identity(n3Id)).Should().Be("title with [...]");
 
+        private static AppDomainContext appDomainContext;
         private static EventContext eventContext;
         private static StatefulInterview interview;
         private static readonly Guid QuestionnaireId = Guid.Parse("10000000000000000000000000000000");

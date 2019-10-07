@@ -18,8 +18,9 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 Create.Entity.NumericIntegerQuestion(id: rosterSizeId, variable: "num_trigger", enablementCondition: "num_disable == 2"),
                 Create.Entity.NumericRoster(rosterId: rosterId, variable: "ros", rosterSizeQuestionId: rosterSizeId)
             );
+            appDomainContext = AppDomainContext.Create();
 
-            interview = SetupStatefullInterview(questionnaire);
+            interview = SetupStatefullInterview(appDomainContext.AssemblyLoadContext, questionnaire);
 
             interview.AnswerNumericIntegerQuestion(userId, questionWhichDisablesRosterSizeQuestion, RosterVector.Empty, DateTime.Now, 2);
             interview.AnswerNumericIntegerQuestion(userId, rosterSizeId, RosterVector.Empty, DateTime.Now, 2);
@@ -32,6 +33,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         public void Cleanup()
         {
             interview = null;
+            appDomainContext.Dispose();
         }
 
         [Test]
@@ -48,6 +50,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
             Assert.That(roster.IsDisabled, Is.False);
         }
 
+        private static AppDomainContext appDomainContext;
         private static StatefulInterview interview;
         private static readonly Guid userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
         private static readonly Guid rosterSizeId = Guid.Parse("33333333333333333333333333333333");

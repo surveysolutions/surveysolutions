@@ -78,7 +78,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 IsSpecialValue = true;
         }
 
-        public bool IsSpecialValueSelected(decimal? value)
+        public virtual bool IsSpecialValueSelected(decimal? value)
         {
             if (!value.HasValue)
                 return false;
@@ -185,7 +185,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             });
         }
 
-        public async Task SetAnswerAsync(decimal? answeredOrSelectedValue)
+        public virtual async Task SetAnswerAsync(decimal? answeredOrSelectedValue)
         {
             IsSpecialValue = IsSpecialValueSelected(answeredOrSelectedValue);
 
