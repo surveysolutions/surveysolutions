@@ -241,4 +241,7 @@
   <data name="WebInterviewUserMessages_CompleteNoteToSupervisor_Descr" xml:space="preserve">
     <value>Комментарий для супервизора</value>
   </data>
+  <data name="SingleResponse" xml:space="preserve">
+    <value>Ограничить одним интервью</value>
+  </data>
 </root>
