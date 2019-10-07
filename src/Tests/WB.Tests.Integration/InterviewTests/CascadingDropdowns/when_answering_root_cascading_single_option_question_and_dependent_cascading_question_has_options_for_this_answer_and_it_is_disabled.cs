@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AppDomainToolkit;
+
 using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
@@ -39,7 +39,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                     Create.Entity.Option("1.2", "child 2 for parent option 1", "1")
                 }));
 
-                var interview = SetupInterview(questionnaire);
+                var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaire);
 
                 using (var eventContext = new EventContext())
                 {
@@ -66,7 +66,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
         }
 
         private static InvokeResults results;
-        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        private static AppDomainContext appDomainContext;
 
         [Serializable]
         internal class InvokeResults

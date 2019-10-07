@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using AppDomainToolkit;
+
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -60,7 +60,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         enablementCondition: "fam.Sum(y => y.frnd.Sum(z => z.petToys.Sum(x => x.toy_age))) > 10"));
 
 
-                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument);
+                var interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 interview.AnswerNumericIntegerQuestion(userId, membersQuestionId, RosterVector.Empty, DateTime.Now, 1);
                 interview.AnswerNumericIntegerQuestion(userId, petsQuestionId, new decimal[] { 0 }, DateTime.Now, 1);
@@ -86,7 +86,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         [NUnit.Framework.Test] public void should_enable_final_question () =>
             result.FinalQuestionWasEnabled.Should().BeTrue();
 
-        static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        static AppDomainContext appDomainContext;
         static InvokeResult result;
 
         [Serializable]

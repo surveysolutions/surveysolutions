@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using AppDomainToolkit;
 using Ncqrs.Spec;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
@@ -34,7 +33,7 @@ namespace WB.Tests.Integration.InterviewTests
                     Create.Entity.SingleOptionQuestion(singleId, optionsFilterExpression: "@optioncode==1 && i2==1", answerCodes: new decimal[]{ 1, 2, 3})
                 );
 
-                var interview = SetupStatefullInterview(questionnaireDocument);
+                var interview = SetupStatefullInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 interview.AnswerNumericIntegerQuestion(userId, numeric1Id, RosterVector.Empty, DateTime.UtcNow, 1);
                 interview.AnswerNumericIntegerQuestion(userId, numeric2Id, RosterVector.Empty, DateTime.UtcNow, 1);

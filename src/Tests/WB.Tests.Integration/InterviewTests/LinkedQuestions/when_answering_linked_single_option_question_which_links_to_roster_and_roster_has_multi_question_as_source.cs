@@ -34,8 +34,9 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 }),
                 Abc.Create.Entity.SingleQuestion(id: linkedToRosterId, variable: "single", linkedToRosterId: rosterId)
             });
+            appDomainContext = AppDomainContext.Create();
 
-            interview = SetupInterview(questionnaireDocument);
+            interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
             interview.AnswerMultipleOptionsQuestion(userId, triggerQuestionId, RosterVector.Empty, DateTime.Now, new [] { 2 });
             interview.AnswerMultipleOptionsQuestion(userId, triggerQuestionId, RosterVector.Empty, DateTime.Now, new [] { 2, 3 });
@@ -53,6 +54,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         {
             eventContext.Dispose();
             eventContext = null;
+            appDomainContext.Dispose();
         }
 
         [NUnit.Framework.Test] public void should_raise_SingleOptionLinkedQuestionAnswered_event () =>
@@ -67,6 +69,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         }
 
 
+        static AppDomainContext appDomainContext;
         static EventContext eventContext;
         static Interview interview;
         static Guid userId;

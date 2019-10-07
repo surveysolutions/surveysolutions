@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AppDomainToolkit;
 using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
@@ -38,7 +37,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                     Create.Entity.Option("12", "child 2 for parent option 1", "1")
                 }), Create.Entity.NumericIntegerQuestion(numericId, "numeric"));
 
-                var interview = SetupInterviewWithExpressionStorage(questionnaire, new object[]{});
+                var interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaire, new object[]{});
 
                 interview.AnswerSingleOptionQuestion(actorId, parentSingleOptionQuestionId, new decimal[] { }, DateTime.Now, 1);
                 interview.AnswerSingleOptionQuestion(actorId, childCascadedComboboxId, new decimal[] { }, DateTime.Now, 11);
@@ -76,7 +75,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
         }
 
         private static InvokeResults results;
-        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        private static AppDomainContext appDomainContext;
 
         private static readonly Guid childCascadedComboboxId = Guid.Parse("11111111111111111111111111111111");
 
