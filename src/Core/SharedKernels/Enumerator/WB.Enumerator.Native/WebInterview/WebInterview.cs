@@ -18,9 +18,6 @@ namespace WB.Enumerator.Native.WebInterview
         private   IQuestionnaireStorage questionnaireRepository => this.ServiceLocator.GetInstance<IQuestionnaireStorage>();
         private   IWebInterviewNotificationService webInterviewNotificationService => this.ServiceLocator.GetInstance<IWebInterviewNotificationService>();
         private   IWebInterviewInterviewEntityFactory interviewEntityFactory => this.ServiceLocator.GetInstance<IWebInterviewInterviewEntityFactory>();
-        private   IImageFileStorage imageFileStorage => this.ServiceLocator.GetInstance<IImageFileStorage>();
-        private   IAudioFileStorage audioFileStorage => this.ServiceLocator.GetInstance<IAudioFileStorage>();
-
         public IServiceLocator ServiceLocator { get; private set; }
 
         protected string CallerInterviewId => this.Context.QueryString[@"interviewId"];
