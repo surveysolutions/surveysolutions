@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AppDomainToolkit;
+
 using Ncqrs.Spec;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
@@ -33,7 +33,7 @@ namespace WB.Tests.Integration.InterviewTests
                         Create.Entity.ValidationCondition("i < 5", "warning", ValidationSeverity.Warning),
                     })
                 );
-                var interview = SetupInterview(questionnaire);
+                var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaire);
 
                 using (var eventContext = new EventContext())
                 {
@@ -85,7 +85,7 @@ namespace WB.Tests.Integration.InterviewTests
                         Create.Entity.ValidationCondition("i <= 5", "warning", ValidationSeverity.Warning),
                     })
                 );
-                var interview = SetupInterview(questionnaire);
+                var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaire);
                 interview.AnswerNumericIntegerQuestion(interviewerId, intQuestionId, RosterVector.Empty, DateTime.UtcNow, 5);
 
                 using (var eventContext = new EventContext())
@@ -135,7 +135,7 @@ namespace WB.Tests.Integration.InterviewTests
                         Create.Entity.ValidationCondition("i <= 5", "warning", ValidationSeverity.Warning),
                     })
                 );
-                var interview = SetupInterview(questionnaire);
+                var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaire);
                 interview.AnswerNumericIntegerQuestion(interviewerId, intQuestionId, RosterVector.Empty, DateTime.UtcNow, 7);
 
                 using (var eventContext = new EventContext())
@@ -187,7 +187,7 @@ namespace WB.Tests.Integration.InterviewTests
                         Create.Entity.ValidationCondition("i <= 5", "warning", ValidationSeverity.Warning),
                     })
                 );
-                var interview = SetupInterview(questionnaire);
+                var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaire);
 
                 using (var eventContext = new EventContext())
                 {

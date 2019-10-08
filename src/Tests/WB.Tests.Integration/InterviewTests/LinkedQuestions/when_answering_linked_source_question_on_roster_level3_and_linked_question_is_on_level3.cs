@@ -3,6 +3,7 @@ using System.Linq;
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
@@ -28,8 +29,9 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                     }),
                 }),
             });
+            appDomainContext = AppDomainContext.Create();
 
-            interview = SetupStatefullInterview(questionnaireDocument);
+            interview = SetupStatefullInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
             interview.AnswerTextListQuestion(interviewerId, rosterSizeQuestion1Id, RosterVector.Empty, DateTime.UtcNow, new[]
             {
@@ -65,6 +67,12 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             BecauseOf();
         }
 
+        [OneTimeTearDown]
+        public void TearDown()
+        {
+            appDomainContext.Dispose();
+        }
+
         public void BecauseOf() =>
             interview.AnswerTextListQuestion(interviewerId, rosterSizeQuestion3Id, Abc.Create.Entity.RosterVector(new[] {2, 2}), DateTime.UtcNow, new[]
             {
@@ -93,6 +101,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         }
 
         static StatefulInterview interview;
+        static AppDomainContext appDomainContext;
 
         static readonly Guid roster1Id = Guid.Parse("11111111111111111111111111111111");
         static readonly Guid roster2Id = Guid.Parse("22222222222222222222222222222222");

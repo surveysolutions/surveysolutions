@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             requestHandler.RegisterHandler<GetInterviewUploadStateRequest, GetInterviewUploadStateResponse>(GetInterviewUploadState);
         }
 
-        public Task<GetInterviewUploadStateResponse> GetInterviewUploadState(GetInterviewUploadStateRequest request)
+        public async Task<GetInterviewUploadStateResponse> GetInterviewUploadState(GetInterviewUploadStateRequest request)
         {
             var existingReceivedPackageLog = this.receivedPackagesLog.Where(
                 x => x.FirstEventId == request.Check.FirstEventId &&
@@ -38,10 +38,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                      x.LastEventId == request.Check.LastEventId &&
                      x.LastEventTimestamp == request.Check.LastEventTimeStamp).Count;
 
-            var audioNames = this.audioFileStorage.GetBinaryFilesForInterview(request.InterviewId).Select(bf => bf.FileName).ToHashSet();
-            var imagesNames = this.imageFileStorage.GetBinaryFilesForInterview(request.InterviewId).Select(bf => bf.FileName).ToHashSet();
+            var audioFiles = await this.audioFileStorage.GetBinaryFilesForInterview(request.InterviewId);
+            var audioNames = audioFiles.Select(bf => bf.FileName).ToHashSet();
+            var images = await this.imageFileStorage.GetBinaryFilesForInterview(request.InterviewId);
+            var imagesNames = images.Select(bf => bf.FileName).ToHashSet();
 
-            return Task.FromResult(new GetInterviewUploadStateResponse
+            return new GetInterviewUploadStateResponse
             {
                 InterviewId = request.InterviewId,
                 UploadState = new InterviewUploadState
@@ -50,7 +52,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                     AudioFilesNames = audioNames,
                     ImagesFilesNames = imagesNames
                 }
-            });
+            };
         }
     }
 }

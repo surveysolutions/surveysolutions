@@ -227,6 +227,20 @@ namespace WB.Core.SharedKernels.Enumerator.Views
             }
         }
 
+        public CommittedEvent GetEventByEventSequence(Guid eventSourceId, int eventSequence)
+        {
+            var connection = this.GetOrCreateConnection(eventSourceId);
+            using (connection.Lock())
+            {
+                var eventV = connection
+                    .Table<EventView>()
+                    .FirstOrDefault(eventView => eventView.EventSourceId == eventSourceId
+                                                 && eventView.EventSequence == eventSequence);
+
+                return eventV == null ? null: ToCommitedEvent(eventV, eventSerializer, this.encryptionService);
+            }
+        }
+
         public int GetMaxSequenceForAnyEvent(Guid eventSourceId, params string[] typeNames)
         {
             var connection = this.GetOrCreateConnection(eventSourceId);

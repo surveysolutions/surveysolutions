@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Web;
@@ -52,6 +53,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IUserViewFactory userViewFactory;
         private readonly IJsonAllTypesSerializer serializer;
         private readonly IClientApkProvider clientApkProvider;
+        private readonly IAuthorizedUser currentUser;
 
         public ControlPanelController(
             IServiceLocator serviceLocator,
@@ -65,7 +67,8 @@ namespace WB.UI.Headquarters.Controllers
             IInterviewPackagesService interviewPackagesService, 
             IUserViewFactory userViewFactory, 
             IJsonAllTypesSerializer serializer,
-            IClientApkProvider clientApkProvider)
+            IClientApkProvider clientApkProvider,
+            IAuthorizedUser currentUser)
              : base(commandService: commandService, logger: logger)
         {
             this.userManager = userManager;
@@ -78,6 +81,7 @@ namespace WB.UI.Headquarters.Controllers
             this.userViewFactory = userViewFactory;
             this.serializer = serializer;
             this.clientApkProvider = clientApkProvider;
+            this.currentUser = currentUser;
         }
 
         public ActionResult CreateHeadquarters()
@@ -111,7 +115,7 @@ namespace WB.UI.Headquarters.Controllers
                     this.Success(@"Headquarters successfully created");
                     return this.RedirectToAction("LogOn", "Account");
                 }
-                AddErrors(creationResult);
+                AddErrors(creationResult.Errors);
             }
 
             // If we got this far, something failed, redisplay form
@@ -139,7 +143,7 @@ namespace WB.UI.Headquarters.Controllers
                     this.Success(@"Administrator successfully created");
                     return this.RedirectToAction("LogOn", "Account");
                 }
-                AddErrors(creationResult);
+                AddErrors(creationResult.Errors);
             }
 
             // If we got this far, something failed, redisplay form
@@ -185,7 +189,7 @@ namespace WB.UI.Headquarters.Controllers
                 }
                 else
                 {
-                    AddErrors(updateResult);
+                    AddErrors(updateResult.Errors);
                     foreach (var error in updateResult.Errors)
                     {
                         this.Error(error, true);
@@ -399,7 +403,36 @@ namespace WB.UI.Headquarters.Controllers
             return this.View();
         }
 
-#endregion
+        [HttpGet]
+        public ActionResult ReevaluateInterview()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult ReevaluateInterview(Guid? interviewId)
+        {
+            if (!interviewId.HasValue)
+            {
+                return this.HttpNotFound();
+            }
+            else
+            {
+                try
+                {
+                    this.CommandService.Execute(new ReevaluateInterview(interviewId.Value, this.currentUser.Id));
+                }
+                catch (Exception exception)
+                {
+                        Logger.Error($"Exception while reevaluatng: {interviewId}", exception);
+                        return new HttpStatusCodeResult(HttpStatusCode.NotAcceptable, exception.Message);
+                }
+            }
+            
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
+        }
+
+        #endregion
 
         public ActionResult SynchronizationLog() => this.View();
 

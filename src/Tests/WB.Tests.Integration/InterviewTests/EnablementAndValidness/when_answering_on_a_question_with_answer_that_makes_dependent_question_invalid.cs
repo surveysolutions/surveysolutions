@@ -1,5 +1,5 @@
 using System;
-using AppDomainToolkit;
+
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
@@ -22,7 +22,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
             appDomainContext = null;
         }
 
-        protected static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        protected static AppDomainContext appDomainContext;
 
         public void BecauseOf() => results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
         {
@@ -31,7 +31,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
             var answeredQuestionId = Guid.Parse("11111111111111111111111111111111");
             var dependentQuestionId = Guid.Parse("22222222222222222222222222222222");
 
-            var interview = SetupInterviewWithExpressionStorage(Create.Entity.QuestionnaireDocumentWithOneChapter(new IComposite[]
+            var interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, Create.Entity.QuestionnaireDocumentWithOneChapter(new IComposite[]
                 {
                     Create.Entity.NumericIntegerQuestion(answeredQuestionId, "q1"),
                     Create.Entity.NumericIntegerQuestion(dependentQuestionId, "q2",

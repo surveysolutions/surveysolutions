@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using AppDomainToolkit;
+
 using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -35,7 +35,7 @@ namespace WB.Tests.Integration.InterviewTests.Variables
                         Create.Entity.StaticText(Id.g3, enablementCondition: "v1.Length > 1")
                     });
 
-                var interview = SetupStatefullInterview(questionnaire);
+                var interview = SetupStatefullInterview(appDomainContext.AssemblyLoadContext, questionnaire);
 
                 using (var eventContext = new EventContext())
                 {
@@ -85,7 +85,7 @@ namespace WB.Tests.Integration.InterviewTests.Variables
         private static readonly Guid n2Id = Guid.Parse("22222222222222222222222222222222");
         private static string UnicodeCharacter = Convert.ToChar(0).ToString();
         private InvokeResult result;
-        private AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        private AppDomainContext appDomainContext;
 
         [OneTimeTearDown] public void CleanUp()
         {

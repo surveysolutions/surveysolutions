@@ -66,8 +66,9 @@ namespace WB.Tests.Integration.InterviewTests
                                     }
                                 }.ToReadOnlyCollection()
                             });
+            appDomainContext = AppDomainContext.Create();
 
-            interview = SetupInterview(questionnaireDocument);
+            interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
             interview.AnswerNumericIntegerQuestion(userId, numericQuestionId, new decimal[] { }, answerTime, 3);
             interview.AnswerTextQuestion(userId, referencedQuestionId, new decimal[] { 0 }, answerTime, "A");
             interview.AnswerTextQuestion(userId, referencedQuestionId, new decimal[] { 2 }, answerTime, "C");
@@ -89,8 +90,10 @@ namespace WB.Tests.Integration.InterviewTests
         {
             eventContext.Dispose();
             eventContext = null;
+            appDomainContext.Dispose();
         }
 
+        private static AppDomainContext appDomainContext;
         private static EventContext eventContext;
         private static Interview interview;
         private static Guid userId;
@@ -98,6 +101,5 @@ namespace WB.Tests.Integration.InterviewTests
         private static DateTime answerTime;
         private static Guid linkedQuestionId;
         private static Guid referencedQuestionId;
-
     }
 }

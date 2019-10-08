@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using AppDomainToolkit;
+
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using NUnit.Framework;
@@ -36,7 +36,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         })
                 });
 
-                var interview = SetupStatefullInterview(questionnaire);
+                var interview = SetupStatefullInterview(appDomainContext.AssemblyLoadContext, questionnaire);
 
                 interview.AnswerTextQuestion(Id.gB, Id.gA, RosterVector.Empty, DateTime.UtcNow, "a");
 
@@ -79,7 +79,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
             appDomainContext = null;
         }
 
-        protected static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        protected static AppDomainContext appDomainContext;
 
         private InvokeResults results;
     }
