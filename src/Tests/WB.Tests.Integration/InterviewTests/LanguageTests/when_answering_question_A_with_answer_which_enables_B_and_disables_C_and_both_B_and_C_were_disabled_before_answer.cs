@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using AppDomainToolkit;
+
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
@@ -26,6 +26,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 var questionC = Guid.Parse("cccccccccccccccccccccccccccccccc");
 
                 var interview = SetupInterviewWithExpressionStorage(
+                    appDomainContext.AssemblyLoadContext,
                     Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
                     {
                         Abc.Create.Entity.Group(null, "Chapter X", null, null, false, new IComposite[]
@@ -75,7 +76,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
         [NUnit.Framework.Test] public void should_raise_QuestionsEnabled_event_with_question_B_only () =>
             result.QuestionsEnabledQuestionIds.Should().BeEquivalentTo(Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"));
 
-        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        private static AppDomainContext appDomainContext;
         private static InvokeResult result;
 
         [Serializable]

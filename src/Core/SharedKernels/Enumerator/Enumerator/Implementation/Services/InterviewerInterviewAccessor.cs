@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Events;
 using Ncqrs.Eventing;
-using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -13,6 +12,7 @@ using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -97,23 +97,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
             this.interviewMultimediaViewRepository.Remove(imageViews);
         }
-
-        public InterviewPackageApiView GetInterviewEventsPackageOrNull(Guid interviewId)
+        
+        public InterviewPackageApiView GetInterviewEventsPackageOrNull(InterviewPackageContainer packageContainer)
         {
-            InterviewView interview = this.interviewViewRepository.GetById(interviewId.FormatGuid());
+            InterviewView interview = this.interviewViewRepository.GetById(packageContainer.InterviewId.FormatGuid());
+            var optimizedEvents = packageContainer.Events;
 
-            return this.BuildInterviewPackageOrNull(interview);
-        }
-
-        public IReadOnlyCollection<CommittedEvent> GetPendingInteviewEvents(Guid interviewId)
-        {
-            List<CommittedEvent> storedEvents = this.eventStore.GetPendingEvents(interviewId);
-            return storedEvents.AsReadOnly();
-        }
-
-        private InterviewPackageApiView BuildInterviewPackageOrNull(InterviewView interview)
-        {
-            AggregateRootEvent[] eventsToSend = this.BuildEventStreamOfLocalChangesToSend(interview.InterviewId);
+            AggregateRootEvent[] eventsToSend = optimizedEvents
+                .Select(storedEvent => new AggregateRootEvent(storedEvent))
+                .ToArray();
 
             if (eventsToSend.Length == 0)
                 return null;
@@ -149,38 +141,19 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 prefilledQuestion.Answer);
         }
 
-        private AggregateRootEvent[] BuildEventStreamOfLocalChangesToSend(Guid interviewId)
+        private IReadOnlyCollection<CommittedEvent> GetFilteredEventsToSend(Guid interviewId)
         {
-            List<CommittedEvent> storedEvents = this.eventStore.GetPendingEvents(interviewId).ToList();
-
-            var optimizedEvents = this.eventStreamOptimizer.RemoveEventsNotNeededToBeSent(storedEvents);
-
-            AggregateRootEvent[] eventsToSend = optimizedEvents
-                .Select(storedEvent => new AggregateRootEvent(storedEvent))
-                .ToArray();
-
-            return eventsToSend;
+            var lastCompleteSequence = this.eventStore.GetMaxSequenceForAnyEvent(interviewId, new[]{typeof(InterviewCompleted).Name});
+            var lastComplete = this.eventStore.GetEventByEventSequence(interviewId, lastCompleteSequence);
+            
+            return this.eventStreamOptimizer.FilterEventsToBeSent(
+                this.eventStore.Read(interviewId, this.eventStore.GetLastEventKnownToHq(interviewId) + 1), 
+                lastComplete?.CommitId);
         }
-
-        public EventStreamSignatureTag GetInterviewEventStreamCheckData(Guid interviewId)
+        
+        public InterviewPackageContainer GetInterviewEventStreamContainer(Guid interviewId)
         {
-            List<CommittedEvent> storedEvents = this.eventStore.GetPendingEvents(interviewId).ToList();
-
-            var optimizedEvents = this.eventStreamOptimizer.RemoveEventsNotNeededToBeSent(storedEvents);
-
-            if (optimizedEvents.Count == 0) return null;
-
-            var first = optimizedEvents.First();
-            var last = optimizedEvents.Last();
-
-            return new EventStreamSignatureTag
-            {
-                FirstEventId = first.EventIdentifier,
-                LastEventId = last.EventIdentifier,
-
-                FirstEventTimeStamp = first.EventTimeStamp,
-                LastEventTimeStamp = last.EventTimeStamp
-            };
+            return new InterviewPackageContainer(interviewId, this.GetFilteredEventsToSend(interviewId));
         }
 
         public void CheckAndProcessInterviewsWithoutViews()

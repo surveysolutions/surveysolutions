@@ -1,5 +1,5 @@
 using System;
-using AppDomainToolkit;
+
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
@@ -33,7 +33,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                     }),
                 });
 
-                var interview = SetupInterview(questionnaireDocument);
+                var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
                 interview.AnswerTextQuestion(Guid.NewGuid(), questionId, RosterVector.Empty, DateTime.Now, "1");
 
                 using (var eventContext = new EventContext())
@@ -60,7 +60,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
         [NUnit.Framework.Test] public void should_raise_AnswerDeclaredInvalidEvent_event () =>
             result.AnswerDeclaredInvalidEventCount.Should().Be(0);
 
-        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        private static AppDomainContext appDomainContext;
         private static InvokeResult result;
         private static readonly Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid groupId = Guid.Parse("22222222222222222222222222222222");

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AppDomainToolkit;
+
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -35,7 +35,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                 using (var eventContext = new EventContext())
                 {
-                    SetupStatefullInterview(questionnaireDocument, answers: new List<InterviewAnswer>
+                    SetupStatefullInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument, answers: new List<InterviewAnswer>
                     {
                         Create.Entity.InterviewAnswer(Create.Identity(numericQuestionId), NumericIntegerAnswer.FromInt(3))
                     });
@@ -59,7 +59,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
         private static InvokeResults results;
 
-        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        private static AppDomainContext appDomainContext;
         private static readonly Guid questionnaireId = Guid.Parse("99999999999999999999999999999999");
         private static readonly Guid roster1Id = Guid.Parse("77777777777777777777777777777777");
         private static readonly Guid numericQuestionId = Guid.Parse("22222222222222222222222222222222");

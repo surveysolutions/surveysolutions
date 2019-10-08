@@ -1,5 +1,5 @@
 ﻿using System;
-using AppDomainToolkit;
+
 using Main.Core.Entities.Composite;
 using NUnit.Framework;
 using WB.Tests.Abc;
@@ -39,7 +39,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                     Create.Entity.NumericIntegerQuestion(rosterSource, variable: "Level_PLOTS")
                 });
 
-                Assert.DoesNotThrow(() => SetupInterview(questionnaireDocument));
+                Assert.DoesNotThrow(() => SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument));
 
                 return true;
             });
@@ -48,6 +48,6 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
         private static readonly Guid rosterGroupId = Id.gA;
         private static readonly Guid rosterSource = Id.g1;
         private static readonly Guid nestedQuestion = Id.g2;
-        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        private static AppDomainContext appDomainContext;
     }
 }

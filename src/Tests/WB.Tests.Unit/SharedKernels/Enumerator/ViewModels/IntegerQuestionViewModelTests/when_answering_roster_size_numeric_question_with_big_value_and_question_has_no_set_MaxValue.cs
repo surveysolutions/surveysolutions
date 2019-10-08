@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -13,8 +14,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
     [TestOf(typeof(IntegerQuestionViewModel))]
     internal class when_answering_roster_size_numeric_question_with_big_value_and_question_has_no_set_MaxValue : IntegerQuestionViewModelTestContext
     {
-        [SetUp]
-        public void Context()
+        [OneTimeSetUp]
+        public async Task Context()
         {
             SetUp();
 
@@ -35,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
             integerModel.Init(interviewId, questionIdentity, navigationState);
        
             integerModel.Answer = 70;
-            integerModel.ValueChangeCommand.Execute();
+            await integerModel.ValueChangeCommand.ExecuteAsync();
         }
 
         [Test]

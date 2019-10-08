@@ -237,7 +237,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.RegisterDenormalizer<AssignmentDenormalizer>();
 
             registry.RegisterDenormalizer<InterviewSummaryCompositeDenormalizer>();
-            registry.RegisterDenormalizer<InterviewLifecycleEventHandler>();
             registry.RegisterDenormalizer<CumulativeChartDenormalizer>();
 
             registry.Bind<IInterviewPackagesService, IInterviewBrokenPackagesService, InterviewPackagesService>();
@@ -273,7 +272,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             
             registry.Bind<IRosterStructureService, RosterStructureService>();
             registry.Bind<IQuestionnaireImportService, QuestionnaireImportService>();
-            registry.Bind<DesignerUserCredentials>();
 
             registry.Bind<IWebInterviewConfigurator, WebInterviewConfigurator>();
             registry.Bind<IWebInterviewConfigProvider, WebInterviewConfigProvider>();
@@ -384,7 +382,7 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .Handles<HqRejectInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.HqReject(command.UserId, command.Comment, command.OriginDate))
                 .Handles<UnapproveByHeadquartersCommand>(command => command.InterviewId, (command, aggregate) => aggregate.UnapproveByHeadquarters(command.UserId, command.Comment, command.OriginDate))
                 .Handles<MarkInterviewAsReceivedByInterviewer>(command => command.InterviewId, (command, aggregate) => aggregate.MarkInterviewAsReceivedByInterviwer(command.UserId, command.OriginDate))
-                .Handles<ReevaluateSynchronizedInterview>(command => command.InterviewId, (command, aggregate) => aggregate.ReevaluateSynchronizedInterview(command.UserId))
+                .Handles<ReevaluateInterview>(command => command.InterviewId, (command, aggregate) => aggregate.ReevaluateInterview(command.UserId))
                 .Handles<RepeatLastInterviewStatus>(command => command.InterviewId, aggregate => aggregate.RepeatLastInterviewStatus)
                 .Handles<RejectInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.Reject(command.UserId, command.Comment, command.OriginDate))
                 .Handles<RejectInterviewToInterviewerCommand>(command => command.InterviewId, (command, aggregate) => aggregate.RejectToInterviewer(command.UserId, command.InterviewerId, command.Comment, command.OriginDate))

@@ -1,5 +1,5 @@
 using System;
-using AppDomainToolkit;
+
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
@@ -24,6 +24,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 var questionB = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
 
                 var interview = SetupInterview(
+                    appDomainContext.AssemblyLoadContext,
                     Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
                     {
                         Abc.Create.Entity.Group(children: new IComposite[]
@@ -66,7 +67,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
         [NUnit.Framework.Test] public void should_not_raise_AnswersDeclaredInvalid_event () =>
             result.AnswersDeclaredInvalidEventCount.Should().Be(0);
 
-        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        private static AppDomainContext appDomainContext;
         private static InvokeResult result;
 
         [Serializable]

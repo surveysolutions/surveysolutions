@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
-using Microsoft.AspNet.Identity.Owin;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;

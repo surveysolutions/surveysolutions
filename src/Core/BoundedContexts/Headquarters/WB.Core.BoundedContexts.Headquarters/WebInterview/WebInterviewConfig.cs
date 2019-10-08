@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
+using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.WebInterview
@@ -14,6 +15,10 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
             this.EmailTemplates = new Dictionary<EmailTextTemplateType, EmailTextTemplate>();
         }
 
+        [DefaultValue(true)]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
+        public bool SingleResponse { get; set; }
+
         public QuestionnaireIdentity QuestionnaireId { get; set; }
         public bool Started { get; set; }
         public bool UseCaptcha { get; set; }
@@ -22,15 +27,15 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
         public static Dictionary<WebInterviewUserMessages, string> DefaultMessages =>
             new Dictionary<WebInterviewUserMessages, string>
             {
-                { WebInterviewUserMessages.FinishInterview, Enumerator.Native.Resources.WebInterview.FinishInterviewText },
-                { WebInterviewUserMessages.Invitation,      Enumerator.Native.Resources.WebInterview.InvitationText },
-                { WebInterviewUserMessages.ResumeInvitation,Enumerator.Native.Resources.WebInterview.Resume_InvitationText },
-                { WebInterviewUserMessages.ResumeWelcome,   Enumerator.Native.Resources.WebInterview.Resume_WelcomeText },
-                { WebInterviewUserMessages.SurveyName,      Enumerator.Native.Resources.WebInterview.SurveyFormatText },
-                { WebInterviewUserMessages.WebSurveyHeader, Enumerator.Native.Resources.WebInterview.WebSurvey },
-                { WebInterviewUserMessages.WelcomeText,     Enumerator.Native.Resources.WebInterview.WelcomeText },
-                { WebInterviewUserMessages.CompleteNoteToSupervisor,     Enumerator.Native.Resources.WebInterview.NoteForSupervisor},
-                { WebInterviewUserMessages.CompleteButton,  Enumerator.Native.Resources.WebInterview.Complete},
+                { WebInterviewUserMessages.FinishInterview, WebInterviewResources.FinishInterviewText },
+                { WebInterviewUserMessages.Invitation,      WebInterviewResources.InvitationText },
+                { WebInterviewUserMessages.ResumeInvitation,WebInterviewResources.Resume_InvitationText },
+                { WebInterviewUserMessages.ResumeWelcome,   WebInterviewResources.Resume_WelcomeText },
+                { WebInterviewUserMessages.SurveyName,      WebInterviewResources.SurveyFormatText },
+                { WebInterviewUserMessages.WebSurveyHeader, WebInterviewResources.WebSurvey },
+                { WebInterviewUserMessages.WelcomeText,     WebInterviewResources.WelcomeText },
+                { WebInterviewUserMessages.CompleteNoteToSupervisor,     WebInterviewResources.NoteForSupervisor},
+                { WebInterviewUserMessages.CompleteButton,  WebInterviewResources.Complete},
 
             };
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoFixture;
+using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSyncHandlers;
 using WB.Core.BoundedContexts.Supervisor.Views;
@@ -60,16 +61,18 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
 
             fixture.GetMock<IImageFileStorage>()
                 .Setup(fs => fs.GetBinaryFilesForInterview(Id.g1))
-                .Returns(new List<InterviewBinaryDataDescriptor>
+                .ReturnsAsync(new List<InterviewBinaryDataDescriptor>
                 {
-                    new InterviewBinaryDataDescriptor(Id.g1, "pic1.jpg", "image/data", Array.Empty<byte>)
+                    new InterviewBinaryDataDescriptor(Id.g1, "pic1.jpg", "image/data", 
+                        () => Task.FromResult(Array.Empty<byte>()))
                 });
 
             fixture.GetMock<IAudioFileStorage>()
                 .Setup(fs => fs.GetBinaryFilesForInterview(Id.g1))
-                .Returns(new List<InterviewBinaryDataDescriptor>
+                .ReturnsAsync(new List<InterviewBinaryDataDescriptor>
                 {
-                    new InterviewBinaryDataDescriptor(Id.g1, "audio.jpg", "audio/data", Array.Empty<byte>)
+                    new InterviewBinaryDataDescriptor(Id.g1, "audio.jpg", "audio/data", 
+                        () => Task.FromResult(Array.Empty<byte>()))
                 });
 
             var handler = fixture.Create<SupervisorInterviewUploadStateHandler>();

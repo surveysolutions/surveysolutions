@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using ASP;
+using Microsoft.Owin.Security;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
@@ -17,12 +18,14 @@ using WB.UI.Shared.Web.Filters;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.InterviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.MoveUserToAnotherTeam;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -31,6 +34,7 @@ using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandDeserialization;
 using WB.Core.Synchronization.MetaInfo;
+using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.Infrastructure.Native.Logging.Slack;
 using WB.Infrastructure.Native.Questionnaire;
@@ -82,6 +86,8 @@ namespace WB.UI.Headquarters.Injections
 
             registry.BindAsSingleton<IRestServiceSettings, DesignerQuestionnaireApiRestServiceSettings>();
 
+            registry.RegisterDenormalizer<InterviewLifecycleEventHandler>();
+
             registry.Bind<IHttpClientFactory, DefaultHttpClientFactory>();
 
             registry.Bind<IRestService, RestService>(
@@ -112,6 +118,11 @@ namespace WB.UI.Headquarters.Injections
             registry.Bind<IQRCodeHelper, QRCodeHelper>();
 
             registry.BindAsSingleton<ILocalExportServiceRunner, LocalExportServiceRunner>();
+            registry.BindAsSingleton<IApplicationPathResolver, AspNetAppPathResolver>();
+            registry.Bind<IDesignerUserCredentials, DesignerUserCredentials>();
+
+            registry.BindToMethodInRequestScope<IAuthenticationManager>(context => HttpContext.Current.GetOwinContext().Authentication);
+            registry.Bind<HqSignInManager>();
 
             registry.BindToMethod<IExportServiceApi>(ctx =>
             {

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using AppDomainToolkit;
+
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -48,7 +48,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                     IntegrationCreate.PreloadedLevelDto(Create.RosterVector(1), new Dictionary<Guid, AbstractAnswer> { { list2Id, TextListAnswer.FromTextListAnswerRows(new List<TextListAnswerRow> { new TextListAnswerRow(1, "World") }) } }),
                     IntegrationCreate.PreloadedLevelDto(Create.RosterVector(1, 1), new Dictionary<Guid, AbstractAnswer> { { textId, TextAnswer.FromString("text") } }));
 
-                var interview = SetupPreloadedInterview(preloadedDataDto, questionnaireDocument);
+                var interview = SetupPreloadedInterview(appDomainContext.AssemblyLoadContext, preloadedDataDto, questionnaireDocument);
 
                 using (var eventContext = new EventContext())
                 {
@@ -74,7 +74,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         }
 
         private static InvokeResults results;
-        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        private static AppDomainContext appDomainContext;
         private static Guid questionnaireId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
         private static Guid roster1Id = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static Guid roster2Id = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");

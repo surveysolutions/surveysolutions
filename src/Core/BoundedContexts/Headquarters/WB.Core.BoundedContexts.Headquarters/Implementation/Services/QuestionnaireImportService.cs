@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly ISystemLog auditLog;
         private readonly IUnitOfWork unitOfWork;
         private readonly IAuthorizedUser authorizedUser;
-        private readonly DesignerUserCredentials designerUserCredentials;
+        private readonly IDesignerUserCredentials designerUserCredentials;
 
         public QuestionnaireImportService(ISupportedVersionProvider supportedVersionProvider,
             IRestService restService,
@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             ISystemLog auditLog,
             IUnitOfWork unitOfWork,
             IAuthorizedUser authorizedUser,
-            DesignerUserCredentials designerUserCredentials)
+            IDesignerUserCredentials designerUserCredentials)
         {
             this.supportedVersionProvider = supportedVersionProvider;
             this.restService = restService;

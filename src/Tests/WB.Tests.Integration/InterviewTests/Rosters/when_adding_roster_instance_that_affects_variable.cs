@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using AppDomainToolkit;
+
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -25,7 +25,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
             appDomainContext = null;
         }
 
-        protected static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        protected static AppDomainContext appDomainContext;
 
         public void BecauseOf() => result = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
         {
@@ -39,6 +39,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
             Guid userId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 
             var interview = SetupInterview(
+                appDomainContext.AssemblyLoadContext,
                 questionnaireDocument: Create.Entity.QuestionnaireDocumentWithOneChapter(
                     children: new IComposite[]
                     {

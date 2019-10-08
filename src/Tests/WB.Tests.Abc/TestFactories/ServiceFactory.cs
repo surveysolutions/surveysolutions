@@ -10,10 +10,8 @@ using NHibernate;
 using NSubstitute;
 using System.Linq;
 using System.Net.Http;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using Main.Core.Events;
 using Ncqrs.Eventing;
 using NHibernate.Linq;
@@ -47,7 +45,6 @@ using WB.Core.BoundedContexts.Headquarters.UserProfile;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
@@ -84,7 +81,6 @@ using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Implementation.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.Services;
 using WB.Core.Infrastructure.TopologicalSorter;
 using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernels.DataCollection;
@@ -115,15 +111,10 @@ using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.WebInterview;
-using WB.Enumerator.Native.WebInterview.Models;
-using WB.Enumerator.Native.WebInterview.Services;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Tests.Abc.Storage;
-using WB.UI.Headquarters.API.WebInterview.Services;
-using WB.UI.Shared.Web.Captcha;
-using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Services;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
@@ -374,30 +365,6 @@ namespace WB.Tests.Abc.TestFactories
                                              Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>());
         }
 
-        public IConfigurationManager ConfigurationManager(NameValueCollection appSettings = null,
-            NameValueCollection membershipSettings = null)
-        {
-            return new ConfigurationManager(appSettings ?? new NameValueCollection(),
-                membershipSettings ?? new NameValueCollection());
-        }
-
-        public WebCacheBasedCaptchaService WebCacheBasedCaptchaService(int? failedLoginsCount = 5,
-            int? timeSpanForLogins = 5, IConfigurationManager configurationManager = null)
-        {
-            return new WebCacheBasedCaptchaService(configurationManager ?? this.ConfigurationManager(
-                                                       new NameValueCollection
-                                                       {
-                                                           {
-                                                               "CountOfFailedLoginAttemptsBeforeCaptcha",
-                                                               (failedLoginsCount ?? 5).ToString()
-                                                           },
-                                                           {
-                                                               "TimespanInMinutesCaptchaWillBeShownAfterFailedLoginAttempt",
-                                                               (timeSpanForLogins ?? 5).ToString()
-                                                           },
-                                                       }));
-        }
-
         public IRandomValuesSource RandomValuesSource(params int[] sequence)
         {
             var result = Substitute.For<IRandomValuesSource>();
@@ -443,7 +410,6 @@ namespace WB.Tests.Abc.TestFactories
 
         public InterviewerOnlineSynchronizationProcess SynchronizationProcess(
             IPlainStorage<InterviewView> interviewViewRepository = null,
-            IPlainStorage<InterviewerIdentity> interviewersPlainStorage = null,
             IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage = null,
             IPlainStorage<InterviewFileView> interviewFileViewStorage = null,
             IOnlineSynchronizationService synchronizationService = null,
@@ -458,7 +424,6 @@ namespace WB.Tests.Abc.TestFactories
 
             return new InterviewerOnlineSynchronizationProcess(
                 syncServiceMock,
-                interviewersPlainStorage ?? Mock.Of<IPlainStorage<InterviewerIdentity>>(),
                 interviewViewRepository ?? new InMemoryPlainStorage<InterviewView>(),
                 principal ?? Mock.Of<IInterviewerPrincipal>(),
                 logger ?? Mock.Of<ILogger>(),
@@ -474,7 +439,6 @@ namespace WB.Tests.Abc.TestFactories
 
         public InterviewerOfflineSynchronizationProcess OfflineSynchronizationProcess(
             IPlainStorage<InterviewView> interviewViewRepository = null,
-            IPlainStorage<InterviewerIdentity> interviewersPlainStorage = null,
             ILogger logger = null,
             IPasswordHasher passwordHasher = null,
             IInterviewerPrincipal principal = null,
@@ -486,7 +450,6 @@ namespace WB.Tests.Abc.TestFactories
             return new InterviewerOfflineSynchronizationProcess(
                 syncServiceMock,
                 interviewViewRepository ?? new InMemoryPlainStorage<InterviewView>(),
-                interviewersPlainStorage ?? Mock.Of<IPlainStorage<InterviewerIdentity>>(),
                 principal ?? Mock.Of<IInterviewerPrincipal>(),
                 logger ?? Mock.Of<ILogger>(),
                 httpStatistician ?? Mock.Of<IHttpStatistician>(),
@@ -564,7 +527,7 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new ExpressionsPlayOrderProvider(
                 new ExpressionsGraphProvider(
-                    expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
+                    expressionProcessor ?? new RoslynExpressionProcessor(),
                     macrosSubstitutionService ?? Create.Service.DefaultMacrosSubstitutionService()));
         }
 
@@ -670,11 +633,7 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IPlainKeyValueStorage<ProfileSettings>>());
         }
 
-        public StatefullInterviewSearcher StatefullInterviewSearcher()
-        {
-            return new StatefullInterviewSearcher(Mock.Of<IInterviewFactory>(x =>
-                x.GetFlaggedQuestionIds(It.IsAny<Guid>()) == new Identity[] { }));
-        }
+
 
         public InterviewPackagesService InterviewPackagesService(
             IPlainStorageAccessor<InterviewPackage> interviewPackageStorage = null,
@@ -986,9 +945,8 @@ namespace WB.Tests.Abc.TestFactories
             ILogger logger = null,
             IHttpStatistician httpStatistician = null,
             IUserInteractionService userInteractionService = null,
-            IPrincipal principal = null,
+            IInterviewerPrincipal principal = null,
             IPasswordHasher passwordHasher = null,
-            IPlainStorage<InterviewerIdentity> interviewers = null,
             IPlainStorage<InterviewView> interviews = null,
             IAuditLogService auditLogService = null,
             IEnumeratorSettings enumeratorSettings = null)
@@ -998,9 +956,8 @@ namespace WB.Tests.Abc.TestFactories
                 synchronizationService ?? Mock.Of<IOnlineSynchronizationService>(),
                 logger ?? Mock.Of<ILogger>(),
                 httpStatistician ?? Mock.Of<IHttpStatistician>(),
-                principal ?? Mock.Of<IPrincipal>(),
+                principal ?? Mock.Of<IInterviewerPrincipal>(),
                 passwordHasher ?? Mock.Of<IPasswordHasher>(),
-                interviewers ?? Mock.Of<IPlainStorage<InterviewerIdentity>>(),
                 interviews ?? Mock.Of<IPlainStorage<InterviewView>>(),
                 auditLogService ?? Mock.Of<IAuditLogService>(),
                 enumeratorSettings ?? Mock.Of<IEnumeratorSettings>(),
@@ -1028,17 +985,6 @@ namespace WB.Tests.Abc.TestFactories
                 questionnairesAccessor ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
                 authorizedUser ?? Mock.Of<IAuthorizedUser>(),
                 questionnaireItems ?? Mock.Of<IPlainStorageAccessor<QuestionnaireCompositeItem>>());
-        }
-
-        public IWebInterviewInterviewEntityFactory WebInterviewInterviewEntityFactory(IMapper autoMapper = null,
-            IEnumeratorGroupStateCalculationStrategy enumeratorGroupStateCalculationStrategy = null,
-            ISupervisorGroupStateCalculationStrategy supervisorGroupStateCalculationStrategy = null)
-        {
-            return new WebInterviewInterviewEntityFactory(
-                autoMapper ?? Mock.Of<IMapper>(),
-                enumeratorGroupStateCalculationStrategy ?? Mock.Of<IEnumeratorGroupStateCalculationStrategy>(),
-                supervisorGroupStateCalculationStrategy ?? Mock.Of<ISupervisorGroupStateCalculationStrategy>(),
-                Mock.Of<IWebNavigationService>());
         }
 
         public IInScopeExecutor InScopeExecutor(IServiceLocator serviceLocatorMock)
@@ -1069,14 +1015,6 @@ namespace WB.Tests.Abc.TestFactories
                 httpClientFactory ?? Mock.Of<IHttpClientFactory>(),
                 new SimpleFileHandler()
             );
-        }
-
-        public WebNavigationService WebNavigationService()
-        {
-            var mockOfVirtualPathService = new Mock<IVirtualPathService>();
-            mockOfVirtualPathService.Setup(x => x.GetAbsolutePath(It.IsAny<string>())).Returns<string>(x => x);
-
-            return new WebNavigationService(mockOfVirtualPathService.Object);
         }
 
         public EnumeratorGroupGroupStateCalculationStrategy EnumeratorGroupGroupStateCalculationStrategy()
@@ -1163,14 +1101,6 @@ namespace WB.Tests.Abc.TestFactories
                 importAssignments ?? new InMemoryPlainStorageAccessor<AssignmentToImport>());
         }
 
-        public IWebInterviewNotificationService WebInterviewNotificationService(
-            IStatefulInterviewRepository statefulInterviewRepository,
-            IQuestionnaireStorage questionnaireStorage,
-            IWebInterviewInvoker webInterviewInvoker)
-        {
-            return new WebInterviewNotificationService(statefulInterviewRepository, questionnaireStorage, webInterviewInvoker);
-        }
-
         public AsyncEventDispatcher InterviewViewModelEventsPublisher(IViewModelEventRegistry viewModelEventRegistry = null,
             ILogger logger = null,
             ICurrentViewModelPresenter currentViewModelPresenter = null) =>
@@ -1188,21 +1118,6 @@ namespace WB.Tests.Abc.TestFactories
             }
 
             return result.Object;
-        }
-        
-        public HqWebInterviewInterviewEntityFactory HqWebInterviewInterviewEntityFactory(
-            IAuthorizedUser authorizedUser = null)
-        {
-            var autoMapperConfig = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new WebInterviewAutoMapProfile());
-            });
-
-            return new HqWebInterviewInterviewEntityFactory(autoMapperConfig.CreateMapper(),
-                authorizedUser ?? Mock.Of<IAuthorizedUser>(),
-                new EnumeratorGroupGroupStateCalculationStrategy(), 
-                new SupervisorGroupStateCalculationStrategy(), 
-                Create.Service.WebNavigationService());
         }
         
         public  WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog.IAuditLogService AuditLogService(
