@@ -125,7 +125,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             }
         }
 
-        public void DeleteMap(string mapName)
+        public async Task DeleteMap(string mapName)
         {
             var map = this.mapPlainStorageAccessor.GetById(mapName);
             if (map != null)
@@ -133,7 +133,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
             if (externalFileStorage.IsEnabled())
             {
-                this.externalFileStorage.Remove(GetExternalStoragePath(mapName));
+                await this.externalFileStorage.RemoveAsync(GetExternalStoragePath(mapName));
             }
             else
             {
@@ -252,11 +252,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             }).ToArray();
         }
 
-        public byte[] GetMapContent(string mapName)
+        public async Task<byte[]> GetMapContentAsync(string mapName)
         {
             if (externalFileStorage.IsEnabled())
             {
-                return this.externalFileStorage.GetBinary((GetExternalStoragePath(mapName)));
+                return await this.externalFileStorage.GetBinaryAsync((GetExternalStoragePath(mapName)));
             }
             
             var filePath = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, mapName);

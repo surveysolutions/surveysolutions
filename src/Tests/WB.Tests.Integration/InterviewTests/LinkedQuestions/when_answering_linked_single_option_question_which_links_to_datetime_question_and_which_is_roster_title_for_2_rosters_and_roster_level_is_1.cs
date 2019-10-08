@@ -55,8 +55,9 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                         Abc.Create.Entity.DateTimeQuestion(questionId: linkedToQuestionId, variable: "link_source")
                     })
             });
+            appDomainContext = AppDomainContext.Create();
 
-            interview = SetupInterview(questionnaireDocument: questionnaireDocument);
+            interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument: questionnaireDocument);
 
             interview.AnswerDateTimeQuestion(userId, linkedToQuestionId, linkedOption1Vector, DateTime.Now, linkedOption1Answer);
             interview.AnswerDateTimeQuestion(userId, linkedToQuestionId, linkedOption2Vector, DateTime.Now, linkedOption2Answer);
@@ -82,6 +83,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         {
             eventContext.Dispose();
             eventContext = null;
+            appDomainContext.Dispose();
         }
 
         [NUnit.Framework.Test] public void should_raise_SingleOptionLinkedQuestionAnswered_event () =>
@@ -107,6 +109,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 .SelectMany(@event => @event.ChangedInstances.Select(x => x.Title))
                 .Should().OnlyContain(title => title == linkedOption2TextInvariantCulture);
 
+        private static AppDomainContext appDomainContext;
         private static EventContext eventContext;
         private static Interview interview;
         private static Guid userId;

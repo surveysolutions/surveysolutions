@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AppDomainToolkit;
+
 using FluentAssertions;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
@@ -27,6 +27,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 var question2Id = Guid.Parse("22222222222222222222222222222222");
 
                 var interview = SetupInterview(
+                    appDomainContext.AssemblyLoadContext,
                     Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                         Abc.Create.Entity.NumericIntegerQuestion(question1Id, "q1"),
                         Abc.Create.Entity.NumericIntegerQuestion(question2Id, "q2", enablementCondition: "1/q1 == 1")
@@ -74,7 +75,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
         }
 
         private static InvokeResults results;
-        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        private static AppDomainContext appDomainContext;
 
         [Serializable]
         internal class InvokeResults

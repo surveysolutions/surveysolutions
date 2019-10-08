@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Specialized;
-using System.Configuration;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
@@ -14,19 +12,23 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
     class QuartzSettings : IQuartzSettings
     {
         private readonly UnitOfWorkConnectionSettings connectionSettings;
+        private string instanceId;
 
-        public QuartzSettings(UnitOfWorkConnectionSettings connectionSettings)
+        public QuartzSettings(UnitOfWorkConnectionSettings connectionSettings,
+            string instanceId,
+            bool isClustered)
         {
             this.connectionSettings = connectionSettings;
+            this.instanceId = instanceId;
+            this.IsClustered = isClustered;
         }
 
         public NameValueCollection GetSettings()
         {
-            var instanceid = ConfigurationManager.AppSettings["Scheduler.InstanceId"];
-            var isAutoMode = instanceid == "AUTO_MachineName";
+            var isAutoMode = instanceId == "AUTO_MachineName";
             if (isAutoMode)
             {
-                instanceid = Environment.MachineName;
+                instanceId = Environment.MachineName;
             }
 
             if (!IsClustered)
@@ -46,13 +48,13 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
                 ["quartz.dataSource.default.provider"] = "Npgsql-30",
                 ["quartz.jobStore.tablePrefix"] = "quartz.",
                 ["quartz.serializer.type"] = "binary",
-                ["quartz.scheduler.instanceId"] = instanceid,
+                ["quartz.scheduler.instanceId"] = instanceId,
                 ["quartz.jobStore.clustered"] = IsClustered.ToString()
             };
 
             return properties;
         }
 
-        public bool IsClustered => ConfigurationManager.AppSettings["Scheduler.IsClustered"].ToBool(false);
+        public bool IsClustered { get; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using AppDomainToolkit;
+﻿
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
@@ -41,7 +41,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                         hideIfDisabled: true)
                 });
                 
-                interview = SetupInterview(questionnaireDocument);
+                interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 interview.AnswerNumericIntegerQuestion(userId, rosterSource, RosterVector.Empty, DateTime.Now, 1);
 
@@ -95,6 +95,6 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
         private static readonly Guid rosterGroupId = Id.gA;
         private static readonly Guid rosterSource = Id.g1;
         private static readonly Guid nestedQuestion = Id.g2;
-        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        private static AppDomainContext appDomainContext;
     }
 }

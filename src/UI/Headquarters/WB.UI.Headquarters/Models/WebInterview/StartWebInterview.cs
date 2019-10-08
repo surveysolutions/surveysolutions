@@ -17,6 +17,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public bool ServerUnderLoad { get; set; } = false;
         public Dictionary<WebInterviewUserMessages, string> CustomMessages { get; set; }
         public bool HasPassword { get; set; }
+        public Guid PendingInterviewId { get; set; }
     }
 
     public class FinishWebInterview
@@ -30,6 +31,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
     public class WebInterviewError
     {
         public string Message { get; set; }
+        public bool AllowInterviewRestart { get; set; }
     }
 
     public static class WebInterviewMsgExtensions

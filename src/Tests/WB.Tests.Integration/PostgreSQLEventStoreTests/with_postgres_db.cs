@@ -25,7 +25,7 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
         protected class AccountLocked : IEvent { }
 
         [NUnit.Framework.OneTimeSetUp] public void context () {
-            TestConnectionString = ConfigurationManager.ConnectionStrings["TestConnection"].ConnectionString;
+            TestConnectionString = TestsConfigurationManager.ConnectionString;
             databaseName = "testdb_" + Guid.NewGuid().FormatGuid();
             connectionStringBuilder = new NpgsqlConnectionStringBuilder(TestConnectionString)
             {

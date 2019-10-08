@@ -9,7 +9,6 @@ namespace WB.Tests.Integration
 {
     internal abstract class NpgsqlTestContext
     {
-        protected NpgsqlConnection pgSqlConnection;
         protected static NpgsqlConnectionStringBuilder connectionStringBuilder;
         protected static string TestConnectionString;
         private static string databaseName;
@@ -19,7 +18,7 @@ namespace WB.Tests.Integration
         [SetUp]
         public void Context()
         {
-            TestConnectionString = ConfigurationManager.ConnectionStrings["TestConnection"].ConnectionString;
+            TestConnectionString = TestsConfigurationManager.ConnectionString;
             databaseName = "testdb_" + Guid.NewGuid().FormatGuid();
             connectionStringBuilder = new NpgsqlConnectionStringBuilder(TestConnectionString)
             {

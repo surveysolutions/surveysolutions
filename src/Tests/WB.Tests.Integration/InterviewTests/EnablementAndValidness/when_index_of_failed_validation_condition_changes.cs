@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AppDomainToolkit;
+
 using FluentAssertions;
 using Main.Core.Documents;
 using Ncqrs.Spec;
@@ -40,7 +40,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         Create.Entity.ValidationCondition(expression: "num >= 0", message: "static text validation 2")
                     }));
 
-                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument);
+                var interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument);
                 interview.AnswerNumericIntegerQuestion(Create.Command.AnswerNumericIntegerQuestionCommand(questionId: questionId, answer: -5));
                 
                 using (var eventContext = new EventContext())
@@ -60,7 +60,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         [NUnit.Framework.Test] public void should_mark_static_text_as_invalid_with_new_failed_condition_index () => results.StaticTextDeclaredInvalid.Should().BeTrue();
 
         static InvokeResults results;
-        static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        static AppDomainContext appDomainContext;
 
         [Serializable]
         internal class InvokeResults

@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
 
         private string GetKey(string key) => storageBasePath + key;
 
-        public byte[] GetBinary(string key)
+        public async Task<byte[]> GetBinaryAsync(string key)
         {
             try
             {
@@ -44,11 +44,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
                     Key = GetKey(key)
                 };
 
-                using (var response = client.GetObject(getObject))
+                using (var response = await client.GetObjectAsync(getObject).ConfigureAwait(false))
                 {
                     using (var ms = new MemoryStream())
                     {
-                        response.ResponseStream.CopyTo(ms);
+                        await response.ResponseStream.CopyToAsync(ms);
                         return ms.ToArray();
                     }
                 }
@@ -65,7 +65,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
             }
         }
 
-        public List<FileObject> List(string prefix)
+        public async Task<List<FileObject>> ListAsync(string prefix)
         {
             try
             {
@@ -75,7 +75,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
                     Prefix = GetKey(prefix)
                 };
 
-                ListObjectsV2Response response = client.ListObjectsV2(listObjects);
+                ListObjectsV2Response response = await client.ListObjectsV2Async(listObjects).ConfigureAwait(false);
                 return response.S3Objects.Select(s3 => new FileObject
                 {
                     Path = s3.Key.Substring(storageBasePath.Length),
@@ -156,7 +156,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
             }
         }
 
-        public async Task<FileObject> StoreAsync(string key, Stream inputStream, string contentType, IProgress<int> progress = null)
+        public async Task<FileObject> StoreAsync(string key, 
+            Stream inputStream, 
+            string contentType, 
+            IProgress<int> progress = null)
         {
             try
             {
@@ -175,7 +178,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
                     uploadRequest.UploadProgressEvent += (sender, args) => { progress.Report(args.PercentDone); };
                 }
 
-                await transferUtility.UploadAsync(uploadRequest);
+                await transferUtility.UploadAsync(uploadRequest).ConfigureAwait(false);
 
                 return new FileObject
                 {
@@ -191,39 +194,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
             }
         }
 
-        public FileObject GetObjectMetadata(string key)
-        {
-            try
-            {
-                var response = client.GetObjectMetadata(s3Settings.BucketName, GetKey(key));
-
-                if (response.HttpStatusCode == HttpStatusCode.OK) return new FileObject
-                {
-                    Path = key,
-                    Size = response.ContentLength,
-                    LastModified = response.LastModified
-                };
-            }
-            catch (AmazonS3Exception e) when (e.StatusCode == HttpStatusCode.NotFound)
-            {
-                log.Trace($"Cannot get object metadata from S3. [{e.StatusCode.ToString()}] {GetKey(key)}");
-                return null;
-            }
-            catch (Exception e)
-            {
-                LogError($"Unable to remove object in S3. Path: {key}", e);
-                throw;
-            }
-
-            return null;
-        }
-
-        
-        public bool IsExist(string key)
-        {
-            return GetObjectMetadata(key) != null;
-        }
-
         public FileObject Store(string path, byte[] data, string contentType, IProgress<int> progress = null)
         {
             using (var ms = new MemoryStream(data))
@@ -232,11 +202,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
             }
         }
 
-        public void Remove(string path)
+        public async Task RemoveAsync(string path)
         {
             try
             {
-                client.DeleteObject(s3Settings.BucketName, GetKey(path));
+                await client.DeleteObjectAsync(s3Settings.BucketName, GetKey(path)).ConfigureAwait(false);
             }
             catch (AmazonS3Exception e) when (e.StatusCode == HttpStatusCode.NotFound)
             {

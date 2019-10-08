@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using AppDomainToolkit;
+
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
@@ -35,7 +35,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
 
                 using (var eventContext = new EventContext())
                 {
-                    SetupInterview(questionnaireDocument);
+                    SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                     return new InvokeResult
                     {
@@ -73,7 +73,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
         [NUnit.Framework.Test] public void should_put_only_id_of_group_instances_with_enablement_conditions_to_QuestionsDisabled_event () =>
             result.GroupsDisabledEventGroupIds.Should().BeEquivalentTo(groupId, rosterId, rosterId);
 
-        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        private static AppDomainContext appDomainContext;
         private static InvokeResult result;
         private static readonly Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid groupId = Guid.Parse("22222222222222222222222222222222");
