@@ -11,6 +11,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
 {
     public class ChangeLanguageRequest
     {
+        public Guid InterviewId { get; set; }
         public string Language { get; set; }
     }
 
