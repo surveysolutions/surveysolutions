@@ -13,7 +13,6 @@ using WB.Core.GenericSubdomains.Portable;
 using System.Threading;
 using System.Web;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity.Providers;
-using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 {
@@ -34,14 +33,14 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         private readonly HqUserManager UserManager;
         private readonly IAuthenticationManager AuthenticationManager;
         private readonly IHashCompatibilityProvider hashCompatibilityProvider;
-        private IApiTokenProvider<Guid> ApiTokenProvider { get; set; }
+        private IApiTokenProvider ApiTokenProvider { get; set; }
 
         public HqSignInManager(HqUserManager userManager, 
             IAuthenticationManager authenticationManager,
             IHashCompatibilityProvider hashCompatibilityProvider,
-            IApiTokenProvider<Guid> tokenProvider = null)
+            IApiTokenProvider tokenProvider = null)
         {
-            this.ApiTokenProvider = tokenProvider ?? new ApiAuthTokenProvider<HqUser, Guid>(userManager);
+            this.ApiTokenProvider = tokenProvider ?? new ApiAuthTokenProvider(userManager);
             this.UserManager = userManager;
             this.AuthenticationManager = authenticationManager;
             this.hashCompatibilityProvider = hashCompatibilityProvider;
@@ -110,7 +109,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             switch (basicCredentials.Scheme)
             {
                 case ApiAuthenticationScheme.Basic:
-                    if (treatPasswordAsPlain && !this.UserManager.CheckPassword(userInfo, basicCredentials.Password))
+                    if (treatPasswordAsPlain && !(await this.UserManager.CheckPasswordAsync(userInfo, basicCredentials.Password)))
                     {
                         return IdentityResult.Failed();
                     }

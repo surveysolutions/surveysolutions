@@ -4,11 +4,9 @@ using System.Web.Http.Controllers;
 using System.Web.Http.Dependencies;
 using System.Web.Http.Hosting;
 using Main.Core.Entities.SubEntities;
-using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
-using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.UI.Headquarters.Code;
 using WB.Tests.Abc;
 
@@ -22,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
         }
 
         protected static HttpActionContext CreateActionContext(Func<string, string, bool> isUserValid = null,
-            IUserStore<HqUser, Guid> userStore = null)
+            IUserRepository userStore = null)
         {
             var context =
                 new HttpActionContext(

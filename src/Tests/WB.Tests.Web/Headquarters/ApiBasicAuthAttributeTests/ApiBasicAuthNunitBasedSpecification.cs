@@ -51,9 +51,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
             this.UserStore.Setup(_ => _.FindByIdAsync(Moq.It.IsAny<Guid>())).Returns(Task.FromResult(hqUser));
         }
 
-        protected Mock<IUserStore<HqUser, Guid>> UserStore = new Mock<IUserStore<HqUser, Guid>>();
+        protected Mock<IUserRepository> UserStore = new Mock<IUserRepository>();
         protected Mock<IHashCompatibilityProvider> HashCompatibilityProvider = new Mock<IHashCompatibilityProvider>();
-        protected Mock<IApiTokenProvider<Guid>> ApiTokenProviderProvider = new Mock<IApiTokenProvider<Guid>>();
+        protected Mock<IApiTokenProvider> ApiTokenProviderProvider = new Mock<IApiTokenProvider>();
 
         protected HttpActionContext CreateActionContext()
         {
