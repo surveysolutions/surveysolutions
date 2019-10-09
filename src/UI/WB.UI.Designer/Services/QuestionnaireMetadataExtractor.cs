@@ -24,8 +24,8 @@ namespace WB.UI.Designer.Implementation.Services
         private readonly ICommandService commandService;
         private readonly DesignerDbContext dbContext;
 
-        public QuestionnaireRevisionTagger(ICommandService commandService,
-            IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService,
+        public QuestionnaireRevisionTagger(
+            ICommandService commandService,            
             DesignerDbContext dbContext)
         {
             this.commandService = commandService;
