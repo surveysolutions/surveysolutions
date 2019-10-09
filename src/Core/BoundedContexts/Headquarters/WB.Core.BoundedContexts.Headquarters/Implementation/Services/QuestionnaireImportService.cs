@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Dapper;
 using Main.Core.Documents;
 using Refit;
 using WB.Core.BoundedContexts.Headquarters.Commands;
+using WB.Core.BoundedContexts.Headquarters.Designer;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
@@ -24,33 +26,9 @@ using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
-    public interface IDesignerApi
-    {
-        [Post("/v3/questionnaires/revision/{id}/tag")]
-        Task Tag(Guid id, [Body] DesignerApiTagModel model);
-
-        [Get("/v3/questionnaires/{id}")] // {this.apiVersion}/questionnaires/{questionnaireId}",
-        Task<QuestionnaireCommunicationPackage> GetQuestionnaire(
-            Guid id,
-            int clientQuestionnaireContentVersion, 
-            [Query] int? minSupportedQuestionnaireVersion);
-    }
-
-    public class DesignerApiTagModel
-    {
-        public int HqTimeZone { get; set; }
-        public string ImporterLogin { get; set; }
-        public long QuestionnaireVersion { get; set; }
-        public string Comment { get; set; }
-        public string HqHost { get; internal set; }
-    }
-
     internal class QuestionnaireImportService : IQuestionnaireImportService
     {
         private readonly ISupportedVersionProvider supportedVersionProvider;
-        private readonly IRestService restService;
-        private readonly string apiPrefix = @"/api/hq";
-        private readonly string apiVersion = @"v3";
         private readonly IStringCompressor zipUtils;
         private readonly IAttachmentContentService attachmentContentService;
         private readonly IPlainKeyValueStorage<QuestionnaireLookupTable> lookupTablesStorage;
@@ -65,7 +43,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly IDesignerApi designerApi;
 
         public QuestionnaireImportService(ISupportedVersionProvider supportedVersionProvider,
-            IRestService restService,
             IStringCompressor zipUtils,
             IAttachmentContentService attachmentContentService,
             IQuestionnaireVersionProvider questionnaireVersionProvider,
@@ -80,7 +57,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             IDesignerApi designerApi)
         {
             this.supportedVersionProvider = supportedVersionProvider;
-            this.restService = restService;
             this.zipUtils = zipUtils;
             this.attachmentContentService = attachmentContentService;
             this.questionnaireVersionProvider = questionnaireVersionProvider;
@@ -115,7 +91,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                 var minSupported = this.supportedVersionProvider.GetMinVerstionSupportedByInterviewer();
 
-                var questionnairePackage = await this.designerApi.GetQuestionnaire(questionnaireId, 
+                var questionnairePackage = await this.designerApi.GetQuestionnaire(questionnaireId,
                     supportedVersion, minSupported);
 
                 QuestionnaireDocument questionnaire = this.zipUtils.DecompressString<QuestionnaireDocument>(questionnairePackage.Questionnaire);
@@ -130,9 +106,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         if (this.attachmentContentService.HasAttachmentContent(questionnaireAttachment.ContentId))
                             continue;
 
-                        var attachmentContent = await this.restService.DownloadFileAsync(
-                            url: $"{this.apiPrefix}/attachment/{questionnaireAttachment.ContentId}?attachmentId={questionnaireAttachment.AttachmentId}",
-                            credentials: credentials);
+                        var attachmentContent = await this.designerApi.DownloadQuestionnaireAttachment(
+                            questionnaireAttachment.ContentId, questionnaireAttachment.AttachmentId).AsRestFile();
 
                         this.attachmentContentService.SaveAttachmentContent(questionnaireAttachment.ContentId,
                             attachmentContent.ContentType, attachmentContent.FileName, attachmentContent.Content);
@@ -146,9 +121,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 {
                     this.translationManagementService.Delete(questionnaireIdentity);
 
-                    var translationContent = await this.restService.GetAsync<List<TranslationDto>>(
-                        url: $"{this.apiPrefix}/translations/{questionnaire.PublicKey}",
-                        credentials: credentials);
+
+                    var translationContent = await this.designerApi.GetTranslations(questionnaire.PublicKey);
 
                     this.translationManagementService.Store(translationContent.Select(x => new TranslationInstance
                     {
@@ -165,9 +139,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 {
                     foreach (var lookupId in questionnaire.LookupTables.Keys)
                     {
-                        var lookupTable = await this.restService.GetAsync<QuestionnaireLookupTable>(
-                            url: $"{this.apiPrefix}/lookup/{questionnaire.PublicKey}/{lookupId}",
-                            credentials: credentials);
+                        var lookupTable = await this.designerApi.GetLookupTables(questionnaire.PublicKey, lookupId);
 
                         lookupTablesStorage.Store(lookupTable, questionnaireIdentity, lookupId);
                     }
