@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
 {
     internal class AttributesTestContext
     {
-        public static ApiBasicAuthFilter CreateApiBasicAuthFilter(
+        public static IpAddressFilter CreateApiBasicAuthFilter(
             IUserStore<DesignerIdentityUser> userStore = null,
             IIpAddressProvider ipAddressProvider = null, 
             IAllowedAddressService allowedAddressService = null,
@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
                 null, 
                 Mock.Of<ILogger<SignInManager<DesignerIdentityUser>>>(),
                 null);
-            return new ApiBasicAuthFilter(onlyAllowedAddresses,
+            return new IpAddressFilter(onlyAllowedAddresses,
                 ipAddressProvider ?? Mock.Of<IIpAddressProvider>(), 
                 allowedAddressService ?? Mock.Of<IAllowedAddressService>(),
                 userManager,

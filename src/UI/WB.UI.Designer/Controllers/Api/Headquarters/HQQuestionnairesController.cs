@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -21,8 +22,9 @@ using WB.UI.Designer.Resources;
 
 namespace WB.UI.Designer.Controllers.Api.Headquarters
 {
-    [ApiBasicAuth(onlyAllowedAddresses: true)]
+    [AllowOnlyFromWhitelistIP(onlyAllowedAddresses: true)]
     [Route("api/hq/v3/questionnaires")]
+    [Authorize]
     public class HQQuestionnairesController : ControllerBase
     {
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
