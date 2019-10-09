@@ -67,7 +67,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                         })
                     );
 
-                Interview interview = SetupInterview(questionnaire);
+                Interview interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaire);
 
                 using (var eventContext = new EventContext())
                 {

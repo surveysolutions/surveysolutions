@@ -35,7 +35,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                 using (var eventContext = new EventContext())
                 {
-                    SetupStatefullInterview(questionnaireDocument, answers: new List<InterviewAnswer>
+                    SetupStatefullInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument, answers: new List<InterviewAnswer>
                     {
                         Create.Entity.InterviewAnswer(Create.Identity(numericQuestionId), NumericIntegerAnswer.FromInt(3))
                     });

@@ -1,12 +1,12 @@
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
@@ -14,14 +14,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
     public class FinishInstallationViewModel : EnumeratorFinishInstallationViewModel
     {
         private readonly IPasswordHasher passwordHasher;
-        private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
+        private readonly IInterviewerPrincipal interviewerPrincipal;
         private readonly IInterviewerSynchronizationService synchronizationService;
         
         public FinishInstallationViewModel(
             IViewModelNavigationService viewModelNavigationService,
-            IPrincipal principal,
+            IInterviewerPrincipal principal,
             IPasswordHasher passwordHasher,
-            IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
             IDeviceSettings deviceSettings,
             IInterviewerSynchronizationService synchronizationService,
             ILogger logger,
@@ -32,23 +31,30 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 logger, qrBarcodeScanService, serializer, userInteractionService)
         {
             this.passwordHasher = passwordHasher;
-            this.interviewersPlainStorage = interviewersPlainStorage;
+            this.interviewerPrincipal = principal;
             this.synchronizationService = synchronizationService;
         }
 
         protected override async Task RelinkUserToAnotherDeviceAsync(RestCredentials credentials, CancellationToken token)
         {
-            await this.SaveUserToLocalStorageAsync(credentials, token);
-            var interviewerIdentity = this.interviewersPlainStorage.FirstOrDefault();
+            var identity = await GenerateInterviewerIdentity(credentials, token);
 
             await this.viewModelNavigationService
                 .NavigateToAsync<RelinkDeviceViewModel, RelinkDeviceViewModelArg>(
-                    new RelinkDeviceViewModelArg { Identity = interviewerIdentity });
+                    new RelinkDeviceViewModelArg { Identity = identity });
         }
 
         protected override async Task SaveUserToLocalStorageAsync(RestCredentials credentials, CancellationToken token)
         {
-            var interviewer = await this.synchronizationService.GetInterviewerAsync(credentials, token: token).ConfigureAwait(false);
+            var interviewerIdentity = await GenerateInterviewerIdentity(credentials, token);
+
+            this.interviewerPrincipal.SaveInterviewer(interviewerIdentity);
+        }
+
+        private async Task<InterviewerIdentity> GenerateInterviewerIdentity(RestCredentials credentials, CancellationToken token)
+        {
+            var interviewer = await this.synchronizationService.GetInterviewerAsync(credentials, token: token)
+                .ConfigureAwait(false);
             var tenantId = await this.synchronizationService.GetTenantId(credentials, token).ConfigureAwait(false);
 
             var interviewerIdentity = new InterviewerIdentity
@@ -62,8 +68,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 SecurityStamp = interviewer.SecurityStamp,
                 TenantId = tenantId
             };
-
-            this.interviewersPlainStorage.Store(interviewerIdentity);
+            return interviewerIdentity;
         }
     }
 }

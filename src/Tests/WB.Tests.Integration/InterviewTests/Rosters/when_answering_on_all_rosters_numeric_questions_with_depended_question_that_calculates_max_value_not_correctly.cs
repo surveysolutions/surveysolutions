@@ -51,7 +51,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                 var result = new InvokeResults();
 
-                var interview = SetupInterview(questionnaireDocument, new List<object>() { });
+                var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument, new List<object>() { });
 
                 using (var eventContext = new EventContext())
                 {                    

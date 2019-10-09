@@ -33,7 +33,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                     }),
                 });
 
-                var interview = SetupInterview(questionnaireDocument);
+                var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
                 interview.AnswerTextQuestion(Guid.NewGuid(), questionId, RosterVector.Empty, DateTime.Now, "1");
 
                 using (var eventContext = new EventContext())

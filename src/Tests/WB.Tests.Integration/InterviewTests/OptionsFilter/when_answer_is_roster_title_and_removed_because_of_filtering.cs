@@ -53,7 +53,7 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                     })
                 );
 
-                var interview = SetupInterview(questionnaire);
+                var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaire);
 
                 interview.AnswerNumericIntegerQuestion(userId, numericQuestionId, RosterVector.Empty, DateTime.Today, 1);
                 interview.AnswerSingleOptionQuestion(userId, rosterTitleQuestionIdentity.Id, rosterTitleQuestionIdentity.RosterVector, DateTime.Today, 1);

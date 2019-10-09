@@ -27,6 +27,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 var staticTextB = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
 
                 var interview = SetupInterview(
+                    appDomainContext.AssemblyLoadContext,
                     Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
                     {
                         Abc.Create.Entity.Group(children: new IComposite[]

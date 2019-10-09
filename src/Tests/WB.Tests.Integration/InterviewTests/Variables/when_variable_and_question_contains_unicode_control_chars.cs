@@ -35,7 +35,7 @@ namespace WB.Tests.Integration.InterviewTests.Variables
                         Create.Entity.StaticText(Id.g3, enablementCondition: "v1.Length > 1")
                     });
 
-                var interview = SetupStatefullInterview(questionnaire);
+                var interview = SetupStatefullInterview(appDomainContext.AssemblyLoadContext, questionnaire);
 
                 using (var eventContext = new EventContext())
                 {

@@ -53,7 +53,9 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                     })
             });
 
-            interview = SetupInterview(questionnaireDocument: questionnaireDocument);
+            appDomainContext = AppDomainContext.Create();
+
+            interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument: questionnaireDocument);
 
             interview.AnswerTextQuestion(userId, linkedToQuestionId, linkedOption1Vector, DateTime.Now, linkedOption1Text);
             interview.AnswerTextQuestion(userId, linkedToQuestionId, linkedOption2Vector, DateTime.Now, linkedOption2Text);
@@ -79,6 +81,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         {
             eventContext.Dispose();
             eventContext = null;
+            appDomainContext.Dispose();
         }
 
         [NUnit.Framework.Test] public void should_raise_MultipleOptionsLinkedQuestionAnswered_event () =>
@@ -103,6 +106,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             eventContext.GetEvents<RosterInstancesTitleChanged>().SelectMany(@event => @event.ChangedInstances.Select(x => x.Title))
                 .Should().OnlyContain(title => title == linkedOption3Text + ", " + linkedOption2Text);
 
+        private static AppDomainContext appDomainContext;
         private static EventContext eventContext;
         private static Interview interview;
         private static Guid userId;

@@ -179,9 +179,18 @@ class WebInterviewSettingsApi {
         return this.http.post(url, { isEnabled: isEnabled });
     }*/
 
-    updateAdditionalSettings(questionnaireId, isEnabledSpamProtection, reminderAfterDaysIfNoResponse, reminderAfterDaysIfPartialResponse) {
+    updateAdditionalSettings(questionnaireId, 
+        isEnabledSpamProtection, 
+        reminderAfterDaysIfNoResponse,
+         reminderAfterDaysIfPartialResponse,
+         singleResponse) {
         var url = `${this.base}/${questionnaireId}/additionalSettings`;
-        return this.http.post(url, { spamProtection: isEnabledSpamProtection, reminderAfterDaysIfNoResponse: reminderAfterDaysIfNoResponse, reminderAfterDaysIfPartialResponse: reminderAfterDaysIfPartialResponse });
+        return this.http.post(url, { 
+            spamProtection: isEnabledSpamProtection, 
+            reminderAfterDaysIfNoResponse: reminderAfterDaysIfNoResponse,
+            reminderAfterDaysIfPartialResponse: reminderAfterDaysIfPartialResponse,
+            singleResponse: singleResponse
+        });
     }
 
     startWebInterview(questionnaireId) {

@@ -28,19 +28,20 @@ namespace WB.Tests.Integration.InterviewTests.Variables
                     Create.Entity.Variable(variableId, VariableType.LongInteger, "v1", "txt.Length")
                 });
 
-            var interview = SetupStatefullInterviewWithExpressionStorage(questionnaire);
-            interview.AnswerTextQuestion(userId, textQuetionId, new decimal[0], DateTime.Now, "any string");
+            using (var appDomainContext = AppDomainContext.Create())
+            {
+                var interview = SetupStatefullInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaire);
+                interview.AnswerTextQuestion(userId, textQuetionId, new decimal[0], DateTime.Now, "any string");
 
-            var eventContext = new EventContext();
+                using (var eventContext = new EventContext())
+                {
+                    // act
+                    interview.CompleteWithoutFirePassiveEvents(userId, String.Empty, DateTime.UtcNow);
 
-            // act
-            interview.CompleteWithoutFirePassiveEvents(userId, String.Empty, DateTime.UtcNow);
-
-            // assert
-            eventContext.ShouldNotContainEvent<VariablesChanged>();
-
-            eventContext.Dispose();
-            eventContext = null;
+                    // assert
+                    eventContext.ShouldNotContainEvent<VariablesChanged>();
+                }
+            }
         }
     }
 }

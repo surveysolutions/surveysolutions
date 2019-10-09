@@ -41,7 +41,7 @@ namespace WB.Tests.Integration.InterviewTests.Substitution
 
                 var result = new InvokeResults();
 
-                var interview = SetupStatefullInterview(questionnaireDocument);
+                var interview = SetupStatefullInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 using (var eventContext = new EventContext())
                 {

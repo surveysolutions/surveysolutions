@@ -39,7 +39,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                     Create.Entity.NumericIntegerQuestion(rosterSource, variable: "Level_PLOTS")
                 });
 
-                Assert.DoesNotThrow(() => SetupInterview(questionnaireDocument));
+                Assert.DoesNotThrow(() => SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument));
 
                 return true;
             });

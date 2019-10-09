@@ -75,7 +75,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                 var result = new InvokeResults();
 
-                var interview = SetupStatefullInterview(questionnaireDocument);
+                var interview = SetupStatefullInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(questionId: rosterSizeQuestionId, 
                     answeredOptions: new [] { Yes(10), Yes(20), Yes(40) }));
