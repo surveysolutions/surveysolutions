@@ -260,6 +260,8 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\DiagnosticsController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\InterviewCommandsController.cs" />
+    <Compile Include="Controllers\InterviewDataController.cs" />
     <Compile Include="Controllers\MultimediaController.cs" />
     <Compile Include="Controllers\ScenariosApiController.cs" />
     <Compile Include="Infrastructure\AppDomainSpecific\CurrentInterview.cs" />

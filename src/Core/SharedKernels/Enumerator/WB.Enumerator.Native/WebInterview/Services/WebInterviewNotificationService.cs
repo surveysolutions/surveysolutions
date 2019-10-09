@@ -108,25 +108,23 @@ namespace WB.Enumerator.Native.WebInterview.Services
         public void ReloadInterview(Guid interviewId) => this.webInterviewInvoker.ReloadInterview(interviewId);
         public void FinishInterview(Guid interviewId) => this.webInterviewInvoker.FinishInterview(interviewId);
 
-        public void MarkAnswerAsNotSaved(string interviewId, string questionId, string errorMessage)
+        public void MarkAnswerAsNotSaved(Guid interviewId, Identity questionId, string errorMessage)
         {
-            var interview = this.statefulInterviewRepository.Get(interviewId);
+            var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
 
             if (interview == null)
             {
                 return;
             }
             
-            var questionIdentity = Identity.Parse(questionId);
-
-            var clientGroupIdentity = this.GetClientGroupIdentity(questionIdentity, interview);
+            var clientGroupIdentity = this.GetClientGroupIdentity(questionId, interview);
 
             if (clientGroupIdentity != null)
-                this.webInterviewInvoker.MarkAnswerAsNotSaved(clientGroupIdentity, questionId, errorMessage);
+                this.webInterviewInvoker.MarkAnswerAsNotSaved(clientGroupIdentity, questionId.ToString(), errorMessage);
         }
-        public void MarkAnswerAsNotSaved(string interviewId, string questionId, Exception exception)
+        public void MarkAnswerAsNotSaved(Guid interviewId, Identity questionId, Exception exception)
         {
-            var errorMessage = GetUiMessageFromException(exception);
+            var errorMessage = WebInterview.GetUiMessageFromException(exception);
             MarkAnswerAsNotSaved(interviewId, questionId, errorMessage);
         }
 
@@ -305,29 +303,5 @@ namespace WB.Enumerator.Native.WebInterview.Services
             => this.webInterviewInvoker.ReloadInterviews(questionnaireIdentity);
 
         public void ShutDownInterview(Guid interviewId) => this.webInterviewInvoker.ShutDown(interviewId);
-
-        public static string GetUiMessageFromException(Exception e)
-        {
-            if (e is InterviewException interviewException && interviewException.ExceptionType != InterviewDomainExceptionType.Undefined)
-            {
-                switch (interviewException.ExceptionType)
-                {
-                    case InterviewDomainExceptionType.InterviewLimitReached:
-                        return Enumerator.Native.Resources.WebInterview.ServerUnderLoad;
-                    case InterviewDomainExceptionType.QuestionnaireIsMissing:
-                    case InterviewDomainExceptionType.InterviewHardDeleted:
-                        return Enumerator.Native.Resources.WebInterview.Error_InterviewExpired;
-                    case InterviewDomainExceptionType.OtherUserIsResponsible:
-                    case InterviewDomainExceptionType.StatusIsNotOneOfExpected:
-                        return Enumerator.Native.Resources.WebInterview.Error_NoActionsNeeded;
-                    case InterviewDomainExceptionType.InterviewRecievedByDevice:
-                        return Enumerator.Native.Resources.WebInterview.InterviewReceivedByInterviewer;
-                    case InterviewDomainExceptionType.InterviewSizeLimitReached:
-                        return Enumerator.Native.Resources.WebInterview.InterviewSizeLimitReached;
-                }
-            }
-
-            return e.Message;
-        }
     }
 }
