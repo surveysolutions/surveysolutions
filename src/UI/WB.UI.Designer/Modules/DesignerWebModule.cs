@@ -11,6 +11,7 @@ using WB.Infrastructure.Native.Storage;
 using WB.UI.Designer.Api.WebTester;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Controllers.Api.WebTester;
+using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Services;
 
 namespace WB.UI.Designer.Modules
@@ -33,6 +34,7 @@ namespace WB.UI.Designer.Modules
             registry.Bind<IQuestionnaireSearchStorage, QuestionnaireSearchStorage>();
             registry.Bind<IClassificationsStorage, ClassificationsStorage>();
             registry.BindAsSingleton<IWebTesterService, WebTesterService>();
+            registry.Bind<IQuestionnaireRevisionTagger, QuestionnaireRevisionTagger>();
         }
 
         public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status)

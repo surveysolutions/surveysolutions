@@ -188,8 +188,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
             this.AddQuestionnaireChangeItem(questionnaireId, command.ResponsibleId,
                 QuestionnaireActionType.ImportToHq, QuestionnaireItemType.Questionnaire, 
-                command.QuestionnaireId, command.IpAddress, command.Site, 
-                null, null, aggregate.QuestionnaireDocument);
+                command.QuestionnaireId, command.Metadata?.HqHostName, null, 
+                null, null, aggregate.QuestionnaireDocument, meta: command.Metadata);
         }
 
         #endregion
@@ -677,7 +677,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             Guid targetId, 
             string targetTitle, 
             QuestionnaireDocument questionnaireDocument, 
-            QuestionnaireChangeReference reference = null)
+            QuestionnaireChangeReference reference = null,
+            QuestionnaireChangeRecordMetadata meta = null)
         {
             AddQuestionnaireChangeItem(questionnaireId,
                 responsibleId,
@@ -689,7 +690,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 null,
                 null,
                 questionnaireDocument,
-                reference);
+                reference, 
+                meta);
         }
 
         private void AddQuestionnaireChangeItem(
@@ -703,7 +705,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             int? affectedEntries,
             DateTime? targetDateTime,
             QuestionnaireDocument questionnaireDocument,
-            QuestionnaireChangeReference reference = null)
+            QuestionnaireChangeReference reference = null,
+            QuestionnaireChangeRecordMetadata meta = null)
         {
             this.questionnaireHistoryVersionsService.AddQuestionnaireChangeItem(questionnaireId, 
                 responsibleId, 
@@ -716,7 +719,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 affectedEntries,
                 targetDateTime,
                 questionnaireDocument,
-                reference);
+                reference,
+                meta);
         }
 
         private string GetUserName(Guid? userId)
