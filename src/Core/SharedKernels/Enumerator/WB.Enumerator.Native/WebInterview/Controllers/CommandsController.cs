@@ -16,12 +16,12 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 {
     public abstract class CommandsController : ApiController
     {
-        private readonly ICommandService commandService;
-        private readonly IImageFileStorage imageFileStorage;
-        private readonly IAudioFileStorage audioFileStorage;
-        private readonly IQuestionnaireStorage questionnaireRepository;
-        private readonly IStatefulInterviewRepository statefulInterviewRepository;
-        private readonly IWebInterviewNotificationService webInterviewNotificationService;
+        protected readonly ICommandService commandService;
+        protected readonly IImageFileStorage imageFileStorage;
+        protected readonly IAudioFileStorage audioFileStorage;
+        protected readonly IQuestionnaireStorage questionnaireRepository;
+        protected readonly IStatefulInterviewRepository statefulInterviewRepository;
+        protected readonly IWebInterviewNotificationService webInterviewNotificationService;
 
 
         public CommandsController(ICommandService commandService, IImageFileStorage imageFileStorage, IAudioFileStorage audioFileStorage,
