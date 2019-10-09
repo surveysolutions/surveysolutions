@@ -2046,7 +2046,6 @@
     <Content Include="Views\Interviews\Index.cshtml" />
     <Content Include="Views\ControlPanel\ReevaluateInterview.cshtml" />
     <Content Include="Views\Assignments\Details.cshtml" />
-    <Content Include="Views\Questionnaires\Details.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -2075,8 +2074,6 @@
     <Compile Include="API\PublicApi\AssignmentsHistoryController.cs" />
     <Compile Include="Controllers\InterviewsController.cs" />
     <Compile Include="API\PublicApi\Models\AuditLogApiView.cs" />
-    <Compile Include="Controllers\QuestionnairesController.cs" />
-    <Compile Include="Models\QuestionnaireDetailsModel.cs" />
     <Compile Include="Services\AspNetAppPathResolver.cs" />
     <Compile Include="Services\ClientApkProvider.cs" />
     <Compile Include="Services\DesignerUserCredentials.cs" />
