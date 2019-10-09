@@ -97,7 +97,6 @@ namespace WB.UI.Designer.Code.Attributes
                     if (!this.allowedAddressService.IsAllowedAddress(clientIpAddress))
                     {
                         this.ThrowForbiddenException(context, string.Format(ErrorMessages.UserNeedToContactSupportFormat, clientIpAddress));
-                        return;
                     }
                 }
             }

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Dapper;
 using Main.Core.Documents;
+using Polly;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -16,6 +16,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.Questionnaire.Synchronization.Designer;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Enumerator.Native.Questionnaire;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -31,6 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly IStringCompressor zipUtils;
         private readonly IAttachmentContentService attachmentContentService;
         private readonly IPlainKeyValueStorage<QuestionnaireLookupTable> lookupTablesStorage;
+        private readonly IPlainKeyValueStorage<QuestionnairePdf> pdfStorage;
         private readonly IQuestionnaireVersionProvider questionnaireVersionProvider;
         private readonly ITranslationManagementService translationManagementService;
         private readonly ICommandService commandService;
@@ -52,7 +54,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             ISystemLog auditLog,
             IUnitOfWork unitOfWork,
             IAuthorizedUser authorizedUser,
-            IDesignerUserCredentials designerUserCredentials)
+            IDesignerUserCredentials designerUserCredentials, 
+            IPlainKeyValueStorage<QuestionnairePdf> pdfStorage)
         {
             this.supportedVersionProvider = supportedVersionProvider;
             this.restService = restService;
@@ -66,6 +69,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.unitOfWork = unitOfWork;
             this.authorizedUser = authorizedUser;
             this.designerUserCredentials = designerUserCredentials;
+            this.pdfStorage = pdfStorage;
             this.lookupTablesStorage = lookupTablesStorage;
         }
 
@@ -86,6 +90,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         ImportError = ErrorMessages.IncorrectUserNameOrPassword
                     };
                 }
+
+                // Start pdf rendering
+                this.logger.Debug($"Requesting pdf generator to start working for questionnaire {questionnaireId}");
+                await this.restService.GetAsync<PdfStatus>(
+                    url: $"pdf/status/{questionnaireId}", 
+                    credentials: credentials);
 
                 var questionnairePackage = await this.restService.GetAsync<QuestionnaireCommunicationPackage>(
                     url: $"{this.apiPrefix}/{this.apiVersion}/questionnaires/{questionnaireId}",
@@ -118,11 +128,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                 var questionnaireVersion = this.questionnaireVersionProvider.GetNextVersion(questionnaire.PublicKey);
 
+                this.logger.Debug($"checking translations questionnaire {questionnaireId}");
                 var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.PublicKey, questionnaireVersion);
                 if (questionnaire.Translations?.Count > 0)
                 {
                     this.translationManagementService.Delete(questionnaireIdentity);
 
+                    this.logger.Debug($"loading translations {questionnaireId}");
                     var translationContent = await this.restService.GetAsync<List<TranslationDto>>(
                         url: $"{this.apiPrefix}/translations/{questionnaire.PublicKey}",
                         credentials: credentials);
@@ -138,10 +150,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     }));
                 }
 
+                this.logger.Debug($"checking lookup tables questionnaire {questionnaireId}");
                 if (questionnaire.LookupTables.Any())
                 {
                     foreach (var lookupId in questionnaire.LookupTables.Keys)
                     {
+                        this.logger.Debug($"Loading lookup table questionnaire {questionnaireId}. Lookup id {lookupId}");
                         var lookupTable = await this.restService.GetAsync<QuestionnaireLookupTable>(
                             url: $"{this.apiPrefix}/lookup/{questionnaire.PublicKey}/{lookupId}",
                             credentials: credentials);
@@ -157,6 +171,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     questionnaireAssembly,
                     questionnaireContentVersion,
                     questionnaireVersion));
+
+                await DownloadAndStorePdf(questionnaireIdentity, credentials);
 
                 this.auditLog.QuestionnaireImported(questionnaire.Title, questionnaireIdentity);
 
@@ -217,6 +233,29 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                 throw;
             }
+        }
+
+        private async Task DownloadAndStorePdf(QuestionnaireIdentity questionnaireIdentity,
+            RestCredentials credentials)
+        {
+            var pdfRetry = Policy.HandleResult<PdfStatus>(x => x.ReadyForDownload == false)
+                .WaitAndRetryAsync(7, retry => TimeSpan.FromSeconds(retry));
+
+            await pdfRetry.ExecuteAsync(async () =>
+            {
+                this.logger.Debug($"Waiting for pdf to be ready {questionnaireIdentity}");
+                var pdfStatus = await this.restService.GetAsync<PdfStatus>(
+                    url: $"pdf/status/{questionnaireIdentity.QuestionnaireId}",
+                    credentials: credentials);
+                return pdfStatus;
+            });
+
+            this.logger.Debug("Loading pdf");
+
+            var pdfFile = await this.restService.DownloadFileAsync($"pdf/download/{questionnaireIdentity.QuestionnaireId}", credentials: credentials);
+            this.pdfStorage.Store(new QuestionnairePdf{Content = pdfFile.Content}, questionnaireIdentity.ToString());
+
+            this.logger.Debug($"PDF for questionnaire stored {questionnaireIdentity}");
         }
     }
 }
