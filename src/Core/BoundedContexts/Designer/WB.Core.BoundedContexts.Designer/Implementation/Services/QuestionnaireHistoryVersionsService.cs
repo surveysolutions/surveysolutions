@@ -72,8 +72,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (minSequence < 0) return;
 
             var oldChangeRecord = this.dbContext.QuestionnaireChangeRecords
-                .Where(x => x.QuestionnaireId == sQuestionnaireId && x.Sequence < minSequence
-                                                                  && (x.ResultingQuestionnaireDocument != null || x.Patch != null))
+                .Where(x => x.QuestionnaireId == sQuestionnaireId 
+                    && x.Sequence < minSequence
+                    && (x.ResultingQuestionnaireDocument != null || x.Patch != null)
+                    && x.ActionType != QuestionnaireActionType.ImportToHq
+                 )                    
                 .OrderBy(x => x.Sequence)
                 .ToList();
 
@@ -96,7 +99,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             int? affectedEntries,
             DateTime? targetDateTime,
             QuestionnaireDocument questionnaireDocument,
-            QuestionnaireChangeReference reference = null)
+            QuestionnaireChangeReference reference = null,
+            QuestionnaireChangeRecordMetadata meta = null)
         {
             var sQuestionnaireId = questionnaireId.FormatGuid();
 
@@ -135,6 +139,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 TargetItemNewTitle = targetNewTitle,
                 AffectedEntriesCount = affectedEntries,
                 TargetItemDateTime = targetDateTime,
+                Meta = meta
             };
 
             if (reference != null)
