@@ -29,10 +29,6 @@ namespace WB.Enumerator.Native.WebInterview
             return this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
         }
 
-        protected virtual bool IsReviewMode => false;
-
-        protected virtual bool IsCurrentUserObserving => false;
-
         public WebInterview()
         {
         }
@@ -53,6 +49,31 @@ namespace WB.Enumerator.Native.WebInterview
         public void SetServiceLocator(IServiceLocator serviceLocator)
         {
             this.ServiceLocator = serviceLocator;
+        }
+
+
+        public static string GetUiMessageFromException(Exception e)
+        {
+            if (e is InterviewException interviewException && interviewException.ExceptionType != InterviewDomainExceptionType.Undefined)
+            {
+                switch (interviewException.ExceptionType)
+                {
+                    case InterviewDomainExceptionType.InterviewLimitReached:
+                        return Enumerator.Native.Resources.WebInterview.ServerUnderLoad;
+                    case InterviewDomainExceptionType.QuestionnaireIsMissing:
+                    case InterviewDomainExceptionType.InterviewHardDeleted:
+                        return Enumerator.Native.Resources.WebInterview.Error_InterviewExpired;
+                    case InterviewDomainExceptionType.OtherUserIsResponsible:
+                    case InterviewDomainExceptionType.StatusIsNotOneOfExpected:
+                        return Enumerator.Native.Resources.WebInterview.Error_NoActionsNeeded;
+                    case InterviewDomainExceptionType.InterviewRecievedByDevice:
+                        return Enumerator.Native.Resources.WebInterview.InterviewReceivedByInterviewer;
+                    case InterviewDomainExceptionType.InterviewSizeLimitReached:
+                        return Enumerator.Native.Resources.WebInterview.InterviewSizeLimitReached;
+                }
+            }
+
+            return e.Message;
         }
     }
 }
