@@ -8,8 +8,8 @@ namespace WB.Enumerator.Native.WebInterview
     {
         void RefreshEntities(Guid interviewId, params Identity[] questions);
         void ReloadInterview(Guid interviewId);
-        void MarkAnswerAsNotSaved(string interviewId, string questionId, string errorMessage);
-        void MarkAnswerAsNotSaved(Guid interviewId, string questionId, Exception exception);
+        void MarkAnswerAsNotSaved(Guid interviewId, Identity questionId, string errorMessage);
+        void MarkAnswerAsNotSaved(Guid interviewId, Identity questionId, Exception exception);
         void RefreshRemovedEntities(Guid interviewId, params Identity[] entities);
         void FinishInterview(Guid interviewId);
         void RefreshLinkedToRosterQuestions(Guid interviewId, Identity[] rosterIdentities);
