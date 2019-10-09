@@ -85,6 +85,10 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
+using System.Net.Http;
+using System;
+using System.Net.Http.Headers;
+using System.Text;
 
 namespace WB.Core.BoundedContexts.Headquarters
 {
@@ -313,6 +317,30 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IInvitationsDeletionService, InvitationsDeletionService>();
 
             registry.BindToConstant<IMemoryCache>(() => new MemoryCache(Options.Create(new MemoryCacheOptions())));
+
+            registry.BindToMethod<IDesignerApi>(ctx =>
+            {
+                const string apiPrefix = @"/api/hq";
+
+                var settings = ctx.Resolve<IRestServiceSettings>();
+                var hc = new HttpClient()
+                {
+                    BaseAddress = new Uri(settings.Endpoint + apiPrefix),
+                    DefaultRequestHeaders =
+                    {
+                        { "User-Agent",  settings.UserAgent },
+                    }
+                };
+                                
+                var credentials = ctx.Resolve<IDesignerUserCredentials>().Get();
+                if(credentials != null)
+                {
+                    var value = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{credentials.Login}:{credentials.Password}"));
+                    hc.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", value);
+                }
+
+                return Refit.RestService.For<IDesignerApi>(hc);
+            });
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)

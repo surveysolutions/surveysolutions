@@ -10,6 +10,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Designer.Api.Headquarters;
 using WB.UI.Designer.Controllers.Api.Headquarters;
+using WB.UI.Designer.Implementation.Services;
 
 namespace WB.Tests.Unit.Designer.Api.Headquarters.QuestionnairesControllerTests
 {
@@ -37,8 +38,7 @@ namespace WB.Tests.Unit.Designer.Api.Headquarters.QuestionnairesControllerTests
                 listItemStorage: Create.InMemoryDbContext(),
                 expressionsPlayOrderProvider: expressionsPlayOrderProvider ?? Substitute.For<IExpressionsPlayOrderProvider>(),
                 questionnaireCompilationVersionService: questionnaireCompilationVersionService ?? Mock.Of<IQuestionnaireCompilationVersionService>(),
-                commandService: Mock.Of<ICommandService>(),
-                ipAddressProvider: Mock.Of<IIpAddressProvider>());
+                questionnaireRevisionTagger: Mock.Of<IQuestionnaireRevisionTagger>());
 
             return hqQuestionnairesController;
         }

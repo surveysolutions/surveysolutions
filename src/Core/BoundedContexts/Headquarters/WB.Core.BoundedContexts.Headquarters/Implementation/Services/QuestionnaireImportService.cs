@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Dapper;
 using Main.Core.Documents;
+using Refit;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -22,6 +24,27 @@ using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
+    public interface IDesignerApi
+    {
+        [Post("/v3/questionnaires/revision/{id}/tag")]
+        Task Tag(Guid id, [Body] DesignerApiTagModel model);
+
+        [Get("/v3/questionnaires/{id}")] // {this.apiVersion}/questionnaires/{questionnaireId}",
+        Task<QuestionnaireCommunicationPackage> GetQuestionnaire(
+            Guid id,
+            int clientQuestionnaireContentVersion, 
+            [Query] int? minSupportedQuestionnaireVersion);
+    }
+
+    public class DesignerApiTagModel
+    {
+        public int HqTimeZone { get; set; }
+        public string ImporterLogin { get; set; }
+        public long QuestionnaireVersion { get; set; }
+        public string Comment { get; set; }
+        public string HqHost { get; internal set; }
+    }
+
     internal class QuestionnaireImportService : IQuestionnaireImportService
     {
         private readonly ISupportedVersionProvider supportedVersionProvider;
@@ -39,6 +62,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly IUnitOfWork unitOfWork;
         private readonly IAuthorizedUser authorizedUser;
         private readonly IDesignerUserCredentials designerUserCredentials;
+        private readonly IDesignerApi designerApi;
 
         public QuestionnaireImportService(ISupportedVersionProvider supportedVersionProvider,
             IRestService restService,
@@ -52,7 +76,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             ISystemLog auditLog,
             IUnitOfWork unitOfWork,
             IAuthorizedUser authorizedUser,
-            IDesignerUserCredentials designerUserCredentials)
+            IDesignerUserCredentials designerUserCredentials,
+            IDesignerApi designerApi)
         {
             this.supportedVersionProvider = supportedVersionProvider;
             this.restService = restService;
@@ -66,6 +91,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.unitOfWork = unitOfWork;
             this.authorizedUser = authorizedUser;
             this.designerUserCredentials = designerUserCredentials;
+            this.designerApi = designerApi;
             this.lookupTablesStorage = lookupTablesStorage;
         }
 
@@ -87,21 +113,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     };
                 }
 
-                var customHeaders = new Dictionary<string, string>();
-                if (!requestUrl.IsNullOrEmpty())
-                    customHeaders.Add("referer", requestUrl);
+                var minSupported = this.supportedVersionProvider.GetMinVerstionSupportedByInterviewer();
 
-                var questionnairePackage = await this.restService.GetAsync<QuestionnaireCommunicationPackage>(
-                    url: $"{this.apiPrefix}/{this.apiVersion}/questionnaires/{questionnaireId}",
-                    credentials: credentials,
-                    queryString: new
-                    {
-                        clientQuestionnaireContentVersion = supportedVersion,
-                        minSupportedQuestionnaireVersion = this.supportedVersionProvider.GetMinVerstionSupportedByInterviewer()
-                    },
-                    customHeaders: customHeaders);
+                var questionnairePackage = await this.designerApi.GetQuestionnaire(questionnaireId, 
+                    supportedVersion, minSupported);
 
                 QuestionnaireDocument questionnaire = this.zipUtils.DecompressString<QuestionnaireDocument>(questionnairePackage.Questionnaire);
+
                 var questionnaireContentVersion = questionnairePackage.QuestionnaireContentVersion;
                 var questionnaireAssembly = questionnairePackage.QuestionnaireAssembly;
 
@@ -150,7 +168,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         var lookupTable = await this.restService.GetAsync<QuestionnaireLookupTable>(
                             url: $"{this.apiPrefix}/lookup/{questionnaire.PublicKey}/{lookupId}",
                             credentials: credentials);
-                        
+
                         lookupTablesStorage.Store(lookupTable, questionnaireIdentity, lookupId);
                     }
                 }
@@ -162,6 +180,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     questionnaireAssembly,
                     questionnaireContentVersion,
                     questionnaireVersion));
+
+                await designerApi.Tag(questionnaire.Revision, new DesignerApiTagModel
+                {
+                    HqHost = GetDomainFromUri(requestUrl),
+                    HqTimeZone = (int)TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).TotalMinutes,
+                    ImporterLogin = this.authorizedUser.UserName,
+                    QuestionnaireVersion = questionnaireIdentity.Version,
+                    Comment = "",
+                });
 
                 this.auditLog.QuestionnaireImported(questionnaire.Title, questionnaireIdentity);
 
@@ -222,6 +249,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                 throw;
             }
+        }
+
+        private string GetDomainFromUri(string requestUrl)
+        {
+            var uri = new Uri(requestUrl);
+            return uri.Host + (!uri.IsDefaultPort ? ":" + uri.Port : "");
         }
     }
 }

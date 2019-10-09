@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 {
@@ -21,5 +22,19 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         public virtual string ResultingQuestionnaireDocument { get; set; }
         public virtual DateTime? TargetItemDateTime { get; set; }
         public virtual string Patch { get; set; }
+        
+        public virtual QuestionnaireChangeRecordMetadata Meta {get;set;}        
+    }
+
+    public class QuestionnaireChangeRecordMetadata
+    {
+        public string HqHostName { get; set; }
+        public string HqUserName { get; set; }
+        public string HqVersion { get; set; }
+        public string HqBuild { get; set; }
+        public string Comment { get; set; }
+        public float HqTimeZone { get; set; }
+        public string ImporterLogin { get; set; }
+        public long QuestionnaireVersion { get; set; }
     }
 }

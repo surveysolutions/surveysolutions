@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Linq;
-using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
-using WB.Core.BoundedContexts.Designer.MembershipProvider.Roles;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -16,11 +13,12 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Attributes;
 using WB.UI.Designer.Extensions;
+using WB.UI.Designer.Implementation.Services;
+using WB.UI.Designer.Models;
 using WB.UI.Designer.Resources;
 
 namespace WB.UI.Designer.Controllers.Api.Headquarters
@@ -39,10 +37,8 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
         private readonly IStringCompressor zipUtils;
         private readonly IExpressionsPlayOrderProvider expressionsPlayOrderProvider;
         private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersionService;
-        private readonly ICommandService commandService;
-        private readonly IIpAddressProvider ipAddressProvider;
-
-
+        private readonly IQuestionnaireRevisionTagger questionnaireRevisionTagger;
+        
         public HQQuestionnairesController(
             IQuestionnaireViewFactory questionnaireViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
@@ -54,8 +50,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             DesignerDbContext listItemStorage,
             IExpressionsPlayOrderProvider expressionsPlayOrderProvider,
             IQuestionnaireCompilationVersionService questionnaireCompilationVersionService,
-            ICommandService commandService,
-            IIpAddressProvider ipAddressProvider)
+            IQuestionnaireRevisionTagger questionnaireRevisionTagger)
         {
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.questionnaireVerifier = questionnaireVerifier;
@@ -67,8 +62,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             this.listItemStorage = listItemStorage;
             this.expressionsPlayOrderProvider = expressionsPlayOrderProvider;
             this.questionnaireCompilationVersionService = questionnaireCompilationVersionService;
-            this.commandService = commandService;
-            this.ipAddressProvider = ipAddressProvider;
+            this.questionnaireRevisionTagger = questionnaireRevisionTagger;
         }
 
         [HttpGet]
@@ -104,7 +98,6 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
 
             return Ok(questionnaires);
         }
-
 
         [HttpGet]
         [Route("{id:Guid}")]
@@ -174,7 +167,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
 
             var questionnaire = questionnaireView.Source.Clone();
 
-            LogInHistoryImportQuestionnaireToHq(questionnaire);
+            this.questionnaireRevisionTagger.LogInHistoryImportQuestionnaireToHq(questionnaire, Request, User.GetId());
 
             questionnaire.IsUsingExpressionStorage = versionToCompileAssembly > 19;
             var readOnlyQuestionnaireDocument = questionnaireView.Source.AsReadOnly();
@@ -190,27 +183,14 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             });
         }
 
-        private void LogInHistoryImportQuestionnaireToHq(QuestionnaireDocument questionnaireDocument)
+        [HttpPost]
+        [Route("revision/{id:Guid}/tag")]
+        public IActionResult Tag(Guid id, [FromBody] QuestionnaireRevisionMetaDataUpdate tagData)
         {
-            if (User.IsInRole(SimpleRoleEnum.Administrator.ToString()))
-                return;
-
-            var userId = User.GetId();
-            var site = GetDomainFromReferer();
-            var ipAddress = ipAddressProvider.GetClientIpAddress();
-            var command = new ImportQuestionnaireToHq(userId, site, ipAddress.ToString(), questionnaireDocument);
-            commandService.Execute(command);
+            this.questionnaireRevisionTagger.UpdateQuestionnaireMetadata(id, tagData);
+            return Ok();
         }
-
-        private string GetDomainFromReferer()
-        {
-            var referer = Request.GetTypedHeaders()?.Referer?.ToString();
-            if (string.IsNullOrWhiteSpace(referer))
-                return null;
-            var uri = new Uri(referer);
-            return uri.Host + (!uri.IsDefaultPort ? ":" + uri.Port : "" );
-        }
-
+        
         [HttpGet]
         [Route("info/{id:guid}")]
         public IActionResult Info(Guid id)

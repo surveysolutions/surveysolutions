@@ -1,21 +1,20 @@
 using System;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
 {
     public class ImportQuestionnaireToHq : QuestionnaireCommand
     {
-        public ImportQuestionnaireToHq(Guid responsibleId, string site, string ipAddress, QuestionnaireDocument source)
+        public ImportQuestionnaireToHq(Guid responsibleId, QuestionnaireChangeRecordMetadata metadata, QuestionnaireDocument source)
             : base(source.PublicKey, responsibleId)
         {
-            IpAddress = ipAddress;
-            Source = source;
-            Site = site;
+            Metadata = metadata;
+            Source = source;            
         }
 
-        public string Site { get; }
-        public string IpAddress { get; }
+        public QuestionnaireChangeRecordMetadata Metadata { get; }
         public QuestionnaireDocument Source { get; }
     }
 }
