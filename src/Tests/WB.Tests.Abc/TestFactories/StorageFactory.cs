@@ -3,7 +3,6 @@ using System.Linq;
 using Amazon.S3;
 using Amazon.S3.Transfer;
 using Main.Core.Documents;
-using Microsoft.AspNet.Identity;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -31,10 +30,11 @@ namespace WB.Tests.Abc.TestFactories
 {
     public class TestHqUserManager : HqUserManager
     {
-        public TestHqUserManager() : base(Mock.Of<IUserStore<HqUser, Guid>>(),
+        public TestHqUserManager() : base(Mock.Of<IUserRepository>(),
             Mock.Of<IHashCompatibilityProvider>(),
-            Mock.Of<IPasswordHasher>(),
-            Mock.Of<IIdentityValidator<string>>(),
+            Mock.Of<IIdentityPasswordHasher>(),
+            Mock.Of<IPasswordValidator>(),
+            Mock.Of<IIdentityValidator>(),
             Mock.Of<ISystemLog>()) { }
     }
 
@@ -52,15 +52,17 @@ namespace WB.Tests.Abc.TestFactories
 
         public IInterviewerProfileFactory UserProfileFactory() => Mock.Of<IInterviewerProfileFactory>();
 
-        public HqUserManager HqUserManager(IUserStore<HqUser, Guid> userStore = null,
+        public HqUserManager HqUserManager(IUserRepository userStore = null,
             IHashCompatibilityProvider hashCompatibilityProvider = null,
-            IPasswordHasher passwordHasher = null,
-            IIdentityValidator<string> identityValidator = null,
+            IIdentityPasswordHasher passwordHasher = null,
+            IPasswordValidator passwordValidator = null,
+            IIdentityValidator identityValidator = null,
             ISystemLog logger = null)
-            => new HqUserManager(userStore ?? Mock.Of<IUserStore<HqUser, Guid>>(),
+            => new HqUserManager(userStore ?? Mock.Of<IUserRepository>(),
                 hashCompatibilityProvider,
-                passwordHasher ?? Mock.Of<IPasswordHasher>(),
-                identityValidator ?? Mock.Of<IIdentityValidator<string>>(),
+                passwordHasher ?? Mock.Of<IIdentityPasswordHasher>(),
+                passwordValidator ?? Mock.Of<IPasswordValidator>(),
+                identityValidator ?? Mock.Of<IIdentityValidator>(),
                 logger ?? Mock.Of<ISystemLog>());
 
         public IAssignmentDocumentsStorage AssignmentDocumentsInmemoryStorage()

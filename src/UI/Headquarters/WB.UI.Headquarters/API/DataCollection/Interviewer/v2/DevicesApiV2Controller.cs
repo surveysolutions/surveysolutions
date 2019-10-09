@@ -38,7 +38,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
 
         [HttpPost]
         [WriteToSyncLog(SynchronizationLogType.LinkToDevice)]
-        public override HttpResponseMessage LinkCurrentResponsibleToDevice(string id, int version) => base.LinkCurrentResponsibleToDevice(id, version);
+        public override Task<IHttpActionResult> LinkCurrentResponsibleToDevice(string id, int version) => base.LinkCurrentResponsibleToDevice(id, version);
 
         [HttpPost]
         public override Task<IHttpActionResult> Info(DeviceInfoApiView info) => base.Info(info);

@@ -21,6 +21,7 @@ using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Resources;
+using IdentityResult = WB.Core.BoundedContexts.Headquarters.OwinSecurity.IdentityResult;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
