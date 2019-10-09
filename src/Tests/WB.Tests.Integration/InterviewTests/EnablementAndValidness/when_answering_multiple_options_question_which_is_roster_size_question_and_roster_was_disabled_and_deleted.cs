@@ -41,7 +41,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                     );
 
                 var emptyVector = new int[] {};
-                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument, new object[] { });
+                var interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument, new object[] { });
 
                 interview.AnswerMultipleOptionsQuestion(userId, multiOptionQuestionId, RosterVector.Empty, DateTime.Now, new [] { 1 });
                 interview.AnswerMultipleOptionsQuestion(userId, multiOptionQuestionId, RosterVector.Empty, DateTime.Now, new [] { 1, 2 });

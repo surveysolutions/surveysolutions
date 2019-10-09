@@ -38,7 +38,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                     })
                 );
 
-                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument, new List<object>
+                var interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument, new List<object>
                 {
                     Abc.Create.Event.QuestionsEnabled(new []
                     {

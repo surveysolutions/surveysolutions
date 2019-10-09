@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         public async Task Context()
         {
             var principal = SetUp.InterviewerPrincipal("name", "pass");
-
+            
             var interviewId = Guid.NewGuid();
 
             var questionnaireIdentity = new QuestionnaireIdentity(
@@ -86,7 +86,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             localInterviewers.Store(Create.Other.InterviewerIdentity());
 
             var viewModel = Create.Service.SynchronizationProcess(principal: principal,
-                interviewersPlainStorage: localInterviewers,
                 interviewViewRepository: interviewViewRepository,
                 httpStatistician: httpStatistician.Object,
                 synchronizationService: synchronizationServiceMock.Object

@@ -24,7 +24,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                     Abc.Create.Entity.GpsCoordinateQuestion(questionId, "gps", enablementCondition: null, validationExpression: "false"),
                 });
 
-                var interview = SetupInterview(questionnaireDocument);
+                var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
                 interview.AnswerGeoLocationQuestion(Guid.NewGuid(), questionId, RosterVector.Empty, DateTime.Now, 1, 1, 1, 1, DateTimeOffset.Now);
 
                 using (var eventContext = new EventContext())

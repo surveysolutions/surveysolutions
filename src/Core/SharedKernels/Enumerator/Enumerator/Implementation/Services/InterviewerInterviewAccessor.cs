@@ -146,7 +146,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             var lastCompleteSequence = this.eventStore.GetMaxSequenceForAnyEvent(interviewId, new[]{typeof(InterviewCompleted).Name});
             var lastComplete = this.eventStore.GetEventByEventSequence(interviewId, lastCompleteSequence);
             
-            return this.eventStreamOptimizer.FilterEventsToBeSent(this.eventStore.Read(interviewId, 0), lastComplete?.CommitId);
+            return this.eventStreamOptimizer.FilterEventsToBeSent(
+                this.eventStore.Read(interviewId, this.eventStore.GetLastEventKnownToHq(interviewId) + 1), 
+                lastComplete?.CommitId);
         }
         
         public InterviewPackageContainer GetInterviewEventStreamContainer(Guid interviewId)

@@ -30,7 +30,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                     Create.Entity.SingleQuestion(q3Id, "q3", linkedToRosterId: rosterId)
                 });
 
-                var interview = SetupStatefullInterview(questionnaireDocument);
+                var interview = SetupStatefullInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 interview.AnswerNumericIntegerQuestion(userId, q1Id, RosterVector.Empty, DateTime.Now, 3);
 

@@ -1,8 +1,7 @@
 using System.Threading.Tasks;
 using Moq;
-using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTests
 {
@@ -12,11 +11,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
         public async Task should_redirect_to_finish_installation_page()
         {
             Mock<IViewModelNavigationService> viewModelNavigationServiceMock = new Mock<IViewModelNavigationService>();
-            Mock<IPlainStorage<InterviewerIdentity>> interviewersPlainStorage = new Mock<IPlainStorage<InterviewerIdentity>>();
+            Mock<IInterviewerPrincipal> interviewerPrincipal = new Mock<IInterviewerPrincipal>();
 
             var viewModel = CreateLoginViewModel(
                 viewModelNavigationService: viewModelNavigationServiceMock.Object,
-                interviewersPlainStorage: interviewersPlainStorage.Object);
+                principal: interviewerPrincipal.Object);
 
             // Act
             viewModel.ViewCreated();

@@ -35,7 +35,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                     })
                 );
 
-                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument);
+                var interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument);
                 interview.AnswerNumericRealQuestion(userId, rosterSizeQuestionId, new decimal[] { }, DateTime.Now, 10);
 
                 using (var eventContext = new EventContext())
