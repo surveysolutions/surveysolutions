@@ -10,6 +10,7 @@ using Moq;
 using NHibernate;
 using NSubstitute.ExceptionExtensions;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters.Designer;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -237,7 +238,6 @@ namespace WB.Tests.Unit.Applications.Headquarters
             var unitOfWork = Mock.Of<IUnitOfWork>(x => x.Session == session);
             IQuestionnaireImportService questionnaireImportService = new QuestionnaireImportService(
                 supportedVersionProvider ?? Mock.Of<ISupportedVersionProvider>(),
-                service,
                 zipUtils ?? new Mock<IStringCompressor> { DefaultValue = DefaultValue.Mock }.Object,
                 attachmentContentService ?? Mock.Of<IAttachmentContentService>(),
                 questionnaireVersionProvider ?? Mock.Of<IQuestionnaireVersionProvider>(),
@@ -248,7 +248,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 Mock.Of<ISystemLog>(),
                 unitOfWork,
                 globalInfoProvider,
-                designerUserCredentials);
+                designerUserCredentials,
+                Mock.Of<IDesignerApi>());
             return questionnaireImportService;
         }
     }

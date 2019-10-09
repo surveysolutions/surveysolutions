@@ -89,9 +89,10 @@ using System.Net.Http;
 using System;
 using System.Net.Http.Headers;
 using System.Text;
+using WB.Core.BoundedContexts.Headquarters.Designer;
 
 namespace WB.Core.BoundedContexts.Headquarters
-{
+{   
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class HeadquartersBoundedContextModule : IModule
     {
@@ -318,29 +319,8 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.BindToConstant<IMemoryCache>(() => new MemoryCache(Options.Create(new MemoryCacheOptions())));
 
-            registry.BindToMethod<IDesignerApi>(ctx =>
-            {
-                const string apiPrefix = @"/api/hq";
-
-                var settings = ctx.Resolve<IRestServiceSettings>();
-                var hc = new HttpClient()
-                {
-                    BaseAddress = new Uri(settings.Endpoint + apiPrefix),
-                    DefaultRequestHeaders =
-                    {
-                        { "User-Agent",  settings.UserAgent },
-                    }
-                };
-                                
-                var credentials = ctx.Resolve<IDesignerUserCredentials>().Get();
-                if(credentials != null)
-                {
-                    var value = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{credentials.Login}:{credentials.Password}"));
-                    hc.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", value);
-                }
-
-                return Refit.RestService.For<IDesignerApi>(hc);
-            });
+            registry.Bind<IDesignerApiFactory, DesignerApiFactory>();
+            registry.BindToMethod(ctx => ctx.Resolve<IDesignerApiFactory>().Get());
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
