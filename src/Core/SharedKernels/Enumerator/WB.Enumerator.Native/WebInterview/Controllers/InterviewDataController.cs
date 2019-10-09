@@ -65,7 +65,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             };
         }
 
-        private IQuestionnaire GetCallerQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
+        protected IQuestionnaire GetCallerQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
         {
             return questionnaireRepository.GetQuestionnaire(questionnaireIdentity, null);
         }
@@ -99,7 +99,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             return statefulInterview.IsEnabled(Identity.Parse(id));
         }
 
-        private IStatefulInterview GetCallerInterview(Guid interviewId)
+        protected IStatefulInterview GetCallerInterview(Guid interviewId)
         {
             return statefulInterviewRepository.Get(interviewId.FormatGuid());
         }
