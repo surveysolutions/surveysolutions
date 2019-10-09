@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web.Http;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.WebInterview;
@@ -20,9 +21,10 @@ namespace WB.UI.WebTester.Controllers
             this.evictionNotify = evictionNotify;
         }
 
-        public override void CompleteInterview(CompleteInterviewRequest completeInterviewRequest)
+        public override IHttpActionResult CompleteInterview(CompleteInterviewRequest completeInterviewRequest)
         {
             evictionNotify.Evict(completeInterviewRequest.InterviewId);
+            return Ok();
         }
     }
 }
