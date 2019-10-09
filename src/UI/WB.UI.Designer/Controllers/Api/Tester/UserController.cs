@@ -1,12 +1,13 @@
-using System;
 using System.Net;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.UI.Designer.Code.Attributes;
 
 namespace WB.UI.Designer.Controllers.Api.Tester
 {
-    [ApiBasicAuth]
+    [AllowOnlyFromWhitelistIP]
+    [Authorize]
     [Route("api")]
     public class UserController : ControllerBase
     {

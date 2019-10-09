@@ -1,9 +1,8 @@
 using System;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.UI.Designer.Code.Attributes;
 
-namespace WB.UI.Designer.Api.Headquarters
+namespace WB.UI.Designer.Controllers.Api.Headquarters
 {
     [Route("api/hq/attachment")]
     public class HQAttachmentController : ControllerBase

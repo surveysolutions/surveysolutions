@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
@@ -18,7 +19,8 @@ using WB.UI.Designer.Models;
 namespace WB.UI.Designer.Api.Portal
 {
     [Route("api/portal")]
-    [ApiBasicAuth(onlyAllowedAddresses: false)]
+    [Authorize]
+    [AllowOnlyFromWhitelistIP(onlyAllowedAddresses: false)]
     public class PortalController : ControllerBase
     {
         private readonly UserManager<DesignerIdentityUser> accountRepository;
