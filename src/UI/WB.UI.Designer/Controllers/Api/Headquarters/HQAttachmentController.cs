@@ -5,7 +5,6 @@ using WB.UI.Designer.Code.Attributes;
 
 namespace WB.UI.Designer.Api.Headquarters
 {
-    [ApiBasicAuth(onlyAllowedAddresses: true)]
     [Route("api/hq/attachment")]
     public class HQAttachmentController : ControllerBase
     {
