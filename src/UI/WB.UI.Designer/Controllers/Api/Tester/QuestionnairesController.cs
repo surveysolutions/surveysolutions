@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using Microsoft.AspNetCore.Http;
 using System.Net.Mime;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -18,7 +19,8 @@ using WB.UI.Designer.Extensions;
 
 namespace WB.UI.Designer.Controllers.Api.Tester
 {
-    [ApiBasicAuth]
+    [AllowOnlyFromWhitelistIP]
+    [Authorize]
     [Route("api/v{version:int}/questionnaires")]
     public class QuestionnairesController : Controller
     {
