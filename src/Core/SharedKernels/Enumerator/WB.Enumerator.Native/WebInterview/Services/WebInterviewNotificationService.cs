@@ -6,6 +6,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -122,6 +123,11 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
             if (clientGroupIdentity != null)
                 this.webInterviewInvoker.MarkAnswerAsNotSaved(clientGroupIdentity, questionId, errorMessage);
+        }
+        public void MarkAnswerAsNotSaved(string interviewId, string questionId, Exception exception)
+        {
+            var errorMessage = GetUiMessageFromException(exception);
+            MarkAnswerAsNotSaved(interviewId, questionId, errorMessage);
         }
 
         public virtual void RefreshRemovedEntities(Guid interviewId, params Identity[] entities)
@@ -299,5 +305,29 @@ namespace WB.Enumerator.Native.WebInterview.Services
             => this.webInterviewInvoker.ReloadInterviews(questionnaireIdentity);
 
         public void ShutDownInterview(Guid interviewId) => this.webInterviewInvoker.ShutDown(interviewId);
+
+        public static string GetUiMessageFromException(Exception e)
+        {
+            if (e is InterviewException interviewException && interviewException.ExceptionType != InterviewDomainExceptionType.Undefined)
+            {
+                switch (interviewException.ExceptionType)
+                {
+                    case InterviewDomainExceptionType.InterviewLimitReached:
+                        return Enumerator.Native.Resources.WebInterview.ServerUnderLoad;
+                    case InterviewDomainExceptionType.QuestionnaireIsMissing:
+                    case InterviewDomainExceptionType.InterviewHardDeleted:
+                        return Enumerator.Native.Resources.WebInterview.Error_InterviewExpired;
+                    case InterviewDomainExceptionType.OtherUserIsResponsible:
+                    case InterviewDomainExceptionType.StatusIsNotOneOfExpected:
+                        return Enumerator.Native.Resources.WebInterview.Error_NoActionsNeeded;
+                    case InterviewDomainExceptionType.InterviewRecievedByDevice:
+                        return Enumerator.Native.Resources.WebInterview.InterviewReceivedByInterviewer;
+                    case InterviewDomainExceptionType.InterviewSizeLimitReached:
+                        return Enumerator.Native.Resources.WebInterview.InterviewSizeLimitReached;
+                }
+            }
+
+            return e.Message;
+        }
     }
 }
