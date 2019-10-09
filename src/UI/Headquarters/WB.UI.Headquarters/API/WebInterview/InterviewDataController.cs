@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.Http;
+using System.Web.Http;
 using Microsoft.AspNet.SignalR;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
@@ -93,10 +94,11 @@ namespace WB.UI.Headquarters.API.WebInterview
         }
 
         [ObserverNotAllowed]
-        public void SetFlag(Guid interviewId, string questionId, bool hasFlag)
+        public IHttpActionResult SetFlag(Guid interviewId, string questionId, bool hasFlag)
         {
             var statefulInterview = this.GetCallerInterview(interviewId);
             this.interviewFactory.SetFlagToQuestion(statefulInterview.Id, Identity.Parse(questionId), hasFlag);
+            return Ok();
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @flags.js")]

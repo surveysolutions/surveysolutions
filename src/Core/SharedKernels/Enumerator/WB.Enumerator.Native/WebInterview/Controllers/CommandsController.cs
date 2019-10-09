@@ -42,102 +42,115 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             return interview.CurrentResponsibleId;
         }
 
-        public void ChangeLanguage(ChangeLanguageRequest request)
+        public IHttpActionResult ChangeLanguage(ChangeLanguageRequest request)
         {
             this.commandService.Execute(new SwitchTranslation(request.InterviewId, request.Language, this.GetCommandResponsibleId(request.InterviewId)));
+            return Ok();
         }
 
-        public void AnswerTextQuestion(Guid interviewId, string questionIdenty, string text)
+        public IHttpActionResult AnswerTextQuestion(Guid interviewId, string questionIdenty, string text)
         {
             var identity = Identity.Parse(questionIdenty);
             this.ExecuteQuestionCommand(new AnswerTextQuestionCommand(interviewId,
                 this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, text));
+            return Ok();
         }
 
-        public void AnswerTextListQuestion(Guid interviewId, string questionIdenty, TextListAnswerRowDto[] rows)
+        public IHttpActionResult AnswerTextListQuestion(Guid interviewId, string questionIdenty, TextListAnswerRowDto[] rows)
         {
             var identity = Identity.Parse(questionIdenty);
             this.ExecuteQuestionCommand(new AnswerTextListQuestionCommand(interviewId,
                 this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector,
                 rows.Select(row => new Tuple<decimal, string>(row.Value, row.Text)).ToArray()));
+            return Ok();
         }
 
-        public void AnswerGpsQuestion(Guid interviewId, string questionIdenty, GpsAnswer answer)
+        public IHttpActionResult AnswerGpsQuestion(Guid interviewId, string questionIdenty, GpsAnswer answer)
         {
             var identity = Identity.Parse(questionIdenty);
             this.ExecuteQuestionCommand(new AnswerGeoLocationQuestionCommand(interviewId,
                 this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, answer.Latitude, answer.Longitude,
                 answer.Accuracy ?? 0, answer.Altitude ?? 0, DateTimeOffset.FromUnixTimeMilliseconds(answer.Timestamp ?? 0)));
+            return Ok();
         }
 
-        public void AnswerDateQuestion(Guid interviewId, string questionIdenty, DateTime answer)
+        public IHttpActionResult AnswerDateQuestion(Guid interviewId, string questionIdenty, DateTime answer)
         {
             var identity = Identity.Parse(questionIdenty);
             this.ExecuteQuestionCommand(new AnswerDateTimeQuestionCommand(interviewId,
                 this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, answer));
+            return Ok();
         }
 
-        public void AnswerSingleOptionQuestion(Guid interviewId, int answer, string questionId)
+        public IHttpActionResult AnswerSingleOptionQuestion(Guid interviewId, int answer, string questionId)
         {
             Identity identity = Identity.Parse(questionId);
             this.ExecuteQuestionCommand(new AnswerSingleOptionQuestionCommand(interviewId, GetCommandResponsibleId(interviewId),
                 identity.Id, identity.RosterVector, answer));
+            return Ok();
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
-        public void AnswerLinkedSingleOptionQuestion(Guid interviewId, string questionIdentity, decimal[] answer)
+        public IHttpActionResult AnswerLinkedSingleOptionQuestion(Guid interviewId, string questionIdentity, decimal[] answer)
         {
             Identity identity = Identity.Parse(questionIdentity);
             this.ExecuteQuestionCommand(new AnswerSingleOptionLinkedQuestionCommand(interviewId, GetCommandResponsibleId(interviewId),
                 identity.Id, identity.RosterVector, answer));
+            return Ok();
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
-        public void AnswerLinkedMultiOptionQuestion(Guid interviewId, string questionIdentity, decimal[][] answer)
+        public IHttpActionResult AnswerLinkedMultiOptionQuestion(Guid interviewId, string questionIdentity, decimal[][] answer)
         {
             Identity identity = Identity.Parse(questionIdentity);
             this.ExecuteQuestionCommand(new AnswerMultipleOptionsLinkedQuestionCommand(interviewId, GetCommandResponsibleId(interviewId),
                 identity.Id, identity.RosterVector, answer.Select(x => new RosterVector(x)).ToArray()));
+            return Ok();
         }
 
-        public void AnswerMultiOptionQuestion(Guid interviewId, int[] answer, string questionId)
+        public IHttpActionResult AnswerMultiOptionQuestion(Guid interviewId, int[] answer, string questionId)
         {
             Identity identity = Identity.Parse(questionId);
             this.ExecuteQuestionCommand(new AnswerMultipleOptionsQuestionCommand(interviewId, GetCommandResponsibleId(interviewId),
                 identity.Id, identity.RosterVector, answer));
+            return Ok();
         }
 
-        public void AnswerYesNoQuestion(Guid interviewId, string questionId, InterviewYesNoAnswer[] answerDto)
+        public IHttpActionResult AnswerYesNoQuestion(Guid interviewId, string questionId, InterviewYesNoAnswer[] answerDto)
         {
             Identity identity = Identity.Parse(questionId);
             var answer = answerDto.Select(a => new AnsweredYesNoOption(a.Value, a.Yes)).ToArray();
             this.ExecuteQuestionCommand(new AnswerYesNoQuestion(interviewId, GetCommandResponsibleId(interviewId),
                 identity.Id, identity.RosterVector, answer));
+            return Ok();
         }
 
-        public void AnswerIntegerQuestion(Guid interviewId, string questionIdenty, int answer)
+        public IHttpActionResult AnswerIntegerQuestion(Guid interviewId, string questionIdenty, int answer)
         {
             Identity identity = Identity.Parse(questionIdenty);
             this.ExecuteQuestionCommand(new AnswerNumericIntegerQuestionCommand(interviewId, this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, answer));
+            return Ok();
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
-        public void AnswerDoubleQuestion(Guid interviewId, string questionIdenty, double answer)
+        public IHttpActionResult AnswerDoubleQuestion(Guid interviewId, string questionIdenty, double answer)
         {
             Identity identity = Identity.Parse(questionIdenty);
             this.ExecuteQuestionCommand(new AnswerNumericRealQuestionCommand(interviewId, this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, answer));
+            return Ok();
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
-        public void AnswerQRBarcodeQuestion(Guid interviewId, string questionIdenty, string text)
+        public IHttpActionResult AnswerQRBarcodeQuestion(Guid interviewId, string questionIdenty, string text)
         {
             var identity = Identity.Parse(questionIdenty);
             this.ExecuteQuestionCommand(new AnswerQRBarcodeQuestionCommand(interviewId,
                 this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, text));
+            return Ok();
         }
 
         [ObserverNotAllowed]
-        public void RemoveAnswer(Guid interviewId, string questionId)
+        public IHttpActionResult RemoveAnswer(Guid interviewId, string questionId)
         {
             Identity identity = Identity.Parse(questionId);
 
@@ -164,19 +177,21 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             }
 
             this.ExecuteQuestionCommand(new RemoveAnswerCommand(interviewId, GetCommandResponsibleId(interviewId), identity));
+            return Ok();
         }
 
         [ObserverNotAllowed]
-        public abstract void CompleteInterview(CompleteInterviewRequest completeInterviewRequest);
+        public abstract IHttpActionResult CompleteInterview(CompleteInterviewRequest completeInterviewRequest);
 
         [ObserverNotAllowed]
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
-        public void SendNewComment(Guid interviewId, string questionIdentity, string comment)
+        public IHttpActionResult SendNewComment(Guid interviewId, string questionIdentity, string comment)
         {
             var identity = Identity.Parse(questionIdentity);
             var command = new CommentAnswerCommand(interviewId, this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, comment);
 
             this.commandService.Execute(command);
+            return Ok();
         }
 
         [ObserverNotAllowed]
