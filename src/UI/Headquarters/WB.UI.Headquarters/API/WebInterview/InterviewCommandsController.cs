@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.Http;
-using Microsoft.AspNet.SignalR;
+using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
@@ -43,15 +43,16 @@ namespace WB.UI.Headquarters.API.WebInterview
         }
 
         [ObserverNotAllowed]
-        public override void CompleteInterview(CompleteInterviewRequest completeInterviewRequest)
+        public override IHttpActionResult CompleteInterview(CompleteInterviewRequest completeInterviewRequest)
         {
             var interviewId = completeInterviewRequest.InterviewId;
             var command = new CompleteInterviewCommand(interviewId, GetCommandResponsibleId(interviewId), completeInterviewRequest.Comment);
             this.commandService.Execute(command);
+            return Ok();
         }
 
         [ObserverNotAllowed]
-        public void Approve(Guid interviewId, string comment)
+        public IHttpActionResult Approve(Guid interviewId, string comment)
         {
             if (this.authorizedUser.IsSupervisor)
             {
@@ -64,10 +65,11 @@ namespace WB.UI.Headquarters.API.WebInterview
                 var command = new HqApproveInterviewCommand(interviewId, this.GetCommandResponsibleId(interviewId), comment);
                 this.commandService.Execute(command);
             }
+            return Ok();
         }
 
         [ObserverNotAllowed]
-        public void Reject(Guid interviewId, string comment, Guid? assignTo)
+        public IHttpActionResult Reject(Guid interviewId, string comment, Guid? assignTo)
         {
             if (this.authorizedUser.IsSupervisor)
             {
@@ -96,12 +98,13 @@ namespace WB.UI.Headquarters.API.WebInterview
                     this.commandService.Execute(command);
                 }
             }
+            return Ok();
         }
 
         [ObserverNotAllowed]
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
-        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public void ResolveComment(Guid interviewId, string questionIdentity)
+        [Microsoft.AspNet.SignalR.Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+        public IHttpActionResult ResolveComment(Guid interviewId, string questionIdentity)
         {
             var identity = Identity.Parse(questionIdentity);
             var command = new ResolveCommentAnswerCommand(interviewId,
@@ -110,6 +113,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 identity.RosterVector);
 
             this.commandService.Execute(command);
+            return Ok();
         }
     }
 }
