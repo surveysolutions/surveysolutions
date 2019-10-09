@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http.Controllers;
@@ -49,6 +51,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
         {
             this.UserStore.Setup(_ => _.FindByNameAsync(Moq.It.IsAny<string>())).Returns(Task.FromResult(hqUser));
             this.UserStore.Setup(_ => _.FindByIdAsync(Moq.It.IsAny<Guid>())).Returns(Task.FromResult(hqUser));
+            this.UserStore.Setup(_ => _.GetSecurityStampAsync(It.IsAny<HqUser>()))
+                .Returns<HqUser>(x => Task.FromResult(x.SecurityStamp));
+            this.UserStore.Setup(_ => _.GetRolesAsync(It.IsAny<Guid>()))
+                .Returns((Task.FromResult((IList<string>)hqUser.Roles.Select(x => x.Role.ToString()).ToList())));
         }
 
         protected Mock<IUserRepository> UserStore = new Mock<IUserRepository>();

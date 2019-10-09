@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         public bool UserLockoutEnabledByDefault { get; set; }
 
         public IIdentityPasswordHasher PasswordHasher => this.passwordHasher;
-        public IQueryable<HqUser> Users => this.store.Users;
+        public virtual IQueryable<HqUser> Users => this.store.Users;
         public bool SupportsUserSecurityStamp => true;
 
         private readonly IUserRepository store;

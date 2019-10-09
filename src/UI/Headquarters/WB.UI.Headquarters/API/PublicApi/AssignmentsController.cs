@@ -360,7 +360,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             }
         }
 
-        private Task<HqUser> GetResponsibleIdPersonFromRequestValueAsync(string responsible)
+        private async Task<HqUser> GetResponsibleIdPersonFromRequestValueAsync(string responsible)
         {
             if (string.IsNullOrWhiteSpace(responsible))
             {
@@ -368,8 +368,8 @@ namespace WB.UI.Headquarters.API.PublicApi
             }
 
             return Guid.TryParse(responsible, out Guid responsibleUserId)
-                ? this.userManager.FindByIdAsync(responsibleUserId)
-                : this.userManager.FindByNameAsync(responsible);
+                ? await this.userManager.FindByIdAsync(responsibleUserId)
+                : await this.userManager.FindByNameAsync(responsible);
         }
 
         /// <summary>
