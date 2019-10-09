@@ -1,4 +1,3 @@
-using System;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Threading;
@@ -6,9 +5,8 @@ using System.Threading.Tasks;
 using System.Web.Http.Controllers;
 using FluentAssertions;
 using Main.Core.Entities.SubEntities;
-using Microsoft.AspNet.Identity;
 using Moq;
-using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.Code;
@@ -19,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
     internal class when_authorizing_not_an_interviewer : ApiBasicAuthAttributeTestsContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
-            var mockOfUserManager = new Mock<IUserStore<HqUser, Guid>>();
+            var mockOfUserManager = new Mock<IUserRepository>();
             mockOfUserManager.Setup(_ => _.FindByNameAsync(Moq.It.IsAny<string>()))
                 .Returns(Task.FromResult(Create.Entity.HqUser(role: UserRoles.Headquarter, passwordHash: "open sesame")));
 

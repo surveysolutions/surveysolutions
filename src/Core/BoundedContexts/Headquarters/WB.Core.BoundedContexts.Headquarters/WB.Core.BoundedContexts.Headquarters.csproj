@@ -58,7 +58,7 @@
     <PackageReference Include="Google.Apis.Drive.v3" Version="1.41.1.1715" />
     <PackageReference Include="Iesi.Collections" Version="4.0.4" />
     <PackageReference Include="Iteedee.ApkReader" Version="1.0.1" />
-    <PackageReference Include="Microsoft.AspNet.Identity.EntityFramework" Version="2.2.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="2.2.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.6.0" />
     <PackageReference Include="Microsoft.Graph" Version="1.17.0" />
     <PackageReference Include="Microsoft.Graph.Core" Version="1.17.0" />
@@ -70,6 +70,7 @@
     <PackageReference Include="refit" Version="4.7.51" />
     <PackageReference Include="Sendgrid" Version="9.12.0" />
     <PackageReference Include="SuperclusterBox" Version="0.1.18" />
+    <PackageReference Include="System.Threading.Tasks" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ddidotnet">

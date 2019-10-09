@@ -1,11 +1,16 @@
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Identity;
 using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 {
-    public class HqPasswordValidator : IIdentityValidator<string>
+    public interface IPasswordValidator
+    {
+        Task<IdentityResult> ValidateAsync(string item);
+    }
+
+
+    public class HqPasswordValidator : IPasswordValidator
     {
         private readonly IPasswordPolicy passwordPolicy;
 
