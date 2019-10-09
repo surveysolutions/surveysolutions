@@ -11,13 +11,11 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Enumerator.Native.WebInterview
 {
-    public abstract partial class WebInterview : Hub, IErrorDetailsProvider
+    public abstract class WebInterview : Hub, IErrorDetailsProvider
     {
         private   IStatefulInterviewRepository statefulInterviewRepository => this.ServiceLocator.GetInstance<IStatefulInterviewRepository>();
         protected ICommandService commandService => this.ServiceLocator.GetInstance<ICommandService>();
         private   IQuestionnaireStorage questionnaireRepository => this.ServiceLocator.GetInstance<IQuestionnaireStorage>();
-        private   IWebInterviewNotificationService webInterviewNotificationService => this.ServiceLocator.GetInstance<IWebInterviewNotificationService>();
-        private   IWebInterviewInterviewEntityFactory interviewEntityFactory => this.ServiceLocator.GetInstance<IWebInterviewInterviewEntityFactory>();
         public IServiceLocator ServiceLocator { get; private set; }
 
         protected string CallerInterviewId => this.Context.QueryString[@"interviewId"];
@@ -51,29 +49,6 @@ namespace WB.Enumerator.Native.WebInterview
         [Localizable(false)]
         public static string GetConnectedClientPrefilledSectionKey(Guid interviewId) => $"PrefilledSectionx{interviewId}";
         
-        public static string GetUiMessageFromException(Exception e)
-        {
-            if (e is InterviewException interviewException && interviewException.ExceptionType != InterviewDomainExceptionType.Undefined)
-            {
-                switch (interviewException.ExceptionType)
-                {
-                    case InterviewDomainExceptionType.InterviewLimitReached:
-                        return Enumerator.Native.Resources.WebInterview.ServerUnderLoad;
-                    case InterviewDomainExceptionType.QuestionnaireIsMissing:
-                    case InterviewDomainExceptionType.InterviewHardDeleted:
-                        return Enumerator.Native.Resources.WebInterview.Error_InterviewExpired;
-                    case InterviewDomainExceptionType.OtherUserIsResponsible:
-                    case InterviewDomainExceptionType.StatusIsNotOneOfExpected:
-                        return Enumerator.Native.Resources.WebInterview.Error_NoActionsNeeded;
-                    case InterviewDomainExceptionType.InterviewRecievedByDevice:
-                        return Enumerator.Native.Resources.WebInterview.InterviewReceivedByInterviewer;
-                    case InterviewDomainExceptionType.InterviewSizeLimitReached:
-                        return Enumerator.Native.Resources.WebInterview.InterviewSizeLimitReached;
-                }
-            }
-
-            return e.Message;
-        }
 
         public void SetServiceLocator(IServiceLocator serviceLocator)
         {

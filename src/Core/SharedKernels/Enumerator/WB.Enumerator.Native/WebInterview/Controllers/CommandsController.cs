@@ -14,23 +14,26 @@ using WB.Enumerator.Native.WebInterview.Models;
 
 namespace WB.Enumerator.Native.WebInterview.Controllers
 {
-    public class CommandsController : ApiController
+    public abstract class CommandsController : ApiController
     {
         private readonly ICommandService commandService;
         private readonly IImageFileStorage imageFileStorage;
         private readonly IAudioFileStorage audioFileStorage;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
+        private readonly IWebInterviewNotificationService webInterviewNotificationService;
 
 
         public CommandsController(ICommandService commandService, IImageFileStorage imageFileStorage, IAudioFileStorage audioFileStorage,
-            IQuestionnaireStorage questionnaireRepository, IStatefulInterviewRepository statefulInterviewRepository)
+            IQuestionnaireStorage questionnaireRepository, IStatefulInterviewRepository statefulInterviewRepository,
+            IWebInterviewNotificationService webInterviewNotificationService)
         {
             this.commandService = commandService;
             this.imageFileStorage = imageFileStorage;
             this.audioFileStorage = audioFileStorage;
             this.questionnaireRepository = questionnaireRepository;
             this.statefulInterviewRepository = statefulInterviewRepository;
+            this.webInterviewNotificationService = webInterviewNotificationService;
         }
 
         protected virtual Guid CommandResponsibleId
@@ -192,8 +195,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             }
             catch (Exception e)
             {
-                var message = GetUiMessageFromException(e);
-                this.Clients.Caller.markAnswerAsNotSaved(command.Question.ToString(), message);
+                webInterviewNotificationService.MarkAnswerAsNotSaved(command.InterviewId, command.Question.ToString(), e);
             }
         }
     }
