@@ -104,8 +104,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
                 })
             });
             var statefulInterview = SetUp.StatefulInterview(questionnaireDocument);
-            //var mapper = SetupMapper();
-            var webInterview = CreateInterviewDataController(statefulInterview, questionnaireDocument);
+            var mapper = SetupMapper();
+            var webInterview = CreateInterviewDataController(statefulInterview, questionnaireDocument, mapper);
             var ids = Identity.Create(rosterId, RosterVector.Empty).ToString().ToEnumerable().ToArray();
 
             var entities = webInterview.GetEntitiesDetails(statefulInterview.Id, null, ids);
@@ -191,11 +191,11 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
         }
 
         private InterviewDataController CreateInterviewDataController(IStatefulInterview statefulInterview,
-            QuestionnaireDocument questionnaireDocument)
+            QuestionnaireDocument questionnaireDocument, IMapper autoMapper = null)
         {
             var statefulInterviewRepository = Create.Fake.StatefulInterviewRepositoryWith(statefulInterview);
             var questionnaireStorage = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(Create.Entity.PlainQuestionnaire(questionnaireDocument));
-            var webInterviewInterviewEntityFactory = Web.Create.Service.WebInterviewInterviewEntityFactory();
+            var webInterviewInterviewEntityFactory = Web.Create.Service.WebInterviewInterviewEntityFactory(autoMapper: autoMapper);
 
             var controller = new InterviewDataController(questionnaireStorage,
                 statefulInterviewRepository,
