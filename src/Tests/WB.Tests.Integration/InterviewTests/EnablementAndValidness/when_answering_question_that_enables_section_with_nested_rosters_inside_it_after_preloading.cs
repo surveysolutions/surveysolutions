@@ -48,7 +48,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                     IntegrationCreate.PreloadedLevelDto(Create.RosterVector(1), new Dictionary<Guid, AbstractAnswer> { { list2Id, TextListAnswer.FromTextListAnswerRows(new List<TextListAnswerRow> { new TextListAnswerRow(1, "World") }) } }),
                     IntegrationCreate.PreloadedLevelDto(Create.RosterVector(1, 1), new Dictionary<Guid, AbstractAnswer> { { textId, TextAnswer.FromString("text") } }));
 
-                var interview = SetupPreloadedInterview(preloadedDataDto, questionnaireDocument);
+                var interview = SetupPreloadedInterview(appDomainContext.AssemblyLoadContext, preloadedDataDto, questionnaireDocument);
 
                 using (var eventContext = new EventContext())
                 {

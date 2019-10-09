@@ -38,7 +38,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
             Guid userId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 
-            var interview = SetupInterview(questionnaireDocument: Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument: Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                 Create.Entity.TextListQuestion(answeredQuestionId, variable: "q1"),
                 Create.Entity.ListRoster(listRosterId, variable: "lst", rosterSizeQuestionId: answeredQuestionId, children: new IComposite[]

@@ -1,4 +1,5 @@
-﻿@using WB.UI.Headquarters.Models.WebInterview
+﻿@using WB.Core.GenericSubdomains.Portable
+@using WB.UI.Headquarters.Models.WebInterview
 @using WB.UI.Shared.Web.Captcha
 @model WB.UI.Headquarters.Models.WebInterview.StartWebInterview
 @{
@@ -51,8 +52,13 @@
     }
     else
     {
-        <div class="row-element">
+        <div class="row-element mb-20">
             <button class="btn btn-success btn-lg" type="submit">@(isResume ? WebInterview.ResumeInterview : WebInterview.Start)</button>
         </div>
+    }
+
+    if (Model.PendingInterviewId != Guid.Empty)
+    {
+        <input name="resume" class="btn btn-success btn-lg" type="submit" value="@WebInterview.ResumeInterview" />
     }
 }

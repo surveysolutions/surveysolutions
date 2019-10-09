@@ -48,7 +48,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                             enablementCondition: "lnkMul.Contains(0)")
                    });
 
-               var interview = SetupInterview(questionnaireDocument);
+               var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                interview.AnswerTextListQuestion(userId, listQuestionId, RosterVector.Empty, DateTime.Now, new[] {Tuple.Create(0m, "one")});
                interview.AnswerSingleOptionQuestion(userId, linkedSingleOptionQuestion, RosterVector.Empty, DateTime.Now, 0);

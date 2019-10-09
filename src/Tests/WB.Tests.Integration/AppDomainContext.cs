@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Reflection;
+using System.Runtime.Loader;
 using MvvmCross.Base;
 using WB.Core.GenericSubdomains.Portable;
 
@@ -6,21 +8,36 @@ namespace WB.Tests.Integration
 {
     public class AppDomainContext : IDisposable
     {
-        private AppDomainContext(AppDomain domain)
+        private AppDomainContext(AssemblyLoadContext assemblyLoadContext)
         {
-            Domain = domain;
+            AssemblyLoadContext = assemblyLoadContext;
         }
 
         public static AppDomainContext Create()
         {
-            var domain = AppDomain.CurrentDomain;
-            return new AppDomainContext(domain);
+            AssemblyLoadContext assemblyLoadContext = new TestAssemblyLoadContext();
+            return new AppDomainContext(assemblyLoadContext);
         }
 
-        public AppDomain Domain { get; }
+        public AppDomain Domain => AppDomain.CurrentDomain;
+
+        public AssemblyLoadContext AssemblyLoadContext { get; }
 
         public void Dispose()
         {
+            AssemblyLoadContext.Unload();
+        }
+    }
+
+    class TestAssemblyLoadContext : AssemblyLoadContext
+    {
+        public TestAssemblyLoadContext() : base(isCollectible: true)
+        {
+        }
+
+        protected override Assembly Load(AssemblyName name)
+        {
+            return null;
         }
     }
 }

@@ -147,10 +147,14 @@ namespace WB.Tests.Abc
             return InterviewerPrincipal(interviewerIdentity);
         }
 
-        public static IInterviewerPrincipal InterviewerPrincipal(IInterviewerUserIdentity interviewerIdentity)
+        public static IInterviewerPrincipal InterviewerPrincipal(InterviewerIdentity interviewerIdentity)
         {
             var interviewerPrincipal = new Mock<IInterviewerPrincipal>();
             interviewerPrincipal.Setup(x => x.CurrentUserIdentity).Returns(interviewerIdentity);
+            interviewerPrincipal.Setup(x => x.DoesIdentityExist()).Returns(true);
+            interviewerPrincipal.Setup(x => x.GetExistingIdentityNameOrNull()).Returns(interviewerIdentity.Name);
+            interviewerPrincipal.Setup(x => x.GetInterviewerByName(interviewerIdentity.Name)).Returns(interviewerIdentity);
+            
             interviewerPrincipal.As<IPrincipal>().Setup(x => x.CurrentUserIdentity).Returns(interviewerIdentity);
             return interviewerPrincipal.Object;
         }
@@ -169,7 +173,7 @@ namespace WB.Tests.Abc
                 .ToList();
 
             Mock<FilteredOptionsViewModel> filteredOptionsViewModel = new Mock<FilteredOptionsViewModel>();
-            filteredOptionsViewModel.Setup(x => x.GetOptions(It.IsAny<string>(), It.IsAny<int[]>())).Returns<string, int[]>((filter, excludedOptions)=>options.FindAll(x=>x.Title.Contains(filter)));
+            filteredOptionsViewModel.Setup(x => x.GetOptions(It.IsAny<string>(), It.IsAny<int[]>(), It.IsAny<int?>())).Returns<string, int[], int?>((filter, excludedOptions, count)=>options.FindAll(x=>x.Title.Contains(filter)));
             filteredOptionsViewModel.Setup(x => x.Init(It.IsAny<string>(), It.IsAny<Identity>(), It.IsAny<int>()));
 
             return filteredOptionsViewModel.Object;
@@ -187,7 +191,7 @@ namespace WB.Tests.Abc
             };
 
             Mock<FilteredOptionsViewModel> filteredOptionsViewModel = new Mock<FilteredOptionsViewModel>();
-            filteredOptionsViewModel.Setup(x => x.GetOptions(It.IsAny<string>(), It.IsAny<int[]>())).Returns<string, int[]>((filter, excludedOptions) =>options.FindAll(x=>x.Title.Contains(filter??string.Empty)));
+            filteredOptionsViewModel.Setup(x => x.GetOptions(It.IsAny<string>(), It.IsAny<int[]>(), It.IsAny<int?>())).Returns<string, int[], int?>((filter, excludedOptions, count) =>options.FindAll(x=>x.Title.Contains(filter??string.Empty)));
             filteredOptionsViewModel.Setup(x => x.Init(It.IsAny<string>(), It.IsAny<Identity>(), It.IsAny<int>()));
             filteredOptionsViewModel.Setup(x => x.GetAnsweredOption(It.IsAny<int>())).Returns<int>(filter => options.Find(x => x.Value == filter ));
             

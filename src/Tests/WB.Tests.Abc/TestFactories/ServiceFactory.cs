@@ -410,7 +410,6 @@ namespace WB.Tests.Abc.TestFactories
 
         public InterviewerOnlineSynchronizationProcess SynchronizationProcess(
             IPlainStorage<InterviewView> interviewViewRepository = null,
-            IPlainStorage<InterviewerIdentity> interviewersPlainStorage = null,
             IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage = null,
             IPlainStorage<InterviewFileView> interviewFileViewStorage = null,
             IOnlineSynchronizationService synchronizationService = null,
@@ -425,7 +424,6 @@ namespace WB.Tests.Abc.TestFactories
 
             return new InterviewerOnlineSynchronizationProcess(
                 syncServiceMock,
-                interviewersPlainStorage ?? Mock.Of<IPlainStorage<InterviewerIdentity>>(),
                 interviewViewRepository ?? new InMemoryPlainStorage<InterviewView>(),
                 principal ?? Mock.Of<IInterviewerPrincipal>(),
                 logger ?? Mock.Of<ILogger>(),
@@ -441,7 +439,6 @@ namespace WB.Tests.Abc.TestFactories
 
         public InterviewerOfflineSynchronizationProcess OfflineSynchronizationProcess(
             IPlainStorage<InterviewView> interviewViewRepository = null,
-            IPlainStorage<InterviewerIdentity> interviewersPlainStorage = null,
             ILogger logger = null,
             IPasswordHasher passwordHasher = null,
             IInterviewerPrincipal principal = null,
@@ -453,7 +450,6 @@ namespace WB.Tests.Abc.TestFactories
             return new InterviewerOfflineSynchronizationProcess(
                 syncServiceMock,
                 interviewViewRepository ?? new InMemoryPlainStorage<InterviewView>(),
-                interviewersPlainStorage ?? Mock.Of<IPlainStorage<InterviewerIdentity>>(),
                 principal ?? Mock.Of<IInterviewerPrincipal>(),
                 logger ?? Mock.Of<ILogger>(),
                 httpStatistician ?? Mock.Of<IHttpStatistician>(),
@@ -949,9 +945,8 @@ namespace WB.Tests.Abc.TestFactories
             ILogger logger = null,
             IHttpStatistician httpStatistician = null,
             IUserInteractionService userInteractionService = null,
-            IPrincipal principal = null,
+            IInterviewerPrincipal principal = null,
             IPasswordHasher passwordHasher = null,
-            IPlainStorage<InterviewerIdentity> interviewers = null,
             IPlainStorage<InterviewView> interviews = null,
             IAuditLogService auditLogService = null,
             IEnumeratorSettings enumeratorSettings = null)
@@ -961,9 +956,8 @@ namespace WB.Tests.Abc.TestFactories
                 synchronizationService ?? Mock.Of<IOnlineSynchronizationService>(),
                 logger ?? Mock.Of<ILogger>(),
                 httpStatistician ?? Mock.Of<IHttpStatistician>(),
-                principal ?? Mock.Of<IPrincipal>(),
+                principal ?? Mock.Of<IInterviewerPrincipal>(),
                 passwordHasher ?? Mock.Of<IPasswordHasher>(),
-                interviewers ?? Mock.Of<IPlainStorage<InterviewerIdentity>>(),
                 interviews ?? Mock.Of<IPlainStorage<InterviewView>>(),
                 auditLogService ?? Mock.Of<IAuditLogService>(),
                 enumeratorSettings ?? Mock.Of<IEnumeratorSettings>(),

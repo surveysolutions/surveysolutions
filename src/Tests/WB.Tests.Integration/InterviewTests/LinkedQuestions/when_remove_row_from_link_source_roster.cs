@@ -14,6 +14,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
     internal class when_remove_row_from_link_source_roster : InterviewTestsContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
+            appDomainContext = AppDomainContext.Create();
             var questionnaireId = Guid.Parse("10000000000000000000000000000000");
             userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
             rosterId = Guid.Parse("21111111111111111111111111111111");
@@ -27,7 +28,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 Abc.Create.Entity.SingleQuestion(id: linkedQuestionId, linkedToRosterId: rosterId, variable: "link")
             });
 
-            interview = SetupInterview(questionnaire);
+            interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaire);
             interview.AnswerTextListQuestion(userId, rosterSizeQuestionId, RosterVector.Empty, DateTime.Now, new[]
             {
                 new Tuple<decimal, string>(0, "a"),
@@ -43,6 +44,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         {
             eventContext.Dispose();
             eventContext = null;
+            appDomainContext.Dispose();
         }
 
         public void BecauseOf() =>
@@ -61,6 +63,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
           eventContext.ShouldContainEvent<LinkedOptionsChanged>(@event
               => @event.ChangedLinkedQuestions.Count(q => q.QuestionId == Create.Identity(linkedQuestionId) && q.Options.Length==1) == 1);
 
+        private static AppDomainContext appDomainContext;
         private static EventContext eventContext;
         private static Interview interview;
         private static Guid userId;
