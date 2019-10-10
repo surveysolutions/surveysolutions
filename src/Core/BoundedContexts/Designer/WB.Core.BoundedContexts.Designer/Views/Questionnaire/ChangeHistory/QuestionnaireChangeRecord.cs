@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         public string HqVersion { get; set; }
         public string HqBuild { get; set; }
         public string Comment { get; set; }
-        public float HqTimeZone { get; set; }
+        public float HqTimeZoneMinutesOffset { get; set; }
         public string HqImporterLogin { get; set; }
         public long QuestionnaireVersion { get; set; }
     }

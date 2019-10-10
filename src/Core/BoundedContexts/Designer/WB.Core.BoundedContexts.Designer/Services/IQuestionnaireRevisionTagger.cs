@@ -3,7 +3,7 @@ using System;
 
 namespace WB.Core.BoundedContexts.Designer.Services
 {
-    public interface IQuestionnaireRevisionTagger
+    public interface IQuestionnaireRevisionMetadataUpdater
     {
         void LogInHistoryImportQuestionnaireToHq(QuestionnaireDocument questionnaireDocument, string userAgent, Guid userId);
         void UpdateQuestionnaireMetadata(Guid revision, QuestionnaireRevisionMetaDataUpdate metaData);

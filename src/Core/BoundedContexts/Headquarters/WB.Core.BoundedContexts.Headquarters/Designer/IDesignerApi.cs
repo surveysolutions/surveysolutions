@@ -18,8 +18,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
 {
     public interface IDesignerApi
     {
-        [Post("/v3/questionnaires/revision/{id}/tag")]
-        Task Tag(Guid id, [Body] DesignerApiTagModel model);
+        [Post("/v3/questionnaires/revision/{id}/metadata")]
+        Task Tag(Guid id, [Body] QuestionnaireRevisionMetadataModel model);
 
         [Get("/v3/questionnaires/{id}")]
         Task<QuestionnaireCommunicationPackage> GetQuestionnaire(
@@ -59,5 +59,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
 
         [AliasAs("filter")]
         public string Filter { get; set; }
+    }
+
+    public class QuestionnaireRevisionMetadataModel
+    {
+        public int HqTimeZoneMinutesOffset { get; set; }
+        public string HqImporterLogin { get; set; }
+        public long HqQuestionnaireVersion { get; set; }
+        public string Comment { get; set; }
+        public string HqHost { get; internal set; }
     }
 }

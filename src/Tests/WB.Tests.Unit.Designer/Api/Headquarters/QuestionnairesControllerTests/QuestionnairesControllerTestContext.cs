@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.Designer.Api.Headquarters.QuestionnairesControllerTests
                 listItemStorage: Create.InMemoryDbContext(),
                 expressionsPlayOrderProvider: expressionsPlayOrderProvider ?? Substitute.For<IExpressionsPlayOrderProvider>(),
                 questionnaireCompilationVersionService: questionnaireCompilationVersionService ?? Mock.Of<IQuestionnaireCompilationVersionService>(),
-                questionnaireRevisionTagger: Mock.Of<IQuestionnaireRevisionTagger>());
+                questionnaireRevisionMetadataUpdater: Mock.Of<IQuestionnaireRevisionMetadataUpdater>());
 
             return hqQuestionnairesController;
         }
