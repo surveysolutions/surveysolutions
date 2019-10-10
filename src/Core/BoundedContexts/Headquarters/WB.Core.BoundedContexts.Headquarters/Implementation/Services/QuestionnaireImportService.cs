@@ -91,12 +91,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     };
                 }
 
-                // Start pdf rendering
-                this.logger.Debug($"Requesting pdf generator to start working for questionnaire {questionnaireId}");
-                await this.restService.GetAsync<PdfStatus>(
-                    url: $"pdf/status/{questionnaireId}", 
-                    credentials: credentials);
-
                 var questionnairePackage = await this.restService.GetAsync<QuestionnaireCommunicationPackage>(
                     url: $"{this.apiPrefix}/{this.apiVersion}/questionnaires/{questionnaireId}",
                     credentials: credentials,
@@ -109,6 +103,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 QuestionnaireDocument questionnaire = this.zipUtils.DecompressString<QuestionnaireDocument>(questionnairePackage.Questionnaire);
                 var questionnaireContentVersion = questionnairePackage.QuestionnaireContentVersion;
                 var questionnaireAssembly = questionnairePackage.QuestionnaireAssembly;
+
+                await TriggerPdfRendering(questionnaire, credentials);
 
                 if (questionnaire.Attachments != null)
                 {
@@ -172,7 +168,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     questionnaireContentVersion,
                     questionnaireVersion));
 
-                await DownloadAndStorePdf(questionnaireIdentity, credentials);
+                await DownloadAndStorePdf(questionnaireIdentity, credentials, questionnaire);
 
                 this.auditLog.QuestionnaireImported(questionnaire.Title, questionnaireIdentity);
 
@@ -235,27 +231,66 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             }
         }
 
+        private async Task TriggerPdfRendering(QuestionnaireDocument questionnaire, RestCredentials credentials)
+        {
+            this.logger.Debug($"Requesting pdf generator to start working for questionnaire {questionnaire.PublicKey}");
+            await this.restService.GetAsync<PdfStatus>(
+                url: $"pdf/status/{questionnaire.PublicKey}",
+                credentials: credentials);
+
+            foreach (var questionnaireTranslation in questionnaire.Translations)
+            { 
+                await this.restService.GetAsync<PdfStatus>(
+                    url: $"pdf/status/{questionnaire.PublicKey}?translation={questionnaireTranslation.Id}",
+                    credentials: credentials);
+            }
+        }
+
         private async Task DownloadAndStorePdf(QuestionnaireIdentity questionnaireIdentity,
-            RestCredentials credentials)
+            RestCredentials credentials,
+            QuestionnaireDocument questionnaire)
         {
             var pdfRetry = Policy.HandleResult<PdfStatus>(x => x.ReadyForDownload == false)
                 .WaitAndRetryAsync(7, retry => TimeSpan.FromSeconds(retry));
 
             await pdfRetry.ExecuteAsync(async () =>
             {
-                this.logger.Debug($"Waiting for pdf to be ready {questionnaireIdentity}");
+                this.logger.Trace($"Waiting for pdf to be ready {questionnaireIdentity}");
                 var pdfStatus = await this.restService.GetAsync<PdfStatus>(
                     url: $"pdf/status/{questionnaireIdentity.QuestionnaireId}",
                     credentials: credentials);
                 return pdfStatus;
             });
 
-            this.logger.Debug("Loading pdf");
+            this.logger.Debug("Loading pdf for default language");
 
             var pdfFile = await this.restService.DownloadFileAsync($"pdf/download/{questionnaireIdentity.QuestionnaireId}", credentials: credentials);
             this.pdfStorage.Store(new QuestionnairePdf{Content = pdfFile.Content}, questionnaireIdentity.ToString());
 
             this.logger.Debug($"PDF for questionnaire stored {questionnaireIdentity}");
+
+            foreach (var translation in questionnaire.Translations)
+            {
+                this.logger.Debug($"loading pdf for translation {translation}");
+
+                await pdfRetry.ExecuteAsync(async () =>
+                {
+                    this.logger.Trace($"Waiting for pdf to be ready {questionnaireIdentity}");
+                    var pdfStatus = await this.restService.GetAsync<PdfStatus>(
+                        url: $"pdf/status/{questionnaireIdentity.QuestionnaireId}?translation={translation.Id}",
+                        credentials: credentials);
+                    return pdfStatus;
+                });
+
+                var pdfTranslated = await this.restService.DownloadFileAsync(
+                    $"pdf/download/{questionnaireIdentity.QuestionnaireId}?translation={translation.Id}",
+                    credentials: credentials);
+
+                this.pdfStorage.Store(new QuestionnairePdf {Content = pdfTranslated.Content},
+                    $"{translation.Id.FormatGuid()}_{questionnaireIdentity}");
+                this.logger.Debug(
+                    $"PDF for questionnaire stored {questionnaireIdentity} translation {translation.Id}, {translation.Name}");
+            }
         }
     }
 }
