@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Microsoft.AspNetCore.Http;
 using Moq;
 using NHibernate;
 using NSubstitute.ExceptionExtensions;
@@ -18,6 +17,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
+using WB.Core.SharedKernels.Questionnaire.Synchronization.Designer;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.Questionnaire;
@@ -97,6 +97,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
             var zipUtils = SetUp.StringCompressor_Decompress(new QuestionnaireDocument() { Attachments = questionnaireAttachments });
 
             var mockOfRestService = new Mock<IRestService>();
+            mockOfRestService.Setup(x => x.GetAsync<PdfStatus>(It.IsAny<string>(), null, null, It.IsAny<RestCredentials>(), null))
+                .ReturnsAsync(new PdfStatus());
             mockOfRestService.Setup(x =>
                 x.DownloadFileAsync(It.IsAny<string>(), null, It.IsAny<RestCredentials>(), null, null)).Returns(Task.FromResult(new RestFile(new byte[] { 1 }, "image/png", "content id", 0, "file.png", HttpStatusCode.OK)));
             mockOfRestService.Setup(x => x.GetAsync<QuestionnaireCommunicationPackage>(It.IsAny<string>(), It.IsAny<IProgress<TransferProgress>>(), It.IsAny<object>(), It.IsAny<RestCredentials>(), It.IsAny<CancellationToken?>()))
@@ -114,7 +116,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
             await service.Import(Guid.NewGuid(), "null", false);
 
             // Assert
-            mockOfRestService.Verify(x => x.DownloadFileAsync(It.IsAny<string>(), null, It.IsAny<RestCredentials>(), null, null), Times.Exactly(2));
+            mockOfRestService.Verify(x => x.DownloadFileAsync(It.IsAny<string>(), null, It.IsAny<RestCredentials>(), null, null), Times.Exactly(3));
             mockOfAttachmentContentService.Verify(x => x.SaveAttachmentContent(questionnaireAttachments[0].ContentId, It.IsAny<string>(),It.IsAny<string>(), It.IsAny<byte[]>()), Times.Never);
             mockOfAttachmentContentService.Verify(x => x.SaveAttachmentContent(questionnaireAttachments[1].ContentId, It.IsAny<string>(),It.IsAny<string>(), It.IsAny<byte[]>()), Times.Once);
             mockOfAttachmentContentService.Verify(x => x.SaveAttachmentContent(questionnaireAttachments[2].ContentId, It.IsAny<string>(),It.IsAny<string>(), It.IsAny<byte[]>()), Times.Once);
@@ -141,8 +143,11 @@ namespace WB.Tests.Unit.Applications.Headquarters
             var lookupStorage = Mock.Of<IPlainKeyValueStorage<QuestionnaireLookupTable>>();
 
             var mockOfRestService = new Mock<IRestService>();
+            mockOfRestService.Setup(x => x.GetAsync<PdfStatus>(It.IsAny<string>(), null, null, It.IsAny<RestCredentials>(), null))
+                .ReturnsAsync(new PdfStatus());
             mockOfRestService.Setup(x =>
-                x.DownloadFileAsync(It.IsAny<string>(), null, It.IsAny<RestCredentials>(), null, null)).Returns(Task.FromResult(new RestFile(new byte[] { 1 }, "image/png", "content id", 0, "file.png", HttpStatusCode.OK)));
+                x.DownloadFileAsync(It.IsAny<string>(), null, It.IsAny<RestCredentials>(), null, null))
+                .Returns(Task.FromResult(new RestFile(new byte[] { 1 }, "image/png", "content id", 0, "file.png", HttpStatusCode.OK)));
             mockOfRestService.Setup(x => x.GetAsync<QuestionnaireCommunicationPackage>(It.IsAny<string>(), It.IsAny<IProgress<TransferProgress>>(), It.IsAny<object>(), It.IsAny<RestCredentials>(), It.IsAny<CancellationToken?>()))
                 .Returns(Task.FromResult(new QuestionnaireCommunicationPackage()));
 
