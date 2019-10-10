@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -35,11 +34,6 @@ namespace WB.UI.Designer.Code.Attributes
         public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
             BasicCredentials credentials = ParseCredentials(context);
-            if (credentials == null)
-            {
-                this.ThrowUnauthorizedException(context, ErrorMessages.User_Not_authorized);
-                return;
-            }
 
             if (this.onlyAllowedAddresses)
             {
@@ -79,16 +73,6 @@ namespace WB.UI.Designer.Code.Attributes
             return null;
         }
 
-
-        private void ThrowUnauthorizedException(AuthorizationFilterContext actionContext, string errorMessage)
-        {
-            ThrowException(actionContext,
-                StatusCodes.Status401Unauthorized,
-                errorMessage);
-
-            var host = actionContext.HttpContext.Request.Host;
-            actionContext.HttpContext.Response.Headers.Add("WWW-Authenticate", $"Basic realm=\"{host}\"");
-        }
 
         private void ThrowForbiddenException(AuthorizationFilterContext actionContext, string errorMessage)
         {

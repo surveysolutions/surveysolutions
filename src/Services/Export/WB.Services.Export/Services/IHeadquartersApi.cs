@@ -19,6 +19,9 @@ namespace WB.Services.Export.Services
         [Get("/api/export/v1/questionnaire/{id}")]
         Task<QuestionnaireDocument> GetQuestionnaireAsync([AliasAs("id")] QuestionnaireId questionnaireId);
 
+        [Get("/api/export/v1/questionnaire/{id}/pdf")]
+        Task<HttpContent> GetPdfAsync([AliasAs("id")] QuestionnaireId questionnaireId, [Query]Guid? translation = null);
+
         [Get("/api/export/v1/interview/batch/diagnosticsInfo")]
         Task<InterviewDiagnosticsInfo[]> GetInterviewDiagnosticsInfoBatchAsync([Query(CollectionFormat.Multi), AliasAs("id")] Guid[] interviewIds);
 
