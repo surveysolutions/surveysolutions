@@ -107,10 +107,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                             continue;
 
                         var attachmentContent = await this.designerApi.DownloadQuestionnaireAttachment(
-                            questionnaireAttachment.ContentId, questionnaireAttachment.AttachmentId).AsRestFile();
-
-                        this.attachmentContentService.SaveAttachmentContent(questionnaireAttachment.ContentId,
-                            attachmentContent.ContentType, attachmentContent.FileName, attachmentContent.Content);
+                            questionnaireAttachment.ContentId, questionnaireAttachment.AttachmentId);
+                        
+                        this.attachmentContentService.SaveAttachmentContent(
+                            questionnaireAttachment.ContentId,
+                            attachmentContent.ContentType, 
+                            attachmentContent.FileName, 
+                            attachmentContent.Content);
                     }
                 }
 
@@ -225,6 +228,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
         private string GetDomainFromUri(string requestUrl)
         {
+            if (requestUrl == null) return null;
             var uri = new Uri(requestUrl);
             return uri.Host + (!uri.IsDefaultPort ? ":" + uri.Port : "");
         }
