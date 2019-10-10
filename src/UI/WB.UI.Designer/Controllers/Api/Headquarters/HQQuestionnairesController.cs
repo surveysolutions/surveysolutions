@@ -167,7 +167,8 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
 
             var questionnaire = questionnaireView.Source.Clone();
 
-            this.questionnaireRevisionTagger.LogInHistoryImportQuestionnaireToHq(questionnaire, Request, User.GetId());
+            var userAgent = Request.Headers["User-Agent"].FirstOrDefault();
+            this.questionnaireRevisionTagger.LogInHistoryImportQuestionnaireToHq(questionnaire, userAgent, User.GetId());
 
             questionnaire.IsUsingExpressionStorage = versionToCompileAssembly > 19;
             var readOnlyQuestionnaireDocument = questionnaireView.Source.AsReadOnly();

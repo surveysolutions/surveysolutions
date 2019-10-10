@@ -1,5 +1,7 @@
 ﻿using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Designer.Classifications;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -33,8 +35,7 @@ namespace WB.UI.Designer.Modules
 
             registry.Bind<IQuestionnaireSearchStorage, QuestionnaireSearchStorage>();
             registry.Bind<IClassificationsStorage, ClassificationsStorage>();
-            registry.BindAsSingleton<IWebTesterService, WebTesterService>();
-            registry.Bind<IQuestionnaireRevisionTagger, QuestionnaireRevisionTagger>();
+            registry.BindAsSingleton<IWebTesterService, WebTesterService>();          
         }
 
         public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status)
