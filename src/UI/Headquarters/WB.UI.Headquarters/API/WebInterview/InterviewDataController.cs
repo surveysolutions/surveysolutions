@@ -10,15 +10,23 @@ using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Interview.Overview;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
+using WB.UI.Headquarters.Code;
+using WB.UI.Shared.Web.Filters;
+using InterviewEntity = WB.Enumerator.Native.WebInterview.Models.InterviewEntity;
 
 namespace WB.UI.Headquarters.API.WebInterview
 {
+    [System.Web.Http.Authorize]
+    [ApiNoCache]
+    [CamelCase]
+    [RoutePrefix("api/webinterview")]
     public class InterviewDataController : Enumerator.Native.WebInterview.Controllers.InterviewDataController
     {
         private readonly IAuthorizedUser authorizedUser;
@@ -48,6 +56,58 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         protected override bool IsCurrentUserObserving() => this.authorizedUser.IsObserving;
 
+        [HttpGet]
+        public override LanguageInfo GetLanguageInfo(Guid interviewId) => base.GetLanguageInfo(interviewId);
+
+        [HttpGet]
+        public override DropdownItem[] GetTopFilteredOptionsForQuestion(Guid interviewId, string id, string filter, int count)
+            => base.GetTopFilteredOptionsForQuestion(interviewId, id, filter, count);
+
+        [HttpGet]
+        public override DropdownItem[] GetTopFilteredOptionsForQuestion(Guid interviewId, string id, string filter, int count, int[] excludedOptionIds) 
+            => base.GetTopFilteredOptionsForQuestion(interviewId, id, filter, count, excludedOptionIds);
+
+        [HttpGet]
+        public override BreadcrumbInfo GetBreadcrumbs(Guid interviewId, string sectionId) => base.GetBreadcrumbs(interviewId, sectionId);
+
+        [HttpGet]
+        public override CompleteInfo GetCompleteInfo(Guid interviewId) => base.GetCompleteInfo(interviewId);
+
+        [HttpGet]
+        public override CoverInfo GetCoverInfo(Guid interviewId) => base.GetCoverInfo(interviewId);
+
+        [HttpGet]
+        public override InterviewEntity[] GetEntitiesDetails(Guid interviewId, string sectionId, string[] ids) => base.GetEntitiesDetails(interviewId, sectionId, ids);
+
+        [HttpGet]
+        public override SectionData GetFullSectionInfo(Guid interviewId, string sectionId) => base.GetFullSectionInfo(interviewId, sectionId);
+
+        [HttpGet]
+        public override GroupStatus GetInterviewStatus(Guid interviewId) => base.GetInterviewStatus(interviewId);
+
+        [HttpGet]
+        public override ButtonState GetNavigationButtonState(Guid interviewId, string sectionId, string id, IQuestionnaire questionnaire = null) =>
+            base.GetNavigationButtonState(interviewId, sectionId, id, questionnaire);
+
+        [HttpGet]
+        public override bool IsEnabled(Guid interviewId, string id) => base.IsEnabled(interviewId, id);
+
+        [HttpGet]
+        public override InterviewEntityWithType[] GetPrefilledQuestions(Guid interviewId) => base.GetPrefilledQuestions(interviewId);
+
+        [HttpGet]
+        public override PrefilledPageData GetPrefilledEntities(Guid interviewId) => base.GetPrefilledEntities(interviewId);
+
+        [HttpGet]
+        public override InterviewEntityWithType[] GetSectionEntities(Guid interviewId, string sectionId) => base.GetSectionEntities(interviewId, sectionId);
+
+        [HttpGet]
+        public override bool HasCoverPage(Guid interviewId) => base.HasCoverPage(interviewId);
+
+        [HttpGet]
+        public override Sidebar GetSidebarChildSectionsOf(Guid interviewId, string sectionId, string[] parentIds) => base.GetSidebarChildSectionsOf(interviewId, sectionId, parentIds);
+
+        [HttpGet]
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @filters.js")]
         public SearchResults Search(Guid interviewId, FilterOption[] flags, int skip = 0, int limit = 50)
         {
@@ -57,6 +117,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             return result;
         }
 
+        [HttpGet]
         public PagedApiResponse<OverviewNode> Overview(Guid interviewId, int skip, int take = 100)
         {
             take = Math.Min(take, 100);
@@ -78,6 +139,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             };
         }
 
+        [HttpGet]
         public OverviewItemAdditionalInfo OverviewItemAdditionalInfo(Guid interviewId, string id)
         {
             var statefulInterview = this.GetCallerInterview(interviewId);
@@ -86,6 +148,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             return additionalInfo;
         }
 
+        [HttpGet]
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @filters.js")]
         public List<CommentedStatusHistoryView> GetStatusesHistory(Guid interviewId)
         {
@@ -93,6 +156,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             return this.changeStatusFactory.GetFilteredStatuses(statefulInterview.Id);
         }
 
+        [HttpGet]
         [ObserverNotAllowed]
         public IHttpActionResult SetFlag(Guid interviewId, string questionId, bool hasFlag)
         {
@@ -101,6 +165,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             return Ok();
         }
 
+        [HttpGet]
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @flags.js")]
         public IEnumerable<string> GetFlags(Guid interviewId)
         {
@@ -108,6 +173,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             return this.interviewFactory.GetFlaggedQuestionIds(statefulInterview.Id).Select(x => x.ToString());
         }
 
+        [HttpGet]
         public override InterviewInfo GetInterviewDetails(Guid interviewId)
         {
             var interviewDetails = base.GetInterviewDetails(interviewId);
