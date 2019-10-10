@@ -63,6 +63,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
             });
         }
 
+        /// <summary>
+        /// JsonContentSerializer with ability to handle RestFile result separatly
+        /// </summary>
         internal class DesignerContentSerializer : IContentSerializer
         {
             JsonContentSerializer json = new JsonContentSerializer();
@@ -71,7 +74,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
             {
                 if(typeof(T) == typeof(RestFile))
                 {
-                    object result = await content.AsRestFileAsync();
+                    object result = await AsRestFileAsync(content);
                     return (T) result;
                 }
 
@@ -82,8 +85,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
             {
                 return json.SerializeAsync(item);
             }
+
+            public async Task<RestFile> AsRestFileAsync(HttpContent content)
+            {
+                var rawContentType = content?.Headers?.ContentType?.MediaType;
+                var length = content?.Headers?.ContentLength;
+                var fileName = content?.Headers?.ContentDisposition?.FileName;
+                var fileContent = await content.ReadAsByteArrayAsync();
+
+                return new RestFile(content: fileContent, contentType: rawContentType,
+                   null, contentLength: length, fileName: fileName, HttpStatusCode.OK);
+            }
         }
 
+        // Handling Designer Errors as they were handled by RestService.
         internal class RestServiceHandler : HttpClientHandler
         {
             protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)

@@ -14,12 +14,12 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Designer.Services
 {
-    public class QuestionnaireRevisionTaggerTests
+    public class QuestionnaireRevisionMetadataUpdaterTests
     {
         private QuestionnaireDocument questionnaire;
         private DesignerDbContext db;
         private Mock<ICommandService> commandService;
-        private QuestionnaireRevisionTagger tagger;
+        private QuestionnaireRevisionMetadataUpdater metadataUpdater;
 
         [SetUp]
         public void Setup()
@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.Designer.Services
 
             this.db = Create.InMemoryDbContext();
             this.commandService = new Mock<ICommandService>();
-            this.tagger = new QuestionnaireRevisionTagger(this.commandService.Object, this.db);
+            this.metadataUpdater = new QuestionnaireRevisionMetadataUpdater(this.commandService.Object, this.db);
         }
 
         [TestCase("WB.Headquarters/18.0.1   (build 22323)    (DEBUG)", "18.0.1", "22323")]
@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.Designer.Services
         public void HqVersionVersionExtractorTest(string userAgent, string hqVersion, string hqBuild)
         {
             // act
-            this.tagger.LogInHistoryImportQuestionnaireToHq(this.questionnaire, userAgent, Id.g1);
+            this.metadataUpdater.LogInHistoryImportQuestionnaireToHq(this.questionnaire, userAgent, Id.g1);
 
             this.commandService.Verify(c => c.Execute(It.Is<ImportQuestionnaireToHq>(cmd =>
                 cmd.QuestionnaireId == this.questionnaire.PublicKey
@@ -62,7 +62,7 @@ namespace WB.Tests.Unit.Designer.Services
             this.db.SaveChanges();
 
             // act
-            this.tagger.LogInHistoryImportQuestionnaireToHq(this.questionnaire, "", Id.gA);
+            this.metadataUpdater.LogInHistoryImportQuestionnaireToHq(this.questionnaire, "", Id.gA);
 
             Assert.That(questionnaire.Revision.FormatGuid(), Is.EqualTo(changeRecord.QuestionnaireChangeRecordId));
         }
@@ -81,7 +81,7 @@ namespace WB.Tests.Unit.Designer.Services
             this.db.SaveChanges();
 
             // act
-            this.tagger.UpdateQuestionnaireMetadata(Guid.Parse(changeRecord.QuestionnaireChangeRecordId),
+            this.metadataUpdater.UpdateQuestionnaireMetadata(Guid.Parse(changeRecord.QuestionnaireChangeRecordId),
                 new QuestionnaireRevisionMetaDataUpdate
                 {
                     Comment = "Some comment",
@@ -99,7 +99,7 @@ namespace WB.Tests.Unit.Designer.Services
             Assert.That(record.Meta.Comment, Is.EqualTo("Some comment"));
             Assert.That(record.Meta.HqImporterLogin, Is.EqualTo("Richard"));
             Assert.That(record.Meta.QuestionnaireVersion, Is.EqualTo(1));
-            Assert.That(record.Meta.HqTimeZone, Is.EqualTo(160));
+            Assert.That(record.Meta.HqTimeZoneMinutesOffset, Is.EqualTo(160));
 
             Assert.That(record.TargetItemTitle, Is.EqualTo("fsb.ru"), "Should also update target item title for history page");
         }

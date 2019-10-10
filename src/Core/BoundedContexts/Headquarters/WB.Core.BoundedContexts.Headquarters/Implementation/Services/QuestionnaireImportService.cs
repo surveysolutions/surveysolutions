@@ -156,10 +156,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     questionnaireContentVersion,
                     questionnaireVersion));
 
-                await designerApi.Tag(questionnaire.Revision, new DesignerApiTagModel
+                await designerApi.Tag(questionnaire.Revision, new QuestionnaireRevisionMetadataModel
                 {
                     HqHost = GetDomainFromUri(requestUrl),
-                    HqTimeZone = (int)TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).TotalMinutes,
+                    HqTimeZoneMinutesOffset = (int)TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).TotalMinutes,
                     HqImporterLogin = this.authorizedUser.UserName,
                     HqQuestionnaireVersion = questionnaireIdentity.Version,
                     Comment = "",

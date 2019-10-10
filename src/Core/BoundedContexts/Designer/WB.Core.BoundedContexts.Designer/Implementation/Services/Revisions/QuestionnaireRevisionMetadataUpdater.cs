@@ -11,12 +11,12 @@ using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
-    public class QuestionnaireRevisionTagger : IQuestionnaireRevisionTagger
+    public class QuestionnaireRevisionMetadataUpdater : IQuestionnaireRevisionMetadataUpdater
     {
         private readonly ICommandService commandService;
         private readonly DesignerDbContext dbContext;
 
-        public QuestionnaireRevisionTagger(
+        public QuestionnaireRevisionMetadataUpdater(
             ICommandService commandService,
             DesignerDbContext dbContext)
         {
@@ -55,7 +55,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             record.Meta.HqHostName = metaData.HqHost ?? record.Meta.HqHostName;
             record.TargetItemTitle = record.Meta.HqHostName;
             record.Meta.Comment = metaData.Comment;
-            record.Meta.HqTimeZone = metaData.HqTimeZone;
+            record.Meta.HqTimeZoneMinutesOffset = metaData.HqTimeZone;
             record.Meta.HqImporterLogin = metaData.HqImporterLogin;
             record.Meta.QuestionnaireVersion = metaData.HqQuestionnaireVersion;
 
