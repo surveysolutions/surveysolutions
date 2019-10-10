@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
     {
         private readonly IRestServiceSettings serviceSettings;
         private readonly IDesignerUserCredentials designerUserCredentials;
-        
+
         public DesignerApiFactory(
             IRestServiceSettings serviceSettings,
             IDesignerUserCredentials designerUserCredentials)
@@ -45,9 +45,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
             {
                 BaseAddress = new Uri(serviceSettings.Endpoint + apiPrefix),
                 DefaultRequestHeaders =
-                    {
-                        { "User-Agent",  serviceSettings.UserAgent },
-                    }
+                {
+                    { "User-Agent",  serviceSettings.UserAgent },
+                }
             };
 
             var credentials = designerUserCredentials.Get();
@@ -57,7 +57,31 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
                 hc.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", value);
             }
 
-            return RestService.For<IDesignerApi>(hc);
+            return RestService.For<IDesignerApi>(hc, new RefitSettings
+            {
+                ContentSerializer = new DesignerContentSerializer()
+            });
+        }
+
+        internal class DesignerContentSerializer : IContentSerializer
+        {
+            JsonContentSerializer json = new JsonContentSerializer();
+
+            public async Task<T> DeserializeAsync<T>(HttpContent content)
+            {
+                if(typeof(T) == typeof(RestFile))
+                {
+                    object result = await content.AsRestFileAsync();
+                    return (T) result;
+                }
+
+                return await json.DeserializeAsync<T>(content);
+            }
+
+            public Task<HttpContent> SerializeAsync<T>(T item)
+            {
+                return json.SerializeAsync(item);
+            }
         }
 
         internal class RestServiceHandler : HttpClientHandler
@@ -118,7 +142,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
                 {
                     var responseMessage = ex.Call.Response;
                     var responseContent = responseMessage.Content.ReadAsStringAsync().Result;
-                    
+
                     var jsonFromHttpResponseMessage = JsonConvert.DeserializeObject<ResponseWithErrorMessage>(responseContent);
                     if (jsonFromHttpResponseMessage != null)
                         return jsonFromHttpResponseMessage.Message;

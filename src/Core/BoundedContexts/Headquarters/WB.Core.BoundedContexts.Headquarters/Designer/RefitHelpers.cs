@@ -55,6 +55,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
                 ContentMD5 = contentMD5
             };
         }
-    }
 
+        public static async Task<RestFile> AsRestFileAsync(this HttpContent content)
+        {
+            var rawContentType = content?.Headers?.ContentType?.MediaType;
+            var length = content?.Headers?.ContentLength;
+            var fileName = content?.Headers?.ContentDisposition?.FileName;
+            var fileContent = await content.ReadAsByteArrayAsync();
+
+            return new RestFile(content: fileContent, contentType: rawContentType,
+               null, contentLength: length, fileName: fileName, HttpStatusCode.OK);
+        }
+    }
 }
