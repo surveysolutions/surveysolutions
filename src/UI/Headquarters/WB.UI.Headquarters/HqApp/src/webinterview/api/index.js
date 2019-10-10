@@ -1,7 +1,7 @@
 // tslint:disable-next-line:max-line-length
 import config from "~/shared/config"
 import * as $script from "scriptjs"
-
+import axios from 'axios'
 import "signalr"
 
 export let store = null;
@@ -213,6 +213,53 @@ export async function apiCaller(action) {
     }
 }
 
+export async function apiGet(actionName, params) {
+    if(config.splashScreen) return
+
+    store.dispatch("fetchProgress", 1)
+
+    try {
+        return await axios.get(`${store.getters.basePath}api/webinterview/${actionName}`, { params:params })
+    } catch (err) {
+        store.dispatch("UNHANDLED_ERROR", err)
+    } finally {
+        store.dispatch("fetchProgress", -1)
+    }
+}
+
+export async function apiPost(actionName, params) {
+    store.dispatch("fetchProgress", 1)
+
+    try {
+        return await axios.post(`${store.getters.basePath}api/webinterview/commands/${actionName}`, params)
+    } catch (err) {
+        store.dispatch("UNHANDLED_ERROR", err)
+    } finally {
+        store.dispatch("fetchProgress", -1)
+    }
+}
+
+export async function apiAnswerPost(id, actionName, params) {
+    if (id) {
+        store.dispatch("fetch", { id })
+    }
+
+    store.dispatch("fetchProgress", 1)
+
+    try {
+        return await axios.post(`${store.getters.basePath}api/webinterview/commands/${actionName}`, params)
+    } catch (err) {
+        if (id) {
+            store.dispatch("setAnswerAsNotSaved", { id, message: err.statusText })
+            store.dispatch("fetch", { id, done: true })
+        } else {
+            store.dispatch("UNHANDLED_ERROR", err)
+        }
+    } finally {
+        store.dispatch("fetchProgress", -1)
+    }
+}
+
 export function install(Vue, options) {
     store = options.store;
     const api = {
@@ -220,6 +267,9 @@ export function install(Vue, options) {
         hub: getInstance,
         stop: apiStop,
         callAndFetch: apiCallerAndFetch,
+        post: apiPost,
+        get: apiGet,
+        answer: apiAnswerPost,
         setState: (callback) => {
             callback(jQuery.signalR[config.hubName].state);
         }

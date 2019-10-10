@@ -9,19 +9,15 @@ export default {
     },
 
     actions: {
-        setFlag({ commit, dispatch }, { questionId, hasFlag }) {
-            Vue.$api.call(api => {
-                return api.setFlag(questionId, hasFlag).then(function () {
-                    commit("SET_FLAG", { questionId, hasFlag })
-                    dispatch("refreshSearchResults")
-                });
-            });
+        async setFlag({ commit, rootState, dispatch }, { questionId, hasFlag }) {
+            const interviewId = rootState.route.params.interviewId
+            await Vue.$api.post('setFlag', {interviewId, questionId, hasFlag})
+            commit("SET_FLAG", { questionId, hasFlag })
+            dispatch("refreshSearchResults")
         },
-        async fetchFlags({ commit }) {
-            const flags = await Vue.$api.call(api => {
-                return api.getFlags();
-            });
-
+        async fetchFlags({ commit, rootState }) {
+            const interviewId = rootState.route.params.interviewId
+            const flags = await Vue.$api.get('getFlags', {interviewId})
             commit("SET_FLAGS", { flags })
         }
     },
