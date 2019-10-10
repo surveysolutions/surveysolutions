@@ -51,7 +51,6 @@ using WB.UI.Shared.Web.Implementation.Services;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Services;
 using WB.UI.Shared.Web.Slack;
-using RestService = WB.Core.GenericSubdomains.Portable.Implementation.Services.RestService;
 
 namespace WB.UI.Headquarters.Injections
 {
@@ -89,11 +88,6 @@ namespace WB.UI.Headquarters.Injections
             registry.RegisterDenormalizer<InterviewLifecycleEventHandler>();
 
             registry.Bind<IHttpClientFactory, DefaultHttpClientFactory>();
-
-            registry.Bind<IRestService, RestService>(
-                new ConstructorArgument("networkService", _ => null),
-                new ConstructorArgument("restServicePointManager", _ => null),
-                new ConstructorArgument("httpStatistican", _ => _.Resolve<IHttpStatistician>()));
 
             registry.Bind<IFastBinaryFilesHttpHandler, FastBinaryFilesHttpHandler>();
 

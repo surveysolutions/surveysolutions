@@ -53,8 +53,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
             var credentials = designerUserCredentials.Get();
             if (credentials != null)
             {
-                var value = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{credentials.Login}:{credentials.Password}"));
-                hc.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", value);
+                var header = credentials.GetAuthenticationHeaderValue();
+                hc.DefaultRequestHeaders.Authorization = header;
             }
 
             return RestService.For<IDesignerApi>(hc, new RefitSettings

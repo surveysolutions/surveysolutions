@@ -35,5 +35,29 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
 
         [Get("/lookup/{questionnaireId}/{lookupId}")]
         Task<QuestionnaireLookupTable> GetLookupTables(Guid questionnaireId, Guid lookupId);
-    }      
+
+        [Get("/v3/questionnaires/info/{questionnaireId}")]
+        Task<QuestionnaireInfo> GetQuestionnaireInfo(Guid questionnaireId);
+
+        [Get("/user/login")]
+        Task Login([Header("Authorization")] string authorization);
+
+        [Get("/v3/questionnaires")]
+        Task<PagedQuestionnaireCommunicationPackage> GetQuestionnairesList([Query] DesignerQuestionnairesListFilter filter);
+    }
+
+    public class DesignerQuestionnairesListFilter
+    {
+        [AliasAs("pageIndex")]
+        public int PageIndex { get; set; }
+
+        [AliasAs("pageSize")]
+        public int PageSize { get; set; }
+
+        [AliasAs("sortOrder")]
+        public string SortOrder { get; set; }
+
+        [AliasAs("filter")]
+        public string Filter { get; set; }
+    }
 }
