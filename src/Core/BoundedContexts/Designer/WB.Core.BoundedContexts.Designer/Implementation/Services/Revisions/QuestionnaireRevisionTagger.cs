@@ -1,40 +1,35 @@
-﻿using System;
+﻿using Main.Core.Documents;
+using System;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Main.Core.Documents;
-using Microsoft.AspNetCore.Http;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
-using WB.UI.Designer.Models;
+using WB.Core.GenericSubdomains.Portable;
 
-namespace WB.UI.Designer.Implementation.Services
+namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
-    public interface IQuestionnaireRevisionTagger
-    {
-        void LogInHistoryImportQuestionnaireToHq(QuestionnaireDocument questionnaireDocument, HttpRequest request, Guid userId);
-        void UpdateQuestionnaireMetadata(Guid revision, QuestionnaireRevisionMetaDataUpdate metaData);
-    }
-
     public class QuestionnaireRevisionTagger : IQuestionnaireRevisionTagger
     {
         private readonly ICommandService commandService;
         private readonly DesignerDbContext dbContext;
 
         public QuestionnaireRevisionTagger(
-            ICommandService commandService,            
+            ICommandService commandService,
             DesignerDbContext dbContext)
         {
             this.commandService = commandService;
             this.dbContext = dbContext;
         }
 
-        public void LogInHistoryImportQuestionnaireToHq(QuestionnaireDocument questionnaireDocument, HttpRequest request, Guid userId)
+        public void LogInHistoryImportQuestionnaireToHq(
+            QuestionnaireDocument questionnaireDocument,
+            string userAgent,
+            Guid userId)
         {
-            var meta = FromHttpRequest(request);
+            var meta = FromUserAgent(userAgent);
 
             var command = new ImportQuestionnaireToHq(userId, meta, questionnaireDocument);
             commandService.Execute(command);
@@ -46,13 +41,13 @@ namespace WB.UI.Designer.Implementation.Services
                 questionnaireDocument.Revision = revisionId.Value;
             }
         }
-        
+
         public void UpdateQuestionnaireMetadata(Guid revision, QuestionnaireRevisionMetaDataUpdate metaData)
         {
             var record = this.dbContext.QuestionnaireChangeRecords
                 .SingleOrDefault(r => r.QuestionnaireChangeRecordId == revision.FormatGuid());
 
-            if(record.Meta == null)
+            if (record.Meta == null)
             {
                 record.Meta = new QuestionnaireChangeRecordMetadata();
             }
@@ -61,8 +56,8 @@ namespace WB.UI.Designer.Implementation.Services
             record.TargetItemTitle = record.Meta.HqHostName;
             record.Meta.Comment = metaData.Comment;
             record.Meta.HqTimeZone = metaData.HqTimeZone;
-            record.Meta.ImporterLogin = metaData.ImporterLogin;
-            record.Meta.QuestionnaireVersion = metaData.QuestionnaireVersion;
+            record.Meta.HqImporterLogin = metaData.HqImporterLogin;
+            record.Meta.QuestionnaireVersion = metaData.HqQuestionnaireVersion;
 
             this.dbContext.QuestionnaireChangeRecords.Update(record);
             this.dbContext.SaveChanges();
@@ -81,9 +76,9 @@ namespace WB.UI.Designer.Implementation.Services
             return Guid.Parse(record.QuestionnaireChangeRecordId);
         }
 
-        private QuestionnaireChangeRecordMetadata FromHttpRequest(HttpRequest Request)
+        private QuestionnaireChangeRecordMetadata FromUserAgent(string userAgent)
         {
-            var versionInfo = GetHqVersionFromUserAgent(Request);
+            var versionInfo = GetHqVersionFromUserAgent(userAgent);
 
             var meta = new QuestionnaireChangeRecordMetadata
             {
@@ -92,25 +87,22 @@ namespace WB.UI.Designer.Implementation.Services
             };
 
             return meta;
-        }                  
- 
+        }
 
-        static Regex hqVersion = new Regex(@"WB\.Headquarters/(?<version>[\d\.]+)\s+\(build\s+(?<build>\d+)", RegexOptions.Compiled);
-        private (string version, string build)? GetHqVersionFromUserAgent(HttpRequest Request)
+        private static Regex hqVersion = new Regex(@"WB\.Headquarters/(?<version>[\d\.]+)\s+\(build\s+(?<build>\d+)",
+            RegexOptions.Compiled);
+
+        private (string version, string build)? GetHqVersionFromUserAgent(string userAgent)
         {
-            if (Request.Headers.TryGetValue("User-Agent", out var userAgents))
+            var match = hqVersion.Match(userAgent);
+
+            if (match.Success)
             {
-                foreach (var ua in userAgents)
-                {
-                    var match = hqVersion.Match(ua);
-                    if (match.Success)
-                    {
-                        return (match.Groups["version"].Value, match.Groups["build"].Value);
-                    }
-                }
+                return (match.Groups["version"].Value, match.Groups["build"].Value);
             }
 
             return null;
         }
     }
 }
+

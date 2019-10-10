@@ -99,6 +99,7 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind<SearchPostProcessors, SearchPostProcessors>();
             registry.Bind<ResourcesPreProcessor, ResourcesPreProcessor>();
             registry.Bind<ResourcesPostProcessor, ResourcesPostProcessor>();
+            registry.Bind<IQuestionnaireRevisionTagger, QuestionnaireRevisionTagger>();
         }
 
         public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status)
