@@ -39,7 +39,8 @@ const pages = {
             "WebInterviewSettings",
             "MapReport",
             "Settings",
-			"DataExport"			
+            "DataExport",
+            "Dashboard"
         ]
     },
     webinterview: {
