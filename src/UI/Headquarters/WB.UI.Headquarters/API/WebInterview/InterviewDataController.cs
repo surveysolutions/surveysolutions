@@ -57,67 +57,91 @@ namespace WB.UI.Headquarters.API.WebInterview
         protected override bool IsCurrentUserObserving() => this.authorizedUser.IsObserving;
 
         [HttpGet]
+        [Route("getLanguageInfo")]
         public override LanguageInfo GetLanguageInfo(Guid interviewId) => base.GetLanguageInfo(interviewId);
 
         [HttpGet]
+        [Route("getTopFilteredOptionsForQuestion")]
         public override DropdownItem[] GetTopFilteredOptionsForQuestion(Guid interviewId, string id, string filter, int count)
             => base.GetTopFilteredOptionsForQuestion(interviewId, id, filter, count);
 
         [HttpGet]
+        [Route("getTopFilteredOptionsForQuestion")]
         public override DropdownItem[] GetTopFilteredOptionsForQuestion(Guid interviewId, string id, string filter, int count, int[] excludedOptionIds) 
             => base.GetTopFilteredOptionsForQuestion(interviewId, id, filter, count, excludedOptionIds);
 
         [HttpGet]
+        [Route("getBreadcrumbs")]
         public override BreadcrumbInfo GetBreadcrumbs(Guid interviewId, string sectionId) => base.GetBreadcrumbs(interviewId, sectionId);
 
         [HttpGet]
+        [Route("getCompleteInfo")]
         public override CompleteInfo GetCompleteInfo(Guid interviewId) => base.GetCompleteInfo(interviewId);
 
         [HttpGet]
+        [Route("getCoverInfo")]
         public override CoverInfo GetCoverInfo(Guid interviewId) => base.GetCoverInfo(interviewId);
 
         [HttpGet]
+        [Route("getEntitiesDetails")]
         public override InterviewEntity[] GetEntitiesDetails(Guid interviewId, string sectionId, string[] ids) => base.GetEntitiesDetails(interviewId, sectionId, ids);
 
         [HttpGet]
+        [Route("getFullSectionInfo")]
         public override SectionData GetFullSectionInfo(Guid interviewId, string sectionId) => base.GetFullSectionInfo(interviewId, sectionId);
 
         [HttpGet]
+        [Route("getInterviewStatus")]
         public override GroupStatus GetInterviewStatus(Guid interviewId) => base.GetInterviewStatus(interviewId);
 
         [HttpGet]
+        [Route("getNavigationButtonState")]
         public override ButtonState GetNavigationButtonState(Guid interviewId, string sectionId, string id, IQuestionnaire questionnaire = null) =>
             base.GetNavigationButtonState(interviewId, sectionId, id, questionnaire);
 
         [HttpGet]
+        [Route("isEnabled")]
         public override bool IsEnabled(Guid interviewId, string id) => base.IsEnabled(interviewId, id);
 
         [HttpGet]
+        [Route("getPrefilledQuestions")]
         public override InterviewEntityWithType[] GetPrefilledQuestions(Guid interviewId) => base.GetPrefilledQuestions(interviewId);
 
         [HttpGet]
+        [Route("getPrefilledEntities")]
         public override PrefilledPageData GetPrefilledEntities(Guid interviewId) => base.GetPrefilledEntities(interviewId);
 
         [HttpGet]
+        [Route("getSectionEntities")]
         public override InterviewEntityWithType[] GetSectionEntities(Guid interviewId, string sectionId) => base.GetSectionEntities(interviewId, sectionId);
 
         [HttpGet]
+        [Route("hasCoverPage")]
         public override bool HasCoverPage(Guid interviewId) => base.HasCoverPage(interviewId);
 
         [HttpGet]
+        [Route("getSidebarChildSectionsOf")]
         public override Sidebar GetSidebarChildSectionsOf(Guid interviewId, string sectionId, string[] parentIds) => base.GetSidebarChildSectionsOf(interviewId, sectionId, parentIds);
 
         [HttpGet]
+        [Route("search")]
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @filters.js")]
-        public SearchResults Search(Guid interviewId, FilterOption[] flags, int skip = 0, int limit = 50)
+        public SearchResults Search(Guid interviewId, string[] flags, int skip = 0, int limit = 50)
         {
+            FilterOption[] flagsEnum = flags.Select(s =>
+            {
+                if (Enum.TryParse(s, out FilterOption option))
+                    return option;
+                return (FilterOption?)null;
+            }).Where(s => s.HasValue).Select(s => s.Value).ToArray();
             var interview = GetCallerInterview(interviewId);
             var questionnaire = GetCallerQuestionnaire(interview.QuestionnaireIdentity);
-            var result = this.statefullInterviewSearcher.Search(interview, questionnaire, flags, skip, limit);
+            var result = this.statefullInterviewSearcher.Search(interview, questionnaire, flagsEnum, skip, limit);
             return result;
         }
 
         [HttpGet]
+        [Route("overview")]
         public PagedApiResponse<OverviewNode> Overview(Guid interviewId, int skip, int take = 100)
         {
             take = Math.Min(take, 100);
@@ -140,6 +164,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         }
 
         [HttpGet]
+        [Route("overviewItemAdditionalInfo")]
         public OverviewItemAdditionalInfo OverviewItemAdditionalInfo(Guid interviewId, string id)
         {
             var statefulInterview = this.GetCallerInterview(interviewId);
@@ -149,6 +174,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         }
 
         [HttpGet]
+        [Route("getStatusesHistory")]
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @filters.js")]
         public List<CommentedStatusHistoryView> GetStatusesHistory(Guid interviewId)
         {
@@ -157,6 +183,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         }
 
         [HttpGet]
+        [Route("setFlag")]
         [ObserverNotAllowed]
         public IHttpActionResult SetFlag(Guid interviewId, string questionId, bool hasFlag)
         {
@@ -166,6 +193,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         }
 
         [HttpGet]
+        [Route("getFlags")]
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @flags.js")]
         public IEnumerable<string> GetFlags(Guid interviewId)
         {
@@ -174,6 +202,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         }
 
         [HttpGet]
+        [Route("getInterviewDetails")]
         public override InterviewInfo GetInterviewDetails(Guid interviewId)
         {
             var interviewDetails = base.GetInterviewDetails(interviewId);
