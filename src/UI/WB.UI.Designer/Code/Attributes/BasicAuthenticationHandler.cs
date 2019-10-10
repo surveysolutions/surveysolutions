@@ -59,25 +59,24 @@ namespace WB.UI.Designer.Code.Attributes
             return AuthenticateResult.Success(ticket);
         }
 
-        protected override Task HandleChallengeAsync(AuthenticationProperties properties)
+        protected override async Task HandleChallengeAsync(AuthenticationProperties properties)
         {
-            HandleFail();
-            return Task.CompletedTask;
+            await HandleFail();
         }
 
-        protected override Task HandleForbiddenAsync(AuthenticationProperties properties)
+        protected override async Task HandleForbiddenAsync(AuthenticationProperties properties)
         {
-            HandleFail();
-            return Task.CompletedTask;
+            await HandleFail();
         }
 
-        private void HandleFail()
+        private async Task HandleFail()
         {
             Response.Headers["WWW-Authenticate"] = $"Basic realm=\"{Options.Realm}\", charset=\"UTF-8\"";
 
             if (this.loginException != null)
             {
                 Response.StatusCode = loginException.ResponseStatusCode;
+                await Response.Body.WriteAsync(Encoding.UTF8.GetBytes(this.loginException.Message));
 
                 var feature = Response.HttpContext?.Features?.Get<IHttpResponseFeature>();
                 if (feature != null)
