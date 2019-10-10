@@ -1,4 +1,4 @@
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -7,22 +7,24 @@ using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 {
-    public class FluentMigratorInitializer<TContext> : IDatabaseInitializer<TContext> where TContext : DbContext
+    public class FluentMigratorInitializer
     {
+        private readonly string connectionString;
         private readonly string schemaName;
         private readonly DbUpgradeSettings upgradeSettings;
 
-        public FluentMigratorInitializer(string schemaName, DbUpgradeSettings upgradeSettings)
+        public FluentMigratorInitializer(string connectionString, string schemaName, DbUpgradeSettings upgradeSettings)
         {
+            this.connectionString = connectionString;
             this.schemaName = schemaName;
             this.upgradeSettings = upgradeSettings;
         }
 
-        public void InitializeDatabase(TContext context)
+        public void InitializeDatabase()
         {
             try
             {
-                DatabaseManagement.InitDatabase(context.Database.Connection.ConnectionString, this.schemaName);
+                DatabaseManagement.InitDatabase(connectionString, this.schemaName);
             }
             catch (System.Exception exc)
             {
@@ -30,7 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
                 throw;
             }
 
-            DbMigrationsRunner.MigrateToLatest(context.Database.Connection.ConnectionString, this.schemaName, this.upgradeSettings);
+            DbMigrationsRunner.MigrateToLatest(connectionString, this.schemaName, this.upgradeSettings);
         }
     }
 }
