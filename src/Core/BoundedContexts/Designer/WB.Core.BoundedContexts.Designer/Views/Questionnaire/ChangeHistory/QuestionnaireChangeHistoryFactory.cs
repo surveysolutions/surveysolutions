@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
-using WB.Core.BoundedContexts.Designer.MembershipProvider.Roles;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 
@@ -34,12 +32,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             var questionnaireId = id.FormatGuid();
 
             var count = this.dbContext.QuestionnaireChangeRecords.Count(h => h.QuestionnaireId == questionnaireId);
-            
+
             var questionnaireHistory =
-                this.dbContext.QuestionnaireChangeRecords
-                    .Where(h => h.QuestionnaireId == questionnaireId)
-                    //.Where(h => !(h.ActionType == QuestionnaireActionType.ImportToHq 
-                    //    && h.User.UserRoles.Any(r => r.RoleId == SimpleRoleGuid.AdminRoleId)))
+                this.dbContext.QuestionnaireChangeRecords.Where(h => h.QuestionnaireId == questionnaireId)
                     .OrderByDescending(h => h.Sequence)
                     .Skip((page - 1) * pageSize)
                     .Take(pageSize)

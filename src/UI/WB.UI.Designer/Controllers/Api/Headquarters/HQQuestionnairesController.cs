@@ -17,8 +17,6 @@ using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Attributes;
 using WB.UI.Designer.Extensions;
-using WB.UI.Designer.Implementation.Services;
-using WB.UI.Designer.Models;
 using WB.UI.Designer.Resources;
 
 namespace WB.UI.Designer.Controllers.Api.Headquarters
@@ -37,7 +35,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
         private readonly IStringCompressor zipUtils;
         private readonly IExpressionsPlayOrderProvider expressionsPlayOrderProvider;
         private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersionService;
-        private readonly IQuestionnaireRevisionTagger questionnaireRevisionTagger;
+        private readonly IQuestionnaireRevisionMetadataUpdater questionnaireRevisionMetadataUpdater;
         
         public HQQuestionnairesController(
             IQuestionnaireViewFactory questionnaireViewFactory,
@@ -50,7 +48,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             DesignerDbContext listItemStorage,
             IExpressionsPlayOrderProvider expressionsPlayOrderProvider,
             IQuestionnaireCompilationVersionService questionnaireCompilationVersionService,
-            IQuestionnaireRevisionTagger questionnaireRevisionTagger)
+            IQuestionnaireRevisionMetadataUpdater questionnaireRevisionMetadataUpdater)
         {
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.questionnaireVerifier = questionnaireVerifier;
@@ -62,7 +60,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             this.listItemStorage = listItemStorage;
             this.expressionsPlayOrderProvider = expressionsPlayOrderProvider;
             this.questionnaireCompilationVersionService = questionnaireCompilationVersionService;
-            this.questionnaireRevisionTagger = questionnaireRevisionTagger;
+            this.questionnaireRevisionMetadataUpdater = questionnaireRevisionMetadataUpdater;
         }
 
         [HttpGet]
@@ -168,7 +166,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             var questionnaire = questionnaireView.Source.Clone();
 
             var userAgent = Request.Headers["User-Agent"].FirstOrDefault();
-            this.questionnaireRevisionTagger.LogInHistoryImportQuestionnaireToHq(questionnaire, userAgent, User.GetId());
+            this.questionnaireRevisionMetadataUpdater.LogInHistoryImportQuestionnaireToHq(questionnaire, userAgent, User.GetId());
 
             questionnaire.IsUsingExpressionStorage = versionToCompileAssembly > 19;
             var readOnlyQuestionnaireDocument = questionnaireView.Source.AsReadOnly();
@@ -185,10 +183,10 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
         }
 
         [HttpPost]
-        [Route("revision/{id:Guid}/tag")]
+        [Route("revision/{id:Guid}/metadata")]
         public IActionResult Tag(Guid id, [FromBody] QuestionnaireRevisionMetaDataUpdate tagData)
         {
-            this.questionnaireRevisionTagger.UpdateQuestionnaireMetadata(id, tagData);
+            this.questionnaireRevisionMetadataUpdater.UpdateQuestionnaireMetadata(id, tagData);
             return Ok();
         }
         
