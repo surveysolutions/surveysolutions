@@ -219,7 +219,11 @@ export async function apiGet(actionName, params) {
     store.dispatch("fetchProgress", 1)
 
     try {
-        return await axios.get(`${store.getters.basePath}api/webinterview/${actionName}`, { params:params })
+        const response = await axios.get(`${store.getters.basePath}api/webinterview/${actionName}`, { 
+            params:params,
+            responseType: 'json'
+        })
+        return response.data
     } catch (err) {
         store.dispatch("UNHANDLED_ERROR", err)
     } finally {
