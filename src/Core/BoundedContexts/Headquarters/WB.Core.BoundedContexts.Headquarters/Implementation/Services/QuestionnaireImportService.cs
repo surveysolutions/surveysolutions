@@ -160,8 +160,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 {
                     HqHost = GetDomainFromUri(requestUrl),
                     HqTimeZone = (int)TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).TotalMinutes,
-                    ImporterLogin = this.authorizedUser.UserName,
-                    QuestionnaireVersion = questionnaireIdentity.Version,
+                    HqImporterLogin = this.authorizedUser.UserName,
+                    HqQuestionnaireVersion = questionnaireIdentity.Version,
                     Comment = "",
                 });
 

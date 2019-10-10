@@ -261,8 +261,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
 
             designerApi.Verify(d => d.Tag(It.IsAny<Guid>(), It.Is<DesignerApiTagModel>(m =>
                 m.HqHost == "fsb.ru"
-                && m.ImporterLogin == "Zorge"
-                && m.QuestionnaireVersion == 0
+                && m.HqImporterLogin == "Zorge"
+                && m.HqQuestionnaireVersion == 0
                 )), Times.Once);
         }
 

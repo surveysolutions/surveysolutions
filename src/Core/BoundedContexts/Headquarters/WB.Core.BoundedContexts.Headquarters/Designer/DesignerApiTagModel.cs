@@ -19,10 +19,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
     public class DesignerApiTagModel
     {
         public int HqTimeZone { get; set; }
-        public string ImporterLogin { get; set; }
-        public long QuestionnaireVersion { get; set; }
+        public string HqImporterLogin { get; set; }
+        public long HqQuestionnaireVersion { get; set; }
         public string Comment { get; set; }
         public string HqHost { get; internal set; }
     }
-
 }
