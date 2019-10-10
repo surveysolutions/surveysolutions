@@ -65,8 +65,8 @@ export default {
                 dispatch("hideSearchResults");
         },
 
-        async getStatusesHistory() {
-            const interviewId = this.$store.rootState.route.params.interviewId
+        async getStatusesHistory({ rootState }) {
+            const interviewId = rootState.route.params.interviewId
             return await Vue.$api.get('getStatusesHistory', {interviewId})
         },
 
