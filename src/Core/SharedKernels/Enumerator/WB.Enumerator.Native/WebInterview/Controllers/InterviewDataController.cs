@@ -52,7 +52,17 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             }
         };
 
-        public LanguageInfo GetLanguageInfo(Guid interviewId)
+        protected IQuestionnaire GetCallerQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
+        {
+            return questionnaireRepository.GetQuestionnaire(questionnaireIdentity, null);
+        }
+
+        protected IStatefulInterview GetCallerInterview(Guid interviewId)
+        {
+            return statefulInterviewRepository.Get(interviewId.FormatGuid());
+        }
+
+        public virtual LanguageInfo GetLanguageInfo(Guid interviewId)
         {
             var statefulInterview = this.GetCallerInterview(interviewId);
             if (statefulInterview == null) return null;
@@ -63,11 +73,6 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 Languages = this.GetCallerQuestionnaire(statefulInterview.QuestionnaireIdentity).GetTranslationLanguages(),
                 CurrentLanguage = statefulInterview.Language
             };
-        }
-
-        protected IQuestionnaire GetCallerQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
-        {
-            return questionnaireRepository.GetQuestionnaire(questionnaireIdentity, null);
         }
 
         public virtual InterviewInfo GetInterviewDetails(Guid interviewId)
@@ -92,19 +97,14 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             };
         }
 
-        public bool IsEnabled(Guid interviewId, string id)
+        public virtual bool IsEnabled(Guid interviewId, string id)
         {
             if (id == null) throw new ArgumentNullException(nameof(id));
             var statefulInterview = this.GetCallerInterview(interviewId);
             return statefulInterview.IsEnabled(Identity.Parse(id));
         }
 
-        protected IStatefulInterview GetCallerInterview(Guid interviewId)
-        {
-            return statefulInterviewRepository.Get(interviewId.FormatGuid());
-        }
-
-        public GroupStatus GetInterviewStatus(Guid interviewId)
+        public virtual GroupStatus GetInterviewStatus(Guid interviewId)
         {
             var interview = this.GetCallerInterview(interviewId);
             if (interview == null) return GroupStatus.StartedInvalid;
@@ -148,7 +148,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             return result;
         }
 
-        public InterviewEntityWithType[] GetPrefilledQuestions(Guid interviewId)
+        public virtual InterviewEntityWithType[] GetPrefilledQuestions(Guid interviewId)
         {
             var interview = this.GetCallerInterview(interviewId);
             var questionnaire = this.GetCallerQuestionnaire(interview.QuestionnaireIdentity);
@@ -165,7 +165,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
-        public PrefilledPageData GetPrefilledEntities(Guid interviewId)
+        public virtual PrefilledPageData GetPrefilledEntities(Guid interviewId)
         {
             var statefulInterview = this.GetCallerInterview(interviewId);
             if (statefulInterview == null) return null;
@@ -185,7 +185,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             return result;
         }
 
-        public InterviewEntityWithType[] GetSectionEntities(Guid interviewId, string sectionId)
+        public virtual InterviewEntityWithType[] GetSectionEntities(Guid interviewId, string sectionId)
         {
             if (sectionId == null) throw new ArgumentNullException(nameof(sectionId));
 
@@ -239,7 +239,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
-        public SectionData GetFullSectionInfo(Guid interviewId, string sectionId)
+        public virtual SectionData GetFullSectionInfo(Guid interviewId, string sectionId)
         {
             var entities = GetSectionEntities(interviewId, sectionId);
 
@@ -252,7 +252,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             };
         }
 
-        public ButtonState GetNavigationButtonState(Guid interviewId, string sectionId, string id, IQuestionnaire questionnaire = null)
+        public virtual ButtonState GetNavigationButtonState(Guid interviewId, string sectionId, string id, IQuestionnaire questionnaire = null)
         {
             var statefulInterview = this.GetCallerInterview(interviewId);
             if (statefulInterview == null) return null;
@@ -323,7 +323,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
-        public BreadcrumbInfo GetBreadcrumbs(Guid interviewId, string sectionId)
+        public virtual BreadcrumbInfo GetBreadcrumbs(Guid interviewId, string sectionId)
         {
             if (sectionId == null) return new BreadcrumbInfo();
 
@@ -410,7 +410,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             return info;
         }
 
-        public InterviewEntity[] GetEntitiesDetails(Guid interviewId, string sectionId, string[] ids)
+        public virtual InterviewEntity[] GetEntitiesDetails(Guid interviewId, string sectionId, string[] ids)
         {
             var callerInterview = this.GetCallerInterview(interviewId);
             if (callerInterview == null) return null;
@@ -448,7 +448,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         private static readonly Regex HtmlRemovalRegex = new Regex(Constants.HtmlRemovalPattern, RegexOptions.Compiled);
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
-        public bool HasCoverPage(Guid interviewId)
+        public virtual bool HasCoverPage(Guid interviewId)
         {
             var interview = this.GetCallerInterview(interviewId);
             if (interview == null) return false;
@@ -459,7 +459,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.sidebar.js")]
-        public Sidebar GetSidebarChildSectionsOf(Guid interviewId, string sectionId, string[] parentIds)
+        public virtual Sidebar GetSidebarChildSectionsOf(Guid interviewId, string sectionId, string[] parentIds)
         {
             var interview = this.GetCallerInterview(interviewId);
             if (interview == null) return null;
@@ -491,7 +491,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             return topFilteredOptionsForQuestion.Select(x => new DropdownItem(x.Value, x.Title)).ToArray();
         }
 
-        public CompleteInfo GetCompleteInfo(Guid interviewId)
+        public virtual CompleteInfo GetCompleteInfo(Guid interviewId)
         {
             var interview = this.GetCallerInterview(interviewId);
             if (interview == null) return null;
@@ -527,7 +527,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
-        public CoverInfo GetCoverInfo(Guid interviewId)
+        public virtual CoverInfo GetCoverInfo(Guid interviewId)
         {
             var interview = this.GetCallerInterview(interviewId);
             if (interview == null) return null;
