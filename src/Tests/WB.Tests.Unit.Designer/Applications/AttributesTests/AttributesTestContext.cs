@@ -42,8 +42,7 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
             return new IpAddressFilter(onlyAllowedAddresses,
                 ipAddressProvider ?? Mock.Of<IIpAddressProvider>(), 
                 allowedAddressService ?? Mock.Of<IAllowedAddressService>(),
-                userManager,
-                signInManager);
+                userManager);
         }
         
         public static string EncodeToBase64(string value)
