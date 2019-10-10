@@ -28,14 +28,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
             [Query] int? minSupportedQuestionnaireVersion);
 
         [Get("/attachment/{contentId}")]
-        Task<HttpResponseMessage> DownloadQuestionnaireAttachment(string contentId, [Query] Guid attachmentId);
+        Task<RestFile> DownloadQuestionnaireAttachment(string contentId, [Query] Guid attachmentId);
 
         [Get("/translations/{questionnaireId}")]
         Task<List<TranslationDto>> GetTranslations(Guid questionnaireId);
 
         [Get("/lookup/{questionnaireId}/{lookupId}")]
         Task<QuestionnaireLookupTable> GetLookupTables(Guid questionnaireId, Guid lookupId);
-
-    }
-
+    }      
 }
