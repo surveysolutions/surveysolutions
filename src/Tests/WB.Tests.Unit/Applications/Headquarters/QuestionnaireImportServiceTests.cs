@@ -15,6 +15,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
@@ -245,7 +246,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 Mock.Of<ISystemLog>(),
                 unitOfWork,
                 globalInfoProvider,
-                designerUserCredentials);
+                designerUserCredentials,
+                new InMemoryPlainStorageAccessor<QuestionnairePdf>());
             return questionnaireImportService;
         }
     }
