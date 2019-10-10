@@ -1,19 +1,20 @@
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
-using System.Data.Entity.Infrastructure.Annotations;
-using System.Data.Entity.Validation;
 using System.Globalization;
 using System.Linq;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using DbConfiguration = WB.Core.BoundedContexts.Headquarters.Repositories.DbConfiguration;
+using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 {
     public class HQIdentityDbContext : DbContext
     {
+        private readonly UnitOfWorkConnectionSettings connectionSettings;
+
         /// <summary>
         ///     IDbSet of Roles
         /// </summary>
@@ -41,102 +42,112 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         public bool RequireUniqueEmail { get; set; }
 
 
-        public HQIdentityDbContext() : base("Postgres")
+        public HQIdentityDbContext(UnitOfWorkConnectionSettings connectionSettings)
         {
-           
+            this.connectionSettings = connectionSettings;
         }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) 
+            => optionsBuilder.UseNpgsql(this.connectionSettings.ConnectionString);
 
         private const string SchemaName = "users";
 
-        public virtual IDbSet<DeviceSyncInfo> DeviceSyncInfos { get; set; }
+        public virtual DbSet<DeviceSyncInfo> DeviceSyncInfos { get; set; }
 
         // Here you define your own DbSet's
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            // Needed to ensure subclasses share the same table
-            var user = modelBuilder.Entity<HqUser>()
-                .HasKey(x => x.Id)
-                .ToTable("users", SchemaName);
-
-            user.HasMany(u => u.Roles).WithRequired().HasForeignKey(ur => ur.UserId);
-            user.HasMany(u => u.Claims).WithRequired().HasForeignKey(uc => uc.UserId);
-            user.HasMany(u => u.Logins).WithRequired().HasForeignKey(ul => ul.UserId);
-            user.Property(u => u.UserName)
-                .IsRequired()
-                .HasMaxLength(256)
-                .HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("UserNameIndex") { IsUnique = true }));
-
-            // CONSIDER: u.Email is Required if set on options?
-            user.Property(u => u.Email).HasMaxLength(256);
-
-            modelBuilder.Entity<HqUserRole>()
-                .HasKey(r => new {r.UserId, r.RoleId})
-                .ToTable("userroles", SchemaName);
-
-            modelBuilder.Entity<HqUserLogin>()
-                .HasKey(l => new { l.LoginProvider, l.ProviderKey, l.UserId })
-                .ToTable("userlogins", SchemaName);
-
-            modelBuilder.Entity<HqUserClaim>()
-                .HasKey(x => x.Id)
-                .ToTable("userclaims", SchemaName);
-
-            var role = modelBuilder.Entity<HqRole>()
-                .HasKey(x => x.Id)
-                .ToTable("roles", SchemaName);
-
-            role.Property(r => r.Name)
-                .IsRequired()
-                .HasMaxLength(256)
-                .HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("RoleNameIndex") { IsUnique = true }));
-            role.HasMany(r => r.Users).WithRequired().HasForeignKey(ur => ur.RoleId);
-
-            modelBuilder.Entity<HqUserProfile>().ToTable("userprofiles", SchemaName);
-            modelBuilder.Entity<DeviceSyncInfo>().ToTable("devicesyncinfo", DbConfiguration.SchemaName);
-            modelBuilder.Entity<SyncStatistics>().ToTable("devicesyncstatistics", DbConfiguration.SchemaName);
-        }
-
-        /// <summary>
-        ///     Validates that UserNames are unique and case insenstive
-        /// </summary>
-        /// <param name="entityEntry"></param>
-        /// <param name="items"></param>
-        /// <returns></returns>
-        protected override DbEntityValidationResult ValidateEntity(DbEntityEntry entityEntry,
-            IDictionary<object, object> items)
-        {
-            if (entityEntry != null && entityEntry.State == EntityState.Added)
+            builder.Entity<HqUser>(b =>
             {
-                var errors = new List<DbValidationError>();
-                //check for uniqueness of user name and email
-                if (entityEntry.Entity is HqUser user)
-                {
-                    if (Users.Any(u => string.Equals(u.UserName, user.UserName)))
-                    {
-                        errors.Add(new DbValidationError("User",
-                            string.Format(CultureInfo.CurrentCulture, "User name {0} is already taken.", user.UserName)));
-                    }
-                    if (RequireUniqueEmail && Users.Any(u => string.Equals(u.Email, user.Email)))
-                    {
-                        errors.Add(new DbValidationError("User",
-                            string.Format(CultureInfo.CurrentCulture, "Email {0} is already taken.", user.Email)));
-                    }
-                }
-                else
-                {
-                    //check for uniqueness of role name
-                    if (entityEntry.Entity is HqRole role && Roles.Any(r => string.Equals(r.Name, role.Name)))
-                    {
-                        errors.Add(new DbValidationError("Role",
-                            string.Format(CultureInfo.CurrentCulture, "Role {0} already exists.", role.Name)));
-                    }
-                }
-                if (errors.Any())
-                {
-                    return new DbEntityValidationResult(entityEntry, errors);
-                }
-            }
-            return base.ValidateEntity(entityEntry, items);
+                // Primary key
+                b.HasKey(u => u.Id);
+
+                // Indexes for "normalized" username and email, to allow efficient lookups
+                b.HasIndex(u => u.UserName).HasName("UserNameIndex").IsUnique();
+                b.HasIndex(u => u.Email).HasName("EmailIndex");
+
+                // Maps to the AspNetUsers table
+                b.ToTable("users", SchemaName);
+                
+                // Limit the size of columns to use efficient database types
+                b.Property(u => u.UserName).HasMaxLength(256);
+                b.Property(u => u.Email).HasMaxLength(256);
+
+                // The relationships between User and other entity types
+                // Note that these relationships are configured with no navigation properties
+
+                // Each User can have many UserClaims
+                b.HasMany<HqUserClaim>().WithOne().HasForeignKey(uc => uc.UserId).IsRequired();
+
+                // Each User can have many UserLogins
+                b.HasMany<HqUserLogin>().WithOne().HasForeignKey(ul => ul.UserId).IsRequired();
+
+                // Each User can have many entries in the UserRole join table
+                b.HasMany<HqUserRole>().WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
+            });
+
+            builder.Entity<HqUserClaim>(b =>
+            {
+                // Primary key
+                b.HasKey(uc => uc.Id);
+
+                // Maps to the AspNetUserClaims table
+                b.ToTable("userclaims", SchemaName);
+            });
+
+            builder.Entity<HqUserLogin>(b =>
+            {
+                // Composite primary key consisting of the LoginProvider and the key to use
+                // with that provider
+                b.HasKey(l => new {l.LoginProvider, l.ProviderKey});
+
+                // Limit the size of the composite key columns due to common DB restrictions
+                b.Property(l => l.LoginProvider).HasMaxLength(128);
+                b.Property(l => l.ProviderKey).HasMaxLength(128);
+
+                // Maps to the AspNetUserLogins table
+                b.ToTable("userlogins", SchemaName);
+            });
+
+            builder.Entity<HqRole>(b =>
+            {
+                // Primary key
+                b.HasKey(r => r.Id);
+
+                // Index for "normalized" role name to allow efficient lookups
+                b.HasIndex(r => r.Name).HasName("RoleNameIndex").IsUnique();
+
+                // Maps to the AspNetRoles table
+                b.ToTable("roles", SchemaName);
+
+                // Limit the size of columns to use efficient database types
+                b.Property(u => u.Name).HasMaxLength(256).IsRequired();
+
+                // The relationships between Role and other entity types
+                // Note that these relationships are configured with no navigation properties
+
+                // Each Role can have many entries in the UserRole join table
+                b.HasMany<HqUserRole>().WithOne().HasForeignKey(ur => ur.RoleId).IsRequired();
+            });
+
+            builder.Entity<HqUserRole>(b =>
+            {
+                // Primary key
+                b.HasKey(r => new {r.UserId, r.RoleId});
+
+                // Maps to the AspNetUserRoles table
+                b.ToTable("userroles", SchemaName);
+            });
+            
+            builder.Entity<HqUserProfile>().ToTable("userprofiles", SchemaName);
+            builder.Entity<DeviceSyncInfo>(b =>
+            {
+                b.HasIndex(dsi => new {dsi.InterviewerId, dsi.AndroidSdkVersion, dsi.AppBuildVersion})
+                    .HasName("devicesyncinfo_interviewerid_androidsdkversion_appbuildversion").IsUnique(false);
+
+                b.ToTable("devicesyncinfo", DbConfiguration.SchemaName);
+            });
+            builder.Entity<SyncStatistics>().ToTable("devicesyncstatistics", DbConfiguration.SchemaName);
         }
     }
 }

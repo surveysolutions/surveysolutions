@@ -82,8 +82,8 @@ namespace WB.UI.Headquarters
 
             var applicationSecuritySection = settingsProvider.GetSection<HqSecuritySection>(@"applicationSecurity");
 
-            Database.SetInitializer(new FluentMigratorInitializer<HQIdentityDbContext>("users", 
-                DbUpgradeSettings.FromFirstMigration<M001_AddUsersHqIdentityModel>()));
+            new FluentMigratorInitializer(settingsProvider.ConnectionStrings[dbConnectionStringName].ConnectionString, "users", 
+                DbUpgradeSettings.FromFirstMigration<M001_AddUsersHqIdentityModel>()).InitializeDatabase();
 
             UnitOfWorkConnectionSettings connectionSettings = new UnitOfWorkConnectionSettings
             {
