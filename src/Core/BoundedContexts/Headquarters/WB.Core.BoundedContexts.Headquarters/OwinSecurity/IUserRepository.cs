@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 
@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 {
     public interface IUserRepository : IDisposable
     {
-        IDbSet<DeviceSyncInfo> DeviceSyncInfos { get; }
+        DbSet<DeviceSyncInfo> DeviceSyncInfos { get; }
         Task<string> GetSecurityStampAsync(HqUser user);
         Task CreateAsync(HqUser user);
         Task UpdateAsync(HqUser user);

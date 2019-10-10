@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity.Providers;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
@@ -34,12 +35,14 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAuthorizedUser, AuthorizedUser>();
         }
 
-        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
+        public async Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
-            serviceLocator.GetInstance<HQPlainStorageDbContext>().DeviceSyncInfo.FirstOrDefault();
+            var hQPlainStorageDbContext = serviceLocator.GetInstance<HQPlainStorageDbContext>();
+            await hQPlainStorageDbContext.Database.MigrateAsync();
+
+            hQPlainStorageDbContext.DeviceSyncInfo.FirstOrDefault();
             serviceLocator.GetInstance<HQIdentityDbContext>().Roles.FirstOrDefault();
 
-            return Task.CompletedTask;
         }
     }
 }

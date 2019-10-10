@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Data.Entity.Utilities;
 using System.Globalization;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
@@ -54,10 +53,10 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             }
 
             var errors = new List<string>();
-            await ValidateUserName(item, errors).WithCurrentCulture();
+            await ValidateUserName(item, errors);
             if (RequireUniqueEmail)
             {
-                await ValidateEmailAsync(item, errors).WithCurrentCulture();
+                await ValidateEmailAsync(item, errors);
             }
             if (errors.Count > 0)
             {
@@ -79,7 +78,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             }
             else
             {
-                var owner = await Manager.FindByNameAsync(user.UserName).WithCurrentCulture();
+                var owner = await Manager.FindByNameAsync(user.UserName);
                 if (owner != null && !EqualityComparer<Guid>.Default.Equals(owner.Id, user.Id))
                 {
                     errors.Add(String.Format(CultureInfo.CurrentCulture, "Name {0} is already taken.", user.UserName));
@@ -90,7 +89,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         // make sure email is not empty, valid, and unique
         private async Task ValidateEmailAsync(HqUser user, List<string> errors)
         {
-            var email = await Manager.GetEmailAsync(user).WithCurrentCulture();
+            var email = await Manager.GetEmailAsync(user);
             if (string.IsNullOrWhiteSpace(email))
             {
                 errors.Add(String.Format(CultureInfo.CurrentCulture, "{0} cannot be null or empty.", "Email"));
@@ -105,7 +104,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
                 errors.Add(String.Format(CultureInfo.CurrentCulture, "Email '{0}' is invalid.", email));
                 return;
             }
-            var owner = await Manager.FindByEmailAsync(email).WithCurrentCulture();
+            var owner = await Manager.FindByEmailAsync(email);
             if (owner != null && !EqualityComparer<Guid>.Default.Equals(owner.Id, user.Id))
             {
                 errors.Add(String.Format(CultureInfo.CurrentCulture, "Email '{0}' is already taken.", email));

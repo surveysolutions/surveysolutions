@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 
@@ -15,9 +15,9 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
     internal class HqUserStore : IUserRepository
     {
         private HQIdentityDbContext context;
-        private readonly IDbSet<HqUserLogin> _logins;
-        private readonly IDbSet<HqUserClaim> _userClaims;
-        private readonly IDbSet<HqUserRole> _userRoles;
+        private readonly DbSet<HqUserLogin> _logins;
+        private readonly DbSet<HqUserClaim> _userClaims;
+        private readonly DbSet<HqUserRole> _userRoles;
 
         private readonly EntityStore<HqRole> _roleStore;
         private EntityStore<HqUser> _userStore;
@@ -87,7 +87,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             _userRoles = context.Set<HqUserRole>();
         }
 
-        public IDbSet<DeviceSyncInfo> DeviceSyncInfos => context.DeviceSyncInfos;
+        public DbSet<DeviceSyncInfo> DeviceSyncInfos => context.DeviceSyncInfos;
         public Task<string> GetSecurityStampAsync(HqUser user)
         {
             ThrowIfDisposed();

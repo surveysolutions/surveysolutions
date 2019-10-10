@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Caching.Memory;
@@ -319,8 +318,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                                    where deviceSyncInfo != null &&
                                          (
                                              deviceSyncInfo.DeviceDate == DateTime.MinValue ||
-                                             Math.Abs((long)DbFunctions.DiffMinutes(
-                                                 deviceSyncInfo.DeviceDate, deviceSyncInfo.SyncDate)) >
+                                             Math.Abs((long)(deviceSyncInfo.DeviceDate - deviceSyncInfo.SyncDate).TotalMinutes) >
                                              InterviewerIssuesConstants.MinutesForWrongTime
                                          )
                                    select i;
