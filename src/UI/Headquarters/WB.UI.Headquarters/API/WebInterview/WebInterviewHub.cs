@@ -23,15 +23,6 @@ namespace WB.UI.Headquarters.API.WebInterview
     [WebInterviewAuthorize]
     public class WebInterviewHub : Enumerator.Native.WebInterview.WebInterview, ILifetimeHub
     {
-        private IInterviewBrokenPackagesService interviewBrokenPackagesService => this.ServiceLocator.GetInstance<IInterviewBrokenPackagesService>();
-        private IAuthorizedUser authorizedUser => this.ServiceLocator.GetInstance<IAuthorizedUser>();
-        private IChangeStatusFactory changeStatusFactory => this.ServiceLocator.GetInstance<IChangeStatusFactory>();
-        private IInterviewFactory interviewFactory => this.ServiceLocator.GetInstance<IInterviewFactory>();
-        private IStatefullInterviewSearcher statefullInterviewSearcher => this.ServiceLocator.GetInstance<IStatefullInterviewSearcher>();
-        private IInterviewOverviewService overviewService => this.ServiceLocator.GetInstance<IInterviewOverviewService>();
-        
-        
-        
         public event EventHandler OnDisposing;
 
         protected override void Dispose(bool disposing)
