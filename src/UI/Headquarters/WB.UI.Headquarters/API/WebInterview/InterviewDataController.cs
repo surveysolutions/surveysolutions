@@ -125,14 +125,9 @@ namespace WB.UI.Headquarters.API.WebInterview
         [HttpGet]
         [Route("search")]
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @filters.js")]
-        public SearchResults Search(Guid interviewId, [FromUri] string[] flags = null, int skip = 0, int limit = 50)
+        public SearchResults Search(Guid interviewId, [FromUri] FilterOption[] flags = null, int skip = 0, int limit = 50)
         {
-            FilterOption[] flagsEnum = flags?.Select(s =>
-            {
-                if (Enum.TryParse(s, out FilterOption option))
-                    return option;
-                return (FilterOption?)null;
-            }).Where(s => s.HasValue).Select(s => s.Value).ToArray() ?? new FilterOption[0];
+            FilterOption[] flagsEnum = flags ?? new FilterOption[0];
             var interview = GetCallerInterview(interviewId);
             var questionnaire = GetCallerQuestionnaire(interview.QuestionnaireIdentity);
             var result = this.statefullInterviewSearcher.Search(interview, questionnaire, flagsEnum, skip, limit);
