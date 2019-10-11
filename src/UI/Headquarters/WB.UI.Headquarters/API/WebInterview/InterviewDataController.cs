@@ -51,8 +51,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         }
 
         protected override bool IsReviewMode() =>
-            this.authorizedUser.CanConductInterviewReview() 
-            && this.Request.GetQueryNameValuePairs().SingleOrDefault(p => p.Key == @"review").Value.ToBool(false);
+            this.authorizedUser.CanConductInterviewReview() && this.Request.Headers.Contains(@"review");
 
         protected override bool IsCurrentUserObserving() => this.authorizedUser.IsObserving;
 
@@ -84,7 +83,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         [HttpGet]
         [Route("getEntitiesDetails")]
-        public override InterviewEntity[] GetEntitiesDetails(Guid interviewId, string sectionId, string[] ids) => base.GetEntitiesDetails(interviewId, sectionId, ids);
+        public override InterviewEntity[] GetEntitiesDetails(Guid interviewId, [FromUri] string[] ids, string sectionId = null) => base.GetEntitiesDetails(interviewId, ids, sectionId);
 
         [HttpGet]
         [Route("getFullSectionInfo")]
@@ -121,19 +120,19 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         [HttpGet]
         [Route("getSidebarChildSectionsOf")]
-        public override Sidebar GetSidebarChildSectionsOf(Guid interviewId, string sectionId, string[] parentIds) => base.GetSidebarChildSectionsOf(interviewId, sectionId, parentIds);
+        public override Sidebar GetSidebarChildSectionsOf(Guid interviewId, [FromUri] string[] ids, string sectionId = null) => base.GetSidebarChildSectionsOf(interviewId, ids, sectionId);
 
         [HttpGet]
         [Route("search")]
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @filters.js")]
-        public SearchResults Search(Guid interviewId, string[] flags, int skip = 0, int limit = 50)
+        public SearchResults Search(Guid interviewId, [FromUri] string[] flags = null, int skip = 0, int limit = 50)
         {
-            FilterOption[] flagsEnum = flags.Select(s =>
+            FilterOption[] flagsEnum = flags?.Select(s =>
             {
                 if (Enum.TryParse(s, out FilterOption option))
                     return option;
                 return (FilterOption?)null;
-            }).Where(s => s.HasValue).Select(s => s.Value).ToArray();
+            }).Where(s => s.HasValue).Select(s => s.Value).ToArray() ?? new FilterOption[0];
             var interview = GetCallerInterview(interviewId);
             var questionnaire = GetCallerQuestionnaire(interview.QuestionnaireIdentity);
             var result = this.statefullInterviewSearcher.Search(interview, questionnaire, flagsEnum, skip, limit);

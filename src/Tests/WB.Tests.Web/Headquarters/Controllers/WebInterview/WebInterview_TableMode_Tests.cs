@@ -108,7 +108,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             var webInterview = CreateInterviewDataController(statefulInterview, questionnaireDocument, mapper);
             var ids = Identity.Create(rosterId, RosterVector.Empty).ToString().ToEnumerable().ToArray();
 
-            var entities = webInterview.GetEntitiesDetails(statefulInterview.Id, null, ids);
+            var entities = webInterview.GetEntitiesDetails(statefulInterview.Id, ids, null);
 
             Assert.That(entities.Length, Is.EqualTo(3));
             Assert.That(entities[0].Id, Is.EqualTo(rosterId.FormatGuid()));
