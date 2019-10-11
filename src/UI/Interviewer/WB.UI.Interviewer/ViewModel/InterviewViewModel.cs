@@ -1,5 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using MvvmCross;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -43,7 +47,7 @@ namespace WB.UI.Interviewer.ViewModel
             VibrationViewModel vibrationViewModel,
             IEnumeratorSettings enumeratorSettings,
             ILastCreatedInterviewStorage lastCreatedInterviewStorage,
-            IAuditLogService auditLogService, 
+            IAuditLogService auditLogService,
             IAudioAuditService audioAuditService,
             IUserInteractionService userInteractionService,
             ILogger logger)
@@ -57,6 +61,9 @@ namespace WB.UI.Interviewer.ViewModel
             this.userInteractionService = userInteractionService;
             this.logger = logger;
         }
+
+        static readonly TimeSpan PauseResumeThrottling = TimeSpan.FromSeconds(5);
+        static readonly object ThrottlingLock = new Object();
 
         public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToInterviewAsync(this.InterviewId, this.navigationState.CurrentNavigationIdentity));
 
@@ -96,39 +103,64 @@ namespace WB.UI.Interviewer.ViewModel
             }
         }
 
-        public override async void ViewAppeared()
+        private void TracePauseResume(string message, [CallerMemberName] string method = null)
         {
-            var interviewId = Guid.Parse(InterviewId);
-            var interview = interviewRepository.Get(this.InterviewId);
-            if (interview == null) return;
+            logger.Trace($"[PauseResume] {method}. {message}");
+        }
 
-            if (!lastCreatedInterviewStorage.WasJustCreated(InterviewId))
+        public override void ViewAppeared()
+        {
+            Task.Run(async () =>
             {
-                commandService.Execute(new ResumeInterviewCommand(interviewId, Principal.CurrentUserIdentity.UserId));
-            }
+                var interviewId = Guid.Parse(InterviewId);
+                var interview = interviewRepository.Get(this.InterviewId);
+                if (interview == null) return;
 
-            if (IsAudioRecordingEnabled == true && !isAuditStarting)
-            {
-                isAuditStarting = true;
-                try
+                if (!lastCreatedInterviewStorage.WasJustCreated(InterviewId))
                 {
-                    await audioAuditService.StartAudioRecordingAsync(interviewId).ConfigureAwait(false);
-                }
-                catch (Exception exc)
-                {
-                    logger.Warn("Audio audit failed to start.", exception: exc);
-                    await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId)
-                            .ConfigureAwait(false);
-                    this.userInteractionService.ShowToast(exc.Message);
-                }
-                finally
-                {
-                    isAuditStarting = false;
-                }
-            }
+                    lock (ThrottlingLock)
+                    {
+                        TracePauseResume($"Checking delay: {(int)delay.Elapsed.TotalSeconds}s");
 
-            auditLogService.Write(new OpenInterviewAuditLogEntity(interviewId, interviewKey?.ToString(), assignmentId));
-            base.ViewAppeared();
+                        if (delay.Elapsed > PauseResumeThrottling)
+                        {
+                            if (pendingPause != null && pendingPause.InterviewId == interviewId)
+                            {
+                                TracePauseResume($"Execute pending PauseInterviewCommand.");
+                                commandService.Execute(pendingPause);
+                            }
+
+                            TracePauseResume($"ResumeInterviewCommand.");
+                            commandService.Execute(new ResumeInterviewCommand(interviewId, Principal.CurrentUserIdentity.UserId));
+                        }
+
+                        pendingPause = null;
+                    }
+                }
+
+                if (IsAudioRecordingEnabled == true && !isAuditStarting)
+                {
+                    isAuditStarting = true;
+                    try
+                    {
+                        await audioAuditService.StartAudioRecordingAsync(interviewId).ConfigureAwait(false);
+                    }
+                    catch (Exception exc)
+                    {
+                        logger.Warn("Audio audit failed to start.", exception: exc);
+                        await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId)
+                                .ConfigureAwait(false);
+                        this.userInteractionService.ShowToast(exc.Message);
+                    }
+                    finally
+                    {
+                        isAuditStarting = false;
+                    }
+                }
+
+                auditLogService.Write(new OpenInterviewAuditLogEntity(interviewId, interviewKey?.ToString(), assignmentId));
+                base.ViewAppeared();
+            });
         }
 
         private bool isAuditStarting = false;
@@ -136,22 +168,51 @@ namespace WB.UI.Interviewer.ViewModel
 
         public override void ViewDisappearing()
         {
-            if (InterviewId != null) 
+            Task.Run(async () =>
             {
-                var interviewId = Guid.Parse(InterviewId);
-                var interview = interviewRepository.Get(this.InterviewId);
-                if (!interview.IsCompleted)
+                if (InterviewId != null)
                 {
-                    commandService.Execute(new PauseInterviewCommand(interviewId, interview.CurrentResponsibleId));
+                    var interviewId = Guid.Parse(InterviewId);
+                    var interview = interviewRepository.Get(this.InterviewId);
+                    if (!interview.IsCompleted)
+                    {
+                        TracePauseResume($"Set pending PauseInterviewCommand.");
+                        pendingPause = new PauseInterviewCommand(interviewId, Principal.CurrentUserIdentity.UserId);
+                        delay.Restart();
+
+                        // discard c# feature to ignore warning on non awaited Task
+                        _ = Task.Run(async () =>
+                        {
+                            TracePauseResume($"BG Thread for pending PauseInterviewCommand. Started");
+                            await Task.Delay(PauseResumeThrottling);
+                            lock (ThrottlingLock)
+                            {
+                                TracePauseResume($"BG Thread for pending PauseInterviewCommand. Executing if needed");
+
+                                if (pendingPause != null && pendingPause.InterviewId == interviewId)
+                                {
+                                    TracePauseResume($"BG Thread for pending PauseInterviewCommand. Command execution.");
+                                    commandService.Execute(pendingPause);
+                                }
+
+                                pendingPause = null;
+                            }
+                        });
+                    }
+
+                    auditLogService.Write(new CloseInterviewAuditLogEntity(interviewId, interviewKey?.ToString()));
+
+                    if (IsAudioRecordingEnabled == true)
+                    {
+                        await audioAuditService.StopAudioRecordingAsync(interviewId);
+                    }
                 }
-
-                auditLogService.Write(new CloseInterviewAuditLogEntity(interviewId, interviewKey?.ToString()));
-
-                if (IsAudioRecordingEnabled == true)
-                    Task.Run(() => audioAuditService.StopAudioRecordingAsync(interviewId));
-            }
+            });
 
             base.ViewDisappearing();
         }
+
+        PauseInterviewCommand pendingPause = null;
+        Stopwatch delay = new Stopwatch();
     }
 }
