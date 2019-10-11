@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
@@ -397,7 +396,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             var enumerableRows = allRowsByAllFiles
                 .Where(x => IsQuestionnaireFile(x.QuestionnaireOrRosterName, questionnaire))
                 .Select(x => x.InterviewIdValue.Value);
-            var allInterviewIdsFromMainFile = enumerableRows.ToImmutableHashSet();
+            var allInterviewIdsFromMainFile = enumerableRows.ToHashSet();
 
             var allInterviewsIdsFromFirstLevelRoster = allRowsByAllFiles
                 .Where(x => x.RosterInstanceCodes.Length == 1)
@@ -471,7 +470,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             var enumerableVariables = numericRosterSizeQuestions
                 .SelectMany(questionnaire.GetRosterGroupsByRosterSizeQuestion)
                 .Select(questionnaire.GetRosterVariableName);
-            var rosterNamesByNumericRosters = enumerableVariables.ToImmutableHashSet();
+            var rosterNamesByNumericRosters = enumerableVariables.ToHashSet();
 
             var rowsByNumericRosters = allRowsByAllFiles.GroupBy(z => z.QuestionnaireOrRosterName)
                 .Where(x => rosterNamesByNumericRosters.Contains(x.Key));
