@@ -243,7 +243,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         {
             var entities = GetSectionEntities(interviewId, sectionId);
 
-            var details = GetEntitiesDetails(interviewId, sectionId, entities.Select(e => e.Identity).ToArray());
+            var details = GetEntitiesDetails(interviewId, entities.Select(e => e.Identity).ToArray(), sectionId);
 
             return new SectionData
             {
@@ -410,7 +410,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             return info;
         }
 
-        public virtual InterviewEntity[] GetEntitiesDetails(Guid interviewId, string sectionId, string[] ids)
+        public virtual InterviewEntity[] GetEntitiesDetails(Guid interviewId, string[] ids, string sectionId = null)
         {
             var callerInterview = this.GetCallerInterview(interviewId);
             if (callerInterview == null) return null;
@@ -459,14 +459,14 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.sidebar.js")]
-        public virtual Sidebar GetSidebarChildSectionsOf(Guid interviewId, string sectionId, string[] parentIds)
+        public virtual Sidebar GetSidebarChildSectionsOf(Guid interviewId, string[] ids, string sectionId = null)
         {
             var interview = this.GetCallerInterview(interviewId);
             if (interview == null) return null;
             var questionnaire = this.GetCallerQuestionnaire(interview.QuestionnaireIdentity);
             if (questionnaire == null) return null;
 
-            return this.interviewEntityFactory.GetSidebarChildSectionsOf(sectionId, interview, questionnaire, parentIds, IsReviewMode());
+            return this.interviewEntityFactory.GetSidebarChildSectionsOf(sectionId, interview, questionnaire, ids, IsReviewMode());
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @Combobox.vue")]

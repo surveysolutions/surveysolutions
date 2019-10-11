@@ -28,7 +28,9 @@ export default {
 
     fetchEntity: batchedAction(async ({ commit, dispatch, rootState }, ids) => {
         const interviewId = rootState.route.params.interviewId
-        const details = await Vue.$api.get('getEntitiesDetails', { interviewId: interviewId, ids: uniq(map(ids, "id")) } )
+        const sectionId = rootState.route.params.sectionId || null
+        const elementIds = uniq(map(ids, "id"))
+        const details = await Vue.$api.get('getEntitiesDetails', { interviewId: interviewId, sectionId: sectionId, ids: elementIds } )
         dispatch("fetch", { ids, done: true })
 
         commit("SET_ENTITIES_DETAILS", {

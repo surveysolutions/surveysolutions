@@ -19,7 +19,8 @@ export default {
     actions: {
         fetchSidebar: batchedAction(async ({ commit, rootState }, ids) => {
             const interviewId = rootState.route.params.interviewId
-            const sideBar = await Vue.$api.get('getSidebarChildSectionsOf', {interviewId, ids})
+            const sectionId = rootState.route.params.sectionId || null
+            const sideBar = await Vue.$api.get('getSidebarChildSectionsOf', {interviewId: interviewId, sectionId: sectionId, ids: ids})
             commit("SET_SIDEBAR_STATE", sideBar)
         }, null, null),
         toggleSidebar({ commit, dispatch }, { panel, collapsed }) {
