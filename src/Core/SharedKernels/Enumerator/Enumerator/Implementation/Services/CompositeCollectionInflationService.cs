@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using MvvmCross.Base;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Utils;
@@ -34,6 +33,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 else if (interviewEntityViewModel is FlatRosterViewModel flatRosterViewModel)
                 {
                     allVisibleGroupItems.AddCollection(flatRosterViewModel.RosterInstances);
+                }
+                else if (interviewEntityViewModel is StaticTextViewModel staticText)
+                {
+                    allVisibleGroupItems.Add(staticText);
+                    staticText.QuestionState.Enablement.PropertyChanged += (sender, e) =>
+                    {
+                        if (e.PropertyName != nameof(EnablementViewModel.Enabled)) return;
+                        allVisibleGroupItems.NotifyItemChanged(staticText);
+                    };
                 }
                 else
                 {
