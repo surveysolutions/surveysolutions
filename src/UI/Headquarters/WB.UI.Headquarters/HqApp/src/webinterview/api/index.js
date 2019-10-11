@@ -219,9 +219,11 @@ export async function apiGet(actionName, params) {
     store.dispatch("fetchProgress", 1)
 
     try {
+        var headers = store.getters.isReviewMode === true ? { review: true } : { }
         const response = await axios.get(`${store.getters.basePath}api/webinterview/${actionName}`, { 
             params:params,
-            responseType: 'json'
+            responseType: 'json',
+            headers: headers
         })
         return response.data
     } catch (err) {
