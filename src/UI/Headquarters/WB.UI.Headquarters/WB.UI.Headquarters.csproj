@@ -1269,6 +1269,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Questionnaire.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Questionnaire.ru.resx" />
     <EmbeddedResource Include="Resources\ReviewInterview.ar.resx">
       <DependentUpon>ReviewInterview.resx</DependentUpon>
     </EmbeddedResource>
