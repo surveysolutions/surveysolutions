@@ -543,6 +543,16 @@ namespace WB.Services.Export.InterviewDataStorage
             if (columnType == NpgsqlDbType.Double && value is string stringValue)
                 value = Double.Parse(stringValue, CultureInfo.InvariantCulture);
 
+            if (columnType == NpgsqlDbType.Double && !(value is double))
+            {
+                value = Convert.ToDouble(value);
+            }
+
+            if (columnType == NpgsqlDbType.Bigint && !(value is long))
+            {
+                value = Convert.ToInt64(value);
+            }
+
             state.UpdateValueInTable(tableName, interviewId, rosterVector, columnName, value, columnType);
         }
 
