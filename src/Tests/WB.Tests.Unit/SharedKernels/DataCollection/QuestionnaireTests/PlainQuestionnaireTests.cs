@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
                 .GetMaxSelectedAnswerOptions(validatedQuestionId);
 
             // assert
-            Assert.That(200, Is.EqualTo(maxSelectedAnswerOptions));
+            Assert.That(maxSelectedAnswerOptions, Is.Null);
         }
     }
 }
