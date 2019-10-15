@@ -48,11 +48,18 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             return Ok();
         }
 
-        public virtual IHttpActionResult AnswerTextQuestion(Guid interviewId, string questionIdenty, string text)
+        public class AnswerRequest<T>
         {
-            var identity = Identity.Parse(questionIdenty);
-            this.ExecuteQuestionCommand(new AnswerTextQuestionCommand(interviewId,
-                this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, text));
+            public Guid InterviewId { get; set; }
+            public string QuestionIdentity { get; set; }
+            public T Answer { get; set; }
+        }
+
+        public virtual IHttpActionResult AnswerTextQuestion([FromBody] AnswerRequest<string> answerRequest)
+        {
+            var identity = Identity.Parse(answerRequest.QuestionIdentity);
+            this.ExecuteQuestionCommand(new AnswerTextQuestionCommand(answerRequest.InterviewId,
+                this.GetCommandResponsibleId(answerRequest.InterviewId), identity.Id, identity.RosterVector, answerRequest.Answer));
             return Ok();
         }
 
@@ -183,12 +190,19 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         [ObserverNotAllowed]
         public abstract IHttpActionResult CompleteInterview(CompleteInterviewRequest completeInterviewRequest);
 
+        public class NewCommentRequest
+        {
+            public Guid InterviewId { get; set; }
+            public string QuestionId { get; set; }
+            public string Comment { get; set; }
+        }
+
         [ObserverNotAllowed]
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
-        public virtual IHttpActionResult SendNewComment(Guid interviewId, string questionIdentity, string comment)
+        public virtual IHttpActionResult SendNewComment(NewCommentRequest request)
         {
-            var identity = Identity.Parse(questionIdentity);
-            var command = new CommentAnswerCommand(interviewId, this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, comment);
+            var identity = Identity.Parse(request.QuestionId);
+            var command = new CommentAnswerCommand(request.InterviewId, this.GetCommandResponsibleId(request.InterviewId), identity.Id, identity.RosterVector, request.Comment);
 
             this.commandService.Execute(command);
             return Ok();

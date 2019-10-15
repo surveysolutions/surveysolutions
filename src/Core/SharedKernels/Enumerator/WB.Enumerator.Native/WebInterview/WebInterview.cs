@@ -61,5 +61,10 @@ namespace WB.Enumerator.Native.WebInterview
         {
             // need remove
         }
+
+        public void Ping()
+        {
+            //
+        }
     }
 }
