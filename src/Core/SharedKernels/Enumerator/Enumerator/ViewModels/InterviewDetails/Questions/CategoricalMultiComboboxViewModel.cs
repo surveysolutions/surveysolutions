@@ -65,7 +65,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.comboboxViewModel.ExcludeOptions(answeredOptions);
 
                 var hasNoOptionsForAnswers = answeredOptions.Length == this.maxAllowedAnswers ||
-                                             answeredOptions.Length == Constants.MaxLongRosterRowCount;
+                                             answeredOptions.Length == Constants.MaxMultiComboboxAnswersCount;
 
                 if (hasNoOptionsForAnswers && this.comboboxCollection.Contains(this.comboboxViewModel))
                     this.comboboxCollection.Remove(this.comboboxViewModel);

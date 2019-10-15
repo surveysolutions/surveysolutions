@@ -504,7 +504,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     $"Cannot return maximum for selected answers for question with id '{questionId}' because it's type {question.QuestionType} does not support that parameter.");
 
             if (question is IMultyOptionsQuestion multi)
-                return multi.MaxAllowedAnswers ?? Constants.MaxMultiComboboxAnswersCount;
+                return multi.MaxAllowedAnswers;
 
             return ((TextListQuestion)question).MaxAnswerCount;
         }
