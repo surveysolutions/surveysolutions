@@ -41,6 +41,17 @@
                             <td>{{$t('Dashboard.RecordAudio')}}</td>
                             <td>{{model.audioAudit ? $t('Common.Yes') : $t('Common.No')}}</td>
                         </tr>
+                        <tr v-if="model.mainPdfUrl">
+                            <td>PDF</td>
+                            <td>
+                                <ul class="list-unstyled">
+                                    <li><a :href="model.mainPdfUrl">{{$t('Common.Download')}}</a></li>
+                                    <li v-for="lang in model.translatedPdfVersions" v-bind:key="lang.name">
+                                        <a :href="lang.pdfUrl">{{lang.name}}</a>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

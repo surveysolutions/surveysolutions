@@ -1265,6 +1265,10 @@
     <EmbeddedResource Include="Resources\PeriodicStatusReport.ro.resx">
       <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Questionnaire.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Questionnaire.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\ReviewInterview.ar.resx">
       <DependentUpon>ReviewInterview.resx</DependentUpon>
     </EmbeddedResource>
@@ -2080,6 +2084,11 @@
     <Compile Include="API\PublicApi\Models\AuditLogApiView.cs" />
     <Compile Include="Controllers\QuestionnairesController.cs" />
     <Compile Include="Models\QuestionnaireDetailsModel.cs" />
+    <Compile Include="Resources\Questionnaire.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Questionnaire.resx</DependentUpon>
+    </Compile>
     <Compile Include="Services\AspNetAppPathResolver.cs" />
     <Compile Include="Services\ClientApkProvider.cs" />
     <Compile Include="Services\DesignerUserCredentials.cs" />
