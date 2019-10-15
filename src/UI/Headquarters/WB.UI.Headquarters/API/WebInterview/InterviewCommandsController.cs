@@ -35,8 +35,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         }
 
         protected bool IsReviewMode() =>
-            this.authorizedUser.CanConductInterviewReview() 
-            && this.Request.GetQueryNameValuePairs().SingleOrDefault(p => p.Key == @"review").Value.ToBool(false);
+            this.authorizedUser.CanConductInterviewReview() && this.Request.Headers.Contains(@"review");
 
 
         protected override Guid GetCommandResponsibleId(Guid interviewId)
@@ -50,66 +49,82 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         [HttpPost]
         [ObserverNotAllowed]
+        [Route("changeLanguage")]
         public override IHttpActionResult ChangeLanguage(ChangeLanguageRequest request) => base.ChangeLanguage(request);
 
         [HttpPost]
         [ObserverNotAllowed]
-        public override IHttpActionResult AnswerTextQuestion(Guid interviewId, string questionIdenty, string text) => base.AnswerTextQuestion(interviewId, questionIdenty, text);
+        [Route("answerTextQuestion")]
+        public override IHttpActionResult AnswerTextQuestion([FromBody] AnswerRequest<string> answerRequest) => base.AnswerTextQuestion(answerRequest);
 
         [HttpPost]
         [ObserverNotAllowed]
+        [Route("answerTextListQuestion")]
         public override IHttpActionResult AnswerTextListQuestion(Guid interviewId, string questionIdenty, TextListAnswerRowDto[] rows) => base.AnswerTextListQuestion(interviewId, questionIdenty, rows);
 
         [HttpPost]
         [ObserverNotAllowed]
+        [Route("answerGpsQuestion")]
         public override IHttpActionResult AnswerGpsQuestion(Guid interviewId, string questionIdenty, GpsAnswer answer) => base.AnswerGpsQuestion(interviewId, questionIdenty, answer);
 
         [HttpPost]
         [ObserverNotAllowed]
+        [Route("answerDateQuestion")]
         public override IHttpActionResult AnswerDateQuestion(Guid interviewId, string questionIdenty, DateTime answer) => base.AnswerDateQuestion(interviewId, questionIdenty, answer);
 
         [HttpPost]
         [ObserverNotAllowed]
+        [Route("answerSingleOptionQuestion")]
         public override IHttpActionResult AnswerSingleOptionQuestion(Guid interviewId, int answer, string questionId) => base.AnswerSingleOptionQuestion(interviewId, answer, questionId);
 
         [HttpPost]
         [ObserverNotAllowed]
+        [Route("answerLinkedSingleOptionQuestion")]
         public override IHttpActionResult AnswerLinkedSingleOptionQuestion(Guid interviewId, string questionIdentity, decimal[] answer) => base.AnswerLinkedSingleOptionQuestion(interviewId, questionIdentity, answer);
 
         [HttpPost]
         [ObserverNotAllowed]
+        [Route("answerLinkedMultiOptionQuestion")]
         public override IHttpActionResult AnswerLinkedMultiOptionQuestion(Guid interviewId, string questionIdentity, decimal[][] answer) => base.AnswerLinkedMultiOptionQuestion(interviewId, questionIdentity, answer);
 
         [HttpPost]
         [ObserverNotAllowed]
+        [Route("answerMultiOptionQuestion")]
         public override IHttpActionResult AnswerMultiOptionQuestion(Guid interviewId, int[] answer, string questionId) => base.AnswerMultiOptionQuestion(interviewId, answer, questionId);
 
         [HttpPost]
         [ObserverNotAllowed]
+        [Route("answerYesNoQuestion")]
         public override IHttpActionResult AnswerYesNoQuestion(Guid interviewId, string questionId, InterviewYesNoAnswer[] answerDto) => base.AnswerYesNoQuestion(interviewId, questionId, answerDto);
 
         [HttpPost]
         [ObserverNotAllowed]
+        [Route("answerIntegerQuestion")]
         public override IHttpActionResult AnswerIntegerQuestion(Guid interviewId, string questionIdenty, int answer) => base.AnswerIntegerQuestion(interviewId, questionIdenty, answer);
 
         [HttpPost]
         [ObserverNotAllowed]
+        [Route("answerDoubleQuestion")]
         public override IHttpActionResult AnswerDoubleQuestion(Guid interviewId, string questionIdenty, double answer) => base.AnswerDoubleQuestion(interviewId, questionIdenty, answer);
 
         [HttpPost]
         [ObserverNotAllowed]
+        [Route("answerQRBarcodeQuestion")]
         public override IHttpActionResult AnswerQRBarcodeQuestion(Guid interviewId, string questionIdenty, string text) => base.AnswerQRBarcodeQuestion(interviewId, questionIdenty, text);
 
         [HttpPost]
         [ObserverNotAllowed]
+        [Route("removeAnswer")]
         public override IHttpActionResult RemoveAnswer(Guid interviewId, string questionId) => base.RemoveAnswer(interviewId, questionId);
 
         [HttpPost]
         [ObserverNotAllowed]
-        public override IHttpActionResult SendNewComment(Guid interviewId, string questionIdentity, string comment) => base.SendNewComment(interviewId, questionIdentity, comment);
+        [Route("sendNewComment")]
+        public override IHttpActionResult SendNewComment([FromBody]NewCommentRequest request) => base.SendNewComment(request);
 
         [HttpPost]
         [ObserverNotAllowed]
+        [Route("completeInterview")]
         public override IHttpActionResult CompleteInterview(CompleteInterviewRequest completeInterviewRequest)
         {
             var interviewId = completeInterviewRequest.InterviewId;
@@ -120,6 +135,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         [HttpPost]
         [ObserverNotAllowed]
+        [Route("approve")]
         public IHttpActionResult Approve(Guid interviewId, string comment)
         {
             if (this.authorizedUser.IsSupervisor)
@@ -138,6 +154,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         [HttpPost]
         [ObserverNotAllowed]
+        [Route("reject")]
         public IHttpActionResult Reject(Guid interviewId, string comment, Guid? assignTo)
         {
             if (this.authorizedUser.IsSupervisor)
@@ -172,6 +189,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         [HttpPost]
         [ObserverNotAllowed]
+        [Route("resolveComment")]
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         [Microsoft.AspNet.SignalR.Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         public IHttpActionResult ResolveComment(Guid interviewId, string questionIdentity)

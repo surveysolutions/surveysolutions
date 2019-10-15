@@ -2,6 +2,7 @@
 import config from "~/shared/config"
 import * as $script from "scriptjs"
 import axios from 'axios'
+
 import "signalr"
 
 export let store = null;
@@ -19,7 +20,7 @@ const wrap = (jqueryPromise) => {
 
 const scriptIncludedPromise = new Promise(resolve =>
     $script(config.signalrPath, () => {
-        // $.connection.hub.logging = true
+        //$.connection.hub.logging = true
         const interviewProxy = $.connection[config.hubName]
 
         interviewProxy.client.reloadInterview = () => {
@@ -217,6 +218,8 @@ export async function apiGet(actionName, params) {
     if(config.splashScreen) return
 
     store.dispatch("fetchProgress", 1)
+    //const hub = await getInterviewHub()
+    //await wrap(hub.ping())
 
     try {
         var headers = store.getters.isReviewMode === true ? { review: true } : { }
@@ -235,9 +238,14 @@ export async function apiGet(actionName, params) {
 
 export async function apiPost(actionName, params) {
     store.dispatch("fetchProgress", 1)
+    const hub = await getInterviewHub()
+    await wrap(hub.ping())
 
     try {
-        return await axios.post(`${store.getters.basePath}api/webinterview/commands/${actionName}`, params)
+        var headers = store.getters.isReviewMode === true ? { review: true } : { }
+        return await axios.post(`${store.getters.basePath}api/webinterview/commands/${actionName}`, params, { 
+            headers: headers
+        })
     } catch (err) {
         store.dispatch("UNHANDLED_ERROR", err)
     } finally {
@@ -251,9 +259,14 @@ export async function apiAnswerPost(id, actionName, params) {
     }
 
     store.dispatch("fetchProgress", 1)
+    const hub = await getInterviewHub()
+    await wrap(hub.ping())
 
     try {
-        return await axios.post(`${store.getters.basePath}api/webinterview/commands/${actionName}`, params)
+        var headers = store.getters.isReviewMode === true ? { review: true } : { }
+        return await axios.post(`${store.getters.basePath}api/webinterview/commands/${actionName}`, params, { 
+            headers: headers
+        })
     } catch (err) {
         if (id) {
             store.dispatch("setAnswerAsNotSaved", { id, message: err.statusText })

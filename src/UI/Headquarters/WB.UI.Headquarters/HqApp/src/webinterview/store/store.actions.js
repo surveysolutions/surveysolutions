@@ -231,7 +231,7 @@ export default {
             try {
                 commit("SET_LOADING_PROGRESS", true)
 
-                const section = await Vue.$api.get('getFullSectionInfo', {interviewId, id})
+                const section = await Vue.$api.get('getFullSectionInfo', {interviewId: interviewId, sectionId: id})
 
                 commit("SET_SECTION_DATA", section.entities)
                 commit("SET_ENTITIES_DETAILS", {
@@ -251,7 +251,7 @@ export default {
         const isPrefilledSection = sectionId === undefined
 
         if (!isPrefilledSection) {
-            const isEnabled = await Vue.$api.get('isEnabled', {interviewId, sectionId})
+            const isEnabled = await Vue.$api.get('isEnabled', {interviewId: interviewId, id: sectionId})
             if (!isEnabled) {
                 const firstSectionId = state.firstSectionId
                 const firstSectionLocation = {
