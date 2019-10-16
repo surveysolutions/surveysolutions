@@ -37,8 +37,11 @@ namespace WB.UI.Designer.Code.Attributes
                 {
                     this.ReturnForbidden(context,
                         string.Format(ErrorMessages.UserNeedToContactSupportFormat, clientIpAddress));
+                    return;
                 }
             }
+
+            await next();
         }
 
         private void ReturnForbidden(ActionExecutingContext actionContext, string errorMessage)
