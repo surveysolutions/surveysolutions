@@ -27,6 +27,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
         [Required(ErrorMessageResourceType = typeof(FieldsAndValidations), ErrorMessageResourceName = nameof(FieldsAndValidations.CloneQuestionnaireModel_NewTitle_Error_Required))]
         public string NewTitle { get; set; }
 
+        [Display(ResourceType = typeof(Assignments), Name = nameof(Assignments.DetailsComments))]
         public string Comment { get; set; }
     }
 }
