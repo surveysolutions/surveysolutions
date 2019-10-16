@@ -89,7 +89,7 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind<IQuestionTypeToCSharpTypeMapper, QuestionTypeToCSharpTypeMapper>();
             registry.Bind<ICodeGenerationModelsFactory, CodeGenerationModelsFactory>();
             registry.Bind(typeof(ITopologicalSorter<>), typeof(TopologicalSorter<>));
-
+            
             registry.Bind(typeof(IPlainKeyValueStorage<>), typeof(DesignerKeyValueStorage<>));
             registry.Bind(typeof(IEntitySerializer<>), typeof(EntitySerializer<>));
             registry.Bind(typeof(IPlainAggregateRootRepository), typeof(QuestionnaireRepository));
@@ -100,6 +100,8 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind<ResourcesPreProcessor, ResourcesPreProcessor>();
             registry.Bind<ResourcesPostProcessor, ResourcesPostProcessor>();
             registry.Bind<IQuestionnaireRevisionMetadataUpdater, QuestionnaireRevisionMetadataUpdater>();
+
+            registry.Bind<IDesignerQuestionnaireStorage, QuetsionnaireStorage>();
         }
 
         public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status)

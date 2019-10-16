@@ -4,7 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
@@ -23,7 +26,7 @@ using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Resources;
 
 namespace WB.UI.Designer.Controllers
-{
+{   
     [Authorize]
     [ResponseCache(NoStore = true)]
     public partial class QuestionnaireController : Controller
@@ -78,13 +81,13 @@ namespace WB.UI.Designer.Controllers
             IFileSystemAccessor fileSystemAccessor,
             ILogger<QuestionnaireController> logger,
             IQuestionnaireInfoFactory questionnaireInfoFactory,
-            IQuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory, 
-            ILookupTableService lookupTableService, 
+            IQuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory,
+            ILookupTableService lookupTableService,
             IQuestionnaireInfoViewFactory questionnaireInfoViewFactory,
             ICategoricalOptionsImportService categoricalOptionsImportService,
             ICommandService commandService,
             DesignerDbContext dbContext,
-            IQuestionnaireHelper questionnaireHelper, 
+            IQuestionnaireHelper questionnaireHelper,
             IPublicFoldersStorage publicFoldersStorage,
             IAttachmentService attachmentService,
             ITranslationsService translationsService)
@@ -105,17 +108,18 @@ namespace WB.UI.Designer.Controllers
             this.translationsService = translationsService;
         }
 
-        
+
         [Route("questionnaire/details/{id}/nosection/{entityType}/{entityId}")]
-        public IActionResult DetailsNoSection(Guid id, Guid? chapterId, string entityType, Guid? entityid)
+        public IActionResult DetailsNoSection(QuestionnaireRevision id,
+            Guid? chapterId, string entityType, Guid? entityid)
         {
-            if (User.IsAdmin() || this.UserHasAccessToEditOrViewQuestionnaire(id))
+            if (User.IsAdmin() || this.UserHasAccessToEditOrViewQuestionnaire(id.QuestionnaireId))
             {
                 // get section id and redirect
-                var sectionId = questionnaireInfoFactory.GetSectionIdForItem(id.FormatGuid(), entityid);
+                var sectionId = questionnaireInfoFactory.GetSectionIdForItem(id, entityid);
                 return RedirectToActionPermanent("Details", new RouteValueDictionary
                 {
-                    { "id", id.FormatGuid() }, {"chapterId", sectionId.FormatGuid()},{ "entityType", entityType},{ "entityid", entityid.FormatGuid()}
+                    { "id", id.ToString() }, {"chapterId", sectionId.FormatGuid()},{ "entityType", entityType},{ "entityid", entityid.FormatGuid()}
                 });
             }
 
@@ -124,10 +128,10 @@ namespace WB.UI.Designer.Controllers
 
         [Route("questionnaire/details/{id}")]
         [Route("questionnaire/details/{id}/chapter/{chapterId}/{entityType}/{entityId}")]
-        public IActionResult Details(Guid id, Guid? chapterId, string entityType, Guid? entityid)
+        public IActionResult Details(QuestionnaireRevision id, Guid? chapterId, string entityType, Guid? entityid)
         {
-            return (User.IsAdmin() || this.UserHasAccessToEditOrViewQuestionnaire(id)) 
-                ? this.View("~/questionnaire/index.cshtml") 
+            return (User.IsAdmin() || this.UserHasAccessToEditOrViewQuestionnaire(id.QuestionnaireId))
+                ? this.View("~/questionnaire/index.cshtml")
                 : this.LackOfPermits();
         }
 
@@ -136,9 +140,9 @@ namespace WB.UI.Designer.Controllers
             return this.questionnaireViewFactory.HasUserAccessToQuestionnaire(id, User.GetId());
         }
 
-        public IActionResult Clone(Guid id)
+        public IActionResult Clone(QuestionnaireRevision id)
         {
-            QuestionnaireView questionnaire = this.GetQuestionnaire(id);
+            QuestionnaireView questionnaire = this.GetQuestionnaireView(id.QuestionnaireId);
             if (questionnaire == null) return NotFound();
             QuestionnaireView model = questionnaire;
             return View(
@@ -148,14 +152,14 @@ namespace WB.UI.Designer.Controllers
                         Id = model.PublicKey
                     });
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Clone(QuestionnaireCloneModel model)
         {
             if (this.ModelState.IsValid)
             {
-                QuestionnaireView questionnaire = this.GetQuestionnaire(model.Id);
+                QuestionnaireView questionnaire = this.GetQuestionnaireView(model.Id);
                 if (questionnaire == null)
                     return NotFound();
                 QuestionnaireView sourceModel = questionnaire;
@@ -217,7 +221,7 @@ namespace WB.UI.Designer.Controllers
                     this.commandService.Execute(command);
                     this.dbContext.SaveChanges();
 
-                    return this.RedirectToAction("Details", "Questionnaire", new {id = questionnaireId.FormatGuid()});
+                    return this.RedirectToAction("Details", "Questionnaire", new { id = questionnaireId.FormatGuid() });
                 }
                 catch (QuestionnaireException e)
                 {
@@ -234,7 +238,7 @@ namespace WB.UI.Designer.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Delete(Guid id)
         {
-            QuestionnaireView model = this.GetQuestionnaire(id);
+            QuestionnaireView model = this.GetQuestionnaireView(id);
             if (model != null)
             {
                 if ((model.CreatedBy != User.GetId()) && !User.IsAdmin())
@@ -268,7 +272,7 @@ namespace WB.UI.Designer.Controllers
             this.commandService.Execute(command);
 
             string sid = id.FormatGuid();
-            return this.RedirectToAction("Details", new {id =  sid});
+            return this.RedirectToAction("Details", new { id = sid });
         }
 
         public IActionResult QuestionnaireHistory(Guid id, int? p)
@@ -279,7 +283,7 @@ namespace WB.UI.Designer.Controllers
                 this.Error(ErrorMessages.NoAccessToQuestionnaire);
                 return this.RedirectToAction("Index");
             }
-            var questionnaireInfoView = this.questionnaireInfoViewFactory.Load(id.FormatGuid(), this.User.GetId());
+            var questionnaireInfoView = this.questionnaireInfoViewFactory.Load(new QuestionnaireRevision(id), this.User.GetId());
             if (questionnaireInfoView == null) return NotFound();
 
             QuestionnaireChangeHistory questionnairePublicListViewModels = questionnaireChangeHistoryFactory.Load(id, p ?? 1, GlobalHelper.GridPageItemsCount);
@@ -294,7 +298,7 @@ namespace WB.UI.Designer.Controllers
             return this.View();
         }
 
-        private QuestionnaireView GetQuestionnaire(Guid id)
+        private QuestionnaireView GetQuestionnaireView(Guid id)
         {
             QuestionnaireView questionnaire = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
             return questionnaire;
@@ -307,14 +311,20 @@ namespace WB.UI.Designer.Controllers
         }
 
         [HttpPost]
-        public IActionResult GetLanguages(Guid id)
+        public IActionResult GetLanguages(QuestionnaireRevision id)
         {
-            QuestionnaireView questionnaire = GetQuestionnaire(id);
+            QuestionnaireView questionnaire = this.questionnaireViewFactory.Load(id);
             if (questionnaire == null) return NotFound();
 
             var comboBoxItems =
-                new ComboItem { Name = QuestionnaireHistoryResources.Translation_Original, Value = null }.ToEnumerable().Concat(
-                    questionnaire.Source.Translations.Select(i => new ComboItem { Name = i.Name ?? Resources.QuestionnaireController.Untitled, Value = i.Id })
+                new ComboItem
+                {
+                    Name = QuestionnaireHistoryResources.Translation_Original,
+                    Value = null
+                }.ToEnumerable()
+                .Concat(
+                    questionnaire.Source.Translations.Select(
+                        i => new ComboItem { Name = i.Name ?? Resources.QuestionnaireController.Untitled, Value = i.Id })
                 );
             return this.Json(comboBoxItems);
         }
@@ -322,7 +332,7 @@ namespace WB.UI.Designer.Controllers
         [HttpPost]
         public IActionResult AssignFolder(Guid id, Guid folderId)
         {
-            QuestionnaireView questionnaire = GetQuestionnaire(id);
+            QuestionnaireView questionnaire = GetQuestionnaireView(id);
             if (questionnaire == null)
                 return NotFound();
 

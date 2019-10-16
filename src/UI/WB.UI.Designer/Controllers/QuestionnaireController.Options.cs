@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer.Extensions;
 
@@ -41,16 +42,16 @@ namespace WB.UI.Designer.Controllers
             }
         }
 
-        public IActionResult EditOptions(string id, Guid questionId)
+        public IActionResult EditOptions(QuestionnaireRevision id, Guid questionId)
         {
             this.SetupViewModel(id, questionId);
             return this.View(this.questionWithOptionsViewModel);
         }
 
-        public IActionResult EditCascadingOptions(string id, Guid questionId)
+        public IActionResult EditCascadingOptions(QuestionnaireRevision id, Guid questionId)
             => this.EditOptions(id, questionId);
 
-        private void SetupViewModel(string id, Guid questionId)
+        private void SetupViewModel(QuestionnaireRevision id, Guid questionId)
         {
             var editQuestionView = this.questionnaireInfoFactory.GetQuestionEditView(id, questionId);
 
@@ -65,7 +66,7 @@ namespace WB.UI.Designer.Controllers
 
             this.questionWithOptionsViewModel = new EditOptionsViewModel
             {
-                QuestionnaireId = id,
+                QuestionnaireId = id.QuestionnaireId.FormatGuid(),
                 QuestionId = questionId,
                 QuestionTitle = editQuestionView.Title,
                 Options = options.ToArray()
