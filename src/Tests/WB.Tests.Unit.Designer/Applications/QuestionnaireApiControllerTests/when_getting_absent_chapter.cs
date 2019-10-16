@@ -9,7 +9,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
         public void should_throw_HttpResponseException_exception()
         {
             var controller = CreateQuestionnaireController();
-            var actionResult = controller.Chapter(questionnaireId, chapterId);
+            var actionResult = controller.Chapter(Create.QuestionnaireRevision(questionnaireId), chapterId);
             Assert.That(actionResult, Is.InstanceOf(typeof(NotFoundResult)));
         }
 

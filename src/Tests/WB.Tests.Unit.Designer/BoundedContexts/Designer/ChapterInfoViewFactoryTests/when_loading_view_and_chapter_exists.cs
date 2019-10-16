@@ -1,23 +1,22 @@
 using System;
 using System.Linq;
 using FluentAssertions;
-using Main.Core.Documents;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.PlainStorage;
-
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewFactoryTests
 {
     internal class when_loading_view_and_chapter_exists : ChapterInfoViewFactoryContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
-            var repositoryMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
+            var repositoryMock = new Mock<IDesignerQuestionnaireStorage>();
 
             repositoryMock
-                .Setup(x => x.GetById(questionnaireId))
+                .Setup(x => x.Get(questionnaireId))
                 .Returns(Create.QuestionnaireDocumentWithOneChapter(chapterId, 
                     Create.TextListQuestion(variable: "list"),
                     Create.FixedRoster(variable: "fixed_roster"),
@@ -45,7 +44,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewFactory
 
         private static NewChapterView view;
         private static ChapterInfoViewFactory factory;
-        private static string questionnaireId = "11111111111111111111111111111111";
+        private static QuestionnaireRevision questionnaireId = Create.QuestionnaireRevision("11111111111111111111111111111111");
         private static Guid chapterId = Guid.Parse("22222222222222222222222222222222");
 
         private static readonly string[] keywordsAndVariables =

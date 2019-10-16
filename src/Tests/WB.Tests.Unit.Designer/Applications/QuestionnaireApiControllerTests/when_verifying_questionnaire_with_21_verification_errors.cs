@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer.Api;
@@ -32,7 +33,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
 
             verificationMessages = CreateQuestionnaireVerificationErrors(questionnaireDocument.Find<IQuestion>(_ => true));
 
-            var questionnaireViewFactory = Mock.Of<IQuestionnaireViewFactory>(x => x.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) == questionnaireView);
+            var questionnaireViewFactory = Mock.Of<IQuestionnaireViewFactory>(x => x.Load(Moq.It.IsAny<QuestionnaireRevision>()) == questionnaireView);
             verifierMock = new Mock<IQuestionnaireVerifier>();
 
             verifierMock
@@ -58,6 +59,6 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
         private static QuestionnaireVerificationMessage[] verificationMessages;
         private static QuestionnaireApiController controller;
         private static VerificationResult result;
-        private static Guid questionnaireId = Guid.Parse("22222222222222222222222222222222");
+        private static QuestionnaireRevision questionnaireId = Create.QuestionnaireRevision("22222222222222222222222222222222");
     }
 }

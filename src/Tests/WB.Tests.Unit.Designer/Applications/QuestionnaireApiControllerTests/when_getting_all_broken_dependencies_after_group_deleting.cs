@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using FluentAssertions;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer.Api;
@@ -38,7 +39,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
 
         private static QuestionnaireApiController controller;
         private static List<QuestionnaireItemLink> result;
-        private static string questionnaireId = Guid.Parse("22222222222222222222222222222222").FormatGuid();
+        private static QuestionnaireRevision questionnaireId = Create.QuestionnaireRevision("22222222222222222222222222222222");
         private static Guid groupId = Guid.Parse("33333333333333333333333333333333");
         private static IQuestionnaireInfoFactory questionnaireInfoFactory;
         private static List<QuestionnaireItemLink> brokenLinks;
