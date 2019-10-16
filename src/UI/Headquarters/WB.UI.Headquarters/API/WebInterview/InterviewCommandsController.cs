@@ -50,7 +50,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         [HttpPost]
         [ObserverNotAllowed]
         [Route("changeLanguage")]
-        public override IHttpActionResult ChangeLanguage(ChangeLanguageRequest request) => base.ChangeLanguage(request);
+        public override IHttpActionResult ChangeLanguage([FromBody]ChangeLanguageRequest request) => base.ChangeLanguage(request);
 
         [HttpPost]
         [ObserverNotAllowed]
@@ -115,7 +115,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         [HttpPost]
         [ObserverNotAllowed]
         [Route("removeAnswer")]
-        public override IHttpActionResult RemoveAnswer(Guid interviewId, string questionId) => base.RemoveAnswer(interviewId, questionId);
+        public override IHttpActionResult RemoveAnswer([FromBody]RemoveAnswerRequest request) => base.RemoveAnswer(request);
 
         [HttpPost]
         [ObserverNotAllowed]
