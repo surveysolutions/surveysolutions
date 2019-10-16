@@ -35,7 +35,7 @@
                 </div>
                 <div class="form-group">
                     @Html.LabelFor(x => x.Comment, new { @class = "control-label" })
-                    @Html.TextAreaFor(x => x.Comment, new { @class = "form-control", placeholder="Enter your comment here", rows = 6, maxlength=500 })
+                    @Html.TextAreaFor(x => x.Comment, new { @class = "form-control", placeholder=$"{Assignments.EnterComments}", rows = 6, maxlength=500 })
                 </div>
 
                 @Html.AntiForgeryToken()
