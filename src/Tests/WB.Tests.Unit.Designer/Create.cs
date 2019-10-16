@@ -1589,5 +1589,11 @@ namespace WB.Tests.Unit.Designer
 
             return result.Object;
         }
+
+        public static QuestionnaireRevision QuestionnaireRevision(string questionnaireId)
+            => new QuestionnaireRevision(Guid.Parse(questionnaireId));
+
+        public static QuestionnaireRevision QuestionnaireRevision(Guid questionnaireId)
+            => new QuestionnaireRevision(questionnaireId);
     }
 }
