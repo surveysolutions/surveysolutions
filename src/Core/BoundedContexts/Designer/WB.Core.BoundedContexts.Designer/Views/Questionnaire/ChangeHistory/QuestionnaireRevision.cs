@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using WB.Core.BoundedContexts.Designer.MembershipProvider;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 {
@@ -24,6 +23,25 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         public virtual string Patch { get; set; }
         
         public virtual QuestionnaireChangeRecordMetadata Meta {get;set;}        
+    }
+  
+    public class QuestionnaireRevision
+    {
+        public QuestionnaireRevision(Guid questionnaireId, Guid? revision = null)
+        {
+            this.QuestionnaireId = questionnaireId;
+            this.Revision = revision;
+        }
+
+        public QuestionnaireRevision(string questionnaireId)
+        {
+            this.QuestionnaireId = Guid.Parse(questionnaireId);
+        }
+
+        public Guid QuestionnaireId { get; }
+        public Guid? Revision { get; }
+
+        public override string ToString() => Revision.HasValue ? $"{QuestionnaireId:N}${Revision:N}" : $"{QuestionnaireId:N}";
     }
 
     public class QuestionnaireChangeRecordMetadata

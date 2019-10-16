@@ -11,7 +11,7 @@
 
 <div id="edit-form" style="position: static;">
     <h3 style="margin: 0; white-space: nowrap; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
-        @Html.ActionLink(QuestionnaireHistoryResources.Edit, "Details", "Questionnaire", new {id = Model.Id.FormatGuid()}, new {@class = "btn btn-default"}) @Model.Title
+        @Html.ActionLink(QuestionnaireHistoryResources.Edit, "Details", "Questionnaire", new { id = Model.Id.FormatGuid() }, new { @class = "btn btn-default" }) @Model.Title
     </h3>
 </div>
 <table id="questionnaire-table-header" class="table  table-header">
@@ -24,7 +24,7 @@
             <th>@QuestionnaireHistoryResources.Timestamp</th>
             @if (!Model.ReadonlyMode)
             {
-            <th></th>
+                <th></th>
             }
         </tr>
     </thead>
@@ -33,39 +33,42 @@
     <div class="scroller-container">
         @if (Model == null || Model.ChangeHistory.Count == 0)
         {
-        <p class="text-center" style="line-height: 10em">@QuestionnaireHistoryResources.ThisListDoesNotContainAnyRecords</p>
+            <p class="text-center" style="line-height: 10em">@QuestionnaireHistoryResources.ThisListDoesNotContainAnyRecords</p>
         }
         else
         {
             var rows = Model.ChangeHistory.ToPagedList(page: Model.PageIndex, pageSize: Model.PageSize, totalCount: Model.TotalCount);
             <table id="questionnaire-table-content" class="table table-content">
                 <tbody>
-                @foreach (var listViewModel in rows)
-                {
+                    @foreach (var listViewModel in rows)
+                    {
 
-                    <tr>
-                        <td class="search-value">
-                            @Html.FormatQuestionnaireHistoricalRecord(Url, Model.Id, listViewModel)
-                        </td>
-                        <td>@(listViewModel.UserName ?? QuestionnaireHistoryResources.UnknownUserName)</td>
-                        <td>
-                            <time time="@listViewModel.Timestamp.ToString("s")Z">@listViewModel.Timestamp.ConvertToLocalAndFormatDate()</time>
-                        </td>
-                        @if (!Model.ReadonlyMode)
-                        {
-                            <td>
-                                @if (listViewModel.HasRevertTo)
-                                {
-                                    <a href="javascript:void(0);" onclick="confirmRevert('@listViewModel.Timestamp.ToString("s")', '@listViewModel.Id')">@QuestionnaireHistoryResources.RevertToThisVersion</a>
-                                }
+                        <tr>
+                            <td class="search-value">
+                                @Html.FormatQuestionnaireHistoricalRecord(Url, Model.Id, listViewModel)
                             </td>
-                        }
-                    </tr>
-                }
+                            <td>@(listViewModel.UserName ?? QuestionnaireHistoryResources.UnknownUserName)</td>
+                            <td>
+                                <time time="@listViewModel.Timestamp.ToString("s")Z">@listViewModel.Timestamp.ConvertToLocalAndFormatDate()</time>
+                            </td>
+                            @if (!Model.ReadonlyMode)
+                            {
+                                <td>
+                                    @if (listViewModel.HasRevertTo)
+                                    {
+                                        <a href="javascript:void(0);" onclick="confirmRevert('@listViewModel.Timestamp.ToString("s")', '@listViewModel.Id')">@QuestionnaireHistoryResources.RevertToThisVersion</a>
+                                    }
+                                </td>
+                            }
+                            <td>
+                                @Html.ActionLink("View", "Details", "Questionnaire", new { id = $"{Model.Id:N}${listViewModel.Sequence}" })
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
-            
-            @Html.Pager(rows.PageIndex + 1, rows.TotalPages , 
+
+            @Html.Pager(rows.PageIndex + 1, rows.TotalPages,
                 x => Url.Action(ViewContext.CurrentAction(), ViewContext.CurrentController(), new
             {
                 p = x,
@@ -90,10 +93,10 @@
                 <div class="modal-footer">
                     @using (Html.BeginForm("Revert", "Questionnaire", FormMethod.Post))
                     {
-                    <button type="button" class="btn btn-default" data-dismiss="modal">@QuestionnaireHistoryResources.Cancel</button>
-                    @Html.Hidden("id", @Model.Id)
-                    @Html.Hidden("commandId", null, new { id = "commandId" })
-                    <button type="submit" class="btn btn-primary" id="confirmRevertBtn">@QuestionnaireHistoryResources.Revert</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">@QuestionnaireHistoryResources.Cancel</button>
+                        @Html.Hidden("id", @Model.Id)
+                        @Html.Hidden("commandId", null, new { id = "commandId" })
+                        <button type="submit" class="btn btn-primary" id="confirmRevertBtn">@QuestionnaireHistoryResources.Revert</button>
                     }
                 </div>
             </div>
