@@ -102,7 +102,7 @@ namespace WB.UI.Headquarters.Controllers
             var model = await this.GetImportModel(id);
             if (model.QuestionnaireInfo != null)
             {
-                var result = await this.importService.Import(id, model.QuestionnaireInfo?.Name, false, Request.Url.ToString());
+                var result = await this.importService.Import(id, model.QuestionnaireInfo?.Name, false, request.Comment, Request.Url.ToString());
                 model.ErrorMessage = result.ImportError;
 
                 if (result.IsSuccess)
@@ -226,5 +226,6 @@ namespace WB.UI.Headquarters.Controllers
         public bool ShouldMigrateAssignments { get; set; }
 
         public string MigrateFrom { get; set; }
+        public string Comment { get; set; }
     }
 }

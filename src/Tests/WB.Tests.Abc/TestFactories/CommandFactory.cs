@@ -145,18 +145,21 @@ namespace WB.Tests.Abc.TestFactories
             QuestionnaireIdentity questionnaireIdentity = null,
             Guid? questionnaireId = null, long? questionnaireVersion = null,
             string newTitle = null,
-            long? newQuestionnaireVersion = null)
+            long? newQuestionnaireVersion = null,
+            string comment = null)
             => new CloneQuestionnaire(
                 questionnaireIdentity?.QuestionnaireId ?? questionnaireId ?? Guid.NewGuid(),
                 questionnaireIdentity?.Version ?? questionnaireVersion ?? 777,
                 newTitle ?? "New Title of Cloned Copy",
                 newQuestionnaireVersion??42,
-                Guid.NewGuid());
+                Guid.NewGuid(),
+                comment: comment);
 
         public ImportFromDesigner ImportFromDesigner(Guid? questionnaireId = null, string title = "Questionnaire X",
             Guid? responsibleId = null, string base64StringOfAssembly = "<base64>assembly</base64> :)",
             long questionnaireContentVersion = 1,
-            string variable = "questionnaire")
+            string variable = "questionnaire",
+            string comment = null)
             => new ImportFromDesigner(
                 responsibleId ?? Guid.NewGuid(),
                 new QuestionnaireDocument
@@ -168,7 +171,8 @@ namespace WB.Tests.Abc.TestFactories
                 false,
                 base64StringOfAssembly,
                 questionnaireContentVersion,
-                2);
+                2,
+                comment: comment);
         
         public SynchronizeInterviewEventsCommand SynchronizeInterviewEventsCommand(
             Guid? interviewId = null,
