@@ -239,7 +239,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
                         Size = PdfPageSize.A4,
                         Margins = new PdfPageMargins() {Top = 10, Bottom = 7, Left = 0, Right = 0},
                     });
-                    Thread.Sleep(10000);
+
                     generationProgress.Finish();
                 }
                 catch (Exception exception)
