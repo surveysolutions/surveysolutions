@@ -323,7 +323,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
-        public virtual BreadcrumbInfo GetBreadcrumbs(Guid interviewId, string sectionId)
+        public virtual BreadcrumbInfo GetBreadcrumbs(Guid interviewId, string sectionId = null)
         {
             if (sectionId == null) return new BreadcrumbInfo();
 
