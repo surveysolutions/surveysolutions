@@ -51,7 +51,8 @@
             },
 
             optionsSource(filter) {
-                return Vue.$api.call(api => api.getTopFilteredOptionsForQuestion(this.$me.id, filter, 50))
+                const interviewId = this.$config.id
+                return Vue.$api.get('getTopFilteredOptionsForQuestion', {interviewId, id:this.$me.id, filter, count:50})
             }
         }
     }
