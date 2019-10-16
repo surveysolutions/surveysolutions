@@ -84,9 +84,10 @@
                                     </label>
                                 </div>
                             </div>
-                            
+
                         </div>
-                        @if (Model.QuestionnairesToUpgradeFrom.Count > 0) {
+                        @if (Model.QuestionnairesToUpgradeFrom.Count > 0)
+                        {
                             <div class="col-sm-8">
                                 <div class="form-group">
                                     <input class="checkbox-filter single-checkbox" id="ckbUpgradeAssignments" type="checkbox" value="True" name="ShouldMigrateAssignments">
@@ -95,11 +96,12 @@
                                     </label>
                                 </div>
                             </div>
-                       
+
                             <div class="col-sm-8" id="templateSelectorBlock" style="display: none">
                                 <div class="form-group">
                                     <select id="templateSelector" data-bind="value: SelectedTemplate" class="selectpicker" name="migrateFrom">
-                                        @foreach (var item in Model.QuestionnairesToUpgradeFrom) {
+                                        @foreach (var item in Model.QuestionnairesToUpgradeFrom)
+                                        {
                                             <option value='{"templateId": "@item.TemplateId","version": "@item.TemplateVersion"}'>
                                                 @Html.QuestionnaireNameVerstionFirst(item.TemplateName, item.TemplateVersion)
                                             </option>
@@ -118,6 +120,10 @@
                             <div class="block">
                                 <h3>@QuestionnaireImport.RegularImportTitle</h3>
                                 <p>@QuestionnaireImport.RegularImportSubTitle</p>
+                            </div>
+                            <div class="block">
+                                <h3>Comment</h3>
+                                <p><textarea name="Comment" class="form-control" rows="5"></textarea></p>
                             </div>
                             <div>
                                 <button type="submit" class="btn btn-primary">@QuestionnaireImport.RegularImportTitle</button>
