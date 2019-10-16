@@ -157,34 +157,40 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             return Ok();
         }
 
-        [ObserverNotAllowed]
-        public virtual IHttpActionResult RemoveAnswer(Guid interviewId, string questionId)
+        public class RemoveAnswerRequest
         {
-            Identity identity = Identity.Parse(questionId);
+            public Guid InterviewId { get; set; }
+            public string QuestionId { get; set; }
+        }
+
+        [ObserverNotAllowed]
+        public virtual IHttpActionResult RemoveAnswer(RemoveAnswerRequest request)
+        {
+            Identity identity = Identity.Parse(request.QuestionId);
 
             try
             {
-                var interview = statefulInterviewRepository.Get(interviewId.FormatGuid());
+                var interview = statefulInterviewRepository.Get(request.InterviewId.FormatGuid());
                 var questionnaire = questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, null);
                 var questionType = questionnaire.GetQuestionType(identity.Id);
 
                 if (questionType == QuestionType.Multimedia)
                 {
                     var fileName = $@"{questionnaire.GetQuestionVariableName(identity.Id)}{string.Join(@"-", identity.RosterVector.Select(rv => rv))}.jpg";
-                    this.imageFileStorage.RemoveInterviewBinaryData(interviewId, fileName);
+                    this.imageFileStorage.RemoveInterviewBinaryData(request.InterviewId, fileName);
                 }
                 else if (questionType == QuestionType.Audio)
                 {
                     var fileName = $@"{questionnaire.GetQuestionVariableName(identity.Id)}__{identity.RosterVector}.m4a";
-                    this.audioFileStorage.RemoveInterviewBinaryData(interviewId, fileName);
+                    this.audioFileStorage.RemoveInterviewBinaryData(request.InterviewId, fileName);
                 }
             }
             catch (Exception e)
             {
-                webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, identity, e);
+                webInterviewNotificationService.MarkAnswerAsNotSaved(request.InterviewId, identity, e);
             }
 
-            this.ExecuteQuestionCommand(new RemoveAnswerCommand(interviewId, GetCommandResponsibleId(interviewId), identity));
+            this.ExecuteQuestionCommand(new RemoveAnswerCommand(request.InterviewId, GetCommandResponsibleId(request.InterviewId), identity));
             return Ok();
         }
 
