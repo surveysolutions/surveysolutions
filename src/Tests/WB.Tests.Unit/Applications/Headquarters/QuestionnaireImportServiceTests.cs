@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 supportedVersionProvider: versionProvider, designerApi: rest.Object);
 
             //Act
-            var importResult = await service.Import(Guid.NewGuid(), "null", false, null);
+            var importResult = await service.Import(Guid.NewGuid(), "null", false, null, null);
 
             //Assert
             Assert.That(importResult.ImportError, Is.EqualTo(exprectedErrorMessageFromServer));
@@ -75,7 +75,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 supportedVersionProvider: versionProvider, zipUtils: zipUtilsMock, designerApi: designerApi.Object);
 
             // Act-assert
-            var exception = Assert.ThrowsAsync<Exception>(async () => await service.Import(Guid.NewGuid(), "null", false, null));
+            var exception = Assert.ThrowsAsync<Exception>(async () => await service.Import(Guid.NewGuid(), "null", false, null, null));
             Assert.That(exception, Is.SameAs(commandServiceException));
         }
 
@@ -114,7 +114,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 supportedVersionProvider: versionProvider, zipUtils: zipUtils, designerApi: designerApi.Object);
 
             // Act
-            await service.Import(Guid.NewGuid(), "null", false, null);
+            await service.Import(Guid.NewGuid(), "null", false, null, null);
 
             // Assert
             designerApi
@@ -195,7 +195,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 lookupStorage: lookupStorage);
 
             // Act
-            await service.Import(Guid.NewGuid(), "null", false, null);
+            await service.Import(Guid.NewGuid(), "null", false, null, null);
 
             // Assert
 
@@ -225,7 +225,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 supportedVersionProvider: versionProvider.Object);
 
             // Act
-            var result = await importService.Import(questionnaireId, "null", false, null);
+            var result = await importService.Import(questionnaireId, "null", false, null, null);
 
             // Assert
             Assert.That(result.IsSuccess, Is.False);
@@ -257,7 +257,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
             );
 
             // act
-            await importService.Import(Guid.NewGuid(), "questionnaire1", false, "http://fsb.ru");
+            await importService.Import(Guid.NewGuid(), "questionnaire1", false, null, "http://fsb.ru");
 
             designerApi.Verify(d => d.Tag(It.IsAny<Guid>(), It.Is<QuestionnaireRevisionMetadataModel>(m =>
                 m.HqHost == "fsb.ru"
