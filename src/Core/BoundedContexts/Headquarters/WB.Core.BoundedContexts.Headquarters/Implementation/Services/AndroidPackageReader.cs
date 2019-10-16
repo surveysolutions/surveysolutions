@@ -46,7 +46,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
         public AndroidPackageInfo Read(string pathToApkFile)
         {
-            return Read(File.OpenRead(pathToApkFile));
+            using (var fileStream = File.OpenRead(pathToApkFile))
+            {
+                return Read(fileStream);
+            }
         }
         
         private class APKManifest
