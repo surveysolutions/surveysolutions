@@ -24,7 +24,6 @@ using Shark.PdfConvert;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
-using WB.UI.Designer.Code.Attributes;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Resources;
 
@@ -32,6 +31,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
 {
     [Area("Pdf")]
     [Route("pdf")]
+    [Authorize]
     public class PdfController : Controller
     {
         #region Subclasses
