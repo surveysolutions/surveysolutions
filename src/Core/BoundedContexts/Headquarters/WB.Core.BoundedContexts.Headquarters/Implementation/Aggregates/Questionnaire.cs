@@ -61,8 +61,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
                 command.QuestionnaireContentVersion,
                 command.QuestionnaireVersion,
                 isSupportAssignments: true,
-                isSupportExportVariables: true
-                );
+                isSupportExportVariables: true,
+                comment: command.Comment);
         }
 
         public void CloneQuestionnaire(CloneQuestionnaire command)
@@ -88,8 +88,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
                 questionnaireBrowseItem.QuestionnaireContentVersion,
                 command.NewQuestionnaireVersion,
                 questionnaireBrowseItem.AllowAssignments,
-                questionnaireBrowseItem.AllowExportVariables
-                );
+                questionnaireBrowseItem.AllowExportVariables,
+                comment: command.Comment);
         }
 
         private void CloneTranslations(Guid sourceQuestionnaireId, long sourceQuestionnaireVersion, long newQuestionnaireVersion)
@@ -111,13 +111,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             }
         }
 
-        private void StoreQuestionnaireAndProjectionsAsNewVersion(QuestionnaireDocument questionnaireDocument, 
-            string assemblyAsBase64, 
-            bool isCensus, 
-            long questionnaireContentVersion, 
+        private void StoreQuestionnaireAndProjectionsAsNewVersion(QuestionnaireDocument questionnaireDocument,
+            string assemblyAsBase64,
+            bool isCensus,
+            long questionnaireContentVersion,
             long questionnaireVersion,
             bool isSupportAssignments,
-            bool isSupportExportVariables)
+            bool isSupportExportVariables, 
+            string comment)
         {
             var identity = new QuestionnaireIdentity(this.Id, questionnaireVersion);
             
@@ -128,7 +129,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             string projectionId = GetProjectionId(identity);
 
             this.questionnaireBrowseItemStorage.Store(
-                new QuestionnaireBrowseItem(questionnaireDocument, identity.Version, isCensus, questionnaireContentVersion, isSupportAssignments, isSupportExportVariables),
+                new QuestionnaireBrowseItem(questionnaireDocument, identity.Version, isCensus,
+                    questionnaireContentVersion, isSupportAssignments, isSupportExportVariables, comment),
                 projectionId);
         }
 
