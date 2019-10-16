@@ -593,7 +593,7 @@
     <value>Поле со списком</value>
   </data>
   <data name="QuestionCurrentTime" xml:space="preserve">
-    <value>Текущее время</value>
+    <value>Текущее время (дата и время)</value>
   </data>
   <data name="QuestionDecimalPlaces" xml:space="preserve">
     <value>Размер дробной части</value>
