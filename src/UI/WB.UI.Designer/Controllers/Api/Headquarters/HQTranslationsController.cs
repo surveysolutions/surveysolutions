@@ -11,7 +11,7 @@ using WB.UI.Designer.Code.Attributes;
 
 namespace WB.UI.Designer.Controllers.Api.Headquarters
 {
-    [AllowOnlyFromWhitelistIP(onlyAllowedAddresses: true)]
+    [AllowOnlyFromWhitelistIP()]
     [Route("api/hq/translations")]
     [Authorize]
     public class HQTranslationsController : ControllerBase

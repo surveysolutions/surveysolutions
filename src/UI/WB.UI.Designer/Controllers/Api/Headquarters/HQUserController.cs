@@ -14,7 +14,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
     {
         [HttpGet]
         [Route("login")]
-        [AllowOnlyFromWhitelistIP(onlyAllowedAddresses: true)]
+        [AllowOnlyFromWhitelistIP()]
         public void Login() { }
 
         [HttpGet]
