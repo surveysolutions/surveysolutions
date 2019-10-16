@@ -39,6 +39,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                     .Skip((page - 1) * pageSize)
                     .Take(pageSize)
                     .ToArray();
+
             var historyItemIds = questionnaireHistory.Select(x => x.QuestionnaireChangeRecordId).ToArray();
 
             var hasHistory = this.dbContext.QuestionnaireChangeRecords
@@ -52,8 +53,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                     .ToList(), page, count, pageSize);
         }
 
-        private QuestionnaireChangeHistoricalRecord CreateQuestionnaireChangeHistoryWebItem(QuestionnaireDocument questionnaire, 
-            QuestionnaireChangeRecord questionnaireChangeRecord, 
+        private QuestionnaireChangeHistoricalRecord CreateQuestionnaireChangeHistoryWebItem(QuestionnaireDocument questionnaire,
+            QuestionnaireChangeRecord questionnaireChangeRecord,
             HashSet<string> recordWithRevertAvailable)
         {
             var references =
@@ -63,9 +64,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             return new QuestionnaireChangeHistoricalRecord(
                 questionnaireChangeRecord.QuestionnaireChangeRecordId,
                 questionnaireChangeRecord.UserName,
-                questionnaireChangeRecord.Timestamp, 
+                questionnaireChangeRecord.Timestamp,
                 questionnaireChangeRecord.ActionType,
-                questionnaireChangeRecord.TargetItemId, 
+                questionnaireChangeRecord.TargetItemId,
                 GetItemParentId(questionnaire, questionnaireChangeRecord.TargetItemId),
                 questionnaireChangeRecord.TargetItemTitle,
                 questionnaireChangeRecord.TargetItemType,
@@ -73,7 +74,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 questionnaireChangeRecord.AffectedEntriesCount,
                 recordWithRevertAvailable.Contains(questionnaireChangeRecord.QuestionnaireChangeRecordId),
                 questionnaireChangeRecord.TargetItemDateTime,
-                references);
+                references)
+            {
+                Sequence = questionnaireChangeRecord.Sequence
+            };
         }
 
         private QuestionnaireChangeHistoricalRecordReference CreateQuestionnaireChangeHistoryReference(

@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         }
 
         public string Id { get; private set; }
-
+        public int Sequence { get; set; }
         public string UserName { get; private set; }
         public DateTime Timestamp { get; private set; }
         public QuestionnaireActionType ActionType { get; private set; }

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -9,6 +8,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
@@ -63,8 +63,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         }
 
         [HttpGet]
-        [Route("get/{id:guid}")]
-        public IActionResult Get(string id)
+        [Route("get/{id}")]
+        public IActionResult Get(QuestionnaireRevision id)
         {
             var questionnaireInfoView = this.questionnaireInfoViewFactory.Load(id, User.GetId());
 
@@ -77,10 +77,10 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         }
 
         [HttpGet]
-        [Route("chapter/{id:guid}")]
-        public IActionResult Chapter(string id, string chapterId)
+        [Route("chapter/{id}")]
+        public IActionResult Chapter(QuestionnaireRevision id, string chapterId)
         {
-            var chapterInfoView = this.chapterInfoViewFactory.Load(questionnaireId: id, groupId: chapterId);
+            var chapterInfoView = this.chapterInfoViewFactory.Load(id, groupId: chapterId);
 
             if (chapterInfoView == null)
             {
@@ -91,8 +91,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         }
 
         [HttpGet]
-        [Route("EditVariable/{id:guid}")]
-        public IActionResult EditVariable(string id, Guid variableId)
+        [Route("EditVariable/{id}")]
+        public IActionResult EditVariable(QuestionnaireRevision id, Guid variableId)
         {
             var variableView = this.questionnaireInfoFactory.GetVariableEditView(id, variableId);
 
@@ -113,8 +113,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         }
 
         [HttpGet]
-        [Route("EditQuestion/{id:guid}")]
-        public IActionResult EditQuestion(string id, Guid questionId)
+        [Route("EditQuestion/{id}")]
+        public IActionResult EditQuestion(QuestionnaireRevision id, Guid questionId)
         {
             var editQuestionView = this.questionnaireInfoFactory.GetQuestionEditView(id, questionId);
 
@@ -136,8 +136,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         }
 
         [HttpGet]
-        [Route("EditGroup/{id:guid}")]
-        public IActionResult EditGroup(string id, Guid groupId)
+        [Route("EditGroup/{id}")]
+        public IActionResult EditGroup(QuestionnaireRevision id, Guid groupId)
         {
             var editGroupView = this.questionnaireInfoFactory.GetGroupEditView(id, groupId);
 
@@ -150,8 +150,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         }
 
         [HttpGet]
-        [Route("EditRoster/{id:guid}")]
-        public IActionResult EditRoster(string id, Guid rosterId)
+        [Route("EditRoster/{id}")]
+        public IActionResult EditRoster(QuestionnaireRevision id, Guid rosterId)
         {
             var editRosterView = this.questionnaireInfoFactory.GetRosterEditView(id, rosterId);
 
@@ -164,8 +164,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         }
 
         [HttpGet]
-        [Route("EditStaticText/{id:guid}")]
-        public IActionResult EditStaticText(string id, Guid staticTextId)
+        [Route("EditStaticText/{id}")]
+        public IActionResult EditStaticText(QuestionnaireRevision id, Guid staticTextId)
         {
             var staticTextEditView = this.questionnaireInfoFactory.GetStaticTextEditView(id, staticTextId);
 
@@ -178,10 +178,10 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         }
 
         [HttpGet]
-        [Route("Verify/{id:guid}")]
-        public IActionResult Verify(Guid id)
+        [Route("Verify/{id}")]
+        public IActionResult Verify(QuestionnaireRevision id)
         {
-            var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
+            var questionnaireView = this.questionnaireViewFactory.Load(id);
 
             if (questionnaireView == null)
             {
@@ -220,15 +220,15 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         }
 
         [HttpGet]
-        [Route("GetAllBrokenGroupDependencies/{id:guid}")]
-        public List<QuestionnaireItemLink> GetAllBrokenGroupDependencies(string id, Guid groupId)
+        [Route("GetAllBrokenGroupDependencies/{id}")]
+        public List<QuestionnaireItemLink> GetAllBrokenGroupDependencies(QuestionnaireRevision id, Guid groupId)
         {
             return this.questionnaireInfoFactory.GetAllBrokenGroupDependencies(id, groupId);
         }
 
         [HttpGet]
-        [Route("GetQuestionsEligibleForNumericRosterTitle/{id:guid}")]
-        public List<DropdownEntityView> GetQuestionsEligibleForNumericRosterTitle(string id, Guid rosterId, Guid rosterSizeQuestionId)
+        [Route("GetQuestionsEligibleForNumericRosterTitle/{id}")]
+        public List<DropdownEntityView> GetQuestionsEligibleForNumericRosterTitle(QuestionnaireRevision id, Guid rosterId, Guid rosterSizeQuestionId)
         {
             return this.questionnaireInfoFactory.GetQuestionsEligibleForNumericRosterTitle(id, rosterId, rosterSizeQuestionId);
         }
