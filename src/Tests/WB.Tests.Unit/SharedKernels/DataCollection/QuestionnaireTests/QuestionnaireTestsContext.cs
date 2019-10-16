@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
         {
             var questionnaire = Create.AggregateRoot.Questionnaire(questionnaireStorage: questionnaireStorage);
 
-            questionnaire.ImportFromDesigner(new ImportFromDesigner(creatorId ?? new Guid(), document ?? new QuestionnaireDocument(), false, "base64 string of assembly", 1 , 1));
+            questionnaire.ImportFromDesigner(new ImportFromDesigner(creatorId ?? new Guid(), document ?? new QuestionnaireDocument(), false, "base64 string of assembly", 1 , 1, null));
 
             return questionnaire;
         }

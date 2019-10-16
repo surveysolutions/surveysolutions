@@ -7,6 +7,7 @@ using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Infrastructure.Native.Storage;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Infrastructure
 {
@@ -89,6 +90,23 @@ namespace WB.Tests.Unit.Infrastructure
             var answerFromJson = JsonConvert.DeserializeObject<TestAnswer>(json, JsonSettings);
             Assert.That(answer.Id, Is.EqualTo(answerFromJson.Id));
             Assert.That(answer.Questions[2].RosterVector, Is.EqualTo(answerFromJson.Questions[2].RosterVector));
+        }
+
+        [Test]
+        public void should_not_write_empty_roster_vector()
+        {
+            var json = JsonConvert.SerializeObject(Create.Identity(Id.g1, RosterVector.Empty), JsonSettings);
+
+            Assert.That(json, Is.EqualTo(@"{""id"":""11111111-1111-1111-1111-111111111111""}"));
+        }
+
+        [Test]
+        public void when_deserializing_should_use_empty_roster_vector_as_default()
+        {
+            string json = @"{""id"":""11111111-1111-1111-1111-111111111111""}";
+            var id = JsonConvert.DeserializeObject<Identity>(json, JsonSettings);
+
+            Assert.That(id.RosterVector, Is.SameAs(RosterVector.Empty));
         }
 
         public class TestAnswer

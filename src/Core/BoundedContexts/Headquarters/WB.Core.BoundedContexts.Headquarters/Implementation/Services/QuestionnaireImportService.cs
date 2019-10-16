@@ -71,7 +71,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.lookupTablesStorage = lookupTablesStorage;
         }
 
-        public async Task<QuestionnaireImportResult> Import(Guid questionnaireId, string name, bool isCensusMode, string requestUrl)
+        public async Task<QuestionnaireImportResult> Import(Guid questionnaireId, string name, bool isCensusMode,
+            string comment, string requestUrl)
         {
             try
             {
@@ -154,7 +155,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     isCensusMode,
                     questionnaireAssembly,
                     questionnaireContentVersion,
-                    questionnaireVersion));
+                    questionnaireVersion,
+                    comment));
 
                 await designerApi.Tag(questionnaire.Revision, new QuestionnaireRevisionMetadataModel
                 {
