@@ -80,7 +80,7 @@ namespace WB.UI.Headquarters.Controllers
             if (questionnaireBrowseItem == null)
                 return new HttpNotFoundResult(string.Format(HQ.QuestionnaireNotFoundFormat, id.FormatGuid(), version));
 
-            return this.View(new CloneQuestionnaireModel(id, version, questionnaireBrowseItem.Title, questionnaireBrowseItem.AllowCensusMode));
+            return this.View(new CloneQuestionnaireModel(id, version, questionnaireBrowseItem.Title, questionnaireBrowseItem.AllowCensusMode, questionnaireBrowseItem.Comment));
         }
 
         [HttpPost]
@@ -98,7 +98,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 var newVersion = this.questionnaireVersionProvider.GetNextVersion(model.Id);
                 this.CommandService.Execute(new CloneQuestionnaire(
-                    model.Id, model.Version, model.NewTitle, newQuestionnaireVersion:newVersion, userId: this.authorizedUser.Id));
+                    model.Id, model.Version, model.NewTitle, newQuestionnaireVersion:newVersion, userId: this.authorizedUser.Id, comment: model.Comment));
             }
             catch (QuestionnaireException exception)
             {

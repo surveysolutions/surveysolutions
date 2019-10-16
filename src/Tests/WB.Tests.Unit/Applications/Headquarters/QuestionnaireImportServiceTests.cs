@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 supportedVersionProvider: versionProvider, restService: mockOfRestService);
 
             //Act
-            var importResult = await service.Import(Guid.NewGuid(), "null", false);
+            var importResult = await service.Import(Guid.NewGuid(), "null", false, null);
 
             //Assert
             Assert.That(importResult.ImportError, Is.EqualTo(exprectedErrorMessageFromServer));
@@ -77,7 +77,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 supportedVersionProvider: versionProvider, zipUtils: zipUtilsMock, restService: restServiceMock.Object);
 
             // Act-assert
-            var exception = Assert.ThrowsAsync<Exception>(async () => await service.Import(Guid.NewGuid(), "null", false));
+            var exception = Assert.ThrowsAsync<Exception>(async () => await service.Import(Guid.NewGuid(), "null", false, null));
             Assert.That(exception, Is.SameAs(commandServiceException));
         }
 
@@ -110,7 +110,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 supportedVersionProvider: versionProvider, zipUtils: zipUtils, restService: mockOfRestService.Object);
 
             // Act
-            await service.Import(Guid.NewGuid(), "null", false);
+            await service.Import(Guid.NewGuid(), "null", false, null);
 
             // Assert
             mockOfRestService.Verify(x => x.DownloadFileAsync(It.IsAny<string>(), null, It.IsAny<RestCredentials>(), null, null), Times.Exactly(2));
@@ -165,7 +165,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 supportedVersionProvider: versionProvider, zipUtils: zipUtils, restService: mockOfRestService.Object, lookupStorage: lookupStorage);
 
             // Act
-            await service.Import(Guid.NewGuid(), "null", false);
+            await service.Import(Guid.NewGuid(), "null", false, null);
 
             // Assert
 
@@ -199,7 +199,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 supportedVersionProvider: versionProvider.Object);
 
             // Act
-            var result = await importService.Import(questionnaireId, "null", false);
+            var result = await importService.Import(questionnaireId, "null", false, null);
 
             // Assert
             Assert.That(result.IsSuccess, Is.False);
