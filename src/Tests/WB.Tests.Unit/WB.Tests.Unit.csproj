@@ -12,12 +12,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="SharedKernels\DataCollection\InterviewEntities\serializedAnswers.json" />
+    <None Remove="SharedKernels\SurveyManagement\ServiceTests\AndroidPackageReaderTests\TestManifest._apk" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\UI\Shared\WB.UI.Shared.Enumerator\Services\DevicePasswordHasher.cs" Link="GenericSubdomains\Utils\PasswordHasherTests\DevicePasswordHasher.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="SharedKernels\DataCollection\InterviewEntities\serializedAnswers.json" />
+    <EmbeddedResource Include="SharedKernels\SurveyManagement\ServiceTests\AndroidPackageReaderTests\TestManifest._apk" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj" />
