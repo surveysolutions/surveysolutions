@@ -22,9 +22,9 @@ using WB.UI.Designer.Resources;
 
 namespace WB.UI.Designer.Controllers.Api.Headquarters
 {
-    [AllowOnlyFromWhitelistIP(onlyAllowedAddresses: true)]
     [Route("api/hq/v3/questionnaires")]
     [Authorize]
+    [AllowOnlyFromWhitelistIP]
     public class HQQuestionnairesController : ControllerBase
     {
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;

@@ -8,8 +8,8 @@ using WB.UI.Designer.Code.Attributes;
 
 namespace WB.UI.Designer.Controllers.Api.Headquarters
 {
-    [AllowOnlyFromWhitelistIP(onlyAllowedAddresses: true)]
     [Authorize]
+    [AllowOnlyFromWhitelistIP]
     [Route("api/hq/lookup")]
     public class HQLookupController : ControllerBase
     {

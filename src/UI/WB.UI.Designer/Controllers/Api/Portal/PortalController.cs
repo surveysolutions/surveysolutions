@@ -20,7 +20,6 @@ namespace WB.UI.Designer.Api.Portal
 {
     [Route("api/portal")]
     [Authorize]
-    [AllowOnlyFromWhitelistIP(onlyAllowedAddresses: false)]
     public class PortalController : ControllerBase
     {
         private readonly UserManager<DesignerIdentityUser> accountRepository;

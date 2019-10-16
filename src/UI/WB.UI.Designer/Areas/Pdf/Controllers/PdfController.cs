@@ -192,7 +192,6 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
         public ActionResult Retry(Guid id, Guid? translation, int? timezoneOffsetMinutes)
         {
             var pdfKey = id.ToString() + translation;
-            var cultureCode = CultureInfo.CurrentUICulture.Name;
             PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(id, translation, timezoneOffsetMinutes));
             if (pdfGenerationProgress != null && pdfGenerationProgress.IsFailed)
             {
