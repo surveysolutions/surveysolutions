@@ -733,6 +733,9 @@
   <data name="HelpSourceQuestion" xml:space="preserve">
     <value>Вопрос источник (ответ генерирует соответствующее количество строк)</value>
   </data>
+  <data name="HelpAttachmentName" xml:space="preserve">
+    <value>Имя файла вложения, которое будет отображено в тексте.</value>
+  </data>
   <data name="HelpTitles" xml:space="preserve">
     <value>Имена строк.</value>
   </data>
