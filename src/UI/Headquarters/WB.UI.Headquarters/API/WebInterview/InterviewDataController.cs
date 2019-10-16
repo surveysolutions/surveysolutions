@@ -65,13 +65,13 @@ namespace WB.UI.Headquarters.API.WebInterview
             => base.GetTopFilteredOptionsForQuestion(interviewId, id, filter, count);
 
         [HttpGet]
-        [Route("getTopFilteredOptionsForQuestion")]
+        [Route("getTopFilteredOptionsForQuestionWithExclude")]
         public override DropdownItem[] GetTopFilteredOptionsForQuestion(Guid interviewId, string id, string filter, int count, int[] excludedOptionIds) 
             => base.GetTopFilteredOptionsForQuestion(interviewId, id, filter, count, excludedOptionIds);
 
         [HttpGet]
         [Route("getBreadcrumbs")]
-        public override BreadcrumbInfo GetBreadcrumbs(Guid interviewId, string sectionId) => base.GetBreadcrumbs(interviewId, sectionId);
+        public override BreadcrumbInfo GetBreadcrumbs(Guid interviewId, string sectionId = null) => base.GetBreadcrumbs(interviewId, sectionId);
 
         [HttpGet]
         [Route("getCompleteInfo")]

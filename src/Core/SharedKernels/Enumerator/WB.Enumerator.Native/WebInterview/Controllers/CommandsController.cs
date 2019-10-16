@@ -51,108 +51,109 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         public class AnswerRequest<T>
         {
             public Guid InterviewId { get; set; }
-            public string QuestionIdentity { get; set; }
+            public string Identity { get; set; }
             public T Answer { get; set; }
         }
 
         public virtual IHttpActionResult AnswerTextQuestion([FromBody] AnswerRequest<string> answerRequest)
         {
-            var identity = Identity.Parse(answerRequest.QuestionIdentity);
+            var identity = Identity.Parse(answerRequest.Identity);
             this.ExecuteQuestionCommand(new AnswerTextQuestionCommand(answerRequest.InterviewId,
                 this.GetCommandResponsibleId(answerRequest.InterviewId), identity.Id, identity.RosterVector, answerRequest.Answer));
             return Ok();
         }
 
-        public virtual IHttpActionResult AnswerTextListQuestion(Guid interviewId, string questionIdenty, TextListAnswerRowDto[] rows)
+        public virtual IHttpActionResult AnswerTextListQuestion([FromBody] AnswerRequest<TextListAnswerRowDto[]> answerRequest)
         {
-            var identity = Identity.Parse(questionIdenty);
-            this.ExecuteQuestionCommand(new AnswerTextListQuestionCommand(interviewId,
-                this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector,
-                rows.Select(row => new Tuple<decimal, string>(row.Value, row.Text)).ToArray()));
+            var identity = Identity.Parse(answerRequest.Identity);
+            this.ExecuteQuestionCommand(new AnswerTextListQuestionCommand(answerRequest.InterviewId,
+                this.GetCommandResponsibleId(answerRequest.InterviewId), 
+                identity.Id, identity.RosterVector, 
+                answerRequest.Answer.Select(row => new Tuple<decimal, string>(row.Value, row.Text)).ToArray()));
             return Ok();
         }
 
-        public virtual IHttpActionResult AnswerGpsQuestion(Guid interviewId, string questionIdenty, GpsAnswer answer)
+        public virtual IHttpActionResult AnswerGpsQuestion([FromBody] AnswerRequest<GpsAnswer> answerRequest)
         {
-            var identity = Identity.Parse(questionIdenty);
-            this.ExecuteQuestionCommand(new AnswerGeoLocationQuestionCommand(interviewId,
-                this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, answer.Latitude, answer.Longitude,
-                answer.Accuracy ?? 0, answer.Altitude ?? 0, DateTimeOffset.FromUnixTimeMilliseconds(answer.Timestamp ?? 0)));
+            var identity = Identity.Parse(answerRequest.Identity);
+            this.ExecuteQuestionCommand(new AnswerGeoLocationQuestionCommand(answerRequest.InterviewId,
+                this.GetCommandResponsibleId(answerRequest.InterviewId), identity.Id, identity.RosterVector, answerRequest.Answer.Latitude, answerRequest.Answer.Longitude,
+                answerRequest.Answer.Accuracy ?? 0, answerRequest.Answer.Altitude ?? 0, DateTimeOffset.FromUnixTimeMilliseconds(answerRequest.Answer.Timestamp ?? 0)));
             return Ok();
         }
 
-        public virtual IHttpActionResult AnswerDateQuestion(Guid interviewId, string questionIdenty, DateTime answer)
+        public virtual IHttpActionResult AnswerDateQuestion([FromBody] AnswerRequest<DateTime> answerRequest)
         {
-            var identity = Identity.Parse(questionIdenty);
-            this.ExecuteQuestionCommand(new AnswerDateTimeQuestionCommand(interviewId,
-                this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, answer));
+            var identity = Identity.Parse(answerRequest.Identity);
+            this.ExecuteQuestionCommand(new AnswerDateTimeQuestionCommand(answerRequest.InterviewId,
+                this.GetCommandResponsibleId(answerRequest.InterviewId), identity.Id, identity.RosterVector, answerRequest.Answer));
             return Ok();
         }
 
-        public virtual IHttpActionResult AnswerSingleOptionQuestion(Guid interviewId, int answer, string questionId)
+        public virtual IHttpActionResult AnswerSingleOptionQuestion([FromBody] AnswerRequest<int> answerRequest)
         {
-            Identity identity = Identity.Parse(questionId);
-            this.ExecuteQuestionCommand(new AnswerSingleOptionQuestionCommand(interviewId, GetCommandResponsibleId(interviewId),
-                identity.Id, identity.RosterVector, answer));
-            return Ok();
-        }
-
-        [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
-        public virtual IHttpActionResult AnswerLinkedSingleOptionQuestion(Guid interviewId, string questionIdentity, decimal[] answer)
-        {
-            Identity identity = Identity.Parse(questionIdentity);
-            this.ExecuteQuestionCommand(new AnswerSingleOptionLinkedQuestionCommand(interviewId, GetCommandResponsibleId(interviewId),
-                identity.Id, identity.RosterVector, answer));
+            var identity = Identity.Parse(answerRequest.Identity);
+            this.ExecuteQuestionCommand(new AnswerSingleOptionQuestionCommand(answerRequest.InterviewId, GetCommandResponsibleId(answerRequest.InterviewId),
+                identity.Id, identity.RosterVector, answerRequest.Answer));
             return Ok();
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
-        public virtual IHttpActionResult AnswerLinkedMultiOptionQuestion(Guid interviewId, string questionIdentity, decimal[][] answer)
+        public virtual IHttpActionResult AnswerLinkedSingleOptionQuestion([FromBody] AnswerRequest<decimal[]> answerRequest)
         {
-            Identity identity = Identity.Parse(questionIdentity);
-            this.ExecuteQuestionCommand(new AnswerMultipleOptionsLinkedQuestionCommand(interviewId, GetCommandResponsibleId(interviewId),
-                identity.Id, identity.RosterVector, answer.Select(x => new RosterVector(x)).ToArray()));
-            return Ok();
-        }
-
-        public virtual IHttpActionResult AnswerMultiOptionQuestion(Guid interviewId, int[] answer, string questionId)
-        {
-            Identity identity = Identity.Parse(questionId);
-            this.ExecuteQuestionCommand(new AnswerMultipleOptionsQuestionCommand(interviewId, GetCommandResponsibleId(interviewId),
-                identity.Id, identity.RosterVector, answer));
-            return Ok();
-        }
-
-        public virtual IHttpActionResult AnswerYesNoQuestion(Guid interviewId, string questionId, InterviewYesNoAnswer[] answerDto)
-        {
-            Identity identity = Identity.Parse(questionId);
-            var answer = answerDto.Select(a => new AnsweredYesNoOption(a.Value, a.Yes)).ToArray();
-            this.ExecuteQuestionCommand(new AnswerYesNoQuestion(interviewId, GetCommandResponsibleId(interviewId),
-                identity.Id, identity.RosterVector, answer));
-            return Ok();
-        }
-
-        public virtual IHttpActionResult AnswerIntegerQuestion(Guid interviewId, string questionIdenty, int answer)
-        {
-            Identity identity = Identity.Parse(questionIdenty);
-            this.ExecuteQuestionCommand(new AnswerNumericIntegerQuestionCommand(interviewId, this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, answer));
+            var identity = Identity.Parse(answerRequest.Identity);
+            this.ExecuteQuestionCommand(new AnswerSingleOptionLinkedQuestionCommand(answerRequest.InterviewId, GetCommandResponsibleId(answerRequest.InterviewId),
+                identity.Id, identity.RosterVector, answerRequest.Answer));
             return Ok();
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
-        public virtual IHttpActionResult AnswerDoubleQuestion(Guid interviewId, string questionIdenty, double answer)
+        public virtual IHttpActionResult AnswerLinkedMultiOptionQuestion([FromBody] AnswerRequest<decimal[][]> answerRequest)
         {
-            Identity identity = Identity.Parse(questionIdenty);
-            this.ExecuteQuestionCommand(new AnswerNumericRealQuestionCommand(interviewId, this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, answer));
+            var identity = Identity.Parse(answerRequest.Identity);
+            this.ExecuteQuestionCommand(new AnswerMultipleOptionsLinkedQuestionCommand(answerRequest.InterviewId, GetCommandResponsibleId(answerRequest.InterviewId),
+                identity.Id, identity.RosterVector, answerRequest.Answer.Select(x => new RosterVector(x)).ToArray()));
+            return Ok();
+        }
+
+        public virtual IHttpActionResult AnswerMultiOptionQuestion([FromBody] AnswerRequest<int[]> answerRequest)
+        {
+            var identity = Identity.Parse(answerRequest.Identity);
+            this.ExecuteQuestionCommand(new AnswerMultipleOptionsQuestionCommand(answerRequest.InterviewId, GetCommandResponsibleId(answerRequest.InterviewId),
+                identity.Id, identity.RosterVector, answerRequest.Answer));
+            return Ok();
+        }
+
+        public virtual IHttpActionResult AnswerYesNoQuestion([FromBody] AnswerRequest<InterviewYesNoAnswer[]> answerRequest)
+        {
+            var identity = Identity.Parse(answerRequest.Identity);
+            var answer = answerRequest.Answer.Select(a => new AnsweredYesNoOption(a.Value, a.Yes)).ToArray();
+            this.ExecuteQuestionCommand(new AnswerYesNoQuestion(answerRequest.InterviewId, GetCommandResponsibleId(answerRequest.InterviewId),
+                identity.Id, identity.RosterVector, answer));
+            return Ok();
+        }
+
+        public virtual IHttpActionResult AnswerIntegerQuestion([FromBody] AnswerRequest<int> answerRequest)
+        {
+            var identity = Identity.Parse(answerRequest.Identity);
+            this.ExecuteQuestionCommand(new AnswerNumericIntegerQuestionCommand(answerRequest.InterviewId, this.GetCommandResponsibleId(answerRequest.InterviewId), identity.Id, identity.RosterVector, answerRequest.Answer));
             return Ok();
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
-        public virtual IHttpActionResult AnswerQRBarcodeQuestion(Guid interviewId, string questionIdenty, string text)
+        public virtual IHttpActionResult AnswerDoubleQuestion([FromBody] AnswerRequest<double> answerRequest)
         {
-            var identity = Identity.Parse(questionIdenty);
-            this.ExecuteQuestionCommand(new AnswerQRBarcodeQuestionCommand(interviewId,
-                this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, text));
+            var identity = Identity.Parse(answerRequest.Identity);
+            this.ExecuteQuestionCommand(new AnswerNumericRealQuestionCommand(answerRequest.InterviewId, this.GetCommandResponsibleId(answerRequest.InterviewId), identity.Id, identity.RosterVector, answerRequest.Answer));
+            return Ok();
+        }
+
+        [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
+        public virtual IHttpActionResult AnswerQRBarcodeQuestion([FromBody] AnswerRequest<string> answerRequest)
+        {
+            var identity = Identity.Parse(answerRequest.Identity);
+            this.ExecuteQuestionCommand(new AnswerQRBarcodeQuestionCommand(answerRequest.InterviewId,
+                this.GetCommandResponsibleId(answerRequest.InterviewId), identity.Id, identity.RosterVector, answerRequest.Answer));
             return Ok();
         }
 

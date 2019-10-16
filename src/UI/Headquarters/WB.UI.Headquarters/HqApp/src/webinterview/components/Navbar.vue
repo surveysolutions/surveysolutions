@@ -187,8 +187,9 @@
             }
         },
         beforeMount() {
-            this.$store.dispatch("getLanguageInfo")
-            this.$store.dispatch("loadInterview")
+            var interviewId = this.$config.id
+            this.$store.dispatch("getLanguageInfo", interviewId)
+            this.$store.dispatch("loadInterview", interviewId)
         },
         mounted(){
             $(window).on('resize', function() {
