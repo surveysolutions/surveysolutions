@@ -273,6 +273,19 @@ namespace WB.UI.Designer.Controllers
             return this.RedirectToAction("Details", new { id = sid });
         }
 
+        [HttpPost]
+        public JsonResult SaveComment(Guid id, Guid historyItemId, string comment)
+        {
+            bool hasAccess = this.User.IsAdmin() || this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id, this.User.GetId());
+            if (!hasAccess)
+                return Json(false);
+
+            this.questionnaireChangeHistoryFactory.UpdateQuestionnaireChangeRecord(historyItemId.ToString("N"),
+                comment);
+
+            return Json(true);
+        }
+
         public IActionResult QuestionnaireHistory(Guid id, int? p)
         {
             bool hasAccess = this.User.IsAdmin() || this.questionnaireViewFactory.HasUserAccessToQuestionnaire(id, this.User.GetId());

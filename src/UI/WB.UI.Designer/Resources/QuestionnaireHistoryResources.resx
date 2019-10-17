@@ -186,6 +186,12 @@
   <data name="RevertToThisVersion" xml:space="preserve">
     <value>Revert to this version</value>
   </data>
+  <data name="LeaveComment" xml:space="preserve">
+    <value>Leave a comment</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
   <data name="Confirm" xml:space="preserve">
     <value>Confirm</value>
   </data>

@@ -115,6 +115,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Leave a comment.
+        /// </summary>
+        public static string LeaveComment {
+            get {
+                return ResourceManager.GetString("LeaveComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lookup table {0} added.
         /// </summary>
         public static string LookupTable_Add {
@@ -444,6 +453,15 @@ namespace WB.UI.Designer.Resources {
         public static string Roster_Update {
             get {
                 return ResourceManager.GetString("Roster_Update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        public static string Save {
+            get {
+                return ResourceManager.GetString("Save", resourceCulture);
             }
         }
         
