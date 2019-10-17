@@ -59,6 +59,5 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
         private static QuestionnaireVerificationMessage[] verificationMessages;
         private static QuestionnaireApiController controller;
         private static VerificationResult result;
-        private static QuestionnaireRevision questionnaireId = Create.QuestionnaireRevision("22222222222222222222222222222222");
     }
 }

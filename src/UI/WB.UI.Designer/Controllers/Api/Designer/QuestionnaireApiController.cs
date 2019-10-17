@@ -28,9 +28,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         private readonly IVerificationErrorsMapper verificationErrorsMapper;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IQuestionnaireInfoFactory questionnaireInfoFactory;
-
         private readonly IOptions<WebTesterSettings> webTesterSettings;
-
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IChapterInfoViewFactory chapterInfoViewFactory;
         private readonly IQuestionnaireInfoViewFactory questionnaireInfoViewFactory;
@@ -78,7 +76,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         [HttpGet]
         [Route("chapter/{id}")]
-        public IActionResult Chapter(QuestionnaireRevision id, string chapterId)
+        public ActionResult<NewChapterView> Chapter(QuestionnaireRevision id, string chapterId)
         {
             var chapterInfoView = this.chapterInfoViewFactory.Load(id, groupId: chapterId);
 
