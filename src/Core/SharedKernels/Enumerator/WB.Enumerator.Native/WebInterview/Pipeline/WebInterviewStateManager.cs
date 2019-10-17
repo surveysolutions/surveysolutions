@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Hubs;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Versions;
@@ -8,7 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Enumerator.Native.WebInterview.Pipeline
 {
-    public class WebInterviewStateManager : HubPipelineModule
+    public class WebInterviewStateManager : IPipelineModule
     {
         private readonly IProductVersion productVersion;
 
@@ -17,14 +18,34 @@ namespace WB.Enumerator.Native.WebInterview.Pipeline
             this.productVersion = productVersion;
         }
 
-        protected override bool OnBeforeConnect(IHub hub)
+        private void ReloadIfOlderVersion(IHub hub)
         {
-            this.ReloadIfOlderVersion(hub);
-            return base.OnBeforeConnect(hub);
+            if (this.productVersion.ToString() != hub.Context.QueryString[@"appVersion"])
+            {
+                hub.Clients.Caller.reloadInterview();
+            }
         }
 
-        protected override void OnAfterConnect(IHub hub)
+        public void OnAfterIncoming(object result, IHubIncomingInvokerContext context)
         {
+            var interviewId = context.Hub.Context.QueryString[@"interviewId"];
+            var sectionId = context.Hub.Clients.CallerState.sectionId as string;
+
+            if (interviewId != null)
+            {
+                context.Hub.Groups.Add(context.Hub.Context.ConnectionId,
+                    sectionId == null
+                        ? Enumerator.Native.WebInterview.WebInterview.GetConnectedClientPrefilledSectionKey(Guid.Parse(interviewId))
+                        : Enumerator.Native.WebInterview.WebInterview.GetConnectedClientSectionKey(Identity.Parse(sectionId), Guid.Parse(interviewId)));
+
+                context.Hub.Groups.Add(context.Hub.Context.ConnectionId, interviewId);
+            }
+        }
+
+        public Task OnConnected(IHub hub)
+        {
+            this.ReloadIfOlderVersion(hub);
+
             var interviewId = hub.Context.QueryString[@"interviewId"];
             string questionnaireId = null;
 
@@ -51,40 +72,18 @@ namespace WB.Enumerator.Native.WebInterview.Pipeline
 
                 hub.Groups.Add(hub.Context.ConnectionId, questionnaireId);
             });
-
-            base.OnAfterConnect(hub);
+            return Task.CompletedTask;
         }
 
-        protected override bool OnBeforeReconnect(IHub hub)
+        public Task OnDisconnected(IHub hub, bool stopCalled)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task OnReconnected(IHub hub)
         {
             this.ReloadIfOlderVersion(hub);
-            return base.OnBeforeReconnect(hub);
-        }
-
-        private void ReloadIfOlderVersion(IHub hub)
-        {
-            if (this.productVersion.ToString() != hub.Context.QueryString[@"appVersion"])
-            {
-                hub.Clients.Caller.reloadInterview();
-            }
-        }
-
-        protected override object OnAfterIncoming(object result, IHubIncomingInvokerContext context)
-        {
-            var interviewId = context.Hub.Context.QueryString[@"interviewId"];
-            var sectionId = context.Hub.Clients.CallerState.sectionId as string;
-
-            if (interviewId != null)
-            {
-                context.Hub.Groups.Add(context.Hub.Context.ConnectionId,
-                    sectionId == null
-                        ? Enumerator.Native.WebInterview.WebInterview.GetConnectedClientPrefilledSectionKey(Guid.Parse(interviewId))
-                        : Enumerator.Native.WebInterview.WebInterview.GetConnectedClientSectionKey(Identity.Parse(sectionId), Guid.Parse(interviewId)));
-
-                context.Hub.Groups.Add(context.Hub.Context.ConnectionId, interviewId);
-            }
-
-            return base.OnAfterIncoming(result, context);
+            return Task.CompletedTask;
         }
     }
 }
