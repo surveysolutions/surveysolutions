@@ -5,6 +5,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
@@ -18,14 +19,18 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IQuestionnaireBrowseViewFactory browseViewFactory;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
+        private readonly IRestServiceSettings restServiceSettings;
 
-        public QuestionnairesController(IQuestionnaireStorage questionnaireStorage,
-            IQuestionnaireBrowseViewFactory browseViewFactory, 
-            IWebInterviewConfigProvider webInterviewConfigProvider)
+        public QuestionnairesController(
+            IQuestionnaireStorage questionnaireStorage,
+            IQuestionnaireBrowseViewFactory browseViewFactory,
+            IWebInterviewConfigProvider webInterviewConfigProvider,
+            IRestServiceSettings restServiceSettings)
         {
             this.questionnaireStorage = questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
             this.browseViewFactory = browseViewFactory ?? throw new ArgumentNullException(nameof(browseViewFactory));
             this.webInterviewConfigProvider = webInterviewConfigProvider ?? throw new ArgumentNullException(nameof(webInterviewConfigProvider));
+            this.restServiceSettings = restServiceSettings ?? throw new ArgumentNullException(nameof(restServiceSettings));
         }
 
         [OutputCache(Duration = 1200)]
@@ -45,7 +50,8 @@ namespace WB.UI.Headquarters.Controllers
             model.CreationDateUtc = browseItem.CreationDate;
             model.WebMode = this.webInterviewConfigProvider.Get(questionnaireIdentity).Started;
             model.AudioAudit = browseItem.IsAudioRecordingEnabled;
-            
+            model.DesignerUrl = $"{this.restServiceSettings.Endpoint.TrimEnd('/')}/" +
+                $"questionnaire/details/{questionnaire.QuestionnaireId:N}${questionnaire.Revision}";
             FillStats(questionnaireIdentity, model);
 
             return View(model);

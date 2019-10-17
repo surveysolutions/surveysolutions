@@ -18,6 +18,10 @@
                             <td>{{model.title}}</td>
                         </tr>
                         <tr>
+                            <td>{{$t('Dashboard.ViewOnDesigner')}}</td>
+                            <td><a :href="model.designerUrl" target="_blank">{{ model.designerUrl }}</a></td>
+                        </tr>
+                        <tr>
                             <td>{{$t('Dashboard.Version')}}</td>
                             <td>{{model.version}}</td>
                         </tr>
