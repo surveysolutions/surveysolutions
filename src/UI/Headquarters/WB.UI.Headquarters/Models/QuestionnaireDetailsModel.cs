@@ -18,5 +18,6 @@ namespace WB.UI.Headquarters.Models
         public int QuestionsCount { get; set; }
         public int QuestionsWithConditionsCount { get; set; }
         public string DesignerUrl { get; internal set; }
+        public string Comment { get; set; }
     }
 }
