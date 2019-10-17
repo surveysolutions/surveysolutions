@@ -60,10 +60,14 @@
                                     }
                                 </td>
                             }
+
                             <td>
-                                @Html.ActionLink("View", "Details", "Questionnaire", new { id = $"{Model.Id:N}${listViewModel.Sequence}" })
-                            </td>
-                        </tr>
+                                @if (listViewModel.HasRevertTo) {
+                                    @Html.ActionLink("View", "Details", "Questionnaire", new { id = $"{Model.Id:N}${listViewModel.Sequence}" })
+                                }
+                         </td>
+
+                     </tr>
                     }
                 </tbody>
             </table>
