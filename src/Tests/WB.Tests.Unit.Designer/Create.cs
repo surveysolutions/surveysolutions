@@ -1595,5 +1595,8 @@ namespace WB.Tests.Unit.Designer
 
         public static QuestionnaireRevision QuestionnaireRevision(Guid questionnaireId)
             => new QuestionnaireRevision(questionnaireId);
+
+        public static QuestionnaireRevision QuestionnaireRevision(Guid questionnaireId, Guid rev)
+            => new QuestionnaireRevision(questionnaireId, rev);
     }
 }

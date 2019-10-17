@@ -39,7 +39,6 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
 
         private static QuestionnaireApiController controller;
         private static List<QuestionnaireItemLink> result;
-        private static QuestionnaireRevision questionnaireId = Create.QuestionnaireRevision("22222222222222222222222222222222");
         private static Guid groupId = Guid.Parse("33333333333333333333333333333333");
         private static IQuestionnaireInfoFactory questionnaireInfoFactory;
         private static List<QuestionnaireItemLink> brokenLinks;

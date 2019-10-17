@@ -36,7 +36,6 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
             result.WereOptionsTruncated.Should().BeTrue();
 
         private static QuestionnaireApiController controller;
-        private static QuestionnaireRevision questionnaireId = Create.QuestionnaireRevision("22222222222222222222222222222222");
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static Mock<IQuestionnaireInfoFactory> questionnaireInfoViewFactoryMock;
         private static NewEditQuestionView result;

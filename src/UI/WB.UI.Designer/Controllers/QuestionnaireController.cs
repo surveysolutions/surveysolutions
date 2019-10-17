@@ -4,8 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -26,7 +24,7 @@ using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Resources;
 
 namespace WB.UI.Designer.Controllers
-{   
+{
     [Authorize]
     [ResponseCache(NoStore = true)]
     public partial class QuestionnaireController : Controller
