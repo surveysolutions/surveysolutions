@@ -45,6 +45,10 @@
                             <td>{{$t('Dashboard.RecordAudio')}}</td>
                             <td>{{model.audioAudit ? $t('Common.Yes') : $t('Common.No')}}</td>
                         </tr>
+                        <tr>
+                            <td>{{$t('Assignments.DetailsComments')}}</td>
+                            <td>{{model.comment}}</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

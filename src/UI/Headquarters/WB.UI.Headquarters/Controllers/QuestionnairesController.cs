@@ -52,6 +52,8 @@ namespace WB.UI.Headquarters.Controllers
             model.AudioAudit = browseItem.IsAudioRecordingEnabled;
             model.DesignerUrl = $"{this.restServiceSettings.Endpoint.TrimEnd('/')}/" +
                 $"questionnaire/details/{questionnaire.QuestionnaireId:N}${questionnaire.Revision}";
+            model.Comment = browseItem.Comment;
+
             FillStats(questionnaireIdentity, model);
 
             return View(model);
