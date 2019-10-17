@@ -53,8 +53,22 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                     .ToList(), page, count, pageSize);
         }
 
-        private QuestionnaireChangeHistoricalRecord CreateQuestionnaireChangeHistoryWebItem(QuestionnaireDocument questionnaire,
-            QuestionnaireChangeRecord questionnaireChangeRecord,
+        public void UpdateQuestionnaireChangeRecord(string questionnaireChangeRecordId, string comment)
+        {
+            var item = this.dbContext.QuestionnaireChangeRecords.Find(questionnaireChangeRecordId);
+            if (item == null) return;
+
+            if(item.Meta == null)
+                item.Meta = new QuestionnaireChangeRecordMetadata();
+
+            item.Meta.Comment = comment;
+
+            this.dbContext.Update(item);
+            this.dbContext.SaveChanges();
+        }
+
+        private QuestionnaireChangeHistoricalRecord CreateQuestionnaireChangeHistoryWebItem(QuestionnaireDocument questionnaire, 
+            QuestionnaireChangeRecord questionnaireChangeRecord, 
             HashSet<string> recordWithRevertAvailable)
         {
             var references =
@@ -74,7 +88,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 questionnaireChangeRecord.AffectedEntriesCount,
                 recordWithRevertAvailable.Contains(questionnaireChangeRecord.QuestionnaireChangeRecordId),
                 questionnaireChangeRecord.TargetItemDateTime,
-                references)
+                references,
+                questionnaireChangeRecord?.Meta?.Comment)
             {
                 Sequence = questionnaireChangeRecord.Sequence
             };
