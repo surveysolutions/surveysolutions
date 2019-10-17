@@ -101,7 +101,7 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind<ResourcesPostProcessor, ResourcesPostProcessor>();
             registry.Bind<IQuestionnaireRevisionMetadataUpdater, QuestionnaireRevisionMetadataUpdater>();
 
-            registry.Bind<IDesignerQuestionnaireStorage, QuetsionnaireStorage>();
+            registry.Bind<IDesignerQuestionnaireStorage, DesignerQuestionnaireStorage>();
         }
 
         public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status)
