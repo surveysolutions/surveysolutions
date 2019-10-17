@@ -30,14 +30,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 .Select(x => x.Value)
                 .ToArray();
 
-            this.logger.Info($"Migrations. {migrationInfos.Length} new migration(s) found");
+            this.logger.Trace($"Migrations. {migrationInfos.Length} new migration(s) found");
 
             foreach (var migrationInfo in migrationInfos)
             {
                 var migration = migrationInfo.Migration;
                 var migrationDescription = migrationInfo.Description ?? migration.GetType().Name;
 
-                this.logger.Info($"Migrations. Migration: {migrationDescription}({migrationInfo.Version}) started");
+                this.logger.Debug($"Migrations. Migration: {migrationDescription}({migrationInfo.Version}) started");
 
                 Stopwatch sw = Stopwatch.StartNew();
 
@@ -49,7 +49,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     Description = migrationDescription
                 });
 
-                this.logger.Info($"Migrations. Migration: {migrationDescription}({migrationInfo.Version}) completed. Took {sw.Elapsed}");
+                this.logger.Debug($"Migrations. Migration: {migrationDescription}({migrationInfo.Version}) completed. Took {sw.Elapsed}");
             }
         }
 
