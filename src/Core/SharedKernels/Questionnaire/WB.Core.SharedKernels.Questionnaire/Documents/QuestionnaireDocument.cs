@@ -37,7 +37,7 @@ namespace Main.Core.Documents
         }
         
         public string Id { get; set; }
-        public Guid Revision { get; set; }
+        public int Revision { get; set; }
 
         private List<IComposite> children;
 
