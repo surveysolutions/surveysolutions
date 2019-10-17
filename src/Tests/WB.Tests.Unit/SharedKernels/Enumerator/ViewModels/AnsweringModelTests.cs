@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Moq;
 using MvvmCross.Plugin.Messenger;
 using NUnit.Framework;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -25,7 +26,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             var answering = new AnsweringViewModel(
                 commandServiceMock.Object, 
                 Mock.Of<IUserInterfaceStateService>(),
-                Mock.Of<IMvxMessenger>());
+                Mock.Of<IMvxMessenger>(),
+                Mock.Of<ILogger>());
 
             try
             {
