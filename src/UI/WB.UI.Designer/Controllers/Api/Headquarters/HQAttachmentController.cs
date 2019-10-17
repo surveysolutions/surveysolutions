@@ -1,10 +1,14 @@
 using System;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.UI.Designer.Code.Attributes;
 
 namespace WB.UI.Designer.Controllers.Api.Headquarters
 {
     [Route("api/hq/attachment")]
+    [Authorize]
+    [AllowOnlyFromWhitelistIP]
     public class HQAttachmentController : ControllerBase
     {
         private readonly IAttachmentService attachmentService;
