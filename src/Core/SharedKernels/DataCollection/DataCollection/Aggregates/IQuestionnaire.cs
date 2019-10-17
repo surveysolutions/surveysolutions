@@ -14,6 +14,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         /// Gets the current version of the instance as it is known in the event store.
         /// </summary>
         long Version { get; }
+        int Revision { get; }
 
         Guid QuestionnaireId { get; }
 

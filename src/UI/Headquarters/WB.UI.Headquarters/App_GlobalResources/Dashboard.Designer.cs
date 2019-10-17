@@ -358,6 +358,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to View on Designer.
+        /// </summary>
+        internal static string ViewOnDesigner {
+            get {
+                return ResourceManager.GetString("ViewOnDesigner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Web interview setup.
         /// </summary>
         internal static string WebInterviewSetup {
