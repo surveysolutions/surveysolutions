@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using FluentAssertions;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
@@ -12,12 +13,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewFactory
 {
     internal class when_loading_view_and_chapter_exists : ChapterInfoViewFactoryContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [OneTimeSetUp]
+        public void context()
+        {
             var repositoryMock = new Mock<IDesignerQuestionnaireStorage>();
 
             repositoryMock
                 .Setup(x => x.Get(questionnaireId))
-                .Returns(Create.QuestionnaireDocumentWithOneChapter(chapterId, 
+                .Returns(Create.QuestionnaireDocumentWithOneChapter(chapterId,
                     Create.TextListQuestion(variable: "list"),
                     Create.FixedRoster(variable: "fixed_roster"),
                     Create.Variable(variableName: "variable")
@@ -30,16 +33,20 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewFactory
         private void BecauseOf() =>
             view = factory.Load(questionnaireId, chapterId.FormatGuid());
 
-        [NUnit.Framework.Test] public void should_find_chapter () =>
+        [Test]
+        public void should_find_chapter() =>
             view.Should().NotBeNull();
 
-        [NUnit.Framework.Test] public void should_chapter_id_be_equal_chapterId () =>
+        [Test]
+        public void should_chapter_id_be_equal_chapterId() =>
             view.Chapter.ItemId.Should().Be(chapterId.FormatGuid());
 
-        [NUnit.Framework.Test] public void should_view_have_all_variabe_names_ () =>
+        [Test]
+        public void should_view_have_all_variabe_names_() =>
             view.VariableNames.Length.Should().Be(keywordsAndVariables.Length);
 
-        [NUnit.Framework.Test] public void should_contain_all_variabe_names_ () =>
+        [Test]
+        public void should_contain_all_variabe_names_() =>
             view.VariableNames.Select(x => x.Name).Should().Contain(keywordsAndVariables);
 
         private static NewChapterView view;

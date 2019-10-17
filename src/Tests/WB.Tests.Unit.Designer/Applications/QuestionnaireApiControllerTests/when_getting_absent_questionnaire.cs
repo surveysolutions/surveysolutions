@@ -11,11 +11,10 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
         public void should_throw_HttpResponseException_exception()
         {
             var controller = CreateQuestionnaireController();
-            var actionResult = controller.EditQuestion(Create.QuestionnaireRevision(questionnaireId), questionId);
+            var actionResult = controller.EditQuestion(questionnaireId, questionId);
             Assert.That(actionResult, Is.InstanceOf(typeof(NotFoundResult)));
         }
 
-        private static string questionnaireId = "22222222222222222222222222222222";
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
     }
 }

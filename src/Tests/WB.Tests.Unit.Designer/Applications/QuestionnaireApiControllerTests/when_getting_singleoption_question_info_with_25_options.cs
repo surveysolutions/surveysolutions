@@ -33,7 +33,6 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
             result.Options.Length.Should().Be(25);
 
         private static QuestionnaireApiController controller;
-        private static QuestionnaireRevision questionnaireId = Create.QuestionnaireRevision("22222222222222222222222222222222");
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static Mock<IQuestionnaireInfoFactory> questionnaireInfoViewFactoryMock;
         private static NewEditQuestionView result;

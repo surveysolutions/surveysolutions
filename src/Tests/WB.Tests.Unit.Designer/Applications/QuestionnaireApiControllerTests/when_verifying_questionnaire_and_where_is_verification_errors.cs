@@ -117,6 +117,5 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
         private static VerificationMessage[] mappedAndEnrichedVerificationErrors;
         private static VerificationMessage[] mappedAndEnrichedVerificationWarnings;
         private static VerificationResult result;
-        private static QuestionnaireRevision questionnaireId = Create.QuestionnaireRevision("22222222222222222222222222222222");
     }
 }
