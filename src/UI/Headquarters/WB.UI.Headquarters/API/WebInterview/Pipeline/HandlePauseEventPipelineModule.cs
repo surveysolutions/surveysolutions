@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.SignalR.Hubs;
@@ -8,22 +9,17 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
+using WB.Enumerator.Native.WebInterview.Pipeline;
 
 namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 {
-    public class HandlePauseEventPipelineModule : HubPipelineModule
+    public class HandlePauseEventPipelineModule : IPipelineModule
     {
         private readonly IPauseResumeQueue pauseResumeQueue;
         
         public HandlePauseEventPipelineModule(IPauseResumeQueue pauseResumeQueue)
         {
             this.pauseResumeQueue = pauseResumeQueue ?? throw new ArgumentNullException(nameof(pauseResumeQueue));
-        }
-
-        protected override bool OnBeforeDisconnect(IHub hub, bool stopCalled)
-        {
-            RecordInterviewPause(hub);
-            return base.OnBeforeDisconnect(hub, stopCalled);
         }
 
         private void RecordInterviewPause(IHub hub)
@@ -55,6 +51,22 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
             {
                 pauseResumeQueue.EnqueueCloseBySupervisor(new CloseInterviewBySupervisorCommand(Guid.Parse(interviewId), userId));
             }
+        }
+
+        public Task OnConnected(IHub hub)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task OnDisconnected(IHub hub, bool stopCalled)
+        {
+            RecordInterviewPause(hub);
+            return Task.CompletedTask;
+        }
+
+        public Task OnReconnected(IHub hub)
+        {
+            return Task.CompletedTask;
         }
     }
 }

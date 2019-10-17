@@ -22,15 +22,13 @@ namespace WB.UI.Headquarters.API.WebInterview
 
             foreach (var type in HubPipelineModules)
             {
-                registry.BindAsSingleton(typeof(IHubPipelineModule), type, type);
+                registry.BindAsSingleton(typeof(IPipelineModule), type, type);
             }
         }
 
         public static Type[] HubPipelineModules => new[]
         {
-            //typeof(SignalrErrorHandler),
             typeof(HandlePauseEventPipelineModule),
-            //typeof(HubLifetimePipelineModule),
             typeof(WebInterviewStateManager),
             typeof(WebInterviewConnectionsCounter)
         };
