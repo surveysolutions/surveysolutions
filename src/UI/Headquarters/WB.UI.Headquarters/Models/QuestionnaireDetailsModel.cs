@@ -17,5 +17,6 @@ namespace WB.UI.Headquarters.Models
         public int RostersCount { get; set; }
         public int QuestionsCount { get; set; }
         public int QuestionsWithConditionsCount { get; set; }
+        public string DesignerUrl { get; internal set; }
     }
 }
