@@ -42,10 +42,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
         }
 
-        public void UpdateQuestionnaireMetadata(Guid revision, QuestionnaireRevisionMetaDataUpdate metaData)
+        public void UpdateQuestionnaireMetadata(Guid questionnaire, int revision, QuestionnaireRevisionMetaDataUpdate metaData)
         {
             var record = this.dbContext.QuestionnaireChangeRecords
-                .SingleOrDefault(r => r.QuestionnaireChangeRecordId == revision.FormatGuid());
+                .SingleOrDefault(r => r.QuestionnaireId == questionnaire.FormatGuid() 
+                    && r.Sequence == revision);
 
             if (record.Meta == null)
             {
@@ -63,7 +64,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             this.dbContext.SaveChanges();
         }
 
-        private Guid? GetLastHistoryIdForAction(Guid questionnaireId, QuestionnaireActionType actionType = QuestionnaireActionType.ImportToHq)
+        private int? GetLastHistoryIdForAction(Guid questionnaireId, QuestionnaireActionType actionType = QuestionnaireActionType.ImportToHq)
         {
             var sId = questionnaireId.FormatGuid();
 
@@ -73,7 +74,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             if (record == null) return null;
 
-            return Guid.Parse(record.QuestionnaireChangeRecordId);
+            return record.Sequence;
         }
 
         private QuestionnaireChangeRecordMetadata FromUserAgent(string userAgent)

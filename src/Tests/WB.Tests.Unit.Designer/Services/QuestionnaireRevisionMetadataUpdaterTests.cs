@@ -54,6 +54,7 @@ namespace WB.Tests.Unit.Designer.Services
             var changeRecord = new QuestionnaireChangeRecord
             {
                 QuestionnaireId = this.questionnaire.Id,
+                Sequence = 2,
                 QuestionnaireChangeRecordId = Id.g2.FormatGuid(),
                 ActionType = QuestionnaireActionType.ImportToHq
             };
@@ -64,7 +65,7 @@ namespace WB.Tests.Unit.Designer.Services
             // act
             this.metadataUpdater.LogInHistoryImportQuestionnaireToHq(this.questionnaire, "", Id.gA);
 
-            Assert.That(questionnaire.Revision.FormatGuid(), Is.EqualTo(changeRecord.QuestionnaireChangeRecordId));
+            Assert.That(questionnaire.Revision, Is.EqualTo(changeRecord.Sequence));
         }
 
         [Test]
@@ -74,6 +75,7 @@ namespace WB.Tests.Unit.Designer.Services
             {
                 QuestionnaireId = this.questionnaire.Id,
                 QuestionnaireChangeRecordId = Id.g2.FormatGuid(),
+                Sequence = 2,
                 ActionType = QuestionnaireActionType.ImportToHq
             };
 
@@ -81,9 +83,9 @@ namespace WB.Tests.Unit.Designer.Services
             this.db.SaveChanges();
 
             // act
-            this.metadataUpdater.UpdateQuestionnaireMetadata(Guid.Parse(changeRecord.QuestionnaireChangeRecordId),
+            this.metadataUpdater.UpdateQuestionnaireMetadata(this.questionnaire.PublicKey, 2,
                 new QuestionnaireRevisionMetaDataUpdate
-                {
+                {                    
                     Comment = "Some comment",
                     HqHost = "fsb.ru",
                     HqTimeZone = 160,
