@@ -13,10 +13,11 @@ export default {
 
     actions: {
         async loadTakeNew({ commit}) {
-            const interviewDetails = await Vue.$api.call(api => api.getInterviewDetails())
+            const interviewId = this.$config.id
+            const interviewDetails = await Vue.$api.get('getInterviewDetails', {interviewId})
             commit("SET_INTERVIEW_DETAILS", interviewDetails);
 
-            const data = await Vue.$api.call(api => api.getPrefilledQuestions())
+            const data = await Vue.$api.get('getPrefilledQuestions', { interviewId })
             commit("SET_TAKENEW_RESPONSE", data)
         }
     },
