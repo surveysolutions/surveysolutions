@@ -183,10 +183,10 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
         }
 
         [HttpPost]
-        [Route("revision/{id:Guid}/metadata")]
-        public IActionResult Tag(Guid id, [FromBody] QuestionnaireRevisionMetaDataUpdate tagData)
+        [Route("{id:Guid}/revision/{rev:int}/metadata")]
+        public IActionResult Tag(Guid id, int rev, [FromBody] QuestionnaireRevisionMetaDataUpdate tagData)
         {
-            this.questionnaireRevisionMetadataUpdater.UpdateQuestionnaireMetadata(id, tagData);
+            this.questionnaireRevisionMetadataUpdater.UpdateQuestionnaireMetadata(id, rev, tagData);
             return Ok();
         }
         
