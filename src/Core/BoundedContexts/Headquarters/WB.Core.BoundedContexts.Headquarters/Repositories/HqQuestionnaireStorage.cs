@@ -56,23 +56,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
             {
                 var question = composite as IQuestion;
 
-                QuestionnaireCompositeItem compositeItem = questionnaireItemsReader.Query(_ => _.FirstOrDefault(x =>
-                    x.QuestionnaireIdentity == questionnaireIdentity &&
-                    x.EntityId == composite.PublicKey));
-
-                if (compositeItem == null)
+                var compositeItem = new QuestionnaireCompositeItem
                 {
-                    compositeItem = new QuestionnaireCompositeItem
-                    {
-                        EntityId = composite.PublicKey,
-                        ParentId = composite.GetParent()?.PublicKey,
-                        QuestionType = question?.QuestionType,
-                        QuestionnaireIdentity = questionnaireIdentity,
-                        Featured = question?.Featured,
-                        QuestionScope = question?.QuestionScope,
-                        EntityType = composite.GetEntityType()
-                    };
-                }
+                    EntityId = composite.PublicKey,
+                    ParentId = composite.GetParent()?.PublicKey,
+                    QuestionType = question?.QuestionType,
+                    QuestionnaireIdentity = questionnaireIdentity,
+                    Featured = question?.Featured,
+                    QuestionScope = question?.QuestionScope,
+                    EntityType = composite.GetEntityType()
+                };
 
                 if (question is AbstractQuestion abstractQuestion)
                 {
