@@ -98,13 +98,64 @@ export default {
         const interviewId = rootState.route.params.interviewId
         Vue.$api.answer(questionIdentity, 'answerLinkedToListSingleQuestion', {interviewId, identity:questionIdentity, answer})
     },
-    answerMultimediaQuestion({ dispatch, rootState }, { id, file }) {
+    async answerMultimediaQuestion({ dispatch, state, rootState }, { id, file }) {
         const interviewId = rootState.route.params.interviewId
-        Vue.$api.answer(id, 'answerPictureQuestion', {interviewId, identity:id, answer:file})
+
+        const fd = new FormData()
+        fd.append("interviewId", interviewId)
+        fd.append("questionId", id)
+        fd.append("file", file)
+        dispatch("uploadProgress", { id, now: 0, total: 100 })
+
+        await $.ajax({
+            url: Vue.$config.imageUploadUri,
+            xhr() {
+                const xhr = $.ajaxSettings.xhr()
+                xhr.upload.onprogress = (e) => {
+                    var entity = state.entityDetails[id];
+                    if (entity != undefined) {
+                        dispatch("uploadProgress", {
+                            id,
+                            now: e.loaded,
+                            total: e.total
+                        })
+                    }
+                }
+                return xhr
+            },
+            data: fd,
+            processData: false,
+            contentType: false,
+            type: "POST"
+        })
     },
-    answerAudioQuestion({ dispatch, rootState }, { id, file }) {
+    async answerAudioQuestion({ dispatch, rootState }, { id, file }) {
         const interviewId = rootState.route.params.interviewId
-        Vue.$api.answer(id, 'answerAudioQuestion', {interviewId, identity:id, answer:file})
+        
+        const fd = new FormData()
+        fd.append("interviewId", interviewId)
+        fd.append("questionId", id)
+        fd.append("file", file)
+        dispatch("uploadProgress", { id, now: 0, total: 100 })
+
+        await $.ajax({
+            url: Vue.$config.audioUploadUri,
+            xhr() {
+                const xhr = $.ajaxSettings.xhr()
+                xhr.upload.onprogress = (e) => {
+                    dispatch("uploadProgress", {
+                        id,
+                        now: e.loaded,
+                        total: e.total
+                    })
+                }
+                return xhr
+            },
+            data: fd,
+            processData: false,
+            contentType: false,
+            type: "POST"
+        })
     },
     answerQRBarcodeQuestion({ dispatch, rootState }, { identity, text }) {
         const interviewId = rootState.route.params.interviewId
