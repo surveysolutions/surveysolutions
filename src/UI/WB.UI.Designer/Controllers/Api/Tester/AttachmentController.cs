@@ -7,7 +7,6 @@ using WB.UI.Designer.Code.Attributes;
 
 namespace WB.UI.Designer.Controllers.Api.Tester
 {
-    [AllowOnlyFromWhitelistIP]
     [Authorize]
     [Route("api/v{version:int}/attachment")]
     public class AttachmentController : ControllerBase
