@@ -76,7 +76,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         [HttpGet]
         [Route("chapter/{id}")]
-        public ActionResult<NewChapterView> Chapter(QuestionnaireRevision id, string chapterId)
+        public IActionResult Chapter(QuestionnaireRevision id, string chapterId)
         {
             var chapterInfoView = this.chapterInfoViewFactory.Load(id, groupId: chapterId);
 

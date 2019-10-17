@@ -1,12 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
-using System;
-using WB.Core.BoundedContexts.Designer.Implementation.Repositories;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Tests.Abc;
-using WB.UI.Designer.Controllers.Api.Designer;
 
 namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
 {

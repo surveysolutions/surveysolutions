@@ -7,12 +7,12 @@ using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.BoundedContexts.Designer.MembershipProvider
 {
-    public class QuetsionnaireStorage : IDesignerQuestionnaireStorage
+    public class DesignerQuestionnaireStorage : IDesignerQuestionnaireStorage
     {
         private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
 
-        public QuetsionnaireStorage(IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService,
+        public DesignerQuestionnaireStorage(IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService,
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader)
         {
             this.questionnaireHistoryVersionsService = questionnaireHistoryVersionsService;
