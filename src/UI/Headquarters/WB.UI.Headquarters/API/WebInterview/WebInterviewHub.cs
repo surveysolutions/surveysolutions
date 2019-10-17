@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Interview.Overview;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
+using WB.Enumerator.Native.WebInterview.Pipeline;
 using WB.UI.Headquarters.API.WebInterview.Pipeline;
 using WB.UI.Headquarters.Code;
 
@@ -23,6 +24,10 @@ namespace WB.UI.Headquarters.API.WebInterview
     [WebInterviewAuthorize]
     public class WebInterviewHub : Enumerator.Native.WebInterview.WebInterview, ILifetimeHub
     {
+        public WebInterviewHub(IPipelineModule[] hubPipelineModules) : base(hubPipelineModules)
+        {
+        }
+
         public event EventHandler OnDisposing;
 
         protected override void Dispose(bool disposing)

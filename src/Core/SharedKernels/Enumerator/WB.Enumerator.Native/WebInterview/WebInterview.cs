@@ -1,30 +1,52 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
-using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Enumerator.Native.WebInterview.Pipeline;
 
 namespace WB.Enumerator.Native.WebInterview
 {
-    public abstract class WebInterview : Hub, IErrorDetailsProvider
+    public abstract class WebInterview : Hub
     {
+        private readonly IPipelineModule[] hubPipelineModules;
+
         protected string CallerInterviewId => this.Context.QueryString[@"interviewId"];
 
 
-        public WebInterview()
+        protected WebInterview(IPipelineModule[] hubPipelineModules)
         {
+            this.hubPipelineModules = hubPipelineModules;
         }
 
-        public void FillExceptionData(Dictionary<string, string> data)
+        public override async Task OnConnected()
         {
-            var interviewId = CallerInterviewId;
-            if (interviewId != null) data["caller.interviewId"] = interviewId;
+            foreach (var pipelineModule in hubPipelineModules)
+            {
+                await pipelineModule.OnConnected(this);
+            }
+            await base.OnConnected();
         }
+
+        public override async Task OnDisconnected(bool stopCalled)
+        {
+            foreach (var pipelineModule in hubPipelineModules)
+            {
+                await pipelineModule.OnDisconnected(this, stopCalled);
+            }
+            await base.OnDisconnected(stopCalled);
+        }
+
+        public override async Task OnReconnected()
+        {
+            foreach (var pipelineModule in hubPipelineModules)
+            {
+                await pipelineModule.OnReconnected(this);
+            }
+            await base.OnReconnected();
+        }
+
 
         [Localizable(false)]
         public static string GetConnectedClientSectionKey(Identity sectionId, Guid interviewId) => $"{sectionId}x{interviewId}";
@@ -57,11 +79,6 @@ namespace WB.Enumerator.Native.WebInterview
             return e.Message;
         }
         
-        public void SetServiceLocator(IServiceLocator sl)
-        {
-            // need remove
-        }
-
         public void Ping()
         {
             //

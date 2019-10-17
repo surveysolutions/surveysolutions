@@ -48,14 +48,6 @@ namespace WB.Enumerator.Native.WebInterview
         public static void Configure(IAppBuilder app, Type[] pipelineModules)
         {
             var resolver = GlobalHost.DependencyResolver;
-            var pipeline = resolver.Resolve<IHubPipeline>() ?? throw new ArgumentNullException(@"resolver.Resolve<IHubPipeline>()");
-
-            foreach (var moduleType in pipelineModules)
-            {
-                var module = resolver.GetService(moduleType) as IHubPipelineModule;
-                if (module == null) throw new ArgumentNullException(nameof(module), $@"Tried to resolve type {moduleType}");
-                pipeline.AddModule(module);
-            }
 
             (resolver.GetService(typeof(IConnectionsMonitor)) as IConnectionsMonitor)?.StartMonitoring();
 
