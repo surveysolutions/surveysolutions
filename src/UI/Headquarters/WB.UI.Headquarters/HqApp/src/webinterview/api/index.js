@@ -61,63 +61,6 @@ const scriptIncludedPromise = new Promise(resolve =>
             store.dispatch("setAnswerAsNotSaved", { id, message })
         }
 
-        interviewProxy.server.answerPictureQuestion = (id, file) => {
-            const fd = new FormData()
-            fd.append("interviewId", store.state.route.params.interviewId)
-            fd.append("questionId", id)
-            fd.append("file", file)
-            store.dispatch("uploadProgress", { id, now: 0, total: 100 })
-
-            return $.ajax({
-                url: config.imageUploadUri,
-                xhr() {
-                    const xhr = $.ajaxSettings.xhr()
-                    xhr.upload.onprogress = (e) => {
-                        var entity = store.state.webinterview.entityDetails[id];
-                        if (entity != undefined) {
-                            store.dispatch("uploadProgress", {
-                                id,
-                                now: e.loaded,
-                                total: e.total
-                            })
-                        }
-                    }
-                    return xhr
-                },
-                data: fd,
-                processData: false,
-                contentType: false,
-                type: "POST"
-            })
-        }
-
-        interviewProxy.server.answerAudioQuestion = (id, file) => {
-            const fd = new FormData()
-            fd.append("interviewId", store.state.route.params.interviewId)
-            fd.append("questionId", id)
-            fd.append("file", file)
-            store.dispatch("uploadProgress", { id, now: 0, total: 100 })
-
-            return $.ajax({
-                url: config.audioUploadUri,
-                xhr() {
-                    const xhr = $.ajaxSettings.xhr()
-                    xhr.upload.onprogress = (e) => {
-                        store.dispatch("uploadProgress", {
-                            id,
-                            now: e.loaded,
-                            total: e.total
-                        })
-                    }
-                    return xhr
-                },
-                data: fd,
-                processData: false,
-                contentType: false,
-                type: "POST"
-            })
-        }
-
         resolve()
     })
 )
@@ -145,7 +88,7 @@ function hubStarter(options) {
         $.connection.hub.qs = _.assign(options, queryString);
     
         // { transport: supportedTransports }
-        wrap($.signalR.hub.start({ transport: config.supportedTransports })).then(() => {
+        $.signalR.hub.start({ transport: config.supportedTransports }).then(() => {
             // transport: "longPolling"
             $.connection.hub.connectionSlow(() => {
                 store.dispatch("connectionSlow")
@@ -177,49 +120,12 @@ async function getInterviewHub() {
     return (await getInstance()).server
 }
 
-export async function apiCallerAndFetch(id, action) {
-    if (id) {
-        store.dispatch("fetch", { id })
-    }
-    const hub = await getInterviewHub()
-
-    store.dispatch("fetchProgress", 1)
-
-    try {
-        return await wrap(action(hub))
-    } catch (err) {
-        if (id) {
-            store.dispatch("setAnswerAsNotSaved", { id, message: err.statusText })
-            store.dispatch("fetch", { id, done: true })
-        } else {
-            store.dispatch("UNHANDLED_ERROR", err)
-        }
-    } finally {
-        store.dispatch("fetchProgress", -1)
-    }
-}
-
-export async function apiCaller(action) {
-    if(config.splashScreen) return
-    const hub = await getInterviewHub()
-
-    store.dispatch("fetchProgress", 1)
-
-    try {
-        return await wrap(action(hub))
-    } catch (err) {
-        store.dispatch("UNHANDLED_ERROR", err)
-    } finally {
-        store.dispatch("fetchProgress", -1)
-    }
-}
-
 export async function apiGet(actionName, params) {
     if(config.splashScreen) return
 
     store.dispatch("fetchProgress", 1)
-    //const hub = await getInterviewHub()
-    //await wrap(hub.ping())
+    const hub = await getInterviewHub()
+    await wrap(hub.ping())
 
     try {
         var headers = store.getters.isReviewMode === true ? { review: true } : { }
@@ -259,8 +165,8 @@ export async function apiAnswerPost(id, actionName, params) {
     }
 
     store.dispatch("fetchProgress", 1)
-    const hub = await getInterviewHub()
-    await wrap(hub.ping())
+    //const hub = await getInterviewHub()
+    //await wrap(hub.ping())
 
     try {
         var headers = store.getters.isReviewMode === true ? { review: true } : { }
@@ -282,10 +188,8 @@ export async function apiAnswerPost(id, actionName, params) {
 export function install(Vue, options) {
     store = options.store;
     const api = {
-        call: apiCaller,
         hub: getInstance,
         stop: apiStop,
-        callAndFetch: apiCallerAndFetch,
         post: apiPost,
         get: apiGet,
         answer: apiAnswerPost,
