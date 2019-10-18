@@ -22,6 +22,7 @@
             </th>
             <th>@QuestionnaireHistoryResources.UserName</th>
             <th>@QuestionnaireHistoryResources.Timestamp</th>
+            <th>@QuestionnaireHistoryResources.Comment</th>
             @if (!Model.ReadonlyMode)
             {
                 <th></th>
@@ -54,26 +55,27 @@
                             <td>
                                 @listViewModel.Comment
                             </td>
-                            @if (!Model.ReadonlyMode)
-                            {
-                                <td>
-                                    @if (listViewModel.HasRevertTo)
-                                    {
-                                        <a href="javascript:void(0);" onclick="confirmRevert('@listViewModel.Timestamp.ToString("s")', '@listViewModel.Id')">@QuestionnaireHistoryResources.RevertToThisVersion</a>
-                                    }
-                                </td>
-                                <td>
-                                       <a href="javascript:void(0);" onclick="showComment('@listViewModel.Id')">@QuestionnaireHistoryResources.LeaveComment</a>
-                                </td>
-                            }
-
                             <td>
-                                @if (listViewModel.HasRevertTo) {
-                                    @Html.ActionLink("View", "Details", "Questionnaire", new { id = $"{Model.Id:N}${listViewModel.Sequence}" })
-                                }
-                         </td>
-
-                     </tr>
+                                <div class="btn-group pull-right">
+                                    <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="false">@QuestionnaireController.Action<span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        @if (!Model.ReadonlyMode)
+                                        {
+                                            @if (listViewModel.HasRevertTo)
+                                            {
+                                                <li>@Html.ActionLink("View", "Details", "Questionnaire", new { id = $"{Model.Id:N}${listViewModel.Sequence}" })</li>
+                                                <li class="divider"></li>
+                                                <li><a href="javascript:void(0);" onclick="confirmRevert('@listViewModel.Timestamp.ToString("s")', '@listViewModel.Id')">@QuestionnaireHistoryResources.RevertToThisVersion</a></li>
+                                                <li>@Html.ActionLink(QuestionnaireHistoryResources.ExtractAtRevision, "SaveAs", "Questionnaire", new { id = $"{Model.Id:N}${listViewModel.Sequence}" })</li>
+                                                <li class="divider"></li>
+                                            }
+                                            <li><a href="javascript:void(0);" onclick="showComment('@listViewModel.Id')">@QuestionnaireHistoryResources.LeaveComment</a></li>
+                                        }
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
                     }
                 </tbody>
             </table>
@@ -130,8 +132,8 @@
             </div>
         </div>
     </div>
-    }
-    <script type="text/javascript">
+}
+<script type="text/javascript">
     $(function() {
         window.confirmRevert = function(date, revertId) {
             $('#version').text(date);
@@ -150,4 +152,4 @@
 
         };
     });
-    </script>
+</script>
