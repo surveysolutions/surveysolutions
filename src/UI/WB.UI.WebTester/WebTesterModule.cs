@@ -178,7 +178,8 @@ namespace WB.UI.WebTester
         
         public static Type[] HubPipelineModules => new[]
         {
-            typeof(WebInterviewStateManager),
+            typeof(WebInterviewVersionChecker),
+            //typeof(WebInterviewStateManager),
             typeof(WebInterviewConnectionsCounter)
         };
 

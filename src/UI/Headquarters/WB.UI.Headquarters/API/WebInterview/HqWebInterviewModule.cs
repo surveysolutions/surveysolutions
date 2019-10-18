@@ -29,7 +29,8 @@ namespace WB.UI.Headquarters.API.WebInterview
         public static Type[] HubPipelineModules => new[]
         {
             typeof(HandlePauseEventPipelineModule),
-            typeof(WebInterviewStateManager),
+            typeof(WebInterviewVersionChecker),
+            //typeof(WebInterviewStateManager),
             typeof(WebInterviewConnectionsCounter)
         };
 
