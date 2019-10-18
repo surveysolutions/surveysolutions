@@ -256,7 +256,8 @@ namespace WB.Tests.Abc.TestFactories
 
             return new LiteEventBus(eventStore ?? Mock.Of<IEventStore>(),
                 denormalizerRegistry ?? Stub<IDenormalizerRegistry>.WithNotEmptyValues,
-                viewModelEventQueue ?? mockOfViewModelEventQueue.Object);
+                viewModelEventQueue ?? mockOfViewModelEventQueue.Object,
+                Mock.Of<ILogger>());
         }
 
         public ViewModelEventRegistry LiteEventRegistry()
@@ -493,7 +494,8 @@ namespace WB.Tests.Abc.TestFactories
             return new QuestionnaireDownloader(
                 attachmentContentStorage ?? Mock.Of<IAttachmentContentStorage>(),
                 questionnairesAccessor ?? Mock.Of<IInterviewerQuestionnaireAccessor>(),
-                synchronizationService ?? Mock.Of<ISynchronizationService>());
+                synchronizationService ?? Mock.Of<ISynchronizationService>(),
+                Mock.Of<ILogger>());
         }
 
         public IAssignmentsSynchronizer AssignmentsSynchronizer(
@@ -513,7 +515,8 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IAnswerToStringConverter>(),
                 Mock.Of<IInterviewAnswerSerializer>()),
                 interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>(),
-                interviewerViewRepository ?? Mock.Of<IPlainStorage<InterviewerDocument>>());
+                interviewerViewRepository ?? Mock.Of<IPlainStorage<InterviewerDocument>>(),
+                Mock.Of<ILogger>());
         }
 
         public IAnswerToStringConverter AnswerToStringConverter()
@@ -1013,7 +1016,8 @@ namespace WB.Tests.Abc.TestFactories
                 restServicePointManager ?? Mock.Of<IRestServicePointManager>(),
                 httpStatistician ?? Mock.Of<IHttpStatistician>(),
                 httpClientFactory ?? Mock.Of<IHttpClientFactory>(),
-                new SimpleFileHandler()
+                new SimpleFileHandler(),
+                Mock.Of<ILogger>()
             );
         }
 
