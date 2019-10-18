@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Web.Http;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
+using WB.UI.Headquarters.API.DataCollection.Enumerator;
 
 namespace WB.UI.Headquarters.API.DataCollection.Interviewer
 {
@@ -11,6 +12,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
 
         public static void Register(HttpConfiguration config)
         {
+            config.TypedRoute("api/enumerator/logs", c => c.Action<LogsApiController>(x => x.Post()));
+
             config.TypedRoute(@"api/interviewer", c => c.Action<InterviewerApiController>(x => x.Get()));
             config.TypedRoute(@"api/interviewer/patch/{deviceVersion}", c => c.Action<InterviewerApiController>(x => x.Patch(Param.Any<int>())));
             config.TypedRoute(@"api/interviewer/latestversion", c => c.Action<InterviewerApiController>(x => x.GetLatestVersion()));
