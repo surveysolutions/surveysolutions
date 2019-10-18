@@ -97,6 +97,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Comment.
+        /// </summary>
+        public static string Comment {
+            get {
+                return ResourceManager.GetString("Comment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm.
         /// </summary>
         public static string Confirm {
@@ -111,6 +120,15 @@ namespace WB.UI.Designer.Resources {
         public static string Edit {
             get {
                 return ResourceManager.GetString("Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Extract at revision.
+        /// </summary>
+        public static string ExtractAtRevision {
+            get {
+                return ResourceManager.GetString("ExtractAtRevision", resourceCulture);
             }
         }
         
