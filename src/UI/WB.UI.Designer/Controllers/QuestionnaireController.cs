@@ -32,7 +32,9 @@ namespace WB.UI.Designer.Controllers
         public class QuestionnaireCloneModel
         {
             [Key]
-            public Guid Id { get; set; }
+            public Guid QuestionnaireId { get; set; }
+
+            public Guid? Revision { get; set; }
 
             [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.QuestionnaireTitle_required))]
             [StringLength(AbstractVerifier.MaxTitleLength, ErrorMessageResourceName = nameof(ErrorMessages.QuestionnaireTitle_MaxLength), ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessage = null)]
@@ -142,12 +144,14 @@ namespace WB.UI.Designer.Controllers
         {
             QuestionnaireView questionnaire = this.GetQuestionnaireView(id.QuestionnaireId);
             if (questionnaire == null) return NotFound();
+
             QuestionnaireView model = questionnaire;
             return View(
                     new QuestionnaireCloneModel
                     {
                         Title = $"Copy of {model.Title}",
-                        Id = model.PublicKey
+                        QuestionnaireId = id.QuestionnaireId,
+                        Revision = id.Revision
                     });
         }
 
@@ -157,9 +161,12 @@ namespace WB.UI.Designer.Controllers
         {
             if (this.ModelState.IsValid)
             {
-                QuestionnaireView questionnaire = this.GetQuestionnaireView(model.Id);
+                QuestionnaireView questionnaire =
+                    this.questionnaireViewFactory.Load(new QuestionnaireRevision(model.QuestionnaireId, model.Revision));
+
                 if (questionnaire == null)
                     return NotFound();
+
                 QuestionnaireView sourceModel = questionnaire;
                 try
                 {
