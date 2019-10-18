@@ -50,9 +50,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.interviewId = interviewId;
             this.navigationState = navigationState;
             this.Identity = entityIdentity;
-            this.eventRegistry.Subscribe(this, interviewId);
-
             UpdateFromInterview();
+
+            this.eventRegistry.Subscribe(this, interviewId);
         }
 
         private void UpdateFromInterview()

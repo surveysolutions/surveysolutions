@@ -126,9 +126,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 }
             };
             
-            this.eventRegistry.Subscribe(this, interviewId);
-
             this.RefreshOptionsFromModelAsync().WaitAndUnwrapException();
+
+            this.eventRegistry.Subscribe(this, interviewId);
         }
 
         public void Dispose()
