@@ -27,6 +27,9 @@
                               local:MvxBind="Text Localization('Diagnostics_SendLogs'); Click Logs.SendLogsCommand; UnderlinePressed ." />
                     <TextView style="@style/Diagnostics_Section_Description"
                               local:MvxBind="Html Localization('Diagnostics_SendLogs_Description')" />
+                    <TextView
+                        style="@style/Diagnostics_Subsection_Title"
+                        local:MvxBind="Text Localization('Diagnostics_SendLogs_Success'); Visible Logs.LogsSent" />
                 </LinearLayout>
                 <ProgressBar style="@style/Interview_Question_Progress_Indicator"
                              android:indeterminateOnly="true" 
