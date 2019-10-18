@@ -804,7 +804,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Send trace log.
+        ///   Looks up a localized string similar to Send trace logs.
         /// </summary>
         public static string Diagnostics_SendLogs {
             get {
@@ -818,6 +818,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Diagnostics_SendLogs_Description {
             get {
                 return ResourceManager.GetString("Diagnostics_SendLogs_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logs are sent to HQ.
+        /// </summary>
+        public static string Diagnostics_SendLogs_Success {
+            get {
+                return ResourceManager.GetString("Diagnostics_SendLogs_Success", resourceCulture);
             }
         }
         
