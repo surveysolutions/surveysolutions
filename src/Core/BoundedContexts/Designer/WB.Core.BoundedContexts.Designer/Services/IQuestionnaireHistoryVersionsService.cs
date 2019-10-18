@@ -7,7 +7,6 @@ namespace WB.Core.BoundedContexts.Designer.Services
     public interface IQuestionnaireHistoryVersionsService
     {
         QuestionnaireDocument GetByHistoryVersion(Guid historyReferenceId);
-        void RemoveOldQuestionnaireHistory(string sQuestionnaireId, int? maxSequenceByQuestionnaire, int maxHistoryDepth);
         string GetDiffWithLastStoredVersion(QuestionnaireDocument questionnaire);
         
         void AddQuestionnaireChangeItem(
