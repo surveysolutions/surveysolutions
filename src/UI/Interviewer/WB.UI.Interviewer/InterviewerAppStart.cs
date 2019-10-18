@@ -1,7 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using MvvmCross;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
+using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -10,6 +12,7 @@ using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Interviewer.Activities;
 using WB.UI.Shared.Enumerator.Migrations;
 using WB.UI.Shared.Enumerator.Services.Notifications;
@@ -22,7 +25,7 @@ namespace WB.UI.Interviewer
         private readonly IMigrationRunner migrationRunner;
         private readonly IAuditLogService auditLogService;
         private readonly IServiceLocator serviceLocator;
-        private IEnumeratorSettings enumeratorSettings;
+        private readonly IEnumeratorSettings enumeratorSettings;
         
         public InterviewerAppStart(IMvxApplication application, 
             IMvxNavigationService navigationService,
@@ -64,7 +67,38 @@ namespace WB.UI.Interviewer
 
             this.CheckAndProcessInterviewsWithoutViews();
 
+            this.CheckAndProcessUserLogins();
+
             return base.ApplicationStartup(hint);
+        }
+
+        private void CheckAndProcessUserLogins()
+        {
+            var interviewersStorage = Mvx.IoCProvider.Resolve<IPlainStorage<InterviewerIdentity>>();
+            
+            var users = interviewersStorage.LoadAll().ToList();
+            if (users.Count > 1)
+            {
+                var interviewViewRepository = Mvx.IoCProvider.Resolve<IPlainStorage<InterviewView>>();
+                var assignmentViewRepository = Mvx.IoCProvider.Resolve<IAssignmentDocumentsStorage>();
+
+                foreach (var interviewerIdentity in users)
+                {
+                    var interviewsCount =
+                        interviewViewRepository.Count(x => x.ResponsibleId == interviewerIdentity.UserId);
+
+                    if(interviewsCount > 0)
+                        continue;
+                    var assignmentsCount =
+                        assignmentViewRepository.Count(x => x.ResponsibleId == interviewerIdentity.UserId);
+
+                    if (assignmentsCount == 0)
+                    {
+                        logger.Warn($"Removing extra user {interviewerIdentity.Name}, Id: {interviewerIdentity.Id}");
+                        interviewersStorage.Remove(interviewerIdentity.Id);
+                    }
+                }
+            }
         }
 
         private void CheckAndProcessInterviewsWithoutViews()
@@ -86,9 +120,9 @@ namespace WB.UI.Interviewer
         protected override async Task NavigateToFirstViewModel(object hint = null)
         {
             var viewModelNavigationService = Mvx.IoCProvider.Resolve<IViewModelNavigationService>();
-            var interviewersPlainStorage = Mvx.IoCProvider.Resolve<IPlainStorage<InterviewerIdentity>>();
-            InterviewerIdentity currentInterviewer = interviewersPlainStorage.FirstOrDefault();
-            if (currentInterviewer == null)
+            var interviewerPrincipal = Mvx.IoCProvider.Resolve<IInterviewerPrincipal>();
+            
+            if (!interviewerPrincipal.DoesIdentityExist())
             {
                 await viewModelNavigationService.NavigateToFinishInstallationAsync();
             }

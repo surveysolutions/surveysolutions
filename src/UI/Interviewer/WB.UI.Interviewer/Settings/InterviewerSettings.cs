@@ -2,6 +2,7 @@
 using System.Linq;
 using Android.App;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
@@ -16,14 +17,14 @@ namespace WB.UI.Interviewer.Settings
     internal class InterviewerSettings : EnumeratorSettings, IInterviewerSettings
     {
         private readonly IPlainStorage<ApplicationSettingsView> settingsStorage;
-        private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
+        private readonly IInterviewerPrincipal principal;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IPlainStorage<QuestionnaireView> questionnaireViewRepository;
 
         public InterviewerSettings(IPlainStorage<ApplicationSettingsView> settingsStorage,
             IInterviewerSyncProtocolVersionProvider syncProtocolVersionProvider,
             IQuestionnaireContentVersionProvider questionnaireContentVersionProvider,
-            IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
+            IInterviewerPrincipal principal,
             IPlainStorage<InterviewView> interviewViewRepository,
             IPlainStorage<QuestionnaireView> questionnaireViewRepository, 
             IFileSystemAccessor fileSystemAccessor,
@@ -31,7 +32,7 @@ namespace WB.UI.Interviewer.Settings
             questionnaireContentVersionProvider, fileSystemAccessor, backupFolder, restoreFolder)
         {
             this.settingsStorage = settingsStorage;
-            this.interviewersPlainStorage = interviewersPlainStorage;
+            this.principal = principal;
             this.interviewViewRepository = interviewViewRepository;
             this.questionnaireViewRepository = questionnaireViewRepository;
         }
@@ -39,7 +40,7 @@ namespace WB.UI.Interviewer.Settings
 
         private string GetUserInformation()
         {
-            var currentStoredUser = this.interviewersPlainStorage.FirstOrDefault();
+            var currentStoredUser = this.principal.CurrentUserIdentity;
             if (currentStoredUser != null)
             {
                 return $"{currentStoredUser.Name}: {currentStoredUser.Id}";

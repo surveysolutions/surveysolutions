@@ -1,32 +1,28 @@
 ﻿using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchronization;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
-using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
     public class MapSyncProvider : MapSyncProviderBase
     {
-        private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
         private readonly IPasswordHasher passwordHasher;
-        private readonly IPrincipal principal;
+        private readonly IInterviewerPrincipal interviewerPrincipal;
 
         public MapSyncProvider(IMapService mapService,
             IOnlineSynchronizationService synchronizationService,
             ILogger logger,
             IHttpStatistician httpStatistician,
-            IPrincipal principal,
+            IInterviewerPrincipal principal,
             IPasswordHasher passwordHasher,
-            IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
             IPlainStorage<InterviewView> interviewViewRepository,
             IAuditLogService auditLogService,
             IEnumeratorSettings enumeratorSettings,
@@ -37,19 +33,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             : base(mapService, synchronizationService, logger, httpStatistician,
                 principal, interviewViewRepository, auditLogService, enumeratorSettings, userInteractionService, deviceInformationService, serviceLocator, assignmentsStorage)
         {
-            this.interviewersPlainStorage = interviewersPlainStorage;
             this.passwordHasher = passwordHasher;
-            this.principal = principal;
+            this.interviewerPrincipal = principal;
         }
 
         protected override void UpdatePasswordOfResponsible(RestCredentials credentials)
         {
-            var localInterviewer = this.interviewersPlainStorage.FirstOrDefault();
+            var localInterviewer = this.interviewerPrincipal.GetInterviewerByName(credentials.Login);
+
             localInterviewer.PasswordHash = this.passwordHasher.Hash(credentials.Password);
             localInterviewer.Token = credentials.Token;
 
-            this.interviewersPlainStorage.Store(localInterviewer);
-            this.principal.SignIn(localInterviewer.Name, credentials.Password, true);
+            this.interviewerPrincipal.SaveInterviewer(localInterviewer);
+            this.interviewerPrincipal.SignIn(localInterviewer.Name, credentials.Password, true);
         }
     }
 }
