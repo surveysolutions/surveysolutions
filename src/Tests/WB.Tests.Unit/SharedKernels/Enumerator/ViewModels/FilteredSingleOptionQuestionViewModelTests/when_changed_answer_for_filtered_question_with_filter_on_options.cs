@@ -4,6 +4,7 @@ using System.Threading;
 using Moq;
 using MvvmCross.Plugin.Messenger;
 using NUnit.Framework;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -38,11 +39,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(_ => _.Get(interviewId) == interview.Object);
             var questionStateMock = new Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> { DefaultValue = DefaultValue.Mock };
 
-            var answerViewModel = new AnsweringViewModel(Mock.Of<ICommandService>(), Mock.Of<IUserInterfaceStateService>(), Mock.Of<IMvxMessenger>());
+            var answerViewModel = new AnsweringViewModel(Mock.Of<ICommandService>(), Mock.Of<IUserInterfaceStateService>(), Mock.Of<IMvxMessenger>(), Mock.Of<ILogger>());
 
             filteredOptionsViewModel = new Mock<FilteredOptionsViewModel>();
             filteredOptionsViewModel.Setup(x => x.GetAnsweredOption(3)).Returns(new CategoricalOption() { Title = "3", Value = 3, ParentValue = null });
-            filteredOptionsViewModel.Setup(x => x.GetOptions(Moq.It.IsAny<string>(), It.IsAny<int[]>())).Returns((string filter, int[] excludedOptions) => 
+            filteredOptionsViewModel.Setup(x => x.GetOptions(Moq.It.IsAny<string>(), It.IsAny<int[]>(), It.IsAny<int?>())).Returns((string filter, int[] excludedOptions, int? count) => 
                 interview.Object.GetTopFilteredOptionsForQuestion(questionIdentity, null, filter, 15, null));
 
             viewModel = CreateFilteredSingleOptionQuestionViewModel(
@@ -65,7 +66,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
 
         [Test] 
         public void should_update_suggestions_list () =>
-            filteredOptionsViewModel.Verify(_ => _.GetOptions(Moq.It.IsAny<string>(), It.IsAny<int[]>()), Times.Once);
+            filteredOptionsViewModel.Verify(_ => _.GetOptions(Moq.It.IsAny<string>(), It.IsAny<int[]>(), It.IsAny<int?>()), Times.Once);
 
         private static FilteredSingleOptionQuestionViewModel viewModel;
         private static Mock<FilteredOptionsViewModel> filteredOptionsViewModel;

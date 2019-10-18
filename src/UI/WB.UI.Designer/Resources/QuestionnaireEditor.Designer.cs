@@ -826,6 +826,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The name of attachment file that will be displayed..
+        /// </summary>
+        public static string HelpAttachmentName {
+            get {
+                return ResourceManager.GetString("HelpAttachmentName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A combo-box is a combination of a drop-down list and a single-line editable text box. Categories could be selected either by typing a value or its part or selecting a value from the list.
         /// </summary>
         public static string HelpCombobox {
@@ -1557,7 +1566,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Current time.
+        ///   Looks up a localized string similar to Current timestamp (date and time).
         /// </summary>
         public static string QuestionCurrentTime {
             get {

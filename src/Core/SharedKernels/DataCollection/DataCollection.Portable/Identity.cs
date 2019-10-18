@@ -32,7 +32,10 @@ namespace WB.Core.SharedKernels.DataCollection
         public RosterVector RosterVector { get; private set; }
 
         // ReSharper disable once UnusedMember.Local # used by NHibernate
-        private Identity() { }
+        private Identity()
+        {
+            this.RosterVector = RosterVector.Empty;
+        }
 
         public Identity(Guid id, RosterVector rosterVector)
         {

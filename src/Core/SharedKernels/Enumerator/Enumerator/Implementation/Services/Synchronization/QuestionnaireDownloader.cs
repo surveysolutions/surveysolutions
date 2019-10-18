@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -16,6 +17,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         private readonly IAttachmentContentStorage attachmentContentStorage;
         private readonly IInterviewerQuestionnaireAccessor questionnairesAccessor;
         private readonly ISynchronizationService synchronizationService;
+        private readonly ILogger logger;
 
         protected QuestionnaireDownloader()
         {
@@ -23,17 +25,20 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         public QuestionnaireDownloader(IAttachmentContentStorage attachmentContentStorage,
             IInterviewerQuestionnaireAccessor questionnairesAccessor,
-            ISynchronizationService synchronizationService)
+            ISynchronizationService synchronizationService,
+            ILogger logger)
         {
             this.attachmentContentStorage = attachmentContentStorage;
             this.questionnairesAccessor = questionnairesAccessor;
             this.synchronizationService = synchronizationService;
+            this.logger = logger;
         }
 
         public virtual async Task DownloadQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity,
             SynchronizationStatistics statistics, IProgress<TransferProgress> transferProgress,
             CancellationToken cancellationToken)
         {
+            this.logger.Trace($"Loading of questionnaire requested {questionnaireIdentity}");
             if (!this.questionnairesAccessor.IsQuestionnaireAssemblyExists(questionnaireIdentity))
             {
                 var questionnaireAssembly = await this.synchronizationService.GetQuestionnaireAssemblyAsync(

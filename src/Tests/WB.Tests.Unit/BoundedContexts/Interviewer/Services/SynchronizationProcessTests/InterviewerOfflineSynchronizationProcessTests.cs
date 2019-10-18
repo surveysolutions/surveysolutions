@@ -25,30 +25,28 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         public void when_synchronize_and_need_to_change_supervisor_should_store_updated_supervisor_id_in_plain_storage()
         {
             InterviewerOfflineSynchronizationProcess viewModel;
-            var InterviewerStorageMock = new Mock<IPlainStorage<InterviewerIdentity>>();
+            
             var PrincipalMock = new Mock<IInterviewerPrincipal>();
             var SynchronizationServiceMock = new Mock<IOfflineSynchronizationService>();
 
             var interviewerIdentity = new InterviewerIdentity { Name = "name", PasswordHash = "hash", Token = "Outdated token", SupervisorId = Id.g1 };
 
             PrincipalMock = Mock.Get(SetUp.InterviewerPrincipal(interviewerIdentity));
-
+            PrincipalMock.Setup(x => x.GetInterviewerByName(It.IsAny<string>())).Returns(interviewerIdentity);
+            
             SynchronizationServiceMock
                 .Setup(x => x.GetCurrentSupervisor(It.IsAny<RestCredentials>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(Id.gA);
-
-            InterviewerStorageMock.Setup(x => x.FirstOrDefault()).Returns(interviewerIdentity);
-
+            
             viewModel = Create.Service.OfflineSynchronizationProcess(principal: PrincipalMock.Object,
-                synchronizationService: SynchronizationServiceMock.Object,
-                interviewersPlainStorage: InterviewerStorageMock.Object);
+                synchronizationService: SynchronizationServiceMock.Object);
 
             viewModel
                 .SynchronizeAsync(new Progress<SyncProgressInfo>(), CancellationToken.None)
                 .WaitAndUnwrapException();
 
-            InterviewerStorageMock.Verify(
-                x => x.Store(It.Is<InterviewerIdentity>(i => i.SupervisorId == Id.gA)), Times.Once);
+            PrincipalMock.Verify(
+                x => x.SaveInterviewer(It.Is<InterviewerIdentity>(i => i.SupervisorId == Id.gA)), Times.Once);
 
             PrincipalMock.Verify(x => x.SignInWithHash("name", "hash", true), Times.Once);
         }
@@ -93,7 +91,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             var syncProcess = Create.Service.OfflineSynchronizationProcess(
                 principal: principalMock.Object,
                 synchronizationService: synchronizationServiceMock.Object,
-                interviewersPlainStorage: interviewerStorageMock.Object,
                 passwordHasher: passwordHasherMock.Object);
 
             // Act

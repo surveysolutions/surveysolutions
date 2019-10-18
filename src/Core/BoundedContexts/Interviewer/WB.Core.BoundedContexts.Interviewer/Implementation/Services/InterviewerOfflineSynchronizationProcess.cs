@@ -19,13 +19,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
     public class InterviewerOfflineSynchronizationProcess : AbstractSynchronizationProcess
     {
         private readonly IOfflineSynchronizationService synchronizationService;
-        private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
         private readonly IInterviewerPrincipal principal;
         private readonly IInterviewerSettings interviewerSettings;
         public InterviewerOfflineSynchronizationProcess(
             IOfflineSynchronizationService synchronizationService,
             IPlainStorage<InterviewView> interviewViewRepository,
-            IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
             IInterviewerPrincipal principal, 
             ILogger logger, 
             IHttpStatistician httpStatistician,
@@ -40,7 +38,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 serviceLocator, deviceInformationService, userInteractionService, assignmentsStorage)
         {
             this.synchronizationService = synchronizationService;
-            this.interviewersPlainStorage = interviewersPlainStorage;
             this.principal = principal;
             this.interviewerSettings = interviewerSettings;
         }
@@ -56,16 +53,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             var currentSupervisorId = await this.synchronizationService.GetCurrentSupervisor(token: cancellationToken, credentials: this.RestCredentials);
             if (currentSupervisorId != this.principal.CurrentUserIdentity.SupervisorId)
             {
-                this.UpdateSupervisorOfInterviewer(currentSupervisorId);
+                this.UpdateSupervisorOfInterviewer(currentSupervisorId, this.RestCredentials.Login);
             }
         }
 
-        private void UpdateSupervisorOfInterviewer(Guid supervisorId)
+        private void UpdateSupervisorOfInterviewer(Guid supervisorId, string name)
         {
-            var localInterviewer = this.interviewersPlainStorage.FirstOrDefault();
+            var localInterviewer = this.principal.GetInterviewerByName(name);
             localInterviewer.SupervisorId = supervisorId;
-            this.interviewersPlainStorage.Store(localInterviewer);
-            this.principal.SignInWithHash(localInterviewer.Name, localInterviewer.PasswordHash, true);
+            this.principal.SaveInterviewer(localInterviewer);
+
+            this.principal.SignInWithHash(this.principal.CurrentUserIdentity.Name, this.principal.CurrentUserIdentity.PasswordHash, true);
         }
 
         protected override void UpdatePasswordOfResponsible(RestCredentials credentials) 

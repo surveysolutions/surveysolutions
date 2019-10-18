@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private IStatefulInterview interview;
         private List<CategoricalOption> Options { get; set; }
         private string Filter { get; set; } = String.Empty;
-        public int Count { get; protected set; } = 20;
+        public int Count { get; protected set; } = 200;
 
         public virtual event Func<object, EventArgs, Task> OptionsChanged;
 
@@ -98,11 +98,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public virtual List<CategoricalOption> GetOptions(string filter = "", int[] excludedOptionIds = null)
+        public virtual List<CategoricalOption> GetOptions(string filter = "", int[] excludedOptionIds = null, int? count = null)
         {
             this.Filter = filter;
             this.excludedOptionIds = excludedOptionIds;
-            this.Options = this.interview.GetTopFilteredOptionsForQuestion(this.questionIdentity, ParentValue, filter, this.Count, excludedOptionIds).ToList();
+            this.Options = this.interview.GetTopFilteredOptionsForQuestion(this.questionIdentity, ParentValue, filter, count ?? this.Count, excludedOptionIds).ToList();
             return Options;
         }
 
