@@ -67,7 +67,7 @@
                                                 <li>@Html.ActionLink("View", "Details", "Questionnaire", new { id = $"{Model.Id:N}${listViewModel.Sequence}" })</li>
                                                 <li class="divider"></li>
                                                 <li><a href="javascript:void(0);" onclick="confirmRevert('@listViewModel.Timestamp.ToString("s")', '@listViewModel.Id')">@QuestionnaireHistoryResources.RevertToThisVersion</a></li>
-                                                <li>@Html.ActionLink(QuestionnaireHistoryResources.ExtractAtRevision, "SaveAs", "Questionnaire", new { id = $"{Model.Id:N}${listViewModel.Sequence}" })</li>
+                                                <li>@Html.ActionLink(QuestionnaireHistoryResources.ExtractAtRevision, "Clone", "Questionnaire", new { id = $"{Model.Id:N}${listViewModel.Sequence}" })</li>
                                                 <li class="divider"></li>
                                             }
                                             <li><a href="javascript:void(0);" onclick="showComment('@listViewModel.Id')">@QuestionnaireHistoryResources.LeaveComment</a></li>
