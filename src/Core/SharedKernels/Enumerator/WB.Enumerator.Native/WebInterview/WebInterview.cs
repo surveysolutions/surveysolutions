@@ -2,8 +2,11 @@
 using System.ComponentModel;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.WebInterview.Pipeline;
 
 namespace WB.Enumerator.Native.WebInterview
@@ -22,6 +25,8 @@ namespace WB.Enumerator.Native.WebInterview
 
         public override async Task OnConnected()
         {
+            await RegisterClient();
+
             foreach (var pipelineModule in hubPipelineModules)
             {
                 await pipelineModule.OnConnected(this);
@@ -35,6 +40,9 @@ namespace WB.Enumerator.Native.WebInterview
             {
                 await pipelineModule.OnDisconnected(this, stopCalled);
             }
+            
+            await UnregisterClient();
+
             await base.OnDisconnected(stopCalled);
         }
 
@@ -45,6 +53,79 @@ namespace WB.Enumerator.Native.WebInterview
                 await pipelineModule.OnReconnected(this);
             }
             await base.OnReconnected();
+        }
+
+        private async Task RegisterClient()
+        {
+            var interviewId = Context.QueryString[@"interviewId"];
+            IStatefulInterview interview = null;
+
+            InScopeExecutor.Current.Execute(ls =>
+            {
+                var interviewRepository = ls.GetInstance<IStatefulInterviewRepository>();
+                interview = interviewRepository.Get(interviewId);
+            });
+
+            if (interview == null)
+            {
+                Clients.Caller.shutDown();
+                return;
+            }
+
+            var questionnaireId = interview.QuestionnaireIdentity.ToString();
+
+            await Groups.Add(Context.ConnectionId, interviewId);
+
+            var isReview = Context.QueryString[@"review"].ToBool(false);
+
+            if (!isReview)
+            {
+                Clients.OthersInGroup(interviewId).closeInterview();
+            }
+
+            await Groups.Add(Context.ConnectionId, questionnaireId);
+        }
+
+        private async Task UnregisterClient()
+        {
+            var interviewId = Context.QueryString[@"interviewId"];
+            var sectionId = Clients.CallerState.sectionId as string;
+
+            await Groups.Remove(Context.ConnectionId, GetGroupNameBySectionIdentity(sectionId, interviewId));
+            await Groups.Remove(Context.ConnectionId, interviewId);
+
+            IStatefulInterview interview = null;
+
+            InScopeExecutor.Current.Execute(ls =>
+            {
+                var interviewRepository = ls.GetInstance<IStatefulInterviewRepository>();
+                interview = interviewRepository.Get(interviewId);
+            });
+
+            if (interview == null)
+                return;
+
+            var questionnaireId = interview.QuestionnaireIdentity.ToString();
+            await Groups.Remove(Context.ConnectionId, questionnaireId);
+        }
+
+        public async Task ChangeSection(string oldSection)
+        {
+            var interviewId = Context.QueryString[@"interviewId"];
+            var sectionId = Clients.CallerState.sectionId as string;
+
+            if (interviewId != null)
+            {
+                await Groups.Remove(Context.ConnectionId, GetGroupNameBySectionIdentity(oldSection, interviewId));
+                await Groups.Add(Context.ConnectionId, GetGroupNameBySectionIdentity(sectionId, interviewId));
+            }
+        }
+
+        private static string GetGroupNameBySectionIdentity(string sectionId, string interviewId)
+        {
+            return sectionId == null
+                ? GetConnectedClientPrefilledSectionKey(Guid.Parse(interviewId))
+                : GetConnectedClientSectionKey(Identity.Parse(sectionId), Guid.Parse(interviewId));
         }
 
 

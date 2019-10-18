@@ -124,8 +124,8 @@ export async function apiGet(actionName, params) {
     if(config.splashScreen) return
 
     store.dispatch("fetchProgress", 1)
-    const hub = await getInterviewHub()
-    await wrap(hub.ping())
+    //const hub = await getInterviewHub()
+    //await wrap(hub.ping())
 
     try {
         var headers = store.getters.isReviewMode === true ? { review: true } : { }
@@ -144,8 +144,8 @@ export async function apiGet(actionName, params) {
 
 export async function apiPost(actionName, params) {
     store.dispatch("fetchProgress", 1)
-    const hub = await getInterviewHub()
-    await wrap(hub.ping())
+    //const hub = await getInterviewHub()
+    //await wrap(hub.ping())
 
     try {
         var headers = store.getters.isReviewMode === true ? { review: true } : { }
@@ -185,6 +185,24 @@ export async function apiAnswerPost(id, actionName, params) {
     }
 }
 
+
+export async function changeSectionRequest(sectionId) {
+    store.dispatch("fetchProgress", 1)
+
+    try {
+        const state = jQuery.signalR[config.hubName].state
+        const oldSectionId = state.sectionId
+        state.sectionId = sectionId
+
+        const hub = await getInterviewHub()
+        await wrap(hub.changeSection(oldSectionId))
+    } catch (err) {
+        store.dispatch("UNHANDLED_ERROR", err)
+    } finally {
+        store.dispatch("fetchProgress", -1)
+    }
+}
+
 export function install(Vue, options) {
     store = options.store;
     const api = {
@@ -193,9 +211,10 @@ export function install(Vue, options) {
         post: apiPost,
         get: apiGet,
         answer: apiAnswerPost,
-        setState: (callback) => {
+        changeSection: changeSectionRequest
+        /*setState: (callback) => {
             callback(jQuery.signalR[config.hubName].state);
-        }
+        }*/
     };
 
     Object.defineProperty(Vue, "$api", {
