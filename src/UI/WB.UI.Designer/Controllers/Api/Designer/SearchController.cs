@@ -9,7 +9,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search;
 using WB.Core.GenericSubdomains.Portable;
 
-namespace WB.UI.Designer.Api.Designer
+namespace WB.UI.Designer.Controllers.Api.Designer
 {
     [ResponseCache(NoStore = true)]
     [Authorize]
