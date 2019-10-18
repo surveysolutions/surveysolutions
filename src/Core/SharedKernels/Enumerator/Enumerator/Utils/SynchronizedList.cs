@@ -175,7 +175,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
         {
             if (index < 0 || index > this._items.Count)
             {
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException($"Requested index {index} for itemsCount {this._items.Count}");
             }
         }
 

@@ -95,8 +95,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
             this.isRoster = questionnaire.IsRosterGroup(entityIdentity.Id);
 
-            this.eventRegistry.Subscribe(this, interviewId);
-
             if (!questionnaire.HasGroup(entityIdentity.Id))
             {
                 throw new InvalidOperationException($"Questionnaire {statefulInterview.QuestionnaireIdentity} has no group with id {entityIdentity.Id}");
@@ -116,6 +114,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
                 this.answerNotifier.Init(this.interviewId); 
                 this.answerNotifier.QuestionAnswered += this.QuestionAnswered;
             }
+
+            this.eventRegistry.Subscribe(this, interviewId);
         }
 
         private void QuestionAnswered(object sender, EventArgs e)

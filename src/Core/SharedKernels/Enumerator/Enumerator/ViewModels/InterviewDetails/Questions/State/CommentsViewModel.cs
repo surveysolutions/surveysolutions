@@ -77,7 +77,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
-            this.eventRegistry.Subscribe(this, interviewId);
             this.interviewId = interviewId ?? throw new ArgumentNullException(nameof(interviewId));
             this.Identity = entityIdentity ?? throw new ArgumentNullException(nameof(entityIdentity));
 
@@ -88,6 +87,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.ShowResolvedCommentsVisible = anyResolvedCommentsExists;
             this.ShowResolvedComments = false;
             this.HasComments = !string.IsNullOrWhiteSpace(this.InterviewerComment);
+
+            this.eventRegistry.Subscribe(this, interviewId);
         }
 
         private void UpdateCommentsFromInterview(bool showResolved = false)
