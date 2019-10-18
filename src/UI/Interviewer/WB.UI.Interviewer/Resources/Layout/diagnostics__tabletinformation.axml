@@ -37,6 +37,7 @@
     </LinearLayout>
 
   </LinearLayout>
+
   <LinearLayout style="@style/Diagnostics_SubSection" local:MvxBind="Visible TabletInformation.IsPackageSendingAttemptCompleted;" >
     <TextView
      style="@style/Diagnostics_Subsection_Title"

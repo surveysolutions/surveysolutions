@@ -12,6 +12,38 @@ using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
+    public class SendLogsViewModel : MvxNotifyPropertyChanged
+    {
+        private bool isInProgress;
+        private readonly IBackupRestoreService backupRestoreService;
+
+        public SendLogsViewModel(IBackupRestoreService backupRestoreService)
+        {
+            this.backupRestoreService = backupRestoreService;
+        }
+
+        public IMvxAsyncCommand SendLogsCommand => new MvxAsyncCommand(this.SendLogsAsync, () => !this.IsInProgress);
+
+        private async Task SendLogsAsync(CancellationToken cancellationToken)
+        {
+            try
+            {
+                this.IsInProgress = true;
+                await this.backupRestoreService.SendLogsAsync(cancellationToken);
+            }
+            finally
+            {
+                this.IsInProgress = false;
+            }
+        }
+
+        public bool IsInProgress
+        {
+            get => this.isInProgress;
+            set => this.RaiseAndSetIfChanged(ref this.isInProgress, value);
+        }
+    }
+
     public class SendTabletInformationViewModel : MvxNotifyPropertyChanged
     {
         private readonly IBackupRestoreService backupRestoreService;
@@ -23,7 +55,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private DateTime whenGenerated;
         private bool isPackageBuild;
         private bool isPackageSendingAttemptCompleted;
-        private string packageSendingAttemptResponceText;
+        private string packageSendingAttemptResponseText;
         private bool isInProgress;
         private string informationPackageFilePath;
 
@@ -65,8 +97,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public string PackageSendingAttemptResponceText
         {
-            get => this.packageSendingAttemptResponceText;
-            set => this.RaiseAndSetIfChanged( ref this.packageSendingAttemptResponceText, value);
+            get => this.packageSendingAttemptResponseText;
+            set => this.RaiseAndSetIfChanged( ref this.packageSendingAttemptResponseText, value);
         }
 
         public bool IsInProgress
@@ -134,5 +166,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public IMvxAsyncCommand CreateBackupCommand => new MvxAsyncCommand(this.CreateBackupAsync);
         public IMvxAsyncCommand SendBackupCommand => new MvxAsyncCommand(this.SendBackupAsync);
         public IMvxCommand DeleteBackupCommand => new MvxCommand(this.DeleteBackup);
+       
     }
 }
