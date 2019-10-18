@@ -593,7 +593,7 @@
     <value>Поле со списком</value>
   </data>
   <data name="QuestionCurrentTime" xml:space="preserve">
-    <value>Текущее время</value>
+    <value>Текущее время (дата и время)</value>
   </data>
   <data name="QuestionDecimalPlaces" xml:space="preserve">
     <value>Размер дробной части</value>
@@ -732,6 +732,9 @@
   </data>
   <data name="HelpSourceQuestion" xml:space="preserve">
     <value>Вопрос источник (ответ генерирует соответствующее количество строк)</value>
+  </data>
+  <data name="HelpAttachmentName" xml:space="preserve">
+    <value>Имя файла вложения, которое будет отображено в тексте.</value>
   </data>
   <data name="HelpTitles" xml:space="preserve">
     <value>Имена строк.</value>

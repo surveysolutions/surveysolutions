@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -23,6 +24,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         private readonly IAssignmentDocumentFromDtoBuilder assignmentDocumentFromDtoBuilder;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IPlainStorage<InterviewerDocument> interviewerViewRepository;
+        private readonly ILogger logger;
 
         public AssignmentsSynchronizer(ISynchronizationService synchronizationService,
             IAssignmentDocumentsStorage assignmentsRepository,
@@ -30,7 +32,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             IQuestionnaireStorage questionnaireStorage,
             IAssignmentDocumentFromDtoBuilder assignmentDocumentFromDtoBuilder,
             IPlainStorage<InterviewView> interviewViewRepository, 
-            IPlainStorage<InterviewerDocument> interviewerViewRepository)
+            IPlainStorage<InterviewerDocument> interviewerViewRepository,
+            ILogger logger)
         {
             this.synchronizationService = synchronizationService;
             this.assignmentsRepository = assignmentsRepository;
@@ -39,6 +42,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             this.assignmentDocumentFromDtoBuilder = assignmentDocumentFromDtoBuilder;
             this.interviewViewRepository = interviewViewRepository;
             this.interviewerViewRepository = interviewerViewRepository;
+            this.logger = logger;
         }
 
         public virtual async Task SynchronizeAssignmentsAsync(IProgress<SyncProgressInfo> progress,
@@ -56,6 +60,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
             // removing local assignments if needed
             this.assignmentsRepository.Remove(removedIds);
+            if (removedIds.Length > 0)
+            {
+                this.logger.Debug($"Removed {string.Join(",", removedIds)}");
+            }
             statistics.RemovedAssignmentsCount += removedIds.Length;
 
             // download questionnaires
@@ -109,17 +117,21 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         {
             if (local.Quantity != remote.Quantity)
             {
+                this.logger.Debug($"Updating Quantity for assignment {local.Id} local: {local.Quantity} remote: {remote.Quantity}");
                 local.Quantity = remote.Quantity;
             }
 
             if (ReceivedByInterviewerTimeShouldBeReset(remote.ResponsibleId, local.ResponsibleId,
                 local.OriginalResponsibleId))
             {
+                this.logger.Debug($"Resetting ReceivedByInterviewerAt for assignment {local.Id}");
                 local.ReceivedByInterviewerAt = null;
             }
 
             if (local.OriginalResponsibleId != remote.ResponsibleId)
             {
+                this.logger.Debug($"Changing responsible assignment {local.Id}. local responsible: {local.ResponsibleId}, remote responsible: {remote.ResponsibleId}");
+
                 local.ResponsibleId = remote.ResponsibleId;
                 local.OriginalResponsibleId = remote.ResponsibleId;
                 local.ResponsibleName = remote.ResponsibleName;
