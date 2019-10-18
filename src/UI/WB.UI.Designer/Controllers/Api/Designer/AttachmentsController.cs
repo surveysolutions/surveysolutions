@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Net;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Headers;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,7 @@ using WB.UI.Designer.Extensions;
 namespace WB.UI.Designer.Controllers.Api.Designer
 {
     [Route("attachments")]
+    [Authorize]
     public class AttachmentsController : Controller
     {
         private const int defaultImageSizeToScale = 156;
