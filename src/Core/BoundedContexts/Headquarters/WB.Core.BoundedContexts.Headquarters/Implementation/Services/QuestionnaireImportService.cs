@@ -164,7 +164,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     HqTimeZoneMinutesOffset = (int)TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).TotalMinutes,
                     HqImporterLogin = this.authorizedUser.UserName,
                     HqQuestionnaireVersion = questionnaireIdentity.Version,
-                    Comment = "",
+                    Comment = comment,
                 });
 
                 this.auditLog.QuestionnaireImported(questionnaire.Title, questionnaireIdentity);
