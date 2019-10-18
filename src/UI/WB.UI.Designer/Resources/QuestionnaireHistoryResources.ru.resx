@@ -339,4 +339,12 @@
       <value>Сохранить</value>
       <comment>Сохранить</comment>
   </data>
+  <data name="ExtractAtRevision" xml:space="preserve">
+      <value>Сохранить как</value>
+      <comment>Сохранить как</comment>
+  </data>
+  <data name="Comment" xml:space="preserve">
+      <value>Комментарий</value>
+      <comment>Комментарий</comment>
+  </data>
 </root>
