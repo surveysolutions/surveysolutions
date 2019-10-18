@@ -117,6 +117,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             var userName = this.UserName;
 
+            this.logger.Trace($"Logging in {userName}");
             this.IsUserValid = this.principal.SignIn(userName, this.Password, true);
 
             if (!this.IsUserValid)
@@ -136,7 +137,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private async Task RemoteSignInAsync()
         {
             this.IsUserValid = true;
-
+            
             var restCredentials = new RestCredentials {Login = this.UserName};
             this.IsInProgress = true;
             this.ErrorMessage = String.Empty;
@@ -148,6 +149,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                     Username = this.UserName,
                     Password = this.Password
                 }, restCredentials);
+                this.logger.Trace("Received token from remote signin");
 
                 restCredentials.Token = token;
 

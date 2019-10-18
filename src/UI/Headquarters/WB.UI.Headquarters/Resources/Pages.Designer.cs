@@ -2905,6 +2905,69 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Questionnaire details.
+        /// </summary>
+        public static string Questionnaire_Info {
+            get {
+                return ResourceManager.GetString("Questionnaire_Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questions.
+        /// </summary>
+        public static string Questionnaire_QuestionsCount {
+            get {
+                return ResourceManager.GetString("Questionnaire_QuestionsCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questions with conditions.
+        /// </summary>
+        public static string Questionnaire_QuestionsCountWithCond {
+            get {
+                return ResourceManager.GetString("Questionnaire_QuestionsCountWithCond", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of rosters.
+        /// </summary>
+        public static string Questionnaire_RostersCount {
+            get {
+                return ResourceManager.GetString("Questionnaire_RostersCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of sections.
+        /// </summary>
+        public static string Questionnaire_SectionsCount {
+            get {
+                return ResourceManager.GetString("Questionnaire_SectionsCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stats.
+        /// </summary>
+        public static string Questionnaire_Stats {
+            get {
+                return ResourceManager.GetString("Questionnaire_Stats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of sub-sections.
+        /// </summary>
+        public static string Questionnaire_SubSectionsCount {
+            get {
+                return ResourceManager.GetString("Questionnaire_SubSectionsCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} (ver. {1}).
         /// </summary>
         public static string QuestionnaireNameFormat {

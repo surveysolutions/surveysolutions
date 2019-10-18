@@ -4,6 +4,7 @@ using System.Reflection;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Implementation.Services;
@@ -15,14 +16,17 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
         private readonly IEventStore eventStore;
         private readonly IDenormalizerRegistry denormalizerRegistry;
         private readonly IAsyncEventQueue viewModelEventQueue;
+        private readonly ILogger logger;
 
         public LiteEventBus(IEventStore eventStore, 
             IDenormalizerRegistry denormalizerRegistry,
-            IAsyncEventQueue viewModelEventQueue)
+            IAsyncEventQueue viewModelEventQueue,
+            ILogger logger)
         {
             this.eventStore = eventStore;
             this.denormalizerRegistry = denormalizerRegistry;
             this.viewModelEventQueue = viewModelEventQueue;
+            this.logger = logger;
         }
 
         public IReadOnlyCollection<CommittedEvent> CommitUncommittedEvents(IEventSourcedAggregateRoot aggregateRoot, string origin) =>
@@ -40,7 +44,8 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
             var exceptions = new List<Exception>();
             foreach (var uncommittedChange in committedEvents)
             {
-                foreach (var denormalizer in this.denormalizerRegistry.GetDenormalizers(uncommittedChange))
+                var denormalizers = this.denormalizerRegistry.GetDenormalizers(uncommittedChange);
+                foreach (var denormalizer in denormalizers)
                 {
                     try
                     {
@@ -52,6 +57,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
                         var publishedEventInterfaceType = typeof(IPublishedEvent<>).MakeGenericType(eventType);
                         var method = denormalizer.GetType().GetRuntimeMethod("Handle", new[] { publishedEventInterfaceType });
 
+                        this.logger.Debug($"Publishing {uncommittedChange.Payload.GetType().Name} to {denormalizer.GetType().Name}");
                         method.Invoke(denormalizer, new[] { publishedEvent });
                     }
                     catch (Exception exception)
@@ -59,6 +65,11 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
                         exceptions.Add(exception);
                     }
                 }
+
+                if (denormalizers.Count == 0)
+                {
+                    this.logger.Debug($"No denormalizers registered for {uncommittedChange.Payload.GetType().Name} event");
+                } 
 
                 if (exceptions.Count > 0)
                 {

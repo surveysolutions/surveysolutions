@@ -1297,4 +1297,25 @@
   <data name="InterviewerProfile_NoMarkers" xml:space="preserve">
     <value>Местоположения интервьювера не было еще записано</value>
   </data>
+  <data name="Questionnaire_Info" xml:space="preserve">
+    <value>Детали опросника</value>
+  </data>
+  <data name="Questionnaire_QuestionsCount" xml:space="preserve">
+    <value>Вопросов</value>
+  </data>
+  <data name="Questionnaire_QuestionsCountWithCond" xml:space="preserve">
+    <value>Вопросов с условиями</value>
+  </data>
+  <data name="Questionnaire_RostersCount" xml:space="preserve">
+    <value>Количество ростеров</value>
+  </data>
+  <data name="Questionnaire_SectionsCount" xml:space="preserve">
+    <value>Количество секций</value>
+  </data>
+  <data name="Questionnaire_Stats" xml:space="preserve">
+    <value>Статистика</value>
+  </data>
+  <data name="Questionnaire_SubSectionsCount" xml:space="preserve">
+    <value>Количество подсекций</value>
+  </data>
 </root>

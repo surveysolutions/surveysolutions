@@ -124,7 +124,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
                     token: token,
                     credentials: this.restCredentials,
                     transferProgress: transferProgress,
-                    customHeaders: new Dictionary<string, string>
+                    customHeaders: existingFileHash == null ? null : new Dictionary<string, string>
                     {
                         ["If-None-Match"] = Convert.ToBase64String(existingFileHash)
                     });

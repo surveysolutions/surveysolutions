@@ -15,7 +15,7 @@ export default class AssignmentsComponent {
         return[
             {
                 path: '/HQ/TakeNewAssignment/:interviewId',
-                component: CreateNew                
+                component: CreateNew 
             },
             {
                 path: '/Assignments', component: Layout,
