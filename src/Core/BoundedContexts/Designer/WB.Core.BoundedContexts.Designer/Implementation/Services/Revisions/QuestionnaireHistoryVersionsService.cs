@@ -65,19 +65,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return entitySerializer.Deserialize(questionnaire);
         }
 
-        public void RemoveOldQuestionnaireHistory(string sQuestionnaireId, int? maxSequenceByQuestionnaire, int maxHistoryDepth)
+        private void RemoveOldQuestionnaireHistory(string sQuestionnaireId, int maxHistoryDepth)
         {
-            var minSequence = (maxSequenceByQuestionnaire ?? 0) -
-                              maxHistoryDepth + 2;
-            if (minSequence < 0) return;
-
             var oldChangeRecord = this.dbContext.QuestionnaireChangeRecords
-                .Where(x => x.QuestionnaireId == sQuestionnaireId 
-                    && x.Sequence < minSequence
-                    && (x.ResultingQuestionnaireDocument != null || x.Patch != null)
-                    && x.ActionType != QuestionnaireActionType.ImportToHq
-                 )                    
-                .OrderBy(x => x.Sequence)
+                .Where(x => 
+                    x.QuestionnaireId == sQuestionnaireId 
+                    && x.ActionType != QuestionnaireActionType.ImportToHq)
+                .OrderByDescending(x => x.Sequence)
+                .Skip(maxHistoryDepth)
                 .ToList();
 
             foreach (var questionnaireChangeRecord in oldChangeRecord)
@@ -154,10 +149,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
 
             this.dbContext.QuestionnaireChangeRecords.Add(questionnaireChangeItem);
-
-            this.RemoveOldQuestionnaireHistory(sQuestionnaireId, 
-                maxSequenceByQuestionnaire, 
-                historySettings.Value.QuestionnaireChangeHistoryLimit);
+            
+            // -1 is to take into account newly added change record that is not yet in DB
+            this.RemoveOldQuestionnaireHistory(sQuestionnaireId, historySettings.Value.QuestionnaireChangeHistoryLimit - 1);
             this.dbContext.SaveChanges();
         }
 
