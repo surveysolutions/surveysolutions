@@ -16,6 +16,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
     {
         private bool isInProgress;
         private readonly IBackupRestoreService backupRestoreService;
+        private bool logsSent;
 
         public SendLogsViewModel(IBackupRestoreService backupRestoreService)
         {
@@ -28,8 +29,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             try
             {
+                this.LogsSent = false;
                 this.IsInProgress = true;
                 await this.backupRestoreService.SendLogsAsync(cancellationToken);
+                this.LogsSent = true;
             }
             finally
             {
@@ -40,7 +43,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public bool IsInProgress
         {
             get => this.isInProgress;
-            set => this.RaiseAndSetIfChanged(ref this.isInProgress, value);
+            set => this.SetProperty(ref this.isInProgress, value);
+        }
+
+        public bool LogsSent
+        {
+            get => logsSent;
+            set => this.SetProperty(ref this.logsSent, value);
         }
     }
 
