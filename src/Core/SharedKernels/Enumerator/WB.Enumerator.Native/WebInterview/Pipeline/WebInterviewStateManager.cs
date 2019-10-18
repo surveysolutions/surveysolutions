@@ -9,23 +9,8 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Enumerator.Native.WebInterview.Pipeline
 {
-    public class WebInterviewStateManager : IPipelineModule
+    public class WebInterviewStateManager2 : IPipelineModule
     {
-        private readonly IProductVersion productVersion;
-
-        public WebInterviewStateManager(IProductVersion productVersion)
-        {
-            this.productVersion = productVersion;
-        }
-
-        private void ReloadIfOlderVersion(IHub hub)
-        {
-            if (this.productVersion.ToString() != hub.Context.QueryString[@"appVersion"])
-            {
-                hub.Clients.Caller.reloadInterview();
-            }
-        }
-
         public void OnAfterIncoming(object result, IHubIncomingInvokerContext context)
         {
             var interviewId = context.Hub.Context.QueryString[@"interviewId"];
@@ -35,8 +20,8 @@ namespace WB.Enumerator.Native.WebInterview.Pipeline
             {
                 context.Hub.Groups.Add(context.Hub.Context.ConnectionId,
                     sectionId == null
-                        ? Enumerator.Native.WebInterview.WebInterview.GetConnectedClientPrefilledSectionKey(Guid.Parse(interviewId))
-                        : Enumerator.Native.WebInterview.WebInterview.GetConnectedClientSectionKey(Identity.Parse(sectionId), Guid.Parse(interviewId)));
+                        ? WebInterview.GetConnectedClientPrefilledSectionKey(Guid.Parse(interviewId))
+                        : WebInterview.GetConnectedClientSectionKey(Identity.Parse(sectionId), Guid.Parse(interviewId)));
 
                 context.Hub.Groups.Add(context.Hub.Context.ConnectionId, interviewId);
             }
@@ -44,8 +29,6 @@ namespace WB.Enumerator.Native.WebInterview.Pipeline
 
         public Task OnConnected(IHub hub)
         {
-            this.ReloadIfOlderVersion(hub);
-
             var interviewId = hub.Context.QueryString[@"interviewId"];
             string questionnaireId = null;
 
@@ -82,7 +65,6 @@ namespace WB.Enumerator.Native.WebInterview.Pipeline
 
         public Task OnReconnected(IHub hub)
         {
-            this.ReloadIfOlderVersion(hub);
             return Task.CompletedTask;
         }
     }

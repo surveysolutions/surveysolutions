@@ -364,6 +364,7 @@ export default {
     },
 
     changeSection(ctx, sectionId) {
-        return Vue.$api.setState((state) => state.sectionId = sectionId)
+        //return Vue.$api.setState((state) => state.sectionId = sectionId)
+        return Vue.$api.changeSection(sectionId)
     }
 }
