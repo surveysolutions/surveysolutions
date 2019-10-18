@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Scenarios;
-using WB.Core.GenericSubdomains.Portable;
-using WB.UI.Designer.BootstrapSupport;
 using WB.UI.Designer.Controllers.Api.Designer;
 using WB.UI.Designer.Services;
 

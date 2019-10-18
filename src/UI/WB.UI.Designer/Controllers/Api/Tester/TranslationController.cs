@@ -1,8 +1,6 @@
 using System;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
-using System.Web.Http;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,11 +9,9 @@ using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
-using WB.UI.Designer.Code.Attributes;
 
 namespace WB.UI.Designer.Controllers.Api.Tester
 {
-    [AllowOnlyFromWhitelistIP]
     [Authorize]
     [Route("api/v{version:int}/translation")]
     public class TranslationController : ControllerBase
