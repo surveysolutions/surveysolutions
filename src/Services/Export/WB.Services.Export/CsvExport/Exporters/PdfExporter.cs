@@ -44,7 +44,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             var targetFileName = Path.ChangeExtension(questionnaire.VariableName, ".pdf");
             try
             {
-                var mainPdf = await hqApi.GetPdfAsync(questionnaire.QuestionnaireId, null);
+                var mainPdf = await hqApi.GetPdfAsync(questionnaire.QuestionnaireId);
                 var mainFilePath = Path.Combine(targetFolder, targetFileName);
                 Directory.CreateDirectory(targetFolder);
                 using (var mainStream = this.fileSystemAccessor.OpenOrCreateFile(mainFilePath, false))
