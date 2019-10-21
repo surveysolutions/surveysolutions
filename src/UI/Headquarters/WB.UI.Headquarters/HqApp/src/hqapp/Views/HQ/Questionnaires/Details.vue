@@ -45,7 +45,7 @@
                             <td>PDF</td>
                             <td>
                                 <ul class="list-unstyled">
-                                    <li><a :href="model.mainPdfUrl">{{$t('Common.Download')}}</a></li>
+                                    <li><a :href="model.mainPdfUrl">{{$t('WebInterview.Original_Language')}}</a></li>
                                     <li v-for="lang in model.translatedPdfVersions" v-bind:key="lang.name">
                                         <a :href="lang.pdfUrl">{{lang.name}}</a>
                                     </li>
