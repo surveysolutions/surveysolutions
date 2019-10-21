@@ -120,14 +120,14 @@
   <data name="DeviceId" xml:space="preserve">
     <value>Устройство</value>
   </data>
+  <data name="PageSubTitle" xml:space="preserve">
+    <value>Интервьюер может отправить подробные логи со страницы диагностики на устройстве</value>
+  </data>
   <data name="PageTitle" xml:space="preserve">
     <value>Логи устройств</value>
   </data>
   <data name="ReceiveDateUtc" xml:space="preserve">
     <value>Получено</value>
-  </data>
-  <data name="String1" xml:space="preserve">
-    <value>Интервьюер может отправить подробные логи со страницы диагностики на устройстве</value>
   </data>
   <data name="UserName" xml:space="preserve">
     <value>Имя пользователя</value>
