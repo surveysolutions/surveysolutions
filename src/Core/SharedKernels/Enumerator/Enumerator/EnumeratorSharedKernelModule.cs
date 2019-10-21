@@ -77,7 +77,7 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<IMigrationRunner, MigrationRunner>();
 
             registry.BindAsSingleton<IViewModelEventRegistry, ViewModelEventRegistry>();
-            registry.BindAsSingleton<IDenormalizerRegistry, DenormalizerRegistry>();
+            registry.BindAsSingleton<IDenormalizerRegistry, EnumeratorDenormalizerRegistry>();
             registry.Bind<ILiteEventBus, LiteEventBus>();
             registry.Bind<IAsyncEventDispatcher, AsyncEventDispatcher>();
             registry.BindAsSingleton<IAsyncEventQueue, AsyncEventQueue>();
