@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
@@ -53,20 +58,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                     .ToList(), page, count, pageSize);
         }
 
-        public void UpdateQuestionnaireChangeRecord(string questionnaireChangeRecordId, string comment)
-        {
-            var item = this.dbContext.QuestionnaireChangeRecords.Find(questionnaireChangeRecordId);
-            if (item == null) return;
-
-            if(item.Meta == null)
-                item.Meta = new QuestionnaireChangeRecordMetadata();
-
-            item.Meta.Comment = comment;
-
-            this.dbContext.Update(item);
-            this.dbContext.SaveChanges();
-        }
-
+   
         private QuestionnaireChangeHistoricalRecord CreateQuestionnaireChangeHistoryWebItem(QuestionnaireDocument questionnaire, 
             QuestionnaireChangeRecord questionnaireChangeRecord, 
             HashSet<string> recordWithRevertAvailable)

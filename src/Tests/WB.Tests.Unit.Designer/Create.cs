@@ -71,6 +71,7 @@ using QuestionnaireVersion = WB.Core.SharedKernel.Structures.Synchronization.Des
 using QuestionnaireView = WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireView;
 using Translation = WB.Core.SharedKernels.SurveySolutions.Documents.Translation;
 using TranslationInstance = WB.Core.BoundedContexts.Designer.Translations.TranslationInstance;
+using WB.Core.Infrastructure.CommandBus;
 
 namespace WB.Tests.Unit.Designer
 {
@@ -1283,7 +1284,8 @@ namespace WB.Tests.Unit.Designer
             DesignerDbContext dbContext = null,
             IEntitySerializer<QuestionnaireDocument> entitySerializer = null,
             IPatchApplier patchApplier = null,
-            IOptions<QuestionnaireHistorySettings> questionnaireHistorySettings = null)
+            IOptions<QuestionnaireHistorySettings> questionnaireHistorySettings = null,
+            ICommandService commandService = null)
         {
             return new QuestionnaireHistoryVersionsService(
                 dbContext ?? Create.InMemoryDbContext(),
@@ -1293,7 +1295,8 @@ namespace WB.Tests.Unit.Designer
                     QuestionnaireChangeHistoryLimit = 10
                 }), 
                 patchApplier ?? Create.PatchApplier(),
-                Create.PatchGenerator());
+                Create.PatchGenerator(),
+                commandService ?? Mock.Of<ICommandService>());
         }
 
         private static IPatchApplier PatchApplier()
