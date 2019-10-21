@@ -1296,4 +1296,28 @@ Table - the questions of the roster are shown in the same level as rows and colu
   <data name="ScenarioDetails" xml:space="preserve">
     <value>Scenario</value>
   </data>
+  <data name="DownloadPdf" xml:space="preserve">
+    <value>Download PDF</value>
+  </data>
+  <data name="GeneratingPdf" xml:space="preserve">
+    <value>Generating pdf for "{0}"</value>
+  </data>
+  <data name="GeneratePdf" xml:space="preserve">
+    <value>Generate pdf</value>
+  </data>
+  <data name="ChooseLanguageTitle" xml:space="preserve">
+    <value>Please choose translation</value>
+  </data>
+  <data name="ChooseLanguage" xml:space="preserve">
+    <value>Choose translation</value>
+  </data>
+  <data name="Initializing" xml:space="preserve">
+    <value>Initializing</value>
+  </data>
+  <data name="RetryExportPDF" xml:space="preserve">
+    <value>Retry export as PDF</value>
+  </data>
+  <data name="Translation_Original" xml:space="preserve">
+    <value>Original</value>
+  </data>
 </root>

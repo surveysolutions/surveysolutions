@@ -205,6 +205,24 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Choose translation.
+        /// </summary>
+        public static string ChooseLanguage {
+            get {
+                return ResourceManager.GetString("ChooseLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please choose translation.
+        /// </summary>
+        public static string ChooseLanguageTitle {
+            get {
+                return ResourceManager.GetString("ChooseLanguageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add classification.
         /// </summary>
         public static string ClassificationAdd {
@@ -462,6 +480,15 @@ namespace WB.UI.Designer.Resources {
         public static string Download {
             get {
                 return ResourceManager.GetString("Download", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download PDF.
+        /// </summary>
+        public static string DownloadPdf {
+            get {
+                return ResourceManager.GetString("DownloadPdf", resourceCulture);
             }
         }
         
@@ -786,6 +813,24 @@ namespace WB.UI.Designer.Resources {
         public static string FlatRoster {
             get {
                 return ResourceManager.GetString("FlatRoster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Generate pdf.
+        /// </summary>
+        public static string GeneratePdf {
+            get {
+                return ResourceManager.GetString("GeneratePdf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Generating pdf for &quot;{0}&quot;.
+        /// </summary>
+        public static string GeneratingPdf {
+            get {
+                return ResourceManager.GetString("GeneratingPdf", resourceCulture);
             }
         }
         
@@ -1211,6 +1256,15 @@ namespace WB.UI.Designer.Resources {
         public static string IncorrectRosterTitle {
             get {
                 return ResourceManager.GetString("IncorrectRosterTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Initializing.
+        /// </summary>
+        public static string Initializing {
+            get {
+                return ResourceManager.GetString("Initializing", resourceCulture);
             }
         }
         
@@ -1922,6 +1976,15 @@ namespace WB.UI.Designer.Resources {
         public static string RequestFailedUnexpectedly {
             get {
                 return ResourceManager.GetString("RequestFailedUnexpectedly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Retry export as PDF.
+        /// </summary>
+        public static string RetryExportPDF {
+            get {
+                return ResourceManager.GetString("RetryExportPDF", resourceCulture);
             }
         }
         
@@ -3263,6 +3326,15 @@ namespace WB.UI.Designer.Resources {
         public static string ToggleSearch {
             get {
                 return ResourceManager.GetString("ToggleSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Original.
+        /// </summary>
+        public static string Translation_Original {
+            get {
+                return ResourceManager.GetString("Translation_Original", resourceCulture);
             }
         }
         
