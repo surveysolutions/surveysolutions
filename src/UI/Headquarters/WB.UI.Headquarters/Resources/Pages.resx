@@ -1279,7 +1279,7 @@
     <value>Questionnaire details</value>
   </data>
   <data name="Questionnaire_Stats" xml:space="preserve">
-    <value>Stats</value>
+    <value>Questionnaire Information</value>
   </data>
   <data name="Questionnaire_QuestionsCount" xml:space="preserve">
     <value>Questions</value>

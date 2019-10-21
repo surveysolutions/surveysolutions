@@ -11,12 +11,9 @@
 
         <div class="row">
             <div class="col-sm-6">
+                <h3>{{model.title}}</h3>
                 <table class="table table-striped table-bordered">
                     <tbody>
-                        <tr>
-                            <td>{{$t('Dashboard.Questionnaire')}}</td>
-                            <td>{{model.title}}</td>
-                        </tr>
                         <tr>
                             <td>{{$t('Dashboard.Version')}}</td>
                             <td>{{model.version}}</td>

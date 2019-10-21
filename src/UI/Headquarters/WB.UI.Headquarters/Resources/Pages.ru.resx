@@ -1313,7 +1313,7 @@
     <value>Количество секций</value>
   </data>
   <data name="Questionnaire_Stats" xml:space="preserve">
-    <value>Статистика</value>
+    <value>О опроснике</value>
   </data>
   <data name="Questionnaire_SubSectionsCount" xml:space="preserve">
     <value>Количество подсекций</value>
