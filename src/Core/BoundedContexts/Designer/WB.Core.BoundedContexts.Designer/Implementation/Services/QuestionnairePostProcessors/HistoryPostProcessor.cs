@@ -188,7 +188,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
             this.AddQuestionnaireChangeItem(questionnaireId, command.ResponsibleId,
                 QuestionnaireActionType.ImportToHq, QuestionnaireItemType.Questionnaire, 
-                command.QuestionnaireId, command.Metadata?.HqHostName, null, 
+                command.QuestionnaireId, command.Metadata?.Hq.HostName, null, 
                 null, null, aggregate.QuestionnaireDocument, meta: command.Metadata);
         }
 

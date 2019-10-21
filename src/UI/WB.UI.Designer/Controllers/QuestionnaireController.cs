@@ -75,6 +75,7 @@ namespace WB.UI.Designer.Controllers
         private readonly IPublicFoldersStorage publicFoldersStorage;
         private readonly IAttachmentService attachmentService;
         private readonly ITranslationsService translationsService;
+        private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
 
         public QuestionnaireController(
             IQuestionnaireViewFactory questionnaireViewFactory,
@@ -82,6 +83,7 @@ namespace WB.UI.Designer.Controllers
             ILogger<QuestionnaireController> logger,
             IQuestionnaireInfoFactory questionnaireInfoFactory,
             IQuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory,
+            IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService,
             ILookupTableService lookupTableService,
             IQuestionnaireInfoViewFactory questionnaireInfoViewFactory,
             ICategoricalOptionsImportService categoricalOptionsImportService,
@@ -106,8 +108,8 @@ namespace WB.UI.Designer.Controllers
             this.publicFoldersStorage = publicFoldersStorage;
             this.attachmentService = attachmentService;
             this.translationsService = translationsService;
+            this.questionnaireHistoryVersionsService = questionnaireHistoryVersionsService;
         }
-
 
         [Route("questionnaire/details/{id}/nosection/{entityType}/{entityId}")]
         public IActionResult DetailsNoSection(QuestionnaireRevision id,
@@ -281,16 +283,16 @@ namespace WB.UI.Designer.Controllers
         }
 
         [HttpPost]
-        public JsonResult SaveComment(Guid id, Guid historyItemId, string comment)
+        public async Task<ActionResult<bool>> SaveComment(Guid id, Guid historyItemId, string comment)
         {
             bool hasAccess = this.User.IsAdmin() || this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id, this.User.GetId());
             if (!hasAccess)
-                return Json(false);
+                return false;
 
-            this.questionnaireChangeHistoryFactory.UpdateQuestionnaireChangeRecord(historyItemId.ToString("N"),
-                comment);
+            await this.questionnaireHistoryVersionsService.UpdateQuestionnaireChangeRecordCommentAsync(
+                historyItemId.FormatGuid(), comment);
 
-            return Json(true);
+            return true;
         }
 
         public IActionResult QuestionnaireHistory(Guid id, int? p)
