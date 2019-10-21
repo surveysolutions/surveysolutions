@@ -259,6 +259,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task SendCommentQuestionCommandAsync()
         {
+#if !PRODUCTION
+            if (this.InterviewerComment?.Equals("!{kaboom}!", StringComparison.InvariantCultureIgnoreCase) == true)
+            {
+                throw new Exception("Test exception");
+            }
+#endif
             await this.commandService.ExecuteAsync(
                 new CommentAnswerCommand(
                     interviewId: Guid.Parse(this.interviewId),
