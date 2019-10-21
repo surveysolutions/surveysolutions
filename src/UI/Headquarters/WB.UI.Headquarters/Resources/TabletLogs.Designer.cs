@@ -70,7 +70,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interviwer can navigate to diagnostics page on his device and tap &quot;Send trace log&quot; link for sending detailed log.
+        ///   Looks up a localized string similar to Interviewer can navigate to diagnostics page on his device and tap &quot;Send trace log&quot; link for sending detailed log.
         /// </summary>
         public static string PageSubTitle {
             get {

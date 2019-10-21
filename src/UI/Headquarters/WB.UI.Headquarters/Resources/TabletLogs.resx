@@ -121,7 +121,7 @@
     <value>Device id</value>
   </data>
   <data name="PageSubTitle" xml:space="preserve">
-    <value>Interviwer can navigate to diagnostics page on his device and tap "Send trace log" link for sending detailed log</value>
+    <value>Interviewer can navigate to diagnostics page on his device and tap "Send trace log" link for sending detailed log</value>
   </data>
   <data name="PageTitle" xml:space="preserve">
     <value>Device logs</value>
