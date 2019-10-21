@@ -126,6 +126,9 @@
   <data name="ReceiveDateUtc" xml:space="preserve">
     <value>Получено</value>
   </data>
+  <data name="String1" xml:space="preserve">
+    <value>Интервьюер может отправить подробные логи со страницы диагностики на устройстве</value>
+  </data>
   <data name="UserName" xml:space="preserve">
     <value>Имя пользователя</value>
   </data>
