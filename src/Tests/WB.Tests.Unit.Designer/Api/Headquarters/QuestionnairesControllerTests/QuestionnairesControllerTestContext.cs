@@ -1,5 +1,4 @@
-﻿using System;
-using Moq;
+﻿using Moq;
 using NSubstitute;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
@@ -7,10 +6,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.CommandBus;
-using WB.UI.Designer.Api.Headquarters;
 using WB.UI.Designer.Controllers.Api.Headquarters;
-using WB.UI.Designer.Implementation.Services;
 
 namespace WB.Tests.Unit.Designer.Api.Headquarters.QuestionnairesControllerTests
 {
@@ -38,7 +34,7 @@ namespace WB.Tests.Unit.Designer.Api.Headquarters.QuestionnairesControllerTests
                 listItemStorage: Create.InMemoryDbContext(),
                 expressionsPlayOrderProvider: expressionsPlayOrderProvider ?? Substitute.For<IExpressionsPlayOrderProvider>(),
                 questionnaireCompilationVersionService: questionnaireCompilationVersionService ?? Mock.Of<IQuestionnaireCompilationVersionService>(),
-                questionnaireRevisionMetadataUpdater: Mock.Of<IQuestionnaireRevisionMetadataUpdater>());
+                questionnaireHistoryVersionsService: Mock.Of<IQuestionnaireHistoryVersionsService>());
 
             return hqQuestionnairesController;
         }

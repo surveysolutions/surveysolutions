@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -35,7 +36,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
         private readonly IStringCompressor zipUtils;
         private readonly IExpressionsPlayOrderProvider expressionsPlayOrderProvider;
         private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersionService;
-        private readonly IQuestionnaireRevisionMetadataUpdater questionnaireRevisionMetadataUpdater;
+        private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
         
         public HQQuestionnairesController(
             IQuestionnaireViewFactory questionnaireViewFactory,
@@ -48,7 +49,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             DesignerDbContext listItemStorage,
             IExpressionsPlayOrderProvider expressionsPlayOrderProvider,
             IQuestionnaireCompilationVersionService questionnaireCompilationVersionService,
-            IQuestionnaireRevisionMetadataUpdater questionnaireRevisionMetadataUpdater)
+            IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService)
         {
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.questionnaireVerifier = questionnaireVerifier;
@@ -60,7 +61,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             this.listItemStorage = listItemStorage;
             this.expressionsPlayOrderProvider = expressionsPlayOrderProvider;
             this.questionnaireCompilationVersionService = questionnaireCompilationVersionService;
-            this.questionnaireRevisionMetadataUpdater = questionnaireRevisionMetadataUpdater;
+            this.questionnaireHistoryVersionsService = questionnaireHistoryVersionsService;
         }
 
         [HttpGet]
@@ -99,7 +100,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
 
         [HttpGet]
         [Route("{id:Guid}")]
-        public IActionResult Get(Guid id, int clientQuestionnaireContentVersion, [FromQuery]int? minSupportedQuestionnaireVersion = null)
+        public async Task<IActionResult> Get(Guid id, int clientQuestionnaireContentVersion, [FromQuery]int? minSupportedQuestionnaireVersion = null)
         {
             QuestionnaireView questionnaireView;
 
@@ -166,7 +167,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             var questionnaire = questionnaireView.Source.Clone();
 
             var userAgent = Request.Headers["User-Agent"].FirstOrDefault();
-            this.questionnaireRevisionMetadataUpdater.LogInHistoryImportQuestionnaireToHq(questionnaire, userAgent, User.GetId());
+            questionnaire.Revision = await this.questionnaireHistoryVersionsService.TrackQuestionnaireImportAsync(questionnaire, userAgent, User.GetId());
 
             questionnaire.IsUsingExpressionStorage = versionToCompileAssembly > 19;
             var readOnlyQuestionnaireDocument = questionnaireView.Source.AsReadOnly();
@@ -184,9 +185,9 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
 
         [HttpPost]
         [Route("{id:Guid}/revision/{rev:int}/metadata")]
-        public IActionResult Tag(Guid id, int rev, [FromBody] QuestionnaireRevisionMetaDataUpdate tagData)
+        public async Task<IActionResult> Tag(Guid id, int rev, [FromBody] QuestionnaireRevisionMetaDataUpdate tagData)
         {
-            this.questionnaireRevisionMetadataUpdater.UpdateQuestionnaireMetadata(id, rev, tagData);
+            await this.questionnaireHistoryVersionsService.UpdateQuestionnaireMetadataAsync(id, rev, tagData);
             return Ok();
         }
         

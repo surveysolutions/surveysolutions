@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 
@@ -23,5 +24,9 @@ namespace WB.Core.BoundedContexts.Designer.Services
             QuestionnaireDocument questionnaireDocument,
             QuestionnaireChangeReference reference = null,
             QuestionnaireChangeRecordMetadata meta = null);
+
+        Task UpdateQuestionnaireChangeRecordCommentAsync(string questionnaireChangeRecordId, string comment);
+        Task<int> TrackQuestionnaireImportAsync(QuestionnaireDocument questionnaireDocument, string userAgent, Guid userId);
+        Task UpdateQuestionnaireMetadataAsync(Guid questionnaire, int revision, QuestionnaireRevisionMetaDataUpdate metaData);
     }
 }
