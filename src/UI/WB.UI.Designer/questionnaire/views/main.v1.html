@@ -5,6 +5,7 @@
             <div class="buttons">
                 <a class="btn" href="http://support.mysurvey.solutions/designer" target="_blank" ng-i18next>Help</a>
                 <a class="btn" href="../../questionnaire/questionnairehistory/{{questionnaire.questionnaireId}}" target="_blank" ng-i18next>History</a>
+                <button class="btn" type="button" ng-click="showDownloadPdf()" ng-i18next>DownloadPdf</button>
                 <a class="btn" type="button" ng-show="questionnaire.hasViewerAdminRights" href="../../questionnaire/backup/{{questionnaire.questionnaireId}}" ng-i18next>Backup</a>
                 <button class="btn" type="button" ng-disabled="questionnaire.isReadOnlyForUser && !questionnaire.hasViewerAdminRights && !questionnaire.isSharedWithUser" ng-click="showShareInfo()" ng-i18next>Settings</button>
 
@@ -726,8 +727,8 @@
 <script type="text/ng-template" id="Image-attachment-info-template.html">
     <p>
         <span class="file-name">{{attachment.meta.fileName}}</span>, &nbsp;
-        <span ng-class="{'error': isAttachmentResolutionTooBig(attachment)}" ng-if="attachment.content.details.width" ng-i18next="({width: attachment.content.details.width, height: attachment.content.details.height})SideBarAttachmentDetailsResolution"></span>{{attachment.content.details.width ? ',&nbsp;' : ''}} 
-        <span ng-i18next="({type: attachment.content.type})SideBarAttachmentDetailsFormat"></span>, 
+        <span ng-class="{'error': isAttachmentResolutionTooBig(attachment)}" ng-if="attachment.content.details.width" ng-i18next="({width: attachment.content.details.width, height: attachment.content.details.height})SideBarAttachmentDetailsResolution"></span>{{attachment.content.details.width ? ',&nbsp;' : ''}}
+        <span ng-i18next="({type: attachment.content.type})SideBarAttachmentDetailsFormat"></span>,
         <span ng-class="{'error': isAttachmentSizeTooBig(attachment)}" ng-i18next="({size: formatBytes(attachment.content.size)})SideBarAttachmentDetailsSize"></span>
     </p>
     <p ng-i18next="({lastUpdate: attachment.meta.lastUpdated})SideBarAttachmentUploaded"></p>
@@ -739,7 +740,7 @@
             <button type="button" class="close" ng-click="closeVerifications()" aria-hidden="true"></button>
             <h3 class="modal-title">
                 <span ng-i18next="CompilationLabel"></span>
-                
+
                 <span ng-if="verificationStatus.typeOfMessageToBeShown === 'error'" ng-i18next="({count: verificationStatus.messagesToShow.length})CompilationErrorsCounter"></span>
                 <span ng-if="verificationStatus.typeOfMessageToBeShown === 'warning'" ng-i18next="({count: verificationStatus.messagesToShow.length})CompilationWarningsCounter"></span>
             </h3>
