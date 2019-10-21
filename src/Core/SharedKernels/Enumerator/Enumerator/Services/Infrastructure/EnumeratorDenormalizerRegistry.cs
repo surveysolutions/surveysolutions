@@ -4,13 +4,27 @@ using System.Linq;
 using System.Reflection;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.SharedKernels.Enumerator.Denormalizer;
 
 namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
 {
-    public class DenormalizerRegistry: IDenormalizerRegistry
+    public class EnumeratorDenormalizerRegistry: IDenormalizerRegistry
     {
+        private readonly ILogger logger;
         private readonly Dictionary<Type, HashSet<BaseDenormalizer>> eventTypes = new Dictionary<Type, HashSet<BaseDenormalizer>>();
+
+        public EnumeratorDenormalizerRegistry(IServiceLocator serviceLocator,
+            ILogger logger)
+        {
+            this.logger = logger;
+            this.logger.Trace("Enumerator registry initializing");
+            var dashboard = (BaseDenormalizer) serviceLocator.GetInstance(typeof(InterviewDashboardEventHandler));
+            this.RegisterDenormalizer(dashboard);
+        }
+
         public void RegisterDenormalizer(BaseDenormalizer denormalizer)
         {
             foreach (var eventType in GetRegisteredEvents(denormalizer))
