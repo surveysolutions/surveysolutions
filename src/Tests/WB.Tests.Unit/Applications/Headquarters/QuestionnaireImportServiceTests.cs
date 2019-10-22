@@ -99,12 +99,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
 
             var designerApi = new Mock<IDesignerApi>();
             SetupGetQuestionnaire(designerApi);
-            SetupDownloadAttachment(designerApi);
-            //designerApi
-            //    .Setup(d => d.DownloadQuestionnaireAttachment(It.IsAny<string>(), It.IsAny<Guid>()))
-            //    .Returns(Task.FromResult(
-            //        new RestFile(new byte[] { 1 }, "image/png", "content id", 0, "file.png", HttpStatusCode.OK)));
-            
+            SetupDownloadAttachment(designerApi);                       
 
             var mockOfAttachmentContentService = new Mock<IAttachmentContentService>();
             mockOfAttachmentContentService.Setup(x => x.HasAttachmentContent(questionnaireAttachments[0].ContentId)).Returns(true);
