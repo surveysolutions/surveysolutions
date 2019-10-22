@@ -268,7 +268,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
             // act
             await importService.Import(Guid.NewGuid(), "questionnaire1", false, null, "http://fsb.ru");
 
-            designerApi.Verify(d => d.Tag(It.IsAny<Guid>(), It.IsAny<int>(), It.Is<QuestionnaireRevisionMetadataModel>(m =>
+            designerApi.Verify(d => d.UpdateRevisionMetadata(It.IsAny<Guid>(), It.IsAny<int>(), It.Is<QuestionnaireRevisionMetadataModel>(m =>
                 m.HqHost == "fsb.ru"
                 && m.HqImporterLogin == "Zorge"
                 && m.HqQuestionnaireVersion == 0
