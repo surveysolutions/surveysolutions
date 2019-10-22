@@ -24,6 +24,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         string VariableName { get; }
         Type ExpressionStorageType { get; set; }
+        IReadOnlyList<Translation> Translations { get; }
 
         IQuestion GetQuestionByVariable(string variable);
 

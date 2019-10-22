@@ -12,6 +12,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
+using WB.Core.SharedKernels.Questionnaire.Synchronization.Designer;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.BoundedContexts.Headquarters.Designer
@@ -42,8 +43,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
         [Get("/user/login")]
         Task Login([Header("Authorization")] string authorization);
 
+        [Get("/user/userdetails")]
+        Task IsLoggedIn();
+
         [Get("/v3/questionnaires")]
         Task<PagedQuestionnaireCommunicationPackage> GetQuestionnairesList([Query] DesignerQuestionnairesListFilter filter);
+
+        [Get("/pdf/status/{questionnaireId}")]
+        Task <PdfStatus> GetPdfStatus(Guid questionnaireId, [Query] Guid? translationId = null);
+
+        [Get("/pdf/download/{questionnaireId}")]
+        Task<RestFile> DownloadPdf(Guid questionnaireId, [Query] Guid? translationId = null);
     }
 
     public class DesignerQuestionnairesListFilter

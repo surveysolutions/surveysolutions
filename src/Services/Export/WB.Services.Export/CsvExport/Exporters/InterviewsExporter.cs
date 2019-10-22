@@ -20,7 +20,6 @@ using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.CsvExport.Exporters
 {
-    [Localizable(false)]
     public class InterviewsExporter : IInterviewsExporter
     {
         private readonly IInterviewFactory interviewFactory;

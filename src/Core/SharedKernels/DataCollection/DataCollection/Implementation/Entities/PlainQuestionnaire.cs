@@ -1169,6 +1169,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .Select(translation => translation.Name)
                 .ToReadOnlyCollection();
 
+        public IReadOnlyList<Translation> Translations => this.QuestionnaireDocument.Translations.ToList();
+
         public string GetDefaultTransation()
         {
             return this.QuestionnaireDocument.Translations.SingleOrDefault(t =>
