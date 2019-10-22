@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
-using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
@@ -81,7 +76,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 recordWithRevertAvailable.Contains(questionnaireChangeRecord.QuestionnaireChangeRecordId),
                 questionnaireChangeRecord.TargetItemDateTime,
                 references,
-                questionnaireChangeRecord?.Meta?.Comment)
+                questionnaireChangeRecord?.Meta?.Comment,
+                questionnaireChangeRecord?.Meta?.Hq?.Comment,
+                questionnaireChangeRecord?.Meta?.Hq?.Version)
             {
                 Sequence = questionnaireChangeRecord.Sequence
             };

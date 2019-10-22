@@ -342,4 +342,7 @@
   <data name="Questionnaire_ImportToHq" xml:space="preserve">
     <value>Import questionnaire to headquarters ({0}) by {1}</value>
   </data>
+  <data name="Questionnaire_ImportToHq_WithComment" xml:space="preserve">
+    <value>Import questionnaire to headquarters ({0}) by {1} with comment: {2}</value>
+  </data>
 </root>

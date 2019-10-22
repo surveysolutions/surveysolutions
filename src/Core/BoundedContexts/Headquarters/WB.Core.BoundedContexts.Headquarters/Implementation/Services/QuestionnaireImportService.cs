@@ -165,13 +165,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     questionnaireVersion,
                     comment));
 
-                await designerApi.Tag(questionnaire.PublicKey, questionnaire.Revision, new QuestionnaireRevisionMetadataModel
+                await designerApi.UpdateRevisionMetadata(questionnaire.PublicKey, questionnaire.Revision, new QuestionnaireRevisionMetadataModel
                 {
                     HqHost = GetDomainFromUri(requestUrl),
                     HqTimeZoneMinutesOffset = (int)TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).TotalMinutes,
                     HqImporterLogin = this.authorizedUser.UserName,
                     HqQuestionnaireVersion = questionnaireIdentity.Version,
-                    Comment = comment,
+                    HqComment = comment,
                 });
 
                 await DownloadAndStorePdf(questionnaireIdentity, questionnaire);

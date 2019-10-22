@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
     public interface IDesignerApi
     {
         [Post("/api/hq/v3/questionnaires/{id}/revision/{rev}/metadata")]
-        Task Tag(Guid id, int rev, [Body] QuestionnaireRevisionMetadataModel model);
+        Task UpdateRevisionMetadata(Guid id, int rev, [Body] QuestionnaireRevisionMetadataModel model);
 
         [Get("/api/hq/v3/questionnaires/{id}")]
         Task<QuestionnaireCommunicationPackage> GetQuestionnaire(
@@ -76,7 +76,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
         public int HqTimeZoneMinutesOffset { get; set; }
         public string HqImporterLogin { get; set; }
         public long HqQuestionnaireVersion { get; set; }
-        public string Comment { get; set; }
+        public string HqComment { get; set; }
         public string HqHost { get; internal set; }
     }
 }
