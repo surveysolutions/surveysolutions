@@ -4,6 +4,7 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using NUnit.Framework;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Translations;
@@ -219,12 +220,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
             storage.StoreOptionsForQuestion(questionnaireIdentity, questionId, question.Answers, translations);
             var filteredQuestionOption = storage.GetQuestionOptionByValue(questionnaireIdentity, questionId, 1, translationId);
 
+            CategoricalOption[] filteredOption1 = storage.GetOptionsByValues(questionnaireIdentity, questionId, new[] {1});
+
+            Assert.That(filteredOption1, Has.Length.EqualTo(1));
             Assert.That(filteredQuestionOption, Is.Not.Null);
             Assert.That(filteredQuestionOption.Value, Is.EqualTo(1));
         }
 
         [Test]
-        public void should_return_correct_option_when_contains_duplidate_titles()
+        public void should_return_correct_option_when_contains_duplicate_titles()
         {
             var options = new List<Answer>();
             options.Add(Create.Entity.Answer("one", 1, 1));

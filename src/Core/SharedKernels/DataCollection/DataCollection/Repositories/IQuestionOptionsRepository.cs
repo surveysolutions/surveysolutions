@@ -17,6 +17,6 @@ namespace WB.Core.SharedKernels.DataCollection.Repositories
             Guid questionId, decimal optionValue, Translation translationId);
 
         IEnumerable<CategoricalOption> GetOptionsByOptionValues(IQuestionnaire questionnaire, Guid questionId,
-            int[] optionsValues);
+            int[] optionsValues, Translation translation);
     }
 }
