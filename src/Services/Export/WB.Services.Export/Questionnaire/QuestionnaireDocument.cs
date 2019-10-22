@@ -13,7 +13,10 @@ namespace WB.Services.Export.Questionnaire
         public QuestionnaireDocument(List<IQuestionnaireEntity> children = null) : base(children)
         {
             this.memoryCache = new MemoryCache(new MemoryCacheOptions());
+            this.Translations = new List<Translation>();
         }
+
+        public List<Translation> Translations { get; set; }
 
         public string Id { get; set;}
 

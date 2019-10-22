@@ -3,7 +3,6 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.UI.Designer.Api.Headquarters;
 using WB.UI.Designer.Controllers.Api.Headquarters;
 
 namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests

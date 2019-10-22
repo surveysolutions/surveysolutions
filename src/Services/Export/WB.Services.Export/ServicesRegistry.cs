@@ -89,6 +89,7 @@ namespace WB.Services.Export
             services.AddTransient<IInterviewReferencesStorage, InterviewReferencesStorage>();
             services.AddTransient<IDatabaseSchemaCommandBuilder, DatabaseSchemaCommandBuilder>();
             services.AddTransient<IUserStorage, UserStorage>();
+            services.AddTransient<IPdfExporter, PdfExporter>();
 
             services.AddTransient<IEventProcessor, EventsProcessor>();
             services.AddScoped<ITenantContext, TenantContext>();

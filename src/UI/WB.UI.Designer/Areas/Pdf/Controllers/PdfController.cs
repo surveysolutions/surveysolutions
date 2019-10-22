@@ -10,8 +10,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Internal;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
@@ -23,29 +26,19 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Resources;
-using ActionDescriptor = Microsoft.AspNetCore.Mvc.Abstractions.ActionDescriptor;
-using ActionResult = Microsoft.AspNetCore.Mvc.ActionResult;
-using Controller = Microsoft.AspNetCore.Mvc.Controller;
-using EmptyModelMetadataProvider = Microsoft.AspNetCore.Mvc.ModelBinding.EmptyModelMetadataProvider;
-using ITempDataProvider = Microsoft.AspNetCore.Mvc.ViewFeatures.ITempDataProvider;
-using JsonResult = Microsoft.AspNetCore.Mvc.JsonResult;
-using ModelStateDictionary = Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary;
-using PdfConvert = Shark.PdfConvert.PdfConvert;
-using TempDataDictionary = Microsoft.AspNetCore.Mvc.ViewFeatures.TempDataDictionary;
-using ViewContext = Microsoft.AspNetCore.Mvc.Rendering.ViewContext;
-using ViewDataDictionary = Microsoft.AspNetCore.Mvc.ViewFeatures.ViewDataDictionary;
 
 namespace WB.UI.Designer.Areas.Pdf.Controllers
 {
     [Area("Pdf")]
     [Route("pdf")]
+    [Authorize]
     public class PdfController : Controller
     {
         #region Subclasses
 
         private class PdfGenerationProgress
         {
-            private DateTime? finishTime = null;
+            private DateTime? finishTime;
 
             public string FilePath { get; } = Path.GetTempFileName();
             public bool IsFailed { get; private set; }
@@ -168,13 +161,12 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
         }
 
         [ResponseCache (Duration = 0, NoStore = true)]
-        [Microsoft.AspNetCore.Mvc.HttpGet]
+        [HttpGet]
         [Route("status/{id}")]
         public JsonResult Status(Guid id, Guid? translation, int? timezoneOffsetMinutes)
         {
             var pdfKey = id.ToString() + translation;
-            var cultureCode = CultureInfo.CurrentUICulture.Name;
-            PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(id, translation, cultureCode, timezoneOffsetMinutes));
+            PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(id, translation, timezoneOffsetMinutes));
 
             if (pdfGenerationProgress.IsFailed)
                 return this.Json(PdfStatus.Failed(PdfMessages.FailedToGenerate));
@@ -195,29 +187,28 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
                     : PdfStatus.InProgress(string.Format(PdfMessages.GeneratingSuccess, sizeInKb)));
         }
 
-        [Microsoft.AspNetCore.Mvc.HttpPost]
+        [HttpPost]
         [Route("retry/{id}")]
         public ActionResult Retry(Guid id, Guid? translation, int? timezoneOffsetMinutes)
         {
             var pdfKey = id.ToString() + translation;
-            var cultureCode = CultureInfo.CurrentUICulture.Name;
-            PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(id, translation, cultureCode, timezoneOffsetMinutes));
+            PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(id, translation, timezoneOffsetMinutes));
             if (pdfGenerationProgress != null && pdfGenerationProgress.IsFailed)
             {
                 GeneratedPdfs.TryRemove(pdfKey, out _);
             }
-            GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(id, translation, cultureCode, timezoneOffsetMinutes));
+            GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(id, translation, timezoneOffsetMinutes));
             return this.Json(PdfStatus.InProgress(PdfMessages.Retry));
         }
 
-        private PdfGenerationProgress StartNewPdfGeneration(Guid id, Guid? translation, string cultureCode, int? timezoneOffsetMinutes)
+        private PdfGenerationProgress StartNewPdfGeneration(Guid id, Guid? translation, int? timezoneOffsetMinutes)
         {
             var newPdfGenerationProgress = new PdfGenerationProgress();
-            this.StartRenderPdf(id, newPdfGenerationProgress, translation, cultureCode, timezoneOffsetMinutes ?? 0);
+            this.StartRenderPdf(id, newPdfGenerationProgress, translation, timezoneOffsetMinutes ?? 0);
             return newPdfGenerationProgress;
         }
         
-        private void StartRenderPdf(Guid id, PdfGenerationProgress generationProgress, Guid? translation, string cultureCode, int timezoneOffsetMinutes)
+        private void StartRenderPdf(Guid id, PdfGenerationProgress generationProgress, Guid? translation, int timezoneOffsetMinutes)
         {
             var pathToWkHtmlToPdfExecutable = this.GetPathToWKHtmlToPdfExecutableOrThrow();
 
