@@ -255,13 +255,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private async Task DownloadAndStorePdf(QuestionnaireIdentity questionnaireIdentity,
             QuestionnaireDocument questionnaire)
         {
-            var pdfRetry = Policy.HandleResult<PdfStatus>(x => x.ReadyForDownload == false)
-                .WaitAndRetryAsync(7, retry => TimeSpan.FromSeconds(retry));
+            var pdfRetry = Policy
+                .HandleResult<PdfStatus>(x => x.ReadyForDownload == false && x.CanRetry != true)
+                .WaitAndRetryForeverAsync(_ => TimeSpan.FromSeconds(3));
 
-            await pdfRetry.ExecuteAsync(async () =>
+            var result = await pdfRetry.ExecuteAsync(async () =>
             {
                 this.logger.Trace($"Waiting for pdf to be ready {questionnaireIdentity}");
-                return await this.designerApi.GetPdfStatus(questionnaireIdentity.QuestionnaireId);
+                return await this.designerApi.GetPdfStatus(questionnaireIdentity.QuestionnaireId);     
             });
 
             this.logger.Debug("Loading pdf for default language");
