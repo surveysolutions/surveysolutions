@@ -7,19 +7,19 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
     {
         public QuestionnaireChangeHistoricalRecord(
             string id,
-            string userName, 
+            string userName,
             DateTime timestamp,
             QuestionnaireActionType actionType,
             Guid targetId,
-            Guid? targetParentId, 
+            Guid? targetParentId,
             string title,
-            QuestionnaireItemType type, 
+            QuestionnaireItemType type,
             string targetNewTitle,
             int? affectedEntries,
             bool hasRevertTo,
             DateTime? targetDateTime,
             List<QuestionnaireChangeHistoricalRecordReference> historicalRecordReferences,
-            string comment)
+            string comment, string hqComment, string hqVersion)
         {
             this.Id = id;
             UserName = userName;
@@ -35,24 +35,28 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             this.HasRevertTo = hasRevertTo;
             this.TargetDateTime = targetDateTime;
             this.Comment = comment;
+            this.HqComment = hqComment;
+            HqVersion = hqVersion;
         }
 
-        public string Id { get; private set; }
+        public string Id { get; }
         public int Sequence { get; set; }
-        public string UserName { get; private set; }
+        public string UserName { get; }
         public DateTime Timestamp { get; private set; }
-        public QuestionnaireActionType ActionType { get; private set; }
+        public QuestionnaireActionType ActionType { get; }
 
         public Guid TargetId { get; private set; }
-        public string TargetTitle { get; private set; }
+        public string TargetTitle { get; }
         public Guid? TargetParentId { get; private set; }
-        public QuestionnaireItemType TargetType { get; private set; }
+        public QuestionnaireItemType TargetType { get; }
         public DateTime? TargetDateTime { get; private set; }
-        public string TargetNewTitle { get; private set; }
+        public string TargetNewTitle { get; }
         public int? AffectedEntries { get; private set; }
 
-        public bool HasRevertTo { get; private set; }
-        public List<QuestionnaireChangeHistoricalRecordReference> HistoricalRecordReferences { get; private set; }
+        public bool HasRevertTo { get; }
+        public List<QuestionnaireChangeHistoricalRecordReference> HistoricalRecordReferences { get; }
         public string Comment { get; }
+        public string HqComment { get; }
+        public string HqVersion { get; }
     }
 }

@@ -187,7 +187,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
 
         [HttpPost]
         [Route("{id:Guid}/revision/{rev:int}/metadata")]
-        public async Task<IActionResult> Tag(Guid id, int rev, [FromBody] QuestionnaireRevisionMetaDataUpdate tagData)
+        public async Task<IActionResult> UpdateRevisionMetadata(Guid id, int rev, [FromBody] QuestionnaireRevisionMetaDataUpdate tagData)
         {
             await this.questionnaireHistoryVersionsService.UpdateQuestionnaireMetadataAsync(id, rev, tagData);
             return Ok();

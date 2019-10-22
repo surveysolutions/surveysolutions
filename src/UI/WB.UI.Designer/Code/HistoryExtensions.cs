@@ -101,14 +101,23 @@ namespace WB.UI.Designer.Code
                     break;
                 case QuestionnaireActionType.ImportToHq:
                 {
-                    var siteHost = record.TargetNewTitle;
-                    var ipAddress = record.TargetTitle;
+                    var siteHost = record.TargetNewTitle ?? record.TargetTitle;
+                    
                     var indexOfOurDomain = siteHost?.IndexOf(".mysurvey.solutions");
                     siteHost = indexOfOurDomain > 0
                         ? siteHost.Substring(0, indexOfOurDomain.Value)
-                        : null;
+                        : siteHost;
 
-                    text = string.Format(QuestionnaireHistoryResources.Questionnaire_ImportToHq, siteHost ?? ipAddress, record.UserName);
+                    if(record.HqVersion != null)
+                    {
+                        siteHost += " v" + record.HqVersion;
+                    }
+
+                    if(record.HqComment != null)
+                        text = string.Format(QuestionnaireHistoryResources.Questionnaire_ImportToHq_WithComment,
+                            siteHost, record.UserName, record.HqComment);
+                    else                     
+                        text = string.Format(QuestionnaireHistoryResources.Questionnaire_ImportToHq, siteHost, record.UserName);
                 }
                 break;
             }
