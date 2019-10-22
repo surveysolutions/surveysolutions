@@ -2950,7 +2950,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Stats.
+        ///   Looks up a localized string similar to Questionnaire Information.
         /// </summary>
         public static string Questionnaire_Stats {
             get {
