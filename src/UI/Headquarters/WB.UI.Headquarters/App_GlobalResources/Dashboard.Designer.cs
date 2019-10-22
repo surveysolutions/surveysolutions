@@ -360,9 +360,9 @@ namespace Resources {
         /// <summary>
         ///   Looks up a localized string similar to View on Designer.
         /// </summary>
-        internal static string ViewOnDesigner {
+        internal static string ShowOnDesigner {
             get {
-                return ResourceManager.GetString("ViewOnDesigner", resourceCulture);
+                return ResourceManager.GetString("ShowOnDesigner", resourceCulture);
             }
         }
         
