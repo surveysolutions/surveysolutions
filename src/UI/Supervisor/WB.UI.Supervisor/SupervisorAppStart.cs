@@ -37,6 +37,8 @@ namespace WB.UI.Supervisor
 
             this.migrationRunner.MigrateUp(this.GetType().Assembly, typeof(Encrypt_Data).Assembly);
 
+            this.CheckAndProcessInterviewsWithoutViews();
+
             return base.ApplicationStartup(hint);
         }
 
@@ -51,6 +53,12 @@ namespace WB.UI.Supervisor
             {
                 return viewModelNavigation.NavigateToLoginAsync();
             }
+        }
+
+        private void CheckAndProcessInterviewsWithoutViews()
+        {
+            var interviewsAccessor = Mvx.IoCProvider.Resolve<IInterviewerInterviewAccessor>();
+            interviewsAccessor.CheckAndProcessInterviewsWithoutViews();
         }
     }
 }
