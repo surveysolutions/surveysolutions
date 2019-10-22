@@ -11,20 +11,13 @@
 
         <div class="row">
             <div class="col-sm-6">
+                 <h3>{{ model.title}} (ver. {{model.version}}) 
+                        <a :href="model.designerUrl" target="_blank" v-if="model.designerUrl != null" >
+                            <span :title="$t('Dashboard.ShowOnDesigner')" class="glyphicon glyphicon-link" />
+                        </a>
+                     </h3>
                 <table class="table table-striped table-bordered">
                     <tbody>
-                        <tr>
-                            <td>{{$t('Dashboard.Questionnaire')}}</td>
-                            <td>{{model.title}}</td>
-                        </tr>
-                        <tr>
-                            <td>{{$t('Dashboard.ViewOnDesigner')}}</td>
-                            <td><a :href="model.designerUrl" target="_blank">{{ model.designerUrl }}</a></td>
-                        </tr>
-                        <tr>
-                            <td>{{$t('Dashboard.Version')}}</td>
-                            <td>{{model.version}}</td>
-                        </tr>
                         <tr>
                             <td>{{$t('Dashboard.ImportDate')}}</td>
                             <td>{{formatUtcDate(model.importDateUtc)}}</td>

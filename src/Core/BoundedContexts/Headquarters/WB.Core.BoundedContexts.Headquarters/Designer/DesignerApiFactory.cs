@@ -39,11 +39,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
 
         public IDesignerApi Get()
         {
-            const string apiPrefix = @"/api/hq";
-
             var hc = new HttpClient()
             {
-                BaseAddress = new Uri(serviceSettings.Endpoint + apiPrefix),
+                BaseAddress = new Uri(serviceSettings.Endpoint),
                 DefaultRequestHeaders =
                 {
                     { "User-Agent",  serviceSettings.UserAgent },
@@ -53,8 +51,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
             var credentials = designerUserCredentials.Get();
             if (credentials != null)
             {
-                var header = credentials.GetAuthenticationHeaderValue();
-                hc.DefaultRequestHeaders.Authorization = header;
+                hc.DefaultRequestHeaders.Authorization = credentials.GetAuthenticationHeaderValue();
             }
 
             return RestService.For<IDesignerApi>(hc, new RefitSettings
