@@ -212,9 +212,6 @@ export function install(Vue, options) {
         get: apiGet,
         answer: apiAnswerPost,
         changeSection: changeSectionRequest
-        /*setState: (callback) => {
-            callback(jQuery.signalR[config.hubName].state);
-        }*/
     };
 
     Object.defineProperty(Vue, "$api", {
