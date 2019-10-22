@@ -328,12 +328,10 @@
     <value>Опросник передан новому владельцу с email "{0}"</value>
   </data>
   <data name="Questionnaire_ImportToHq" xml:space="preserve">
-      <value>Пользователь {1} заимпортил опросник на хедквотер ({0}) </value>
-      <comment>Пользователь {1} заимпортил опросник на хедквотер ({0}) </comment>
+      <value>Пользователь {1} заимпортил опросник {2} на хедквотер ({0}) </value>
   </data>
   <data name="Questionnaire_ImportToHq_WithComment" xml:space="preserve">
-      <value>Пользователь {1} заимпортил опросник на хедквотер ({0}) </value>
-      <comment>Пользователь {1} заимпортил опросник на хедквотер ({0}) c комментарием: {2}</comment>
+      <value>Пользователь {1} заимпортил опросник {2} на хедквотер ({0}) с комментарием: {3}</value>
   </data>
   <data name="LeaveComment" xml:space="preserve">
       <value>Оставить комментарий</value>
