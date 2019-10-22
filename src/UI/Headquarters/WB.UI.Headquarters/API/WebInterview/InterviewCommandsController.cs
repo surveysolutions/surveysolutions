@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
@@ -25,13 +26,15 @@ namespace WB.UI.Headquarters.API.WebInterview
     public class InterviewCommandsController : CommandsController
     {
         private readonly IAuthorizedUser authorizedUser;
+        private readonly IInterviewFactory interviewFactory;
 
         public InterviewCommandsController(ICommandService commandService, IImageFileStorage imageFileStorage, IAudioFileStorage audioFileStorage, 
             IQuestionnaireStorage questionnaireRepository, IStatefulInterviewRepository statefulInterviewRepository, 
-            IWebInterviewNotificationService webInterviewNotificationService, IAuthorizedUser authorizedUser) 
+            IWebInterviewNotificationService webInterviewNotificationService, IAuthorizedUser authorizedUser, IInterviewFactory interviewFactory) 
             : base(commandService, imageFileStorage, audioFileStorage, questionnaireRepository, statefulInterviewRepository, webInterviewNotificationService)
         {
             this.authorizedUser = authorizedUser;
+            this.interviewFactory = interviewFactory;
         }
 
         protected bool IsReviewMode() =>
@@ -206,23 +209,40 @@ namespace WB.UI.Headquarters.API.WebInterview
         public class ResolveCommentRequest
         {
             public Guid InterviewId { get; set; }
-            public string QuestionIdentity { get; set; }
+            public string QuestionId { get; set; }
         }
 
         [HttpPost]
         [ObserverNotAllowed]
         [Route("resolveComment")]
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
-        [Microsoft.AspNet.SignalR.Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         public IHttpActionResult ResolveComment([FromBody]ResolveCommentRequest resolveCommentRequest)
         {
-            var identity = Identity.Parse(resolveCommentRequest.QuestionIdentity);
+            var identity = Identity.Parse(resolveCommentRequest.QuestionId);
             var command = new ResolveCommentAnswerCommand(resolveCommentRequest.InterviewId,
                 this.GetCommandResponsibleId(resolveCommentRequest.InterviewId),
                 identity.Id,
                 identity.RosterVector);
 
             this.commandService.Execute(command);
+            return Ok();
+        }
+
+        public class SetFlagRequest
+        {
+            public Guid InterviewId { get; set; }
+            public string QuestionId { get; set; }
+            public bool HasFlag { get; set; }
+        }
+
+
+        [HttpPost]
+        [Route("setFlag")]
+        [ObserverNotAllowed]
+        public IHttpActionResult SetFlag(SetFlagRequest request)
+        {
+            this.interviewFactory.SetFlagToQuestion(request.InterviewId, Identity.Parse(request.QuestionId), request.HasFlag);
             return Ok();
         }
     }
