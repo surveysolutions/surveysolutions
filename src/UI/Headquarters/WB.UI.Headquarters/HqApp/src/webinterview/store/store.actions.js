@@ -356,7 +356,7 @@ export default {
 
     changeLanguage({ rootState }, language) {
         const interviewId = rootState.route.params.interviewId
-        Vue.$api.post('changeLanguage', {interviewId, language})
+        Vue.$api.post('changeLanguage', {interviewId, language: language.language})
     },
 
     stop() {
@@ -364,7 +364,6 @@ export default {
     },
 
     changeSection(ctx, sectionId) {
-        //return Vue.$api.setState((state) => state.sectionId = sectionId)
         return Vue.$api.changeSection(sectionId)
     }
 }
