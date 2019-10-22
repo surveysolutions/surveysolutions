@@ -6,7 +6,6 @@ using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
-using WB.UI.Designer.Api.Headquarters;
 using WB.UI.Designer.Controllers.Api.Headquarters;
 
 

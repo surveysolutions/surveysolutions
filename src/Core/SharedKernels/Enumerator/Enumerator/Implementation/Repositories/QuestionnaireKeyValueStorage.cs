@@ -20,6 +20,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             return currentQuestionnaireDocument?.QuestionnaireDocument;
         }
 
+        public bool HasNotEmptyValue(string id)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void Remove(string id)
         {
             this.questionnaireDocumentViewRepository.Remove(id);

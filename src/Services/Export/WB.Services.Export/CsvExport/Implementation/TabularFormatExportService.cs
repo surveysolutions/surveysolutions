@@ -8,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using WB.Services.Export.CsvExport.Exporters;
-using WB.Services.Export.ExportProcessHandlers;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire;
@@ -30,6 +29,7 @@ namespace WB.Services.Export.CsvExport.Implementation
         private readonly IQuestionnaireStorage questionnaireStorage;
 
         private readonly IProductVersion productVersion;
+        private readonly IPdfExporter pdfExporter;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IAssignmentActionsExporter assignmentActionsExporter;
         private readonly IInterviewsExporter interviewsExporter;
@@ -44,6 +44,7 @@ namespace WB.Services.Export.CsvExport.Implementation
             IQuestionnaireExportStructureFactory exportStructureFactory,
             IQuestionnaireStorage questionnaireStorage,
             IProductVersion productVersion, 
+            IPdfExporter pdfExporter,
             IFileSystemAccessor fileSystemAccessor,
             IAssignmentActionsExporter assignmentActionsExporter)
         {
@@ -56,6 +57,7 @@ namespace WB.Services.Export.CsvExport.Implementation
             this.exportStructureFactory = exportStructureFactory;
             this.questionnaireStorage = questionnaireStorage;
             this.productVersion = productVersion;
+            this.pdfExporter = pdfExporter;
             this.fileSystemAccessor = fileSystemAccessor;
             this.assignmentActionsExporter = assignmentActionsExporter;
         }
@@ -102,7 +104,8 @@ namespace WB.Services.Export.CsvExport.Implementation
                 this.interviewActionsExporter.ExportAsync(tenant, questionnaireIdentity, interviewIdsToExport, tempPath, exportInterviewActionsProgress, cancellationToken),
                 this.interviewsExporter.ExportAsync(tenant, questionnaireExportStructure, questionnaire, interviewsToExport, tempPath, exportInterviewsProgress, cancellationToken),
                 this.diagnosticsExporter.ExportAsync(interviewIdsToExport, tempPath, tenant, exportDiagnosticsProgress, cancellationToken),
-                this.assignmentActionsExporter.ExportAsync(assignmentIdsToExport, tenant, tempPath, exportAssignmentActionsProgress, cancellationToken)
+                this.assignmentActionsExporter.ExportAsync(assignmentIdsToExport, tenant, tempPath, exportAssignmentActionsProgress, cancellationToken),
+                this.pdfExporter.ExportAsync(tenant, questionnaire, tempPath)
             );
 
             exportWatch.Stop();

@@ -24,6 +24,11 @@ namespace WB.Tests.Abc.Storage
             return null;
         }
 
+        public bool HasNotEmptyValue(string id)
+        {
+            return this.Storage.ContainsKey(id);
+        }
+
         public void Remove(string id)
         {
             if (this.Storage.ContainsKey(id))

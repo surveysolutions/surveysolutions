@@ -18,6 +18,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
+using WB.Core.SharedKernels.Questionnaire.Synchronization.Designer;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.Questionnaire;
@@ -142,6 +143,14 @@ namespace WB.Tests.Unit.Applications.Headquarters
             designerApi
                 .Setup(d => d.GetQuestionnaire(It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<int?>()))
                 .Returns(Task.FromResult(package ?? new QuestionnaireCommunicationPackage()));
+
+            designerApi
+                .Setup(d => d.GetPdfStatus(It.IsAny<Guid>(), It.IsAny<Guid?>()))
+                .Returns(Task.FromResult(new PdfStatus { ReadyForDownload = true }));
+            
+            designerApi
+                .Setup(d => d.DownloadPdf(It.IsAny<Guid>(), It.IsAny<Guid?>()))
+                .Returns(Task.FromResult(new RestFile(new byte[] { 1 }, "image/png", "content id", 0, "file.png", HttpStatusCode.OK)));
         }
 
         private void SetupDownloadAttachment(Mock<IDesignerApi> designerApi, RestFile file = null)
@@ -291,6 +300,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
 
             var session = Mock.Of<NHibernate.ISession>(s => s.CreateSQLQuery(It.IsAny<string>()) == Mock.Of<ISQLQuery>());
             var unitOfWork = Mock.Of<IUnitOfWork>(x => x.Session == session);
+            
             IQuestionnaireImportService questionnaireImportService = new QuestionnaireImportService(
                 supportedVersionProvider ?? Mock.Of<ISupportedVersionProvider>(),
                 zipUtils ?? new Mock<IStringCompressor> { DefaultValue = DefaultValue.Mock }.Object,
@@ -303,8 +313,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 Mock.Of<ISystemLog>(),
                 unitOfWork,
                 globalInfoProvider,
-                designerUserCredentials,
-                designerApi ?? Mock.Of<IDesignerApi>());
+                designerApi ?? Mock.Of<IDesignerApi>(),
+                Mock.Of<IPlainKeyValueStorage<QuestionnairePdf>>());
             return questionnaireImportService;
         }
     }

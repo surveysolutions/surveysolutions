@@ -191,8 +191,8 @@ namespace WB.Services.Export.Tests
                 Mock.Of<IInterviewActionsExporter>(),
                 Mock.Of<IQuestionnaireExportStructureFactory>(x => x.GetQuestionnaireExportStructureAsync(It.IsAny<TenantInfo>(), It.IsAny<QuestionnaireId>()) == Task.FromResult(questionnaireExportStructure)),
                 Mock.Of<IQuestionnaireStorage>(),
-                
                 Mock.Of<IProductVersion>(),
+                Mock.Of<IPdfExporter>(),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 Mock.Of<IAssignmentActionsExporter>());
         }
@@ -654,6 +654,14 @@ namespace WB.Services.Export.Tests
                 NewValue = newValue,
                 Comment = comment,
             };
+        }
+
+        public static PdfExporter PdfExporter(ITenantApi<IHeadquartersApi> api = null,
+            IFileSystemAccessor fileSystem = null)
+        {
+            return new PdfExporter(api ?? HeadquartersApi(),
+                fileSystem ?? Mock.Of<IFileSystemAccessor>(),
+                Mock.Of<ILogger<PdfExporter>>());
         }
     }
 
