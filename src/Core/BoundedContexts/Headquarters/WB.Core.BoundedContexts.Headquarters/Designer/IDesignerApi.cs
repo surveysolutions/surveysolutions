@@ -19,34 +19,34 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
 {
     public interface IDesignerApi
     {
-        [Post("/v3/questionnaires/{id}/revision/{rev}/metadata")]
+        [Post("/api/hq/v3/questionnaires/{id}/revision/{rev}/metadata")]
         Task Tag(Guid id, int rev, [Body] QuestionnaireRevisionMetadataModel model);
 
-        [Get("/v3/questionnaires/{id}")]
+        [Get("/api/hq/v3/questionnaires/{id}")]
         Task<QuestionnaireCommunicationPackage> GetQuestionnaire(
             Guid id,
             int clientQuestionnaireContentVersion,
             [Query] int? minSupportedQuestionnaireVersion);
 
-        [Get("/attachment/{contentId}")]
+        [Get("/api/hq/attachment/{contentId}")]
         Task<RestFile> DownloadQuestionnaireAttachment(string contentId, [Query] Guid attachmentId);
 
-        [Get("/translations/{questionnaireId}")]
+        [Get("/api/hq/translations/{questionnaireId}")]
         Task<List<TranslationDto>> GetTranslations(Guid questionnaireId);
 
-        [Get("/lookup/{questionnaireId}/{lookupId}")]
+        [Get("/api/hq/lookup/{questionnaireId}/{lookupId}")]
         Task<QuestionnaireLookupTable> GetLookupTables(Guid questionnaireId, Guid lookupId);
 
-        [Get("/v3/questionnaires/info/{questionnaireId}")]
+        [Get("/api/hq/v3/questionnaires/info/{questionnaireId}")]
         Task<QuestionnaireInfo> GetQuestionnaireInfo(Guid questionnaireId);
 
-        [Get("/user/login")]
+        [Get("/api/hq/user/login")]
         Task Login([Header("Authorization")] string authorization);
 
-        [Get("/user/userdetails")]
+        [Get("/api/hq/user/userdetails")]
         Task IsLoggedIn();
 
-        [Get("/v3/questionnaires")]
+        [Get("/api/hq/v3/questionnaires")]
         Task<PagedQuestionnaireCommunicationPackage> GetQuestionnairesList([Query] DesignerQuestionnairesListFilter filter);
 
         [Get("/pdf/status/{questionnaireId}")]
