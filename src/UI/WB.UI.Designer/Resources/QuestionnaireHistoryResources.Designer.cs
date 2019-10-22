@@ -322,7 +322,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Import questionnaire to headquarters ({0}) by {1}.
+        ///   Looks up a localized string similar to Import questionnaire to headquarters as {2} ({0}) by {1}.
         /// </summary>
         public static string Questionnaire_ImportToHq {
             get {
@@ -331,7 +331,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Import questionnaire to headquarters ({0}) by {1} with comment: {2}.
+        ///   Looks up a localized string similar to Import questionnaire to headquarters as {2} ({0}) by {1} with comment: {3}.
         /// </summary>
         public static string Questionnaire_ImportToHq_WithComment {
             get {

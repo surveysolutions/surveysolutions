@@ -113,11 +113,13 @@ namespace WB.UI.Designer.Code
                         siteHost += " v" + record.HqVersion;
                     }
 
-                    if(record.HqComment != null)
+                    var questionnaireVersion = $"ver. {record.HqQuestionnaireVersion}";
+
+                    if (record.HqComment != null)
                         text = string.Format(QuestionnaireHistoryResources.Questionnaire_ImportToHq_WithComment,
-                            siteHost, record.UserName, record.HqComment);
+                            siteHost, record.UserName, questionnaireVersion, record.HqComment);
                     else                     
-                        text = string.Format(QuestionnaireHistoryResources.Questionnaire_ImportToHq, siteHost, record.UserName);
+                        text = string.Format(QuestionnaireHistoryResources.Questionnaire_ImportToHq, siteHost, record.UserName, questionnaireVersion);
                 }
                 break;
             }

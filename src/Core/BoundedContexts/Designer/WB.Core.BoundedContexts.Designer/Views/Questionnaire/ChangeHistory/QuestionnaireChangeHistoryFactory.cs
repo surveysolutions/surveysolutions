@@ -78,7 +78,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 references,
                 questionnaireChangeRecord?.Meta?.Comment,
                 questionnaireChangeRecord?.Meta?.Hq?.Comment,
-                questionnaireChangeRecord?.Meta?.Hq?.Version)
+                questionnaireChangeRecord?.Meta?.Hq?.Version,
+                questionnaireChangeRecord?.Meta?.Hq?.QuestionnaireVersion)
             {
                 Sequence = questionnaireChangeRecord.Sequence
             };

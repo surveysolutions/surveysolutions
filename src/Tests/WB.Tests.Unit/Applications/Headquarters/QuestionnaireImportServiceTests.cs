@@ -52,7 +52,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
             //Assert
             Assert.That(importResult.ImportError, Is.EqualTo(exprectedErrorMessageFromServer));
         }
-
+        
         [Test]
         public void when_importing_questionnaire_from_designer_and_command_service_throws_not_a_questionnaire_exception()
         {
