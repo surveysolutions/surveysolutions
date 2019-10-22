@@ -49,6 +49,17 @@
                             <td>{{$t('Assignments.DetailsComments')}}</td>
                             <td>{{model.comment}}</td>
                         </tr>
+                        <tr v-if="model.mainPdfUrl">
+                            <td>PDF</td>
+                            <td>
+                                <ul class="list-unstyled">
+                                    <li><a :href="model.mainPdfUrl">{{$t('WebInterview.Original_Language')}}</a></li>
+                                    <li v-for="lang in model.translatedPdfVersions" v-bind:key="lang.name">
+                                        <a :href="lang.pdfUrl">{{lang.name}}</a>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

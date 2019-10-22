@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
@@ -11,14 +10,13 @@ using WB.Core.BoundedContexts.Designer.Views.AllowedAddresses;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Designer.Code;
-using WB.UI.Designer.Code.Attributes;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
 
 namespace WB.UI.Designer.Api.Portal
 {
     [Route("api/portal")]
-    [ApiBasicAuth(onlyAllowedAddresses: false)]
+    [Authorize]
     public class PortalController : ControllerBase
     {
         private readonly UserManager<DesignerIdentityUser> accountRepository;

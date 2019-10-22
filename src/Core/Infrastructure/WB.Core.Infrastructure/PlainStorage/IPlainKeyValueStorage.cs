@@ -10,6 +10,8 @@ namespace WB.Core.Infrastructure.PlainStorage
     {
         TEntity GetById(TKey id);
 
+        bool HasNotEmptyValue(TKey id);
+
         void Remove(TKey id);
 
         void Store(TEntity entity, TKey id);
