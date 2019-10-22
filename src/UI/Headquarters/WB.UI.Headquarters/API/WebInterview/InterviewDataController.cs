@@ -177,16 +177,6 @@ namespace WB.UI.Headquarters.API.WebInterview
         }
 
         [HttpGet]
-        [Route("setFlag")]
-        [ObserverNotAllowed]
-        public IHttpActionResult SetFlag(Guid interviewId, string questionId, bool hasFlag)
-        {
-            var statefulInterview = this.GetCallerInterview(interviewId);
-            this.interviewFactory.SetFlagToQuestion(statefulInterview.Id, Identity.Parse(questionId), hasFlag);
-            return Ok();
-        }
-
-        [HttpGet]
         [Route("getFlags")]
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @flags.js")]
         public IEnumerable<string> GetFlags(Guid interviewId)
