@@ -220,7 +220,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
             storage.StoreOptionsForQuestion(questionnaireIdentity, questionId, question.Answers, translations);
             var filteredQuestionOption = storage.GetQuestionOptionByValue(questionnaireIdentity, questionId, 1, translationId);
 
-            CategoricalOption[] filteredOption1 = storage.GetOptionsByValues(questionnaireIdentity, questionId, new[] {1});
+            CategoricalOption[] filteredOption1 = storage.GetOptionsByValues(questionnaireIdentity, questionId, new[] {1}, translationId);
 
             Assert.That(filteredOption1, Has.Length.EqualTo(1));
             Assert.That(filteredQuestionOption, Is.Not.Null);
