@@ -20,6 +20,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 {
     [Authorize]
     [ApiNoCache]
+    [CamelCase]
     [RoutePrefix("api/webinterview/commands")]
     public class InterviewCommandsController : CommandsController
     {
