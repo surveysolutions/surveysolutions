@@ -49,6 +49,13 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
             });            
         }
 
+        public bool HasNotEmptyValue(string id)
+        {
+            var entity = FindEntry(id);
+
+            return entity != null && entity.State != EntityState.Deleted;
+        }
+
         public void Remove(string id)
         {
             var entity = FindEntry(id);

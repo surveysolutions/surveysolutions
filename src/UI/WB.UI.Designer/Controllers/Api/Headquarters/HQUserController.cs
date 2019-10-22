@@ -1,22 +1,24 @@
 ﻿using System.Linq;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.UI.Designer.Code.Attributes;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
 
-namespace WB.UI.Designer.Api.Headquarters
+namespace WB.UI.Designer.Controllers.Api.Headquarters
 {
     [Route("api/hq/user")]
+    [Authorize]
     public class HQUserController : ControllerBase
     {
         [HttpGet]
         [Route("login")]
-        [ApiBasicAuth(onlyAllowedAddresses: true)]
+        [AllowOnlyFromWhitelistIP()]
         public void Login() { }
 
         [HttpGet]
-        [ApiBasicAuth(onlyAllowedAddresses: false)]
+        [AllowOnlyFromWhitelistIP]
         [Route("userdetails")]
         public IActionResult UserDetails()
         {
