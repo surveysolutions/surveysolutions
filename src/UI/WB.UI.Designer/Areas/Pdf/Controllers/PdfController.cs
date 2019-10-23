@@ -72,7 +72,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
         private static readonly ConcurrentDictionary<string, PdfGenerationProgress> GeneratedPdfs = new ConcurrentDictionary<string, PdfGenerationProgress>();
 
         private readonly IPdfFactory pdfFactory;
-        private readonly PdfSettings pdfSettings;
+        private readonly IOptions<PdfSettings> pdfSettings;
         private readonly ILogger logger;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IRazorViewEngine razorViewEngine;
@@ -89,7 +89,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
             IOptions<PdfSettings> pdfOptions)
         {
             this.pdfFactory = pdfFactory;
-            this.pdfSettings = pdfOptions.Value;
+            this.pdfSettings = pdfOptions;
             this.logger = logger;
             this.fileSystemAccessor = fileSystemAccessor;
             this.razorViewEngine = razorViewEngine;
@@ -234,7 +234,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
                         PageFooterUrl = pageFooterUrl,
                         OutputPath = generationProgress.FilePath,
                         WkHtmlToPdfExeName = pathToWkHtmlToPdfExecutable,
-                        ExecutionTimeout = this.pdfSettings.PdfGenerationTimeoutInMilliseconds,
+                        ExecutionTimeout = this.pdfSettings.Value.PdfGenerationTimeoutInMilliseconds,
                         TempFilesPath = Path.GetTempPath(),
                         Size = PdfPageSize.A4,
                         Margins = new PdfPageMargins() {Top = 10, Bottom = 7, Left = 0, Right = 0},
@@ -301,7 +301,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
 
         private string GetPathToWKHtmlToPdfExecutableOrThrow()
         {
-            string path = Path.GetFullPath(pdfSettings.WKHtmlToPdfExecutablePath);
+            string path = Path.GetFullPath(pdfSettings.Value.WKHtmlToPdfExecutablePath);
 
             if (!System.IO.File.Exists(path))
                 throw new ConfigurationErrorsException(string.Format("Path to wkhtmltopdf.exe is incorrect ({0}). Please install wkhtmltopdf.exe and/or update server configuration.", path));
