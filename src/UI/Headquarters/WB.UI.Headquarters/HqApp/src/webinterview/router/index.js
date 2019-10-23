@@ -45,23 +45,17 @@ function NewRouter(store) {
                     {
                         name: "prefilled",
                         path: "Cover",
-                        components: {
-                            default: Cover
-                        },
+                        component: Cover,
                     },
                     {
                         name: "section",
                         path: "Section/:sectionId",
-                        components: {
-                            default: Section
-                        }
+                        component: Section
                     },
                     {
                         name: "complete",
                         path: "Complete",
-                        components: {
-                            default: Complete
-                        }
+                        component: Complete
                     },
                 ]
             },
