@@ -1566,7 +1566,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Current timestamp (date and time).
+        ///   Looks up a localized string similar to Current timestamp(date &amp; time).
         /// </summary>
         public static string QuestionCurrentTime {
             get {
