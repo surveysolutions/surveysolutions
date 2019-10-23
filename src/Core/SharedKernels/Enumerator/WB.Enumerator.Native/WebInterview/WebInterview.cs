@@ -54,7 +54,7 @@ namespace WB.Enumerator.Native.WebInterview
 
         private async Task RegisterClient()
         {
-            var interviewId = Context.QueryString[@"interviewId"];
+            var interviewId = CallerInterviewId;
 
             await Groups.Add(Context.ConnectionId, interviewId);
 
@@ -68,7 +68,7 @@ namespace WB.Enumerator.Native.WebInterview
 
         private async Task UnregisterClient()
         {
-            var interviewId = Context.QueryString[@"interviewId"];
+            var interviewId = CallerInterviewId;
             var sectionId = Clients.CallerState.sectionId as string;
 
             await Groups.Remove(Context.ConnectionId, GetGroupNameBySectionIdentity(sectionId, interviewId));
@@ -77,7 +77,7 @@ namespace WB.Enumerator.Native.WebInterview
 
         public async Task ChangeSection(string oldSection)
         {
-            var interviewId = Context.QueryString[@"interviewId"];
+            var interviewId = CallerInterviewId;
             var sectionId = Clients.CallerState.sectionId as string;
 
             if (interviewId != null)
