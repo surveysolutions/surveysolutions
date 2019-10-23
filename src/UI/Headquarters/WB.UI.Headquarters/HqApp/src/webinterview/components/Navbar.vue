@@ -186,11 +186,6 @@
                 newScenarioName: ""
             }
         },
-        beforeMount() {
-            var interviewId = this.$config.id
-            this.$store.dispatch("getLanguageInfo", interviewId)
-            this.$store.dispatch("loadInterview", interviewId)
-        },
         mounted(){
             $(window).on('resize', function() {
                 if($(window).width() > 880) {

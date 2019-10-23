@@ -15,7 +15,6 @@
 @section Scripts{
     @Html.RenderHqConfig(Model)
     <script>
-        window.CONFIG.id = '@Model.Id'
         window.CONFIG.audioGet = '@Url.Content(@"~/Resource/AudioRecordReview")'
     </script>
 }

@@ -12,33 +12,9 @@ import Splash from "../components/Splash"
 function NewRouter(store) {
 
     const router = new VueRouter({
-        base: Vue.$config.virtualPath + "/",
+        base: Vue.$config.virtualPath,
         mode: "history",
         routes: [
-            {
-                name: "prefilled",
-                path: "/:interviewId/Cover",
-                components: {
-                    default: Cover,
-                    sideBar: SideBar
-                }
-            },
-            {
-                name: "section",
-                path: "/:interviewId/Section/:sectionId",
-                components: {
-                    default: Section,
-                    sideBar: SideBar
-                }
-            },
-            {
-                name: "complete",
-                path: "/:interviewId/Complete",
-                components: {
-                    default: Complete,
-                    sideBar: SideBar
-                }
-            },
             {
                 name: "finish",
                 path: "/Finish/:interviewId"
@@ -50,7 +26,55 @@ function NewRouter(store) {
                     default: Splash,
                     sideBar: SideBar
                 }
-            }
+            },
+            {
+                name: "webinterview",
+                path: "/:interviewId",
+                components: {
+                    default: Cover,
+                    sideBar: SideBar
+                },
+                beforeEnter : (to, from, next) => {
+                    var interviewId = to.params.interviewId
+                    store.dispatch("getLanguageInfo", interviewId)
+                    store.dispatch("loadInterview", interviewId)
+                    next()
+                },
+				children: [
+					{
+						name: "prefilled",
+						path: "Cover",
+						components: {
+							default: Cover,
+							sideBar: SideBar
+						},
+					},
+					{
+						name: "section",
+						path: "Section/:sectionId",
+						components: {
+							default: Section,
+							sideBar: SideBar
+						}
+					},
+					{
+						name: "complete",
+						path: "Complete",
+						components: {
+							default: Complete,
+							sideBar: SideBar
+						}
+                    },
+                    /*{
+                        path: '*',
+                        name:'404', 
+                        components: {
+							default: Cover,
+							sideBar: SideBar
+						},
+                    }*/
+				]
+            },
         ],
         scrollBehavior(to, from, savedPosition) {
             if (savedPosition) {
