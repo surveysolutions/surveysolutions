@@ -16,7 +16,6 @@ namespace WB.Enumerator.Native.WebInterview
         void RefreshEntitiesWithFilteredOptions(Guid interviewId);
         void RefreshCascadingOptions(Guid interviewId, Identity identity);
         void RefreshLinkedToListQuestions(Guid interviewId, Identity[] identities);
-        void ReloadInterviewByQuestionnaire(QuestionnaireIdentity questionnaireIdentity);
         void ShutDownInterview(Guid interviewId);
     }
 }
