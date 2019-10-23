@@ -447,7 +447,7 @@ export default {
                 interviewId: window.CONFIG.model.id,
                 review: false
             })
-            .then(() => this.$store.dispatch("loadTakeNew"));
+            .then(() => this.$store.dispatch("loadTakeNew", { interviewId: window.CONFIG.model.id }));
     },
 
     mounted() {
