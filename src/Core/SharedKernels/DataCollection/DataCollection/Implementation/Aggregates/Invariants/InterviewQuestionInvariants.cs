@@ -490,7 +490,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
         private InterviewQuestionInvariants RequireOptionsExist(IReadOnlyCollection<int> values)
         {
             var availableValues = (this.Questionnaire.IsQuestionFilteredCombobox(this.QuestionId)
-                ? this.questionOptionsRepository.GetOptionsByOptionValues(this.Questionnaire, this.QuestionId, values.ToArray()).Select(x => x.Value)
+                ? this.questionOptionsRepository.GetOptionsByOptionValues(this.Questionnaire, this.QuestionId, values.ToArray(), this.Questionnaire.Translation).Select(x => x.Value)
                 : this.Questionnaire.GetMultiSelectAnswerOptionsAsValues(this.QuestionId)).ToArray();
 
             bool someValueIsNotOneOfAvailable = values.Any(value => !availableValues.Contains(value));
