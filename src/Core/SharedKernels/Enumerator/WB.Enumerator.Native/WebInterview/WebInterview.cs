@@ -4,9 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.WebInterview.Pipeline;
 
 namespace WB.Enumerator.Native.WebInterview
@@ -16,7 +14,6 @@ namespace WB.Enumerator.Native.WebInterview
         private readonly IPipelineModule[] hubPipelineModules;
 
         protected string CallerInterviewId => this.Context.QueryString[@"interviewId"];
-
 
         protected WebInterview(IPipelineModule[] hubPipelineModules)
         {
@@ -58,21 +55,6 @@ namespace WB.Enumerator.Native.WebInterview
         private async Task RegisterClient()
         {
             var interviewId = Context.QueryString[@"interviewId"];
-            IStatefulInterview interview = null;
-
-            InScopeExecutor.Current.Execute(ls =>
-            {
-                var interviewRepository = ls.GetInstance<IStatefulInterviewRepository>();
-                interview = interviewRepository.Get(interviewId);
-            });
-
-            if (interview == null)
-            {
-                Clients.Caller.shutDown();
-                return;
-            }
-
-            var questionnaireId = interview.QuestionnaireIdentity.ToString();
 
             await Groups.Add(Context.ConnectionId, interviewId);
 
@@ -82,8 +64,6 @@ namespace WB.Enumerator.Native.WebInterview
             {
                 Clients.OthersInGroup(interviewId).closeInterview();
             }
-
-            await Groups.Add(Context.ConnectionId, questionnaireId);
         }
 
         private async Task UnregisterClient()
@@ -93,20 +73,6 @@ namespace WB.Enumerator.Native.WebInterview
 
             await Groups.Remove(Context.ConnectionId, GetGroupNameBySectionIdentity(sectionId, interviewId));
             await Groups.Remove(Context.ConnectionId, interviewId);
-
-            IStatefulInterview interview = null;
-
-            InScopeExecutor.Current.Execute(ls =>
-            {
-                var interviewRepository = ls.GetInstance<IStatefulInterviewRepository>();
-                interview = interviewRepository.Get(interviewId);
-            });
-
-            if (interview == null)
-                return;
-
-            var questionnaireId = interview.QuestionnaireIdentity.ToString();
-            await Groups.Remove(Context.ConnectionId, questionnaireId);
         }
 
         public async Task ChangeSection(string oldSection)
@@ -158,11 +124,6 @@ namespace WB.Enumerator.Native.WebInterview
             }
 
             return e.Message;
-        }
-        
-        public void Ping()
-        {
-            //
         }
     }
 }
