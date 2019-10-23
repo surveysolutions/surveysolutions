@@ -23,7 +23,6 @@ using InterviewEntity = WB.Enumerator.Native.WebInterview.Models.InterviewEntity
 
 namespace WB.UI.Headquarters.API.WebInterview
 {
-    [System.Web.Http.Authorize]
     [ApiNoCache]
     [CamelCase]
     [RoutePrefix("api/webinterview")]
