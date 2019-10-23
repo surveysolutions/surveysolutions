@@ -252,15 +252,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             RestCredentials credentials,
             QuestionnaireDocument questionnaire)
         {
-            var pdfRetry = Policy.HandleResult<PdfStatus>(x => x.ReadyForDownload == false)
-                .WaitAndRetryAsync(7, retry => TimeSpan.FromSeconds(retry));
+            var pdfRetry = Policy
+                .HandleResult<PdfStatus>(x => x.ReadyForDownload == false && x.CanRetry != true)
+                .WaitAndRetryForeverAsync(_ => TimeSpan.FromSeconds(3));
 
-            await pdfRetry.ExecuteAsync(async () =>
+            var result = await pdfRetry.ExecuteAsync(async () =>
             {
                 this.logger.Trace($"Waiting for pdf to be ready {questionnaireIdentity}");
                 var pdfStatus = await this.restService.GetAsync<PdfStatus>(
                     url: $"pdf/status/{questionnaireIdentity.QuestionnaireId}",
                     credentials: credentials);
+                this.logger.Trace($"Waiting for pdf to be ready {questionnaireIdentity} - Ready: {pdfStatus.ReadyForDownload}");
                 return pdfStatus;
             });
 
