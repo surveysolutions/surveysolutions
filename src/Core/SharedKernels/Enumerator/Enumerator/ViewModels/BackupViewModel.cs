@@ -12,47 +12,6 @@ using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
-    public class SendLogsViewModel : MvxNotifyPropertyChanged
-    {
-        private bool isInProgress;
-        private readonly IBackupRestoreService backupRestoreService;
-        private bool logsSent;
-
-        public SendLogsViewModel(IBackupRestoreService backupRestoreService)
-        {
-            this.backupRestoreService = backupRestoreService;
-        }
-
-        public IMvxAsyncCommand SendLogsCommand => new MvxAsyncCommand(this.SendLogsAsync, () => !this.IsInProgress);
-
-        private async Task SendLogsAsync(CancellationToken cancellationToken)
-        {
-            try
-            {
-                this.LogsSent = false;
-                this.IsInProgress = true;
-                await this.backupRestoreService.SendLogsAsync(cancellationToken);
-                this.LogsSent = true;
-            }
-            finally
-            {
-                this.IsInProgress = false;
-            }
-        }
-
-        public bool IsInProgress
-        {
-            get => this.isInProgress;
-            set => this.SetProperty(ref this.isInProgress, value);
-        }
-
-        public bool LogsSent
-        {
-            get => logsSent;
-            set => this.SetProperty(ref this.logsSent, value);
-        }
-    }
-
     public class SendTabletInformationViewModel : MvxNotifyPropertyChanged
     {
         private readonly IBackupRestoreService backupRestoreService;
@@ -104,7 +63,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             set => this.RaiseAndSetIfChanged( ref this.isPackageSendingAttemptCompleted, value);
         }
 
-        public string PackageSendingAttemptResponceText
+        public string PackageSendingAttemptResponseText
         {
             get => this.packageSendingAttemptResponseText;
             set => this.RaiseAndSetIfChanged( ref this.packageSendingAttemptResponseText, value);
@@ -155,12 +114,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             try
             {
                 await this.backupRestoreService.SendBackupAsync(informationPackageFilePath, cancellationToken);
-                this.PackageSendingAttemptResponceText = EnumeratorUIResources.Troubleshooting_InformationPackageIsSuccessfullySent;
+                this.PackageSendingAttemptResponseText = EnumeratorUIResources.Troubleshooting_InformationPackageIsSuccessfullySent;
             }
             catch (SynchronizationException ex)
             {
                 this.logger.Error("Error when sending backup. ", ex);
-                this.PackageSendingAttemptResponceText = ex.Message;
+                this.PackageSendingAttemptResponseText = ex.Message;
             }
             this.IsPackageSendingAttemptCompleted = true;
             this.IsPackageBuild = false;
