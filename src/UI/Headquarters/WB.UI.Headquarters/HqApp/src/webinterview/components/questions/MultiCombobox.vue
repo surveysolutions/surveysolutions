@@ -77,7 +77,7 @@
             },
             optionsSource(filter) {
                 const self = this;
-                const interviewId = this.$config.id
+                const interviewId = this.$route.params.interviewId
                 const optionsPromise = Vue.$api.get('getTopFilteredOptionsForQuestionWithExclude', {interviewId, id:this.$me.id, filter, count:20, excludedOptionIds:self.$me.answer})
                 return optionsPromise
                     .then(options => {
