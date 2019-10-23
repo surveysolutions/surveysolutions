@@ -218,13 +218,18 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
 
             var storage = new OptionsRepository(new SqliteInmemoryStorage<OptionView>());
             storage.StoreOptionsForQuestion(questionnaireIdentity, questionId, question.Answers, translations);
-            var filteredQuestionOption = storage.GetQuestionOptionByValue(questionnaireIdentity, questionId, 1, translationId);
 
+            // Assert
+            var filteredQuestionOption = storage.GetQuestionOptionByValue(questionnaireIdentity, questionId, 1, translationId);
+             
             CategoricalOption[] filteredOption1 = storage.GetOptionsByValues(questionnaireIdentity, questionId, new[] {1}, translationId);
 
             Assert.That(filteredOption1, Has.Length.EqualTo(1));
             Assert.That(filteredQuestionOption, Is.Not.Null);
             Assert.That(filteredQuestionOption.Value, Is.EqualTo(1));
+
+            CategoricalOption[] filteredOption2 = storage.GetOptionsByValues(questionnaireIdentity, questionId, new[] {1, 2}, translationId);
+            Assert.That(filteredOption2, Has.Length.EqualTo(2));
         }
 
         [Test]
