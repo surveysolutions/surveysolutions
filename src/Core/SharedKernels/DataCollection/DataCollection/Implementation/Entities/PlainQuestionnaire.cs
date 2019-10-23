@@ -377,7 +377,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 => this.GetMultiSelectAnswerOptionsAsValuesImpl(questionId));
 
         public IEnumerable<CategoricalOption> GetCategoricalMultiOptionsByValues(Guid questionId, int[] values) =>
-            this.questionOptionsRepository.GetOptionsByOptionValues(this, questionId, values);
+            this.questionOptionsRepository.GetOptionsByOptionValues(this, questionId, values, this.translation);
 
         public IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, int? parentQuestionValue,
             string searchFor, int[] excludedOptionIds)

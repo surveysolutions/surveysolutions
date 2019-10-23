@@ -50,9 +50,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.interviewId = interviewId;
             this.Identity = entityIdentity;
             this.navigationState = navigationState;
+            this.UpdateValidStateAsync().WaitAndUnwrapException();
 
             this.liteEventRegistry.Subscribe(this, interviewId);
-            this.UpdateValidStateAsync().WaitAndUnwrapException();
         }
         
         private bool isImplausible;
