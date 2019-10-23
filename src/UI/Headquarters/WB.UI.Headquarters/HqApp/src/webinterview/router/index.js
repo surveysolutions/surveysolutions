@@ -35,12 +35,6 @@ function NewRouter(store) {
                     default: Interview,
                     sideBar: SideBar
                 },
-                beforeEnter : (to, from, next) => {
-                    var interviewId = to.params.interviewId
-                    store.dispatch("getLanguageInfo", interviewId)
-                    store.dispatch("loadInterview", interviewId)
-                    next()
-                },
                 children: [
                     {
                         name: "prefilled",
