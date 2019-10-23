@@ -8,6 +8,7 @@ import Cover from "../components/Cover"
 import Section from "../components/Section"
 import SideBar from "../components/Sidebar"
 import Splash from "../components/Splash"
+import Interview from "../components/Interview"
 
 function NewRouter(store) {
 
@@ -31,7 +32,7 @@ function NewRouter(store) {
                 name: "webinterview",
                 path: "/:interviewId",
                 components: {
-                    default: Cover,
+                    default: Interview,
                     sideBar: SideBar
                 },
                 beforeEnter : (to, from, next) => {
@@ -40,40 +41,29 @@ function NewRouter(store) {
                     store.dispatch("loadInterview", interviewId)
                     next()
                 },
-				children: [
-					{
-						name: "prefilled",
-						path: "Cover",
-						components: {
-							default: Cover,
-							sideBar: SideBar
-						},
-					},
-					{
-						name: "section",
-						path: "Section/:sectionId",
-						components: {
-							default: Section,
-							sideBar: SideBar
-						}
-					},
-					{
-						name: "complete",
-						path: "Complete",
-						components: {
-							default: Complete,
-							sideBar: SideBar
-						}
-                    },
-                    /*{
-                        path: '*',
-                        name:'404', 
+                children: [
+                    {
+                        name: "prefilled",
+                        path: "Cover",
                         components: {
-							default: Cover,
-							sideBar: SideBar
-						},
-                    }*/
-				]
+                            default: Cover
+                        },
+                    },
+                    {
+                        name: "section",
+                        path: "Section/:sectionId",
+                        components: {
+                            default: Section
+                        }
+                    },
+                    {
+                        name: "complete",
+                        path: "Complete",
+                        components: {
+                            default: Complete
+                        }
+                    },
+                ]
             },
         ],
         scrollBehavior(to, from, savedPosition) {
