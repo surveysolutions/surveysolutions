@@ -231,7 +231,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
 
             record.Meta.Hq.HostName = metaData.HqHost ?? record.Meta.Hq.HostName;
-            record.Meta.Hq.Comment = metaData.HqComment;
+            record.Meta.Comment = metaData.Comment;
             record.Meta.Hq.TimeZoneMinutesOffset = metaData.HqTimeZone;
             record.Meta.Hq.ImporterLogin = metaData.HqImporterLogin;
             record.Meta.Hq.QuestionnaireVersion = metaData.HqQuestionnaireVersion;

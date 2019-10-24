@@ -115,11 +115,10 @@ namespace WB.UI.Designer.Code
 
                     var questionnaireVersion = $"ver. {record.HqQuestionnaireVersion}";
 
-                    if (record.HqComment != null)
-                        text = string.Format(QuestionnaireHistoryResources.Questionnaire_ImportToHq_WithComment,
-                            siteHost, record.UserName, questionnaireVersion, record.HqComment);
-                    else                     
-                        text = string.Format(QuestionnaireHistoryResources.Questionnaire_ImportToHq, siteHost, record.UserName, questionnaireVersion);
+                    text = string.Format(QuestionnaireHistoryResources.Questionnaire_ImportToHq, 
+                        siteHost, 
+                        record.UserName, 
+                        questionnaireVersion);
                 }
                 break;
             }

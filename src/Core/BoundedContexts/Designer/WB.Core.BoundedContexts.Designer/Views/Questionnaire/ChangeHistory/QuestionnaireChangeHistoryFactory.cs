@@ -77,7 +77,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 questionnaireChangeRecord.TargetItemDateTime,
                 references,
                 questionnaireChangeRecord?.Meta?.Comment,
-                questionnaireChangeRecord?.Meta?.Hq?.Comment,
                 questionnaireChangeRecord?.Meta?.Hq?.Version,
                 questionnaireChangeRecord?.Meta?.Hq?.QuestionnaireVersion)
             {

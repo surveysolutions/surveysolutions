@@ -91,7 +91,7 @@ namespace WB.Tests.Unit.Designer.Services
             await this.metadataUpdater.UpdateQuestionnaireMetadataAsync(this.questionnaire.PublicKey, 2,
                 new QuestionnaireRevisionMetaDataUpdate
                 {
-                    HqComment = "Some comment",
+                    Comment = "Some comment",
                     HqHost = "fsb.ru",
                     HqTimeZone = 160,
                     HqImporterLogin = "Richard",
@@ -103,7 +103,7 @@ namespace WB.Tests.Unit.Designer.Services
                 .Single(r => r.QuestionnaireChangeRecordId == changeRecord.QuestionnaireChangeRecordId);
 
             Assert.That(record.Meta.Hq.HostName, Is.EqualTo("fsb.ru"));
-            Assert.That(record.Meta.Hq.Comment, Is.EqualTo("Some comment"));
+            Assert.That(record.Meta.Comment, Is.EqualTo("Some comment"));
             Assert.That(record.Meta.Hq.ImporterLogin, Is.EqualTo("Richard"));
             Assert.That(record.Meta.Hq.QuestionnaireVersion, Is.EqualTo(1));
             Assert.That(record.Meta.Hq.TimeZoneMinutesOffset, Is.EqualTo(160));
