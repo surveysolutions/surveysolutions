@@ -63,8 +63,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.navigationState.ScreenChanged += this.OnScreenChanged;
 
-            this.eventRegistry.Subscribe(this, interviewId);
-
             var interview = this.statefulInterviewRepository.Get(this.interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
@@ -80,6 +78,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             });
 
             this.UpdateSections();
+
+            this.eventRegistry.Subscribe(this, interviewId);
         }
 
         private void OnScreenChanged(ScreenChangedEventArgs e) => this.UpdateSections(clearExpanded: true);
