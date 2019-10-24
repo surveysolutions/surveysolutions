@@ -13,14 +13,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChangeRecordMetadataTe
             // So any changes to QuestionnaireChangeRecordMetadata should be backward compatible
 
             var json = "{\"Hq\":{\"HostName\":\"HostName\",\"UserName\":\"UserName\",\"Version\":\"Version\"," +
-                "\"Build\":\"Build\",\"Comment\":\"Comment\",\"ImporterLogin\":\"ImporterLogin\"," +
+                "\"Build\":\"Build\",\"ImporterLogin\":\"ImporterLogin\"," +
                 "\"QuestionnaireVersion\":42,\"TimeZoneMinutesOffset\":180.0},\"Comment\":\"Comment\"}";
 
             var metadata = JsonConvert.DeserializeObject<QuestionnaireChangeRecordMetadata>(json);
 
             Assert.That(metadata.Comment, Is.EqualTo("Comment"));
             Assert.That(metadata.Hq.Build, Is.EqualTo("Build"));
-            Assert.That(metadata.Hq.Comment, Is.EqualTo("Comment"));
             Assert.That(metadata.Hq.HostName, Is.EqualTo("HostName"));
             Assert.That(metadata.Hq.ImporterLogin, Is.EqualTo("ImporterLogin"));
             Assert.That(metadata.Hq.QuestionnaireVersion, Is.EqualTo(42));

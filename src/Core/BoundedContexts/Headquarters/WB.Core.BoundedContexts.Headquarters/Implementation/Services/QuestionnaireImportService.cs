@@ -171,7 +171,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     HqTimeZoneMinutesOffset = (int)TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).TotalMinutes,
                     HqImporterLogin = this.authorizedUser.UserName,
                     HqQuestionnaireVersion = questionnaireIdentity.Version,
-                    HqComment = comment,
+                    Comment = comment,
                 });
 
                 await DownloadAndStorePdf(questionnaireIdentity, questionnaire);

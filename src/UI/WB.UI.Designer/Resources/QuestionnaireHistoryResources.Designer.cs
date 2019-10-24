@@ -331,15 +331,6 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Import questionnaire to headquarters as {2} ({0}) by {1} with comment: {3}.
-        /// </summary>
-        public static string Questionnaire_ImportToHq_WithComment {
-            get {
-                return ResourceManager.GetString("Questionnaire_ImportToHq_WithComment", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Questionnaire ownership transferred to user with email &quot;{0}&quot;.
         /// </summary>
         public static string Questionnaire_Move {
