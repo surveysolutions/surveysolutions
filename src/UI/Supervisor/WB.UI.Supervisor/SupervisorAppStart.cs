@@ -32,13 +32,12 @@ namespace WB.UI.Supervisor
 
         protected override Task<object> ApplicationStartup(object hint = null)
         {
-            Mvx.IoCProvider.GetSingleton<IDenormalizerRegistry>()
-                .RegisterDenormalizer(Mvx.IoCProvider.GetSingleton<InterviewDashboardEventHandler>());
-
             var logger = Mvx.IoCProvider.Resolve<ILoggerProvider>().GetFor<SupervisorAppStart>();
             logger.Info($"Application started. Version: {typeof(SplashActivity).Assembly.GetName().Version}");
 
             this.migrationRunner.MigrateUp(this.GetType().Assembly, typeof(Encrypt_Data).Assembly);
+
+            this.CheckAndProcessInterviewsWithoutViews();
 
             return base.ApplicationStartup(hint);
         }
@@ -54,6 +53,12 @@ namespace WB.UI.Supervisor
             {
                 return viewModelNavigation.NavigateToLoginAsync();
             }
+        }
+
+        private void CheckAndProcessInterviewsWithoutViews()
+        {
+            var interviewsAccessor = Mvx.IoCProvider.Resolve<IInterviewerInterviewAccessor>();
+            interviewsAccessor.CheckAndProcessInterviewsWithoutViews();
         }
     }
 }

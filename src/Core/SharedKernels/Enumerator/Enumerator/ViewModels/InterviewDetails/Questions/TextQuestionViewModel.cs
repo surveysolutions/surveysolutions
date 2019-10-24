@@ -65,14 +65,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.questionIdentity = entityIdentity;
             this.interviewId = interviewId;
-
-            this.liteEventRegistry.Subscribe(this, interviewId);
-
             this.questionState.Init(interviewId, entityIdentity, navigationState);
             this.InstructionViewModel.Init(interviewId, entityIdentity, navigationState);
 
             this.InitQuestionSettings();
             this.UpdateSelfFromModel();
+
+            this.liteEventRegistry.Subscribe(this, interviewId);
         }
 
         public void Dispose()

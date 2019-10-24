@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 using Serilog.Exceptions;
+using WB.Services.Export.Host.Infra;
 using WB.Services.Infrastructure.Logging;
 
 namespace WB.Services.Export.Host
@@ -83,6 +84,8 @@ namespace WB.Services.Export.Host
             var verboseLog = Path.Combine(Directory.GetCurrentDirectory(), "..", "logs", "export-service-verbose-.log");
             var errorDetailedLog= Path.Combine(Directory.GetCurrentDirectory(), "..", "logs", "export-service-errors-.log");
 
+            var connectionString = GetConnectionString(configuration);
+
             logConfig
                 .ReadFrom.Configuration(configuration)
                 .Enrich.FromLogContext()
@@ -91,7 +94,7 @@ namespace WB.Services.Export.Host
                 .Enrich.WithProperty("Version", fvi.FileVersion)
                 .Enrich.WithProperty("VersionInfo", fvi.ProductVersion)
                 .Enrich.WithProperty("Host", Environment.MachineName)
-                .WriteTo.Postgres(configuration.GetConnectionString("DefaultConnection"), LogEventLevel.Error)
+                .WriteTo.Postgres(connectionString, LogEventLevel.Error)
                 .WriteTo.File(Path.GetFullPath(verboseLog), LogEventLevel.Verbose,
                     retainedFileCountLimit: 3, rollingInterval: RollingInterval.Day)
                 .WriteTo.File(Path.GetFullPath(errorDetailedLog),
@@ -119,6 +122,19 @@ namespace WB.Services.Export.Host
             {
                 logConfig.Enrich.WithProperty(assemblyMetadataAttribute.Key, assemblyMetadataAttribute.Value);
             }
+        }
+
+        private static string GetConnectionString(IConfiguration configuration)
+        {
+            var webConfig = configuration["webConfigs"];
+
+            // should we go to web config for connection string?
+            if (webConfig != null)
+            {
+                return WebConfigReader.ReadConnectionStringFromWebConfig(webConfig, null);
+            }
+
+            return configuration.GetConnectionString("DefaultConnection");
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args, bool useKestrel)

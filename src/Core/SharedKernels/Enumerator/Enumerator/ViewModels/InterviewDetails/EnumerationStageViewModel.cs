@@ -76,10 +76,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.interviewId = interviewId;
             this.groupId = groupId;
             this.navigationState = navigationState ?? throw new ArgumentNullException(nameof(navigationState));
+            
+            this.InitRegularGroupScreen(groupId, anchoredElementIdentity);
 
             liteEventRegistry.Subscribe(this, interviewId);
-
-            this.InitRegularGroupScreen(groupId, anchoredElementIdentity);
         }
 
         private void InitRegularGroupScreen(Identity groupIdentity, Identity anchoredElementIdentity)

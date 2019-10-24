@@ -52,9 +52,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.interviewId = interviewId;
             this.navigationState = navigationState;
             this.Identity = entityIdentity;
+            this.UpdateValidStateAsync().WaitAndUnwrapException();
 
             this.liteEventRegistry.Subscribe(this, interviewId);
-            this.UpdateValidStateAsync().WaitAndUnwrapException();
         }
 
         private string exceptionErrorMessageFromViewModel;
