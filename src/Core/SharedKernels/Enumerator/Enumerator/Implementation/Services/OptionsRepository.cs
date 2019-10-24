@@ -148,15 +148,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             var questionIdAsString = questionId.FormatGuid();
             var translationIdAsString = translationId.FormatGuid();
 
-            OptionView categoricalQuestionOption = null;
-
-            categoricalQuestionOption = this.optionsStorage
-                .Where(x => x.QuestionnaireId == questionnaireIdAsString &&
-                            x.QuestionId == questionIdAsString &&
-                            x.Value == optionValue &&
-                            (x.TranslationId == translationIdAsString || x.TranslationId == null))
-                .OrderBy(x => x.TranslationId == null)
-                .FirstOrDefault();
+            var categoricalQuestionOption = GetOptionByValue(optionValue, questionnaireIdAsString, questionIdAsString, translationIdAsString);
 
             if (categoricalQuestionOption == null)
                 return null;
@@ -169,18 +161,38 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             };
         }
 
-        public CategoricalOption[] GetOptionsByValues(QuestionnaireIdentity questionnaireId, Guid questionId, int[] optionValues)
+        private OptionView GetOptionByValue(decimal optionValue, string questionnaireIdAsString, string questionIdAsString,
+            string translationIdAsString)
         {
+            OptionView categoricalQuestionOption = this.optionsStorage
+                .Where(x => x.QuestionnaireId == questionnaireIdAsString &&
+                            x.QuestionId == questionIdAsString &&
+                            x.Value == optionValue &&
+                            (x.TranslationId == translationIdAsString || x.TranslationId == null))
+                .OrderBy(x => x.TranslationId == null)
+                .FirstOrDefault();
+            return categoricalQuestionOption;
+        }
+
+        public CategoricalOption[] GetOptionsByValues(QuestionnaireIdentity questionnaireId, Guid questionId, int[] optionValues, Guid? translationId)
+        {
+            if (optionValues.Length == 0) return Array.Empty<CategoricalOption>();
+
             var questionnaireIdAsString = questionnaireId.ToString();
             var questionIdAsString = questionId.FormatGuid();
             var values = optionValues.Select(Convert.ToDecimal).ToArray();
+            var translationIdAsString = translationId.FormatGuid();
 
-            return this.optionsStorage
-                .Where(x => x.QuestionnaireId == questionnaireIdAsString &&
-                            x.QuestionId == questionIdAsString &&
-                            values.Contains(x.Value))
-                .Select(ToCategoricalOption)
-                .ToArray();
+            List<CategoricalOption> result = new List<CategoricalOption>(optionValues.Length);
+
+            for (int i = 0; i < values.Length; i++)
+            {
+                var option = GetOptionByValue(values[i], questionnaireIdAsString, questionIdAsString,
+                    translationIdAsString);
+                result.Add(ToCategoricalOption(option));
+            }
+
+            return result.ToArray();
         }
 
         private CategoricalOption ToCategoricalOption(OptionView option) => new CategoricalOption
