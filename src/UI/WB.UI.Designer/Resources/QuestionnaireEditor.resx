@@ -743,7 +743,7 @@
     <value>Checkboxes</value>
   </data>
   <data name="QuestionCurrentTime" xml:space="preserve">
-    <value>Current timestamp (date and time)</value>
+    <value>Current timestamp(date &amp; time)</value>
   </data>
   <data name="QuestionDefaultDate" xml:space="preserve">
     <value>Default date</value>
