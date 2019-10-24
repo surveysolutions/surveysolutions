@@ -104,20 +104,18 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
         [Route("{id:Guid}")]
         public async Task<IActionResult> Get(Guid id, int clientQuestionnaireContentVersion, [FromQuery]int? minSupportedQuestionnaireVersion = null)
         {
-            QuestionnaireView questionnaireView;
+            QuestionnaireView questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
 
-            var questionnaireView1 = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
-            if (questionnaireView1 == null)
+            if (questionnaireView == null)
             {
                 return this.ErrorWithReasonPhraseForHQ(StatusCodes.Status404NotFound, string.Format(ErrorMessages.TemplateNotFound, id));
             }
 
-            if (!this.ValidateAccessPermissions(questionnaireView1))
+            if (!this.ValidateAccessPermissions(questionnaireView))
             {
                 return this.ErrorWithReasonPhraseForHQ(StatusCodes.Status403Forbidden, ErrorMessages.NoAccessToQuestionnaire);
             }
 
-            questionnaireView = questionnaireView1;
             if (!this.engineVersionService.IsClientVersionSupported(clientQuestionnaireContentVersion))
             {
                 return this.ErrorWithReasonPhraseForHQ(StatusCodes.Status426UpgradeRequired,
@@ -189,6 +187,18 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
         [Route("{id:Guid}/revision/{rev:int}/metadata")]
         public async Task<IActionResult> UpdateRevisionMetadata(Guid id, int rev, [FromBody] QuestionnaireRevisionMetaDataUpdate tagData)
         {
+            QuestionnaireView questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
+
+            if (questionnaireView == null)
+            {
+                return this.ErrorWithReasonPhraseForHQ(StatusCodes.Status404NotFound, string.Format(ErrorMessages.TemplateNotFound, id));
+            }
+
+            if (!this.ValidateAccessPermissions(questionnaireView))
+            {
+                return this.ErrorWithReasonPhraseForHQ(StatusCodes.Status403Forbidden, ErrorMessages.NoAccessToQuestionnaire);
+            }
+
             await this.questionnaireHistoryVersionsService.UpdateQuestionnaireMetadataAsync(id, rev, tagData);
             return Ok();
         }
