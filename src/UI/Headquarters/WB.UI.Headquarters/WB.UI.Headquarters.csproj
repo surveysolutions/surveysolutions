@@ -2089,6 +2089,7 @@
     <Compile Include="API\DataCollection\AssignmentsControllerBase.cs" />
     <Compile Include="API\DataCollection\AuditLogControllerBase.cs" />
     <Compile Include="API\DataCollection\AppApiControllerBase.cs" />
+    <Compile Include="API\DataCollection\Enumerator\EnumeratorWebApiConfig.cs" />
     <Compile Include="API\DataCollection\Enumerator\LogsApiController.cs" />
     <Compile Include="API\Export\UserExportApiController.cs" />
     <Compile Include="API\PublicApi\AssignmentsHistoryController.cs" />
