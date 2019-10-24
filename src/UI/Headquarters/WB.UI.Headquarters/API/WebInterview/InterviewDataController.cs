@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Interview.Overview;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
+using WB.UI.Headquarters.API.WebInterview.Pipeline;
 using WB.UI.Headquarters.Code;
 using WB.UI.Shared.Web.Filters;
 using InterviewEntity = WB.Enumerator.Native.WebInterview.Models.InterviewEntity;
@@ -25,6 +26,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 {
     [ApiNoCache]
     [CamelCase]
+    [WebInterviewDataAuthorizeAttribute]
     [RoutePrefix("api/webinterview")]
     public class InterviewDataController : Enumerator.Native.WebInterview.Controllers.InterviewDataController
     {

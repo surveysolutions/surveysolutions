@@ -2086,6 +2086,7 @@
     <Compile Include="API\PublicApi\AssignmentsHistoryController.cs" />
     <Compile Include="API\WebInterview\InterviewCommandsController.cs" />
     <Compile Include="API\WebInterview\InterviewDataController.cs" />
+    <Compile Include="API\WebInterview\Pipeline\WebInterviewDataAuthorizeAttribute.cs" />
     <Compile Include="Controllers\InterviewsController.cs" />
     <Compile Include="API\PublicApi\Models\AuditLogApiView.cs" />
     <Compile Include="Controllers\QuestionnairesController.cs" />
