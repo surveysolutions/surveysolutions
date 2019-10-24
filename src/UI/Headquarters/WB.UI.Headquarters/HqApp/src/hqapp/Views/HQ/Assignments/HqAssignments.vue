@@ -484,7 +484,7 @@ export default {
                 },
                 {
                     data: 'isAudioRecordingEnabled',
-                    name: 'IsAudioRecordingEnabled',
+                    name: 'AudioRecording',
                     class: 'pointer editable',
                     title: this.$t('Assignments.IsAudioRecordingEnabled'),
                     tooltip: this.$t('Assignments.Tooltip_Table_IsAudioRecordingEnabled'),
@@ -661,6 +661,7 @@ export default {
         upateAudioRecording() {
             this.$hq.Assignments.setAudioSettings(this.editedRowId, this.editedAudioRecordingEnabled).then(() => {
                 this.$refs.editAudioEnabledModal.hide()
+                this.editedAudioRecordingEnabled = null
                 this.reloadTable()
             })
         },
@@ -719,16 +720,14 @@ export default {
                 this.$hq.Assignments.quantitySettings(this.editedRowId).then(data => {
                     this.canEditQuantity = data.CanChangeQuantity
                     this.$refs.editQuantityModal.modal('show')
-                })
-
-                this.$refs.editQuantityModal.modal('show')
+                })                
             }
-            if (columnName === 'IsAudioRecordingEnabled' && this.config.isHeadquarter && !this.showArchive.key) {
+            if (columnName === 'AudioRecording' && this.config.isHeadquarter && !this.showArchive.key) {
                 this.editedRowId = parsedRowId
                 this.$hq.Assignments.audioSettings(this.editedRowId).then(data => {
                     this.editedAudioRecordingEnabled = data.Enabled
                     this.$refs.editAudioEnabledModal.modal('show')
-                })
+                })                
             }
         },
         async updateQuantity() {
