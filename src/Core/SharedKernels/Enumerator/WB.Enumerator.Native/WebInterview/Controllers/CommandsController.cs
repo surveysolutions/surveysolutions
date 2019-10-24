@@ -163,7 +163,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             public string QuestionId { get; set; }
         }
 
-        [ObserverNotAllowed]
+        [WebInterviewObserverNotAllowed]
         public virtual IHttpActionResult RemoveAnswer(RemoveAnswerRequest request)
         {
             Identity identity = Identity.Parse(request.QuestionId);
@@ -194,7 +194,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             return Ok();
         }
 
-        [ObserverNotAllowed]
+        [WebInterviewObserverNotAllowed]
         public abstract IHttpActionResult CompleteInterview(CompleteInterviewRequest completeInterviewRequest);
 
         public class NewCommentRequest
@@ -204,7 +204,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             public string Comment { get; set; }
         }
 
-        [ObserverNotAllowed]
+        [WebInterviewObserverNotAllowed]
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         public virtual IHttpActionResult SendNewComment(NewCommentRequest request)
         {
@@ -215,7 +215,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             return Ok();
         }
 
-        [ObserverNotAllowed]
+        [WebInterviewObserverNotAllowed]
         protected void ExecuteQuestionCommand(QuestionCommand command)
         {
             try
