@@ -26,7 +26,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 {
     [ApiNoCache]
     [CamelCase]
-    [WebInterviewDataAuthorizeAttribute]
+    [WebInterviewDataAuthorize]
     [RoutePrefix("api/webinterview")]
     public class InterviewDataController : Enumerator.Native.WebInterview.Controllers.InterviewDataController
     {

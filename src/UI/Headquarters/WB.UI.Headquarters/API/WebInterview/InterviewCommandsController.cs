@@ -21,7 +21,7 @@ using WB.UI.Shared.Web.Filters;
 namespace WB.UI.Headquarters.API.WebInterview
 {
     [ApiNoCache]
-    [WebInterviewDataAuthorizeAttribute]
+    [WebInterviewDataAuthorize]
     [CamelCase]
     [RoutePrefix("api/webinterview/commands")]
     public class InterviewCommandsController : CommandsController
