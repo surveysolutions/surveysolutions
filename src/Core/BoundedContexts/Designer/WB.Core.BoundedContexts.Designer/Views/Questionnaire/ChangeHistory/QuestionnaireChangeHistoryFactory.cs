@@ -33,54 +33,47 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 
             var count = this.dbContext.QuestionnaireChangeRecords.Count(h => h.QuestionnaireId == questionnaireId);
 
-            var questionnaireHistory =
-                this.dbContext.QuestionnaireChangeRecords.Where(h => h.QuestionnaireId == questionnaireId)
+            var query = this.dbContext.QuestionnaireChangeRecords.Where(h => h.QuestionnaireId == questionnaireId);
+
+            
+
+            var questionnaireHistory = query                
                     .OrderByDescending(h => h.Sequence)
                     .Skip((page - 1) * pageSize)
                     .Take(pageSize)
                     .ToArray();
-
-            var historyItemIds = questionnaireHistory.Select(x => x.QuestionnaireChangeRecordId).ToArray();
-
-            var hasHistory = this.dbContext.QuestionnaireChangeRecords
-                                            .Where(x => historyItemIds.Contains(x.QuestionnaireChangeRecordId) 
-                                                          && (x.Patch != null || x.ResultingQuestionnaireDocument != null))
-                                            .Select(x => x.QuestionnaireChangeRecordId)
-                                            .ToList().ToHashSet();
             
             return new QuestionnaireChangeHistory(id, questionnaire.Title,
-                questionnaireHistory.Select(h => CreateQuestionnaireChangeHistoryWebItem(questionnaire, h, hasHistory))
+                questionnaireHistory.Select(h => CreateQuestionnaireChangeHistoryWebItem(questionnaire, h))
                     .ToList(), page, count, pageSize);
         }
-
    
-        private QuestionnaireChangeHistoricalRecord CreateQuestionnaireChangeHistoryWebItem(QuestionnaireDocument questionnaire, 
-            QuestionnaireChangeRecord questionnaireChangeRecord, 
-            HashSet<string> recordWithRevertAvailable)
+        private QuestionnaireChangeHistoricalRecord CreateQuestionnaireChangeHistoryWebItem(
+            QuestionnaireDocument questionnaire,  QuestionnaireChangeRecord revision)
         {
             var references =
-                questionnaireChangeRecord.References.Select(
+                revision.References.Select(
                     r => CreateQuestionnaireChangeHistoryReference(questionnaire, r)).ToList();
 
             return new QuestionnaireChangeHistoricalRecord(
-                questionnaireChangeRecord.QuestionnaireChangeRecordId,
-                questionnaireChangeRecord.UserName,
-                questionnaireChangeRecord.Timestamp,
-                questionnaireChangeRecord.ActionType,
-                questionnaireChangeRecord.TargetItemId,
-                GetItemParentId(questionnaire, questionnaireChangeRecord.TargetItemId),
-                questionnaireChangeRecord.TargetItemTitle,
-                questionnaireChangeRecord.TargetItemType,
-                questionnaireChangeRecord.TargetItemNewTitle,
-                questionnaireChangeRecord.AffectedEntriesCount,
-                recordWithRevertAvailable.Contains(questionnaireChangeRecord.QuestionnaireChangeRecordId),
-                questionnaireChangeRecord.TargetItemDateTime,
+                revision.QuestionnaireChangeRecordId,
+                revision.UserName,
+                revision.Timestamp,
+                revision.ActionType,
+                revision.TargetItemId,
+                GetItemParentId(questionnaire, revision.TargetItemId),
+                revision.TargetItemTitle,
+                revision.TargetItemType,
+                revision.TargetItemNewTitle,
+                revision.AffectedEntriesCount,
+                revision.Patch != null || revision.ResultingQuestionnaireDocument != null,
+                revision.TargetItemDateTime,
                 references,
-                questionnaireChangeRecord?.Meta?.Comment,
-                questionnaireChangeRecord?.Meta?.Hq?.Version,
-                questionnaireChangeRecord?.Meta?.Hq?.QuestionnaireVersion)
+                revision?.Meta?.Comment,
+                revision?.Meta?.Hq?.Version,
+                revision?.Meta?.Hq?.QuestionnaireVersion)
             {
-                Sequence = questionnaireChangeRecord.Sequence
+                Sequence = revision.Sequence
             };
         }
 
