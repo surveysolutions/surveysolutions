@@ -76,7 +76,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
         public int HqTimeZoneMinutesOffset { get; set; }
         public string HqImporterLogin { get; set; }
         public long HqQuestionnaireVersion { get; set; }
-        public string HqComment { get; set; }
+        public string Comment { get; set; }
         public string HqHost { get; internal set; }
     }
 }

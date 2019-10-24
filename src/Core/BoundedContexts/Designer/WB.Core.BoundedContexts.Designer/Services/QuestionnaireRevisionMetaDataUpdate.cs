@@ -6,6 +6,6 @@
         public float HqTimeZone { get; set; }
         public string HqImporterLogin { get; set; }
         public long HqQuestionnaireVersion { get; set; }
-        public string HqComment { get; set; }
+        public string Comment { get; set; }
     }
 }
