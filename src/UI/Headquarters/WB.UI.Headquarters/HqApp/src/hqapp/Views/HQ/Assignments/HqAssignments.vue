@@ -660,8 +660,7 @@ export default {
 
         upateAudioRecording() {
             this.$hq.Assignments.setAudioSettings(this.editedRowId, this.editedAudioRecordingEnabled).then(() => {
-                this.$refs.editAudioEnabledModal.hide()
-                this.editedAudioRecordingEnabled = null
+                this.$refs.editAudioEnabledModal.hide()                
                 this.reloadTable()
             })
         },
@@ -724,6 +723,7 @@ export default {
             }
             if (columnName === 'AudioRecording' && this.config.isHeadquarter && !this.showArchive.key) {
                 this.editedRowId = parsedRowId
+                this.editedAudioRecordingEnabled = null
                 this.$hq.Assignments.audioSettings(this.editedRowId).then(data => {
                     this.editedAudioRecordingEnabled = data.Enabled
                     this.$refs.editAudioEnabledModal.modal('show')
