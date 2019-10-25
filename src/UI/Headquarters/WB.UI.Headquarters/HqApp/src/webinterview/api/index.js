@@ -144,8 +144,11 @@ export async function apiPost(actionName, params) {
     store.dispatch("fetchProgress", 1)
 
     try {
+        var interviewId = params.interviewId
+        delete params.interviewId
+
         var headers = store.getters.isReviewMode === true ? { review: true } : { }
-        return await axios.post(`${store.getters.basePath}api/webinterview/commands/${actionName}`, params, { 
+        return await axios.post(`${store.getters.basePath}api/webinterview/commands/${actionName}?interviewId=${interviewId}`, params, { 
             headers: headers
         })
     } catch (err) {
@@ -163,8 +166,11 @@ export async function apiAnswerPost(id, actionName, params) {
     store.dispatch("fetchProgress", 1)
 
     try {
+        var interviewId = params.interviewId
+        delete params.interviewId
+
         var headers = store.getters.isReviewMode === true ? { review: true } : { }
-        return await axios.post(`${store.getters.basePath}api/webinterview/commands/${actionName}`, params, { 
+        return await axios.post(`${store.getters.basePath}api/webinterview/commands/${actionName}?interviewId=${interviewId}`, params, { 
             headers: headers
         })
     } catch (err) {
