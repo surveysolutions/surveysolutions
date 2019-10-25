@@ -356,7 +356,6 @@ namespace WB.Enumerator.Native.WebInterview.Models
 
     public class CompleteInterviewRequest
     {
-        public Guid InterviewId { get; set; }
         public string Comment { get; set; }
     }
 }

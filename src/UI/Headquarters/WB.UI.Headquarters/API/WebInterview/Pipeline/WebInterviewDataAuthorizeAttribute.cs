@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Formatting;
+using System.Web;
 using System.Web.Http.Controllers;
 using System.Web.Mvc;
+using Esri.ArcGISRuntime.Portal;
 using WB.Enumerator.Native.WebInterview;
 using AuthorizeAttribute = System.Web.Http.AuthorizeAttribute;
 
@@ -51,8 +54,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 
         private void CheckPermissions(HttpActionContext actionContext)
         {
-            var queryString = actionContext.Request.RequestUri.ParseQueryString();
-            var interviewId = queryString.Get(InterviewIdQueryString);
+            var interviewId = GetInterviewId(actionContext);
             var isReview = actionContext.Request.Headers.Contains(@"review");
 
             if (!isReview)
@@ -63,6 +65,17 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
             {
                 DependencyResolver.Current.GetService<IReviewAllowedService>().CheckIfAllowed(Guid.Parse(interviewId));
             }
+        }
+
+        private static string GetInterviewId(HttpActionContext actionContext)
+        {
+            if (actionContext.Request.Method == HttpMethod.Get || actionContext.Request.Method == HttpMethod.Post)
+            {
+                var queryString = actionContext.Request.RequestUri.ParseQueryString();
+                return queryString.Get(InterviewIdQueryString);
+            }
+
+            throw new ArgumentException("Cann't resolve interviewId");
         }
     }
 }
