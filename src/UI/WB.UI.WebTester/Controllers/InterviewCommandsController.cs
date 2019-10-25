@@ -26,69 +26,69 @@ namespace WB.UI.WebTester.Controllers
 
         [HttpPost]
         [Route("changeLanguage")]
-        public override IHttpActionResult ChangeLanguage([FromBody] ChangeLanguageRequest request) => base.ChangeLanguage(request);
+        public override IHttpActionResult ChangeLanguage(Guid interviewId, [FromBody]ChangeLanguageRequest request) => base.ChangeLanguage(interviewId, request);
 
         [HttpPost]
         [Route("answerTextQuestion")]
-        public override IHttpActionResult AnswerTextQuestion([FromBody] AnswerRequest<string> answerRequest) => base.AnswerTextQuestion(answerRequest);
+        public override IHttpActionResult AnswerTextQuestion(Guid interviewId, [FromBody] AnswerRequest<string> answerRequest) => base.AnswerTextQuestion(interviewId, answerRequest);
 
         [HttpPost]
         [Route("answerTextListQuestion")]
-        public override IHttpActionResult AnswerTextListQuestion([FromBody] AnswerRequest<TextListAnswerRowDto[]> answerRequest) => base.AnswerTextListQuestion(answerRequest);
+        public override IHttpActionResult AnswerTextListQuestion(Guid interviewId, [FromBody] AnswerRequest<TextListAnswerRowDto[]> answerRequest) => base.AnswerTextListQuestion(interviewId, answerRequest);
 
         [HttpPost]
         [Route("answerGpsQuestion")]
-        public override IHttpActionResult AnswerGpsQuestion([FromBody] AnswerRequest<GpsAnswer> answerRequest) => base.AnswerGpsQuestion(answerRequest);
+        public override IHttpActionResult AnswerGpsQuestion(Guid interviewId, [FromBody] AnswerRequest<GpsAnswer> answerRequest) => base.AnswerGpsQuestion(interviewId, answerRequest);
 
         [HttpPost]
         [Route("answerDateQuestion")]
-        public override IHttpActionResult AnswerDateQuestion([FromBody] AnswerRequest<DateTime> answerRequest) => base.AnswerDateQuestion(answerRequest);
+        public override IHttpActionResult AnswerDateQuestion(Guid interviewId, [FromBody] AnswerRequest<DateTime> answerRequest) => base.AnswerDateQuestion(interviewId, answerRequest);
 
         [HttpPost]
         [Route("answerSingleOptionQuestion")]
-        public override IHttpActionResult AnswerSingleOptionQuestion([FromBody] AnswerRequest<int> answerRequest) => base.AnswerSingleOptionQuestion(answerRequest);
+        public override IHttpActionResult AnswerSingleOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<int> answerRequest) => base.AnswerSingleOptionQuestion(interviewId, answerRequest);
 
         [HttpPost]
         [Route("answerLinkedSingleOptionQuestion")]
-        public override IHttpActionResult AnswerLinkedSingleOptionQuestion([FromBody] AnswerRequest<decimal[]> answerRequest) => base.AnswerLinkedSingleOptionQuestion(answerRequest);
+        public override IHttpActionResult AnswerLinkedSingleOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<decimal[]> answerRequest) => base.AnswerLinkedSingleOptionQuestion(interviewId, answerRequest);
 
         [HttpPost]
         [Route("answerLinkedMultiOptionQuestion")]
-        public override IHttpActionResult AnswerLinkedMultiOptionQuestion([FromBody] AnswerRequest<decimal[][]> answerRequest) => base.AnswerLinkedMultiOptionQuestion(answerRequest);
+        public override IHttpActionResult AnswerLinkedMultiOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<decimal[][]> answerRequest) => base.AnswerLinkedMultiOptionQuestion(interviewId, answerRequest);
 
         [HttpPost]
         [Route("answerMultiOptionQuestion")]
-        public override IHttpActionResult AnswerMultiOptionQuestion([FromBody] AnswerRequest<int[]> answerRequest) => base.AnswerMultiOptionQuestion(answerRequest);
+        public override IHttpActionResult AnswerMultiOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<int[]> answerRequest) => base.AnswerMultiOptionQuestion(interviewId, answerRequest);
 
         [HttpPost]
         [Route("answerYesNoQuestion")]
-        public override IHttpActionResult AnswerYesNoQuestion([FromBody] AnswerRequest<InterviewYesNoAnswer[]> answerRequest) => base.AnswerYesNoQuestion(answerRequest);
+        public override IHttpActionResult AnswerYesNoQuestion(Guid interviewId, [FromBody] AnswerRequest<InterviewYesNoAnswer[]> answerRequest) => base.AnswerYesNoQuestion(interviewId, answerRequest);
 
         [HttpPost]
         [Route("answerIntegerQuestion")]
-        public override IHttpActionResult AnswerIntegerQuestion([FromBody] AnswerRequest<int> answerRequest) => base.AnswerIntegerQuestion(answerRequest);
+        public override IHttpActionResult AnswerIntegerQuestion(Guid interviewId, [FromBody] AnswerRequest<int> answerRequest) => base.AnswerIntegerQuestion(interviewId, answerRequest);
 
         [HttpPost]
         [Route("answerDoubleQuestion")]
-        public override IHttpActionResult AnswerDoubleQuestion([FromBody] AnswerRequest<double> answerRequest) => base.AnswerDoubleQuestion(answerRequest);
+        public override IHttpActionResult AnswerDoubleQuestion(Guid interviewId, [FromBody] AnswerRequest<double> answerRequest) => base.AnswerDoubleQuestion(interviewId, answerRequest);
 
         [HttpPost]
         [Route("answerQRBarcodeQuestion")]
-        public override IHttpActionResult AnswerQRBarcodeQuestion([FromBody] AnswerRequest<string> answerRequest) => base.AnswerQRBarcodeQuestion(answerRequest);
+        public override IHttpActionResult AnswerQRBarcodeQuestion(Guid interviewId, [FromBody] AnswerRequest<string> answerRequest) => base.AnswerQRBarcodeQuestion(interviewId, answerRequest);
 
         [HttpPost]
         [Route("removeAnswer")]
-        public override IHttpActionResult RemoveAnswer([FromBody]RemoveAnswerRequest request) => base.RemoveAnswer(request);
+        public override IHttpActionResult RemoveAnswer(Guid interviewId, [FromBody]RemoveAnswerRequest request) => base.RemoveAnswer(interviewId, request);
 
         [HttpPost]
         [Route("sendNewComment")]
-        public override IHttpActionResult SendNewComment([FromBody]NewCommentRequest request) => base.SendNewComment(request);
+        public override IHttpActionResult SendNewComment(Guid interviewId, [FromBody]NewCommentRequest request) => base.SendNewComment(interviewId, request);
 
         [HttpPost]
         [Route("completeInterview")]
-        public override IHttpActionResult CompleteInterview([FromBody]CompleteInterviewRequest completeInterviewRequest)
+        public override IHttpActionResult CompleteInterview(Guid interviewId, [FromBody]CompleteInterviewRequest completeInterviewRequest)
         {
-            evictionNotify.Evict(completeInterviewRequest.InterviewId);
+            evictionNotify.Evict(interviewId);
             return Ok();
         }
     }
