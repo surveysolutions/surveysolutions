@@ -186,10 +186,6 @@
                 newScenarioName: ""
             }
         },
-        beforeMount() {
-            this.$store.dispatch("getLanguageInfo")
-            this.$store.dispatch("loadInterview")
-        },
         mounted(){
             $(window).on('resize', function() {
                 if($(window).width() > 880) {
