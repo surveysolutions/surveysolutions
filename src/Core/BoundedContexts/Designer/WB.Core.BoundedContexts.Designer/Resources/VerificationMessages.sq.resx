@@ -667,7 +667,7 @@
     <value>Titulli është shumë i gjatë. Nuk duhet të jetë më i gjatë se {0} karaktere.</value>
   </data>
   <data name="WB0261_RosterStructureTooExplosive" xml:space="preserve">
-    <value>Pyetësori përmban një numër të tepruar njësish të rosterit.</value>
+    <value>Pyetësori përmban një numër të tepruar njësish të rosterit {0}.Limit {1}</value>
   </data>
   <data name="WB0262_RosterHasTooBigPropagation" xml:space="preserve">
     <value>Rosteri ka arritur madhësinë limit. Ulni madhësinë e rosterit ose zvogëloni përsëritjen.</value>
