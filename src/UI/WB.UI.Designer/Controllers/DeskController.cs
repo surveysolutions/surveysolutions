@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
-using WB.UI.Designer.Extensions;
+using WB.Core.BoundedContexts.Designer;
 using WB.UI.Designer.Services;
 
 namespace WB.UI.Designer.Controllers

@@ -42,7 +42,6 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.DependencyInjection;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Infrastructure.Native.Storage;
-using System;
 
 namespace WB.Core.BoundedContexts.Designer
 {
@@ -101,6 +100,7 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind<ResourcesPostProcessor, ResourcesPostProcessor>();
 
             registry.Bind<IDesignerQuestionnaireStorage, DesignerQuestionnaireStorage>();
+            registry.Bind<IUserManager, DesignerUserManager>();
         }
 
         public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status)

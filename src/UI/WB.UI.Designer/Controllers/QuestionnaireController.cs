@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
@@ -295,7 +296,7 @@ namespace WB.UI.Designer.Controllers
             return true;
         }
 
-        public IActionResult QuestionnaireHistory(Guid id, int? p)
+        public async Task<IActionResult> QuestionnaireHistory(Guid id, int? p)
         {
             bool hasAccess = this.User.IsAdmin() || this.questionnaireViewFactory.HasUserAccessToQuestionnaire(id, this.User.GetId());
             if (!hasAccess)
@@ -306,7 +307,7 @@ namespace WB.UI.Designer.Controllers
             var questionnaireInfoView = this.questionnaireInfoViewFactory.Load(new QuestionnaireRevision(id), this.User.GetId());
             if (questionnaireInfoView == null) return NotFound();
 
-            QuestionnaireChangeHistory questionnairePublicListViewModels = questionnaireChangeHistoryFactory.Load(id, p ?? 1, GlobalHelper.GridPageItemsCount);
+            QuestionnaireChangeHistory questionnairePublicListViewModels = await questionnaireChangeHistoryFactory.LoadAsync(id, p ?? 1, GlobalHelper.GridPageItemsCount, this.User);
             questionnairePublicListViewModels.ReadonlyMode = questionnaireInfoView.IsReadOnlyForUser;
 
             return this.View(questionnairePublicListViewModels);
