@@ -117,10 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
+  <data name="UserDoesNotExist" xml:space="preserve">
+    <value>Informacioni i përdoruesit nuk mund të përditësohet, sepse ky përdorues nuk ekziston </value>
   </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Application update is required</value>
+  <data name="UserNameIsTakenByArchivedUsersFormat" xml:space="preserve">
+    <value>Emri i përdoruesit '{0}' është zënë tashmë nga një përdorues i arkivuar. Ju lutemi, zgjidhni një emër tjetër përdoruesi.</value>
+  </data>
+  <data name="UserNameIsTakenFormat" xml:space="preserve">
+    <value>Emri i përdoruesit '{0}' është i zënë tashmë. Ju lutemi, zgjidhni një emër tjetër përdoruesi.</value>
+  </data>
+  <data name="YouCantUnarchiveInterviewerUntilSupervisorIsArchivedFormat" xml:space="preserve">
+    <value>Ju nuk mund ta nxirrni intervistuesin {0} nga arkivi, derisa të nxirret supervizori nga arkivi</value>
   </data>
 </root>

@@ -117,10 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
+  <data name="Clone" xml:space="preserve">
+    <value>Klono</value>
   </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Application update is required</value>
+  <data name="CloneQuestionnaireTitle" xml:space="preserve">
+    <value>Klono Pyetësorin</value>
+  </data>
+  <data name="ToCloneQuestionnaire" xml:space="preserve">
+    <value>Klono pyetësorin</value>
+  </data>
+  <data name="UnexpectedError" xml:space="preserve">
+    <value>Ndodhi një gabim i papritur. Na falni për shqetësimin. Ju lutemi kontaktoni support@mysurvey.solutions ose provojeni sërish më vonë.</value>
   </data>
 </root>

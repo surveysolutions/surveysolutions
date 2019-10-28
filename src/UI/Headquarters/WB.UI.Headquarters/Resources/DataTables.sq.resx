@@ -117,10 +117,55 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
+  <data name="Aria_SortAscending" xml:space="preserve">
+    <value>: aktivizo për të renditur kolonën në rend rritës </value>
   </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Application update is required</value>
+  <data name="Aria_SortDescending" xml:space="preserve">
+    <value>: aktivizo për të renditur kolonën në rend zbritës</value>
+  </data>
+  <data name="EmptyTable" xml:space="preserve">
+    <value>Tabela nuk ka të dhëna të vlefshme </value>
+  </data>
+  <data name="Info" xml:space="preserve">
+    <value>Po shfaq _START_ to _END_ of _TOTAL_ të dhënat e regjistruara</value>
+  </data>
+  <data name="InfoEmpty" xml:space="preserve">
+    <value>Po shfaq 0 në 0 nga 0 të dhëna të regjistruara</value>
+  </data>
+  <data name="InfoFiltered" xml:space="preserve">
+    <value>(filtered from _MAX_ total entries)</value>
+  </data>
+  <data name="InfoThousands" xml:space="preserve">
+    <value>,</value>
+  </data>
+  <data name="LengthMenu" xml:space="preserve">
+    <value>Shfaq të dhënat e _MENU_ </value>
+  </data>
+  <data name="LoadingRecords" xml:space="preserve">
+    <value>Po ngarkohet...</value>
+  </data>
+  <data name="Paginate_First" xml:space="preserve">
+    <value>I pari</value>
+  </data>
+  <data name="Paginate_Last" xml:space="preserve">
+    <value>I fundit</value>
+  </data>
+  <data name="Paginate_Next" xml:space="preserve">
+    <value>Pas</value>
+  </data>
+  <data name="Paginate_Previous" xml:space="preserve">
+    <value>Para</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Po përpunohet...</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Kërkim:</value>
+  </data>
+  <data name="SearchPlaceholder" xml:space="preserve">
+    <value>Kërko...</value>
+  </data>
+  <data name="ZeroRecords" xml:space="preserve">
+    <value>Nuk i gjetën të dhëna që përputhen </value>
   </data>
 </root>

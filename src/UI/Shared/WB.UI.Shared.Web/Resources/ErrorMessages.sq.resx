@@ -117,10 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
+  <data name="ExcessiveRequestAttemptsDetected" xml:space="preserve">
+    <value>U zbuluan përpjekje të tepruara.</value>
   </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Application update is required</value>
+  <data name="TryLater" xml:space="preserve">
+    <value>Ju lutemi, provojeni prapë më vonë </value>
   </data>
 </root>

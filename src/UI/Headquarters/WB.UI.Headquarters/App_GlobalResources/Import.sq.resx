@@ -117,10 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
+  <data name="CreateSample" xml:space="preserve">
+    <value>Krijo kampion nga këto të dhëna</value>
   </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Application update is required</value>
+  <data name="ParsingCompleted" xml:space="preserve">
+    <value>Analiza përfundoi</value>
+  </data>
+  <data name="ParsingError" xml:space="preserve">
+    <value>Gabim i analizës</value>
+  </data>
+  <data name="ParsingInProgress" xml:space="preserve">
+    <value>Analiza po kryhet...</value>
+  </data>
+  <data name="SelectResponsible" xml:space="preserve">
+    <value>Përzgjidh përgjegjësin</value>
   </data>
 </root>

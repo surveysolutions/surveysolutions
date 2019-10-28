@@ -117,10 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
+  <data name="CannotParseIncomingFile" xml:space="preserve">
+    <value>Skedari i dhënë ka gabim në rreshtin {0} dhe nuk mund të analizohet </value>
   </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Application update is required</value>
+  <data name="FileColumnsCantBeMappedFormat" xml:space="preserve">
+    <value>Skedari '{0}' përmban kolonat vijuese që nuk mund ndërtohen sipas vetive të përdoruesit (p.sh., emri i plotë, numri i telefonit etj.) : {1}</value>
+  </data>
+  <data name="FileColumnsMissingFormat" xml:space="preserve">
+    <value>Skedari '{0}' nuk përmban kolonat e duhura: {1}</value>
+  </data>
+  <data name="HasUsersToImport" xml:space="preserve">
+    <value>Ju lutemi, pritni derisa importimi i mëparshëm i përdoruesve të përfundojë</value>
+  </data>
+  <data name="TheDatasetMaxRecordNumberReachedFormat" xml:space="preserve">
+    <value>Numri maksimal i regjistrimeve të lejuara është {0}</value>
   </data>
 </root>
