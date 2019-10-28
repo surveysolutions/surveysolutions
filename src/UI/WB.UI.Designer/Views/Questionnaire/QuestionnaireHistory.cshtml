@@ -22,9 +22,9 @@
             </th>
             <th>@QuestionnaireHistoryResources.UserName</th>
             <th>@QuestionnaireHistoryResources.Timestamp</th>
-            <th>@QuestionnaireHistoryResources.Comment</th>
-            @if (!Model.ReadonlyMode)
-            {
+            @if (!Model.ReadonlyMode) { 
+
+                <th>@QuestionnaireHistoryResources.Comment</th>
                 <th></th>
             }
         </tr>
@@ -44,38 +44,46 @@
                     @foreach (var listViewModel in rows)
                     {
 
-                        <tr>
-                            <td class="search-value">
-                                @Html.FormatQuestionnaireHistoricalRecord(Url, Model.Id, listViewModel)
-                            </td>
-                            <td>@(listViewModel.UserName ?? QuestionnaireHistoryResources.UnknownUserName)</td>
-                            <td>
-                                <time time="@listViewModel.Timestamp.ToString("s")Z">@listViewModel.Timestamp.ConvertToLocalAndFormatDate()</time>
-                            </td>
+                    <tr>
+                        <td class="search-value">
+                            @Html.FormatQuestionnaireHistoricalRecord(Url, Model.Id, listViewModel)
+                        </td>
+                        <td>@(listViewModel.UserName ?? QuestionnaireHistoryResources.UnknownUserName)</td>
+                        <td>
+                            <time time="@listViewModel.Timestamp.ToString("s")Z">@listViewModel.Timestamp.ConvertToLocalAndFormatDate()</time>
+                        </td>
+                        @if (!Model.ReadonlyMode)
+                        {
                             <td>
                                 @listViewModel.Comment
                             </td>
                             <td>
+                                @if (listViewModel.HasRevertTo && listViewModel.CanEditComment)
+                                {
                                 <div class="btn-group pull-right">
-                                    <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="false">@QuestionnaireController.Action<span class="caret"></span>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        @if (!Model.ReadonlyMode)
-                                        {
-                                            @if (listViewModel.HasRevertTo)
-                                            {
-                                                <li>@Html.ActionLink("View", "Details", "Questionnaire", new { id = $"{Model.Id:N}${listViewModel.Sequence}" })</li>
-                                                <li class="divider"></li>
-                                                <li><a href="javascript:void(0);" onclick="confirmRevert('@listViewModel.Timestamp.ToString("s")', '@listViewModel.Id')">@QuestionnaireHistoryResources.RevertToThisVersion</a></li>
-                                                <li>@Html.ActionLink(QuestionnaireHistoryResources.ExtractAtRevision, "Clone", "Questionnaire", new { id = $"{Model.Id:N}${listViewModel.Sequence}" })</li>
-                                                <li class="divider"></li>
-                                            }
-                                            <li><a href="javascript:void(0);" onclick="showComment('@listViewModel.Id')">@QuestionnaireHistoryResources.LeaveComment</a></li>
-                                        }
-                                    </ul>
+                                    <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="false">
+                                        @QuestionnaireController.Action<span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    @if (listViewModel.HasRevertTo)
+                                    {
+                                        <li>@Html.ActionLink("View", "Details", "Questionnaire", new { id = $"{Model.Id:N}${listViewModel.Sequence}" })</li>
+                                        <li class="divider"></li>
+                                        <li><a href="javascript:void(0);" onclick="confirmRevert('@listViewModel.Timestamp.ToString("s")', '@listViewModel.Id')">@QuestionnaireHistoryResources.RevertToThisVersion</a></li>
+                                        <li>@Html.ActionLink(QuestionnaireHistoryResources.ExtractAtRevision, "Clone", "Questionnaire", new { id = $"{Model.Id:N}${listViewModel.Sequence}" })</li>
+                                        <li class="divider"></li>
+                                    }
+
+                                    @if (listViewModel.CanEditComment)
+                                    {
+                                        <li><a href="javascript:void(0);" onclick="showComment('@listViewModel.Id')">@QuestionnaireHistoryResources.LeaveComment</a></li>
+                                    }
+                                </ul>                                
                                 </div>
-                            </td>
-                        </tr>
+                                }
+                        </td>
+                        }
+                    </tr>
                     }
                 </tbody>
             </table>

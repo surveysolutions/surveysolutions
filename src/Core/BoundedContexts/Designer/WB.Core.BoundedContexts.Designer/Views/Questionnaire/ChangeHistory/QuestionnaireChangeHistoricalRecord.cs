@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             bool hasRevertTo,
             DateTime? targetDateTime,
             List<QuestionnaireChangeHistoricalRecordReference> historicalRecordReferences,
-            string comment, string hqVersion, long? hqQuestionnaireVersion)
+            string comment, string hqVersion, long? hqQuestionnaireVersion, bool canEditComment)
         {
             this.Id = id;
             UserName = userName;
@@ -37,6 +37,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             this.Comment = comment;
             this.HqVersion = hqVersion;
             this.HqQuestionnaireVersion = hqQuestionnaireVersion;
+            this.CanEditComment = canEditComment;
         }
 
         public string Id { get; }
@@ -56,6 +57,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         public bool HasRevertTo { get; }
         public List<QuestionnaireChangeHistoricalRecordReference> HistoricalRecordReferences { get; }
         public string Comment { get; }
+        public bool CanEditComment { get; set; }
         public string HqVersion { get; }
         public long? HqQuestionnaireVersion { get; }
     }
