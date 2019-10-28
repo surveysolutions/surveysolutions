@@ -1,6 +1,7 @@
 ﻿using Main.Core.Documents;
 using Moq;
 using NUnit.Framework;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
@@ -72,6 +73,33 @@ namespace WB.Tests.Unit.Designer.Services
 
             Assert.That(revision, Is.EqualTo(changeRecord.Sequence));
         }
+
+
+        [Test]
+        public async Task TrackQuestionnaireImportAsync_Should_return_last_revision_id_for_lot_of_changes()
+        {
+            for (int i = 5; i >= 1; i--)
+            {
+                var changeRecord = new QuestionnaireChangeRecord
+                {
+                    
+                    QuestionnaireId = this.questionnaire.Id,
+                    Sequence = i,
+                    QuestionnaireChangeRecordId = System.Guid.NewGuid().FormatGuid(),
+                    ActionType = QuestionnaireActionType.ImportToHq
+                };
+
+                this.db.QuestionnaireChangeRecords.Add(changeRecord);
+            }
+
+            this.db.SaveChanges();
+
+            // act
+            var revision = await this.metadataUpdater.TrackQuestionnaireImportAsync(this.questionnaire, "", Id.gA);
+
+            Assert.That(revision, Is.EqualTo(5));
+        }
+
 
         [Test]
         public async Task UpdateQuestionnaireMetadata_should_fill_metadata_values()

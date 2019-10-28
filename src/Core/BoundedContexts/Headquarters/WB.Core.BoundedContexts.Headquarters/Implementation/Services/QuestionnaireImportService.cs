@@ -156,6 +156,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     }
                 }
 
+                logger.Verbose($"commandService.Execute.new ImportFromDesigner: {questionnaire.Title}({questionnaire.PublicKey} rev.{questionnaire.Revision})");
                 this.commandService.Execute(new ImportFromDesigner(
                     this.authorizedUser.Id,
                     questionnaire,
@@ -164,7 +165,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     questionnaireContentVersion,
                     questionnaireVersion,
                     comment));
-
+                
+                logger.Verbose($"UpdateRevisionMetadata: {questionnaire.Title}({questionnaire.PublicKey} rev.{questionnaire.Revision})");
                 await designerApi.UpdateRevisionMetadata(questionnaire.PublicKey, questionnaire.Revision, new QuestionnaireRevisionMetadataModel
                 {
                     HqHost = GetDomainFromUri(requestUrl),
@@ -174,6 +176,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     Comment = comment,
                 });
 
+                logger.Verbose($"DownloadAndStorePdf: {questionnaire.Title}({questionnaire.PublicKey} rev.{questionnaire.Revision})");
                 await DownloadAndStorePdf(questionnaireIdentity, questionnaire);
 
                 this.auditLog.QuestionnaireImported(questionnaire.Title, questionnaireIdentity);
