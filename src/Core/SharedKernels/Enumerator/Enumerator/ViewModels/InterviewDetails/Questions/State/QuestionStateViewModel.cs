@@ -53,9 +53,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.questionIdentity = entityIdentity ?? throw new ArgumentNullException(nameof(entityIdentity));
             this.interviewId = interviewId ?? throw new ArgumentNullException(nameof(interviewId));
-
-            this.liteEventRegistry.Subscribe(this, interviewId);
-
+            
             var interview = this.interviewRepository.Get(interviewId);
             this.IsAnswered = interview.WasAnswered(entityIdentity);
 
@@ -70,6 +68,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.answersRemovedNotifier.AnswerRemoved += this.AnswerRemoved;
             this.Header.ShowComments += this.ShowCommentsCommand;
+
+            this.liteEventRegistry.Subscribe(this, interviewId);
         }
 
         private void AnswerRemoved(object sender, EventArgs eventArgs)

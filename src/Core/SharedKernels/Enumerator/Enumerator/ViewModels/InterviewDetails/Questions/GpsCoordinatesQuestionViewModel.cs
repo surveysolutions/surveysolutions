@@ -89,8 +89,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             var interview = this.interviewRepository.Get(interviewId);
 
-            this.liteEventRegistry.Subscribe(this, interviewId);
-
             this.questionIdentity = entityIdentity;
             this.interviewId = interview.Id;
 
@@ -105,6 +103,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.Answer = new GpsLocation(gpsAnswer.Accuracy, gpsAnswer.Altitude, gpsAnswer.Latitude,
                     gpsAnswer.Longitude, DateTimeOffset.MinValue);
             }
+
+            this.liteEventRegistry.Subscribe(this, interviewId);
         }
 
         private async Task RemoveAnswerAsync()
@@ -199,8 +199,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Dispose()
         {
-            this.QuestionState.Dispose();
             this.liteEventRegistry.Unsubscribe(this);
+            this.QuestionState.Dispose();
         }
 
         public void Handle(AnswersRemoved @event)
