@@ -72,8 +72,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.lookupTablesStorage = lookupTablesStorage;
         }
 
-        public async Task<QuestionnaireImportResult> Import(Guid questionnaireId, string name, bool isCensusMode,
-            string comment, string requestUrl)
+        public async Task<QuestionnaireImportResult> Import(Guid questionnaireId, string name, bool isCensusMode, string comment, string requestUrl, bool includePdf = true)
         {
             try
             {
@@ -99,7 +98,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                                 
                 QuestionnaireDocument questionnaire = this.zipUtils.DecompressString<QuestionnaireDocument>(questionnairePackage.Questionnaire);
 
-                await TriggerPdfTranslationsRendering(questionnaire);
+                if (includePdf)
+                    await TriggerPdfRendering(questionnaireId);
 
                 var questionnaireContentVersion = questionnairePackage.QuestionnaireContentVersion;
                 var questionnaireAssembly = questionnairePackage.QuestionnaireAssembly;
@@ -177,7 +177,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 });
 
                 logger.Verbose($"DownloadAndStorePdf: {questionnaire.Title}({questionnaire.PublicKey} rev.{questionnaire.Revision})");
-                await DownloadAndStorePdf(questionnaireIdentity, questionnaire);
+                if (includePdf)
+                    await DownloadAndStorePdf(questionnaireIdentity, questionnaire);
+
 
                 this.auditLog.QuestionnaireImported(questionnaire.Title, questionnaireIdentity);
 

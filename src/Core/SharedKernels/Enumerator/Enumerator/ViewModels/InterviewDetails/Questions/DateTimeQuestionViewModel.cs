@@ -64,8 +64,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.questionIdentity = entityIdentity;
             this.interviewId = interviewId;
-            this.liteEventRegistry.Subscribe(this, interviewId);
-
+            
             var interview = this.interviewRepository.Get(interviewId);
             var answerModel = interview.GetDateTimeQuestion(entityIdentity);
             this.answerFormatString = answerModel.UiFormatString;
@@ -77,6 +76,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
             this.DefaultDate = questionnaire.GetDefaultDateForDateQuestion(this.questionIdentity.Id);
+
+            this.liteEventRegistry.Subscribe(this, interviewId);
         }
 
         public IMvxAsyncCommand<DateTime> AnswerCommand => new MvxAsyncCommand<DateTime>(this.SendAnswerAsync);
@@ -140,8 +141,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Dispose()
         {
+            this.liteEventRegistry.Unsubscribe(this);
             this.QuestionState.Dispose();
-            this.liteEventRegistry.Unsubscribe(this); 
         }
 
         public void Handle(AnswersRemoved @event)

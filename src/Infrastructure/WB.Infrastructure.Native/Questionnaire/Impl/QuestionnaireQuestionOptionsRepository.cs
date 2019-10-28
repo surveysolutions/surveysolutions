@@ -28,7 +28,7 @@ namespace WB.Enumerator.Native.Questionnaire.Impl
             return questionnaire.GetOptionForQuestionByOptionValueFromStructure(questionId, optionValue);
         }
 
-        public IEnumerable<CategoricalOption> GetOptionsByOptionValues(IQuestionnaire questionnaire, Guid questionId, int[] optionsValues) => 
+        public IEnumerable<CategoricalOption> GetOptionsByOptionValues(IQuestionnaire questionnaire, Guid questionId, int[] optionsValues, Translation translation) => 
             questionnaire.GetOptionsForQuestion(questionId, null, null, null).Where(x => optionsValues.Contains(x.Value));
     }
 }
