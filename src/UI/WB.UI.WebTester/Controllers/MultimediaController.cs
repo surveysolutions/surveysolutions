@@ -105,8 +105,7 @@ namespace WB.UI.WebTester.Controllers
             }
             catch (Exception e)
             {
-                webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, questionId,
-                    WebInterview.GetUiMessageFromException(e));
+                webInterviewNotificationService.MarkAnswerAsNotSaved(Guid.Parse(interviewId), questionIdentity, e);
                 throw;
             }
 
@@ -154,8 +153,7 @@ namespace WB.UI.WebTester.Controllers
             catch (Exception e)
             {
                 if (fileName != null)
-                    webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, questionId,
-                        WebInterview.GetUiMessageFromException(e));
+                    webInterviewNotificationService.MarkAnswerAsNotSaved(Guid.Parse(interviewId), questionIdentity, e);
                 throw;
             }
 

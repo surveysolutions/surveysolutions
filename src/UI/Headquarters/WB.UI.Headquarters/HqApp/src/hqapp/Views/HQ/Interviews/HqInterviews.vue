@@ -1155,7 +1155,6 @@ export default {
                 if (responsibleId != undefined)
                     self.responsibleId = { key: responsibleId, value: self.$route.query.responsible };
 
-                self.reloadTable();
                 self.startWatchers(
                     ["responsibleId", "questionnaireId", "status", "assignmentId", "questionnaireVersion"],
                     self.reloadTable.bind(self)

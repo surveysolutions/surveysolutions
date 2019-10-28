@@ -58,7 +58,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
             foreach (var parentId in sectionIds.Distinct())
             {
-                var children = parentId == null
+                var children = parentId == null || parentId == "null"
                     ? interview.GetEnabledSections()
                     : interview.GetGroup(Identity.Parse(parentId))?.Children
                         .OfType<InterviewTreeGroup>().Where(g => !g.IsDisabled());
