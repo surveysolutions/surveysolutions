@@ -191,10 +191,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return resultingQuestionnaireDocument;
         }
 
-        public async Task UpdateQuestionnaireChangeRecordCommentAsync(string questionnaireChangeRecordId, string comment)
+        public async Task<bool> UpdateRevisionCommentaryAsync(string questionnaireChangeRecordId, string comment)
         {
             var item = await this.dbContext.QuestionnaireChangeRecords.FindAsync(questionnaireChangeRecordId);
-            if (item == null) return;
+            
+            if (item == null) return false;
 
             if (item.Meta == null)
                 item.Meta = new QuestionnaireChangeRecordMetadata();
@@ -203,8 +204,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             this.dbContext.Update(item);
             await this.dbContext.SaveChangesAsync();
+            return true;
         }
-
 
         public async Task<int> TrackQuestionnaireImportAsync(
             QuestionnaireDocument questionnaireDocument,

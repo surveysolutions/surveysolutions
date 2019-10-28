@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.MembershipProvider.Roles;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 
@@ -20,58 +21,72 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         private readonly DesignerDbContext dbContext;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentStorage;
         private readonly IUserManager userManager;
+        private readonly IQuestionnaireViewFactory questionnaireViewFactory;
 
         public QuestionnaireChangeHistoryFactory(
             DesignerDbContext dbContext,
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentStorage,
+            IQuestionnaireViewFactory questionnaireViewFactory,
             IUserManager userManager)
         {
             this.dbContext = dbContext;
             this.questionnaireDocumentStorage = questionnaireDocumentStorage;
             this.userManager = userManager;
+            this.questionnaireViewFactory = questionnaireViewFactory;
         }
 
-        public async Task<QuestionnaireChangeHistory> LoadAsync(Guid id, int page, int pageSize, IPrincipal user)
+        public async Task<QuestionnaireChangeHistory> LoadAsync(Guid questionnaireId, int page, int pageSize, IPrincipal user)
         {
-            var questionnaire = questionnaireDocumentStorage.GetById(id.FormatGuid());
+            var questionnaire = questionnaireDocumentStorage.GetById(questionnaireId.FormatGuid());
 
             if (questionnaire == null)
                 return null;
 
-            var questionnaireId = id.FormatGuid();
+            var sQuestionnaireId = questionnaireId.FormatGuid();
 
             var isAdmin = user.IsAdmin();
 
+            var questionnaireListViewItem = this.dbContext.Questionnaires
+                .Where(x => x.QuestionnaireId == questionnaireId.FormatGuid())
+                .Include(x => x.SharedPersons).FirstOrDefault();
+
             IQueryable<QuestionnaireChangeRecord> query = this.dbContext.QuestionnaireChangeRecords
-                .Where(h => h.QuestionnaireId == questionnaireId);
+                .Where(h => h.QuestionnaireId == sQuestionnaireId);
 
             if (isAdmin == false)
             {
                 var adminUsers = (await userManager.GetUsersInRoleAsync(SimpleRoleEnum.Administrator))
                     .Select(u => u.Id).ToArray();
 
-                query = query.Where(h => !(h.ActionType == QuestionnaireActionType.ImportToHq && adminUsers.Contains(h.UserId)));               
+                query = query.Where(h => !(h.ActionType == QuestionnaireActionType.ImportToHq && adminUsers.Contains(h.UserId)));
             }
 
             var count = await query.CountAsync();
-            
+
             var questionnaireHistory = await query
                     .OrderByDescending(h => h.Sequence)
                     .Skip((page - 1) * pageSize)
                     .Take(pageSize)
                     .ToArrayAsync();
+            var userId = user.GetId();
 
-            return new QuestionnaireChangeHistory(id, questionnaire.Title,
-                questionnaireHistory.Select(h => CreateQuestionnaireChangeHistoryWebItem(questionnaire, h))
+            return new QuestionnaireChangeHistory(questionnaireId, questionnaire.Title,
+                questionnaireHistory.Select(h => 
+                    CreateQuestionnaireChangeHistoryWebItem(questionnaire, h, questionnaireListViewItem, userId))
                     .ToList(), page, count, pageSize);
         }
 
         private QuestionnaireChangeHistoricalRecord CreateQuestionnaireChangeHistoryWebItem(
-            QuestionnaireDocument questionnaire, QuestionnaireChangeRecord revision)
+            QuestionnaireDocument questionnaire, 
+            QuestionnaireChangeRecord revision,
+            QuestionnaireList.QuestionnaireListViewItem questionnaireListViewItem,
+            Guid userId)
         {
             var references =
                 revision.References.Select(
                     r => CreateQuestionnaireChangeHistoryReference(questionnaire, r)).ToList();
+
+            var canEditComment = questionnaireViewFactory.HasUserAccessToEditComments(revision, questionnaireListViewItem, userId);
 
             return new QuestionnaireChangeHistoricalRecord(
                 revision.QuestionnaireChangeRecordId,
@@ -89,8 +104,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 references,
                 revision?.Meta?.Comment,
                 revision?.Meta?.Hq?.Version,
-                revision?.Meta?.Hq?.QuestionnaireVersion, true)
+                revision?.Meta?.Hq?.QuestionnaireVersion,
+                canEditComment)
             {
+                HqUserName = revision.Meta?.Hq?.ImporterLogin,
                 Sequence = revision.Sequence
             };
         }
@@ -120,7 +137,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             }
             return item.PublicKey;
         }
-
+        
         private bool IsQuestionnaireChangeHistoryReferenceExists(QuestionnaireDocument questionnaire, Guid itemId,
             QuestionnaireItemType type)
         {
