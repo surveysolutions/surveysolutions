@@ -58,6 +58,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         public List<QuestionnaireChangeHistoricalRecordReference> HistoricalRecordReferences { get; }
         public string Comment { get; }
         public bool CanEditComment { get; set; }
+        public string HqUserName { get; set; }
         public string HqVersion { get; }
         public long? HqQuestionnaireVersion { get; }
     }

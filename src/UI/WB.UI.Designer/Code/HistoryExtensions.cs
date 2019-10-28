@@ -115,9 +115,9 @@ namespace WB.UI.Designer.Code
 
                     var questionnaireVersion = $"ver. {record.HqQuestionnaireVersion}";
 
-                    text = string.Format(QuestionnaireHistoryResources.Questionnaire_ImportToHq, 
-                        siteHost, 
-                        record.UserName, 
+                    text = string.Format(QuestionnaireHistoryResources.Questionnaire_ImportToHq,
+                        siteHost,
+                        record.HqUserName,
                         questionnaireVersion);
                 }
                 break;

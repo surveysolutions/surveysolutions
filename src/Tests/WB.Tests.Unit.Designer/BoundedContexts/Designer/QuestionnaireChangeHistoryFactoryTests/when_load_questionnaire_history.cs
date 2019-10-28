@@ -76,7 +76,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
                     questionnaireChangeRecordStorage,
                     Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(
                             _ => _.GetById(Moq.It.IsAny<string>()) == questionnaireDocument),
-                    userManagerMock.Object);
+                    userManager: userManagerMock.Object);
         }
 
         private async Task BecauseOf(bool isAdmin = true)

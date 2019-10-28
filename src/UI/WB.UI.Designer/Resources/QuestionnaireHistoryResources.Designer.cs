@@ -322,7 +322,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Imported questionnaire to headquarters as {2} ({0}) by {1}.
+        ///   Looks up a localized string similar to Imported questionnaire to Headquarters ({0}) as {2} by {1}.
         /// </summary>
         public static string Questionnaire_ImportToHq {
             get {

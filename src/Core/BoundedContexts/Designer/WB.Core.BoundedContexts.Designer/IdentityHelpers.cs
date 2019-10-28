@@ -11,6 +11,11 @@ namespace WB.Core.BoundedContexts.Designer
         {
             return identity.IsInRole(SimpleRoleEnum.Administrator.ToString());
         }
+        
+        public static Guid GetId(this IPrincipal identity)
+        {
+            return ((ClaimsPrincipal)identity).GetId();
+        }
 
         public static Guid GetId(this ClaimsPrincipal identity)
         {

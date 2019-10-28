@@ -286,14 +286,18 @@ namespace WB.UI.Designer.Controllers
         [HttpPost]
         public async Task<ActionResult<bool>> SaveComment(Guid id, Guid historyItemId, string comment)
         {
-            bool hasAccess = this.User.IsAdmin() || this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id, this.User.GetId());
+            bool hasAccess = this.User.IsAdmin() 
+                || this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id, this.User.GetId());
+
             if (!hasAccess)
                 return false;
 
-            await this.questionnaireHistoryVersionsService.UpdateQuestionnaireChangeRecordCommentAsync(
-                historyItemId.FormatGuid(), comment);
+            var canEdit = this.questionnaireViewFactory.HasUserAccessToEditComments(historyItemId, this.User.GetId());
 
-            return true;
+            if (!canEdit) return false;
+
+            return await this.questionnaireHistoryVersionsService.UpdateRevisionCommentaryAsync(
+                historyItemId.FormatGuid(), comment);
         }
 
         public async Task<IActionResult> QuestionnaireHistory(Guid id, int? p)
