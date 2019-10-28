@@ -377,7 +377,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 => this.GetMultiSelectAnswerOptionsAsValuesImpl(questionId));
 
         public IEnumerable<CategoricalOption> GetCategoricalMultiOptionsByValues(Guid questionId, int[] values) =>
-            this.questionOptionsRepository.GetOptionsByOptionValues(this, questionId, values);
+            this.questionOptionsRepository.GetOptionsByOptionValues(this, questionId, values, this.translation);
 
         public IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, int? parentQuestionValue,
             string searchFor, int[] excludedOptionIds)
@@ -504,7 +504,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     $"Cannot return maximum for selected answers for question with id '{questionId}' because it's type {question.QuestionType} does not support that parameter.");
 
             if (question is IMultyOptionsQuestion multi)
-                return multi.MaxAllowedAnswers ?? Constants.MaxMultiComboboxAnswersCount;
+                return multi.MaxAllowedAnswers;
 
             return ((TextListQuestion)question).MaxAnswerCount;
         }

@@ -127,10 +127,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Init(interview, questionnaire);
 
             this.throttlingModel.Init(SaveAnswer);
+            
+            this.UpdateViewModelsAsync().WaitAndUnwrapException();
 
             this.eventRegistry.Subscribe(this, interviewId);
-
-            this.UpdateViewModelsAsync().WaitAndUnwrapException(); 
         }
 
         private async Task SaveAnswer()

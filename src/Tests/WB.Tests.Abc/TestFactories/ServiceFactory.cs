@@ -118,7 +118,6 @@ using WB.Tests.Abc.Storage;
 using WB.UI.Shared.Web.Services;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
-using DenormalizerRegistry = WB.Core.SharedKernels.Enumerator.Services.Infrastructure.DenormalizerRegistry;
 using IAuditLogService = WB.Core.SharedKernels.Enumerator.Services.IAuditLogService;
 using IDenormalizerRegistry = WB.Core.SharedKernels.Enumerator.Services.Infrastructure.IDenormalizerRegistry;
 
@@ -263,7 +262,8 @@ namespace WB.Tests.Abc.TestFactories
         public ViewModelEventRegistry LiteEventRegistry()
             => new ViewModelEventRegistry();
 
-        public DenormalizerRegistry DenormalizerRegistry() => new DenormalizerRegistry();
+        public EnumeratorDenormalizerRegistry DenormalizerRegistry() =>
+            new EnumeratorDenormalizerRegistry(Create.Service.ServiceLocatorService(DashboardDenormalizer()), Mock.Of<ILogger>());
 
         public WB.Core.Infrastructure.Implementation.EventDispatcher.DenormalizerRegistry DenormalizerRegistryNative() 
             => new WB.Core.Infrastructure.Implementation.EventDispatcher.DenormalizerRegistry();
