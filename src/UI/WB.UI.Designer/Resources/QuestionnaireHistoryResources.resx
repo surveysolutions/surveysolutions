@@ -340,6 +340,6 @@
     <value>Questionnaire metadata {0} updated</value>
   </data>
   <data name="Questionnaire_ImportToHq" xml:space="preserve">
-    <value>Imported questionnaire to headquarters as {2} ({0}) by {1}</value>
+    <value>Imported questionnaire to Headquarters ({0}) as {2} by {1}</value>
   </data>
 </root>
