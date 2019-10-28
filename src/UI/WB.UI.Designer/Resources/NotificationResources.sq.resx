@@ -117,10 +117,58 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
+  <data name="CompleteRegistration" xml:space="preserve">
+    <value>përfundo regjistrimin </value>
   </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Application update is required</value>
+  <data name="ConfirmationEmail" xml:space="preserve">
+    <value>Përshendetje {0}, &lt;br/&gt;                                 &lt;br/&gt;                                                            Për të përfunduar procesin e regjistrimit, klikoni në këtë adresë:</value>
+  </data>
+  <data name="MailNotifier_NotifyOwnerAboutShareChange_view" xml:space="preserve">
+    <value>shih</value>
+  </data>
+  <data name="MailNotifier_NotifyTargetPersonAboutShareChange_edit" xml:space="preserve">
+    <value>redakto</value>
+  </data>
+  <data name="MailNotifier_NotifyTargetPersonAboutShareChange_link" xml:space="preserve">
+    <value>adresë</value>
+  </data>
+  <data name="MailNotifier_NotifyTargetPersonAboutShareChange_user" xml:space="preserve">
+    <value>përdorues</value>
+  </data>
+  <data name="OwnerShareNotification_cshtml_Execute_Hello__0____br____br____1__has_invited__2__to__3__your_questionnaire__" xml:space="preserve">
+    <value>Përshëndetje {0}, &lt;br&gt;  {1} ka ftuar {2} në {3} pyetësorin tuaj: </value>
+  </data>
+  <data name="OwnerStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_revoked_access_for__2__to_your_questionnaire___3_" xml:space="preserve">
+    <value>Përshëndetje {0}, &lt;br&gt;  {1} ka tërhequr aksesin e {2} në pyetësorin tuaj: {3}</value>
+  </data>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>rivendos fjalëkalimin</value>
+  </data>
+  <data name="ResetPasswordEmail" xml:space="preserve">
+    <value>Përshëndetje {0}, &lt;br/&gt;&lt;br/&gt; Për të përfunduar procesin e rivendosjes të fjalëkalimit, klikoni mbi këtë adresë:</value>
+  </data>
+  <data name="SystemMailer_ConfirmationEmail_Complete_Registration_Process" xml:space="preserve">
+    <value>Përfundo Procesin e Regjistrimit </value>
+  </data>
+  <data name="SystemMailer_GetOwnerShareNotificationEmail_Your_questionnaire_sharing_notification" xml:space="preserve">
+    <value>Njoftimi për ndarjen e pyetësorit tuaj </value>
+  </data>
+  <data name="SystemMailer_GetOwnerStopShareNotificationEmail_Your_questionnaire_stop_sharing_notification" xml:space="preserve">
+    <value>Njoftimi për ndalimin e ndarjes së pyetësorit tuaj</value>
+  </data>
+  <data name="SystemMailer_GetShareNotificationEmail_Questionnaire_sharing_notification" xml:space="preserve">
+    <value>Njoftim për ndarjen e pyetësorit </value>
+  </data>
+  <data name="SystemMailer_GetStopShareNotificationEmail_Questionnaire_stop_sharing_notification" xml:space="preserve">
+    <value>Njoftimi për ndërprerjen e ndarjes së pyetësorit </value>
+  </data>
+  <data name="SystemMailer_ResetPasswordEmail_Complete_Password_Reset" xml:space="preserve">
+    <value>Përfundo Rivendosjen e Fjalëkalimit </value>
+  </data>
+  <data name="TargetPersonShareNotification_cshtml_Execute_Hello__0____br____br____1__has_invited_you_to__2__the_following_questionnaire_" xml:space="preserve">
+    <value>Përshëndetje {0}, &lt;br&gt; {1} ju ka ftuar për të {2} këtë pyetësor:</value>
+  </data>
+  <data name="TargetPersonStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_stopped_to_share_with_you_questionnaire___2_" xml:space="preserve">
+    <value>Përshëndetje {0}, &lt;br&gt; {1} ka ndaluar së ndari me ju pyetësorin: {2}</value>
   </data>
 </root>

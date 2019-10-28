@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ApproveConfirmMessage" xml:space="preserve">
+    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; intervistë(a) do të miratohen.&lt;/h3&gt;                                          &lt;b&gt;Shënim!&lt;/b&gt; Ju mund të miratoni vetëm intervistat me këto statuse: &lt;i&gt;{{status1}}&lt;/i&gt; dhe &lt;i&gt;{{status2}}&lt;/i&gt;</value>
+  </data>
+  <data name="ApproveConfirmMessageHQ" xml:space="preserve">
+    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; intervistë(a) do të miratohen.&lt;/h3&gt;                                          &lt;b&gt;Shënim!&lt;/b&gt; Ju mund të miratoni vetëm intervistat me këtë status: &lt;i&gt;{{status1}}&lt;/i&gt; dhe &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
+  </data>
+  <data name="AssignConfirmMessage" xml:space="preserve">
+    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; intervistë(a) të përzgjedhura për t’u ricaktuar.&lt;/h3&gt; &lt;b&gt;Shënim!&lt;/b&gt; Ju mund të caktoni vetëm intervistat me këto statuse: &lt;i&gt;{{status1}}&lt;/i&gt;, &lt;i&gt;{{status2}} (vetëm një intervistuesi tjetër)&lt;/i&gt; dhe &lt;i&gt;{{status3}}&lt;/i&gt;.</value>
+  </data>
+  <data name="Assignment" xml:space="preserve">
+    <value>Detyra</value>
+  </data>
+  <data name="AssignReceivedConfirm" xml:space="preserve">
+    <value>Zbato në {{count}} intervistë(a) që janë marrë tashmë nga Intervistuesi</value>
+  </data>
+  <data name="AssignToOtherTeamConfirmMessage" xml:space="preserve">
+    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; intervistues do të caktohen.&lt;/h3&gt;                                           &lt;b&gt;Shënim!&lt;/b&gt; Vetëm intervistat që nuk kanë statusin &lt;i&gt;{{status1}}&lt;/i&gt; dhe &lt;i&gt;{{status2}}&lt;/i&gt; mund të rishpërndahen.</value>
+  </data>
+  <data name="ChooseResponsible" xml:space="preserve">
+    <value>Nuk është zgjedhur asnjë përgjegjës për disa intervista. Ju lutemi zgjidhni supervizorin ose intervistuesin përgjegjës. </value>
+  </data>
+  <data name="ChooseResponsibleInterviewer" xml:space="preserve">
+    <value>Nuk është zgjedhur asnjë përgjegjës për disa intervista. Ju lutemi, zgjidhni intervistuesin përgjegjës.</value>
+  </data>
+  <data name="ChooseResponsibleSupervisor" xml:space="preserve">
+    <value>Nuk është zgjedhur asnjë përgjegjës për disa intervista. Ju lutemi, zgjidhni supervizorin.</value>
+  </data>
+  <data name="ClientKeyTitle" xml:space="preserve">
+    <value>Çelësi që u gjenerua në pajisje, por ndryshoi për shkak të përplasjes me intervistën ekzistuese në server</value>
+  </data>
+  <data name="ContinueConfirmMessage" xml:space="preserve">
+    <value>Dëshironi të vazhdoni?</value>
+  </data>
+  <data name="ContinueConfirmMessageHQ" xml:space="preserve">
+    <value>Dëshironi të vazhdoni?</value>
+  </data>
+  <data name="DeleteConfirmMessageHQ" xml:space="preserve">
+    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; intervista(t) do të fshihen.&lt;/h3&gt;                                                  &lt;b&gt;Shënim!&lt;/b&gt; Ju mund ta fshini intervistat që nuk janë marrë nga Intervistuesi vetëm me këto statuse: &lt;i&gt;{{status1}}&lt;/i&gt; dhe &lt;i&gt;{{status2}}&lt;/i&gt;</value>
+  </data>
+  <data name="Errors" xml:space="preserve">
+    <value>Gabime</value>
+  </data>
+  <data name="RejectConfirmMessage" xml:space="preserve">
+    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; intervista(t) do të refuzohet.&lt;/h3&gt;                                               &lt;b&gt;Shënim!&lt;/b&gt; Ju mund të refuzoni vetëm intervistat me këto statuse: &lt;i&gt;{{status1}}&lt;/i&gt; dhe &lt;i&gt;{{status2}}&lt;/i&gt;</value>
+  </data>
+  <data name="RejectConfirmMessageHQ" xml:space="preserve">
+    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; intervista(t) do të refuzohet(refuzohen).&lt;/h3&gt;                          &lt;b&gt;Shënim!&lt;/b&gt; Ju mund të refuzoni vetëm intervistat me këto statuse: &lt;i&gt;{{status1}}&lt;/i&gt; dhe &lt;i&gt;{{status2}}&lt;/i&gt;</value>
+  </data>
+  <data name="Tooltip_Filter_Assignment" xml:space="preserve">
+    <value>Identifikuesi i detyrës. Kliko në fushë për të shtypur numrin e plotë të identifikimit.</value>
+  </data>
+  <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
+    <value>Përzgjidh një pyetësor për të parë intervistat shoqëruese në listë. Zgjidh “Të gjithë pyetësorët” për të parë intervistat shoqëruese të çdo pyetësori.</value>
+  </data>
+  <data name="Tooltip_Filter_Responsible" xml:space="preserve">
+    <value>Përdoruesi përgjegjës. Kliko në fushë për të zgjedhur një emër përdoruesi, qoftë duke e përzgjedhur drejtpërdrejt apo duke e shtypur për të filtruar më tej listë e emrave të përdoruesve.</value>
+  </data>
+  <data name="Tooltip_Filter_Status" xml:space="preserve">
+    <value>Statusi i intervistës. Zgjidh një status për të parë të gjitha intervistat me atë status. Zgjidh “Të gjitha statuset” për të parë intervistat me çdo status.</value>
+  </data>
+  <data name="Tooltip_Table_Assignment" xml:space="preserve">
+    <value>Identifikuesi për detyrën së cilës i përket kjo intervistë. Kliko mbi ikonën “rendit” për të renditur sipas numrit të detyrës.</value>
+  </data>
+  <data name="Tooltip_Table_ErrorsCount" xml:space="preserve">
+    <value>Shfaq numrin e përgjithshëm të pyetjeve të pavlefshme dhe teksteve statike në intervistë. Kushtet e shumta të dështimit të validitetit për të njëjtin entitet llogariten si 1.</value>
+  </data>
+  <data name="Tooltip_Table_HideShowIdentifying" xml:space="preserve">
+    <value>Kliko këtu për të fshehur ose shfaqur pyetjet identifikuese. Fshehja e pyetjeve identifikuese mund të japë më shumë hapësirë për informacione të tjera. Shfaqja e pyetjeve identifikuese mund të ofrojë hollësi për të bërë dallimin midis intervistave.</value>
+  </data>
+  <data name="Tooltip_Table_IdentifyingQuestions" xml:space="preserve">
+    <value>Informacioni që identifikon çdo detyrë. Këto janë përgjigje të pyetjeve të shënjuara si identifikuese në Designer.</value>
+  </data>
+  <data name="Tooltip_Table_InterviewKey" xml:space="preserve">
+    <value>Idenfikues i shkurtër i rastit që shfaqet në të gjithë sistemin --te Zyra Qendrore, Përgjegjësi dhe Intervistuesi. Merrni në konsideratë përdorimin e këtij identifikuesi kur të komunikoni me ekipin në terren, në vend të një grupi të madh pyetjesh identifikuese.</value>
+  </data>
+  <data name="Tooltip_Table_LastUpdate" xml:space="preserve">
+    <value>Kur janë postuar ndryshimet e fundit të intervistës në server. Kliko mbi ikonën “rendit” për të radhitur sipas kohës.</value>
+  </data>
+  <data name="Tooltip_Table_ReceivedByInterviewer" xml:space="preserve">
+    <value>Tregues nëse intervista është shkarkuar në tabletin e intervistuesit. Kliko mbi ikonën “rendit” për të renditur sipas marrjes nga intervistuesi.</value>
+  </data>
+  <data name="Tooltip_Table_Responsible" xml:space="preserve">
+    <value>Përdoruesi është aktualisht përgjegjës për detyrën. Kliko mbi ikonën “rendit” për renditur emrin e përdoruesit.</value>
+  </data>
+  <data name="Tooltip_Table_Status" xml:space="preserve">
+    <value>Statusi i intervistës në planin e punës së anketës. Kliko mbi ikonën “rendit” për të renditur sipas statusit.</value>
+  </data>
+  <data name="UnapproveConfirmMessageHQ" xml:space="preserve">
+    <value>                                                                       &lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; interviste(ave) do t’u tërhiqet miratimit.&lt;/h3&gt;                                 &lt;b&gt;Shënim!&lt;/b&gt; Ju mund të mos miratoni vetëm intervistat me statusin në vijim: &lt;i&gt;{{status1}}&lt;/i&gt;</value>
+  </data>
+</root>

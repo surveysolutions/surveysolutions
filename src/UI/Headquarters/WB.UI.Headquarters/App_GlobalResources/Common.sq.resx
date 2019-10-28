@@ -1,0 +1,324 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Admin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="AllAssignments" xml:space="preserve">
+    <value>Të gjitha detyrat</value>
+  </data>
+  <data name="AllGpsQuestions" xml:space="preserve">
+    <value>Të gjitha pyetjet GPS</value>
+  </data>
+  <data name="AllQuestionnaires" xml:space="preserve">
+    <value>Të gjithë pyetësorët</value>
+  </data>
+  <data name="AllResponsible" xml:space="preserve">
+    <value>Çdo përgjegjës</value>
+  </data>
+  <data name="AllStatuses" xml:space="preserve">
+    <value>Të gjitha statuset</value>
+  </data>
+  <data name="AllSupervisors" xml:space="preserve">
+    <value>Të gjithë supervizorët</value>
+  </data>
+  <data name="AllVersions" xml:space="preserve">
+    <value>Të gjitha versionet</value>
+  </data>
+  <data name="AlRightsReserved" xml:space="preserve">
+    <value>Të gjitha të drejtat të rezervuara</value>
+  </data>
+  <data name="Any" xml:space="preserve">
+    <value>Çdo</value>
+  </data>
+  <data name="Approve" xml:space="preserve">
+    <value>Mirato</value>
+  </data>
+  <data name="Archived" xml:space="preserve">
+    <value>I/e arkivuar</value>
+  </data>
+  <data name="Assign" xml:space="preserve">
+    <value>Cakto</value>
+  </data>
+  <data name="Assignment" xml:space="preserve">
+    <value>Detyrë</value>
+  </data>
+  <data name="AuditLog" xml:space="preserve">
+    <value>Lista e auditimit</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Anulo</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Konfirmo</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Krijo</value>
+  </data>
+  <data name="CreatedOnClient" xml:space="preserve">
+    <value>Krijuar në bazë të Klientit</value>
+  </data>
+  <data name="CreateNewAssignment" xml:space="preserve">
+    <value>Krijo një detyrë të re</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Fshi</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Shkarko</value>
+  </data>
+  <data name="DownloadSupervisor" xml:space="preserve">
+    <value>Shkarko aplikacionin e Supervizorit </value>
+  </data>
+  <data name="EmailProviders" xml:space="preserve">
+    <value>Ofruesit e email-it</value>
+  </data>
+  <data name="ErrorsLog" xml:space="preserve">
+    <value>Lista e gabimeve </value>
+  </data>
+  <data name="GetInterviewerApp" xml:space="preserve">
+    <value>Merr Aplikacionin Intervistuesi </value>
+  </data>
+  <data name="HideIdentifying" xml:space="preserve">
+    <value>Fshih</value>
+  </data>
+  <data name="InterviewKey" xml:space="preserve">
+    <value>Çelësi i intervistës</value>
+  </data>
+  <data name="Interviews" xml:space="preserve">
+    <value>Intervistat</value>
+  </data>
+  <data name="LastUpdate" xml:space="preserve">
+    <value>Përditësuar më</value>
+  </data>
+  <data name="Legal" xml:space="preserve">
+    <value>I/e ligjshme</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Po ngarkohet. Ju lutemi, pritni</value>
+  </data>
+  <data name="Logoff" xml:space="preserve">
+    <value>Dil</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Emri</value>
+  </data>
+  <data name="NewVersionAvailable" xml:space="preserve">
+    <value>Version i ri i disponueshëm:</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Jo</value>
+  </data>
+  <data name="NoResultsFound" xml:space="preserve">
+    <value>Nuk u gjet asnjë rezultat</value>
+  </data>
+  <data name="NothingSelected" xml:space="preserve">
+    <value>Nuk u zgjodh asgjë</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>I/e hapur</value>
+  </data>
+  <data name="OpenAssignment" xml:space="preserve">
+    <value>Detyrë e hapur</value>
+  </data>
+  <data name="OpenResponsiblesProfile" xml:space="preserve">
+    <value>Hap profilin e përgjegjësit</value>
+  </data>
+  <data name="PrefilledQuestions" xml:space="preserve">
+    <value>Pyetjet identifikuese</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Po përpunohet...</value>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Pyetësor</value>
+  </data>
+  <data name="Questionnaires" xml:space="preserve">
+    <value>Pyetësorë</value>
+  </data>
+  <data name="QuestionnaireVersion" xml:space="preserve">
+    <value>Versioni i pyetësorit</value>
+  </data>
+  <data name="ReceivedByInterviewer" xml:space="preserve">
+    <value>Marrë nga Intervistuesi</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Rifresko</value>
+  </data>
+  <data name="Reject" xml:space="preserve">
+    <value>Refuzo</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Rivendos</value>
+  </data>
+  <data name="Responsible" xml:space="preserve">
+    <value>Përgjegjës</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Ruaj</value>
+  </data>
+  <data name="SaveChanges" xml:space="preserve">
+    <value>Ruaj ndryshimet</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Kërko</value>
+  </data>
+  <data name="SelectQuestionnaire" xml:space="preserve">
+    <value>Përzgjidh pyetësorin</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Cilësimet</value>
+  </data>
+  <data name="ShowIdentifying" xml:space="preserve">
+    <value>Shfaq identifikues</value>
+  </data>
+  <data name="ShowStatusHistory" xml:space="preserve">
+    <value>Shfaq historikun e Statuseve</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>Hyr</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Statusi</value>
+  </data>
+  <data name="Template" xml:space="preserve">
+    <value>Modeli</value>
+  </data>
+  <data name="TheWorldBankGroup" xml:space="preserve">
+    <value>Grupi i Bankës Botërore</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Titulli</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>Gjithsej</value>
+  </data>
+  <data name="Unapprove" xml:space="preserve">
+    <value>Tërhiq miratimin</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Po</value>
+  </data>
+  <data name="НasErrors" xml:space="preserve">
+    <value>Ka gabime</value>
+  </data>
+</root>

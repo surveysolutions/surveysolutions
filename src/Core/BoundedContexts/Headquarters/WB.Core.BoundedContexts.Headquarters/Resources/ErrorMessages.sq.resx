@@ -117,10 +117,28 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
+  <data name="IncorrectUserNameOrPassword" xml:space="preserve">
+    <value>Emër përdoruesi ose fjalëkalim i pasaktë.</value>
   </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Application update is required</value>
+  <data name="PleaseFillCaptcha" xml:space="preserve">
+    <value>Ju lutemi, plotësoni fushën me captcha</value>
+  </data>
+  <data name="Questionnaire_verification_failed" xml:space="preserve">
+    <value>Pyetësori "{0}" ka gabime në përpilim. Ju lutemi, korrigjojini në Designer.</value>
+  </data>
+  <data name="RequestTimeout" xml:space="preserve">
+    <value>Koha përfundoi gjatë përpjekjes për t’u lidhur me Designer. Ju lutemi, kontrolloni lidhjen tuaj të internetit.</value>
+  </data>
+  <data name="ServerError" xml:space="preserve">
+    <value>Ndodhi një gabim i brendshëm i serverit. Ju lutemi, kontaktoni ekipin për kujdesin ndaj klientit të Survey Solutions në support@mysurvey.solutions.</value>
+  </data>
+  <data name="ServiceUnavailable" xml:space="preserve">
+    <value>Designer është i padisponueshëm. Ju lutemi, sigurohuni që Designer nuk është në modalitet mirëmbajtjeje </value>
+  </data>
+  <data name="SiteAccessNotAllowed" xml:space="preserve">
+    <value>Ju nuk keni leje për akses në këtë faqe. Kontaktoni administratorin tuaj.</value>
+  </data>
+  <data name="TemplateNotFound" xml:space="preserve">
+    <value>Pyetësori "{0}" nuk mund të gjendet. Ju lutemi, rifreskoni listën e pyetësorëve.</value>
   </data>
 </root>

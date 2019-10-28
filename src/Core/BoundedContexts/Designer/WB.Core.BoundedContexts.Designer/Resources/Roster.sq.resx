@@ -117,10 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
+  <data name="RosterTitle" xml:space="preserve">
+    <value>Roster: {0}</value>
   </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Application update is required</value>
+  <data name="RosterType_Fixed" xml:space="preserve">
+    <value>Grup fiks objektesh</value>
+  </data>
+  <data name="RosterType_List" xml:space="preserve">
+    <value>Pyetje e listës</value>
+  </data>
+  <data name="RosterType_Multi" xml:space="preserve">
+    <value>Pyetje me zgjedhje të shumëfishtë </value>
+  </data>
+  <data name="RosterType_Numeric" xml:space="preserve">
+    <value>Pyetje numerike</value>
   </data>
 </root>

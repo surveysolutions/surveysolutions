@@ -117,10 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
+  <data name="InterviewsLeftFormat" xml:space="preserve">
+    <value>Ju mund të krijoni {0} intervista të reja </value>
   </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Application update is required</value>
+  <data name="YouAreInTestingMode" xml:space="preserve">
+    <value>Ju jeni në MODALITETIN E TESTIMIT</value>
+  </data>
+  <data name="YouHaveExceededYourLimitFormat" xml:space="preserve">
+    <value>Ju e keni tejkaluar kufirin tuaj prej {0} intervistash. Ju nuk mund të krijoni më një intervistë të re.</value>
   </data>
 </root>

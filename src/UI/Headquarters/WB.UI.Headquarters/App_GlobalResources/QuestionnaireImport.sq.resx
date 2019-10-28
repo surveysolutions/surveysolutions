@@ -117,10 +117,67 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
+  <data name="BeforeSignInToDesigner" xml:space="preserve">
+    <value>Përpara se të hyni, ju lutemi, sigurohuni që faqja e internetit 'Designer' është e vlefshme </value>
   </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Application update is required</value>
+  <data name="Chapters" xml:space="preserve">
+    <value>Rubrikat</value>
+  </data>
+  <data name="CreatedAt" xml:space="preserve">
+    <value>Krijuar më</value>
+  </data>
+  <data name="DesignerQuestionnaires" xml:space="preserve">
+    <value>Pyetësorët Designer </value>
+  </data>
+  <data name="Gropus" xml:space="preserve">
+    <value>Nënrubrikat</value>
+  </data>
+  <data name="ImportAsNewVersion" xml:space="preserve">
+    <value>Krijo një version të ri  (#{0})</value>
+  </data>
+  <data name="ImportModePageTitle" xml:space="preserve">
+    <value>Importo Pyetësorin:</value>
+  </data>
+  <data name="ImportModeTitle" xml:space="preserve">
+    <value>Modaliteti i importimit të Pyetësorit </value>
+  </data>
+  <data name="LastModifiedAt" xml:space="preserve">
+    <value>Modifikimi i fundit më</value>
+  </data>
+  <data name="ListOfMyQuestionnaires" xml:space="preserve">
+    <value>lista e pyetësorëve të mi</value>
+  </data>
+  <data name="LoginToDesignerError" xml:space="preserve">
+    <value>Nuk mund të lidhemi me Designer. Ju lutemi, kontrolloni nëse Designer është i vlefshëm dhe provoni &lt;a href='{0}'&gt;again&lt;/a&gt;</value>
+  </data>
+  <data name="MyQuestionnairesTitle" xml:space="preserve">
+    <value>Designer: Pyetësorët e mi</value>
+  </data>
+  <data name="QuestionnaireExists" xml:space="preserve">
+    <value>Ju e keni importuar njëherë këtë pyetësor </value>
+  </data>
+  <data name="Questions" xml:space="preserve">
+    <value>Pyetje</value>
+  </data>
+  <data name="QuestionsWithConditions" xml:space="preserve">
+    <value>{0} prej tyre me kushte</value>
+  </data>
+  <data name="RegularImportSubTitle" xml:space="preserve">
+    <value>Kjo do t’ju lejojë të krijoni detyra individuale, që mund të përmbajnë të dhëna identifikuese. Vetëm këto detyra do të shfaqen në pajisjet e intervistuesve.</value>
+  </data>
+  <data name="RegularImportTitle" xml:space="preserve">
+    <value>Importo</value>
+  </data>
+  <data name="Rosters" xml:space="preserve">
+    <value>Rosterat</value>
+  </data>
+  <data name="SignInToDesigner" xml:space="preserve">
+    <value>Ju lutemi, regjistrohuni në Designer</value>
+  </data>
+  <data name="SignInToDesignerTitle" xml:space="preserve">
+    <value>Regjistrohuni në Designer</value>
+  </data>
+  <data name="UpgradeAssignments" xml:space="preserve">
+    <value>Shto detyrat</value>
   </data>
 </root>

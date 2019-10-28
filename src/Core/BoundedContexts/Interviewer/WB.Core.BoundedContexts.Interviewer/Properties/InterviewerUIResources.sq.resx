@@ -117,10 +117,61 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
+  <data name="SendToSupervisor_BluetoothError" xml:space="preserve">
+    <value>Aplikacioni nuk mund të përcaktojë gjendjen e bluetooth-it. Ju lutemi, rindizni pajisjet e Intervistuesit dhe Supervizorit dhe provoni t’i sinkronizoni prapë</value>
   </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Application update is required</value>
+  <data name="SendToSupervisor_CheckSupervisorDevice" xml:space="preserve">
+    <value>Sigurohuni që pajisja e supervizorit të ketë të ndezur wifi dhe bluetooth të ndezura dhe që ju jeni disa metra larg saj</value>
+  </data>
+  <data name="SendToSupervisor_ConnectionFailed" xml:space="preserve">
+    <value>Sigurohuni që të dyja pajisjet të jenë afër me njëra-tjetrën; WIFI dhe Bluetooth-i duhet të jenë të aktivizuara në të dyja pajisjet; aplikacioni i Supervizorit duhet të jetë i hapur në pajisjen e supervizorit</value>
+  </data>
+  <data name="SendToSupervisor_DeviceConnectionAccepted" xml:space="preserve">
+    <value>Është lidhur me pajisjen e supervizorit</value>
+  </data>
+  <data name="SendToSupervisor_DeviceConnectionAccepting" xml:space="preserve">
+    <value>Në pritje të miratimit të lidhjes nga supervizori</value>
+  </data>
+  <data name="SendToSupervisor_DeviceFound" xml:space="preserve">
+    <value>Pajisja e Superviziorit u gjet. Po kërkon të lidhet</value>
+  </data>
+  <data name="SendToSupervisor_LookingForSupervisor" xml:space="preserve">
+    <value>Po kërkon pajisjen e supervizorit</value>
+  </data>
+  <data name="SendToSupervisor_MovingToSupervisorDevice" xml:space="preserve">
+    <value>Kalimi i të gjitha intervistave të përfunduara në pajisjen e supervizorit</value>
+  </data>
+  <data name="SendToSupervisor_MovingToSupervisorFormat" xml:space="preserve">
+    <value>Kalimi i të gjitha intervistave të përfunduara në '{0}'</value>
+  </data>
+  <data name="SendToSupervisor_Note" xml:space="preserve">
+    <value>Shënim: Ky veprim do të kërkojë më shumë kohë se zakonisht, mos e fikni pajisjen </value>
+  </data>
+  <data name="SendToSupervisor_Retry" xml:space="preserve">
+    <value>Provojeni sërish</value>
+  </data>
+  <data name="SendToSupervisor_SomeInterviewsOnSupervisor" xml:space="preserve">
+    <value>Tani, disa intervista janë një pajisje tjetër </value>
+  </data>
+  <data name="SendToSupervisor_SupervisorNotFound" xml:space="preserve">
+    <value>Transferimi nuk ka nisur.                             Pajisja e Supervizorit nuk mund të gjendet</value>
+  </data>
+  <data name="SendToSupervisor_SupervisorTerminateTransfering" xml:space="preserve">
+    <value>Transferimi u ndërpre në pajisjen e dytë.</value>
+  </data>
+  <data name="SendToSupervisor_SyncCompleted" xml:space="preserve">
+    <value>Transferimi përfundoi. Të gjitha intervistat e përfunduara janë tashmë në një pajisje tjetër</value>
+  </data>
+  <data name="SendToSupervisor_SyncCompletedWithErrorsFormat" xml:space="preserve">
+    <value>Transferimi përfundoi. {0} intervistë(a) nuk u sinkronizuan</value>
+  </data>
+  <data name="SendToSupervisor_TransferInProgress" xml:space="preserve">
+    <value>Transferimi po kryhet</value>
+  </data>
+  <data name="SendToSupervisor_TransferWasAborted" xml:space="preserve">
+    <value>Transferimi u ndërpre</value>
+  </data>
+  <data name="Synchronization_UpdateApp" xml:space="preserve">
+    <value>Përditëso</value>
   </data>
 </root>

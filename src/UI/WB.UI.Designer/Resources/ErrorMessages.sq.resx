@@ -1,0 +1,270 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AccountBlocked" xml:space="preserve">
+    <value>Llogaria juaj është bllokuar. Kontaktoni administratorin për të zhbllokuar llogarinë tuaj.</value>
+  </data>
+  <data name="ApplicationUpdateRequired" xml:space="preserve">
+    <value>Aplikacioni duhet përditësuar.</value>
+  </data>
+  <data name="ClientVersionIsNotSupported" xml:space="preserve">
+    <value>Pyetësori nuk mund të hapet. Versioni juaj është {0}. Ju lutemi, përditësojeni.</value>
+  </data>
+  <data name="ConfirmAccount" xml:space="preserve">
+    <value>Ju lutemi, konfirmoni më parë llogarinë tuaj. Ju kemi dërguar një adresë konfirmimi në {0}. Nuk ju ka ardhur?</value>
+  </data>
+  <data name="Email_required" xml:space="preserve">
+    <value>Duhet email-i</value>
+  </data>
+  <data name="EmptyTranslationFile" xml:space="preserve">
+    <value>Skedari i përzgjedhur i përkthimit është bosh </value>
+  </data>
+  <data name="EmptyUserNameOrPassword" xml:space="preserve">
+    <value>Emri i përdoruesit ose fjalëkalimi është bosh.</value>
+  </data>
+  <data name="FullNameMaxLengthError" xml:space="preserve">
+    <value>Emri i plotë nuk mund të përmbajë më shumë se {1} karaktere</value>
+  </data>
+  <data name="IncorrectUserNameOrPassword" xml:space="preserve">
+    <value>Emri i regjistrimit ose fjalëkalimi është i pasaktë. Ju lutemi, provojeni prapë.</value>
+  </data>
+  <data name="InvalidEmailAddress" xml:space="preserve">
+    <value>Kjo adresë email-i nuk është e vlefshme</value>
+  </data>
+  <data name="Maintenance" xml:space="preserve">
+    <value>Serveri është në modalitet mirëmbajtjeje tani. Kërkojmë falje për shqetësimin. Ju lutemi, provojeni prapë më vonë.</value>
+  </data>
+  <data name="NoAccessToQuestionnaire" xml:space="preserve">
+    <value>Përdoruesit nuk i lejohet hyrja në pyetësorin e kërkuar</value>
+  </data>
+  <data name="NoQuestionnaireIdToValidatePremissions" xml:space="preserve">
+    <value>Identifikuesi i pyetësorit nuk u paraqit për të validuar lejet</value>
+  </data>
+  <data name="NotSupportedQuestionnaireVersion" xml:space="preserve">
+    <value>Pyetësori nuk u importua. Pyetësori juaj "{0}" ka versionin {1}. Aplikacioni i zyrës qendrore mbështet vetëm deri te versioni {2}.</value>
+  </data>
+  <data name="OldClientPleaseUpdate" xml:space="preserve">
+    <value>Ju keni një version të vjetër të aplikacionit Zyra Qendrore. Ju lutemi, kontaktoni me support@mysurvey.solutions për të kërkuar një përditësim.</value>
+  </data>
+  <data name="OldPassword_required" xml:space="preserve">
+    <value>Kërkohet fjalëkalimi aktual</value>
+  </data>
+  <data name="Password_must_be_at_least_characters_long" xml:space="preserve">
+    <value>Fjalëkalimi duhet të jetë i gjatë të paktën {2} karaktere.</value>
+  </data>
+  <data name="Password_must_contain_at_least_one_number_one_upper_case_character_and_one_lower_case_character" xml:space="preserve">
+    <value>Fjalëkalimi duhet të përmbajë të paktën një numër, një karakter me shkronjë të madhe dhe një karakter me shkronjë të vogël.</value>
+  </data>
+  <data name="Password_required" xml:space="preserve">
+    <value>Kërkohet fjalëkalim </value>
+  </data>
+  <data name="PasswordResetNotAllowed" xml:space="preserve">
+    <value>Nuk lejohet rivendosja e fjalëkalimit </value>
+  </data>
+  <data name="Questionnaire_verification_failed" xml:space="preserve">
+    <value>Pyetësori juaj ka gabime. Ju lutemi, verifikoni pyetësorin në Designer.</value>
+  </data>
+  <data name="QuestionnaireTitle_MaxLength" xml:space="preserve">
+    <value>Titulli i pyetësorit nuk mund të ketë më shumë se {1} simbole.</value>
+  </data>
+  <data name="QuestionnaireTitle_required" xml:space="preserve">
+    <value>Duhet titulli i pyetësorit </value>
+  </data>
+  <data name="QuestionnaireTitle_rules" xml:space="preserve">
+    <value>Vetëm këto karaktere mund të përdoren në titullin e pyetësorit: A..Z a..z 0..9 ( ) \ / _ - dhe hapësirë dhe nuk duhet të ketë dy ose më shumë karaktere të nënvizuara të njëpasnjëshme.</value>
+  </data>
+  <data name="QuestionnaireVariable_MaxLength" xml:space="preserve">
+    <value>Emrat e variableve dhe identifikuesit e rosterit mund të jenë të gjatë nga 1 deri në {1} karaktere </value>
+  </data>
+  <data name="QuestionnaireVariable_required" xml:space="preserve">
+    <value>Kërkohet variabli i pyetësorit </value>
+  </data>
+  <data name="QuestionnaireVariable_rules" xml:space="preserve">
+    <value>Variabli i pyetësorit përdoret si parashtesë për të formuar emërtimet për skedarët që do të eksportohen. Emrat e variableve dhe identifikuesit e rosterit duhet të përmbajnë vetëm këto karaktere: a-z, A-Z, _, ose 0-9. Karakteri i parë nuk mund të jetë 0-9 ose _ dhe i fundit nuk mund të jetë _.</value>
+  </data>
+  <data name="RequestAnotherEmail" xml:space="preserve">
+    <value>Kërko një tjetër.</value>
+  </data>
+  <data name="RestorePassword_EmailSentInstructions" xml:space="preserve">
+    <value>Ju është dërguar një mesazh në llogarinë e email-it. Ju lutemi, ndiqni udhëzimet në email, për të rivendosur fjalëkalimin.</value>
+  </data>
+  <data name="ServerError" xml:space="preserve">
+    <value>Ndodhi një gabim në server. Ju lutemi, kontaktoni me support@mysurvey.solutions.</value>
+  </data>
+  <data name="TemplateNotFound" xml:space="preserve">
+    <value>Pyetësori me identifikues ={0} nuk mund të gjendet. Ju lutemi, kontrolloni listën e pyetësorëve të vlefshëm ose kontaktoni me kolegun që ndau me ju adresën e pyetësorit.</value>
+  </data>
+  <data name="The_current_password_is_incorrect_or_the_new_password_is_invalid" xml:space="preserve">
+    <value>Fjalëkalimi aktual/i ri është i pavlefshëm, ju lutemi, vendoseni sërish.</value>
+  </data>
+  <data name="The_password_and_confirmation_password_do_not_match" xml:space="preserve">
+    <value>Fjalëkalimi dhe fjalëkalimi i konfirmimit nuk përputhen.</value>
+  </data>
+  <data name="The_user_name_or_password_provided_is_incorrect" xml:space="preserve">
+    <value>Emri i përdoruesit ose fjalëkalimi i dhënë janë të pasaktë. Ju lutemi, rivendosini.</value>
+  </data>
+  <data name="Unexpected_error_occurred_Please_try_again_later" xml:space="preserve">
+    <value>Ndodhi një gabim i papritur. Ju lutemi, provoni të hyni prapë më vonë në Designer.</value>
+  </data>
+  <data name="UnhandledExceptionDuringUpdateUserInfo" xml:space="preserve">
+    <value>Informacioni i përdoruesit nuk mundi të përditësohej. Ju lutemi, provojeni prapë më vonë.</value>
+  </data>
+  <data name="User_already_confirmed_in_system" xml:space="preserve">
+    <value>Përdoruesi {0} është i konfirmuar tashmë në sistem. Ju lutemi, vendosni emrin e regjistrimit dhe fjalëkalimin që të filloni të përdorni Designer.</value>
+  </data>
+  <data name="User_does_not_exist" xml:space="preserve">
+    <value>Përdoruesi {0} nuk ekziston. Ju lutemi, vendosni një emër përdoruesi ose email të vlefshëm.</value>
+  </data>
+  <data name="User_does_not_exist_Please_enter_a_valid_user_name" xml:space="preserve">
+    <value>Përdoruesi {0} nuk ekziston. Ju lutemi, vendosni një emër përdoruesi ose email të vlefshëm.</value>
+  </data>
+  <data name="User_name_needs_to_be_between_3_and_15_characters" xml:space="preserve">
+    <value>Emri i përdoruesit duhet të jetë midis 3 dhe 15 karaktereve dhe të përmbajë vetëm shkronja, shifra dhe simbole të nënvizuara.</value>
+  </data>
+  <data name="User_Not_authorized" xml:space="preserve">
+    <value>Përdoruesi nuk është i autorizuar. Ju lutemi, kontrolloni emrin e regjistrimit dhe fjalëkalimin.</value>
+  </data>
+  <data name="UserLockedOut" xml:space="preserve">
+    <value>Llogaria juaj është bllokuar. Ju lutemi, kontaktoni me support@mysurvey.solutions për ta zhbllokuar.</value>
+  </data>
+  <data name="UserName_required" xml:space="preserve">
+    <value>Kërkohet regjistrim </value>
+  </data>
+  <data name="UserNeedToContactSupportFormat" xml:space="preserve">
+    <value>Nuk jeni të autorizuar për kryerjen e këtij veprimi. Ju lutemi, kontaktoni personelin mbështetës. IP:{0}</value>
+  </data>
+  <data name="UserNotApproved" xml:space="preserve">
+    <value>Llogaria juaj nuk u miratua. Ju lutemi, konfirmoni më parë llogarinë tuaj. Ju kemi dërguar një adresë konfirmimi në {0}.</value>
+  </data>
+  <data name="VersionParameterIsIncorrect" xml:space="preserve">
+    <value>Versioni i pyetësorit tuaj ka një problem. Ju lutemi, kontaktoni me support@mysurvey.solutions.</value>
+  </data>
+  <data name="You_did_not_type_the_verification_word_correctly" xml:space="preserve">
+    <value>Fjala verifikuese është e pasaktë. Ju lutemi, provojeni prapë.</value>
+  </data>
+  <data name="Your_email_is_verified" xml:space="preserve">
+    <value>Designer e verifikoi me sukses email-in tuaj.</value>
+  </data>
+  <data name="Your_password_successfully_changed" xml:space="preserve">
+    <value>Ju e ndryshuat me sukses fjalëkalimin.</value>
+  </data>
+  <data name="YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate" xml:space="preserve">
+    <value>Pyetësori juaj "{0}" përmban një funksion të ri: {1}. Tipari(et) i ri/të reja nuk mbështeten nga instalimi juaj. Ju lutemi, përditësoni.</value>
+  </data>
+</root>
