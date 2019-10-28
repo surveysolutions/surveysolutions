@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using System.Net.Mime;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;

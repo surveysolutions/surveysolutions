@@ -1,9 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Security.Principal;
+using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.Core.BoundedContexts.Designer.MembershipProvider.Roles;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 
@@ -13,16 +19,19 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
     {
         private readonly DesignerDbContext dbContext;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentStorage;
+        private readonly IUserManager userManager;
 
         public QuestionnaireChangeHistoryFactory(
             DesignerDbContext dbContext,
-            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentStorage)
+            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentStorage,
+            IUserManager userManager)
         {
             this.dbContext = dbContext;
             this.questionnaireDocumentStorage = questionnaireDocumentStorage;
+            this.userManager = userManager;
         }
 
-        public QuestionnaireChangeHistory Load(Guid id, int page,int pageSize)
+        public async Task<QuestionnaireChangeHistory> LoadAsync(Guid id, int page, int pageSize, IPrincipal user)
         {
             var questionnaire = questionnaireDocumentStorage.GetById(id.FormatGuid());
 
@@ -31,25 +40,34 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 
             var questionnaireId = id.FormatGuid();
 
-            var count = this.dbContext.QuestionnaireChangeRecords.Count(h => h.QuestionnaireId == questionnaireId);
+            var isAdmin = user.IsAdmin();
 
-            var query = this.dbContext.QuestionnaireChangeRecords.Where(h => h.QuestionnaireId == questionnaireId);
+            IQueryable<QuestionnaireChangeRecord> query = this.dbContext.QuestionnaireChangeRecords
+                .Where(h => h.QuestionnaireId == questionnaireId);
 
+            if (isAdmin == false)
+            {
+                var adminUsers = (await userManager.GetUsersInRoleAsync(SimpleRoleEnum.Administrator))
+                    .Select(u => u.Id).ToArray();
+
+                query = query.Where(h => !(h.ActionType == QuestionnaireActionType.ImportToHq && adminUsers.Contains(h.UserId)));               
+            }
+
+            var count = await query.CountAsync();
             
-
-            var questionnaireHistory = query                
+            var questionnaireHistory = await query
                     .OrderByDescending(h => h.Sequence)
                     .Skip((page - 1) * pageSize)
                     .Take(pageSize)
-                    .ToArray();
-            
+                    .ToArrayAsync();
+
             return new QuestionnaireChangeHistory(id, questionnaire.Title,
                 questionnaireHistory.Select(h => CreateQuestionnaireChangeHistoryWebItem(questionnaire, h))
                     .ToList(), page, count, pageSize);
         }
-   
+
         private QuestionnaireChangeHistoricalRecord CreateQuestionnaireChangeHistoryWebItem(
-            QuestionnaireDocument questionnaire,  QuestionnaireChangeRecord revision)
+            QuestionnaireDocument questionnaire, QuestionnaireChangeRecord revision)
         {
             var references =
                 revision.References.Select(
@@ -78,7 +96,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         }
 
         private QuestionnaireChangeHistoricalRecordReference CreateQuestionnaireChangeHistoryReference(
-            QuestionnaireDocument questionnaire, 
+            QuestionnaireDocument questionnaire,
             QuestionnaireChangeReference questionnaireChangeReference)
         {
             return new QuestionnaireChangeHistoricalRecordReference(
@@ -113,7 +131,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 case QuestionnaireItemType.Roster:
                 case QuestionnaireItemType.StaticText:
                 case QuestionnaireItemType.Variable:
-                    return questionnaire.FirstOrDefault<IComposite>(g => g.PublicKey == itemId)!=null;
+                    return questionnaire.FirstOrDefault<IComposite>(g => g.PublicKey == itemId) != null;
                 case QuestionnaireItemType.Person:
                     return true;
                 case QuestionnaireItemType.Questionnaire:
