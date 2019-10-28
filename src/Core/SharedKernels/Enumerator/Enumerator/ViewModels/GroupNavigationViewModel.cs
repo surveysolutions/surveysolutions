@@ -109,8 +109,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.Identity = groupIdentity;
             this.navigationState = navigationState;
 
-            this.eventRegistry.Subscribe(this, interviewId);
-
             var interview = this.interviewRepository.Get(interviewId);
             this.questionnaireIdentity = interview.QuestionnaireIdentity;
 
@@ -133,6 +131,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             var questionsToListen = interview.GetChildQuestions(groupIdentity);
             this.answerNotifier.Init(this.interviewId, questionsToListen.ToArray());
             this.answerNotifier.QuestionAnswered += this.QuestionAnswered;
+
+            this.eventRegistry.Subscribe(this, interviewId);
         }
 
         private void QuestionAnswered(object sender, EventArgs e)
