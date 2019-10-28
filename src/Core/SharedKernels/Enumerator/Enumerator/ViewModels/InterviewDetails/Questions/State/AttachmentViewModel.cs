@@ -58,7 +58,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (IsImage)
                 {
                     this.Image = this.attachmentContentStorage.GetContent(attachment.ContentId);
-                    this.RaisePropertyChanged(() => Image);
+                    this.RaisePropertyChanged(nameof(Image));
                     return;
                 }
 
@@ -74,13 +74,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     if (IsVideo)
                     {
                         this.Video = media;
-                        this.RaisePropertyChanged(() => Video);
+                        this.RaisePropertyChanged(nameof(Video));
                     }
 
                     if (IsAudio)
                     {
                         this.Audio = media;
-                        this.RaisePropertyChanged(() => Audio);
+                        this.RaisePropertyChanged(nameof(Audio));
                     }
 
                     return;
@@ -89,7 +89,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (IsPdf)
                 {
                     this.ContentPath = backingFile;
-                    this.RaisePropertyChanged(() => ContentPath);
+                    this.RaisePropertyChanged(nameof(ContentPath));
                 }
             }
         }

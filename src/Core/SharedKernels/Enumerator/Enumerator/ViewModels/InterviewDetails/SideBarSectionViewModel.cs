@@ -65,8 +65,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             NavigationState navigationState)
         {
             this.interviewId = interviewId;
-            this.eventRegistry.Subscribe(this, interviewId);
-
             var interview = this.statefulInterviewRepository.Get(this.interviewId);
 
             this.SectionIdentity = sectionIdentity;
@@ -96,6 +94,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.answerNotifier.Init(this.interviewId);
             this.answerNotifier.QuestionAnswered += this.QuestionAnswered;
             this.Tag = "SideBar_Section_" + sectionIdentity;
+
+            this.eventRegistry.Subscribe(this, interviewId);
         }
 
         private void QuestionAnswered(object sender, EventArgs e)
