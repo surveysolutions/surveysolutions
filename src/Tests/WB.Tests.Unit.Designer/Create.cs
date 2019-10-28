@@ -613,7 +613,7 @@ namespace WB.Tests.Unit.Designer
             return questionnaire;
         }
 
-
+        static int changeRecordSequence = 0;
         public static QuestionnaireChangeRecord QuestionnaireChangeRecord(
             string questionnaireChangeRecordId = null,
             string questionnaireId = null,
@@ -623,17 +623,19 @@ namespace WB.Tests.Unit.Designer
             string resultingQuestionnaireDocument = null,
             int? sequence = null,
             string diffWithPreviousVersion = null,
+            Guid? userId = null,
             params QuestionnaireChangeReference[] reference)
         {
             return new QuestionnaireChangeRecord()
             {
+                UserId = userId ?? Guid.NewGuid(),
                 QuestionnaireChangeRecordId = questionnaireChangeRecordId ?? Guid.NewGuid().FormatGuid(),
                 QuestionnaireId = questionnaireId,
                 ActionType = action ?? QuestionnaireActionType.Add,
                 TargetItemId = targetId ?? Guid.NewGuid(),
                 TargetItemType = targetType ?? QuestionnaireItemType.Section,
                 References = reference.ToImmutableHashSet(),
-                Sequence = sequence ?? 1,
+                Sequence = sequence ?? changeRecordSequence++,
                 ResultingQuestionnaireDocument = resultingQuestionnaireDocument,
                 Patch = diffWithPreviousVersion
             };

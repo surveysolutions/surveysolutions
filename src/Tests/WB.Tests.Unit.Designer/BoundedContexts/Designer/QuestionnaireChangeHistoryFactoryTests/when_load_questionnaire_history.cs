@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
@@ -6,14 +7,23 @@ using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
-
+using WB.Core.BoundedContexts.Designer;
+using WB.Core.BoundedContexts.Designer.MembershipProvider.Roles;
+using System.Collections.Generic;
+using WB.Tests.Abc;
+using System.Security.Claims;
+using System.Security.Principal;
+using NUnit.Framework;
+using System.Linq;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHistoryFactoryTests
 {
     internal class when_load_questionnaire_history : QuestionnaireChangeHistoryFactoryTestContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
-            var questionnaireDocument = Create.QuestionnaireDocument(children: new []
+        [OneTimeSetUp]
+        public void Context()
+        {
+            var questionnaireDocument = Create.QuestionnaireDocument(children: new[]
             {
                 Create.Group(children: new[]
                 {
@@ -21,56 +31,118 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
                 })
             });
 
-            questionnaireChangeRecordStorage= Create.InMemoryDbContext();
+            questionnaireChangeRecordStorage = Create.InMemoryDbContext();
 
-            questionnaireChangeRecordStorage.Add(
-                Create.QuestionnaireChangeRecord(
+            questionnaireChangeRecordStorage.Add(Create.QuestionnaireChangeRecord(
                     questionnaireId: questionnaireId.FormatGuid(),
                     targetId: questionId,
                     targetType: QuestionnaireItemType.Question,
                     action: QuestionnaireActionType.Clone,
-                    reference: new[] {Create.QuestionnaireChangeReference()}));
+                    reference: new[] { Create.QuestionnaireChangeReference() }));
 
-            questionnaireChangeRecordStorage.Add(
-                Create.QuestionnaireChangeRecord(
+            questionnaireChangeRecordStorage.Add(Create.QuestionnaireChangeRecord(
                     questionnaireId: questionnaireId.FormatGuid(),
                     targetType: QuestionnaireItemType.Question,
                     action: QuestionnaireActionType.Update,
                     targetId: questionId));
+
+            questionnaireChangeRecordStorage.Add(Create.QuestionnaireChangeRecord(
+                  questionnaireId: questionnaireId.FormatGuid(),
+                  targetType: QuestionnaireItemType.Questionnaire,
+                  action: QuestionnaireActionType.ImportToHq,
+                  userId: adminUser.GetId(),
+                  targetId: questionId));
+
+            questionnaireChangeRecordStorage.Add(Create.QuestionnaireChangeRecord(
+                  questionnaireId: questionnaireId.FormatGuid(),
+                  targetType: QuestionnaireItemType.Questionnaire,
+                  action: QuestionnaireActionType.ImportToHq,
+                  userId: currentUser.GetId(),
+                  targetId: questionId));
+
             questionnaireChangeRecordStorage.SaveChanges();
+
+            var userManagerMock = new Mock<IUserManager>();
+
+            userManagerMock                
+                .Setup(m => m.GetUsersInRoleAsync(SimpleRoleEnum.Administrator))
+                .Returns(Task.FromResult((IList<DesignerIdentityUser>)new List<DesignerIdentityUser>
+                {
+                    new DesignerIdentityUser() { Id = adminUser.GetId() }
+                }));
 
             questionnaireChangeHistoryFactory =
                 CreateQuestionnaireChangeHistoryFactory(
                     questionnaireChangeRecordStorage,
-                    questionnaireDocumentStorage:
-                        Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(
-                            _ => _.GetById(Moq.It.IsAny<string>()) == questionnaireDocument));
-            
-            BecauseOf();
+                    Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(
+                            _ => _.GetById(Moq.It.IsAny<string>()) == questionnaireDocument),
+                    userManagerMock.Object);
         }
 
-        private void BecauseOf() =>
-            result = questionnaireChangeHistoryFactory.Load(questionnaireId, 1, 20);
+        private async Task BecauseOf(bool isAdmin = true)
+            => result = await questionnaireChangeHistoryFactory.LoadAsync(questionnaireId, 1, 20, isAdmin ? adminUser : currentUser);
 
-        [NUnit.Framework.Test] public void should_return_2_hostorical_records () =>
-            result.ChangeHistory.Count.Should().Be(2);
+        [Test]
+        public async Task should_return_4_hostorical_records_for_admin()
+        {
+            await BecauseOf(true);
+            result.ChangeHistory.Count.Should().Be(4);
+        }
 
-        [NUnit.Framework.Test] public void should_first_historical_record_be_clone () =>
-            result.ChangeHistory[0].ActionType.Should().Be(QuestionnaireActionType.Clone);
+        [Test]
+        public async Task should_return_3_historical_records_for_user()
+        {
+            await BecauseOf(false);
+            result.ChangeHistory.Count.Should().Be(3);
+        }
 
-        [NUnit.Framework.Test] public void should_first_historical_has_parent_id () =>
-           result.ChangeHistory[0].TargetParentId.Should().NotBeNull();
+        [Test]
+        public async Task should_last_historical_record_be_clone()
+        {
+            await BecauseOf();
+            result.ChangeHistory.Last().ActionType.Should().Be(QuestionnaireActionType.Clone);
+        }
 
-        [NUnit.Framework.Test] public void should_first_historical_has_one_reference () =>
-            result.ChangeHistory[0].HistoricalRecordReferences.Count.Should().Be(1);
+        [Test]
+        public async Task should_last_historical_has_parent_id()
+        {
+            await BecauseOf();
+            result.ChangeHistory.Last().TargetParentId.Should().NotBeNull();
+        }
 
-        [NUnit.Framework.Test] public void should_second_historical_record_be_clone () =>
-           result.ChangeHistory[1].ActionType.Should().Be(QuestionnaireActionType.Update);
+        [Test]
+        public async Task should_last_historical_has_one_reference()
+        {
+            await BecauseOf();
+            result.ChangeHistory.Last().HistoricalRecordReferences.Count.Should().Be(1);
+        }
 
-        private static QuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory;
-        private static DesignerDbContext questionnaireChangeRecordStorage;
-        private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
-        private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
-        private static QuestionnaireChangeHistory result;
+        [Test]
+        public async Task should_second_historical_record_be_clone()
+        {
+            await BecauseOf();
+            result.ChangeHistory[2].ActionType.Should().Be(QuestionnaireActionType.Update);
+        }
+
+        private QuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory;
+        private DesignerDbContext questionnaireChangeRecordStorage;
+        private Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
+        private Guid questionId = Guid.Parse("11111111111111111111111111111111");
+        private QuestionnaireChangeHistory result;
+
+        private ClaimsPrincipal currentUser = new ClaimsPrincipal(new List<ClaimsIdentity>
+        {
+            new ClaimsIdentity(Mock.Of<IIdentity>(), new [] {
+                new Claim(ClaimTypes.Role, SimpleRoleEnum.User.ToString()),
+                new Claim(ClaimTypes.NameIdentifier, Id.gB.ToString()) }
+            )
+        });
+        private ClaimsPrincipal adminUser = new ClaimsPrincipal(new List<ClaimsIdentity>
+        {
+            new ClaimsIdentity(Mock.Of<IIdentity>(), new [] {
+                new Claim(ClaimTypes.Role, SimpleRoleEnum.Administrator.ToString()),
+                new Claim(ClaimTypes.NameIdentifier, Id.gA.ToString()) }
+            )
+        });
     }
 }
