@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Configuration;
 using System.Globalization;
 using System.IO;
 using System.Net;
@@ -9,14 +8,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Shark.PdfConvert;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.UI.Designer.Resources;
 using WB.Core.BoundedContexts.Designer;
-using WB.UI.Shared.Web.Services;
+using PuppeteerSharp;
+using System.Linq;
+using PuppeteerSharp.Media;
 
 namespace WB.UI.Designer.Areas.Pdf.Controllers
 {
@@ -63,23 +62,17 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
         private static readonly ConcurrentDictionary<string, PdfGenerationProgress> GeneratedPdfs = new ConcurrentDictionary<string, PdfGenerationProgress>();
 
         private readonly IPdfFactory pdfFactory;
-        private readonly IOptions<PdfSettings> pdfSettings;
         private readonly ILogger logger;
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IViewRenderService viewRenderingService;
 
         public PdfController(
             IPdfFactory pdfFactory, 
             ILogger<PdfController> logger,
-            IFileSystemAccessor fileSystemAccessor,
-            IOptions<PdfSettings> pdfOptions, 
-            IViewRenderService viewRenderingService)
+            IFileSystemAccessor fileSystemAccessor)
         {
             this.pdfFactory = pdfFactory;
-            this.pdfSettings = pdfOptions;
-            this.viewRenderingService = viewRenderingService;
             this.logger = logger;
-            this.fileSystemAccessor = fileSystemAccessor;
+            this.fileSystemAccessor = fileSystemAccessor;            
         }
 
         protected IActionResult RenderQuestionnaire(Guid id, Guid requestedByUserId, string requestedByUserName, Guid? translation, string cultureCode, int timezoneOffsetMinutes)
@@ -98,16 +91,8 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
             questionnaire.TimezoneOffsetMinutes = timezoneOffsetMinutes;
             return this.View("RenderQuestionnaire", questionnaire);
         }
-
-        [AllowAnonymous]
-        [HttpGet]
-        [Route("questionnairefooter", Name = "QuestionnaireFooter")]
-        public ActionResult RenderQuestionnaireFooter()
-        {
-            return this.View("RenderQuestionnaireFooter");
-        }
-
-        [Route("printpreview/{id}")]
+        
+        [Route("printpreview/{id}", Name = "PrintPreview")]
         public IActionResult PrintPreview(Guid id, Guid? translation)
         {
             PdfQuestionnaireModel questionnaire = this.LoadQuestionnaire(id, User.GetId(), User.GetUserName(), translation: translation, useDefaultTranslation: true);
@@ -192,11 +177,11 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
             this.StartRenderPdf(id, newPdfGenerationProgress, translation, timezoneOffsetMinutes ?? 0);
             return newPdfGenerationProgress;
         }
-        
+
+        static SemaphoreSlim chromeDownloader = new SemaphoreSlim(1);
+
         private void StartRenderPdf(Guid id, PdfGenerationProgress generationProgress, Guid? translation, int timezoneOffsetMinutes)
         {
-            var pathToWkHtmlToPdfExecutable = this.GetPathToWKHtmlToPdfExecutableOrThrow();
-
             PdfQuestionnaireModel questionnaire = this.LoadQuestionnaire(id, User.GetId(), User.GetUserName(), translation, false);
             if (questionnaire == null)
             {
@@ -204,24 +189,72 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
             }
             questionnaire.TimezoneOffsetMinutes = timezoneOffsetMinutes;
 
-            var questionnaireHtml = RenderActionResultToString(nameof(RenderQuestionnaire), questionnaire).Result;
+            var link = this.Url.RouteUrl("PrintPreview", new { id, translation }, this.Request.Scheme, this.Request.Host.ToString());
+            var cookies = this.Request.Cookies.ToList();
+            var cookieDomain = this.Request.Host.ToString();
 
-            var pageFooterUrl = Url.Link("QuestionnaireFooter", new { });
-
-            Task.Factory.StartNew(() =>
+            Task.Factory.StartNew(async () =>
             {
                 try
                 {
-                    PdfConvert.Convert(new PdfConversionSettings
+                    try
                     {
-                        Content = questionnaireHtml,
-                        PageFooterUrl = pageFooterUrl,
-                        OutputPath = generationProgress.FilePath,
-                        PdfToolPath = pathToWkHtmlToPdfExecutable,
-                        ExecutionTimeout = this.pdfSettings.Value.PdfGenerationTimeoutInMilliseconds,
-                        TempFilesPath = Path.GetTempPath(),
-                        Size = PdfPageSize.A4,
-                        Margins = new PdfPageMargins() {Top = 10, Bottom = 7, Left = 0, Right = 0},
+                        await chromeDownloader.WaitAsync();
+                        await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultRevision);
+                    }
+                    finally
+                    {
+                        chromeDownloader.Release();
+                    }
+                                       
+
+                    async Task<Browser> GetBrowser()
+                    {
+                        var remote = Environment.GetEnvironmentVariable("PUPPETEER_REMOTE_ADDR");
+                        if (remote != null)
+                        {
+                            return await Puppeteer.ConnectAsync(new ConnectOptions
+                            {
+                                BrowserWSEndpoint = remote
+                            });
+                        } else
+                        {
+                            var launchArgs = Environment.GetEnvironmentVariable("PUPPETEER_LAUNCH_ARGS");
+                            return await Puppeteer.LaunchAsync(new LaunchOptions
+                            {
+                                Headless = true,
+                                Args = launchArgs == null ? Array.Empty<string>() : launchArgs.Split(' ')
+                            });
+                        }
+                    }
+
+                    using var browser = await GetBrowser();
+                    
+                    var page = await browser.NewPageAsync();
+                                        
+                    foreach(var cookie in cookies)
+                    {
+                        await page.SetCookieAsync(new CookieParam
+                        {
+                            Name = cookie.Key,
+                            Value = cookie.Value,
+                            Domain = cookieDomain
+                        });
+                    }
+                  
+                    await page.GoToAsync(link);
+                    await page.PdfAsync(generationProgress.FilePath, new PdfOptions
+                    {
+                       DisplayHeaderFooter = true,
+                       Format = PaperFormat.A4,
+                       MarginOptions = new MarginOptions
+                       {
+                           Top = "10px", Bottom = "15px", Left = "20px", Right = "20px"
+                       },
+                       HeaderTemplate = "",
+                       PrintBackground = true,
+                       Scale = 1,
+                       FooterTemplate = @"<table style='width: 100%; margin-right: 20px;font-size: 10px; text-align: right'><td><span class='pageNumber'></span> / <span class='totalPages'></span></td></table>"
                     });
 
                     generationProgress.Finish();
@@ -232,26 +265,6 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
                     generationProgress.Fail();
                 }
             }, TaskCreationOptions.LongRunning);
-        }
-
-        private async Task<string> RenderActionResultToString(string viewName, object model)
-        {
-            string webRoot = new Uri($"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}").ToString().TrimEnd('/');
-            var routeData = new Microsoft.AspNetCore.Routing.RouteData();
-            routeData.DataTokens.Add("area", "Pdf");
-            routeData.Values.Add("controller", "Pdf");
-            routeData.Values.Add("area", "Pdf");
-            return await this.viewRenderingService.RenderToStringAsync(viewName, model, webRoot, routeData);
-        }
-
-        private string GetPathToWKHtmlToPdfExecutableOrThrow()
-        {
-            string path = Path.GetFullPath(pdfSettings.Value.WKHtmlToPdfExecutablePath);
-
-            if (!System.IO.File.Exists(path))
-                throw new ConfigurationErrorsException(string.Format("Path to wkhtmltopdf.exe is incorrect ({0}). Please install wkhtmltopdf.exe and/or update server configuration.", path));
-
-            return path;
         }
 
         private PdfQuestionnaireModel LoadQuestionnaire(Guid id, Guid requestedByUserId, string requestedByUserName, Guid? translation, bool useDefaultTranslation)

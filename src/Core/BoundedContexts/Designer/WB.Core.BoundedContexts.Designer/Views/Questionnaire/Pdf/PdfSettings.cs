@@ -2,8 +2,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 {
     public class PdfSettings
     {
-        public string WKHtmlToPdfExecutablePath { get; set; }
-
         public int InstructionsExcerptLength { get; set; }
         public int ExpressionExcerptLength { get; set; }
         public int OptionsExcerptCount { get; set; }
