@@ -52,7 +52,7 @@
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.fr.resx">
       <Link>InterviewerUIResources.fr.resx</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.id-ID.resx">
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.id.resx">
       <Link>InterviewerUIResources.id-ID.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.ka.resx">
@@ -73,13 +73,13 @@
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.ru.resx">
       <Link>InterviewerUIResources.ru.resx</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.th-TH.resx">
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.th.resx">
       <Link>InterviewerUIResources.th-TH.resx</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.uk-UA.resx">
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.uk.resx">
       <Link>InterviewerUIResources.uk-UA.resx</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.vi-VN.resx">
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.vi.resx">
       <Link>InterviewerUIResources.vi-VN.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.zh.resx">

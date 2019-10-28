@@ -52,7 +52,7 @@
     <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.fr.resx">
       <Link>EnumeratorUIResources.fr.resx</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.id-ID.resx">
+    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.id.resx">
       <Link>EnumeratorUIResources.id-ID.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.ka.resx">
@@ -73,13 +73,13 @@
     <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.ru.resx">
       <Link>EnumeratorUIResources.ru.resx</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.th-TH.resx">
+    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.th.resx">
       <Link>EnumeratorUIResources.th-TH.resx</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.uk-UA.resx">
+    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.uk.resx">
       <Link>EnumeratorUIResources.uk-UA.resx</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.vi-VN.resx">
+    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.vi.resx">
       <Link>EnumeratorUIResources.vi-VN.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.zh.resx">
@@ -94,7 +94,7 @@
     <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.fr.resx">
       <Link>UIResources.fr.resx</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.id-ID.resx">
+    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.id.resx">
       <Link>UIResources.id-ID.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.ka.resx">
@@ -115,13 +115,13 @@
     <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.ru.resx">
       <Link>UIResources.ru.resx</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.th-TH.resx">
+    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.th.resx">
       <Link>UIResources.th-TH.resx</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.uk-UA.resx">
+    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.uk.resx">
       <Link>UIResources.uk-UA.resx</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.vi-VN.resx">
+    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.vi.resx">
       <Link>UIResources.vi-VN.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.zh.resx">
