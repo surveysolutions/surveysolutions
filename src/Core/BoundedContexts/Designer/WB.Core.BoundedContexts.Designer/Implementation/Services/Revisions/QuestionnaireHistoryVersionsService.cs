@@ -248,7 +248,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             var record = await this.dbContext.QuestionnaireChangeRecords
                 .Where(q => q.QuestionnaireId == sId)
-                .LastAsync(r => r.ActionType == actionType);
+                .OrderByDescending(q => q.Sequence)
+                .FirstAsync(r => r.ActionType == actionType);
 
             return record.Sequence;
         }
