@@ -117,10 +117,40 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
+  <data name="ActiveInterviewers" xml:space="preserve">
+    <value>Intervistues aktivë</value>
   </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Application update is required</value>
+  <data name="ActiveSupervisors" xml:space="preserve">
+    <value>Supervizorë aktivë</value>
+  </data>
+  <data name="ArchivedInterviewers" xml:space="preserve">
+    <value>intervistues të arkivuar</value>
+  </data>
+  <data name="ArchivedSupervisors" xml:space="preserve">
+    <value>Supervizorë të arkivuar</value>
+  </data>
+  <data name="CreationDate" xml:space="preserve">
+    <value>Data e krijimit</value>
+  </data>
+  <data name="DoYouWantToContinue" xml:space="preserve">
+    <value>Dëshironi të vazhdoni?</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Interviewers" xml:space="preserve">
+    <value>Intervistuesit</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Emri</value>
+  </data>
+  <data name="Unarchive" xml:space="preserve">
+    <value>Nxirr nga arkiva</value>
+  </data>
+  <data name="UnarchiveInterviewerWarning" xml:space="preserve">
+    <value>Intervistuesi(t) do të nxirren nga arkiva.</value>
+  </data>
+  <data name="UnarchiveSupervisorWarning" xml:space="preserve">
+    <value>Supervizori(ët) do të nxirren nga arkiva.</value>
   </data>
 </root>

@@ -117,10 +117,121 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
+  <data name="AllInterviewers" xml:space="preserve">
+    <value>Të gjithë intervistuesit</value>
   </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Application update is required</value>
+  <data name="AllPeriods" xml:space="preserve">
+    <value>Të gjitha periudhat</value>
+  </data>
+  <data name="AllQuestionnaires" xml:space="preserve">
+    <value>Të gjithë pyetësorët</value>
+  </data>
+  <data name="AllTeams" xml:space="preserve">
+    <value>Të gjitha ekipet</value>
+  </data>
+  <data name="AnyHeadquarters" xml:space="preserve">
+    <value>çdo zyrë qendrore</value>
+  </data>
+  <data name="Assignments" xml:space="preserve">
+    <value>Detyrat</value>
+  </data>
+  <data name="Average" xml:space="preserve">
+    <value>Mesatare</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Anulo</value>
+  </data>
+  <data name="CommandTransformator_ParseQuestionError" xml:space="preserve">
+    <value>Gabim kur analizohet përgjigjja e pyetjes</value>
+  </data>
+  <data name="ControlPanelController_RepeatLastInterviewStatus" xml:space="preserve">
+    <value>Status i vendosur nga ekipi i mbështetjes së Survey Solutions </value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Ditë</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Gabim</value>
+  </data>
+  <data name="HQ_AccountController_AccountPasswordChangedSuccessfully" xml:space="preserve">
+    <value>Fjalëkalimi i llogarisë u përditësua me sukses </value>
+  </data>
+  <data name="HQ_AccountController_AccountPasswordChangedSuccessfullyFormat" xml:space="preserve">
+    <value>Fjalëkalimi për llogarinë &lt;b&gt;{0}&lt;/b&gt; u përditësua me sukses</value>
+  </data>
+  <data name="HQ_AccountController_AccountUpdatedSuccessfully" xml:space="preserve">
+    <value>Të dhënat e llogarisë u përditësuan me sukses </value>
+  </data>
+  <data name="HQ_AccountController_AccountUpdatedSuccessfullyFormat" xml:space="preserve">
+    <value>Të dhënat mbi &lt;b&gt;{0}&lt;/b&gt; u përditësuan me sukses</value>
+  </data>
+  <data name="HQ_Views_Manage_Title" xml:space="preserve">
+    <value>Menaxho llogarinë</value>
+  </data>
+  <data name="Interviews" xml:space="preserve">
+    <value>Intervistat</value>
+  </data>
+  <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
+    <value>Miratuar nga Zyra Qendrore </value>
+  </data>
+  <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
+    <value>Miratuar nga Supervizori</value>
+  </data>
+  <data name="InterviewStatus_Completed" xml:space="preserve">
+    <value>Përfundoi/Të përfunduara</value>
+  </data>
+  <data name="InterviewStatus_Created" xml:space="preserve">
+    <value>U krijua/të krijuara</value>
+  </data>
+  <data name="InterviewStatus_Deleted" xml:space="preserve">
+    <value>U fshi/të fshira</value>
+  </data>
+  <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
+    <value>Intervistuesi u caktua</value>
+  </data>
+  <data name="InterviewStatus_ReadyForInterview" xml:space="preserve">
+    <value>Gati për intervistë</value>
+  </data>
+  <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
+    <value>Refuzuar nga Zyra Qendrore </value>
+  </data>
+  <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
+    <value>Refuzuar nga Supervizori</value>
+  </data>
+  <data name="InterviewStatus_Restarted" xml:space="preserve">
+    <value>Rifilloi</value>
+  </data>
+  <data name="InterviewStatus_Restored" xml:space="preserve">
+    <value>U rivendos</value>
+  </data>
+  <data name="InterviewStatus_SentToCapi" xml:space="preserve">
+    <value>U dërguan te Capi</value>
+  </data>
+  <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
+    <value>Supervizori u caktua</value>
+  </data>
+  <data name="NoPermissionsToExecute" xml:space="preserve">
+    <value>Përdoruesi nuk është i autorizuar për të kryer veprimin e dhënë </value>
+  </data>
+  <data name="ObserverNotAllowed" xml:space="preserve">
+    <value>Vrojtuesi nuk lejohet ta kryejë këtë veprim </value>
+  </data>
+  <data name="SurverManagement_MainMenu_ManageAccount" xml:space="preserve">
+    <value>Menaxho llogarinë</value>
+  </data>
+  <data name="Teams" xml:space="preserve">
+    <value>Ekipet</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>Gjithsej</value>
+  </data>
+  <data name="UnexpectedErrorOccurred" xml:space="preserve">
+    <value>Ndodhi një gabim i papritur</value>
+  </data>
+  <data name="ViewHelpers_Invalid_property" xml:space="preserve">
+    <value>Veti e pavlefshme </value>
+  </data>
+  <data name="WithErrors" xml:space="preserve">
+    <value>Me gabime</value>
   </data>
 </root>

@@ -117,10 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
+  <data name="Assignment" xml:space="preserve">
+    <value>Detyra</value>
   </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Application update is required</value>
+  <data name="details" xml:space="preserve">
+    <value>Hollësitë</value>
+  </data>
+  <data name="MapReportTitle" xml:space="preserve">
+    <value>Raporti i hartës</value>
+  </data>
+  <data name="NoGpsQuestionsByQuestionnaire" xml:space="preserve">
+    <value>Nuk ka pyetje të llojit GPS në pyetësorët e përzgjedhur</value>
+  </data>
+  <data name="NotAllMarkers" xml:space="preserve">
+    <value>Jo të gjithë markerat ishin të ngarkuar për shkallën aktuale të zmadhimit. Ju lutemi, zvogëlojeni dhe ringarkoni markerat.</value>
+  </data>
+  <data name="ReloadMarkers" xml:space="preserve">
+    <value>Ringarko markerat</value>
+  </data>
+  <data name="ViewInterviewContent" xml:space="preserve">
+    <value>Shih hollësitë e intervistës</value>
   </data>
 </root>

@@ -117,10 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
+  <data name="QuestionnaireNameUniqueFormat" xml:space="preserve">
+    <value>Pyetësori '{0}' ekziston tashmë. Ju lutemi, zgjidhni një emër tjetër.</value>
   </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Application update is required</value>
+  <data name="QuestionnaireVariableUniqueFormat" xml:space="preserve">
+    <value>Ju keni importuar tashmë një pyetësor tjetër me variabël pyetësori '{0}' nga Designer. Në dëshironi ende ta importoni këtë pyetësor, vendosni një variabël tjetër pyetësori në Designer.</value>
+  </data>
+  <data name="UserDontHavePermissionsToAnswer" xml:space="preserve">
+    <value>Vetëm supervizori përgjegjës për këtë detyrë mund t’u përgjigjet pyetjeve të supervizorit të saj</value>
   </data>
 </root>

@@ -117,10 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
+  <data name="HellowText" xml:space="preserve">
+    <value>Për fat të keq, shfletuesi juaj është i vjetruar </value>
   </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Application update is required</value>
+  <data name="LinkToUpdate" xml:space="preserve">
+    <value>Mund të gjeni versionin më të fundit duke përdorur këtë faqe:</value>
+  </data>
+  <data name="PleaseUpdate" xml:space="preserve">
+    <value>Për të vazhduar, ju lutemi, përditësoni shfletuesin tuaj</value>
   </data>
 </root>

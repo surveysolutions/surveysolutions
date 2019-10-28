@@ -117,10 +117,106 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
+  <data name="Dashboard_HaveNotBeenUpdated" xml:space="preserve">
+    <value>lista nuk është përditësuar</value>
   </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Application update is required</value>
+  <data name="Dashboard_LastUpdated" xml:space="preserve">
+    <value>lista u përditësua {0}</value>
+  </data>
+  <data name="ImportQuestionnaire_CheckConnectionToServer" xml:space="preserve">
+    <value>Po lidhet me serverin</value>
+  </data>
+  <data name="ImportQuestionnaire_CreateInterview" xml:space="preserve">
+    <value>Po krijon intervistën</value>
+  </data>
+  <data name="ImportQuestionnaire_DownloadProgress" xml:space="preserve">
+    <value>Pyetësori po shkarkohet -  {0}%</value>
+  </data>
+  <data name="ImportQuestionnaire_Error_Forbidden" xml:space="preserve">
+    <value>Pyetësori "{0}" nuk mund të hapet. Llogaria juaj e përdoruesit në Designer nuk është e autorizuar. Ju lutemi, kontrolloni emrin e regjistrimit dhe fjalëkalimin</value>
+  </data>
+  <data name="ImportQuestionnaire_Error_NotFound" xml:space="preserve">
+    <value>Pyetësori "{0}" nuk mund të hapet. Pyetësori nuk mund të gjendet. Ju lutemi, rifreskoni listën e pyetësorëve.</value>
+  </data>
+  <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
+    <value>Pyetësori "{0}" nuk mund të hapet. Pyetësori ka gabime. Ju lutemi, korrigjojeni këtë në Designer.</value>
+  </data>
+  <data name="ImportQuestionnaire_StoreQuestionnaire" xml:space="preserve">
+    <value>Pyetësori po ruhet në memorien lokale </value>
+  </data>
+  <data name="ImportQuestionnaireAttachments_DownloadProgress" xml:space="preserve">
+    <value>Bashkëlidhjet e pyetësorit po shkarkohen -  {0}%</value>
+  </data>
+  <data name="Login_Error_NotFound" xml:space="preserve">
+    <value>Për momentin, nuk mund të hyni në aplikacionin Designer në internet. Kontrollo cilësimet e lidhjes me internetin ose provoje sërish më vonë</value>
+  </data>
+  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
+    <value>Pyetësorë</value>
+  </data>
+  <data name="MenuItem_Title_Language" xml:space="preserve">
+    <value>Gjuha</value>
+  </data>
+  <data name="MenuItem_Title_Language_Original" xml:space="preserve">
+    <value>Fillestar</value>
+  </data>
+  <data name="MenuItem_Title_Reload" xml:space="preserve">
+    <value>Ngarko edhe njëherë pyetësorin </value>
+  </data>
+  <data name="MenuItem_Title_Settings" xml:space="preserve">
+    <value>Cilësimet</value>
+  </data>
+  <data name="MenuItem_Title_SignOut" xml:space="preserve">
+    <value>Dil</value>
+  </data>
+  <data name="Prefs_AcceptUnsignedSummary" xml:space="preserve">
+    <value>Çaktivizo validimin e certifikatës SSL  </value>
+  </data>
+  <data name="Prefs_AcceptUnsignedTitle" xml:space="preserve">
+    <value>Prano të gjitha certifikatat SSL</value>
+  </data>
+  <data name="Prefs_ConnectionSettings" xml:space="preserve">
+    <value>Cilësimet e lidhjes me internetin</value>
+  </data>
+  <data name="Prefs_DesignerEndPointSummary" xml:space="preserve">
+    <value>URL-ja që përdoret për të komunikuar me aplikacionin designer </value>
+  </data>
+  <data name="Prefs_DesignerEndPointTitle" xml:space="preserve">
+    <value>URL-ja Designer </value>
+  </data>
+  <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
+    <value>Numri i sekondave që duhet pritur për koordinatat</value>
+  </data>
+  <data name="Prefs_GpsReceiveTimeoutSecTitle" xml:space="preserve">
+    <value>Koha e GPS Receive skadoi</value>
+  </data>
+  <data name="Prefs_HttpResponseTimeoutSummary" xml:space="preserve">
+    <value>Numri i sekondave që duhet pritur derisa të përgjigjet serveri</value>
+  </data>
+  <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
+    <value>Afati i skadimit të Përgjigjes së Serverit</value>
+  </data>
+  <data name="Prefs_ShowAnswerTime" xml:space="preserve">
+    <value>Shfaq kohën që e kaluar për çdo përgjigje</value>
+  </data>
+  <data name="Prefs_ShowAnswerTimeSummary" xml:space="preserve">
+    <value>Aktivizimi i masave, validimi dhe koha e përhapjes së rosterit. Marrja e të dhënave ose pamjeve GPS që kërkojnë kohë nuk përfshihet.</value>
+  </data>
+  <data name="Prefs_ShowVariables" xml:space="preserve">
+    <value>Shfaq variablet</value>
+  </data>
+  <data name="Prefs_ShowVariablesSummary_Checked" xml:space="preserve">
+    <value>Variablet shfaqen në intervistë me vlerë dhe përshkrim</value>
+  </data>
+  <data name="Prefs_ShowVariablesSummary_UnChecked" xml:space="preserve">
+    <value>Variablet janë të fshehura</value>
+  </data>
+  <data name="Prefs_VersionSummaryFormat" xml:space="preserve">
+    <value>Versioni: {0}</value>
+  </data>
+  <data name="Prefs_VersionTitle" xml:space="preserve">
+    <value>Versioni i aplikacionit</value>
+  </data>
+  <data name="ReloadInterviewErrorMessage" xml:space="preserve">
+    <value>Të dhënat e intervistës nuk mund të përdoren në versionin e ri të pyetësorit. Ne do të hapim intervistë bosh</value>
   </data>
 </root>

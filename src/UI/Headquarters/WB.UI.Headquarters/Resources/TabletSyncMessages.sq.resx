@@ -117,10 +117,52 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
+  <data name="AndroidDeviceIdWasNotProvided" xml:space="preserve">
+    <value>Sinkronizimi dështoi. Nuk u dha identifikuesi i pajisjes Android. Ju lutemi, kontaktoni programuesit.</value>
   </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Application update is required</value>
+  <data name="FileWasNotFound" xml:space="preserve">
+    <value>Sinkronizimi dështoi. Skedari me versionin e fundit nuk i gjet. Ju lutemi, kontaktoni me programuesit.</value>
+  </data>
+  <data name="IncorrectFilesCount" xml:space="preserve">
+    <value>Sinkronizimi dështoi. Numër i pasaktë skedarësh. Ju lutemi, kontaktoni me programuesit.</value>
+  </data>
+  <data name="IncorrectMediaType" xml:space="preserve">
+    <value>Sinkronizimi dështoi. Lloj i pasaktë i medias. Ju lutemi, kontaktoni programuesit.</value>
+  </data>
+  <data name="InterviewerApplicationShouldBeUpdated" xml:space="preserve">
+    <value>Sinkronizimi dështoi. Aplikacioni juaj nuk përputhet me serverin një. Përditësoni aplikacionin tuaj të Intervistuesit</value>
+  </data>
+  <data name="InterviewerIsNotCompatibleWithThisVersion" xml:space="preserve">
+    <value>Sinkronizimi dështoi. Aplikacioni juaj nuk përputhet me serverin një. Çinstaloni aplikacionin tuaj dhe shkarkoni versionin e ri të aplikacionit të Intervistuesit</value>
+  </data>
+  <data name="InvalidDeviceIdentifier" xml:space="preserve">
+    <value>Identifikues i pavlefshëm i pajisjes. Diçka ka ndodhur me instalimin e aplikacionit të klientit, ju lutemi dërgoni të dhënat e tabletit.</value>
+  </data>
+  <data name="InvalidSequenceIdentifier" xml:space="preserve">
+    <value>Sinkronizimi dështoi. Identifikues i pavlefshëm i sekuencës. Diçka ka ndodhur me instalimin e aplikacionit të klientit, shtypni butonin “Dërgo të dhënat e tabletit".</value>
+  </data>
+  <data name="InvalidUserFormat" xml:space="preserve">
+    <value>Sinkronizimi dështoi. Përdoruesi nuk është i autorizuar. Ju lutemi, kontrolloni regjistrimin/fjalëkalimin për {0}.</value>
+  </data>
+  <data name="InvalidUserRole" xml:space="preserve">
+    <value>Llogaria juaj nuk ka rolin që e lejon këtë veprim.</value>
+  </data>
+  <data name="Maintenance" xml:space="preserve">
+    <value>Serveri është aktualisht në gjendje mirëmbajtjeje. Na falni për shqetësimin. Ju lutemi, provojeni sërish më vonë.</value>
+  </data>
+  <data name="NoClientIdentifier" xml:space="preserve">
+    <value>Sinkronizimi dështoi. Ju lutemi, instalojeni aplikacionin nga e para. Identifikuesi i instaluesit mungon. Ju lutemi, kontaktoni me programuesit.</value>
+  </data>
+  <data name="OldInterviewerNeedsCleanup" xml:space="preserve">
+    <value>Sinkronizimi dështoi pjesërisht. Intervistat e përfunduara u dërguan në server, por ju nuk do të merrni detyra të reja. Ju lutemi, shkoni te cilësimet android -&gt; Apps -&gt; Intervistues dhe shtypni butonin “Pastro të dhënat”. Më pas, sinkronizoni nga e para.</value>
+  </data>
+  <data name="ServerError" xml:space="preserve">
+    <value>Sinkronizimi dështoi. Gabim i brendshëm i serverit. Ju lutemi, kontaktoni krijuesit.</value>
+  </data>
+  <data name="Sync_package_with_id__0__was_not_found_on_serverFormat" xml:space="preserve">
+    <value>Sinkronizimi dështoi. Paketa e sinkronizimit me identifikuesin '{0}' nuk u gjet në server. Ju lutemi, kontaktoni programuesit.</value>
+  </data>
+  <data name="WrongAndroidDeviceIdWasProvided" xml:space="preserve">
+    <value>Sinkronizimi dështoi. Identifikuesi i dhënë i pajisjes android ishte i gabuar. Ju lutemi, kontaktoni programuesit.</value>
   </data>
 </root>

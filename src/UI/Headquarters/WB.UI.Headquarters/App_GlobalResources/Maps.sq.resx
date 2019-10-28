@@ -117,10 +117,55 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
+  <data name="FileLoadingNotTsvError" xml:space="preserve">
+    <value>Ndodhi një gabim. Skedari nuk është një .tab</value>
   </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Application update is required</value>
+  <data name="Levels" xml:space="preserve">
+    <value>Nivelet</value>
+  </data>
+  <data name="MapEngineIsNotInitialized" xml:space="preserve">
+    <value>Komponenti i hartave nuk u inicializua. Ju lutemi, kontaktoni administratorin e sistemit.</value>
+  </data>
+  <data name="MapLoadingInvalidFile" xml:space="preserve">
+    <value>Skedari '{0}' përmban të dhëna që sistemi nuk mund t’i përpunojë. Gabim: {1}</value>
+  </data>
+  <data name="MapLoadingInvalidFilesError" xml:space="preserve">
+    <value>Ndodhi një gabim. Skedarët vijues nuk u pranuan:</value>
+  </data>
+  <data name="MapLoadingNoMapsInArchive" xml:space="preserve">
+    <value>Ndodhi një gabim. Arkivi nuk përmban skedarët e hartave</value>
+  </data>
+  <data name="MapLoadingNotZipError" xml:space="preserve">
+    <value>Ndodhi një gabim. Skedari nuk është arkiv.zip </value>
+  </data>
+  <data name="MapLoadingUnsupportedFilesInArchive" xml:space="preserve">
+    <value>Ndodhi një gabim. Arkivi nuk përmban skedarë me harta </value>
+  </data>
+  <data name="MappingsLoadingError" xml:space="preserve">
+    <value>Ndodhi një gabim në ngarkimin e adresës së hartës.</value>
+  </data>
+  <data name="MapsLoadingError" xml:space="preserve">
+    <value>Ndodhi një gabim në ngarkimin e hartës.</value>
+  </data>
+  <data name="MaxScale" xml:space="preserve">
+    <value>Shkalla maksimale</value>
+  </data>
+  <data name="MinScale" xml:space="preserve">
+    <value>Shkalla minimale</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Emërtimi</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>Madhësia (MB)</value>
+  </data>
+  <data name="UpdateDate" xml:space="preserve">
+    <value>Importuar më</value>
+  </data>
+  <data name="UploadMappingsSummaryFormat" xml:space="preserve">
+    <value>adresa për {0} harta u përpunuan, nga të cilat {1} të pavlefshme</value>
+  </data>
+  <data name="UploadMapsSummaryFormat" xml:space="preserve">
+    <value>{0} harta u përpunuan, nga të cilat {1} skedarë të pavlefshëm hartash</value>
   </data>
 </root>

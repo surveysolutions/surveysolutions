@@ -117,10 +117,46 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
+  <data name="Area_ShowCoordinates" xml:space="preserve">
+    <value>Shfaq koordinatat</value>
   </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Application update is required</value>
+  <data name="ChooseResponsibleInterviewer" xml:space="preserve">
+    <value>Intervista nuk ka përgjegjës. Ju lutemi, zgjidhni një intervistues përgjegjës</value>
+  </data>
+  <data name="Duration" xml:space="preserve">
+    <value>Kohëzgjatja</value>
+  </data>
+  <data name="FlagTitleFlagged" xml:space="preserve">
+    <value>I/e sinjalizuar</value>
+  </data>
+  <data name="FlagTitleUnflagged" xml:space="preserve">
+    <value>I/e pasinjalizuar</value>
+  </data>
+  <data name="LastUpdated" xml:space="preserve">
+    <value>I/e përditësuar</value>
+  </data>
+  <data name="NoAnswer" xml:space="preserve">
+    <value>Pa përgjigje</value>
+  </data>
+  <data name="NoSearchResults" xml:space="preserve">
+    <value>Nuk u gjet asnjë objekt</value>
+  </data>
+  <data name="Overview" xml:space="preserve">
+    <value>Vështrim i përgjithshëm</value>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Pyetësor: {{ name }}</value>
+  </data>
+  <data name="Responsible" xml:space="preserve">
+    <value>Përgjegjës</value>
+  </data>
+  <data name="SearchResult_Count" xml:space="preserve">
+    <value>u gjet {{ count }} objekt:</value>
+  </data>
+  <data name="SearchResult_Count_plural" xml:space="preserve">
+    <value>u gjetën {{ count }} objekte:</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Statusi: {{ name }}</value>
   </data>
 </root>

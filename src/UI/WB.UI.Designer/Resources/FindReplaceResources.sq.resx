@@ -117,10 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
+  <data name="SearchForRegexNotValid" xml:space="preserve">
+    <value>Shprehja e rregullt e kërkimit është shformuar </value>
   </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Application update is required</value>
+  <data name="SearchForTooLong" xml:space="preserve">
+    <value>Kërkimi për fushën nuk lejohet të ketë më shumë se {0} simbole</value>
   </data>
 </root>

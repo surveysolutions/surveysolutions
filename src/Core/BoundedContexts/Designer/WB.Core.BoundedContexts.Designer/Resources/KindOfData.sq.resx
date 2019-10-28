@@ -117,10 +117,31 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
+  <data name="adm" xml:space="preserve">
+    <value>Të dhëna të regjistrimeve administrative [adm]</value>
   </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Application update is required</value>
+  <data name="agg" xml:space="preserve">
+    <value>Të dhëna agregate [agg]</value>
+  </data>
+  <data name="cen" xml:space="preserve">
+    <value>Të dhënat e censit/anketës [cen]</value>
+  </data>
+  <data name="cli" xml:space="preserve">
+    <value>Të dhëna klinike [cli]</value>
+  </data>
+  <data name="evn" xml:space="preserve">
+    <value>Të dhënat e ngjarjes/transaksionit [evn]</value>
+  </data>
+  <data name="obs" xml:space="preserve">
+    <value>Të dhënat/vlerësimet e vrojtimit [obs]</value>
+  </data>
+  <data name="pro" xml:space="preserve">
+    <value>Të dhënat e prodhuara nga procesi [pro]</value>
+  </data>
+  <data name="ssd" xml:space="preserve">
+    <value>Kampioni i të dhënave të anketës [ssd]</value>
+  </data>
+  <data name="tbd" xml:space="preserve">
+    <value>Ditarët e kohës dhe buxhetit [tbd]</value>
   </data>
 </root>

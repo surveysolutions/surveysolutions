@@ -117,10 +117,115 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
+  <data name="AllAccountsCreated" xml:space="preserve">
+    <value>Të {{total}} llogaritë u krijuan me sukses:</value>
   </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Application update is required</value>
+  <data name="AssignedTo" xml:space="preserve">
+    <value>Supervizori</value>
+  </data>
+  <data name="AssignedToDescription" xml:space="preserve">
+    <value>kërkohet për intervistuesit, përmban emrin e përdoruesit të supervizorit të cilit do t’i caktohet ky person </value>
+  </data>
+  <data name="BackToImport" xml:space="preserve">
+    <value>Kthehu tek importi i përdoruesit</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Anulo</value>
+  </data>
+  <data name="Column" xml:space="preserve">
+    <value>kolonë</value>
+  </data>
+  <data name="CompleteDescription" xml:space="preserve">
+    <value>Ju mund të krijoni një detyrë për këto ekipe nga rubrika 'pyetësorë', detyrat mund të krijohen edhe në modalitetin në grup </value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Krijo grup përdoruesish duke ngarkuar skedarët me të gjithë informacionin e nevojshëm. Grupi mund të përfshijë si supervizorët, ashtu edhe intervistuesit, në mënyrë alternative, që mund të krijoni</value>
+  </data>
+  <data name="DownloadTemplateLink" xml:space="preserve">
+    <value>Shkarkoni formatin .tab për t’u ngarkuar nga përdoruesi </value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="EstimatedTime" xml:space="preserve">
+    <value>Ka mbetur afërsisht {{estimatedTime}} </value>
+  </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Emri i plotë</value>
+  </data>
+  <data name="ImportingUserInfo" xml:space="preserve">
+    <value>Informacioni i përdoruesit nga </value>
+  </data>
+  <data name="InterviewersAndSupervisorsCount" xml:space="preserve">
+    <value>{{supervisorsCount}} supervizorët dhe {{interviewersCount}} intervistuesit po kryhet</value>
+  </data>
+  <data name="Line" xml:space="preserve">
+    <value>linjë </value>
+  </data>
+  <data name="ManualInterviewerCreateLink" xml:space="preserve">
+    <value>Intervistuesi</value>
+  </data>
+  <data name="ManualSupervisorCreateLink" xml:space="preserve">
+    <value>supervizori</value>
+  </data>
+  <data name="NoCreatedUsers" xml:space="preserve">
+    <value>Nuk u krijua asnjë llogari përdoruesi</value>
+  </data>
+  <data name="OptionalInformation" xml:space="preserve">
+    <value>Të dhëna personale fakultative </value>
+  </data>
+  <data name="Or" xml:space="preserve">
+    <value>ose</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Fjalëkalim</value>
+  </data>
+  <data name="PasswordDescription" xml:space="preserve">
+    <value>fjalëkalimi duhet të përmbajë të paktën një numër, një karakter me shkronjë të madhe dhe një karakter me shkronjë të vogël</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Numri i telefonit</value>
+  </data>
+  <data name="Profile" xml:space="preserve">
+    <value>profilizo manualisht</value>
+  </data>
+  <data name="Questionnaires" xml:space="preserve">
+    <value>Pyetësorë</value>
+  </data>
+  <data name="RequiredData" xml:space="preserve">
+    <value>Të dhënat e nevojshme për krijimin e intervistuesve dhe supervizorëve</value>
+  </data>
+  <data name="ReUploadTabFile" xml:space="preserve">
+    <value>Ringarkim i skedarit .tab</value>
+  </data>
+  <data name="Role" xml:space="preserve">
+    <value>Roli</value>
+  </data>
+  <data name="TimeDetermination" xml:space="preserve">
+    <value>caktimi i kohës</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Po krijohen përdorues të shumëfishtë përmes ngarkimit në grup </value>
+  </data>
+  <data name="UploadBtn" xml:space="preserve">
+    <value>Ngarko skedarin .tab</value>
+  </data>
+  <data name="Uploading" xml:space="preserve">
+    <value>Po importohen {{importedUsersCount}} nga {{totalUsersToImportCount}}</value>
+  </data>
+  <data name="UploadInProgress" xml:space="preserve">
+    <value>Lajmërim: Një tjetër ngarkim në grup po kryhet nga "{{userName}}".</value>
+  </data>
+  <data name="UploadInProgressDescription" xml:space="preserve">
+    <value>Ju do të keni mundësi të nisni tuajin, kur të përfundojë ai aktual.</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>Hyrje</value>
+  </data>
+  <data name="UserNameDescription" xml:space="preserve">
+    <value>emri i përdoruesit duhet të jetë midis 3 dhe 15 karaktereve dhe të përmbajë vetëm shkronja, shifra dhe simbole të nënvizuara</value>
+  </data>
+  <data name="VerificationFailed" xml:space="preserve">
+    <value>Verifikimi dështoi</value>
   </data>
 </root>
