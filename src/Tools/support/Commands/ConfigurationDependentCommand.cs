@@ -62,8 +62,8 @@ namespace support
         }
 
         [Description("Physical path to Headquarters website.")]
-        [Argument(Name = "path")]
-        public string PathToHeadquarters { get; set; }
+        [Argument(Name = "path", IsRequired = false)]
+        public string PathToHeadquarters { get; set; } = Path.GetFullPath("..\\");
 
         protected bool ReadConfigurationFile(IConsoleHost host)
         {

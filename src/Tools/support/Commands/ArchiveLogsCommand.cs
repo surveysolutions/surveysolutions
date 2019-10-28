@@ -5,6 +5,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using NConsole;
@@ -32,36 +33,33 @@ namespace support
             if (!ReadConfigurationFile(host))
                 return null;
 
-            var elmahConfigSection = ConfigurationManager.GetSection("elmah/errorLog") as Hashtable;
-            var nlogConfigSection = ConfigurationManager.GetSection("nlog") as XmlLoggingConfiguration;
+            var webConfig = XDocument.Load(Path.Combine(PathToHeadquarters, "Web.config"));
 
-            var elmahRelativeLogPath = "logPath";
-            var nlogLogPathFormat = "logDirectory";
+            var nlogConfigSection = webConfig.Descendants("nlog").FirstOrDefault();
 
-            var hasElmahSettings = elmahConfigSection != null && elmahConfigSection.ContainsKey(elmahRelativeLogPath);
-            var hasNlogSettings = nlogConfigSection != null &&
-                                  (nlogConfigSection.Variables?.ContainsKey(nlogLogPathFormat) ?? false);
+            var hasNlogSettings = nlogConfigSection != null;
 
-            string pathToElmahLogs = "";
-
-            if (hasElmahSettings)
-                pathToElmahLogs = ((string) elmahConfigSection[elmahRelativeLogPath]).Replace("~", PathToHq).Replace("/", "\\");
-
-            string pathToNlogLogs = "";
+            string pathToNlogLogs = null;
             if (hasNlogSettings)
-                pathToNlogLogs = nlogConfigSection.Variables[nlogLogPathFormat]
-                                     .Text.Replace("${basedir}", PathToHq)
-                                     .Replace("/", "\\")
-                                     .TrimEnd('\\') + "\\logs";
+            {
+                var lotDirectoryValue = nlogConfigSection.Descendants("variable").FirstOrDefault(x => x.Attribute("name")?.Value == "logDirectory")
+                    ?.Attribute("value")
+                    ?.Value;
+
+                if (lotDirectoryValue != null)
+                {
+                    var noBaseDir = lotDirectoryValue.Replace("${basedir}", PathToHq)
+                        .Replace("/", "\\");
+                    pathToNlogLogs = Path.Combine(noBaseDir, "logs");
+                }
+            }
             
             //export service logs location
             string pathToExportLogs = Path.Combine(PathToHq, "/.bin/logs");
 
             totalLogFilesCount = 0;
-            if (Directory.Exists(pathToElmahLogs))
-                totalLogFilesCount += Directory.EnumerateFiles(pathToElmahLogs).Count();
-
-            if (Directory.Exists(pathToNlogLogs))
+            
+            if (pathToNlogLogs != null && Directory.Exists(pathToNlogLogs))
                 totalLogFilesCount += Directory.EnumerateFiles(pathToNlogLogs).Count();
 
             if (Directory.Exists(pathToExportLogs))
@@ -79,7 +77,6 @@ namespace support
 
             try
             {
-                await MoveLogFilesToTempDirAsync(pathToElmahLogs, tempLogsDirectory, "elmah");
                 await MoveLogFilesToTempDirAsync(pathToNlogLogs, tempLogsDirectory, "nlog");
                 await MoveLogFilesToTempDirAsync(pathToExportLogs, tempLogsDirectory, "export");
             }
