@@ -30,6 +30,7 @@
 <body class="gray-background">
     <script>
     global: CONFIG = {
+        id: '@Model.Id',
         askForEmail: @(Model.AskForEmail ?? "false"),
         sendLinkUri: '@Url.RouteUrl(@"WebInterview.LinkSending", new { controller = @"WebInterview", Action = @"EmailLink" })',
         virtualPath: '@Url.RouteUrl(@"Default", new {controller = @"WebInterview", Action = "Index"})',
