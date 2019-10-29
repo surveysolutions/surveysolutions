@@ -6,6 +6,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -107,21 +108,24 @@ namespace WB.Enumerator.Native.WebInterview.Services
         public void ReloadInterview(Guid interviewId) => this.webInterviewInvoker.ReloadInterview(interviewId);
         public void FinishInterview(Guid interviewId) => this.webInterviewInvoker.FinishInterview(interviewId);
 
-        public void MarkAnswerAsNotSaved(string interviewId, string questionId, string errorMessage)
+        public void MarkAnswerAsNotSaved(Guid interviewId, Identity questionId, string errorMessage)
         {
-            var interview = this.statefulInterviewRepository.Get(interviewId);
+            var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
 
             if (interview == null)
             {
                 return;
             }
             
-            var questionIdentity = Identity.Parse(questionId);
-
-            var clientGroupIdentity = this.GetClientGroupIdentity(questionIdentity, interview);
+            var clientGroupIdentity = this.GetClientGroupIdentity(questionId, interview);
 
             if (clientGroupIdentity != null)
-                this.webInterviewInvoker.MarkAnswerAsNotSaved(clientGroupIdentity, questionId, errorMessage);
+                this.webInterviewInvoker.MarkAnswerAsNotSaved(clientGroupIdentity, questionId.ToString(), errorMessage);
+        }
+        public void MarkAnswerAsNotSaved(Guid interviewId, Identity questionId, Exception exception)
+        {
+            var errorMessage = WebInterview.GetUiMessageFromException(exception);
+            MarkAnswerAsNotSaved(interviewId, questionId, errorMessage);
         }
 
         public virtual void RefreshRemovedEntities(Guid interviewId, params Identity[] entities)
@@ -294,9 +298,6 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 this.RefreshEntities(interviewId, identitiesToRefresh);
             }
         }
-
-        public void ReloadInterviewByQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
-            => this.webInterviewInvoker.ReloadInterviews(questionnaireIdentity);
 
         public void ShutDownInterview(Guid interviewId) => this.webInterviewInvoker.ShutDown(interviewId);
     }

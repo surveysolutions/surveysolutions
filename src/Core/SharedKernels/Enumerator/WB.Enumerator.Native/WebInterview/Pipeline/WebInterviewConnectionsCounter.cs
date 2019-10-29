@@ -1,10 +1,11 @@
 using System.ComponentModel;
+using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Hubs;
 
 namespace WB.Enumerator.Native.WebInterview.Pipeline
 {
     [Localizable(false)]
-    public class WebInterviewConnectionsCounter : HubPipelineModule
+    public class WebInterviewConnectionsCounter : IPipelineModule
     {
         private readonly IConnectionsMonitor connectionsMonitor;
         
@@ -13,22 +14,22 @@ namespace WB.Enumerator.Native.WebInterview.Pipeline
             this.connectionsMonitor = connectionsMonitor;
         }
         
-        protected override void OnAfterConnect(IHub hub)
+        public Task OnConnected(IHub hub)
         {
             connectionsMonitor.Connected(hub.Context.ConnectionId);
-            base.OnAfterConnect(hub);
+            return Task.CompletedTask;
         }
 
-        protected override void OnAfterReconnect(IHub hub)
-        {
-            connectionsMonitor.Connected(hub.Context.ConnectionId);
-            base.OnAfterReconnect(hub);
-        }
-
-        protected override bool OnBeforeDisconnect(IHub hub, bool stopCalled)
+        public Task OnDisconnected(IHub hub, bool stopCalled)
         {
             connectionsMonitor.Disconnected(hub.Context.ConnectionId);
-            return base.OnBeforeDisconnect(hub, stopCalled);
+            return Task.CompletedTask;
+        }
+
+        public Task OnReconnected(IHub hub)
+        {
+            connectionsMonitor.Connected(hub.Context.ConnectionId);
+            return Task.CompletedTask;
         }
     }
 }

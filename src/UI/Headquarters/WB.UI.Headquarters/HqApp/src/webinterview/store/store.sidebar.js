@@ -17,8 +17,8 @@ export default {
     },
 
     actions: {
-        fetchSidebar: batchedAction(({ commit }, ids) => {
-            return Vue.$api.call(api => api.getSidebarChildSectionsOf(ids))
+        fetchSidebar: batchedAction(({ commit, rootState }, ids) => {
+            return Vue.$api.get('getSidebarChildSectionsOf', {interviewId: rootState.route.params.interviewId, sectionId: rootState.route.params.sectionId || null, ids: ids})
                 .then((sideBar) => {
                     commit("SET_SIDEBAR_STATE", sideBar)
                 });
