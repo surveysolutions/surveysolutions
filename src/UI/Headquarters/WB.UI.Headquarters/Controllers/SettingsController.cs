@@ -53,6 +53,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> UpdateLogo()
         {
             if (Request.Files.Count > 0)
