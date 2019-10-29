@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Configuration;
 using System.IO;
+using System.Reflection;
 using NConsole;
 
 namespace support
@@ -63,7 +64,7 @@ namespace support
 
         [Description("Physical path to Headquarters website.")]
         [Argument(Name = "path", IsRequired = false)]
-        public string PathToHeadquarters { get; set; } = Path.GetFullPath("..\\");
+        public string PathToHeadquarters { get; set; } = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..\\");
 
         protected bool ReadConfigurationFile(IConsoleHost host)
         {
