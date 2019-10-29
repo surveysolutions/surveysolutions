@@ -77,6 +77,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
         public string HqImporterLogin { get; set; }
         public long HqQuestionnaireVersion { get; set; }
         public string Comment { get; set; }
-        public string HqHost { get; internal set; }
+        public string HqHost { get; set; }
     }
 }
