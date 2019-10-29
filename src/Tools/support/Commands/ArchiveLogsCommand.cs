@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using System.ComponentModel;
-using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,7 +8,6 @@ using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using NConsole;
 using NLog;
-using NLog.Config;
 
 namespace support
 {
@@ -55,7 +52,7 @@ namespace support
             }
             
             //export service logs location
-            string pathToExportLogs = Path.Combine(PathToHq, "/.bin/logs");
+            string pathToExportLogs = Path.GetFullPath(Path.Combine(PathToHeadquarters, ".bin", "logs"));
 
             totalLogFilesCount = 0;
             
@@ -92,7 +89,6 @@ namespace support
             {
                 host.WriteMessage("Archiving files: ");
                 ArchiveWithProgress(tempLogsDirectory, archiveFileName);
-                DeleteTemporaryDirectoryWithLogFiles(tempLogsDirectory);
                 host.WriteLine();
                 host.WriteLine($"Archived to {Path.Combine(tempSupportDirectory, archiveFileName)}");
             }
@@ -100,6 +96,10 @@ namespace support
             {
                 logger.Error(e, "Unexpected exception");
                 host.WriteError("Unexpected exception. See error log for more details");
+            }
+            finally
+            {
+                DeleteTemporaryDirectoryWithLogFiles(tempLogsDirectory);
             }
 
             host.WriteLine();
@@ -117,27 +117,39 @@ namespace support
 
         private async Task MoveLogFilesToTempDirAsync(string logsDirectory, string tempDirectory, string logTypeName)
         {
+            Console.WriteLine("Copying logs from {0} to temp directory", logsDirectory);
+
             if (!Directory.Exists(logsDirectory)) return;
             if (!Directory.Exists(tempDirectory)) Directory.CreateDirectory(tempDirectory);
 
             foreach (var filename in Directory.EnumerateFiles(logsDirectory))
             {
+                Console.WriteLine($"Copying log file to temporary directory: {Path.GetFileName(filename)}");
+
                 var logsTempDirectory = Path.Combine(tempDirectory, logTypeName);
                 if (!Directory.Exists(logsTempDirectory)) Directory.CreateDirectory(logsTempDirectory);
 
-                using (var sourceStream = File.Open(filename, FileMode.Open))
+                try
                 {
-                    var logFile = Path.Combine(tempDirectory, logTypeName, filename.Replace(logsDirectory, "").TrimStart('\\'));
-
-                    if (!Directory.Exists(Path.GetDirectoryName(logFile)))
-                        Directory.CreateDirectory(Path.GetDirectoryName(logFile));
-
-                    using (var destinationStream = File.Create(logFile))
+                    using (var sourceStream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                     {
-                        await sourceStream.CopyToAsync(destinationStream);
-                        Console.CursorLeft = 0;
-                        Console.Write($"Copying log files to temporary directory: {++logFilesCount} of {totalLogFilesCount}");
+                        var logFile = Path.Combine(tempDirectory, logTypeName, filename.Replace(logsDirectory, "").TrimStart('\\'));
+
+                        if (!Directory.Exists(Path.GetDirectoryName(logFile)))
+                            Directory.CreateDirectory(Path.GetDirectoryName(logFile));
+
+                        using (var destinationStream = File.Create(logFile))
+                        {
+                            await sourceStream.CopyToAsync(destinationStream);
+                            Console.CursorLeft = 0;
+                        }
                     }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"Failed to copy log file: {Path.GetFileName(filename)}");
+                    Console.WriteLine(e.Message);
+                    logger.Error(e);
                 }
             }
         }
