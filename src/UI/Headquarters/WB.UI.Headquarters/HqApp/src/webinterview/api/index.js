@@ -1,6 +1,7 @@
 // tslint:disable-next-line:max-line-length
 import config from "~/shared/config"
 import * as $script from "scriptjs"
+import axios from 'axios'
 
 import "signalr"
 
@@ -19,7 +20,7 @@ const wrap = (jqueryPromise) => {
 
 const scriptIncludedPromise = new Promise(resolve =>
     $script(config.signalrPath, () => {
-        // $.connection.hub.logging = true
+        //$.connection.hub.logging = true
         const interviewProxy = $.connection[config.hubName]
 
         interviewProxy.client.reloadInterview = () => {
@@ -60,63 +61,6 @@ const scriptIncludedPromise = new Promise(resolve =>
             store.dispatch("setAnswerAsNotSaved", { id, message })
         }
 
-        interviewProxy.server.answerPictureQuestion = (id, file) => {
-            const fd = new FormData()
-            fd.append("interviewId", store.state.route.params.interviewId)
-            fd.append("questionId", id)
-            fd.append("file", file)
-            store.dispatch("uploadProgress", { id, now: 0, total: 100 })
-
-            return $.ajax({
-                url: config.imageUploadUri,
-                xhr() {
-                    const xhr = $.ajaxSettings.xhr()
-                    xhr.upload.onprogress = (e) => {
-                        var entity = store.state.webinterview.entityDetails[id];
-                        if (entity != undefined) {
-                            store.dispatch("uploadProgress", {
-                                id,
-                                now: e.loaded,
-                                total: e.total
-                            })
-                        }
-                    }
-                    return xhr
-                },
-                data: fd,
-                processData: false,
-                contentType: false,
-                type: "POST"
-            })
-        }
-
-        interviewProxy.server.answerAudioQuestion = (id, file) => {
-            const fd = new FormData()
-            fd.append("interviewId", store.state.route.params.interviewId)
-            fd.append("questionId", id)
-            fd.append("file", file)
-            store.dispatch("uploadProgress", { id, now: 0, total: 100 })
-
-            return $.ajax({
-                url: config.audioUploadUri,
-                xhr() {
-                    const xhr = $.ajaxSettings.xhr()
-                    xhr.upload.onprogress = (e) => {
-                        store.dispatch("uploadProgress", {
-                            id,
-                            now: e.loaded,
-                            total: e.total
-                        })
-                    }
-                    return xhr
-                },
-                data: fd,
-                processData: false,
-                contentType: false,
-                type: "POST"
-            })
-        }
-
         resolve()
     })
 )
@@ -144,7 +88,7 @@ function hubStarter(options) {
         $.connection.hub.qs = _.assign(options, queryString);
     
         // { transport: supportedTransports }
-        wrap($.signalR.hub.start({ transport: config.supportedTransports })).then(() => {
+        $.signalR.hub.start({ transport: config.supportedTransports }).then(() => {
             // transport: "longPolling"
             $.connection.hub.connectionSlow(() => {
                 store.dispatch("connectionSlow")
@@ -176,16 +120,59 @@ async function getInterviewHub() {
     return (await getInstance()).server
 }
 
-export async function apiCallerAndFetch(id, action) {
-    if (id) {
-        store.dispatch("fetch", { id })
-    }
-    const hub = await getInterviewHub()
+export async function apiGet(actionName, params) {
+    if(config.splashScreen) return
 
     store.dispatch("fetchProgress", 1)
 
     try {
-        return await wrap(action(hub))
+        var headers = store.getters.isReviewMode === true ? { review: true } : { }
+        const response = await axios.get(`${store.getters.basePath}api/webinterview/${actionName}`, { 
+            params:params,
+            responseType: 'json',
+            headers: headers
+        })
+        return response.data
+    } catch (err) {
+        store.dispatch("UNHANDLED_ERROR", err)
+    } finally {
+        store.dispatch("fetchProgress", -1)
+    }
+}
+
+export async function apiPost(actionName, params) {
+    store.dispatch("fetchProgress", 1)
+
+    try {
+        var interviewId = params.interviewId
+        delete params.interviewId
+
+        var headers = store.getters.isReviewMode === true ? { review: true } : { }
+        return await axios.post(`${store.getters.basePath}api/webinterview/commands/${actionName}?interviewId=${interviewId}`, params, { 
+            headers: headers
+        })
+    } catch (err) {
+        store.dispatch("UNHANDLED_ERROR", err)
+    } finally {
+        store.dispatch("fetchProgress", -1)
+    }
+}
+
+export async function apiAnswerPost(id, actionName, params) {
+    if (id) {
+        store.dispatch("fetch", { id })
+    }
+
+    store.dispatch("fetchProgress", 1)
+
+    try {
+        var interviewId = params.interviewId
+        delete params.interviewId
+
+        var headers = store.getters.isReviewMode === true ? { review: true } : { }
+        return await axios.post(`${store.getters.basePath}api/webinterview/commands/${actionName}?interviewId=${interviewId}`, params, { 
+            headers: headers
+        })
     } catch (err) {
         if (id) {
             store.dispatch("setAnswerAsNotSaved", { id, message: err.statusText })
@@ -198,14 +185,17 @@ export async function apiCallerAndFetch(id, action) {
     }
 }
 
-export async function apiCaller(action) {
-    if(config.splashScreen) return
-    const hub = await getInterviewHub()
 
+export async function changeSectionRequest(sectionId) {
     store.dispatch("fetchProgress", 1)
 
     try {
-        return await wrap(action(hub))
+        const state = jQuery.signalR[config.hubName].state
+        const oldSectionId = state.sectionId
+        state.sectionId = sectionId
+
+        const hub = await getInterviewHub()
+        await wrap(hub.changeSection(oldSectionId))
     } catch (err) {
         store.dispatch("UNHANDLED_ERROR", err)
     } finally {
@@ -216,13 +206,12 @@ export async function apiCaller(action) {
 export function install(Vue, options) {
     store = options.store;
     const api = {
-        call: apiCaller,
         hub: getInstance,
         stop: apiStop,
-        callAndFetch: apiCallerAndFetch,
-        setState: (callback) => {
-            callback(jQuery.signalR[config.hubName].state);
-        }
+        post: apiPost,
+        get: apiGet,
+        answer: apiAnswerPost,
+        changeSection: changeSectionRequest
     };
 
     Object.defineProperty(Vue, "$api", {

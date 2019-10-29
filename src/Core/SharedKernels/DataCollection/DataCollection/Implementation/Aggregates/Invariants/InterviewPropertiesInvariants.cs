@@ -115,7 +115,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
         {
             if ((this.InterviewProperties.Status == InterviewStatus.SupervisorAssigned ||
                  this.InterviewProperties.Status == InterviewStatus.RejectedBySupervisor)
-                && this.InterviewProperties.SupervisorId == supervisorIdToAssign)
+                && this.InterviewProperties.SupervisorId == supervisorIdToAssign
+                && !this.InterviewProperties.InterviewerId.HasValue)
                 throw new InterviewException(
                     $"Interview has assigned on this supervisor already")
                 {
