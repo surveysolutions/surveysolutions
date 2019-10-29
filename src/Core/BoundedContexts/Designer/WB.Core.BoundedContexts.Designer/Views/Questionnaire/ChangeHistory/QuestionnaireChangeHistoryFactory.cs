@@ -46,11 +46,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 
             var isAdmin = user.IsAdmin();
 
-            var questionnaireListViewItem = this.dbContext.Questionnaires
-                .Where(x => x.QuestionnaireId == questionnaireId.FormatGuid())
-                .Include(x => x.SharedPersons).FirstOrDefault();
-
             IQueryable<QuestionnaireChangeRecord> query = this.dbContext.QuestionnaireChangeRecords
+                .Include(r => r.References)
                 .Where(h => h.QuestionnaireId == sQuestionnaireId);
 
             if (isAdmin == false)
@@ -72,21 +69,20 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 
             return new QuestionnaireChangeHistory(questionnaireId, questionnaire.Title,
                 questionnaireHistory.Select(h => 
-                    CreateQuestionnaireChangeHistoryWebItem(questionnaire, h, questionnaireListViewItem, userId))
+                    CreateQuestionnaireChangeHistoryWebItem(questionnaire, h, userId))
                     .ToList(), page, count, pageSize);
         }
 
         private QuestionnaireChangeHistoricalRecord CreateQuestionnaireChangeHistoryWebItem(
-            QuestionnaireDocument questionnaire, 
+            QuestionnaireDocument questionnaire,
             QuestionnaireChangeRecord revision,
-            QuestionnaireList.QuestionnaireListViewItem questionnaireListViewItem,
             Guid userId)
         {
             var references =
                 revision.References.Select(
                     r => CreateQuestionnaireChangeHistoryReference(questionnaire, r)).ToList();
-
-            var canEditComment = questionnaireViewFactory.HasUserAccessToEditComments(revision, questionnaireListViewItem, userId);
+            
+            var canEditComment = questionnaireViewFactory.HasUserAccessToEditComments(revision, questionnaire, userId);
 
             return new QuestionnaireChangeHistoricalRecord(
                 revision.QuestionnaireChangeRecordId,
