@@ -7,10 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.PlainStorage;
-
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {
@@ -22,7 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         bool HasUserAccessToQuestionnaire(Guid questionnaireId, Guid userId);
 
         bool HasUserAccessToRevertQuestionnaire(Guid questionnaireId, Guid userId);
-        bool HasUserAccessToEditComments(QuestionnaireChangeRecord changeRecord, QuestionnaireListViewItem questionnaire, Guid userId);
+        bool HasUserAccessToEditComments(QuestionnaireChangeRecord changeRecord, QuestionnaireDocument questionnaire, Guid userId);
         bool HasUserAccessToEditComments(Guid revisionId, Guid userId);
     }
 
@@ -136,18 +133,19 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             var changeRecord = this.dbContext.QuestionnaireChangeRecords.Single(
                 q => q.QuestionnaireChangeRecordId == revisionId.FormatGuid());
 
-            var questionnaire = this.dbContext.Questionnaires
-               .Where(x => x.QuestionnaireId == changeRecord.QuestionnaireId)
-               .Include(x => x.SharedPersons).FirstOrDefault();
+            var questionnaire = this.questionnaireStorage.Get(Guid.Parse(changeRecord.QuestionnaireId));
 
             return HasUserAccessToEditComments(changeRecord, questionnaire, userId);
         }
 
-        public bool HasUserAccessToEditComments(QuestionnaireChangeRecord changeRecord, QuestionnaireListViewItem questionnaire, Guid userId)
+        public bool HasUserAccessToEditComments(
+            QuestionnaireChangeRecord changeRecord,
+            QuestionnaireDocument questionnaire, 
+            Guid userId)
         {
             if(changeRecord.ActionType == QuestionnaireActionType.ImportToHq)
             {
-                return questionnaire.SharedPersons.Any(s => s.IsOwner && s.UserId == userId);
+                return questionnaire.CreatedBy == userId;
             }
 
             return true;
