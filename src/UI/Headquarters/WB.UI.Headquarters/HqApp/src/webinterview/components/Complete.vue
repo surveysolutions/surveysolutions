@@ -144,7 +144,7 @@
                     return
                 }
 
-                this.$store.dispatch('completeInterview', { comment: this.comment });
+                this.$store.dispatch('completeInterview', this.comment);
             },
 
             navigateTo(entityWithError) {

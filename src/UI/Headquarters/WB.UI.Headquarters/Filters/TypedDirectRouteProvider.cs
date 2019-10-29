@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -15,6 +16,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Filters
 
         protected override IReadOnlyList<IDirectRouteFactory> GetActionRouteFactories(HttpActionDescriptor actionDescriptor)
         {
+            if (actionDescriptor is ReflectedHttpActionDescriptor reflectedHttpActionDescriptor 
+                && reflectedHttpActionDescriptor.MethodInfo.DeclaringType != actionDescriptor.ControllerDescriptor.ControllerType)
+                throw new ArgumentException($"Can't register method {actionDescriptor.ActionName} from base controller, need declare it in child controller {actionDescriptor.ControllerDescriptor.ControllerType}'");
+
             var factories = base.GetActionRouteFactories(actionDescriptor).ToList();
             if (Routes.ContainsKey(actionDescriptor.ControllerDescriptor.ControllerType))
             {

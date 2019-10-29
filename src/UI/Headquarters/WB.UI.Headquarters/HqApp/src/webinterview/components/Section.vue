@@ -13,7 +13,9 @@
     
     async function checkSectionPermission(to) {
           if (to.name === "section") {
-                return await Vue.$api.call(api => api.isEnabled(to.params["sectionId"]))
+              const sectionId = to.params["sectionId"]
+              const interviewId = to.params["interviewId"]
+              return await Vue.$api.get('isEnabled', {interviewId, id:sectionId})
           }
     }
 
