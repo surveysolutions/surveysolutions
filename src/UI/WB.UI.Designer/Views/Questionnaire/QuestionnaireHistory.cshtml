@@ -44,7 +44,6 @@
                 <tbody>
                     @foreach (var listViewModel in rows)
                     {
-
                         <tr>
                             <td class="search-value">
                                 @Html.FormatQuestionnaireHistoricalRecord(Url, Model.Id, listViewModel)
@@ -81,7 +80,7 @@
                                                 
                                                 @if (listViewModel.CanEditComment)
                                                 {
-                                                    <li><a href="javascript:void(0);" onclick="showComment('@listViewModel.Id')">@QuestionnaireHistoryResources.LeaveComment</a></li>
+                                                    <li><a href="javascript:void(0);" onclick="showComment('@listViewModel.Id', '')">@QuestionnaireHistoryResources.LeaveComment</a></li>
                                                 }
                                             </ul>
                                         </div>
@@ -153,16 +152,19 @@
             $('#commandId').val(revertId);
             $('#myModal').modal('show');
         };
-        window.showComment = function(historyItemId) {
-            $('#saveCommentBtn').click(function() {
+
+        var comments = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.ChangeHistory.ToDictionary(c=> c.Id, c=> c.Comment)))
+
+        window.showComment = function (historyItemId) {
+            $("#comment").val(comments[historyItemId])
+            $('#saveCommentBtn').click(function () {                    
                 $.post("@Url.Action("SaveComment", "Questionnaire")",
-                    { id: '@Model.Id', historyItemId: historyItemId, comment: $('#comment').val() })
-                    .done(function (data) {
-                        if(data) location.reload();
-                    });
+                    {
+                        id: '@Model.Id', historyItemId: historyItemId, comment: $('#comment').val()
+                    })
+                .done(function (data) { if(data) location.reload();});
             });
             $('#commentModal').modal('show');
-
         };
     });
 </script>
