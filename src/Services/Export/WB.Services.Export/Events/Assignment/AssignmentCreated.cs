@@ -13,10 +13,5 @@ namespace WB.Services.Export.Events.Assignment
         public bool AudioRecording { get; set; }
         public bool? WebMode { get; set; }
         public string Comment { get; set; }
-        /*public string Email { get; set; }
-        public string Password { get; set; }
-        public InterviewAnswer[] Answers { get; set; }
-        public string[] ProtectedVariables { get; set; }
-        */
     }
 }
