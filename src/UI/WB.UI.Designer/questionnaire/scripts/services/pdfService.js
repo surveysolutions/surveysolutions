@@ -13,6 +13,10 @@
                     translationId);
             };
 
+            pdfService.retryExportPdf = function(questionnaireId, translationId) {
+                return $http.post('../../pdf/retry', { id: questionnaireId, translation: translationId });
+            };
+
             return pdfService;
         }
     ]);
