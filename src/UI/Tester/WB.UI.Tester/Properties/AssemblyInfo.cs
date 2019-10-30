@@ -16,7 +16,7 @@ using Android.App;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 
-[assembly: MetaData("net.hockeyapp.android.appIdentifier", Value = "e77a488dd76b43009a378716f5b2faa7")]
+[assembly: MetaData("net.hockeyapp.android.appIdentifier", Value = "e77a488d-d76b-4300-9a37-8716f5b2faa7")]
 
 // Version information for an assembly consists of the following four values:
 //
