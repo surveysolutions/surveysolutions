@@ -1315,4 +1315,8 @@
   <data name="ScenarioDetails" xml:space="preserve">
     <value>Сценарий</value>
   </data>
+  <data name="SaveAs" xml:space="preserve">
+      <value>Сохранить как</value>
+      <comment>Сохранить как</comment>
+  </data>
 </root>
