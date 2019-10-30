@@ -1,6 +1,7 @@
 ﻿using System;
 using Main.Core.Documents;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.Infrastructure.PlainStorage;
 
@@ -16,11 +17,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewFactory
             };
         }
 
-        protected static ChapterInfoViewFactory CreateChapterInfoViewFactory(
-            IPlainKeyValueStorage<QuestionnaireDocument> repository = null)
+        protected static ChapterInfoViewFactory CreateChapterInfoViewFactory(IDesignerQuestionnaireStorage repository = null)
         {
             return new ChapterInfoViewFactory(
-                repository ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(),
+                repository ?? Mock.Of<IDesignerQuestionnaireStorage>(),
                 Create.QuestionTypeToCSharpTypeMapper());
         }
     }

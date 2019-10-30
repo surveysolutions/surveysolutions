@@ -1,7 +1,9 @@
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
+
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 {
     public interface IChapterInfoViewFactory
     {
-        NewChapterView Load(string questionnaireId, string groupId);
+        NewChapterView Load(QuestionnaireRevision questionnaireId, string groupId);
     }
 }

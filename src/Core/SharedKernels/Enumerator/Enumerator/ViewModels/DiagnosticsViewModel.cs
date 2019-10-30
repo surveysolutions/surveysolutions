@@ -8,6 +8,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
     public class DiagnosticsViewModel : BaseViewModel
     {
         private readonly ITabletDiagnosticService tabletDiagnosticService;
+        private readonly SendLogsViewModel logsViewModel;
         private readonly IDeviceSettings deviceSettings;
 
         public DiagnosticsViewModel(IPrincipal principal, 
@@ -17,10 +18,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             SendTabletInformationViewModel sendTabletInformationViewModel,
             CheckNewVersionViewModel checkNewVersion,
             BackupRestoreViewModel backupRestore,
-            BandwidthTestViewModel bandwidthTest) : base(principal, viewModelNavigationService)
+            BandwidthTestViewModel bandwidthTest,
+            SendLogsViewModel logsViewModel) : base(principal, viewModelNavigationService)
         {
             this.deviceSettings = deviceSettings;
             this.tabletDiagnosticService = tabletDiagnosticService;
+            this.logsViewModel = logsViewModel;
             this.TabletInformation = sendTabletInformationViewModel;
             this.CheckNewVersion = checkNewVersion;
             this.BackupRestore = backupRestore;
@@ -36,6 +39,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public BackupRestoreViewModel BackupRestore { get; set; }
 
         public BandwidthTestViewModel BandwidthTest { get; set; }
+
+        public SendLogsViewModel Logs => logsViewModel;
 
         public IMvxCommand ShareDeviceTechnicalInformationCommand => new MvxCommand(this.ShareDeviceTechnicalInformation);
         public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToDashboardAsync());

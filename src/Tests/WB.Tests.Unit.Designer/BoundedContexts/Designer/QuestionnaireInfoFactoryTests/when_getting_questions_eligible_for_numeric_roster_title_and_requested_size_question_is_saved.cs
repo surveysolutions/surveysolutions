@@ -6,9 +6,10 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.PlainStorage;
 
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
@@ -26,7 +27,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
             ); 
 
             questionDetailsReaderMock
-                .Setup(x => x.GetById(questionnaireId))
+                .Setup(x => x.Get(questionnaireId))
                 .Returns(questionnaireView);
 
             factory = CreateQuestionnaireInfoFactory(questionDetailsReaderMock.Object);
@@ -45,8 +46,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
         private static QuestionnaireInfoFactory factory;
         private static List<DropdownEntityView> result;
         private static QuestionnaireDocument questionnaireView;
-        private static readonly Mock<IPlainKeyValueStorage<QuestionnaireDocument>> questionDetailsReaderMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
-        private static string questionnaireId = "11111111111111111111111111111111";
+        private static readonly Mock<IDesignerQuestionnaireStorage> questionDetailsReaderMock = new Mock<IDesignerQuestionnaireStorage>();
+        private static QuestionnaireRevision questionnaireId = Create.QuestionnaireRevision("11111111111111111111111111111111");
         private static readonly Guid roster1Id = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid roster2Id = Guid.Parse("22222222222222222222222222222222");
         private static readonly Guid rosterSizeQuestionId = Guid.Parse("33333333333333333333333333333333");

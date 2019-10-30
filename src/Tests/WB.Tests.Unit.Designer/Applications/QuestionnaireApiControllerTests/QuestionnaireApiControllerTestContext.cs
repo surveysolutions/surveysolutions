@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
@@ -22,7 +23,8 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
 {
     internal class QuestionnaireApiControllerTestContext
     {
-        public static QuestionnaireApiController CreateQuestionnaireController(IChapterInfoViewFactory chapterInfoViewFactory = null,
+        public static QuestionnaireApiController CreateQuestionnaireController(
+            IChapterInfoViewFactory chapterInfoViewFactory = null,
             IQuestionnaireInfoViewFactory questionnaireInfoViewFactory = null,
             IQuestionnaireViewFactory questionnaireViewFactory = null,
             IQuestionnaireVerifier questionnaireVerifier = null,
@@ -112,5 +114,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
                 IsFilteredCombobox = isFilteredCombobox,
             };
         }
+
+        protected static QuestionnaireRevision questionnaireId = Create.QuestionnaireRevision("22222222222222222222222222222222");
     }
 }

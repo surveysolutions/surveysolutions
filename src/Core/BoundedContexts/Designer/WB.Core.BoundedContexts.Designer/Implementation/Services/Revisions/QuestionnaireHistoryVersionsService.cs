@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Main.Core.Documents;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
@@ -22,13 +27,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             IEntitySerializer<QuestionnaireDocument> entitySerializer,
             IOptions<QuestionnaireHistorySettings> historySettings,
             IPatchApplier patchApplier,
-            IPatchGenerator patchGenerator)
+            IPatchGenerator patchGenerator,
+            ICommandService commandService)
         {
             this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             this.entitySerializer = entitySerializer;
             this.historySettings = historySettings;
             this.patchApplier = patchApplier;
             this.patchGenerator = patchGenerator;
+            this.commandService = commandService;
         }
 
         public QuestionnaireDocument GetByHistoryVersion(Guid historyReferenceId)
@@ -65,16 +72,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return entitySerializer.Deserialize(questionnaire);
         }
 
-        public void RemoveOldQuestionnaireHistory(string sQuestionnaireId, int? maxSequenceByQuestionnaire, int maxHistoryDepth)
+        private void RemoveOldQuestionnaireHistory(string sQuestionnaireId, int maxHistoryDepth)
         {
-            var minSequence = (maxSequenceByQuestionnaire ?? 0) -
-                              maxHistoryDepth + 2;
-            if (minSequence < 0) return;
-
             var oldChangeRecord = this.dbContext.QuestionnaireChangeRecords
-                .Where(x => x.QuestionnaireId == sQuestionnaireId && x.Sequence < minSequence
-                                                                  && (x.ResultingQuestionnaireDocument != null || x.Patch != null))
-                .OrderBy(x => x.Sequence)
+                .Where(x => 
+                    x.QuestionnaireId == sQuestionnaireId 
+                    && x.ActionType != QuestionnaireActionType.ImportToHq)
+                .OrderByDescending(x => x.Sequence)
+                .Skip(maxHistoryDepth)
                 .ToList();
 
             foreach (var questionnaireChangeRecord in oldChangeRecord)
@@ -96,7 +101,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             int? affectedEntries,
             DateTime? targetDateTime,
             QuestionnaireDocument questionnaireDocument,
-            QuestionnaireChangeReference reference = null)
+            QuestionnaireChangeReference reference = null,
+            QuestionnaireChangeRecordMetadata meta = null)
         {
             var sQuestionnaireId = questionnaireId.FormatGuid();
 
@@ -135,6 +141,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 TargetItemNewTitle = targetNewTitle,
                 AffectedEntriesCount = affectedEntries,
                 TargetItemDateTime = targetDateTime,
+                Meta = meta
             };
 
             if (reference != null)
@@ -149,10 +156,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
 
             this.dbContext.QuestionnaireChangeRecords.Add(questionnaireChangeItem);
-
-            this.RemoveOldQuestionnaireHistory(sQuestionnaireId, 
-                maxSequenceByQuestionnaire, 
-                historySettings.Value.QuestionnaireChangeHistoryLimit);
+            
+            // -1 is to take into account newly added change record that is not yet in DB
+            this.RemoveOldQuestionnaireHistory(sQuestionnaireId, historySettings.Value.QuestionnaireChangeHistoryLimit - 1);
             this.dbContext.SaveChanges();
         }
 
@@ -184,5 +190,100 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             return resultingQuestionnaireDocument;
         }
+
+        public async Task<bool> UpdateRevisionCommentaryAsync(string questionnaireChangeRecordId, string comment)
+        {
+            var item = await this.dbContext.QuestionnaireChangeRecords.FindAsync(questionnaireChangeRecordId);
+            
+            if (item == null) return false;
+
+            if (item.Meta == null)
+                item.Meta = new QuestionnaireChangeRecordMetadata();
+
+            item.Meta.Comment = comment;
+
+            this.dbContext.Update(item);
+            await this.dbContext.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<int> TrackQuestionnaireImportAsync(
+            QuestionnaireDocument questionnaireDocument,
+            string userAgent,
+            Guid userId)
+        {
+            var meta = FromUserAgent(userAgent);
+
+            var command = new ImportQuestionnaireToHq(userId, meta, questionnaireDocument);
+            commandService.Execute(command);
+
+            return await this.GetLastHistoryIdForActionAsync(questionnaireDocument.PublicKey, QuestionnaireActionType.ImportToHq);
+        }
+
+        public async Task UpdateQuestionnaireMetadataAsync(Guid questionnaire, int revision, QuestionnaireRevisionMetaDataUpdate metaData)
+        {
+            var record = await this.dbContext.QuestionnaireChangeRecords
+                .SingleOrDefaultAsync(r => r.QuestionnaireId == questionnaire.FormatGuid()
+                    && r.Sequence == revision);
+
+            if (record.Meta == null)
+            {
+                record.Meta = new QuestionnaireChangeRecordMetadata();
+            }
+
+            record.Meta.Hq.HostName = metaData.HqHost ?? record.Meta.Hq.HostName;
+            record.Meta.Comment = metaData.Comment;
+            record.Meta.Hq.TimeZoneMinutesOffset = metaData.HqTimeZone;
+            record.Meta.Hq.ImporterLogin = metaData.HqImporterLogin;
+            record.Meta.Hq.QuestionnaireVersion = metaData.HqQuestionnaireVersion;
+
+            record.TargetItemTitle = record.Meta.Hq.HostName;
+
+            this.dbContext.QuestionnaireChangeRecords.Update(record);
+            await this.dbContext.SaveChangesAsync();
+        }
+
+        private async Task<int> GetLastHistoryIdForActionAsync(Guid questionnaireId, QuestionnaireActionType actionType = QuestionnaireActionType.ImportToHq)
+        {
+            var sId = questionnaireId.FormatGuid();
+
+            var record = await this.dbContext.QuestionnaireChangeRecords
+                .Where(q => q.QuestionnaireId == sId)
+                .OrderByDescending(q => q.Sequence)
+                .FirstAsync(r => r.ActionType == actionType);
+
+            return record.Sequence;
+        }
+
+        private QuestionnaireChangeRecordMetadata FromUserAgent(string userAgent)
+        {
+            var versionInfo = GetHqVersionFromUserAgent(userAgent);
+
+            return new QuestionnaireChangeRecordMetadata
+            {
+                Hq = new HeadquarterMetadata
+                {
+                    Version = versionInfo.HasValue ? versionInfo.Value.version : null,
+                    Build = versionInfo.HasValue ? versionInfo.Value.build : null,
+                }
+            };
+        }
+
+        private static Regex hqVersion = new Regex(@"WB\.Headquarters/(?<version>[\d\.]+)\s+\(build\s+(?<build>\d+)",
+            RegexOptions.Compiled);
+        private readonly ICommandService commandService;
+
+        private (string version, string build)? GetHqVersionFromUserAgent(string userAgent)
+        {
+            var match = hqVersion.Match(userAgent);
+
+            if (match.Success)
+            {
+                return (match.Groups["version"].Value, match.Groups["build"].Value);
+            }
+
+            return null;
+        }
+
     }
 }
