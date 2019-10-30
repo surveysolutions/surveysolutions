@@ -13,7 +13,6 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
             Assert.That(actionResult, Is.InstanceOf(typeof(NotFoundResult)));
         }
 
-        private static string questionnaireId = "11111111111111111111111111111111";
         private static string chapterId = "22222222222222222222222222222222";
     }
 }

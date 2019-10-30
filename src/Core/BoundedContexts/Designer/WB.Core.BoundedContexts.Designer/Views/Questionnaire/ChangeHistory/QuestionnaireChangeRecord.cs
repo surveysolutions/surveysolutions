@@ -21,5 +21,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         public virtual string ResultingQuestionnaireDocument { get; set; }
         public virtual DateTime? TargetItemDateTime { get; set; }
         public virtual string Patch { get; set; }
+        
+        public virtual QuestionnaireChangeRecordMetadata Meta {get;set;}        
     }
 }

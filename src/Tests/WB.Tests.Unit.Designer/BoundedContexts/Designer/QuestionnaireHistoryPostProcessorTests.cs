@@ -984,6 +984,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                     Create.TextQuestion()
                 }));
 
+
+            dbContext.QuestionnaireChangeRecords.Add(
+                Create.QuestionnaireChangeRecord(
+                    questionnaireChangeRecordId: Id.gF.FormatGuid(),
+                    questionnaireId: questionnaireId.FormatGuid(),
+                    targetId: questionId,
+                    targetType: QuestionnaireItemType.Question,
+                    action: QuestionnaireActionType.ImportToHq,
+                    resultingQuestionnaireDocument: null,
+                    diffWithPreviousVersion: "patch",
+                    sequence: 0,
+                    reference: new[] { Create.QuestionnaireChangeReference() }));
+
             dbContext.QuestionnaireChangeRecords.Add(
                 Create.QuestionnaireChangeRecord(
                     questionnaireChangeRecordId: Id.gA.FormatGuid(),
@@ -992,7 +1005,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                     targetType: QuestionnaireItemType.Question,
                     action: QuestionnaireActionType.Clone,
                     resultingQuestionnaireDocument: oldJson,
-                    sequence: 0,
+                    sequence: 1,
                     reference: new[] { Create.QuestionnaireChangeReference() }));
 
             dbContext.QuestionnaireChangeRecords.Add(
@@ -1003,7 +1016,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                     targetType: QuestionnaireItemType.Question,
                     action: QuestionnaireActionType.Clone,
                     resultingQuestionnaireDocument: newJson,
-                    sequence: 1,
+                    sequence: 2,
                     reference: new[] { Create.QuestionnaireChangeReference() }));
 
             dbContext.QuestionnaireChangeRecords.Add(
@@ -1014,9 +1027,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                     action: QuestionnaireActionType.Update,
                     resultingQuestionnaireDocument: null,
                     diffWithPreviousVersion: "patch",
-                    sequence: 2,
+                    sequence: 3,
                     targetId: questionId));
-            
 
             var tracker = new QuestionnaireStateTracker
             {
@@ -1027,39 +1039,45 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 
             var questionnaireStateTackerStorage = new InMemoryKeyValueStorage<QuestionnaireStateTracker>();
             questionnaireStateTackerStorage.Store(tracker, questionnaireId.FormatGuid());
-            
+
             var questionnaire = Create.Questionnaire();
-            questionnaire.Initialize(questionnaireId, Create.QuestionnaireDocumentWithOneChapter(), Enumerable.Empty<SharedPerson>());
+            questionnaire.Initialize(questionnaireId, Create.QuestionnaireDocumentWithOneChapter(),
+                Enumerable.Empty<SharedPerson>());
 
             var moveQuestionCommand = Create.Command.MoveQuestion(questionnaireId, questionId, responsibleId, groupBId);
 
             var historyPostProcessor = Create.HistoryPostProcessor(dbContext,
-                Create.QuestionnireHistoryVersionsService(dbContext, 
-                    questionnaireHistorySettings: 
-                    Mock.Of<IOptions<QuestionnaireHistorySettings>>(x => x.Value == new QuestionnaireHistorySettings{ QuestionnaireChangeHistoryLimit = 2})),
+                Create.QuestionnireHistoryVersionsService(dbContext,
+                    questionnaireHistorySettings:
+                    Mock.Of<IOptions<QuestionnaireHistorySettings>>(x =>
+                        x.Value == new QuestionnaireHistorySettings { QuestionnaireChangeHistoryLimit = 2 })),
                 questionnaireStateTackerStorage);
+
             dbContext.SaveChanges();
 
             // act
-
             historyPostProcessor.Process(questionnaire, moveQuestionCommand);
             dbContext.SaveChanges();
 
             // assert
             var newHistoryItems = dbContext.QuestionnaireChangeRecords.ToArray();
 
-            Assert.That(newHistoryItems.Length, Is.EqualTo(4));
+            Assert.That(newHistoryItems.Length, Is.EqualTo(5));
             Assert.That(newHistoryItems[0].ResultingQuestionnaireDocument, Is.Null);
-            Assert.That(newHistoryItems[0].Patch, Is.Null);
+            Assert.That(newHistoryItems[0].Patch, Is.Not.Null); // should preserve import to hq
+            Assert.That(newHistoryItems[0].ActionType, Is.EqualTo(QuestionnaireActionType.ImportToHq)); // should preserve import to hq
 
             Assert.That(newHistoryItems[1].ResultingQuestionnaireDocument, Is.Null);
             Assert.That(newHistoryItems[1].Patch, Is.Null);
 
             Assert.That(newHistoryItems[2].ResultingQuestionnaireDocument, Is.Null);
-            Assert.That(newHistoryItems[2].Patch, Is.Not.Null);
+            Assert.That(newHistoryItems[2].Patch, Is.Null);
 
-            Assert.That(newHistoryItems[3].ResultingQuestionnaireDocument, Is.Not.Null);
-            Assert.That(newHistoryItems[3].Patch, Is.Null);
+            Assert.That(newHistoryItems[3].ResultingQuestionnaireDocument, Is.Null);
+            Assert.That(newHistoryItems[3].Patch, Is.Not.Null);
+
+            Assert.That(newHistoryItems[4].ResultingQuestionnaireDocument, Is.Not.Null);
+            Assert.That(newHistoryItems[4].Patch, Is.Null);
         }
 
         [Test]

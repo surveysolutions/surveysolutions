@@ -5,28 +5,31 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.PlainStorage;
-
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {
     public interface IQuestionnaireViewFactory
     {
         QuestionnaireView Load(QuestionnaireViewInputModel input);
+        QuestionnaireView Load(QuestionnaireRevision revision);
 
         bool HasUserAccessToQuestionnaire(Guid questionnaireId, Guid userId);
 
         bool HasUserAccessToRevertQuestionnaire(Guid questionnaireId, Guid userId);
+        bool HasUserAccessToEditComments(QuestionnaireChangeRecord changeRecord, QuestionnaireDocument questionnaire, Guid userId);
+        bool HasUserAccessToEditComments(Guid revisionId, Guid userId);
     }
 
     public class QuestionnaireViewFactory : IQuestionnaireViewFactory
     {
-        private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
+        private readonly IDesignerQuestionnaireStorage questionnaireStorage;
         private readonly DesignerDbContext dbContext;
 
         public QuestionnaireViewFactory(
-            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
+            IDesignerQuestionnaireStorage questionnaireStorage,
             DesignerDbContext dbContext)
         {
             this.questionnaireStorage = questionnaireStorage;
@@ -40,16 +43,23 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             return doc == null ? null : new QuestionnaireView(doc, sharedPersons);
         }
 
+        public QuestionnaireView Load(QuestionnaireRevision revision)
+        {
+            var doc = this.questionnaireStorage.Get(revision);
+            return doc == null ? null : new QuestionnaireView(doc, Enumerable.Empty<SharedPersonView>());
+        }
+
         public bool HasUserAccessToQuestionnaire(Guid questionnaireId, Guid userId)
         {
-            var questionnaire = this.questionnaireStorage.GetById(questionnaireId.FormatGuid());
+            var questionnaire = this.questionnaireStorage.Get(questionnaireId);
             if (questionnaire == null || questionnaire.IsDeleted)
                 return false;
 
             if (questionnaire.CreatedBy == userId)
                 return true;
 
-            var questionnaireListItem = this.dbContext.Questionnaires.Where(x => x.QuestionnaireId == questionnaireId.FormatGuid())
+            var questionnaireListItem = this.dbContext.Questionnaires
+                .Where(x => x.QuestionnaireId == questionnaireId.FormatGuid())
                 .Include(x => x.SharedPersons).FirstOrDefault();
 
             if (questionnaireListItem == null)
@@ -66,7 +76,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         public bool HasUserAccessToRevertQuestionnaire(Guid questionnaireId, Guid userId)
         {
-            var questionnaire = this.questionnaireStorage.GetById(questionnaireId.FormatGuid());
+            var questionnaire = this.questionnaireStorage.Get(questionnaireId);
             if (questionnaire == null || questionnaire.IsDeleted)
                 return false;
 
@@ -85,7 +95,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         private List<SharedPersonView> GetSharedPersons(Guid questionnaireId)
         {
-            var listViewItem = this.dbContext.SharedPersons.Where(x => x.QuestionnaireId == questionnaireId.FormatGuid()).ToList();
+            var listViewItem = this.dbContext.SharedPersons.Where(x => x.QuestionnaireId 
+                == questionnaireId.FormatGuid()).ToList();
+
             var sharedPersons = listViewItem
                 .Select(x => new SharedPersonView
                 {
@@ -102,7 +114,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         {
             try
             {
-                var doc = this.questionnaireStorage.GetById(input.QuestionnaireId.FormatGuid());
+                var doc = this.questionnaireStorage.Get(input.QuestionnaireId);
                 if (doc == null || doc.IsDeleted)
                 {
                     return null;
@@ -114,6 +126,29 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             {
                 return null;
             }
+        }
+
+        public bool HasUserAccessToEditComments(Guid revisionId, Guid userId)
+        {
+            var changeRecord = this.dbContext.QuestionnaireChangeRecords.Single(
+                q => q.QuestionnaireChangeRecordId == revisionId.FormatGuid());
+
+            var questionnaire = this.questionnaireStorage.Get(Guid.Parse(changeRecord.QuestionnaireId));
+
+            return HasUserAccessToEditComments(changeRecord, questionnaire, userId);
+        }
+
+        public bool HasUserAccessToEditComments(
+            QuestionnaireChangeRecord changeRecord,
+            QuestionnaireDocument questionnaire, 
+            Guid userId)
+        {
+            if(changeRecord.ActionType == QuestionnaireActionType.ImportToHq)
+            {
+                return questionnaire.CreatedBy == userId;
+            }
+
+            return true;
         }
     }
 }

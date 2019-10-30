@@ -3,7 +3,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.UI.Designer.Code.Attributes;
-using WB.UI.Designer.Extensions;
+using WB.Core.BoundedContexts.Designer;
 using WB.UI.Designer.Models;
 
 namespace WB.UI.Designer.Controllers.Api.Headquarters
