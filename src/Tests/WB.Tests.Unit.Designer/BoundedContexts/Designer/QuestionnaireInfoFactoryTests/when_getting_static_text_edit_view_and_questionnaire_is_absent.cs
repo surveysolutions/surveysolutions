@@ -1,17 +1,16 @@
 using System;
 using FluentAssertions;
-using Main.Core.Documents;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.Infrastructure.PlainStorage;
-
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
 {
     internal class when_getting_static_text_edit_view_and_questionnaire_is_absent : QuestionnaireInfoFactoryTestContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
-            questionnaireEntityDetailsReaderMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
+            questionnaireEntityDetailsReaderMock = new Mock<IDesignerQuestionnaireStorage>();
             factory = CreateQuestionnaireInfoFactory(questionnaireEntityDetailsReaderMock.Object);
             BecauseOf();
         }
@@ -24,8 +23,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
 
         private static QuestionnaireInfoFactory factory;
         private static NewEditStaticTextView result;
-        private static Mock<IPlainKeyValueStorage<QuestionnaireDocument>> questionnaireEntityDetailsReaderMock;
-        private static string questionnaireId = "11111111111111111111111111111111";
+        private static Mock<IDesignerQuestionnaireStorage> questionnaireEntityDetailsReaderMock;
+        private static QuestionnaireRevision questionnaireId = Create.QuestionnaireRevision("11111111111111111111111111111111");
         private static Guid entityId = st1Id;
     }
 }

@@ -42,7 +42,6 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.DependencyInjection;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Infrastructure.Native.Storage;
-using System;
 
 namespace WB.Core.BoundedContexts.Designer
 {
@@ -89,7 +88,7 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind<IQuestionTypeToCSharpTypeMapper, QuestionTypeToCSharpTypeMapper>();
             registry.Bind<ICodeGenerationModelsFactory, CodeGenerationModelsFactory>();
             registry.Bind(typeof(ITopologicalSorter<>), typeof(TopologicalSorter<>));
-
+            
             registry.Bind(typeof(IPlainKeyValueStorage<>), typeof(DesignerKeyValueStorage<>));
             registry.Bind(typeof(IEntitySerializer<>), typeof(EntitySerializer<>));
             registry.Bind(typeof(IPlainAggregateRootRepository), typeof(QuestionnaireRepository));
@@ -99,6 +98,9 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind<SearchPostProcessors, SearchPostProcessors>();
             registry.Bind<ResourcesPreProcessor, ResourcesPreProcessor>();
             registry.Bind<ResourcesPostProcessor, ResourcesPostProcessor>();
+
+            registry.Bind<IDesignerQuestionnaireStorage, DesignerQuestionnaireStorage>();
+            registry.Bind<IUserManager, DesignerUserManager>();
         }
 
         public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status)
@@ -111,6 +113,7 @@ namespace WB.Core.BoundedContexts.Designer
                 .InitializesWith<ImportQuestionnaire>((command, aggregate) => aggregate.ImportQuestionnaire(command.ResponsibleId, command.Source), config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>().PostProcessBy<SearchPostProcessors>())
                 .Handles<DeleteQuestionnaire>((command, aggregate) => aggregate.DeleteQuestionnaire(), config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>().PostProcessBy<ResourcesPostProcessor>().PostProcessBy<SearchPostProcessors>())
                 .Handles<RevertVersionQuestionnaire>((command, aggregate) => aggregate.RevertVersion(command), config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>().PostProcessBy<SearchPostProcessors>())
+                .Handles<ImportQuestionnaireToHq>((command, aggregate) => {}, config => config.PostProcessBy<HistoryPostProcessor>())
                 // Macro
                 .Handles<AddMacro>(aggregate => aggregate.AddMacro, config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())
                 .Handles<DeleteMacro>(aggregate => aggregate.DeleteMacro, config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())
