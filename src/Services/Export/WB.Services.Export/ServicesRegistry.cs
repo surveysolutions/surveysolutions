@@ -7,7 +7,6 @@ using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.CsvExport.Implementation.DoFiles;
 using WB.Services.Export.Ddi;
 using WB.Services.Export.Ddi.Implementation;
-using WB.Services.Export.DescriptionGenerator;
 using WB.Services.Export.Events;
 using WB.Services.Export.ExportProcessHandlers;
 using WB.Services.Export.ExportProcessHandlers.Externals;
@@ -62,7 +61,6 @@ namespace WB.Services.Export
             services.AddTransient<IInterviewFactory, InterviewFactory>();
             services.AddTransient<IInterviewErrorsExporter, InterviewErrorsExporter>();
             services.AddTransient<IExportQuestionService, ExportQuestionService>();
-            services.AddTransient<IDescriptionGenerator, DescriptionGenerator.DescriptionGenerator>();
             services.AddTransient<IEnvironmentContentService, StataEnvironmentContentService>();
             services.AddTransient<IFileBasedExportedDataAccessor, FileBasedExportedDataAccessor>();
             services.AddTransient<IDataExportFileAccessor, DataExportFileAccessor>();
