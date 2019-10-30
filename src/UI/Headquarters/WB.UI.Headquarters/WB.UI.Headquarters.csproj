@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -1377,6 +1377,12 @@
       <DependentUpon>SyncLogMessages.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\SyncLogMessages.sq.resx" />
+    <EmbeddedResource Include="Resources\TabletLogs.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>TabletLogs.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TabletLogs.ru.resx" />
     <EmbeddedResource Include="Resources\TabletSyncMessages.ar.resx">
       <DependentUpon>TabletSyncMessages.resx</DependentUpon>
     </EmbeddedResource>
@@ -2143,6 +2149,7 @@
     <Content Include="Views\ControlPanel\ReevaluateInterview.cshtml" />
     <Content Include="Views\Assignments\Details.cshtml" />
     <Content Include="Views\Questionnaires\Details.cshtml" />
+    <Content Include="Views\Diagnostics\Logs.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -2167,6 +2174,8 @@
     <Compile Include="API\DataCollection\AssignmentsControllerBase.cs" />
     <Compile Include="API\DataCollection\AuditLogControllerBase.cs" />
     <Compile Include="API\DataCollection\AppApiControllerBase.cs" />
+    <Compile Include="API\DataCollection\Enumerator\EnumeratorWebApiConfig.cs" />
+    <Compile Include="API\DataCollection\Enumerator\LogsApiController.cs" />
     <Compile Include="API\Export\UserExportApiController.cs" />
     <Compile Include="API\PublicApi\AssignmentsHistoryController.cs" />
     <Compile Include="App_GlobalResources\BatchUpload.sq.designer.cs">
@@ -2246,11 +2255,18 @@
     </Compile>
     <Compile Include="API\WebInterview\InterviewCommandsController.cs" />
     <Compile Include="API\WebInterview\InterviewDataController.cs" />
+    <Compile Include="API\TabletLogsApiController.cs" />
+    <Compile Include="Controllers\DiagnosticsController.cs" />
     <Compile Include="API\WebInterview\Pipeline\WebInterviewDataAuthorizeAttribute.cs" />
     <Compile Include="Controllers\InterviewsController.cs" />
     <Compile Include="API\PublicApi\Models\AuditLogApiView.cs" />
     <Compile Include="Controllers\QuestionnairesController.cs" />
     <Compile Include="Models\QuestionnaireDetailsModel.cs" />
+    <Compile Include="Resources\TabletLogs.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TabletLogs.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\Questionnaire.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

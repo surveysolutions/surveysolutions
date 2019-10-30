@@ -24,6 +24,8 @@ namespace WB.UI.Headquarters.Models
         public int QuestionsWithConditionsCount { get; set; }
         public List<TranslatedPdf> TranslatedPdfVersions { get; set; }
         public string MainPdfUrl { get; set; }
+        public string DesignerUrl { get; internal set; }
+        public string Comment { get; set; }
     }
 
     public struct TranslatedPdf

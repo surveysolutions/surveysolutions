@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
+using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Resources;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.UI.Designer.Extensions;
 
@@ -21,35 +23,41 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             var id = context.ActionArguments["id"];
-            if (id == null || !Guid.TryParse(id.ToString(), out var parsedId))
+
+            Guid questionnaireid;
+            if (id != null && id is QuestionnaireRevision rev)
+            {
+                questionnaireid = rev.QuestionnaireId;
+            } 
+            else            
+            if (id == null || !Guid.TryParse(id.ToString(), out questionnaireid))
             {
                 context.Result = new NotFoundResult();
+                return;
             }
-            else
+
+            var viewFactory = context.HttpContext.RequestServices.GetService<IQuestionnaireViewFactory>();
+            var httpContextUser = context.HttpContext.User;
+
+            if (!httpContextUser.Identity.IsAuthenticated)
             {
-                var viewFactory = context.HttpContext.RequestServices.GetService<IQuestionnaireViewFactory>();
-                var httpContextUser = context.HttpContext.User;
-
-                if (!httpContextUser.Identity.IsAuthenticated)
+                context.Result = new JsonResult(new { message = ExceptionMessages.NoPremissionsToEditQuestionnaire })
                 {
-                    context.Result = new JsonResult(new { message = ExceptionMessages.NoPremissionsToEditQuestionnaire })
-                    {
-                        StatusCode = StatusCodes.Status401Unauthorized
-                    };    
-                    return;
-                }
-
-                bool hasAccess = httpContextUser.IsAdmin() || 
-                                    (write ? viewFactory.HasUserAccessToRevertQuestionnaire(parsedId, httpContextUser.GetId()) :
-                                            viewFactory.HasUserAccessToQuestionnaire(parsedId, httpContextUser.GetId()));
-                if (!hasAccess)
-                {
-                    context.Result = new JsonResult(new { message = ExceptionMessages.NoPremissionsToEditQuestionnaire })
-                    {
-                        StatusCode = StatusCodes.Status403Forbidden
-                    };                                        
-                }
+                    StatusCode = StatusCodes.Status401Unauthorized
+                };
+                return;
             }
-        }        
+
+            bool hasAccess = httpContextUser.IsAdmin() ||
+                                (write ? viewFactory.HasUserAccessToRevertQuestionnaire(questionnaireid, httpContextUser.GetId()) :
+                                        viewFactory.HasUserAccessToQuestionnaire(questionnaireid, httpContextUser.GetId()));
+            if (!hasAccess)
+            {
+                context.Result = new JsonResult(new { message = ExceptionMessages.NoPremissionsToEditQuestionnaire })
+                {
+                    StatusCode = StatusCodes.Status403Forbidden
+                };
+            }
+        }
     }
 }
