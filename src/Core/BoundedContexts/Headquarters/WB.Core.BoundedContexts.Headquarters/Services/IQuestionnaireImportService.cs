@@ -5,6 +5,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
 {
     public interface IQuestionnaireImportService
     {
-        Task<QuestionnaireImportResult> Import(Guid questionnaireId, string name, bool isCensusMode, bool includePdf = true);
+        Task<QuestionnaireImportResult> Import(Guid questionnaireId, string name, bool isCensusMode, string comment, string requestUrl, bool includePdf = true);
     }
 }

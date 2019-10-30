@@ -223,4 +223,7 @@
     <value>Details</value>
     <comment>Questionnaire details</comment>
   </data>
+  <data name="ShowOnDesigner" xml:space="preserve">
+    <value>Show on Designer</value>
+  </data>
 </root>

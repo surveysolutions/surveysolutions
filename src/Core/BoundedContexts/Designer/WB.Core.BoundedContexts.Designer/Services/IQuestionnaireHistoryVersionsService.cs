@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 
@@ -7,9 +8,8 @@ namespace WB.Core.BoundedContexts.Designer.Services
     public interface IQuestionnaireHistoryVersionsService
     {
         QuestionnaireDocument GetByHistoryVersion(Guid historyReferenceId);
-        void RemoveOldQuestionnaireHistory(string sQuestionnaireId, int? maxSequenceByQuestionnaire, int maxHistoryDepth);
         string GetDiffWithLastStoredVersion(QuestionnaireDocument questionnaire);
-
+        
         void AddQuestionnaireChangeItem(
             Guid questionnaireId,
             Guid responsibleId,
@@ -22,6 +22,11 @@ namespace WB.Core.BoundedContexts.Designer.Services
             int? affectedEntries,
             DateTime? targetDateTime,
             QuestionnaireDocument questionnaireDocument,
-            QuestionnaireChangeReference reference = null);
+            QuestionnaireChangeReference reference = null,
+            QuestionnaireChangeRecordMetadata meta = null);
+
+        Task<bool> UpdateRevisionCommentaryAsync(string questionnaireChangeRecordId, string comment);
+        Task<int> TrackQuestionnaireImportAsync(QuestionnaireDocument questionnaireDocument, string userAgent, Guid userId);
+        Task UpdateQuestionnaireMetadataAsync(Guid questionnaire, int revision, QuestionnaireRevisionMetaDataUpdate metaData);
     }
 }
