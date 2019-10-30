@@ -31,11 +31,11 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             var messageHandler = new ModernHttpClient.NativeMessageHandler
             {
                 Timeout = restServiceSettings.Timeout,
-                EnableUntrustedCertificates = restServiceSettings.AcceptUnsignedSslCertificate,
                 DisableCaching = true,
                 AutomaticDecompression = DecompressionMethods.None,
                 AllowAutoRedirect = true,
-                Proxy = WebRequest.GetSystemWebProxy()
+                Proxy = WebRequest.GetSystemWebProxy(),
+                TLSConfig = { DangerousAcceptAnyServerCertificateValidator = restServiceSettings.AcceptUnsignedSslCertificate }
             };
 
             return messageHandler;
