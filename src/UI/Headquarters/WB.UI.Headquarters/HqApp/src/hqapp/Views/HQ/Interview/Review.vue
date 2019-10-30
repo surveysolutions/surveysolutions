@@ -35,8 +35,7 @@ export default {
   computed: {
     classes() {
       const sidebar = this.$store.state.webinterview.sidebar;
-      const smallOrMedioumScreenWidth =
-        sidebar.screenWidth < sidebar.mediumScreenThreshold;
+      const smallOrMedioumScreenWidth = sidebar.screenWidth < sidebar.mediumScreenThreshold;
 
       return {
         "show-content": smallOrMedioumScreenWidth && !sidebar.sidebarHidden,

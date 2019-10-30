@@ -97,9 +97,30 @@ namespace WB.UI.Designer.Code
                                 );
                                 break;
                         }
-
                     }
                     break;
+                case QuestionnaireActionType.ImportToHq:
+                {
+                    var siteHost = record.TargetNewTitle ?? record.TargetTitle;
+                    
+                    var indexOfOurDomain = siteHost?.IndexOf(".mysurvey.solutions");
+                    siteHost = indexOfOurDomain > 0
+                        ? siteHost.Substring(0, indexOfOurDomain.Value)
+                        : siteHost;
+
+                    if(record.HqVersion != null)
+                    {
+                        siteHost += " v" + record.HqVersion;
+                    }
+
+                    var questionnaireVersion = $"ver. {record.HqQuestionnaireVersion}";
+
+                    text = string.Format(QuestionnaireHistoryResources.Questionnaire_ImportToHq,
+                        siteHost,
+                        record.HqUserName,
+                        questionnaireVersion);
+                }
+                break;
             }
             return new HtmlString(text);
         }

@@ -887,4 +887,13 @@ It will appear on interviewer device after next synchronization</value>
   <data name="Synchronization_UserLinkedToAnotherServer_Status" xml:space="preserve">
     <value>User linked to another server</value>
   </data>
+  <data name="Diagnostics_SendLogs" xml:space="preserve">
+    <value>Send trace logs</value>
+  </data>
+  <data name="Diagnostics_SendLogs_Description" xml:space="preserve">
+    <value>Send detailed logs to headquarters site for issues investigation</value>
+  </data>
+  <data name="Diagnostics_SendLogs_Success" xml:space="preserve">
+    <value>Logs are sent to HQ</value>
+  </data>
 </root>

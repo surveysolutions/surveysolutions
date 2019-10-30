@@ -37,6 +37,7 @@
         TeamMembersAndStatuses = 33,
         SurveyStatistics = 34,
         EmailProviders = 35,
-        Interviews = 36
+        Interviews = 36,
+        TabletLogs
     }
 }

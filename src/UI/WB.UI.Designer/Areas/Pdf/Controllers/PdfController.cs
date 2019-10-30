@@ -26,6 +26,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Resources;
+using WB.Core.BoundedContexts.Designer;
 
 namespace WB.UI.Designer.Areas.Pdf.Controllers
 {
