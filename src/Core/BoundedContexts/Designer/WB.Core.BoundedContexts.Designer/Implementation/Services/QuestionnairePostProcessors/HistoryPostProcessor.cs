@@ -76,7 +76,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, UpdateAreaQuestion>,
         ICommandPostProcessor<Questionnaire, UpdateAudioQuestion>,
         ICommandPostProcessor<Questionnaire, UpdateMetadata>,
-        ICommandPostProcessor<Questionnaire, PassOwnershipFromQuestionnaire>
+        ICommandPostProcessor<Questionnaire, PassOwnershipFromQuestionnaire>,
+        ICommandPostProcessor<Questionnaire, ImportQuestionnaireToHq>
     {
         private readonly DesignerDbContext dbContext;
         private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
@@ -180,6 +181,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 QuestionnaireActionType.Update,
                 QuestionnaireItemType.Metadata, command.QuestionnaireId, command.Title, aggregate.QuestionnaireDocument);
         }
+
+        public void Process(Questionnaire aggregate, ImportQuestionnaireToHq command)
+        {
+            var questionnaireId = command.QuestionnaireId;
+
+            this.AddQuestionnaireChangeItem(questionnaireId, command.ResponsibleId,
+                QuestionnaireActionType.ImportToHq, QuestionnaireItemType.Questionnaire, 
+                command.QuestionnaireId, command.Metadata?.Hq.HostName, null, 
+                null, null, aggregate.QuestionnaireDocument, meta: command.Metadata);
+        }
+
         #endregion
 
         #region Shared persons
@@ -665,7 +677,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             Guid targetId, 
             string targetTitle, 
             QuestionnaireDocument questionnaireDocument, 
-            QuestionnaireChangeReference reference = null)
+            QuestionnaireChangeReference reference = null,
+            QuestionnaireChangeRecordMetadata meta = null)
         {
             AddQuestionnaireChangeItem(questionnaireId,
                 responsibleId,
@@ -677,7 +690,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 null,
                 null,
                 questionnaireDocument,
-                reference);
+                reference, 
+                meta);
         }
 
         private void AddQuestionnaireChangeItem(
@@ -691,7 +705,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             int? affectedEntries,
             DateTime? targetDateTime,
             QuestionnaireDocument questionnaireDocument,
-            QuestionnaireChangeReference reference = null)
+            QuestionnaireChangeReference reference = null,
+            QuestionnaireChangeRecordMetadata meta = null)
         {
             this.questionnaireHistoryVersionsService.AddQuestionnaireChangeItem(questionnaireId, 
                 responsibleId, 
@@ -704,7 +719,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 affectedEntries,
                 targetDateTime,
                 questionnaireDocument,
-                reference);
+                reference,
+                meta);
         }
 
         private string GetUserName(Guid? userId)

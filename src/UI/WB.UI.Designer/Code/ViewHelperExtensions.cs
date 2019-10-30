@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Routing;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
+using WB.Core.BoundedContexts.Designer;
 
 namespace WB.UI.Designer.BootstrapSupport
 {

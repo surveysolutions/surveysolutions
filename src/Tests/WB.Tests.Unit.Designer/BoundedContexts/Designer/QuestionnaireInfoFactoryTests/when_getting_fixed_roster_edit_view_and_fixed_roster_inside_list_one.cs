@@ -6,6 +6,8 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
@@ -16,7 +18,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
     internal class when_getting_fixed_roster_edit_view_and_fixed_roster_inside_list_one : QuestionnaireInfoFactoryTestContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
-            questionDetailsReaderMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
+            questionDetailsReaderMock = new Mock<IDesignerQuestionnaireStorage>();
             questionnaireView = Create.QuestionnaireDocumentWithOneChapter(children: new List<IComposite>
             {
                 Create.Roster(rosterId: g2Id, title: "list_roster", variable:  "list_roster", rosterType: RosterSizeSourceType.Question, rosterSizeQuestionId: q1Id, children: new IComposite[]
@@ -27,7 +29,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                 Create.TextListQuestion(q1Id, variable:"list_question", title: "list_question"),
             });
             questionDetailsReaderMock
-                .Setup(x => x.GetById(questionnaireId))
+                .Setup(x => x.Get(questionnaireId))
                 .Returns(questionnaireView);
 
             factory = CreateQuestionnaireInfoFactory(questionDetailsReaderMock.Object);
@@ -74,7 +76,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
         private static QuestionnaireInfoFactory factory;
         private static NewEditRosterView result;
         private static QuestionnaireDocument questionnaireView;
-        private static Mock<IPlainKeyValueStorage<QuestionnaireDocument>> questionDetailsReaderMock;
-        private static string questionnaireId = "11111111111111111111111111111111";
+        private static Mock<IDesignerQuestionnaireStorage> questionDetailsReaderMock;
     }
 }
