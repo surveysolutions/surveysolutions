@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -8,6 +9,7 @@ using WB.Services.Export.CsvExport.Implementation;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Questionnaire;
+using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services;
 
 namespace WB.Services.Export.Tests.CsvExport.Implementation
@@ -25,6 +27,11 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation
             fileSystemAccessor
                 .Setup(accessor => accessor.WriteAllText(@"x:\export__readme.txt", It.IsAny<string>()))
                 .Callback<string, string>((file, content) => description = content);
+
+            var questionnaireStorage = new Mock<IQuestionnaireStorage>();
+            var questionnaireDocument = Create.QuestionnaireDocument(Guid.Parse("11111111111111111111111111111111"), 555);
+            questionnaireStorage.SetupIgnoreArgs(x => x.GetQuestionnaireAsync(null, CancellationToken.None))
+                .ReturnsAsync(questionnaireDocument);
 
             var questionnaireExportStructure = CreateQuestionnaireExportStructure(levels: new[]
             {
@@ -49,7 +56,8 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation
                 questionnaireExportStructure,
                 tenantApi,
 
-                fileSystemAccessor: fileSystemAccessor.Object);
+                fileSystemAccessor: fileSystemAccessor.Object,
+                questionnaireStorage: questionnaireStorage.Object);
 
             // act
             await exportService.GenerateDescriptionFileAsync(Create.Tenant(), new QuestionnaireId(questionnaireExportStructure.QuestionnaireId), @"x:\", ".xlsx");
@@ -57,13 +65,51 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation
             // assert
             Assert.That(description, Is.Not.Empty);
             var lines = description.Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries);
-            CollectionAssert.AreEqual(lines.Skip(1), new[]
+            CollectionAssert.AreEqual(lines.Skip(3), new[]
             {
                 "questionnaire.xlsx",
                 "x, y",
                 "roster.xlsx",
                 "name, age",
             });
+        }
+
+         [Test]
+        public async Task When_generating_description_file_Then_should_generate_link_to_view_questionnaire_on_designer()
+        {
+            // arrange
+            var questionnaireId = "11111111111111111111111111111111$1";
+            string description = null;
+            var fileSystemAccessor = new Mock<IFileSystemAccessor>();
+            fileSystemAccessor
+                .Setup(accessor => accessor.WriteAllText(@"x:\export__readme.txt", It.IsAny<string>()))
+                .Callback<string, string>((file, content) => description = content);
+
+            var questionnaireStorage = new Mock<IQuestionnaireStorage>();
+            var questionnaireDocument = Create.QuestionnaireDocument();
+            questionnaireDocument.Title = "Name of questionnaire";
+            questionnaireStorage.SetupIgnoreArgs(x => x.GetQuestionnaireAsync(null, CancellationToken.None))
+                .ReturnsAsync(questionnaireDocument);
+
+            var questionnaireExportStructure = CreateQuestionnaireExportStructure();
+            var hqApi = new Mock<IHeadquartersApi>();
+            var tenantApi = Create.TenantHeadquartersApi(hqApi.Object);
+
+            var exportService = Create.ReadSideToTabularFormatExportService(
+                questionnaireExportStructure,
+                tenantApi,
+
+                fileSystemAccessor: fileSystemAccessor.Object,
+                questionnaireStorage: questionnaireStorage.Object);
+
+            // act
+            await exportService.GenerateDescriptionFileAsync(Create.Tenant(), new QuestionnaireId(questionnaireId), @"x:\", ".xlsx");
+
+            // assert
+            Assert.That(description, Is.Not.Empty);
+            var lines = description.Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries);
+            Assert.That(lines[1], Is.EqualTo($"The data in this download were collected using the Survey Solutions questionnaire \"{questionnaireDocument.Title}\". "));
+            Assert.That(lines[2], Is.EqualTo($"You can open the questionnaire in the Survey Solutions Designer online by that link: https://designer.mysurvey.solutions/questionnaire/details/{questionnaireId}"));
         }
 
         protected static HeaderStructureForLevel CreateHeaderStructureForLevel(
