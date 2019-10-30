@@ -54,9 +54,6 @@ namespace WB.UI.Interviewer
         {
             auditLogService.Write(new OpenApplicationAuditLogEntity());
 
-            this.serviceLocator.GetInstance<IDenormalizerRegistry>()
-                .RegisterDenormalizer(this.serviceLocator.GetInstance<InterviewDashboardEventHandler>());
-
             logger.Info($"Application started. Version: {typeof(SplashActivity).Assembly.GetName().Version}");
 
             migrationRunner.MigrateUp(this.GetType().Assembly, typeof(Encrypt_Data).Assembly);

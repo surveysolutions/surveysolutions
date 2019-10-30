@@ -35,7 +35,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
                 try
                 {
                     if (hubIncomingInvokerContext.MethodDescriptor.Attributes.Any(x =>
-                        x.TypeId.ToString() == ObserverNotAllowedAttribute.Id))
+                        x.TypeId.ToString() == WebInterviewObserverNotAllowedAttribute.Id))
                     {
                         if (serviceLocatorLocal.GetInstance<IAuthorizedUser>().IsObserving)
                             return false;
@@ -54,8 +54,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
                     }
                 }
 
-                var authorizeHubMethodInvocation =
-                    base.AuthorizeHubMethodInvocation(hubIncomingInvokerContext, appliesToMethod);
+                var authorizeHubMethodInvocation = base.AuthorizeHubMethodInvocation(hubIncomingInvokerContext, appliesToMethod);
 
                 return authorizeHubMethodInvocation;
             });

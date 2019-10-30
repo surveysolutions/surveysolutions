@@ -51,13 +51,13 @@
                 return `${this.$store.getters.basePath}Interview/InterviewAreaFrame/${this.interviewId}?questionId=${this.$me.id}`
             },
             isPolygon() {
-                return this.$me.type == 0
+                return this.$me.type == "Polygon"
             },
             isPolyline() {
-                return this.$me.type == 1
+                return this.$me.type == "Polyline"
             },
             isMultiPoints() {
-                return this.$me.type == 3
+                return this.$me.type == "Multipoint"
             }
         },
         methods: {

@@ -46,7 +46,7 @@ namespace WB.UI.Headquarters.API.Automation
                 });
             }
 
-            var result = await this.importService.Import(request.QuestionnaireId, null, false);
+            var result = await this.importService.Import(request.QuestionnaireId, null, false, includePdf: false);
 
             if (result.IsSuccess)
             {

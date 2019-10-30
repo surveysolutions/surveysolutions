@@ -14,15 +14,13 @@ const store = {
 
     actions: {
         approve(_, comment) {
-            return Vue.$api.call(api => {
-                return api.approve(comment);
-            });
+            const interviewId = this.state.route.params.interviewId
+            return Vue.$api.post('approve', {interviewId, comment});
         },
 
         reject(_, rejection) {
-            return Vue.$api.call(api => {
-                return api.reject(rejection.comment, rejection.assignTo);
-            });
+            const interviewId = this.state.route.params.interviewId
+            return Vue.$api.post('reject', {interviewId, comment:rejection.comment, assignTo:rejection.assignTo });
         }
     },
     getters: {

@@ -52,10 +52,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.Identity = entityId;
             this.navigationState = navigationState;
 
-            this.eventRegistry.Subscribe(this, interviewId);
-
             this.RosterInstances = new CovariantObservableCollection<IInterviewEntityViewModel>();
             this.UpdateFromInterview();
+
+            this.eventRegistry.Subscribe(this, interviewId);
         }
 
         public void Handle(RosterInstancesRemoved @event)

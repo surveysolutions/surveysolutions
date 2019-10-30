@@ -96,8 +96,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             comboboxCollection.Add(comboboxViewModel);
 
-           
-
             this.eventRegistry.Subscribe(this, interviewId);
         }
 
@@ -179,13 +177,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public virtual void Dispose()
         {
+            this.eventRegistry.Unsubscribe(this);
+
             this.comboboxViewModel.OnItemSelected -= ComboboxInstantViewModel_OnItemSelected;
             this.comboboxViewModel.OnAnswerRemoved -= ComboboxInstantViewModel_OnAnswerRemoved;
             this.comboboxViewModel.OnShowErrorIfNoAnswer -= ComboboxViewModel_OnShowErrorIfNoAnswer;
             this.comboboxViewModel.Dispose();
 
             this.QuestionState.Dispose();
-            this.eventRegistry.Unsubscribe(this);
         }
 
         protected OptionBorderViewModel optionsTopBorderViewModel;

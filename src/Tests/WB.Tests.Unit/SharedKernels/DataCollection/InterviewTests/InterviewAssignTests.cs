@@ -306,6 +306,24 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         }
 
         [Test]
+        public void when_interview_is_rejected_by_sv_should_be_able_to_assign_to_same_team()
+        {
+            var interview = SetupInterview();
+            interview.Apply(Create.Event.SupervisorAssigned(supervisorId, supervisorId));
+            interview.Apply(Create.Event.InterviewerAssigned(supervisorId, interviewerId, DateTime.UtcNow.AddHours(-1)));
+            interview.Apply(Create.Event.InteviewCompleted());
+            interview.Apply(Create.Event.InterviewRejected(supervisorId));
+            interview.Apply(Create.Event.InterviewStatusChanged(InterviewStatus.RejectedBySupervisor));
+            SetupEventContext();
+
+            // act
+            interview.AssignResponsible(Create.Command.AssignResponsibleCommand(supervisorId: supervisorId, interviewerId: null));
+
+            // assert
+            eventContext.ShouldContainEvent<SupervisorAssigned>();
+        }
+
+        [Test]
         public void When_Interview_in_status_SupervisorAssigned_And_interview_being_moved_to_the_same_supervisor_As_result_exception_should_be_thrown()
         {
             // arrange
