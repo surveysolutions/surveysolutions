@@ -287,6 +287,9 @@
     <Reference Include="StackExchange.Exceptional.Shared, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\StackExchange.Exceptional.Shared.2.0.0\lib\net461\StackExchange.Exceptional.Shared.dll</HintPath>
     </Reference>
+    <Reference Include="Supercluster, Version=0.1.18.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\SuperclusterBox.0.1.18\lib\netstandard2.0\Supercluster.dll</HintPath>
+    </Reference>
     <Reference Include="Swashbuckle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cd1bb07a5ac7c7bc, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Swashbuckle.Core.5.6.0\lib\net40\Swashbuckle.Core.dll</HintPath>
     </Reference>
@@ -2081,6 +2084,9 @@
     <Compile Include="API\DataCollection\AppApiControllerBase.cs" />
     <Compile Include="API\Export\UserExportApiController.cs" />
     <Compile Include="API\PublicApi\AssignmentsHistoryController.cs" />
+    <Compile Include="API\WebInterview\InterviewCommandsController.cs" />
+    <Compile Include="API\WebInterview\InterviewDataController.cs" />
+    <Compile Include="API\WebInterview\Pipeline\WebInterviewDataAuthorizeAttribute.cs" />
     <Compile Include="Controllers\InterviewsController.cs" />
     <Compile Include="API\PublicApi\Models\AuditLogApiView.cs" />
     <Compile Include="Controllers\QuestionnairesController.cs" />

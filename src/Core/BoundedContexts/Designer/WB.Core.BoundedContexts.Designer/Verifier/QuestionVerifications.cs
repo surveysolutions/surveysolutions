@@ -175,7 +175,12 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 .Where(grouping => grouping.Count() >= 5)
                 .Select(grouping => grouping.Select(question => CreateReference(question)).ToArray());
 
-        private static bool MoreThan20Options(ICategoricalQuestion question) => question.Answers?.Count > 20;
+        private static bool MoreThan20Options(MultyOptionsQuestion question)
+        {
+            if (question.IsFilteredCombobox == true) return false;
+
+            return question.Answers?.Count > 20;
+        }
 
         private static bool NonconsecutiveCascadings(ICategoricalQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
             => question.CascadeFromQuestionId.HasValue

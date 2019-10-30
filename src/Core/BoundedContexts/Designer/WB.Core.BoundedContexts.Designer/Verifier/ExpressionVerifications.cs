@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.Composite;
@@ -661,7 +661,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         public IEnumerable<QuestionnaireVerificationMessage> Verify(MultiLanguageQuestionnaireDocument multiLanguageQuestionnaireDocument)
         {
             var verificationMessagesByQuestionnaire = new List<QuestionnaireVerificationMessage>();
-            foreach (var verifier in ErrorsVerifiers)
+            foreach (var verifier in ErrorsVerifiers.AsParallel())
             {
                 verificationMessagesByQuestionnaire.AddRange(verifier.Invoke(multiLanguageQuestionnaireDocument));
             }

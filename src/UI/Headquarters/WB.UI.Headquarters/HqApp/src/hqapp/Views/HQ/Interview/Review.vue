@@ -59,8 +59,9 @@ export default {
   },
 
   beforeMount() {
-    this.$store.dispatch("getLanguageInfo");
-    this.$store.dispatch("loadInterview");
+    var interviewId = this.$route.params.interviewId
+    this.$store.dispatch("getLanguageInfo", interviewId);
+    this.$store.dispatch("loadInterview", interviewId);
   },
 
   mounted() {

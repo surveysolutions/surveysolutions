@@ -14,6 +14,8 @@ export function batchedAction(callback, fetchAction = "fetch", limit = null) {
     let queue = []
 
     return (ctx, data) => {
+        data = data || null
+        
         if (fetchAction != null) {
             forEachIfNeeded(data, id => ctx.dispatch(fetchAction, { id }))
         }
