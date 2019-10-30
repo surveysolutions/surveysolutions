@@ -41,7 +41,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Enumerator
 
             if (authHeader != null)
             {
-                await signInManager.SignInWithAuthTokenAsync(authHeader, false, UserRoles.Supervisor);
+                await signInManager.SignInWithAuthTokenAsync(authHeader, false, UserRoles.Interviewer, UserRoles.Supervisor);
             }
 
             var multipartMemoryStreamProvider = await request.Content.ReadAsMultipartAsync();
