@@ -205,15 +205,6 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose translation.
-        /// </summary>
-        public static string ChooseLanguage {
-            get {
-                return ResourceManager.GetString("ChooseLanguage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Please choose translation.
         /// </summary>
         public static string ChooseLanguageTitle {
@@ -822,15 +813,6 @@ namespace WB.UI.Designer.Resources {
         public static string GeneratePdf {
             get {
                 return ResourceManager.GetString("GeneratePdf", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Generating pdf for &quot;{0}&quot;.
-        /// </summary>
-        public static string GeneratingPdf {
-            get {
-                return ResourceManager.GetString("GeneratingPdf", resourceCulture);
             }
         }
         
