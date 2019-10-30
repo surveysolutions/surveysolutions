@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -25,15 +26,19 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IQuestionnaireBrowseViewFactory browseViewFactory;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         private readonly IPlainKeyValueStorage<QuestionnairePdf> pdfStorage;
+        private readonly IRestServiceSettings restServiceSettings;
 
-        public QuestionnairesController(IQuestionnaireStorage questionnaireStorage,
-            IQuestionnaireBrowseViewFactory browseViewFactory, 
-            IWebInterviewConfigProvider webInterviewConfigProvider, 
+        public QuestionnairesController(
+            IQuestionnaireStorage questionnaireStorage,
+            IQuestionnaireBrowseViewFactory browseViewFactory,
+            IWebInterviewConfigProvider webInterviewConfigProvider,
+            IRestServiceSettings restServiceSettings,
             IPlainKeyValueStorage<QuestionnairePdf> pdfStorage)
         {
             this.questionnaireStorage = questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
             this.browseViewFactory = browseViewFactory ?? throw new ArgumentNullException(nameof(browseViewFactory));
             this.webInterviewConfigProvider = webInterviewConfigProvider ?? throw new ArgumentNullException(nameof(webInterviewConfigProvider));
+            this.restServiceSettings = restServiceSettings ?? throw new ArgumentNullException(nameof(restServiceSettings));
             this.pdfStorage = pdfStorage ?? throw new ArgumentNullException(nameof(pdfStorage));
         }
 
@@ -44,7 +49,7 @@ namespace WB.UI.Headquarters.Controllers
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
             var model = new QuestionnaireDetailsModel
             {
-                Title = questionnaire.Title, 
+                Title = questionnaire.Title,
                 Version = questionnaire.Version
             };
 
@@ -54,11 +59,14 @@ namespace WB.UI.Headquarters.Controllers
             model.CreationDateUtc = browseItem.CreationDate;
             model.WebMode = this.webInterviewConfigProvider.Get(questionnaireIdentity).Started;
             model.AudioAudit = browseItem.IsAudioRecordingEnabled;
+            model.DesignerUrl = $"{this.restServiceSettings.Endpoint.TrimEnd('/')}/" +
+                $"questionnaire/details/{questionnaire.QuestionnaireId:N}${questionnaire.Revision}";
+            model.Comment = browseItem.Comment;
 
             var mainPdfFile = this.pdfStorage.HasNotEmptyValue(questionnaireIdentity.ToString());
             if (mainPdfFile)
             {
-                model.MainPdfUrl = Url.Action("Pdf", new {id = id});
+                model.MainPdfUrl = Url.Action("Pdf", new { id = id });
             }
 
             foreach (var translation in questionnaire.Translations)
@@ -73,7 +81,7 @@ namespace WB.UI.Headquarters.Controllers
                         });
 
                     var pdf = new TranslatedPdf(translation.Name, url);
-                    
+
                     model.TranslatedPdfVersions.Add(pdf);
                 }
             }
@@ -113,7 +121,7 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     if (group.GetParent().PublicKey == questionnaireIdentity.QuestionnaireId)
                     {
-                       model.SectionsCount++;
+                        model.SectionsCount++;
                     }
                     else if (group.IsRoster)
                     {

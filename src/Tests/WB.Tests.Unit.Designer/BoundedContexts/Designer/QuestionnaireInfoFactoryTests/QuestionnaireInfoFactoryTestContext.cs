@@ -5,6 +5,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -15,11 +16,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
     internal class QuestionnaireInfoFactoryTestContext
     {
         protected static QuestionnaireInfoFactory CreateQuestionnaireInfoFactory(
-            IPlainKeyValueStorage<QuestionnaireDocument> questionDetailsReader = null,
+            IDesignerQuestionnaireStorage questionDetailsReader = null,
             IExpressionProcessor expressionProcessor = null)
         {
             return new QuestionnaireInfoFactory(
-                    questionDetailsReader ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(),
+                    questionDetailsReader ?? Mock.Of<IDesignerQuestionnaireStorage>(),
                     expressionProcessor ?? Mock.Of<IExpressionProcessor>());
         }
 
@@ -80,5 +81,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
 
         protected static Guid var1Id = Guid.Parse("11DDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         protected static Guid docId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
+
+        protected static QuestionnaireRevision questionnaireId = Create.QuestionnaireRevision("11111111111111111111111111111111");
+
     }
 }

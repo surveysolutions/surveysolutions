@@ -15,7 +15,6 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
             Assert.That(actionResult, Is.InstanceOf(typeof(NotFoundResult)));
         }
 
-        private static string questionnaireId = "22222222222222222222222222222222";
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
     }
 }

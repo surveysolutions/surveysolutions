@@ -97,6 +97,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Comment.
+        /// </summary>
+        public static string Comment {
+            get {
+                return ResourceManager.GetString("Comment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm.
         /// </summary>
         public static string Confirm {
@@ -111,6 +120,24 @@ namespace WB.UI.Designer.Resources {
         public static string Edit {
             get {
                 return ResourceManager.GetString("Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Extract at revision.
+        /// </summary>
+        public static string ExtractAtRevision {
+            get {
+                return ResourceManager.GetString("ExtractAtRevision", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Leave a comment.
+        /// </summary>
+        public static string LeaveComment {
+            get {
+                return ResourceManager.GetString("LeaveComment", resourceCulture);
             }
         }
         
@@ -295,6 +322,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Imported questionnaire to Headquarters ({0}) as {2} by {1}.
+        /// </summary>
+        public static string Questionnaire_ImportToHq {
+            get {
+                return ResourceManager.GetString("Questionnaire_ImportToHq", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Questionnaire ownership transferred to user with email &quot;{0}&quot;.
         /// </summary>
         public static string Questionnaire_Move {
@@ -435,6 +471,15 @@ namespace WB.UI.Designer.Resources {
         public static string Roster_Update {
             get {
                 return ResourceManager.GetString("Roster_Update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        public static string Save {
+            get {
+                return ResourceManager.GetString("Save", resourceCulture);
             }
         }
         
