@@ -60,7 +60,6 @@ namespace WB.UI.Interviewer.Infrastructure
             registry.Bind<IInterviewEventStreamOptimizer, InterviewEventStreamOptimizer>();
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
             registry.BindAsSingleton<IQuestionnaireStorage, QuestionnaireStorage>();
-            registry.Bind<IAnswerToStringConverter, AnswerToStringConverter>();
             registry.BindAsSingleton<IAssignmentDocumentsStorage, AssignmentDocumentsStorage>();
             registry.BindAsSingleton<IAudioAuditService, AudioAuditService>();
             

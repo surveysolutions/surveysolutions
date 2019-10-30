@@ -38,12 +38,12 @@ export default {
     },
 
     actions: {
-        async fetchSearchResults({ commit, state }) {
-            const res = await Vue.$api.call(api => {
-                const flags = getSelectedFlags(state);
-                const skip = state.search.needToClear ? 0 : state.search.skip;
-                return api.search(flags, skip, state.search.pageSize)
-            })
+        async fetchSearchResults({ commit, state, rootState }) {
+            const interviewId = rootState.route.params.interviewId
+            const flags = getSelectedFlags(state);
+            const skip = state.search.needToClear ? 0 : state.search.skip;
+            const limit = state.search.pageSize
+            const res = await Vue.$api.get('search', {interviewId, flags, skip, limit})
             commit("LOG_LAST_ACTIVITY")
             commit("SET_SEARCH_RESULT", res)
         },
@@ -65,8 +65,9 @@ export default {
                 dispatch("hideSearchResults");
         },
 
-        async getStatusesHistory() {
-            return await Vue.$api.call(api => api.getStatusesHistory());
+        async getStatusesHistory({ rootState }) {
+            const interviewId = rootState.route.params.interviewId
+            return await Vue.$api.get('getStatusesHistory', {interviewId})
         },
 
         resetAllFilters({ commit, state, dispatch }) {

@@ -1,0 +1,1 @@
+﻿UPDATE "questionnaireVariable$17" SET "long_variabe" = @answer1 WHERE interview__id = @interviewId1;

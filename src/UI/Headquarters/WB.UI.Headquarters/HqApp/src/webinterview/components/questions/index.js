@@ -38,18 +38,18 @@ Vue.component("wb-humburger",       () => import( /* webpackChunkName: "question
 Vue.component("wb-typeahead",       () => import( /* webpackChunkName: "questions" */ "./ui/typeahead"))
 
 export const GroupStatus = {
-    Disabled: 1,
-    NotStarted: 2,
-    Started: 3,
-    StartedInvalid: 4,
-    Completed: 5,
-    CompletedInvalid: 6
+    Disabled: "Disabled",
+    NotStarted: "NotStarted",
+    Started: "Started",
+    StartedInvalid: "StartedInvalid",
+    Completed: "Completed",
+    CompletedInvalid: "CompletedInvalid"
 }
 
 export const ButtonType = {
-    Start: 0,
-    Next: 1,
-    Parent: 2,
-    Complete: 3
+    Start: "Start",
+    Next: "Next",
+    Parent: "Parent",
+    Complete: "Complete"
 }
 

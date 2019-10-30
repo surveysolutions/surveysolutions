@@ -98,9 +98,11 @@ namespace WB.Tests.Unit.Applications.Headquarters
 
             var mockOfRestService = new Mock<IRestService>();
             mockOfRestService.Setup(x => x.GetAsync<PdfStatus>(It.IsAny<string>(), null, null, It.IsAny<RestCredentials>(), null))
-                .ReturnsAsync(new PdfStatus());
-            mockOfRestService.Setup(x =>
-                x.DownloadFileAsync(It.IsAny<string>(), null, It.IsAny<RestCredentials>(), null, null)).Returns(Task.FromResult(new RestFile(new byte[] { 1 }, "image/png", "content id", 0, "file.png", HttpStatusCode.OK)));
+                .ReturnsAsync(new PdfStatus {  ReadyForDownload = true } );
+
+            mockOfRestService.Setup(x => x.DownloadFileAsync(It.IsAny<string>(), null, It.IsAny<RestCredentials>(), null, null))
+                .Returns(Task.FromResult(new RestFile(new byte[] { 1 }, "image/png", "content id", 0, "file.png", HttpStatusCode.OK)));
+
             mockOfRestService.Setup(x => x.GetAsync<QuestionnaireCommunicationPackage>(It.IsAny<string>(), It.IsAny<IProgress<TransferProgress>>(), It.IsAny<object>(), It.IsAny<RestCredentials>(), It.IsAny<CancellationToken?>()))
                 .Returns(Task.FromResult(new QuestionnaireCommunicationPackage()));
 
@@ -144,7 +146,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
 
             var mockOfRestService = new Mock<IRestService>();
             mockOfRestService.Setup(x => x.GetAsync<PdfStatus>(It.IsAny<string>(), null, null, It.IsAny<RestCredentials>(), null))
-                .ReturnsAsync(new PdfStatus());
+                .ReturnsAsync(new PdfStatus() { ReadyForDownload = true } );
             mockOfRestService.Setup(x =>
                 x.DownloadFileAsync(It.IsAny<string>(), null, It.IsAny<RestCredentials>(), null, null))
                 .Returns(Task.FromResult(new RestFile(new byte[] { 1 }, "image/png", "content id", 0, "file.png", HttpStatusCode.OK)));

@@ -73,7 +73,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.lookupTablesStorage = lookupTablesStorage;
         }
 
-        public async Task<QuestionnaireImportResult> Import(Guid questionnaireId, string name, bool isCensusMode)
+        public async Task<QuestionnaireImportResult> Import(Guid questionnaireId, string name, bool isCensusMode, bool includePdf = true)
         {
             try
             {
@@ -104,7 +104,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 var questionnaireContentVersion = questionnairePackage.QuestionnaireContentVersion;
                 var questionnaireAssembly = questionnairePackage.QuestionnaireAssembly;
 
-                await TriggerPdfRendering(questionnaire, credentials);
+                if (includePdf)
+                    await TriggerPdfRendering(questionnaire, credentials);
 
                 if (questionnaire.Attachments != null)
                 {
@@ -168,7 +169,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     questionnaireContentVersion,
                     questionnaireVersion));
 
-                await DownloadAndStorePdf(questionnaireIdentity, credentials, questionnaire);
+                if (includePdf)
+                    await DownloadAndStorePdf(questionnaireIdentity, credentials, questionnaire);
 
                 this.auditLog.QuestionnaireImported(questionnaire.Title, questionnaireIdentity);
 
@@ -250,15 +252,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             RestCredentials credentials,
             QuestionnaireDocument questionnaire)
         {
-            var pdfRetry = Policy.HandleResult<PdfStatus>(x => x.ReadyForDownload == false)
-                .WaitAndRetryAsync(7, retry => TimeSpan.FromSeconds(retry));
+            var pdfRetry = Policy
+                .HandleResult<PdfStatus>(x => x.ReadyForDownload == false && x.CanRetry != true)
+                .WaitAndRetryForeverAsync(_ => TimeSpan.FromSeconds(3));
 
-            await pdfRetry.ExecuteAsync(async () =>
+            var result = await pdfRetry.ExecuteAsync(async () =>
             {
                 this.logger.Trace($"Waiting for pdf to be ready {questionnaireIdentity}");
                 var pdfStatus = await this.restService.GetAsync<PdfStatus>(
                     url: $"pdf/status/{questionnaireIdentity.QuestionnaireId}",
                     credentials: credentials);
+                this.logger.Trace($"Waiting for pdf to be ready {questionnaireIdentity} - Ready: {pdfStatus.ReadyForDownload}");
                 return pdfStatus;
             });
 
