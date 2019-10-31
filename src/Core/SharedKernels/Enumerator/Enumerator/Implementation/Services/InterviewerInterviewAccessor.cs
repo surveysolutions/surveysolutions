@@ -76,6 +76,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public void RemoveInterview(Guid interviewId)
         {
+            logger.Warn($"Removing interview {interviewId}");
+
             this.aggregateRootRepositoryWithCache.CleanCache();
 
             this.interviewViewRepository.Remove(interviewId.FormatGuid());
@@ -84,7 +86,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.RemoveInterviewImages(interviewId);
             this.eventStore.RemoveEventSourceById(interviewId);
             this.eventRegistry.RemoveAggregateRoot(interviewId.FormatGuid());
-            
         }
 
         private void RemoveInterviewImages(Guid interviewId)

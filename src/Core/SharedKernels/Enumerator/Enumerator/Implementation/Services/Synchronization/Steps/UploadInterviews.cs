@@ -95,7 +95,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         }
                         else
                         {
-                            this.logger.Warn($"Interview event stream is missing. No package was sent to server");
+                            this.logger.Error($"Interview event stream is missing. No package was sent to server");
+                            throw new Exception($"Data inconsistency for interview {completedInterview.InterviewId}. No events to send.");
                         }
                     }
                     else
