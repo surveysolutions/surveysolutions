@@ -117,10 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
+  <data name="PageHeader" xml:space="preserve">
+    <value>Zgjidh një pyetësor për ta importuar </value>
   </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Application update is required</value>
+  <data name="QuestionnaireCannotBeFound" xml:space="preserve">
+    <value>Pyetësori i kërkuar nuk mund të gjendet. Ju lutemi, rifreskoni listën e pyetësorëve </value>
+  </data>
+  <data name="SignedInBlock" xml:space="preserve">
+    <value>Ju jeni të regjistruar në Designer si {0}.</value>
+  </data>
+  <data name="SignOut" xml:space="preserve">
+    <value>Dil</value>
+  </data>
+  <data name="Table_CreatedBy" xml:space="preserve">
+    <value>Krijuar nga</value>
+  </data>
+  <data name="Table_LastModified" xml:space="preserve">
+    <value>Ndryshuar për herë të fundit</value>
+  </data>
+  <data name="Table_Title" xml:space="preserve">
+    <value>titulli</value>
   </data>
 </root>

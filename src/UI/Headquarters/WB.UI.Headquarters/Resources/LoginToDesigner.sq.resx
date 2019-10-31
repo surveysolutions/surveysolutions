@@ -117,10 +117,31 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
+  <data name="AccessForbidden" xml:space="preserve">
+    <value>Serveri nuk është i regjistruar në Questionnaire Designer. Ju lutemi, dërgoni një kërkesë për të regjistruar serverin e vetëhostuar në portalin Survey Solutions https://mysurvey.solutions/NewServerRequest </value>
   </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Application update is required</value>
+  <data name="DesignerAppDescription" xml:space="preserve">
+    <value>Ky është një instrument falas për krijimin e pyetësorëve për platformën CAPI të Bankës Botërore. Atë mund ta gjeni në</value>
+  </data>
+  <data name="InvalidCredentials" xml:space="preserve">
+    <value>Përdoruesi nuk është i autorizuar. Ju lutemi, kontrolloni emrin e regjistrimit dhe fjalëkalimin tuaj.</value>
+  </data>
+  <data name="LoginWatermark" xml:space="preserve">
+    <value>Emri i regjistrimit ose email-i</value>
+  </data>
+  <data name="PageHeader" xml:space="preserve">
+    <value>Përdorni kredencialet tuaja të Survey Solutions Designer për të hyrë te pyetësorët tuaj.</value>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Pyetësor</value>
+  </data>
+  <data name="SessionExpired" xml:space="preserve">
+    <value>Seanca skadoi, ju lutemi, regjistrohuni sërish</value>
+  </data>
+  <data name="UnableToImportNewQuestionnaire" xml:space="preserve">
+    <value>E pamundur të importohet pyetësori i ri:</value>
+  </data>
+  <data name="UserDesignerCredentials" xml:space="preserve">
+    <value>Ju lutemi, regjistrohuni me kredencialet që përdorni normalisht për të hyrë te pyetësorët tuaj në faqen Designer dhe në aplikimin Tester</value>
   </data>
 </root>

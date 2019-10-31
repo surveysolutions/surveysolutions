@@ -117,10 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
+  <data name="Empty" xml:space="preserve">
+    <value>Logu është bosh</value>
   </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Application update is required</value>
+  <data name="EventType" xml:space="preserve">
+    <value>Lloji i ngjarjes</value>
+  </data>
+  <data name="Log" xml:space="preserve">
+    <value>Logu</value>
+  </data>
+  <data name="LogDate" xml:space="preserve">
+    <value>Data e regjistrit</value>
+  </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Logu i kontrollit</value>
+  </data>
+  <data name="ServerFilePath" xml:space="preserve">
+    <value>Vendndodhja e skedarit në server: </value>
+  </data>
+  <data name="User" xml:space="preserve">
+    <value>Përdoruesi</value>
   </data>
 </root>

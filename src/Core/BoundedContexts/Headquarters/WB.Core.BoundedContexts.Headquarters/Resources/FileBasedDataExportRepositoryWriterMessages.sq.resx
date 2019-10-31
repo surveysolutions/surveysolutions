@@ -117,10 +117,31 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
+  <data name="Administrator" xml:space="preserve">
+    <value>Administratori</value>
   </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Application update is required</value>
+  <data name="ApiUser" xml:space="preserve">
+    <value>Përdorues Api</value>
+  </data>
+  <data name="FileContentIsMissingForFileNameAndInterviewFormat" xml:space="preserve">
+    <value>Përmbajtja e skedarit për intervistën {1} me emër skedari {0} </value>
+  </data>
+  <data name="Headquarter" xml:space="preserve">
+    <value>Zyra Qendrore</value>
+  </data>
+  <data name="Interviewer" xml:space="preserve">
+    <value>Intervistuesi</value>
+  </data>
+  <data name="InterviewWithIdIsAbsentFormat" xml:space="preserve">
+    <value>Intervista me identifikues '{0}' mungon</value>
+  </data>
+  <data name="Supervisor" xml:space="preserve">
+    <value>Supervizori</value>
+  </data>
+  <data name="UnknownRole" xml:space="preserve">
+    <value>&lt;UNKNOWN ROLE&gt;</value>
+  </data>
+  <data name="UnknownUser" xml:space="preserve">
+    <value>&lt;UNKNOWN USER&gt;</value>
   </data>
 </root>

@@ -117,10 +117,37 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
+  <data name="Interviewers" xml:space="preserve">
+    <value>Intervistuesit</value>
   </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Application update is required</value>
+  <data name="LowStorage" xml:space="preserve">
+    <value>Më pak se 100MB hapësirë e lirë</value>
+  </data>
+  <data name="NeverSynchronized" xml:space="preserve">
+    <value>Nuk është lidhur asnjëherë</value>
+  </data>
+  <data name="NeverUploaded" xml:space="preserve">
+    <value>Nuk është ngarkuar asnjëherë</value>
+  </data>
+  <data name="NoAssignments" xml:space="preserve">
+    <value>Nuk është marrë asnjë detyrë</value>
+  </data>
+  <data name="OldAndroidVersion" xml:space="preserve">
+    <value>Android 4.4 ose më poshtë</value>
+  </data>
+  <data name="OldInterviewerVersion" xml:space="preserve">
+    <value>Version i vjetër</value>
+  </data>
+  <data name="TabletReassigned" xml:space="preserve">
+    <value>Tableti iu caktua dikujt tjetër</value>
+  </data>
+  <data name="Teams" xml:space="preserve">
+    <value>Ekipet</value>
+  </data>
+  <data name="TeamSize" xml:space="preserve">
+    <value>Madhësia e ekipit</value>
+  </data>
+  <data name="WrongDateOnTablet" xml:space="preserve">
+    <value>Ora e gabuar në tablet</value>
   </data>
 </root>

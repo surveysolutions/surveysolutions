@@ -117,10 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
+  <data name="ImportInterviews_FailedToImportInterview_NoSupervisor" xml:space="preserve">
+    <value>Gabim gjatë importimit të intervistës me pyetjet identifikuese {0}. Mungon supervizori përgjegjës</value>
   </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Application update is required</value>
+  <data name="ImportInterviews_GenericError" xml:space="preserve">
+    <value>Gabim gjatë importimit të detyrës me përgjigje: {0}. Përgjegjës: {1}, Përjashtim: {2}</value>
+  </data>
+  <data name="ImportInterviews_IncorrectDatafile" xml:space="preserve">
+    <value>Skedari i të dhënave është i pasaktë </value>
+  </data>
+  <data name="ImportInterviews_QuestionaireNotFound" xml:space="preserve">
+    <value>Pyetësori nuk u gjet</value>
   </data>
 </root>

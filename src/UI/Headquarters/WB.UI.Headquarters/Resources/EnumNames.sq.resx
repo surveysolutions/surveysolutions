@@ -117,10 +117,76 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
+  <data name="InterviewerFacet_None" xml:space="preserve">
+    <value>Asnjë</value>
   </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Application update is required</value>
+  <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
+    <value>Miratuar nga Zyra </value>
+  </data>
+  <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
+    <value>Miratuar nga Supervizori</value>
+  </data>
+  <data name="InterviewStatus_Completed" xml:space="preserve">
+    <value>Përfunduar</value>
+  </data>
+  <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
+    <value>Intervistuesi u caktua</value>
+  </data>
+  <data name="MenuItem_Completed" xml:space="preserve">
+    <value>Përfunduar</value>
+  </data>
+  <data name="MenuItem_Profile" xml:space="preserve">
+    <value>Profili</value>
+  </data>
+  <data name="MenuItem_Rejected" xml:space="preserve">
+    <value>Refuzuar</value>
+  </data>
+  <data name="MenuItem_Started" xml:space="preserve">
+    <value>Nisur</value>
+  </data>
+  <data name="UserRoles_Administrator" xml:space="preserve">
+    <value>Administrator</value>
+  </data>
+  <data name="UserRoles_ApiUser" xml:space="preserve">
+    <value>PërdoruesApi</value>
+  </data>
+  <data name="UserRoles_Headquarter" xml:space="preserve">
+    <value>Zyra qendrore</value>
+  </data>
+  <data name="UserRoles_Interviewer" xml:space="preserve">
+    <value>Intervistuesi</value>
+  </data>
+  <data name="UserRoles_Observer" xml:space="preserve">
+    <value>Vrojtuesi</value>
+  </data>
+  <data name="UserRoles_Supervisor" xml:space="preserve">
+    <value>Supervizori</value>
+  </data>
+  <data name="WebInterviewUserMessages_CompleteButton" xml:space="preserve">
+    <value>Përfunduar</value>
+  </data>
+  <data name="WebInterviewUserMessages_CompleteNoteToSupervisor" xml:space="preserve">
+    <value>Shënim për Supervizorin</value>
+  </data>
+  <data name="WebInterviewUserMessages_FinishInterview" xml:space="preserve">
+    <value>Përfundo Tekstin</value>
+  </data>
+  <data name="WebInterviewUserMessages_Invitation" xml:space="preserve">
+    <value>Ftesa e Mirëseardhjes</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeInvitation" xml:space="preserve">
+    <value>Ftesa për të vazhduar</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeWelcome" xml:space="preserve">
+    <value>Kreu Rifillo </value>
+  </data>
+  <data name="WebInterviewUserMessages_SurveyName" xml:space="preserve">
+    <value>Titulli i Anketës</value>
+  </data>
+  <data name="WebInterviewUserMessages_WebSurveyHeader" xml:space="preserve">
+    <value>Kreu Përfundo</value>
+  </data>
+  <data name="WebInterviewUserMessages_WelcomeText" xml:space="preserve">
+    <value>Kreu Mirë se vjen</value>
   </data>
 </root>

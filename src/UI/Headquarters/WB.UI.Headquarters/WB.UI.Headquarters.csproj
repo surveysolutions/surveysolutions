@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -942,6 +942,66 @@
       <LastGenOutput>Maps.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="App_GlobalResources\BatchUpload.sq.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>BatchUpload.sq.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Common.sq.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Common.sq.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Dashboard.sq.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Dashboard.sq.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\DataExport.sq.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>DataExport.sq.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\HQ.sq.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>HQ.sq.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Import.sq.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Import.sq.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\MainMenu.sq.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>MainMenu.sq.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\MapReport.sq.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>MapReport.sq.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Maps.sq.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Maps.sq.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\QuestionnaireClonning.sq.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>QuestionnaireClonning.sq.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\QuestionnaireImport.sq.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>QuestionnaireImport.sq.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Reports.sq.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Reports.sq.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Settings.sq.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Settings.sq.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\TakeNewInterview.sq.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>TakeNewInterview.sq.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Users.sq.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Users.sq.designer.cs</LastGenOutput>
+    </Content>
     <EmbeddedResource Include="Content\img\no_image_found.jpg" />
     <Content Include="Content\img\sort_asc.png" />
     <Content Include="Content\img\sort_asc_disabled.png" />
@@ -1121,45 +1181,53 @@
     <EmbeddedResource Include="Resources\Archived.ro.resx">
       <DependentUpon>Archived.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Archived.sq.resx" />
     <EmbeddedResource Include="Resources\Assignments.ar.resx">
       <DependentUpon>Assignments.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Assignments.ro.resx">
       <DependentUpon>Assignments.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Assignments.sq.resx" />
     <EmbeddedResource Include="Resources\AuditLog.ar.resx">
       <DependentUpon>AuditLog.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\AuditLog.ro.resx">
       <DependentUpon>AuditLog.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AuditLog.sq.resx" />
     <EmbeddedResource Include="Resources\DataTables.ar.resx">
       <DependentUpon>DataTables.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\DataTables.ro.resx">
       <DependentUpon>DataTables.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\DataTables.sq.resx" />
     <EmbeddedResource Include="Resources\Details.ar.resx">
       <DependentUpon>Details.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Details.ro.resx">
       <DependentUpon>Details.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Details.sq.resx" />
     <EmbeddedResource Include="Resources\DevicesInterviewers.ar.resx">
       <DependentUpon>DevicesInterviewers.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\DevicesInterviewers.ro.resx">
       <DependentUpon>DevicesInterviewers.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\DevicesInterviewers.sq.resx" />
     <EmbeddedResource Include="Resources\EnumNames.ar.resx">
       <DependentUpon>EnumNames.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\EnumNames.ro.resx">
       <DependentUpon>EnumNames.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\EnumNames.sq.resx" />
     <EmbeddedResource Include="Resources\FieldsAndValidations.ro.resx">
       <DependentUpon>FieldsAndValidations.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\FieldsAndValidations.sq.resx" />
     <EmbeddedResource Include="Resources\ImportQuestionnaire.ar.resx">
       <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
     </EmbeddedResource>
@@ -1214,6 +1282,7 @@
     <EmbeddedResource Include="Resources\ImportQuestionnaire.fr.resx">
       <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ImportQuestionnaire.sq.resx" />
     <EmbeddedResource Include="Resources\Interviews.ar.resx">
       <DependentUpon>Interviews.resx</DependentUpon>
     </EmbeddedResource>
@@ -1223,6 +1292,7 @@
     <EmbeddedResource Include="Resources\Interviews.ro.resx">
       <DependentUpon>Interviews.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Interviews.sq.resx" />
     <EmbeddedResource Include="Resources\LimitsIndicator.ar.resx">
       <DependentUpon>LimitsIndicator.resx</DependentUpon>
     </EmbeddedResource>
@@ -1232,6 +1302,7 @@
     <EmbeddedResource Include="Resources\LimitsIndicator.ro.resx">
       <DependentUpon>LimitsIndicator.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\LimitsIndicator.sq.resx" />
     <EmbeddedResource Include="Resources\LoginToDesigner.ar.resx">
       <DependentUpon>LoginToDesigner.resx</DependentUpon>
     </EmbeddedResource>
@@ -1241,6 +1312,7 @@
     <EmbeddedResource Include="Resources\LoginToDesigner.ro.resx">
       <DependentUpon>LoginToDesigner.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\LoginToDesigner.sq.resx" />
     <EmbeddedResource Include="Resources\OutdatedBrowser.ar.resx">
       <DependentUpon>OutdatedBrowser.resx</DependentUpon>
     </EmbeddedResource>
@@ -1253,12 +1325,14 @@
     <EmbeddedResource Include="Resources\OutdatedBrowser.ro.resx">
       <DependentUpon>OutdatedBrowser.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\OutdatedBrowser.sq.resx" />
     <EmbeddedResource Include="Resources\Pages.es.resx">
       <DependentUpon>Pages.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Pages.ro.resx">
       <DependentUpon>Pages.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Pages.sq.resx" />
     <EmbeddedResource Include="Resources\PeriodicStatusReport.ar.resx">
       <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
     </EmbeddedResource>
@@ -1268,6 +1342,7 @@
     <EmbeddedResource Include="Resources\PeriodicStatusReport.ro.resx">
       <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PeriodicStatusReport.sq.resx" />
     <EmbeddedResource Include="Resources\Questionnaire.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Questionnaire.Designer.cs</LastGenOutput>
@@ -1285,6 +1360,7 @@
     <EmbeddedResource Include="Resources\ReviewInterview.ro.resx">
       <DependentUpon>ReviewInterview.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ReviewInterview.sq.resx" />
     <EmbeddedResource Include="Resources\ReviewInterview.zh.resx">
       <DependentUpon>ReviewInterview.resx</DependentUpon>
     </EmbeddedResource>
@@ -1300,6 +1376,7 @@
     <EmbeddedResource Include="Resources\SyncLogMessages.ro.resx">
       <DependentUpon>SyncLogMessages.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\SyncLogMessages.sq.resx" />
     <EmbeddedResource Include="Resources\TabletLogs.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>TabletLogs.Designer.cs</LastGenOutput>
@@ -1315,6 +1392,7 @@
     <EmbeddedResource Include="Resources\TabletSyncMessages.ro.resx">
       <DependentUpon>TabletSyncMessages.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TabletSyncMessages.sq.resx" />
     <EmbeddedResource Include="Resources\Troubleshooting.ar.resx">
       <DependentUpon>Troubleshooting.resx</DependentUpon>
     </EmbeddedResource>
@@ -1327,6 +1405,7 @@
     <EmbeddedResource Include="Resources\Troubleshooting.ro.resx">
       <DependentUpon>Troubleshooting.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Troubleshooting.sq.resx" />
     <EmbeddedResource Include="Resources\UnderConstruction.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>UnderConstruction.Designer.cs</LastGenOutput>
@@ -1335,6 +1414,7 @@
     <EmbeddedResource Include="Resources\UnderConstruction.ru.resx">
       <DependentUpon>UnderConstruction.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UnderConstruction.sq.resx" />
     <EmbeddedResource Include="Resources\UnderConstruction.zh.resx" />
     <EmbeddedResource Include="Resources\UploadUsers.fr.resx">
       <DependentUpon>UploadUsers.resx</DependentUpon>
@@ -1342,6 +1422,7 @@
     <EmbeddedResource Include="Resources\UploadUsers.ro.resx">
       <DependentUpon>UploadUsers.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UploadUsers.sq.resx" />
     <EmbeddedResource Include="Resources\UploadUsers.zh.resx">
       <DependentUpon>UploadUsers.resx</DependentUpon>
     </EmbeddedResource>
@@ -1360,6 +1441,7 @@
     <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.ru.resx">
       <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.sq.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.zh.resx">
       <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
     </EmbeddedResource>
@@ -1372,12 +1454,15 @@
       <LastGenOutput>WebInterviewSettings.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\WebInterviewSettings.sq.resx" />
     <EmbeddedResource Include="Resources\WebInterviewSetup.ro.resx">
       <DependentUpon>WebInterviewSetup.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\WebInterviewSetup.sq.resx" />
     <EmbeddedResource Include="Resources\WebInterviewUI.ro.resx">
       <DependentUpon>WebInterviewUI.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\WebInterviewUI.sq.resx" />
     <EmbeddedResource Include="Resources\WebInterviewUI.uk-UA.resx" />
     <EmbeddedResource Include="Resources\WebInterviewUI.zh.resx">
       <DependentUpon>WebInterviewUI.resx</DependentUpon>
@@ -2093,6 +2178,81 @@
     <Compile Include="API\DataCollection\Enumerator\LogsApiController.cs" />
     <Compile Include="API\Export\UserExportApiController.cs" />
     <Compile Include="API\PublicApi\AssignmentsHistoryController.cs" />
+    <Compile Include="App_GlobalResources\BatchUpload.sq.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BatchUpload.sq.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Common.sq.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Common.sq.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Dashboard.sq.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Dashboard.sq.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\DataExport.sq.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataExport.sq.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\HQ.sq.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HQ.sq.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Import.sq.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Import.sq.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\MainMenu.sq.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MainMenu.sq.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\MapReport.sq.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MapReport.sq.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Maps.sq.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Maps.sq.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\QuestionnaireClonning.sq.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QuestionnaireClonning.sq.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\QuestionnaireImport.sq.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QuestionnaireImport.sq.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Reports.sq.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reports.sq.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Settings.sq.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Settings.sq.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\TakeNewInterview.sq.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TakeNewInterview.sq.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Users.sq.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Users.sq.resx</DependentUpon>
+    </Compile>
     <Compile Include="API\WebInterview\InterviewCommandsController.cs" />
     <Compile Include="API\WebInterview\InterviewDataController.cs" />
     <Compile Include="API\TabletLogsApiController.cs" />

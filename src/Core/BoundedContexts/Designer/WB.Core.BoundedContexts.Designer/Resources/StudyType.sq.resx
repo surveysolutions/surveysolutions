@@ -117,10 +117,76 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
+  <data name="AdministrativeRecords" xml:space="preserve">
+    <value>Regjistrime administrative</value>
   </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Application update is required</value>
+  <data name="AgriculturalCensus" xml:space="preserve">
+    <value>Censi bujqësor</value>
+  </data>
+  <data name="AgriculturalSurvey" xml:space="preserve">
+    <value>Anketa bujqësore</value>
+  </data>
+  <data name="ChildLaborSurvey" xml:space="preserve">
+    <value>Anketa e punës së fëmijëve</value>
+  </data>
+  <data name="CoreWelfareIndicatorsQuestionnaire" xml:space="preserve">
+    <value>Pyetësori i Treguesve Kryesorë të Mirëqenies </value>
+  </data>
+  <data name="DemographicAndHealthSurvey" xml:space="preserve">
+    <value>Anketa demografike dhe e shëndetit</value>
+  </data>
+  <data name="EnterpriseCensus" xml:space="preserve">
+    <value>Censi i ndërmarrjeve</value>
+  </data>
+  <data name="EnterpriseSurvey" xml:space="preserve">
+    <value>Anketa e ndërmarrjeve</value>
+  </data>
+  <data name="HouseholdHealthSurvey" xml:space="preserve">
+    <value>Anketa e shëndetit të familjes</value>
+  </data>
+  <data name="HouseholdSurvey" xml:space="preserve">
+    <value>Anketa e familjeve</value>
+  </data>
+  <data name="InformalSectorSurvey" xml:space="preserve">
+    <value>Anketa e sektorit informal</value>
+  </data>
+  <data name="IntegratedSurvey" xml:space="preserve">
+    <value>Anketa e integruar</value>
+  </data>
+  <data name="LaborForceSurvey" xml:space="preserve">
+    <value>Anketa e forcës së punës</value>
+  </data>
+  <data name="LivingStandardsMeasurementStudy" xml:space="preserve">
+    <value>Anketa e matjes së nivelit të jetesës </value>
+  </data>
+  <data name="MultipleIndicatorClusterSurvey" xml:space="preserve">
+    <value>Anketa e grupimeve të treguesve të shumëfishtë</value>
+  </data>
+  <data name="PopulationAndHousingCensus" xml:space="preserve">
+    <value>Censi i popullsisë dhe banesave</value>
+  </data>
+  <data name="PriceSurvey" xml:space="preserve">
+    <value>Anketa e çmimeve</value>
+  </data>
+  <data name="PrioritySurvey" xml:space="preserve">
+    <value>Anketa e përparësive</value>
+  </data>
+  <data name="SampleFrame" xml:space="preserve">
+    <value>Struktura e kampionit</value>
+  </data>
+  <data name="ServiceProvisionAssessments" xml:space="preserve">
+    <value>Vlerësimet e ofrimit të shërbimeve </value>
+  </data>
+  <data name="SocioEconomicMonitoringSurvey" xml:space="preserve">
+    <value>Anketa socio-ekonomike/monitoruese</value>
+  </data>
+  <data name="StatisticalInfoAndMonitoringProg" xml:space="preserve">
+    <value>Të dhëna statistikore dhe monitorimi i ecurisë.</value>
+  </data>
+  <data name="WorldFertilitySurvey" xml:space="preserve">
+    <value>Anketa e fertilitetit në botë</value>
+  </data>
+  <data name="WorldHealthSurvey" xml:space="preserve">
+    <value>Anketa botërore e shëndetit</value>
   </data>
 </root>

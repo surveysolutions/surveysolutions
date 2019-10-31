@@ -1,0 +1,876 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AccountIsLockedOnServer" xml:space="preserve">
+    <value>Llogaria juaj e përdoruesit është bllokuar. Ju lutemi, kontaktoni supervizorin tuaj.</value>
+  </data>
+  <data name="AccountIsNotAnInterviewer" xml:space="preserve">
+    <value>Llogaria juaj nuk ka rol Intervistuesi </value>
+  </data>
+  <data name="AccountIsNotApprovedOnServer" xml:space="preserve">
+    <value>Llogaria juaj nuk është miratuar. Ju lutemi kontaktoni supervizorin tuaj.</value>
+  </data>
+  <data name="ApplicationIncompatibleWithServer" xml:space="preserve">
+    <value>Aplikacioni juaj nuk është në përputhje me atë të serverit. Përditësoni aplikacionin tuaj të Intervistuesit.</value>
+  </data>
+  <data name="AssignmentsSynchronization" xml:space="preserve">
+    <value>Detyra(t) po sinkronizohen </value>
+  </data>
+  <data name="Dashboard_Assign" xml:space="preserve">
+    <value>Cakto</value>
+  </data>
+  <data name="Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat" xml:space="preserve">
+    <value>Për të mbledhur: e pakufizuar</value>
+  </data>
+  <data name="Dashboard_AssignmentCard_SubTitleCountdownFormat" xml:space="preserve">
+    <value>Për të mbledhur: {0} intervistë(a)</value>
+  </data>
+  <data name="Dashboard_AssignmentCard_SubTitleSingleInterivew" xml:space="preserve">
+    <value>Detyra e një interviste të vetme </value>
+  </data>
+  <data name="Dashboard_AssignmentsTabTitle" xml:space="preserve">
+    <value>Krijo të re</value>
+  </data>
+  <data name="Dashboard_CensusAssignment" xml:space="preserve">
+    <value>Censi</value>
+  </data>
+  <data name="Dashboard_CompletedLinkText" xml:space="preserve">
+    <value>Përfunduar ({0})</value>
+  </data>
+  <data name="Dashboard_CompletedTabText" xml:space="preserve">
+    <value>Intervistat e përfunduara do të ngarkohen gjatë sinkronizimit tuaj të radhës</value>
+  </data>
+  <data name="Dashboard_CreateNewTabText" xml:space="preserve">
+    <value>Krijo intervistë të re duke përdorur modelet </value>
+  </data>
+  <data name="Dashboard_Discard" xml:space="preserve">
+    <value>Hidhe</value>
+  </data>
+  <data name="Dashboard_Interview_AssignmentLabelFormat" xml:space="preserve">
+    <value>Detyra #{0}</value>
+  </data>
+  <data name="Dashboard_Interview_QuestionsAnsweredFormat" xml:space="preserve">
+    <value>{0} pyetje me përgjigje</value>
+  </data>
+  <data name="Dashboard_NeedTextForSearch" xml:space="preserve">
+    <value>Kryej kërkimin për të shfaqur rezultatet  </value>
+  </data>
+  <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
+    <value>I ri ({0})</value>
+  </data>
+  <data name="Dashboard_No_InterviewKey" xml:space="preserve">
+    <value>Asnjë çelës interviste </value>
+  </data>
+  <data name="Dashboard_NoInterviewsSyncButton" xml:space="preserve">
+    <value>Sinkronizo</value>
+  </data>
+  <data name="Dashboard_NoInterviewsText" xml:space="preserve">
+    <value>Sinkronizo për të marrë detyrat e reja ose kontaktoni supervizorin tuaj për udhëzime të mëtejshme</value>
+  </data>
+  <data name="Dashboard_NoInterviewsTitle" xml:space="preserve">
+    <value>Ju nuk keni detyra të reja</value>
+  </data>
+  <data name="Dashboard_NoNewItemsLinkText" xml:space="preserve">
+    <value>Asnjë e re</value>
+  </data>
+  <data name="Dashboard_NotFoundSearchResult" xml:space="preserve">
+    <value>Nuk u gjet asgjë</value>
+  </data>
+  <data name="Dashboard_Open" xml:space="preserve">
+    <value>Hap</value>
+  </data>
+  <data name="Dashboard_QuestionnairesTabText" xml:space="preserve">
+    <value>Ju mund të krijoni intervista të reja duke përdorur detyra</value>
+  </data>
+  <data name="Dashboard_Reinitialize_Interview_Message" xml:space="preserve">
+    <value>Intervista përfundoi. Dëshironi ta hapni sërish intervistën?</value>
+  </data>
+  <data name="Dashboard_RejectedLinkText" xml:space="preserve">
+    <value>Refuzuar ({0})</value>
+  </data>
+  <data name="Dashboard_RejectedTabText" xml:space="preserve">
+    <value>Intervistat që janë refuzuar nga supervizori. Ju duhet të zgjidhni problemet e shënuara në faqen e parë</value>
+  </data>
+  <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
+    <value>Jeni të sigurt që dëshironi ta fshini këtë intervistë {0}?</value>
+  </data>
+  <data name="Dashboard_Reopen" xml:space="preserve">
+    <value>Rihap</value>
+  </data>
+  <data name="Dashboard_Search_ExitSearch" xml:space="preserve">
+    <value>Dil  nga kërkimi</value>
+  </data>
+  <data name="Dashboard_Searching" xml:space="preserve">
+    <value>Po kërkon...</value>
+  </data>
+  <data name="Dashboard_SearchResult" xml:space="preserve">
+    <value>{0} elemente u gjetën</value>
+  </data>
+  <data name="Dashboard_SearchWatermark" xml:space="preserve">
+    <value>Vendos tekstin për kërkim</value>
+  </data>
+  <data name="Dashboard_ShowLocation" xml:space="preserve">
+    <value>Shfaq vendndodhjen</value>
+  </data>
+  <data name="Dashboard_Start" xml:space="preserve">
+    <value>Fillo</value>
+  </data>
+  <data name="Dashboard_StartedLinkText" xml:space="preserve">
+    <value>Filloi ({0})</value>
+  </data>
+  <data name="Dashboard_StartedTabText" xml:space="preserve">
+    <value>Intervistat që kanë filluar por nuk kanë përfunduar                                                       Ju duhet ta përfundoni që të sinkronizoheni </value>
+  </data>
+  <data name="Dashboard_StartNewInterview" xml:space="preserve">
+    <value>Fillo një intervistë të re</value>
+  </data>
+  <data name="Dashboard_Title" xml:space="preserve">
+    <value>{0} intervista për {1}</value>
+  </data>
+  <data name="Dashboard_ViewIssues" xml:space="preserve">
+    <value>Shih problemet </value>
+  </data>
+  <data name="DashboardItem_ApprovedBySupervisor" xml:space="preserve">
+    <value>Miratuar nga supervizori {0}</value>
+  </data>
+  <data name="DashboardItem_AssignedOn" xml:space="preserve">
+    <value>Caktuar më {0}</value>
+  </data>
+  <data name="DashboardItem_AssignmentCreatedComment" xml:space="preserve">
+    <value>Intervistat u krijuan: {0}</value>
+  </data>
+  <data name="DashboardItem_AssignmentLeftComment" xml:space="preserve">
+    <value>{0} intervista(t)</value>
+  </data>
+  <data name="DashboardItem_CensusModeComment" xml:space="preserve">
+    <value>Modaliteti censi, Intervistat u krijuan: {0}</value>
+  </data>
+  <data name="DashboardItem_CompletedOn" xml:space="preserve">
+    <value>Përfunduar në {0}</value>
+  </data>
+  <data name="DashboardItem_CreatedOn" xml:space="preserve">
+    <value>Krijuar më {0}</value>
+  </data>
+  <data name="DashboardItem_NotStarted" xml:space="preserve">
+    <value>Nuk ka filluar</value>
+  </data>
+  <data name="DashboardItem_RejectedByHqOn" xml:space="preserve">
+    <value>Refuzuar nga Zyra Qendrore më {0}</value>
+  </data>
+  <data name="DashboardItem_RejectedOn" xml:space="preserve">
+    <value>Refuzuar më {0}</value>
+  </data>
+  <data name="DashboardItem_Responsible" xml:space="preserve">
+    <value>Përgjegjës: {0}</value>
+  </data>
+  <data name="DashboardItem_StartedOn" xml:space="preserve">
+    <value>Filluar më {0}</value>
+  </data>
+  <data name="DashboardItem_Title" xml:space="preserve">
+    <value>{0} (v{1})</value>
+  </data>
+  <data name="Diagnostics_Backup_Description" xml:space="preserve">
+    <value>Ruaj të gjitha informacionet përkatëse në skedarin në këtë pajisje.</value>
+  </data>
+  <data name="Diagnostics_Backup_Title" xml:space="preserve">
+    <value>Gjenero paketën e mbështetjes </value>
+  </data>
+  <data name="Diagnostics_BackupDate_Title" xml:space="preserve">
+    <value>Kur ruhet:</value>
+  </data>
+  <data name="Diagnostics_BackupFileLocation_Title" xml:space="preserve">
+    <value>Bëj kopje rezervë të vendndodhjes së skedarit:</value>
+  </data>
+  <data name="Diagnostics_BackupReady_Title" xml:space="preserve">
+    <value>Të dhënat u ruajtën</value>
+  </data>
+  <data name="Diagnostics_BackupScope_Title" xml:space="preserve">
+    <value>Sfera:</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionAbsent_Title" xml:space="preserve">
+    <value>&lt;font color="red"&gt;No internet connection&lt;/font&gt;</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionNotOK_Title" xml:space="preserve">
+    <value>Lidhja është &lt;font color="red"&gt;jo e mirë &lt;/font&gt;</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionOK_Title" xml:space="preserve">
+    <value>Lidhja është OK</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionToTheServerAbsent_Title" xml:space="preserve">
+    <value>&lt;font color="red"&gt;Nuk është lidhur me serverin &lt;/font&gt;</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionType_Title" xml:space="preserve">
+    <value>Lloji i lidhjes:</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestNetworkName_Title" xml:space="preserve">
+    <value>Emri i rrjetit:</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestPing_Title" xml:space="preserve">
+    <value>Ping:</value>
+  </data>
+  <data name="Diagnostics_CheckVersion_Description" xml:space="preserve">
+    <value>Do të kontrollojmë për një version më të ri në serverin e ZQ-së</value>
+  </data>
+  <data name="Diagnostics_CheckVersion_Title" xml:space="preserve">
+    <value>Versioni: {0}. Kontrollo për një version të ri </value>
+  </data>
+  <data name="Diagnostics_Delete" xml:space="preserve">
+    <value>Fshi</value>
+  </data>
+  <data name="Diagnostics_DownloadingPleaseWait" xml:space="preserve">
+    <value>Po shkarkohet, ju lutemi pritni...</value>
+  </data>
+  <data name="Diagnostics_NewVersionAvaliable_Title" xml:space="preserve">
+    <value>Ekziston version i ri. Dëshironi të shkarkoni dhe përditësoni aplikacionin?</value>
+  </data>
+  <data name="Diagnostics_NewVersionNumber_Title" xml:space="preserve">
+    <value>Versioni numër:</value>
+  </data>
+  <data name="Diagnostics_No" xml:space="preserve">
+    <value>Jo</value>
+  </data>
+  <data name="Diagnostics_Restore_Description" xml:space="preserve">
+    <value>Duke rikuperuar të dhënat e ruajtura, do të zëvendësoni të gjitha detyrat në këtë pajisje</value>
+  </data>
+  <data name="Diagnostics_Restore_Title" xml:space="preserve">
+    <value>RIKTHE NË GJENDJE FILLESTARE</value>
+  </data>
+  <data name="Diagnostics_RestoreReady_Title" xml:space="preserve">
+    <value>U gjetën të dhënat e ruajtura:</value>
+  </data>
+  <data name="Diagnostics_Send" xml:space="preserve">
+    <value>Dërgo</value>
+  </data>
+  <data name="Diagnostics_Send_Description" xml:space="preserve">
+    <value>Të gjitha të dhënat e aplikacionit dhe intervistës do të mblidhen në një arkiv të vetëm. Për këtë mund të duhen 10 minuta.</value>
+  </data>
+  <data name="Diagnostics_Send_Title" xml:space="preserve">
+    <value>Mblidhni dhe dërgoni në ZQ të gjitha informacionin e tabletit</value>
+  </data>
+  <data name="Diagnostics_ServerUrl" xml:space="preserve">
+    <value>URL-ja e serverit: </value>
+  </data>
+  <data name="Diagnostics_Share_Description" xml:space="preserve">
+    <value>I gjithë informacioni e mëposhtëm do të ndahet si tekst i thjeshtë. Ai mund të dërgohet me email, google hangouts  ose çdo aplikacion tjetër për dërgimin e mesazheve</value>
+  </data>
+  <data name="Diagnostics_Share_Title" xml:space="preserve">
+    <value>Nda të gjithë informacionin teknik </value>
+  </data>
+  <data name="Diagnostics_TabletInformationReady_Title" xml:space="preserve">
+    <value>Arkivi i të dhënave është gati</value>
+  </data>
+  <data name="Diagnostics_TabletInformationScope_Title" xml:space="preserve">
+    <value>Sfera:</value>
+  </data>
+  <data name="Diagnostics_TabletInformationWhenGenerated_Title" xml:space="preserve">
+    <value>Kur gjenerohet:</value>
+  </data>
+  <data name="Diagnostics_TestConnection_Description" xml:space="preserve">
+    <value>Ne do të testojmë lidhjen me serverin tonë dhe shpejtësinë e tij </value>
+  </data>
+  <data name="Diagnostics_TestConnection_Title" xml:space="preserve">
+    <value>Testo gjerësinë e bandës me serverin</value>
+  </data>
+  <data name="Diagnostics_Title" xml:space="preserve">
+    <value>Diagnostikim</value>
+  </data>
+  <data name="Diagnostics_Update" xml:space="preserve">
+    <value>Përditëso</value>
+  </data>
+  <data name="Diagnostics_YouHaveTheLatestVersionOfApplication" xml:space="preserve">
+    <value>Ju keni versionin më të fundit të aplikacionit.</value>
+  </data>
+  <data name="FailedToCreateInterview" xml:space="preserve">
+    <value>Intervista nuk arriti të krijohej. Arsyeja: {0}</value>
+  </data>
+  <data name="FailedToLoadInterview" xml:space="preserve">
+    <value>Intervista nuk arriti të hapet</value>
+  </data>
+  <data name="FailedToLoadInterviewDescription" xml:space="preserve">
+    <value>Intervista është në gjendje të pavlefshme dhe nuk mund të hapet. Ju lutemi, kontaktoni me ekipin mbështetës ose provoni të sinkronizoheni, që të përftoni gjendjen e duhur.</value>
+  </data>
+  <data name="FinishInstallation_EndpointDiffers" xml:space="preserve">
+    <value>Pika fundore e sinkronizimit '{0}' është ndryshe nga ajo që përcaktohet në Cilësime ('{1}'). Ngarko URL-në nga cilësimet?</value>
+  </data>
+  <data name="FinishInstallation_QrBarcodeReaderErrorMessage" xml:space="preserve">
+    <value>Gjatë skanimit ndodhi një gabim</value>
+  </data>
+  <data name="HostUnreachable" xml:space="preserve">
+    <value>Nuk ka akses në internet në serverin tuaj. Kontrollo adresën e serverit dhe(ose) cilësimet e rrjetit</value>
+  </data>
+  <data name="InternalServerError" xml:space="preserve">
+    <value>Gabim i serverit. Ju lutemi, kontaktoni me ekipin mbështetës support@mysurvey.solutions</value>
+  </data>
+  <data name="Interview_Creating" xml:space="preserve">
+    <value>Intervista po krijohet</value>
+  </data>
+  <data name="Interview_Creating_Description" xml:space="preserve">
+    <value>Për këtë mund të duhen disa minuta, mos dil nga ky aplikacion</value>
+  </data>
+  <data name="Interview_Loading" xml:space="preserve">
+    <value>Të dhënat e intervistës po shkarkohen</value>
+  </data>
+  <data name="Interview_Loading_Description" xml:space="preserve">
+    <value>Intervista do të fillojë pas pak</value>
+  </data>
+  <data name="Interview_Loading_With_Percents" xml:space="preserve">
+    <value>Të dhënat e intervistës po ngarkohen  {0}%</value>
+  </data>
+  <data name="InterviewerFromDifferentTeam" xml:space="preserve">
+    <value>Intervista i takon një ekipi tjetër. Ju lutemi, sinkronizohuni me faqen e Zyrës Qendrore </value>
+  </data>
+  <data name="InvalidEndpoint" xml:space="preserve">
+    <value>Adresa e faqes së Supervizorit është e pavlefshme. Sigurohuni që keni vendosur adresën e saktë url</value>
+  </data>
+  <data name="LocationPermissionRequired" xml:space="preserve">
+    <value>Kërkohet leja e vendndodhjes për sinkronizimin jashtë internetit</value>
+  </data>
+  <data name="Login_FinishInstallation_Message" xml:space="preserve">
+    <value>Ky është ndezja e parë në këtë pajisje. Përdoruesi dhe domeni ende nuk janë vendosur.&lt;br /&gt;Ju duhet lidhje me internetin për të vijuar</value>
+  </data>
+  <data name="Login_Online_Signin_Explanation_message" xml:space="preserve">
+    <value>Ju mund të provoni të sign in në internet, nëse keni harruar fjalëkalimin apo nëse ai është rivendosur</value>
+  </data>
+  <data name="Login_Online_SignIn_Failed" xml:space="preserve">
+    <value>Problem verifikimi në serverin e largët. Ju lutemi, kontaktoni Supervizorin tuaj </value>
+  </data>
+  <data name="Login_WrongPassword" xml:space="preserve">
+    <value>Fjalëkalimi i gabuar</value>
+  </data>
+  <data name="Maintenance" xml:space="preserve">
+    <value>Faqja e internetit e Survey Solutions Supervisor është në mirëmbajtje. Na falni për shqetësimin</value>
+  </data>
+  <data name="Maps_NoMapsText" xml:space="preserve">
+    <value>Sinkronizohuni për të marrë hartat ose kontaktoni me supevizorin tuaj për udhëzime të mëtejshme</value>
+  </data>
+  <data name="Maps_Synchronization_Success_Description" xml:space="preserve">
+    <value>Të gjitha hartat u sinkronizuan </value>
+  </data>
+  <data name="Maps_Title" xml:space="preserve">
+    <value>Hartat</value>
+  </data>
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Checking_maps_on_server" xml:space="preserve">
+    <value>Hartat në server po kontrollohen </value>
+  </data>
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Map_sync_error" xml:space="preserve">
+    <value>Gabim në sinkronizimin e hartës</value>
+  </data>
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Map_synchronization_succesfuly_finished" xml:space="preserve">
+    <value>Sinkronizimi i hartës përfundoi me sukses </value>
+  </data>
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format" xml:space="preserve">
+    <value>Përdorimi i hartës {0}, {1} nga {2}.          Shkarkuar {3}%</value>
+  </data>
+  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
+    <value>Paneli kryesor</value>
+  </data>
+  <data name="MenuItem_Title_Diagnostics" xml:space="preserve">
+    <value>Diagnostikimi</value>
+  </data>
+  <data name="MenuItem_Title_Language" xml:space="preserve">
+    <value>Gjuha</value>
+  </data>
+  <data name="MenuItem_Title_Language_Original" xml:space="preserve">
+    <value>Fillestar</value>
+  </data>
+  <data name="MenuItem_Title_Login" xml:space="preserve">
+    <value>Hyrje</value>
+  </data>
+  <data name="MenuItem_Title_Maps" xml:space="preserve">
+    <value>Hartat</value>
+  </data>
+  <data name="MenuItem_Title_MapsSynchronization" xml:space="preserve">
+    <value>Sinkronizimi i hartave</value>
+  </data>
+  <data name="MenuItem_Title_Search" xml:space="preserve">
+    <value>Kërko</value>
+  </data>
+  <data name="MenuItem_Title_Settings" xml:space="preserve">
+    <value>Cilësimet</value>
+  </data>
+  <data name="MenuItem_Title_SignOut" xml:space="preserve">
+    <value>Dil</value>
+  </data>
+  <data name="NoNetwork" xml:space="preserve">
+    <value>Nuk ka rrjet. Kontrolloni cilësimet e rrjetit tuaj </value>
+  </data>
+  <data name="Notifications_CompletedInterviewsText" xml:space="preserve">
+    <value>Ju keni {0} intervistë(a) të përfunduara që duhen sinkronizuar</value>
+  </data>
+  <data name="Notifications_InterviewsTitle" xml:space="preserve">
+    <value>Intervista</value>
+  </data>
+  <data name="Notifications_ManyCompletedInterviews" xml:space="preserve">
+    <value>Ka shumë intervista të përfunduara. Ju lutemi, sinkronizojini.</value>
+  </data>
+  <data name="Notifications_ManyStartedInterviews" xml:space="preserve">
+    <value>Ju keni nisur shumë intervista. Ju lutemi, përfundojini.</value>
+  </data>
+  <data name="Notifications_RejectedInterviewsText" xml:space="preserve">
+    <value>Ju keni {0} intervistë(a) të refuzuara që nuk janë trajtuar</value>
+  </data>
+  <data name="Notifications_StaleAssignments" xml:space="preserve">
+    <value>Disa detyra nuk janë përditësuar 3 ditët e fundit.</value>
+  </data>
+  <data name="Notifications_SyncNoRetryTitle" xml:space="preserve">
+    <value>Nuk pati përpjekje të riprovuar pas dështimit të sinkronizimit. Ju lutemi, provojeni prapë</value>
+  </data>
+  <data name="Notifications_SyncTitle" xml:space="preserve">
+    <value>Sinkronizim</value>
+  </data>
+  <data name="Notifications_SyncTooLongAgoText" xml:space="preserve">
+    <value>Sinkronizimi nuk është kryer së fundmi. Ju lutemi, sinkronizoni</value>
+  </data>
+  <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
+    <value>Ju keni një version që nuk përputhet me aplikacionin e Intervistuesit. Ju lutemi, çinstalojeni dhe instalojeni prapë nga faqja e Zyrës Qendrore në Survey Solutions </value>
+  </data>
+  <data name="Prefs_AboutApplication" xml:space="preserve">
+    <value>Rreth aplikacionit</value>
+  </data>
+  <data name="Prefs_AllowSyncWithHq" xml:space="preserve">
+    <value>Lejo sinkronizimin me Zyrën Qendrore </value>
+  </data>
+  <data name="Prefs_AllowSyncWithHq_Summary" xml:space="preserve">
+    <value>Çaktivizo këtë cilësim nëse dëshiron të sinkronizohesh vetëm me aplikacionin e supervizorit në celular. Pas sinkronizimit të parë të suksesshëm me Aplikacionin e Supervizorit nuk do të jetë e mundur ta aktivizoni sërish këtë cilësim</value>
+  </data>
+  <data name="Prefs_AllowSyncWithHq_Summary_Disabled" xml:space="preserve">
+    <value>Sinkronizimi me Zyrën Qendrore nuk është i mundur, nëse ka pasur edhe një sinkronizim të vetëm të suksesshëm me Aplikacionin e Supervizorit</value>
+  </data>
+  <data name="Prefs_ApplicationVersionTitle" xml:space="preserve">
+    <value>Versioni i aplikacionit:</value>
+  </data>
+  <data name="Prefs_BufferSizeSummary" xml:space="preserve">
+    <value>Numri i bitëve për paketë duke marrë/përcjellë të dhëna nga/drejt aplikacionit të supervizorit </value>
+  </data>
+  <data name="Prefs_BufferSizeTitle" xml:space="preserve">
+    <value>Madhësia e paketës së komunikimit </value>
+  </data>
+  <data name="Prefs_ConnectionSettings" xml:space="preserve">
+    <value>Cilësimet e lidhjes</value>
+  </data>
+  <data name="Prefs_DeviceIdTitle" xml:space="preserve">
+    <value>Identiteti i Pajisjes:</value>
+  </data>
+  <data name="Prefs_EndpointTitle" xml:space="preserve">
+    <value>URL-ja e Supervizorit</value>
+  </data>
+  <data name="Prefs_EventChunkSizeSummary" xml:space="preserve">
+    <value>Sa ngjarje mund të lexohen me një kërkim </value>
+  </data>
+  <data name="Prefs_EventChunkSizeTitle" xml:space="preserve">
+    <value>Madhësia e pjesës së ngjarjes</value>
+  </data>
+  <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
+    <value>Numri i sekondave të pritjes për koordinatat </value>
+  </data>
+  <data name="Prefs_GpsReceiveTimeoutSecTitle" xml:space="preserve">
+    <value>Koha e vlefshme për GPS Receive </value>
+  </data>
+  <data name="Prefs_HttpResponseTimeoutSummary" xml:space="preserve">
+    <value>Numri i sekondave të pritjes deri në përgjigjen e serverit </value>
+  </data>
+  <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
+    <value>Koha e vlefshme për Përgjigjen e Serverit </value>
+  </data>
+  <data name="Prefs_InterviewSettings" xml:space="preserve">
+    <value>Cilësimet e intervistës</value>
+  </data>
+  <data name="Prefs_Title" xml:space="preserve">
+    <value>Cilësimet</value>
+  </data>
+  <data name="RequestCanceledByUser" xml:space="preserve">
+    <value>Kërkesa u anulua nga përdoruesi </value>
+  </data>
+  <data name="RequestTimeout" xml:space="preserve">
+    <value>Koha skadoi gjatë lidhjes me faqen e Supervizorit në Survey Solutions. Kontrolloni lidhjen tuaj të internetit.</value>
+  </data>
+  <data name="SelectResponsible_CancelButtonText" xml:space="preserve">
+    <value>Anulo</value>
+  </data>
+  <data name="SelectResponsible_Reassign" xml:space="preserve">
+    <value>Ricakto</value>
+  </data>
+  <data name="SelectResponsible_ReassignButtonText" xml:space="preserve">
+    <value>Ricakto</value>
+  </data>
+  <data name="SelectResponsible_ReassignDescription" xml:space="preserve">
+    <value>Zgjidh përgjegjës të ri për intervistën. Do të shfaqet në pajisjen e intervistuesit pas sinkronizimit të radhës</value>
+  </data>
+  <data name="ServiceUnavailable" xml:space="preserve">
+    <value>Nuk është lidhur me Supervizorin në Survey Solutions. Ju lutemi, sigurohuni që faqja është e disponueshme.</value>
+  </data>
+  <data name="Share_to_Title" xml:space="preserve">
+    <value>Ndaje informacionin me..</value>
+  </data>
+  <data name="Synchronization_Cancel" xml:space="preserve">
+    <value>Anulo</value>
+  </data>
+  <data name="Synchronization_Check_Obsolete_Questionnaires" xml:space="preserve">
+    <value>Shih për pyetësorë të vjetruar </value>
+  </data>
+  <data name="Synchronization_Check_Obsolete_Questionnaires_Description" xml:space="preserve">
+    <value>Po hiqen {0} pyetësorë nga {1}</value>
+  </data>
+  <data name="Synchronization_CheckForObsolete_Interviews" xml:space="preserve">
+    <value>Shih për intervista të vjetruara  </value>
+  </data>
+  <data name="Synchronization_CheckNewVersionOfApplication" xml:space="preserve">
+    <value>Po kontrollohen përditësimet e aplikacionit</value>
+  </data>
+  <data name="Synchronization_Done" xml:space="preserve">
+    <value>U krye</value>
+  </data>
+  <data name="Synchronization_DoneWithErrors_Title" xml:space="preserve">
+    <value>Sinkronizimi përfundoi me gabime</value>
+  </data>
+  <data name="Synchronization_Download_AttachmentsCleanup" xml:space="preserve">
+    <value>Bashkëlidhjet e vjetruara po hiqen </value>
+  </data>
+  <data name="Synchronization_Download_Description_Format" xml:space="preserve">
+    <value>{0} një {1} {2} të përfunduara</value>
+  </data>
+  <data name="Synchronization_Download_Title" xml:space="preserve">
+    <value>Detyrat po përditësohen</value>
+  </data>
+  <data name="Synchronization_DownloadApplication" xml:space="preserve">
+    <value>Përditësimet e aplikacionit po shkarkohen</value>
+  </data>
+  <data name="Synchronization_DownloadApplication_Description" xml:space="preserve">
+    <value>U morën {0} nga {1} në {2} ({3}%)</value>
+  </data>
+  <data name="Synchronization_DownloadingLogo" xml:space="preserve">
+    <value>Logoja e shkarkimit</value>
+  </data>
+  <data name="Synchronization_Fail_State_DeletedInterviews_Format" xml:space="preserve">
+    <value>{0} nga {1} intervista u fshinë</value>
+  </data>
+  <data name="Synchronization_Fail_State_FailedToProcess_Format" xml:space="preserve">
+    <value>{0} intervistë(a) nuk arritën të sinkronizohen</value>
+  </data>
+  <data name="Synchronization_Fail_State_NewInterviews_Format" xml:space="preserve">
+    <value>{0} nga {1} intervista të reja u shkarkuan </value>
+  </data>
+  <data name="Synchronization_Fail_State_RejectedInterviews_Format" xml:space="preserve">
+    <value>{0} nga {1} intervista të refuzuara u kthyen </value>
+  </data>
+  <data name="Synchronization_Fail_State_UploadedInterviews_Format" xml:space="preserve">
+    <value>{0} nga {1} intervista të përfunduara u ngarkuan</value>
+  </data>
+  <data name="Synchronization_Fail_Title" xml:space="preserve">
+    <value>Sinkronizimi u ndërpre, ju lutemi provojeni prapë </value>
+  </data>
+  <data name="Synchronization_Fail_UnexpectedException" xml:space="preserve">
+    <value>Përjashtim i papritur</value>
+  </data>
+  <data name="Synchronization_Interviews" xml:space="preserve">
+    <value>Intervista</value>
+  </data>
+  <data name="Synchronization_LockedAssignments_Text" xml:space="preserve">
+    <value>Detyrat janë të bllokuara derisa të përfundojë sinkronizimi</value>
+  </data>
+  <data name="Synchronization_Of_AssignmentsFormat" xml:space="preserve">
+    <value>Duke sinkronizuar {0} nga {1} detyrë(a)</value>
+  </data>
+  <data name="Synchronization_Of_Interviewers" xml:space="preserve">
+    <value>Sinkronizimi i intervistuesve </value>
+  </data>
+  <data name="Synchronization_Of_InterviewersFormat" xml:space="preserve">
+    <value>Po sinkronizohen {0} nga {1} intervistues (s)</value>
+  </data>
+  <data name="Synchronization_Of_Supervisor_details" xml:space="preserve">
+    <value>Hollësitë e sinkronizimit të Supervizorit </value>
+  </data>
+  <data name="Synchronization_Questionnaires" xml:space="preserve">
+    <value>Pyetësorë</value>
+  </data>
+  <data name="Synchronization_Receiving_Title_Format" xml:space="preserve">
+    <value>Po merr {0}</value>
+  </data>
+  <data name="Synchronization_ReceivingAuditLog" xml:space="preserve">
+    <value>Po merret informacioni i kontrollit </value>
+  </data>
+  <data name="Synchronization_SendingApplication_Description" xml:space="preserve">
+    <value>Dërguar {0} nga {1} në {2} ({3}%)</value>
+  </data>
+  <data name="Synchronization_Success_Description" xml:space="preserve">
+    <value>Të gjitha detyrat u përditësuan </value>
+  </data>
+  <data name="Synchronization_Success_State_DeletedInterviews_Format" xml:space="preserve">
+    <value>{0} intervista u fshinë</value>
+  </data>
+  <data name="Synchronization_Success_State_NewInterviews_Format" xml:space="preserve">
+    <value>{0} intervista të reja u shkarkuan </value>
+  </data>
+  <data name="Synchronization_Success_State_RejectedInterviews_Format" xml:space="preserve">
+    <value>{0} intervista të reja u kthyen </value>
+  </data>
+  <data name="Synchronization_Success_State_UploadedInterviews_Format" xml:space="preserve">
+    <value>{0} intervista të përfunduara u ngarkuan </value>
+  </data>
+  <data name="Synchronization_Success_Title" xml:space="preserve">
+    <value>Sinkronizimi përfundoi me sukses </value>
+  </data>
+  <data name="Synchronization_SupervisorShouldDoOnlineSync" xml:space="preserve">
+    <value>Supervizori duhet të ketë gjithnjë ndryshimet e fundit nga Zyra Qendrore, ndaj duhet të sinkronizohet i fundit nga ekipi, para sesa sinkronizimi pa internet të jetë i disponueshëm </value>
+  </data>
+  <data name="Synchronization_SupervisorShouldDoOnlineSync_Title" xml:space="preserve">
+    <value>Aplikacioni i supervizorit duhet të sinkronizohet.</value>
+  </data>
+  <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
+    <value>detyra të përfunduara</value>
+  </data>
+  <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
+    <value>{0} nga {1} {2} u kryen</value>
+  </data>
+  <data name="Synchronization_Upload_Interviews_Text" xml:space="preserve">
+    <value>Intervista</value>
+  </data>
+  <data name="Synchronization_Upload_Title_Format" xml:space="preserve">
+    <value>Po ngarkohet {0}</value>
+  </data>
+  <data name="Synchronization_UploadAuditLog" xml:space="preserve">
+    <value>Ngarko informacionin e kontrollit </value>
+  </data>
+  <data name="Synchronization_UploadingApplication" xml:space="preserve">
+    <value>Përditësimet e aplikacionit po dërgohen </value>
+  </data>
+  <data name="Synchronization_UploadingLogo" xml:space="preserve">
+    <value>Logoja po ngarkohet </value>
+  </data>
+  <data name="Synchronization_UserAuthentication_Description" xml:space="preserve">
+    <value>Po përgatitet për sinkronizim </value>
+  </data>
+  <data name="Synchronization_UserAuthentication_Title" xml:space="preserve">
+    <value>Vërtetimi i përdoruesit</value>
+  </data>
+  <data name="Synchronization_UserDoNotBelongToTeam" xml:space="preserve">
+    <value>Përdoruesi nuk i përket më ekipit të Supervizorit. Ju lutemi, për hollësitë kontaktoni Zyrën Tuaj Qendrore.</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherDevice_Status" xml:space="preserve">
+    <value>Gabim në verifikimin e përdoruesit </value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherDevice_Title" xml:space="preserve">
+    <value>Llogaria juaj u rilidh me një tablet tjetër </value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherServer_Description" xml:space="preserve">
+    <value>Përdoruesi aktual u krijua në një njësi tjetër të aplikacionit të Zyrës Qendrore. Ndrysho URL-në e pikës fundore të sinkronizimit në serverin fillestar</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherServer_Status" xml:space="preserve">
+    <value>Përdoruesi është i lidhur me një server tjetër </value>
+  </data>
+  <data name="Synchronization_UserPassword_Update_Format" xml:space="preserve">
+    <value>Problem vërtetimi. Nuk mundëm të konfirmojmë kredencialet tuaja '{0}'. Llogaria juaj mund të ketë fjalëkalim tjetër, të jetë e bllokuar ose e fshirë. Ju lutemi, vendoseni edhe njëherë fjalëkalimin. Nëse problemi vazhdon, kontaktoni me Supervizorin tuaj ose Zyrën Qendrore.</value>
+  </data>
+  <data name="TransferringAssignments" xml:space="preserve">
+    <value>Detyrat po transferohen</value>
+  </data>
+  <data name="Troubleshooting_Backup" xml:space="preserve">
+    <value>Krijo kopje rezervë</value>
+  </data>
+  <data name="Troubleshooting_BackupErrorMessage" xml:space="preserve">
+    <value>Diçka shkoi keq dhe kopja rezervë nuk arriti të krijohej</value>
+  </data>
+  <data name="Troubleshooting_BackupWasSaved" xml:space="preserve">
+    <value>Kopja rezervë u ruajt në {0}</value>
+  </data>
+  <data name="Troubleshooting_CurrentVersion_CheckForUpdates" xml:space="preserve">
+    <value>Version: {0}. Shihni për një version të ri </value>
+  </data>
+  <data name="Troubleshooting_InformationPackageIsSuccessfullySent" xml:space="preserve">
+    <value>Paketa e informacionit u dërgua me sukses</value>
+  </data>
+  <data name="Troubleshooting_InformationPackageSizeWarningFormat" xml:space="preserve">
+    <value>Paketa e informacionit me madhësi {0} do të dërgohet nëpërmjet rrjetit. Jeni të sigurt që doni ta dërgoni?</value>
+  </data>
+  <data name="Troubleshooting_NewVerisonExist" xml:space="preserve">
+    <value>Ekziston versioni i ri. Doni ta shkarkoni dhe të përditësoni aplikacionin?</value>
+  </data>
+  <data name="Troubleshooting_NoNewVersion" xml:space="preserve">
+    <value>Ju keni versionin më të fundit të aplikimit </value>
+  </data>
+  <data name="Troubleshooting_Old_AreYouSureYouWantToRestore" xml:space="preserve">
+    <value>Të gjitha të dhënat aktuale do të fshihen. Jeni të sigurt që doni të vazhdoni me kthimin në gjendjen e mëparshme. Nëse Po, ju lutemi sigurohuni që rikuperimi i të dhënave të jetë paraqitet në {0}</value>
+  </data>
+  <data name="Troubleshooting_Old_CreatingInformationPackage" xml:space="preserve">
+    <value>Paketa e informacionit po krijohet </value>
+  </data>
+  <data name="Troubleshooting_Old_InformationPackage" xml:space="preserve">
+    <value>Paketa e informacionit</value>
+  </data>
+  <data name="Troubleshooting_Old_InformationPackageIsSuccessfullySent" xml:space="preserve">
+    <value>Paketa e informacionit u dërgua me sukses </value>
+  </data>
+  <data name="Troubleshooting_Old_InformationPackageSizeWarningFormat" xml:space="preserve">
+    <value>Paketa e informacionit me madhësi {0} do të dërgohet nëpërmjet rrjetit. Jeni i sigurt që doni ta dërgoni?</value>
+  </data>
+  <data name="Troubleshooting_Old_SendingInformationPackage" xml:space="preserve">
+    <value>Paketa e informacionit po dërgohet </value>
+  </data>
+  <data name="Troubleshooting_Old_SendingOfInformationPackageIsCanceled" xml:space="preserve">
+    <value>Dërgimi i paketës së informacionit u anulua.    Arsye: {0}</value>
+  </data>
+  <data name="Troubleshooting_Old_SendingOfInformationPackageIsCanceling" xml:space="preserve">
+    <value>Po anulohet</value>
+  </data>
+  <data name="Troubleshooting_RestorationErrorMessage" xml:space="preserve">
+    <value>Diçka shkoi keq dhe tableti nuk arriti të kthehej në gjendjen e mëparshme</value>
+  </data>
+  <data name="Troubleshooting_Restore" xml:space="preserve">
+    <value>Rikupero nga kopja rezervë</value>
+  </data>
+  <data name="Troubleshooting_RestoreConfirmation" xml:space="preserve">
+    <value>Të gjitha të dhënat aktuale do të fshihen. Jeni të sigurt që doni të vazhdoni rikuperimin? Nëse Po, ju lutemi, sigurohuni që rikuperimi i të dhënave është i pranishëm në {0}</value>
+  </data>
+  <data name="Troubleshooting_RestoredSuccessfully" xml:space="preserve">
+    <value>Tableti u kthye me sukses në gjendjen e mëparshme</value>
+  </data>
+  <data name="Troubleshooting_RestoreFolderIsEmpty" xml:space="preserve">
+    <value>Dosja '{0}' është bosh. Ju lutemi, vendosni në dosje kopjen rezervë që doni të rikuperoni.</value>
+  </data>
+  <data name="Troubleshooting_SendingOfInformationPackageErrorMessage" xml:space="preserve">
+    <value>Dërgimi i paketës së informacionit nuk arriti të bëhej </value>
+  </data>
+  <data name="Troubleshooting_SendTabletInformation" xml:space="preserve">
+    <value>Dërgo të dhënat e tabletit</value>
+  </data>
+  <data name="Troubleshooting_Title" xml:space="preserve">
+    <value>Zgjidhje problemesh</value>
+  </data>
+  <data name="Troubleshooting_Unknown_ErrorMessage" xml:space="preserve">
+    <value>Ndodhi një gabim gjatë kontrollit të versionit. Ju lutemi, kontrolloni cilësimet ose provojeni prapë më vonë</value>
+  </data>
+  <data name="UnacceptableSSLCertificate" xml:space="preserve">
+    <value>Nuk arriti të verifikonte certifikatën për URL-në e synuar. Ju lutemi, kontrolloni nëse adresa e faqes së Zyrës Qendrore është e vlefshme dhe nëse pajisja juaj ka datën dhe orën aktuale</value>
+  </data>
+  <data name="Unauthorized" xml:space="preserve">
+    <value>Emri i regjistrimit ose fjalëkalimi juaj është i pasaktë</value>
+  </data>
+  <data name="UnexpectedException" xml:space="preserve">
+    <value>Gabim i papritur</value>
+  </data>
+  <data name="UpdatingQuestionnaires" xml:space="preserve">
+    <value>Pyetësorët po përditësohen</value>
+  </data>
+  <data name="UpgradeRequired" xml:space="preserve">
+    <value>Ka dalë version i ri i aplikacionit. Ju lutemi, përditësoni aplikacionin</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Paralajmërim</value>
+  </data>
+</root>
