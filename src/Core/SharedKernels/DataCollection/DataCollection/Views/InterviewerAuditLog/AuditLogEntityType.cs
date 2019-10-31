@@ -18,6 +18,7 @@
         ApproveInterview,
         RejectInterview,
         AssignResponsibleToInterview,
-        AssignResponsibleToAssignment
+        AssignResponsibleToAssignment,
+        FinishInstallation
     }
 }
