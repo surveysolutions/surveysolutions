@@ -5,12 +5,14 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Controllers;
 using WB.Enumerator.Native.WebInterview.Models;
+using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.WebTester.Services;
 
 namespace WB.UI.WebTester.Controllers
 {
     [ApiNoCache]
+    [CamelCase]
     [RoutePrefix("api/webinterview/commands")]
     public class InterviewCommandsController : CommandsController
     {

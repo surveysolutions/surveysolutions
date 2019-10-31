@@ -5,12 +5,14 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
+using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.WebTester.Controllers
 {
     [ApiNoCache]
     [RoutePrefix("api/webinterview")]
+    [CamelCase]
     public class InterviewDataController : Enumerator.Native.WebInterview.Controllers.InterviewDataController
     {
         public InterviewDataController(IQuestionnaireStorage questionnaireRepository, IStatefulInterviewRepository statefulInterviewRepository, 
