@@ -23,14 +23,8 @@ namespace WB.Services.Export.Host
 {
     public class Startup
     {
-        private readonly ILogger<Startup> logger;
-
-        public Startup(IConfiguration configuration, ILogger<Startup> logger)
+        public Startup(IConfiguration configuration)
         {
-            logger.LogInformation("Export service started. version {version}", 
-                FileVersionInfo.GetVersionInfo(this.GetType().Assembly.Location).ProductVersion);
-
-            this.logger = logger;
             Configuration = configuration;
         }
 
@@ -44,17 +38,16 @@ namespace WB.Services.Export.Host
             // should we go to web config for connection string?
             if (webConfig != null)
             {
-                WebConfigReader.Read(Configuration, webConfig, logger);
+                WebConfigReader.Read(Configuration, webConfig);
             }
 
             services.AddTransient<TenantModelBinder>();
-            //services.AddMvcCore(ops =>
-            //{
-            //    ops.ModelBinderProviders.Insert(0, new TenantEntityBinderProvider());
-            //    ops.Filters.Add<TenantInfoPropagationActionFilter>();
-            //})
-            //.SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-           // .AddJsonFormatters();
+
+            services.AddControllers(opts =>
+            {
+                opts.ModelBinderProviders.Insert(0, new TenantEntityBinderProvider());
+                opts.Filters.Add<TenantInfoPropagationActionFilter>();
+            }).AddNewtonsoftJson();
 
             services.AddTransient<IDataExportProcessesService, PostgresDataExportProcessesService>();
 
@@ -64,7 +57,8 @@ namespace WB.Services.Export.Host
 
             services.RegisterJobHandler<ExportJobRunner>(ExportJobRunner.Name);
             services.AddScoped(typeof(ITenantApi<>), typeof(TenantApi<>));
-            services.AddDbContext<TenantDbContext>(builder => {
+            services.AddDbContext<TenantDbContext>(builder =>
+            {
                 builder.ReplaceService<IModelCacheKeyFactory, TenantModelCacheKeyFactory>();
             });
             services.AddTransient<IOnDemandCollector, AppVersionCollector>();
@@ -76,7 +70,7 @@ namespace WB.Services.Export.Host
 
                 registry.RegisterOnDemandCollectors(collectors);
                 registry.RegisterOnDemandCollector<DotNetStatsCollector>();
-                
+
                 return registry;
             });
 
@@ -87,22 +81,25 @@ namespace WB.Services.Export.Host
             }
 
             healthChecksBuilder
-                .AddCheck<EfCoreHealthCheck>("EF migrations");
-             //   .AddDbContextCheck<JobContext>("Database");
+                .AddCheck<EfCoreHealthCheck>("EF migrations")
+                .AddDbContextCheck<JobContext>("Database");
 
             services.Configure(Configuration);
-            
-            #if RANDOMSCHEMA && DEBUG
+
+#if RANDOMSCHEMA && DEBUG
             TenantInfoExtension.AddSchemaDebugTag(Process.GetCurrentProcess().Id.ToString() + "_");
-            #endif
+#endif
 
             // Create the IServiceProvider based on the container.
-            
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
+            logger.LogInformation("Export service started. version {version}",
+                FileVersionInfo.GetVersionInfo(this.GetType().Assembly.Location).ProductVersion);
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -116,11 +113,10 @@ namespace WB.Services.Export.Host
             app.UseEndpoints(e =>
             {
                 e.MapControllers();
-               
             });
 
             //app.UseMetricServer("/metrics", app.ApplicationServices.GetService<ICollectorRegistry>());
-            
+
         }
     }
 }

@@ -37,7 +37,7 @@ namespace WB.Services.Scheduler
             if (string.IsNullOrWhiteSpace(connectionName))
                 connectionName = new JobSettings().ConnectionName;
 
-            services.AddSingleton<IHostedService, BackgroundExportService>();
+            services.AddHostedService<BackgroundExportService>();
 
             services.AddTransient<IHostedSchedulerService, CleanupService>();
             services.AddTransient<IHostedSchedulerService, WorkCancellationTrackService>();
