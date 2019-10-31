@@ -78,7 +78,6 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation
         public async Task When_generating_description_file_Then_should_generate_link_to_view_questionnaire_on_designer()
         {
             // arrange
-            var questionnaireId = "11111111111111111111111111111111$1";
             string description = null;
             var fileSystemAccessor = new Mock<IFileSystemAccessor>();
             fileSystemAccessor
@@ -88,6 +87,8 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation
             var questionnaireStorage = new Mock<IQuestionnaireStorage>();
             var questionnaireDocument = Create.QuestionnaireDocument();
             questionnaireDocument.Title = "Name of questionnaire";
+            questionnaireDocument.Id = "11111111111111111111111111111111";
+            questionnaireDocument.Revision = 1;
             questionnaireStorage.SetupIgnoreArgs(x => x.GetQuestionnaireAsync(null, CancellationToken.None))
                 .ReturnsAsync(questionnaireDocument);
 
@@ -103,13 +104,13 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation
                 questionnaireStorage: questionnaireStorage.Object);
 
             // act
-            await exportService.GenerateDescriptionFileAsync(Create.Tenant(), new QuestionnaireId(questionnaireId), @"x:\", ".xlsx");
+            await exportService.GenerateDescriptionFileAsync(Create.Tenant(), new QuestionnaireId("id"), @"x:\", ".xlsx");
 
             // assert
             Assert.That(description, Is.Not.Empty);
             var lines = description.Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries);
             Assert.That(lines[1], Is.EqualTo($"The data in this download were collected using the Survey Solutions questionnaire \"{questionnaireDocument.Title}\". "));
-            Assert.That(lines[2], Is.EqualTo($"You can open the questionnaire in the Survey Solutions Designer online by that link: https://designer.mysurvey.solutions/questionnaire/details/{questionnaireId}"));
+            Assert.That(lines[2], Is.EqualTo($"You can open the questionnaire in the Survey Solutions Designer online by that link: https://designer.mysurvey.solutions/questionnaire/details/11111111111111111111111111111111$1"));
         }
 
         protected static HeaderStructureForLevel CreateHeaderStructureForLevel(
