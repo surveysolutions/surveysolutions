@@ -60,15 +60,20 @@ namespace WB.Services.Scheduler.Tests
         public async Task Init()
         {
             var person = new Bogus.Person();
-            this.SchemaName = "test_schema_" + person.UserName.ToLowerInvariant().Replace(".", "");
+
+            this.SchemaName = "test_schema_";// + person.UserName.ToLowerInvariant().Replace(".", "");
+
             Console.WriteLine(SchemaName);
             using (var scope = PrepareOneTime().CreateScope())
             {
                 var db = scope.ServiceProvider.GetService<JobContext>();
 
+                try { await db.Database.ExecuteSqlRawAsync($"DROP SCHEMA IF EXISTS " + SchemaName + " CASCADE"); }
+                catch { }
+
                 await EnsurePublicSchemaExists(db.Database);
                 await db.Database.MigrateAsync();
-                await db.Database.ExecuteSqlCommandAsync("ALTER SCHEMA scheduler RENAME TO " + SchemaName);
+                await db.Database.ExecuteSqlRawAsync("ALTER SCHEMA scheduler RENAME TO " + SchemaName);
             }
         }
 
@@ -95,8 +100,9 @@ namespace WB.Services.Scheduler.Tests
             {
                 var db = scope.ServiceProvider.GetService<JobContext>();
                 
-                await db.Database.ExecuteSqlCommandAsync($"DROP SCHEMA " + SchemaName +" CASCADE");
-                await db.Database.ExecuteSqlCommandAsync($"DROP Table public.\"__EFMigrationsHistory\"");
+                await db.Database.ExecuteSqlRawAsync($"DROP SCHEMA " + SchemaName +" CASCADE");
+                await db.Database.ExecuteSqlRawAsync($"DROP Table public.\"__EFMigrationsHistory\"");
+               // db.Database.CommitTransaction();
             }
         }
 
