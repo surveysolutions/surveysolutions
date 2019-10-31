@@ -181,7 +181,8 @@ namespace WB.Services.Export.Tests
         public static TabularFormatExportService ReadSideToTabularFormatExportService(QuestionnaireExportStructure questionnaireExportStructure,
             ITenantApi<IHeadquartersApi> tenantApi,
             IFileSystemAccessor fileSystemAccessor = null,
-            ICsvWriter csvWriter = null)
+            ICsvWriter csvWriter = null, 
+            IQuestionnaireStorage questionnaireStorage = null)
         {
             return new TabularFormatExportService(Mock.Of<ILogger<TabularFormatExportService>>(),
                 Mock.Of<IInterviewsToExportSource>(),
@@ -190,7 +191,7 @@ namespace WB.Services.Export.Tests
                 Mock.Of<IDiagnosticsExporter>(),
                 Mock.Of<IInterviewActionsExporter>(),
                 Mock.Of<IQuestionnaireExportStructureFactory>(x => x.GetQuestionnaireExportStructureAsync(It.IsAny<TenantInfo>(), It.IsAny<QuestionnaireId>()) == Task.FromResult(questionnaireExportStructure)),
-                Mock.Of<IQuestionnaireStorage>(),
+                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 Mock.Of<IProductVersion>(),
                 Mock.Of<IPdfExporter>(),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),

@@ -81,7 +81,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {
                 var enablementModel = this.GetEnablementViewModel(forItemObject);
 
-                if (enablementModel != null && !enablementModel.Enabled)
+                if (enablementModel != null && !enablementModel.GetEnablementFromInterview())
                 {
                     if (enablementModel.HideIfDisabled) return UnknownViewType;
 

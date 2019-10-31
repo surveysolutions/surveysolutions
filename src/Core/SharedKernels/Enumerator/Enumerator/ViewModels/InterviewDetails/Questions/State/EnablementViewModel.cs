@@ -38,7 +38,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionnaireRepository = questionnaireRepository;
         }
 
-        private string interviewId;
+        public string InterviewId { get; private set; }
+    
         private Identity entityIdentity;
 
         public void Init(string interviewId, Identity entityIdentity)
@@ -46,10 +47,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
 
-            this.interviewId = interviewId;
+            this.InterviewId = interviewId;
             this.entityIdentity = entityIdentity;
 
-            var interview = this.interviewRepository.Get(this.interviewId);
+            var interview = this.interviewRepository.Get(this.InterviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
             this.HideIfDisabled = questionnaire.ShouldBeHiddenIfDisabled(entityIdentity.Id);
 
@@ -71,9 +72,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void UpdateSelfFromModel()
         {
-            var interview = this.interviewRepository.Get(this.interviewId);
+            this.Enabled = GetEnablementFromInterview();
+        }
 
-            this.Enabled = interview.IsEnabled(this.entityIdentity);
+        public bool GetEnablementFromInterview()
+        {
+            var interview = this.interviewRepository.Get(this.InterviewId);
+            return interview.IsEnabled(this.entityIdentity);
         }
 
         public void Handle(GroupsEnabled @event)
