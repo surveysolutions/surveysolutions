@@ -187,7 +187,6 @@
     <Compile Include="Services\ArchivePatcherService.cs" />
     <Compile Include="Services\BackupRestoreService.cs" />
     <Compile Include="Services\BaseViewModelNavigationService.cs" />
-    <Compile Include="Services\AutoSendingCrashListener.cs" />
     <Compile Include="Services\CurrentViewModelPresenter.cs" />
     <Compile Include="Services\DeviceInformationService.cs" />
     <Compile Include="Services\DevicePasswordHasher.cs" />
@@ -195,7 +194,6 @@
     <Compile Include="Services\EnumeratorTabletDiagnosticService.cs" />
     <Compile Include="Services\IApplicationCypher.cs" />
     <Compile Include="Services\Internals\AndroidHttpClientFactory.cs" />
-    <Compile Include="Services\Internals\CrashReporting.cs" />
     <Compile Include="Services\Internals\FileSystem\FileSystemService.cs" />
     <Compile Include="Services\Internals\GpsLocationService.cs" />
     <Compile Include="Services\InterviewerQuestionnaireAssemblyFileAccessor.cs" />
@@ -229,6 +227,8 @@
     <Compile Include="Settings\GsmSignalStrengthListener.cs" />
     <Compile Include="Utils\AndroidInformationUtils.cs" />
     <Compile Include="Utils\ContextExtensions.cs" />
+    <Compile Include="Utils\CrashReporting.cs" />
+    <Compile Include="Utils\LogCatTarget.cs" />
     <Compile Include="Utils\StringExtensions.cs" />
     <Compile Include="ValueCombiners\BaseValueCombiner.cs" />
     <Compile Include="ValueCombiners\LayoutBackgroundStyleValueCombiner.cs" />
@@ -2218,14 +2218,17 @@
     <PackageReference Include="Autofac.Extras.MvvmCross">
       <Version>5.0.0</Version>
     </PackageReference>
-    <PackageReference Include="HockeySDK.Xamarin">
-      <Version>5.2.0</Version>
-    </PackageReference>
     <PackageReference Include="Humanizer.Core">
       <Version>2.7.2</Version>
     </PackageReference>
     <PackageReference Include="MessagePack">
       <Version>1.7.3.7</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AppCenter.Analytics">
+      <Version>2.5.0</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AppCenter.Crashes">
+      <Version>2.5.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.CSharp">
       <Version>4.6.0</Version>
