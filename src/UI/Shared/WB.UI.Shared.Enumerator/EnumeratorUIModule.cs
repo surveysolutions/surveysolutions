@@ -43,6 +43,7 @@ using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Shared.Enumerator.Services.Internals.FileSystem;
 using WB.UI.Shared.Enumerator.Services.Logging;
 using WB.UI.Shared.Enumerator.Services.Notifications;
+using WB.UI.Shared.Enumerator.Utils;
 
 namespace WB.UI.Shared.Enumerator
 {
@@ -162,12 +163,14 @@ namespace WB.UI.Shared.Enumerator
             registry.Bind<ILoggerProvider, NLogLoggerProvider>();
 
             LogManager.Configuration = config;
+
+            LogManager.ReconfigExistingLoggers();
         }
 
         private static void EnableDebugLogging(LoggingConfiguration config)
         {
 #if DEBUG
-            var androidTarget = new TraceTarget("android")
+            var androidTarget = new LogCatTarget
             {
                 Layout =
                     "[${logger:shortName=true}][${level}][${message}][${onexception:${exception:format=toString,Data}|${stacktrace}}]"

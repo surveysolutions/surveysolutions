@@ -227,6 +227,8 @@
     <Compile Include="Settings\GsmSignalStrengthListener.cs" />
     <Compile Include="Utils\AndroidInformationUtils.cs" />
     <Compile Include="Utils\ContextExtensions.cs" />
+    <Compile Include="Utils\CrashReporting.cs" />
+    <Compile Include="Utils\LogCatTarget.cs" />
     <Compile Include="Utils\StringExtensions.cs" />
     <Compile Include="ValueCombiners\BaseValueCombiner.cs" />
     <Compile Include="ValueCombiners\LayoutBackgroundStyleValueCombiner.cs" />
