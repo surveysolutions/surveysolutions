@@ -17,7 +17,7 @@ namespace WB.Core.GenericSubdomains.Portable.Services
         Task PostAsync(string url, object request = null, RestCredentials credentials = null, CancellationToken? token = null);
 
         Task<T> GetAsync<T>(string url, IProgress<TransferProgress> transferProgress = null,
-            object queryString = null, RestCredentials credentials = null, CancellationToken? token = null);
+            object queryString = null, RestCredentials credentials = null, Dictionary<string, string> customHeaders = null, CancellationToken ? token = null);
 
         Task<T> PostAsync<T>(string url, IProgress<TransferProgress> transferProgress = null,
             object request = null, RestCredentials credentials = null, CancellationToken? token = null);

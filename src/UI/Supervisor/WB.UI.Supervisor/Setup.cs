@@ -38,6 +38,7 @@ using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Shared.Enumerator.Services.Logging;
+using WB.UI.Shared.Enumerator.Utils;
 using WB.UI.Supervisor.Activities;
 using WB.UI.Supervisor.Activities.Interview;
 using WB.UI.Supervisor.MvvmBindings;
@@ -47,6 +48,11 @@ namespace WB.UI.Supervisor
 {
     public class Setup : EnumeratorSetup<SupervisorMvxApplication>
     {
+        public Setup()
+        {
+            CrashReporting.Init("80bf6bc0-7188-4591-9213-0d4895a5e041");
+        }
+
         protected override IMvxViewsContainer InitializeViewLookup(IDictionary<Type, Type> viewModelViewLookup)
         {
             var lookup = base.InitializeViewLookup(viewModelViewLookup);

@@ -259,10 +259,10 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
         public async Task<T> GetAsync<T>(string url,
             IProgress<TransferProgress> transferProgress, object queryString = null,
-            RestCredentials credentials = null, CancellationToken? token = null)
+            RestCredentials credentials = null, Dictionary<string, string> customHeaders = null, CancellationToken ? token = null)
         {
             var response = await this.ExecuteRequestAsync(url: url, queryString: queryString, credentials: credentials, method: HttpMethod.Get,
-                userCancellationToken: token, request: null);
+                userCancellationToken: token, request: null, customHeaders: customHeaders);
 
             return await this.ReceiveCompressedJsonWithProgressAsync<T>(response: response, token: token ?? default(CancellationToken),
                 transferProgress: transferProgress);

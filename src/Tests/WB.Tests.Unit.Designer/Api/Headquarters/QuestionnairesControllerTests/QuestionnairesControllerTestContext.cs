@@ -1,5 +1,4 @@
-﻿using System;
-using Moq;
+﻿using Moq;
 using NSubstitute;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
@@ -34,7 +33,8 @@ namespace WB.Tests.Unit.Designer.Api.Headquarters.QuestionnairesControllerTests
                 zipUtils: zipUtils ?? Mock.Of<IStringCompressor>(),
                 listItemStorage: Create.InMemoryDbContext(),
                 expressionsPlayOrderProvider: expressionsPlayOrderProvider ?? Substitute.For<IExpressionsPlayOrderProvider>(),
-                questionnaireCompilationVersionService: questionnaireCompilationVersionService ?? Mock.Of<IQuestionnaireCompilationVersionService>());
+                questionnaireCompilationVersionService: questionnaireCompilationVersionService ?? Mock.Of<IQuestionnaireCompilationVersionService>(),
+                questionnaireHistoryVersionsService: Mock.Of<IQuestionnaireHistoryVersionsService>());
 
             return hqQuestionnairesController;
         }
