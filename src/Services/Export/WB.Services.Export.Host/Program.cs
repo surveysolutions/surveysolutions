@@ -6,7 +6,6 @@ using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
 using Masking.Serilog;
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -34,41 +33,16 @@ namespace WB.Services.Export.Host
                     Log.Logger.Fatal("Unhandled exception occur {exception}", new[] { eventArgs.ExceptionObject.ToString() });
                 };
 
-                var isService = !(Debugger.IsAttached || args.Contains("--console"));
-                args = args.Where(arg => arg != "--console").ToArray();
-
-                var useKestrel = args.Contains("--kestrel");
-                args = args.Where(arg => arg != "--kestrel").ToArray();
-
                 string currentWorkingDir = Directory.GetCurrentDirectory();
 
-                if (isService)
-                {
-                    var pathToExe = Process.GetCurrentProcess().MainModule.FileName;
-                    var pathToContentRoot = Path.GetDirectoryName(pathToExe);
-                    currentWorkingDir = pathToContentRoot;
-                    Directory.SetCurrentDirectory(currentWorkingDir);
-                }
+                var builder = CreateWebHostBuilder(args);
 
-                var builder = CreateWebHostBuilder(args, useKestrel);
-
-                if (isService)
-                {
-                    builder.UseContentRoot(currentWorkingDir);
-                }
+                builder.UseWindowsService();
 
                 OpenPIDFile();
 
-                var host = builder.Build();
+                await builder.Build().RunAsync();
 
-                if (isService)
-                {
-                    host.RunAsCustomService();
-                }
-                else
-                {
-                    await host.RunAsync();
-                }
             }
             catch (Exception ex)
             {
@@ -84,7 +58,7 @@ namespace WB.Services.Export.Host
 
             var fileLog = Path.Combine(Directory.GetCurrentDirectory(), "..", "logs", "export-service.log");
             var verboseLog = Path.Combine(Directory.GetCurrentDirectory(), "..", "logs", "export-service-verbose-.log");
-            var errorDetailedLog= Path.Combine(Directory.GetCurrentDirectory(), "..", "logs", "export-service-errors-.log");
+            var errorDetailedLog = Path.Combine(Directory.GetCurrentDirectory(), "..", "logs", "export-service-errors-.log");
 
             var connectionString = GetConnectionString(configuration);
 
@@ -106,10 +80,10 @@ namespace WB.Services.Export.Host
 
                 .WriteTo
                     .File(Path.GetFullPath(fileLog), LogEventLevel.Debug,
-                    
+
                     outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}",
                     rollingInterval: RollingInterval.Day);
-                
+
 
             var hook = configuration.GetSection("Slack").GetValue<string>("Hook");
             if (!string.IsNullOrWhiteSpace(hook))
@@ -133,23 +107,15 @@ namespace WB.Services.Export.Host
             // should we go to web config for connection string?
             if (webConfig != null)
             {
-                return WebConfigReader.ReadConnectionStringFromWebConfig(webConfig, null);
+                return WebConfigReader.ReadConnectionStringFromWebConfig(webConfig);
             }
 
             return configuration.GetConnectionString("DefaultConnection");
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args, bool useKestrel)
+        public static IHostBuilder CreateWebHostBuilder(string[] args)
         {
-            var host = WebHost.CreateDefaultBuilder(args);
-
-            host.ConfigureAppConfiguration(c =>
-            {
-                c.AddJsonFile($"appsettings.{Environment.MachineName}.json", true);
-                c.AddJsonFile($"appsettings.Production.json", true);
-
-                c.AddCommandLine(args);
-            });
+            var host = Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args);
 
             host.ConfigureLogging((hosting, logging) =>
             {
@@ -169,12 +135,25 @@ namespace WB.Services.Export.Host
                 }
             });
 
-            host
-                .UseSerilog()
-                .UseUrls(GetCommandLineUrls(args));
 
-            host = useKestrel ? host.UseKestrel() : host.UseHttpSys();
-            return host.UseStartup<Startup>();
+            host.ConfigureWebHostDefaults(web =>
+            {
+                web.UseStartup<Startup>();
+                web.ConfigureAppConfiguration(c =>
+                {
+                    c.AddJsonFile($"appsettings.{Environment.MachineName}.json", true);
+                    c.AddJsonFile($"appsettings.Production.json", true);
+
+                    c.AddCommandLine(args);
+                });
+
+
+                web
+                    .UseSerilog()
+                    .UseUrls(GetCommandLineUrls(args));
+            });
+
+            return host;
         }
 
         private static string GetCommandLineUrls(string[] args) =>
