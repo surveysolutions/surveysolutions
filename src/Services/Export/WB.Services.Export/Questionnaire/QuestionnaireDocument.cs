@@ -19,6 +19,7 @@ namespace WB.Services.Export.Questionnaire
         public List<Translation> Translations { get; set; }
 
         public string Id { get; set;}
+        public int Revision { get; set; }
 
         public bool IsIntegerQuestion(Guid publicKey)
         {
