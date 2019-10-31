@@ -5,10 +5,8 @@ using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
-using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -24,30 +22,19 @@ namespace WB.UI.Interviewer
         private readonly ILogger logger;
         private readonly IMigrationRunner migrationRunner;
         private readonly IAuditLogService auditLogService;
-        private readonly IServiceLocator serviceLocator;
         private readonly IEnumeratorSettings enumeratorSettings;
         
         public InterviewerAppStart(IMvxApplication application, 
             IMvxNavigationService navigationService,
             IAuditLogService auditLogService,
             IEnumeratorSettings enumeratorSettings, 
-            IServiceLocator serviceLocator,
             ILogger logger,
             IMigrationRunner migrationRunner) : base(application, navigationService)
         {
             this.auditLogService = auditLogService;
-            this.serviceLocator = serviceLocator;
             this.logger = logger;
             this.migrationRunner = migrationRunner;
             this.enumeratorSettings = enumeratorSettings;
-        }
-
-        public override void ResetStart()
-        {
-            //temp fix of KP-11583
-            //
-            //base.ResetStart();
-            logger.Warn("Ignored application reset start");
         }
 
         protected override Task<object> ApplicationStartup(object hint = null)
