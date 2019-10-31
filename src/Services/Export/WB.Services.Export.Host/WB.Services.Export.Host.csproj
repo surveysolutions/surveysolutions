@@ -13,6 +13,13 @@
     <RootNamespace>WB.Services.Export.Host</RootNamespace>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <PublishTrimmed>true</PublishTrimmed>
+    <!--<PublishReadyToRun>true</PublishReadyToRun>-->
+    <PublishSingleFile>true</PublishSingleFile>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+  </PropertyGroup>
+  
   <ItemGroup>
     <Compile Remove="logs\**" />
     <Content Remove="logs\**" />
