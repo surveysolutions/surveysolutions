@@ -2,10 +2,8 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
-    <LangVersion>7.2</LangVersion>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <!--<TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>-->
-    <RuntimeFrameworkVersion>2.2.5</RuntimeFrameworkVersion>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <PackageId>WB.Services.Export.Host</PackageId>
     <Product>Survey Solutions Export Service</Product>
@@ -29,19 +27,7 @@
     <PackageReference Include="Dapper" Version="1.60.6" />
     <PackageReference Include="Humanizer.Core" Version="2.6.2" />
     <PackageReference Include="Masking.Serilog" Version="1.0.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.HealthChecks" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.WindowsServices" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Server.HttpSys" Version="2.2.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.4">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.4" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="2.2.0" />
     <PackageReference Include="Refit" Version="4.7.9" />
 
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.2.4" />

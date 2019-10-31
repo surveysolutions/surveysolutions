@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Prometheus;
 using Prometheus.Advanced;
@@ -36,7 +37,7 @@ namespace WB.Services.Export.Host
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
             var webConfig = Configuration["webConfigs"];
 
@@ -47,13 +48,13 @@ namespace WB.Services.Export.Host
             }
 
             services.AddTransient<TenantModelBinder>();
-            services.AddMvcCore(ops =>
-            {
-                ops.ModelBinderProviders.Insert(0, new TenantEntityBinderProvider());
-                ops.Filters.Add<TenantInfoPropagationActionFilter>();
-            })
-            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-            .AddJsonFormatters();
+            //services.AddMvcCore(ops =>
+            //{
+            //    ops.ModelBinderProviders.Insert(0, new TenantEntityBinderProvider());
+            //    ops.Filters.Add<TenantInfoPropagationActionFilter>();
+            //})
+            //.SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+           // .AddJsonFormatters();
 
             services.AddTransient<IDataExportProcessesService, PostgresDataExportProcessesService>();
 
@@ -86,8 +87,8 @@ namespace WB.Services.Export.Host
             }
 
             healthChecksBuilder
-                .AddCheck<EfCoreHealthCheck>("EF migrations")
-                .AddDbContextCheck<JobContext>("Database");
+                .AddCheck<EfCoreHealthCheck>("EF migrations");
+             //   .AddDbContextCheck<JobContext>("Database");
 
             services.Configure(Configuration);
             
@@ -96,11 +97,11 @@ namespace WB.Services.Export.Host
             #endif
 
             // Create the IServiceProvider based on the container.
-            return services.BuildServiceProvider();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -109,8 +110,17 @@ namespace WB.Services.Export.Host
 
             app.StartScheduler();
             app.UseHealthChecks("/.hc");
-            app.UseMetricServer("/metrics", app.ApplicationServices.GetService<ICollectorRegistry>());
-            app.UseMvc();
+
+            app.UseRouting();
+
+            app.UseEndpoints(e =>
+            {
+                e.MapControllers();
+               
+            });
+
+            //app.UseMetricServer("/metrics", app.ApplicationServices.GetService<ICollectorRegistry>());
+            
         }
     }
 }
