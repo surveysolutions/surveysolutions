@@ -225,4 +225,7 @@
   <data name="Details" xml:space="preserve">
     <value>Подробности</value>
   </data>
+  <data name="ShowOnDesigner">
+    <value>Посмотреть на Дизайнере</value>
+  </data>
 </root>

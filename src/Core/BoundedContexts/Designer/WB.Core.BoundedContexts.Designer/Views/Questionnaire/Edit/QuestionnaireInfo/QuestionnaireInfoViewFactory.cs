@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 
@@ -15,35 +16,36 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
 {
     public class QuestionnaireInfoViewFactory : IQuestionnaireInfoViewFactory
     {
-        private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
         private readonly DesignerDbContext dbContext;
+        private readonly IDesignerQuestionnaireStorage questionnaireStorage;
         private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersion;
         private readonly IAttachmentService attachmentService;
         private readonly ILoggedInUser loggedInUser;
 
         public QuestionnaireInfoViewFactory(
-            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
             DesignerDbContext dbContext,
+            IDesignerQuestionnaireStorage questionnaireStorage,
             IQuestionnaireCompilationVersionService questionnaireCompilationVersion,
             IAttachmentService attachmentService,
             ILoggedInUser loggedInUser)
         {
-            this.questionnaireDocumentReader = questionnaireDocumentReader;
             this.dbContext = dbContext;
+            this.questionnaireStorage = questionnaireStorage;
             this.questionnaireCompilationVersion = questionnaireCompilationVersion;
             this.attachmentService = attachmentService;
             this.loggedInUser = loggedInUser;
         }
 
-        public QuestionnaireInfoView Load(string questionnaireId, Guid viewerId)
+        public QuestionnaireInfoView Load(QuestionnaireRevision revision, Guid viewerId)
         {
-            QuestionnaireDocument questionnaireDocument = this.questionnaireDocumentReader.GetById(questionnaireId);
+            var questionnaireDocument = this.questionnaireStorage.Get(revision);
 
             if (questionnaireDocument == null) return null;
 
             var questionnaireInfoView = new QuestionnaireInfoView
             {
-                QuestionnaireId = questionnaireId,
+                QuestionnaireId = revision.QuestionnaireId.FormatGuid(),
+                QuestionnaireRevision = revision.Revision.FormatGuid(),
                 Title = questionnaireDocument.Title,
                 Variable = questionnaireDocument.VariableName,
                 Chapters = new List<ChapterInfoView>(),
@@ -89,20 +91,23 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             questionnaireInfoView.GroupsCount = groupsCount;
             questionnaireInfoView.RostersCount = rostersCount;
 
-            var listItem = this.dbContext.Questionnaires.Include(x => x.SharedPersons).FirstOrDefault(x => x.QuestionnaireId == questionnaireId);
-            var sharedPersons = listItem.SharedPersons.GroupBy(x => x.Email).Select(g => g.First())
-                .Select(x => new SharedPersonView
-                {
-                    Email = x.Email,
-                    Login = this.dbContext.Users.Find(x.UserId).UserName,
-                    UserId = x.UserId,
-                    IsOwner = x.IsOwner,
-                    ShareType = x.ShareType
-                })
-                .ToList();
-            
-            if (questionnaireDocument.CreatedBy.HasValue &&
-                sharedPersons.All(x => x.UserId != questionnaireDocument.CreatedBy))
+            var listItem = this.dbContext.Questionnaires.Include(x => x.SharedPersons)
+                .FirstOrDefault(x => x.QuestionnaireId == revision.QuestionnaireId.FormatGuid());
+
+            var sharedPersons = revision.Revision == null
+                    ? listItem.SharedPersons.GroupBy(x => x.Email).Select(g => g.First())
+                        .Select(x => new SharedPersonView
+                        {
+                            Email = x.Email,
+                            Login = this.dbContext.Users.Find(x.UserId).UserName,
+                            UserId = x.UserId,
+                            IsOwner = x.IsOwner,
+                            ShareType = x.ShareType
+                        })
+                        .ToList()
+                    : new List<SharedPersonView>();
+
+            if (questionnaireDocument.CreatedBy.HasValue && sharedPersons.All(x => x.UserId != questionnaireDocument.CreatedBy))
             {
                 var owner = this.dbContext.Users.Find(questionnaireDocument.CreatedBy.Value);
                 if (owner != null)
@@ -120,7 +125,16 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             var person = sharedPersons.FirstOrDefault(sharedPerson => sharedPerson.UserId == viewerId);
 
             questionnaireInfoView.SharedPersons = sharedPersons;
-            questionnaireInfoView.IsReadOnlyForUser = person == null || (!person.IsOwner && person.ShareType != ShareType.Edit);
+
+            if (revision.Revision != null)
+            {
+                questionnaireInfoView.IsReadOnlyForUser = true;
+            }
+            else
+            {
+                questionnaireInfoView.IsReadOnlyForUser = person == null || (!person.IsOwner && person.ShareType != ShareType.Edit);
+
+            }
             questionnaireInfoView.IsSharedWithUser = person != null;
             questionnaireInfoView.WebTestAvailable = this.questionnaireCompilationVersion.GetById(listItem.PublicId)?.Version == null;
             questionnaireInfoView.HasViewerAdminRights = this.loggedInUser.IsAdmin;
@@ -134,11 +148,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             questionnaireInfoView.LookupTables = questionnaireDocument
                 .LookupTables
                 .Select(x => new LookupTableView
-                        {
-                            ItemId = x.Key.FormatGuid(),
-                            Name = x.Value.TableName ?? "",
-                            FileName = x.Value.FileName ?? ""
-                        })
+                {
+                    ItemId = x.Key.FormatGuid(),
+                    Name = x.Value.TableName ?? "",
+                    FileName = x.Value.FileName ?? ""
+                })
                 .OrderBy(x => x.Name)
                 .ToList();
 

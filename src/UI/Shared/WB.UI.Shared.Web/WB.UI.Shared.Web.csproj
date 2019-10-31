@@ -325,6 +325,7 @@
       <LastGenOutput>Captcha.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Captcha.sq.resx" />
     <EmbeddedResource Include="Resources\Captcha.zh.resx">
       <DependentUpon>Captcha.resx</DependentUpon>
     </EmbeddedResource>
@@ -349,6 +350,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ErrorMessages.ro.resx" />
+    <EmbeddedResource Include="Resources\ErrorMessages.sq.resx" />
     <EmbeddedResource Include="Resources\ErrorMessages.zh.resx">
       <DependentUpon>ErrorMessages.resx</DependentUpon>
     </EmbeddedResource>
@@ -363,6 +365,7 @@
     <EmbeddedResource Include="Resources\UnderConstruction.ru.resx">
       <DependentUpon>UnderConstruction.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UnderConstruction.sq.resx" />
     <EmbeddedResource Include="Resources\UnderConstruction.zh.resx" />
   </ItemGroup>
   <ItemGroup>

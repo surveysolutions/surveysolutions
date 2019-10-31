@@ -1315,6 +1315,7 @@
   <data name="ScenarioDetails" xml:space="preserve">
     <value>Сценарий</value>
   </data>
+
   <data name="ChooseLanguageTitle" xml:space="preserve">
       <value>Пожалуйста, выберите перевод</value>
       <comment>Пожалуйста, выберите перевод</comment>
@@ -1338,5 +1339,11 @@
   <data name="Translation_Original" xml:space="preserve">
       <value>Оргинальный</value>
       <comment>Оргинальный</comment>
+
+</data>
+  <data name="SaveAs" xml:space="preserve">
+      <value>Сохранить как</value>
+      <comment>Сохранить как</comment>
+
   </data>
 </root>

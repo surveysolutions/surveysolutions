@@ -293,6 +293,55 @@ namespace WB.UI.Shared.Enumerator.Services
             }
         }
 
+        public async Task SendLogsAsync(CancellationToken token)
+        {
+            var backupTo =
+                this.fileSystemAccessor.CombinePath(privateStorage, "logs.zip");
+            try
+            {
+                var backupHeaders = new Dictionary<string, string>()
+                {
+                    {"DeviceId", this.deviceSettings.GetDeviceId()},
+                };
+
+                var path = this.fileSystemAccessor.CombinePath(privateStorage, "Logs");
+
+                if (this.fileSystemAccessor.IsFileExists(backupTo))
+                {
+                    this.fileSystemAccessor.DeleteFile(backupTo);
+                }
+
+                await this.archiver.ZipDirectoryToFileAsync(path, backupTo)
+                    .ConfigureAwait(false);
+
+                if (token.IsCancellationRequested) return;
+
+                using (var logsFileStream = this.fileSystemAccessor.ReadFile(backupTo))
+                {
+                    await this.restService.SendStreamAsync(
+                        stream: logsFileStream,
+                        customHeaders: backupHeaders,
+                        url: "api/enumerator/logs",
+                        credentials:
+                        this.principal.IsAuthenticated
+                            ? new RestCredentials
+                            {
+                                Login = this.principal.CurrentUserIdentity.Name,
+                                Token = this.principal.CurrentUserIdentity.Token
+                            }
+                            : null,
+                        token: token).ConfigureAwait(false);
+                }
+            }
+            finally
+            {
+                if (this.fileSystemAccessor.IsFileExists(backupTo))
+                {
+                    this.fileSystemAccessor.DeleteFile(backupTo);
+                }
+            }
+        }
+
         private void ReCreatePrivateDirectory()
         {
             if (!this.fileSystemAccessor.IsDirectoryExists(this.privateStorage)) return;

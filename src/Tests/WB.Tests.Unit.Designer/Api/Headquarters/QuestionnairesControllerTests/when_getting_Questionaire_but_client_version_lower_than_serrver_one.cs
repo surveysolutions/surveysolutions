@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Main.Core.Documents;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,9 +14,8 @@ namespace WB.Tests.Unit.Designer.Api.Headquarters.QuestionnairesControllerTests
     internal class when_getting_Questionnaire_but_client_version_lower_than_server_one : QuestionnairesControllerTestContext
     {
         [Test]
-        public void should_throw_HttpResponseException_with_explanation_in_ReasonPhrase()
+        public async Task should_throw_HttpResponseException_with_explanation_in_ReasonPhrase()
         {
-
             var questionnaireViewFactory = Mock.Of<IQuestionnaireViewFactory>(
                 _ => _.Load(It.IsAny<QuestionnaireViewInputModel>()) == Create.QuestionnaireView(userId));
 
@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.Designer.Api.Headquarters.QuestionnairesControllerTests
                 engineVersionService: expressionsEngineVersionService);
 
             questionnairesController.SetupLoggedInUser(userId);
-            var result = questionnairesController.Get(questionnaireId, 12, null) as JsonResult;
+            var result = await questionnairesController.Get(questionnaireId, 12, null) as JsonResult;
 
             Assert.That(result.StatusCode, Is.EqualTo(StatusCodes.Status417ExpectationFailed));
         }

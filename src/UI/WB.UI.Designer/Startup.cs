@@ -122,12 +122,14 @@ namespace WB.UI.Designer
                     opts => { opts.Realm = "mysurvey.solutions"; });
 
             services.AddRouting(options => options.LowercaseUrls = true);
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+            services.AddMvc()                    
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddJsonOptions(options =>
                 {
                     options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                     options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
-                });
+                })
+                .AddMvcOptions(options => options.ModelBinderProviders.Insert(0, new QuestionnaireRevisionBinderProvider()));
 
             services.AddCors(corsOpt =>
             {
@@ -269,7 +271,8 @@ namespace WB.UI.Designer
                     new CultureInfo("fr"),
                     new CultureInfo("es"),
                     new CultureInfo("ar"),
-                    new CultureInfo("zh")
+                    new CultureInfo("zh"),
+                    new CultureInfo("sq")
                 };
             });
 

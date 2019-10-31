@@ -7,6 +7,8 @@ using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
@@ -41,14 +43,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
                 Id = Id.gB,
                 Name = "NotDefault"
             });
-            var repositoryMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
+            var repositoryMock = new Mock<IDesignerQuestionnaireStorage>();
             repositoryMock
-                .Setup(x => x.GetById(questionnaireId.FormatGuid()))
+                .Setup(x => x.Get(questionnaireId))
                 .Returns(questionnaire);
 
             var dbContext = Create.InMemoryDbContext();
             dbContext.Users.Add(new DesignerIdentityUser() {Id = userId, Email = ownerEmail});
-            dbContext.Questionnaires.Add(Create.QuestionnaireListViewItem(id: questionnaireId, createdBy: userId));
+            dbContext.Questionnaires.Add(Create.QuestionnaireListViewItem(id: questionnaireId.QuestionnaireId, createdBy: userId));
             dbContext.SaveChanges();
 
             factory = CreateQuestionnaireInfoViewFactory(repository: repositoryMock.Object,
@@ -56,7 +58,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
             BecauseOf();
         }
 
-        private void BecauseOf() => view = factory.Load(questionnaireId.FormatGuid(), userId);
+        private void BecauseOf() => view = factory.Load(questionnaireId, userId);
 
         [Test]
         public void should_count_number_of_questions_in_questionnaire
@@ -92,7 +94,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
 
         private static QuestionnaireInfoView view;
         private static QuestionnaireInfoViewFactory factory;
-        private static Guid questionnaireId = Id.g1;
+        
         private static string questionnaireTitle = "questionnaire title";
         private static Guid userId = Guid.Parse("22222222222222222222222222222222");
         private static string ownerEmail = "r@example.org";
