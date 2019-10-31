@@ -117,10 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
+  <data name="FailedToGenerate" xml:space="preserve">
+    <value>Nuk arriti të krijonte PDF.                                 Ju lutemi, ringarkoni faqen dhe provojeni prapë ose kontaktoni me support@mysurvey.solutions</value>
   </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Application update is required</value>
+  <data name="Generate" xml:space="preserve">
+    <value>Dokumenti PDF u krijua {0} minutë(a) më parë. Madhësia: {1}Kb</value>
+  </data>
+  <data name="GenerateLessMinute" xml:space="preserve">
+    <value>Dokumenti PDF u gjenerua më pak se një minutë më parë.                                                    Madhësia: {0}Kb</value>
+  </data>
+  <data name="GeneratingSuccess" xml:space="preserve">
+    <value>PDF-ja juaj po gjenerohet.                          Madhësia: {0}Kb</value>
+  </data>
+  <data name="PreparingToGenerate" xml:space="preserve">
+    <value>Në përgatitje për të gjeneruar PDF-në tuaj.         Ju lutemi, pritni...</value>
+  </data>
+  <data name="Retry" xml:space="preserve">
+    <value>Po riprovon eksportimin si PDF.</value>
   </data>
 </root>

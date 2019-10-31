@@ -117,10 +117,40 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
+  <data name="MissingCensusInterviews_NoBrokenPackages_Message" xml:space="preserve">
+    <value>Nëse intervista që po përpiqeni të gjeni nuk është në listë, ju lutemi, udhëzojeni intervistuesin ta përfundojë intervistën dhe ta sinkronizojë sërish.</value>
   </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Application update is required</value>
+  <data name="MissingCensusInterviews_SomeBrokenPackages_Message" xml:space="preserve">
+    <value>Nëse intervista që po përpiqeni të gjeni nuk është në listë, ju lutemi, udhëzojeni intervistuesin ta përfundojë intervistën dhe ta sinkronizojë sërish. Më pas, kërkojeni sërish intervistën. Nëse intervista nuk gjendet gjatë kërkimit të dytë, kontaktoni ekipin mbështetës.</value>
+  </data>
+  <data name="NoData_ContactSupport" xml:space="preserve">
+    <value>Të dhënat nga intervista {0} ishin të korruptuara. Kontaktoni personelin mbështetës për rikuperimin e kësaj interviste </value>
+  </data>
+  <data name="NoData_ContactSupportWithMoreDetails" xml:space="preserve">
+    <value>Ju lutemi, kontaktoni me ekipin mbështetës për t’ju dhënë më shumë hollësi </value>
+  </data>
+  <data name="NoData_InterveiwWasNotUploadedYet" xml:space="preserve">
+    <value>Intervista {0} nuk është sinkronizuar ende </value>
+  </data>
+  <data name="NoData_InterviewDeleted" xml:space="preserve">
+    <value>Intervista {0} u fshi nga ZQ-ja ose Administratori, ndaj nuk mund të rikuperohet </value>
+  </data>
+  <data name="NoData_InterviewerChangedDevice" xml:space="preserve">
+    <value>Intervistuesi ndryshoi tabletat. Të dhënat për intervistën {0} mund të humbasin, sepse të dhënat fshihen kur intervistuesit kalojnë nga njëri tablet në tjetrin. Nëse është kështu, intervista nuk mund të rikuperohet</value>
+  </data>
+  <data name="NoData_InterviewWasNotReceived" xml:space="preserve">
+    <value>Intervista {0} nuk është marrë ende nga intervistuesi {1}. Intervistuesi nuk është sinkronizuar ende.</value>
+  </data>
+  <data name="NoData_InterviewWasReassigned" xml:space="preserve">
+    <value>Intervista {0} iu ricaktua një intervistuesi tjetër. Intervista është aktualisht në tabletin e intervistuesit të fundit.</value>
+  </data>
+  <data name="NoData_NoIssuesInterviewOnServer" xml:space="preserve">
+    <value>Intervista {0} nuk ka probleme të regjistruara në server.&lt;br /&gt;Ju lutemi, merrni më shumë informacion nga personi që është aktualisht përgjegjës për këtë intervistë.&lt;br /&gt;Nëse problemi vazhdon, kontaktoni ekipin mbështetës për të mësuar hollësi të mëtejshme</value>
+  </data>
+  <data name="NoData_NotFound" xml:space="preserve">
+    <value>Intervista {0} nuk mund të gjendet </value>
+  </data>
+  <data name="NoData_QuestionnaireDeleted" xml:space="preserve">
+    <value>Administratori i serverit fshiu pyetësorin për intervistën {0}. Për pasojë, të gjitha intervistat shoqëruese të këtij pyetësori u fshinë dhe nuk mund të kthehen në gjendjen e mëparshme </value>
   </data>
 </root>

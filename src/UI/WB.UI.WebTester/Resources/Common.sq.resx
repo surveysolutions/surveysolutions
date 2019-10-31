@@ -117,10 +117,31 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
+  <data name="AlRightsReserved" xml:space="preserve">
+    <value>Të gjitha të drejtat të rezervuara</value>
   </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Application update is required</value>
+  <data name="CantOpenQuestionnaire" xml:space="preserve">
+    <value>Pyetësori nuk mund të hapet </value>
+  </data>
+  <data name="FixErrorsOnDesigner" xml:space="preserve">
+    <value>Ju lutemi, korrigjojeni këtë në Designer.</value>
+  </data>
+  <data name="Legal" xml:space="preserve">
+    <value>Ligjor</value>
+  </data>
+  <data name="PageNotFound" xml:space="preserve">
+    <value>Nuk u gjet</value>
+  </data>
+  <data name="PageNotFoundDesc" xml:space="preserve">
+    <value>Faqja nuk u gjet. Ju lutemi, kthehuni te aplikacioni Designer dhe rifilloni testimin e rrjetit.</value>
+  </data>
+  <data name="QuestionnaireHasErrors" xml:space="preserve">
+    <value>Pyetësori ka gabime.</value>
+  </data>
+  <data name="ReloadInterviewErrorMessage" xml:space="preserve">
+    <value>Të dhënat e intervistës nuk mund të përdoren në versionin e ri të pyetësorit. U krijua një intervistë bosh</value>
+  </data>
+  <data name="TheWorldBankGroup" xml:space="preserve">
+    <value>Grupi i Bankës Botërore</value>
   </data>
 </root>

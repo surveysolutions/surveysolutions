@@ -117,10 +117,40 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
+  <data name="CreateOneMore" xml:space="preserve">
+    <value>Do të krijoni edhe një tjetër?</value>
   </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Application update is required</value>
+  <data name="InterviewWasCreated" xml:space="preserve">
+    <value>Intervista u krijua me sukses.</value>
+  </data>
+  <data name="NoPermission" xml:space="preserve">
+    <value>Nuk mund të përditësoni informacionin e përdoruesit, pasi nuk keni leje për ta kryer këtë ndërhyrje.</value>
+  </data>
+  <data name="ObserverCreatedFormat" xml:space="preserve">
+    <value>Përdoruesi Vrojtues &lt;b&gt;{0}&lt;/b&gt; u krijua me sukses.</value>
+  </data>
+  <data name="QuestionnaireClonedAndRenamedFormat" xml:space="preserve">
+    <value>Pyetësori '{0}' u klonua me sukses me një titull të ri '{1}'.</value>
+  </data>
+  <data name="QuestionnaireClonedFormat" xml:space="preserve">
+    <value>Pyetësori '{0}' u klonua me sukses.</value>
+  </data>
+  <data name="QuestionnaireNotFoundFormat" xml:space="preserve">
+    <value>Pyetësori me identifikues {0} dhe versioni {1} nuk mund të gjendet.</value>
+  </data>
+  <data name="SuccessfullyCreatedFormat" xml:space="preserve">
+    <value>Supervizori &lt;b&gt;{0}&lt;/b&gt; u krijua me sukses.</value>
+  </data>
+  <data name="SupervisorNotFound" xml:space="preserve">
+    <value>Intervistuesi mundi të krijohej. Supervizori i përzgjedhur nuk ekziston</value>
+  </data>
+  <data name="UserNotExists" xml:space="preserve">
+    <value>Të dhënat e përdoruesit nuk mund të përditësohen, pasi përdoruesi nuk ekziston</value>
+  </data>
+  <data name="UserWasCreatedFormat" xml:space="preserve">
+    <value>Përdoruesi Zyra Qendrore {0} i krijua me sukses.</value>
+  </data>
+  <data name="UserWasUpdatedFormat" xml:space="preserve">
+    <value>Informacioni rreth &lt;b&gt;{0}&lt;/b&gt; u përditësua me sukses</value>
   </data>
 </root>

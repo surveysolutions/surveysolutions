@@ -271,7 +271,8 @@ namespace WB.UI.Designer
                     new CultureInfo("fr"),
                     new CultureInfo("es"),
                     new CultureInfo("ar"),
-                    new CultureInfo("zh")
+                    new CultureInfo("zh"),
+                    new CultureInfo("sq")
                 };
             });
 

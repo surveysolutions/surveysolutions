@@ -117,10 +117,103 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
+  <data name="ApiUsers" xml:space="preserve">
+    <value>Përdoruesit e API-t</value>
   </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Application update is required</value>
+  <data name="Assignments" xml:space="preserve">
+    <value>Detyrat</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Përfundoi</value>
+  </data>
+  <data name="CreateNew" xml:space="preserve">
+    <value>Krijo të re</value>
+  </data>
+  <data name="CumulativeChart" xml:space="preserve">
+    <value>Grafiku Kumulativ i Intervistës </value>
+  </data>
+  <data name="DataExport" xml:space="preserve">
+    <value>Eksportimi i të dhënave</value>
+  </data>
+  <data name="DevicesInterviewers" xml:space="preserve">
+    <value>Pajisjet/Intervistuesit</value>
+  </data>
+  <data name="Headquarters" xml:space="preserve">
+    <value>Zyra Qendrore</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Ndihmë</value>
+  </data>
+  <data name="Interviewers" xml:space="preserve">
+    <value>Intervistuesit</value>
+  </data>
+  <data name="Interviews" xml:space="preserve">
+    <value>Intervistat</value>
+  </data>
+  <data name="MapReport" xml:space="preserve">
+    <value>Raporti i hartës</value>
+  </data>
+  <data name="Maps" xml:space="preserve">
+    <value>Hartat</value>
+  </data>
+  <data name="Observers" xml:space="preserve">
+    <value>Vrojtuesit</value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>Sasia</value>
+  </data>
+  <data name="Questionnaires" xml:space="preserve">
+    <value>Pyetësorët</value>
+  </data>
+  <data name="QueueSizeTitle" xml:space="preserve">
+    <value>Numri i intervistave të sinkronizuara por ende të papërpunuara</value>
+  </data>
+  <data name="Rejected" xml:space="preserve">
+    <value>Refuzuar</value>
+  </data>
+  <data name="Reports" xml:space="preserve">
+    <value>Raporte</value>
+  </data>
+  <data name="Speed" xml:space="preserve">
+    <value>Shpejtësia</value>
+  </data>
+  <data name="Started" xml:space="preserve">
+    <value>Nisi</value>
+  </data>
+  <data name="StatusDuration" xml:space="preserve">
+    <value>Kohëzgjatja e statusit</value>
+  </data>
+  <data name="Supervisors" xml:space="preserve">
+    <value>Supervizorët</value>
+  </data>
+  <data name="SurveysAndStatuses" xml:space="preserve">
+    <value>Anketat dhe statuset</value>
+  </data>
+  <data name="SurveySetup" xml:space="preserve">
+    <value>Konfigurimi i anketës</value>
+  </data>
+  <data name="SurveyStatistics" xml:space="preserve">
+    <value>Statistikat e anketës</value>
+  </data>
+  <data name="TeamAndRoles" xml:space="preserve">
+    <value>Ekipi dhe rolet</value>
+  </data>
+  <data name="TeamMembersAndStatuses" xml:space="preserve">
+    <value>Pjesëtarët e ekipit dhe statuset</value>
+  </data>
+  <data name="TeamsAndRoles" xml:space="preserve">
+    <value>Ekipet dhe Rolet</value>
+  </data>
+  <data name="TeamsAndStatuses" xml:space="preserve">
+    <value>Ekipet dhe Statuset</value>
+  </data>
+  <data name="Troubleshooting" xml:space="preserve">
+    <value>Zgjidhja e problemeve</value>
+  </data>
+  <data name="UserBatchUpload" xml:space="preserve">
+    <value>Ngarkim i përdoruesve në grup</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>Përdoruesit</value>
   </data>
 </root>
