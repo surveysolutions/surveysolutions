@@ -1,17 +1,12 @@
-using System.Linq;
 using Android.OS;
 using Android.Support.Graphics.Drawable;
 using Android.Views;
-using HockeyApp.Android;
-using MvvmCross;
 using MvvmCross.Droid.Support.V7.AppCompat;
-using MvvmCross.Logging;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using MvvmCross.ViewModels;
+using NLog;
 using Plugin.CurrentActivity;
 using Plugin.Permissions;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Utils;
 
 namespace WB.UI.Shared.Enumerator.Activities
@@ -19,12 +14,13 @@ namespace WB.UI.Shared.Enumerator.Activities
     [MvxActivityPresentation]
     public abstract class BaseActivity<TViewModel> : MvxAppCompatActivity<TViewModel> where TViewModel : class, IMvxViewModel
     {
+        
         protected abstract int ViewResourceId { get; }
-        private ILogger log;
+        private Logger log;
 
         protected override void OnCreate(Bundle bundle)
         {
-            log = Mvx.IoCProvider.Resolve<ILoggerProvider>().GetForType(this.GetType());
+            log = LogManager.GetLogger(this.GetType().Name);
             log.Trace("Create");
             base.OnCreate(bundle);
             CrossCurrentActivity.Current.Init(this, bundle);
@@ -39,7 +35,6 @@ namespace WB.UI.Shared.Enumerator.Activities
         protected override void OnResume()
         {
             log.Trace("Resume");
-            CrashManager.Register(this, new AutoSendingCrashListener());
             base.OnResume();
         }
 
