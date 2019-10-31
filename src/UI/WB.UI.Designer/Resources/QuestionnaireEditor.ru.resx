@@ -1315,4 +1315,28 @@
   <data name="ScenarioDetails" xml:space="preserve">
     <value>Сценарий</value>
   </data>
+  <data name="ChooseLanguageTitle" xml:space="preserve">
+      <value>Пожалуйста, выберите перевод</value>
+      <comment>Пожалуйста, выберите перевод</comment>
+  </data>
+  <data name="DownloadPdf" xml:space="preserve">
+      <value>Скачать PDF</value>
+      <comment>Скачать PDF</comment>
+  </data>
+  <data name="GeneratePdf" xml:space="preserve">
+      <value>Сгенерировать pdf</value>
+      <comment>Сгенерировать pdf</comment>
+  </data>
+  <data name="Initializing" xml:space="preserve">
+      <value>Инициализация</value>
+      <comment>Инициализация</comment>
+  </data>
+  <data name="RetryExportPDF" xml:space="preserve">
+      <value>Повторить экспорт в PDF</value>
+      <comment>Повторить экспорт в PDF</comment>
+  </data>
+  <data name="Translation_Original" xml:space="preserve">
+      <value>Оргинальный</value>
+      <comment>Оргинальный</comment>
+  </data>
 </root>
