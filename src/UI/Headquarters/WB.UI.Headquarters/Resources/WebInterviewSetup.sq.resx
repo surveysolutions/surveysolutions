@@ -1,0 +1,243 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BackToQuestionnaires" xml:space="preserve">
+    <value>Kthehu te Konfigurimi i Anketës </value>
+  </data>
+  <data name="CustomMessageTooLong" xml:space="preserve">
+    <value>Mesazhi i personalizuar nuk duhet të përmbajë më shumë sesa {0} karaktere (përfshi html)</value>
+  </data>
+  <data name="CustomText" xml:space="preserve">
+    <value>Përdorni tekstin e personalizuar</value>
+  </data>
+  <data name="Done" xml:space="preserve">
+    <value>U krye</value>
+  </data>
+  <data name="DownloadTitle" xml:space="preserve">
+    <value>Shkarkoni ({{count}})</value>
+  </data>
+  <data name="ExportAssignmentsTitle" xml:space="preserve">
+    <value>Ju mund të shkarkoni listën e detyrave të krijuara që i caktohen intervistuesit, me qëllim që t’u dërgoni adresat në internet të intervistuarve  </value>
+  </data>
+  <data name="Invitations" xml:space="preserve">
+    <value>Ftesa</value>
+  </data>
+  <data name="Invitations_ChangeEmailSettingsAdmin" xml:space="preserve">
+    <value>Ju mund t’i ndryshoni këto cilësime në faqen &lt;a href="{{url}}"&gt;'Email Providers'&lt;/a&gt;.</value>
+  </data>
+  <data name="Invitations_ChangeEmailSettingsNotAdmin" xml:space="preserve">
+    <value>I thoni përdoruesit tuaj administrator t’i ndryshojë këto cilësime në faqen 'Email Providers'.</value>
+  </data>
+  <data name="Invitations_EmailIsNotSetUp" xml:space="preserve">
+    <value>Ofruesi i email-it nuk është konfiguruar.</value>
+  </data>
+  <data name="Invitations_NothingSent" xml:space="preserve">
+    <value>Ende nuk është dërguar asnjë ftesë.</value>
+  </data>
+  <data name="Invitations_NothingToSend" xml:space="preserve">
+    <value>Nuk ka ftesa për t’u dërguar deri tani.</value>
+  </data>
+  <data name="Invitations_SendAction" xml:space="preserve">
+    <value>Dërgoni {{count}} ftesa</value>
+  </data>
+  <data name="Invitations_Sent" xml:space="preserve">
+    <value>{{count}} ftesa u dërguan tashmë.</value>
+  </data>
+  <data name="Invitations_SetupError" xml:space="preserve">
+    <value>Ftesat nuk mund të dërgohen.</value>
+  </data>
+  <data name="Invitations_SuccessfulSetup" xml:space="preserve">
+    <value>Anketa në internet ka nisur dhe ofruesi i email-it u konfigurua si duhet. Sistemi është gati të dërgojë ftesat.</value>
+  </data>
+  <data name="Invitations_SurveyIsNotStarted" xml:space="preserve">
+    <value>Anketa në internet nuk ka nisur. Konfiguro dhe &lt;a href="{{url}}"&gt;nis anketën në internet &lt;/a&gt; përpara dërgimit të ftesave.</value>
+  </data>
+  <data name="Invitations_ToSend" xml:space="preserve">
+    <value>{{count}} ftesa për t’u dërguar.</value>
+  </data>
+  <data name="Invitations_TotalInvitations" xml:space="preserve">
+    <value>{{count}} ftesa gjithsej.</value>
+  </data>
+  <data name="SaveAll" xml:space="preserve">
+    <value>Ruaji të gjitha</value>
+  </data>
+  <data name="SelectInterviwer" xml:space="preserve">
+    <value>Përzgjidh intervistuesin/en</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Nis</value>
+  </data>
+  <data name="Started_Title" xml:space="preserve">
+    <value>Intervista në internet nisi</value>
+  </data>
+  <data name="StartInfo" xml:space="preserve">
+    <value>Intervista në internet po nis për {{name}}</value>
+  </data>
+  <data name="StopWebInterview" xml:space="preserve">
+    <value>Ndërprit intervistën në internet</value>
+  </data>
+  <data name="TextCustomize" xml:space="preserve">
+    <value>Teksti që iu shfaqet të intervistuarve mund të përshtatet</value>
+  </data>
+  <data name="TextsUpdated" xml:space="preserve">
+    <value>Tekstet u përditësuan</value>
+  </data>
+  <data name="UseCaptcha" xml:space="preserve">
+    <value>Përdor CAPTCHA përpara nisjes së intervistës</value>
+  </data>
+  <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
+    <value>Konfigurimi i intervistës në internet</value>
+  </data>
+  <data name="WebInterviewSetup_SendInvitationsTitle" xml:space="preserve">
+    <value>Dërgo ftesat</value>
+  </data>
+  <data name="WebInterviewSetup_Title" xml:space="preserve">
+    <value>Konfigurimi i intervistës në internet </value>
+  </data>
+  <data name="WebInterviewStarted" xml:space="preserve">
+    <value>Intervista në internet për {{name}} filloi</value>
+  </data>
+  <data name="WebInterviewUserMessages_CompleteButton_Descr" xml:space="preserve">
+    <value>Përfundoi</value>
+  </data>
+  <data name="WebInterviewUserMessages_CompleteNoteToSupervisor_Descr" xml:space="preserve">
+    <value>Shënim për Supervizorin</value>
+  </data>
+  <data name="WebInterviewUserMessages_FinishInterview_Descr" xml:space="preserve">
+    <value>Teksti që shfaqet në faqen e fundit në përfundim të intervistës</value>
+  </data>
+  <data name="WebInterviewUserMessages_Invitation_Descr" xml:space="preserve">
+    <value>Teksti i ftesës që i paraqitet përdoruesit në faqen e parë. %QUESTIONNAIRE% zëvendësohet me titullin e pyetësorit</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeInvitation_Descr" xml:space="preserve">
+    <value>Teksti që i shfaqet përdoruesit që kthehet, përpara vazhdimit të intervistës. %QUESTIONNAIRE% zëvendësohet me titullin e pyetësorit</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeWelcome_Descr" xml:space="preserve">
+    <value>Teksti i kreut që i shfaqet përdoruesit që kthehet, përpara se të vazhdojë një intervistë </value>
+  </data>
+  <data name="WebInterviewUserMessages_SurveyName_Descr" xml:space="preserve">
+    <value>Titulli i anketës së kryer. %QUESTIONNAIRE% zëvendësohet me titullin e pyetësorit</value>
+  </data>
+  <data name="WebInterviewUserMessages_WebSurveyHeader_Descr" xml:space="preserve">
+    <value>Teksti i titullit shfaqet pas përfundimit të intervistës</value>
+  </data>
+  <data name="WebInterviewUserMessages_WelcomeText_Descr" xml:space="preserve">
+    <value>Teksti i kreut të mirëseardhjes në faqen e parë </value>
+  </data>
+</root>
