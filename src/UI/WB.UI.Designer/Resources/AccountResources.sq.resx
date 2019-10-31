@@ -1,0 +1,282 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AccountInfoUpdated" xml:space="preserve">
+    <value>Të dhënat e llogarisë u përditësuan me sukses</value>
+  </data>
+  <data name="AllRights" xml:space="preserve">
+    <value>Të gjitha të drejtat janë të rezervuara.</value>
+  </data>
+  <data name="AppDescription" xml:space="preserve">
+    <value>Një instrument bashkëpunues për të krijuar pyetësorë për platformën CAPI/CAWI të Bankës Botërore.</value>
+  </data>
+  <data name="AppName" xml:space="preserve">
+    <value>Questionnaire Designer</value>
+  </data>
+  <data name="BackToLogin" xml:space="preserve">
+    <value>Kthehu te Hyrja</value>
+  </data>
+  <data name="Change" xml:space="preserve">
+    <value>Ndrysho</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>Ndrysho fjalëkalimin</value>
+  </data>
+  <data name="CompanyName" xml:space="preserve">
+    <value>Grupi i Bankës Botërore</value>
+  </data>
+  <data name="CompleteRegistrationInstruction" xml:space="preserve">
+    <value>Për të përfunduar procesin e regjistrimit, kërkoni një email në kutinë e mesazheve që ofron udhëzime të mëtejshme</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Konfirmo fjalëkalimin</value>
+  </data>
+  <data name="CurrentPassword" xml:space="preserve">
+    <value>Fjalëkalimi aktual</value>
+  </data>
+  <data name="EditProfile" xml:space="preserve">
+    <value>Redakto profilin</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="ExternalLoginRemoved" xml:space="preserve">
+    <value>Regjistrimi i jashtëm u hoq.</value>
+  </data>
+  <data name="ForgotPassword" xml:space="preserve">
+    <value>Harruat fjalëkalimin?</value>
+  </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Emri i plotë</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Ndihmë</value>
+  </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>Adresa e vendosur e e-mail-it është e pavlefshme. Ju lutemi, kontrollojeni vlerën dhe provojeni prapë.</value>
+  </data>
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>Fjalëkalimi i dhënë është i pavlefshëm. Ju lutemi, vendosni një vlerë të saktë të fjalëkalimit.</value>
+  </data>
+  <data name="InvalidResetPasswordLink" xml:space="preserve">
+    <value>Adresa për rivendosjen e fjalëkalimit është e pavlefshme ose ka skaduar. Ju lutemi, provojeni prapë</value>
+  </data>
+  <data name="InvalidRetrievalAnswer" xml:space="preserve">
+    <value>Përgjigjja e dhënë për marrjen e fjalëkalimit është e pasaktë. Ju lutemi, kontrolloni vlerën dhe provojeni prapë.</value>
+  </data>
+  <data name="InvalidRetrievalQuestion" xml:space="preserve">
+    <value>Pyetja e dhënë për rikuperimin e fjalëkalimit është e pavlefshme. Ju lutemi, kontrolloni vlerën dhe provojeni prapë.</value>
+  </data>
+  <data name="InvalidUserName" xml:space="preserve">
+    <value>Emri i përdoruesit që dhatë është i pavlefshëm. Ju lutemi, kontrolloni vlerën dhe provojeni prapë.</value>
+  </data>
+  <data name="Legal" xml:space="preserve">
+    <value>I/e ligjshme</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Hyr</value>
+  </data>
+  <data name="LoginMessage" xml:space="preserve">
+    <value>Ju lutemi, hyni ose</value>
+  </data>
+  <data name="LoginName" xml:space="preserve">
+    <value>Hyrje</value>
+  </data>
+  <data name="LoginOrEmail" xml:space="preserve">
+    <value>Emri i regjistrimit ose email-i</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Dil</value>
+  </data>
+  <data name="ManageAccount" xml:space="preserve">
+    <value>Menaxho llogarinë</value>
+  </data>
+  <data name="MembershipProviderError" xml:space="preserve">
+    <value>Ofruesi i verifikimit raportoi një gabim. Ju lutemi, verifikoni të dhënat dhe provojeni prapë. Nëse problemi vazhdon, ju lutemi, kontaktoni administratorin e sistemit tuaj.</value>
+  </data>
+  <data name="OutdatedBrowserMessage" xml:space="preserve">
+    <value>Ju po përdorni një shfletues të vjetër </value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Fjalëkalimi</value>
+  </data>
+  <data name="PasswordChanged" xml:space="preserve">
+    <value>Fjalëkalimi juaj ka ndryshuar.</value>
+  </data>
+  <data name="PasswordReset" xml:space="preserve">
+    <value>Rivendosje e fjalëkalimit </value>
+  </data>
+  <data name="PasswordResetDescription" xml:space="preserve">
+    <value>Vendosni emrin e regjistrimit ose email-in dhe do t’ju dërgojmë një adresë për rivendosjen e fjalëkalimit</value>
+  </data>
+  <data name="PasswordSet" xml:space="preserve">
+    <value>Fjalëkalimi juaj u vendos.</value>
+  </data>
+  <data name="PasswordWatermark" xml:space="preserve">
+    <value>Fjalëkalim i ri (min 10 simbole, numra DHE shkronja)</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Regjistrohu</value>
+  </data>
+  <data name="RegistrationError" xml:space="preserve">
+    <value>Gabim regjistrimi</value>
+  </data>
+  <data name="RegistrationErrorDescription" xml:space="preserve">
+    <value>Pati një gabim gjatë konfirmimit të email-it tuaj. Ju lutemi, provojeni prapë.</value>
+  </data>
+  <data name="RepeatPassword" xml:space="preserve">
+    <value>Përsërit fjalëkalimin</value>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>Kthe në gjendjen e mëparshme</value>
+  </data>
+  <data name="ShowPassword" xml:space="preserve">
+    <value>Shfaq fjalëkalimin</value>
+  </data>
+  <data name="StaySignedIn" xml:space="preserve">
+    <value>Qëndro i regjistruar për një ditë </value>
+  </data>
+  <data name="TesterApp" xml:space="preserve">
+    <value>Instalo Survey Solutions Questionnaire Tester në tabletin Android për të testuar pyetësorët që krijon të Designer.</value>
+  </data>
+  <data name="TesterAppImageDescription" xml:space="preserve">
+    <value>Merre në Google Play</value>
+  </data>
+  <data name="ThankYou" xml:space="preserve">
+    <value>Ju faleminderit</value>
+  </data>
+  <data name="UnknownError" xml:space="preserve">
+    <value>Ndodhi një gabim i panjohur. Ju lutemi, verifikoni të dhënat tuaja dhe provojeni prapë. Nëse problemi vazhdon, ju lutemi kontaktoni me administratorin e sistemit tuaj.</value>
+  </data>
+  <data name="UpgradeYourBrowser" xml:space="preserve">
+    <value>Ju lutemi &lt;a href="http://browsehappy.com/"&gt;përditësoni nivelin e shfletuesit tuaj &lt;/a&gt; për të përdorur aplikacionin designer.</value>
+  </data>
+  <data name="UserCreationRequestCanceled" xml:space="preserve">
+    <value>Kërkesa për krijimin e përdoruesit u anulua. Ju lutemi, verifikoni të dhënat tuaja dhe provojeni prapë. Nëse problemi vazhdon, ju lutemi kontaktoni me administratorin e sistemit tuaj.</value>
+  </data>
+  <data name="UserNameExists" xml:space="preserve">
+    <value>Emri i përdoruesit ekziston tashmë. Ju lutemi, vendosni një emër tjetër përdoruesi.</value>
+  </data>
+  <data name="UserNameForEmailExists" xml:space="preserve">
+    <value>Ekziston tashmë një emër përdoruesi për këtë adresë e-mail-i. Ju lutemi, vendosni një adresë tjetër e-mail-i.</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>Mirë se vini në Survey Solutions</value>
+  </data>
+</root>

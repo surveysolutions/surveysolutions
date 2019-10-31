@@ -337,6 +337,10 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
     public class AudioRecorderInfoListener : Java.Lang.Object, MediaRecorder.IOnInfoListener
     {
+        public AudioRecorderInfoListener() { }
+        public AudioRecorderInfoListener(System.IntPtr pointer, Android.Runtime.JniHandleOwnership ownership)
+            :base(pointer, ownership) { }
+
         public event EventHandler OnMaxDurationReached;
         public void OnInfo(MediaRecorder mr, MediaRecorderInfo what, int extra)
         {

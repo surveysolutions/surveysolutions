@@ -40,7 +40,8 @@ const pages = {
             "MapReport",
             "Settings",
             "DataExport",
-            "Dashboard"
+            "Dashboard",
+            "TabletLogs"
         ]
     },
     webinterview: {

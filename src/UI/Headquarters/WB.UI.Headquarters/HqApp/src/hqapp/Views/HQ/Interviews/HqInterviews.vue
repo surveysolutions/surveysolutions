@@ -1078,10 +1078,11 @@ export default {
             this.isLoading = true
             this.selectedRows.splice(0, this.selectedRows.length)
             this.$refs.table.reload(self.reloadTable)
-
+        },
+        reloadTableAndSaveRoute() {
+            this.reloadTable()
             this.addParamsToQueryString()
         },
-
         addParamsToQueryString() {
             var queryString = {}
 
@@ -1157,7 +1158,7 @@ export default {
 
                 self.startWatchers(
                     ["responsibleId", "questionnaireId", "status", "assignmentId", "questionnaireVersion"],
-                    self.reloadTable.bind(self)
+                    self.reloadTableAndSaveRoute.bind(self)
                 );
             });
         });

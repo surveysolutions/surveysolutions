@@ -21,6 +21,20 @@
         <LinearLayout style="@style/Diagnostic_Container">
             <include layout="@layout/diagnostics__check_new_version" />
             <include layout="@layout/diagnostics__test_bandwidth_to_server" />
+            <LinearLayout style="@style/Diagnostics_Section">
+                <LinearLayout style="@style/Diagnostics_TitleSection">
+                    <TextView style="@style/Diagnostics_Section_Title"
+                              local:MvxBind="Text Localization('Diagnostics_SendLogs'); Click Logs.SendLogsCommand; UnderlinePressed ." />
+                    <TextView style="@style/Diagnostics_Section_Description"
+                              local:MvxBind="Html Localization('Diagnostics_SendLogs_Description')" />
+                    <TextView
+                        style="@style/Diagnostics_Subsection_Title"
+                        local:MvxBind="Text Localization('Diagnostics_SendLogs_Success'); Visible Logs.LogsSent" />
+                </LinearLayout>
+                <ProgressBar style="@style/Interview_Question_Progress_Indicator"
+                             android:indeterminateOnly="true" 
+                             local:MvxBind="Visible Logs.IsInProgress" />
+            </LinearLayout>
             <include layout="@layout/diagnostics__tabletinformation" />
             <include layout="@layout/diagnostics__backup_restore" />
             <LinearLayout style="@style/Diagnostics_Section">

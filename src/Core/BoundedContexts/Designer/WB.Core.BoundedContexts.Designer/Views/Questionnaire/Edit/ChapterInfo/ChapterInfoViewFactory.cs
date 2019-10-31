@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
     public class ChapterInfoViewFactory : IChapterInfoViewFactory
     {
         private readonly IQuestionTypeToCSharpTypeMapper questionnaireTypeMapper; 
-        private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
+        private readonly IDesignerQuestionnaireStorage questionnaireStorage;
         private readonly IReadOnlyList<VariableName> predefinedVariables = new List<VariableName>
         {
             new VariableName(null, "self", null),
@@ -27,16 +27,16 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         };
 
         public ChapterInfoViewFactory(
-            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage, 
+            IDesignerQuestionnaireStorage questionnaireStorage, 
             IQuestionTypeToCSharpTypeMapper questionnaireTypeMapper)
         {
             this.questionnaireStorage = questionnaireStorage;
             this.questionnaireTypeMapper = questionnaireTypeMapper;
         }
 
-        public NewChapterView Load(string questionnaireId, string chapterId)
+        public NewChapterView Load(QuestionnaireRevision questionnaireId, string chapterId)
         {
-            var document = this.questionnaireStorage.GetById(questionnaireId).AsReadOnly();
+            var document = this.questionnaireStorage.Get(questionnaireId).AsReadOnly();
             var chapterPublicKey = Guid.Parse(chapterId);
             var isExistsChapter = document.Find<IGroup>(chapterPublicKey)!=null;
             if (!isExistsChapter)

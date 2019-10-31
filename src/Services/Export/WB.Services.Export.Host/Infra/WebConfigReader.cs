@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -76,7 +77,9 @@ namespace WB.Services.Export.Host.Infra
             if (string.IsNullOrWhiteSpace(connectionString)) return;
 
             configuration.GetSection("ConnectionStrings")["DefaultConnection"] = connectionString;
-            logger.LogDebug("Using connections string: {connectionString}", connectionString);
+
+            var connectionStringWithOutPassword = Regex.Replace(connectionString, "password=[^;]*", "Password=***", RegexOptions.IgnoreCase);
+            logger.LogDebug("Using connections string: {connectionString}", connectionStringWithOutPassword);
         }
 
         private static string GetConnectionString(XDocument config)
