@@ -1,6 +1,9 @@
 <Project>
    <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
-
+   <PropertyGroup>
+      <LangVersion>latest</LangVersion>
+   </PropertyGroup>
+   
    <PropertyGroup>
       <!-- Reading version from .version file into ProductVersion -->
       <WBVersionInfoFile>$([MSBuild]::GetPathOfFileAbove('.version', '$(MSBuildThisFileDirectory)../'))</WBVersionInfoFile>
