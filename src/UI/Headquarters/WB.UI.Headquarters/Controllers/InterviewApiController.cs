@@ -15,6 +15,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Infrastructure.Native.Sanitizer;
 using WB.UI.Headquarters.Code;
+using WB.UI.Shared.Web.Attributes;
 
 namespace WB.UI.Headquarters.Controllers
 {

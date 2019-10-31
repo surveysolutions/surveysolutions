@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.Views.SystemLog;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.UI.Headquarters.Code;
+using WB.UI.Shared.Web.Attributes;
 
 namespace WB.UI.Headquarters.API
 {

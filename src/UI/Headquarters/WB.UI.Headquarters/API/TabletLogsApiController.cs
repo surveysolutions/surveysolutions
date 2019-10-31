@@ -10,6 +10,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Infrastructure.Native.Utils;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.Api;
+using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Filters;
 

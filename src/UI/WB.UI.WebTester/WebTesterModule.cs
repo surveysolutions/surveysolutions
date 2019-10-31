@@ -119,7 +119,7 @@ namespace WB.UI.WebTester
 
             foreach (var type in HubPipelineModules)
             {
-                registry.BindAsSingleton(typeof(IHubPipelineModule), type);
+                registry.BindAsSingleton(typeof(IPipelineModule), type);
                 registry.BindAsSingleton(type, type);
             }
 
