@@ -3,6 +3,7 @@ using System.Linq;
 using ApprovalTests;
 using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
+using ApprovalTests.Reporters.TestFrameworks;
 using Moq;
 using Npgsql;
 using NpgsqlTypes;

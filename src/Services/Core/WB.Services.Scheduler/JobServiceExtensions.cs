@@ -52,7 +52,7 @@ namespace WB.Services.Scheduler
 
             services.AddDbContext<JobContext>(ops =>
                 ops
-                    .UseLoggerFactory(MyLoggerFactory)
+                    //.UseLoggerFactory(MyLoggerFactory)
                     .UseNpgsql(configuration.GetConnectionString(connectionName)));
 
             services.Configure<JobSettings>(jobSettingsSection);
@@ -103,7 +103,9 @@ namespace WB.Services.Scheduler
         /// </summary>
         private const long LockValueForMigration = -889238397;
 
-        private static readonly LoggerFactory MyLoggerFactory
-            = new LoggerFactory(new[] { new ConsoleLoggerProvider((s, level) => (int)level >= 4, true) });
+        //private static readonly LoggerFactory MyLoggerFactory
+        //    = new LoggerFactory(new[] { new ConsoleLoggerProvider(
+        //        Options.Create(new Con
+        //        (s, level) => (int)level >= 4, true) });
     }
 }
