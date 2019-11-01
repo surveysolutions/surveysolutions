@@ -19,6 +19,7 @@ using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.UI.Headquarters.API.WebInterview.Pipeline;
 using WB.UI.Headquarters.Code;
+using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Filters;
 using InterviewEntity = WB.Enumerator.Native.WebInterview.Models.InterviewEntity;
 

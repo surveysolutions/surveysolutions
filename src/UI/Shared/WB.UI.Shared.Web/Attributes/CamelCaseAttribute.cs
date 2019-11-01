@@ -3,7 +3,7 @@ using System.Net.Http.Formatting;
 using System.Web.Http.Filters;
 using Newtonsoft.Json.Serialization;
 
-namespace WB.UI.Headquarters.Code
+namespace WB.UI.Shared.Web.Attributes
 {
     public class CamelCaseAttribute : ActionFilterAttribute
     {

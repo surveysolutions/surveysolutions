@@ -176,6 +176,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\CamelCaseAttribute.cs" />
     <Compile Include="Compression\CompressionHandler.cs" />
     <Compile Include="Configuration\ExternalStoragesConfigSection.cs" />
     <Compile Include="DataAnnotations\ServerSideOnlyRegularExpressionAttribute.cs" />
