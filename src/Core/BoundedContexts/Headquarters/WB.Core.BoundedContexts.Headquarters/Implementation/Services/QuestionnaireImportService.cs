@@ -92,14 +92,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                 var minSupported = this.supportedVersionProvider.GetMinVerstionSupportedByInterviewer();
 
-                await TriggerPdfRendering(questionnaireId);
+                if (includePdf)
+                    await TriggerPdfRendering(questionnaireId);
 
                 var questionnairePackage = await this.designerApi.GetQuestionnaire(questionnaireId, supportedVersion, minSupported);
                                 
                 QuestionnaireDocument questionnaire = this.zipUtils.DecompressString<QuestionnaireDocument>(questionnairePackage.Questionnaire);
 
                 if (includePdf)
-                    await TriggerPdfRendering(questionnaireId);
+                    await TriggerPdfTranslationsRendering(questionnaire);
 
                 var questionnaireContentVersion = questionnairePackage.QuestionnaireContentVersion;
                 var questionnaireAssembly = questionnairePackage.QuestionnaireAssembly;
