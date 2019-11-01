@@ -33,16 +33,16 @@ namespace WB.Services.Export.Host
                     Log.Logger.Fatal("Unhandled exception occur {exception}", new[] { eventArgs.ExceptionObject.ToString() });
                 };
 
-                string currentWorkingDir = Directory.GetCurrentDirectory();
+                var pathToExe = Process.GetCurrentProcess().MainModule.FileName;
+                var pathToContentRoot = Path.GetDirectoryName(pathToExe);
 
-                var builder = CreateWebHostBuilder(args);
-
-                builder.UseWindowsService();
-
+                Directory.SetCurrentDirectory(pathToContentRoot);
                 OpenPIDFile();
 
-                await builder.Build().RunAsync();
-
+                await CreateWebHostBuilder(args)
+                    .UseWindowsService()
+                    .Build()
+                    .RunAsync();
             }
             catch (Exception ex)
             {
@@ -116,10 +116,8 @@ namespace WB.Services.Export.Host
         public static IHostBuilder CreateWebHostBuilder(string[] args)
         {
             var host = Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args);
-
             host.ConfigureLogging((hosting, logging) =>
             {
-
                 var logConfig = new LoggerConfiguration();
                 logConfig.Enrich.WithProperty("Environment", hosting.HostingEnvironment.EnvironmentName);
                 logConfig.WriteTo.Console(LogEventLevel.Debug);
@@ -147,17 +145,11 @@ namespace WB.Services.Export.Host
                     c.AddCommandLine(args);
                 });
 
-
-                web
-                    .UseSerilog()
-                    .UseUrls(GetCommandLineUrls(args));
+                //  web.UseSerilog();
             });
 
             return host;
         }
-
-        private static string GetCommandLineUrls(string[] args) =>
-            new ConfigurationBuilder().AddCommandLine(args).Build()["urls"];
 
         // pid file - is a file that is exists only while process is alive and contains own process id
         private static void OpenPIDFile()
