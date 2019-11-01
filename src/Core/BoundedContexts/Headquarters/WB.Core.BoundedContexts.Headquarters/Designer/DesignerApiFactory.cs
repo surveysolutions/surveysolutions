@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
 
         public IDesignerApi Get()
         {
-            var hc = new HttpClient()
+            var hc = new HttpClient(new RestServiceHandler(designerUserCredentials))
             {
                 BaseAddress = new Uri(serviceSettings.Endpoint),
                 DefaultRequestHeaders =
@@ -48,13 +48,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
                 }
             };
 
-            var credentials = designerUserCredentials.Get();
-            if (credentials != null)
-            {
-                hc.DefaultRequestHeaders.Authorization = credentials.GetAuthenticationHeaderValue();
-            }
-
-            return RestService.For<IDesignerApi>(hc, new RefitSettings
+           return RestService.For<IDesignerApi>(hc, new RefitSettings
             {
                 ContentSerializer = new DesignerContentSerializer()
             });
@@ -98,10 +92,22 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
         // Handling Designer Errors as they were handled by RestService.
         internal class RestServiceHandler : HttpClientHandler
         {
+            private readonly IDesignerUserCredentials designerCredentials;
+
+            public RestServiceHandler(IDesignerUserCredentials designerCredentials)
+            {
+                this.designerCredentials = designerCredentials;
+            }
+
             protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
             {
                 try
                 {
+                    var credentials = designerCredentials.Get();
+                    if (credentials != null)
+                    {
+                        request.Headers.Authorization = credentials.GetAuthenticationHeaderValue();
+                    }
                     var result = await base.SendAsync(request, cancellationToken);
                     return result;
                 }
