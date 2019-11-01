@@ -23,6 +23,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.API
