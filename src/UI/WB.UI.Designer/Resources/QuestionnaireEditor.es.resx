@@ -960,4 +960,24 @@
   <data name="WarningsCounter_plural" xml:space="preserve">
     <value>{{count}} Advertencias</value>
   </data>
+  <data name="DownloadPdf" xml:space="preserve">
+      <value>Descargar PDF</value>
+      <comment>Descargar PDF</comment>
+  </data>
+  <data name="GeneratePdf" xml:space="preserve">
+      <value>Generar PDF</value>
+      <comment>Generar PDF</comment>
+  </data>
+  <data name="Initializing" xml:space="preserve">
+      <value>Inicializando</value>
+      <comment>Inicializando</comment>
+  </data>
+  <data name="RetryExportPDF" xml:space="preserve">
+      <value>Intentar de nuevo exportar PDF</value>
+      <comment>Intentar de nuevo exportar PDF</comment>
+  </data>
+  <data name="Translation_Original" xml:space="preserve">
+      <value>Original</value>
+      <comment>Original</comment>
+  </data>
 </root>

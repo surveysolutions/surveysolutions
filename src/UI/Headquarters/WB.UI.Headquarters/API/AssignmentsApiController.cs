@@ -17,6 +17,7 @@ using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Api;
 using WB.UI.Headquarters.Resources;
+using WB.UI.Shared.Web.Attributes;
 
 namespace WB.UI.Headquarters.API
 {
