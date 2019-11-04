@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -10,9 +10,6 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
-using WB.Enumerator.Native.WebInterview;
-using WB.Enumerator.Native.WebInterview.Services;
-using WB.UI.Shared.Web.Services;
 using WB.UI.WebTester.Services;
 
 namespace WB.UI.WebTester.Controllers
@@ -44,11 +41,11 @@ namespace WB.UI.WebTester.Controllers
             this.imageProcessingService = imageProcessingService;
         }
 
-        public ActionResult AudioRecord(string interviewId, string fileName)
+        public IActionResult AudioRecord(string interviewId, string fileName)
         {
             if (!Guid.TryParse(interviewId, out var id))
             {
-                return HttpNotFound();
+                return StatusCode(StatusCodes.Status404NotFound);
             }
 
             MultimediaFile file = null;
@@ -58,7 +55,7 @@ namespace WB.UI.WebTester.Controllers
             }
 
             if (file == null || file.Data.Length == 0)
-                return HttpNotFound();
+                return StatusCode(StatusCodes.Status404NotFound);
 
             return this.File(file.Data, file.MimeType, fileName);
         }
@@ -106,6 +103,7 @@ namespace WB.UI.WebTester.Controllers
             catch (Exception e)
             {
                 webInterviewNotificationService.MarkAnswerAsNotSaved(Guid.Parse(interviewId), questionIdentity, e);
+                webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, questionId, WebInterview.GetUiMessageFromException(e));
                 throw;
             }
 
