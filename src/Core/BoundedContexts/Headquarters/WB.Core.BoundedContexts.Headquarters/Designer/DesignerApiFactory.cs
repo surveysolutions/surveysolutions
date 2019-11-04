@@ -1,21 +1,14 @@
 ﻿using Newtonsoft.Json;
 using Refit;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.SharedKernel.Structures.Synchronization.Designer;
-using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.BoundedContexts.Headquarters.Designer
 {
@@ -39,7 +32,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
 
         public IDesignerApi Get()
         {
-            var hc = new HttpClient(new RestServiceHandler(designerUserCredentials))
+            var restHandler = new RestServiceHandler(designerUserCredentials);
+            var hc = new HttpClient(restHandler)
             {
                 BaseAddress = new Uri(serviceSettings.Endpoint),
                 DefaultRequestHeaders =
@@ -48,7 +42,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
                 }
             };
 
-           return RestService.For<IDesignerApi>(hc, new RefitSettings
+            return RestService.For<IDesignerApi>(hc, new RefitSettings
             {
                 ContentSerializer = new DesignerContentSerializer()
             });
@@ -63,10 +57,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
 
             public async Task<T> DeserializeAsync<T>(HttpContent content)
             {
-                if(typeof(T) == typeof(RestFile))
+                if (typeof(T) == typeof(RestFile))
                 {
                     object result = await AsRestFileAsync(content);
-                    return (T) result;
+                    return (T)result;
                 }
 
                 return await json.DeserializeAsync<T>(content);
@@ -108,8 +102,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
                     {
                         request.Headers.Authorization = credentials.GetAuthenticationHeaderValue();
                     }
-                    var result = await base.SendAsync(request, cancellationToken);
-                    return result;
+                    var call = new HttpCall(request);
+
+                    call.Response = await base.SendAsync(request, cancellationToken);
+                    call.Response.RequestMessage = request;
+                    if (call.IsSucceeded)
+                        return call.Response;
+
+                    throw new ExtendedMessageHandlerException(call, null);
                 }
                 catch (OperationCanceledException ex)
                 {
@@ -128,7 +128,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
                     }
                     else if (ex.Call.Response != null)
                     {
-                        var reasonPhrase = GetReasonPhrase(ex);
+                        var reasonPhrase = await GetReasonPhrase(ex);
                         throw new RestException(reasonPhrase, statusCode: ex.Call.Response.StatusCode, innerException: ex);
                     }
                     else
@@ -154,12 +154,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
                 }
             }
 
-            private string GetReasonPhrase(ExtendedMessageHandlerException ex)
+            private async Task<string> GetReasonPhrase(ExtendedMessageHandlerException ex)
             {
                 try
                 {
                     var responseMessage = ex.Call.Response;
-                    var responseContent = responseMessage.Content.ReadAsStringAsync().Result;
+                    var responseContent = await responseMessage.Content.ReadAsStringAsync();
 
                     var jsonFromHttpResponseMessage = JsonConvert.DeserializeObject<ResponseWithErrorMessage>(responseContent);
                     if (jsonFromHttpResponseMessage != null)
