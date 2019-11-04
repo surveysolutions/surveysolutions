@@ -87,7 +87,7 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation
             var questionnaireStorage = new Mock<IQuestionnaireStorage>();
             var questionnaireDocument = Create.QuestionnaireDocument();
             questionnaireDocument.Title = "Name of questionnaire";
-            questionnaireDocument.Id = "11111111111111111111111111111111";
+            questionnaireDocument.PublicKey = Guid.Parse("11111111111111111111111111111111");
             questionnaireDocument.Revision = 1;
             questionnaireStorage.SetupIgnoreArgs(x => x.GetQuestionnaireAsync(null, CancellationToken.None))
                 .ReturnsAsync(questionnaireDocument);

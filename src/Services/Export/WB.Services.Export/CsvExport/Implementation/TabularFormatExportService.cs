@@ -121,7 +121,7 @@ namespace WB.Services.Export.CsvExport.Implementation
             var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(questionnaireId);
             QuestionnaireExportStructure questionnaireExportStructure = await this.exportStructureFactory.GetQuestionnaireExportStructureAsync(tenant, questionnaireId);
 
-            var questionnaireUrl = $"https://designer.mysurvey.solutions/questionnaire/details/{questionnaire.Id}";
+            var questionnaireUrl = $"https://designer.mysurvey.solutions/questionnaire/details/{questionnaire.PublicKey.ToString("N")}";
             if (questionnaire.Revision > 0)
                 questionnaireUrl += $"${questionnaire.Revision}";
 
