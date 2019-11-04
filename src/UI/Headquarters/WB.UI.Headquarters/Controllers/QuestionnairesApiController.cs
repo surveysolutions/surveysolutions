@@ -21,6 +21,7 @@ using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Models.Api;
 using WB.UI.Headquarters.Models.ComponentModels;
 using WB.UI.Headquarters.Models.Template;
+using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers

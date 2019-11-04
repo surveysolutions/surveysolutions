@@ -204,7 +204,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             Translation translation = null)
         {
             this.innerDocument = document;
-            
+            this.Revision = document.Revision;
             this.Version = version;
             this.translation = translation;
             this.questionOptionsRepository = questionOptionsRepository;
@@ -230,7 +230,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         }
 
         public long Version { get; }
-
+        public int Revision { get; }
         public Guid QuestionnaireId => this.innerDocument.PublicKey;
 
         public string Title => this.innerDocument.Title;
@@ -377,7 +377,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 => this.GetMultiSelectAnswerOptionsAsValuesImpl(questionId));
 
         public IEnumerable<CategoricalOption> GetCategoricalMultiOptionsByValues(Guid questionId, int[] values) =>
-            this.questionOptionsRepository.GetOptionsByOptionValues(this, questionId, values);
+            this.questionOptionsRepository.GetOptionsByOptionValues(this, questionId, values, this.translation);
 
         public IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, int? parentQuestionValue,
             string searchFor, int[] excludedOptionIds)
@@ -504,7 +504,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     $"Cannot return maximum for selected answers for question with id '{questionId}' because it's type {question.QuestionType} does not support that parameter.");
 
             if (question is IMultyOptionsQuestion multi)
-                return multi.MaxAllowedAnswers ?? Constants.MaxMultiComboboxAnswersCount;
+                return multi.MaxAllowedAnswers;
 
             return ((TextListQuestion)question).MaxAnswerCount;
         }
@@ -1168,6 +1168,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .Translations
                 .Select(translation => translation.Name)
                 .ToReadOnlyCollection();
+
+        public IReadOnlyList<Translation> Translations => this.QuestionnaireDocument.Translations.ToList();
 
         public string GetDefaultTransation()
         {

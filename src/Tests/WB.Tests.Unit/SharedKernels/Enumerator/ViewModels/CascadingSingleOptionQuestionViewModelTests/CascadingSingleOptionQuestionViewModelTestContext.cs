@@ -8,6 +8,7 @@ using MvvmCross.Plugin.Messenger;
 using MvvmCross.Tests;
 using MvvmCross.Views;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
@@ -85,7 +86,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             var userInterfaceStateService = Mock.Of<IUserInterfaceStateService>(
                 x => x.WaitWhileUserInterfaceIsRefreshingAsync() == Task.FromResult(true));
             
-            AnsweringViewModelMock = new Mock<AnsweringViewModel>(Mock.Of<ICommandService>(), userInterfaceStateService, Mock.Of<IMvxMessenger>());
+            AnsweringViewModelMock = new Mock<AnsweringViewModel>(Mock.Of<ICommandService>(), userInterfaceStateService, Mock.Of<IMvxMessenger>(), Mock.Of<ILogger>());
             
             EventRegistry = new Mock<IViewModelEventRegistry>();
         }

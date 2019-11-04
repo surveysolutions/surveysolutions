@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
             this.ImportDate = DateTime.UtcNow;
         }
 
-        public QuestionnaireBrowseItem(QuestionnaireDocument doc, long version, bool allowCensusMode, long questionnaireContentVersion, bool isSupportAssignments, bool allowExportVariables)
+        public QuestionnaireBrowseItem(QuestionnaireDocument doc, long version, bool allowCensusMode, long questionnaireContentVersion, bool isSupportAssignments, bool allowExportVariables, string comment)
             : this(doc.PublicKey, version, doc.Title, doc.VariableName, doc.CreationDate, doc.LastEntryDate, doc.CreatedBy, doc.IsPublic, allowCensusMode, isSupportAssignments, allowExportVariables)
         {
             this.FeaturedQuestions =
@@ -51,7 +51,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
                    .ToList();
             this.QuestionnaireContentVersion = questionnaireContentVersion;
             this.Id = string.Format("{0}${1}", doc.PublicKey.FormatGuid(), version);
+            this.Comment = comment;
         }
+
+        public virtual string Comment { get; set; }
 
         public virtual string Id { get; set; }
 

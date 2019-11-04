@@ -5,7 +5,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Commands
 {
     public class ImportFromDesigner : QuestionnaireCommand
     {
-        public ImportFromDesigner(Guid createdBy, IQuestionnaireDocument source, bool allowCensusMode, string supportingAssembly, long questionnaireContentVersion, long questionnaireVersion)
+        public ImportFromDesigner(Guid createdBy, IQuestionnaireDocument source, bool allowCensusMode,
+            string supportingAssembly, long questionnaireContentVersion, long questionnaireVersion, string comment)
             : base(source.PublicKey, source.PublicKey)
         {
             this.AllowCensusMode = allowCensusMode;
@@ -14,7 +15,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Commands
             this.SupportingAssembly = supportingAssembly;
             this.QuestionnaireContentVersion = questionnaireContentVersion;
             this.QuestionnaireVersion = questionnaireVersion;
+            this.Comment = comment;
         }
+
+        public string Comment { get; private set; }
 
         public Guid CreatedBy { get; private set; }
         public bool AllowCensusMode { get; private set; }

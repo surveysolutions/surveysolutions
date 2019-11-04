@@ -35,8 +35,7 @@ export default {
   computed: {
     classes() {
       const sidebar = this.$store.state.webinterview.sidebar;
-      const smallOrMedioumScreenWidth =
-        sidebar.screenWidth < sidebar.mediumScreenThreshold;
+      const smallOrMedioumScreenWidth = sidebar.screenWidth < sidebar.mediumScreenThreshold;
 
       return {
         "show-content": smallOrMedioumScreenWidth && !sidebar.sidebarHidden,
@@ -59,8 +58,9 @@ export default {
   },
 
   beforeMount() {
-    this.$store.dispatch("getLanguageInfo");
-    this.$store.dispatch("loadInterview");
+    var interviewId = this.$route.params.interviewId
+    this.$store.dispatch("getLanguageInfo", interviewId);
+    this.$store.dispatch("loadInterview", interviewId);
   },
 
   mounted() {

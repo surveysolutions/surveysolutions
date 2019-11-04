@@ -39,7 +39,7 @@
                     {
                         render: function(data, type, row) {
                             if (row.questionnaireVersion) {
-                                return getLinkToInterviews(model, data, row);
+                                return getLinkToInterviews(model, data, row,'', model.Url.query['responsible']);
                             }
                             else {
                                 var responsible = model.Url.query['responsible'];

@@ -1,0 +1,732 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WB0001_NoQuestions" xml:space="preserve">
+    <value>Pyetësori duhet të përmbajë të paktën një pyetje.</value>
+  </data>
+  <data name="WB0002_CustomValidationExpressionHasIncorrectSyntax" xml:space="preserve">
+    <value>Kushti i validimit ka një gabim sintaksor.</value>
+  </data>
+  <data name="WB0003_CustomEnablementConditionHasIncorrectSyntax" xml:space="preserve">
+    <value>Kushti i aktivizimit ka një gabim sintaksor.</value>
+  </data>
+  <data name="WB0004_VariableHasEmptyExpression" xml:space="preserve">
+    <value>Variabli nuk mund të ketë shprehje bosh.</value>
+  </data>
+  <data name="WB0005_VariableExpressionHasLengthMoreThan10000Characters" xml:space="preserve">
+    <value>Shprehja variable është e gjatë më shumë se {0} karaktere.</value>
+  </data>
+  <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
+    <value>Vetëm një pyetje GPS mund të shënohet si identifikuese</value>
+  </data>
+  <data name="WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked" xml:space="preserve">
+    <value>Pyetjet po/jo me zgjedhje të shumëfishtë nuk mund të lidhen</value>
+  </data>
+  <data name="WB0008_SubstitutionsInVariableLableAreProhibited" xml:space="preserve">
+    <value>Nuk lejohet të përdoren zëvendësime në etiketën e variablit</value>
+  </data>
+  <data name="WB0009_RosterSizeQuestionIsMissing" xml:space="preserve">
+    <value>Pyetja për madhësinë e rosterit mungon.</value>
+  </data>
+  <data name="WB0010_MacroHasInvalidName" xml:space="preserve">
+    <value>Makroja ka emërtim të pavlefshëm.</value>
+  </data>
+  <data name="WB0011_LinkedQuestionReferencesNotExistingQuestion" xml:space="preserve">
+    <value>Pyetja e lidhur i referohet një pyetjeje që nuk ekziston.</value>
+  </data>
+  <data name="WB0012_LinkedQuestionReferencesQuestionOfNotSupportedType" xml:space="preserve">
+    <value>Pyetja e lidhur i referohet një lloji pyetjeje që nuk mbështetet.</value>
+  </data>
+  <data name="WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup" xml:space="preserve">
+    <value>Pyetja e lidhur i referohet një pyetjeje që nuk është në një roster.</value>
+  </data>
+  <data name="WB0014_MacroHasEmptyName" xml:space="preserve">
+    <value>Makroja nuk mund të ketë emërtim bosh.</value>
+  </data>
+  <data name="WB0015_QuestionWithTitleSubstitutionCantBePrefilled" xml:space="preserve">
+    <value>Pyetja me zëvendësim titulli ose udhëzimesh nuk mund të shënohet si identifikuese.</value>
+  </data>
+  <data name="WB0017_SubstitutionReferencesNotExistingQuestionOrVariable" xml:space="preserve">
+    <value>Zëvendësimi i referohet një pyetjeje ose variabli joekzistues.</value>
+  </data>
+  <data name="WB0018_SubstitutionReferencesUnsupportedEntity" xml:space="preserve">
+    <value>Zëvendësimi i referohet një objekti që nuk mbështetet në zëvendësues.</value>
+  </data>
+  <data name="WB0019_SubstitutionCantReferenceItemWithDeeperRosterLevel" xml:space="preserve">
+    <value>Zëvendësimi nuk mund t’u referohet objekteve nga një nivel më i thellë rosteri.</value>
+  </data>
+  <data name="WB0020_NameForMacrosIsNotUnique" xml:space="preserve">
+    <value>Ekziston tashmë një Makro tjetër me të njëjtin emër .</value>
+  </data>
+  <data name="WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount" xml:space="preserve">
+    <value>Numri maksimal i përgjigjeve është më i madh se numri i kategorive të pyetjes.</value>
+  </data>
+  <data name="WB0022_PrefilledQuestionsOfIllegalType" xml:space="preserve">
+    <value>Pyetja e këtij lloji nuk mund të identifikohet.</value>
+  </data>
+  <data name="WB0023_RosterSizeSourceQuestionTypeIsIncorrect" xml:space="preserve">
+    <value>Pyetja burimore për madhësinë e rosterit është e pasaktë. Mund të përdoren vetëm pyetje numerike, kategorike me zgjedhje të shumëfishtë apo të listës tekst.</value>
+  </data>
+  <data name="WB0024_LookupHasInvalidName" xml:space="preserve">
+    <value>Tabela e kërkimit ka emërtim të pavlefshëm.</value>
+  </data>
+  <data name="WB0025_LookupHasEmptyName" xml:space="preserve">
+    <value>Tabela e kërkimit nuk mund të ketë emërtim bosh.</value>
+  </data>
+  <data name="WB0026_ItemsWithTheSameNamesFound" xml:space="preserve">
+    <value>U gjetën objekte me të njëjtin emër.</value>
+  </data>
+  <data name="WB0027_VariableExpresssionHasIncorrectSyntax" xml:space="preserve">
+    <value>Shprehja ka një gabim sintaksor.</value>
+  </data>
+  <data name="WB0028_OptionsFilterExpressionHasLengthMoreThan10000Characters" xml:space="preserve">
+    <value>Shprehja e filtrit të kategorive është më e gjatë se {0} karaktere.</value>
+  </data>
+  <data name="WB0029_QuestionWithOptionsFilterCannotBePrefilled" xml:space="preserve">
+    <value>Nuk mund të identifikohen pyetje me shprehje të filtrit të kategorive.</value>
+  </data>
+  <data name="WB0030_PrefilledQuestionCantBeInsideOfRoster" xml:space="preserve">
+    <value>Pyetjet identifikuese nuk mund të jenë brenda rosterit.</value>
+  </data>
+  <data name="WB0031_LookupTableHasInvalidHeaders" xml:space="preserve">
+    <value>Tabela e kërkimit ka tituj kolonash të pavlefshme.</value>
+  </data>
+  <data name="WB0032_GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles" xml:space="preserve">
+    <value>Rosteri kur pyetja burimore e madhësisë së rosterit nuk mund të ketë një grup fiks objektesh.</value>
+  </data>
+  <data name="WB0033_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion" xml:space="preserve">
+    <value>Rosteri me grup fiks objektesh nuk mund të ketë pyetje për madhësinë e rosterit.</value>
+  </data>
+  <data name="WB0034_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterTitleQuestion" xml:space="preserve">
+    <value>Rosteri me grup fiks objektesh nuk mund të ketë pyetje për titullin e rosterit.</value>
+  </data>
+  <data name="WB0035_GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion" xml:space="preserve">
+    <value>Rosteri kur pyetja burimore për madhësinë e rosterit ka pyetje të pavlefshme për titullin e rosterit.</value>
+  </data>
+  <data name="WB0036_ListAndMultiRostersCantHaveRosterTitleQuestion" xml:space="preserve">
+    <value>Rosteri kur pyetja për madhësinë e rosterit është pyetje kategorike me përgjigje të shumëfishta ose listë nuk mund të ketë pyetje për titullin e rosterit.</value>
+  </data>
+  <data name="WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles" xml:space="preserve">
+    <value>Rosteri me grup fiks objektesh nuk mund të ketë tituj bosh apo më pak se dy objekte.</value>
+  </data>
+  <data name="WB0038_RosterFixedTitlesHaveMoreThan200Items" xml:space="preserve">
+    <value>Rosteri me grup fiks objektesh nuk mund të ketë më shumë se {0} rreshta.</value>
+  </data>
+  <data name="WB0039_TextListQuestionCannotBePrefilled" xml:space="preserve">
+    <value>Pyetja e listës nuk mund të indentifikohej.</value>
+  </data>
+  <data name="WB0040_TextListQuestionCannotBeFilledBySupervisor" xml:space="preserve">
+    <value>Pyetja e listës nuk mundi të plotësohej nga supervizori.</value>
+  </data>
+  <data name="WB0041_GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues" xml:space="preserve">
+    <value>Vlerat e rosterit me grup fiks objektesh duhet tp jenë unike.</value>
+  </data>
+  <data name="WB0042_TextListQuestionMaxAnswerInRange1And200" xml:space="preserve">
+    <value>Numri maksimal i elementeve të listës duhet të jetë në gamën [{1}, {0}].</value>
+  </data>
+  <data name="WB0043_LookupTableMoreThan11Columns" xml:space="preserve">
+    <value>Tabela e kërkimit ka shumë kolona</value>
+  </data>
+  <data name="WB0044_LookupTableMoreThan5000Rows" xml:space="preserve">
+    <value>Tabela e kërkimit ka shumë rreshta</value>
+  </data>
+  <data name="WB0045_QuestionHasOptionsWithEmptyValue" xml:space="preserve">
+    <value>Pyetja ka kategori me vlera bosh.</value>
+  </data>
+  <data name="WB0046_CustomConditionExpressionReferencesQuestionWithDeeperRosterLevel" xml:space="preserve">
+    <value>Kushti aktivizues nuk mund t’i referohet një pyetjeje nga një nivel më i thellë i rosterit.</value>
+  </data>
+  <data name="WB0047_LookupTableNotUniqueRowcodeValues" xml:space="preserve">
+    <value>Tabela e kërkimit nuk ka vlera unike të kodeve të rreshtave</value>
+  </data>
+  <data name="WB0048_LookupHasEmptyContent" xml:space="preserve">
+    <value>Tabela e kërkimit nuk mund të jetë bosh</value>
+  </data>
+  <data name="WB0049_QRBarcodeQuestionIsSupervisorQuestion" xml:space="preserve">
+    <value>Pyeta e barkodit nuk mund të plotësohet nga supervizori.</value>
+  </data>
+  <data name="WB0050_QRBarcodeQuestionIsPreFilledQuestion" xml:space="preserve">
+    <value>Pyetja e barkodit nuk mund të jetë identifikuese.</value>
+  </data>
+  <data name="WB0051_GroupsCustomConditionExpressionReferencesChildQuestion" xml:space="preserve">
+    <value>Nënrubrikat nuk mund të kenë kusht aktivizues që i referohet pyetjes bijë.</value>
+  </data>
+  <data name="WB0052_LookupNameIsKeyword" xml:space="preserve">
+    <value>Tabela e kërkimit nuk mund të jetë një fjalë e rezervuar.</value>
+  </data>
+  <data name="WB0053_LinkedQuestionReferencesNotExistingRoster" xml:space="preserve">
+    <value>Rosteri që është burimi i lidhjes duhet të ekzistojë.</value>
+  </data>
+  <data name="WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster" xml:space="preserve">
+    <value>Rosteri duhet të ketë një nivel më të thellë ose të njëjtë rosteri me pyetjen për madhësinë e rosterit.</value>
+  </data>
+  <data name="WB0055_RosterHasRosterLevelMoreThan4" xml:space="preserve">
+    <value>Rosteri nuk mund të ketë më shumë se {0} rostera mëmë.</value>
+  </data>
+  <data name="WB0056_EntityShouldNotHaveCircularReferences" xml:space="preserve">
+    <value>Referencat qarkore nuk lejohen.</value>
+  </data>
+  <data name="WB0057_LinksAreProhibitedOnNavigationElements" xml:space="preserve">
+    <value>Adresat lidhëse ndalohen në elementet e navigimit: rubrika, nënrubrika, rostera</value>
+  </data>
+  <data name="WB0058_QuestionHasVariableNameReservedForServiceNeeds" xml:space="preserve">
+    <value>Emri i variablit ose identifikuesi i rosterit nuk mund të jenë një fjalë e rezervuar.</value>
+  </data>
+  <data name="WB0059_EntityUsesRostertitleSubstitutionAndNeedsToBePlacedInsideRoster" xml:space="preserve">
+    <value>Nëse objekti përdor zëvendësuesin %rostertitle% duhet vendosur brenda rosterit.</value>
+  </data>
+  <data name="WB0060_CategoricalQuestionHasLessThan2Options" xml:space="preserve">
+    <value>Pyetja ka më pak se {0} kategori.</value>
+  </data>
+  <data name="WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2" xml:space="preserve">
+    <value>Pyetja ka një numër maksimal përgjigjesh të lejuara më pak se {0}.</value>
+  </data>
+  <data name="WB0062_OptionFilterExpresssionHasIncorrectSyntax" xml:space="preserve">
+    <value>Shprehja e filtrit të opsionit ka një gabim sintaksor.</value>
+  </data>
+  <data name="WB0063_CategoricalLinkedQuestionUsedInValidationExpression" xml:space="preserve">
+    <value>Pyetja kategorike e lidhur nuk mund të përdoret në kushtin e validimit #{0}.</value>
+  </data>
+  <data name="WB0064_CategoricalLinkedQuestionUsedInEnablementCondition" xml:space="preserve">
+    <value>Pyetja kategorike e lidhur nuk mund të përdoret në kushtin e aktivizimit.</value>
+  </data>
+  <data name="WB0065_NameForAttachmentIsNotUnique" xml:space="preserve">
+    <value>Ekziston një bashkëlidhje tjetër me të njëjtin emër.</value>
+  </data>
+  <data name="WB0066_QuestionTypeIsNotAllowed" xml:space="preserve">
+    <value>Pyetja e këtij lloji nuk mbështetet.</value>
+  </data>
+  <data name="WB0067_VariableNameIsEmpty" xml:space="preserve">
+    <value>Emërtimi i variablit të vlefshëm ose identifikuesit të të rosterit nuk duhet të jetë bosh.</value>
+  </data>
+  <data name="WB0068_RosterHasMoreThanAllowedChildElements" xml:space="preserve">
+    <value>Rosteri nuk mund të ketë më shumë se {0} elemente bijë</value>
+  </data>
+  <data name="WB0070_RosterHasVariableNameEqualToQuestionnaireTitle" xml:space="preserve">
+    <value>Rosteri ka identifikues rosteri të barabartë me titullin e pyetësorit.</value>
+  </data>
+  <data name="WB0071_StaticTextIsEmpty" xml:space="preserve">
+    <value>Teksti statik nuk mund të jetë bosh.</value>
+  </data>
+  <data name="WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion" xml:space="preserve">
+    <value>Titujt e kategorive duhet të jenë unikë.</value>
+  </data>
+  <data name="WB0073_OptionValuesMustBeUniqueForCategoricalQuestion" xml:space="preserve">
+    <value>Vlerat e kategorive duhet të jenë unike.</value>
+  </data>
+  <data name="WB0074_CategoricalQuestionHasOptionsAndIsLinked" xml:space="preserve">
+    <value>Pyetjet kategorike nuk mund të kenë kategori dhe të lidhen me pyetje të tjera.</value>
+  </data>
+  <data name="WB0075_FilteredComboboxContainsMoreThan5000Options" xml:space="preserve">
+    <value>Përmban më shumë se {0} kategori.</value>
+  </data>
+  <data name="WB0076_CategoricalOptionsCountMoreThan200" xml:space="preserve">
+    <value>Përmban më shumë se {0} kategori.</value>
+  </data>
+  <data name="WB0077_QuestionHasInvalidVariableName" xml:space="preserve">
+    <value>Pyetja ka emërtim të pavlefshëm të variablit.</value>
+  </data>
+  <data name="WB0078_MultimediaQuestionIsInterviewersOnly" xml:space="preserve">
+    <value>Pyetja me foto mund të jetë vetëm për intervistuesit.</value>
+  </data>
+  <data name="WB0079_MultimediaShouldNotHaveValidationExpression" xml:space="preserve">
+    <value>Pyetja me foto nuk mund të ketë kusht validimi.</value>
+  </data>
+  <data name="WB0080_LongRosterCannotHaveNestedRosters" xml:space="preserve">
+    <value>Rosteri me më shumë se {0} rreshta nuk mund të ketë rostera të përsëritur </value>
+  </data>
+  <data name="WB0081_LongRosterCannotBeNested" xml:space="preserve">
+    <value>Rosteri me më shumë se {0} rreshta nuk mund të brendavendoset </value>
+  </data>
+  <data name="WB0082_RosterSizeMultiOptionQuestionShouldBeLimited" xml:space="preserve">
+    <value>Pyetja me zgjedhje të shumëfishtë për madhësinë e rosterit duhet të ketë kufi</value>
+  </data>
+  <data name="WB0083_QuestionCannotBeUsedAsRosterTitle" xml:space="preserve">
+    <value>Pyetjet me lloj vijues nuk mund të përdoret si titull rosteri.</value>
+  </data>
+  <data name="WB0084_CascadingOptionsShouldHaveParent" xml:space="preserve">
+    <value>Kategoritë në pyetjet kaskadë bijë në kutinë e kombinuar duhet t’u referohen vetëm opsioneve ekzistuese në pyetjen mëmë.</value>
+  </data>
+  <data name="WB0085_CascadingQuestionWrongParentLevel" xml:space="preserve">
+    <value>Pyetja duhet të ketë nivel më të thellë ose të njëjtë me pyetjen e saj mëmë.</value>
+  </data>
+  <data name="WB0086_ParentCascadingQuestionShouldExist" xml:space="preserve">
+    <value>Pyetja kaskadë e kutisë së kombinuar i referohet pyetjes që mungon apo të llojit që nuk mbështetet.</value>
+  </data>
+  <data name="WB0087_CascadingQuestionHasCicularReference" xml:space="preserve">
+    <value>Referencat qarkore në pyetjet kaskadë të kutisë së kombinuar nuk lejohen.</value>
+  </data>
+  <data name="WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers" xml:space="preserve">
+    <value>Pyetja kaskadë e kutisë së kombinuar duhet të ketë më pak se {0} kategori.</value>
+  </data>
+  <data name="WB0089_CascadingQuestionOptionWithParentShouldBeUnique" xml:space="preserve">
+    <value>Pyetja kaskadë e kutisë së kombinuar duhet të ketë vlerë unike dhe një listë kategorish me vlerë mëmë.</value>
+  </data>
+  <data name="WB0090_LinkedQuestionIsInterviewersOnly" xml:space="preserve">
+    <value>Pyetja e lidhur mund të jetë vetëm e intervistuesve.</value>
+  </data>
+  <data name="WB0091_CascadingChildQuestionShouldNotContainCondition" xml:space="preserve">
+    <value>Pyetja kaskadë bijë e kutisë së kombinuar nuk duhet të përmbajë kusht aktivizimi. </value>
+  </data>
+  <data name="WB0092_CascadingChildQuesionShouldNotContainValidation" xml:space="preserve">
+    <value>Pyetja kaskadë bijë e kutisë së kombinuar nuk duhet të përmbajë kusht validimi.</value>
+  </data>
+  <data name="WB0093_RosterSizeListOptionQuestionShouldBeLimit" xml:space="preserve">
+    <value>Pyetja e listës tekst për madhësinë e rosterit duhet të ketë kufi</value>
+  </data>
+  <data name="WB0094_ConditionExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
+    <value>Kushti aktivizues është i gjatë më shumë se {0} karaktere.</value>
+  </data>
+  <data name="WB0095_StaticTextRefersAbsentAttachment" xml:space="preserve">
+    <value>Teksti statik referon bashkëlidhje që mungojnë </value>
+  </data>
+  <data name="WB0096_GeneralCompilationError" xml:space="preserve">
+    <value>Gjatë përpilimit të pyetësorit ndodhi një gabim.</value>
+  </data>
+  <data name="WB0097_QuestionnaireTitleHasInvalidCharacters" xml:space="preserve">
+    <value>Vetëm këto karaktere mund të përdoren në titullin e pyetësorit: A..Z a..z 0..9 ( ) \ / _ - dhe hapësirë.</value>
+  </data>
+  <data name="WB0098_QuestionnaireHasSizeMoreThan5MB" xml:space="preserve">
+    <value>Madhësia e pyetësorit është rreth {0:0.##}MB dhe është shumë e madhe për të punuar si duhet me Survey Solutions. Provojeni të zvogëloni sasinë e të dhënave derisa të jetë më pak se {1}MB.</value>
+  </data>
+  <data name="WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen200" xml:space="preserve">
+    <value>Numri maksimal i përgjigjeve për pyetjen e madhësisë së rosterit nuk mund të jetë më i madh se {0}.</value>
+  </data>
+  <data name="WB0101_GroupHasLevelDepthMoreThan10" xml:space="preserve">
+    <value>Nënrubrika nuk mund të ketë më shumë se {0} nënrubrika mëmë.</value>
+  </data>
+  <data name="WB0102_QuestionnaireEntitiesShareSameInternalId" xml:space="preserve">
+    <value>Këto objekte të pyetësorit (pyetja/grupi/teksti statik /etj.) përdorin të njëjtin identifikues të brendshëm. Ju lutemi, fshijeni njërin prej tyre.</value>
+  </data>
+  <data name="WB0103_LinkedQuestionReferencesGroupWhichIsNotARoster" xml:space="preserve">
+    <value>Rosteri që është burimi i lidhjes është roster, jo nënrubrikë.</value>
+  </data>
+  <data name="WB0104_ValidationConditionIsTooLong" xml:space="preserve">
+    <value>Kushti i validimit #{0} është shumë i gjatë. Nuk duhet të jetë më i gjatë se {1} karaktere.</value>
+  </data>
+  <data name="WB0105_ValidationMessageIsTooLong" xml:space="preserve">
+    <value>Mesazhi i gabimit të validimit #{0} është shumë i gjatë. Nuk duhet të jetë më i gjatë se {1} karaktere.</value>
+  </data>
+  <data name="WB0106_ValidationConditionIsEmpty" xml:space="preserve">
+    <value>Kushti i validimit #{0} është bosh.</value>
+  </data>
+  <data name="WB0107_ValidationMessageIsEmpty" xml:space="preserve">
+    <value>Mesazhi për gabimin e validimit #{0} është bosh.</value>
+  </data>
+  <data name="WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
+    <value>Shprehja e filtrimit të pyetjes së lidhur ka më shumë se {0} karaktere.</value>
+  </data>
+  <data name="WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion" xml:space="preserve">
+    <value>Pyetja nuk mund të përdoret në shprehjen e saj të filtrimit.</value>
+  </data>
+  <data name="WB0110_LinkedQuestionFilterExpresssionHasIncorrectSyntax" xml:space="preserve">
+    <value>Shprehja e filtrimit ka një gabim sintaksor.</value>
+  </data>
+  <data name="WB0111_AttachmentHasEmptyContent" xml:space="preserve">
+    <value>Bashkëlidhja nuk mund të jetë bosh</value>
+  </data>
+  <data name="WB0112_VariableHasInvalidName" xml:space="preserve">
+    <value>Variabli ka emërtim të pavlefshëm.</value>
+  </data>
+  <data name="WB0113_VariableHasEmptyVariableName" xml:space="preserve">
+    <value>Variabli nuk mund të ketë emërtim bosh.</value>
+  </data>
+  <data name="WB0114_CategoricalQuestionSupportsOnlyIntegerPositiveValues" xml:space="preserve">
+    <value>Pyetja kategorike mbështet vetëm vlerat e plota në një gamë nga {0} në {1}</value>
+  </data>
+  <data name="WB0115_FixRosterSupportsOnlyIntegerTitleValues" xml:space="preserve">
+    <value>Rosteri fiks mbështet vetëm vlera të plota të titullit </value>
+  </data>
+  <data name="WB0116_LinkedQuestionReferenceTextListQuestionFromWrongScope" xml:space="preserve">
+    <value>Pyetja e lidhur i referohet një pyetjeje të listës nga niveli i gabuar.</value>
+  </data>
+  <data name="WB0117_LinkedToTextListQuestionDoesNotSupportFilters" xml:space="preserve">
+    <value>Lidhja me pyetjen e listës nuk mbështet filtrin e kategorive</value>
+  </data>
+  <data name="WB0118_ExpressionReferencingForbiddenDateTimeProperies" xml:space="preserve">
+    <value>Shprehja u referohet veçorive të ndaluara të DatësOrës: {0}, {1}, {2}. Konsideroni përdorimin e pyetjes për orën aktuale në vend të saj.</value>
+  </data>
+  <data name="WB0119_QuestionnaireTitleTooLong" xml:space="preserve">
+    <value>Titulli i pyetësorit nuk mund të ketë më shumë se {0} simbole.</value>
+  </data>
+  <data name="WB0120_GroupTitleIsEmpty" xml:space="preserve">
+    <value>Titulli i rubrikave dhe nënrubrikave nuk mund të jetë bosh apo të përmbajë vetëm hapësirë të bardhë.</value>
+  </data>
+  <data name="WB0121_VariableNameTooLong" xml:space="preserve">
+    <value>Emertimi ose identifikuesi i këtij elementi nuk duhet të jetë më i gjatë se {0} karaktere.</value>
+  </data>
+  <data name="WB0122_VariableNameHasSpecialCharacters" xml:space="preserve">
+    <value>Emërtimi i variablit të vlefshëm ose identifikuesi i rosterit duhet të përmbajë vetëm shkronja, shifra dhe karaktere të nënvizuara</value>
+  </data>
+  <data name="WB0123_VariableNameStartWithDigitOrUnderscore" xml:space="preserve">
+    <value>Emërtimi i variablit ose identifikuesi i rosterit nuk duhet të fillojnë me shifër ose nënvijë</value>
+  </data>
+  <data name="WB0124_VariableNameEndWithUnderscore" xml:space="preserve">
+    <value>Emërtimi i variablit ose identifikuesi i rosterit  nuk duhet të përfundojë me nënvijë  </value>
+  </data>
+  <data name="WB0125_VariableNameHasConsecutiveUnderscores" xml:space="preserve">
+    <value>Emërtimi i variablit ose identifikuesi i rosterit nuk duhet të ketë dy e më shumë karaktere të nënvizuara të njëpasnjëshme.</value>
+  </data>
+  <data name="WB0126_VarialbeNameNotUnique" xml:space="preserve">
+    <value>Emërtimi i variablit ose identifikuesi i rosterit duhet të jenë unike në sferën e pyetësorit.</value>
+  </data>
+  <data name="WB0127_CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
+    <value>Ka të paktën një dublikatë të çifteve “Titulli” dhe “Vlera mëmë ". Lista nuk duhet të përmbajë asnjë dublikatë.</value>
+  </data>
+  <data name="WB0128_CountOfDecimalPlacesIsNotInRange" xml:space="preserve">
+    <value>Numri i pozicioneve dhjetore nuk është në diapazon nga {0} në {1}.</value>
+  </data>
+  <data name="WB0129_AnswerTitleIsTooLong" xml:space="preserve">
+    <value>Titulli i kategorisë është bosh ose shumë i gjatë. Gjatësia e titullit duhet të jetë në diapazonin nga {0} në {1} karaktere.</value>
+  </data>
+  <data name="WB0130_SubsectionOrRosterReferenceChildrendInCondition" xml:space="preserve">
+    <value>Ju nuk mund të përdorni entitete bijë në kushtin e aktivizimit për rubrikat, nënrubrikën dhe rosterat.</value>
+  </data>
+  <data name="WB0131_SpecialValuesHasNonIntegerOptionsValues" xml:space="preserve">
+    <value>Vlerat e posaçme mbështetin vetëm vlerat e plota në diapazonin nga {0} në {1}.</value>
+  </data>
+  <data name="WB0132_SpecialValuesHasOptionsWithLongTexts" xml:space="preserve">
+    <value>Titulli me vlerë të posaçme është bosh ose shumë i gjatë. Gjatësia e titullit duhet të jetë në një diapazon nga {0} në {1} karaktere.</value>
+  </data>
+  <data name="WB0133_SpecialValuesMustBeUniqueForNumericlQuestion" xml:space="preserve">
+    <value>Vlerat e posaçme duhet të jenë unike.</value>
+  </data>
+  <data name="WB0134_SpecialValuesCountMoreThanMaxOptionCount" xml:space="preserve">
+    <value>Përmban më shumë se {0} vlera të posaçme.</value>
+  </data>
+  <data name="WB0135_SpecialValuesForRosterSizeQuestionsCantBeMoreThanRosterLimit" xml:space="preserve">
+    <value>Pyetja përmban një vlerë të posaçme, që është shumë e madhe dhe nuk mund të përdoret në këtë pyetje, pasi ajo përcakton madhësinë e rosterit.</value>
+  </data>
+  <data name="WB0136_SpecialValuesHaveOptionsWithEmptyValue" xml:space="preserve">
+    <value>Pyetja ka vlerë(a) të posaçme me vlerë bosh.</value>
+  </data>
+  <data name="WB0137_SpecialValuesTitlesMustBeUnique" xml:space="preserve">
+    <value>Titujt e vlerave të posaçme duhet të jenë unike.</value>
+  </data>
+  <data name="WB0200_LargeNumberOfRostersIsCreated" xml:space="preserve">
+    <value>Është krijuar një numër i madh rosterash. Eksportimi i këtyre strukturave në skedarët e të dhënave mund të jetë problematik. Mendoni të ulni numrin e rosterave.</value>
+  </data>
+  <data name="WB0201_LargeNumberOfQuestionsInGroup" xml:space="preserve">
+    <value>Rubrika ose Rosteri përmban më shumë se {0} pyetje, merrni në konsideratë ndarjen në nënrubrika.</value>
+  </data>
+  <data name="WB0202_GroupWithoutQuestions" xml:space="preserve">
+    <value>Rubrika nuk përmban asnjë pyetje. Merrni në konsideratë fshirjen e rubrikës bosh.</value>
+  </data>
+  <data name="WB0203_RosterHasSingleQuestion" xml:space="preserve">
+    <value>Grupi i rosterit përmban vetëm një pyetje. Merrni në konsideratë grupimin me rostera të tjerë. Për rosterin fiks, merrni në konsideratë paraqitjen si një grup pyetjesh të pavarura.</value>
+  </data>
+  <data name="WB0204_EmptyRoster" xml:space="preserve">
+    <value>Rosteri është bosh. Fshijeni, nëse nuk është i nevojshëm.</value>
+  </data>
+  <data name="WB0205_TooManyQuestions" xml:space="preserve">
+    <value>Pyetësori ka më shumë se {0} pyetje. Mund të jetë e vështirë të administrohet.</value>
+  </data>
+  <data name="WB0206_FewSectionsManyQuestions" xml:space="preserve">
+    <value>Pyetësori përmban më shumë se {0} pyetje, por vetëm një ose dy rubrika. Gruponi pyetjet në rubrika për të thjeshtuar shfletimin dhe përmirësuar performancën.</value>
+  </data>
+  <data name="WB0207_FixedRosterContains3OrLessItems" xml:space="preserve">
+    <value>Rosteri fiks përmban {0} ose më pak objekte. Merrni në konsideratë përdorimin e nënrubrikave dhe një serie pyetjesh. Rosterat e ndërlikojnë strukturën e të dhënave të eksportuara.</value>
+  </data>
+  <data name="WB0208_MoreThan50PercentsQuestionsWithoutValidationConditions" xml:space="preserve">
+    <value>Më shumë se {0}% e pyetjeve nuk përmbajnë kushte validimi. Shto kushtet e validimit për të përmirësuar cilësinë e të dhënave.</value>
+  </data>
+  <data name="WB0209_LongEnablementCondition" xml:space="preserve">
+    <value>Kushti i aktivizimit është i gjatë. Është e mundur që të kemi kushte më të shkurtra, më të lexueshme me funksione ndërtuara brenda (d.m.th., NëListë()).</value>
+  </data>
+  <data name="WB0210_CategoricalQuestionHasManyOptions" xml:space="preserve">
+    <value>Pyetja me një zgjedhje të vetme ka shumë kategori, merrni në konsideratë ndryshimin në kuti të kombinuar.</value>
+  </data>
+  <data name="WB0211_QuestionnaireHasNoGpsQuestion" xml:space="preserve">
+    <value>Pyetësori nuk përmban asnjë pyetje GPS. Merrni në konsideratë të shtoni një pyetje GPS.</value>
+  </data>
+  <data name="WB0212_LongValidationCondition" xml:space="preserve">
+    <value>Kushti i validimit #{0} është i gjatë. Është e mundur që të kemi kushte më të shkurtra, më të lexueshme me funksione ndërtuara brenda (d.m.th., NëListë()).</value>
+  </data>
+  <data name="WB0213_AttachmentSizeIsMoreThan5Mb" xml:space="preserve">
+    <value>Madhësia e bashkëlidhjes është më shumë se {0}Mb</value>
+  </data>
+  <data name="WB0214_TotalAttachmentsSizeIsMoreThan50Mb" xml:space="preserve">
+    <value>Madhësia e përgjithshme e bashkëlidhjeve është më shumë se {0}Mb</value>
+  </data>
+  <data name="WB0215_UnusedAttachments" xml:space="preserve">
+    <value>Pyetësori përmban bashkëlidhje të papërdorura </value>
+  </data>
+  <data name="WB0216_NoPrefilledQuestions" xml:space="preserve">
+    <value>Nuk u përcaktua asnjë pyetje identifikuese. Përcaktoni të paktën një pyetje identifikuese.</value>
+  </data>
+  <data name="WB0217_VariableLableMoreThan120Characters" xml:space="preserve">
+    <value>Etiketa e variablit është shumë e gjatë (më shumë se {0} karakt.) dhe do të shkurtohet në eksportimin e skedarëve SPSS.</value>
+  </data>
+  <data name="WB0218_ConsecutiveQuestionsWithIdenticalEnablementConditions" xml:space="preserve">
+    <value>Pyetjet e njëpasnjëshme përmbajnë kushte aktivizimi identike. Merrni në konsideratë vendosjen e një nënrubrike dhe caktimin e një kushti për nënrubrikën.</value>
+  </data>
+  <data name="WB0219_ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options" xml:space="preserve">
+    <value>Pyetje të shumëfishta të njëpasnjëshme të pakushtëzuara me zgjedhje të vetme me {0} kategori. Merrni në konsideratë pyetje me shumë zgjedhje.</value>
+  </data>
+  <data name="WB0220_RowIndexInMultiOptionBasedRoster" xml:space="preserve">
+    <value>Përdorimi i  @{0} me një roster me shumë zgjedhje mund të jetë i paqëndrueshëm. Merrni në konsideratë përdorimin e @{1} në vend të saj.</value>
+  </data>
+  <data name="WB0221_NoCurrentTimeQuestions" xml:space="preserve">
+    <value>Nuk u gjet pyetja për orën aktuale. Merrni në konsideratë të regjistroni datën e intervistës në pyetësorin tuaj.</value>
+  </data>
+  <data name="WB0222_SingleOptionPrefilled" xml:space="preserve">
+    <value>Pyetja me zgjedhje të vetme është shënjuar si identifikuese. Merrni në konsideratë përdorimin e një pyetjeje tekst.</value>
+  </data>
+  <data name="WB0223_SectionWithLessThan5Questions" xml:space="preserve">
+    <value>Rubrika përmban më pas se pesë pyetje. Merrni në konsideratë bashkimin me rubrika të tjera.</value>
+  </data>
+  <data name="WB0224_TooManySubsectionsAtOneLevel" xml:space="preserve">
+    <value>Shumë nënrubrika në një nivel. Merrni në konsideratë vendosjen hierarkike.</value>
+  </data>
+  <data name="WB0225_ComboBoxWithLessThan10Elements" xml:space="preserve">
+    <value>Menuja zbirtëse (kutia e kombinuar) përmban më pak se 10 elemente. Merrni në konsideratë kalimin në një paraqitje standarde me një zgjedhje të vetme.</value>
+  </data>
+  <data name="WB0226_SameCascadingParentQuestion" xml:space="preserve">
+    <value>Pyetjet kaskadë të kutisë së kombinuar kanë të njëjtën pyetje mëmë.</value>
+  </data>
+  <data name="WB0227_NotShared" xml:space="preserve">
+    <value>Pyetësori nuk është rishikuar. Merrni në konsideratë ndarjen e tij me përdorues të tjerë për komente.</value>
+  </data>
+  <data name="WB0228_OmittedOptions" xml:space="preserve">
+    <value>Pyetja kategorike ka kode jo të njëpasnjëshme të kategorive. Shih për kategori të hequra.</value>
+  </data>
+  <data name="WB0229_SupervisorQuestionInValidation" xml:space="preserve">
+    <value>Pyetja e supervizorit përdoret në validim. Shih llogaritë e kushtit kur supervizori nuk përgjigjet ose udhëzojeni supervizorin të përgjigjet gjithmonë.</value>
+  </data>
+  <data name="WB0230_NonconsecutiveCascadings" xml:space="preserve">
+    <value>Pyetje jo të njëpasnjëshme kaskadë. Merrni në konsideratë vendosjen e pyetjeve kaskadë njëra pas tjetrës.</value>
+  </data>
+  <data name="WB0231_MultiOptionWithMoreThan20Options" xml:space="preserve">
+    <value>Pyetja me zgjedhje të shumëfishtë përmban shumë (&gt;{0}) kategori. Do të jetë e vështirë të shfletohet në tableta. Merrni në konsideratë ndarjen në dy pyetje me shumë zgjedhje, nëse është e mundur.</value>
+  </data>
+  <data name="WB0232_FiveOrMoreQuestionsWithSameEnabling" xml:space="preserve">
+    <value>Pesë ose më shumë pyetje kanë të njëjtin kusht aktivizimi. Vendosini pyetjet në një grup dhe zbatoni një kusht të vetëm aktivizimi për një grup, që të përmirësoni efikasitetin e pyetësorit.</value>
+  </data>
+  <data name="WB0233_NestedRosterDegree3OrMore" xml:space="preserve">
+    <value>Roster i vendosur brenda tri ose më shumë shkallë përsëritjeje. Përpiquni t’i shmangni këto struktura komplekse, që mund të sjellin probleme në mbledhjen e të dhënave.</value>
+  </data>
+  <data name="WB0234_RosterInRosterWithSameSourceQuestion" xml:space="preserve">
+    <value>Nivelet e nënrenditura në një roster me përsëritje bazohen të njëjtën pyetje mëmë. Përpiquni t’i rishikoni, këta rostera mund të sjellin probleme në mbledhjen e të dhënave.</value>
+  </data>
+  <data name="WB0235_FewQuestionsWithSameLongEnablement" xml:space="preserve">
+    <value>I njëjti kusht i gjatë aktivizimi përdoret në disa pyetje. Mund të doni të krijoni një variabël Boolean për të thjeshtuar menaxhimin e kodit.</value>
+  </data>
+  <data name="WB0236_FewQuestionsWithSameLongValidation" xml:space="preserve">
+    <value>I njëjti kusht i gjatë validimi përdoret për disa pyetje. Mund të doni të krijoni një variabël Boolean për të thjeshtuar menaxhimin e kodit.</value>
+  </data>
+  <data name="WB0237_BitwiseAnd" xml:space="preserve">
+    <value>&amp; përdoret në shprehje. Sigurohuni të kuptoni dallimin midis operatorëve &amp; dhe &amp;&amp;. Në shumicën e rasteve, përdorni &amp;&amp;.</value>
+  </data>
+  <data name="WB0238_BitwiseOr" xml:space="preserve">
+    <value>| përdoret në shprehje. Sigurohuni të kuptoni dallimin midis operatorëve | dhe ||. Në shumicën e rasteve, përdorni ||.</value>
+  </data>
+  <data name="WB0250_ValidationConditionRefersToAFutureQuestion" xml:space="preserve">
+    <value>Kushti i validimit #{0} i referohet një pyetjeje të ardhshme. Merrni në konsideratë përmbysjen e rendit.</value>
+  </data>
+  <data name="WB0251_EnablementConditionRefersToAFutureQuestion" xml:space="preserve">
+    <value>Kushti i aktivizimit i referohet një pyetjeje të ardhshme. Merrni në konsideratë përmbysjen e rendit.</value>
+  </data>
+  <data name="WB0253_TooFewVariableLabelsAreDefined" xml:space="preserve">
+    <value>Shumë pak etiketa variabël janë përcaktuar. Shto etiketat variable për të përmirësuar përdorimin e të dhënave të eksportuara dhe për të ofruar input në metadata për formatin e Nismës së Dokumentimit të të Dhënave (DDI).</value>
+  </data>
+  <data name="WB0254_UseFunctionIsValidEmailToValidateEmailAddress" xml:space="preserve">
+    <value>Përdor funksionin ËshtëEmailiVlefshëm () për validimin e adresës së emailit.</value>
+  </data>
+  <data name="WB0255_QuestionIsTooShort" xml:space="preserve">
+    <value>Pyetja është shumë e shkurtër. Kjo mund të jetë një pyetje e paplotë.</value>
+  </data>
+  <data name="WB0256_TranslationNameIsInvalid" xml:space="preserve">
+    <value>Emërtimi i përkthimit është i pavlefshëm </value>
+  </data>
+  <data name="WB0257_TranslationHasEmptyContent" xml:space="preserve">
+    <value>Përkthimi ka përmbajtje bosh </value>
+  </data>
+  <data name="WB0258_TranslationsHaveDuplicatedNames" xml:space="preserve">
+    <value>Përkthimi ka emërtime të dubluara</value>
+  </data>
+  <data name="WB0259_QuestionTitleIsTooLong" xml:space="preserve">
+    <value>Titulli i pyetjes është shumë i gjatë. Nuk duhet të jetë më i gjatë se {0} karaktere.</value>
+  </data>
+  <data name="WB0260_GroupTitleIsTooLong" xml:space="preserve">
+    <value>Titulli është shumë i gjatë. Nuk duhet të jetë më i gjatë se {0} karaktere.</value>
+  </data>
+  <data name="WB0261_RosterStructureTooExplosive" xml:space="preserve">
+    <value>Pyetësori përmban një numër të tepruar njësish të rosterit {0}.Limit {1}</value>
+  </data>
+  <data name="WB0262_RosterHasTooBigPropagation" xml:space="preserve">
+    <value>Rosteri ka arritur madhësinë limit. Ulni madhësinë e rosterit ose zvogëloni përsëritjen.</value>
+  </data>
+  <data name="WB0263_FirstChapterHasEnablingCondition" xml:space="preserve">
+    <value>Rubrika e parë nuk mund të ketë kusht aktivizues.</value>
+  </data>
+  <data name="WB0264_GpsQuestion" xml:space="preserve">
+    <value>Ju keni një pyetje GPS. Tabletat mund ta mbështetin përdorimin e vendndodhjes gjeografike me këtë pyetësor.</value>
+  </data>
+  <data name="WB0265_MoreThan30PercentQuestionsAreText" xml:space="preserve">
+    <value>Më shumë se {0}% e pyetjeve janë pyetje tekst. Është e vështirë t’u përgjigjesh pyetjeve tekst në tableta. Merrni në konsideratë përdorimin në vend të tyre të pyetjeve me një ose shumë zgjedhje.</value>
+  </data>
+  <data name="WB0266_SameTitle" xml:space="preserve">
+    <value>Pyetje të dubluara. (Pyetjet kanë të njëjtin titull.)</value>
+  </data>
+  <data name="WB0267_QRBarcodeQuestion" xml:space="preserve">
+    <value>Ju keni një pyetje barkod. Tableti duhet të mbështetë përdorimin e autofokusit me këtë pyetësor.</value>
+  </data>
+  <data name="WB0268_DoesNotSupportSubstitution" xml:space="preserve">
+    <value>Përpiquni të përdorni zëvendësim për entitetin e pambështetur.</value>
+  </data>
+  <data name="WB0269_QuestionTitleIsEmpty" xml:space="preserve">
+    <value>Pyetja nuk mund ta ketë titullon bosh.</value>
+  </data>
+  <data name="WB0270_SectionContainsTooManyQuestions" xml:space="preserve">
+    <value>Rubrika nuk duhet të përmbajë më shumë se {0} pyetje.</value>
+  </data>
+  <data name="WB0271_MacroHasEmptyContent" xml:space="preserve">
+    <value>Makroja nuk mund të jetë bosh.</value>
+  </data>
+  <data name="WB0272_ConditionUsingForbiddenClasses" xml:space="preserve">
+    <value>Kushti i aktivizimit po përdor një lloj të ndaluar.</value>
+  </data>
+  <data name="WB0273_ValidationConditionUsingForbiddenClasses" xml:space="preserve">
+    <value>Kushti i validimit po përdor një lloj të ndaluar.</value>
+  </data>
+  <data name="WB0274_VariableUsingForbiddenClasses" xml:space="preserve">
+    <value>Variabli po përdor një lloj të ndaluar.</value>
+  </data>
+  <data name="WB0275_FilterExpressionIsUsingForbiddenClasses" xml:space="preserve">
+    <value>Shprehja e filtrit po përdor një lloj të ndaluar.</value>
+  </data>
+  <data name="WB0276_RownameIsNotSupported" xml:space="preserve">
+    <value>variabli @rowname nuk mbështetet më.</value>
+  </data>
+  <data name="WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore" xml:space="preserve">
+    <value>Titulli i pyetësorit nuk duhet të ketë dy ose më shumë karaktere të njëpasnjëshme të nënvizuara.</value>
+  </data>
+  <data name="WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+    <value>Modaliteti i thjeshtë lejohet vetëm për rosterat me jo më shumë se {0} elemente.</value>
+  </data>
+  <data name="WB0279_PlainModeGroupContainsNestedGroup" xml:space="preserve">
+    <value>Modaliteti i thjeshtë nuk lejon përdorimin e rosterave fole.</value>
+  </data>
+  <data name="WB0280_TextContainsLinkToUnknownQuestionOrGroup" xml:space="preserve">
+    <value>Teksti përmban një lidhje për një pyetje, nënrubrikë, roster ose bashkëlidhje pdf të panjohur.</value>
+  </data>
+  <data name="WB0281_QuestionnaireExceededEntitiesLimit" xml:space="preserve">
+    <value>Numri i përgjithshëm i elementeve ({0}) e tejkalon limitin ({1}) të sistemit. Merrni në konsideratë uljen e numrit të pyetjeve, teksteve statike, variableve ose objekteve në rosterat fikse.</value>
+  </data>
+</root>

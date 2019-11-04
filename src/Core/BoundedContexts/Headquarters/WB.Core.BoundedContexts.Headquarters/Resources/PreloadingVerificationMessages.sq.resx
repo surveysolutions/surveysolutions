@@ -1,0 +1,252 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ArchiveWithPasswordNotSupported" xml:space="preserve">
+    <value>Arkivat e mbrojtura me fjalëkalim nuk mbështeten </value>
+  </data>
+  <data name="PL0002_MoreThenOneLevel" xml:space="preserve">
+    <value>[PL0002] N/A</value>
+  </data>
+  <data name="PL0003_ColumnWasntMappedOnQuestion" xml:space="preserve">
+    <value>Kolona nuk mund të përputhet me asnjë pyetjeje të pyetësorit.</value>
+  </data>
+  <data name="PL0004_FileWasntMappedRoster" xml:space="preserve">
+    <value>Skedari nuk mund të përputhet me asnjë roster në pyetësor.</value>
+  </data>
+  <data name="PL0006_IdDublication" xml:space="preserve">
+    <value>U gjetën vlera identifikuese të dubluara.</value>
+  </data>
+  <data name="PL0007_ServiceColumnIsAbsent" xml:space="preserve">
+    <value>Një ose më shumë kolona identifikuese mëmë mungojnë.</value>
+  </data>
+  <data name="PL0008_OrphanRosterRecord" xml:space="preserve">
+    <value>E dhëna e rosterit nuk ka një mëmë.</value>
+  </data>
+  <data name="PL0009_RosterIdIsInconsistantWithRosterSizeQuestion" xml:space="preserve">
+    <value>Identifikuesi i rosterit nuk përputhet me madhësinë e rosterit.</value>
+  </data>
+  <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
+    <value>Vlerat e paraqitura për pyetjen nuk lejohen.</value>
+  </data>
+  <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
+    <value>Vlera e Datës dhe Orës e vendosur në pyetjen e datës është e pasaktë.</value>
+  </data>
+  <data name="PL0017_ExpectedGpsNotParsed" xml:space="preserve">
+    <value>Vlerë e pasaktë e GPS-së.</value>
+  </data>
+  <data name="PL0018_ExpectedIntNotParsed" xml:space="preserve">
+    <value>Lejohen vetëm vlerat e plota.</value>
+  </data>
+  <data name="PL0019_ExpectedDecimalNotParsed" xml:space="preserve">
+    <value>Lejohen vetëm vlerat reale.</value>
+  </data>
+  <data name="PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative" xml:space="preserve">
+    <value>Pyetja e madhësisë së rosterit nuk mund të ketë vlera negative.</value>
+  </data>
+  <data name="PL0024_DataWasNotFound" xml:space="preserve">
+    <value>Të dhënat e ngarkimit paraprak nuk u gjetën.</value>
+  </data>
+  <data name="PL0026_ResponsibleWasNotFound" xml:space="preserve">
+    <value>Përgjegjësi nuk ekziston për 1 ose më shumë vrojtime.</value>
+  </data>
+  <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
+    <value>Përgjegjësi është përdorues i bllokuar për 1 ose më shumë vrojtime.</value>
+  </data>
+  <data name="PL0028_UserIsNotHQOrSupervisorOrInterviewer" xml:space="preserve">
+    <value>Përdoruesi nuk është Zyra Qendrore, Supervizori apo Intervistuesi për 1 ose më shumë vrojtime.</value>
+  </data>
+  <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
+    <value>Përgjigjja për pyetjen mbi madhësinë e rosterit nuk mund të jetë më shumë se {0}.</value>
+  </data>
+  <data name="PL0030_GpsFieldsRequired" xml:space="preserve">
+    <value>Pyetjet GPS-së kërkojnë kolona të veçanta për Gjerësinë dhe Gjatësinë</value>
+  </data>
+  <data name="PL0030_GpsMandatoryFilds" xml:space="preserve">
+    <value>Pyetja e GPS-së kërkon vendosjen e Gjerësisë dhe Gjatësisë.</value>
+  </data>
+  <data name="PL0031_ColumnNameDuplicatesFound" xml:space="preserve">
+    <value>Dy ose më shumë kolona kanë emërtim të njëjtë.</value>
+  </data>
+  <data name="PL0032_LatitudeMustBeGeaterThenN90AndLessThen90" xml:space="preserve">
+    <value>Gjerësia duhet të jetë më e madhe se -90° dhe më e vogël se 90°.</value>
+  </data>
+  <data name="PL0033_LongitudeMustBeGeaterThenN180AndLessThen180" xml:space="preserve">
+    <value>Gjatësia duhet të jetë më e madhe se -180° dhe më e vogël se 180°.</value>
+  </data>
+  <data name="PL0034_CommaSymbolIsNotAllowedInNumericAnswer" xml:space="preserve">
+    <value>Ndarës dhjetor i pasaktë. Simboli "," nuk lejohet në përgjigjet numerike. Ju lutemi, përdorni "." në vend të tij.</value>
+  </data>
+  <data name="PL0035_QuantityNotParsed" xml:space="preserve">
+    <value>Lejohen vetëm vlerat e plota.</value>
+  </data>
+  <data name="PL0036_QuantityShouldBeGreaterThanMinus1" xml:space="preserve">
+    <value>Sasia duhet të jetë më e madhe ose e barabartë me -1.</value>
+  </data>
+  <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
+    <value>Skedari me të dhëna të nivelit të pyetësorit mungon.</value>
+  </data>
+  <data name="PL0041_AnswerExceedsMaxAnswersCount" xml:space="preserve">
+    <value>Numri i opsioneve me përgjigje për pyetjet me shumë zgjedhje nuk mund të jetë më shumë sesa numri i lejuar maksimal i përgjigjeve.</value>
+  </data>
+  <data name="PL0042_IdIsEmpty" xml:space="preserve">
+    <value>Kolona identifikuese nuk ka asnjë vlerë.</value>
+  </data>
+  <data name="PL0047_ProtectedVariables_MissingColumn" xml:space="preserve">
+    <value>Kolona e kërkuar {0} mungon.</value>
+  </data>
+  <data name="PL0048_ProtectedVariables_VariableNotFoundInQuestionnaire" xml:space="preserve">
+    <value>Variabli i mbrojtur nuk u gjet në pyetësorin e dhënë.</value>
+  </data>
+  <data name="PL0049_ProtectedVariables_VariableNotSupportsProtection" xml:space="preserve">
+    <value>Variabli është i llojit që nuk mbështet mbrojtjen.</value>
+  </data>
+  <data name="PL0050_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1" xml:space="preserve">
+    <value>Nuk lejohet vlerë negative për pyetjet Kategorike me Shumë zgjedhje.</value>
+  </data>
+  <data name="PL0052_ColumnByTextListRosterSizeAnswerNotFound" xml:space="preserve">
+    <value>Rosteri sipas pyetjeve të listës duhet të letë kolona për përgjigjet e listës tekst</value>
+  </data>
+  <data name="PL0053_InconsistentNumericRosterInstanceCodes" xml:space="preserve">
+    <value>Kod i rosterit nuk përputhet me rosterin numerik. Rendi i kodeve të rosterit duhet të jetë 0, 1, ... për numërimin e njësive të rosterit</value>
+  </data>
+  <data name="PL0054_MaxInterviewsCountByAssignmentExeeded" xml:space="preserve">
+    <value>Sasia maksimale nuk duhet të jetë më e madhe sesa {0}.</value>
+  </data>
+  <data name="PL0055_InvalidEmail" xml:space="preserve">
+    <value>Email-i nuk është i vlefshëm</value>
+  </data>
+  <data name="PL0056_InvalidPassword" xml:space="preserve">
+    <value>Fjalëkalim i pavlefshëm. Të paktën 6 numra dhe shkronja të mëdha ose simbole njëshe '?' për të gjeneruar fjalëkalimin</value>
+  </data>
+  <data name="PL0057_IncosistentQuantityAndEmail" xml:space="preserve">
+    <value>Për detyrat e email-it të dhënë sasia e lejuar është 1</value>
+  </data>
+  <data name="PL0058_IncosistentWebmodeAndEmail" xml:space="preserve">
+    <value>Modaliteti Ueb duhet të jetë i aktivizuar për detyrat që kanë Email</value>
+  </data>
+  <data name="PL0059_IncosistentWebmodeAndPassword" xml:space="preserve">
+    <value>Modaliteti Ueb duhet të jetë i aktivizuar për detyrat që kanë Fjalëkalim</value>
+  </data>
+  <data name="PL0060_WebmodeSizeOneHasNoEmailOrPassword" xml:space="preserve">
+    <value>Detyra me madhësi 1 për modalitetin ueb duhet të ketë të dhënë ose email-in ose fjalëkalimin</value>
+  </data>
+  <data name="PL0061_DuplicatePasswordWithQuantity1" xml:space="preserve">
+    <value>Fjalëkalimi nuk është unik. Fjalëkalimi i caktuar për modalitetin ueb me sasi 1 duhet të jetë unik</value>
+  </data>
+</root>

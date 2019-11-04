@@ -3,6 +3,7 @@ using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
@@ -17,11 +18,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
         [NUnit.Framework.Test]
         public void should_be_only_1_specified_shared_person()
         {
-            var questionnaireInfoViewRepository = Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(
-                x => x.GetById(questionnaireId) == CreateQuestionnaireDocument(questionnaireId, questionnaireTitle));
+            var questionnaireInfoViewRepository = Mock.Of<IDesignerQuestionnaireStorage>(
+                x => x.Get(questionnaireId) == CreateQuestionnaireDocument(questionnaireId.ToString(), questionnaireTitle));
 
             var dbContext = Create.InMemoryDbContext();
-            var questionnaireListViewItem = Create.QuestionnaireListViewItem(id: Guid.Parse(questionnaireId));
+            var questionnaireListViewItem = Create.QuestionnaireListViewItem(id:questionnaireId.QuestionnaireId);
             questionnaireListViewItem.SharedPersons.Add(new SharedPerson
             {
                 UserId = userId,
@@ -46,7 +47,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
 
         private static QuestionnaireInfoView view;
         private static QuestionnaireInfoViewFactory factory;
-        private static string questionnaireId = "11111111111111111111111111111111";
         private static string questionnaireTitle = "questionnaire title";
         private static readonly Guid userId = Guid.Parse("22222222222222222222222222222222");
         private static string userEmail = "user@email.com";

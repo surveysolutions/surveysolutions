@@ -25,6 +25,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
             };
         }
 
+        public bool HasNotEmptyValue(string id)
+        {
+            throw new NotSupportedException();
+        }
+
         public void Remove(string id)
         {
             throw new NotSupportedException();

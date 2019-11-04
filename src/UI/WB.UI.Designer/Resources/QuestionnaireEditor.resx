@@ -123,6 +123,9 @@
   <data name="Backup" xml:space="preserve">
     <value>Backup</value>
   </data>
+  <data name="SaveAs" xml:space="preserve">
+    <value>Save as</value>
+  </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
@@ -740,7 +743,7 @@
     <value>Checkboxes</value>
   </data>
   <data name="QuestionCurrentTime" xml:space="preserve">
-    <value>Current time</value>
+    <value>Current timestamp(date &amp; time)</value>
   </data>
   <data name="QuestionDefaultDate" xml:space="preserve">
     <value>Default date</value>
@@ -914,6 +917,9 @@ Table - the questions of the roster are shown in the same level as rows and colu
   </data>
   <data name="HelpVariableName" xml:space="preserve">
     <value>Variable names and roster IDs may be from {{minLength}} to {{maxLength}} characters long and must contain only following characters: a-z, A-Z, _, or 0-9. The first character cannot be 0-9 or _ and the last one cannot be _.</value>
+  </data>
+  <data name="HelpAttachmentName" xml:space="preserve">
+    <value>The name of attachment file that will be displayed.</value>
   </data>
   <data name="ConditionMightBeBroken" xml:space="preserve">
     <value>Condition or cascading depended items might be broken</value>
@@ -1292,5 +1298,23 @@ Table - the questions of the roster are shown in the same level as rows and colu
   </data>
   <data name="ScenarioDetails" xml:space="preserve">
     <value>Scenario</value>
+  </data>
+  <data name="DownloadPdf" xml:space="preserve">
+    <value>Download PDF</value>
+  </data>
+  <data name="GeneratePdf" xml:space="preserve">
+    <value>Generate pdf</value>
+  </data>
+  <data name="ChooseLanguageTitle" xml:space="preserve">
+    <value>Please choose translation</value>
+  </data>
+  <data name="Initializing" xml:space="preserve">
+    <value>Initializing</value>
+  </data>
+  <data name="RetryExportPDF" xml:space="preserve">
+    <value>Retry export as PDF</value>
+  </data>
+  <data name="Translation_Original" xml:space="preserve">
+    <value>Original</value>
   </data>
 </root>

@@ -1,10 +1,15 @@
 ﻿using System;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
+using System.Collections.Generic;
 
 namespace WB.UI.Headquarters.Models
 {
     public class QuestionnaireDetailsModel
     {
+        public QuestionnaireDetailsModel()
+        {
+            this.TranslatedPdfVersions = new List<TranslatedPdf>();
+        }
+
         public string Title { get; set; }
         public long Version { get; set; }
         public DateTime ImportDateUtc { get; set; }
@@ -17,5 +22,22 @@ namespace WB.UI.Headquarters.Models
         public int RostersCount { get; set; }
         public int QuestionsCount { get; set; }
         public int QuestionsWithConditionsCount { get; set; }
+        public List<TranslatedPdf> TranslatedPdfVersions { get; set; }
+        public string MainPdfUrl { get; set; }
+        public string DesignerUrl { get; internal set; }
+        public string Comment { get; set; }
+    }
+
+    public struct TranslatedPdf
+    {
+        public TranslatedPdf(string name, string pdfUrl)
+        {
+            Name = name;
+            PdfUrl = pdfUrl;
+        }
+
+        public string Name { get; }
+
+        public string PdfUrl { get; }
     }
 }

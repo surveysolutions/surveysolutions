@@ -11,16 +11,13 @@
 
         <div class="row">
             <div class="col-sm-6">
+                 <h3>{{ model.title}} (ver. {{model.version}}) 
+                        <a :href="model.designerUrl" target="_blank" v-if="model.designerUrl != null" >
+                            <span :title="$t('Dashboard.ShowOnDesigner')" class="glyphicon glyphicon-link" />
+                        </a>
+                     </h3>
                 <table class="table table-striped table-bordered">
                     <tbody>
-                        <tr>
-                            <td>{{$t('Dashboard.Questionnaire')}}</td>
-                            <td>{{model.title}}</td>
-                        </tr>
-                        <tr>
-                            <td>{{$t('Dashboard.Version')}}</td>
-                            <td>{{model.version}}</td>
-                        </tr>
                         <tr>
                             <td>{{$t('Dashboard.ImportDate')}}</td>
                             <td>{{formatUtcDate(model.importDateUtc)}}</td>
@@ -40,6 +37,21 @@
                         <tr>
                             <td>{{$t('Dashboard.RecordAudio')}}</td>
                             <td>{{model.audioAudit ? $t('Common.Yes') : $t('Common.No')}}</td>
+                        </tr>
+                        <tr>
+                            <td>{{$t('Assignments.DetailsComments')}}</td>
+                            <td>{{model.comment}}</td>
+                        </tr>
+                        <tr v-if="model.mainPdfUrl">
+                            <td>PDF</td>
+                            <td>
+                                <ul class="list-unstyled">
+                                    <li><a :href="model.mainPdfUrl">{{$t('WebInterview.Original_Language')}}</a></li>
+                                    <li v-for="lang in model.translatedPdfVersions" v-bind:key="lang.name">
+                                        <a :href="lang.pdfUrl">{{lang.name}}</a>
+                                    </li>
+                                </ul>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

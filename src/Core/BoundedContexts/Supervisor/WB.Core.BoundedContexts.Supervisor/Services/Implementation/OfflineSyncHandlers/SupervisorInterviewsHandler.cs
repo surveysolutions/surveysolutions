@@ -90,7 +90,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         public Task<OkResponse> UploadInterview(UploadInterviewRequest request)
         {
             var interview = request.Interview;
-           
+
+            this.logger.Info($"Uploading of interview {interview.InterviewId} started.");
+
             var innerwatch = Stopwatch.StartNew();
 
             try

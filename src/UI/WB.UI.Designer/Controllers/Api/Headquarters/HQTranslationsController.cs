@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
@@ -10,8 +11,9 @@ using WB.UI.Designer.Code.Attributes;
 
 namespace WB.UI.Designer.Controllers.Api.Headquarters
 {
-    [ApiBasicAuth(onlyAllowedAddresses: true)]
+    [AllowOnlyFromWhitelistIP()]
     [Route("api/hq/translations")]
+    [Authorize]
     public class HQTranslationsController : ControllerBase
     {
         private readonly DesignerDbContext translations;

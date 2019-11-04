@@ -134,8 +134,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.questionIdentity = entityIdentity ?? throw new ArgumentNullException(nameof(entityIdentity));
             this.interviewId = interviewId ?? throw new ArgumentNullException(nameof(interviewId));
-
-            this.liteEventRegistry.Subscribe(this, interviewId);
+            
             this.questionState.Init(interviewId, entityIdentity, navigationState);
 
             var interview = this.interviewRepository.Get(interviewId);
@@ -165,6 +164,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             if (!this.specialValues.HasSpecialValues)
                 this.throttlingModel.ThrottlePeriod = 0;
+
+            this.liteEventRegistry.Subscribe(this, interviewId);
         }
 
         public int? ProtectedAnswer

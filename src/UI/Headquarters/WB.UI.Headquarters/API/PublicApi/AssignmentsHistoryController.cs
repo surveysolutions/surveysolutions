@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Headquarters.Code;
+using WB.UI.Shared.Web.Attributes;
 
 namespace WB.UI.Headquarters.API.PublicApi
 {

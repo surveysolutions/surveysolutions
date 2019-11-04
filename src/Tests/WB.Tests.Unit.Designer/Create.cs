@@ -71,6 +71,7 @@ using QuestionnaireVersion = WB.Core.SharedKernel.Structures.Synchronization.Des
 using QuestionnaireView = WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireView;
 using Translation = WB.Core.SharedKernels.SurveySolutions.Documents.Translation;
 using TranslationInstance = WB.Core.BoundedContexts.Designer.Translations.TranslationInstance;
+using WB.Core.Infrastructure.CommandBus;
 
 namespace WB.Tests.Unit.Designer
 {
@@ -405,6 +406,7 @@ namespace WB.Tests.Unit.Designer
         public static IMultyOptionsQuestion MultipleOptionsQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             bool areAnswersOrdered = false, int? maxAllowedAnswers = null, Guid? linkedToQuestionId = null, bool isYesNo = false, bool hideIfDisabled = false, List<Answer> answersList = null,
             string title = "test",
+            bool isCombobox = false,
             params decimal[] answers)
         {
             var publicKey = questionId ?? Guid.NewGuid();
@@ -421,7 +423,8 @@ namespace WB.Tests.Unit.Designer
                 LinkedToQuestionId = linkedToQuestionId,
                 YesNoView = isYesNo,
                 Answers = answersList ?? answers.Select(a => Create.Answer(a.ToString(), a)).ToList(),
-                QuestionText = title
+                QuestionText = title,
+                IsFilteredCombobox = isCombobox
             };
         }
 
@@ -610,7 +613,7 @@ namespace WB.Tests.Unit.Designer
             return questionnaire;
         }
 
-
+        static int changeRecordSequence = 0;
         public static QuestionnaireChangeRecord QuestionnaireChangeRecord(
             string questionnaireChangeRecordId = null,
             string questionnaireId = null,
@@ -620,17 +623,19 @@ namespace WB.Tests.Unit.Designer
             string resultingQuestionnaireDocument = null,
             int? sequence = null,
             string diffWithPreviousVersion = null,
+            Guid? userId = null,
             params QuestionnaireChangeReference[] reference)
         {
             return new QuestionnaireChangeRecord()
             {
+                UserId = userId ?? Guid.NewGuid(),
                 QuestionnaireChangeRecordId = questionnaireChangeRecordId ?? Guid.NewGuid().FormatGuid(),
                 QuestionnaireId = questionnaireId,
                 ActionType = action ?? QuestionnaireActionType.Add,
                 TargetItemId = targetId ?? Guid.NewGuid(),
                 TargetItemType = targetType ?? QuestionnaireItemType.Section,
                 References = reference.ToImmutableHashSet(),
-                Sequence = sequence ?? 1,
+                Sequence = sequence ?? changeRecordSequence++,
                 ResultingQuestionnaireDocument = resultingQuestionnaireDocument,
                 Patch = diffWithPreviousVersion
             };
@@ -1283,7 +1288,8 @@ namespace WB.Tests.Unit.Designer
             DesignerDbContext dbContext = null,
             IEntitySerializer<QuestionnaireDocument> entitySerializer = null,
             IPatchApplier patchApplier = null,
-            IOptions<QuestionnaireHistorySettings> questionnaireHistorySettings = null)
+            IOptions<QuestionnaireHistorySettings> questionnaireHistorySettings = null,
+            ICommandService commandService = null)
         {
             return new QuestionnaireHistoryVersionsService(
                 dbContext ?? Create.InMemoryDbContext(),
@@ -1293,7 +1299,8 @@ namespace WB.Tests.Unit.Designer
                     QuestionnaireChangeHistoryLimit = 10
                 }), 
                 patchApplier ?? Create.PatchApplier(),
-                Create.PatchGenerator());
+                Create.PatchGenerator(),
+                commandService ?? Mock.Of<ICommandService>());
         }
 
         private static IPatchApplier PatchApplier()
@@ -1589,5 +1596,14 @@ namespace WB.Tests.Unit.Designer
 
             return result.Object;
         }
+
+        public static QuestionnaireRevision QuestionnaireRevision(string questionnaireId)
+            => new QuestionnaireRevision(Guid.Parse(questionnaireId));
+
+        public static QuestionnaireRevision QuestionnaireRevision(Guid questionnaireId)
+            => new QuestionnaireRevision(questionnaireId);
+
+        public static QuestionnaireRevision QuestionnaireRevision(Guid questionnaireId, Guid rev)
+            => new QuestionnaireRevision(questionnaireId, rev);
     }
 }

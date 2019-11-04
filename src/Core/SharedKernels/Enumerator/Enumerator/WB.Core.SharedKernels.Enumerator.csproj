@@ -72,7 +72,7 @@
     <EmbeddedResource Update="Properties\EnumeratorUIResources.fr.resx">
       <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Update="Properties\EnumeratorUIResources.id-ID.resx">
+    <EmbeddedResource Update="Properties\EnumeratorUIResources.id.resx">
       <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Update="Properties\EnumeratorUIResources.ka.resx">
@@ -94,13 +94,13 @@
     <EmbeddedResource Update="Properties\EnumeratorUIResources.ru.resx">
       <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Update="Properties\EnumeratorUIResources.th-TH.resx">
+    <EmbeddedResource Update="Properties\EnumeratorUIResources.th.resx">
       <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Update="Properties\EnumeratorUIResources.uk-UA.resx">
+    <EmbeddedResource Update="Properties\EnumeratorUIResources.uk.resx">
       <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Update="Properties\EnumeratorUIResources.vi-VN.resx">
+    <EmbeddedResource Update="Properties\EnumeratorUIResources.vi.resx">
       <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Update="Properties\EnumeratorUIResources.zh.resx">
@@ -115,7 +115,7 @@
     <EmbeddedResource Update="Properties\UIResources.fr.resx">
       <DependentUpon>UIResources.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Update="Properties\UIResources.id-ID.resx">
+    <EmbeddedResource Update="Properties\UIResources.id.resx">
       <DependentUpon>UIResources.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Update="Properties\UIResources.ka.resx">
@@ -137,13 +137,13 @@
     <EmbeddedResource Update="Properties\UIResources.ru.resx">
       <DependentUpon>UIResources.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Update="Properties\UIResources.th-TH.resx">
+    <EmbeddedResource Update="Properties\UIResources.th.resx">
       <DependentUpon>UIResources.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Update="Properties\UIResources.uk-UA.resx">
+    <EmbeddedResource Update="Properties\UIResources.uk.resx">
       <DependentUpon>UIResources.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Update="Properties\UIResources.vi-VN.resx">
+    <EmbeddedResource Update="Properties\UIResources.vi.resx">
       <DependentUpon>UIResources.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Update="Properties\UIResources.zh.resx">

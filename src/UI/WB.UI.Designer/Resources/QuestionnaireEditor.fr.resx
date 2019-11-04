@@ -1104,4 +1104,28 @@
   <data name="ViewResolvedCommentsCounter_plural" xml:space="preserve">
     <value>Afficher tous les {{count}} commentaires résolus</value>
   </data>
+  <data name="DownloadPdf" xml:space="preserve">
+      <value>Télécharger le fichier PDF</value>
+      <comment>Télécharger le fichier PDF</comment>
+  </data>
+  <data name="GeneratePdf" xml:space="preserve">
+      <value>Generer un pdf</value>
+      <comment>Generer un pdf</comment>
+  </data>
+  <data name="ChooseLanguageTitle" xml:space="preserve">
+      <value>S'il vous plait, choisir la traduction</value>
+      <comment>S'il vous plait, choisir la traduction</comment>
+  </data>
+  <data name="Initializing" xml:space="preserve">
+      <value>Initialisation</value>
+      <comment>Initialisation</comment>
+  </data>
+  <data name="RetryExportPDF" xml:space="preserve">
+      <value>Réessayer l'exportation en PDF</value>
+      <comment>Réessayer l'exportation en PDF</comment>
+  </data>
+  <data name="Translation_Original" xml:space="preserve">
+      <value>Original</value>
+      <comment>Original</comment>
+  </data>
 </root>

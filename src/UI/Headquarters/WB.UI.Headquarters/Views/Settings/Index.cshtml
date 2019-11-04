@@ -165,6 +165,7 @@
                 </p>
             </div>
             <form action="@Url.Action("UpdateLogo", "Settings")" method="post" enctype="multipart/form-data" class="col-sm-7" data-bind="submit: onLogoSubmit">
+                @Html.AntiForgeryToken()
                 <div class="block-filter">
                     <div class="form-group">
                         <label for="companyLogo">@Settings.Logo: </label>

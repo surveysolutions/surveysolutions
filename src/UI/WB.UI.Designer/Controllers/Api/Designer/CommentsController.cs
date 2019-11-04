@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Comments;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
@@ -16,7 +18,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
     [Authorize]
     [QuestionnairePermissions]
     [ResponseCache(NoStore = true)]
-    [Route("questionnaire/{id:Guid}")]
+    [Route("questionnaire/{id}")]
     public class CommentsController : Controller
     {
         private readonly ICommentsService commentsService;
@@ -38,25 +40,29 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         [HttpGet]
         [Route("commentThreads")]
-        public List<CommentThread> commentThreads(Guid id)
+        public List<CommentThread> commentThreads(QuestionnaireRevision id)
         {
             bool hasAccess = User.IsAdmin() || 
-                             this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id, this.User.GetId());
+                             this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id.QuestionnaireId, this.User.GetId());
 
-            return hasAccess ? this.commentsService.LoadCommentThreads(id) : new List<CommentThread>();
+            return hasAccess ? this.commentsService.LoadCommentThreads(id.QuestionnaireId) : new List<CommentThread>();
         }
 
         [HttpGet]
         [Route("entity/{itemId:Guid}/comments")]
-        public async Task<List<CommentView>> Get(Guid id, Guid itemId)
+        public async Task<List<CommentView>> Get(QuestionnaireRevision id, Guid itemId)
         {
-            bool hasAccess = User.IsAdmin() || this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id, User.GetId());
-            return hasAccess ? await this.commentsService.LoadCommentsForEntity(id, itemId) : new List<CommentView>();
+            bool hasAccess = User.IsAdmin() 
+                || this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id.QuestionnaireId, User.GetId());
+
+            return hasAccess 
+                ? await this.commentsService.LoadCommentsForEntity(id.QuestionnaireId, itemId) 
+                : new List<CommentView>();
         }
 
         [HttpPost]
         [Route("entity/addComment")]
-        public async Task<IActionResult> PostComment(Guid id, [FromBody]AddCommentModel commentModel)
+        public async Task<IActionResult> PostComment(QuestionnaireRevision id, [FromBody]AddCommentModel commentModel)
         {
             if (!ModelState.IsValid)
             {
@@ -65,7 +71,11 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                     Error = string.Join(", ", ModelState.SelectMany(x => x.Value.Errors).Select(x => x.ErrorMessage))
                 });
             }
-            bool hasAccess = User.IsAdmin() || this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id, User.GetId());
+            bool hasAccess = User.IsAdmin() 
+                || this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id.QuestionnaireId, User.GetId());
+
+            hasAccess = hasAccess && id.Revision == null;
+
             if (!hasAccess)
             {
                 return Json(new
@@ -91,6 +101,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         [Route("comment/resolve/{commentId:Guid}")]
         public async Task<IActionResult> ResolveComment(Guid id, Guid commentId)
         {
+
             await commentsService.ResolveCommentAsync(commentId);
             await dbContext.SaveChangesAsync();
             return Ok();
