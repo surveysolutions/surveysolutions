@@ -44,16 +44,6 @@ namespace WB.Enumerator.Native.WebInterview
             return Task.CompletedTask;
         }
 
-
-        public static void Configure(IAppBuilder app, Type[] pipelineModules)
-        {
-            var resolver = GlobalHost.DependencyResolver;
-
-            (resolver.GetService(typeof(IConnectionsMonitor)) as IConnectionsMonitor)?.StartMonitoring();
-
-            app.MapSignalR(new HubConfiguration { EnableDetailedErrors = true, Resolver = resolver });
-        }
-
         internal class SignalRHubMinifier : IJavaScriptMinifier
         {
             readonly ConcurrentDictionary<string, string> cache = new ConcurrentDictionary<string, string>();
