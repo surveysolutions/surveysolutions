@@ -67,7 +67,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 }
             }
         }
-
+        
         public override void BulkStore(List<Tuple<TEntity, string>> bulk)
         {
             lock (lockObject)

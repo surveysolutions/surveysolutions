@@ -385,48 +385,67 @@ input#edit-question-title, input#edit-group-title {
     }
 }
 
-.help-bracket{
-    color:#bfd8ed;
-}
-
-.edit-question-note{
-    font-family: "Helvetica Neue","Helvetica",Arial,sans-serif;
-    font-size: 14px;
-    color: #c1c7cb;
-}
-
-.roster-type-specific-block,
-.question-type-specific-block {
-    background: @questionnarie-question-specific-block-color;
-    padding: 8px;
-    border-radius: 0 0 4px 4px;
-    .clearfix();
-}
-
-#roster-editor {
-
-    #rosterTypeBtn {
-        border-color: @designer-editor-lightblue-bg-color;
-    }
-
-    .input-variable-name:before {
-        top: 35px;
-    }
-}
-
-#question-editor {
-    .input-variable-name:before {
-        top: 35px;
-    }
-}
-
-textarea.form-control, textarea#edit-group-description {
-    height: 37px;
+.dropdown-with-fixed-width {
+    padding: 10px 40px 10px 10px;
+    background-color: #ffffff;
+    border: 2px solid #cccccc;
+    text-transform: none;
+    text-align: left;
     min-height: 37px;
-}
-
-#static-text-editor{
-    #edit-static-attachment-name {
-        color: #e004c9;
+    width: 220px;
+    > span.dropdown-arrow {
+        background: url(../i/dropdown-arrow.png) no-repeat center center;
+        width: 19px;
+        height: 12px;
+        position: absolute;
+        right: 10px;
     }
 }
+
+
+
+    .help-bracket {
+        color: #bfd8ed;
+    }
+
+    .edit-question-note {
+        font-family: "Helvetica Neue","Helvetica",Arial,sans-serif;
+        font-size: 14px;
+        color: #c1c7cb;
+    }
+
+    .roster-type-specific-block,
+    .question-type-specific-block {
+        background: @questionnarie-question-specific-block-color;
+        padding: 8px;
+        border-radius: 0 0 4px 4px;
+        .clearfix();
+    }
+
+    #roster-editor {
+
+        #rosterTypeBtn {
+            border-color: @designer-editor-lightblue-bg-color;
+        }
+
+        .input-variable-name:before {
+            top: 35px;
+        }
+    }
+
+    #question-editor {
+        .input-variable-name:before {
+            top: 35px;
+        }
+    }
+
+    textarea.form-control, textarea#edit-group-description {
+        height: 37px;
+        min-height: 37px;
+    }
+
+    #static-text-editor {
+        #edit-static-attachment-name {
+            color: #e004c9;
+        }
+    }

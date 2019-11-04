@@ -39,6 +39,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return serializer.Deserialize<TEntity>(keyValueItem.Json);
         }
 
+        public bool HasNotEmptyValue(TKey id)
+        {
+            var keyValueItem = fileSystemAccessor.GetById(id);
+            return keyValueItem?.Json != null;
+        }
+
         public virtual void Remove(TKey id)
         {
             fileSystemAccessor.Remove(id);

@@ -77,7 +77,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
-            this.eventRegistry.Subscribe(this, interviewId);
             this.interviewId = interviewId ?? throw new ArgumentNullException(nameof(interviewId));
             this.Identity = entityIdentity ?? throw new ArgumentNullException(nameof(entityIdentity));
 
@@ -88,6 +87,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.ShowResolvedCommentsVisible = anyResolvedCommentsExists;
             this.ShowResolvedComments = false;
             this.HasComments = !string.IsNullOrWhiteSpace(this.InterviewerComment);
+
+            this.eventRegistry.Subscribe(this, interviewId);
         }
 
         private void UpdateCommentsFromInterview(bool showResolved = false)
@@ -258,6 +259,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task SendCommentQuestionCommandAsync()
         {
+#if !PRODUCTION
+            if (this.InterviewerComment?.Equals("!{kaboom}!", StringComparison.InvariantCultureIgnoreCase) == true)
+            {
+                throw new Exception("Test exception");
+            }
+#endif
             await this.commandService.ExecuteAsync(
                 new CommentAnswerCommand(
                     interviewId: Guid.Parse(this.interviewId),

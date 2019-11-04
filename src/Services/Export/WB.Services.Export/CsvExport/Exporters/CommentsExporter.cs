@@ -83,7 +83,18 @@ namespace WB.Services.Export.CsvExport.Exporters
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                var comments = await headquartersApi.GetInterviewCommentsBatchAsync(interviewIds.ToArray());
+                List<InterviewComment> comments;
+                var guids = interviewIds.ToArray();
+
+                try
+                {
+                    comments = await headquartersApi.GetInterviewCommentsBatchAsync(guids);
+                }
+                catch (Exception e)
+                {
+                    logger.LogError(e, "Get comments from HQ exception. Can't get comments for interviews: " + string.Join(", ", guids.Select(id => id.ToString())));
+                    throw;
+                }
 
                 var rows = ConvertToCsvStrings(comments, maxRosterDepthInQuestionnaire, hasAtLeastOneRoster);
                 this.csvWriter.WriteData(commentsFilePath, rows, ExportFileSettings.DataFileSeparator.ToString());

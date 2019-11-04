@@ -52,7 +52,7 @@
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\Properties\TesterUIResources.fr.resx">
       <Link>TesterUIResources.fr.resx</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\Properties\TesterUIResources.id-ID.resx">
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\Properties\TesterUIResources.id.resx">
       <Link>TesterUIResources.id-ID.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\Properties\TesterUIResources.ka.resx">
@@ -70,10 +70,10 @@
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\Properties\TesterUIResources.ru.resx">
       <Link>TesterUIResources.ru.resx</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\Properties\TesterUIResources.th-TH.resx">
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\Properties\TesterUIResources.th.resx">
       <Link>TesterUIResources.th-TH.resx</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\Properties\TesterUIResources.vi-VN.resx">
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\Properties\TesterUIResources.vi.resx">
       <Link>TesterUIResources.vi-VN.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\Properties\TesterUIResources.zh.resx">

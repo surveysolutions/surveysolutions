@@ -1,0 +1,474 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AnswerIsInvalid" xml:space="preserve">
+    <value>Përgjigjja është e pavlefshme</value>
+  </data>
+  <data name="AnswerWasNotSaved" xml:space="preserve">
+    <value>Përgjigjja nuk u ruajt</value>
+  </data>
+  <data name="AreaRecord" xml:space="preserve">
+    <value>Hapësira e redaktimit</value>
+  </data>
+  <data name="AudioClickRecord" xml:space="preserve">
+    <value>Kliko për të regjistruar audion</value>
+  </data>
+  <data name="AudioInitializationFailed" xml:space="preserve">
+    <value>Audioja nuk arriti të inicialilzohet</value>
+  </data>
+  <data name="AudioRecording" xml:space="preserve">
+    <value>Regjistrim audio</value>
+  </data>
+  <data name="AudioRecordingDuration" xml:space="preserve">
+    <value>{{humanizedLength}} ({{formattedLength}}) i regjistrimit audio</value>
+  </data>
+  <data name="AudioRecordNew" xml:space="preserve">
+    <value>Regjistro të ri</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Anulo</value>
+  </data>
+  <data name="ClickToAnswer" xml:space="preserve">
+    <value>Klikoni për t’u përgjigjur</value>
+  </data>
+  <data name="CloseInterviewMessage" xml:space="preserve">
+    <value>&lt;p&gt;Intervista në internet mbështet vetëm një tab aktiv me intervistën.&lt;/p&gt;&lt;p&gt;Ju lutemi ringarkoni këtë faqe, që të vazhdoni ta përdorni këtë tab ose mbylleni atë.&lt;/p&gt;</value>
+  </data>
+  <data name="CloseInterviewTitle" xml:space="preserve">
+    <value>Kjo intervistë është hapur në një tabelë ose shfletues tjetër</value>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Komento</value>
+  </data>
+  <data name="CommentAdd" xml:space="preserve">
+    <value>Shto koment</value>
+  </data>
+  <data name="CommentAdmin" xml:space="preserve">
+    <value>Komenti i administratorit</value>
+  </data>
+  <data name="CommentEnter" xml:space="preserve">
+    <value>Vendosni komentin tuaj</value>
+  </data>
+  <data name="CommentHeadquarters" xml:space="preserve">
+    <value>Komenti i zyrës qendrore</value>
+  </data>
+  <data name="CommentHide" xml:space="preserve">
+    <value>Fshih komentin</value>
+  </data>
+  <data name="CommentInterviewer" xml:space="preserve">
+    <value>Komenti i intervistuesit</value>
+  </data>
+  <data name="CommentPost" xml:space="preserve">
+    <value>Posto</value>
+  </data>
+  <data name="CommentPosting" xml:space="preserve">
+    <value>Po postohet...</value>
+  </data>
+  <data name="CommentSupervisor" xml:space="preserve">
+    <value>Komenti i supervizorit </value>
+  </data>
+  <data name="CommentYours" xml:space="preserve">
+    <value>Komenti juaj</value>
+  </data>
+  <data name="Complete" xml:space="preserve">
+    <value>Përfundoi</value>
+  </data>
+  <data name="CompleteAbout" xml:space="preserve">
+    <value>Ju jeni pranë përfundimit të kësaj interviste </value>
+  </data>
+  <data name="CompleteErrors" xml:space="preserve">
+    <value>Pyetje me gabime:</value>
+  </data>
+  <data name="CompleteFirstErrors" xml:space="preserve">
+    <value>{{count}} entitetet e para me gabime:</value>
+  </data>
+  <data name="CompleteNoteToSupervisor" xml:space="preserve">
+    <value>Shënim për supervizorin</value>
+  </data>
+  <data name="CompleteQuestionsAnswered" xml:space="preserve">
+    <value>Me përgjigje</value>
+  </data>
+  <data name="CompleteQuestionsStatus" xml:space="preserve">
+    <value>Statusi i pyetjes:</value>
+  </data>
+  <data name="CompleteQuestionsUnanswered" xml:space="preserve">
+    <value>Pa përgjigje</value>
+  </data>
+  <data name="ConfirmRosterRemove" xml:space="preserve">
+    <value>Jeni i sigurt që doni ta fshini rosterin përkatës?</value>
+  </data>
+  <data name="ConnectionLostMessage" xml:space="preserve">
+    <value>Ju lutemi ringarkoni faqen për t’u rilidhur dhe për të vijuar këtë intervistë.</value>
+  </data>
+  <data name="ConnectionLostTitle" xml:space="preserve">
+    <value>Lidhja me rrjetin u shkëput.</value>
+  </data>
+  <data name="Cover" xml:space="preserve">
+    <value>Faqja e parë</value>
+  </data>
+  <data name="CoverBrokenPackegeText" xml:space="preserve">
+    <value>Kujdes! Kjo intervistë ka të dhëna të korruptuara, &lt;br /&gt;                                     vetëm versioni i mëparshëm i intervistës është i disponueshëm. &lt;br /&gt;                                 Kontaktoni personelin mbështetës për ndihmë.</value>
+  </data>
+  <data name="CoverBrokenPackegeTitle" xml:space="preserve">
+    <value>Gabim: Kjo intervistë është e korruptuar </value>
+  </data>
+  <data name="CoverComments" xml:space="preserve">
+    <value>Pyetje me komente:</value>
+  </data>
+  <data name="CoverFirstComments" xml:space="preserve">
+    <value>{{count}} entitetet e para me komente:</value>
+  </data>
+  <data name="CoverSupervisorNote" xml:space="preserve">
+    <value>Shënim i supervizorit:</value>
+  </data>
+  <data name="DecimalCannotParse" xml:space="preserve">
+    <value>Vlera e vendosur nuk mund të analizohet si vlerë dhjetore </value>
+  </data>
+  <data name="DecimalEnter" xml:space="preserve">
+    <value>Vendosni numrin dhjetor</value>
+  </data>
+  <data name="DecimalTooBig" xml:space="preserve">
+    <value>Vlera e vendosur është shumë e gjatë. Lejohet me më pak se 15 shifra</value>
+  </data>
+  <data name="Disconnected" xml:space="preserve">
+    <value>I shkëputur</value>
+  </data>
+  <data name="Done" xml:space="preserve">
+    <value>U krye</value>
+  </data>
+  <data name="EmailLink_EmailResumeLink" xml:space="preserve">
+    <value>Adresa e vazhdimit të email-it</value>
+  </data>
+  <data name="EmailLink_Header" xml:space="preserve">
+    <value>Vendosni adresën e email-it </value>
+  </data>
+  <data name="EmailLink_InvalidEmail" xml:space="preserve">
+    <value>{{email}} është adresë email-i e pavlefshme </value>
+  </data>
+  <data name="EmailLink_Message" xml:space="preserve">
+    <value>Do t’ju dërgojmë një mesazh me adresën për të vazhduar me intervistën, nëse ju duhet të vazhdoni më vonë.</value>
+  </data>
+  <data name="EmailLink_Placeholder" xml:space="preserve">
+    <value>Vendosni email-in</value>
+  </data>
+  <data name="EmailLink_ResumeAnyTime" xml:space="preserve">
+    <value>Anulojeni tani dhe vazhdoni me intervistën. Dhe mund ta dërgoni më vonë, duke klikuar “Adresën për vazhdimin e email-it' në menunë në krye     </value>
+  </data>
+  <data name="EnterDate" xml:space="preserve">
+    <value>Vendos datën</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Gabim</value>
+  </data>
+  <data name="Error_plural" xml:space="preserve">
+    <value>Gabime</value>
+  </data>
+  <data name="GPSError" xml:space="preserve">
+    <value>Pozicioni nuk mund të përcaktohet, për shkak të një gabimi të panjohur (Kodi: {{strErrorCode}}).</value>
+  </data>
+  <data name="GPSNotAvailable" xml:space="preserve">
+    <value>Shfletuesi juaj nuk e mbështet marrjen e vendndodhjes gjeografike</value>
+  </data>
+  <data name="GPSPermissionDenied" xml:space="preserve">
+    <value>Kjo faqe nuk ka leje për përdorimin e API-t për vendndodhjen gjeografike</value>
+  </data>
+  <data name="GPSPositionUnavailable" xml:space="preserve">
+    <value>Pozicioni aktual nuk mund të përcaktohet.</value>
+  </data>
+  <data name="GPSRecord" xml:space="preserve">
+    <value>Regjistro GPS</value>
+  </data>
+  <data name="GPSTimeout" xml:space="preserve">
+    <value>Pozicioni aktual nuk mund të përcaktohet brenda kufirit kohor të specifikuar.</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Ndihmë</value>
+  </data>
+  <data name="HideResolved" xml:space="preserve">
+    <value>Fshih të përfunduarat</value>
+  </data>
+  <data name="Instruction" xml:space="preserve">
+    <value>Udhëzimet</value>
+  </data>
+  <data name="InstructionShow" xml:space="preserve">
+    <value>Shfaq udhëzimet</value>
+  </data>
+  <data name="Interview_Overview_AdditionalInformation" xml:space="preserve">
+    <value>Informacion për pyetje shtesë  </value>
+  </data>
+  <data name="Interview_Overview_NotAnswered" xml:space="preserve">
+    <value>Pa përgjigje</value>
+  </data>
+  <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
+    <value>Jeni të sigurt që doni të hiqni rosterin përkatës '{{rosterTitle}}'?</value>
+  </data>
+  <data name="InterviewReceivedCantModify" xml:space="preserve">
+    <value>Intervista është marrë nga intervistuesi dhe nuk mund të modifikohet</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Po ngarkohet...</value>
+  </data>
+  <data name="LoadingQuestionnaire" xml:space="preserve">
+    <value>Pyetësori po ngarkohet. Ju lutemi, pritni...</value>
+  </data>
+  <data name="LoadingWait" xml:space="preserve">
+    <value>Po ngarkohet, ju lutemi, pritni</value>
+  </data>
+  <data name="MultimediaNotSupported" xml:space="preserve">
+    <value>Shfletuesi juaj nuk e mbështet përsëritjen në multimedia. Në vend të kësaj, ju mund ta shkarkoni.</value>
+  </data>
+  <data name="Network" xml:space="preserve">
+    <value>Rrjeti</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Jo</value>
+  </data>
+  <data name="NoQuestionnaireAccess" xml:space="preserve">
+    <value>Ju nuk keni akses në pyetësor  </value>
+  </data>
+  <data name="NoResultsFound" xml:space="preserve">
+    <value>Nuk u gjet asnjë rezultat</value>
+  </data>
+  <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
+    <value>Vlera e vendosur nuk mund të jetë më e vogël sesa përgjigjja e mbrojtur</value>
+  </data>
+  <data name="NumberCannotParse" xml:space="preserve">
+    <value>Vlera e vendosur nuk mund të analizohet si vlerë e plotë </value>
+  </data>
+  <data name="NumberEnter" xml:space="preserve">
+    <value>Vendosni numrin</value>
+  </data>
+  <data name="NumberRosterError" xml:space="preserve">
+    <value>Përgjigjja '{{answer}}' është e pasaktë, pasi pyetja është përdorur si madhësi e rosterit dhe përgjigjja e specifikuar është negative </value>
+  </data>
+  <data name="NumberRosterRemoveConfirm" xml:space="preserve">
+    <value>Jeni të sigurt që dëshironi të fshini {{amountOfRostersToRemove}} rreshtin(rreshtat) nga secili roster përkatës?</value>
+  </data>
+  <data name="NumberRosterUpperBound" xml:space="preserve">
+    <value>Përgjigjja '{{answer}}' është e pasaktë, pasi përgjigjja ëshë më e madhe sesa kufiri i sipërm i Rosterit {{answerMaxValue}}.</value>
+  </data>
+  <data name="OptionsAvailableAfterAnswer" xml:space="preserve">
+    <value>Kategoritë do të jenë të vlefshme vetëm pas përgjigjes së pyetjes së referuar</value>
+  </data>
+  <data name="PhotoIsNotImage" xml:space="preserve">
+    <value>Vetëm skedarët e imazheve mund të ngarkohen </value>
+  </data>
+  <data name="PhotoTooBig" xml:space="preserve">
+    <value>Imazhi është shumë i madhe për t’u ngarkuar. Ju lutemi zgjidhni një imazh më të vogël se 30 Mb</value>
+  </data>
+  <data name="PhotoUpload" xml:space="preserve">
+    <value>Ngarko një foto</value>
+  </data>
+  <data name="ProgressText" xml:space="preserve">
+    <value>{{progress}}% I përfunduar</value>
+  </data>
+  <data name="QuestionUnsupported" xml:space="preserve">
+    <value>Lloj pyetjeje i pambështetur </value>
+  </data>
+  <data name="RecordCurrentTime" xml:space="preserve">
+    <value>Regjistro orën aktuale</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Ringarko </value>
+  </data>
+  <data name="ReloadQuestionnaire" xml:space="preserve">
+    <value>Ringarko pyetësorin</value>
+  </data>
+  <data name="Resolve" xml:space="preserve">
+    <value>Përfundo</value>
+  </data>
+  <data name="ResolveHint" xml:space="preserve">
+    <value>Komentet e përfunduara janë të fshehura me parazgjedhje, por mund të rishikohen nga të gjithë pjesëmarrësit në intervistë</value>
+  </data>
+  <data name="SaveScenario" xml:space="preserve">
+    <value>Ruani skenarin</value>
+  </data>
+  <data name="SaveScenarioDesignerLogin" xml:space="preserve">
+    <value>Seanca në aplikacionin Designer skadoi. Hyni në aplikacionin Designer që të mund të ruani.</value>
+  </data>
+  <data name="SaveScenarioGoToDesigner" xml:space="preserve">
+    <value>Hap Designer</value>
+  </data>
+  <data name="SaveScenarioName" xml:space="preserve">
+    <value>Emri</value>
+  </data>
+  <data name="SaveScenarioOptions" xml:space="preserve">
+    <value>Zgjidhni skenarin që do të zëvendësoni </value>
+  </data>
+  <data name="SaveScenarioOptions_ReplaceExisting" xml:space="preserve">
+    <value>Zëvendësoni ekzistuesin</value>
+  </data>
+  <data name="SaveScenarioOptions_SaveNew" xml:space="preserve">
+    <value>Ruani të riun</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Kërko</value>
+  </data>
+  <data name="SessionTimeoutMessage" xml:space="preserve">
+    <value>Ju lutemi, ngarkojeni faqen sërish për të vazhduar intervistën.</value>
+  </data>
+  <data name="SessionTimeoutMessageTitle" xml:space="preserve">
+    <value>Koha e seancës suaj ka mbaruar, pasi nuk keni kryer asnjë veprim për 15 minuta.</value>
+  </data>
+  <data name="SessionTimeoutTitle" xml:space="preserve">
+    <value>Koha e seancës suaj ka mbaruar </value>
+  </data>
+  <data name="ShowOnMap" xml:space="preserve">
+    <value>Shfaq në hartë</value>
+  </data>
+  <data name="ShowResolved" xml:space="preserve">
+    <value>Shfaq të përfunduarat</value>
+  </data>
+  <data name="SlowConnection" xml:space="preserve">
+    <value>Lidhja me rrjetin është e ngadaltë</value>
+  </data>
+  <data name="SwitchingLanguage" xml:space="preserve">
+    <value>Gjuha po ndryshon. Ju lutemi, prisni...</value>
+  </data>
+  <data name="TextEnter" xml:space="preserve">
+    <value>Vendosni tekstin</value>
+  </data>
+  <data name="TextEnterMasked" xml:space="preserve">
+    <value>Vendosni tekstin {{userFriendlyMask}}</value>
+  </data>
+  <data name="TextEnterNewItem" xml:space="preserve">
+    <value>Vendosni një objekt të ri</value>
+  </data>
+  <data name="TextRequired" xml:space="preserve">
+    <value>Ju lutemi, plotësoni të gjitha vlerat e kërkuara </value>
+  </data>
+  <data name="ToggleNavigation" xml:space="preserve">
+    <value>Ndrysho shfletimin</value>
+  </data>
+  <data name="WarningsHeader" xml:space="preserve">
+    <value>Paralajmërime</value>
+  </data>
+  <data name="WebInterview" xml:space="preserve">
+    <value>Intervistë në ueb</value>
+  </data>
+  <data name="WebTesterSessionOver" xml:space="preserve">
+    <value>Seanca e testimit përfundoi </value>
+  </data>
+  <data name="WebTesterSessionOverMessage" xml:space="preserve">
+    <value>Ju lutemi, mbylleni këtë faqe. Mund të hapni një të re duke u kthyer te faqja Designer </value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Po</value>
+  </data>
+</root>

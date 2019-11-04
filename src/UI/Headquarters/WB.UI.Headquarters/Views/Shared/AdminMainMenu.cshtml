@@ -60,6 +60,7 @@
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" title="@User.Identity.Name">@User.Identity.Name<span class="caret"></span></a>
         <ul class="dropdown-menu">
             @Html.MainMenuItem("Index", "Settings", Common.Settings, MenuItem.Settings)
+            @Html.MainMenuItem("Logs", "Diagnostics", TabletLogs.PageTitle, MenuItem.TabletLogs)
             @Html.MainMenuItem("EmailProviders", "Settings", Common.EmailProviders, MenuItem.EmailProviders)
             @Html.MainMenuItem("Index", "AuditLog", Common.AuditLog, MenuItem.AuditLog)
             @Html.MainMenuItem("Manage", "Account", Strings.SurverManagement_MainMenu_ManageAccount, MenuItem.ManageAccount)

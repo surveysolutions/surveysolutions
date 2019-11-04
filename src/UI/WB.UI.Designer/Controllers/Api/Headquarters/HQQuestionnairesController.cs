@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
@@ -21,8 +24,9 @@ using WB.UI.Designer.Resources;
 
 namespace WB.UI.Designer.Controllers.Api.Headquarters
 {
-    [ApiBasicAuth(onlyAllowedAddresses: true)]
     [Route("api/hq/v3/questionnaires")]
+    [Authorize]
+    [AllowOnlyFromWhitelistIP]
     public class HQQuestionnairesController : ControllerBase
     {
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
@@ -35,8 +39,8 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
         private readonly IStringCompressor zipUtils;
         private readonly IExpressionsPlayOrderProvider expressionsPlayOrderProvider;
         private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersionService;
-
-
+        private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
+        
         public HQQuestionnairesController(
             IQuestionnaireViewFactory questionnaireViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
@@ -47,7 +51,8 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             IStringCompressor zipUtils,
             DesignerDbContext listItemStorage,
             IExpressionsPlayOrderProvider expressionsPlayOrderProvider,
-            IQuestionnaireCompilationVersionService questionnaireCompilationVersionService)
+            IQuestionnaireCompilationVersionService questionnaireCompilationVersionService,
+            IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService)
         {
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.questionnaireVerifier = questionnaireVerifier;
@@ -59,6 +64,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             this.listItemStorage = listItemStorage;
             this.expressionsPlayOrderProvider = expressionsPlayOrderProvider;
             this.questionnaireCompilationVersionService = questionnaireCompilationVersionService;
+            this.questionnaireHistoryVersionsService = questionnaireHistoryVersionsService;
         }
 
         [HttpGet]
@@ -95,25 +101,22 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             return Ok(questionnaires);
         }
 
-
         [HttpGet]
         [Route("{id:Guid}")]
-        public IActionResult Get(Guid id, int clientQuestionnaireContentVersion, [FromQuery]int? minSupportedQuestionnaireVersion = null)
+        public async Task<IActionResult> Get(Guid id, int clientQuestionnaireContentVersion, [FromQuery]int? minSupportedQuestionnaireVersion = null)
         {
-            QuestionnaireView questionnaireView;
+            QuestionnaireView questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
 
-            var questionnaireView1 = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
-            if (questionnaireView1 == null)
+            if (questionnaireView == null)
             {
                 return this.ErrorWithReasonPhraseForHQ(StatusCodes.Status404NotFound, string.Format(ErrorMessages.TemplateNotFound, id));
             }
 
-            if (!this.ValidateAccessPermissions(questionnaireView1))
+            if (!this.ValidateAccessPermissions(questionnaireView))
             {
                 return this.ErrorWithReasonPhraseForHQ(StatusCodes.Status403Forbidden, ErrorMessages.NoAccessToQuestionnaire);
             }
 
-            questionnaireView = questionnaireView1;
             if (!this.engineVersionService.IsClientVersionSupported(clientQuestionnaireContentVersion))
             {
                 return this.ErrorWithReasonPhraseForHQ(StatusCodes.Status426UpgradeRequired,
@@ -163,6 +166,10 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             }
 
             var questionnaire = questionnaireView.Source.Clone();
+
+            var userAgent = Request.Headers["User-Agent"].FirstOrDefault();
+            questionnaire.Revision = await this.questionnaireHistoryVersionsService.TrackQuestionnaireImportAsync(questionnaire, userAgent, User.GetId());
+
             questionnaire.IsUsingExpressionStorage = versionToCompileAssembly > 19;
             var readOnlyQuestionnaireDocument = questionnaireView.Source.AsReadOnly();
             questionnaire.ExpressionsPlayOrder = this.expressionsPlayOrderProvider.GetExpressionsPlayOrder(readOnlyQuestionnaireDocument);
@@ -177,6 +184,26 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             });
         }
 
+        [HttpPost]
+        [Route("{id:Guid}/revision/{rev:int}/metadata")]
+        public async Task<IActionResult> UpdateRevisionMetadata(Guid id, int rev, [FromBody] QuestionnaireRevisionMetaDataUpdate tagData)
+        {
+            QuestionnaireView questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
+
+            if (questionnaireView == null)
+            {
+                return this.ErrorWithReasonPhraseForHQ(StatusCodes.Status404NotFound, string.Format(ErrorMessages.TemplateNotFound, id));
+            }
+
+            if (!this.ValidateAccessPermissions(questionnaireView))
+            {
+                return this.ErrorWithReasonPhraseForHQ(StatusCodes.Status403Forbidden, ErrorMessages.NoAccessToQuestionnaire);
+            }
+
+            await this.questionnaireHistoryVersionsService.UpdateQuestionnaireMetadataAsync(id, rev, tagData);
+            return Ok();
+        }
+        
         [HttpGet]
         [Route("info/{id:guid}")]
         public IActionResult Info(Guid id)

@@ -122,6 +122,22 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 }
             }
         }
+        
+        public bool HasNotEmptyValue(string id)
+        {
+            EnsureTableExists();
+
+            using (var existsCommand = new NpgsqlCommand())
+            {
+                existsCommand.CommandText = $"SELECT 1 FROM {this.tableName} WHERE id = :id AND value IS NOT NULL";
+                var idParameter = new NpgsqlParameter("id", NpgsqlDbType.Varchar) { Value = id };
+                existsCommand.Parameters.Add(idParameter);
+
+                object existsResult = this.ExecuteScalar(existsCommand);
+
+                return  existsResult != null;
+            }
+        }
 
         public virtual void BulkStore(List<Tuple<TEntity, string>> bulk)
         {

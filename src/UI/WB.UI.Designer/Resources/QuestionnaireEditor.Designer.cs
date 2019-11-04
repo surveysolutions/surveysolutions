@@ -205,6 +205,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please choose translation.
+        /// </summary>
+        public static string ChooseLanguageTitle {
+            get {
+                return ResourceManager.GetString("ChooseLanguageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add classification.
         /// </summary>
         public static string ClassificationAdd {
@@ -462,6 +471,15 @@ namespace WB.UI.Designer.Resources {
         public static string Download {
             get {
                 return ResourceManager.GetString("Download", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download PDF.
+        /// </summary>
+        public static string DownloadPdf {
+            get {
+                return ResourceManager.GetString("DownloadPdf", resourceCulture);
             }
         }
         
@@ -790,6 +808,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Generate pdf.
+        /// </summary>
+        public static string GeneratePdf {
+            get {
+                return ResourceManager.GetString("GeneratePdf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Geometry type.
         /// </summary>
         public static string GeometryType {
@@ -822,6 +849,15 @@ namespace WB.UI.Designer.Resources {
         public static string Help {
             get {
                 return ResourceManager.GetString("Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The name of attachment file that will be displayed..
+        /// </summary>
+        public static string HelpAttachmentName {
+            get {
+                return ResourceManager.GetString("HelpAttachmentName", resourceCulture);
             }
         }
         
@@ -1206,6 +1242,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Initializing.
+        /// </summary>
+        public static string Initializing {
+            get {
+                return ResourceManager.GetString("Initializing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use signature pad.
         /// </summary>
         public static string IsSignature {
@@ -1557,7 +1602,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Current time.
+        ///   Looks up a localized string similar to Current timestamp(date &amp; time).
         /// </summary>
         public static string QuestionCurrentTime {
             get {
@@ -1917,6 +1962,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Retry export as PDF.
+        /// </summary>
+        public static string RetryExportPDF {
+            get {
+                return ResourceManager.GetString("RetryExportPDF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add item.
         /// </summary>
         public static string RosterAddItem {
@@ -2048,6 +2102,15 @@ namespace WB.UI.Designer.Resources {
         public static string Save {
             get {
                 return ResourceManager.GetString("Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save as.
+        /// </summary>
+        public static string SaveAs {
+            get {
+                return ResourceManager.GetString("SaveAs", resourceCulture);
             }
         }
         
@@ -3254,6 +3317,15 @@ namespace WB.UI.Designer.Resources {
         public static string ToggleSearch {
             get {
                 return ResourceManager.GetString("ToggleSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Original.
+        /// </summary>
+        public static string Translation_Original {
+            get {
+                return ResourceManager.GetString("Translation_Original", resourceCulture);
             }
         }
         

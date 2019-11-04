@@ -5,6 +5,7 @@ using MvvmCross.Navigation;
 using MvvmCross.Platforms.Android;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -21,6 +22,7 @@ namespace WB.UI.Interviewer.Implementations.Services
     {
         private readonly IMvxAndroidCurrentTopActivity androidCurrentTopActivity;
         private readonly IMvxNavigationService navigationService;
+        private readonly ILogger log;
 
         public ViewModelNavigationService(
             ICommandService commandService,
@@ -28,15 +30,18 @@ namespace WB.UI.Interviewer.Implementations.Services
             IUserInterfaceStateService userInterfaceStateService,
             IMvxAndroidCurrentTopActivity androidCurrentTopActivity,
             IPrincipal principal,
-            IMvxNavigationService navigationService)
-            : base(commandService, userInteractionService, userInterfaceStateService, androidCurrentTopActivity, navigationService, principal)
+            IMvxNavigationService navigationService,
+            ILogger log)
+            : base(commandService, userInteractionService, userInterfaceStateService, androidCurrentTopActivity, navigationService, principal, log)
         {
             this.androidCurrentTopActivity = androidCurrentTopActivity;
             this.navigationService = navigationService;
+            this.log = log;
         }
 
         public override async Task<bool> NavigateToDashboardAsync(string interviewId = null)
         {
+            this.log.Trace($"Navigating to dashboard interviewId: {interviewId ?? "'null'"}");
             if (interviewId == null)
             {
                return await this.navigationService.Navigate<DashboardViewModel>().ConfigureAwait(false);
@@ -48,11 +53,15 @@ namespace WB.UI.Interviewer.Implementations.Services
             }).ConfigureAwait(false);
         }
 
-        public override Task NavigateToPrefilledQuestionsAsync(string interviewId) => 
-            this.navigationService.Navigate<PrefilledQuestionsViewModel, InterviewViewModelArgs>(new InterviewViewModelArgs
-            {
-                InterviewId = interviewId
-            });
+        public override Task NavigateToPrefilledQuestionsAsync(string interviewId)
+        {
+            this.log.Trace($"Navigating to PrefilledQuestionsViewModel interviewId: {interviewId}");
+            return this.navigationService.Navigate<PrefilledQuestionsViewModel, InterviewViewModelArgs>(
+                new InterviewViewModelArgs
+                {
+                    InterviewId = interviewId
+                });
+        }
 
         public override void NavigateToSplashScreen()
         {
@@ -60,18 +69,33 @@ namespace WB.UI.Interviewer.Implementations.Services
         }
 
         public override Task NavigateToFinishInstallationAsync()
-            => this.NavigateToAsync<FinishInstallationViewModel>();
+        {
+            this.log.Trace("Navigating to FinishInstallationViewModel");
+            return this.NavigateToAsync<FinishInstallationViewModel>();
+        }
 
-        public override Task NavigateToMapsAsync() => this.NavigateToAsync<MapsViewModel>();
+        public override Task NavigateToMapsAsync()
+        {
+            this.log.Trace("Navigating to MapsViewModel");
+            return this.NavigateToAsync<MapsViewModel>();
+        }
 
         public override Task NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity)
-            => this.navigationService.Navigate<InterviewViewModel, InterviewViewModelArgs>(new InterviewViewModelArgs
-            {
-                InterviewId = interviewId,
-                NavigationIdentity = navigationIdentity
-            });
+        {
+            this.log.Trace($"Navigating to interview {interviewId}:{navigationIdentity}");
+            return this.navigationService.Navigate<InterviewViewModel, InterviewViewModelArgs>(
+                new InterviewViewModelArgs
+                {
+                    InterviewId = interviewId,
+                    NavigationIdentity = navigationIdentity
+                });
+        }
 
-        public override Task NavigateToLoginAsync() => this.NavigateToAsync<LoginViewModel>();
+        public override Task NavigateToLoginAsync()
+        {
+            this.log.Trace("Navigating to login");
+            return this.NavigateToAsync<LoginViewModel>();
+        }
 
         protected override void FinishActivity() => this.androidCurrentTopActivity.Activity.Finish();
         protected override void NavigateToSettingsImpl() =>

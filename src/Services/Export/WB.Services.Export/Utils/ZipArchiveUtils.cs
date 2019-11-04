@@ -113,7 +113,7 @@ namespace WB.Services.Export
             IProgress<int> exportProgress,
             CancellationToken token = default)
         {
-            logger.LogTrace("Compressing directory {directory} into {archiveName}", exportTempDirectoryPath, archiveName);
+            logger.LogDebug("Compressing directory {directory} into {archiveName}", exportTempDirectoryPath, archiveName);
             using (var archiveFile = File.Create(archiveName))
             {
                 using (var archive = CreateArchive(archiveFile, archivePassword, CompressionLevel.Optimal))
@@ -121,7 +121,7 @@ namespace WB.Services.Export
                     var files = Directory.EnumerateFiles(exportTempDirectoryPath).ToList();
                     var total = files.Count;
                     long added = 0;
-                    foreach (var file in Directory.EnumerateFiles(exportTempDirectoryPath))
+                    foreach (var file in Directory.EnumerateFiles(exportTempDirectoryPath, "*.**", SearchOption.AllDirectories))
                     {
                         using (var fs = File.OpenRead(file))
                         {
