@@ -91,20 +91,26 @@
       <HintPath>..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Extensions.Configuration, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Microsoft.Extensions.Configuration.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.dll</HintPath>
+    <Reference Include="Microsoft.Extensions.Configuration, Version=3.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.Extensions.Configuration.3.0.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Extensions.Configuration.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Microsoft.Extensions.Configuration.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
+    <Reference Include="Microsoft.Extensions.Configuration.Abstractions, Version=3.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.Extensions.Configuration.Abstractions.3.0.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Extensions.Configuration.Binder, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Microsoft.Extensions.Configuration.Binder.2.2.4\lib\netstandard2.0\Microsoft.Extensions.Configuration.Binder.dll</HintPath>
+    <Reference Include="Microsoft.Extensions.Configuration.Binder, Version=3.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.Extensions.Configuration.Binder.3.0.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.Binder.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Extensions.Configuration.FileExtensions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Microsoft.Extensions.Configuration.FileExtensions.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.FileExtensions.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Extensions.Configuration.Json, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Microsoft.Extensions.Configuration.Json.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection, Version=3.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.Extensions.DependencyInjection.3.0.0\lib\net461\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=3.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.3.0.0\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Extensions.FileProviders.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Microsoft.Extensions.FileProviders.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.Extensions.FileProviders.Abstractions.dll</HintPath>
@@ -115,8 +121,17 @@
     <Reference Include="Microsoft.Extensions.FileSystemGlobbing, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Microsoft.Extensions.FileSystemGlobbing.2.2.0\lib\netstandard2.0\Microsoft.Extensions.FileSystemGlobbing.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Extensions.Primitives, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Microsoft.Extensions.Primitives.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
+    <Reference Include="Microsoft.Extensions.Logging, Version=3.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.Extensions.Logging.3.0.0\lib\netstandard2.0\Microsoft.Extensions.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=3.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.Extensions.Logging.Abstractions.3.0.0\lib\netstandard2.0\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Options, Version=3.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.Extensions.Options.3.0.0\lib\netstandard2.0\Microsoft.Extensions.Options.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Primitives, Version=3.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.Extensions.Primitives.3.0.0\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Owin, Version=4.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Microsoft.Owin.4.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
@@ -168,6 +183,9 @@
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\System.Buffers.4.5.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
     </Reference>
+    <Reference Include="System.ComponentModel.Annotations, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.ComponentModel.Annotations.4.6.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
+    </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
@@ -191,8 +209,8 @@
     <Reference Include="System.Reactive, Version=4.1.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\System.Reactive.4.1.6\lib\net46\System.Reactive.dll</HintPath>
     </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.5.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Runtime.CompilerServices.Unsafe.4.6.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -253,73 +271,113 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\ConfigurationSource.cs" />
-    <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\AutofacConfig.cs" />
-    <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\DiagnosticsController.cs" />
-    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\InterviewCommandsController.cs" />
     <Compile Include="Controllers\InterviewDataController.cs" />
-    <Compile Include="Controllers\MultimediaController.cs" />
-    <Compile Include="Controllers\ScenariosApiController.cs" />
-    <Compile Include="Infrastructure\AppDomainSpecific\CurrentInterview.cs" />
-    <Compile Include="Infrastructure\AppDomainSpecific\IWebTesterTranslationStorage.cs" />
-    <Compile Include="Infrastructure\AppDomainSpecific\PrivateSettersResolver.cs" />
-    <Compile Include="Infrastructure\AppDomainSpecific\IWebTesterTranslationService.cs" />
-    <Compile Include="Infrastructure\AppDomainSpecific\WebTesterAppDomainModule.cs" />
-    <Compile Include="Infrastructure\AppDomainSpecific\WebTesterQuestionnaireStorage.cs" />
-    <Compile Include="Infrastructure\AppDomainSpecific\WebTesterTranslationService.cs" />
-    <Compile Include="Infrastructure\AppDomainSpecific\WebTesterTranslationStorage.cs" />
-    <Compile Include="Infrastructure\IScenarioSerializer.cs" />
-    <Compile Include="Infrastructure\NoScopeInScopeExecutor.cs" />
-    <Compile Include="Infrastructure\WebTesterCommandService.cs" />
-    <Compile Include="Infrastructure\WebTesterStatefulInterview.cs" />
-    <Compile Include="Services\IInterviewFactory.cs" />
-    <Compile Include="Services\Implementation\AppdomainsPerInterviewManager.cs" />
-    <Compile Include="Services\IAppdomainsPerInterviewManager.cs" />
-    <Compile Include="Services\ICacheStorage.cs" />
-    <Compile Include="Services\IEvictionObservable.cs" />
-    <Compile Include="Services\IEvictionNotifier.cs" />
-    <Compile Include="Services\Implementation\WebTesterAudioFileStorage.cs" />
-    <Compile Include="Services\Implementation\WebTesterInterviewFileStorage.cs" />
-    <Compile Include="Services\Implementation\QuestionnaireImportService.cs" />
-    <Compile Include="Services\Implementation\RemoteInterviewContainer.cs" />
-    <Compile Include="Services\IQuestionnaireImportService.cs" />
-    <Compile Include="Services\Implementation\TokenEviction.cs" />
-    <Compile Include="Services\Implementation\WebTesterAggregateRootRepository.cs" />
-    <Compile Include="Services\MetricsService.cs" />
-    <Compile Include="Services\MultimediaFile.cs" />
-    <Compile Include="Controllers\WebInterviewResourcesController.cs" />
-    <Compile Include="Controllers\WebTesterController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Hub\WebInterviewHub.cs" />
-    <Compile Include="Infrastructure\AppDomainSpecific\WebTesterQuestionnaireAssemblyAccessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resources\Common.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Common.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Services\IDesignerWebTesterApi.cs" />
-    <Compile Include="Services\Implementation\InMemoryCacheStorage.cs" />
-    <Compile Include="Services\Implementation\TranslationStorage.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="Infrastructure\WebTesterEventStore.cs" />
-    <Compile Include="WebTesterModule.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\**\*.*" />
-    <Content Include="ErrorPages\genericError.html" />
+    <Content Include="Content\Build\markup-web-interview.css" />
+    <Content Include="Content\Build\markup.css" />
+    <Content Include="Content\Dist\hq.js" />
+    <Content Include="Content\Dist\locale\webtester\ar.215c4d375c25.json" />
+    <Content Include="Content\Dist\locale\webtester\ar.50aa6e301b60.json" />
+    <Content Include="Content\Dist\locale\webtester\ar.ecc9159ced4a.json" />
+    <Content Include="Content\Dist\locale\webtester\en.7170fc6466c4.json" />
+    <Content Include="Content\Dist\locale\webtester\en.8e8c8a56bee0.json" />
+    <Content Include="Content\Dist\locale\webtester\en.c8e3d64e7a60.json" />
+    <Content Include="Content\Dist\locale\webtester\es.224d46e8941e.json" />
+    <Content Include="Content\Dist\locale\webtester\es.864231e27a5d.json" />
+    <Content Include="Content\Dist\locale\webtester\es.d1f4cff9b6eb.json" />
+    <Content Include="Content\Dist\locale\webtester\fr.4af09766aad7.json" />
+    <Content Include="Content\Dist\locale\webtester\fr.4f5021b4b535.json" />
+    <Content Include="Content\Dist\locale\webtester\fr.d378fd5da43d.json" />
+    <Content Include="Content\Dist\locale\webtester\ka.0bb98bc0d9e1.json" />
+    <Content Include="Content\Dist\locale\webtester\ka.2758fd9f01fe.json" />
+    <Content Include="Content\Dist\locale\webtester\ka.b0f46fe0b125.json" />
+    <Content Include="Content\Dist\locale\webtester\pt.0d247f1c4667.json" />
+    <Content Include="Content\Dist\locale\webtester\pt.35e10f785f46.json" />
+    <Content Include="Content\Dist\locale\webtester\pt.dba5c4f30845.json" />
+    <Content Include="Content\Dist\locale\webtester\ro.605527a4a89b.json" />
+    <Content Include="Content\Dist\locale\webtester\ro.a8c535de7da6.json" />
+    <Content Include="Content\Dist\locale\webtester\ro.e4beee78319c.json" />
+    <Content Include="Content\Dist\locale\webtester\ru.217d8e0476ec.json" />
+    <Content Include="Content\Dist\locale\webtester\ru.34a2987f62c2.json" />
+    <Content Include="Content\Dist\locale\webtester\ru.7d5d02438923.json" />
+    <Content Include="Content\Dist\locale\webtester\uk-UA.212c2523ea4d.json" />
+    <Content Include="Content\Dist\locale\webtester\uk-UA.577eb74be7f7.json" />
+    <Content Include="Content\Dist\locale\webtester\uk-UA.d563ea374dc7.json" />
+    <Content Include="Content\Dist\locale\webtester\zh.31d257512f3f.json" />
+    <Content Include="Content\Dist\locale\webtester\zh.4aa4775d923f.json" />
+    <Content Include="Content\Dist\locale\webtester\zh.aec8ae61a8c1.json" />
+    <Content Include="Content\Dist\questions.js" />
+    <Content Include="Content\Dist\report.js" />
+    <Content Include="Content\Dist\review.js" />
+    <Content Include="Content\Dist\vendors~questions.js" />
+    <Content Include="Content\Dist\vendors~report.js" />
+    <Content Include="Content\Dist\vendors~review.js" />
+    <Content Include="Content\Dist\webinterview.js" />
+    <Content Include="Content\Dist\webtester.js" />
+    <Content Include="Content\Fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\Fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\Fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\Fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\Fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Content\Fonts\RobotoBold.svg" />
+    <Content Include="Content\Fonts\RobotoBold.ttf" />
+    <Content Include="Content\Fonts\RobotoBold.woff" />
+    <Content Include="Content\Fonts\RobotoBold.woff2" />
+    <Content Include="Content\Fonts\RobotoItalic.svg" />
+    <Content Include="Content\Fonts\RobotoItalic.ttf" />
+    <Content Include="Content\Fonts\RobotoItalic.woff" />
+    <Content Include="Content\Fonts\RobotoItalic.woff2" />
+    <Content Include="Content\Fonts\RobotoLight.svg" />
+    <Content Include="Content\Fonts\RobotoLight.ttf" />
+    <Content Include="Content\Fonts\RobotoLight.woff" />
+    <Content Include="Content\Fonts\RobotoLight.woff2" />
+    <Content Include="Content\Fonts\RobotoMedium.svg" />
+    <Content Include="Content\Fonts\RobotoMedium.ttf" />
+    <Content Include="Content\Fonts\RobotoMedium.woff" />
+    <Content Include="Content\Fonts\RobotoMedium.woff2" />
+    <Content Include="Content\Fonts\RobotoRegular.svg" />
+    <Content Include="Content\Fonts\RobotoRegular.ttf" />
+    <Content Include="Content\Fonts\RobotoRegular.woff" />
+    <Content Include="Content\Fonts\RobotoRegular.woff2" />
+    <Content Include="Content\Fonts\TrebuchetMS.svg" />
+    <Content Include="Content\Fonts\TrebuchetMS.ttf" />
+    <Content Include="Content\Fonts\TrebuchetMS.woff" />
+    <Content Include="Content\Fonts\TrebuchetMS.woff2" />
+    <Content Include="Content\Fonts\TrebuchetMSBold.svg" />
+    <Content Include="Content\Fonts\TrebuchetMSBold.ttf" />
+    <Content Include="Content\Fonts\TrebuchetMSBold.woff" />
+    <Content Include="Content\Fonts\TrebuchetMSBold.woff2" />
+    <Content Include="Content\Fonts\ufonts_com_lucidaconsole.svg" />
+    <Content Include="Content\Fonts\ufonts_com_lucidaconsole.ttf" />
+    <Content Include="Content\Fonts\ufonts_com_lucidaconsole.woff" />
+    <Content Include="Content\Fonts\ufonts_com_lucidaconsole.woff2" />
+    <Content Include="Content\Img\back-to-parrent-1-no-animation-1.png" />
+    <Content Include="Content\Img\back-to-parrent-1-no-animation-2.png" />
+    <Content Include="Content\Img\back-to-parrent-1-no-animation-3.png" />
+    <Content Include="Content\Img\back-to-parrent-1-no-animation-4.png" />
+    <Content Include="Content\Img\error2.svg" />
+    <Content Include="Content\Img\icon-mic-1x.png" />
+    <Content Include="Content\Img\icon-mic-2x.png" />
+    <Content Include="Content\Img\instruction.svg" />
+    <Content Include="Content\Img\language.png" />
+    <Content Include="Content\Img\logo.png" />
+    <Content Include="Content\Img\padlock-1dp.png" />
+    <Content Include="Content\Img\padlock-3dp.png" />
+    <Content Include="Content\Img\questionnaire-sprite.png" />
+    <Content Include="Content\Img\questionnaire-sprite2k.png" />
+    <Content Include="Content\Img\question_background_disabled_tile.png" />
+    <Content Include="Content\Img\warning2.svg" />
+    <Content Include="Content\Styles\markup-56f471627b.min.css" />
+    <Content Include="Content\Styles\markup-5e9c61410e.min.css" />
+    <Content Include="Content\Styles\markup-web-interview-e458a0c901.min.css" />
     <Content Include="Global.asax" />
-    <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\WebTester\Interview.cshtml" />
-    <Content Include="Views\Web.config">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -334,19 +392,9 @@
     <Folder Include="App_Data\Elmah\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Configuration\config.json" />
-    <Content Include="Configuration\config.override.json" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="Views\ApiTest\Index.cshtml" />
-    <Content Include="Views\ApiTest\Test.cshtml" />
-    <Content Include="Views\Shared\partial.webtester.cshtml" />
-    <Content Include="Views\WebTester\Run.cshtml" />
-    <Content Include="Views\Error\QuestionnaireWithErrors.cshtml" />
-    <Content Include="Views\Error\NotFound.cshtml" />
-    <Content Include="Views\Error\_ErrorLayout.cshtml" />
-    <Content Include="Views\WebTester\InterviewLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
@@ -381,17 +429,6 @@
       <Project>{75470164-4087-4e9b-845a-5400c038a499}</Project>
       <Name>WB.UI.Shared.Web</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Common.fr.resx" />
-    <EmbeddedResource Include="Resources\Common.ro.resx" />
-    <EmbeddedResource Include="Resources\Common.ru.resx" />
-    <EmbeddedResource Include="Resources\Common.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Common.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Common.zh.resx" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
