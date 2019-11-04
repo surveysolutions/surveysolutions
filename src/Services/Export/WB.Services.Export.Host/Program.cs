@@ -115,40 +115,42 @@ namespace WB.Services.Export.Host
 
         public static IHostBuilder CreateWebHostBuilder(string[] args)
         {
-            var host = Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args);
-            host.ConfigureLogging((hosting, logging) =>
-            {
-                var logConfig = new LoggerConfiguration();
-                logConfig.Enrich.WithProperty("Environment", hosting.HostingEnvironment.EnvironmentName);
-                logConfig.WriteTo.Console(LogEventLevel.Debug);
-                logConfig.Destructure.ByMaskingProperties("Password", "ArchivePassword");
-
-                ConfigureSerilog(logConfig, hosting.Configuration);
-
-                Log.Logger = logConfig.CreateLogger();
-
-                if (!hosting.HostingEnvironment.IsDevelopment())
+            return Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args)
+                .ConfigureLogging((hosting, logging) =>
                 {
-                    logging.ClearProviders();
-                }
-            });
+                    var logConfig = new LoggerConfiguration();
+                    logConfig.Enrich.WithProperty("Environment", hosting.HostingEnvironment.EnvironmentName);
+                    logConfig.WriteTo.Console(LogEventLevel.Debug);
+                    logConfig.Destructure.ByMaskingProperties("Password", "ArchivePassword");
 
+                    ConfigureSerilog(logConfig, hosting.Configuration);
 
-            host.ConfigureWebHostDefaults(web =>
-            {
-                web.UseStartup<Startup>();
-                web.ConfigureAppConfiguration(c =>
+                    Log.Logger = logConfig.CreateLogger();
+
+                    if (!hosting.HostingEnvironment.IsDevelopment())
+                    {
+                        logging.ClearProviders();
+                    }
+                })
+                .ConfigureWebHostDefaults(web =>
                 {
-                    c.AddJsonFile($"appsettings.{Environment.MachineName}.json", true);
-                    c.AddJsonFile($"appsettings.Production.json", true);
+                    if (!args.Contains("--kestrel"))
+                    {
+                        web.UseHttpSys();
+                    }
 
-                    c.AddCommandLine(args);
+                    web.UseStartup<Startup>();
+                    web.ConfigureAppConfiguration(c =>
+                    {
+                        c.AddJsonFile($"appsettings.{Environment.MachineName}.json", true);
+                        c.AddJsonFile($"appsettings.Cloud.json", true);
+                        c.AddJsonFile($"appsettings.Production.json", true);
+
+                        c.AddCommandLine(args);
+                    });
+
+                    //  web.UseSerilog();
                 });
-
-                //  web.UseSerilog();
-            });
-
-            return host;
         }
 
         // pid file - is a file that is exists only while process is alive and contains own process id
