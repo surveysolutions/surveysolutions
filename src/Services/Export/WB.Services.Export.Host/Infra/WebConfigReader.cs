@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -71,19 +72,48 @@ namespace WB.Services.Export.Host.Infra
 
         private static void FillConnectionString(IConfiguration configuration, XDocument config, ILogger logger)
         {  
-            var connectionStrings = config.Element("configuration")?.Element("connectionStrings");
-            if (connectionStrings == null) return;
-
-            var connectionString = connectionStrings
-                .Elements("add")
-                ?.FirstOrDefault(e => e.Attribute("name")?.Value == "Postgres")
-                ?.Attribute("connectionString")
-                ?.Value;
+            var connectionString = GetConnectionString(config);
 
             if (string.IsNullOrWhiteSpace(connectionString)) return;
 
             configuration.GetSection("ConnectionStrings")["DefaultConnection"] = connectionString;
-            logger.LogDebug("Using connections string: {connectionString}", connectionString);
+
+            var connectionStringWithOutPassword = Regex.Replace(connectionString, "password=[^;]*", "Password=***", RegexOptions.IgnoreCase);
+            logger.LogDebug("Using connections string: {connectionString}", connectionStringWithOutPassword);
+        }
+
+        private static string GetConnectionString(XDocument config)
+        {
+            var connectionStrings = config.Element("configuration")?.Element("connectionStrings");
+            var connectionString = connectionStrings?.Elements("add")
+                ?.FirstOrDefault(e => e.Attribute("name")?.Value == "Postgres")
+                ?.Attribute("connectionString")
+                ?.Value;
+            return connectionString;
+        }
+
+        public static string ReadConnectionStringFromWebConfig(string webConfigsPath, ILogger logger)
+        {
+            foreach (var webConfigPath in webConfigsPath.Split(';').Reverse())
+            {
+                if (File.Exists(webConfigPath))
+                {
+                    try
+                    {
+                        var xml = XDocument.Load(webConfigPath);
+                        var connectionString = GetConnectionString(xml);
+                        if (!string.IsNullOrWhiteSpace(connectionString))
+                            return connectionString;
+                    }
+                    catch (Exception e)
+                    {
+                        logger?.LogError(e, "Were not able to read connection string from web.config");
+                        throw;
+                    }
+                }
+            }
+
+            return null;
         }
     }
 }

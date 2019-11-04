@@ -28,6 +28,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
         private readonly IHttpStatistician httpStatistician;
         private readonly IHttpClientFactory httpClientFactory;
         private readonly IFastBinaryFilesHttpHandler fileDownloader;
+        private ILogger logger;
 
         public RestService(
             IRestServiceSettings restServiceSettings,
@@ -36,7 +37,9 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             IStringCompressor stringCompressor,
             IRestServicePointManager restServicePointManager,
             IHttpStatistician httpStatistician,
-            IHttpClientFactory httpClientFactory, IFastBinaryFilesHttpHandler fileDownloader)
+            IHttpClientFactory httpClientFactory, 
+            IFastBinaryFilesHttpHandler fileDownloader,
+            ILogger logger)
         {
             this.restServiceSettings = restServiceSettings;
             this.networkService = networkService;
@@ -45,6 +48,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             this.httpStatistician = httpStatistician;
             this.httpClientFactory = httpClientFactory;
             this.fileDownloader = fileDownloader;
+            this.logger = logger;
 
             if (this.restServiceSettings.AcceptUnsignedSslCertificate)
                 restServicePointManager?.AcceptUnsignedSslCertificate();
@@ -126,7 +130,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
                 if (forceNoCache)
                 {
-                    request.Headers.CacheControl = new CacheControlHeaderValue() { NoCache = true };
+                    request.Headers.CacheControl = new CacheControlHeaderValue { NoCache = true };
                 }
 
                 if (credentials?.Token != null)
@@ -152,6 +156,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 var httpResponseMessage = await
                     httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, linkedCancellationTokenSource.Token)
                         .ConfigureAwait(false);
+                this.logger.Debug($"Executed web request url: {request.RequestUri}, response code: {httpResponseMessage.StatusCode}");
 
                 if (httpResponseMessage.IsSuccessStatusCode
                     || httpResponseMessage.StatusCode == HttpStatusCode.NotModified
@@ -164,11 +169,13 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             }
             catch (OperationCanceledException ex)
             {
+                this.logger.Debug("OperationCanceledException", ex);
                 // throwed when receiving bytes in ReceiveBytesWithProgressAsync method and user canceling request
                 throw new RestException("Request canceled by user", type: RestExceptionType.RequestCanceledByUser, innerException: ex);
             }
             catch (ExtendedMessageHandlerException ex)
             {
+                this.logger.Debug("ExtendedMessageHandlerException", ex);
                 if (ex.GetSelfOrInnerAs<TaskCanceledException>() != null || ex.GetSelfOrInnerAs<OperationCanceledException>() != null)
                 {
                     if (requestTimeoutToken.IsCancellationRequested)
@@ -252,10 +259,10 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
         public async Task<T> GetAsync<T>(string url,
             IProgress<TransferProgress> transferProgress, object queryString = null,
-            RestCredentials credentials = null, CancellationToken? token = null)
+            RestCredentials credentials = null, Dictionary<string, string> customHeaders = null, CancellationToken ? token = null)
         {
             var response = await this.ExecuteRequestAsync(url: url, queryString: queryString, credentials: credentials, method: HttpMethod.Get,
-                userCancellationToken: token, request: null);
+                userCancellationToken: token, request: null, customHeaders: customHeaders);
 
             return await this.ReceiveCompressedJsonWithProgressAsync<T>(response: response, token: token ?? default(CancellationToken),
                 transferProgress: transferProgress);

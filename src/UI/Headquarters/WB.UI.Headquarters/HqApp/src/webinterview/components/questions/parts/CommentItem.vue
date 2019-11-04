@@ -14,7 +14,7 @@
         props: {
             userRole: {
                 required: true,
-                type: Number
+                type: String
             },
             text: {
                 required: true,
@@ -45,16 +45,16 @@
                 if (this.isOwnComment == true) {
                     return this.$t("WebInterviewUI.CommentYours")
                 }
-                if (this.userRole == 1 /*'Administrator'*/) {
+                if (this.userRole == 'Administrator') {
                     return this.$t("WebInterviewUI.CommentAdmin") // "Admin comment"
                 }
-                if (this.userRole == 2/*'Supervisor'*/) {
+                if (this.userRole == 'Supervisor') {
                     return this.$t("WebInterviewUI.CommentSupervisor") // "Supervisor comment"
                 }
-                if (this.userRole == 4/*'Interviewer'*/) {
+                if (this.userRole == 'Interviewer') {
                     return this.$t("WebInterviewUI.CommentInterviewer") // "Interviewer comment"
                 }
-                if (this.userRole == 6/*'Headquarter'*/) {
+                if (this.userRole == 'Headquarter') {
                     return this.$t("WebInterviewUI.CommentHeadquarters") // "Headquarters comment"
                 }
 

@@ -154,13 +154,14 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             LogResume(interview);
-            return this.View("Index", GetInterviewModel(webInterviewConfig));
+            return this.View("Index", GetInterviewModel(id, webInterviewConfig));
         }
 
-        private WebInterviewIndexPageModel GetInterviewModel(WebInterviewConfig webInterviewConfig)
+        private WebInterviewIndexPageModel GetInterviewModel(string interviewId, WebInterviewConfig webInterviewConfig)
         {
             return new WebInterviewIndexPageModel
             {
+                Id = interviewId,
                 AskForEmail = Request.Cookies.Get(AskForEmail)?.Value ?? "false",
                 CustomMessages = webInterviewConfig.CustomMessages
             };
@@ -383,7 +384,7 @@ namespace WB.UI.Headquarters.Controllers
 
             LogResume(interview);
 
-            return View("Index", GetInterviewModel(webInterviewConfig));
+            return View("Index", GetInterviewModel(id, webInterviewConfig));
         }
 
         private void LogResume(IStatefulInterview statefulInterview)
@@ -486,7 +487,7 @@ namespace WB.UI.Headquarters.Controllers
                 return this.RedirectToAction("Resume", routeValues: new { id, returnUrl });
             }
 
-            return View("Index", GetInterviewModel(webInterviewConfig));
+            return View("Index", GetInterviewModel(id, webInterviewConfig));
         }
 
         [HttpPost]

@@ -59,6 +59,11 @@ namespace WB.Core.Infrastructure.Implementation
             return GetById((object) id);
         }
 
+        public bool HasNotEmptyValue(string id)
+        {
+            return this.inMemoryStorage.ContainsKey(id) && this.inMemoryStorage[id] != null;
+        }
+
         public void Remove(string id)
         {
             Remove((object)id);

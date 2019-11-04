@@ -3,13 +3,14 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
+using WB.Core.BoundedContexts.Headquarters.Designer;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.Api;
+using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
@@ -17,22 +18,18 @@ namespace WB.UI.Headquarters.Controllers
     [Authorize(Roles = "Administrator, Headquarter")]
     [ApiValidationAntiForgeryToken]
     public class DesignerQuestionnairesApiController : BaseApiController
-    {
-    
-        private readonly string apiPrefix = @"/api/hq";
-        private readonly string apiVersion = @"v3";
-        
-        private readonly IRestService restService;
+    {   
+        private readonly IDesignerApi designerApi;
         private readonly DesignerUserCredentials designerUserCredentials;
 
         public DesignerQuestionnairesApiController(
             ICommandService commandService, 
             ILogger logger, 
-            IRestService restService,
+            IDesignerApi designerApi,
             DesignerUserCredentials designerUserCredentials)
             : base(commandService, logger)
         {
-            this.restService = restService;
+            this.designerApi = designerApi;
             this.designerUserCredentials = designerUserCredentials;
         }
 
@@ -42,16 +39,13 @@ namespace WB.UI.Headquarters.Controllers
         {
             try
             {
-                var list = await this.restService.GetAsync<PagedQuestionnaireCommunicationPackage>(
-                    url: $@"{this.apiPrefix}/{this.apiVersion}/questionnaires",
-                    credentials: this.designerUserCredentials.Get(),
-                    queryString: new
-                    {
-                        PageIndex = request.PageIndex,
-                        PageSize = request.PageSize,
-                        SortOrder = request.GetSortOrder(),
-                        Filter = request.Search.Value
-                    });
+                var list = await this.designerApi.GetQuestionnairesList(new DesignerQuestionnairesListFilter
+                {
+                    PageIndex = request.PageIndex,
+                    PageSize = request.PageSize,
+                    SortOrder = request.GetSortOrder(),
+                    Filter = request.Search.Value
+                });
 
                 return new DataTableResponse<QuestionnaireToBeImported>
                 {

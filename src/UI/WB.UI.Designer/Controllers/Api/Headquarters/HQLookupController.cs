@@ -1,13 +1,15 @@
 using System;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.UI.Designer.Code.Attributes;
 
-namespace WB.UI.Designer.Api.Headquarters
+namespace WB.UI.Designer.Controllers.Api.Headquarters
 {
-    [ApiBasicAuth(onlyAllowedAddresses: true)]
+    [Authorize]
+    [AllowOnlyFromWhitelistIP]
     [Route("api/hq/lookup")]
     public class HQLookupController : ControllerBase
     {

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -29,6 +31,7 @@ using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.Versions;
 using WB.Infrastructure.Native.Files;
 using WB.UI.Designer.Code;
+using WB.UI.Designer.Code.Attributes;
 using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.CommonWeb;
 using WB.UI.Designer.DependencyInjection;
@@ -92,16 +95,41 @@ namespace WB.UI.Designer
                     Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<IPasswordHasher<DesignerIdentityUser>, PasswordHasher>();
-            services.AddDefaultIdentity<DesignerIdentityUser>()
+            services
+                .AddDefaultIdentity<DesignerIdentityUser>()
                 .AddRoles<DesignerIdentityRole>()
                 .AddEntityFrameworkStores<DesignerDbContext>();
+
+            services
+                .AddAuthentication(sharedOptions =>
+                {
+                    sharedOptions.DefaultScheme = "boc";
+                    sharedOptions.DefaultChallengeScheme = "boc";
+                })
+                .AddPolicyScheme("boc", "Basic or cookie", options =>
+                {
+                    options.ForwardDefaultSelector = context =>
+                    {
+                        if (context.Request.Headers.ContainsKey("Authorization"))
+                        {
+                            return "basic";
+                        }
+
+                        return IdentityConstants.ApplicationScheme;
+                    };
+                })
+                .AddScheme<BasicAuthenticationSchemeOptions, BasicAuthenticationHandler>("basic",
+                    opts => { opts.Realm = "mysurvey.solutions"; });
+
             services.AddRouting(options => options.LowercaseUrls = true);
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+            services.AddMvc()                    
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddJsonOptions(options =>
                 {
                     options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                     options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
-                });
+                })
+                .AddMvcOptions(options => options.ModelBinderProviders.Insert(0, new QuestionnaireRevisionBinderProvider()));
 
             services.AddCors(corsOpt =>
             {
@@ -138,6 +166,7 @@ namespace WB.UI.Designer
             services.AddTransient<ICaptchaProtectedAuthenticationService, CaptchaProtectedAuthenticationService>();
             services.AddSingleton<IProductVersion, ProductVersion>();
             services.AddTransient<IProductVersionHistory, ProductVersionHistory>();
+            services.AddTransient<IBasicAuthenticationService, BasicBasicAuthenticationService>();
 
             services.Configure<CaptchaConfig>(Configuration.GetSection("Captcha"));
             services.Configure<RecaptchaSettings>(Configuration.GetSection("Captcha"));
@@ -242,7 +271,8 @@ namespace WB.UI.Designer
                     new CultureInfo("fr"),
                     new CultureInfo("es"),
                     new CultureInfo("ar"),
-                    new CultureInfo("zh")
+                    new CultureInfo("zh"),
+                    new CultureInfo("sq")
                 };
             });
 

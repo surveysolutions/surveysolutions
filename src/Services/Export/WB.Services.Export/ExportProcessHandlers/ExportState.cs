@@ -3,7 +3,7 @@ using WB.Services.Export.Services.Processing;
 
 namespace WB.Services.Export.ExportProcessHandlers
 {
-    internal class ExportState
+    public class ExportState
     {
         public ExportState(DataExportProcessArgs args)
         {

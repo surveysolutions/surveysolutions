@@ -82,6 +82,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 step.Context = context;
+                this.logger.Trace($"Executing synchronization step {step.GetType().Name}");
                 await step.ExecuteAsync();
             }
         }

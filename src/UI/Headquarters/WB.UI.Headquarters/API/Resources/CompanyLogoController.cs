@@ -13,6 +13,7 @@ namespace WB.UI.Headquarters.API.Resources
 {
     [Localizable(false)]
     [AllowAnonymous]
+    [RoutePrefix("api/CompanyLogo")]
     public class CompanyLogoController : ApiController
     {
         private readonly IPlainKeyValueStorage<CompanyLogo> appSettingsStorage;
@@ -27,6 +28,7 @@ namespace WB.UI.Headquarters.API.Resources
         }
 
         [HttpGet]
+        [Route("Thumbnail")]
         public HttpResponseMessage Thumbnail()
         {
             var companyLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey);
@@ -55,6 +57,7 @@ namespace WB.UI.Headquarters.API.Resources
         }
 
         [HttpGet]
+        [Route("ThumbnailOrDefault")]
         public HttpResponseMessage ThumbnailOrDefault()
         {
             var companyLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey);
