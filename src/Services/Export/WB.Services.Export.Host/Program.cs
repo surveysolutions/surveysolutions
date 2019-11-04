@@ -9,6 +9,7 @@ using Masking.Serilog;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Hosting.WindowsServices;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
@@ -32,17 +33,21 @@ namespace WB.Services.Export.Host
                     Console.WriteLine(eventArgs.ExceptionObject.ToString());
                     Log.Logger.Fatal("Unhandled exception occur {exception}", new[] { eventArgs.ExceptionObject.ToString() });
                 };
-
+                
                 var pathToExe = Process.GetCurrentProcess().MainModule.FileName;
                 var pathToContentRoot = Path.GetDirectoryName(pathToExe);
-
+                
                 Directory.SetCurrentDirectory(pathToContentRoot);
                 OpenPIDFile();
 
-                await CreateWebHostBuilder(args)
-                    .UseWindowsService()
-                    .Build()
-                    .RunAsync();
+                var host = CreateWebHostBuilder(args).UseWindowsService();
+                
+                if (WindowsServiceHelpers.IsWindowsService())
+                {
+                    host = host.UseContentRoot(pathToContentRoot);
+                }
+
+                await host.Build().RunAsync();
             }
             catch (Exception ex)
             {
