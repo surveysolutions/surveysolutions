@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNet.SignalR;
-using WB.Core.GenericSubdomains.Portable;
+using Microsoft.AspNetCore.SignalR;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Enumerator.Native.WebInterview.Pipeline;
@@ -13,14 +13,14 @@ namespace WB.Enumerator.Native.WebInterview
     {
         private readonly IPipelineModule[] hubPipelineModules;
 
-        protected string CallerInterviewId => this.Context.QueryString[@"interviewId"];
+        protected string CallerInterviewId => this.Context.Items[@"interviewId"] as string;
 
         protected WebInterview(IPipelineModule[] hubPipelineModules)
         {
             this.hubPipelineModules = hubPipelineModules;
         }
 
-        public override async Task OnConnected()
+        public override async Task OnConnectedAsync()
         {
             await RegisterClient();
 
@@ -28,62 +28,65 @@ namespace WB.Enumerator.Native.WebInterview
             {
                 await pipelineModule.OnConnected(this);
             }
-            await base.OnConnected();
+
+            await base.OnConnectedAsync();
         }
 
-        public override async Task OnDisconnected(bool stopCalled)
+        public override async Task OnDisconnectedAsync(Exception exception)
         {
             foreach (var pipelineModule in hubPipelineModules)
             {
-                await pipelineModule.OnDisconnected(this, stopCalled);
+                await pipelineModule.OnDisconnected(this, exception);
             }
             
             await UnregisterClient();
 
-            await base.OnDisconnected(stopCalled);
+            await base.OnDisconnectedAsync(exception);
         }
 
-        public override async Task OnReconnected()
+        /*public override async Task OnReconnected()
         {
             foreach (var pipelineModule in hubPipelineModules)
             {
                 await pipelineModule.OnReconnected(this);
             }
             await base.OnReconnected();
-        }
+        }*/
 
         private async Task RegisterClient()
         {
             var interviewId = CallerInterviewId;
 
-            await Groups.Add(Context.ConnectionId, interviewId);
+            await Groups.AddToGroupAsync(Context.ConnectionId, interviewId);
 
-            var isReview = Context.QueryString[@"review"].ToBool(false);
+            var isReview = Context.Items[@"review"] as bool?;//.ToBool(false);
 
-            if (!isReview)
+            if (isReview == false)
             {
-                Clients.OthersInGroup(interviewId).closeInterview();
+                await Clients.OthersInGroup(interviewId).SendCoreAsync("closeInterview", null, CancellationToken.None);
             }
         }
 
         private async Task UnregisterClient()
         {
             var interviewId = CallerInterviewId;
-            var sectionId = Clients.CallerState.sectionId as string;
+            var sectionId = this.Context.Items["sectionId"] as string;
+            //var sectionId = Clients.CallerState.sectionId as string;
 
-            await Groups.Remove(Context.ConnectionId, GetGroupNameBySectionIdentity(sectionId, interviewId));
-            await Groups.Remove(Context.ConnectionId, interviewId);
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, GetGroupNameBySectionIdentity(sectionId, interviewId));
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, interviewId);
         }
 
         public async Task ChangeSection(string oldSection)
         {
             var interviewId = CallerInterviewId;
-            var sectionId = Clients.CallerState.sectionId as string;
+            var sectionId = this.Context.Items["sectionId"] as string;
+            //var sectionId = Clients.CallerState.sectionId as string;
 
             if (interviewId != null)
             {
-                await Groups.Remove(Context.ConnectionId, GetGroupNameBySectionIdentity(oldSection, interviewId));
-                await Groups.Add(Context.ConnectionId, GetGroupNameBySectionIdentity(sectionId, interviewId));
+                await Groups.RemoveFromGroupAsync(Context.ConnectionId, GetGroupNameBySectionIdentity(oldSection, interviewId));
+                await Groups.AddToGroupAsync(Context.ConnectionId, GetGroupNameBySectionIdentity(sectionId, interviewId));
             }
         }
 
