@@ -82,9 +82,6 @@ namespace WB.UI.Headquarters
 
             var applicationSecuritySection = settingsProvider.GetSection<HqSecuritySection>(@"applicationSecurity");
 
-            new FluentMigratorInitializer(settingsProvider.ConnectionStrings[dbConnectionStringName].ConnectionString, "users", 
-                DbUpgradeSettings.FromFirstMigration<M001_AddUsersHqIdentityModel>()).InitializeDatabase();
-
             UnitOfWorkConnectionSettings connectionSettings = new UnitOfWorkConnectionSettings
             {
                 ConnectionString = settingsProvider.ConnectionStrings[dbConnectionStringName].ConnectionString,
@@ -97,7 +94,8 @@ namespace WB.UI.Headquarters
                 },
                 PlainStoreUpgradeSettings = new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_Init).Namespace),
                 ReadSideUpgradeSettings = new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_InitDb).Namespace),
-                LogsUpgradeSettings = new DbUpgradeSettings(typeof(M201905171139_AddErrorsTable).Assembly, typeof(M201905171139_AddErrorsTable).Namespace)
+                LogsUpgradeSettings = new DbUpgradeSettings(typeof(M201905171139_AddErrorsTable).Assembly, typeof(M201905171139_AddErrorsTable).Namespace),
+                UsersUpgradeSettings = DbUpgradeSettings.FromFirstMigration<M001_AddUsersHqIdentityModel>()
             };
             
             var eventStoreSettings = new PostgreConnectionSettings

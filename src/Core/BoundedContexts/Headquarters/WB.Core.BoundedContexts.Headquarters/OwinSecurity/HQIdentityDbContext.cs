@@ -77,13 +77,13 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
                 // Note that these relationships are configured with no navigation properties
 
                 // Each User can have many UserClaims
-                b.HasMany<HqUserClaim>().WithOne().HasForeignKey(uc => uc.UserId).IsRequired();
+                b.HasMany(x => x.Claims).WithOne().HasForeignKey(uc => uc.UserId).IsRequired();
 
                 // Each User can have many UserLogins
-                b.HasMany<HqUserLogin>().WithOne().HasForeignKey(ul => ul.UserId).IsRequired();
+                b.HasMany(x => x.Logins).WithOne().HasForeignKey(ul => ul.UserId).IsRequired();
 
                 // Each User can have many entries in the UserRole join table
-                b.HasMany<HqUserRole>().WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
+                b.HasMany(x => x.Roles).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
             });
 
             builder.Entity<HqUserClaim>(b =>
@@ -127,7 +127,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
                 // Note that these relationships are configured with no navigation properties
 
                 // Each Role can have many entries in the UserRole join table
-                b.HasMany<HqUserRole>().WithOne().HasForeignKey(ur => ur.RoleId).IsRequired();
+                b.HasMany(x => x.Users).WithOne().HasForeignKey(ur => ur.RoleId).IsRequired();
             });
 
             builder.Entity<HqUserRole>(b =>

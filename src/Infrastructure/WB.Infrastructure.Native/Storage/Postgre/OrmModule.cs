@@ -107,6 +107,30 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 }
             }
 
+            if (this.connectionSettings.UsersUpgradeSettings != null)
+            {
+                try
+                {
+                    status.Message = Modules.InitializingDb;
+                    DatabaseManagement.InitDatabase(this.connectionSettings.ConnectionString,
+                        this.connectionSettings.UsersSchemaName);
+
+                    status.Message = Modules.MigrateDb;
+                    DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString,
+                        this.connectionSettings.UsersSchemaName,
+                        this.connectionSettings.UsersUpgradeSettings);
+
+                    status.ClearMessage();
+                }
+                catch (Exception exc)
+                {
+                    status.Error(Modules.ErrorDuringRunningMigrations, exc);
+
+                    LogManager.GetLogger(nameof(OrmModule)).Fatal(exc, "Error during db initialization.");
+                    throw new InitializationException(Subsystem.Database, null, exc);
+                }
+            }
+
             return Task.CompletedTask;
         }
 
@@ -260,5 +284,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         public DbUpgradeSettings PlainStoreUpgradeSettings { get; set; }
         public DbUpgradeSettings LogsUpgradeSettings { get; set; }
         public string LogsSchemaName => "logs";
+        public DbUpgradeSettings UsersUpgradeSettings { get; set; }
+        public string UsersSchemaName => "users";
     }
 }
