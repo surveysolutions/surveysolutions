@@ -87,8 +87,13 @@ namespace WB.UI.Interviewer
 
         private void CheckAndProcessInterviewsWithoutViews()
         {
+            var settings = Mvx.IoCProvider.Resolve<IEnumeratorSettings>();
+            if (settings.DashboardViewsUpdated) return;
+
             var interviewsAccessor = Mvx.IoCProvider.Resolve<IInterviewerInterviewAccessor>();
-            interviewsAccessor.CheckAndProcessInterviewsWithoutViews();
+            interviewsAccessor.CheckAndProcessInterviewsToFixViews(false);
+            
+            settings.SetDashboardViewsUpdated(true);
         }
 
         private void UpdateNotificationsWorker()

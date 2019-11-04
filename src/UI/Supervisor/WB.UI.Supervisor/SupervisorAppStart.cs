@@ -37,9 +37,19 @@ namespace WB.UI.Supervisor
 
             this.migrationRunner.MigrateUp(this.GetType().Assembly, typeof(Encrypt_Data).Assembly);
 
-            this.CheckAndProcessInterviewsWithoutViews();
-
+            this.CheckAndProcessInterviews();
             return base.ApplicationStartup(hint);
+        }
+
+        private void CheckAndProcessInterviews()
+        {
+            var settings = Mvx.IoCProvider.Resolve<IEnumeratorSettings>();
+            if (settings.DashboardViewsUpdated) return;
+
+            var interviewsAccessor = Mvx.IoCProvider.Resolve<IInterviewerInterviewAccessor>();
+            interviewsAccessor.CheckAndProcessInterviewsToFixViews(true);
+
+            settings.SetDashboardViewsUpdated(true);
         }
 
         protected override Task NavigateToFirstViewModel(object hint = null)
@@ -53,12 +63,6 @@ namespace WB.UI.Supervisor
             {
                 return viewModelNavigation.NavigateToLoginAsync();
             }
-        }
-
-        private void CheckAndProcessInterviewsWithoutViews()
-        {
-            var interviewsAccessor = Mvx.IoCProvider.Resolve<IInterviewerInterviewAccessor>();
-            interviewsAccessor.CheckAndProcessInterviewsWithoutViews();
         }
     }
 }
