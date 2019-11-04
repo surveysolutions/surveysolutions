@@ -56,7 +56,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
                     userId));
             }
             
-            await EnsureClaimsLoaded(user);
+            await EnsureClaimsLoadedAsync(user);
             return user.Claims.Select(c => new Claim(c.ClaimType, c.ClaimValue)).ToList();
         }
 
@@ -183,9 +183,10 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             }
             if (user != null)
             {
-                await EnsureClaimsLoaded(user);
+                await EnsureClaimsLoadedAsync(user);
                 await EnsureLoginsLoaded(user);
-                await EnsureRolesLoaded(user);
+                await EnsureRolesLoadedAsync(user);
+                await EnsureProfileLoadedAsync(user);
             }
             return user;
         }
@@ -199,14 +200,9 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             }
         }
 
-        private bool AreClaimsLoaded(HqUser user)
+        private async Task EnsureClaimsLoadedAsync(HqUser user)
         {
-            return context.Entry(user).Collection(u => u.Claims).IsLoaded;
-        }
-
-        private async Task EnsureClaimsLoaded(HqUser user)
-        {
-            if (!AreClaimsLoaded(user))
+            if (!context.Entry(user).Collection(u => u.Claims).IsLoaded)
             {
                 var userId = user.Id;
                 await _userClaims.Where(uc => uc.UserId.Equals(userId)).LoadAsync();
@@ -214,7 +210,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             }
         }
 
-        private async Task EnsureRolesLoaded(HqUser user)
+        private async Task EnsureRolesLoadedAsync(HqUser user)
         {
             if (!context.Entry(user).Collection(u => u.Roles).IsLoaded)
             {
@@ -224,14 +220,15 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             }
         }
 
-        private bool AreLoginsLoaded(HqUser user)
+        private async Task EnsureProfileLoadedAsync(HqUser user)
         {
-            return context.Entry(user).Collection(u => u.Logins).IsLoaded;
+            if (!context.Entry(user).Reference(x => x.Profile).IsLoaded)
+                await context.Entry(user).Reference(x => x.Profile).LoadAsync();
         }
 
         private async Task EnsureLoginsLoaded(HqUser user)
         {
-            if (!AreLoginsLoaded(user))
+            if (!context.Entry(user).Collection(u => u.Logins).IsLoaded)
             {
                 var userId = user.Id;
                 await _logins.Where(uc => uc.UserId.Equals(userId)).LoadAsync();

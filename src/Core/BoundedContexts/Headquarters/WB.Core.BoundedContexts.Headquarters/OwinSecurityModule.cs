@@ -35,14 +35,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAuthorizedUser, AuthorizedUser>();
         }
 
-        public async Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
-        {
-            var hQPlainStorageDbContext = serviceLocator.GetInstance<HQPlainStorageDbContext>();
-            await hQPlainStorageDbContext.Database.MigrateAsync();
-
-            hQPlainStorageDbContext.DeviceSyncInfo.FirstOrDefault();
-            serviceLocator.GetInstance<HQIdentityDbContext>().Roles.FirstOrDefault();
-
-        }
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
+            => Task.CompletedTask;
     }
 }
