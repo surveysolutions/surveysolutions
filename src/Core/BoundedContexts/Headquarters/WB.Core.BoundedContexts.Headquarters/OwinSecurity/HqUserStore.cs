@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         /// <summary>
         ///     Returns an IQueryable of users
         /// </summary>
-        public IQueryable<HqUser> Users => _userStore.EntitySet;
+        public IQueryable<HqUser> Users => _userStore.EntitySet.Include("Profile").Include("Roles");
 
         public async Task<IList<string>> GetRolesAsync(Guid userId)
         {

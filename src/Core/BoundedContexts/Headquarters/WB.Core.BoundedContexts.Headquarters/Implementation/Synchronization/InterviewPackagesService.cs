@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Main.Core.Events;
 using Ncqrs.Eventing.Storage;
 using NHibernate;
@@ -13,6 +14,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Modularity;
@@ -213,7 +215,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                 //Uow would contain partial data
                 //so a new scope created
 
-                InScopeExecutor.Current.Execute((serviceLocator) =>
+                InScopeExecutor.Current.ExecuteAsync(async (IServiceLocator serviceLocator) =>
                 {
                     var interviewsLocal =
                         serviceLocator.GetInstance<IQueryableReadSideRepositoryReader<InterviewSummary>>();
@@ -249,11 +251,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     bool shouldChangeInterviewKey =
                         CheckIfInterviewKeyNeedsToBeChanged(interviewsLocal, interview.InterviewId, serializedEvents);
 
-                    bool shouldChangeSupervisorId = CheckIfInterviewerWasMovedToAnotherTeam(
+                    var result = await CheckIfInterviewerWasMovedToAnotherTeamAsync(
                         serviceLocator.GetInstance<IUserRepository>(),
-                        interview.ResponsibleId, serializedEvents, out Guid? newSupervisorId);
+                        interview.ResponsibleId, serializedEvents);
 
-                    if (shouldChangeSupervisorId && !newSupervisorId.HasValue)
+                    if (result.shouldChangeSupervisorId && !result.newSupervisorId.HasValue)
                         throw new InterviewException(
                             "Can't move interview to a new team, because supervisor id is empty",
                             exceptionType: InterviewDomainExceptionType.CantMoveToUndefinedTeam);
@@ -270,11 +272,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                                 ? serviceLocator.GetInstance<IInterviewUniqueKeyGenerator>().Get()
                                 : null,
                             synchronizedEvents: serializedEvents,
-                            newSupervisorId: shouldChangeSupervisorId ? newSupervisorId : null),
+                            newSupervisorId: result.shouldChangeSupervisorId ? result.newSupervisorId : null),
                         this.syncSettings.Origin);
 
                     RecordProcessedPackageInfo(packageTrackr, aggregateRootEvents);
-                });
+                }).WaitAndUnwrapException();
 
             }
             catch (Exception exception)
@@ -377,19 +379,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 
         }
 
-        private bool CheckIfInterviewerWasMovedToAnotherTeam(IUserRepository userRepositoryLocal,
-            Guid responsibleId,
-            IEvent[] interviewEvents, out Guid? newSupervisorId)
+        private async Task<(bool shouldChangeSupervisorId, Guid? newSupervisorId)> 
+            CheckIfInterviewerWasMovedToAnotherTeamAsync(IUserRepository userRepositoryLocal,
+            Guid responsibleId, IEvent[] interviewEvents)
         {
-            newSupervisorId = null;
             SupervisorAssigned supervisorAssigned = interviewEvents.OfType<SupervisorAssigned>().LastOrDefault();
+
             if (supervisorAssigned == null)
-                return false;
-            HqUser interviewer = userRepositoryLocal.FindByIdAsync(responsibleId).Result;
+                return (false, null);
+
+            HqUser interviewer = await userRepositoryLocal.FindByIdAsync(responsibleId);
             if (interviewer == null)
-                return false;
-            newSupervisorId = interviewer.Profile.SupervisorId;
-            return newSupervisorId != supervisorAssigned.SupervisorId;
+                return (false, null);
+
+            var newSupervisorId = interviewer.Profile.SupervisorId;
+            return (newSupervisorId != supervisorAssigned.SupervisorId, newSupervisorId);
         }
 
         private bool CheckIfInterviewKeyNeedsToBeChanged(IQueryableReadSideRepositoryReader<InterviewSummary> interviewsLocal, 
