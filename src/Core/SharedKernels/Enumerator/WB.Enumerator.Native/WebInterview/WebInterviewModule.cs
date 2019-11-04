@@ -3,9 +3,7 @@ using System.Collections.Concurrent;
 using System.Configuration;
 using System.Threading.Tasks;
 using Microsoft.Ajax.Utilities;
-using Microsoft.AspNet.SignalR;
-using Microsoft.AspNet.SignalR.Hubs;
-using Owin;
+using Microsoft.AspNetCore.SignalR;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
@@ -24,13 +22,14 @@ namespace WB.Enumerator.Native.WebInterview
                 ConfigurationManager.AppSettings["MaxWebInterviewsCount"].ToInt(100));
 
             registry.BindInPerLifetimeScope<InterviewLifecycleEventHandler, InterviewLifecycleEventHandler>();
-            registry.BindToConstant<IJavaScriptMinifier>(() => new SignalRHubMinifier());
+            //registry.BindToConstant<IJavaScriptMinifier>(() => new SignalRHubMinifier());
 
             registry.BindToMethodInSingletonScope<IWebInterviewInvoker>(_ =>
             {
                 // Ninject calls this method before container innitialization. Just make sure that we can handle this in AutoFac
-                var lazyClients = new Lazy<IHubConnectionContext<dynamic>>(
-                    () => GlobalHost.ConnectionManager.GetHubContext("interview").Clients);
+//                var lazyClients = new Lazy<IHubClients<dynamic>>(
+//                    () => GlobalHost.ConnectionManager.GetHubContext("interview").Clients);
+                var lazyClients = new Lazy<IHubClients>(() => _.Resolve<IHubClients>());
 
                 return new WebInterviewInvoker(lazyClients);
             });
@@ -44,7 +43,7 @@ namespace WB.Enumerator.Native.WebInterview
             return Task.CompletedTask;
         }
 
-        internal class SignalRHubMinifier : IJavaScriptMinifier
+        /*internal class SignalRHubMinifier : IJavaScriptMinifier
         {
             readonly ConcurrentDictionary<string, string> cache = new ConcurrentDictionary<string, string>();
 
@@ -55,6 +54,6 @@ namespace WB.Enumerator.Native.WebInterview
                     PreserveImportantComments = false
                 }));
             }
-        }
+        }*/
     }
 }

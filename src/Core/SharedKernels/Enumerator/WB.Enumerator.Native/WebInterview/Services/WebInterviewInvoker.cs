@@ -1,20 +1,19 @@
 using System;
-using Microsoft.AspNet.SignalR.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Enumerator.Native.WebInterview.Services
 {
     public class WebInterviewInvoker : IWebInterviewInvoker
     {
-        private readonly Lazy<IHubConnectionContext<dynamic>> lazyHubContext;
+        private readonly Lazy<IHubClients> lazyHubContext;
 
-        public WebInterviewInvoker(Lazy<IHubConnectionContext<dynamic>> lazyHubContext)
+        public WebInterviewInvoker(Lazy<IHubClients> lazyHubContext)
         {
             this.lazyHubContext = lazyHubContext;
         }
 
-        private IHubConnectionContext<dynamic> HubClients => lazyHubContext.Value;
+        private IHubClients<dynamic> HubClients => (IHubClients<dynamic>)lazyHubContext.Value;
 
         public void RefreshEntities(string interviewId, string[] identities)
         {
