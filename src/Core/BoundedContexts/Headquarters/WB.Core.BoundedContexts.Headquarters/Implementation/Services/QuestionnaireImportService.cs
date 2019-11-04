@@ -92,14 +92,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                 var minSupported = this.supportedVersionProvider.GetMinVerstionSupportedByInterviewer();
 
-                await TriggerPdfRendering(questionnaireId);
+                if (includePdf)
+                    await TriggerPdfRendering(questionnaireId);
 
                 var questionnairePackage = await this.designerApi.GetQuestionnaire(questionnaireId, supportedVersion, minSupported);
                                 
                 QuestionnaireDocument questionnaire = this.zipUtils.DecompressString<QuestionnaireDocument>(questionnairePackage.Questionnaire);
 
                 if (includePdf)
-                    await TriggerPdfRendering(questionnaireId);
+                    await TriggerPdfTranslationsRendering(questionnaire);
 
                 var questionnaireContentVersion = questionnairePackage.QuestionnaireContentVersion;
                 var questionnaireAssembly = questionnairePackage.QuestionnaireAssembly;
@@ -264,7 +265,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 .HandleResult<PdfStatus>(x => x.ReadyForDownload == false && x.CanRetry != true)
                 .WaitAndRetryForeverAsync(_ => TimeSpan.FromSeconds(3));
 
-            var result = await pdfRetry.ExecuteAsync(async () =>
+            await pdfRetry.ExecuteAsync(async () =>
             {
                 this.logger.Trace($"Waiting for pdf to be ready {questionnaireIdentity}");
                 return await this.designerApi.GetPdfStatus(questionnaireIdentity.QuestionnaireId);     
