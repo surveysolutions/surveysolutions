@@ -12,17 +12,21 @@ using CSCore;
 using CSCore.Codecs.WAV;
 using CSCore.MediaFoundation;
 using StackExchange.Exceptional;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Infrastructure.Native.Monitoring;
 
 namespace WB.Enumerator.Native.WebInterview.Services
 {
     public class AudioProcessingService : IAudioProcessingService
     {
+        private readonly ILogger logger;
+
         private const int EncoderBufferSize = 64 * 1024; // just an 64Kb buffer to read
         private const string MimeType = @"audio/m4a";
 
-        public AudioProcessingService()
+        public AudioProcessingService(ILogger logger)
         {
+            this.logger = logger;
             // single thread to process all audio compression requests
             // if there is need to process audio in more then one queue - duplicate line below
             Task.Factory.StartNew(AudioCompressionQueueProcessor);
@@ -69,7 +73,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
             }
             catch (Exception ex)
             {
-                ex.Log(HttpContext.Current);
+                logger.Error("Error on compress audio", ex);
+                //ex.Log(HttpContext.Current);
 
                 audioResult.MimeType = @"audio/wav";
                 audioResult.Binary = audio;

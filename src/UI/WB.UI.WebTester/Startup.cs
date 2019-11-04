@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Web.Hosting;
@@ -50,7 +51,7 @@ namespace WB.UI.WebTester
             
             InScopeExecutor.Init(new NoScopeInScopeExecutor(container));
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
-            WebInterviewModule.Configure(app, WebTesterModule.HubPipelineModules);
+            WebInterviewModuleConfigure(app);
             
             WebApiConfig.Register(config);
 
@@ -64,6 +65,14 @@ namespace WB.UI.WebTester
                 var m = new WebInterviewModule();
                 m.Init(serviceLocatorLocal, new UnderConstructionInfo()).WaitAndUnwrapException();
             }
+        }
+
+
+        public static void WebInterviewModuleConfigure(IAppBuilder app)
+        {
+            var resolver = GlobalHost.DependencyResolver;
+            (resolver.GetService(typeof(IConnectionsMonitor)) as IConnectionsMonitor)?.StartMonitoring();
+            app.MapSignalR(new HubConfiguration { EnableDetailedErrors = true, Resolver = resolver });
         }
 
         private void EnsureJsonStorageForErrorsExists()
