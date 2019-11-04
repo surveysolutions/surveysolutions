@@ -72,6 +72,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         /// <summary>
         ///     Navigation property for users in the role
         /// </summary>
+        [ForeignKey("RoleId")]
         public virtual ICollection<HqUserRole> Users { get; }
 
         /// <summary>
@@ -166,16 +167,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         /// <summary>
         ///     Navigation property for user roles
         /// </summary>
+        [ForeignKey("UserId")]
         public virtual ICollection<HqUserRole> Roles { get; }
 
         /// <summary>
         ///     Navigation property for user claims
         /// </summary>
+        [ForeignKey("UserId")]
         public virtual ICollection<HqUserClaim> Claims { get; }
 
         /// <summary>
         ///     Navigation property for user logins
         /// </summary>
+        [ForeignKey("UserId")]
         public virtual ICollection<HqUserLogin> Logins { get; }
 
         /// <summary>
