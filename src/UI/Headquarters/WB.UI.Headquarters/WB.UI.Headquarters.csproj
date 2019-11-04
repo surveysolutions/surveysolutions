@@ -2841,7 +2841,7 @@
       <Name>WB.Core.SharedKernels.DataCollection</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\SharedKernels\Enumerator\WB.Enumerator.Native\WB.Enumerator.Native.csproj">
-      <Project>{2e701301-76ff-4738-9049-e28fe1b33d86}</Project>
+      <Project>{30342261-52f3-48d7-8724-385fc7d83230}</Project>
       <Name>WB.Enumerator.Native</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj">

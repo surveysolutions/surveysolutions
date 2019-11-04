@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.interviewerPrincipal = principal;
             this.synchronizationService = synchronizationService;
         }
-
+         
         protected override async Task RelinkUserToAnotherDeviceAsync(RestCredentials credentials, CancellationToken token)
         {
             var identity = await GenerateInterviewerIdentity(credentials, token);
