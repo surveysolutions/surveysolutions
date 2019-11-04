@@ -76,8 +76,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public void RemoveInterview(Guid interviewId)
         {
-            logger.Warn($"Removing interview {interviewId}");
-
             this.aggregateRootRepositoryWithCache.CleanCache();
 
             this.interviewViewRepository.Remove(interviewId.FormatGuid());
@@ -86,6 +84,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.RemoveInterviewImages(interviewId);
             this.eventStore.RemoveEventSourceById(interviewId);
             this.eventRegistry.RemoveAggregateRoot(interviewId.FormatGuid());
+            
         }
 
         private void RemoveInterviewImages(Guid interviewId)
@@ -157,12 +156,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return new InterviewPackageContainer(interviewId, this.GetFilteredEventsToSend(interviewId));
         }
 
-        public void CheckAndProcessInterviewsWithoutViews()
+        public void CheckAndProcessInterviewsToFixViews(bool isSupervisor)
         {
             var registeredItems = this.interviewViewRepository.LoadAll().Select(i => i.InterviewId).ToList();
-
             var itemsInStore = this.eventStore.GetListOfAllItemsIds();
-
             var orphans = itemsInStore.Except(registeredItems);
             
             foreach (var orphan in orphans)
@@ -176,6 +173,34 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 catch (Exception e)
                 {
                     logger.Info($"Error on processing orphan interview {orphan}", e);
+                }
+            }
+
+            if (!isSupervisor) return;
+            
+            foreach (var registeredItem in registeredItems)
+            {
+                var sequence =  this.eventStore.GetMaxSequenceForAnyEvent(registeredItem, new[] { typeof(InterviewStatusChanged).Name });
+                var lastStatus = this.eventStore.GetEventByEventSequence(registeredItem, sequence);
+
+                if (lastStatus.Payload is InterviewStatusChanged status)
+                {
+                    string itemId = registeredItem.FormatGuid();
+                    if (this.interviewViewRepository.GetById(itemId).Status != status.Status)
+                    {
+                        logger.Info($"Processing incorrect interview {itemId}");
+                        try
+                        {
+                            this.interviewViewRepository.Remove(itemId);
+                            List<CommittedEvent> storedEvents = this.eventStore.Read(registeredItem, 0).ToList();
+
+                            this.eventBus.PublishCommittedEvents(storedEvents);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Info($"Error on processing incorrect interview {itemId}", e);
+                        }
+                    }
                 }
             }
         }
