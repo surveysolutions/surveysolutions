@@ -156,7 +156,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return new InterviewPackageContainer(interviewId, this.GetFilteredEventsToSend(interviewId));
         }
 
-        public void CheckAndProcessInterviewsToFixViews(bool isSupervisor)
+        public void CheckAndProcessInterviewsToFixViews()
         {
             var registeredItems = this.interviewViewRepository.LoadAll().Select(i => i.InterviewId).ToList();
             var itemsInStore = this.eventStore.GetListOfAllItemsIds();
@@ -172,15 +172,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 }
                 catch (Exception e)
                 {
-                    logger.Info($"Error on processing orphan interview {orphan}", e);
+                    logger.Error($"Error on processing orphan interview {orphan}", e);
                 }
             }
-
-            if (!isSupervisor) return;
             
             foreach (var registeredItem in registeredItems)
             {
-                var sequence =  this.eventStore.GetMaxSequenceForAnyEvent(registeredItem, new[] { typeof(InterviewStatusChanged).Name });
+                var sequence =  this.eventStore.GetMaxSequenceForAnyEvent(registeredItem, nameof(InterviewStatusChanged));
                 var lastStatus = this.eventStore.GetEventByEventSequence(registeredItem, sequence);
 
                 if (lastStatus.Payload is InterviewStatusChanged status)
@@ -198,7 +196,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                         }
                         catch (Exception e)
                         {
-                            logger.Info($"Error on processing incorrect interview {itemId}", e);
+                            logger.Error($"Error on processing incorrect interview {itemId}", e);
                         }
                     }
                 }

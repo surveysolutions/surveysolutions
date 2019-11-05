@@ -4,7 +4,6 @@ using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -47,7 +46,7 @@ namespace WB.UI.Supervisor
             if (settings.DashboardViewsUpdated) return;
 
             var interviewsAccessor = Mvx.IoCProvider.Resolve<IInterviewerInterviewAccessor>();
-            interviewsAccessor.CheckAndProcessInterviewsToFixViews(true);
+            interviewsAccessor.CheckAndProcessInterviewsToFixViews();
 
             settings.SetDashboardViewsUpdated(true);
         }

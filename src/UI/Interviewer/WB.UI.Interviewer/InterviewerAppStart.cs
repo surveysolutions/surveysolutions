@@ -91,7 +91,7 @@ namespace WB.UI.Interviewer
             if (settings.DashboardViewsUpdated) return;
 
             var interviewsAccessor = Mvx.IoCProvider.Resolve<IInterviewerInterviewAccessor>();
-            interviewsAccessor.CheckAndProcessInterviewsToFixViews(false);
+            interviewsAccessor.CheckAndProcessInterviewsToFixViews();
             
             settings.SetDashboardViewsUpdated(true);
         }
