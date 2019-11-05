@@ -271,8 +271,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\InterviewCommandsController.cs" />
-    <Compile Include="Controllers\InterviewDataController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -390,6 +388,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Elmah\" />
+    <Folder Include="Controllers\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
