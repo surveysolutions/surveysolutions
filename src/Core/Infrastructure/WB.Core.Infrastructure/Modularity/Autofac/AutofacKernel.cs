@@ -53,15 +53,16 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
             {
                 this.containerBuilder.RegisterModule(autofacModule);
             }
+
             initModules.AddRange(modules);
         }
 
 
-        public Task InitAsync(bool restartOnInitiazationError)
+        public async Task InitAsync(bool restartOnInitiazationError)
         {
             this.containerBuilder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
             Container = containerBuilder.Build();
-            return InitModules(restartOnInitiazationError);
+            await InitModules(restartOnInitiazationError);
         }
 
         public Task InitCoreAsync(ILifetimeScope container, bool restartOnInitiazationError)
@@ -90,11 +91,14 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
                 using (var scope = container.BeginLifetimeScope())
                 {
                     var serviceLocatorLocal = scope.Resolve<IServiceLocator>();
+                    var tasks = new List<Task>();
                     foreach (var module in initModules)
                     {
                         status.ClearMessage();
-                        await module.Init(serviceLocatorLocal, status);
+                        tasks.Add(Task.Run(() => module.Init(serviceLocatorLocal, status)));
                     }
+
+                    await Task.WhenAll(tasks);
                 }
 
                 status.Finish();
