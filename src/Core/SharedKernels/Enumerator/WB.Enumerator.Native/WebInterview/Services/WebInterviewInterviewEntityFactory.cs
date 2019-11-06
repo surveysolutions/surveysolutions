@@ -12,7 +12,6 @@ using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.WebInterview.Models;
-using WebGrease.Css.Extensions;
 
 namespace WB.Enumerator.Native.WebInterview.Services
 {
@@ -357,7 +356,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         Status = this.CalculateSimpleStatus(ri, isReviewMode, callerInterview, questionnaire),
                     }).ToArray();
 
-                ListExtensions.ForEach(tableRosterInstances, rosterInstance =>
+                tableRosterInstances.ForEach(rosterInstance =>
                 {
                     this.ApplyDisablement(rosterInstance, identity, questionnaire);
                     this.ApplyValidity(rosterInstance.Validity, rosterInstance.Status);
