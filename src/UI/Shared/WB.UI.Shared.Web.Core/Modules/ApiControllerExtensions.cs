@@ -3,19 +3,18 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Cryptography;
-using System.Web;
-using System.Web.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WB.UI.Shared.Web.Modules
 {
     public static class ApiControllerExtensions
     {
-        public static HttpResponseMessage BinaryResponseMessageWithEtag(this ApiController controller, byte[] resultFile, string contentType = "image/png")
+        public static HttpResponseMessage BinaryResponseMessageWithEtag(this Controller controller, byte[] resultFile, string contentType = "image/png")
         {
             var stringEtag = GetEtagValue(resultFile);
             var etag = $"\"{stringEtag}\"";
 
-            var incomingEtag = HttpContext.Current.Request.Headers[@"If-None-Match"];
+            var incomingEtag = controller.Request.Headers[@"If-None-Match"];
 
             if (string.Compare(incomingEtag, etag, StringComparison.InvariantCultureIgnoreCase) == 0)
             {
