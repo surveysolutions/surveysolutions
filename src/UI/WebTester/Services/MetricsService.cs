@@ -1,9 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Web.WebPages;
 using NLog;
 using StackExchange.Exceptional;
-using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.WebTester.Services
 {

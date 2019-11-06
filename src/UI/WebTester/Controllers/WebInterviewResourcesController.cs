@@ -1,16 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Web.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.UI.Shared.Web.Extensions;
-using WB.UI.Shared.Web.Modules;
-using WB.UI.Shared.Web.Services;
 using WB.UI.WebTester.Services;
 
 namespace WB.UI.WebTester.Controllers

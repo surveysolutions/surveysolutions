@@ -5,10 +5,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Web.Http;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -22,7 +21,7 @@ using GpsAnswer = WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
 namespace WB.Enumerator.Native.WebInterview.Controllers
 {
-    public abstract class InterviewDataController : ApiController
+    public abstract class InterviewDataController : ControllerBase
     {
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;

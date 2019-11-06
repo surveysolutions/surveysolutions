@@ -10,6 +10,8 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Enumerator.Native.WebInterview;
+using WB.Enumerator.Native.WebInterview.Services;
 using WB.UI.WebTester.Services;
 
 namespace WB.UI.WebTester.Controllers
@@ -103,7 +105,7 @@ namespace WB.UI.WebTester.Controllers
             catch (Exception e)
             {
                 webInterviewNotificationService.MarkAnswerAsNotSaved(Guid.Parse(interviewId), questionIdentity, e);
-                webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, questionId, WebInterview.GetUiMessageFromException(e));
+                //webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, questionId, WebInterview.GetUiMessageFromException(e));
                 throw;
             }
 
