@@ -375,4 +375,100 @@
   <data name="InterviewReceivedCantModify" xml:space="preserve">
     <value>تم استلام المقابلة من الباحث ولا يمكن تعديلها</value>
   </data>
+  <data name="EmailLink_Header" xml:space="preserve">
+    <value>أدخل عنوان بريدك الالكتروني</value>
+  </data>
+  <data name="EmailLink_Message" xml:space="preserve">
+    <value>سنرسل لك رسالة تحتوي على رابط لاستئناف المقابلة إذا كنت تريد المتابعة لاحقًا</value>
+  </data>
+  <data name="EmailLink_ResumeAnyTime" xml:space="preserve">
+    <value>يمكنك الإلغاء الآن والمضي قدماً في المقابلة. ويمكنك إرسالها لاحقًا عن طريق النقر فوق عنصر "رابط استئناف البريد الإلكتروني" في القائمة العلوية.</value>
+  </data>
+  <data name="EmailLink_Placeholder" xml:space="preserve">
+    <value>أدخل البريد الإلكتروني</value>
+  </data>
+  <data name="EmailLink_EmailResumeLink" xml:space="preserve">
+    <value>رابط استئناف البريد الإلكتروني</value>
+  </data>
+  <data name="AreaRecord" xml:space="preserve">
+    <value>تحرير المنطقة</value>
+  </data>
+  <data name="CoverBrokenPackegeText" xml:space="preserve">
+    <value>انتباه! أفسدت هذه المقابلة البيانات, &lt;br /&gt;</value>
+  </data>
+  <data name="CoverBrokenPackegeTitle" xml:space="preserve">
+    <value>خطأ: هذه المقابلة تالفة</value>
+  </data>
+  <data name="EmailLink_InvalidEmail" xml:space="preserve">
+    <value>{{email}} هو عنوان بريد إلكتروني غير صالح</value>
+  </data>
+  <data name="HideResolved" xml:space="preserve">
+    <value>إخفاء حلها</value>
+  </data>
+  <data name="Interview_Overview_AdditionalInformation" xml:space="preserve">
+    <value>معلومات السؤال إضافية</value>
+  </data>
+  <data name="Interview_Overview_NotAnswered" xml:space="preserve">
+    <value>بلا جواب</value>
+  </data>
+  <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
+    <value>هل تريد بالتأكيد إزالة القائمة ذات الصلة '{{rosterTitle}}'?</value>
+  </data>
+  <data name="LoadingQuestionnaire" xml:space="preserve">
+    <value>تحميل الاستبيان. ارجوك انتظر...</value>
+  </data>
+  <data name="MultimediaNotSupported" xml:space="preserve">
+    <value>لا يدعم متصفحك تشغيل الوسائط المتعددة. يمكنك تنزيله بدلاً من ذلك.</value>
+  </data>
+  <data name="NoQuestionnaireAccess" xml:space="preserve">
+    <value>ليس لديك حق الوصول إلى الاستبيان</value>
+  </data>
+  <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
+    <value>لا يمكن أن تكون القيمة المدخلة أقل من الإجابة المحمية</value>
+  </data>
+  <data name="ReloadQuestionnaire" xml:space="preserve">
+    <value>تحديث الاستبيان</value>
+  </data>
+  <data name="Resolve" xml:space="preserve">
+    <value>حل</value>
+  </data>
+  <data name="ResolveHint" xml:space="preserve">
+    <value>يتم إخفاء التعليقات التي تم حلها افتراضيًا ، ولكن يمكن مراجعتها من قبل جميع المشاركين في المقابلة</value>
+  </data>
+  <data name="SaveScenario" xml:space="preserve">
+    <value>حفظ السيناريو</value>
+  </data>
+  <data name="SaveScenarioDesignerLogin" xml:space="preserve">
+    <value>انتهت الجلسة على تطبيق المصمم. تسجيل الدخول على تطبيق مصمم لتكون قادرة على حفظ.</value>
+  </data>
+  <data name="SaveScenarioGoToDesigner" xml:space="preserve">
+    <value>فتح مصمم</value>
+  </data>
+  <data name="SaveScenarioName" xml:space="preserve">
+    <value>اسم</value>
+  </data>
+  <data name="SaveScenarioOptions" xml:space="preserve">
+    <value>حدد السيناريو لاستبدال</value>
+  </data>
+  <data name="SaveScenarioOptions_ReplaceExisting" xml:space="preserve">
+    <value>استبدال القائمة</value>
+  </data>
+  <data name="SaveScenarioOptions_SaveNew" xml:space="preserve">
+    <value>حفظ الجديد</value>
+  </data>
+  <data name="ShowOnMap" xml:space="preserve">
+    <value>عرض على الخريطة</value>
+  </data>
+  <data name="ShowResolved" xml:space="preserve">
+    <value>عرض حلها</value>
+  </data>
+  <data name="WarningsHeader" xml:space="preserve">
+    <value>تحذيرات</value>
+  </data>
+  <data name="WebTesterSessionOver" xml:space="preserve">
+    <value>انتهت جلسة اختبار</value>
+  </data>
+  <data name="WebTesterSessionOverMessage" xml:space="preserve">
+    <value>يرجى إغلاق هذه الصفحة. يمكنك فتح واحدة جديدة من خلال العودة إلى موقع المصمم</value>
+  </data>
 </root>

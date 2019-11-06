@@ -187,7 +187,7 @@
     <value>تاريخ إكمال الاستجواب: </value>
   </data>
   <data name="InterviewIdFormatText" xml:space="preserve">
-    <value>رقم تعريف الاستجواب: {0}</value>
+    <value>معرف المقابلة: {0}</value>
   </data>
   <data name="InterviewStartDateFormatText" xml:space="preserve">
     <value>تاريخ بداية الاستجواب: </value>
@@ -231,6 +231,15 @@
   <data name="StartedInterviewText" xml:space="preserve">
     <value>هذا الاستجواب لم يكتمل</value>
   </data>
+  <data name="Start" xml:space="preserve">
+    <value>بدء مقابلة جديدة</value>
+  </data>
+  <data name="ResumeInterview" xml:space="preserve">
+    <value>استئناف المقابلة</value>
+  </data>
+  <data name="EnterPasswordText" xml:space="preserve">
+    <value>هذا الرابط محمي بكلمة مرور تم توزيعها مع الرابط. يرجى ادخال</value>
+  </data>
   <data name="StartPageTitle" xml:space="preserve">
     <value>المسح الإلكتروني</value>
   </data>
@@ -248,5 +257,86 @@
   </data>
   <data name="PoweredBy" xml:space="preserve">
     <value>مشغل بواسطة</value>
+  </data>
+  <data name="Complete" xml:space="preserve">
+    <value>اكتمال</value>
+  </data>
+  <data name="Email_InvitationTemplate_Message" xml:space="preserve">
+    <value>مرحبًا بك في %SURVEYNAME%!</value>
+  </data>
+  <data name="Email_InvitationTemplate_Subject" xml:space="preserve">
+    <value>دعوة للمشاركة في %SURVEYNAME%</value>
+  </data>
+  <data name="Email_NoResponse_Message" xml:space="preserve">
+    <value>تتلقى هذا التذكير لأنك لم تبدأ الاستجابة %SURVEYNAME%!</value>
+  </data>
+  <data name="Email_NoResponse_Subject" xml:space="preserve">
+    <value>تذكير ، لا تنس المشاركة %SURVEYNAME%</value>
+  </data>
+  <data name="Email_PartialResponse_Message" xml:space="preserve">
+    <value>تتلقى هذا التذكير لأنك بدأت الاستجابة إلى %SURVEYNAME% ، لكنك لم تكمل العملية.</value>
+  </data>
+  <data name="Email_PartialResponse_Subject" xml:space="preserve">
+    <value>تذكير ، يرجى استكمال ردكم على %SURVEYNAME%</value>
+  </data>
+  <data name="Email_RejectEmail_Message" xml:space="preserve">
+    <value>شكرا لك على المشاركة %SURVEYNAME%!</value>
+  </data>
+  <data name="Email_RejectEmail_Subject" xml:space="preserve">
+    <value>الإجراء الخاص بك مطلوب في %SURVEYNAME%</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>خطأ</value>
+  </data>
+  <data name="Filters_Answered" xml:space="preserve">
+    <value>أجاب</value>
+  </data>
+  <data name="Filters_ClearSelection" xml:space="preserve">
+    <value>إعادة تعيين جميع المرشحات</value>
+  </data>
+  <data name="Filters_Flagged" xml:space="preserve">
+    <value>وضع علامة</value>
+  </data>
+  <data name="Filters_ForInterviewer" xml:space="preserve">
+    <value>لمقابلة</value>
+  </data>
+  <data name="Filters_ForSupervisor" xml:space="preserve">
+    <value>للمشرف</value>
+  </data>
+  <data name="Filters_Invalid" xml:space="preserve">
+    <value>غير صالحة</value>
+  </data>
+  <data name="Filters_NotAnswered" xml:space="preserve">
+    <value>بلا جواب</value>
+  </data>
+  <data name="Filters_NotFlagged" xml:space="preserve">
+    <value>لا علم</value>
+  </data>
+  <data name="Filters_Title" xml:space="preserve">
+    <value>تصفية الأسئلة</value>
+  </data>
+  <data name="Filters_Valid" xml:space="preserve">
+    <value>صالح</value>
+  </data>
+  <data name="Filters_WithComments" xml:space="preserve">
+    <value>مع التعليقات</value>
+  </data>
+  <data name="InterviewReceivedByInterviewer" xml:space="preserve">
+    <value>لا يمكن تعديل المقابلة التي تم استلامها عن طريق الجهاز</value>
+  </data>
+  <data name="InterviewSizeLimitReached" xml:space="preserve">
+    <value>تحتوي المقابلة على إجمالي عدد مثيلات الجدول والأسئلة التي تتجاوز حدود النظام.</value>
+  </data>
+  <data name="NoteForSupervisor" xml:space="preserve">
+    <value>ملاحظة للمشرف</value>
+  </data>
+  <data name="QuestionnaireNameFormat" xml:space="preserve">
+    <value>{0} (الإصدار. {1})</value>
+  </data>
+  <data name="ResumeInterviewDescription" xml:space="preserve">
+    <value>لقد لاحظنا أنك بدأت بالفعل هذه المقابلة ، لكنك لم تنته منها</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>تحذير</value>
   </data>
 </root>
