@@ -7,10 +7,10 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using CSCore;
 using CSCore.Codecs.WAV;
 using CSCore.MediaFoundation;
+using Microsoft.AspNetCore.Http;
 using StackExchange.Exceptional;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Infrastructure.Native.Monitoring;
@@ -20,13 +20,15 @@ namespace WB.Enumerator.Native.WebInterview.Services
     public class AudioProcessingService : IAudioProcessingService
     {
         private readonly ILogger logger;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
         private const int EncoderBufferSize = 64 * 1024; // just an 64Kb buffer to read
         private const string MimeType = @"audio/m4a";
 
-        public AudioProcessingService(ILogger logger)
+        public AudioProcessingService(ILogger logger, IHttpContextAccessor httpContextAccessor)
         {
             this.logger = logger;
+            this.httpContextAccessor = httpContextAccessor;
             // single thread to process all audio compression requests
             // if there is need to process audio in more then one queue - duplicate line below
             Task.Factory.StartNew(AudioCompressionQueueProcessor);
@@ -74,7 +76,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
             catch (Exception ex)
             {
                 logger.Error("Error on compress audio", ex);
-                //ex.Log(HttpContext.Current);
+                ex.Log(httpContextAccessor.HttpContext);
 
                 audioResult.MimeType = @"audio/wav";
                 audioResult.Binary = audio;
