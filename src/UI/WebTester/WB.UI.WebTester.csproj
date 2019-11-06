@@ -171,7 +171,7 @@
     <ProjectReference Include="..\..\Core\SharedKernels\Enumerator\WB.Enumerator.Native\WB.Enumerator.Native.csproj" />
     <ProjectReference Include="..\..\Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
     <ProjectReference Include="..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj" />
-    <ProjectReference Include="..\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj" />
+    <ProjectReference Include="..\Shared\WB.UI.Shared.Web.Core\WB.UI.Shared.Web.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
