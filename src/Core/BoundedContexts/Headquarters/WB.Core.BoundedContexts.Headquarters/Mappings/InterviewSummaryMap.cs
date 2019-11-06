@@ -52,6 +52,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                                WHERE c.summary_id = id AND c.variable not like '@@%')");
             });
             Property(x => x.AssignmentId);
+
             Property(x => x.ReceivedByInterviewer, pm => pm.Column(cm =>
             {
                 cm.Default(false);
@@ -69,6 +70,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                     collection.Key(key => key.Column("interview_id"));
                     collection.OrderBy(x => x.Position);
                     collection.Cascade(Cascade.All | Cascade.DeleteOrphans);
+                    collection.Lazy(CollectionLazy.NoLazy);
                     collection.Inverse(true);
                 },
                 rel => rel.OneToMany());
