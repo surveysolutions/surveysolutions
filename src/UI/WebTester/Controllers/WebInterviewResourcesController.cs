@@ -4,6 +4,8 @@ using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.UI.Shared.Web.Extensions;
+using WB.UI.Shared.Web.Services;
 using WB.UI.WebTester.Services;
 
 namespace WB.UI.WebTester.Controllers

@@ -3,31 +3,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Localization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Serialization;
 using NLog;
-using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.Ncqrs;
-using WB.Core.Infrastructure.Versions;
-using WB.Infrastructure.Native.Files;
+using StackExchange.Exceptional.Stores;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace WebTester
@@ -118,7 +101,7 @@ namespace WebTester
             if (StackExchange.Exceptional.Exceptional.Settings.DefaultStore is JSONErrorStore exceptionalConfig)
             {
                 var jsonStorePath = exceptionalConfig.Settings.Path;
-                var jsonStorePathAbsolute = hostingEnvironment.MapPath(jsonStorePath);
+                var jsonStorePathAbsolute = hostingEnvironment.ContentRootFileProvider.GetFileInfo(jsonStorePath).PhysicalPath;
 
                 if (!Directory.Exists(jsonStorePathAbsolute))
                 {
