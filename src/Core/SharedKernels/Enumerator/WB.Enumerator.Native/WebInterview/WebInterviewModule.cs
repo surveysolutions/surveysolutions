@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Concurrent;
 using System.Configuration;
 using System.Threading.Tasks;
-using Microsoft.Ajax.Utilities;
 using Microsoft.AspNetCore.SignalR;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
