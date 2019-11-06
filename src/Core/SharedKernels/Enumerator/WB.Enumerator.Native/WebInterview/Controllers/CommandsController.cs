@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Web.Http;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
@@ -14,7 +14,7 @@ using WB.Enumerator.Native.WebInterview.Models;
 
 namespace WB.Enumerator.Native.WebInterview.Controllers
 {
-    public abstract class CommandsController : ApiController
+    public abstract class CommandsController : ControllerBase
     {
         protected readonly ICommandService commandService;
         protected readonly IImageFileStorage imageFileStorage;
@@ -42,7 +42,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             return interview.CurrentResponsibleId;
         }
 
-        public virtual IHttpActionResult ChangeLanguage(Guid interviewId, ChangeLanguageRequest request)
+        public virtual IActionResult ChangeLanguage(Guid interviewId, ChangeLanguageRequest request)
         {
             this.commandService.Execute(new SwitchTranslation(interviewId, request.Language, this.GetCommandResponsibleId(interviewId)));
             return Ok();
@@ -54,7 +54,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             public T Answer { get; set; }
         }
 
-        public virtual IHttpActionResult AnswerTextQuestion(Guid interviewId, [FromBody] AnswerRequest<string> answerRequest)
+        public virtual IActionResult AnswerTextQuestion(Guid interviewId, [FromBody] AnswerRequest<string> answerRequest)
         {
             var identity = Identity.Parse(answerRequest.Identity);
             this.ExecuteQuestionCommand(new AnswerTextQuestionCommand(interviewId,
@@ -62,7 +62,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             return Ok();
         }
 
-        public virtual IHttpActionResult AnswerTextListQuestion(Guid interviewId, [FromBody] AnswerRequest<TextListAnswerRowDto[]> answerRequest)
+        public virtual IActionResult AnswerTextListQuestion(Guid interviewId, [FromBody] AnswerRequest<TextListAnswerRowDto[]> answerRequest)
         {
             var identity = Identity.Parse(answerRequest.Identity);
             this.ExecuteQuestionCommand(new AnswerTextListQuestionCommand(interviewId,
@@ -72,7 +72,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             return Ok();
         }
 
-        public virtual IHttpActionResult AnswerGpsQuestion(Guid interviewId, [FromBody] AnswerRequest<GpsAnswer> answerRequest)
+        public virtual IActionResult AnswerGpsQuestion(Guid interviewId, [FromBody] AnswerRequest<GpsAnswer> answerRequest)
         {
             var identity = Identity.Parse(answerRequest.Identity);
             this.ExecuteQuestionCommand(new AnswerGeoLocationQuestionCommand(interviewId,
@@ -81,7 +81,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             return Ok();
         }
 
-        public virtual IHttpActionResult AnswerDateQuestion(Guid interviewId, [FromBody] AnswerRequest<DateTime> answerRequest)
+        public virtual IActionResult AnswerDateQuestion(Guid interviewId, [FromBody] AnswerRequest<DateTime> answerRequest)
         {
             var identity = Identity.Parse(answerRequest.Identity);
             this.ExecuteQuestionCommand(new AnswerDateTimeQuestionCommand(interviewId,
@@ -89,7 +89,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             return Ok();
         }
 
-        public virtual IHttpActionResult AnswerSingleOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<int> answerRequest)
+        public virtual IActionResult AnswerSingleOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<int> answerRequest)
         {
             var identity = Identity.Parse(answerRequest.Identity);
             this.ExecuteQuestionCommand(new AnswerSingleOptionQuestionCommand(interviewId, GetCommandResponsibleId(interviewId),
@@ -98,7 +98,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
-        public virtual IHttpActionResult AnswerLinkedSingleOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<decimal[]> answerRequest)
+        public virtual IActionResult AnswerLinkedSingleOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<decimal[]> answerRequest)
         {
             var identity = Identity.Parse(answerRequest.Identity);
             this.ExecuteQuestionCommand(new AnswerSingleOptionLinkedQuestionCommand(interviewId, GetCommandResponsibleId(interviewId),
@@ -107,7 +107,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
-        public virtual IHttpActionResult AnswerLinkedMultiOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<decimal[][]> answerRequest)
+        public virtual IActionResult AnswerLinkedMultiOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<decimal[][]> answerRequest)
         {
             var identity = Identity.Parse(answerRequest.Identity);
             this.ExecuteQuestionCommand(new AnswerMultipleOptionsLinkedQuestionCommand(interviewId, GetCommandResponsibleId(interviewId),
@@ -115,7 +115,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             return Ok();
         }
 
-        public virtual IHttpActionResult AnswerMultiOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<int[]> answerRequest)
+        public virtual IActionResult AnswerMultiOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<int[]> answerRequest)
         {
             var identity = Identity.Parse(answerRequest.Identity);
             this.ExecuteQuestionCommand(new AnswerMultipleOptionsQuestionCommand(interviewId, GetCommandResponsibleId(interviewId),
@@ -123,7 +123,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             return Ok();
         }
 
-        public virtual IHttpActionResult AnswerYesNoQuestion(Guid interviewId, [FromBody] AnswerRequest<InterviewYesNoAnswer[]> answerRequest)
+        public virtual IActionResult AnswerYesNoQuestion(Guid interviewId, [FromBody] AnswerRequest<InterviewYesNoAnswer[]> answerRequest)
         {
             var identity = Identity.Parse(answerRequest.Identity);
             var answer = answerRequest.Answer.Select(a => new AnsweredYesNoOption(a.Value, a.Yes)).ToArray();
@@ -132,7 +132,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             return Ok();
         }
 
-        public virtual IHttpActionResult AnswerIntegerQuestion(Guid interviewId, [FromBody] AnswerRequest<int> answerRequest)
+        public virtual IActionResult AnswerIntegerQuestion(Guid interviewId, [FromBody] AnswerRequest<int> answerRequest)
         {
             var identity = Identity.Parse(answerRequest.Identity);
             this.ExecuteQuestionCommand(new AnswerNumericIntegerQuestionCommand(interviewId, this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, answerRequest.Answer));
@@ -140,7 +140,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
-        public virtual IHttpActionResult AnswerDoubleQuestion(Guid interviewId, [FromBody] AnswerRequest<double> answerRequest)
+        public virtual IActionResult AnswerDoubleQuestion(Guid interviewId, [FromBody] AnswerRequest<double> answerRequest)
         {
             var identity = Identity.Parse(answerRequest.Identity);
             this.ExecuteQuestionCommand(new AnswerNumericRealQuestionCommand(interviewId, this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, answerRequest.Answer));
@@ -148,7 +148,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
-        public virtual IHttpActionResult AnswerQRBarcodeQuestion(Guid interviewId, [FromBody] AnswerRequest<string> answerRequest)
+        public virtual IActionResult AnswerQRBarcodeQuestion(Guid interviewId, [FromBody] AnswerRequest<string> answerRequest)
         {
             var identity = Identity.Parse(answerRequest.Identity);
             this.ExecuteQuestionCommand(new AnswerQRBarcodeQuestionCommand(interviewId,
@@ -162,7 +162,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         }
 
         [WebInterviewObserverNotAllowed]
-        public virtual IHttpActionResult RemoveAnswer(Guid interviewId, RemoveAnswerRequest request)
+        public virtual IActionResult RemoveAnswer(Guid interviewId, RemoveAnswerRequest request)
         {
             Identity identity = Identity.Parse(request.QuestionId);
 
@@ -193,7 +193,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         }
 
         [WebInterviewObserverNotAllowed]
-        public abstract IHttpActionResult CompleteInterview(Guid interviewId, CompleteInterviewRequest completeInterviewRequest);
+        public abstract IActionResult CompleteInterview(Guid interviewId, CompleteInterviewRequest completeInterviewRequest);
 
         public class NewCommentRequest
         {
@@ -203,7 +203,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
         [WebInterviewObserverNotAllowed]
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
-        public virtual IHttpActionResult SendNewComment(Guid interviewId, NewCommentRequest request)
+        public virtual IActionResult SendNewComment(Guid interviewId, NewCommentRequest request)
         {
             var identity = Identity.Parse(request.QuestionId);
             var command = new CommentAnswerCommand(interviewId, this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, request.Comment);

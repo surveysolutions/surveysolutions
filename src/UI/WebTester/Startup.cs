@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
@@ -33,8 +34,11 @@ namespace WebTester
 {
     public class Startup
     {
+        private readonly IHostingEnvironment hostingEnvironment;
+
         public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
+            this.hostingEnvironment = hostingEnvironment;
             Configuration = configuration;
         }
 
@@ -114,7 +118,7 @@ namespace WebTester
             if (StackExchange.Exceptional.Exceptional.Settings.DefaultStore is JSONErrorStore exceptionalConfig)
             {
                 var jsonStorePath = exceptionalConfig.Settings.Path;
-                var jsonStorePathAbsolute = HostingEnvironment.MapPath(jsonStorePath);
+                var jsonStorePathAbsolute = hostingEnvironment.MapPath(jsonStorePath);
 
                 if (!Directory.Exists(jsonStorePathAbsolute))
                 {
