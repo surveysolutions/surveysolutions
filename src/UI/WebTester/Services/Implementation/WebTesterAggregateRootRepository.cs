@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Web.WebPages;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
