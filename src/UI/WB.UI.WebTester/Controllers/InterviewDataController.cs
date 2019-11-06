@@ -32,7 +32,7 @@ namespace WB.UI.WebTester.Controllers
 
         [HttpGet]
         [Route("getTopFilteredOptionsForQuestionWithExclude")]
-        public override DropdownItem[] GetTopFilteredOptionsForQuestion(Guid interviewId, string id, string filter, int count, int[] excludedOptionIds)
+        public override DropdownItem[] GetTopFilteredOptionsForQuestion(Guid interviewId, string id, string filter, int count, [FromUri] int[] excludedOptionIds = null)
             => base.GetTopFilteredOptionsForQuestion(interviewId, id, filter, count, excludedOptionIds);
 
         [HttpGet]
