@@ -265,7 +265,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 .HandleResult<PdfStatus>(x => x.ReadyForDownload == false && x.CanRetry != true)
                 .WaitAndRetryForeverAsync(_ => TimeSpan.FromSeconds(3));
 
-            var result = await pdfRetry.ExecuteAsync(async () =>
+            await pdfRetry.ExecuteAsync(async () =>
             {
                 this.logger.Trace($"Waiting for pdf to be ready {questionnaireIdentity}");
                 return await this.designerApi.GetPdfStatus(questionnaireIdentity.QuestionnaireId);     
