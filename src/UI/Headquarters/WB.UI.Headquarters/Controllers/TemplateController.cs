@@ -24,6 +24,7 @@ using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.Template;
 using WB.UI.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Designer;
+using WB.UI.Headquarters.Services;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -176,14 +177,14 @@ namespace WB.UI.Headquarters.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> LoginToDesigner(LogOnModel model)
         {
-            var designerUserCredentials = new RestCredentials { Login = model.UserName, Password = model.Password };
+            var creds = new RestCredentials { Login = model.UserName, Password = model.Password };
 
             try
             {
-                var authHeader = designerUserCredentials.GetAuthenticationHeaderValue();
+                var authHeader = creds.GetAuthenticationHeaderValue();
                 await this.designerApi.Login(authHeader.ToString());
                 
-                this.designerUserCredentials.Set(designerUserCredentials);
+                this.designerUserCredentials.Set(creds);
 
                 return this.RedirectToAction("Import");
             }
