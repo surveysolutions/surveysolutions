@@ -475,7 +475,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @MultiCombobox.vue")]
-        public virtual DropdownItem[] GetTopFilteredOptionsForQuestion(Guid interviewId, string id, string filter, int count, int[] excludedOptionIds)
+        public virtual DropdownItem[] GetTopFilteredOptionsForQuestion(Guid interviewId, string id, string filter, int count, int[] excludedOptionIds = null)
         {
             var questionIdentity = Identity.Parse(id);
             var statefulInterview = this.GetCallerInterview(interviewId);
