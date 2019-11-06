@@ -2942,7 +2942,8 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.2.1\build\net452\Esri.ArcGISRuntime.WPF.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.2.1\build\net452\Esri.ArcGISRuntime.WPF.targets'))" />
     <Error Condition="!Exists('..\..\..\..\packages\RazorGenerator.MsBuild.2.5.0\build\RazorGenerator.MsBuild.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\RazorGenerator.MsBuild.2.5.0\build\RazorGenerator.MsBuild.targets'))" />
-    <Error Condition="!Exists('..\..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="'$(Configuration)' == 'Debug' and !Exists('..\..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" 
+        Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
     <Error Condition="!Exists('..\..\..\..\packages\Refit.4.7.51\build\net461\refit.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Refit.4.7.51\build\net461\refit.targets'))" />
   </Target>
   <Import Project="..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.2.1\build\net452\Esri.ArcGISRuntime.WPF.targets" Condition="Exists('..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.2.1\build\net452\Esri.ArcGISRuntime.WPF.targets')" />
