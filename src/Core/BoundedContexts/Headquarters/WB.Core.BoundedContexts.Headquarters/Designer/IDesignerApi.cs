@@ -41,7 +41,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
         Task<QuestionnaireInfo> GetQuestionnaireInfo(Guid questionnaireId);
 
         [Get("/api/hq/user/login")]
-        Task Login([Header("Authorization")] string authorization);
+        Task<string> Login([Header("Authorization")] string authorization);
 
         [Get("/api/hq/user/userdetails")]
         Task IsLoggedIn();
