@@ -1,9 +1,9 @@
-﻿using System.Web.Mvc;
+﻿using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace WB.UI.Shared.Web.Modules.Filters
 {
-    public class MvcAuthorizationFilter<TFilter> : System.Web.Mvc.IAuthorizationFilter
-        where TFilter : System.Web.Mvc.IAuthorizationFilter
+    public class MvcAuthorizationFilter<TFilter> : IAuthorizationFilter
+        where TFilter : IAuthorizationFilter
     {
         private readonly TFilter filter;
 
@@ -12,9 +12,9 @@ namespace WB.UI.Shared.Web.Modules.Filters
             this.filter = filter;
         }
 
-        public void OnAuthorization(AuthorizationContext filterContext)
+        public void OnAuthorization(AuthorizationFilterContext context)
         {
-            filter.OnAuthorization(filterContext);
+            filter.OnAuthorization(context);
         }
     }
 }
