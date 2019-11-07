@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Web;
 using System.Web.Caching;
+using Microsoft.AspNetCore.Http;
 using WB.UI.Shared.Web.Configuration;
 
 namespace WB.UI.Shared.Web.Captcha
@@ -9,10 +10,12 @@ namespace WB.UI.Shared.Web.Captcha
     public sealed class WebCacheBasedCaptchaService : ICaptchaService
     {
         private readonly IConfigurationManager configurationManager;
-        
-        public WebCacheBasedCaptchaService(IConfigurationManager configurationManager)
+        private readonly IHttpContextAccessor httpContextAccessor;
+
+        public WebCacheBasedCaptchaService(IConfigurationManager configurationManager, IHttpContextAccessor httpContextAccessor)
         {
             this.configurationManager = configurationManager;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         private int MaxFailedLoginAttemps => this.configurationManager.GetMaxFailedLoginCountBeforeCaptchaAppear();
@@ -97,8 +100,8 @@ namespace WB.UI.Shared.Web.Captcha
                 });
             }
         }
-
-        private static Cache Cache => HttpContext.Current == null
+        
+        private Cache Cache => httpContextAccessor.HttpContext == null
           ? HttpRuntime.Cache
           : HttpContext.Current.Cache;
     }

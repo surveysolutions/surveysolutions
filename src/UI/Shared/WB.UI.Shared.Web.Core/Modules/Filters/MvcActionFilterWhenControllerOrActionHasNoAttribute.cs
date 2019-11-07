@@ -1,10 +1,12 @@
 ﻿using System;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace WB.UI.Shared.Web.Modules.Filters
 {
     public class MvcActionFilterWhenControllerOrActionHasNoAttribute<TFilter, TAttribute> : IActionFilter, IResultFilter
-        where TFilter : System.Web.Mvc.ActionFilterAttribute
+        where TFilter : ActionFilterAttribute
         where TAttribute : Attribute
     {
         private readonly TFilter filterInstance;
@@ -49,9 +51,9 @@ namespace WB.UI.Shared.Web.Modules.Filters
             }
         }
 
-        private bool ShouldExecute(ActionDescriptor actionDescriptor, ControllerBase baseController)
+        private bool ShouldExecute(ActionDescriptor actionDescriptor, object baseController)
         {
-            var actionAttributes = actionDescriptor.GetCustomAttributes(typeof(TAttribute), true);
+            var actionAttributes = (actionDescriptor as ControllerActionDescriptor)?.MethodInfo.GetCustomAttributes(typeof(TAttribute), true);
             var controllerAttributes = baseController.GetType().GetCustomAttributes(typeof(TAttribute), true);
             bool shouldExecute = (actionAttributes == null || actionAttributes.Length == 0)
                                  && (controllerAttributes == null || controllerAttributes.Length == 0);
