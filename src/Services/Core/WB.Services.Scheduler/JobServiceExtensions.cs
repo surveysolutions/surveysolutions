@@ -6,9 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Console;
 using Prometheus.Advanced;
 using WB.Services.Scheduler.Services;
 using WB.Services.Scheduler.Services.Implementation;
@@ -52,7 +50,6 @@ namespace WB.Services.Scheduler
 
             services.AddDbContext<JobContext>(ops =>
                 ops
-                    //.UseLoggerFactory(MyLoggerFactory)
                     .UseNpgsql(configuration.GetConnectionString(connectionName)));
 
             services.Configure<JobSettings>(jobSettingsSection);
@@ -72,14 +69,12 @@ namespace WB.Services.Scheduler
         {
             var serviceProvider = app.ApplicationServices;
 
-            using (var scope = serviceProvider.CreateScope())
-            {
-                var db = scope.ServiceProvider.GetService<JobContext>();
+            using var scope = serviceProvider.CreateScope();
+            var db = scope.ServiceProvider.GetService<JobContext>();
 
-                serviceProvider.GetService<ILogger<JobContext>>().LogInformation("Running scheduler database migrations");
-                EnsurePublicSchemaExists(db.Database);
-                db.Database.Migrate();
-            }
+            serviceProvider.GetService<ILogger<JobContext>>().LogInformation("Running scheduler database migrations");
+            EnsurePublicSchemaExists(db.Database);
+            db.Database.Migrate();
         }
 
         private static void EnsurePublicSchemaExists(DatabaseFacade db)
@@ -97,15 +92,5 @@ namespace WB.Services.Scheduler
                  */
             }
         }
-
-        /// <summary>
-        /// True random lock value for lock to prevent run of several migrations at once
-        /// </summary>
-        private const long LockValueForMigration = -889238397;
-
-        //private static readonly LoggerFactory MyLoggerFactory
-        //    = new LoggerFactory(new[] { new ConsoleLoggerProvider(
-        //        Options.Create(new Con
-        //        (s, level) => (int)level >= 4, true) });
     }
 }
