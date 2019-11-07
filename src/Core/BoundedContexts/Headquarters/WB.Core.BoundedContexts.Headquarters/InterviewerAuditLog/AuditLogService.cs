@@ -134,6 +134,8 @@ namespace WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog
                 case AuditLogEntityType.AssignResponsibleToAssignment:
                     var assignResponsibleToAssignmentAuditLogEntity = record.GetEntity<AssignResponsibleToAssignmentAuditLogEntity>();
                     return InterviewerAuditRecord.AssignResponsibleToAssignment.FormatString(assignResponsibleToAssignmentAuditLogEntity.ResponsibleName, assignResponsibleToAssignmentAuditLogEntity.AssignmentId);
+                case AuditLogEntityType.FinishInstallation:
+                    return InterviewerAuditRecord.FinishInstallation.FormatString();
                 default:
                     throw new ArgumentException("Unknown audit record type: " + record.Type);
             }
