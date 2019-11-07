@@ -8,7 +8,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
     {
         private const string requestPropertiesName = "CustomHttpCall";
 
-        internal HttpCall(HttpRequestMessage request)
+        public HttpCall(HttpRequestMessage request)
         {
             Request = request;
             if (request?.Properties != null)
