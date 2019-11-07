@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Prometheus;
 using Prometheus.Advanced;
+using Serilog;
 using WB.Services.Export.Checks;
 using WB.Services.Export.Host.Infra;
 using WB.Services.Export.Host.Jobs;
@@ -89,9 +90,7 @@ namespace WB.Services.Export.Host
 #if RANDOMSCHEMA && DEBUG
             TenantInfoExtension.AddSchemaDebugTag(Process.GetCurrentProcess().Id.ToString() + "_");
 #endif
-
-            // Create the IServiceProvider based on the container.
-
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -115,6 +114,7 @@ namespace WB.Services.Export.Host
                 e.MapControllers();
             });
 
+            Log.Logger.Information("Export service started. version {version}");
             //app.UseMetricServer("/metrics", app.ApplicationServices.GetService<ICollectorRegistry>());
 
         }
