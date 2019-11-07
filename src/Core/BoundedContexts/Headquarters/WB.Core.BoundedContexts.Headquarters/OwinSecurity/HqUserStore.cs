@@ -126,6 +126,12 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             return GetUserAggregateAsync(u => u.Id.Equals(userId));
         }
 
+        public HqUser FindById(Guid userId)
+        {
+            ThrowIfDisposed();
+            return GetUserAggregate(u => u.Id.Equals(userId));
+        }
+
         public Task<HqUser> FindByNameAsync(string userName)
         {
             ThrowIfDisposed();
@@ -166,7 +172,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         }
 
         /// <summary>
-        /// Used to attach child entities to the User aggregate, i.e. Roles, Logins, and Claims
+        /// Used to attach child entities to the User aggregate, i.e. Roles, Logins, Claims and Profile
         /// </summary>
         /// <param name="filter"></param>
         /// <returns></returns>
@@ -184,9 +190,35 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             if (user != null)
             {
                 await EnsureClaimsLoadedAsync(user);
-                await EnsureLoginsLoaded(user);
+                await EnsureLoginsLoadedAsync(user);
                 await EnsureRolesLoadedAsync(user);
                 await EnsureProfileLoadedAsync(user);
+            }
+            return user;
+        }
+
+        /// <summary>
+        /// Used to attach child entities to the User aggregate, i.e. Roles, Logins, Claims and Profile
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        protected virtual HqUser GetUserAggregate(Expression<Func<HqUser, bool>> filter)
+        {
+            HqUser user;
+            if (FindByIdFilterParser.TryMatchAndGetId(filter, out var id))
+            {
+                user = _userStore.GetById(id);
+            }
+            else
+            {
+                user = Users.FirstOrDefault(filter);
+            }
+            if (user != null)
+            {
+                EnsureClaimsLoaded(user);
+                EnsureLoginsLoaded(user);
+                EnsureRolesLoaded(user);
+                EnsureProfileLoaded(user);
             }
             return user;
         }
@@ -197,6 +229,16 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             if (AutoSaveChanges)
             {
                 await context.SaveChangesAsync();
+            }
+        }
+
+        private async Task EnsureLoginsLoadedAsync(HqUser user)
+        {
+            if (!context.Entry(user).Collection(u => u.Logins).IsLoaded)
+            {
+                var userId = user.Id;
+                await _logins.Where(uc => uc.UserId.Equals(userId)).LoadAsync();
+                context.Entry(user).Collection(u => u.Logins).IsLoaded = true;
             }
         }
 
@@ -226,14 +268,40 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
                 await context.Entry(user).Reference(x => x.Profile).LoadAsync();
         }
 
-        private async Task EnsureLoginsLoaded(HqUser user)
+        private void EnsureLoginsLoaded(HqUser user)
         {
             if (!context.Entry(user).Collection(u => u.Logins).IsLoaded)
             {
                 var userId = user.Id;
-                await _logins.Where(uc => uc.UserId.Equals(userId)).LoadAsync();
+                _logins.Where(uc => uc.UserId.Equals(userId)).Load();
                 context.Entry(user).Collection(u => u.Logins).IsLoaded = true;
             }
+        }
+
+        private void EnsureClaimsLoaded(HqUser user)
+        {
+            if (!context.Entry(user).Collection(u => u.Claims).IsLoaded)
+            {
+                var userId = user.Id;
+                _userClaims.Where(uc => uc.UserId.Equals(userId)).Load();
+                context.Entry(user).Collection(u => u.Claims).IsLoaded = true;
+            }
+        }
+
+        private void EnsureRolesLoaded(HqUser user)
+        {
+            if (!context.Entry(user).Collection(u => u.Roles).IsLoaded)
+            {
+                var userId = user.Id;
+                _userRoles.Where(uc => uc.UserId.Equals(userId)).Load();
+                context.Entry(user).Collection(u => u.Roles).IsLoaded = true;
+            }
+        }
+
+        private void EnsureProfileLoaded(HqUser user)
+        {
+            if (!context.Entry(user).Reference(x => x.Profile).IsLoaded)
+                context.Entry(user).Reference(x => x.Profile).Load();
         }
         
         private void ThrowIfDisposed()
@@ -384,28 +452,26 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public virtual Task<TEntity> GetByIdAsync(object id)
-        {
-            return DbEntitySet.FindAsync(id);
-        }
+        public virtual Task<TEntity> GetByIdAsync(object id) => DbEntitySet.FindAsync(id);
+
+        /// <summary>
+        ///     FindAsync an entity by ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public virtual TEntity GetById(object id) => DbEntitySet.Find(id);
 
         /// <summary>
         ///     Insert an entity
         /// </summary>
         /// <param name="entity"></param>
-        public void Create(TEntity entity)
-        {
-            DbEntitySet.Add(entity);
-        }
+        public void Create(TEntity entity) => DbEntitySet.Add(entity);
 
         /// <summary>
         ///     Mark an entity for deletion
         /// </summary>
         /// <param name="entity"></param>
-        public void Delete(TEntity entity)
-        {
-            DbEntitySet.Remove(entity);
-        }
+        public void Delete(TEntity entity) => DbEntitySet.Remove(entity);
 
         /// <summary>
         ///     Update an entity

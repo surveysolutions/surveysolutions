@@ -17,6 +17,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         Task UpdateAsync(HqUser user);
         Task<HqUser> FindByIdAsync(Guid userId);
         Task<HqUser> FindByNameAsync(string userName);
+        HqUser FindById(Guid userId);
         Task SetPasswordHashAsync(HqUser user, string hash);
         Task SetSecurityStampAsync(HqUser user, string newSecurityStamp);
         Task SetLockoutEnabledAsync(HqUser user, bool isLockout);
