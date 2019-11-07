@@ -1,6 +1,4 @@
-﻿using System.Net.Http;
-using System.Net.Http.Formatting;
-using System.Web.Http.Filters;
+﻿using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json.Serialization;
 
 namespace WB.UI.Shared.Web.Attributes
@@ -15,12 +13,12 @@ namespace WB.UI.Shared.Web.Attributes
             CamelCasingFormatter.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
         }
 
-        public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
+        public override void OnActionExecuted(ActionExecutedContext context)
         {
-            ObjectContent content = actionExecutedContext.Response?.Content as ObjectContent;
-            if (content!=null)
+            ObjectContent content = context.Response?.Content as ObjectContent;
+            if (content != null)
             {
-                actionExecutedContext.Response.Content = new ObjectContent(content.ObjectType, content.Value, CamelCasingFormatter);
+                context.Response.Content = new ObjectContent(content.ObjectType, content.Value, CamelCasingFormatter);
             }
         }
     }

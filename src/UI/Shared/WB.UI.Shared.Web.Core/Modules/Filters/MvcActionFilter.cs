@@ -1,9 +1,9 @@
-﻿using System.Web.Mvc;
+﻿using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace WB.UI.Shared.Web.Modules.Filters
 {
     public class MvcActionFilter<TFilter> : IActionFilter, IResultFilter
-        where TFilter : System.Web.Mvc.ActionFilterAttribute
+        where TFilter : ActionFilterAttribute
     {
         private readonly TFilter filterInstance;
 

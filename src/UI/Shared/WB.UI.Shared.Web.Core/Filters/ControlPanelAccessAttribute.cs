@@ -1,6 +1,5 @@
-﻿using System.Web;
-using System.Web.Mvc;
-using Main.Core.Entities.SubEntities;
+﻿using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Mvc.Filters;
 using WB.UI.Shared.Web.Settings;
 
 namespace WB.UI.Shared.Web.Filters

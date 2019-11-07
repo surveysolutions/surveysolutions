@@ -1,17 +1,17 @@
 ﻿using System.Net.Http.Headers;
-using System.Web.Http.Filters;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace WB.UI.Shared.Web.Filters
 {
     public class ApiNoCacheAttribute : ActionFilterAttribute
     {
-        public override void OnActionExecuted(HttpActionExecutedContext filterContext)
+        public override void OnActionExecuted(ActionExecutedContext context)
         {
-            base.OnActionExecuted(filterContext);
+            base.OnActionExecuted(context);
 
-            if (filterContext.Response?.Headers == null) return;
+            if (context.Response?.Headers == null) return;
 
-            filterContext.Response.Headers.CacheControl = new CacheControlHeaderValue
+            context.Response.Headers.CacheControl = new CacheControlHeaderValue
             {
                 NoCache = true
             };
