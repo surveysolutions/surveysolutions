@@ -1,21 +1,14 @@
 ﻿using Newtonsoft.Json;
 using Refit;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.SharedKernel.Structures.Synchronization.Designer;
-using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.BoundedContexts.Headquarters.Designer
 {
@@ -39,7 +32,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
 
         public IDesignerApi Get()
         {
-            var hc = new HttpClient()
+            var restHandler = new RestServiceHandler(designerUserCredentials);
+            var hc = new HttpClient(restHandler)
             {
                 BaseAddress = new Uri(serviceSettings.Endpoint),
                 DefaultRequestHeaders =
@@ -47,12 +41,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
                     { "User-Agent",  serviceSettings.UserAgent },
                 }
             };
-
-            var credentials = designerUserCredentials.Get();
-            if (credentials != null)
-            {
-                hc.DefaultRequestHeaders.Authorization = credentials.GetAuthenticationHeaderValue();
-            }
 
             return RestService.For<IDesignerApi>(hc, new RefitSettings
             {
@@ -69,10 +57,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
 
             public async Task<T> DeserializeAsync<T>(HttpContent content)
             {
-                if(typeof(T) == typeof(RestFile))
+                if (typeof(T) == typeof(RestFile))
                 {
                     object result = await AsRestFileAsync(content);
-                    return (T) result;
+                    return (T)result;
                 }
 
                 return await json.DeserializeAsync<T>(content);
@@ -98,12 +86,30 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
         // Handling Designer Errors as they were handled by RestService.
         internal class RestServiceHandler : HttpClientHandler
         {
+            private readonly IDesignerUserCredentials designerCredentials;
+
+            public RestServiceHandler(IDesignerUserCredentials designerCredentials)
+            {
+                this.designerCredentials = designerCredentials;
+            }
+
             protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
             {
                 try
                 {
-                    var result = await base.SendAsync(request, cancellationToken);
-                    return result;
+                    var credentials = designerCredentials.Get();
+                    if (credentials != null)
+                    {
+                        request.Headers.Authorization = credentials.GetAuthenticationHeaderValue();
+                    }
+                    var call = new HttpCall(request);
+
+                    call.Response = await base.SendAsync(request, cancellationToken);
+                    call.Response.RequestMessage = request;
+                    if (call.IsSucceeded)
+                        return call.Response;
+
+                    throw new ExtendedMessageHandlerException(call, null);
                 }
                 catch (OperationCanceledException ex)
                 {
@@ -122,7 +128,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
                     }
                     else if (ex.Call.Response != null)
                     {
-                        var reasonPhrase = GetReasonPhrase(ex);
+                        var reasonPhrase = await GetReasonPhrase(ex);
                         throw new RestException(reasonPhrase, statusCode: ex.Call.Response.StatusCode, innerException: ex);
                     }
                     else
@@ -148,12 +154,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
                 }
             }
 
-            private string GetReasonPhrase(ExtendedMessageHandlerException ex)
+            private async Task<string> GetReasonPhrase(ExtendedMessageHandlerException ex)
             {
                 try
                 {
                     var responseMessage = ex.Call.Response;
-                    var responseContent = responseMessage.Content.ReadAsStringAsync().Result;
+                    var responseContent = await responseMessage.Content.ReadAsStringAsync();
 
                     var jsonFromHttpResponseMessage = JsonConvert.DeserializeObject<ResponseWithErrorMessage>(responseContent);
                     if (jsonFromHttpResponseMessage != null)
