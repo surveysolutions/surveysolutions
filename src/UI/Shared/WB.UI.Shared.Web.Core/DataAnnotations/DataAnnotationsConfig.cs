@@ -1,4 +1,4 @@
-﻿using System.Web.Mvc;
+﻿using Microsoft.AspNetCore.Mvc.DataAnnotations.Internal;
 
 namespace WB.UI.Shared.Web.DataAnnotations
 {

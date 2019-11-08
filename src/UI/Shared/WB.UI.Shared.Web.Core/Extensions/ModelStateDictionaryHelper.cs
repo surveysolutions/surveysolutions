@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace WB.UI.Shared.Web.Extensions
 {

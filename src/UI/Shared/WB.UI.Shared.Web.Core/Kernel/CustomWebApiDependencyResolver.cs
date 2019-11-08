@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Autofac;
-using Autofac.Integration.WebApi;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.UI.Shared.Web.Kernel
