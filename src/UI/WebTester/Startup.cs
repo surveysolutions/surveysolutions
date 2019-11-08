@@ -52,7 +52,7 @@ namespace WebTester
                 new DataCollectionSharedKernelModule(),
                 //new CaptchaModule("recaptcha"),
                 new WebInterviewModule(),
-                new WebTesterModule(),
+                new WebTesterModule(this.hostingEnvironment),
                 new ProductVersionModule(typeof(Startup).Assembly, shouldStoreVersionToDb: false)
             );
         }

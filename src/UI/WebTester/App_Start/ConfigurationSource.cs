@@ -1,5 +1,4 @@
-﻿using System.Web.Hosting;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 
 namespace WB.UI.WebTester
