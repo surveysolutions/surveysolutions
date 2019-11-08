@@ -4,15 +4,16 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Http;
 using WB.UI.Shared.Web.Exceptions;
 
 namespace WB.UI.Shared.Web.Extensions
 {
     public class ProgressiveDownload
     {
-        private readonly HttpRequestMessage request;
+        private readonly HttpRequest request;
 
-        public ProgressiveDownload(HttpRequestMessage request)
+        public ProgressiveDownload(HttpRequest request)
         {
             this.request = request;
         }
@@ -29,10 +30,11 @@ namespace WB.UI.Shared.Web.Extensions
 
         public HttpResponseMessage ResultMessage(Stream stream, string mediaType, string fileName = null, byte[] hash = null)
         {
-            var rangeHeader = this.request.Headers.Range?.Ranges.FirstOrDefault();
+            var rangeHeaderValue = this.request.GetTypedHeaders().Range;
+            var rangeHeader = rangeHeaderValue?.Ranges.FirstOrDefault();
             if (rangeHeader != null)
             {
-                var byteRange = new ByteRangeStreamContent(stream, this.request.Headers.Range, mediaType);
+                var byteRange = new ByteRangeStreamContent(stream, RangeHeaderValue.Parse(rangeHeaderValue.ToString()), mediaType);
                 var partialResponse = new HttpResponseMessage(HttpStatusCode.PartialContent);
 
                 partialResponse.Content = new PushStreamContent((outputStream, content, context) =>
@@ -92,7 +94,7 @@ namespace WB.UI.Shared.Web.Extensions
                 return partialResponse;
             }
 
-            var nonPartialResponse = this.request.CreateResponse(HttpStatusCode.OK);
+            var nonPartialResponse = new HttpResponseMessage(HttpStatusCode.OK);
 
             nonPartialResponse.Content = new StreamContent(stream);
 
