@@ -212,8 +212,6 @@
     <Compile Include="Kernel\AutofacServiceLocatorFactory.cs" />
     <Compile Include="Kernel\AutofacWebKernel.cs" />
     <Compile Include="Kernel\CustomWebApiDependencyResolver.cs" />
-    <Compile Include="MembershipProvider\Accounts\PasswordPolicy.cs" />
-    <Compile Include="MembershipProvider\Settings\MembershipProviderSettings.cs" />
     <Compile Include="Captcha\CaptchaModule.cs" />
     <Compile Include="Modules\ApiControllerExtensions.cs" />
     <Compile Include="Modules\AutofacWebModuleAdapter.cs" />
@@ -233,7 +231,6 @@
     <Compile Include="Modules\IWebIocRegistry.cs" />
     <Compile Include="Modules\IWebModule.cs" />
     <Compile Include="Modules\AutofacModuleExtensions.cs" />
-    <Compile Include="MembershipProvider\Settings\PasswordPolicyFactory.cs" />
     <Compile Include="Modules\LogRequestModule.cs" />
     <Compile Include="Modules\WebConfigurationModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -277,6 +274,10 @@
     <ProjectReference Include="..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj">
       <Project>{048bbba2-7bbf-44a5-a1b1-e4d32bba2797}</Project>
       <Name>WB.Infrastructure.Native</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WB.UI.Shared.Web.Core\WB.UI.Shared.Web.Core.csproj">
+      <Project>{81b7ec6d-97bb-4308-bfc1-8f5d8a9e33da}</Project>
+      <Name>WB.UI.Shared.Web.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -349,7 +350,6 @@
     <EmbeddedResource Include="Resources\UnderConstruction.zh.resx" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="MembershipProvider\Roles\" />
     <Folder Include="Modules\NonWebRequest\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
