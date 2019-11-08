@@ -3,6 +3,9 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>WB.UI.Shared.Web</RootNamespace>
+    <AssemblyVersion>5.22.20.0</AssemblyVersion>
+    <FileVersion>5.22.20.0</FileVersion>
+    <Version>0</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,6 +22,10 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj" />
     <ProjectReference Include="..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
 
 </Project>
