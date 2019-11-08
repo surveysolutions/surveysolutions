@@ -180,7 +180,14 @@
     <Compile Include="Compression\CompressionHandler.cs" />
     <Compile Include="Configuration\ExternalStoragesConfigSection.cs" />
     <Compile Include="DataAnnotations\ServerSideOnlyRegularExpressionAttribute.cs" />
+    <Compile Include="Extensions\ProgressiveDownload.cs" />
+    <Compile Include="Extensions\ProgressiveDownloadHelpers.cs" />
     <Compile Include="Filters\ControlPanelAccessAttribute.cs" />
+    <Compile Include="MembershipProvider\Accounts\PasswordPolicy.cs" />
+    <Compile Include="MembershipProvider\Settings\MembershipProviderSettings.cs" />
+    <Compile Include="MembershipProvider\Settings\PasswordPolicyFactory.cs" />
+    <Compile Include="Modules\ApiControllerExtensions.cs" />
+    <Compile Include="Services\IImageProcessingService.cs" />
     <Compile Include="Slack\ChannelsCollection.cs" />
     <Compile Include="Slack\ISlackMessageThrottler.cs" />
     <Compile Include="Slack\SlackApiClient.cs" />
@@ -291,10 +298,6 @@
     <ProjectReference Include="..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj">
       <Project>{048bbba2-7bbf-44a5-a1b1-e4d32bba2797}</Project>
       <Name>WB.Infrastructure.Native</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WB.UI.Shared.Web.Core\WB.UI.Shared.Web.Core.csproj">
-      <Project>{81b7ec6d-97bb-4308-bfc1-8f5d8a9e33da}</Project>
-      <Name>WB.UI.Shared.Web.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
