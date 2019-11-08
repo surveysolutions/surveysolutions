@@ -86,7 +86,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Tests.Integration.Design
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Tests.Web", "Tests\WB.Tests.Web\WB.Tests.Web.csproj", "{0BBFE22F-42C5-4AA8-B559-A71B47C74D5E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.UI.WebTester", "UI\WebTester\WB.UI.WebTester.csproj", "{80190DF0-F563-4C55-8BB1-07FDA706BA9E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.UI.WebTester.Core", "UI\WebTester\WB.UI.WebTester.Core.csproj", "{80190DF0-F563-4C55-8BB1-07FDA706BA9E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.UI.Shared.Web.Core", "UI\Shared\WB.UI.Shared.Web.Core\WB.UI.Shared.Web.Core.csproj", "{81B7EC6D-97BB-4308-BFC1-8F5D8A9E33DA}"
 EndProject

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.Loader;
 using AppDomainToolkit;
 using Autofac;
 using Main.Core.Documents;
@@ -43,12 +42,18 @@ namespace WB.UI.WebTester.Services.Implementation
             var rulesAssemblyPath = Path.Combine(cachePath, "rules.dll");
             File.WriteAllBytes(rulesAssemblyPath, Convert.FromBase64String(supportingAssembly));
 
-            InterviewAssemblyLoadContext assemblyLoadContext = new InterviewAssemblyLoadContext(binFolderPath);
-            var interviewAssembly = assemblyLoadContext.LoadFromAssemblyPath(rulesAssemblyPath);
+            var setupInfo = new AppDomainSetup
+            {
+                ApplicationName = interviewId.FormatGuid(),
+                ApplicationBase = binFolderPath,
+                CachePath = cachePath,
+                ShadowCopyFiles = "true"
+            };
 
+            var domainContext = AppDomainContext.Create(setupInfo);
             AppDomainsAliveGauge.Inc();
 
-            this.context = assemblyLoadContext;
+            this.context = domainContext;
 
             string documentString = JsonConvert.SerializeObject(questionnaireDocument, Formatting.None,
                 new JsonSerializerSettings
@@ -61,7 +66,6 @@ namespace WB.UI.WebTester.Services.Implementation
 
             var translationsString = JsonConvert.SerializeObject(translations ?? new List<TranslationDto>(), Formatting.None);
 
-            interviewAssembly.EntryPoint[]
             RemoteAction.Invoke(domainContext.Domain, documentString, translationsString, supportingAssembly,
                 (questionnaireJson, translationsJson, assembly) =>
                 {
@@ -106,7 +110,7 @@ namespace WB.UI.WebTester.Services.Implementation
         private static readonly Gauge AppDomainsAliveGauge =
             new Gauge(@"wb_app_domains_total", @"Count of appdomains per interview in memory");
 
-        private readonly InterviewAssemblyLoadContext context;
+        private readonly AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> context;
         private readonly string cachePath;
 
         private void ReleaseUnmanagedResources()
