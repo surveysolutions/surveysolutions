@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Main.Core.Documents;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
 using Refit;
@@ -195,12 +196,14 @@ namespace WB.UI.WebTester
 
         public void Load(IDependencyRegistry registry)
         {
-            registry.BindAsSingletonWithConstructorArgument<ILiteEventBus, NcqrCompatibleEventDispatcher>("eventBusSettings", new EventBusSettings
-            {
-                DisabledEventHandlerTypes = Array.Empty<Type>(),
-                EventHandlerTypesWithIgnoredExceptions = Array.Empty<Type>(),
-                IgnoredAggregateRoots = new List<string>()
-            });
+            registry.BindToMethodInSingletonScope<ILiteEventBus>(s => new NcqrCompatibleEventDispatcher(
+                s.GetRequiredService<IServiceLocator>(), new EventBusSettings
+                {
+                    DisabledEventHandlerTypes = Array.Empty<Type>(),
+                    EventHandlerTypesWithIgnoredExceptions = Array.Empty<Type>(),
+                    IgnoredAggregateRoots = new List<string>()
+                }, s.GetRequiredService<ILogger>(), s.GetRequiredService<IEventStore>(),
+                s.GetRequiredService<IInMemoryEventStore>(), s.GetService<IDenormalizerRegistry>()));
 
             registry.Bind<WebTesterStatefulInterview, WebTesterStatefulInterview>();
             registry.Bind<IInterviewFactory, InterviewFactory>();
@@ -217,8 +220,10 @@ namespace WB.UI.WebTester
             registry.BindAsSingleton<ICommandService, WebTesterCommandService>();
 
             //var binPath = Path.GetFullPath(Path.Combine(HttpRuntime.CodegenDir, ".." + Path.DirectorySeparatorChar + ".."));
-            var binPath = System.Web.Hosting.HostingEnvironment.MapPath("~/bin");
-            registry.BindAsSingletonWithConstructorArgument<IAppdomainsPerInterviewManager, AppdomainsPerInterviewManager>("binFolderPath", binPath);
+            var binPath = Path.Combine(hostingEnvironment.WebRootPath, "bin");
+            registry.BindToMethodInSingletonScope(s =>
+                new AppdomainsPerInterviewManager(binPath, s.GetRequiredService<ILogger>()));
+
             registry.Bind<IImageProcessingService, ImageProcessingService>();
             registry.Bind<IVirtualPathService, VirtualPathService>();
             registry.Bind<ISerializer, NewtonJsonSerializer>();
@@ -290,7 +295,7 @@ namespace WB.UI.WebTester
             registry.RegisterDenormalizer<InterviewLifecycleEventHandler>();
 
             registry.BindAsSingleton<IInMemoryEventStore, WebTesterEventStore>();
-            registry.BindToMethod<IEventStore>(f => f.Resolve<IInMemoryEventStore>());
+            registry.BindToMethod<IEventStore>(f => f.GetRequiredService<IInMemoryEventStore>());
 
             registry.BindAsSingleton<IPlainKeyValueStorage<QuestionnaireDocument>, InMemoryKeyValueStorage<QuestionnaireDocument>>();
             registry.BindAsSingleton(typeof(ICacheStorage<,>), typeof(InMemoryCacheStorage<,>));

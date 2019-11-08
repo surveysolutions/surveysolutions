@@ -16,8 +16,6 @@ namespace WB.Core.Infrastructure.DependencyInjection
         void BindAsSingleton(Type @interface, Type implementation);
         void BindToMethod<TImplementation>(Func<TImplementation> func, string name = null) where TImplementation : class;
         void BindToMethod<TImplementation>(Func<IServiceProvider, TImplementation> func, string name = null) where TImplementation : class;
-        void BindAsSingletonWithConstructorArgument<TInterface, TImplementation>(string argumentName,
-            object argumentValue) where TImplementation : TInterface;
         void BindToMethodInSingletonScope<T>(Func<IServiceProvider, T> func, string named = null);
         void RegisterDenormalizer<T>() where T : IEventHandler;
     }
