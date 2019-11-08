@@ -183,8 +183,6 @@
     <Compile Include="Slack\ISlackMessageThrottler.cs" />
     <Compile Include="Slack\SlackApiClient.cs" />
     <Compile Include="Slack\SlackApiConfiguration.cs" />
-    <Compile Include="Extensions\ProgressiveDownload.cs" />
-    <Compile Include="Extensions\ProgressiveDownloadHelpers.cs" />
     <Compile Include="Filters\ApiNoCacheAttribute.cs" />
     <Compile Include="Captcha\ICaptchaService.cs" />
     <Compile Include="Captcha\NoCaptchaProvider.cs" />
@@ -213,7 +211,6 @@
     <Compile Include="Kernel\AutofacWebKernel.cs" />
     <Compile Include="Kernel\CustomWebApiDependencyResolver.cs" />
     <Compile Include="Captcha\CaptchaModule.cs" />
-    <Compile Include="Modules\ApiControllerExtensions.cs" />
     <Compile Include="Modules\AutofacWebModuleAdapter.cs" />
     <Compile Include="Modules\Filters\FilterExtensions.cs" />
     <Compile Include="Modules\Filters\MvcActionFilter.cs" />
@@ -249,7 +246,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>UnderConstruction.resx</DependentUpon>
     </Compile>
-    <Compile Include="Services\IImageProcessingService.cs" />
     <Compile Include="Services\ImageProcessingService.cs" />
     <Compile Include="Settings\CoreSettings.cs" />
     <Compile Include="Settings\ISettingsProvider.cs" />

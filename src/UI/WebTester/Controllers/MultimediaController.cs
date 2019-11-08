@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Services;
+using WB.UI.Shared.Web.Services;
 using WB.UI.WebTester.Services;
 
 namespace WB.UI.WebTester.Controllers
@@ -63,7 +64,7 @@ namespace WB.UI.WebTester.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Audio(string interviewId, string questionId, HttpPostedFileBase file)
+        public async Task<ActionResult> Audio(string interviewId, string questionId, IFormFile file)
         {
             IStatefulInterview interview = this.statefulInterviewRepository.Get(interviewId);
 
@@ -79,7 +80,7 @@ namespace WB.UI.WebTester.Controllers
             {
                 using (var ms = new MemoryStream())
                 {
-                    await file.InputStream.CopyToAsync(ms);
+                    await file.CopyToAsync(ms);
 
                     byte[] bytes = ms.ToArray();
 
@@ -113,7 +114,7 @@ namespace WB.UI.WebTester.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Image(string interviewId, string questionId, HttpPostedFileBase file)
+        public async Task<ActionResult> Image(string interviewId, string questionId, IFormFile file)
         {
             IStatefulInterview interview = this.statefulInterviewRepository.Get(interviewId);
 
@@ -131,7 +132,7 @@ namespace WB.UI.WebTester.Controllers
             {
                 using (var ms = new MemoryStream())
                 {
-                    await file.InputStream.CopyToAsync(ms);
+                    await file.CopyToAsync(ms);
 
                     this.imageProcessingService.ValidateImage(ms.ToArray());
 
