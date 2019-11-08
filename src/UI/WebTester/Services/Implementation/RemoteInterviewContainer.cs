@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Loader;
 using AppDomainToolkit;
 using Autofac;
 using Main.Core.Documents;
@@ -41,6 +42,8 @@ namespace WB.UI.WebTester.Services.Implementation
             Directory.CreateDirectory(cachePath);
             var rulesAssemblyPath = Path.Combine(cachePath, "rules.dll");
             File.WriteAllBytes(rulesAssemblyPath, Convert.FromBase64String(supportingAssembly));
+
+            InterviewAssemblyLoadContext assemblyLoadContext = new InterviewAssemblyLoadContext(binFolderPath);
 
             var setupInfo = new AppDomainSetup
             {

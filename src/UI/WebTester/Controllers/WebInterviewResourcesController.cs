@@ -1,10 +1,13 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Shared.Web.Extensions;
+using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Services;
 using WB.UI.WebTester.Services;
 
@@ -44,12 +47,12 @@ namespace WB.UI.WebTester.Controllers
         }
 
         [HttpGet]
-        public IActionResult Content([FromQuery] string interviewId, [FromQuery] string contentId)
+        public HttpResponseMessage Content([FromQuery] string interviewId, [FromQuery] string contentId)
         {
             var attachment = attachmentStorage.Get(contentId, Guid.Parse(interviewId));
             if (attachment == null)
             {
-                return StatusCode(StatusCodes.Status404NotFound);
+                return new HttpResponseMessage(HttpStatusCode.NotFound);
             }
 
             if (attachment.Content.IsImage())

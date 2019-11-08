@@ -19,9 +19,6 @@ using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Enumerator.Native.WebInterview;
-using WB.UI.WebTester.Hub;
-using WB.UI.WebTester.Infrastructure;
-using WB.UI.WebTester.Services;
 
 [assembly: OwinStartup(typeof(WB.UI.WebTester.Startup))]
 
@@ -29,7 +26,7 @@ namespace WB.UI.WebTester
 {
     public class Startup
     {
-        public void Configuration(IAppBuilder app)
+        /*public void Configuration(IAppBuilder app)
         {
             EnsureJsonStorageForErrorsExists();
             var logger = LogManager.GetCurrentClassLogger();
@@ -87,7 +84,7 @@ namespace WB.UI.WebTester
                     Directory.CreateDirectory(jsonStorePathAbsolute);
                 }
             }
-        }
+        }*/
 
     }
 }
