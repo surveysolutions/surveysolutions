@@ -7,7 +7,7 @@ using StackExchange.Exceptional;
 
 namespace WB.UI.WebTester
 {
-    /*public class MvcApplication : HttpApplication
+    public class MvcApplication : HttpApplication
     {
         private readonly Logger log = LogManager.GetCurrentClassLogger();
 
@@ -33,5 +33,5 @@ namespace WB.UI.WebTester
             lasterror.Log(HttpContext.Current);
             log.Error(lasterror, "Application_Error");
         }
-    }*/
+    }
 }

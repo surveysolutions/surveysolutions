@@ -271,11 +271,59 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\AutofacConfig.cs" />
+    <Compile Include="App_Start\ConfigurationSource.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\DiagnosticsController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\InterviewCommandsController.cs" />
+    <Compile Include="Controllers\InterviewDataController.cs" />
+    <Compile Include="Controllers\MultimediaController.cs" />
+    <Compile Include="Controllers\ScenariosApiController.cs" />
+    <Compile Include="Controllers\WebInterviewResourcesController.cs" />
+    <Compile Include="Controllers\WebTesterController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Hub\WebInterviewHub.cs" />
+    <Compile Include="Infrastructure\AppDomainSpecific\CurrentInterview.cs" />
+    <Compile Include="Infrastructure\AppDomainSpecific\IWebTesterTranslationService.cs" />
+    <Compile Include="Infrastructure\AppDomainSpecific\IWebTesterTranslationStorage.cs" />
+    <Compile Include="Infrastructure\AppDomainSpecific\PrivateSettersResolver.cs" />
+    <Compile Include="Infrastructure\AppDomainSpecific\WebTesterAppDomainModule.cs" />
+    <Compile Include="Infrastructure\AppDomainSpecific\WebTesterQuestionnaireAssemblyAccessor.cs" />
+    <Compile Include="Infrastructure\AppDomainSpecific\WebTesterQuestionnaireStorage.cs" />
+    <Compile Include="Infrastructure\AppDomainSpecific\WebTesterTranslationService.cs" />
+    <Compile Include="Infrastructure\AppDomainSpecific\WebTesterTranslationStorage.cs" />
+    <Compile Include="Infrastructure\IScenarioSerializer.cs" />
+    <Compile Include="Infrastructure\NoScopeInScopeExecutor.cs" />
+    <Compile Include="Infrastructure\WebTesterCommandService.cs" />
+    <Compile Include="Infrastructure\WebTesterEventStore.cs" />
+    <Compile Include="Infrastructure\WebTesterStatefulInterview.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\Common.Designer.cs" />
+    <Compile Include="Services\IAppdomainsPerInterviewManager.cs" />
+    <Compile Include="Services\ICacheStorage.cs" />
+    <Compile Include="Services\IDesignerWebTesterApi.cs" />
+    <Compile Include="Services\IEvictionNotifier.cs" />
+    <Compile Include="Services\IEvictionObservable.cs" />
+    <Compile Include="Services\IInterviewFactory.cs" />
+    <Compile Include="Services\Implementation\AppdomainsPerInterviewManager.cs" />
+    <Compile Include="Services\Implementation\InMemoryCacheStorage.cs" />
+    <Compile Include="Services\Implementation\QuestionnaireImportService.cs" />
+    <Compile Include="Services\Implementation\RemoteInterviewContainer.cs" />
+    <Compile Include="Services\Implementation\TokenEviction.cs" />
+    <Compile Include="Services\Implementation\TranslationStorage.cs" />
+    <Compile Include="Services\Implementation\WebTesterAggregateRootRepository.cs" />
+    <Compile Include="Services\Implementation\WebTesterAudioFileStorage.cs" />
+    <Compile Include="Services\Implementation\WebTesterInterviewFileStorage.cs" />
+    <Compile Include="Services\IQuestionnaireImportService.cs" />
+    <Compile Include="Services\MetricsService.cs" />
+    <Compile Include="Services\MultimediaFile.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="WebTesterModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Build\markup-web-interview.css" />
@@ -375,6 +423,7 @@
     <Content Include="Content\Styles\markup-56f471627b.min.css" />
     <Content Include="Content\Styles\markup-5e9c61410e.min.css" />
     <Content Include="Content\Styles\markup-web-interview-e458a0c901.min.css" />
+    <Content Include="ErrorPages\genericError.html" />
     <Content Include="Global.asax" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -388,12 +437,24 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Elmah\" />
-    <Folder Include="Controllers\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Configuration\config.json" />
+    <Content Include="Configuration\config.override.json" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="Views\ApiTest\Index.cshtml" />
+    <Content Include="Views\ApiTest\Test.cshtml" />
+    <Content Include="Views\Error\NotFound.cshtml" />
+    <Content Include="Views\Error\QuestionnaireWithErrors.cshtml" />
+    <Content Include="Views\Error\_ErrorLayout.cshtml" />
+    <Content Include="Views\Shared\partial.webtester.cshtml" />
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\WebTester\Interview.cshtml" />
+    <Content Include="Views\WebTester\InterviewLayout.cshtml" />
+    <Content Include="Views\WebTester\Run.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
@@ -412,9 +473,9 @@
       <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
       <Name>WB.Core.SharedKernels.DataCollection</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Core\SharedKernels\Enumerator\WB.Enumerator.Native\WB.Enumerator.Native.Core.csproj">
-      <Project>{30342261-52F3-48D7-8724-385FC7D83230}</Project>
-      <Name>WB.Enumerator.Native.Core</Name>
+    <ProjectReference Include="..\..\Core\SharedKernels\Enumerator\WB.Enumerator.Native-old\WB.Enumerator.Native.csproj">
+      <Project>{7fa1b5c3-6441-4e77-b90f-84722e60b02f}</Project>
+      <Name>WB.Enumerator.Native</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj">
       <Project>{D6616C1D-7C3A-4576-B82B-098721CD4417}</Project>
@@ -428,6 +489,14 @@
       <Project>{75470164-4087-4e9b-845a-5400c038a499}</Project>
       <Name>WB.UI.Shared.Web</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Common.fr.resx" />
+    <EmbeddedResource Include="Resources\Common.resx" />
+    <EmbeddedResource Include="Resources\Common.ro.resx" />
+    <EmbeddedResource Include="Resources\Common.ru.resx" />
+    <EmbeddedResource Include="Resources\Common.sq.resx" />
+    <EmbeddedResource Include="Resources\Common.zh.resx" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
