@@ -5,12 +5,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.Infrastructure.DependencyInjection;
 using WB.Core.Infrastructure.Exceptions;
 using WB.Core.Infrastructure.Modularity;
 using WB.Infrastructure.Native;
 
-namespace WB.UI.Designer.DependencyInjection
+namespace WB.Core.Infrastructure.DependencyInjection
 {
     public class AspCoreKernel
     {

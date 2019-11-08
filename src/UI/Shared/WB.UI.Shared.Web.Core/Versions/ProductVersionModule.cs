@@ -1,15 +1,14 @@
 using System.Reflection;
 using System.Threading.Tasks;
-using NHibernate;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.DependencyInjection;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.Versions;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.UI.Shared.Web.Versions
 {
-    public class ProductVersionModule : IModule
+    public class ProductVersionModule : IModule, IAppModule
     {
         private readonly bool shouldStoreVersionToDb;
         private readonly ProductVersion productVersion;
@@ -33,6 +32,25 @@ namespace WB.UI.Shared.Web.Versions
                 var unitOfWork = serviceLocator.GetInstance<IUnitOfWork>();
                 serviceLocator.GetInstance<IProductVersionHistory>()
                               .RegisterCurrentVersion();
+                unitOfWork.AcceptChanges();
+            }
+
+            return Task.CompletedTask;
+        }
+
+        public void Load(IDependencyRegistry registry)
+        {
+            registry.BindToConstant<IProductVersion>(() => this.productVersion);
+            registry.Bind<IProductVersionHistory, ProductVersionHistory>();
+        }
+
+        public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status)
+        {
+            if (shouldStoreVersionToDb)
+            {
+                var unitOfWork = serviceLocator.GetInstance<IUnitOfWork>();
+                serviceLocator.GetInstance<IProductVersionHistory>()
+                    .RegisterCurrentVersion();
                 unitOfWork.AcceptChanges();
             }
 

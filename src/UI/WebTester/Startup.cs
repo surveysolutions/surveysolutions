@@ -11,6 +11,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NLog;
 using StackExchange.Exceptional.Stores;
+using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.DependencyInjection;
+using WB.Core.Infrastructure.Ncqrs;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Enumerator.Native.WebInterview;
+using WB.Infrastructure.Native.Logging;
+using WB.UI.Shared.Web.Versions;
+using WB.UI.WebTester;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace WebTester
@@ -18,6 +26,7 @@ namespace WebTester
     public class Startup
     {
         private readonly IHostingEnvironment hostingEnvironment;
+        private AspCoreKernel aspCoreKernel;
 
         public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
@@ -34,7 +43,18 @@ namespace WebTester
             var logger = LogManager.GetCurrentClassLogger();
             logger.Info($"Application started {FileVersionInfo.GetVersionInfo(typeof(Startup).Assembly.Location).ProductVersion}");
 
+            aspCoreKernel = new AspCoreKernel(services);
 
+            aspCoreKernel.Load(
+                new NcqrsModule(),
+                new NLogLoggingModule(),
+                new InfrastructureModuleMobile(),
+                new DataCollectionSharedKernelModule(),
+                //new CaptchaModule("recaptcha"),
+                new WebInterviewModule(),
+                new WebTesterModule(),
+                new ProductVersionModule(typeof(Startup).Assembly, shouldStoreVersionToDb: false)
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -94,6 +114,12 @@ namespace WebTester
                     name: "default",
                     template: "{controller=Questionnaire}/{action=Index}/{id?}");
             });
+
+            var initTask = aspCoreKernel.InitAsync(serviceProvider);
+            if (env.IsDevelopment())
+                initTask.Wait();
+            else
+                initTask.Wait(TimeSpan.FromSeconds(10));
         }
 
         private void EnsureJsonStorageForErrorsExists()
