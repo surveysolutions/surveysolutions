@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Prometheus;
-using Prometheus.Advanced;
+
 using Serilog;
 using WB.Services.Export.Checks;
 using WB.Services.Export.Host.Infra;
@@ -18,6 +18,7 @@ using WB.Services.Export.Infrastructure;
 using WB.Services.Export.InterviewDataStorage.EfMappings;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Scheduler;
+using WB.Services.Scheduler.Stats;
 using WB.Services.Scheduler.Storage;
 
 namespace WB.Services.Export.Host
@@ -62,18 +63,6 @@ namespace WB.Services.Export.Host
             {
                 builder.ReplaceService<IModelCacheKeyFactory, TenantModelCacheKeyFactory>();
             });
-            services.AddTransient<IOnDemandCollector, AppVersionCollector>();
-
-            services.AddSingleton<ICollectorRegistry>(c =>
-            {
-                var registry = DefaultCollectorRegistry.Instance;
-                var collectors = c.GetServices<IOnDemandCollector>();
-
-                registry.RegisterOnDemandCollectors(collectors);
-                registry.RegisterOnDemandCollector<DotNetStatsCollector>();
-
-                return registry;
-            });
 
             var healthChecksBuilder = services.AddHealthChecks();
             if (Configuration.IsS3Enabled())
@@ -94,6 +83,7 @@ namespace WB.Services.Export.Host
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        // ReSharper disable once UnusedMember.Global Used by Aspnet core
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
             logger.LogInformation("Export service started. version {version}",
@@ -104,7 +94,10 @@ namespace WB.Services.Export.Host
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseMetricServer();
+            
             app.StartScheduler();
+            app.UseSchedulerMetrics();
             app.UseHealthChecks("/.hc");
 
             app.UseRouting();
@@ -115,7 +108,6 @@ namespace WB.Services.Export.Host
             });
 
             Log.Logger.Information("Export service started. version {version}");
-            //app.UseMetricServer("/metrics", app.ApplicationServices.GetService<ICollectorRegistry>());
 
         }
     }
