@@ -65,7 +65,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.WebTester-old", "UI\W
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Infrastructure.Native", "Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj", "{048BBBA2-7BBF-44A5-A1B1-E4D32BBA2797}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Enumerator.Native", "Core\SharedKernels\Enumerator\WB.Enumerator.Native\WB.Enumerator.Native.csproj", "{30342261-52F3-48D7-8724-385FC7D83230}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Enumerator.Native.Core", "Core\SharedKernels\Enumerator\WB.Enumerator.Native\WB.Enumerator.Native.Core.csproj", "{30342261-52F3-48D7-8724-385FC7D83230}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Core.BoundedContexts.Supervisor", "Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\WB.Core.BoundedContexts.Supervisor.csproj", "{276D7605-A681-4469-B4C0-E62C5CE87E30}"
 EndProject
@@ -90,7 +90,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.UI.WebTester", "UI\WebTe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.UI.Shared.Web.Core", "UI\Shared\WB.UI.Shared.Web.Core\WB.UI.Shared.Web.Core.csproj", "{81B7EC6D-97BB-4308-BFC1-8F5D8A9E33DA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Enumerator.Native.Old", "Core\SharedKernels\Enumerator\WB.Enumerator.Native-old\WB.Enumerator.Native.Old.csproj", "{7FA1B5C3-6441-4E77-B90F-84722E60B02F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Enumerator.Native", "Core\SharedKernels\Enumerator\WB.Enumerator.Native-old\WB.Enumerator.Native.csproj", "{7FA1B5C3-6441-4E77-B90F-84722E60B02F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
