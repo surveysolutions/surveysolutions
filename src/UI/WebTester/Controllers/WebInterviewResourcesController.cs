@@ -35,12 +35,12 @@ namespace WB.UI.WebTester.Controllers
 
         [HttpHead]
         [ActionName("Content")]
-        public IActionResult ContentHead([FromQuery] string interviewId, [FromQuery] string contentId)
+        public HttpResponseMessage ContentHead([FromQuery] string interviewId, [FromQuery] string contentId)
         {
             var attachment = attachmentStorage.Get(contentId, Guid.Parse(interviewId));
             if (attachment == null)
             {
-                return StatusCode(StatusCodes.Status204NoContent);
+                return new HttpResponseMessage(HttpStatusCode.NoContent);
             }
 
             return new ProgressiveDownload(this.Request).HeaderInfoMessage(attachment.Content.Content.LongLength, attachment.Content.ContentType);
@@ -70,7 +70,7 @@ namespace WB.UI.WebTester.Controllers
         }
 
         [HttpGet]
-        public IActionResult Image([FromQuery] string interviewId, [FromQuery] string questionId,
+        public HttpResponseMessage Image([FromQuery] string interviewId, [FromQuery] string questionId,
             [FromQuery] string filename)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId);
@@ -78,7 +78,7 @@ namespace WB.UI.WebTester.Controllers
             var file = this.mediaStorage.Get(filename, interview.Id);
 
             if ((file?.Data?.Length ?? 0) == 0)
-                return StatusCode(StatusCodes.Status204NoContent);
+                return new HttpResponseMessage(HttpStatusCode.NoContent);
 
             var fullSize = GetQueryStringValue("fullSize") != null;
             var resultFile = fullSize
