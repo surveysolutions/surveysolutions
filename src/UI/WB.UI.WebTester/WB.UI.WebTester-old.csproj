@@ -412,9 +412,9 @@
       <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
       <Name>WB.Core.SharedKernels.DataCollection</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Core\SharedKernels\Enumerator\WB.Enumerator.Native\WB.Enumerator.Native.csproj">
+    <ProjectReference Include="..\..\Core\SharedKernels\Enumerator\WB.Enumerator.Native\WB.Enumerator.Native.Core.csproj">
       <Project>{30342261-52F3-48D7-8724-385FC7D83230}</Project>
-      <Name>WB.Enumerator.Native</Name>
+      <Name>WB.Enumerator.Native.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj">
       <Project>{D6616C1D-7C3A-4576-B82B-098721CD4417}</Project>
