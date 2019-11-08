@@ -172,6 +172,7 @@
     <ProjectReference Include="..\..\Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
     <ProjectReference Include="..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj" />
     <ProjectReference Include="..\Shared\WB.UI.Shared.Web.Core\WB.UI.Shared.Web.Core.csproj" />
+    <ProjectReference Include="..\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj" />
   </ItemGroup>
 
   <ItemGroup>
