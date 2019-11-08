@@ -1,12 +1,10 @@
-﻿
-using System.Web;
-using System.Web.Http.Routing;
+﻿using Microsoft.AspNetCore.Html;
 
 namespace WB.UI.Shared.Web.Extensions
 {
     public static class LinkExtensions
     {
-        public static IHtmlString GenerateFavicon(this System.Web.Mvc.WebViewPage page, string faviconHref)
+        public static HtmlString GenerateFavicon(this WebViewPage page, string faviconHref)
         {
             return new HtmlString(string.Format(
                 @"<link rel='icon' type='image/png' sizes='192x192' href='{0}-192x192.png'> 

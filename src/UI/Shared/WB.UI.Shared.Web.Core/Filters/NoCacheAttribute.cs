@@ -1,20 +1,16 @@
 ﻿using System;
-using System.Web;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace WB.UI.Shared.Web.Filters
 {
-    public class NoCacheAttribute : ActionFilterAttribute
+    public class NoCacheAttribute : ResponseCacheAttribute
     {
-        public override void OnResultExecuting(ResultExecutingContext filterContext)
+        public NoCacheAttribute() : base()
         {
-            filterContext.HttpContext.Response.Cache.SetExpires(DateTime.UtcNow.AddDays(-1));
-            filterContext.HttpContext.Response.Cache.SetValidUntilExpires(false);
-            filterContext.HttpContext.Response.Cache.SetRevalidation(HttpCacheRevalidation.AllCaches);
-            filterContext.HttpContext.Response.Cache.SetCacheability(HttpCacheability.NoCache);
-            filterContext.HttpContext.Response.Cache.SetNoStore();
-
-            base.OnResultExecuting(filterContext);
+            Duration = 0;
+            Location = ResponseCacheLocation.None;
+            NoStore = true;
         }
     }
 }
