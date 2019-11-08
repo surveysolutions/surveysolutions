@@ -1,4 +1,4 @@
-﻿using System.Web.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using WB.Core.Infrastructure.Modularity;
 using WB.UI.Shared.Web.Resources;
 

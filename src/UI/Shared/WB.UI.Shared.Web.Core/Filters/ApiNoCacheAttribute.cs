@@ -9,9 +9,9 @@ namespace WB.UI.Shared.Web.Filters
         {
             base.OnActionExecuted(context);
 
-            if (context.Response?.Headers == null) return;
+            if (context.HttpContext.Response?.Headers == null) return;
 
-            context.Response.Headers.CacheControl = new CacheControlHeaderValue
+            context.HttpContext.Response.Headers.CacheControl = new CacheControlHeaderValue
             {
                 NoCache = true
             };

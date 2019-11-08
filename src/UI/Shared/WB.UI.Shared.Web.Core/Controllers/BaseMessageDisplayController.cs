@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Shared.Web.Controllers

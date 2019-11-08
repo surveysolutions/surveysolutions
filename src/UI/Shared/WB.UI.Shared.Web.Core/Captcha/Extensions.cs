@@ -1,7 +1,5 @@
 using System;
-using System.Web;
-using System.Web.Mvc;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Extensions;
 
