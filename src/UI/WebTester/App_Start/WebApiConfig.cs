@@ -1,4 +1,5 @@
 ﻿using System.Web.Http;
+using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json.Serialization;
 
