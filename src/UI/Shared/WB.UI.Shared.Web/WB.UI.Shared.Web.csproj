@@ -177,20 +177,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\CamelCaseAttribute.cs" />
-    <Compile Include="Compression\CompressionHandler.cs" />
-    <Compile Include="Configuration\ExternalStoragesConfigSection.cs" />
     <Compile Include="DataAnnotations\ServerSideOnlyRegularExpressionAttribute.cs" />
     <Compile Include="Filters\ControlPanelAccessAttribute.cs" />
     <Compile Include="Slack\ChannelsCollection.cs" />
     <Compile Include="Slack\ISlackMessageThrottler.cs" />
     <Compile Include="Slack\SlackApiClient.cs" />
     <Compile Include="Slack\SlackApiConfiguration.cs" />
-    <Compile Include="Controllers\UnderConstructionController.cs" />
-    <Compile Include="Extensions\IPrincipalExtensions.cs" />
     <Compile Include="Extensions\ProgressiveDownload.cs" />
     <Compile Include="Extensions\ProgressiveDownloadHelpers.cs" />
     <Compile Include="Filters\ApiNoCacheAttribute.cs" />
-    <Compile Include="Attributes\NoTransactionAttribute.cs" />
     <Compile Include="Captcha\ICaptchaService.cs" />
     <Compile Include="Captcha\NoCaptchaProvider.cs" />
     <Compile Include="Captcha\HostedCaptchaProvider.cs" />
@@ -198,22 +193,10 @@
     <Compile Include="Captcha\ReCaptchaProvider.cs" />
     <Compile Include="Captcha\Extensions.cs" />
     <Compile Include="Captcha\WebCacheBasedCaptchaService.cs" />
-    <Compile Include="CommandDeserialization\CommandDeserializationException.cs" />
-    <Compile Include="CommandDeserialization\CommandDeserializer.cs" />
-    <Compile Include="CommandDeserialization\ICommandDeserializer.cs" />
-    <Compile Include="Configuration\ConfigurationManager.cs" />
-    <Compile Include="Configuration\EventBusConfigSection.cs" />
-    <Compile Include="Configuration\IConfigurationManager.cs" />
-    <Compile Include="Configuration\HqSecuritySection.cs" />
-    <Compile Include="Controllers\BaseMessageDisplayController.cs" />
     <Compile Include="DataAnnotations\PasswordRegularExpressionAttribute.cs" />
     <Compile Include="DataAnnotations\PasswordStringLengthAttribute.cs" />
     <Compile Include="DataAnnotations\DataAnnotationsConfig.cs" />
-    <Compile Include="Extensions\Alerts.cs" />
-    <Compile Include="Extensions\ModelStateDictionaryHelper.cs" />
     <Compile Include="Extensions\LinkExtensions.cs" />
-    <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="Extensions\NameValueCollectionExtensions.cs" />
     <Compile Include="Filters\ApiTransactionFilter.cs" />
     <Compile Include="Filters\TransactionFilter.cs" />
     <Compile Include="Filters\UnderConstructionFilter.cs" />
@@ -229,7 +212,6 @@
     <Compile Include="Kernel\AutofacServiceLocatorFactory.cs" />
     <Compile Include="Kernel\AutofacWebKernel.cs" />
     <Compile Include="Kernel\CustomWebApiDependencyResolver.cs" />
-    <Compile Include="Mappings\ProductVersionChangeMap.cs" />
     <Compile Include="MembershipProvider\Accounts\PasswordPolicy.cs" />
     <Compile Include="MembershipProvider\Settings\MembershipProviderSettings.cs" />
     <Compile Include="Captcha\CaptchaModule.cs" />
@@ -278,9 +260,6 @@
     <Compile Include="Slack\SlackAttachmentsDto.cs" />
     <Compile Include="Slack\SlackChannelConfiguration.cs" />
     <Compile Include="Slack\SlackMessageThrottler.cs" />
-    <Compile Include="Versions\ProductVersion.cs" />
-    <Compile Include="Versions\ProductVersionHistory.cs" />
-    <Compile Include="Versions\ProductVersionModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
