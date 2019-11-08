@@ -14,6 +14,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.DependencyInjection;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Implementation;
@@ -49,7 +50,7 @@ using WebTester;
 
 namespace WB.UI.WebTester
 {
-    public class WebTesterModule : IModule
+    public class WebTesterModule : IModule, IAppModule
     {
         private readonly IHostingEnvironment hostingEnvironment;
 
@@ -190,9 +191,130 @@ namespace WB.UI.WebTester
             typeof(WebInterviewConnectionsCounter)
         };
 
-        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status) => Task.CompletedTask;
+
+        public void Load(IDependencyRegistry registry)
         {
-            return Task.CompletedTask;
+            registry.BindAsSingletonWithConstructorArgument<ILiteEventBus, NcqrCompatibleEventDispatcher>("eventBusSettings", new EventBusSettings
+            {
+                DisabledEventHandlerTypes = Array.Empty<Type>(),
+                EventHandlerTypesWithIgnoredExceptions = Array.Empty<Type>(),
+                IgnoredAggregateRoots = new List<string>()
+            });
+
+            registry.Bind<WebTesterStatefulInterview, WebTesterStatefulInterview>();
+            registry.Bind<IInterviewFactory, InterviewFactory>();
+
+            registry.BindAsSingleton<IEvictionObservable, TokenEviction>();
+            registry.BindAsSingleton<IEvictionNotifier, TokenEviction>();
+
+            registry.Bind<IEnumeratorGroupStateCalculationStrategy, EnumeratorGroupGroupStateCalculationStrategy>();
+            registry.Bind<ISupervisorGroupStateCalculationStrategy, SupervisorGroupStateCalculationStrategy>();
+            registry.BindAsSingleton<IAggregateRootCacheCleaner, WebTesterAggregateRootRepository>();
+            registry.BindAsSingleton<IAggregateRootCacheFiller, WebTesterAggregateRootRepository>();
+            registry.BindAsSingleton<IEventSourcedAggregateRootRepository, WebTesterAggregateRootRepository>();
+            registry.BindAsSingleton<IWebInterviewNotificationService, WebInterviewNotificationService>();
+            registry.BindAsSingleton<ICommandService, WebTesterCommandService>();
+
+            //var binPath = Path.GetFullPath(Path.Combine(HttpRuntime.CodegenDir, ".." + Path.DirectorySeparatorChar + ".."));
+            var binPath = System.Web.Hosting.HostingEnvironment.MapPath("~/bin");
+            registry.BindAsSingletonWithConstructorArgument<IAppdomainsPerInterviewManager, AppdomainsPerInterviewManager>("binFolderPath", binPath);
+            registry.Bind<IImageProcessingService, ImageProcessingService>();
+            registry.Bind<IVirtualPathService, VirtualPathService>();
+            registry.Bind<ISerializer, NewtonJsonSerializer>();
+            registry.BindAsSingleton<IScenarioSerializer, ScenarioSerializer>();
+
+            registry.BindToMethod<IServiceLocator>(() => ServiceLocator.Current);
+
+            #if DEBUG
+
+            #endif
+
+            registry.BindToMethod(() => Refit.RestService.For<IDesignerWebTesterApi>(
+                new HttpClient(
+                    #if DEBUG
+                        new HttpClientHandler
+                        {
+                            ClientCertificateOptions = ClientCertificateOption.Manual,
+                            ServerCertificateCustomValidationCallback = (message, certificate2, arg3, arg4) => true
+                        }
+                    #endif
+                    )
+                {
+                    MaxResponseContentBufferSize = 2_000_000_000,
+                    BaseAddress = new Uri(DesignerAddress()),
+                    Timeout = TimeSpan.FromMinutes(3)
+                },
+                new RefitSettings
+                {                   
+                    ContentSerializer = new JsonContentSerializer(new JsonSerializerSettings { 
+                        TypeNameHandling = TypeNameHandling.All,
+                        NullValueHandling = NullValueHandling.Ignore,
+                        FloatParseHandling = FloatParseHandling.Decimal,
+                        Converters = new List<JsonConverter> { new IdentityJsonConverter(), new RosterVectorConverter() },
+                        SerializationBinder = new OldToNewAssemblyRedirectSerializationBinder()
+                    })
+                }));
+
+            foreach (var type in HubPipelineModules)
+            {
+                registry.BindAsSingleton(typeof(IPipelineModule), type);
+                registry.BindAsSingleton(type, type);
+            }
+
+            registry.Bind<IWebInterviewInterviewEntityFactory, WebInterviewInterviewEntityFactory>();
+            registry.Bind<IWebNavigationService, WebNavigationService>();
+
+            registry.BindToMethodInSingletonScope(context => new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new WebInterviewAutoMapProfile());
+            }).CreateMapper());
+
+
+            registry.BindToConstant(() => JsonSerializer.Create(new JsonSerializerSettings
+            {
+                ContractResolver = new FilteredCamelCasePropertyNamesContractResolver
+                {
+                    AssembliesToInclude =
+                    {
+                        typeof(Startup).Assembly,
+                        typeof(WebInterviewModule).Assembly,
+                        typeof(WebInterviewHub).Assembly,
+                        typeof(CategoricalOption).Assembly
+                    }
+                }
+            }));
+
+            registry.BindAsSingleton<IAudioProcessingService, AudioProcessingService>();
+
+            registry.RegisterDenormalizer<InterviewLifecycleEventHandler>();
+
+            registry.BindAsSingleton<IInMemoryEventStore, WebTesterEventStore>();
+            registry.BindToMethod<IEventStore>(f => f.Resolve<IInMemoryEventStore>());
+
+            registry.BindAsSingleton<IPlainKeyValueStorage<QuestionnaireDocument>, InMemoryKeyValueStorage<QuestionnaireDocument>>();
+            registry.BindAsSingleton(typeof(ICacheStorage<,>), typeof(InMemoryCacheStorage<,>));
+            registry.BindAsSingleton(typeof(IPlainStorageAccessor<>), typeof(InMemoryPlainStorageAccessor<>));
+            registry.BindAsSingleton<IQuestionnaireStorage, QuestionnaireStorage>();
+            registry.Bind<ITranslationStorage, TranslationStorage>();
+            registry.BindAsSingleton<IQuestionnaireImportService, QuestionnaireImportService>();
+
+            registry.Bind<IAudioFileStorage, WebTesterAudioFileStorage>();
+            registry.Bind<IImageFileStorage, WebTesterImageFileStorage>();
+
+            // TODO: Find a generic place for each of the dependencies below
+            registry.Bind<IInterviewExpressionStatePrototypeProvider, InterviewExpressionStatePrototypeProvider>();
+            registry.Bind<ITranslationManagementService, TranslationManagementService>();
+            registry.Bind<ISubstitutionTextFactory, SubstitutionTextFactory>();
+            registry.Bind<ISubstitutionService, SubstitutionService>();
+            registry.Bind<IInterviewTreeBuilder, InterviewTreeBuilder>();
+            registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
+            registry.Bind<IQuestionnaireAssemblyAccessor, WebTesterQuestionnaireAssemblyAccessor>();
+            registry.Bind<IQuestionOptionsRepository, QuestionnaireQuestionOptionsRepository>();
+            registry.BindAsSingleton<IInterviewExpressionStateUpgrader, InterviewExpressionStateUpgrader>();
+            registry.Bind<IVariableToUIStringService, VariableToUIStringService>();
         }
+
+        public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status) => Task.CompletedTask;
     }
 }

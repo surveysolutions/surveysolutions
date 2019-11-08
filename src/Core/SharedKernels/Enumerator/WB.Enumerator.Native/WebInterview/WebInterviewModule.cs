@@ -2,15 +2,17 @@ using System;
 using System.Configuration;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.DependencyInjection;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.DependencyInjection;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Modularity;
 using WB.Enumerator.Native.WebInterview.Services;
 
 namespace WB.Enumerator.Native.WebInterview
 {
-    public class WebInterviewModule : IModule
+    public class WebInterviewModule : IModule, IAppModule
     {
         public void Load(IIocRegistry registry)
         {
@@ -53,5 +55,33 @@ namespace WB.Enumerator.Native.WebInterview
                 }));
             }
         }*/
+        public void Load(IDependencyRegistry registry)
+        {
+            registry.BindAsSingleton<IConnectionsMonitor, ConnectionsMonitor>();
+            registry.Bind<IWebInterviewNotificationService, WebInterviewLazyNotificationService>();
+            registry.BindAsSingletonWithConstructorArgument<IConnectionLimiter, ConnectionLimiter>("connectionsLimit",
+                ConfigurationManager.AppSettings["MaxWebInterviewsCount"].ToInt(100));
+
+            registry.BindInPerLifetimeScope<InterviewLifecycleEventHandler, InterviewLifecycleEventHandler>();
+            //registry.BindToConstant<IJavaScriptMinifier>(() => new SignalRHubMinifier());
+
+            registry.BindToMethodInSingletonScope<IWebInterviewInvoker>(_ =>
+            {
+                // Ninject calls this method before container innitialization. Just make sure that we can handle this in AutoFac
+//                var lazyClients = new Lazy<IHubClients<dynamic>>(
+//                    () => GlobalHost.ConnectionManager.GetHubContext("interview").Clients);
+                var lazyClients = new Lazy<IHubClients>(() => _.GetRequiredService<IHubClients>());
+
+                return new WebInterviewInvoker(lazyClients);
+            });
+        }
+
+        public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status)
+        {
+            var registry = serviceLocator.GetInstance<IDenormalizerRegistry>();
+            registry.Register<InterviewLifecycleEventHandler>();
+
+            return Task.CompletedTask;
+        }
     }
 }
