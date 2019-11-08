@@ -37,57 +37,56 @@ namespace WB.Services.Export.Events
         {
             try
             {
-                using (var tr = this.dbContext.Database.BeginTransaction())
+                using var tr = await this.dbContext.Database.BeginTransactionAsync(token);
+
+                var eventsToPublish = eventsFilter != null
+                    ? await eventsFilter.FilterAsync(feed.Events)
+                    : feed.Events;
+
+                var globalSequence = dbContext.GlobalSequence;
+                
+                if (eventsToPublish.Count > 0)
                 {
-                    var eventsToPublish = eventsFilter != null
-                        ? await eventsFilter.FilterAsync(feed.Events)
-                        : feed.Events;
-
-                    var globalSequence = dbContext.GlobalSequence;
-
                     var eventHandlerStopwatch = new Stopwatch();
-                    if (eventsToPublish.Count > 0)
+
+                    foreach (var handler in handlers)
                     {
-                        foreach (var handler in handlers)
+                        eventHandlerStopwatch.Restart();
+                        foreach (var ev in eventsToPublish)
                         {
-                            eventHandlerStopwatch.Restart();
-                            foreach (var ev in eventsToPublish)
+                            try
                             {
-                                try
-                                {
-                                    await handler.Handle(ev, token);
-                                }
-                                catch (Exception e)
-                                {
-                                    e.Data.Add("Event", ev.EventTypeName);
-                                    e.Data.Add("GlobalSequence", ev.GlobalSequence);
-                                    e.Data.Add("InterviewId", ev.EventSourceId);
-                                    throw;
-                                }
+                                await handler.Handle(ev, token);
                             }
-
-                            await handler.SaveStateAsync(token);
-                            eventHandlerStopwatch.Stop();
-
-                            Monitoring.TrackEventHandlerProcessingSpeed(
-                                this.tenantContext?.Tenant?.Name,
-                                handler.GetType(),
-                                eventsToPublish.Count / eventHandlerStopwatch.Elapsed.TotalSeconds);
+                            catch (Exception e)
+                            {
+                                e.Data.Add("Event", ev.EventTypeName);
+                                e.Data.Add("GlobalSequence", ev.GlobalSequence);
+                                e.Data.Add("InterviewId", ev.EventSourceId);
+                                throw;
+                            }
                         }
+
+                        await handler.SaveStateAsync(token);
+                        eventHandlerStopwatch.Stop();
+
+                        Monitoring.TrackEventsProcessingLatency(this.tenantContext?.Tenant?.Name,
+                            eventsToPublish.Count,
+                            eventHandlerStopwatch.Elapsed);
                     }
-
-                    if (feed.Events.Count > 0)
-                    {
-                        globalSequence.AsLong = feed.Events.Last().GlobalSequence;
-                    }
-
-                    await dbContext.SaveChangesAsync(token);
-                    tr.Commit();
-
-                    Monitoring.TrackEventsProcessedCount(this.tenantContext?.Tenant?.Name, globalSequence.AsLong);
-
-                    return globalSequence.AsLong;
                 }
+
+                if (feed.Events.Count > 0)
+                {
+                    globalSequence.AsLong = feed.Events.Last().GlobalSequence;
+                }
+
+                await dbContext.SaveChangesAsync(token);
+                tr.Commit();
+                    
+                Monitoring.TrackEventsProcessedCount(this.tenantContext?.Tenant?.Name, globalSequence.AsLong);
+
+                return globalSequence.AsLong;
             }
             catch (OperationCanceledException)
             {
