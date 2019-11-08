@@ -7466,10 +7466,10 @@ value-or-function@^3.0.0:
   resolved "https://registry.yarnpkg.com/value-or-function/-/value-or-function-3.0.0.tgz#1c243a50b595c1be54a754bfece8563b9ff8d813"
   integrity sha1-HCQ6ULWVwb5Up1S/7OhWO5/42BM=
 
-vee-validate@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/vee-validate/-/vee-validate-3.0.2.tgz#0fb0a22ffa2eefcb0315629f24b93639c2777bb5"
-  integrity sha512-JpWarnbyuXmyU4wyL7rybAP8Qt5BcEDdoJtrX1mtiue/0IRYbXT04vIshg6hGfIqpBHL45Qs1AOMMHnMsBYBSQ==
+vee-validate@2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/vee-validate/-/vee-validate-2.2.2.tgz#0d98c848886bf61ba333b25e3170a22d477b1fc9"
+  integrity sha512-6Eih7mtPEpiim54WY7zI6wThXu3ZTqR3Wjg9Bf86/84gD4Z0VNckc9E1cE59yzJSH91L2qNP+lpi1ZbDkQhqXA==
 
 verror@1.10.0:
   version "1.10.0"
