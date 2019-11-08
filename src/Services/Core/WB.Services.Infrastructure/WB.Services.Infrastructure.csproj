@@ -17,5 +17,6 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="System.Reactive" Version="4.2.0" />
+    <PackageReference Include="prometheus-net" Version="3.3.0" />
   </ItemGroup>
 </Project>

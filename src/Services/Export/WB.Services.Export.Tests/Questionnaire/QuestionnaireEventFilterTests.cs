@@ -319,9 +319,7 @@ namespace WB.Services.Export.Tests.Questionnaire
             IDatabaseSchemaService databaseSchemaService = null)
         {
             return new QuestionnaireEventFilter
-            (
-                tenantContext ?? this.tenantContext,
-                dbContext,
+            (dbContext,
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 databaseSchemaService ?? Mock.Of<IDatabaseSchemaService>()
             );
