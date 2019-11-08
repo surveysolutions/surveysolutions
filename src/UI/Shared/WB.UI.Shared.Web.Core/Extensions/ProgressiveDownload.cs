@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Web;
+using WB.UI.Shared.Web.Exceptions;
 
 namespace WB.UI.Shared.Web.Extensions
 {
@@ -19,7 +19,7 @@ namespace WB.UI.Shared.Web.Extensions
 
         public HttpResponseMessage HeaderInfoMessage(long contentLength, string mediaType)
         {
-            var response = this.request.CreateResponse();
+            var response = new HttpResponseMessage();
             response.Content = new ByteArrayContent(Array.Empty<byte>());
             response.Content.Headers.ContentType = MediaTypeHeaderValue.Parse(mediaType);
             response.Content.Headers.ContentLength = contentLength;
@@ -33,7 +33,7 @@ namespace WB.UI.Shared.Web.Extensions
             if (rangeHeader != null)
             {
                 var byteRange = new ByteRangeStreamContent(stream, this.request.Headers.Range, mediaType);
-                var partialResponse = this.request.CreateResponse(HttpStatusCode.PartialContent);
+                var partialResponse = new HttpResponseMessage(HttpStatusCode.PartialContent);
 
                 partialResponse.Content = new PushStreamContent((outputStream, content, context) =>
                 {

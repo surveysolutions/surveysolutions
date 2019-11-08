@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
 using Main.Core.Documents;
-using Microsoft.AspNet.SignalR.Hubs;
-using Ncqrs.Eventing.ServiceModel.Bus;
+using Microsoft.AspNetCore.Hosting;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
 using Refit;
@@ -40,17 +40,24 @@ using WB.Enumerator.Native.WebInterview.Models;
 using WB.Enumerator.Native.WebInterview.Pipeline;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.Infrastructure.Native.Storage;
-using WB.UI.Shared.Web.Implementation.Services;
 using WB.UI.Shared.Web.Services;
 using WB.UI.WebTester.Hub;
 using WB.UI.WebTester.Infrastructure;
 using WB.UI.WebTester.Services;
 using WB.UI.WebTester.Services.Implementation;
+using WebTester;
 
 namespace WB.UI.WebTester
 {
     public class WebTesterModule : IModule
     {
+        private readonly IHostingEnvironment hostingEnvironment;
+
+        public WebTesterModule(IHostingEnvironment hostingEnvironment)
+        {
+            this.hostingEnvironment = hostingEnvironment;
+        }
+
         private static string DesignerAddress()
         {
             var baseAddress = ConfigurationSource.Configuration["DesignerAddress"];
@@ -78,7 +85,7 @@ namespace WB.UI.WebTester
             registry.BindAsSingleton<ICommandService, WebTesterCommandService>();
 
             //var binPath = Path.GetFullPath(Path.Combine(HttpRuntime.CodegenDir, ".." + Path.DirectorySeparatorChar + ".."));
-            var binPath = System.Web.Hosting.HostingEnvironment.MapPath("~/bin");
+            var binPath = Path.Combine(hostingEnvironment.WebRootPath, "bin");
             registry.BindAsSingletonWithConstructorArgument<IAppdomainsPerInterviewManager, AppdomainsPerInterviewManager>("binFolderPath", binPath);
             registry.Bind<IImageProcessingService, ImageProcessingService>();
             registry.Bind<IVirtualPathService, VirtualPathService>();
