@@ -36,6 +36,8 @@ namespace WB.Services.Export.Tests.CsvExport
                 .ReturnsAsync(new ByteArrayContent(translatedPdfFileFromHq));
 
             var fileSystem = new Mock<IFileSystemAccessor>();
+            fileSystem.Setup(x => x.MakeValidFileName(It.IsAny<string>()))
+                .Returns<string>(arg => arg);
             var mockMainStream = new MemoryStream();
             var mockTranslatedStream = new MemoryStream();
             fileSystem.Setup(x => x.OpenOrCreateFile($"testPath\\Pdf\\{questionnaire.VariableName}.pdf", false))

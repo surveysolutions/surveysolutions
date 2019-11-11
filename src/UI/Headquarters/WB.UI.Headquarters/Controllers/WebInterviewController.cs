@@ -557,6 +557,9 @@ namespace WB.UI.Headquarters.Controllers
 
             var interviewer = this.usersRepository.GetUser(assignment.ResponsibleId);
             
+            if(interviewer.Roles.Any(x => x == UserRoles.Supervisor || x == UserRoles.Headquarter))
+                throw new InvalidOperationException(@"Web interview is not allowed to be completed by this role");
+
             var interviewId = Guid.NewGuid();
 
             var createInterviewCommand = new CreateInterview(
