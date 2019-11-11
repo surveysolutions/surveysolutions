@@ -78,7 +78,7 @@ namespace WB.UI.Shared.Enumerator.Services
             if (!this.fileSystemAccessor.IsDirectoryExists(backupToFolderPath))
                 this.fileSystemAccessor.CreateDirectory(backupToFolderPath);
 
-            var timestamp = $"{DateTime.Now:s}";
+            var timestamp = $"{DateTime.Now:s}".Replace(":", "_");
             var backupFilePath = this.fileSystemAccessor.CombinePath(backupToFolderPath, $"backup-{timestamp}.zip");
 
             var backupTempFolder = this.fileSystemAccessor.CombinePath(backupToFolderPath,  $"temp-backup-{timestamp}");
