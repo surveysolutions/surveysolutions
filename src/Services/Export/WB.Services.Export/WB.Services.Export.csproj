@@ -58,6 +58,7 @@
     <PackageReference Include="System.Reactive" Version="4.1.5" />
     <PackageReference Include="System.Runtime.Caching" Version="4.5.0" />
     <PackageReference Include="System.Threading.Tasks.Dataflow" Version="4.9.0" />
+    <PackageReference Include="Unidecode.NET" Version="1.4.0" />
   </ItemGroup>
 
   <ItemGroup>
