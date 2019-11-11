@@ -120,7 +120,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 var multimediaAnswer = multimediaQuestion.GetAnswer();
                 this.Answer = 
-                    this.imageFileStorage.GetInterviewBinaryData(this.interviewId, multimediaAnswer.FileName).Result;
+                    Task.Run<byte[]>(async () => await this.imageFileStorage.GetInterviewBinaryData(this.interviewId, multimediaAnswer.FileName)).Result;
             }
 
             this.eventRegistry.Subscribe(this, interviewId);
