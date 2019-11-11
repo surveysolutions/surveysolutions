@@ -60,11 +60,6 @@ namespace WB.Core.Infrastructure.DependencyInjection
             services.AddTransient(func);
         }
 
-        public void BindAsSingletonWithConstructorArgument<TInterface, TImplementation>(string argumentName, object argumentValue) where TImplementation : TInterface
-        {
-            //services.AddSingleton(func);
-        }
-
         public void BindToMethodInSingletonScope<T>(Func<IServiceProvider, T> func, string named = null)
         {
             services.AddSingleton(func);

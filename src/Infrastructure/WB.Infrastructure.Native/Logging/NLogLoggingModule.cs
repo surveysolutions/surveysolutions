@@ -24,14 +24,7 @@ namespace WB.Infrastructure.Native.Logging
         public void Load(IDependencyRegistry registry)
         {
             registry.Bind<ILoggerProvider, NLogLoggerProvider>();
-
-            registry.BindToMethod<ILogger>(context =>
-            {
-                if (context.MemberDeclaringType != null)
-                    return new NLogLogger(context.MemberDeclaringType);
-
-                return new NLogLogger("UNKNOWN");
-            });
+            registry.Bind<ILogger, NLogLogger>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status) => Task.CompletedTask;
