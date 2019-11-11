@@ -39,7 +39,7 @@
         },
         computed: {
             isInterviewersComment() {
-                return this.userRole == 4 /*'Interviewer'*/;
+                return this.userRole == 'Interviewer';
             },
             commentTitle() {
                 if (this.isOwnComment == true) {
