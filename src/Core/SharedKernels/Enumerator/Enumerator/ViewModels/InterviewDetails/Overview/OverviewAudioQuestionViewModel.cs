@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.WeakSubscription;
 using WB.Core.SharedKernels.DataCollection;
@@ -34,8 +35,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
                 var audioQuestion = treeQuestion.GetAsInterviewTreeAudioQuestion();
                 fileName = audioQuestion.GetAnswer().FileName;
 
-                this.Audio = audioFileStorage.GetInterviewBinaryData(interviewId,
-                    fileName).Result;
+                this.Audio = Task.Run<byte[]>(async () => await audioFileStorage.GetInterviewBinaryData(interviewId,
+                    fileName)).Result;
                 this.audioService.WeakSubscribe<IAudioService, PlaybackCompletedEventArgs>(nameof(audioService.OnPlaybackCompleted), PlaybackCompleted);
             }
         }
