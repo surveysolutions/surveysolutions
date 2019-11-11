@@ -244,6 +244,9 @@
   <data name="Error_NotFound" xml:space="preserve">
     <value>Interview not found</value>
   </data>
+  <data name="EnterPasswordText" xml:space="preserve">
+    <value>This link is protected with password, that was distributed with the link. Please enter it here</value>
+  </data>
   <data name="PictureQuestionNotAPicture" xml:space="preserve">
     <value>Only image files are accepted</value>
   </data>

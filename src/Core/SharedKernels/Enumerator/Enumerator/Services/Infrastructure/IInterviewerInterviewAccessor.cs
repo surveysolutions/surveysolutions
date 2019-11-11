@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using Ncqrs.Eventing;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 
 namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
@@ -12,6 +10,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
         
         InterviewPackageContainer GetInterviewEventStreamContainer(Guid interviewId);
 
-        void CheckAndProcessInterviewsWithoutViews();
+        void CheckAndProcessInterviewsToFixViews();
     }
 }
