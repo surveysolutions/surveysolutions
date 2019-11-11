@@ -62,7 +62,7 @@ namespace WB.Enumerator.Native.WebInterview
             registry.BindToMethodInSingletonScope((s) =>
                 new ConnectionLimiter(ConfigurationManager.AppSettings["MaxWebInterviewsCount"].ToInt(100)));
 
-            registry.BindInPerLifetimeScope<InterviewLifecycleEventHandler, InterviewLifecycleEventHandler>();
+            registry.BindAsScoped<InterviewLifecycleEventHandler, InterviewLifecycleEventHandler>();
             //registry.BindToConstant<IJavaScriptMinifier>(() => new SignalRHubMinifier());
 
             registry.BindToMethodInSingletonScope<IWebInterviewInvoker>(_ =>
