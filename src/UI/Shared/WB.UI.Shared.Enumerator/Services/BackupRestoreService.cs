@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Humanizer;
 using Plugin.Permissions.Abstractions;
 using SQLite;
 using SQLitePCL;
@@ -88,6 +89,7 @@ namespace WB.UI.Shared.Enumerator.Services
             try
             {
                 this.CreateDeviceInfoFile();
+                this.CreateFilesListInfoFile();
 
                 await Task.Run(this.BackupSqliteDbs).ConfigureAwait(false);
 
@@ -355,6 +357,36 @@ namespace WB.UI.Shared.Enumerator.Services
             var tabletInfoFilePath = this.fileSystemAccessor.CombinePath(this.privateStorage, "device.info");
             var deviceTechnicalInformation = this.deviceSettings.GetDeviceTechnicalInformation();
             this.fileSystemAccessor.WriteAllText(tabletInfoFilePath, deviceTechnicalInformation);
+
+        }
+
+        private void CreateFilesListInfoFile()
+        {
+            var internalFiles = this.fileSystemAccessor.CombinePath(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+            var tabletInfoFilePath = this.fileSystemAccessor.CombinePath(this.privateStorage, "files.info");
+
+            var files = this.fileSystemAccessor.GetFilesInDirectory(internalFiles, true);
+            var sb = new StringBuilder();
+            sb.AppendLine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + " files list:");
+            sb.AppendLine();
+
+            foreach(var file in files)
+            {
+                var fi = new FileInfo(file);
+                sb.Append($"\t{file}");
+
+                // we want to always read hash for .apk files or add hash if it's already exists 
+                if (file.EndsWith(".apk") || this.fileSystemAccessor.IsFileExists(file + ".md5"))
+                {
+                    var hash = this.fileSystemAccessor.ReadHash(file);
+                    sb.Append($"\t[md5:{Convert.ToBase64String(hash)}]");
+                }
+
+                sb.Append($"\t{fi.Length}({fi.Length.Bytes().ToString("0.00")})\t{fi.LastWriteTimeUtc}");
+                sb.AppendLine();
+            }
+
+            this.fileSystemAccessor.WriteAllText(tabletInfoFilePath, sb.ToString());
         }
 
         private void DecryptKeyStore()
