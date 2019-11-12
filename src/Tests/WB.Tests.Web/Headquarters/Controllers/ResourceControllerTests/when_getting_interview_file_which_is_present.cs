@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ResourceControllerTests
             controller =
                 CreateController(
                     imageFileStorage:
-                        Mock.Of<IImageFileStorage>(_ => _.GetInterviewBinaryData(interviewId, fileName) == Task.FromResult(fileContent)));
+                        Mock.Of<IImageFileStorage>(_ => _.GetInterviewBinaryDataAsync(interviewId, fileName) == Task.FromResult(fileContent)));
             await Becauseof();
         }
 
