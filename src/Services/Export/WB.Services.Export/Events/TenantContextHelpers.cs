@@ -18,6 +18,13 @@ namespace WB.Services.Export.Events
 
             ctx.Tenant = context.Tenant;
         }
+
+        public static IServiceScope CreateTenantScope(this IServiceProvider serviceProvider, ITenantContext context)
+        {
+            var scope = serviceProvider.CreateScope();
+            scope.PropagateTenantContext(context);
+            return scope;
+        }
         
         public static void SetTenant(this IServiceProvider scope, TenantInfo tenant)
         {

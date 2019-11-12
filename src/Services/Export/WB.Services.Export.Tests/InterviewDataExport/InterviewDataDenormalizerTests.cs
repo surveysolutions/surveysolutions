@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using ApprovalTests;
 using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
+using ApprovalTests.Reporters.TestFrameworks;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
@@ -365,7 +366,8 @@ namespace WB.Services.Export.Tests.InterviewDataExport
             IMemoryCache memoryCache = Mock.Of<IMemoryCache>(mc => mc.TryGetValue(It.IsAny<object>(), out value) == true);
             ILogger<InterviewDataDenormalizer> logger = Mock.Of<ILogger<InterviewDataDenormalizer>>();
             var interviewReference = Create.Entity.InterviewReference();
-            IInterviewReferencesStorage interviewReferencesStorage = Mock.Of<IInterviewReferencesStorage>(r => r.FindAsync(It.IsAny<Guid>()) == Task.FromResult(interviewReference));
+            IInterviewReferencesStorage interviewReferencesStorage = Mock.Of<IInterviewReferencesStorage>(r 
+                => r.FindAsync(It.IsAny<Guid>()) == new ValueTask<InterviewReference>(Task.FromResult(interviewReference)));
             IInterviewDataExportBulkCommandBuilder commandBuilder = new InterviewDataExportBulkCommandBuilder();
             Mock<ICommandExecutor> commandExecutor = new Mock<ICommandExecutor>();
             commandExecutor.Setup(c => c.ExecuteNonQueryAsync(It.IsAny<DbCommand>(), It.IsAny<CancellationToken>()))
