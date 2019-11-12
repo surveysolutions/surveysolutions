@@ -1,9 +1,7 @@
-﻿using System.Configuration;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Amazon.S3;
 using Amazon.S3.Transfer;
 using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
@@ -14,33 +12,44 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage
     public class FileStorageModule : IModule
     {
         private readonly string currentFolderPath;
+        private readonly bool isS3Enabled;
+        private readonly string bucketName;
+        private readonly string region;
+        private readonly string prefix;
+        private readonly string endpoint;
 
-        public FileStorageModule(string currentFolderPath)
+        public FileStorageModule(string currentFolderPath,
+            bool isS3enabled,
+            string bucketName,
+            string region,
+            string prefix, 
+            string endpoint)
         {
             this.currentFolderPath = currentFolderPath;
+            this.isS3Enabled = isS3enabled;
+            this.bucketName = bucketName;
+            this.region = region;
+            this.prefix = prefix;
+            this.endpoint = endpoint;
         }
 
         public void Load(IIocRegistry registry)
         {
             registry.Bind<IAudioFileStorage, AudioFileStorage>();
             
-
-            var isS3Enabled = ConfigurationManager.AppSettings["Storage.S3.Enable"].ToBool(true);
-
             if (isS3Enabled)
             {
                 registry.Bind<IExternalFileStorage, S3FileStorage>();
 
                 registry.BindToMethodInSingletonScope(ctx =>
                 {
-                    var settings = ConfigurationManager.AppSettings;
 
                     return new AmazonS3Settings
                     {
-                        BucketName = settings["Storage.S3.BucketName"],
-                        Region = settings["Storage.S3.Region"],
-                        Prefix = settings["Storage.S3.Prefix"],
-                        Endpoint = settings["Storage.S3.Endpoint"]
+                        BucketName = bucketName,
+                        Region = region, 
+                        Prefix = prefix, 
+                        Endpoint = endpoint 
                     };
                 });
 

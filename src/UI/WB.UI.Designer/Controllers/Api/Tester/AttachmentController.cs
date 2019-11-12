@@ -1,6 +1,5 @@
 using System.Net;
-using System.Net.Http;
-using System.Web.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
@@ -8,7 +7,7 @@ using WB.UI.Designer.Code.Attributes;
 
 namespace WB.UI.Designer.Controllers.Api.Tester
 {
-    [ApiBasicAuth]
+    [Authorize]
     [Route("api/v{version:int}/attachment")]
     public class AttachmentController : ControllerBase
     {

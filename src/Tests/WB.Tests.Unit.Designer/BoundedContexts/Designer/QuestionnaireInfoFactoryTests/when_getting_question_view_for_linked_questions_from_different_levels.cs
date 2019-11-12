@@ -3,6 +3,7 @@ using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
@@ -13,7 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
     internal class when_getting_question_view_for_linked_questions_from_different_levels : QuestionnaireInfoFactoryTestContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
-            questionDetailsReaderMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
+            questionDetailsReaderMock = new Mock<IDesignerQuestionnaireStorage>();
             questionnaireView = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                 Create.Roster(g1Id, title: "Roster 1", fixedRosterTitles: new [] { Create.FixedRosterTitle(1, "1") }, children: new IComposite[]
@@ -36,7 +37,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
             });
 
             questionDetailsReaderMock
-                .Setup(x => x.GetById(questionnaireId))
+                .Setup(x => x.Get(questionnaireId))
                 .Returns(questionnaireView);
 
             factory = CreateQuestionnaireInfoFactory(questionDetailsReaderMock.Object);
@@ -77,8 +78,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
 
         private static QuestionnaireInfoFactory factory;
         private static QuestionnaireDocument questionnaireView;
-        private static Mock<IPlainKeyValueStorage<QuestionnaireDocument>> questionDetailsReaderMock;
-        private static string questionnaireId = "11111111111111111111111111111111";
+        private static Mock<IDesignerQuestionnaireStorage> questionDetailsReaderMock;
         private static NewEditQuestionView q2View;
         private static NewEditQuestionView q4View;
         private static NewEditQuestionView q6View;

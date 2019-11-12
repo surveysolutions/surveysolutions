@@ -1,9 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using Microsoft.AspNet.Identity;
-using Microsoft.Owin.Security;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity.Providers;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
@@ -23,9 +21,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IPasswordHasher, PasswordHasher>();
             registry.Bind<IIdentityValidator<string>, HqPasswordValidator>();
 
-            //this.Bind<IOwinContext>().ToMethod(context => HttpContext.Current.GetOwinContext());
-            registry.BindToMethodInRequestScope<IAuthenticationManager>(context => HttpContext.Current.GetOwinContext().Authentication);
-
             // no on per request scope required - lifetime managed by their parents controllers/handlers
             registry.Bind<HQIdentityDbContext>();
 
@@ -38,7 +33,6 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.Bind<UserManager<HqUser, Guid>, HqUserManager>();
 
-            registry.Bind<HqSignInManager>();
 
             registry.Bind<IApiTokenProvider<Guid>, ApiAuthTokenProvider<HqUser, Guid>>();
             registry.Bind<IAuthorizedUser, AuthorizedUser>();

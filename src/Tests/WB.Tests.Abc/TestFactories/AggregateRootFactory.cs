@@ -100,7 +100,8 @@ namespace WB.Tests.Abc.TestFactories
             Action<Mock<IInterviewLevel>> setupLevel = null,
             List<InterviewAnswer> answers = null,
             List<string> protectedAnswers = null,
-            IQuestionOptionsRepository optionsRepository = null)
+            IQuestionOptionsRepository optionsRepository = null,
+            Type expressionStorageType = null)
         {
             questionnaireId = questionnaireId ?? questionnaire?.PublicKey ?? Guid.NewGuid();
             if (questionnaire != null)
@@ -118,7 +119,7 @@ namespace WB.Tests.Abc.TestFactories
                 questionnaire ?? Create.Entity.QuestionnaireDocumentWithOneQuestion(), 1,
                 questionOptionsRepository: questionOptionsRepository);
 
-            plainQuestionnaire.ExpressionStorageType = typeof(DummyInterviewExpressionStorage);
+            plainQuestionnaire.ExpressionStorageType = expressionStorageType ?? typeof(DummyInterviewExpressionStorage);
 
             var questionnaireRepository = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(plainQuestionnaire, questionnaire ?? 
                 Create.Entity.QuestionnaireDocumentWithOneQuestion());

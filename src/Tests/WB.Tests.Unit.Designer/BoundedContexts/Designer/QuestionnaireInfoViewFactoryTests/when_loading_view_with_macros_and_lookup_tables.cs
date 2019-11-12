@@ -4,6 +4,7 @@ using System.Linq;
 using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
@@ -17,17 +18,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
         [NUnit.Framework.Test]
         public void should_find_questionnaire()
         {
-            var questionnaireDocument = CreateQuestionnaireDocument(questionnaireId, questionnaireTitle);
+            var questionnaireDocument = CreateQuestionnaireDocument(questionnaireId.ToString(), questionnaireTitle);
             questionnaireDocument.Macros = macros;
             questionnaireDocument.LookupTables = lookupTables;
 
             var dbContext = Create.InMemoryDbContext();
-            dbContext.Questionnaires.Add(Create.QuestionnaireListViewItem(id: Guid.Parse(questionnaireId)));
+            dbContext.Questionnaires.Add(Create.QuestionnaireListViewItem(id: questionnaireId.QuestionnaireId));
             dbContext.SaveChanges();
 
-            var repositoryMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
+            var repositoryMock = new Mock<IDesignerQuestionnaireStorage>();
             repositoryMock
-                .Setup(x => x.GetById(questionnaireId))
+                .Setup(x => x.Get(questionnaireId))
                 .Returns(questionnaireDocument);
 
             factory = CreateQuestionnaireInfoViewFactory(dbContext: dbContext, repository: repositoryMock.Object);
@@ -84,7 +85,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
             {lookupTable1Id, Create.LookupTable("table1")},
             {lookupTable2Id, Create.LookupTable("table2")}
         };
-        private static string questionnaireId = "11111111111111111111111111111111";
+        
         private static string questionnaireTitle = "questionnaire title";
         private static Guid userId = Guid.Parse("22222222222222222222222222222222");
 

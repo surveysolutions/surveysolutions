@@ -5,7 +5,10 @@
             <div class="buttons">
                 <a class="btn" href="http://support.mysurvey.solutions/designer" target="_blank" ng-i18next>Help</a>
                 <a class="btn" href="../../questionnaire/questionnairehistory/{{questionnaire.questionnaireId}}" target="_blank" ng-i18next>History</a>
+                <button class="btn" type="button" ng-click="showDownloadPdf()" ng-i18next>DownloadPdf</button>
                 <a class="btn" type="button" ng-show="questionnaire.hasViewerAdminRights" href="../../questionnaire/backup/{{questionnaire.questionnaireId}}" ng-i18next>Backup</a>
+
+                <a class="btn"  ng-if="questionnaire.questionnaireRevision" href="../../questionnaire/clone/{{questionnaire.questionnaireId}}${{questionnaire.questionnaireRevision}}" target="_blank" ng-i18next>SaveAs</a>
                 <button class="btn" type="button" ng-disabled="questionnaire.isReadOnlyForUser && !questionnaire.hasViewerAdminRights && !questionnaire.isSharedWithUser" ng-click="showShareInfo()" ng-i18next>Settings</button>
 
                 <div class="btn-group">
@@ -32,7 +35,7 @@
                                                                     rostersCount: '{{questionnaire.rostersCount}}' })QuestionnaireSummary">
 
                     </span>
-                    <input id="verification-btn" type="button" class="btn" ng-i18next="[value]Compile" value="COMPILE" ng-click="verify()" />
+                    <input id="verification-btn" type="button" class="btn" ng-i18next="[value]Compile" value="COMPILE" ng-click="verify()" ng-if="questionnaire.questionnaireRevision === null" />
                     <span ng-show="verificationStatus.warnings!=null && verificationStatus.errors!=null">
                         <span data-toggle="modal" ng-show="(verificationStatus.warnings.length + verificationStatus.errors.length) > 0" class="error-message ng-hide" ng-class="{'no-errors': verificationStatus.errors.length == 0}">
                             <a href="javascript:void(0);"
@@ -51,7 +54,7 @@
                         <span class="text-success"><em ng-i18next="[i18next]({dateTime: verificationStatus.time})SavedAtTimestamp"></em></span>
                     </span>
                     <span class="error-message strong" ng-show="questionnaire.isReadOnlyForUser" ng-i18next>ReadOnly</span>
-                    <input id="webtest-btn" type="button" class="btn" ng-if="questionnaire.webTestAvailable" ng-i18next="[value]Test" value="Test" ng-click="webTest()" />
+                    <input id="webtest-btn" type="button" class="btn" ng-if="questionnaire.webTestAvailable && questionnaire.questionnaireRevision === null" ng-i18next="[value]Test" value="Test" ng-click="webTest()" />
                 </div>
             </div>
         </div>
@@ -713,7 +716,7 @@
             <li><a class="left-menu-chapters" ng-class="{unfolded: isUnfoldedChapters }" ng-click="unfoldChapters();" ng-i18next="[title]SideBarSectionsTitle"></a></li>
             <li><a class="left-menu-metadata" ng-class="{unfolded: isUnfoldedMetadata }" ng-click="unfoldMetadata();" ng-i18next="[title]SideBarMetadataTitle"></a></li>
             <li><a class="left-menu-translations" ng-class="{unfolded: isUnfoldedTranslations }" ng-click="unfoldTranslations();" ng-i18next="[title]SideBarTranslationsTitle"></a></li>
-            <li><a class="left-menu-scenarios" ng-class="{unfolded: isUnfoldedScenarios }" ng-click="unfoldScenarios();" ng-i18next="[title]SideBarScenarioTitle"></a></li>
+            <li><a class="left-menu-scenarios" ng-if="questionnaire.questionnaireRevision === null" ng-class="{unfolded: isUnfoldedScenarios }" ng-click="unfoldScenarios();" ng-i18next="[title]SideBarScenarioTitle"></a></li>
             <li><a class="left-menu-macroses" ng-class="{unfolded: isUnfoldedMacros }" ng-click="unfoldMacros();" ng-i18next="[title]SideBarMacroTitle"></a></li>
             <li><a class="left-menu-lookupTables" ng-class="{unfolded: isUnfoldedLookupTables }" ng-click="unfoldLookupTables();" ng-i18next="[title]SideBarLookupTitle"></a></li>
             <li><a class="left-menu-attachments" ng-class="{unfolded: isUnfoldedAttachments }" ng-click="unfoldAttachments();" ng-i18next="[title]SideBarAttachmentsTitle"></a></li>
@@ -726,8 +729,8 @@
 <script type="text/ng-template" id="Image-attachment-info-template.html">
     <p>
         <span class="file-name">{{attachment.meta.fileName}}</span>, &nbsp;
-        <span ng-class="{'error': isAttachmentResolutionTooBig(attachment)}" ng-if="attachment.content.details.width" ng-i18next="({width: attachment.content.details.width, height: attachment.content.details.height})SideBarAttachmentDetailsResolution"></span>{{attachment.content.details.width ? ',&nbsp;' : ''}} 
-        <span ng-i18next="({type: attachment.content.type})SideBarAttachmentDetailsFormat"></span>, 
+        <span ng-class="{'error': isAttachmentResolutionTooBig(attachment)}" ng-if="attachment.content.details.width" ng-i18next="({width: attachment.content.details.width, height: attachment.content.details.height})SideBarAttachmentDetailsResolution"></span>{{attachment.content.details.width ? ',&nbsp;' : ''}}
+        <span ng-i18next="({type: attachment.content.type})SideBarAttachmentDetailsFormat"></span>,
         <span ng-class="{'error': isAttachmentSizeTooBig(attachment)}" ng-i18next="({size: formatBytes(attachment.content.size)})SideBarAttachmentDetailsSize"></span>
     </p>
     <p ng-i18next="({lastUpdate: attachment.meta.lastUpdated})SideBarAttachmentUploaded"></p>
@@ -739,7 +742,7 @@
             <button type="button" class="close" ng-click="closeVerifications()" aria-hidden="true"></button>
             <h3 class="modal-title">
                 <span ng-i18next="CompilationLabel"></span>
-                
+
                 <span ng-if="verificationStatus.typeOfMessageToBeShown === 'error'" ng-i18next="({count: verificationStatus.messagesToShow.length})CompilationErrorsCounter"></span>
                 <span ng-if="verificationStatus.typeOfMessageToBeShown === 'warning'" ng-i18next="({count: verificationStatus.messagesToShow.length})CompilationWarningsCounter"></span>
             </h3>

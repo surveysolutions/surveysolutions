@@ -1,4 +1,5 @@
-﻿@using WB.UI.Headquarters.Models.WebInterview
+﻿@using WB.Core.GenericSubdomains.Portable
+@using WB.UI.Headquarters.Models.WebInterview
 @using WB.UI.Shared.Web.Captcha
 @model WB.UI.Headquarters.Models.WebInterview.StartWebInterview
 @{
@@ -34,7 +35,7 @@
     if (Model.HasPassword)
     {
         <div class="form-group @(isPasswordInvalid? "has-error": "")">
-            <label class="font-bold primary-text">This link is protected with password, that was distributed with the link. Please enter it here</label>
+            <label class="font-bold primary-text">@WebInterview.EnterPasswordText</label>
             <input class="form-control" type="password" name="password" placeholder="Enter the password" />
             @if (isPasswordInvalid)
             {
@@ -46,13 +47,18 @@
     if (Model.ServerUnderLoad)
     {
         <div class="row-element">
-            <button class="btn btn-success btn-lg" onClick="window.location.reload();return false">@WebInterview.RefreshPage</button>
+            <button class="btn btn-success btn-lg" onClick="window.location.reload(); return false;">@WebInterview.RefreshPage</button>
         </div>
     }
     else
     {
-        <div class="row-element">
+        <div class="row-element mb-20">
             <button class="btn btn-success btn-lg" type="submit">@(isResume ? WebInterview.ResumeInterview : WebInterview.Start)</button>
         </div>
+    }
+
+    if (Model.PendingInterviewId != Guid.Empty)
+    {
+        <input name="resume" class="btn btn-success btn-lg" type="submit" value="@WebInterview.ResumeInterview" />
     }
 }

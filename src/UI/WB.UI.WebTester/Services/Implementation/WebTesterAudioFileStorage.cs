@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 
@@ -14,12 +15,14 @@ namespace WB.UI.WebTester.Services.Implementation
             this.mediaStorage = mediaStorage;
         }
 
-        public byte[] GetInterviewBinaryData(Guid interviewId, string fileName)
+        public Task<byte[]> GetInterviewBinaryData(Guid interviewId, string fileName)
         {
-            return this.mediaStorage.Get(fileName, interviewId)?.Data;
+            var interviewBinaryData = this.mediaStorage.Get(fileName, interviewId)?.Data;
+
+            return Task.FromResult(interviewBinaryData);
         }
 
-        public List<InterviewBinaryDataDescriptor> GetBinaryFilesForInterview(Guid interviewId)
+        public Task<List<InterviewBinaryDataDescriptor>> GetBinaryFilesForInterview(Guid interviewId)
         {
             throw new NotImplementedException();
         }
@@ -34,9 +37,10 @@ namespace WB.UI.WebTester.Services.Implementation
             }, fileName, interviewId);
         }
 
-        public void RemoveInterviewBinaryData(Guid interviewId, string fileName)
+        public Task RemoveInterviewBinaryData(Guid interviewId, string fileName)
         {
             mediaStorage.Remove(fileName, interviewId);
+            return Task.CompletedTask;
         }
     }
 }

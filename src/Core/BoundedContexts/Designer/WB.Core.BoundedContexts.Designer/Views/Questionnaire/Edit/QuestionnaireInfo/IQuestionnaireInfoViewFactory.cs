@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo
 {
+
     public interface IQuestionnaireInfoViewFactory
     {
-        QuestionnaireInfoView Load(string questionnaireId, Guid viewerId);
+        QuestionnaireInfoView Load(QuestionnaireRevision questionnaireId, Guid viewerId);
     }
 }

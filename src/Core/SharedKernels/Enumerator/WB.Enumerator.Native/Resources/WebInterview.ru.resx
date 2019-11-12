@@ -139,7 +139,7 @@
     <value>Пользователь не авторизован</value>
   </data>
   <data name="FinishInterviewText" xml:space="preserve">
-    <value>Интервью было закончено</value>
+    <value>Интервью было завершено</value>
   </data>
   <data name="HasPreviousStartedInterview" xml:space="preserve">
     <value>Вы стартовали интервью</value>
@@ -360,5 +360,8 @@
   </data>
   <data name="NoteForSupervisor" xml:space="preserve">
     <value>Комментарий для супервизора</value>
+  </data>
+  <data name="EnterPasswordText" xml:space="preserve">
+    <value>Эта ссылка защищена паролем, который распространяется вместе со ссылкой. Пожалуйста введите его</value>
   </data>
 </root>

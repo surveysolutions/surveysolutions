@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using Android.App;
 using Android.Bluetooth;
 using Android.Content;
@@ -376,8 +375,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             if (this.GoogleApi == null)
             {
                 this.GoogleApi = new GoogleApiClient.Builder(this)
-                    .AddConnectionCallbacks(this)
-                    .AddOnConnectionFailedListener(this)
+                    .EnableAutoManage(this, this)
                     .AddApi(NearbyClass.CONNECTIONS_API)
                     .Build();
 

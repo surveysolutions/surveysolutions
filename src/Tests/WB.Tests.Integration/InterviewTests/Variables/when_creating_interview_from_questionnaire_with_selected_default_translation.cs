@@ -17,6 +17,7 @@ namespace WB.Tests.Integration.InterviewTests.Variables
         private const string language = "Mova";
         private readonly Guid rosterId = Id.gA;
 
+        private AppDomainContext appDomainContext;
         private EventContext eventContext;
 
         [OneTimeSetUp]
@@ -54,9 +55,10 @@ namespace WB.Tests.Integration.InterviewTests.Variables
             IQuestionnaireStorage questionnaires = Moq.Mock.Of<IQuestionnaireStorage>(x =>
                 x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), null) == nonTranslatedPlainQuestionnaire &&
                 x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), language) == translatedPlainQuestionnaire);
+            appDomainContext = AppDomainContext.Create();
 
             // ACT
-            interview = SetupStatefullInterviewWithExpressionStorageWithoutCreate(nonTranslatedQuestionnaire
+            interview = SetupStatefullInterviewWithExpressionStorageWithoutCreate(appDomainContext.AssemblyLoadContext, nonTranslatedQuestionnaire
                 , questionnaireStorage: questionnaires);
 
             var command = Create.Command.CreateInterview(Guid.Empty, Id.g1, 
@@ -65,6 +67,12 @@ namespace WB.Tests.Integration.InterviewTests.Variables
 
             this.eventContext = new EventContext();
             interview.CreateInterview(command);
+        }
+
+        public void TearDown()
+        {
+            eventContext.Dispose();
+            appDomainContext.Dispose();
         }
 
         [Test]

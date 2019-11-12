@@ -13,13 +13,10 @@ using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -29,8 +26,6 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.SurveySolutions;
 using WB.Enumerator.Native.Questionnaire.Impl;
 using WB.Tests.Abc.Storage;
-using WB.UI.WebTester.Services;
-using WB.UI.WebTester.Services.Implementation;
 
 namespace WB.Tests.Abc.TestFactories
 {
@@ -78,11 +73,6 @@ namespace WB.Tests.Abc.TestFactories
 
         public SQLiteConnectionWithLock InMemorySqLiteConnection =>
             new SQLiteConnectionWithLock(new SQLiteConnectionString(":memory:", SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex, true));
-
-        public InMemoryCacheStorage<MultimediaFile, string> MediaStorage()
-        {
-            return new InMemoryCacheStorage<MultimediaFile, string>();
-        }
 
         public S3FileStorage S3FileStorage(AmazonS3Settings s3Settings, IAmazonS3 client, ITransferUtility transferUtility, ILoggerProvider loggerProvider)
         {

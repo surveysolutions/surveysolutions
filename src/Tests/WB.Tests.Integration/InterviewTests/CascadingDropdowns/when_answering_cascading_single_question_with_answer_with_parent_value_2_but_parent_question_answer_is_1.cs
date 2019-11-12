@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using AppDomainToolkit;
 using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
@@ -46,7 +45,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                         })
                     );
 
-                var interview = SetupInterviewWithExpressionStorage(questionnaire, new List<object>
+                var interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaire, new List<object>
                 {
                     Create.Event.SingleOptionQuestionAnswered(
                         parentSingleOptionQuestionId, new decimal[] { }, 1, null, null
@@ -83,7 +82,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
         }
 
         private static InvokeResults results;
-        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        private static AppDomainContext appDomainContext;
 
         [Serializable]
         internal class InvokeResults

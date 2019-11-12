@@ -241,4 +241,7 @@
   <data name="WebInterviewUserMessages_CompleteNoteToSupervisor_Descr" xml:space="preserve">
     <value>Note for Supervisor</value>
   </data>
+  <data name="SingleResponse" xml:space="preserve">
+    <value>Limit to one interview per respondent</value>
+  </data>
 </root>

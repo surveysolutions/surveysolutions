@@ -1,23 +1,14 @@
-﻿using System;
-using System.Diagnostics;
-using Microsoft.AspNet.SignalR.Hubs;
-using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.DataCollection.Repositories;
+﻿using Microsoft.AspNet.SignalR.Hubs;
 using WB.Enumerator.Native.WebInterview;
-using WB.Enumerator.Native.WebInterview.Models;
-using WB.UI.WebTester.Services;
+using WB.Enumerator.Native.WebInterview.Pipeline;
 
 namespace WB.UI.WebTester.Hub
 {
     [HubName(@"interview")]
     public class WebInterviewHub : WebInterview
     {
-        private IEvictionNotifier evictionNotify => this.ServiceLocator.GetInstance<IEvictionNotifier>();
-
-        public override void CompleteInterview(CompleteInterviewRequest completeInterviewRequest)
+        public WebInterviewHub(IPipelineModule[] hubPipelineModules) : base(hubPipelineModules)
         {
-            var interviewId = Guid.Parse(this.CallerInterviewId);
-            evictionNotify.Evict(interviewId);
         }
     }
 }

@@ -85,9 +85,14 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
+using System.Net.Http;
+using System;
+using System.Net.Http.Headers;
+using System.Text;
+using WB.Core.BoundedContexts.Headquarters.Designer;
 
 namespace WB.Core.BoundedContexts.Headquarters
-{
+{   
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class HeadquartersBoundedContextModule : IModule
     {
@@ -237,7 +242,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.RegisterDenormalizer<AssignmentDenormalizer>();
 
             registry.RegisterDenormalizer<InterviewSummaryCompositeDenormalizer>();
-            registry.RegisterDenormalizer<InterviewLifecycleEventHandler>();
             registry.RegisterDenormalizer<CumulativeChartDenormalizer>();
 
             registry.Bind<IInterviewPackagesService, IInterviewBrokenPackagesService, InterviewPackagesService>();
@@ -273,7 +277,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             
             registry.Bind<IRosterStructureService, RosterStructureService>();
             registry.Bind<IQuestionnaireImportService, QuestionnaireImportService>();
-            registry.Bind<DesignerUserCredentials>();
 
             registry.Bind<IWebInterviewConfigurator, WebInterviewConfigurator>();
             registry.Bind<IWebInterviewConfigProvider, WebInterviewConfigProvider>();
@@ -315,6 +318,9 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IInvitationsDeletionService, InvitationsDeletionService>();
 
             registry.BindToConstant<IMemoryCache>(() => new MemoryCache(Options.Create(new MemoryCacheOptions())));
+
+            registry.Bind<IDesignerApiFactory, DesignerApiFactory>();
+            registry.BindToMethod(ctx => ctx.Resolve<IDesignerApiFactory>().Get());
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)

@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using AppDomainToolkit;
+
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
@@ -66,7 +66,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
         private static InvokeResults results;
 
-        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        private static AppDomainContext appDomainContext;
         private static readonly Guid roster1Id = Guid.Parse("77777777777777777777777777777777");
 
         [Serializable]

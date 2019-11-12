@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace WB.Core.SharedKernels.DataCollection.Views.BinaryData
 {
     public class InterviewBinaryDataDescriptor
     {
-        public InterviewBinaryDataDescriptor(Guid interviewId, string fileName, string contentType, Func<byte[]> getData)
+        public InterviewBinaryDataDescriptor(Guid interviewId, string fileName, string contentType, Func<Task<byte[]>> getData)
         {
             this.InterviewId = interviewId;
             this.FileName = fileName;
@@ -16,11 +17,11 @@ namespace WB.Core.SharedKernels.DataCollection.Views.BinaryData
         public string FileName { get; private set; }
         public string ContentType { get; private set; }
 
-        public byte[] GetData()
+        public async Task<byte[]> GetData()
         {
-            return this.getData();
+            return await this.getData();
         }
 
-        private readonly Func<byte[]> getData;
+        private readonly Func<Task<byte[]>> getData;
     }
 }

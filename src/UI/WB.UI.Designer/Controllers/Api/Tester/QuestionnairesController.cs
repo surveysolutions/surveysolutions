@@ -3,8 +3,9 @@ using System.Linq;
 using System.Net;
 using Microsoft.AspNetCore.Http;
 using System.Net.Mime;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Net.Http.Headers;
+using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
@@ -13,12 +14,11 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
-using WB.UI.Designer.Code.Attributes;
 using WB.UI.Designer.Extensions;
 
 namespace WB.UI.Designer.Controllers.Api.Tester
 {
-    [ApiBasicAuth]
+    [Authorize]
     [Route("api/v{version:int}/questionnaires")]
     public class QuestionnairesController : Controller
     {

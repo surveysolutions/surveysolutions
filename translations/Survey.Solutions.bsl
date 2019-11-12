@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<LocalizationSolution xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" AutoDoNotTranslate="true" InvariantLocale="en" IsTranslationPackage="false" AllowEditingInvariant="true" GridLayoutXml="" DockManagerLayoutXml="">
+<LocalizationSolution xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" AutoDoNotTranslate="true" InvariantLocale="en" IsTranslationPackage="false" AllowEditingInvariant="true" RemoveOrhpanedStrings="true" GridLayoutXml="" DockManagerLayoutXml="">
   <Projects>
-    <Project xsi:type="VSLocalizationProject" Name="WB.Core.BoundedContexts.Headquarter.L" VisualStudioProjectFilename="..\src\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarter.L\WB.Core.BoundedContexts.Headquarter.L.csproj" AssemblyName="WB.Core.BoundedContexts.Headquarter.L" AssemblyType="Dll" RootNamespace="WB.Core.BoundedContexts.Headquarter.L" InvariantLocale="en">
+    <Project xsi:type="VSLocalizationProject" Name="WB.Core.BoundedContexts.Headquarter.L" VisualStudioProjectFilename="..\src\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarter.L\WB.Core.BoundedContexts.Headquarter.L.csproj" ProjectType="WinForms" ProjectProgrammingLanguage="C_Sharp" AssemblyName="WB.Core.BoundedContexts.Headquarter.L" AssemblyType="Dll" RootNamespace="WB.Core.BoundedContexts.Headquarter.L" InvariantLocale="en">
       <locales>
         <locale>fr</locale>
         <locale>pt</locale>
@@ -18,6 +18,7 @@
         <locale>vi-VN</locale>
         <locale>zh-CN</locale>
         <locale>ro</locale>
+        <locale>sq</locale>
       </locales>
       <items>
         <it rn="Properties-E\UIResources.resx" nm="AreaMap_Active_Map_Title" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarter.L.Properties_E" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6019,7 +6020,7 @@
       </items>
       <ExcludedItems />
     </Project>
-    <Project xsi:type="VSLocalizationProject" Name="WB.UI.Headquarters" VisualStudioProjectFilename="..\src\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj" AssemblyName="WB.UI.Headquarters" AssemblyType="Dll" RootNamespace="WB.UI.Headquarters" InvariantLocale="en">
+    <Project xsi:type="VSLocalizationProject" Name="WB.UI.Headquarters" VisualStudioProjectFilename="..\src\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj" ProjectType="WinForms" ProjectProgrammingLanguage="C_Sharp" AssemblyName="WB.UI.Headquarters" AssemblyType="Dll" RootNamespace="WB.UI.Headquarters" InvariantLocale="en">
       <locales>
         <locale>fr</locale>
         <locale>pt</locale>
@@ -6030,6 +6031,7 @@
         <locale>es</locale>
         <locale>ka</locale>
         <locale>ro</locale>
+        <locale>sq</locale>
       </locales>
       <items>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="AdvancedMode" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
@@ -18053,7 +18055,7 @@
       </items>
       <ExcludedItems />
     </Project>
-    <Project xsi:type="VSLocalizationProject" Name="WB.UI.Shared.Web" VisualStudioProjectFilename="..\src\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj" AssemblyName="WB.UI.Shared.Web" AssemblyType="Dll" RootNamespace="WB.UI.Shared.Web" InvariantLocale="en">
+    <Project xsi:type="VSLocalizationProject" Name="WB.UI.Shared.Web" VisualStudioProjectFilename="..\src\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj" ProjectType="WinForms" ProjectProgrammingLanguage="C_Sharp" AssemblyName="WB.UI.Shared.Web" AssemblyType="Dll" RootNamespace="WB.UI.Shared.Web" InvariantLocale="en">
       <locales>
         <locale />
         <locale>zh</locale>
@@ -18064,6 +18066,7 @@
         <locale>es</locale>
         <locale>ka</locale>
         <locale>ro</locale>
+        <locale>sq</locale>
       </locales>
       <items>
         <it rn="Resources\Captcha.resx" nm="EnterText" rc="" dnt="false" nms="WB.UI.Shared.Web.Resources" cln="Captcha" bac="EmbeddedResource" hgt="0" wdt="0">

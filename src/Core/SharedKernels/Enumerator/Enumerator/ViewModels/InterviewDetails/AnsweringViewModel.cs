@@ -4,7 +4,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -17,6 +19,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly ICommandService commandService;
         readonly IUserInterfaceStateService userInterfaceStateService;
         private readonly IMvxMessenger messenger;
+        private readonly ILogger logger;
 
         private int inProgressDepth = 0;
 
@@ -24,11 +27,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public AnsweringViewModel(ICommandService commandService,
             IUserInterfaceStateService userInterfaceStateService,
-            IMvxMessenger messenger)
+            IMvxMessenger messenger,
+            ILogger logger)
         {
             this.commandService = commandService;
             this.userInterfaceStateService = userInterfaceStateService;
             this.messenger = messenger;
+            this.logger = logger;
         }
 
         private bool inProgress;
@@ -41,7 +46,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             private set => this.RaiseAndSetIfChanged(ref this.inProgress, value);
         }
 
-        private async Task MeasureCommandTime(Func<Task> action)
+        private async Task MeasureCommandTime(Func<Task> action, string commandName)
         {
             Stopwatch commandTime = Stopwatch.StartNew();
             try
@@ -51,6 +56,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             finally
             {
                 commandTime.Stop();
+                if (commandTime.Elapsed.TotalSeconds > 2)
+                {
+                    logger.Warn($"Answering {commandName} took {commandTime.Elapsed.TotalMilliseconds}ms");
+                }
                 messenger.Publish(new AnswerAcceptedMessage(this, commandTime.Elapsed));
             }
         }
@@ -59,7 +68,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             try
             {
-                await MeasureCommandTime(() => this.ExecuteCommandAsync(answerCommand));
+                await MeasureCommandTime(() => this.ExecuteCommandAsync(answerCommand), $"{answerCommand.GetType()}: {answerCommand.Question}");
             }
             catch (Exception e)
             {
@@ -72,7 +81,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public virtual Task SendRemoveAnswerCommandAsync(RemoveAnswerCommand command)
         {
-            return MeasureCommandTime(() => this.ExecuteCommandAsync(command));
+            return MeasureCommandTime(() => this.ExecuteCommandAsync(command), $"{command.GetType()}: {command.Question}");
         }
 
         private async Task ExecuteActionAsync(Func<CancellationToken, Task> action, CancellationToken cancellationToken = default)

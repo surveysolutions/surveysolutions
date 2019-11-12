@@ -487,7 +487,7 @@ angular.module('designerApp')
                 return _.without(questionnaire.sharedPersons, _.findWhere(questionnaire.sharedPersons, { isOwner: true }));
             };
 
-            $scope.showShareInfo = function () {
+            $scope.showShareInfo = function() {
                 $uibModal.open({
                     templateUrl: 'views/share.html',
                     controller: 'shareCtrl',
@@ -500,7 +500,27 @@ angular.module('designerApp')
                                 email: $scope.currentUserEmail,
                             }
                         },
-                        questionnaire: function () {
+                        questionnaire: function() {
+                            return $scope.questionnaire;
+                        }
+                    }
+                });
+            };
+
+            $scope.showDownloadPdf = function() {
+                $uibModal.open({
+                    templateUrl: 'views/pdf.html',
+                    controller: 'pdfCtrl',
+                    windowClass: 'share-window',
+                    resolve:
+                    {
+                        currentUser: function() {
+                            return {
+                                name: $scope.currentUserName,
+                                email: $scope.currentUserEmail,
+                            }
+                        },
+                        questionnaire: function() {
                             return $scope.questionnaire;
                         }
                     }

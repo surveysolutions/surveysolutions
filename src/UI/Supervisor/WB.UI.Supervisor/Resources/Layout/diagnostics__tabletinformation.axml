@@ -40,7 +40,7 @@
   <LinearLayout style="@style/Diagnostics_SubSection" local:MvxBind="Visible TabletInformation.IsPackageSendingAttemptCompleted;" >
     <TextView
      style="@style/Diagnostics_Subsection_Title"
-     local:MvxBind="Text TabletInformation.PackageSendingAttemptResponceText" />
+     local:MvxBind="Text TabletInformation.PackageSendingAttemptResponseText" />
   </LinearLayout>
   <ProgressBar style="@style/Interview_Question_Progress_Indicator"
                android:indeterminateOnly="true" 

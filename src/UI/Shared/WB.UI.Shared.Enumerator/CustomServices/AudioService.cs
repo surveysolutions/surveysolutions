@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 using Android.Media;
 using Android.Runtime;
 using Android.Webkit;
@@ -78,8 +79,10 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         public event EventHandler OnMaxDurationReached;
         public event EventHandler<PlaybackCompletedEventArgs> OnPlaybackCompleted;
 
-        public void Play(Guid interviewId, Identity questionId, string fileName)
+        public async Task Play(Guid interviewId, Identity questionId, string fileName)
         {
+            var interviewBinaryData = await this.audioFileStorage.GetInterviewBinaryData(interviewId, fileName);
+
             lock (this.lockObject)
             {
                 if (this.mediaPlayer.IsPlaying)
@@ -91,7 +94,6 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                 this.mediaPlayer.Reset();
                 this.fileSystemAccessor.DeleteFile(this.tempFileName);
 
-                var interviewBinaryData = this.audioFileStorage.GetInterviewBinaryData(interviewId, fileName);
                 this.fileSystemAccessor.WriteAllBytes(this.tempFileName, interviewBinaryData);
                 
                 this.mediaPlayer.SetDataSource(this.tempFileName);
@@ -335,6 +337,10 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
     public class AudioRecorderInfoListener : Java.Lang.Object, MediaRecorder.IOnInfoListener
     {
+        public AudioRecorderInfoListener() { }
+        public AudioRecorderInfoListener(System.IntPtr pointer, Android.Runtime.JniHandleOwnership ownership)
+            :base(pointer, ownership) { }
+
         public event EventHandler OnMaxDurationReached;
         public void OnInfo(MediaRecorder mr, MediaRecorderInfo what, int extra)
         {
