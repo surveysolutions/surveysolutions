@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
+
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace WB.Services.Infrastructure.Storage
@@ -20,27 +21,27 @@ namespace WB.Services.Infrastructure.Storage
             foreach (var entity in modelBuilder.Model.GetEntityTypes())
             {
                 // Replace table names
-                entity.Relational().TableName = entity.Relational().TableName.ToSnakeCase();
+                entity.SetTableName(entity.GetTableName().ToSnakeCase());
 
                 // Replace column names            
                 foreach (var property in entity.GetProperties())
                 {
-                    property.Relational().ColumnName = property.Name.ToSnakeCase();
+                    property.SetColumnName(property.Name.ToSnakeCase());
                 }
 
                 foreach (var key in entity.GetKeys())
                 {
-                    key.Relational().Name = key.Relational().Name.ToSnakeCase();
+                    key.SetName(key.GetName().ToSnakeCase());
                 }
 
                 foreach (var key in entity.GetForeignKeys())
                 {
-                    key.Relational().Name = key.Relational().Name.ToSnakeCase();
+                    key.SetConstraintName(key.GetConstraintName().ToSnakeCase());
                 }
 
                 foreach (var index in entity.GetIndexes())
                 {
-                    index.Relational().Name = index.Relational().Name.ToSnakeCase();
+                    index.SetName(index.GetName().ToSnakeCase());
                 }
             }
         }
@@ -53,12 +54,12 @@ namespace WB.Services.Infrastructure.Storage
 
         public static Task AcquireLockAsync(this DbContext db, long id)
         {
-            return db.Database.ExecuteSqlCommandAsync($"select pg_advisory_lock ({id})");
+            return db.Database.ExecuteSqlRawAsync($"select pg_advisory_lock ({id})");
         }
 
         public static Task AcquireXactLockAsync(this DbContext db, long id)
         {
-            return db.Database.ExecuteSqlCommandAsync($"select pg_advisory_xact_lock ({id})");
+            return db.Database.ExecuteSqlRawAsync($"select pg_advisory_xact_lock ({id})");
         }
 
         public static async Task<bool> ReleaseLockAsync(this DbContext db, long id)

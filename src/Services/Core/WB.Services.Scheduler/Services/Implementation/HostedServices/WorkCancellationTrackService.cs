@@ -41,7 +41,7 @@ namespace WB.Services.Scheduler.Services.Implementation.HostedServices
                         
                         connection.Notification += (conn, arg) =>
                         {
-                            if (long.TryParse(arg.AdditionalInformation, out var jobId))
+                            if (long.TryParse(arg.Payload, out var jobId))
                             {
                                 logger.LogDebug("Job cancellation acquired from DB. JobId: {jobId}", jobId);
                                 cancellationNotification.JobCancelled(jobId);

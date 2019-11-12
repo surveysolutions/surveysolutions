@@ -80,6 +80,7 @@ namespace WB.Services.Infrastructure.EventSourcing.Json
         {
             var type = typeof(IEvent);
             var types = AppDomain.CurrentDomain.GetAssemblies()
+                .Where(a => a.FullName.Contains("WB.Services"))
                 .SelectMany(s => s.GetTypes())
                 .Where(p => type.IsAssignableFrom(p));
 
