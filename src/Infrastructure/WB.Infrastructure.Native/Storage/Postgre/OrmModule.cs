@@ -56,7 +56,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             {
                 status.Error(Modules.ErrorDuringRunningMigrations, exc);
 
-                LogManager.GetLogger(nameof(OrmModule)).Fatal(exc, "Error during db initialization.");
+                LogManager.GetLogger(typeof(OrmModule).FullName).Fatal(exc, "Error during db initialization.");
                 throw new InitializationException(Subsystem.Database, null, exc);
             }
 
@@ -78,7 +78,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 {
                     status.Error(Modules.ErrorDuringRunningMigrations, exc);
 
-                    LogManager.GetLogger(nameof(OrmModule)).Fatal(exc, "Error during db initialization.");
+                    LogManager.GetLogger(typeof(OrmModule).FullName).Fatal(exc, "Error during db initialization.");
                     throw new InitializationException(Subsystem.Database, null, exc);
                 }
             }
@@ -102,7 +102,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 {
                     status.Error(Modules.ErrorDuringRunningMigrations, exc);
 
-                    LogManager.GetLogger(nameof(OrmModule)).Fatal(exc, "Error during db initialization.");
+                    LogManager.GetLogger(typeof(OrmModule).FullName).Fatal(exc, "Error during db initialization.");
                     throw new InitializationException(Subsystem.Database, null, exc);
                 }
             }
@@ -126,7 +126,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 {
                     status.Error(Modules.ErrorDuringRunningMigrations, exc);
 
-                    LogManager.GetLogger(nameof(OrmModule)).Fatal(exc, "Error during db initialization.");
+                    LogManager.GetLogger(typeof(OrmModule).FullName).Fatal(exc, "Error during db initialization.");
                     throw new InitializationException(Subsystem.Database, null, exc);
                 }
             }
