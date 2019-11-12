@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
@@ -13,7 +14,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerPlainInt
     internal class when_getting_interview_binary_data : InterviewerPlainInterviewFileStorageTestsContext
     {
         [OneTimeSetUp]
-        public void context()
+        public async Task context()
         {
             var imageViewStorage = new SqliteInmemoryStorage<InterviewMultimediaView>();
             imageViewStorage.Store(
@@ -36,11 +37,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerPlainInt
             interviewerImageFileStorage = CreateInterviewerPlainInterviewFileStorage(
                 fileViewStorage: fileViewStorage,
                 imageViewStorage: imageViewStorage);
-            BecauseOf();
+            await BecauseOf();
         }
 
-        public void BecauseOf() =>
-            bytesResult = interviewerImageFileStorage.GetInterviewBinaryData(interviewId, imageFileName);
+        public async Task BecauseOf() =>
+            bytesResult = await interviewerImageFileStorage.GetInterviewBinaryData(interviewId, imageFileName);
 
         [Test]
         public void should_remove_questionnaire_document_view_from_plain_storage() =>

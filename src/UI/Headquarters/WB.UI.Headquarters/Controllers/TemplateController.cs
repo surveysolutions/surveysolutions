@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -22,6 +23,8 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.Template;
 using WB.UI.Headquarters.Resources;
+using WB.Core.BoundedContexts.Headquarters.Designer;
+using WB.UI.Headquarters.Services;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -29,7 +32,7 @@ namespace WB.UI.Headquarters.Controllers
     [AuthorizeOr403(Roles = "Administrator, Headquarter")]
     public class TemplateController : BaseController
     {
-        private readonly IRestService designerQuestionnaireApiRestService;
+        private readonly IDesignerApi designerApi;
         private readonly IQuestionnaireVersionProvider questionnaireVersionProvider;
         private readonly IQuestionnaireImportService importService;
         private readonly DesignerUserCredentials designerUserCredentials;
@@ -39,7 +42,7 @@ namespace WB.UI.Headquarters.Controllers
 
         public TemplateController(ICommandService commandService, 
             ILogger logger,
-            IRestService designerQuestionnaireApiRestService, 
+            IDesignerApi designerApi, 
             IQuestionnaireVersionProvider questionnaireVersionProvider,
             IQuestionnaireImportService importService,
             DesignerUserCredentials designerUserCredentials, 
@@ -48,7 +51,7 @@ namespace WB.UI.Headquarters.Controllers
             IAuthorizedUser authorizedUser)
             : base(commandService, logger)
         {
-            this.designerQuestionnaireApiRestService = designerQuestionnaireApiRestService;
+            this.designerApi = designerApi;
             this.questionnaireVersionProvider = questionnaireVersionProvider;
             this.importService = importService;
             this.designerUserCredentials = designerUserCredentials;
@@ -74,7 +77,6 @@ namespace WB.UI.Headquarters.Controllers
 
             return this.View(new ImportQuestionnaireListModel { DesignerUserName = this.designerUserCredentials.Get().Login });
         }
-
       
         public async Task<ActionResult> ImportMode(Guid id)
         {
@@ -89,8 +91,9 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Import(Guid id, ImportModel request, bool showResult = false)
+        public async Task<ActionResult> Import(Guid id, ImportModel request)
         {
             if (this.designerUserCredentials.Get() == null)
             {
@@ -101,7 +104,7 @@ namespace WB.UI.Headquarters.Controllers
             var model = await this.GetImportModel(id);
             if (model.QuestionnaireInfo != null)
             {
-                var result = await this.importService.Import(id, model.QuestionnaireInfo?.Name, false);
+                var result = await this.importService.Import(id, model.QuestionnaireInfo?.Name, false, request.Comment, Request.Url.ToString());
                 model.ErrorMessage = result.ImportError;
 
                 if (result.IsSuccess)
@@ -118,9 +121,6 @@ namespace WB.UI.Headquarters.Controllers
                         return RedirectToAction("UpgradeProgress", "SurveySetup", new {id = processId});
                     }
 
-                    if (showResult)
-                        return Json(result);
-                    
                     return this.RedirectToAction("Index", "SurveySetup");
                 }
             }
@@ -133,9 +133,7 @@ namespace WB.UI.Headquarters.Controllers
             ImportModeModel model = new ImportModeModel();
             try
             {
-                var questionnaireInfo = await this.designerQuestionnaireApiRestService
-                    .GetAsync<QuestionnaireInfo>(url: $"/api/hq/v3/questionnaires/info/{id}",
-                        credentials: this.designerUserCredentials.Get());
+                var questionnaireInfo = await this.designerApi.GetQuestionnaireInfo(id);
 
                 model.QuestionnaireInfo = questionnaireInfo;
                 model.NewVersionNumber = this.questionnaireVersionProvider.GetNextVersion(id);
@@ -180,14 +178,14 @@ namespace WB.UI.Headquarters.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> LoginToDesigner(LogOnModel model)
         {
-            var designerUserCredentials = new RestCredentials { Login = model.UserName, Password = model.Password };
+            var creds = new RestCredentials { Login = model.UserName, Password = model.Password };
 
             try
             {
-                await this.designerQuestionnaireApiRestService.GetAsync(url: @"/api/hq/user/login",
-                    credentials: designerUserCredentials);
-
-                this.designerUserCredentials.Set(designerUserCredentials);
+                var authHeader = creds.GetAuthenticationHeaderValue();
+                await this.designerApi.Login(authHeader.ToString());
+                
+                this.designerUserCredentials.Set(creds);
 
                 return this.RedirectToAction("Import");
             }
@@ -227,5 +225,6 @@ namespace WB.UI.Headquarters.Controllers
         public bool ShouldMigrateAssignments { get; set; }
 
         public string MigrateFrom { get; set; }
+        public string Comment { get; set; }
     }
 }

@@ -115,7 +115,7 @@ namespace WB.UI.Headquarters.Controllers
                     this.Success(@"Headquarters successfully created");
                     return this.RedirectToAction("LogOn", "Account");
                 }
-                AddErrors(creationResult);
+                AddErrors(creationResult.Errors);
             }
 
             // If we got this far, something failed, redisplay form
@@ -143,7 +143,7 @@ namespace WB.UI.Headquarters.Controllers
                     this.Success(@"Administrator successfully created");
                     return this.RedirectToAction("LogOn", "Account");
                 }
-                AddErrors(creationResult);
+                AddErrors(creationResult.Errors);
             }
 
             // If we got this far, something failed, redisplay form
@@ -189,7 +189,7 @@ namespace WB.UI.Headquarters.Controllers
                 }
                 else
                 {
-                    AddErrors(updateResult);
+                    AddErrors(updateResult.Errors);
                     foreach (var error in updateResult.Errors)
                     {
                         this.Error(error, true);

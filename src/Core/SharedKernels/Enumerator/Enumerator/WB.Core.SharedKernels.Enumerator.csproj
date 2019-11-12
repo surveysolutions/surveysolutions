@@ -17,13 +17,13 @@
   <ItemGroup>
     
     
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.2.0" />
     
     
     
     
-    <PackageReference Include="Autofac" Version="4.9.2" />
-    <PackageReference Include="Humanizer.Core" Version="2.6.2" />
+    <PackageReference Include="Autofac" Version="4.9.4" />
+    <PackageReference Include="Humanizer.Core" Version="2.7.2" />
     <PackageReference Include="MvvmCross.Plugin.Messenger" Version="6.4.0" />
     <PackageReference Include="MvvmCross.Plugin.PictureChooser" Version="6.4.0" />
     <PackageReference Include="MvvmCross.Plugin.WebBrowser" Version="6.4.0" />
@@ -32,7 +32,7 @@
     <PackageReference Include="sqlite-net-pcl" Version="1.6.292" />
     <PackageReference Include="SQLitePCLRaw.bundle_green" Version="1.1.13" />
     <PackageReference Include="SQLitePCLRaw.core" Version="1.1.13" />
-    <PackageReference Include="System.Reactive" Version="4.1.5" />
+    <PackageReference Include="System.Reactive" Version="4.1.6" />
     <PackageReference Include="Xam.Plugin.Geolocator" Version="4.5.0.6" />
   </ItemGroup>
   <ItemGroup>
@@ -72,7 +72,7 @@
     <EmbeddedResource Update="Properties\EnumeratorUIResources.fr.resx">
       <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Update="Properties\EnumeratorUIResources.id-ID.resx">
+    <EmbeddedResource Update="Properties\EnumeratorUIResources.id.resx">
       <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Update="Properties\EnumeratorUIResources.ka.resx">
@@ -94,13 +94,13 @@
     <EmbeddedResource Update="Properties\EnumeratorUIResources.ru.resx">
       <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Update="Properties\EnumeratorUIResources.th-TH.resx">
+    <EmbeddedResource Update="Properties\EnumeratorUIResources.th.resx">
       <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Update="Properties\EnumeratorUIResources.uk-UA.resx">
+    <EmbeddedResource Update="Properties\EnumeratorUIResources.uk.resx">
       <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Update="Properties\EnumeratorUIResources.vi-VN.resx">
+    <EmbeddedResource Update="Properties\EnumeratorUIResources.vi.resx">
       <DependentUpon>EnumeratorUIResources.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Update="Properties\EnumeratorUIResources.zh.resx">
@@ -115,7 +115,7 @@
     <EmbeddedResource Update="Properties\UIResources.fr.resx">
       <DependentUpon>UIResources.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Update="Properties\UIResources.id-ID.resx">
+    <EmbeddedResource Update="Properties\UIResources.id.resx">
       <DependentUpon>UIResources.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Update="Properties\UIResources.ka.resx">
@@ -137,13 +137,13 @@
     <EmbeddedResource Update="Properties\UIResources.ru.resx">
       <DependentUpon>UIResources.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Update="Properties\UIResources.th-TH.resx">
+    <EmbeddedResource Update="Properties\UIResources.th.resx">
       <DependentUpon>UIResources.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Update="Properties\UIResources.uk-UA.resx">
+    <EmbeddedResource Update="Properties\UIResources.uk.resx">
       <DependentUpon>UIResources.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Update="Properties\UIResources.vi-VN.resx">
+    <EmbeddedResource Update="Properties\UIResources.vi.resx">
       <DependentUpon>UIResources.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Update="Properties\UIResources.zh.resx">

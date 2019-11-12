@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -40,9 +41,9 @@ namespace WB.UI.Headquarters.API.DataCollection
 
         protected abstract string[] GetMapsList();
 
-        public virtual HttpResponseMessage GetMapContent([FromUri]string id)
+        public virtual async Task<HttpResponseMessage> GetMapContent([FromUri] string id)
         {
-            var mapContent = this.mapRepository.GetMapContent(id);
+            var mapContent = await this.mapRepository.GetMapContentAsync(id);
 
             if (mapContent == null)
                 return Request.CreateResponse(HttpStatusCode.NotFound);

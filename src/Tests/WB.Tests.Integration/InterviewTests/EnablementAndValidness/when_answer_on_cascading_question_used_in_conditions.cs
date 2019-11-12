@@ -65,8 +65,9 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
             );
 
             Moq.Mock.Get(ServiceLocator.Current).Setup(_ => _.GetInstance<IQuestionOptionsRepository>()).Returns(optionsRepo);
+            appDomainContext = AppDomainContext.Create();
 
-            interview = SetupStatefullInterview(questionnaire, questionOptionsRepository: optionsRepo);
+            interview = SetupStatefullInterview(appDomainContext.AssemblyLoadContext, questionnaire, questionOptionsRepository: optionsRepo);
 
             interview.AnswerSingleOptionQuestion(userId, parentQuestionId, RosterVector.Empty, DateTime.Now, 1);
             interview.AnswerSingleOptionQuestion(userId, cascadingQuestionId, RosterVector.Empty, DateTime.Now, 1);
@@ -77,6 +78,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         public void Cleanup ()
         {
             interview = null;
+            appDomainContext.Dispose();
         }
 
         [Test]
@@ -86,6 +88,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         }
 
         
+        private static AppDomainContext appDomainContext;
         private static StatefulInterview interview;
         private static readonly Guid userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
         private static readonly Guid cascadingQuestionId = Guid.Parse("33333333333333333333333333333333");

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Reflection;
 using Npgsql;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -21,7 +22,7 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
     {
         public static string InitializeDb(params DbType[] dbType)
         {
-            var TestConnectionString = ConfigurationManager.ConnectionStrings["TestConnection"].ConnectionString;
+            var TestConnectionString = TestsConfigurationManager.ConnectionString;
             var databaseName = "testdb_" + Guid.NewGuid().FormatGuid();
             var connectionStringBuilder = new NpgsqlConnectionStringBuilder(TestConnectionString)
             {

@@ -1,22 +1,30 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net48</TargetFramework>
+    <TargetFramework>netstandard2</TargetFramework>
     <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
     <Configurations>Debug;Release;Debug-ESRI</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <TreatSpecificWarningsAsErrors />
     <WarningLevel>3</WarningLevel>
-    <NoWarn>1701;1702;1705;618</NoWarn>
+    <NoWarn>1701;1702;1705;618;NU1201;NU1701</NoWarn>
     <WarningsAsErrors />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <NoWarn>1701;1702;1705;618</NoWarn>
     <WarningLevel>3</WarningLevel>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Services\WebInterview\**" />
+    <EmbeddedResource Remove="Services\WebInterview\**" />
+    <None Remove="Services\WebInterview\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="Resources\WebInterviewResources.ru.resx" />
+  </ItemGroup>
   <ItemGroup>
     <None Remove="Views\Reposts\Factories\DevicesInterviewersForSupervisor.sql" />
   </ItemGroup>
@@ -29,45 +37,39 @@
     <EmbeddedResource Include="Views\Reposts\Factories\DeviceInterviewersReport.sql" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\WebInterviewResources.ru.resx" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj" />
     <ProjectReference Include="..\..\..\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj" />
     <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj" />
     <ProjectReference Include="..\..\..\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj" />
     <ProjectReference Include="..\..\..\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj" />
-    <ProjectReference Include="..\..\..\SharedKernels\Enumerator\WB.Enumerator.Native\WB.Enumerator.Native.csproj" />
     <ProjectReference Include="..\..\..\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AWSSDK.S3" Version="3.3.102.18" />
-    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.100.24" />
+    <PackageReference Include="AWSSDK.S3" Version="3.3.104.31" />
+    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.101.52" />
     <PackageReference Include="CsvHelper" Version="12.1.2" />
-    <PackageReference Include="Dapper" Version="1.60.6" />
-    <PackageReference Include="Dropbox.Api" Version="4.9.3" />
+    <PackageReference Include="Dapper" Version="2.0.4" />
+    <PackageReference Include="Dropbox.Api" Version="4.9.4" />
     <PackageReference Include="EntityFramework" Version="6.2.0" />
     <PackageReference Include="EPPlus" Version="4.5.3.2" />
-    <PackageReference Include="GeoJSON.Net" Version="1.1.72" />
-    <PackageReference Include="Google.Apis.Drive.v3" Version="1.40.0.1596" />
+    <PackageReference Include="Google.Apis.Drive.v3" Version="1.41.1.1715" />
     <PackageReference Include="Iesi.Collections" Version="4.0.4" />
-    <PackageReference Include="Iteedee.ApkReader" Version="1.0.1" />
-    <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.2" />
     <PackageReference Include="Microsoft.AspNet.Identity.EntityFramework" Version="2.2.2" />
-    <PackageReference Include="Microsoft.AspNet.Identity.Owin" Version="2.2.2" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
-    <PackageReference Include="Microsoft.Graph" Version="1.15.0" />
-    <PackageReference Include="Microsoft.Graph.Core" Version="1.15.0" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.6.0" />
+    <PackageReference Include="Microsoft.Graph" Version="1.17.0" />
+    <PackageReference Include="Microsoft.Graph.Core" Version="1.17.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Owin" Version="4.0.1" />
-    <PackageReference Include="Microsoft.Owin.Host.SystemWeb" Version="4.0.1" />
-    <PackageReference Include="Microsoft.Owin.Security" Version="4.0.1" />
-    <PackageReference Include="Microsoft.Owin.Security.Cookies" Version="4.0.1" />
-    <PackageReference Include="Microsoft.Owin.Security.OAuth" Version="4.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-    <PackageReference Include="NHibernate" Version="5.2.5" />
-    <PackageReference Include="Owin" Version="1.0" />
+    <PackageReference Include="NHibernate" Version="5.2.6" />
+    <PackageReference Include="PasswordGenerator" Version="2.0.1" />
+    <PackageReference Include="Polly" Version="7.1.1" />
     <PackageReference Include="Quartz" Version="3.0.7" />
     <PackageReference Include="refit" Version="4.7.51" />
-    <PackageReference Include="Sendgrid" Version="9.11.0" />
-    <PackageReference Include="SuperclusterBox" Version="0.1.16" />
+    <PackageReference Include="Sendgrid" Version="9.12.0" />
+    <PackageReference Include="SuperclusterBox" Version="0.1.18" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ddidotnet">
@@ -76,8 +78,6 @@
     <Reference Include="StatData">
       <HintPath>..\..\..\..\..\libs\StatData.dll</HintPath>
     </Reference>
-    <Reference Include="System.Runtime.Caching" />
-    <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Resources\CommandValidatorsMessages.es.resx">
@@ -329,9 +329,10 @@
     <EmbeddedResource Update="Resources\UserPreloadingServiceMessages.zh.resx">
       <DependentUpon>UserPreloadingServiceMessages.resx</DependentUpon>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Services\WebInterview\" />
+    <EmbeddedResource Update="Resources\WebInterviewResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WebInterviewResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Resources\CommandValidatorsMessages.Designer.cs">
@@ -393,6 +394,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>UserPreloadingServiceMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\WebInterviewResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>WebInterviewResources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
 </Project>

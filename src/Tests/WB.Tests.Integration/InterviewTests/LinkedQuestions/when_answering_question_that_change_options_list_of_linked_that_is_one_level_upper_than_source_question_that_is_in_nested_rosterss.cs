@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using AppDomainToolkit;
+
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -44,7 +44,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                     })
                 });
 
-                var interview = SetupStatefullInterview(questionnaireDocument);
+                var interview = SetupStatefullInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 interview.AnswerMultipleOptionsQuestion(userId, q1Id, Abc.Create.Entity.RosterVector(new[] {1, 1}), DateTime.Now, new[] { 1, 2, 3 });
                 interview.AnswerMultipleOptionsQuestion(userId, q1Id, Abc.Create.Entity.RosterVector(new[] {1, 2}), DateTime.Now, new[] { 1, 3, 4 });
@@ -95,7 +95,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         }
 
         private static InvokeResults results;
-        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        private static AppDomainContext appDomainContext;
         private static readonly Guid questionnaireId = Guid.Parse("99999999999999999999999999999999");
         private static readonly Guid rosterId = Guid.Parse("88888888888888888888888888888888");
         private static readonly Guid roster1Id = Guid.Parse("77777777777777777777777777777777");

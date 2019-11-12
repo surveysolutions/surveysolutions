@@ -204,7 +204,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             Translation translation = null)
         {
             this.innerDocument = document;
-            
+            this.Revision = document.Revision;
             this.Version = version;
             this.translation = translation;
             this.questionOptionsRepository = questionOptionsRepository;
@@ -230,7 +230,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         }
 
         public long Version { get; }
-
+        public int Revision { get; }
         public Guid QuestionnaireId => this.innerDocument.PublicKey;
 
         public string Title => this.innerDocument.Title;
@@ -1168,6 +1168,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .Translations
                 .Select(translation => translation.Name)
                 .ToReadOnlyCollection();
+
+        public IReadOnlyList<Translation> Translations => this.QuestionnaireDocument.Translations.ToList();
 
         public string GetDefaultTransation()
         {

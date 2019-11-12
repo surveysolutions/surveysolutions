@@ -30,6 +30,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.AllowExportVariables);
             Property(x => x.DisabledBy);
             Property(x => x.IsAudioRecordingEnabled);
+            Property(x => x.Comment);
 
             List(x => x.FeaturedQuestions, listMap =>
             {

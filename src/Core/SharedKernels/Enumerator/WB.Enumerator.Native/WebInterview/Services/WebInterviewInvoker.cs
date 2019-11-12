@@ -46,11 +46,6 @@ namespace WB.Enumerator.Native.WebInterview.Services
             this.HubClients.Group(section).markAnswerAsNotSaved(questionId, errorMessage);
         }
 
-        public void ReloadInterviews(QuestionnaireIdentity questionnaireIdentity)
-        {
-            this.HubClients.Group(questionnaireIdentity.ToString()).reloadInterview();
-        }
-
         public void ShutDown(Guid interviewId)
         {
             this.HubClients.Group(interviewId.FormatGuid()).shutDown();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -9,13 +10,14 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Attributes;
-using WB.UI.Designer.Extensions;
+using WB.Core.BoundedContexts.Designer;
 using WB.UI.Designer.Resources;
 
 namespace WB.UI.Designer.Controllers.Api.Headquarters
 {
     [Obsolete("Since v5.11")]
-    [ApiBasicAuth(onlyAllowedAddresses: true)]
+    [Authorize]
+    [AllowOnlyFromWhitelistIP()]
     [Route("api/v2/import")]
     public class ImportV2Controller : ImportControllerBase
     {

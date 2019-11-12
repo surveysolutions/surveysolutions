@@ -764,6 +764,12 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 .ExpectWarning("WB0231");
 
         [Test]
+        public void conmbobox_multiple_option_with_21_options_Should_not_raise_warning()
+            => Create
+                .MultipleOptionsQuestion(answersList: Enumerable.Repeat(Create.Answer(), 21).ToList(), isCombobox: true)
+                .ExpectNoWarning("WB0231");
+
+        [Test]
         public void multi_option_with_20_options()
             => Create
                 .MultipleOptionsQuestion(answersList: Enumerable.Repeat(Create.Answer(), 20).ToList())

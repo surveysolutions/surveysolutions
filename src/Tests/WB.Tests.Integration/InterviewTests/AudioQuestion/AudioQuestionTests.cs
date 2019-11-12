@@ -26,12 +26,13 @@ namespace WB.Tests.Integration.InterviewTests.AudioQuestion
                 Create.Entity.StaticText(staticId, validationConditions: new List<ValidationCondition>{ Create.Entity.ValidationCondition("IsAnswered(audio)")} )
             );
 
-            var interview = SetupInterview(questionnaireDocument);
 
             bool staticTextDeclaredValid;
 
+            using (var appDomainContext = AppDomainContext.Create())
             using (var eventContext = new EventContext())
             {
+                var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 interview.AnswerAudioQuestion(Guid.NewGuid(), audioId, RosterVector.Empty, DateTimeOffset.Now, "some.mp3", new TimeSpan(0, 1, 20));
 
@@ -58,9 +59,10 @@ namespace WB.Tests.Integration.InterviewTests.AudioQuestion
 
             bool staticTextDeclaredInvalid;
 
+            using (var appDomainContext = AppDomainContext.Create())
             using (var eventContext = new EventContext())
             {
-                var interview = SetupInterview(questionnaireDocument);
+                var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 var validStaticTexts = eventContext.GetSingleEvent<StaticTextsDeclaredInvalid>().FailedValidationConditions;
 

@@ -8,37 +8,14 @@ import Cover from "../components/Cover"
 import Section from "../components/Section"
 import SideBar from "../components/Sidebar"
 import Splash from "../components/Splash"
+import Interview from "../components/Interview"
 
 function NewRouter(store) {
 
     const router = new VueRouter({
-        base: Vue.$config.virtualPath + "/",
+        base: Vue.$config.virtualPath,
         mode: "history",
         routes: [
-            {
-                name: "prefilled",
-                path: "/:interviewId/Cover",
-                components: {
-                    default: Cover,
-                    sideBar: SideBar
-                }
-            },
-            {
-                name: "section",
-                path: "/:interviewId/Section/:sectionId",
-                components: {
-                    default: Section,
-                    sideBar: SideBar
-                }
-            },
-            {
-                name: "complete",
-                path: "/:interviewId/Complete",
-                components: {
-                    default: Complete,
-                    sideBar: SideBar
-                }
-            },
             {
                 name: "finish",
                 path: "/Finish/:interviewId"
@@ -50,7 +27,32 @@ function NewRouter(store) {
                     default: Splash,
                     sideBar: SideBar
                 }
-            }
+            },
+            {
+                name: "webinterview",
+                path: "/:interviewId",
+                components: {
+                    default: Interview,
+                    sideBar: SideBar
+                },
+                children: [
+                    {
+                        name: "prefilled",
+                        path: "Cover",
+                        component: Cover,
+                    },
+                    {
+                        name: "section",
+                        path: "Section/:sectionId",
+                        component: Section
+                    },
+                    {
+                        name: "complete",
+                        path: "Complete",
+                        component: Complete
+                    },
+                ]
+            },
         ],
         scrollBehavior(to, from, savedPosition) {
             if (savedPosition) {

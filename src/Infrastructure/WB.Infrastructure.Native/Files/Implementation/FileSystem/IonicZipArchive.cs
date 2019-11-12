@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Text;
 using Ionic.Zip;
 using Ionic.Zlib;
 using WB.Core.Infrastructure.FileSystem;

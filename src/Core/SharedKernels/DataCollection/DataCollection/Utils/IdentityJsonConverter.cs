@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Newtonsoft.Json;
 
 namespace WB.Core.SharedKernels.DataCollection.Utils
@@ -14,8 +12,13 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
             writer.WriteStartObject();
             writer.WritePropertyName("id");
             writer.WriteValue(identity.Id);
-            writer.WritePropertyName("rosterVector");
-            serializer.Serialize(writer, identity.RosterVector, typeof(RosterVector));
+
+            if (!identity.RosterVector.Identical(RosterVector.Empty))
+            {
+                writer.WritePropertyName("rosterVector");
+                serializer.Serialize(writer, identity.RosterVector, typeof(RosterVector));
+            }
+
             writer.WriteEndObject();
         }
 
@@ -40,7 +43,6 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
                     {
                         reader.Read();
                         vector = serializer.Deserialize<RosterVector>(reader);
-                        continue;
                     }
                 }
             }

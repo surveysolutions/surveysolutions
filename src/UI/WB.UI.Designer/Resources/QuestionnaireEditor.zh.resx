@@ -1143,4 +1143,28 @@
   <data name="WarningsCounter_plural" xml:space="preserve">
     <value>{{count}}个警告</value>
   </data>
+  <data name="DownloadPdf" xml:space="preserve">
+      <value>下载PDF版本</value>
+      <comment>下载PDF版本</comment>
+  </data>
+  <data name="GeneratePdf" xml:space="preserve">
+      <value>生成PDF文件</value>
+      <comment>生成PDF文件</comment>
+  </data>
+  <data name="ChooseLanguageTitle" xml:space="preserve">
+      <value>请选择渲染PDF问卷模板的语言</value>
+      <comment>请选择渲染PDF问卷模板的语言</comment>
+  </data>
+  <data name="Initializing" xml:space="preserve">
+      <value>初始化</value>
+      <comment>初始化</comment>
+  </data>
+  <data name="RetryExportPDF" xml:space="preserve">
+      <value>重新导出为PDF</value>
+      <comment>重新导出为PDF</comment>
+  </data>
+  <data name="Translation_Original" xml:space="preserve">
+      <value>初始的</value>
+      <comment>初始的</comment>
+  </data>
 </root>

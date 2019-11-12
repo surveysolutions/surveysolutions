@@ -4,6 +4,7 @@ using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
+using WB.UI.Headquarters.API.DataCollection.Enumerator;
 using WB.UI.Headquarters.API.DataCollection.Interviewer;
 using WB.UI.Headquarters.API.DataCollection.Supervisor;
 using WB.UI.Headquarters.API.Filters;
@@ -25,6 +26,7 @@ namespace WB.UI.Headquarters
             InterviewerV2WebApiConfig.Register(config);
             InterviewerV3WebApiConfig.Register(config);
             SupervisorV1WebApiConfig.Register(config);
+            EnumeratorWebApiConfig.Register(config);
 
             config.Filters.Add(new UnhandledExceptionFilter());
             config.MessageHandlers.Add(new CompressionHandler());

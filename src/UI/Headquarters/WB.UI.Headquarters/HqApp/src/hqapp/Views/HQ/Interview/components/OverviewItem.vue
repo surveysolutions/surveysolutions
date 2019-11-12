@@ -6,7 +6,7 @@
         </div>
         <div ref="itemContent" class="item-content" @click="showAdditionalDetails">
             <h4>
-                <span v-html="item.Title"></span>
+                <span v-html="item.title"></span>
                 <template v-if="item.rosterTitle != null"><span> - </span>
                 <i v-if="item.rosterTitle != null" v-html="item.rosterTitle"></i>
                 </template>
@@ -14,9 +14,9 @@
             <div class="answer" v-if="hasAttachment">
                 <wb-attachment :contentId="attachmentContentId" :interviewId="interviewId" :previewOnly="true" customCssClass="static-text-image"></wb-attachment>
             </div>
-            <div class="answer" v-if="item.State != 3">
+            <div class="answer" v-if="item.state != 'Unanswered'">
                 <div v-if="item.controlType === 'image'">
-                    <wb-attachment :filename="item.Answer" :previewOnly="true"></wb-attachment>
+                    <wb-attachment :filename="item.answer" :previewOnly="true"></wb-attachment>
                 </div>
                 <div v-else-if="item.controlType === 'audio'">
                     <audio controls preload="auto" 
@@ -31,12 +31,12 @@
                     <img v-bind:src="googleMapPosition" draggable="false" />
                 </div>
                 <div v-else>
-                      {{item.Answer}}
+                      {{item.answer}}
                 </div>
               
               
             </div>
-            <div class="btn-link" v-if="item.State == 3">{{$t("WebInterviewUI.Interview_Overview_NotAnswered")}}</div>
+            <div class="btn-link" v-if="item.state == 'Unanswered'">{{$t("WebInterviewUI.Interview_Overview_NotAnswered")}}</div>
         </div>
 
         <AdditionalInfo ref="additionalInfo" :item="item" />
@@ -45,10 +45,10 @@
 
 <script>
 const State = {
-    Answered: 0,
-    Commented: 1,
-    Invalid: 2,
-    Unanswered: 3
+    Answered: 'Answered',
+    Commented: 'Commented',
+    Invalid: 'Invalid',
+    Unanswered: 'Unanswered'
 };
 import Vue from "vue";
 import AdditionalInfo from './OverviewItemAdditionalInfo'
@@ -87,9 +87,9 @@ export default {
             if (this.item.isGroup || this.item.isSection) 
                 return;
             
-            const cantLeaveCommentAndNoWarningsNoErrors = !this.item.SupportsComments 
-                && !this.item.HasWarnings 
-                && !this.item.HasErrors;
+            const cantLeaveCommentAndNoWarningsNoErrors = !this.item.supportsComments 
+                && !this.item.hasWarnings 
+                && !this.item.hasErrors;
 
             if (cantLeaveCommentAndNoWarningsNoErrors)
                 return;
@@ -111,28 +111,28 @@ export default {
             return this.$route.params.interviewId;
         },
         areaAnswerUrl() {
-            return `${this.$store.getters.basePath}Interview/InterviewAreaFrame/${this.interviewId}?questionId=${this.item.Id}`
+            return `${this.$store.getters.basePath}Interview/InterviewAreaFrame/${this.interviewId}?questionId=${this.item.id}`
         },
         googleMapPosition() {
-            let coords = this.parseGps(this.item.Answer);
+            let coords = this.parseGps(this.item.answer);
             return `${this.$config.googleMapsApiBaseUrl}/maps/api/staticmap?center=${coords.latitude},${coords.longitude}`
                 + `&zoom=14&scale=0&size=340x177&markers=color:blue|label:O|${coords.latitude},${coords.longitude}`
                 + `&key=${this.$config.googleApiKey}`
         },
         audioRecordPath() {
-            return api.resources.audioRecordUri(this.interviewId, this.item.Answer);
+            return api.resources.audioRecordUri(this.interviewId, this.item.answer);
         },
         itemClass() {
             return {
                 group: this.item.isGroup,
                 section: this.item.isSection,
-                unanswered: this.item.State == State.Unanswered,
-                invalid: this.item.State == State.Invalid,
-                hasComment: this.item.HasComment
+                unanswered: this.item.state == State.Unanswered,
+                invalid: this.item.state == State.Invalid,
+                hasComment: this.item.hasComment
             };
         },
         hasDate(){
-            if (!this.item.AnswerTimeUtc)
+            if (!this.item.answerTimeUtc)
                 return false;
             if  (this.item.isGroup || this.item.isSection)
                 return false;
@@ -140,12 +140,12 @@ export default {
         },
         answerDate(){
             if (!this.hasDate) return;   
-            let local = moment.utc(this.item.AnswerTimeUtc).local();
+            let local = moment.utc(this.item.answerTimeUtc).local();
             return local.format("MMM DD");
         },
         answerTime(){
             if (!this.hasDate) return;
-            let local = moment.utc(this.item.AnswerTimeUtc).local();
+            let local = moment.utc(this.item.answerTimeUtc).local();
             return local.format("HH:mm");
         },
         attachmentContentId(){

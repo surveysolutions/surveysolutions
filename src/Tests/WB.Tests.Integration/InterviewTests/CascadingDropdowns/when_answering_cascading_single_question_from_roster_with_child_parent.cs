@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using AppDomainToolkit;
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -55,7 +54,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                             })
                     );
 
-                    Interview interview = SetupInterviewWithExpressionStorage(questionnaire);
+                    Interview interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaire);
 
                     interview.AnswerSingleOptionQuestion(actorId, parentSingleOptionQuestionId, RosterVector.Empty,
                         DateTime.Now, 1);
