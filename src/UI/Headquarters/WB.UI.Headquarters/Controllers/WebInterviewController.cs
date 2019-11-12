@@ -154,13 +154,14 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             LogResume(interview);
-            return this.View("Index", GetInterviewModel(webInterviewConfig));
+            return this.View("Index", GetInterviewModel(id, webInterviewConfig));
         }
 
-        private WebInterviewIndexPageModel GetInterviewModel(WebInterviewConfig webInterviewConfig)
+        private WebInterviewIndexPageModel GetInterviewModel(string interviewId, WebInterviewConfig webInterviewConfig)
         {
             return new WebInterviewIndexPageModel
             {
+                Id = interviewId,
                 AskForEmail = Request.Cookies.Get(AskForEmail)?.Value ?? "false",
                 CustomMessages = webInterviewConfig.CustomMessages
             };
@@ -200,6 +201,7 @@ namespace WB.UI.Headquarters.Controllers
             if (!webInterviewConfig.Started)
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
 
+            Guid pendingInterviewId = Guid.Empty;
             if (assignment.Quantity == 1)
             {
                 // personal link
@@ -227,17 +229,15 @@ namespace WB.UI.Headquarters.Controllers
             {
                 // public mode
                 var interviewIdCookie = Request.Cookies[$"InterviewId-{assignment.Id}"];
-                if (interviewIdCookie != null)
+                if (interviewIdCookie != null && Guid.TryParse(interviewIdCookie.Value, out pendingInterviewId) && webInterviewConfig.SingleResponse)
                 {
-                    if (Guid.TryParse(interviewIdCookie.Value, out Guid interviewIdFromCookie))
-                    {
-                        return this.Redirect(GenerateUrl("Cover", interviewIdFromCookie.FormatGuid()));
-                    }
+                    return this.Redirect(GenerateUrl("Cover", pendingInterviewId.FormatGuid()));
                 }
 
                 if (assignment.IsCompleted)
                     throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired,
                         Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
+
                 if (invitation.InterviewId == null)
                 {
                     Response.Cookies.Add(new HttpCookie(AskForEmail, "true")
@@ -246,7 +246,7 @@ namespace WB.UI.Headquarters.Controllers
                     });
                 }
 
-                if (!webInterviewConfig.UseCaptcha && string.IsNullOrWhiteSpace(assignment.Password))
+                if (!webInterviewConfig.UseCaptcha && string.IsNullOrWhiteSpace(assignment.Password) && webInterviewConfig.SingleResponse)
                 {
                     var interviewId = this.CreateInterview(assignment);
 
@@ -262,6 +262,7 @@ namespace WB.UI.Headquarters.Controllers
 
             var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig, assignment);
             model.ServerUnderLoad = !this.connectionLimiter.CanConnect();
+          
             return this.View(model);
         }
 
@@ -321,6 +322,13 @@ namespace WB.UI.Headquarters.Controllers
                 return this.Redirect(GenerateUrl("Cover", invitation.InterviewId));
             }
 
+            var requestInterviewIdCookie = Request.Cookies[$"InterviewId-{assignment.Id}"];
+            if (Request["resume"] != null && Guid.TryParse(requestInterviewIdCookie?.Value, out Guid pendingInterviewId))
+            {
+                RememberCapchaFilled(invitation.InterviewId);
+                return this.Redirect(GenerateUrl("Cover", pendingInterviewId.FormatGuid()));
+            }
+
             if (assignment.IsCompleted)
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired,
                     Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
@@ -376,7 +384,7 @@ namespace WB.UI.Headquarters.Controllers
 
             LogResume(interview);
 
-            return View("Index", GetInterviewModel(webInterviewConfig));
+            return View("Index", GetInterviewModel(id, webInterviewConfig));
         }
 
         private void LogResume(IStatefulInterview statefulInterview)
@@ -479,7 +487,7 @@ namespace WB.UI.Headquarters.Controllers
                 return this.RedirectToAction("Resume", routeValues: new { id, returnUrl });
             }
 
-            return View("Index", GetInterviewModel(webInterviewConfig));
+            return View("Index", GetInterviewModel(id, webInterviewConfig));
         }
 
         [HttpPost]
@@ -549,6 +557,9 @@ namespace WB.UI.Headquarters.Controllers
 
             var interviewer = this.usersRepository.GetUser(assignment.ResponsibleId);
             
+            if(interviewer.Roles.Any(x => x == UserRoles.Supervisor || x == UserRoles.Headquarter))
+                throw new InvalidOperationException(@"Web interview is not allowed to be completed by this role");
+
             var interviewId = Guid.NewGuid();
 
             var createInterviewCommand = new CreateInterview(
@@ -612,6 +623,16 @@ namespace WB.UI.Headquarters.Controllers
                 CustomMessages = webInterviewConfig.CustomMessages,
                 HasPassword = !string.IsNullOrWhiteSpace(assignment?.Password ?? String.Empty)
             };
+
+            var interviewIdCookie = Request.Cookies[$"InterviewId-{assignment.Id}"];
+            if (Guid.TryParse(interviewIdCookie?.Value, out Guid pendingInterviewId))
+            {
+                var interview = statefulInterviewRepository.Get(pendingInterviewId.FormatGuid());
+                if (interview.Status == InterviewStatus.InterviewerAssigned)
+                {
+                    view.PendingInterviewId = pendingInterviewId;
+                }
+            }
 
             return view;
         }
@@ -686,7 +707,7 @@ namespace WB.UI.Headquarters.Controllers
                     filterContext.HttpContext.Response.StatusCode = 401;
                     filterContext.Result = new ContentResult
                     {
-                        Content = "User is Not Authorised"
+                        Content = "User is Not Authorized"
                     };
 
                     return;
@@ -731,7 +752,6 @@ Exception details:<br />
 <pre>{filterContext.Exception}</pre>"
             };
         }
-
 
         private void HandleInterviewAccessError(ExceptionContext filterContext, string message)
         {

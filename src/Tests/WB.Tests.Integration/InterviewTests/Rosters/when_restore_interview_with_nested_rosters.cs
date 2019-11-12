@@ -32,8 +32,9 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                     Create.Entity.Roster(nestedRosterGroupId, fixedRosterTitles: new [] { Create.Entity.FixedTitle(1, "level 2")})
                 })
             );
+            appDomainContext = AppDomainContext.Create();
 
-            interview = SetupStatefullInterview(questionnaire);
+            interview = SetupStatefullInterview(appDomainContext.AssemblyLoadContext, questionnaire);
 
             interviewSynchronizationDto =
                 Create.Entity.InterviewSynchronizationDto(interviewId: interview.EventSourceId,
@@ -70,6 +71,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
         {
             eventContext.Dispose();
             eventContext = null;
+            appDomainContext.Dispose();
         }
 
         public void BecauseOf() => 
@@ -81,6 +83,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
         [NUnit.Framework.Test] public void should_restore_2_rosters_from_the_sync_package () => 
             interview.GetAllInterviewNodes().Count(x => x is InterviewTreeRoster).Should().Be(2);
 
+        private static AppDomainContext appDomainContext;
         private static EventContext eventContext;
         private static StatefulInterview interview;
         private static Guid userId;

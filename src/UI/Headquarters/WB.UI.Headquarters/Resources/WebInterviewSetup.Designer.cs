@@ -250,6 +250,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Limit to one interview per respondent.
+        /// </summary>
+        public static string SingleResponse {
+            get {
+                return ResourceManager.GetString("SingleResponse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start.
         /// </summary>
         public static string Start {

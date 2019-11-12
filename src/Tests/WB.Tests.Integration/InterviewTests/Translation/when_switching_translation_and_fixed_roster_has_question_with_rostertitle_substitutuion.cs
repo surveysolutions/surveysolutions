@@ -47,8 +47,9 @@ namespace WB.Tests.Integration.InterviewTests.Translation
                     && repository.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) == questionnaire);
 
             questionnaire.Translations.Add(new Core.SharedKernels.SurveySolutions.Documents.Translation {Name = translationName , Id = translationId});
+            appDomainContext = AppDomainContext.Create();
 
-            interview = SetupStatefullInterview(questionnaire, questionnaireStorage: repo);
+            interview = SetupStatefullInterview(appDomainContext.AssemblyLoadContext, questionnaire, questionnaireStorage: repo);
            
             eventContext = new EventContext();
 
@@ -59,6 +60,7 @@ namespace WB.Tests.Integration.InterviewTests.Translation
         {
             eventContext.Dispose();
             eventContext = null;
+            appDomainContext.Dispose();
         }
 
         public void BecauseOf() =>
@@ -67,6 +69,7 @@ namespace WB.Tests.Integration.InterviewTests.Translation
         [NUnit.Framework.Test] public void should_raise_VariablesValuesChanged_event_for_the_variable () =>
             interview.GetTitleText(Create.Identity(t1Id, 1)).Should().Be("title with test");
 
+        static AppDomainContext appDomainContext;
         static EventContext eventContext;
         static StatefulInterview interview;
         static readonly Guid QuestionnaireId = Guid.Parse("10000000000000000000000000000000");

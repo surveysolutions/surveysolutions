@@ -119,7 +119,7 @@ namespace WB.UI.WebTester
 
             foreach (var type in HubPipelineModules)
             {
-                registry.BindAsSingleton(typeof(IHubPipelineModule), type);
+                registry.BindAsSingleton(typeof(IPipelineModule), type);
                 registry.BindAsSingleton(type, type);
             }
 
@@ -178,9 +178,8 @@ namespace WB.UI.WebTester
         
         public static Type[] HubPipelineModules => new[]
         {
-            typeof(HubLifetimePipelineModule),
-            typeof(SignalrErrorHandler),
-            typeof(WebInterviewStateManager),
+            typeof(WebInterviewVersionChecker),
+            //typeof(WebInterviewStateManager),
             typeof(WebInterviewConnectionsCounter)
         };
 

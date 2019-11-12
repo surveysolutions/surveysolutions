@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using AppDomainToolkit;
+
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -65,7 +65,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                        })
                    );
 
-               var interview = SetupInterviewWithExpressionStorage(questionnaireDocument);
+               var interview = SetupInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                interview.AnswerNumericIntegerQuestion(userId, numericQuestionId, RosterVector.Empty, DateTime.Now, 1);
                interview.AnswerNumericIntegerQuestion(userId, petsQuestionId, new decimal[] { 0 }, DateTime.Now, 2);
@@ -94,7 +94,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         [NUnit.Framework.Test] public void should_invalid_validation_count_equal_2 () =>
             result.CountInvalidValidations.Should().Be(2);
 
-        static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        static AppDomainContext appDomainContext;
         static InvokeResult result;
 
         [Serializable]

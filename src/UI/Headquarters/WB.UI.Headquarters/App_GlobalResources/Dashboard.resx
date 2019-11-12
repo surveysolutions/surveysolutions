@@ -219,4 +219,11 @@
   <data name="WebMode" xml:space="preserve">
     <value>Web mode</value>
   </data>
+  <data name="Details" xml:space="preserve">
+    <value>Details</value>
+    <comment>Questionnaire details</comment>
+  </data>
+  <data name="ShowOnDesigner" xml:space="preserve">
+    <value>Show on Designer</value>
+  </data>
 </root>

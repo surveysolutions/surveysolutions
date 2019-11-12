@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Loader;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -44,6 +45,7 @@ namespace WB.Tests.Integration.InterviewTests
         }
 
         protected static StatefulInterview SetupPreloadedInterview(
+            AssemblyLoadContext assemblyLoadContext,
             PreloadedDataDto preloadedData,
             QuestionnaireDocument questionnaireDocument,
             IEnumerable<object> events = null)
@@ -57,7 +59,7 @@ namespace WB.Tests.Integration.InterviewTests
             questionnaireDocument.ValidationDependencyGraph = playOrderProvider.GetValidationDependencyGraph(readOnlyQuestionnaireDocument);
 
             var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument, 1);
-            plainQuestionnaire.ExpressionStorageType = GetLatestExpressionStorage(questionnaireDocument).GetType();
+            plainQuestionnaire.ExpressionStorageType = GetLatestExpressionStorage(assemblyLoadContext, questionnaireDocument).GetType();
 
             var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(repository
                 => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) ==
@@ -88,6 +90,7 @@ namespace WB.Tests.Integration.InterviewTests
         }
 
         protected static StatefulInterview SetupStatefullInterview(
+            AssemblyLoadContext assemblyLoadContext,
             QuestionnaireDocument questionnaireDocument, 
             IEnumerable<object> events = null, 
             bool useLatestEngine = true,
@@ -96,10 +99,11 @@ namespace WB.Tests.Integration.InterviewTests
             IQuestionnaireStorage questionnaireStorage = null,
             IQuestionOptionsRepository questionOptionsRepository = null)
         {
-            return SetupStatefullInterviewWithExpressionStorage(questionnaireDocument, events, answers, questionnaireIdentity, questionnaireStorage, questionOptionsRepository);
+            return SetupStatefullInterviewWithExpressionStorage(assemblyLoadContext, questionnaireDocument, events, answers, questionnaireIdentity, questionnaireStorage, questionOptionsRepository);
         }
 
         protected static StatefulInterview SetupStatefullInterviewWithExpressionStorage(
+            AssemblyLoadContext assemblyLoadContext,
             QuestionnaireDocument questionnaireDocument,
             IEnumerable<object> events = null,
             List<InterviewAnswer> answers = null,
@@ -120,7 +124,7 @@ namespace WB.Tests.Integration.InterviewTests
 
             var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument, 1 , 
                 questionOptionsRepository: questionOptionsRepository);
-            questionnaire.ExpressionStorageType = GetLatestExpressionStorage(questionnaireDocument).GetType();
+            questionnaire.ExpressionStorageType = GetLatestExpressionStorage(assemblyLoadContext, questionnaireDocument).GetType();
 
             var questionnaireRepository = questionnaireStorage ?? Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(
                 questionnaireIdentity.QuestionnaireId,
@@ -140,6 +144,7 @@ namespace WB.Tests.Integration.InterviewTests
 
 
         protected static StatefulInterview SetupStatefullInterviewWithExpressionStorageWithoutCreate(
+            AssemblyLoadContext assemblyLoadContext,
             QuestionnaireDocument questionnaireDocument,
             QuestionnaireIdentity questionnaireIdentity = null,
             IQuestionnaireStorage questionnaireStorage = null)
@@ -156,7 +161,7 @@ namespace WB.Tests.Integration.InterviewTests
             if (questionnaireRepository == null)
             {
                 var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
-                plainQuestionnaire.ExpressionStorageType = GetLatestExpressionStorage(questionnaireDocument).GetType();
+                plainQuestionnaire.ExpressionStorageType = GetLatestExpressionStorage(assemblyLoadContext, questionnaireDocument).GetType();
                 questionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(
                     questionnaireIdentity.QuestionnaireId,
                     plainQuestionnaire, questionnaireIdentity.Version);
@@ -183,6 +188,7 @@ namespace WB.Tests.Integration.InterviewTests
         }
 
         protected static Interview SetupInterviewWithExpressionStorage(
+            AssemblyLoadContext assemblyLoadContext,
             QuestionnaireDocument questionnaireDocument,
             IEnumerable<object> events = null)
         {
@@ -202,7 +208,7 @@ namespace WB.Tests.Integration.InterviewTests
             
             SetUp.InstanceToMockedServiceLocator(questionnaireRepository);
 
-            IInterviewExpressionStorage state = GetLatestExpressionStorage(questionnaireDocument);
+            IInterviewExpressionStorage state = GetLatestExpressionStorage(assemblyLoadContext, questionnaireDocument);
             questionnaire.ExpressionStorageType = state.GetType();
             var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionStorage(It.IsAny<QuestionnaireIdentity>()) == state);
 
@@ -213,31 +219,24 @@ namespace WB.Tests.Integration.InterviewTests
             return interview;
         }
 
-        protected static Interview SetupInterview(QuestionnaireDocument questionnaireDocument)
+        protected static Interview SetupInterview(AssemblyLoadContext assemblyLoadContext, QuestionnaireDocument questionnaireDocument)
         {
-            return SetupInterviewWithExpressionStorage(questionnaireDocument, null);
+            return SetupInterviewWithExpressionStorage(assemblyLoadContext, questionnaireDocument, null);
         }
 
         protected static Interview SetupInterview(
+            AssemblyLoadContext assemblyLoadContext,
             QuestionnaireDocument questionnaireDocument,
             IEnumerable<object> events)
         {
-            return SetupInterviewWithExpressionStorage(questionnaireDocument, events);
+            return SetupInterviewWithExpressionStorage(assemblyLoadContext, questionnaireDocument, events);
         }
 
         private static IInterviewExpressionStorage GetLatestExpressionStorage(
-            QuestionnaireDocument questionnaireDocument,
-            IInterviewExpressionStorage precompiledState = null)
+            AssemblyLoadContext assemblyLoadContext,
+            QuestionnaireDocument questionnaireDocument)
         {
-            IInterviewExpressionStorage state = precompiledState ?? GetInterviewExpressionStorage(questionnaireDocument);
-            return state;
-        }
-
-        private static ILatestInterviewExpressionState GetLatestInterviewExpressionState(
-            QuestionnaireDocument questionnaireDocument, 
-            ILatestInterviewExpressionState precompiledState = null)
-        {
-            ILatestInterviewExpressionState state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument);
+            IInterviewExpressionStorage state = GetInterviewExpressionStorage(assemblyLoadContext, questionnaireDocument);
             return state;
         }
 
@@ -279,13 +278,13 @@ namespace WB.Tests.Integration.InterviewTests
             return (T) firstTypedEvent?.Payload;
         }
 
-        protected static Assembly CompileAssemblyUsingQuestionnaireEngine(QuestionnaireDocument questionnaireDocument)
-            => CompileAssembly(questionnaireDocument, IntegrationCreate.DesignerEngineVersionService().GetQuestionnaireContentVersion(questionnaireDocument));
+        protected static Assembly CompileAssemblyUsingQuestionnaireEngine(AssemblyLoadContext assemblyLoadContext, QuestionnaireDocument questionnaireDocument)
+            => CompileAssembly(assemblyLoadContext, questionnaireDocument, IntegrationCreate.DesignerEngineVersionService().GetQuestionnaireContentVersion(questionnaireDocument));
 
-        protected static Assembly CompileAssemblyUsingLatestEngine(QuestionnaireDocument questionnaireDocument)
-            => CompileAssembly(questionnaireDocument, IntegrationCreate.DesignerEngineVersionService().LatestSupportedVersion);
+        protected static Assembly CompileAssemblyUsingLatestEngine(AssemblyLoadContext assemblyLoadContext, QuestionnaireDocument questionnaireDocument)
+            => CompileAssembly(assemblyLoadContext, questionnaireDocument, IntegrationCreate.DesignerEngineVersionService().LatestSupportedVersion);
 
-        protected static Assembly CompileAssembly(QuestionnaireDocument questionnaireDocument, int engineVersion)
+        protected static Assembly CompileAssembly(AssemblyLoadContext assemblyLoadContext, QuestionnaireDocument questionnaireDocument, int engineVersion)
         {
             var expressionProcessorGenerator =
                 new QuestionnaireExpressionProcessorGenerator(
@@ -305,14 +304,14 @@ namespace WB.Tests.Integration.InterviewTests
 
             File.WriteAllBytes(filePath, Convert.FromBase64String(resultAssembly));
 
-            var compiledAssembly = Assembly.LoadFrom(filePath);
+            var compiledAssembly = assemblyLoadContext.LoadFromAssemblyPath(filePath);
 
             return compiledAssembly;
         }
 
-        public static IInterviewExpressionStorage GetInterviewExpressionStorage(QuestionnaireDocument questionnaireDocument)
+        public static IInterviewExpressionStorage GetInterviewExpressionStorage(AssemblyLoadContext assemblyLoadContext, QuestionnaireDocument questionnaireDocument)
         {
-            var compiledAssembly = CompileAssembly(questionnaireDocument, 21);
+            var compiledAssembly = CompileAssembly(assemblyLoadContext, questionnaireDocument, 21);
 
             Type interviewExpressionStorageType =
                 compiledAssembly.GetTypes()
@@ -328,9 +327,11 @@ namespace WB.Tests.Integration.InterviewTests
             return interviewExpressionStorage;
         }
 
-        public static ILatestInterviewExpressionState GetInterviewExpressionState(QuestionnaireDocument questionnaireDocument, bool useLatestEngine = true)
+        public static ILatestInterviewExpressionState GetInterviewExpressionState(AssemblyLoadContext assemblyLoadContext, QuestionnaireDocument questionnaireDocument, bool useLatestEngine = true)
         {
-            var compiledAssembly = useLatestEngine ? CompileAssemblyUsingLatestEngine(questionnaireDocument) : CompileAssemblyUsingQuestionnaireEngine(questionnaireDocument);
+            var compiledAssembly = useLatestEngine 
+                ? CompileAssemblyUsingLatestEngine(assemblyLoadContext, questionnaireDocument) 
+                : CompileAssemblyUsingQuestionnaireEngine(assemblyLoadContext, questionnaireDocument);
 
             Type interviewExpressionStateType =
                 compiledAssembly.GetTypes()

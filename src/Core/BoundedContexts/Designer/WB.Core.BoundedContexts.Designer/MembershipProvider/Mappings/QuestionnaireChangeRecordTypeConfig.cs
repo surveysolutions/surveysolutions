@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 
 namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings
@@ -24,6 +25,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings
 
             builder.Property(e => e.QuestionnaireId).HasColumnName("questionnaireid");
 
+
             builder.Property(e => e.ResultingQuestionnaireDocument).HasColumnName("resultingquestionnairedocument");
 
             builder.Property(e => e.Sequence).HasColumnName("sequence");
@@ -43,6 +45,12 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings
             builder.Property(e => e.UserId).HasColumnName("userid");
 
             builder.Property(e => e.UserName).HasColumnName("username");
+
+            builder.Property(e => e.Meta).HasColumnName("meta")
+                .HasColumnType("jsonb")
+                .HasConversion(
+                    v => JsonConvert.SerializeObject(v),
+                    v => JsonConvert.DeserializeObject<QuestionnaireChangeRecordMetadata>(v));                
         }
     }
 }

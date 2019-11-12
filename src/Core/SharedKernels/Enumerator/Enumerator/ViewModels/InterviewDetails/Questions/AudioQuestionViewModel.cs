@@ -119,7 +119,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public IMvxAsyncCommand RemoveAnswerCommand => new MvxAsyncCommand(this.RemoveAnswerAsync);
 
-        public IMvxCommand TogglePlayback => new MvxCommand(() =>
+        public IMvxCommand TogglePlayback => new MvxAsyncCommand(async () =>
         {
             if (this.IsPlaying)
             {
@@ -128,7 +128,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
             else
             {
-                this.audioService.Play(this.interviewId, this.questionIdentity, this.GetAudioFileName());
+                await this.audioService.Play(this.interviewId, this.questionIdentity, this.GetAudioFileName());
                 this.IsPlaying = true;
             }
         });

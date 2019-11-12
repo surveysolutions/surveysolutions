@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using System.Threading.Tasks;
+using Moq;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -12,7 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
     internal class when_answering_roster_size_numeric_question_with_negative_value_and_question_was_not_answered : IntegerQuestionViewModelTestContext
     {
         [SetUp]
-        public void Context()
+        public async Task Context()
         {
             SetUp();
 
@@ -33,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
             integerModel.Init(interviewId, questionIdentity, navigationState);
         
             integerModel.Answer = -4;
-            integerModel.ValueChangeCommand.Execute();
+            await integerModel.ValueChangeCommand.ExecuteAsync();
         }
 
         [Test]

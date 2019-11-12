@@ -11,7 +11,7 @@ namespace WB.Tests.Integration.PostgreSQLTests
         [OneTimeSetUp]
         protected static void Context()
         {
-            TestConnectionString = ConfigurationManager.ConnectionStrings["TestConnection"].ConnectionString;
+            TestConnectionString = TestsConfigurationManager.ConnectionString;
             databaseName = "testdb_" + Guid.NewGuid().FormatGuid();
             ConnectionStringBuilder = new NpgsqlConnectionStringBuilder(TestConnectionString)
             {
@@ -30,7 +30,7 @@ namespace WB.Tests.Integration.PostgreSQLTests
                 connection.Close();
             }
 
-            var cnSection = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            /*var cnSection = TestsConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 
             if (cnSection.ConnectionStrings.ConnectionStrings["Postgres"] != null)
             {
@@ -42,7 +42,7 @@ namespace WB.Tests.Integration.PostgreSQLTests
             });
             cnSection.Save();
 
-            ConfigurationManager.RefreshSection("connectionStrings");
+            TestsConfigurationManager.RefreshSection("connectionStrings");*/
         }
 
         [OneTimeTearDown]

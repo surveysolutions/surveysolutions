@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="InterviewDataIsMissingDescription" xml:space="preserve">
+    <value>Cilësoni një çelës interviste apo identifikues interviste për kërkimin.</value>
+  </data>
+  <data name="InterviewDataIsMissingTitle" xml:space="preserve">
+    <value>Intervistuesi pretendon se intervista u përfundua dhe u sinkronizua, por unë nuk shoh asnjë të dhënë për këtë intervistë në server </value>
+  </data>
+  <data name="MissingCensusInterviews_Filters_Dates" xml:space="preserve">
+    <value>Kërko intervistat që janë të sinkronizuara midis dy datave</value>
+  </data>
+  <data name="MissingCensusInterviews_Filters_DatesPlaceholder" xml:space="preserve">
+    <value>Zgjidh datat</value>
+  </data>
+  <data name="MissingCensusInterviews_Filters_Interviewer" xml:space="preserve">
+    <value>Intervistuesi</value>
+  </data>
+  <data name="MissingCensusInterviews_Filters_InterviewerPlaceholder" xml:space="preserve">
+    <value>Përzgjidh intervistuesin</value>
+  </data>
+  <data name="MissingCensusInterviews_Filters_Questionnaire" xml:space="preserve">
+    <value>Pyetësori</value>
+  </data>
+  <data name="MissingCensusInterviews_Filters_QuestionnairePlaceholder" xml:space="preserve">
+    <value>Zgjidh pyetësorin</value>
+  </data>
+  <data name="MissingCensusInterviews_Filters_Search" xml:space="preserve">
+    <value>Kërko</value>
+  </data>
+  <data name="MissingCensusInterviews_FiltersTitle" xml:space="preserve">
+    <value>Kushtet e filtrit</value>
+  </data>
+  <data name="MissingCensusInterviews_Instructions" xml:space="preserve">
+    <value>Për të gjetur një intervistë, ju lutemi, vendosni titullin e pyetësorit.&lt;br/&gt;                         Përzgjidhni një intervistues dhe një kuadër kohor për të kufizuar rezultatet e kërkimit tuaj</value>
+  </data>
+  <data name="MissingCensusInterviews_MoreThanOneInterviewsFound_Message_Format" xml:space="preserve">
+    <value>{0} intervista i përmbushin kushtet e filtrimit </value>
+  </data>
+  <data name="MissingCensusInterviews_NothingFound_Message" xml:space="preserve">
+    <value>Asnjë intervistë nuk i përmbush kushtet e filtrimit </value>
+  </data>
+  <data name="MissingCensusInterviews_OneInterviewFound_Message" xml:space="preserve">
+    <value>Një intervistë përmbush kushtet e filtrimit </value>
+  </data>
+  <data name="MissingCensusInterviews_PageHeader" xml:space="preserve">
+    <value>Intervista specifike po gjendet </value>
+  </data>
+  <data name="MissingCensusInterviewsDescription" xml:space="preserve">
+    <value>Jepni një emër regjistrimi të intervistuesit, titullin e pyetësorit dhe varg datash </value>
+  </data>
+  <data name="MissingCensusInterviewsTitle" xml:space="preserve">
+    <value>Më duhet të gjej një intervistë</value>
+  </data>
+  <data name="NoData_Description" xml:space="preserve">
+    <value>Specifikoni një çelës interviste (XX-XX-XX-XX) ose identifikues interviste për të kërkuar.</value>
+  </data>
+  <data name="NoData_Filters_InterviewKey" xml:space="preserve">
+    <value>Çelësi i intervistës ose identifikuesi i intervistës</value>
+  </data>
+  <data name="NoData_Filters_InterviewKeyPlaceholder" xml:space="preserve">
+    <value>Vendosni çelësin ose identifikuesin </value>
+  </data>
+  <data name="NoData_Title" xml:space="preserve">
+    <value>Nuk shoh asnjë të dhënë për intervistën e sinkronizuar në server</value>
+  </data>
+  <data name="SupportSite" xml:space="preserve">
+    <value>Klikoni te adresa e një çështjeje që doni të zgjidhni. Për problemet që nuk gjenden në listën më poshtë, vizitoni Survey Solutions &lt;a href="{0}" target="_blank"&gt;faqja mbështetëse&lt;/a&gt;.</value>
+  </data>
+  <data name="TableTitle_Enumerator" xml:space="preserve">
+    <value>Anketuesi </value>
+  </data>
+  <data name="TableTitle_InterviewId" xml:space="preserve">
+    <value>Identifikuesi i intervistës</value>
+  </data>
+  <data name="TableTitle_LastUpdate" xml:space="preserve">
+    <value>Përditësimi i fundit</value>
+  </data>
+  <data name="TableTitle_Status" xml:space="preserve">
+    <value>Statusi</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Zgjidhje e problemeve</value>
+  </data>
+</root>

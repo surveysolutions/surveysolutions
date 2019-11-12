@@ -31,8 +31,8 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             var messageHandler = new ModernHttpClient.NativeMessageHandler
             {
                 Timeout = restServiceSettings.Timeout,
-                EnableUntrustedCertificates = restServiceSettings.AcceptUnsignedSslCertificate,
                 DisableCaching = true,
+                EnableUntrustedCertificates = restServiceSettings.AcceptUnsignedSslCertificate,
                 AutomaticDecompression = DecompressionMethods.None,
                 AllowAutoRedirect = true,
                 Proxy = WebRequest.GetSystemWebProxy()

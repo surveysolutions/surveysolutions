@@ -327,4 +327,23 @@
   <data name="Questionnaire_Move" xml:space="preserve">
     <value>Опросник передан новому владельцу с email "{0}"</value>
   </data>
+  <data name="Questionnaire_ImportToHq" xml:space="preserve">
+      <value>Пользователь {1} импортировал опросник {2} на Хедквотер ({0}) </value>
+  </data>
+  <data name="LeaveComment" xml:space="preserve">
+      <value>Оставить комментарий</value>
+      <comment>Оставить комментарий</comment>
+  </data>
+  <data name="Save" xml:space="preserve">
+      <value>Сохранить</value>
+      <comment>Сохранить</comment>
+  </data>
+  <data name="ExtractAtRevision" xml:space="preserve">
+      <value>Сохранить как</value>
+      <comment>Сохранить как</comment>
+  </data>
+  <data name="Comment" xml:space="preserve">
+      <value>Комментарий</value>
+      <comment>Комментарий</comment>
+  </data>
 </root>

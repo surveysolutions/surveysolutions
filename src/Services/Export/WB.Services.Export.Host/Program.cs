@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
+using Masking.Serilog;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -155,6 +156,7 @@ namespace WB.Services.Export.Host
                 var logConfig = new LoggerConfiguration();
                 logConfig.Enrich.WithProperty("Environment", hosting.HostingEnvironment.EnvironmentName);
                 logConfig.WriteTo.Console(LogEventLevel.Debug);
+                logConfig.Destructure.ByMaskingProperties("Password", "ArchivePassword");
 
                 ConfigureSerilog(logConfig, hosting.Configuration);
 

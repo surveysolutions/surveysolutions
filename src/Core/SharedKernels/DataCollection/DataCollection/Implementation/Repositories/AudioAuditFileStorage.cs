@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
@@ -32,24 +33,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             this.filePlainStorageAccessor = filePlainStorageAccessor;
         }
 
-        public byte[] GetInterviewBinaryData(Guid interviewId, string fileName)
+        public Task<byte[]> GetInterviewBinaryData(Guid interviewId, string fileName)
         {
             var fileId = AudioAuditFile.GetFileId(interviewId, fileName);
             var databaseFile = filePlainStorageAccessor.GetById(fileId);
-            return databaseFile?.Data;
+            return Task.FromResult(databaseFile?.Data);
         }
 
-        public List<InterviewBinaryDataDescriptor> GetBinaryFilesForInterview(Guid interviewId)
+        public Task<List<InterviewBinaryDataDescriptor>> GetBinaryFilesForInterview(Guid interviewId)
         {
             var databaseFiles = filePlainStorageAccessor.Query(q => q.Where(f => f.InterviewId == interviewId));
 
-            return databaseFiles.Select(file 
+            var interviewBinaryDataDescriptors = databaseFiles.Select(file 
                 => new InterviewBinaryDataDescriptor(
                     interviewId, 
                     file.FileName,
                     file.ContentType,
                     () => GetInterviewBinaryData(interviewId, file.FileName)
                 )).ToList();
+
+            return Task.FromResult(interviewBinaryDataDescriptors);
         }
 
         public void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data, string contentType)
@@ -67,10 +70,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             filePlainStorageAccessor.Store(file, fileId);
         }
 
-        public void RemoveInterviewBinaryData(Guid interviewId, string fileName)
+        public Task RemoveInterviewBinaryData(Guid interviewId, string fileName)
         {
             var fileId = AudioAuditFile.GetFileId(interviewId, fileName);
             filePlainStorageAccessor.Remove(fileId);
+            return Task.CompletedTask;
         }
     }
 }

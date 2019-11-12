@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Services;
@@ -15,7 +16,7 @@ using WB.Services.Infrastructure;
 
 namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
 {
-    internal class TabularFormatParaDataExportProcessHandler : IExportHandler
+    public class TabularFormatParaDataExportProcessHandler : IExportHandler
     {
         private readonly ICsvWriter csvWriter;
         private readonly IOptions<ExportServiceSettings> interviewDataExportSettings;
@@ -121,9 +122,21 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
 
             doFileContent.AppendLine("label variable interview__id `\"Unique 32-character long identifier of the interview\"'");
             doFileContent.AppendLine("label variable order `\"Sequential event number within each interview\"'");
+
+            //values are exported as strings yet
+            //doFileContent.AppendLine("label define event " + string.Join("",
+            //                             Enum.GetValues(typeof(InterviewHistoricalAction)).Cast<InterviewHistoricalAction>()
+            //                                 .Select(x => $"{x} `\"{x.ToString()}\"'")));
+            
+            //doFileContent.AppendLine("label values event event");
             doFileContent.AppendLine("label variable event `\"Type of event happened\"'");
             doFileContent.AppendLine("label variable responsible `\"Login name of the person who initiated the event\"'");
+            
+            doFileContent.AppendLine("label define role " 
+                                     + string.Join("", ExportHelper.RolesMap.Select(x=> $"{x.Key} `\"{x.Value}\"'")));
+            doFileContent.AppendLine("label values role role");
             doFileContent.AppendLine("label variable role `\"System role of the person who initiated the event\"'");
+            
             doFileContent.AppendLine("label variable timestamp `\"Date and time when the event happened\"'");
             doFileContent.AppendLine("label variable offset `\"Timezone offset relative to UTC\"'");
             doFileContent.AppendLine("label variable parameters `\"Event-specific parameters\"'");

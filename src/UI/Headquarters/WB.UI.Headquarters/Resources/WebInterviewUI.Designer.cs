@@ -513,7 +513,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You cancel now and proceed with the interview. And you can send it later by clicking &apos;Email resume link&apos; item in the top menu..
+        ///   Looks up a localized string similar to You can cancel now and proceed with the interview. And you can send it later by clicking &apos;Email resume link&apos; item in the top menu..
         /// </summary>
         internal static string EmailLink_ResumeAnyTime {
             get {
@@ -909,7 +909,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Session on Designer applicaton has expired. Sign in on Designer application to be able to save..
+        ///   Looks up a localized string similar to Session on Designer application has expired. Sign in on Designer application to be able to save..
         /// </summary>
         internal static string SaveScenarioDesignerLogin {
             get {

@@ -1,5 +1,5 @@
 using System;
-using AppDomainToolkit;
+
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -32,7 +32,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                         }),
                 });
 
-                var interview = SetupStatefullInterview(questionnaireDocument);
+                var interview = SetupStatefullInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 return new InvokeResults
                 {
@@ -51,7 +51,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
         private static InvokeResults results;
 
-        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        private static AppDomainContext appDomainContext;
         private static readonly Guid questionnaireId = Guid.Parse("99999999999999999999999999999999");
         private static readonly Guid roster2Id = Guid.Parse("88888888888888888888888888888888");
         private static readonly Guid roster1Id = Guid.Parse("77777777777777777777777777777777");

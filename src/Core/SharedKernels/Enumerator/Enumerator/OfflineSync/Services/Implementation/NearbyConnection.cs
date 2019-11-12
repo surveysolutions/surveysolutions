@@ -41,11 +41,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
         public async Task<NearbyStatus> StartDiscoveryAsync(string serviceName, CancellationToken cancellationToken)
         {
-            //this.logger.Verbose($"({serviceName}) ENTER");
-
             var result = await connectionClient.StartDiscoveryAsync(serviceName, cancellationToken);
-
-            //this.logger.Verbose($"({serviceName}) EXIT => {result.Status.ToString()}");
             return result;
         }
 

@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private DateTime whenGenerated;
         private bool isPackageBuild;
         private bool isPackageSendingAttemptCompleted;
-        private string packageSendingAttemptResponceText;
+        private string packageSendingAttemptResponseText;
         private bool isInProgress;
         private string informationPackageFilePath;
 
@@ -63,10 +63,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             set => this.RaiseAndSetIfChanged( ref this.isPackageSendingAttemptCompleted, value);
         }
 
-        public string PackageSendingAttemptResponceText
+        public string PackageSendingAttemptResponseText
         {
-            get => this.packageSendingAttemptResponceText;
-            set => this.RaiseAndSetIfChanged( ref this.packageSendingAttemptResponceText, value);
+            get => this.packageSendingAttemptResponseText;
+            set => this.RaiseAndSetIfChanged( ref this.packageSendingAttemptResponseText, value);
         }
 
         public bool IsInProgress
@@ -114,12 +114,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             try
             {
                 await this.backupRestoreService.SendBackupAsync(informationPackageFilePath, cancellationToken);
-                this.PackageSendingAttemptResponceText = EnumeratorUIResources.Troubleshooting_InformationPackageIsSuccessfullySent;
+                this.PackageSendingAttemptResponseText = EnumeratorUIResources.Troubleshooting_InformationPackageIsSuccessfullySent;
             }
             catch (SynchronizationException ex)
             {
                 this.logger.Error("Error when sending backup. ", ex);
-                this.PackageSendingAttemptResponceText = ex.Message;
+                this.PackageSendingAttemptResponseText = ex.Message;
             }
             this.IsPackageSendingAttemptCompleted = true;
             this.IsPackageBuild = false;
@@ -134,5 +134,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public IMvxAsyncCommand CreateBackupCommand => new MvxAsyncCommand(this.CreateBackupAsync);
         public IMvxAsyncCommand SendBackupCommand => new MvxAsyncCommand(this.SendBackupAsync);
         public IMvxCommand DeleteBackupCommand => new MvxCommand(this.DeleteBackup);
+       
     }
 }

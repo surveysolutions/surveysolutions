@@ -26,12 +26,15 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                     })
             });
 
-            var interview = SetupInterview(questionnaireDocument: questionnaireDocument);
+            using (var appDomainContext = AppDomainContext.Create())
+            {
+                var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument: questionnaireDocument);
 
-            var exception = Assert.Throws<InterviewException>(() => interview.AnswerSingleOptionLinkedQuestion(userId: userId, questionId: linkedToQuestionId,
-                originDate: DateTimeOffset.Now, rosterVector: new decimal[0], selectedRosterVector: answer));
+                var exception = Assert.Throws<InterviewException>(() => interview.AnswerSingleOptionLinkedQuestion(userId: userId, questionId: linkedToQuestionId,
+                    originDate: DateTimeOffset.Now, rosterVector: new decimal[0], selectedRosterVector: answer));
 
-            Assert.That(exception, Has.Property(nameof(exception.Message)).EqualTo("Answer on linked categorical question cannot be saved. Specified option is absent"));
+                Assert.That(exception, Has.Property(nameof(exception.Message)).EqualTo("Answer on linked categorical question cannot be saved. Specified option is absent"));
+            }
         }
 
         private static Guid userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFF1111111111");

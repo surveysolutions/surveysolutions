@@ -121,6 +121,6 @@
     <value>Check server settings </value>
   </data>
   <data name="UpdateRequired" xml:space="preserve">
-    <value>Need to update the application</value>
+    <value>Application update is required</value>
   </data>
 </root>

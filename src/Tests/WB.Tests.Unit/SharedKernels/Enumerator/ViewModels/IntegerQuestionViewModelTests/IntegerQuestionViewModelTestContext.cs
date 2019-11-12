@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Moq;
 using MvvmCross.Base;
 using MvvmCross.Tests;
@@ -18,7 +19,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewModelTests
 {
-    internal class IntegerQuestionViewModelTestContext : MvxIoCSupportingTest
+    public class IntegerQuestionViewModelTestContext : MvxIoCSupportingTest
     {
         public IntegerQuestionViewModelTestContext()
         {
@@ -34,8 +35,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
         {
             var userIdentity = Mock.Of<IUserIdentity>(_ => _.UserId == userId);
             var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity && _.IsAuthenticated == true);
-            
 
+            var special = specialValuesViewModel;
+            if(special == null)
+            {
+                var specialMock = new Mock<SpecialValuesViewModel>();
+                specialMock.DefaultValueProvider = DefaultValueProvider.Mock;
+                specialMock.SetReturnsDefault(Task.CompletedTask);
+                special = specialMock.Object;
+            }
             QuestionStateMock.Setup(x => x.Validity).Returns(ValidityModelMock.Object);
 
             return new IntegerQuestionViewModel(
@@ -47,7 +55,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
                 AnsweringViewModelMock.Object,
                 Mock.Of<QuestionInstructionViewModel>(),
                 Mock.Of<IViewModelEventRegistry>(),
-                specialValuesViewModel ?? Mock.Of<SpecialValuesViewModel>(),
+                special,
                 Create.ViewModel.ThrottlingViewModel());
         }
 

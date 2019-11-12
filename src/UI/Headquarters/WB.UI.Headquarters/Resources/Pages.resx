@@ -1275,4 +1275,25 @@
   <data name="InterviewerProfile_NoMarkers" xml:space="preserve">
     <value>Interviewer location was never recorded in any of the interviews that he/she has submitted</value>
   </data>
+  <data name="Questionnaire_Info" xml:space="preserve">
+    <value>Questionnaire details</value>
+  </data>
+  <data name="Questionnaire_Stats" xml:space="preserve">
+    <value>Questionnaire Information</value>
+  </data>
+  <data name="Questionnaire_QuestionsCount" xml:space="preserve">
+    <value>Questions</value>
+  </data>
+  <data name="Questionnaire_QuestionsCountWithCond" xml:space="preserve">
+    <value>Questions with conditions</value>
+  </data>
+  <data name="Questionnaire_RostersCount" xml:space="preserve">
+    <value>Number of rosters</value>
+  </data>
+  <data name="Questionnaire_SectionsCount" xml:space="preserve">
+    <value>Number of sections</value>
+  </data>
+  <data name="Questionnaire_SubSectionsCount" xml:space="preserve">
+    <value>Number of sub-sections</value>
+  </data>
 </root>

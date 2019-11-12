@@ -40,11 +40,22 @@ using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Logging;
+using WB.UI.Shared.Enumerator.Utils;
 
 namespace WB.UI.Interviewer
 {
     public class Setup : EnumeratorSetup<InterviewerMvxApplication>
     {
+        public Setup()
+        {
+            
+#if PRODUCTION
+            CrashReporting.Init("bd034ac8-bec5-41d7-83f7-e40c1300fd10");
+#else
+            CrashReporting.Init("1d21a663-e5fc-4535-9b25-4f22d6fa2b31");
+#endif
+        }
+
         protected override IMvxViewsContainer InitializeViewLookup(IDictionary<Type, Type> viewModelViewLookup)
         {
             var lookup = base.InitializeViewLookup(viewModelViewLookup);
@@ -85,7 +96,6 @@ namespace WB.UI.Interviewer
 
             registry.AddOrOverwrite("Localization", new InterviewerLocalizationValueConverter());
         }
-
 
         protected override IMvxIoCProvider CreateIocProvider()
         {

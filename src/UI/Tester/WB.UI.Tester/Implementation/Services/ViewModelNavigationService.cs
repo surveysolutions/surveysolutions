@@ -4,6 +4,7 @@ using Android.Content;
 using MvvmCross.Navigation;
 using MvvmCross.Platforms.Android;
 using WB.Core.BoundedContexts.Tester.ViewModels;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -26,8 +27,9 @@ namespace WB.UI.Tester.Implementation.Services
             IUserInterfaceStateService userInterfaceStateService,
             IMvxAndroidCurrentTopActivity androidCurrentTopActivity,
             IPrincipal principal,
-            IMvxNavigationService navigationService)
-            : base(commandService, userInteractionService, userInterfaceStateService, androidCurrentTopActivity, navigationService, principal)
+            IMvxNavigationService navigationService,
+            ILogger log)
+            : base(commandService, userInteractionService, userInterfaceStateService, androidCurrentTopActivity, navigationService, principal, log)
         {
             this.androidCurrentTopActivity = androidCurrentTopActivity;
             this.navigationService = navigationService;
