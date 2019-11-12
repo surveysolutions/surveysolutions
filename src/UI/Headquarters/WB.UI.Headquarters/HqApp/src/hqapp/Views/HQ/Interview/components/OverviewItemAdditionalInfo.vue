@@ -21,7 +21,7 @@
             </div>
             <div class="information-block comments-block">
                 <template v-for="comment in comments">
-                    <wb-comment-item :userRole="comment.UserRole" :text="comment.Text" :isOwnComment="comment.IsOwnComment" :key="comment.CommentTimeUtc" />
+                    <wb-comment-item :userRole="comment.userRole" :text="comment.text" :isOwnComment="comment.isOwnComment" :key="comment.commentTimeUtc" />
                 </template>
                 <div class="comment" v-if="isCommentFormIsVisible">
                     <form class="form-inline" onsubmit="return false;">
@@ -52,7 +52,7 @@
             </div>
         </div>
         <div class="popover-footer clearftix">
-            <button type="button" v-if="item.SupportsComments" @click="showAddCommentForm" class="btn btn-link gray-action-unit pull-left add-comment">{{$t("WebInterviewUI.CommentAdd")}}</button>
+            <button type="button" v-if="item.supportsComments" @click="showAddCommentForm" class="btn btn-link gray-action-unit pull-left add-comment">{{$t("WebInterviewUI.CommentAdd")}}</button>
             <button type="button" @click="close" class="btn btn-link gray-action-unit pull-right close-popover">{{$t("Pages.CloseLabel")}}</button>
         </div>
     </div>
@@ -77,7 +77,7 @@ export default {
     methods: 
     {
         show(){
-            this.$store.dispatch("loadAdditionalInfo", { id: this.item.Id });
+            this.$store.dispatch("loadAdditionalInfo", { id: this.item.id });
             this.isAdditionalInfoVisible = true;
         },
         close(){
@@ -93,32 +93,32 @@ export default {
             if (!com || !com.trim())
                 return
 
-            await this.$store.dispatch("sendNewComment", { questionId: this.item.Id, comment: com.trim() })
+            await this.$store.dispatch("sendNewComment", { questionId: this.item.id, comment: com.trim() })
 
-            this.$store.dispatch("loadAdditionalInfo", { id: this.item.Id });
+            this.$store.dispatch("loadAdditionalInfo", { id: this.item.id });
 
             this.comment = ''
             if(evnt && evnt.target) {
                 evnt.target.blur()
             }
 
-            this.item.HasComment = true;
+            this.item.hasComment = true;
             this.isCommentFormIsVisible = false;
             this.postingComment = false;
         }
     },
     computed: {
         additionalInfo() {
-            return this.$store.state.review.overview.additionalInfo[this.item.Id] || {};
+            return this.$store.state.review.overview.additionalInfo[this.item.id] || {};
         },
         errors() {
-            return this.additionalInfo.Errors || [];
+            return this.additionalInfo.errors || [];
         },
         warnings() {
-            return this.additionalInfo.Warnings || [];
+            return this.additionalInfo.warnings || [];
         },
         comments() {
-            return this.additionalInfo.Comments || [];
+            return this.additionalInfo.comments || [];
         },
         postBtnText() {
             return this.postingComment ? this.$t("WebInterviewUI.CommentPosting") : this.$t("WebInterviewUI.CommentPost")

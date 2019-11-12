@@ -19,5 +19,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public DateTime? LastSync { get; set; }
 
         public bool? LastSyncSucceeded { get; set; }
+
+        public bool? DashboardViewsUpdated { get; set; }
     }
 }

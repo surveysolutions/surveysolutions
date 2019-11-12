@@ -432,7 +432,7 @@ Contact support for assistance.</value>
     <value>We will send you a message with the link to resume the interview if you need to continue later.</value>
   </data>
   <data name="EmailLink_ResumeAnyTime" xml:space="preserve">
-    <value>You cancel now and proceed with the interview. And you can send it later by clicking 'Email resume link' item in the top menu.</value>
+    <value>You can cancel now and proceed with the interview. And you can send it later by clicking 'Email resume link' item in the top menu.</value>
   </data>
   <data name="EmailLink_Placeholder" xml:space="preserve">
     <value>Enter email</value>
@@ -466,7 +466,7 @@ Contact support for assistance.</value>
     <value>Select scenario to replace</value>
   </data>
   <data name="SaveScenarioDesignerLogin" xml:space="preserve">
-    <value>Session on Designer applicaton has expired. Sign in on Designer application to be able to save.</value>
+    <value>Session on Designer application has expired. Sign in on Designer application to be able to save.</value>
   </data>
   <data name="SaveScenarioGoToDesigner" xml:space="preserve">
     <value>Open Designer</value>

@@ -55,10 +55,11 @@ namespace WB.Services.Export.Tests.EventsProcessorTests
             var logMock = new Mock<ILogger<EventsHandler>>();
 
             services.AddTransient<IFunctionalHandler>(c => new EventHandler(handledEvents));
+            services.AddTransient<ILogger<EventsHandler>>(c => logMock.Object);
 
-            services.AddTransient(c => logMock.Object);
-
-            var provider = Create.SetupEventsProcessor(services, apiMock.Object, withDefaultEventsFilter: true);
+            var provider = Create.SetupEventsProcessor(services, apiMock.Object, 
+                withDefaultEventsFilter: true, 
+                noEventsHandlerLogger: true);
 
             var processor = provider.GetService<EventsProcessor>();
             SetupEvents(apiMock, (0, new EventsFeed
