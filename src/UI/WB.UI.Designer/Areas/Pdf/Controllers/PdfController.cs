@@ -234,7 +234,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
                         Content = questionnaireHtml,
                         PageFooterUrl = pageFooterUrl,
                         OutputPath = generationProgress.FilePath,
-                        WkHtmlToPdfExeName = pathToWkHtmlToPdfExecutable,
+                        PdfToolPath = pathToWkHtmlToPdfExecutable,
                         ExecutionTimeout = this.pdfSettings.Value.PdfGenerationTimeoutInMilliseconds,
                         TempFilesPath = Path.GetTempPath(),
                         Size = PdfPageSize.A4,
