@@ -2,10 +2,10 @@
 using System.Threading;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WB.Services.Infrastructure.Storage;
 using WB.Services.Scheduler.Model;
-using WB.Services.Scheduler.Storage;
 
 namespace WB.Services.Scheduler
 {
@@ -15,11 +15,15 @@ namespace WB.Services.Scheduler
         private static long counter = 0;
         public long Id { get; }
         private readonly IOptions<JobSettings> jobSettings;
-        
-        public JobContext(DbContextOptions<JobContext> options, IOptions<JobSettings> jobSettings)
+        private readonly ILoggerFactory loggerFactory;
+
+        public JobContext(DbContextOptions<JobContext> options,
+            IOptions<JobSettings> jobSettings,
+            ILoggerFactory loggerFactory = null)
             : base(options)
         {
             this.jobSettings = jobSettings;
+            this.loggerFactory = loggerFactory;
             Id = Interlocked.Increment(ref counter);
         }
 
@@ -30,6 +34,16 @@ namespace WB.Services.Scheduler
             modelBuilder.UseSnakeCaseNaming();
             modelBuilder.HasDefaultSchema(jobSettings.Value.SchemaName);
             modelBuilder.ApplyConfiguration(new JobItemConfiguration());
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (loggerFactory != null)
+            {
+                optionsBuilder.UseLoggerFactory(loggerFactory);
+            }
+
+            base.OnConfiguring(optionsBuilder);
         }
     }
 
