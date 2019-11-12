@@ -41,7 +41,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
         Task<QuestionnaireInfo> GetQuestionnaireInfo(Guid questionnaireId);
 
         [Get("/api/hq/user/login")]
-        Task Login([Header("Authorization")] string authorization);
+        Task<string> Login([Header("Authorization")] string authorization);
 
         [Get("/api/hq/user/userdetails")]
         Task IsLoggedIn();
@@ -50,10 +50,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
         Task<PagedQuestionnaireCommunicationPackage> GetQuestionnairesList([Query] DesignerQuestionnairesListFilter filter);
 
         [Get("/pdf/status/{questionnaireId}")]
-        Task <PdfStatus> GetPdfStatus(Guid questionnaireId, [Query] Guid? translationId = null);
+        Task <PdfStatus> GetPdfStatus(Guid questionnaireId, [Query] Guid? translation = null);
 
         [Get("/pdf/download/{questionnaireId}")]
-        Task<RestFile> DownloadPdf(Guid questionnaireId, [Query] Guid? translationId = null);
+        Task<RestFile> DownloadPdf(Guid questionnaireId, [Query] Guid? translation = null);
     }
 
     public class DesignerQuestionnairesListFilter

@@ -152,5 +152,10 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
         public void MarkSyncStart(){}
 
         public void MarkSyncSucceeded(){}
+        public bool DashboardViewsUpdated => false;
+        public void SetDashboardViewsUpdated(bool updated)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
