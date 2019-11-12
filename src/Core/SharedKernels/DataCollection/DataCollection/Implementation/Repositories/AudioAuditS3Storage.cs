@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             this.filePlainStorageAccessor = filePlainStorageAccessor ?? throw new ArgumentNullException(nameof(filePlainStorageAccessor));
         }
 
-        public async Task<byte[]> GetInterviewBinaryData(Guid interviewId, string fileName)
+        public async Task<byte[]> GetInterviewBinaryDataAsync(Guid interviewId, string fileName)
         {
             string fileId = AudioAuditFile.GetFileId(interviewId, fileName);
             var audioAuditData = filePlainStorageAccessor.GetById(fileId);
@@ -33,6 +33,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             return audioAuditData.Data;
         }
 
+        public byte[] GetInterviewBinaryData(Guid interviewId, string fileName)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<List<InterviewBinaryDataDescriptor>> GetBinaryFilesForInterview(Guid interviewId)
         {
             var databaseFiles = filePlainStorageAccessor.Query(q => q.Where(f => f.InterviewId == interviewId));
@@ -42,7 +47,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
                     interviewId,
                     file.FileName,
                     file.ContentType,
-                    () => GetInterviewBinaryData(interviewId, file.FileName)
+                    () => GetInterviewBinaryDataAsync(interviewId, file.FileName)
                 )).ToList();
             return Task.FromResult(interviewBinaryDataDescriptors);
         }
