@@ -230,7 +230,6 @@ namespace WB.Services.Export.Tests.InterviewDataExport
         private IInterviewDataExportBulkCommandBuilder CreateBuilder() => new InterviewDataExportBulkCommandBuilder();
 
         private readonly string fakeTableName1 = "fakeTableName1";
-        private readonly string fakeTableName2 = "fakeTableName2";
         private readonly string fakeColumnName1 = "fakeColumnName1";
         private readonly string fakeColumnName2 = "fakeColumnName2";
         private readonly Guid interviewId1 = Guid.NewGuid();

@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.UI.Headquarters.Services;
 
 namespace WB.UI.Headquarters.API.Automation
 {

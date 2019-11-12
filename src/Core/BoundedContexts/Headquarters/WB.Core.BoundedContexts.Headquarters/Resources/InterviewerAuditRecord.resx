@@ -162,6 +162,9 @@
   <data name="AssignResponsibleToAssignment" xml:space="preserve">
     <value>Assign responsible {0} to assignment #{1}</value>
   </data>
+  <data name="FinishInstallation" xml:space="preserve">
+      <value>Installation finished</value>
+  </data>
   <data name="OpenInterview" xml:space="preserve">
     <value>Interview {0} opened</value>
   </data>

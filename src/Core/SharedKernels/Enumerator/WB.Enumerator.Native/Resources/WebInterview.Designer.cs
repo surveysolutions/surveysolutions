@@ -191,6 +191,15 @@ namespace WB.Enumerator.Native.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This link is protected with password, that was distributed with the link. Please enter it here.
+        /// </summary>
+        public static string EnterPasswordText {
+            get {
+                return ResourceManager.GetString("EnterPasswordText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
         public static string Error {
