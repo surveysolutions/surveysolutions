@@ -158,7 +158,7 @@ namespace WB.UI.WebTester.Services
 
                 foreach (var image in await this.imageFileStorage.GetBinaryFilesForInterview(originalInterviewId))
                 {
-                    var imageBytes = await this.imageFileStorage.GetInterviewBinaryData(image.InterviewId, image.FileName);
+                    var imageBytes = await this.imageFileStorage.GetInterviewBinaryDataAsync(image.InterviewId, image.FileName);
 
                     this.imageFileStorage.StoreInterviewBinaryData(designerToken, image.FileName, imageBytes,
                         image.ContentType);

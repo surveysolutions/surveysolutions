@@ -131,7 +131,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 await this.audioService.Play(this.interviewId, this.questionIdentity, this.GetAudioFileName());
                 this.IsPlaying = true;
             }
-        });
+        }, () => this.CanBePlayed);
         
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {

@@ -33,11 +33,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             this.filePlainStorageAccessor = filePlainStorageAccessor;
         }
 
-        public Task<byte[]> GetInterviewBinaryData(Guid interviewId, string fileName)
+        public Task<byte[]> GetInterviewBinaryDataAsync(Guid interviewId, string fileName) 
+            => Task.FromResult(this.GetInterviewBinaryData(interviewId, fileName));
+
+        public byte[] GetInterviewBinaryData(Guid interviewId, string fileName)
         {
             var fileId = AudioFile.GetFileId(interviewId, fileName);
             var databaseFile = filePlainStorageAccessor.GetById(fileId);
-            return Task.FromResult(databaseFile?.Data);
+
+            return databaseFile?.Data;
         }
 
         public Task<List<InterviewBinaryDataDescriptor>> GetBinaryFilesForInterview(Guid interviewId)
@@ -49,7 +53,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
                     interviewId, 
                     file.FileName,
                     file.ContentType,
-                    () => GetInterviewBinaryData(interviewId, file.FileName)
+                    () => GetInterviewBinaryDataAsync(interviewId, file.FileName)
                 )).ToList();
             return Task.FromResult(interviewBinaryDataDescriptors);
         }

@@ -27,8 +27,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
                 var fileName = multimediaQuestion.GetAnswer().FileName;
                 this.fileName = fileName;
 
-                this.Image = fileStorageas.GetInterviewBinaryData(interviewId,
-                    fileName).Result;
+                this.Image = fileStorageas.GetInterviewBinaryData(interviewId, fileName);
             }
         }
 
