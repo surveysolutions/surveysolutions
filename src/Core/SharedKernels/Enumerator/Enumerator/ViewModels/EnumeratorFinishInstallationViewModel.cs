@@ -6,6 +6,7 @@ using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
+using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -23,6 +24,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private readonly ILogger logger;
         private CancellationTokenSource cancellationTokenSource;
         private readonly IUserInteractionService userInteractionService;
+        private readonly IAuditLogService auditLogService;
         private const string StateKey = "identity";
         private readonly IQRBarcodeScanService qrBarcodeScanService;
         private readonly ISerializer serializer;
@@ -35,12 +37,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             ILogger logger,
             IQRBarcodeScanService qrBarcodeScanService,
             ISerializer serializer,
-            IUserInteractionService userInteractionService) : base(principal, viewModelNavigationService)
+            IUserInteractionService userInteractionService,
+            IAuditLogService auditLogService) : base(principal, viewModelNavigationService)
         {
             this.deviceSettings = deviceSettings;
             this.synchronizationService = synchronizationService;
             this.logger = logger;
             this.userInteractionService = userInteractionService;
+            this.auditLogService = auditLogService;
 
             this.qrBarcodeScanService = qrBarcodeScanService;
             this.serializer = serializer;
@@ -209,6 +213,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 await this.SaveUserToLocalStorageAsync(restCredentials, cancellationTokenSource.Token);
 
                 this.Principal.SignIn(restCredentials.Login, this.Password, true);
+
+                this.auditLogService.Write(new FinishInstallationAuditLogEntity(this.Endpoint));
+                this.auditLogService.Write(new LoginAuditLogEntity(this.UserName));
+
                 await this.viewModelNavigationService.NavigateToDashboardAsync();
             }
             catch (SynchronizationException ex)

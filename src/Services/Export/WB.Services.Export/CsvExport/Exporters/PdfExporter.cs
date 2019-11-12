@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Unidecode.NET;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services;
@@ -42,6 +43,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             this.logger.LogDebug("Loading main pdf for {questionnaire}", questionnaire.QuestionnaireId);
 
             var targetFileName = Path.ChangeExtension(questionnaire.VariableName, ".pdf");
+            targetFileName = fileSystemAccessor.MakeValidFileName(targetFileName);
             try
             {
                 var mainPdf = await hqApi.GetPdfAsync(questionnaire.QuestionnaireId);
@@ -72,7 +74,13 @@ namespace WB.Services.Export.CsvExport.Exporters
                 {
                     this.logger.LogDebug("Loading pdf for {questionnaire} {translationId}", questionnaire.QuestionnaireId, translation.Id);
                     var translatedPdf = await hqApi.GetPdfAsync(questionnaire.QuestionnaireId, translation.Id);
-                    var translatedFilePath = Path.Combine(targetFolder, translation.Name + " " + targetFileName);
+                    var translatedFilePath = Path.Combine(targetFolder, translation.Name.Unidecode() + " " + targetFileName);
+
+                    for (int i = 1; fileSystemAccessor.IsFileExists(translatedFilePath); i++)
+                    {
+                        translatedFilePath = Path.Combine(targetFolder,
+                            $"{translation.Name.Unidecode()} ({i}) {targetFileName}");
+                    }
 
                     using (var translatedStream = this.fileSystemAccessor.OpenOrCreateFile(translatedFilePath, false))
                     {
