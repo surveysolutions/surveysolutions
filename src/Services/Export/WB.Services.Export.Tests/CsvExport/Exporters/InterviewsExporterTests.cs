@@ -38,7 +38,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         public async Task It_should_export_service_column_with_interview_key()
         {
             //arrange
-            Guid interviewId = Id.g1;
+            Guid interviewId = Id.g2;
             var interviewKey = "11-11-11-11";
             var assignmentId = 11;
 
@@ -85,7 +85,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             
 
             Assert.That(dataInCsvFile[0].Data[0][2], Is.EqualTo(ServiceColumns.InterviewRandom));
-            Assert.That(dataInCsvFile[1].Data[0][2], Is.EqualTo("0.72624326996796"));
+            Assert.That(dataInCsvFile[1].Data[0][2], Is.EqualTo("0.7262432699679598"));
 
             Assert.That(dataInCsvFile[0].Data[0][3], Is.EqualTo(ServiceColumns.HasAnyError));
             Assert.That(dataInCsvFile[1].Data[0][3], Is.EqualTo("0"));
