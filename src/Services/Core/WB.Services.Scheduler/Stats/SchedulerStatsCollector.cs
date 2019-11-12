@@ -1,15 +1,25 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Linq;
 using Dapper;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Prometheus;
-using Prometheus.Advanced;
 using WB.Services.Scheduler.Model;
 
 namespace WB.Services.Scheduler.Stats
 {
-    public class SchedulerStatsCollector : IOnDemandCollector
+    public static class SchedulerMetricsExtensions
+    {
+        public static void UseSchedulerMetrics(this IApplicationBuilder app, CollectorRegistry? registry = null)
+        {
+            var collector = new SchedulerStatsCollector(app.ApplicationServices);
+            collector.Register(registry);
+        }
+    }
+    
+    internal class SchedulerStatsCollector
     {
         private readonly IServiceProvider serviceProvider;
 
@@ -22,12 +32,12 @@ namespace WB.Services.Scheduler.Stats
             this.serviceProvider = serviceProvider;
         }
 
-        public void RegisterMetrics(ICollectorRegistry registry)
+        public void Register(CollectorRegistry? registry = null)
         {
-            registry.GetOrAdd(CurrentJobs);
+            (registry ?? Metrics.DefaultRegistry).AddBeforeCollectCallback(UpdateMetrics);
         }
 
-        private readonly string JobStatuses = 
+        private readonly string JobStatuses =
             string.Join(",",
             Enum.GetValues(typeof(JobStatus))
                 .OfType<JobStatus>()
@@ -36,11 +46,11 @@ namespace WB.Services.Scheduler.Stats
 
         public void UpdateMetrics()
         {
-            using (var scope = serviceProvider.CreateScope())
-            {
-                var db = scope.ServiceProvider.GetService<JobContext>();
+            using var scope = serviceProvider.CreateScope();
+
+            var db = scope.ServiceProvider.GetService<JobContext>();
                 
-                var query = @"
+            var query = @"
             with
                 tenants as (select distinct tenant_name as tenant from scheduler.jobs),
                 statuses as (select s as status from unnest(ARRAY[" + JobStatuses + @"]) s),
@@ -53,12 +63,11 @@ namespace WB.Services.Scheduler.Stats
                 ) as ""count""
             from tuples t";
 
-                var counts = db.Database.GetDbConnection().Query<(string tenant, string status, string type, int count)>(query);
+            var counts = db.Database.GetDbConnection().Query<(string tenant, string status, string type, int count)>(query);
 
-                foreach (var count in counts)
-                {
-                    CurrentJobs.Labels(count.type, count.status, count.tenant).Set(count.count);
-                }
+            foreach (var count in counts)
+            {
+                CurrentJobs.Labels(count.type, count.status, count.tenant).Set(count.count);
             }
         }
     }

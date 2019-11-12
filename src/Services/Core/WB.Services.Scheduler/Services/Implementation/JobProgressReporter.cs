@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using WB.Services.Scheduler.Model;
 using WB.Services.Scheduler.Model.Events;
@@ -12,24 +13,23 @@ namespace WB.Services.Scheduler.Services.Implementation
 {
     internal class JobProgressReporter : IJobProgressReporter
     {
-        private readonly JobContext db;
         private readonly IJobCancellationNotifier jobCancellationNotifier;
         private readonly ILogger<JobProgressReporter> logger;
         private readonly TaskCompletionSource<bool> queueCompletion = new TaskCompletionSource<bool>();
 
-        public JobProgressReporter(JobContext db, IJobCancellationNotifier jobCancellationNotifier, ILogger<JobProgressReporter> logger)
+        public JobProgressReporter(IServiceProvider serviceProvider, IJobCancellationNotifier jobCancellationNotifier, ILogger<JobProgressReporter> logger)
         {
-            this.db = db;
             this.jobCancellationNotifier = jobCancellationNotifier;
             this.logger = logger;
+            this.serviceProvider = serviceProvider;
         }
 
         public void StartProgressReporter()
         {
             Task.Factory.StartNew(async () =>
             {
-                db.ChangeTracker.AutoDetectChangesEnabled = false;
-                db.Database.AutoTransactionsEnabled = false;
+                using var scope = serviceProvider.CreateScope();
+                var db = scope.ServiceProvider.GetRequiredService<JobContext>();
 
                 foreach (var task in queue.GetConsumingEnumerable())
                 {
@@ -46,7 +46,7 @@ namespace WB.Services.Scheduler.Services.Implementation
 
                         await db.SaveChangesAsync();
                         logger.LogTrace(task.ToString());
-                        tr.Commit();
+                        await tr.CommitAsync();
                     }
                 }
 
@@ -86,6 +86,7 @@ namespace WB.Services.Scheduler.Services.Implementation
         }
 
         readonly BlockingCollection<IJobEvent> queue = new BlockingCollection<IJobEvent>();
+        private readonly IServiceProvider serviceProvider;
 
         public void Dispose()
         {
