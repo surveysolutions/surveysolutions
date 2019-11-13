@@ -105,7 +105,7 @@ namespace WB.UI.Headquarters.API.Resources
                 return this.Request.CreateResponse(HttpStatusCode.NoContent);
             }
 
-            var file = await this.imageFileStorage.GetInterviewBinaryData(interview.Id, filename);
+            var file = await this.imageFileStorage.GetInterviewBinaryDataAsync(interview.Id, filename);
 
             if (file == null || file.Length == 0)
                 return this.Request.CreateResponse(HttpStatusCode.NoContent);
