@@ -132,7 +132,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 await this.synchronizationService.UploadInterviewImageAsync(
                     imageView.InterviewId,
                     imageView.FileName,
-                    await this.imagesStorage.GetInterviewBinaryData(interviewId, imageView.FileName),
+                    await this.imagesStorage.GetInterviewBinaryDataAsync(interviewId, imageView.FileName),
                     transferProgress,
                     cancellationToken);
 

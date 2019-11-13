@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerPlainInt
         }
 
         public async Task BecauseOf() =>
-            bytesResult = await interviewerImageFileStorage.GetInterviewBinaryData(interviewId, imageFileName);
+            bytesResult = await interviewerImageFileStorage.GetInterviewBinaryDataAsync(interviewId, imageFileName);
 
         [Test]
         public void should_remove_questionnaire_document_view_from_plain_storage() =>
