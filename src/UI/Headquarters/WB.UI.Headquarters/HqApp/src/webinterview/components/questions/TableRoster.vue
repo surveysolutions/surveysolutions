@@ -126,8 +126,7 @@
                     field: "rosterTitle", 
                     autoHeight: true, 
                     pinned: true, 
-                    editable: false, 
-                    cellClass: "cell-content", 
+                    editable: false,                     
                     cellStyle: {minHeight: '40px'}, 
                     cellRendererFramework: 'TableRoster_RosterTitle',
                     cellRendererParams: { }
