@@ -129,11 +129,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             if (revision.Revision != null)
             {
                 questionnaireInfoView.IsReadOnlyForUser = true;
+                questionnaireInfoView.IsHistoryPreview = true;
             }
             else
             {
                 questionnaireInfoView.IsReadOnlyForUser = person == null || (!person.IsOwner && person.ShareType != ShareType.Edit);
-
+                questionnaireInfoView.IsHistoryPreview = false;
             }
             questionnaireInfoView.IsSharedWithUser = person != null;
             questionnaireInfoView.WebTestAvailable = this.questionnaireCompilationVersion.GetById(listItem.PublicId)?.Version == null;
