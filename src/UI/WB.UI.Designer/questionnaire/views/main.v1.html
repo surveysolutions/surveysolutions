@@ -54,6 +54,7 @@
                         <span class="text-success"><em ng-i18next="[i18next]({dateTime: verificationStatus.time})SavedAtTimestamp"></em></span>
                     </span>
                     <span class="error-message strong" ng-show="questionnaire.isReadOnlyForUser" ng-i18next>ReadOnly</span>
+                    <span class="warning-message strong" ng-show="questionnaire.isHistoryPreview" ng-i18next>Preview</span>
                     <input id="webtest-btn" type="button" class="btn" ng-if="questionnaire.webTestAvailable && questionnaire.questionnaireRevision === null" ng-i18next="[value]Test" value="Test" ng-click="webTest()" />
                 </div>
             </div>

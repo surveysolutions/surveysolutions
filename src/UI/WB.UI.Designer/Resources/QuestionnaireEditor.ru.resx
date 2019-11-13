@@ -1339,11 +1339,12 @@
   <data name="Translation_Original" xml:space="preserve">
       <value>Оргинальный</value>
       <comment>Оргинальный</comment>
-
 </data>
   <data name="SaveAs" xml:space="preserve">
       <value>Сохранить как</value>
       <comment>Сохранить как</comment>
-
+  </data>
+  <data name="Preview" xml:space="preserve">
+    <value>Просмотр</value>
   </data>
 </root>
