@@ -3,11 +3,9 @@
         template: '#group-editor-template',
         data: function() {
             return {
-                isNew: this.group.isNew,
                 isEditMode: this.group.isNew,
-                title: this.group.title,
-                id: this.group.id
-            }
+                title: this.group.title
+            };
         },
         props: ['group', 'index'],
         computed: {
@@ -17,7 +15,7 @@
         },
         methods: {
             cancel() {
-                if (this.isNew) {
+                if (this.group.isNew) {
                     store.dispatch('deleteGroup', this.index);
                 } else {
                     this.title = this.group.title;
@@ -38,8 +36,8 @@
             save() {
                 var self = this;
                 var group = {
-                    isNew: this.isNew,
-                    id: this.id,
+                    isNew: this.group.isNew,
+                    id: this.group.id,
                     title: this.title,
                     index: this.index
                 };

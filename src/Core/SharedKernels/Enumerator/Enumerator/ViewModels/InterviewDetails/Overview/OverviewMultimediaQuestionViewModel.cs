@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using MvvmCross.Commands;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -27,8 +28,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
                 var fileName = multimediaQuestion.GetAnswer().FileName;
                 this.fileName = fileName;
 
-                this.Image = fileStorageas.GetInterviewBinaryData(interviewId,
-                    fileName).Result;
+                this.Image = Task.Run<byte[]>(async () => await fileStorageas.GetInterviewBinaryData(interviewId,
+                    fileName)).Result;
             }
         }
 
