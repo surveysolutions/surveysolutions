@@ -48,5 +48,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         public bool? HideIfDisabled { get; set; }
 
         public List<ScenarioView> Scenarios { get; set; }
+        public bool IsHistoryPreview { get; set; }
     }
 }
