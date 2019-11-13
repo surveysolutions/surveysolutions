@@ -18,6 +18,8 @@ export default {
 
             const data = await Vue.$api.get('getPrefilledQuestions', { interviewId })
             commit("SET_TAKENEW_RESPONSE", data)
+
+            Vue.$api.changeSection(null)
         }
     },
 

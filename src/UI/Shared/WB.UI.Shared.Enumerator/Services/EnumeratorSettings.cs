@@ -95,6 +95,9 @@ namespace WB.UI.Shared.Enumerator.Services
 
         public bool Encrypted => this.CurrentSettings.Encrypted ?? false;
         public void SetEncrypted(bool encrypted) => this.SaveCurrentSettings(s => s.Encrypted = encrypted);
+        public bool DashboardViewsUpdated => this.CurrentSettings.DashboardViewsUpdated ?? false;
+        public void SetDashboardViewsUpdated(bool updated) => this.SaveCurrentSettings(s => s.DashboardViewsUpdated = updated);
+
         public bool NotificationsEnabled => this.CurrentSettings.NotificationsEnabled ?? true;
         public virtual void SetNotifications(bool notificationsEnabled) => this.SaveCurrentSettings(s => s.NotificationsEnabled = notificationsEnabled);
         public void MarkSyncStart()

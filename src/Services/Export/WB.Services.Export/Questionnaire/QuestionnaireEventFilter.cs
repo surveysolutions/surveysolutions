@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using WB.Services.Export.Events.Assignment.Base;
 using WB.Services.Export.Events.Interview;
 using WB.Services.Export.Events.Interview.Base;
 using WB.Services.Export.Infrastructure;
@@ -14,17 +13,14 @@ namespace WB.Services.Export.Questionnaire
 {
     public class QuestionnaireEventFilter : IEventsFilter
     {
-        private readonly ITenantContext tenantContext;
         private readonly TenantDbContext dbContext;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IDatabaseSchemaService databaseSchemaService;
 
-        public QuestionnaireEventFilter(ITenantContext tenantContext,
-            TenantDbContext dbContext,
+        public QuestionnaireEventFilter(TenantDbContext dbContext,
             IQuestionnaireStorage questionnaireStorage,
             IDatabaseSchemaService databaseSchemaService)
         {
-            this.tenantContext = tenantContext;
             this.dbContext = dbContext;
             this.questionnaireStorage = questionnaireStorage;
             this.databaseSchemaService = databaseSchemaService;
@@ -106,10 +102,6 @@ namespace WB.Services.Export.Questionnaire
 
             this.dbContext.SaveChanges();
             filterWatch.Stop();
-
-            Monitoring.TrackEventHandlerProcessingSpeed(this.tenantContext?.Tenant?.Name,
-                this.GetType(), feed.Count / filterWatch.Elapsed.TotalSeconds);
-
             return result;
         }
 
