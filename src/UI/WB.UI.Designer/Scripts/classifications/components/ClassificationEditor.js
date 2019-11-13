@@ -3,12 +3,9 @@
     template: '#classification-editor-template',
     data: function() {
         return {
-            isNew: this.classification.isNew,
             isEditMode: this.classification.isNew,
-            title: this.classification.title,
-            id: this.classification.id,
-            parent: this.classification.parent,
-        }
+            title: this.classification.title
+        };
     },
     props: ['classification', 'index'],
     computed: {
@@ -21,7 +18,7 @@
     },
     methods: {
         cancel() {
-            if (this.isNew) {
+            if (this.classification.isNew) {
                 store.dispatch('deleteClassification', this.index);
             } else {
                 this.title = this.classification.title;
@@ -42,11 +39,11 @@
         save() {
             var self = this;
             var classification = {
-                isNew: this.isNew,
-                id: this.id,
+                isNew: this.classification.isNew,
+                id: this.classification.id,
                 title: this.title,
                 index: this.index,
-                parent: this.parent
+                parent: this.classification.parent
             };
 
             this.$validator.validate().then(function(result) {
