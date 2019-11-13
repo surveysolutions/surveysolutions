@@ -1,4 +1,4 @@
-@import "../node_modules/ag-grid-community/src/styles/ag-grid.scss";
+//@import "../node_modules/ag-grid-community/src/styles/ag-grid.scss";
 
 .table-view{
     .ag-theme-customStyles{
@@ -15,7 +15,7 @@
                 overflow: visible;
                 white-space: normal !important;
                 padding: 11px 15px;                    
-
+                width: 100%;
             }
         }
         .ag-pinned-left-header{
@@ -28,7 +28,6 @@
             .ag-cell{
                 background-color: transparent;
                 border-right-color: rgba(0, 0, 0, 0.3);
-                padding: 11px 15px;
             }
         }
         .ag-cell{
@@ -80,10 +79,15 @@
                 }
             }
         }
+        .ag-cell:not(.ag-cell-last-left-pinned){
+            .cell-unit{
+                background: #FFFFFF; 
+            }
+        }
         .cell-unit{
             width: 100%;
             height: 100%;
-            background: #FFFFFF; 
+            
             display: flex;
             align-items: center;
             align-content: center;
