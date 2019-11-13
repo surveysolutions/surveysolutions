@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Caching.Memory;
@@ -8,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
 using WB.Core.BoundedContexts.Headquarters.Views.Responsible;
 using WB.Core.BoundedContexts.Headquarters.Views.Supervisor;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Infrastructure.Native.Utils;
 
@@ -48,37 +48,38 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
         public UserView GetUser(UserViewInputModel input)
         {
-            var repository = this.userRepository;
-            var query = repository.Users.Select(user => new UserQueryItem
-            {
-                PublicKey = user.Id,
-                UserName = user.UserName,
-                Email = user.Email,
-                PersonName = user.FullName,
-                PhoneNumber = user.PhoneNumber,
-                IsArchived = user.IsArchived,
-                IsLockedByHQ = user.IsLockedByHeadquaters,
-                IsLockedBySupervisor = user.IsLockedBySupervisor,
-                CreationDate = user.CreationDate,
-                RoleId = user.Roles.FirstOrDefault().RoleId,
-                DeviceId = user.Profile.DeviceId,
-                SupervisorId = user.Profile.SupervisorId,
-                SupervisorName = repository.Users.Select(x => new { x.Id, Name = x.UserName })
-                    .FirstOrDefault(x => user.Profile.SupervisorId == x.Id)
-                    .Name,
-                SecurityStamp = user.SecurityStamp
-            });
+            var query = this.userRepository.Users;
 
             if (input.PublicKey != null)
-                query = query.Where(x => x.PublicKey == input.PublicKey);
+                query = query.Where(x => x.Id == input.PublicKey);
             else if (!string.IsNullOrEmpty(input.UserName))
                 query = query.Where(x => x.UserName.ToLower() == input.UserName.ToLower());
             else if (!string.IsNullOrEmpty(input.UserEmail))
                 query = query.Where(x => x.Email.ToLower() == input.UserEmail.ToLower());
             else if (!string.IsNullOrEmpty(input.DeviceId))
-                query = query.Where(x => x.DeviceId == input.DeviceId);
+                query = query.Where(x => x.Profile.DeviceId == input.DeviceId);
 
-            var dbUser = query.FirstOrDefault();
+            var dbUser =
+                (from user in query
+                join profile in this.userRepository.Users on user.Profile.SupervisorId equals profile.Id into supervisorInfo
+                from supervisor in supervisorInfo.DefaultIfEmpty()
+                select new
+                {
+                    PublicKey = user.Id,
+                    UserName = user.UserName,
+                    Email = user.Email,
+                    PersonName = user.UserName,
+                    PhoneNumber = user.PhoneNumber,
+                    IsArchived = user.IsArchived,
+                    IsLockedByHQ = user.IsLockedByHeadquaters,
+                    IsLockedBySupervisor = user.IsLockedBySupervisor,
+                    CreationDate = user.CreationDate,
+                    Roles = user.Roles,
+                    SecurityStamp = user.SecurityStamp,
+                    SupervisorId = supervisor == null ? (Guid?)null : supervisor.Id,
+                    SupervisorName = supervisor.UserName
+                }).FirstOrDefault();
+
             if (dbUser == null) return null;
 
             return new UserView
@@ -92,11 +93,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 IsLockedByHQ = dbUser.IsLockedByHQ,
                 IsLockedBySupervisor = dbUser.IsLockedBySupervisor,
                 CreationDate = dbUser.CreationDate,
+                Roles = dbUser.Roles.Select(x => x.Role).ToHashSet(),
+                SecurityStamp = dbUser.SecurityStamp,
                 Supervisor = dbUser.SupervisorId.HasValue
                     ? new UserLight(dbUser.SupervisorId.Value, dbUser.SupervisorName)
-                    : null,
-                Roles = new HashSet<UserRoles>(new[] { dbUser.RoleId.ToUserRole() }),
-                SecurityStamp = dbUser.SecurityStamp
+                    : null
             };
         }
 
@@ -246,7 +247,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                     EnumeratorVersion = x.Profile.DeviceAppVersion,
                     EnumeratorBuild = x.Profile.DeviceAppBuildVersion,
                     TrafficUsed = repository.DeviceSyncInfos
-                        .Where(d => d.InterviewerId == x.Id)
+                        .Where(d => d.InterviewerId == x.Id && d.Statistics != null)
                         .Select(d => d.Statistics.TotalDownloadedBytes + d.Statistics.TotalUploadedBytes)
                         .DefaultIfEmpty(0l)
                         .Sum()
@@ -319,8 +320,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                                    where deviceSyncInfo != null &&
                                          (
                                              deviceSyncInfo.DeviceDate == DateTime.MinValue ||
-                                             Math.Abs((long)DbFunctions.DiffMinutes(
-                                                 deviceSyncInfo.DeviceDate, deviceSyncInfo.SyncDate)) >
+                                             Math.Abs((long)(deviceSyncInfo.DeviceDate - deviceSyncInfo.SyncDate).TotalMinutes) >
                                              InterviewerIssuesConstants.MinutesForWrongTime
                                          )
                                    select i;
@@ -475,24 +475,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             public Guid UserId { get; set; }
             public string Email { get; set; }
             public bool IsArchived { get; set; }
-        }
-
-        public class UserQueryItem
-        {
-            public DateTime CreationDate { get; set; }
-            public string Email { get; set; }
-            public bool IsLockedByHQ { get; set; }
-            public bool IsArchived { get; set; }
-            public bool IsLockedBySupervisor { get; set; }
-            public Guid PublicKey { get; set; }
-            public string UserName { get; set; }
-            public Guid RoleId { get; set; }
-            public string PersonName { get; set; }
-            public string PhoneNumber { get; set; }
-            public Guid? SupervisorId { get; set; }
-            public string SupervisorName { get; set; }
-            public string DeviceId { get; set; }
-            public string SecurityStamp { get; set; }
         }
     }
 }

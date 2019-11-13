@@ -137,18 +137,18 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [Authorize]
-        public ActionResult Manage()
+        public async Task<ActionResult> Manage()
         {
             this.ViewBag.ActivePage = MenuItem.ManageAccount;
 
-            var manageAccountModel = GetCurrentUserModel();
+            var manageAccountModel = await GetCurrentUserModel();
             manageAccountModel.AllowEditLockState = false;
             return View(manageAccountModel);
         }
 
-        private ManageAccountModel GetCurrentUserModel()
+        private async Task<ManageAccountModel> GetCurrentUserModel()
         {
-            var currentUser = this.userManager.FindById(this.authorizedUser.Id);
+            var currentUser = await this.userManager.FindByIdAsync(this.authorizedUser.Id);
             var manageAccountModel = new ManageAccountModel
             {
                 Id = currentUser.Id,
@@ -168,7 +168,7 @@ namespace WB.UI.Headquarters.Controllers
         [ObserverNotAllowed]
         public async Task<ActionResult> Manage(ManageAccountModel model)
         {
-            var currentUser = this.userManager.FindById(this.authorizedUser.Id);
+            var currentUser = await this.userManager.FindByIdAsync(this.authorizedUser.Id);
             model.Id = currentUser.Id;
 
             this.ViewBag.ActivePage = MenuItem.ManageAccount;
@@ -198,7 +198,7 @@ namespace WB.UI.Headquarters.Controllers
         [ObserverNotAllowed]
         public async Task<ActionResult> UpdateOwnPassword([Bind(Prefix = "UpdateOwnPassword")]ManageAccountModel model)
         {
-            var currentUser = this.userManager.FindById(this.authorizedUser.Id);
+            var currentUser = await this.userManager.FindByIdAsync(this.authorizedUser.Id);
             var resultModel = GetCurrentUserModel();
 
             model.Id = currentUser.Id;
