@@ -34,7 +34,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             var metadataView = this.fileMetadataViewStorage.FirstOrDefault(metadata =>
                 metadata.InterviewId == interviewId && metadata.FileName == fileName);
 
-            return metadataView == null ? null : Task.FromResult(this.GetFileById(metadataView.FileId));
+            return metadataView == null ? Task.FromResult((byte[])null) : Task.FromResult(this.GetFileById(metadataView.FileId));
         }
 
         public Task<List<InterviewBinaryDataDescriptor>> GetBinaryFilesForInterview(Guid interviewId)
