@@ -29,12 +29,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             this.encryptionService = encryptionService;
         }
 
-        public Task<byte[]> GetInterviewBinaryData(Guid interviewId, string fileName)
+        public Task<byte[]> GetInterviewBinaryDataAsync(Guid interviewId, string fileName) 
+            => Task.FromResult(this.GetInterviewBinaryData(interviewId, fileName));
+
+        public byte[] GetInterviewBinaryData(Guid interviewId, string fileName)
         {
             var metadataView = this.fileMetadataViewStorage.FirstOrDefault(metadata =>
                 metadata.InterviewId == interviewId && metadata.FileName == fileName);
 
-            return metadataView == null ? null : Task.FromResult(this.GetFileById(metadataView.FileId));
+            return metadataView == null ? null : this.GetFileById(metadataView.FileId);
         }
 
         public Task<List<InterviewBinaryDataDescriptor>> GetBinaryFilesForInterview(Guid interviewId)

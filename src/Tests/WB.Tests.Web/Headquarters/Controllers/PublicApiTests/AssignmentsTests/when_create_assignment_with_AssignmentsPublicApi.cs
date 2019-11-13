@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         [Test]
         public void should_return_404_for_non_existing_responsibleUser()
         {
-            Assert.Throws(Is.TypeOf<HttpResponseException>()
+            Assert.ThrowsAsync(Is.TypeOf<HttpResponseException>()
                     .And.Property(nameof(HttpResponseException.Response))
                     .Property(nameof(HttpResponseMessage.StatusCode)).EqualTo(HttpStatusCode.NotFound),
                 () => this.controller.Create(new CreateAssignmentApiRequest()
@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         {
             this.SetupResponsibleUser(Create.Entity.HqUser(role: role));
 
-            Assert.Throws(Is.TypeOf<HttpResponseException>()
+            Assert.ThrowsAsync(Is.TypeOf<HttpResponseException>()
                     .And.Property(nameof(HttpResponseException.Response))
                     .Property(nameof(HttpResponseMessage.StatusCode)).EqualTo(HttpStatusCode.NotAcceptable),
                 () => this.controller.Create(new CreateAssignmentApiRequest
@@ -58,7 +58,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         {
             this.SetupResponsibleUser(Create.Entity.HqUser());
 
-            Assert.Throws(Is.TypeOf<HttpResponseException>()
+            Assert.ThrowsAsync(Is.TypeOf<HttpResponseException>()
                     .And.Property(nameof(HttpResponseException.Response))
                     .Property(nameof(HttpResponseMessage.StatusCode)).EqualTo(HttpStatusCode.NotFound),
                 () => this.controller.Create(new CreateAssignmentApiRequest
@@ -88,7 +88,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
 
             try
             {
-                this.controller.Create(new CreateAssignmentApiRequest
+                await this.controller.Create(new CreateAssignmentApiRequest
                 {
                     QuestionnaireId = qid.ToString(),
                     Responsible = "any"
@@ -104,7 +104,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         }
 
         [Test]
-        public void should_store_new_assignment()
+        public async Task should_store_new_assignment()
         {
             var qid = QuestionnaireIdentity.Parse("f2250674-42e6-4756-b394-b86caa62225e$1");
 
@@ -121,7 +121,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 .Setup(x => x.VerifyWithInterviewTree(It.IsAny<List<InterviewAnswer>>(), It.IsAny<Guid?>(), It.IsAny<IQuestionnaire>()))
                 .Returns((InterviewImportError)null);
 
-            this.controller.Create(new CreateAssignmentApiRequest
+            await this.controller.Create(new CreateAssignmentApiRequest
             {
                 QuestionnaireId = qid.ToString(),
                 Responsible = "any"
@@ -131,7 +131,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         }
 
         [Test]
-        public void and_quantity_minus_1_should_stored_new_assignment_has_null_quantity()
+        public async Task and_quantity_minus_1_should_stored_new_assignment_has_null_quantity()
         {
             var qid = QuestionnaireIdentity.Parse("f2250674-42e6-4756-b394-b86caa62225e$1");
 
@@ -148,7 +148,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 .Setup(x => x.VerifyWithInterviewTree(It.IsAny<List<InterviewAnswer>>(), It.IsAny<Guid?>(), It.IsAny<IQuestionnaire>()))
                 .Returns((InterviewImportError)null);
 
-            this.controller.Create(new CreateAssignmentApiRequest
+            await this.controller.Create(new CreateAssignmentApiRequest
             {
                 QuestionnaireId = qid.ToString(),
                 Responsible = "any",

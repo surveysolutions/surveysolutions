@@ -85,8 +85,9 @@ namespace WB.Services.Export.Tests
         }
 
         public static void Verify<T>(this Mock<ILogger<T>> logMock, LogLevel level, Predicate<Exception> exception, Func<Times> times)
-        {
-            logMock.Verify(l => l.Log(level, 0, It.IsAny<object>(), Match.Create(exception), It.IsAny<Func<object, Exception, string>>()), times);
+        {            
+            logMock.Verify(l => l.Log(level, 0, It.IsAny<It.IsAnyType>(), 
+                Match.Create(exception), (Func<It.IsAnyType, Exception, string>) It.IsAny<object>()), times);
         }
     }
 }

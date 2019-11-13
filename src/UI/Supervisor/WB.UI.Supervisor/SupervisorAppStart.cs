@@ -4,7 +4,6 @@ using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -37,9 +36,19 @@ namespace WB.UI.Supervisor
 
             this.migrationRunner.MigrateUp(this.GetType().Assembly, typeof(Encrypt_Data).Assembly);
 
-            this.CheckAndProcessInterviewsWithoutViews();
-
+            this.CheckAndProcessInterviews();
             return base.ApplicationStartup(hint);
+        }
+
+        private void CheckAndProcessInterviews()
+        {
+            var settings = Mvx.IoCProvider.Resolve<IEnumeratorSettings>();
+            if (settings.DashboardViewsUpdated) return;
+
+            var interviewsAccessor = Mvx.IoCProvider.Resolve<IInterviewerInterviewAccessor>();
+            interviewsAccessor.CheckAndProcessInterviewsToFixViews();
+
+            settings.SetDashboardViewsUpdated(true);
         }
 
         protected override Task NavigateToFirstViewModel(object hint = null)
@@ -53,12 +62,6 @@ namespace WB.UI.Supervisor
             {
                 return viewModelNavigation.NavigateToLoginAsync();
             }
-        }
-
-        private void CheckAndProcessInterviewsWithoutViews()
-        {
-            var interviewsAccessor = Mvx.IoCProvider.Resolve<IInterviewerInterviewAccessor>();
-            interviewsAccessor.CheckAndProcessInterviewsWithoutViews();
         }
     }
 }

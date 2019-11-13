@@ -16,6 +16,7 @@ namespace WB.Services.Export.Ddi.Implementation
             this.metaDescription.Study.Title = this.metaDescription.Document.Title = questionnaireTitle;
             this.metaDescription.Study.Idno = "QUEST";
         }
+
         public void SaveMetadataInFile(string fileName)
         {
             this.metaDescription.WriteXml(fileName);

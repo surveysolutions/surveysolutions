@@ -25,12 +25,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
                 this.fileSystemAccessor.CreateDirectory(this.basePath);
         }
 
-        public Task<byte[]> GetInterviewBinaryData(Guid interviewId, string fileName)
+        public Task<byte[]> GetInterviewBinaryDataAsync(Guid interviewId, string fileName) 
+            => Task.FromResult(this.GetInterviewBinaryData(interviewId, fileName));
+
+        public byte[] GetInterviewBinaryData(Guid interviewId, string fileName)
         {
             var filePath = this.GetPathToFile(interviewId, fileName);
-            if (!fileSystemAccessor.IsFileExists(filePath))
-                return Task.FromResult((byte[])null);
-            return Task.FromResult(fileSystemAccessor.ReadAllBytes(filePath));
+
+            return !fileSystemAccessor.IsFileExists(filePath) ? null : fileSystemAccessor.ReadAllBytes(filePath);
         }
 
         public Task<List<InterviewBinaryDataDescriptor>> GetBinaryFilesForInterview(Guid interviewId)
