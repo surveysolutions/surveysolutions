@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainInterviewFileStorageTe
             await BecauseOf();
         }
 
-        public async Task BecauseOf() => result = await imageFileRepository.GetInterviewBinaryData(interviewId, fileName1);
+        public async Task BecauseOf() => result = await imageFileRepository.GetInterviewBinaryDataAsync(interviewId, fileName1);
 
         [NUnit.Framework.Test] public void should_result_Be_equal_to_data1 () =>
             result.Should().BeEquivalentTo(data1);

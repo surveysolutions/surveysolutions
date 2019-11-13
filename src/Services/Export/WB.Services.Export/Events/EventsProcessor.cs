@@ -58,6 +58,7 @@ namespace WB.Services.Export.Events
         {
             long sequenceToStartFrom;
             await EnsureMigrated();
+
             using (var scope = serviceProvider.CreateScope())
             {
                 scope.PropagateTenantContext(tenant);
@@ -65,14 +66,7 @@ namespace WB.Services.Export.Events
                 sequenceToStartFrom = tenantDbContext.GlobalSequence.AsLong;
             }
 
-            try
-            {
-                await HandleNewEventsImplementation(exportProcessId, sequenceToStartFrom, token);
-            }
-            finally
-            {
-                Monitoring.ResetEventHandlerProcessingSpeed(this.tenant?.Tenant?.Name);
-            }
+            await HandleNewEventsImplementation(exportProcessId, sequenceToStartFrom, token);
         }
 
         private async Task HandleNewEventsImplementation(long exportProcessId, long sequenceToStartFrom,
@@ -94,50 +88,47 @@ namespace WB.Services.Export.Events
             {
                 executionTrack.Restart();
 
-                using (var batchScope = this.serviceProvider.CreateScope())
-                {
-                    batchScope.PropagateTenantContext(tenant);
+                using var batchScope = this.serviceProvider.CreateTenantScope(tenant);
 
-                    var eventsHandler = batchScope.ServiceProvider.GetRequiredService<IEventsHandler>();
+                var eventsHandler = batchScope.ServiceProvider.GetRequiredService<IEventsHandler>();
 
-                    var lastProcessedGlobalSequence = await eventsHandler.HandleEventsFeedAsync(feed, token);
+                var lastProcessedGlobalSequence = await eventsHandler.HandleEventsFeedAsync(feed, token);
 
-                    executionTrack.Stop();
+                executionTrack.Stop();
                     
-                    // ReSharper disable once PossibleInvalidOperationException - max value will always be set
-                    var totalEventsToRead = maximumSequenceToQuery.Value - sequenceToStartFrom;
-                    var eventsProcessed = lastProcessedGlobalSequence - sequenceToStartFrom;
-                    var percent = eventsProcessed.PercentDOf(totalEventsToRead);
+                // ReSharper disable once PossibleInvalidOperationException - max value will always be set
+                var totalEventsToRead = maximumSequenceToQuery.Value - sequenceToStartFrom;
+                var eventsProcessed = lastProcessedGlobalSequence - sequenceToStartFrom;
+                var percent = eventsProcessed.PercentDOf(totalEventsToRead);
 
-                    // in events/second
-                    var thisBatchProcessingSpeed = feed.Events.Count / executionTrack.Elapsed.TotalSeconds;
+                // in events/second
+                var thisBatchProcessingSpeed = feed.Events.Count / executionTrack.Elapsed.TotalSeconds;
 
-                    // setting next batch size to be equal average processing speed * multiplier
-                    var size = (int) runningAverage.Add(thisBatchProcessingSpeed);
-                    pageSize = (int) (size * BatchSizeMultiplier);
+                // setting next batch size to be equal average processing speed * multiplier
+                var size = (int) runningAverage.Add(thisBatchProcessingSpeed);
+                pageSize = (int) (size * BatchSizeMultiplier);
 
-                    // estimation by average processing speed, seconds
-                    var estimatedAverage = runningAverage.Eta(totalEventsToRead - eventsProcessed);
+                // estimation by average processing speed, seconds
+                var estimatedAverage = runningAverage.Eta(totalEventsToRead - eventsProcessed);
 
-                    // estimation by overall progress timer, seconds
-                    var estimationByTotal = globalStopwatch.Elapsed.TotalSeconds / (percent / 100.0) 
-                        - globalStopwatch.Elapsed.TotalSeconds;
+                // estimation by overall progress timer, seconds
+                var estimationByTotal = globalStopwatch.Elapsed.TotalSeconds / (percent / 100.0) 
+                                        - globalStopwatch.Elapsed.TotalSeconds;
 
-                    // taking average between two estimations
-                    var estimatedTime = TimeSpan.FromSeconds((estimatedAverage.TotalSeconds + estimationByTotal) / 2.0);
+                // taking average between two estimations
+                var estimatedTime = TimeSpan.FromSeconds((estimatedAverage.TotalSeconds + estimationByTotal) / 2.0);
 
-                    dataExportProcessesService.UpdateDataExportProgress(exportProcessId, (int) percent, estimatedTime);
+                dataExportProcessesService.UpdateDataExportProgress(exportProcessId, (int) percent, estimatedTime);
                     
-                    this.logger.LogInformation(
-                        "Published {pageSize} events. " +
-                        "GlobalSequence: {sequence:n0}/{total:n0}. " +
-                        "Batch time {duration:g}. Total time {globalDuration:g}.  ETA: {eta}",
-                        feed.Events.Count, feed.Events.Count > 0 ? feed.Events.Last().GlobalSequence : 0
-                        , feed.Total,
-                        executionTrack.Elapsed, 
-                        globalStopwatch.Elapsed,
-                        estimatedTime);
-                }
+                this.logger.LogInformation(
+                    "Published {pageSize} events. " +
+                    "GlobalSequence: {sequence:n0}/{total:n0}. " +
+                    "Batch time {duration:g}. Total time {globalDuration:g}.  ETA: {eta}",
+                    feed.Events.Count, feed.Events.Count > 0 ? feed.Events.Last().GlobalSequence : 0
+                    , feed.Total,
+                    executionTrack.Elapsed, 
+                    globalStopwatch.Elapsed,
+                    estimatedTime);
             }
 
             logger.LogInformation("Database refresh done. Took {elapsed:g}", globalStopwatch.Elapsed);
@@ -172,12 +163,10 @@ namespace WB.Services.Export.Events
                         ? feed.Events.Last().GlobalSequence
                         : maximumSequenceToQuery;
 
-                    maximumSequenceToQuery = maximumSequenceToQuery ?? feed.Total;
+                    maximumSequenceToQuery ??= feed.Total;
 
                     var readingSpeed = feed.Events.Count / apiTrack.Elapsed.TotalSeconds;
                     readingAvg.Add(readingSpeed);
-
-                    Monitoring.TrackEventHandlerProcessingSpeed(tenant?.Tenant?.Name, ApiEventsQueryMonitoringKey, readingSpeed);
 
                     logger.LogDebug("Read {eventsCount:n0} events from HQ. From {start:n0} to {last:n0} Took {elapsed:g}",
                         feed.Events.Count, readingSequence, lastSequence, apiTrack.Elapsed);
@@ -195,7 +184,6 @@ namespace WB.Services.Export.Events
             }
             finally
             {
-                Monitoring.TrackEventHandlerProcessingSpeed(tenant?.Tenant?.Name, ApiEventsQueryMonitoringKey, 0);
                 eventsProducer.CompleteAdding();
             }
         }

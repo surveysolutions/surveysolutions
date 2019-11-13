@@ -220,4 +220,8 @@
     <comment>Назначен ответственный {0} на задачу №{1}
 </comment>
   </data>
+  <data name="FinishInstallation" xml:space="preserve">
+      <value>Установка приложения закончена</value>
+      <comment>Установка приложения закончена</comment>
+  </data>
 </root>

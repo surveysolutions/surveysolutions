@@ -15,12 +15,11 @@ namespace WB.UI.WebTester.Services.Implementation
             this.mediaStorage = mediaStorage;
         }
 
-        public Task<byte[]> GetInterviewBinaryData(Guid interviewId, string fileName)
-        {
-            var interviewBinaryData = this.mediaStorage.Get(fileName, interviewId)?.Data;
+        public Task<byte[]> GetInterviewBinaryDataAsync(Guid interviewId, string fileName) 
+            => Task.FromResult(GetInterviewBinaryData(interviewId, fileName));
 
-            return Task.FromResult(interviewBinaryData);
-        }
+        public byte[] GetInterviewBinaryData(Guid interviewId, string fileName) 
+            => this.mediaStorage.Get(fileName, interviewId)?.Data;
 
         public Task<List<InterviewBinaryDataDescriptor>> GetBinaryFilesForInterview(Guid interviewId)
         {

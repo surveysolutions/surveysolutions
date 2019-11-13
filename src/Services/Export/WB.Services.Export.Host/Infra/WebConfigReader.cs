@@ -6,12 +6,13 @@ using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace WB.Services.Export.Host.Infra
 {
     internal class WebConfigReader
     {
-        public static void Read(IConfiguration configuration, string webConfigsPath, ILogger logger)
+        public static void Read(IConfiguration configuration, string webConfigsPath)
         {
             foreach (var webConfigPath in webConfigsPath.Split(';'))
             {
@@ -20,14 +21,14 @@ namespace WB.Services.Export.Host.Infra
                     try
                     {
                         var xml = XDocument.Load(webConfigPath);
-                        logger.LogInformation("Loading configuration values from " + webConfigPath);
+                        Log.Logger.Information("Loading configuration values from " + webConfigPath);
 
-                        FillConnectionString(configuration, xml, logger);
-                        FillAppSettings(configuration, xml, logger);
+                        FillConnectionString(configuration, xml);
+                        FillAppSettings(configuration, xml);
                     }
                     catch (Exception e)
                     {
-                        logger.LogError(e, "Were not able to apply configurations");
+                        Log.Logger.Error(e, "Were not able to apply configurations");
                     }
                 }
             }
@@ -43,7 +44,7 @@ namespace WB.Services.Export.Host.Infra
             ("AWS:SecretKey", "AWSSecretKey")
         };
 
-        private static void FillAppSettings(IConfiguration configuration, XDocument config, ILogger logger)
+        private static void FillAppSettings(IConfiguration configuration, XDocument config)
         {
             try
             {
@@ -60,18 +61,18 @@ namespace WB.Services.Export.Host.Infra
                     if (values.TryGetValue(appSetting.hqKey, out var value))
                     {
                         configuration[appSetting.ownKey] = value;
-                        logger.LogDebug("Set {key} = {value}", appSetting.hqKey, value);
+                        Log.Logger.Debug("Set {key} = {value}", appSetting.hqKey, value);
                     }
                 }
             }
             catch (Exception e)
             {
-                logger.LogError(e, "There were an error while reading data from web.config");
+                Log.Logger.Error(e, "There were an error while reading data from web.config");
             }
         }
 
-        private static void FillConnectionString(IConfiguration configuration, XDocument config, ILogger logger)
-        {  
+        private static void FillConnectionString(IConfiguration configuration, XDocument config)
+        {
             var connectionString = GetConnectionString(config);
 
             if (string.IsNullOrWhiteSpace(connectionString)) return;
@@ -79,7 +80,7 @@ namespace WB.Services.Export.Host.Infra
             configuration.GetSection("ConnectionStrings")["DefaultConnection"] = connectionString;
 
             var connectionStringWithOutPassword = Regex.Replace(connectionString, "password=[^;]*", "Password=***", RegexOptions.IgnoreCase);
-            logger.LogDebug("Using connections string: {connectionString}", connectionStringWithOutPassword);
+            Log.Logger.Debug("Using connections string: {connectionString}", connectionStringWithOutPassword);
         }
 
         private static string GetConnectionString(XDocument config)
@@ -92,7 +93,7 @@ namespace WB.Services.Export.Host.Infra
             return connectionString;
         }
 
-        public static string ReadConnectionStringFromWebConfig(string webConfigsPath, ILogger logger)
+        public static string ReadConnectionStringFromWebConfig(string webConfigsPath)
         {
             foreach (var webConfigPath in webConfigsPath.Split(';').Reverse())
             {
@@ -107,7 +108,7 @@ namespace WB.Services.Export.Host.Infra
                     }
                     catch (Exception e)
                     {
-                        logger?.LogError(e, "Were not able to read connection string from web.config");
+                        Log.Logger.Error(e, "Were not able to read connection string from web.config");
                         throw;
                     }
                 }

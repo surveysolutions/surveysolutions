@@ -81,7 +81,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
         public async Task Play(Guid interviewId, Identity questionId, string fileName)
         {
-            var interviewBinaryData = await this.audioFileStorage.GetInterviewBinaryData(interviewId, fileName);
+            var interviewBinaryData = await this.audioFileStorage.GetInterviewBinaryDataAsync(interviewId, fileName);
 
             lock (this.lockObject)
             {

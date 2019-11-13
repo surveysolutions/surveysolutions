@@ -26,9 +26,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             ILogger logger,
             IQRBarcodeScanService qrBarcodeScanService,
             ISerializer serializer,
-            IUserInteractionService userInteractionService) 
+            IUserInteractionService userInteractionService,
+            IAuditLogService auditLogService) 
             : base(viewModelNavigationService, principal, deviceSettings, synchronizationService, 
-                logger, qrBarcodeScanService, serializer, userInteractionService)
+                logger, qrBarcodeScanService, serializer, userInteractionService, auditLogService)
         {
             this.passwordHasher = passwordHasher;
             this.interviewerPrincipal = principal;

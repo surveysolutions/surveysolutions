@@ -100,6 +100,7 @@
                                                         v-if="selectedSaveOption === 'saveNew'">
                                                         <label for="txtScenarioName" class="control-label">{{this.$t('WebInterviewUI.SaveScenarioName')}}</label>
                                                         <input
+                                                            maxlength="32"
                                                             id="txtScenarioName"
                                                             class="form-control" 
                                                             v-model="newScenarioName"/>
