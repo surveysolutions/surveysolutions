@@ -193,7 +193,7 @@ namespace WB.UI.Headquarters
                 LoginPath = new PathString(@"/Account/LogOn"),
                 Provider = new CookieAuthenticationProvider
                 {
-                    OnValidateIdentity = OnValidateIdentity<HqUserManager, HqUser, Guid>(
+                    OnValidateIdentity = OnValidateIdentity(
                             validateInterval: TimeSpan.FromMinutes(30),
                             regenerateIdentityCallback: (manager, user) => manager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie),
                             getUserIdCallback: (id) => Guid.Parse(id.GetUserId()),
@@ -214,22 +214,16 @@ namespace WB.UI.Headquarters
         ///     Rejects the identity if the stamp changes, and otherwise will call regenerateIdentity to sign in a new
         ///     ClaimsIdentity
         /// </summary>
-        /// <typeparam name="TManager"></typeparam>
-        /// <typeparam name="TUser"></typeparam>
-        /// <typeparam name="TKey"></typeparam>
         /// <param name="validateInterval"></param>
         /// <param name="regenerateIdentityCallback"></param>
         /// <param name="getUserIdCallback"></param>
         /// <param name="ioc"></param>
         /// <returns></returns>
-        public static Func<CookieValidateIdentityContext, Task> OnValidateIdentity<TManager, TUser, TKey>(
+        public static Func<CookieValidateIdentityContext, Task> OnValidateIdentity(
             TimeSpan validateInterval, 
-            Func<TManager, TUser, Task<ClaimsIdentity>> regenerateIdentityCallback,
-            Func<ClaimsIdentity, TKey> getUserIdCallback,
+            Func<HqUserManager, HqUser, Task<ClaimsIdentity>> regenerateIdentityCallback,
+            Func<ClaimsIdentity, Guid> getUserIdCallback,
             IContainer ioc)
-            where TManager : UserManager<TUser, TKey>
-            where TUser : class, IUser<TKey>
-            where TKey : IEquatable<TKey>
         {
             if (getUserIdCallback == null)
                 throw new ArgumentNullException(nameof(getUserIdCallback));
@@ -253,7 +247,7 @@ namespace WB.UI.Headquarters
 
                 if (validate)
                 {
-                    var manager = ioc.Resolve<TManager>();
+                    var manager = ioc.Resolve<HqUserManager>();
                     var userId = getUserIdCallback(context.Identity);
                     if (manager != null && userId != null)
                     {

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Headquarters.InterviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 
@@ -20,8 +19,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
         public void AddOrUpdate(DeviceSyncInfo deviceSyncInfo)
         {
             if (deviceSyncInfo.Statistics != null)
-                deviceSyncInfo.StatisticsId = dbContext.SyncStatistics.Add(deviceSyncInfo.Statistics).Id;
-            dbContext.DeviceSyncInfo.AddOrUpdate(deviceSyncInfo);
+                deviceSyncInfo.StatisticsId = dbContext.SyncStatistics.Add(deviceSyncInfo.Statistics).Entity.Id;
+            if (dbContext.DeviceSyncInfo.Find(deviceSyncInfo.Id) != null)
+                dbContext.DeviceSyncInfo.Update(deviceSyncInfo);
+            else
+                dbContext.DeviceSyncInfo.Add(deviceSyncInfo);
+
             dbContext.SaveChanges();
         }
 
@@ -118,7 +121,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
                         TotalUploadedBytes = statistics.TotalUploadedBytes,
                         TotalDownloadedBytes = statistics.TotalDownloadedBytes
                     })
-                .GroupBy(x => DbFunctions.TruncateTime(x.Date))
+                .GroupBy(x => x.Date)
                 .OrderByDescending(x => x.Key)
                 .Take(30)
                 .OrderBy(x => x.Key)
@@ -126,9 +129,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
                 {
                     DownloadedBytes = x.Sum(s => s.TotalDownloadedBytes),
                     UploadedBytes =  x.Sum(s => s.TotalUploadedBytes),
-                    Year = x.Key.Value.Year,
-                    Month = x.Key.Value.Month,
-                    Day = x.Key.Value.Day
+                    Year = x.Key.Year,
+                    Month = x.Key.Month,
+                    Day = x.Key.Day
                 })
                 .ToList();
             return trafficUsageForUser;
