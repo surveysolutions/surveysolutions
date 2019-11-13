@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.WeakSubscription;
 using WB.Core.SharedKernels.DataCollection;
