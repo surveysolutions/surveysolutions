@@ -5,7 +5,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
 using Main.Core.Documents;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
@@ -47,19 +46,11 @@ using WB.UI.WebTester.Hub;
 using WB.UI.WebTester.Infrastructure;
 using WB.UI.WebTester.Services;
 using WB.UI.WebTester.Services.Implementation;
-using WebTester;
 
 namespace WB.UI.WebTester
 {
     public class WebTesterModule : IModule, IAppModule
     {
-        private readonly IWebHostEnvironment hostingEnvironment;
-
-        public WebTesterModule(IWebHostEnvironment hostingEnvironment)
-        {
-            this.hostingEnvironment = hostingEnvironment;
-        }
-
         private static string DesignerAddress()
         {
             var baseAddress = ConfigurationSource.Configuration["DesignerAddress"];
@@ -86,10 +77,7 @@ namespace WB.UI.WebTester
             registry.BindAsSingleton<IWebInterviewNotificationService, WebInterviewNotificationService>();
             registry.BindAsSingleton<ICommandService, WebTesterCommandService>();
 
-            //var binPath = Path.GetFullPath(Path.Combine(HttpRuntime.CodegenDir, ".." + Path.DirectorySeparatorChar + ".."));
-            var binPath = Path.Combine(hostingEnvironment.WebRootPath, "bin");
-            registry.BindAsSingletonWithConstructorArgument<IAppdomainsPerInterviewManager, AppdomainsPerInterviewManager>("binFolderPath", binPath);
-            //registry.Bind<IImageProcessingService, ImageProcessingService>();
+            registry.BindAsSingleton<IAppdomainsPerInterviewManager, AppdomainsPerInterviewManager>();
             registry.Bind<IVirtualPathService, VirtualPathService>();
             registry.Bind<ISerializer, NewtonJsonSerializer>();
             registry.BindAsSingleton<IScenarioSerializer, ScenarioSerializer>();
@@ -214,11 +202,7 @@ namespace WB.UI.WebTester
             registry.BindAsSingleton<IEventSourcedAggregateRootRepository, WebTesterAggregateRootRepository>();
             registry.BindAsSingleton<IWebInterviewNotificationService, WebInterviewNotificationService>();
             registry.BindAsSingleton<ICommandService, WebTesterCommandService>();
-
-            //var binPath = Path.GetFullPath(Path.Combine(HttpRuntime.CodegenDir, ".." + Path.DirectorySeparatorChar + ".."));
-            var binPath = Path.Combine(hostingEnvironment.ContentRootPath, "bin");
-            registry.BindToMethodInSingletonScope(s =>
-                new AppdomainsPerInterviewManager(binPath, s.GetRequiredService<ILogger>()));
+            registry.BindAsSingleton<IAppdomainsPerInterviewManager, AppdomainsPerInterviewManager>();
 
             registry.Bind<IVirtualPathService, VirtualPathService>();
             registry.Bind<ISerializer, NewtonJsonSerializer>();
