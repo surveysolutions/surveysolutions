@@ -3,61 +3,73 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using NLog;
 using StackExchange.Exceptional.Stores;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.DependencyInjection;
+using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Logging;
 using WB.UI.Shared.Web.Versions;
+using WB.UI.WebTester.Services;
 
 namespace WB.UI.WebTester
 {
     public class Startup
     {
-        private readonly IWebHostEnvironment hostingEnvironment;
-        private AspCoreKernel aspCoreKernel;
-
-        public Startup(IConfiguration configuration, IWebHostEnvironment hostingEnvironment)
+        public Startup(IConfiguration configuration)
         {
-            this.hostingEnvironment = hostingEnvironment;
             Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        // ConfigureContainer is where you can register things directly
+        // with Autofac. This runs after ConfigureServices so the things
+        // here will override registrations made in ConfigureServices.
+        // Don't build the container; that gets done for you by the factory.
+        public void ConfigureContainer(ContainerBuilder builder)
         {
-            EnsureJsonStorageForErrorsExists();
-
-            var logger = LogManager.GetCurrentClassLogger();
-            logger.Info($"Application started {FileVersionInfo.GetVersionInfo(typeof(Startup).Assembly.Location).ProductVersion}");
-
-            aspCoreKernel = new AspCoreKernel(services);
-
-            aspCoreKernel.Load(
+            var autofacKernel = new AutofacKernel(builder);
+            autofacKernel.Load(
                 new NcqrsModule(),
                 new NLogLoggingModule(),
                 new InfrastructureModuleMobile(),
                 new DataCollectionSharedKernelModule(),
                 //new CaptchaModule("recaptcha"),
                 new WebInterviewModule(),
-                new WebTesterModule(),
-                new ProductVersionModule(typeof(Startup).Assembly, shouldStoreVersionToDb: false)
-            );
+                new WebTesterModule(Configuration["DesignerAddress"]),
+                new ProductVersionModule(typeof(Startup).Assembly, shouldStoreVersionToDb: false));
+            this.Container = autofacKernel;
         }
 
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddOptions();
+            services.AddControllersWithViews();
+            services.AddDistributedMemoryCache();
+            services.AddSession();
+            services.AddResponseCaching();
+            services.AddResponseCompression();
+
+            services.Configure<TesterConfiguration>(this.Configuration);
+        }
+
+        public AutofacKernel Container { get; set; }
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (!env.IsDevelopment())
             {
@@ -102,37 +114,29 @@ namespace WB.UI.WebTester
                 };
             });
 
-            app.UseMvc(routes =>
+            app.UseRouting();
+
+            app.UseEndpoints(routes =>
             {
-                routes.MapRoute(
-                    name: "areas",
-                    template: "{area:exists}/{controller=Questionnaire}/{action=My}/{id?}"
-                );
+                routes.MapControllerRoute("Section", "WebTester/Interview/{id:Guid}/Section/{sectionId:Guid}", 
+                    defaults: new { controller = "WebTester", action = "Section" });
 
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Questionnaire}/{action=Index}/{id?}");
-            });
-
-            var initTask = aspCoreKernel.InitAsync(serviceProvider);
-            if (env.IsDevelopment())
-                initTask.Wait();
-            else
-                initTask.Wait(TimeSpan.FromSeconds(10));
-        }
-
-        private void EnsureJsonStorageForErrorsExists()
-        {
-            if (StackExchange.Exceptional.Exceptional.Settings.DefaultStore is JSONErrorStore exceptionalConfig)
-            {
-                var jsonStorePath = exceptionalConfig.Settings.Path;
-                var jsonStorePathAbsolute = hostingEnvironment.ContentRootFileProvider.GetFileInfo(jsonStorePath).PhysicalPath;
-
-                if (!Directory.Exists(jsonStorePathAbsolute))
+                routes.MapControllerRoute("Interview", "WebTester/Interview/{id}/{*url}", new
                 {
-                    Directory.CreateDirectory(jsonStorePathAbsolute);
-                }
-            }
+                    controller = "WebTester",
+                    action = "Interview"
+                });
+
+                routes.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=WebTester}/{action=Index}/{id?}");
+            });
+            ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(Container.Container));
+            //var initTask = Container.InitAsync(false);
+            //if (env.IsDevelopment())
+            //    initTask.Wait();
+            //else
+            //    initTask.Wait(TimeSpan.FromSeconds(10));
         }
     }
 }

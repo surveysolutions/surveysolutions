@@ -1,14 +1,13 @@
 using System.Reflection;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.Infrastructure.DependencyInjection;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.Versions;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.UI.Shared.Web.Versions
 {
-    public class ProductVersionModule : IModule, IAppModule
+    public class ProductVersionModule : IModule
     {
         private readonly bool shouldStoreVersionToDb;
         private readonly ProductVersion productVersion;
@@ -36,12 +35,6 @@ namespace WB.UI.Shared.Web.Versions
             }
 
             return Task.CompletedTask;
-        }
-
-        public void Load(IDependencyRegistry registry)
-        {
-            registry.BindToConstant<IProductVersion>(() => this.productVersion);
-            registry.Bind<IProductVersionHistory, ProductVersionHistory>();
         }
 
         public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status)
