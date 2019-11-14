@@ -53,9 +53,9 @@ namespace WB.UI.WebTester
 {
     public class WebTesterModule : IModule, IAppModule
     {
-        private readonly IHostingEnvironment hostingEnvironment;
+        private readonly IWebHostEnvironment hostingEnvironment;
 
-        public WebTesterModule(IHostingEnvironment hostingEnvironment)
+        public WebTesterModule(IWebHostEnvironment hostingEnvironment)
         {
             this.hostingEnvironment = hostingEnvironment;
         }
@@ -89,16 +89,12 @@ namespace WB.UI.WebTester
             //var binPath = Path.GetFullPath(Path.Combine(HttpRuntime.CodegenDir, ".." + Path.DirectorySeparatorChar + ".."));
             var binPath = Path.Combine(hostingEnvironment.WebRootPath, "bin");
             registry.BindAsSingletonWithConstructorArgument<IAppdomainsPerInterviewManager, AppdomainsPerInterviewManager>("binFolderPath", binPath);
-            registry.Bind<IImageProcessingService, ImageProcessingService>();
+            //registry.Bind<IImageProcessingService, ImageProcessingService>();
             registry.Bind<IVirtualPathService, VirtualPathService>();
             registry.Bind<ISerializer, NewtonJsonSerializer>();
             registry.BindAsSingleton<IScenarioSerializer, ScenarioSerializer>();
 
             registry.BindToMethod<IServiceLocator>(() => ServiceLocator.Current);
-
-            #if DEBUG
-
-            #endif
 
             registry.BindToMethod(() => Refit.RestService.For<IDesignerWebTesterApi>(
                 new HttpClient(
@@ -220,11 +216,10 @@ namespace WB.UI.WebTester
             registry.BindAsSingleton<ICommandService, WebTesterCommandService>();
 
             //var binPath = Path.GetFullPath(Path.Combine(HttpRuntime.CodegenDir, ".." + Path.DirectorySeparatorChar + ".."));
-            var binPath = Path.Combine(hostingEnvironment.WebRootPath, "bin");
+            var binPath = Path.Combine(hostingEnvironment.ContentRootPath, "bin");
             registry.BindToMethodInSingletonScope(s =>
                 new AppdomainsPerInterviewManager(binPath, s.GetRequiredService<ILogger>()));
 
-            registry.Bind<IImageProcessingService, ImageProcessingService>();
             registry.Bind<IVirtualPathService, VirtualPathService>();
             registry.Bind<ISerializer, NewtonJsonSerializer>();
             registry.BindAsSingleton<IScenarioSerializer, ScenarioSerializer>();
