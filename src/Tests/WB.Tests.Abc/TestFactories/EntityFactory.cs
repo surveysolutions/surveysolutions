@@ -1295,7 +1295,8 @@ namespace WB.Tests.Abc.TestFactories
             string userName = "name", bool isLockedByHQ = false, UserRoles role = UserRoles.Interviewer,
             string deviceId = null, string passwordHash = null, string passwordHashSha1 = null, string interviewerVersion = null,
             int? interviewerBuild = null,
-            bool lockedBySupervisor = false)
+            bool lockedBySupervisor = false,
+            string securityStamp = null)
         {
             var user = new HqUser
             {
@@ -1312,7 +1313,8 @@ namespace WB.Tests.Abc.TestFactories
                     DeviceAppVersion = interviewerVersion
                 },
                 PasswordHash = passwordHash,
-                PasswordHashSha1 = passwordHashSha1
+                PasswordHashSha1 = passwordHashSha1,
+                SecurityStamp = securityStamp ?? Guid.NewGuid().ToString()
             };
             user.Roles.Add(new HqUserRole {UserId = user.Id, RoleId = role.ToUserId()});
 
