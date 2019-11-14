@@ -6,6 +6,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -22,17 +23,20 @@ namespace WB.UI.WebTester.Controllers
         private readonly IEvictionNotifier evictionService;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IInterviewFactory interviewFactory;
+        private readonly IOptions<TesterConfiguration> testerConfig;
 
         public WebTesterController(
             IStatefulInterviewRepository statefulInterviewRepository,
             IEvictionNotifier evictionService,
             IQuestionnaireStorage questionnaireStorage,
-            IInterviewFactory interviewFactory)
+            IInterviewFactory interviewFactory,
+            IOptions<TesterConfiguration> testerConfig)
         {
             this.statefulInterviewRepository = statefulInterviewRepository ?? throw new ArgumentNullException(nameof(statefulInterviewRepository));
             this.evictionService = evictionService;
             this.questionnaireStorage = questionnaireStorage;
             this.interviewFactory = interviewFactory;
+            this.testerConfig = testerConfig;
         }
 
         public IActionResult Run(Guid id, string sid, string saveScenarioAvailable, int? scenarioId = null)
@@ -115,16 +119,17 @@ namespace WB.UI.WebTester.Controllers
 
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
+            var designerUrl = testerConfig.Value.DesignerAddress;
             var reloadQuestionnaireUrl =
-                $"{ConfigurationSource.Configuration["DesignerAddress"]}/WebTesterReload/Index/{interview.QuestionnaireIdentity.QuestionnaireId}?interviewId={id}";
+                $"{designerUrl}/WebTesterReload/Index/{interview.QuestionnaireIdentity.QuestionnaireId}?interviewId={id}";
 
-            var saveScenarioDesignerUrl = $"{ConfigurationSource.Configuration["DesignerAddress"]}/api/WebTester/Scenarios/{interview.QuestionnaireIdentity.QuestionnaireId}";
+            var saveScenarioDesignerUrl = $"{designerUrl}/api/WebTester/Scenarios/{interview.QuestionnaireIdentity.QuestionnaireId}";
                 
             var interviewPageModel = new InterviewPageModel
             {
                 Id = id,
                 Title = $"{questionnaire.Title} | Web Tester",
-                GoogleMapsKey = ConfigurationSource.Configuration["GoogleMapApiKey"],
+                GoogleMapsKey = testerConfig.Value.GoogleMapApiKey,
                 ReloadQuestionnaireUrl = reloadQuestionnaireUrl
             };
             var saveFlagInt = this.HttpContext.Session.GetInt32(SaveScenarioSessionKey);
@@ -132,7 +137,7 @@ namespace WB.UI.WebTester.Controllers
             {
                 interviewPageModel.GetScenarioUrl = Url.Content("~/api/ScenariosApi");
                 interviewPageModel.SaveScenarioUrl = saveScenarioDesignerUrl;
-                interviewPageModel.DesignerUrl = ConfigurationSource.Configuration["DesignerAddress"];
+                interviewPageModel.DesignerUrl = designerUrl;
             }
             
             return interviewPageModel;
@@ -147,7 +152,7 @@ namespace WB.UI.WebTester.Controllers
                 return StatusCode(StatusCodes.Status404NotFound, string.Empty);
             }
 
-            var targetSectionIsEnabled = interview?.IsEnabled(Identity.Parse(sectionId));
+            var targetSectionIsEnabled = interview.IsEnabled(Identity.Parse(sectionId));
             if (targetSectionIsEnabled != true)
             {
                 var firstSectionId = interview.GetAllEnabledGroupsAndRosters().First().Identity.ToString();
