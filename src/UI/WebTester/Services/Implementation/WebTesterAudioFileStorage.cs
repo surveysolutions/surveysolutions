@@ -15,7 +15,12 @@ namespace WB.UI.WebTester.Services.Implementation
             this.mediaStorage = mediaStorage;
         }
 
-        public Task<byte[]> GetInterviewBinaryData(Guid interviewId, string fileName)
+        byte[] IInterviewFileStorage.GetInterviewBinaryData(Guid interviewId, string fileName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<byte[]> GetInterviewBinaryDataAsync(Guid interviewId, string fileName)
         {
             var interviewBinaryData = this.mediaStorage.Get(fileName, interviewId)?.Data;
 

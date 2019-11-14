@@ -7,7 +7,7 @@ namespace WB.UI.WebTester.Services
 {
     public class MetricsService
     {
-        public static bool IsEnabled => ConfigurationSource.Configuration[@"Metrics.Enable"].AsBool(true);
+        public static bool IsEnabled => true;
 
         [Localizable(false)]
         public static void Start(Logger logger)

@@ -78,7 +78,7 @@ namespace WB.UI.WebTester.Services.Implementation
             if (appDomains.TryGetValue(interviewId, out var interview))
             {
                 logger.Debug($"Execute remote interview GetFirstTopFilteredOptionsForQuestion: {interviewId}");
-                return interview.Value.GetFirstTopFilteredOptionsForQuestion(questionIdentity, parentQuestionValue, filter, itemsCount, excludedOptionIds);
+                return interview.Value.statefulInterview.GetFirstTopFilteredOptionsForQuestion(questionIdentity, parentQuestionValue, filter, itemsCount, excludedOptionIds);
             }
 
             throw new ArgumentException("Cannot get first top filtered options. No remote domain were setted up");

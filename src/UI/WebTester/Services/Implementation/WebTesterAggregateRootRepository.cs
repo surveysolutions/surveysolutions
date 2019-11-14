@@ -21,7 +21,7 @@ namespace WB.UI.WebTester.Services.Implementation
             IEvictionObservable evictionNotification) : base(eventStore, eventStore, new EventBusSettings(), repository, serviceLocator, aggregateLock)
         {
             this.notify = notify;
-            Expiration = TimeSpan.FromMinutes(ConfigurationSource.Configuration["Cache.Expiration"].AsInt(10));
+            Expiration = TimeSpan.FromMinutes(10);
             evictionNotification.Subscribe(this.Evict);
         }
 

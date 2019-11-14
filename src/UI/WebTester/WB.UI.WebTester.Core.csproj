@@ -153,12 +153,6 @@
     <PackageReference Include="AutoMapper" Version="8.1.1" />
     <PackageReference Include="Dapper" Version="2.0.4" />
     <PackageReference Include="Markdig" Version="0.17.1" />
-    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.7" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-    <PackageReference Include="Microsoft.AspNetCore.Proxy" Version="0.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.1.0" />
-    <PackageReference Include="Microsoft.NETCore.App" Version="2.2.7" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="NLog" Version="4.6.7" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.8.6" />
