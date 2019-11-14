@@ -1,5 +1,7 @@
-﻿@using WB.Core.Infrastructure.Versions
+﻿@using System.Web
+@using WB.Core.Infrastructure.Versions
 @using WB.Enumerator.Native.Resources
+@inject IProductVersion version
 @model WB.UI.WebTester.Controllers.InterviewPageModel
 <!DOCTYPE html>
 <html>
@@ -28,7 +30,7 @@
         signalrPath: '@Url.Content(@"~/signalr/hubs")',
         verboseLogging: false,
         supportedTransports: ["webSockets", "longPolling"],
-        appVersion: '@(DependencyResolver.Current.GetService<IProductVersion>().ToString())',
+        appVersion: '@(version.ToString())',
 		googleApiKey: '@Model.GoogleMapsKey',
 		googleMapsApiBaseUrl: 'https://maps.googleapis.com',
         googleMapsBaseUrl: 'https://www.google.com',
