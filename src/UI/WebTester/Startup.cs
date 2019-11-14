@@ -18,10 +18,8 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Logging;
 using WB.UI.Shared.Web.Versions;
-using WB.UI.WebTester;
-using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
-namespace WebTester
+namespace WB.UI.WebTester
 {
     public class Startup
     {
@@ -40,6 +38,7 @@ namespace WebTester
         public void ConfigureServices(IServiceCollection services)
         {
             EnsureJsonStorageForErrorsExists();
+
             var logger = LogManager.GetCurrentClassLogger();
             logger.Info($"Application started {FileVersionInfo.GetVersionInfo(typeof(Startup).Assembly.Location).ProductVersion}");
 
@@ -52,7 +51,7 @@ namespace WebTester
                 new DataCollectionSharedKernelModule(),
                 //new CaptchaModule("recaptcha"),
                 new WebInterviewModule(),
-                new WebTesterModule(this.hostingEnvironment),
+                new WebTesterModule(),
                 new ProductVersionModule(typeof(Startup).Assembly, shouldStoreVersionToDb: false)
             );
         }

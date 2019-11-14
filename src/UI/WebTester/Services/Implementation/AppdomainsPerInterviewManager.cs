@@ -3,7 +3,9 @@ using Ncqrs.Eventing;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using WB.Core.GenericSubdomains.Portable.Services;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Logging;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
@@ -14,14 +16,14 @@ namespace WB.UI.WebTester.Services.Implementation
     public class AppdomainsPerInterviewManager : IAppdomainsPerInterviewManager
     {
         private readonly string binFolderPath;
-        private readonly ILogger logger;
+        private readonly ILogger<AppdomainsPerInterviewManager> logger;
 
         private readonly ConcurrentDictionary<Guid, Lazy<RemoteInterviewContainer>> appDomains = new ConcurrentDictionary<Guid, Lazy<RemoteInterviewContainer>>();
 
-        public AppdomainsPerInterviewManager(string binFolderPath,
-            ILogger logger)
+        public AppdomainsPerInterviewManager(IWebHostEnvironment hosting,
+            ILogger<AppdomainsPerInterviewManager> logger)
         {
-            this.binFolderPath = binFolderPath ?? throw new ArgumentNullException(nameof(binFolderPath));
+            this.binFolderPath = Path.Combine(hosting.ContentRootPath, "bin");
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
         
@@ -30,10 +32,10 @@ namespace WB.UI.WebTester.Services.Implementation
             List<TranslationDto> translations,
             string supportingAssembly)
         {
-            logger.Debug($"[SetupForInterview]Creating remote interview: {interviewId} for q: {questionnaireDocument.Title}[{questionnaireDocument.PublicKey}]");
+            logger.LogDebug($"[SetupForInterview]Creating remote interview: {interviewId} for q: {questionnaireDocument.Title}[{questionnaireDocument.PublicKey}]");
             appDomains.GetOrAdd(interviewId, new Lazy<RemoteInterviewContainer>(() =>
             {
-                logger.Debug($"[lazy]Creating remote interview: {interviewId} for q: {questionnaireDocument.Title}[{questionnaireDocument.PublicKey}]");
+                logger.LogDebug($"[lazy]Creating remote interview: {interviewId} for q: {questionnaireDocument.Title}[{questionnaireDocument.PublicKey}]");
                 return new RemoteInterviewContainer(interviewId,
                     binFolderPath, questionnaireDocument, translations, supportingAssembly);
             }));
@@ -41,12 +43,12 @@ namespace WB.UI.WebTester.Services.Implementation
         
         public void TearDown(Guid interviewId)
         {
-            logger.Debug($"TearDown remote interview: {interviewId}");
+            logger.LogDebug($"TearDown remote interview: {interviewId}");
             if (appDomains.TryRemove(interviewId, out var remote))
             {
-                logger.Debug($"TearDown remote interview: {interviewId}. Disposing");
+                logger.LogDebug($"TearDown remote interview: {interviewId}. Disposing");
                 remote.Value.Dispose();
-                logger.Debug($"TearDown remote interview: {interviewId}. Disposed");
+                logger.LogDebug($"TearDown remote interview: {interviewId}. Disposed");
             }
         }
 
@@ -64,7 +66,7 @@ namespace WB.UI.WebTester.Services.Implementation
 
             if(appDomains.TryGetValue(interviewCommand.InterviewId, out var interview))
             {
-                logger.Debug($"Execute remote interview command: {interviewCommand.InterviewId} # {command.GetType().Name}");
+                logger.LogDebug($"Execute remote interview command: {interviewCommand.InterviewId} # {command.GetType().Name}");
                 return interview.Value.Execute(command);
             }
             
@@ -77,7 +79,7 @@ namespace WB.UI.WebTester.Services.Implementation
         {
             if (appDomains.TryGetValue(interviewId, out var interview))
             {
-                logger.Debug($"Execute remote interview GetFirstTopFilteredOptionsForQuestion: {interviewId}");
+                logger.LogDebug($"Execute remote interview GetFirstTopFilteredOptionsForQuestion: {interviewId}");
                 return interview.Value.statefulInterview.GetFirstTopFilteredOptionsForQuestion(questionIdentity, parentQuestionValue, filter, itemsCount, excludedOptionIds);
             }
 
@@ -88,7 +90,7 @@ namespace WB.UI.WebTester.Services.Implementation
         {
             if (appDomains.TryGetValue(interviewId, out var interview))
             {
-                logger.Debug($"Execute remote interview GetLastEventSequence: {interviewId}");
+                logger.LogDebug($"Execute remote interview GetLastEventSequence: {interviewId}");
                 return interview.Value.GetLastEventSequence();
             }
 
