@@ -20,7 +20,13 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
             this.containerBuilder = new ContainerBuilder();
         }
 
+        public AutofacKernel(ContainerBuilder containerBuilder)
+        {
+            this.containerBuilder = containerBuilder;
+        }
+
         protected readonly ContainerBuilder containerBuilder;
+
         protected readonly List<IInitModule> initModules = new List<IInitModule>();
 
         public ContainerBuilder ContainerBuilder => containerBuilder;
