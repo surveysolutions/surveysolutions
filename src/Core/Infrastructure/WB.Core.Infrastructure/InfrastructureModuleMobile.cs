@@ -13,7 +13,7 @@ using WB.Core.Infrastructure.WriteSide;
 namespace WB.Core.Infrastructure
 {
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-    public class InfrastructureModuleMobile : IModule, IAppModule
+    public class InfrastructureModuleMobile : IModule
     {
         public void Load(IIocRegistry registry)
         {
@@ -27,21 +27,5 @@ namespace WB.Core.Infrastructure
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status) => Task.CompletedTask;
-
-        public void Load(IDependencyRegistry registry)
-        {
-            registry.Bind<IClock, DateTimeBasedClock>();
-
-            registry.Bind<IEventSourcedAggregateRootRepositoryWithCache, EventSourcedAggregateRootRepositoryWithCache>();
-            registry.Bind<IEventSourcedAggregateRootRepository, EventSourcedAggregateRootRepositoryWithCache>(); 
-            registry.Bind<IEventSourcedAggregateRootRepositoryCacheCleaner, EventSourcedAggregateRootRepositoryWithCache>(); 
-            registry.Bind<IPlainAggregateRootRepository, PlainAggregateRootRepository>();
-            registry.BindAsSingleton<IAggregateLock, AggregateLock>();
-            registry.BindAsSingleton<ICommandsMonitoring, TraceCommandsMonitoring>();
-            registry.BindAsSingleton<IDenormalizerRegistry, DenormalizerRegistry>();
-        }
-
-        public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status)
-            => Task.CompletedTask;
     }
 }
