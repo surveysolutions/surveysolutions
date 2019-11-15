@@ -6,14 +6,14 @@ namespace WB.Enumerator.Native.WebInterview.Services
 {
     public class WebInterviewInvoker : IWebInterviewInvoker
     {
-        private readonly Lazy<IHubContext<WebInterview>> lazyHubContext;
+        private readonly IHubContext<WebInterview> lazyHubContext;
 
-        public WebInterviewInvoker(Lazy<IHubContext<WebInterview>> lazyHubContext)
+        public WebInterviewInvoker(IHubContext<WebInterview> lazyHubContext)
         {
             this.lazyHubContext = lazyHubContext;
         }
 
-        private IHubContext<WebInterview> HubClients => lazyHubContext.Value;
+        private IHubContext<WebInterview> HubClients => lazyHubContext;
 
         public void RefreshEntities(string interviewId, string[] identities)
         {
