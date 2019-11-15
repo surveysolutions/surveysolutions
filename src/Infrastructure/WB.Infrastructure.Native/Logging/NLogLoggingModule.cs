@@ -21,6 +21,5 @@ namespace WB.Infrastructure.Native.Logging
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status) => Task.CompletedTask;
-        public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status) => Task.CompletedTask;
     }
 }

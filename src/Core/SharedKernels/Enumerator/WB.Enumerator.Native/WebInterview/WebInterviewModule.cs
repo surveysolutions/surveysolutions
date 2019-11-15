@@ -37,13 +37,5 @@ namespace WB.Enumerator.Native.WebInterview
 
             return Task.CompletedTask;
         }
-
-        public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status)
-        {
-            var registry = serviceLocator.GetInstance<IDenormalizerRegistry>();
-            registry.Register<InterviewLifecycleEventHandler>();
-
-            return Task.CompletedTask;
-        }
     }
 }

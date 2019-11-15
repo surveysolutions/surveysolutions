@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Autofac;
 
 namespace WB.Core.Infrastructure.Modularity
 {
@@ -7,5 +8,6 @@ namespace WB.Core.Infrastructure.Modularity
         void Load<T>(params IModule<T>[] modules) where T : IIocRegistry;
 
         Task InitAsync(bool restartOnInitiazationError);
+        Task InitCoreAsync(IContainer container, bool restartOnInitiazationError);
     }
 }

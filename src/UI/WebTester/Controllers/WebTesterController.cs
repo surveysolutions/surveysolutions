@@ -26,6 +26,7 @@ namespace WB.UI.WebTester.Controllers
         private readonly IOptions<TesterConfiguration> testerConfig;
 
         public WebTesterController(
+
             IStatefulInterviewRepository statefulInterviewRepository,
             IEvictionNotifier evictionService,
             IQuestionnaireStorage questionnaireStorage,
