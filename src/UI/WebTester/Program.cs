@@ -36,6 +36,7 @@ namespace WB.UI.WebTester
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.UseWebRoot("Content");
                     webBuilder.UseStartup<Startup>();
                 });
     }
