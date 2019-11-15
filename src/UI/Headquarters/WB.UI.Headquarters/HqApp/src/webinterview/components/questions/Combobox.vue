@@ -52,7 +52,7 @@
 
             optionsSource(filter) {
                 const interviewId = this.$route.params.interviewId
-                return Vue.$api.get('getTopFilteredOptionsForQuestion', {interviewId, id:this.$me.id, filter, count:50})
+                return Vue.$http.get('getTopFilteredOptionsForQuestion', {interviewId, id:this.$me.id, filter, count:50})
             }
         }
     }

@@ -13,14 +13,14 @@ function getAnswer(state, questionId){
 
 export default {
     async loadInterview({ commit, rootState }, interviewId) {
-        const info = await Vue.$api.get('getInterviewDetails', { interviewId })
+        const info = await Vue.$http.get('getInterviewDetails', { interviewId })
         commit("SET_INTERVIEW_INFO", info)
-        const flag = await Vue.$api.get('hasCoverPage', { interviewId })
+        const flag = await Vue.$http.get('hasCoverPage', { interviewId })
         commit("SET_HAS_COVER_PAGE", flag)
     },
 
     async getLanguageInfo({ commit, rootState }, interviewId) {
-        const languageInfo = await Vue.$api.get('getLanguageInfo', { interviewId })
+        const languageInfo = await Vue.$http.get('getLanguageInfo', { interviewId })
         commit("SET_LANGUAGE_INFO", languageInfo)
     },
 
@@ -28,7 +28,7 @@ export default {
         const interviewId = rootState.route.params.interviewId
         const sectionId = rootState.route.params.sectionId || null
         const elementIds = uniq(map(ids, "id"))
-        const details = await Vue.$api.get('getEntitiesDetails', { interviewId: interviewId, sectionId: sectionId, ids: elementIds } )
+        const details = await Vue.$http.get('getEntitiesDetails', { interviewId: interviewId, sectionId: sectionId, ids: elementIds } )
         dispatch("fetch", { ids, done: true })
 
         commit("SET_ENTITIES_DETAILS", {
@@ -263,7 +263,7 @@ export default {
         const isPrefilledSection = id === undefined
 
         if (isPrefilledSection) {
-            const prefilledPageData = await Vue.$api.get('getPrefilledEntities', { interviewId })
+            const prefilledPageData = await Vue.$http.get('getPrefilledEntities', { interviewId })
             if (!prefilledPageData.hasAnyQuestions) {
                 const loc = {
                     name: "section",
@@ -281,7 +281,7 @@ export default {
             try {
                 commit("SET_LOADING_PROGRESS", true)
 
-                const section = await Vue.$api.get('getFullSectionInfo', {interviewId: interviewId, sectionId: id})
+                const section = await Vue.$http.get('getFullSectionInfo', {interviewId: interviewId, sectionId: id})
 
                 commit("SET_SECTION_DATA", section.entities)
                 commit("SET_ENTITIES_DETAILS", {
@@ -301,7 +301,7 @@ export default {
         const isPrefilledSection = sectionId === undefined
 
         if (!isPrefilledSection) {
-            const isEnabled = await Vue.$api.get('isEnabled', {interviewId: interviewId, id: sectionId})
+            const isEnabled = await Vue.$http.get('isEnabled', {interviewId: interviewId, id: sectionId})
             if (!isEnabled) {
                 const firstSectionId = state.firstSectionId
                 const firstSectionLocation = {
@@ -320,25 +320,25 @@ export default {
     fetchBreadcrumbs: debounce(async ({ commit, rootState }) => {
         const interviewId = rootState.route.params.interviewId
         const sectionId = rootState.route.params.sectionId
-        const crumps = await Vue.$api.get('getBreadcrumbs', {interviewId, sectionId})
+        const crumps = await Vue.$http.get('getBreadcrumbs', {interviewId, sectionId})
         commit("SET_BREADCRUMPS", crumps)
     }, 200),
 
     fetchCompleteInfo: debounce(async ({ commit, rootState }) => {
         const interviewId = rootState.route.params.interviewId
-        const completeInfo = await Vue.$api.get('getCompleteInfo', {interviewId})
+        const completeInfo = await Vue.$http.get('getCompleteInfo', {interviewId})
         commit("SET_COMPLETE_INFO", completeInfo)
     }, 200),
 
     fetchInterviewStatus: debounce(async ({ commit, rootState }) => {
         const interviewId = rootState.route.params.interviewId
-        const interviewState = await Vue.$api.get('getInterviewStatus', {interviewId})
+        const interviewState = await Vue.$http.get('getInterviewStatus', {interviewId})
         commit("SET_INTERVIEW_STATUS", interviewState)
     }, 200),
 
     fetchCoverInfo: debounce(async ({ commit, rootState }) => {
         const interviewId = rootState.route.params.interviewId
-        const coverInfo = await Vue.$api.get('getCoverInfo', {interviewId})
+        const coverInfo = await Vue.$http.get('getCoverInfo', {interviewId})
         commit("SET_COVER_INFO", coverInfo)
     }, 200),
 
@@ -364,7 +364,7 @@ export default {
         Vue.$api.stop()
     },
 
-    changeSection(ctx, sectionId) {
-        return Vue.$api.changeSection(sectionId)
+    changeSection(ctx, { from , to}) {
+        return Vue.$api.changeSection(from, to)
     }
 }

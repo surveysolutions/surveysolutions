@@ -138,68 +138,6 @@ export async function apiGet(actionName, params) {
     }
 }
 
-export async function apiPost(actionName, params) {
-    store.dispatch("fetchProgress", 1)
-
-    try {
-        var interviewId = params.interviewId
-        delete params.interviewId
-
-        var headers = store.getters.isReviewMode === true ? { review: true } : { }
-        return await axios.post(`${store.getters.basePath}api/webinterview/commands/${actionName}?interviewId=${interviewId}`, params, { 
-            headers: headers
-        })
-    } catch (err) {
-        store.dispatch("UNHANDLED_ERROR", err)
-    } finally {
-        store.dispatch("fetchProgress", -1)
-    }
-}
-
-export async function apiAnswerPost(id, actionName, params) {
-    if (id) {
-        store.dispatch("fetch", { id })
-    }
-
-    store.dispatch("fetchProgress", 1)
-
-    try {
-        var interviewId = params.interviewId
-        delete params.interviewId
-
-        var headers = store.getters.isReviewMode === true ? { review: true } : { }
-        return await axios.post(`${store.getters.basePath}api/webinterview/commands/${actionName}?interviewId=${interviewId}`, params, { 
-            headers: headers
-        })
-    } catch (err) {
-        if (id) {
-            store.dispatch("setAnswerAsNotSaved", { id, message: err.statusText })
-            store.dispatch("fetch", { id, done: true })
-        } else {
-            store.dispatch("UNHANDLED_ERROR", err)
-        }
-    } finally {
-        store.dispatch("fetchProgress", -1)
-    }
-}
-
-
-export async function changeSectionRequest(sectionId) {
-    store.dispatch("fetchProgress", 1)
-
-    try {
-        const state = jQuery.signalR[config.hubName].state
-        const oldSectionId = state.sectionId
-        state.sectionId = sectionId
-
-        const hub = await getInterviewHub()
-        await wrap(hub.changeSection(oldSectionId))
-    } catch (err) {
-        store.dispatch("UNHANDLED_ERROR", err)
-    } finally {
-        store.dispatch("fetchProgress", -1)
-    }
-}
 
 export function install(Vue, options) {
     store = options.store;

@@ -714,6 +714,15 @@
     cssnano-preset-default "^4.0.0"
     postcss "^7.0.0"
 
+"@microsoft/signalr@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@microsoft/signalr/-/signalr-3.0.0.tgz#df03564f900957db0a62469cad576eb573368c9d"
+  integrity sha512-M0KMWvJ62yZuizPxFLZakitJb4aOZkJH6epXTLvp5LednJZdzacRDxWT3La7Cexp1cHxVbldBFtc3jrdfwmtxw==
+  dependencies:
+    eventsource "^1.0.7"
+    request "^2.88.0"
+    ws "^6.0.0"
+
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"

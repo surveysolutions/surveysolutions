@@ -43,7 +43,7 @@ export default {
             const flags = getSelectedFlags(state);
             const skip = state.search.needToClear ? 0 : state.search.skip;
             const limit = state.search.pageSize
-            const res = await Vue.$api.get('search', {interviewId, flags, skip, limit})
+            const res = await Vue.$http.get('search', {interviewId, flags, skip, limit})
             commit("LOG_LAST_ACTIVITY")
             commit("SET_SEARCH_RESULT", res)
         },
@@ -67,7 +67,7 @@ export default {
 
         async getStatusesHistory({ rootState }) {
             const interviewId = rootState.route.params.interviewId
-            return await Vue.$api.get('getStatusesHistory', {interviewId})
+            return await Vue.$http.get('getStatusesHistory', {interviewId})
         },
 
         resetAllFilters({ commit, state, dispatch }) {
