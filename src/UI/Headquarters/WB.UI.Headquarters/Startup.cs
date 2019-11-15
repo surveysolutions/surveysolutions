@@ -187,7 +187,7 @@ namespace WB.UI.Headquarters
             app.MapSignalR(new HubConfiguration { EnableDetailedErrors = true, Resolver = resolver });
         }
 
-        private void ConfigureAuth(IAppBuilder app, IContainer ioc)
+        private void ConfigureAuth(IAppBuilder app, ILifetimeScope ioc)
         {
             var applicationSecuritySection = NConfigurator.Default.GetSection<HqSecuritySection>(@"applicationSecurity");
 
@@ -230,7 +230,7 @@ namespace WB.UI.Headquarters
             TimeSpan validateInterval, 
             Func<HqUserManager, HqUser, Task<ClaimsIdentity>> regenerateIdentityCallback,
             Func<ClaimsIdentity, Guid> getUserIdCallback,
-            IContainer ioc)
+            ILifetimeScope ioc)
         {
             if (getUserIdCallback == null)
                 throw new ArgumentNullException(nameof(getUserIdCallback));
