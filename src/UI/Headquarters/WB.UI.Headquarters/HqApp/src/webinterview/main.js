@@ -37,11 +37,13 @@ const router = createRouter(store);
 sync(store, router);
 
 const App = require("./App").default;
-const installApi = require("./api").install;
+// const webInterviewApi = import("./api").then(() => {
 
-installApi(Vue, {
-  store
-});
+// });
+
+// installApi(Vue, {
+//   store
+// });
 
 box.init(i18n, browserLanguage);
 
