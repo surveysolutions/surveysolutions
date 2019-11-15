@@ -23,6 +23,7 @@
     "WB.UI.Designer": {
       "commandName": "Project",
       "launchBrowser": true,
+      "launchUrl": "https://localhost:5002",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
