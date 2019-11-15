@@ -44,7 +44,6 @@ namespace WB.UI.WebTester
             services.AddResponseCompression();
             services.AddLogging();
             services.AddSignalR();
-
             services.Configure<TesterConfiguration>(this.Configuration);
         }
 
@@ -86,6 +85,7 @@ namespace WB.UI.WebTester
             app.UseResponseCompression();
             app.UseStaticFiles(new StaticFileOptions
             {
+                RequestPath = "/Content",
                 OnPrepareResponse = ctx =>
                 {
                     if (!env.IsDevelopment())

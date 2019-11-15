@@ -107,3 +107,4 @@ src/UI/WB.UI.Designer/wwwroot
 /src/UI/WB.UI.Designer/web.config
 /src/UI/WebTester/Content/
 /src/UI/WebTester/Content/Dist
+/src/UI/WebTester/Views/Shared/partial.webtester.cshtml
