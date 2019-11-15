@@ -17,7 +17,7 @@ export default {
         },
         async fetchFlags({ commit, rootState }) {
             const interviewId = rootState.route.params.interviewId
-            const flags = await Vue.$api.get('getFlags', {interviewId})
+            const flags = await Vue.$http.get('getFlags', {interviewId})
             commit("SET_FLAGS", { flags })
         }
     },

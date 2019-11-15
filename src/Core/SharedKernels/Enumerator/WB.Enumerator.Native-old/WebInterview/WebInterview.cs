@@ -75,11 +75,10 @@ namespace WB.Enumerator.Native.WebInterview
             await Groups.Remove(Context.ConnectionId, interviewId);
         }
 
-        public async Task ChangeSection(string oldSection)
+        public async Task ChangeSection(string oldSection, string sectionId)
         {
             var interviewId = CallerInterviewId;
-            var sectionId = Clients.CallerState.sectionId as string;
-
+            
             if (interviewId != null)
             {
                 await Groups.Remove(Context.ConnectionId, GetGroupNameBySectionIdentity(oldSection, interviewId));

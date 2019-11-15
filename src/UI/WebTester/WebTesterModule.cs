@@ -170,13 +170,13 @@ namespace WB.UI.WebTester
             registry.BindAsSingleton<IInterviewExpressionStateUpgrader, InterviewExpressionStateUpgrader>();
             registry.Bind<IVariableToUIStringService, VariableToUIStringService>();
         }
-        
-        public static Type[] HubPipelineModules => new[]
-        {
-            typeof(WebInterviewVersionChecker),
-            //typeof(WebInterviewStateManager),
-            typeof(WebInterviewConnectionsCounter)
-        };
+
+        public static Type[] HubPipelineModules => Array.Empty<Type>();//[]
+        //{
+        //    //typeof(WebInterviewVersionChecker),
+        //    //typeof(WebInterviewStateManager),
+        //    //typeof(WebInterviewConnectionsCounter)
+        //};
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
