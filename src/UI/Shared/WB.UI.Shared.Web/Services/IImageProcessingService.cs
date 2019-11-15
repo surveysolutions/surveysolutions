@@ -2,7 +2,6 @@
 {
     public interface IImageProcessingService
     {
-        void ValidateImage(byte[] source);
-        byte[] ResizeImage(byte[] source, int? height = null, int? width = null);
+        byte[] ResizeImage(byte[] source, int height, int width);
     }
 }
