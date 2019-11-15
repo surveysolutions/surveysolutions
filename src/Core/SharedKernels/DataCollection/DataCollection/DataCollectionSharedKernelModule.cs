@@ -12,7 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Scenarios;
 
 namespace WB.Core.SharedKernels.DataCollection
 {
-    public class DataCollectionSharedKernelModule : IModule, IAppModule
+    public class DataCollectionSharedKernelModule : IModule
     {
         public void Load(IIocRegistry registry)
         {
@@ -22,20 +22,5 @@ namespace WB.Core.SharedKernels.DataCollection
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status) => Task.CompletedTask;
-
-        public void Load(IDependencyRegistry registry)
-        {
-            registry.Bind<IStatefulInterviewRepository, StatefulInterviewRepository>();
-            registry.Bind<IScenarioService, ScenarioService>();
-            registry.BindToMethod((s) =>
-            {
-                var interview = s.GetRequiredService<StatefulInterview>();
-                interview.ServiceLocatorInstance = s.GetService<IServiceLocator>();
-
-                return interview;
-            });
-        }
-
-        public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status) => Task.CompletedTask;
     }
 }

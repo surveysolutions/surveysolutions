@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -34,6 +35,18 @@ namespace WB.UI.WebTester
         }
 
         public IConfiguration Configuration { get; }
+        
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddOptions();
+            services.AddControllersWithViews();
+            services.AddDistributedMemoryCache();
+            services.AddSession();
+            services.AddResponseCaching();
+            services.AddResponseCompression();
+
+            services.Configure<TesterConfiguration>(this.Configuration);
+        }
 
         // ConfigureContainer is where you can register things directly
         // with Autofac. This runs after ConfigureServices so the things
@@ -48,39 +61,30 @@ namespace WB.UI.WebTester
                 new InfrastructureModuleMobile(),
                 new DataCollectionSharedKernelModule(),
                 //new CaptchaModule("recaptcha"),
-                new WebInterviewModule(),
+                new WebInterviewModule(), // init registers denormalizer
                 new WebTesterModule(Configuration["DesignerAddress"]),
-                new ProductVersionModule(typeof(Startup).Assembly, shouldStoreVersionToDb: false));
-            this.Container = autofacKernel;
+                new ProductVersionModule(typeof(Startup).Assembly, shouldStoreVersionToDb: false)); // stores app version in database but does not do it for web tester
+            builder.RegisterInstance(autofacKernel).SingleInstance();
         }
-
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddOptions();
-            services.AddControllersWithViews();
-            services.AddDistributedMemoryCache();
-            services.AddSession();
-            services.AddResponseCaching();
-            services.AddResponseCompression();
-
-            services.Configure<TesterConfiguration>(this.Configuration);
-        }
-
-        public AutofacKernel Container { get; set; }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            AutofacKernel k = app.ApplicationServices.GetService<AutofacKernel>();
+            var initTask = k.InitCoreAsync((IContainer)app.ApplicationServices.GetAutofacRoot(), false);
+
             if (!env.IsDevelopment())
             {
                 app.UseStatusCodePagesWithReExecute("/error/{0}");
-            }
-
-            if (!env.IsDevelopment())
-            {
                 app.UseHttpsRedirection();
-            }
+                initTask.Wait();
 
+            }
+            else
+            {
+                initTask.Wait(TimeSpan.FromSeconds(10));
+            }
+            
             app.UseResponseCompression();
             app.UseStaticFiles(new StaticFileOptions
             {
@@ -131,12 +135,7 @@ namespace WB.UI.WebTester
                     name: "default",
                     pattern: "{controller=WebTester}/{action=Index}/{id?}");
             });
-            ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(Container.Container));
-            //var initTask = Container.InitAsync(false);
-            //if (env.IsDevelopment())
-            //    initTask.Wait();
-            //else
-            //    initTask.Wait(TimeSpan.FromSeconds(10));
+          
         }
     }
 }

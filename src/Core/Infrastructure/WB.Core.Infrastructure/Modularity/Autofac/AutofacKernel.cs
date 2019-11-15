@@ -15,14 +15,20 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
 {
     public class AutofacKernel : IKernel
     {
-        public AutofacKernel()
+        public AutofacKernel() : this(new ContainerBuilder())
         {
-            this.containerBuilder = new ContainerBuilder();
         }
 
         public AutofacKernel(ContainerBuilder containerBuilder)
         {
             this.containerBuilder = containerBuilder;
+
+            this.containerBuilder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
+
+            this.containerBuilder.RegisterType<AutofacServiceLocatorAdapter>().As<IServiceLocator>().InstancePerLifetimeScope();
+
+            var status = new UnderConstructionInfo();
+            this.containerBuilder.Register((ctx, p) => status).SingleInstance();
         }
 
         protected readonly ContainerBuilder containerBuilder;
@@ -52,21 +58,26 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
             initModules.AddRange(modules);
         }
 
-        
+
         public Task InitAsync(bool restartOnInitiazationError)
         {
-            this.containerBuilder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
-
-            this.containerBuilder.RegisterType<AutofacServiceLocatorAdapter>().As<IServiceLocator>().InstancePerLifetimeScope();
-
-            var status = new UnderConstructionInfo();
-            this.containerBuilder.Register((ctx, p) => status).SingleInstance();
-
             Container = containerBuilder.Build();
+            return InitModules(restartOnInitiazationError);
+        }
 
+        public Task InitCoreAsync(IContainer container, bool restartOnInitiazationError)
+        {
+            Container = container;
+
+            return InitModules(restartOnInitiazationError);
+        }
+
+        private Task InitModules(bool restartOnInitiazationError)
+        {
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(Container));
 
-            var initTask = Task.Run(async () => await InitModules(status, Container, restartOnInitiazationError));
+            var initTask = Task.Run(async () =>
+                await InitModules(Container.Resolve<UnderConstructionInfo>(), Container, restartOnInitiazationError));
             return initTask;
         }
 

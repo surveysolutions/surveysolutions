@@ -175,7 +175,5 @@ namespace WB.UI.WebTester
         };
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status) => Task.CompletedTask;
-        
-        public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status) => Task.CompletedTask;
     }
 }
