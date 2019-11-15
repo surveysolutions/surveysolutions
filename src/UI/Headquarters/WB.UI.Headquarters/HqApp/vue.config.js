@@ -59,7 +59,7 @@ const pages = {
         entry: "src/webinterview/main.js",
         filename: path.join(
             uiFolder,
-            "WB.UI.WebTester",
+            "WebTester",
             "Views",
             "Shared",
             "partial.webtester.cshtml"
