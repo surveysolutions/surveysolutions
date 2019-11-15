@@ -38,7 +38,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
 
         public DeviceSyncInfo GetLastSuccessByInterviewerId(Guid interviewerId)
         {
-            var result = this.dbContext.DeviceSyncInfo.Include("Statistics").OrderByDescending(deviceInfo => deviceInfo.Id)
+            var result = this.dbContext.DeviceSyncInfo
+                .Include(x => x.Statistics)
+                .OrderByDescending(deviceInfo => deviceInfo.Id)
                 .FirstOrDefault(deviceInfo => deviceInfo.InterviewerId == interviewerId &&
                                               deviceInfo.StatisticsId != null
                                               && (deviceInfo.Statistics.DownloadedInterviewsCount > 0
