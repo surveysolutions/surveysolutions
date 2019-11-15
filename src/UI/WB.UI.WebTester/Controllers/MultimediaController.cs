@@ -133,7 +133,7 @@ namespace WB.UI.WebTester.Controllers
                 {
                     await file.InputStream.CopyToAsync(ms);
 
-                    this.imageProcessingService.ValidateImage(ms.ToArray());
+                    this.imageProcessingService.ResizeImage(ms.ToArray(), 1, 1);
 
                     fileName = GetPictureFileName(question.VariableName, questionIdentity.RosterVector);
 

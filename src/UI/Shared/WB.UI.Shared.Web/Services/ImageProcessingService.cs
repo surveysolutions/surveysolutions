@@ -1,42 +1,25 @@
-﻿using System.Drawing;
-using System.IO;
-using ImageResizer;
+﻿using System.IO;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
+using SixLabors.Primitives;
+using Image = SixLabors.ImageSharp.Image;
 
 namespace WB.UI.Shared.Web.Services
 {
     public class ImageProcessingService : IImageProcessingService
     {
-        public void ValidateImage(byte[] source)
+        public byte[] ResizeImage(byte[] source, int height, int width)
         {
             using (var outputStream = new MemoryStream())
+            using (var image = Image.Load(source))
             {
-                ImageBuilder.Current.Build(source, outputStream, new ResizeSettings
+                image.Mutate(x => x.Resize(new ResizeOptions()
                 {
-                    MaxWidth = 1,
-                    MaxHeight = 1,
-                    Format = "png"
-                });
-
-                outputStream.ToArray();
-            }
-        }
-
-        public byte[] ResizeImage(byte[] source, int? height = null, int? width = null)
-        {
-            if (!height.HasValue || !width.HasValue) return source;
-
-            //later should handle video and produce image preview 
-            using (var outputStream = new MemoryStream())
-            {
-                ImageBuilder.Current.Build(source, outputStream, new ResizeSettings
-                {
-                    MaxHeight = height.Value,
-                    MaxWidth = width.Value,
-                    Format = "png",
-                    Mode = FitMode.Max,
-                    PaddingColor = Color.Transparent,
-                    Anchor = ContentAlignment.MiddleCenter
-                });
+                    Position = AnchorPositionMode.Center, 
+                    Mode = ResizeMode.Max, 
+                    Size = new Size(width, height)
+                }));
+                image.SaveAsPng(outputStream);
 
                 return outputStream.ToArray();
             }
