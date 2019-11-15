@@ -78,6 +78,7 @@ namespace WB.UI.WebTester
             registry.BindAsSingleton<ICommandService, WebTesterCommandService>();
             registry.BindAsSingleton<IWebTesterTranslationService, WebTesterTranslationService>();
             registry.BindAsSingleton<IWebTesterTranslationStorage , WebTesterTranslationStorage>();
+            registry.BindAsSingleton<IQuestionnaireStorage , WebTesterQuestionnaireStorage>();
 
             registry.BindAsSingleton<IAppdomainsPerInterviewManager, AppdomainsPerInterviewManager>();
             registry.Bind<IVirtualPathService, VirtualPathService>();
@@ -151,7 +152,6 @@ namespace WB.UI.WebTester
             registry.BindAsSingleton<IPlainKeyValueStorage<QuestionnaireDocument>, InMemoryKeyValueStorage<QuestionnaireDocument>>();
             registry.BindAsSingleton(typeof(ICacheStorage<,>), typeof(InMemoryCacheStorage<,>));
             registry.BindAsSingleton(typeof(IPlainStorageAccessor<>), typeof(InMemoryPlainStorageAccessor<>));
-            registry.BindAsSingleton<IQuestionnaireStorage, QuestionnaireStorage>();
             registry.Bind<ITranslationStorage, TranslationStorage>();
             registry.BindAsSingleton<IQuestionnaireImportService, QuestionnaireImportService>();
 
