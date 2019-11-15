@@ -90,6 +90,7 @@ namespace WB.UI.WebTester.Services.Implementation
                 questionnaire.ExpressionStorageType = prototype.GetExpressionStorageType(questionnaireIdentity);
 
                 statefulInterview = ServiceLocator.Current.GetInstance<WebTesterStatefulInterview>();
+                statefulInterview.SetId(interviewId);
             }
         }
 
