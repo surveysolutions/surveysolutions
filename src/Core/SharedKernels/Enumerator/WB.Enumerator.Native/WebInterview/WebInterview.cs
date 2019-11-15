@@ -13,7 +13,14 @@ namespace WB.Enumerator.Native.WebInterview
     {
         private readonly IPipelineModule[] hubPipelineModules;
 
-        protected string CallerInterviewId => this.Context.Items[@"interviewId"] as string;
+        protected string CallerInterviewId
+        {
+            get
+            {
+                var http = this.Context.GetHttpContext();
+                return http.Request.Query["interviewId"];
+            }
+        }
 
         protected WebInterview(IPipelineModule[] hubPipelineModules)
         {

@@ -37,6 +37,10 @@ const router = createRouter(store);
 sync(store, router);
 
 const App = require("./App").default;
+
+import http from "./api/http";
+Vue.use(http, { store });
+
 // const webInterviewApi = import("./api").then(() => {
 
 // });

@@ -58,7 +58,7 @@ export default {
     },
     async show() {
       if (this.items == null){
-        this.items = await vue.$api.get('getStatusesHistory', {interviewId: this.$route.params.interviewId});
+        this.items = await vue.$http.get('getStatusesHistory', {interviewId: this.$route.params.interviewId});
       }
 
       this.$refs.modal.modal();

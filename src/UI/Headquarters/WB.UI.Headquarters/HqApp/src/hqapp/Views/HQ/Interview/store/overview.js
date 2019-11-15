@@ -19,7 +19,7 @@ export default {
     actions: {
         async loadAdditionalInfo({ dispatch, commit, rootState }, { id }) {
             const interviewId = rootState.route.params.interviewId
-            const data = await Vue.$api.get('overviewItemAdditionalInfo', {interviewId, id});
+            const data = await Vue.$http.get('overviewItemAdditionalInfo', {interviewId, id});
             commit("SET_ADDITIONAL_INFO", { 
                 id,
                 data
@@ -33,7 +33,7 @@ export default {
 
         async loadOverview({ commit, dispatch, state, rootState }, { skip }) {
             const interviewId = rootState.route.params.interviewId
-            const data = await Vue.$api.get('overview', {interviewId, skip, take:state.pageSize});
+            const data = await Vue.$http.get('overview', {interviewId, skip, take:state.pageSize});
 
             commit("SET_OVERVIEW_RESPONSE", data);
 

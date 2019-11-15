@@ -15,7 +15,7 @@
           if (to.name === "section") {
               const sectionId = to.params["sectionId"]
               const interviewId = to.params["interviewId"]
-              return await Vue.$api.get('isEnabled', {interviewId, id:sectionId})
+              return await Vue.$http.get('isEnabled', {interviewId, id:sectionId})
           }
     }
 
