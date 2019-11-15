@@ -17,6 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using Ncqrs.Domain.Storage;
 using Newtonsoft.Json.Serialization;
 using reCAPTCHA.AspNetCore;
 using StackExchange.Exceptional;
@@ -189,6 +190,7 @@ namespace WB.UI.Designer
             services.AddTransient<IEmailSender, MailSender>();
             services.AddTransient<IViewRenderingService, ViewRenderingService>();
             services.AddTransient<IQuestionnaireHelper, QuestionnaireHelper>();
+            services.AddTransient<IDomainRepository, DomainRepository>();
             services.AddScoped<ILoggedInUser, LoggedInUser>();
 
             services.Configure<CompilerSettings>(Configuration.GetSection("CompilerSettings"));
@@ -202,7 +204,6 @@ namespace WB.UI.Designer
             aspCoreKernel.Load(
                 new EventFreeInfrastructureModule(),
                 new InfrastructureModule(),
-                new NcqrsModule(),
                 new DesignerBoundedContextModule(),
                 new QuestionnaireVerificationModule(),
                 new FileInfrastructureModule(),
