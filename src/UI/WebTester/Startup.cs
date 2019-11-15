@@ -37,13 +37,15 @@ namespace WB.UI.WebTester
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                .AddNewtonsoftJson();
             services.AddDistributedMemoryCache();
             services.AddSession();
             services.AddResponseCaching();
             services.AddResponseCompression();
             services.AddLogging();
-            services.AddSignalR();
+            services.AddSignalR()
+                .AddNewtonsoftJsonProtocol();
             services.Configure<TesterConfiguration>(this.Configuration);
         }
 
