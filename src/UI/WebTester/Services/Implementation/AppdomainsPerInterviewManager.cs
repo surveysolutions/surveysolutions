@@ -4,6 +4,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using Autofac;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 using WB.Core.Infrastructure.CommandBus;
@@ -16,18 +17,21 @@ namespace WB.UI.WebTester.Services.Implementation
     public class AppdomainsPerInterviewManager : IAppdomainsPerInterviewManager
     {
         private readonly string binFolderPath;
+        private readonly IWebHostEnvironment hosting;
         private readonly ILogger<AppdomainsPerInterviewManager> logger;
-        private readonly Core.GenericSubdomains.Portable.Services.ILoggerProvider loggerProvider;
+        private readonly ILifetimeScope rootScope;
 
         private readonly ConcurrentDictionary<Guid, Lazy<RemoteInterviewContainer>> appDomains = new ConcurrentDictionary<Guid, Lazy<RemoteInterviewContainer>>();
 
         public AppdomainsPerInterviewManager(IWebHostEnvironment hosting,
             ILogger<AppdomainsPerInterviewManager> logger,
-            Core.GenericSubdomains.Portable.Services.ILoggerProvider loggerProvider)
+            ILifetimeScope rootScope)
         {
+
             this.binFolderPath = Path.Combine(hosting.ContentRootPath, "bin");
+            this.hosting = hosting;
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            this.loggerProvider = loggerProvider;
+            this.rootScope = rootScope;
         }
         
         public void SetupForInterview(Guid interviewId, 
@@ -39,8 +43,13 @@ namespace WB.UI.WebTester.Services.Implementation
             appDomains.GetOrAdd(interviewId, new Lazy<RemoteInterviewContainer>(() =>
             {
                 logger.LogDebug($"[lazy]Creating remote interview: {interviewId} for q: {questionnaireDocument.Title}[{questionnaireDocument.PublicKey}]");
-                return new RemoteInterviewContainer(interviewId,
-                    binFolderPath, questionnaireDocument, translations, loggerProvider, supportingAssembly);
+                return new RemoteInterviewContainer(
+                    rootScope,
+                    interviewId,
+                    binFolderPath, 
+                    questionnaireDocument, 
+                    translations, 
+                    supportingAssembly);
             }));
         }
         

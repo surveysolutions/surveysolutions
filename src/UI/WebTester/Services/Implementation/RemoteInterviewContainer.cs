@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using Autofac;
 using Main.Core.Documents;
 using Ncqrs.Eventing;
 using Newtonsoft.Json;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
@@ -23,20 +24,20 @@ namespace WB.UI.WebTester.Services.Implementation
 {
     public class RemoteInterviewContainer : IDisposable
     {
-        private readonly ILoggerProvider loggerProvider;
-
         enum State { Running, Teardown }
 
         private State state = State.Running;
 
-        public RemoteInterviewContainer(Guid interviewId, 
+        public RemoteInterviewContainer(
+            ILifetimeScope rootScope,
+            Guid interviewId, 
             string binFolderPath, 
             QuestionnaireDocument questionnaireDocument, 
             List<TranslationDto> translations,
-            ILoggerProvider loggerProvider,
             string supportingAssembly)
         {
-            this.loggerProvider = loggerProvider;
+            this.scope = rootScope.BeginLifetimeScope();
+
             using (var assemblyStream = new MemoryStream(Convert.FromBase64String(supportingAssembly)))
             {
                 context = new InterviewAssemblyLoadContext(binFolderPath);
@@ -53,9 +54,6 @@ namespace WB.UI.WebTester.Services.Implementation
                         Formatting = Formatting.None,
                     });
 
-                var translationsString =
-                    JsonConvert.SerializeObject(translations ?? new List<TranslationDto>(), Formatting.None);
-
                 const int questionnaireVersion = 1;
 
                 QuestionnaireDocument document = JsonConvert.DeserializeObject<QuestionnaireDocument>(
@@ -67,29 +65,37 @@ namespace WB.UI.WebTester.Services.Implementation
                         Formatting = Formatting.None
                     });
 
-                List<TranslationInstance> translationsList =
-                    JsonConvert.DeserializeObject<List<TranslationInstance>>(translationsString);
+                var questionnaireIdentity = new QuestionnaireIdentity(document.PublicKey, questionnaireVersion);
 
-                var questionnaireStorage = ServiceLocator.Current.GetInstance<IQuestionnaireStorage>();
-                var webTesterTranslationService = ServiceLocator.Current.GetInstance<IWebTesterTranslationService>();
-                var questionnaireAssemblyAccessor = ServiceLocator.Current.GetInstance<IQuestionnaireAssemblyAccessor>();
+                var questionnaireStorage = this.scope.Resolve<IQuestionnaireStorage>();
+                var webTesterTranslationService =  this.scope.Resolve<IWebTesterTranslationService>();
+                var questionnaireAssemblyAccessor =  this.scope.Resolve<IQuestionnaireAssemblyAccessor>();
 
                 questionnaireStorage.StoreQuestionnaire(document.PublicKey, questionnaireVersion, document);
-                
-                webTesterTranslationService.Store(translationsList);
+
+                webTesterTranslationService.Store(translations.Select(x => new TranslationInstance
+                {
+                    Value = x.Value,
+                    TranslationId = x.TranslationId,
+                    QuestionnaireEntityId = x.QuestionnaireEntityId,
+                    QuestionnaireId = questionnaireIdentity,
+                    TranslationIndex = x.TranslationIndex,
+                    Type = x.Type
+
+                }).ToList());
+
                 ((WebTesterQuestionnaireAssemblyAccessor)questionnaireAssemblyAccessor).Assembly = assembly;
 
-                var questionnaireIdentity = new QuestionnaireIdentity(document.PublicKey, questionnaireVersion);
                 var questionnaire =
                     questionnaireStorage.GetQuestionnaire(
                         questionnaireIdentity, null);
-                var prototype = new InterviewExpressionStatePrototypeProvider(questionnaireAssemblyAccessor,
+                var prototype =  new InterviewExpressionStatePrototypeProvider(questionnaireAssemblyAccessor,
                     new InterviewExpressionStateUpgrader(),
-                    loggerProvider);
+                    this.scope.Resolve<ILoggerProvider>());
 
                 questionnaire.ExpressionStorageType = prototype.GetExpressionStorageType(questionnaireIdentity);
 
-                statefulInterview = ServiceLocator.Current.GetInstance<WebTesterStatefulInterview>();
+                statefulInterview =  this.scope.Resolve<WebTesterStatefulInterview>();
                 statefulInterview.SetId(interviewId);
             }
         }
@@ -98,6 +104,7 @@ namespace WB.UI.WebTester.Services.Implementation
             new Gauge(@"wb_app_domains_total", @"Count of appdomains per interview in memory");
 
         private readonly InterviewAssemblyLoadContext context;
+        private ILifetimeScope scope;
 
         public WebTesterStatefulInterview statefulInterview { get; private set; }
 
@@ -111,7 +118,7 @@ namespace WB.UI.WebTester.Services.Implementation
                     this.context.Dispose();
                 }
             }
-
+            this.scope.Dispose();
             AppDomainsAliveGauge.Dec();
         }
 
