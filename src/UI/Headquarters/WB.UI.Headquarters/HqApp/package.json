@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@google/markerclustererplus": "^2.1.11",
+    "@microsoft/signalr": "^3.0.0",
     "ag-grid-community": "^21.2.1",
     "ag-grid-vue": "^21.2.1",
     "append-query": "^2.1.0",
