@@ -20,14 +20,8 @@ namespace WB.Enumerator.Native.WebInterview
                 ConfigurationManager.AppSettings["MaxWebInterviewsCount"].ToInt(100));
 
             registry.BindInPerLifetimeScope<InterviewLifecycleEventHandler, InterviewLifecycleEventHandler>();
-            //registry.BindToConstant<IJavaScriptMinifier>(() => new SignalRHubMinifier());
+            registry.BindAsSingleton<IWebInterviewInvoker, WebInterviewInvoker>();
 
-            registry.BindToMethodInSingletonScope<IWebInterviewInvoker>(_ =>
-            {
-                var lazyClients = new Lazy<IHubClients>(_.Resolve<IHubClients>);
-
-                return new WebInterviewInvoker(lazyClients);
-            });
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
