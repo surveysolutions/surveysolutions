@@ -6,6 +6,7 @@ using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +18,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Logging;
 using WB.UI.Shared.Web.Versions;
+using WB.UI.WebTester.Hub;
 using WB.UI.WebTester.Services;
 
 namespace WB.UI.WebTester
@@ -41,6 +43,7 @@ namespace WB.UI.WebTester
             services.AddResponseCaching();
             services.AddResponseCompression();
             services.AddLogging();
+            services.AddSignalR();
 
             services.Configure<TesterConfiguration>(this.Configuration);
         }
@@ -125,6 +128,9 @@ namespace WB.UI.WebTester
                     controller = "WebTester",
                     action = "Interview"
                 });
+
+                routes.MapHub<WebInterviewHub>("interview",
+                    options => { options.Transports = HttpTransportType.WebSockets | HttpTransportType.LongPolling; });
 
                 routes.MapControllerRoute(
                     name: "default",
