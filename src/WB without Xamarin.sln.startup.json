@@ -49,10 +49,18 @@
         }
       },
       "Services.Export": {
+        "Projects": {
+          "WB.Services.Export.Host": {
+            "StartProject": true
+          }
+        }
+      },
+      "WebTester": {
           "Projects": {
-            "WB.Services.Export.Host": {
-              "StartProject": true
-            }
+            "WB.UI.Designer": {
+              "StartBrowserWithURL": "https://localhost:5002/questionnaire/details/6158dd074d64498f8a50e5e9828fda23"
+            },
+            "WB.UI.WebTester.Core":  {}
           } 
       } 
     }
