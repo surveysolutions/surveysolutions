@@ -23,7 +23,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         {
             this.containerBuilder = containerBuilder;
 
-            this.containerBuilder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
+            //this.containerBuilder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
 
             this.containerBuilder.RegisterType<AutofacServiceLocatorAdapter>().As<IServiceLocator>().InstancePerLifetimeScope();
 
@@ -37,7 +37,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
 
         public ContainerBuilder ContainerBuilder => containerBuilder;
 
-        public IContainer Container { get; set; }
+        public ILifetimeScope Container { get; set; }
 
         public virtual void Load<T>(params IModule<T>[] modules) where T: IIocRegistry
         {
@@ -65,7 +65,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
             return InitModules(restartOnInitiazationError);
         }
 
-        public Task InitCoreAsync(IContainer container, bool restartOnInitiazationError)
+        public Task InitCoreAsync(ILifetimeScope container, bool restartOnInitiazationError)
         {
             Container = container;
 
@@ -81,7 +81,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
             return initTask;
         }
 
-        private async Task InitModules(UnderConstructionInfo status, IContainer container,
+        private async Task InitModules(UnderConstructionInfo status, ILifetimeScope container,
             bool restartOnInitiazationError)
         {
             status.Run();

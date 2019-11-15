@@ -8,6 +8,6 @@ namespace WB.Core.Infrastructure.Modularity
         void Load<T>(params IModule<T>[] modules) where T : IIocRegistry;
 
         Task InitAsync(bool restartOnInitiazationError);
-        Task InitCoreAsync(IContainer container, bool restartOnInitiazationError);
+        Task InitCoreAsync(ILifetimeScope container, bool restartOnInitiazationError);
     }
 }
