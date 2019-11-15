@@ -17,14 +17,17 @@ namespace WB.UI.WebTester.Services.Implementation
     {
         private readonly string binFolderPath;
         private readonly ILogger<AppdomainsPerInterviewManager> logger;
+        private readonly Core.GenericSubdomains.Portable.Services.ILoggerProvider loggerProvider;
 
         private readonly ConcurrentDictionary<Guid, Lazy<RemoteInterviewContainer>> appDomains = new ConcurrentDictionary<Guid, Lazy<RemoteInterviewContainer>>();
 
         public AppdomainsPerInterviewManager(IWebHostEnvironment hosting,
-            ILogger<AppdomainsPerInterviewManager> logger)
+            ILogger<AppdomainsPerInterviewManager> logger,
+            Core.GenericSubdomains.Portable.Services.ILoggerProvider loggerProvider)
         {
             this.binFolderPath = Path.Combine(hosting.ContentRootPath, "bin");
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.loggerProvider = loggerProvider;
         }
         
         public void SetupForInterview(Guid interviewId, 
@@ -37,7 +40,7 @@ namespace WB.UI.WebTester.Services.Implementation
             {
                 logger.LogDebug($"[lazy]Creating remote interview: {interviewId} for q: {questionnaireDocument.Title}[{questionnaireDocument.PublicKey}]");
                 return new RemoteInterviewContainer(interviewId,
-                    binFolderPath, questionnaireDocument, translations, supportingAssembly);
+                    binFolderPath, questionnaireDocument, translations, loggerProvider, supportingAssembly);
             }));
         }
         

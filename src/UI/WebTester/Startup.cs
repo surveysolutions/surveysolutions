@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
-using System.IO;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
@@ -12,11 +10,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using NLog;
-using StackExchange.Exceptional.Stores;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.DependencyInjection;
 using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
@@ -29,6 +23,8 @@ namespace WB.UI.WebTester
 {
     public class Startup
     {
+        private AutofacKernel autofacKernel;
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -44,6 +40,7 @@ namespace WB.UI.WebTester
             services.AddSession();
             services.AddResponseCaching();
             services.AddResponseCompression();
+            services.AddLogging();
 
             services.Configure<TesterConfiguration>(this.Configuration);
         }
@@ -54,7 +51,7 @@ namespace WB.UI.WebTester
         // Don't build the container; that gets done for you by the factory.
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            var autofacKernel = new AutofacKernel(builder);
+            autofacKernel = new AutofacKernel(builder);
             autofacKernel.Load(
                 new NcqrsModule(),
                 new NLogLoggingModule(),
@@ -64,14 +61,12 @@ namespace WB.UI.WebTester
                 new WebInterviewModule(), // init registers denormalizer
                 new WebTesterModule(Configuration["DesignerAddress"]),
                 new ProductVersionModule(typeof(Startup).Assembly, shouldStoreVersionToDb: false)); // stores app version in database but does not do it for web tester
-            builder.RegisterInstance(autofacKernel).SingleInstance();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            AutofacKernel k = app.ApplicationServices.GetService<AutofacKernel>();
-            var initTask = k.InitCoreAsync((IContainer)app.ApplicationServices.GetAutofacRoot(), false);
+            var initTask = autofacKernel.InitCoreAsync(app.ApplicationServices.GetAutofacRoot(), false);
 
             if (!env.IsDevelopment())
             {

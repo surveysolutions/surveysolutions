@@ -5,10 +5,14 @@ using Main.Core.Documents;
 using Ncqrs.Eventing;
 using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Enumerator.Native.Questionnaire;
@@ -19,6 +23,8 @@ namespace WB.UI.WebTester.Services.Implementation
 {
     public class RemoteInterviewContainer : IDisposable
     {
+        private readonly ILoggerProvider loggerProvider;
+
         enum State { Running, Teardown }
 
         private State state = State.Running;
@@ -26,9 +32,11 @@ namespace WB.UI.WebTester.Services.Implementation
         public RemoteInterviewContainer(Guid interviewId, 
             string binFolderPath, 
             QuestionnaireDocument questionnaireDocument, 
-            List<TranslationDto> translations, 
+            List<TranslationDto> translations,
+            ILoggerProvider loggerProvider,
             string supportingAssembly)
         {
+            this.loggerProvider = loggerProvider;
             using (var assemblyStream = new MemoryStream(Convert.FromBase64String(supportingAssembly)))
             {
                 context = new InterviewAssemblyLoadContext(binFolderPath);
@@ -67,8 +75,19 @@ namespace WB.UI.WebTester.Services.Implementation
                 var questionnaireAssemblyAccessor = ServiceLocator.Current.GetInstance<IQuestionnaireAssemblyAccessor>();
 
                 questionnaireStorage.StoreQuestionnaire(document.PublicKey, questionnaireVersion, document);
+                
                 webTesterTranslationService.Store(translationsList);
                 ((WebTesterQuestionnaireAssemblyAccessor)questionnaireAssemblyAccessor).Assembly = assembly;
+
+                var questionnaireIdentity = new QuestionnaireIdentity(document.PublicKey, questionnaireVersion);
+                var questionnaire =
+                    questionnaireStorage.GetQuestionnaire(
+                        questionnaireIdentity, null);
+                var prototype = new InterviewExpressionStatePrototypeProvider(questionnaireAssemblyAccessor,
+                    new InterviewExpressionStateUpgrader(),
+                    loggerProvider);
+
+                questionnaire.ExpressionStorageType = prototype.GetExpressionStorageType(questionnaireIdentity);
 
                 statefulInterview = ServiceLocator.Current.GetInstance<WebTesterStatefulInterview>();
             }
@@ -78,6 +97,7 @@ namespace WB.UI.WebTester.Services.Implementation
             new Gauge(@"wb_app_domains_total", @"Count of appdomains per interview in memory");
 
         private readonly InterviewAssemblyLoadContext context;
+
         public WebTesterStatefulInterview statefulInterview { get; private set; }
 
         private void ReleaseUnmanagedResources()
