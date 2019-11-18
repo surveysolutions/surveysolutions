@@ -134,7 +134,8 @@ namespace WB.UI.WebTester.Controllers
                 {
                     await file.CopyToAsync(ms);
 
-                    this.imageProcessingService.ValidateImage(ms.ToArray());
+                    var fileContent = ms.ToArray();
+                    this.imageProcessingService.ResizeImage(fileContent, 1,1);
 
                     fileName = GetPictureFileName(question.VariableName, questionIdentity.RosterVector);
 
@@ -143,7 +144,7 @@ namespace WB.UI.WebTester.Controllers
                     this.mediaStorage.Store(new MultimediaFile
                     {
                         Filename = fileName,
-                        Data = ms.ToArray(),
+                        Data = fileContent,
                         MimeType = "image/jpg"
                     }, fileName, interview.Id);
 

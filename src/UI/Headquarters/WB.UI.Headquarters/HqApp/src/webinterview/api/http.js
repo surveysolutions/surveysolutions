@@ -79,7 +79,7 @@ const httpPlugin = {
 
                 await axios.post(url, fd, {
                     onUploadProgress(ev) {
-                        var entity = state.entityDetails[id];
+                        var entity = state.webinterview.entityDetails[id];
                         if (entity != undefined) {
                             dispatch("uploadProgress", {
                                 id,
@@ -90,7 +90,6 @@ const httpPlugin = {
                     }
                 })
             }
-
         }
 
         Object.defineProperty(Vue, "$http", {

@@ -10,7 +10,6 @@ namespace WB.UI.WebTester.Controllers
 {
     [ResponseCache(NoStore = true)]
     [Route("api/webinterview")]
-    //[CamelCase]
     public class InterviewDataController : Enumerator.Native.WebInterview.Controllers.InterviewDataController
     {
         public InterviewDataController(IQuestionnaireStorage questionnaireRepository, IStatefulInterviewRepository statefulInterviewRepository, 
