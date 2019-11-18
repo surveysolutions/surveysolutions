@@ -217,10 +217,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         {
             try
             {
-                InScopeExecutor.Current.Execute(sl =>
-                {
-                    sl.GetInstance<ICommandService>().Execute(command);
-                });
+                commandService.Execute(command);
             }
             catch (Exception e)
             {

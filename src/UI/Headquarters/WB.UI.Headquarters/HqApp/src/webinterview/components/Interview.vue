@@ -16,7 +16,9 @@
         },
 
         async beforeRouteUpdate(to, from, next) {
-            await this.$store.dispatch("changeSection", { from, to })
+            await this.$store.dispatch("changeSection", { 
+                from: from.params.sectionId,
+                to: to.params.sectionId })
             next()
         },
 
