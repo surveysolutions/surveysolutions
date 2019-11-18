@@ -78,7 +78,7 @@ namespace WB.UI.WebTester
             registry.BindAsSingleton<ICommandService, WebTesterCommandService>();
             registry.BindInPerLifetimeScope<IWebTesterTranslationService, WebTesterTranslationService>();
             registry.BindInPerLifetimeScope<IWebTesterTranslationStorage , WebTesterTranslationStorage>();
-            registry.BindInPerLifetimeScope<IQuestionnaireStorage , WebTesterQuestionnaireStorage>();
+            registry.BindAsSingleton<IQuestionnaireStorage , WebTesterQuestionnaireStorage>();
 
             registry.BindAsSingleton<IAppdomainsPerInterviewManager, AppdomainsPerInterviewManager>();
             registry.Bind<IVirtualPathService, VirtualPathService>();
