@@ -143,9 +143,6 @@
     <Reference Include="Iesi.Collections, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Iesi.Collections.4.0.4\lib\net461\Iesi.Collections.dll</HintPath>
     </Reference>
-    <Reference Include="ImageResizer, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\ImageResizer.4.2.5\lib\net45\ImageResizer.dll</HintPath>
-    </Reference>
     <Reference Include="Iteedee.ApkReader, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Iteedee.ApkReader.1.0.1\lib\Iteedee.ApkReader.dll</HintPath>
     </Reference>

@@ -1,6 +1,6 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using System.Web.Mvc;
-using ImageResizer.ExtensionMethods;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
@@ -47,10 +47,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
                 if (file != null && file.ContentLength > 0)
                 {
-                    this.tabletInformationService.SaveTabletInformation(
-                        content: file.InputStream.CopyToMemoryStream().ToArray(),
-                        androidId: @"manual-restore",
-                        user: this.userViewFactory.GetUser(new UserViewInputModel(this.authorizedUser.Id)));
+                    using (var ms = new MemoryStream())
+                    {
+                        file.InputStream.CopyTo(ms);
+
+                        this.tabletInformationService.SaveTabletInformation(
+                            content: ms.ToArray(),
+                            androidId: @"manual-restore",
+                            user: this.userViewFactory.GetUser(new UserViewInputModel(this.authorizedUser.Id)));
+                    }
                 }
             }
             

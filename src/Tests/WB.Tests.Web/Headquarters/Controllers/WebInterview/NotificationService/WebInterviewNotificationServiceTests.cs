@@ -119,5 +119,28 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.NotificationServi
                 It.Is<string[]>(m => m.Contains(question.ToString()))
             ), Times.Once);
         }
+
+        [Test]
+        public void should_refresh_section_when_cascading_with_showAsList()
+        {
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.Entity.SingleQuestion(Id.Identity1.Id),
+                Create.Entity.SingleQuestion(Id.Identity2.Id, cascadeFromQuestionId: Id.Identity1.Id, showAsList: true)
+            });
+
+            var localInterview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire, shouldBeInitialized: true);
+            var localHubMock = new Mock<IWebInterviewInvoker>();
+
+            var service = Web.Create.Service.WebInterviewNotificationService(Create.Storage.InterviewRepository(localInterview), 
+                Create.Storage.QuestionnaireStorage(questionnaire), localHubMock.Object);
+
+            // act
+            service.RefreshEntities(localInterview.Id, Id.Identity1, Id.Identity2);
+
+            // Assert
+            localHubMock.Verify(g => g.RefreshSection(localInterview.Id), Times.Once);
+            localHubMock.Verify(g => g.RefreshSectionState(localInterview.Id), Times.Never);
+        }
     }
 }
