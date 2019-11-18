@@ -1,11 +1,12 @@
 ﻿using System.Net.Http;
-using System.Web.Http;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.Infrastructure.Versions;
 
 namespace WB.UI.WebTester.Controllers
 {
-    [RoutePrefix("api")]
-    public class DiagnosticsController : ApiController
+    [Route("api")]
+    public class DiagnosticsController : Controller
     {
         private readonly IProductVersion productVersion;
 
@@ -16,12 +17,10 @@ namespace WB.UI.WebTester.Controllers
 
         [HttpGet]
         [Route("version")]
-        public HttpResponseMessage Version()
+        public IActionResult Version()
         {
-            var response = Request.CreateResponse(System.Net.HttpStatusCode.OK);
-            response.Content = new StringContent(productVersion.ToString());
-
-            return response;
+            var stringContent = new StringContent(productVersion.ToString());
+            return StatusCode(StatusCodes.Status200OK, stringContent);
         }
     }
 }
