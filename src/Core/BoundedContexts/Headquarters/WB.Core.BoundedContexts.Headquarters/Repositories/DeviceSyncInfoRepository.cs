@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using NHibernate.Hql.Ast.ANTLR.Tree;
 using WB.Core.BoundedContexts.Headquarters.InterviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 
@@ -37,7 +38,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
 
         public DeviceSyncInfo GetLastSuccessByInterviewerId(Guid interviewerId)
         {
-            var result = this.dbContext.DeviceSyncInfo.OrderByDescending(deviceInfo => deviceInfo.Id)
+            var result = this.dbContext.DeviceSyncInfo
+                .Include(x => x.Statistics)
+                .OrderByDescending(deviceInfo => deviceInfo.Id)
                 .FirstOrDefault(deviceInfo => deviceInfo.InterviewerId == interviewerId &&
                                               deviceInfo.StatisticsId != null
                                               && (deviceInfo.Statistics.DownloadedInterviewsCount > 0
@@ -110,32 +113,28 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
                 .Where(deviceInfo => deviceInfo.InterviewerId == interviewerId)
                 .Select(info => info.DeviceId).Distinct().Count();
 
-        public List<InterviewerDailyTrafficUsage> GetTrafficUsageForInterviewer(Guid interviewerId)
-        {
-            List<InterviewerDailyTrafficUsage> trafficUsageForUser = this.dbContext.DeviceSyncInfo
+        public List<InterviewerDailyTrafficUsage> GetTrafficUsageForInterviewer(Guid interviewerId) =>
+            this.dbContext.DeviceSyncInfo
                 .Where(deviceInfo => deviceInfo.InterviewerId == interviewerId)
-                .Join(this.dbContext.SyncStatistics, deviceInfo => deviceInfo.StatisticsId, statistics => statistics.Id, 
-                    (deviceInfo, statistics) => new
-                    {
-                        Date = deviceInfo.SyncDate,
-                        TotalUploadedBytes = statistics.TotalUploadedBytes,
-                        TotalDownloadedBytes = statistics.TotalDownloadedBytes
-                    })
-                .GroupBy(x => x.Date)
+                .GroupBy(x => x.SyncDate.Date, x => new
+                {
+                    Date = x.SyncDate,
+                    TotalUploadedBytes = x.Statistics == null ? 0 : x.Statistics.TotalUploadedBytes,
+                    TotalDownloadedBytes = x.Statistics == null ? 0 : x.Statistics.TotalDownloadedBytes
+                })
                 .OrderByDescending(x => x.Key)
                 .Take(30)
+                .ToList()
                 .OrderBy(x => x.Key)
                 .Select(x => new InterviewerDailyTrafficUsage
                 {
                     DownloadedBytes = x.Sum(s => s.TotalDownloadedBytes),
-                    UploadedBytes =  x.Sum(s => s.TotalUploadedBytes),
+                    UploadedBytes = x.Sum(s => s.TotalUploadedBytes),
                     Year = x.Key.Year,
                     Month = x.Key.Month,
                     Day = x.Key.Day
                 })
                 .ToList();
-            return trafficUsageForUser;
-        }
 
         public async Task<long> GetTotalTrafficUsageForInterviewer(Guid interviewerId)
         {

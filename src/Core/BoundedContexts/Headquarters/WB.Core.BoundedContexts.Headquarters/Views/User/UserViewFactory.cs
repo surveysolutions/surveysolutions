@@ -68,7 +68,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                     PublicKey = user.Id,
                     UserName = user.UserName,
                     Email = user.Email,
-                    PersonName = user.UserName,
+                    PersonName = user.FullName,
                     PhoneNumber = user.PhoneNumber,
                     IsArchived = user.IsArchived,
                     IsLockedByHQ = user.IsLockedByHeadquaters,
