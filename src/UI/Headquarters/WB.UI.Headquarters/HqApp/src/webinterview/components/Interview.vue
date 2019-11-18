@@ -16,17 +16,19 @@
         },
 
         async beforeRouteUpdate(to, from, next) {
-            await this.$store.dispatch("changeSection", { 
-                from: from.params.sectionId,
-                to: to.params.sectionId })
+            await this.changeSection(to.params.sectionId)
             next()
         },
 
         methods: {
+            changeSection(to, from) {
+                return this.$store.dispatch("changeSection", { to })
+            },
             connected() {
                 var interviewId = this.$route.params.interviewId
                 this.$store.dispatch("getLanguageInfo", interviewId);
                 this.$store.dispatch("loadInterview", interviewId);
+                this.changeSection(this.$route.params.sectionId);
             }
         }
     }
