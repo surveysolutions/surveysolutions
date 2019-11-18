@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo
 {
@@ -48,5 +49,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         public bool? HideIfDisabled { get; set; }
 
         public List<ScenarioView> Scenarios { get; set; }
+        public List<CategoriesView> Categories { get; set; }
     }
 }

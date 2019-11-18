@@ -30,6 +30,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersionService;
         private readonly ITopologicalSorter<Guid> topologicalSorter;
         private readonly IExpressionsPlayOrderProvider graphProvider;
+        private readonly ICategoriesService categoriesService;
 
 
         public QuestionnaireVerifier(IExpressionProcessor expressionProcessor, 
@@ -46,7 +47,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             IQuestionnaireTranslator questionnaireTranslator, 
             IQuestionnaireCompilationVersionService questionnaireCompilationVersionService, 
             IDynamicCompilerSettingsProvider compilerSettings,
-            IExpressionsPlayOrderProvider graphProvider)
+            IExpressionsPlayOrderProvider graphProvider,
+            ICategoriesService categoriesService)
         {
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.engineVersionService = engineVersionService;
@@ -55,6 +57,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             this.questionnaireCompilationVersionService = questionnaireCompilationVersionService;
             this.topologicalSorter = topologicalSorter;
             this.graphProvider = graphProvider;
+            this.categoriesService = categoriesService;
 
             verifiers = new IPartialVerifier[]
             {
@@ -67,7 +70,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 new QuestionnaireVerifications(substitutionService, keywordsProvider), 
                 new StaticTextVerifications(), 
                 new TranslationVerifications(translationService), 
-                new VariableVerifications(substitutionService)
+                new VariableVerifications(substitutionService),
+                new CategoriesVerifications(categoriesService)
             };
         }
        
