@@ -11,6 +11,8 @@ namespace WB.Enumerator.Native.WebInterview
 {
     public class WebInterview : Hub
     {
+        private const string SectionId = "sectionId";
+
         private readonly IPipelineModule[] hubPipelineModules;
 
         protected string CallerInterviewId
@@ -46,19 +48,10 @@ namespace WB.Enumerator.Native.WebInterview
                 await pipelineModule.OnDisconnected(this, exception);
             }
             
-            await UnregisterClient();
+            await UnRegisterClient();
 
             await base.OnDisconnectedAsync(exception);
         }
-
-        /*public override async Task OnReconnected()
-        {
-            foreach (var pipelineModule in hubPipelineModules)
-            {
-                await pipelineModule.OnReconnected(this);
-            }
-            await base.OnReconnected();
-        }*/
 
         private async Task RegisterClient()
         {
@@ -66,7 +59,7 @@ namespace WB.Enumerator.Native.WebInterview
 
             await Groups.AddToGroupAsync(Context.ConnectionId, interviewId);
 
-            var isReview = Context.Items[@"review"] as bool?;//.ToBool(false);
+            var isReview = Context.Items[@"review"] as bool?;
 
             if (isReview == false)
             {
@@ -74,21 +67,20 @@ namespace WB.Enumerator.Native.WebInterview
             }
         }
 
-        private async Task UnregisterClient()
+        private async Task UnRegisterClient()
         {
             var interviewId = CallerInterviewId;
-            var sectionId = this.Context.Items["sectionId"] as string;
-            //var sectionId = Clients.CallerState.sectionId as string;
+            var sectionId = this.Context.Items[SectionId] as string;
 
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, GetGroupNameBySectionIdentity(sectionId, interviewId));
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, interviewId);
         }
 
-        public async Task ChangeSection(string oldSection)
+        
+        public async Task ChangeSection(string sectionId)
         {
             var interviewId = CallerInterviewId;
-            var sectionId = this.Context.Items["sectionId"] as string;
-            //var sectionId = Clients.CallerState.sectionId as string;
+            var oldSection = this.Context.Items[SectionId] as string;
 
             if (interviewId != null)
             {

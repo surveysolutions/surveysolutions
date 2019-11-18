@@ -14,8 +14,8 @@ export default {
         const api = {
             get: this.apiGet,
 
-            changeSection(from, to) {
-                connection.send("changeSection", from, to)
+            changeSection(to) {
+                return connection.send("changeSection", to)
             }
         };
 
