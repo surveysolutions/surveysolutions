@@ -30,12 +30,14 @@ namespace WB.UI.WebTester.Controllers
 
         [HttpGet]
         [Route("getTopFilteredOptionsForQuestionWithExclude")]
-        public override DropdownItem[] GetTopFilteredOptionsForQuestion(Guid interviewId, string id, string filter, int count, int[] excludedOptionIds)
+        public override DropdownItem[] GetTopFilteredOptionsForQuestion(Guid interviewId, string id, string filter, int count,
+            [FromQuery(Name = "excludedOptionIds[]")] int[] excludedOptionIds)
             => base.GetTopFilteredOptionsForQuestion(interviewId, id, filter, count, excludedOptionIds);
 
         [HttpGet]
         [Route("getBreadcrumbs")]
-        public override BreadcrumbInfo GetBreadcrumbs(Guid interviewId, string sectionId = null) => base.GetBreadcrumbs(interviewId, sectionId);
+        public override BreadcrumbInfo GetBreadcrumbs(Guid interviewId, string sectionId = null) 
+            => base.GetBreadcrumbs(interviewId, sectionId);
 
         [HttpGet]
         [Route("getCompleteInfo")]
@@ -47,7 +49,7 @@ namespace WB.UI.WebTester.Controllers
 
         [HttpGet]
         [Route("getEntitiesDetails")]
-        public override InterviewEntity[] GetEntitiesDetails(Guid interviewId, [FromQuery] string[] ids, string sectionId = null) => base.GetEntitiesDetails(interviewId, ids, sectionId);
+        public override InterviewEntity[] GetEntitiesDetails(Guid interviewId, [FromQuery(Name = "ids[]")] string[] ids, string sectionId = null) => base.GetEntitiesDetails(interviewId, ids, sectionId);
 
         [HttpGet]
         [Route("getFullSectionInfo")]
@@ -84,7 +86,8 @@ namespace WB.UI.WebTester.Controllers
 
         [HttpGet]
         [Route("getSidebarChildSectionsOf")]
-        public override Sidebar GetSidebarChildSectionsOf(Guid interviewId, [FromQuery] string[] ids, string sectionId = null) => base.GetSidebarChildSectionsOf(interviewId, ids, sectionId);
+        public override Sidebar GetSidebarChildSectionsOf(Guid interviewId, [FromQuery(Name = "ids[]")] string[] ids, string sectionId = null) 
+            => base.GetSidebarChildSectionsOf(interviewId, ids, sectionId);
 
         [HttpGet]
         [Route("getInterviewDetails")]
