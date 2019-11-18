@@ -103,6 +103,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
         private readonly ITranslationsService translationService;
+        private readonly ICategoriesService categoriesService;
         private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
         private int affectedByReplaceEntries;
 
@@ -113,13 +114,15 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             ILookupTableService lookupTableService, 
             IAttachmentService attachmentService,
             ITranslationsService translationService,
-            IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService)
+            IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService,
+            ICategoriesService categoriesService)
         {
             this.clock = clock;
             this.lookupTableService = lookupTableService;
             this.attachmentService = attachmentService;
             this.translationService = translationService;
             this.questionnaireHistoryVersionsService = questionnaireHistoryVersionsService;
+            this.categoriesService = categoriesService;
         }
 
         #region Questionnaire command handlers
@@ -183,6 +186,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 }
 
                 translation.Id = newTranslationId;
+            }
+
+            foreach (var categories in clonedDocument.Categories)
+            {
+                var newCategoriesId = Guid.NewGuid();
+                this.categoriesService.CloneCategories(document.PublicKey, categories.Id, clonedDocument.PublicKey, newCategoriesId);
+                categories.Id = newCategoriesId;
             }
 
             this.innerDocument = clonedDocument;
@@ -536,6 +546,33 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfMacroIsAbsent(command.MacroId);
 
             innerDocument.Macros.Remove(command.MacroId);
+        }
+
+        #endregion
+
+        #region Categories command handlers
+
+        public void AddOrUpdateCategories(AddOrUpdateCategories command)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+
+            var categories = new Categories()
+            {
+                Id = command.CategoriesId,
+                Name = command.Name,
+            };
+            innerDocument.Categories.RemoveAll(x => x.Id == command.CategoriesId);
+
+            if (command.OldCategoriesId.HasValue)
+                innerDocument.Categories.RemoveAll(x => x.Id == command.OldCategoriesId.Value);
+
+            innerDocument.Categories.Add(categories);
+        }
+
+        public void DeleteCategories(DeleteCategories command)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+            this.innerDocument.Categories.RemoveAll(x => x.Id == command.CategoriesId);
         }
 
         #endregion

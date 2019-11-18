@@ -602,7 +602,8 @@ namespace WB.Tests.Unit.Designer
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IAttachmentService>(),
                 Mock.Of<ITranslationsService>(),
-                historyVersionsService ?? Mock.Of<IQuestionnaireHistoryVersionsService>());
+                historyVersionsService ?? Mock.Of<IQuestionnaireHistoryVersionsService>(),
+                Mock.Of<ICategoriesService>());
         }
 
 
@@ -1444,7 +1445,8 @@ namespace WB.Tests.Unit.Designer
             ILookupTableService lookupTableService = null,
             IAttachmentService attachmentService = null,
             ITopologicalSorter<Guid> topologicalSorter = null,
-            IQuestionnaireTranslator questionnaireTranslator = null)
+            IQuestionnaireTranslator questionnaireTranslator = null,
+            ICategoriesService categoriesService = null)
         {
             var fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
             fileSystemAccessorMock.Setup(x => x.MakeStataCompatibleFileName(Moq.It.IsAny<string>())).Returns<string>(s => s);
@@ -1484,7 +1486,8 @@ namespace WB.Tests.Unit.Designer
                 questionnaireTranslator ?? Mock.Of<IQuestionnaireTranslator>(),
                 Mock.Of<IQuestionnaireCompilationVersionService>(), 
                 Mock.Of<IDynamicCompilerSettingsProvider>(x => x.GetAssembliesToReference() == DynamicCompilerSettingsProvider().GetAssembliesToReference()),
-                expressionsPlayOrderProvider);
+                expressionsPlayOrderProvider,
+                categoriesService ?? Mock.Of<ICategoriesService>());
         }
 
         public static IQuestionTypeToCSharpTypeMapper QuestionTypeToCSharpTypeMapper()
