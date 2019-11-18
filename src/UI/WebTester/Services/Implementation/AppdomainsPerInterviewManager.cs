@@ -1,5 +1,4 @@
-﻿using Main.Core.Documents;
-using Ncqrs.Eventing;
+﻿using Ncqrs.Eventing;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -10,14 +9,13 @@ using Microsoft.Extensions.Logging;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
-using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.UI.WebTester.Services.Implementation
 {
     public class AppdomainsPerInterviewManager : IAppdomainsPerInterviewManager
     {
         private readonly string binFolderPath;
-        private readonly IWebHostEnvironment hosting;
         private readonly ILogger<AppdomainsPerInterviewManager> logger;
         private readonly ILifetimeScope rootScope;
 
@@ -29,26 +27,23 @@ namespace WB.UI.WebTester.Services.Implementation
         {
 
             this.binFolderPath = Path.Combine(hosting.ContentRootPath, "bin");
-            this.hosting = hosting;
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.rootScope = rootScope;
         }
         
-        public void SetupForInterview(Guid interviewId, 
-            QuestionnaireDocument questionnaireDocument,
-            List<TranslationDto> translations,
+        public void SetupForInterview(Guid interviewId,
+            QuestionnaireIdentity questionnaireIdentity,
             string supportingAssembly)
         {
-            logger.LogDebug($"[SetupForInterview]Creating remote interview: {interviewId} for q: {questionnaireDocument.Title}[{questionnaireDocument.PublicKey}]");
+            logger.LogDebug($"[SetupForInterview]Creating remote interview: {interviewId} for q: [{questionnaireIdentity}]");
             appDomains.GetOrAdd(interviewId, new Lazy<RemoteInterviewContainer>(() =>
             {
-                logger.LogDebug($"[lazy]Creating remote interview: {interviewId} for q: {questionnaireDocument.Title}[{questionnaireDocument.PublicKey}]");
+                logger.LogDebug($"[lazy]Creating remote interview: {interviewId} for q: {questionnaireIdentity}");
                 return new RemoteInterviewContainer(
                     rootScope,
                     interviewId,
                     binFolderPath, 
-                    questionnaireDocument, 
-                    translations, 
+                    questionnaireIdentity, 
                     supportingAssembly);
             }));
         }
