@@ -364,7 +364,7 @@ export default {
         Vue.$api.stop()
     },
 
-    changeSection(ctx, { from , to}) {
-        return Vue.$api.changeSection(from, to)
+    changeSection(ctx, { to }) {
+        return Vue.$api.changeSection(to)
     }
 }
