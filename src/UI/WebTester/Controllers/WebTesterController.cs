@@ -11,6 +11,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Questionnaire.Api;
+using WB.UI.WebTester.Infrastructure;
 using WB.UI.WebTester.Resources;
 using WB.UI.WebTester.Services;
 
@@ -118,7 +119,10 @@ namespace WB.UI.WebTester.Controllers
                 return null;
             }
 
-            var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+            WebTesterStatefulInterview webTesterInterview = (WebTesterStatefulInterview) interview;
+
+            var questionnaire =
+                webTesterInterview.Questionnaire;
 
             var designerUrl = testerConfig.Value.DesignerAddress;
             var reloadQuestionnaireUrl =

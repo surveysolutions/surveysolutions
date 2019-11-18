@@ -76,9 +76,9 @@ namespace WB.UI.WebTester
             registry.BindAsSingleton<IEventSourcedAggregateRootRepository, IAggregateRootCacheFiller, IAggregateRootCacheCleaner, WebTesterAggregateRootRepository>();
             registry.BindAsSingleton<IWebInterviewNotificationService, WebInterviewNotificationService>();
             registry.BindAsSingleton<ICommandService, WebTesterCommandService>();
-            registry.BindAsSingleton<IWebTesterTranslationService, WebTesterTranslationService>();
-            registry.BindAsSingleton<IWebTesterTranslationStorage , WebTesterTranslationStorage>();
-            registry.BindAsSingleton<IQuestionnaireStorage , WebTesterQuestionnaireStorage>();
+            registry.BindInPerLifetimeScope<IWebTesterTranslationService, WebTesterTranslationService>();
+            registry.BindInPerLifetimeScope<IWebTesterTranslationStorage , WebTesterTranslationStorage>();
+            registry.BindInPerLifetimeScope<IQuestionnaireStorage , WebTesterQuestionnaireStorage>();
 
             registry.BindAsSingleton<IAppdomainsPerInterviewManager, AppdomainsPerInterviewManager>();
             registry.Bind<IVirtualPathService, VirtualPathService>();
@@ -165,7 +165,7 @@ namespace WB.UI.WebTester
             registry.Bind<ISubstitutionService, SubstitutionService>();
             registry.Bind<IInterviewTreeBuilder, InterviewTreeBuilder>();
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
-            registry.Bind<IQuestionnaireAssemblyAccessor, WebTesterQuestionnaireAssemblyAccessor>();
+            registry.BindInPerLifetimeScope<IQuestionnaireAssemblyAccessor, WebTesterQuestionnaireAssemblyAccessor>();
             registry.Bind<IQuestionOptionsRepository, QuestionnaireQuestionOptionsRepository>();
             registry.BindAsSingleton<IInterviewExpressionStateUpgrader, InterviewExpressionStateUpgrader>();
             registry.Bind<IVariableToUIStringService, VariableToUIStringService>();
