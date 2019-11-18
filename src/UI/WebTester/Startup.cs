@@ -46,6 +46,7 @@ namespace WB.UI.WebTester
             services.AddSignalR()
                 .AddNewtonsoftJsonProtocol();
             services.Configure<TesterConfiguration>(this.Configuration);
+            services.AddHttpContextAccessor();
         }
 
         // ConfigureContainer is where you can register things directly
