@@ -8,6 +8,12 @@ const http = {
             async get(actionName, params) {
                 if (config.splashScreen) return
 
+                if(params == null) {
+                    params = {}
+                }
+
+                params.interviewId = store.state.route.params.interviewId
+
                 store.dispatch("fetchProgress", 1)
 
                 try {
@@ -30,9 +36,9 @@ const http = {
 
             async post(actionName, params) {
                 store.dispatch("fetchProgress", 1)
+                const interviewId = store.state.route.params.interviewId
 
                 try {
-                    var interviewId = params.interviewId
                     delete params.interviewId
 
                     var headers = store.getters.isReviewMode === true ? { review: true } : {}
@@ -54,10 +60,11 @@ const http = {
                     store.dispatch("fetch", { id })
                 }
 
+                const interviewId = store.state.route.params.interviewId
                 store.dispatch("fetchProgress", 1)
 
                 try {
-                    var interviewId = params.interviewId
+                    
                     delete params.interviewId
 
                     var headers = store.getters.isReviewMode === true ? { review: true } : {}
