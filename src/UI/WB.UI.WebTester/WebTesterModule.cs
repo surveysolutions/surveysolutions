@@ -4,8 +4,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
 using Main.Core.Documents;
-using Microsoft.AspNet.SignalR.Hubs;
-using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
 using Refit;
@@ -22,6 +20,7 @@ using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -40,10 +39,9 @@ using WB.Enumerator.Native.WebInterview.Models;
 using WB.Enumerator.Native.WebInterview.Pipeline;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.Infrastructure.Native.Storage;
-using WB.UI.Shared.Web.Implementation.Services;
 using WB.UI.Shared.Web.Services;
-using WB.UI.WebTester.Hub;
 using WB.UI.WebTester.Infrastructure;
+using WB.UI.WebTester.Infrastructure.AppDomainSpecific;
 using WB.UI.WebTester.Services;
 using WB.UI.WebTester.Services.Implementation;
 
@@ -51,10 +49,11 @@ namespace WB.UI.WebTester
 {
     public class WebTesterModule : IModule
     {
-        private static string DesignerAddress()
+        private readonly string designerAddress;
+
+        public WebTesterModule(string designerAddress)
         {
-            var baseAddress = ConfigurationSource.Configuration["DesignerAddress"];
-            return $"{baseAddress.TrimEnd('/')}";
+            this.designerAddress = designerAddress.TrimEnd('/');
         }
 
         public void Load(IIocRegistry registry)
@@ -76,20 +75,16 @@ namespace WB.UI.WebTester
             registry.BindAsSingleton<IEventSourcedAggregateRootRepository, IAggregateRootCacheFiller, IAggregateRootCacheCleaner, WebTesterAggregateRootRepository>();
             registry.BindAsSingleton<IWebInterviewNotificationService, WebInterviewNotificationService>();
             registry.BindAsSingleton<ICommandService, WebTesterCommandService>();
+            registry.BindInPerLifetimeScope<IWebTesterTranslationService, WebTesterTranslationService>();
+            registry.BindInPerLifetimeScope<IWebTesterTranslationStorage , WebTesterTranslationStorage>();
+            registry.BindAsSingleton<IQuestionnaireStorage , WebTesterQuestionnaireStorage>();
 
-            //var binPath = Path.GetFullPath(Path.Combine(HttpRuntime.CodegenDir, ".." + Path.DirectorySeparatorChar + ".."));
-            var binPath = System.Web.Hosting.HostingEnvironment.MapPath("~/bin");
-            registry.BindAsSingletonWithConstructorArgument<IAppdomainsPerInterviewManager, AppdomainsPerInterviewManager>("binFolderPath", binPath);
-            registry.Bind<IImageProcessingService, ImageProcessingService>();
+            registry.BindAsSingleton<IAppdomainsPerInterviewManager, AppdomainsPerInterviewManager>();
             registry.Bind<IVirtualPathService, VirtualPathService>();
             registry.Bind<ISerializer, NewtonJsonSerializer>();
             registry.BindAsSingleton<IScenarioSerializer, ScenarioSerializer>();
 
             registry.BindToMethod<IServiceLocator>(() => ServiceLocator.Current);
-
-            #if DEBUG
-
-            #endif
 
             registry.BindToMethod(() => Refit.RestService.For<IDesignerWebTesterApi>(
                 new HttpClient(
@@ -103,7 +98,7 @@ namespace WB.UI.WebTester
                     )
                 {
                     MaxResponseContentBufferSize = 2_000_000_000,
-                    BaseAddress = new Uri(DesignerAddress()),
+                    BaseAddress = new Uri(designerAddress),
                     Timeout = TimeSpan.FromMinutes(3)
                 },
                 new RefitSettings
@@ -140,7 +135,7 @@ namespace WB.UI.WebTester
                     {
                         typeof(Startup).Assembly,
                         typeof(WebInterviewModule).Assembly,
-                        typeof(WebInterviewHub).Assembly,
+                        typeof(WebInterview).Assembly,
                         typeof(CategoricalOption).Assembly
                     }
                 }
@@ -156,7 +151,6 @@ namespace WB.UI.WebTester
             registry.BindAsSingleton<IPlainKeyValueStorage<QuestionnaireDocument>, InMemoryKeyValueStorage<QuestionnaireDocument>>();
             registry.BindAsSingleton(typeof(ICacheStorage<,>), typeof(InMemoryCacheStorage<,>));
             registry.BindAsSingleton(typeof(IPlainStorageAccessor<>), typeof(InMemoryPlainStorageAccessor<>));
-            registry.BindAsSingleton<IQuestionnaireStorage, QuestionnaireStorage>();
             registry.Bind<ITranslationStorage, TranslationStorage>();
             registry.BindAsSingleton<IQuestionnaireImportService, QuestionnaireImportService>();
 
@@ -170,21 +164,45 @@ namespace WB.UI.WebTester
             registry.Bind<ISubstitutionService, SubstitutionService>();
             registry.Bind<IInterviewTreeBuilder, InterviewTreeBuilder>();
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
-            registry.Bind<IQuestionnaireAssemblyAccessor, WebTesterQuestionnaireAssemblyAccessor>();
+            registry.BindInPerLifetimeScope<IQuestionnaireAssemblyAccessor, WebTesterQuestionnaireAssemblyAccessor>();
             registry.Bind<IQuestionOptionsRepository, QuestionnaireQuestionOptionsRepository>();
             registry.BindAsSingleton<IInterviewExpressionStateUpgrader, InterviewExpressionStateUpgrader>();
             registry.Bind<IVariableToUIStringService, VariableToUIStringService>();
         }
-        
-        public static Type[] HubPipelineModules => new[]
-        {
-            typeof(WebInterviewVersionChecker),
-            //typeof(WebInterviewStateManager),
-            typeof(WebInterviewConnectionsCounter)
-        };
+
+        public static Type[] HubPipelineModules => Array.Empty<Type>();//[]
+        //{
+        //    //typeof(WebInterviewVersionChecker),
+        //    //typeof(WebInterviewStateManager),
+        //    //typeof(WebInterviewConnectionsCounter)
+        //};
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
+             CommandRegistry
+               .Setup<StatefulInterview>()
+               .InitializesWith<CreateInterview>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterview(command))
+               .Handles<AnswerDateTimeQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerDateTimeQuestion(command.UserId, command.QuestionId, command.RosterVector, command.OriginDate, command.Answer))
+               .Handles<AnswerGeoLocationQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerGeoLocationQuestion(command.UserId, command.QuestionId, command.RosterVector, command.OriginDate, command.Latitude, command.Longitude, command.Accuracy, command.Altitude, command.Timestamp))
+               .Handles<AnswerMultipleOptionsLinkedQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerMultipleOptionsLinkedQuestion(command.UserId, command.QuestionId, command.RosterVector, command.OriginDate, command.SelectedRosterVectors))
+               .Handles<AnswerMultipleOptionsQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerMultipleOptionsQuestion(command.UserId, command.QuestionId, command.RosterVector, command.OriginDate, command.SelectedValues))
+               .Handles<AnswerYesNoQuestion>(command => command.InterviewId, aggregate => aggregate.AnswerYesNoQuestion)
+               .Handles<AnswerNumericIntegerQuestionCommand>(command => command.InterviewId, aggregate => aggregate.AnswerNumericIntegerQuestion)
+               .Handles<AnswerNumericRealQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerNumericRealQuestion(command.UserId, command.QuestionId, command.RosterVector, command.OriginDate, command.Answer))
+               .Handles<AnswerPictureQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerPictureQuestion(command.UserId, command.QuestionId, command.RosterVector, command.OriginDate, command.PictureFileName))
+               .Handles<AnswerQRBarcodeQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerQRBarcodeQuestion(command.UserId, command.QuestionId, command.RosterVector, command.OriginDate, command.Answer))
+               .Handles<AnswerSingleOptionLinkedQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerSingleOptionLinkedQuestion(command.UserId, command.QuestionId, command.RosterVector, command.OriginDate, command.SelectedRosterVector))
+               .Handles<AnswerSingleOptionQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerSingleOptionQuestion(command.UserId, command.QuestionId, command.RosterVector, command.OriginDate, command.SelectedValue))
+               .Handles<AnswerTextListQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerTextListQuestion(command.UserId, command.QuestionId, command.RosterVector, command.OriginDate, command.Answers))
+               .Handles<AnswerTextQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerTextQuestion(command.UserId, command.QuestionId, command.RosterVector, command.OriginDate, command.Answer))
+               .Handles<AnswerAudioQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerAudioQuestion(command.UserId, command.QuestionId, command.RosterVector, command.OriginDate, command.FileName, command.Length))
+               .Handles<RemoveAnswerCommand>(command => command.InterviewId, (command, aggregate) => aggregate.RemoveAnswer(command.QuestionId, command.RosterVector, command.UserId, command.OriginDate))
+               .Handles<AnswerGeographyQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerAreaQuestion(command))
+               .Handles<CommentAnswerCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CommentAnswer(command.UserId, command.QuestionId, command.RosterVector, command.OriginDate, command.Comment))
+               .Handles<CompleteInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.Complete(command.UserId, command.Comment, command.OriginDate))
+               .Handles<SwitchTranslation>(command => command.InterviewId, aggregate => aggregate.SwitchTranslation);
+
+
             return Task.CompletedTask;
         }
     }

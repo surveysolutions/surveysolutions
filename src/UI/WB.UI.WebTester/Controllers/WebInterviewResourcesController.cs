@@ -3,8 +3,8 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Web.Http;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Modules;
@@ -13,8 +13,8 @@ using WB.UI.WebTester.Services;
 
 namespace WB.UI.WebTester.Controllers
 {
-    [RoutePrefix("api")]
-    public class WebInterviewResourcesController : ApiController
+    [Route("api")]
+    public class WebInterviewResourcesController : Controller
     {
         private readonly ICacheStorage<QuestionnaireAttachment, string> attachmentStorage;
         private readonly IImageProcessingService imageProcessingService;
@@ -35,24 +35,24 @@ namespace WB.UI.WebTester.Controllers
 
         [HttpHead]
         [ActionName("Content")]
-        public HttpResponseMessage ContentHead([FromUri] string interviewId, [FromUri] string contentId)
+        public HttpResponseMessage ContentHead([FromQuery] string interviewId, [FromQuery] string contentId)
         {
             var attachment = attachmentStorage.Get(contentId, Guid.Parse(interviewId));
             if (attachment == null)
             {
-                return this.Request.CreateResponse(HttpStatusCode.NoContent);
+                return new HttpResponseMessage(HttpStatusCode.NoContent);
             }
 
             return new ProgressiveDownload(this.Request).HeaderInfoMessage(attachment.Content.Content.LongLength, attachment.Content.ContentType);
         }
 
         [HttpGet]
-        public HttpResponseMessage Content([FromUri] string interviewId, [FromUri] string contentId)
+        public HttpResponseMessage Content([FromQuery] string interviewId, [FromQuery] string contentId)
         {
             var attachment = attachmentStorage.Get(contentId, Guid.Parse(interviewId));
             if (attachment == null)
             {
-                return this.Request.CreateResponse(HttpStatusCode.NoContent);
+                return new HttpResponseMessage(HttpStatusCode.NotFound);
             }
 
             if (attachment.Content.IsImage())
@@ -70,15 +70,15 @@ namespace WB.UI.WebTester.Controllers
         }
 
         [HttpGet]
-        public HttpResponseMessage Image([FromUri] string interviewId, [FromUri] string questionId,
-            [FromUri] string filename)
+        public HttpResponseMessage Image([FromQuery] string interviewId, [FromQuery] string questionId,
+            [FromQuery] string filename)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId);
             
             var file = this.mediaStorage.Get(filename, interview.Id);
 
             if ((file?.Data?.Length ?? 0) == 0)
-                return this.Request.CreateResponse(HttpStatusCode.NoContent);
+                return new HttpResponseMessage(HttpStatusCode.NoContent);
 
             var fullSize = GetQueryStringValue("fullSize") != null;
             var resultFile = fullSize
@@ -91,7 +91,7 @@ namespace WB.UI.WebTester.Controllers
 
         private string GetQueryStringValue(string key)
         {
-            return (this.Request.GetQueryNameValuePairs().Where(query => query.Key == key).Select(query => query.Value))
+            return (this.Request.Query.Where(query => query.Key == key).Select(query => query.Value))
                 .FirstOrDefault();
         }
     }

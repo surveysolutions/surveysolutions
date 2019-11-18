@@ -9,11 +9,8 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Services;
-using WB.Tests.Abc;
 
-using WB.UI.WebTester.Infrastructure;
-
-namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.NotificationService
+namespace WB.Tests.Web.Headquarters.Controllers.WebInterview.NotificationService
 {
     public class LazyNotificationServiceTests
     {
@@ -36,7 +33,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.NotificationServi
                 .Returns(new WebInterviewNotificationService(this.statefulRepoMock.Object, Mock.Of<IQuestionnaireStorage>(), Mock.Of<IWebInterviewInvoker>()));
 
 
-            var inScopeExecutor = Create.Service.InScopeExecutor(serviceLocatorMock.Object);
+            var inScopeExecutor = Abc.Create.Service.InScopeExecutor(serviceLocatorMock.Object);
 
             InScopeExecutor.Init(inScopeExecutor);
         }

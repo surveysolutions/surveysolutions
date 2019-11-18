@@ -1,9 +1,0 @@
-﻿@{
-    Layout = "InterviewLayout.cshtml";
-}
-@section scripts
-{
-<script>
-    window.CONFIG.hqLink = '@Url.Action("Interview", "WebTester", new {id = Model.Id})';
-</script>
-}
