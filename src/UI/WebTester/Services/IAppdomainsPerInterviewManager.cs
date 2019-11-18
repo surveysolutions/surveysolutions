@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using Main.Core.Documents;
 using Ncqrs.Eventing;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.UI.WebTester.Services
 {
     public interface IAppdomainsPerInterviewManager
     {
-        void SetupForInterview(Guid interviewId, 
-            QuestionnaireDocument questionnaireDocument,
-            List<TranslationDto> translations,
+        void SetupForInterview(Guid interviewId,
+            QuestionnaireIdentity questionnaireIdentity,
             string supportingAssembly);
 
         void TearDown(Guid interviewId);

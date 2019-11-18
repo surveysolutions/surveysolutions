@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Autofac;
-using Main.Core.Documents;
 using Ncqrs.Eventing;
 using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -15,7 +14,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Enumerator.Native.Questionnaire;
 using WB.Infrastructure.Native.Monitoring;
 using WB.UI.WebTester.Infrastructure;
@@ -28,12 +26,10 @@ namespace WB.UI.WebTester.Services.Implementation
 
         private State state = State.Running;
 
-        public RemoteInterviewContainer(
-            ILifetimeScope rootScope,
-            Guid interviewId, 
-            string binFolderPath, 
-            QuestionnaireDocument questionnaireDocument, 
-            List<TranslationDto> translations,
+        public RemoteInterviewContainer(ILifetimeScope rootScope,
+            Guid interviewId,
+            string binFolderPath,
+            QuestionnaireIdentity identity,
             string supportingAssembly)
         {
             this.scope = rootScope.BeginLifetimeScope();
@@ -45,55 +41,19 @@ namespace WB.UI.WebTester.Services.Implementation
 
                 AppDomainsAliveGauge.Inc();
 
-                string documentString = JsonConvert.SerializeObject(questionnaireDocument, Formatting.None,
-                    new JsonSerializerSettings
-                    {
-                        TypeNameHandling = TypeNameHandling.Objects,
-                        NullValueHandling = NullValueHandling.Ignore,
-                        FloatParseHandling = FloatParseHandling.Decimal,
-                        Formatting = Formatting.None,
-                    });
-
-                const int questionnaireVersion = 1;
-
-                QuestionnaireDocument document = JsonConvert.DeserializeObject<QuestionnaireDocument>(
-                    documentString, new JsonSerializerSettings
-                    {
-                        TypeNameHandling = TypeNameHandling.Objects,
-                        NullValueHandling = NullValueHandling.Ignore,
-                        FloatParseHandling = FloatParseHandling.Decimal,
-                        Formatting = Formatting.None
-                    });
-
-                var questionnaireIdentity = new QuestionnaireIdentity(document.PublicKey, questionnaireVersion);
-
                 var questionnaireStorage = this.scope.Resolve<IQuestionnaireStorage>();
-                var webTesterTranslationService =  this.scope.Resolve<IWebTesterTranslationService>();
                 var questionnaireAssemblyAccessor =  this.scope.Resolve<IQuestionnaireAssemblyAccessor>();
-
-                questionnaireStorage.StoreQuestionnaire(document.PublicKey, questionnaireVersion, document);
-
-                webTesterTranslationService.Store(translations.Select(x => new TranslationInstance
-                {
-                    Value = x.Value,
-                    TranslationId = x.TranslationId,
-                    QuestionnaireEntityId = x.QuestionnaireEntityId,
-                    QuestionnaireId = questionnaireIdentity,
-                    TranslationIndex = x.TranslationIndex,
-                    Type = x.Type
-
-                }).ToList());
 
                 ((WebTesterQuestionnaireAssemblyAccessor)questionnaireAssemblyAccessor).Assembly = assembly;
 
                 var questionnaire =
                     questionnaireStorage.GetQuestionnaire(
-                        questionnaireIdentity, null);
+                        identity, null);
                 var prototype =  new InterviewExpressionStatePrototypeProvider(questionnaireAssemblyAccessor,
                     new InterviewExpressionStateUpgrader(),
                     this.scope.Resolve<ILoggerProvider>());
 
-                questionnaire.ExpressionStorageType = prototype.GetExpressionStorageType(questionnaireIdentity);
+                questionnaire.ExpressionStorageType = prototype.GetExpressionStorageType(identity);
 
                 statefulInterview =  this.scope.Resolve<WebTesterStatefulInterview>();
                 statefulInterview.SetId(interviewId);
