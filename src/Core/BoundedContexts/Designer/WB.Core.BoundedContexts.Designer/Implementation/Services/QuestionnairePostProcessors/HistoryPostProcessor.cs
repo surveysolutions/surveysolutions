@@ -349,6 +349,23 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
         #endregion
 
+        #region Categories
+
+        public void Process(Questionnaire aggregate, AddOrUpdateCategories command)
+        {
+            this.AddOrUpdateQuestionnaireStateItem(command.QuestionnaireId, command.CategoriesId, command.Name,
+                parentId: null, setAction: (s, id, title) => s.CategoriesState[id] = title);
+
+            this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Update,
+                QuestionnaireItemType.Categories, command.CategoriesId, command.Name, aggregate.QuestionnaireDocument);
+        }
+
+        public void Process(Questionnaire aggregate, DeleteCategories command)
+            => this.DeleteItemFromStateAndUpdateHistory(command.QuestionnaireId, q => q.CategoriesState, command.CategoriesId,
+                QuestionnaireItemType.Categories, command.ResponsibleId, aggregate.QuestionnaireDocument);
+
+        #endregion
+
         #region Translations
         public void Process(Questionnaire aggregate, AddOrUpdateTranslation command)
         {
