@@ -42,5 +42,7 @@ namespace WB.UI.WebTester.Infrastructure
         {
             return this.questionnaireStorage.GetQuestionnaire(this.QuestionnaireIdentity, language);
         }
+
+        public IQuestionnaire Questionnaire => GetQuestionnaireOrThrow(null);
     }
 }
