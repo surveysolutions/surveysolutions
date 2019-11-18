@@ -9,7 +9,7 @@ using WB.Enumerator.Native.WebInterview.Pipeline;
 
 namespace WB.Enumerator.Native.WebInterview
 {
-    public abstract class WebInterview : Hub
+    public class WebInterview : Hub
     {
         private readonly IPipelineModule[] hubPipelineModules;
 
@@ -22,7 +22,7 @@ namespace WB.Enumerator.Native.WebInterview
             }
         }
 
-        protected WebInterview(IPipelineModule[] hubPipelineModules)
+        public WebInterview(IPipelineModule[] hubPipelineModules)
         {
             this.hubPipelineModules = hubPipelineModules;
         }

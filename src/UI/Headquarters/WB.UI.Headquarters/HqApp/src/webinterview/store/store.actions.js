@@ -42,61 +42,61 @@ export default {
         if(storedAnswer != null && storedAnswer.value == answer) return; // skip same answer on same question
         
         const interviewId = rootState.route.params.interviewId
-        Vue.$api.answer(questionId, 'answerSingleOptionQuestion', {interviewId, answer, identity:questionId})
+        Vue.$http.answer(questionId, 'answerSingleOptionQuestion', {interviewId, answer, identity:questionId})
     },
     answerTextQuestion({ state, commit, rootState }, { identity, text }) {
         if(getAnswer(state, identity) == text) return; // skip same answer on same question
 
         commit("SET_ANSWER", {identity, answer: text}) // to prevent answer blinking in TableRoster
         const interviewId = rootState.route.params.interviewId
-        Vue.$api.answer(identity, 'answerTextQuestion', {interviewId, identity, answer:text})
+        Vue.$http.answer(identity, 'answerTextQuestion', {interviewId, identity, answer:text})
     },
     answerMultiOptionQuestion({ dispatch, rootState }, { answer, questionId }) {
         const interviewId = rootState.route.params.interviewId
-        Vue.$api.answer(questionId, 'answerMultiOptionQuestion', {interviewId, answer, identity:questionId})
+        Vue.$http.answer(questionId, 'answerMultiOptionQuestion', {interviewId, answer, identity:questionId})
     },
     answerYesNoQuestion({ dispatch, rootState }, { questionId, answer }) {
         const interviewId = rootState.route.params.interviewId
-        Vue.$api.answer(questionId, 'answerYesNoQuestion', {interviewId, identity:questionId, answer})
+        Vue.$http.answer(questionId, 'answerYesNoQuestion', {interviewId, identity:questionId, answer})
     },
     answerIntegerQuestion({ commit, rootState }, { identity, answer }) {
         commit("SET_ANSWER", {identity, answer: answer}) // to prevent answer blinking in TableRoster
         const interviewId = rootState.route.params.interviewId
-        Vue.$api.answer(identity, 'answerIntegerQuestion', {interviewId, identity, answer})
+        Vue.$http.answer(identity, 'answerIntegerQuestion', {interviewId, identity, answer})
     },
     answerDoubleQuestion({ commit, rootState }, { identity, answer }) {
         commit("SET_ANSWER", {identity, answer: answer}) // to prevent answer blinking in TableRoster
         const interviewId = rootState.route.params.interviewId
-        Vue.$api.answer(identity, 'answerDoubleQuestion', {interviewId, identity, answer})
+        Vue.$http.answer(identity, 'answerDoubleQuestion', {interviewId, identity, answer})
     },
     answerGpsQuestion({ dispatch, rootState }, { identity, answer }) {
         const interviewId = rootState.route.params.interviewId
-        Vue.$api.answer(identity, 'answerGpsQuestion', {interviewId, identity, answer})
+        Vue.$http.answer(identity, 'answerGpsQuestion', {interviewId, identity, answer})
     },
     answerDateQuestion({ state, rootState }, { identity, date }) {
         if(getAnswer(state, identity) == date) return; // skip answer on same question
         const interviewId = rootState.route.params.interviewId
-        Vue.$api.answer(identity, 'answerDateQuestion', {interviewId, identity, answer:date})
+        Vue.$http.answer(identity, 'answerDateQuestion', {interviewId, identity, answer:date})
     },
     answerTextListQuestion({ dispatch, rootState }, { identity, rows }) {
         const interviewId = rootState.route.params.interviewId
-        Vue.$api.answer(identity, 'answerTextListQuestion', {interviewId, identity, answer:rows})
+        Vue.$http.answer(identity, 'answerTextListQuestion', {interviewId, identity, answer:rows})
     },
     answerLinkedSingleOptionQuestion({ dispatch, rootState }, { questionIdentity, answer }) {
         const interviewId = rootState.route.params.interviewId
-        Vue.$api.answer(questionIdentity, 'answerLinkedSingleOptionQuestion', {interviewId, identity:questionIdentity, answer})
+        Vue.$http.answer(questionIdentity, 'answerLinkedSingleOptionQuestion', {interviewId, identity:questionIdentity, answer})
     },
     answerLinkedMultiOptionQuestion({ dispatch, rootState }, { questionIdentity, answer }) {
         const interviewId = rootState.route.params.interviewId
-        Vue.$api.answer(questionIdentity, 'answerLinkedMultiOptionQuestion', {interviewId, identity:questionIdentity, answer})
+        Vue.$http.answer(questionIdentity, 'answerLinkedMultiOptionQuestion', {interviewId, identity:questionIdentity, answer})
     },
     answerLinkedToListMultiQuestion({ dispatch, rootState }, { questionIdentity, answer }) {
         const interviewId = rootState.route.params.interviewId
-        Vue.$api.answer(questionIdentity, 'answerLinkedToListMultiQuestion', {interviewId, identity:questionIdentity, answer})
+        Vue.$http.answer(questionIdentity, 'answerLinkedToListMultiQuestion', {interviewId, identity:questionIdentity, answer})
     },
     answerLinkedToListSingleQuestion({ dispatch, rootState }, { questionIdentity, answer }) {
         const interviewId = rootState.route.params.interviewId
-        Vue.$api.answer(questionIdentity, 'answerLinkedToListSingleQuestion', {interviewId, identity:questionIdentity, answer})
+        Vue.$http.answer(questionIdentity, 'answerLinkedToListSingleQuestion', {interviewId, identity:questionIdentity, answer})
     },
     async answerMultimediaQuestion({ dispatch, state, rootState }, { id, file }) {
         const interviewId = rootState.route.params.interviewId
@@ -159,11 +159,11 @@ export default {
     },
     answerQRBarcodeQuestion({ dispatch, rootState }, { identity, text }) {
         const interviewId = rootState.route.params.interviewId
-        Vue.$api.answer(identity, 'answerQRBarcodeQuestion', {interviewId, identity, answer:text})
+        Vue.$http.answer(identity, 'answerQRBarcodeQuestion', {interviewId, identity, answer:text})
     },
     removeAnswer({ dispatch, rootState }, questionId) {
         const interviewId = rootState.route.params.interviewId
-        Vue.$api.answer(questionId, 'removeAnswer', {interviewId, questionId})
+        Vue.$http.answer(questionId, 'removeAnswer', {interviewId, questionId})
     },
     async sendNewComment({ dispatch, commit, rootState }, { questionId, comment }) {
         commit("POSTING_COMMENT", { questionId: questionId })

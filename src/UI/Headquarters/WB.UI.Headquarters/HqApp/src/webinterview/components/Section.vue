@@ -39,25 +39,6 @@
             }
         },
 
-        async beforeRouteEnter (to, from, next) {
-            if(await checkSectionPermission(to)) {
-                next(vm => vm.$store.dispatch("changeSection", to.params.sectionId))
-                return;
-            }
-            
-            next(false);
-        },
-
-        async beforeRouteUpdate (to, from, next) {
-            if(await checkSectionPermission(to)) {
-                this.$store.dispatch("changeSection", to.params.sectionId)
-                next();
-                return;
-            }
-            
-            next(false);
-        },
-
         watch: {
             ["$route.params.sectionId"]() {
                  this.loadSection()
