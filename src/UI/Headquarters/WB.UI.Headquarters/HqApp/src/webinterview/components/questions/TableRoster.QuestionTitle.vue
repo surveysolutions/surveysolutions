@@ -1,5 +1,5 @@
 <template>
-    <popover :enable="hasInstructions" trigger="hover-focus" append-to="body">
+    <popover class="w-100 d-block" :enable="hasInstructions" trigger="hover-focus" append-to="body">
         <div class="ag-cell-label-container" v-bind:class="{ 'has-instruction' : hasInstructions }">    
             <div class="ag-header-cell-label">    
                 <span class="ag-header-cell-text" v-html="title"></span>    

@@ -1165,7 +1165,8 @@ namespace WB.Tests.Abc.TestFactories
             bool isFilteredCombobox = false, 
             Guid? linkedToRosterId = null,
             string linkedFilter = null,
-            string optionsFilter = null)
+            string optionsFilter = null,
+            bool showAsList = false)
             => new SingleQuestion
             {
                 QuestionType = QuestionType.SingleOption,
@@ -1183,7 +1184,8 @@ namespace WB.Tests.Abc.TestFactories
                 Properties = new QuestionProperties(false, false)
                 {
                     OptionsFilterExpression = optionsFilter
-                }
+                },
+                ShowAsList = showAsList
             };
 
         public StaticText StaticText(

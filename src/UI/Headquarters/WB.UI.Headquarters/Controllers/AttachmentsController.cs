@@ -1,12 +1,11 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
-using ImageResizer;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.UI.Shared.Web.Services;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
@@ -14,10 +13,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     public class AttachmentsController : ApiController
     {
         private readonly IAttachmentContentService attachmentContentService;
+        private readonly IImageProcessingService imageProcessingService;
 
-        public AttachmentsController(IAttachmentContentService attachmentContentService)
+        public AttachmentsController(IAttachmentContentService attachmentContentService, IImageProcessingService imageProcessingService)
         {
             this.attachmentContentService = attachmentContentService;
+            this.imageProcessingService = imageProcessingService;
         }
         
         [HttpGet]
@@ -47,21 +48,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return response;
         }
 
-        private static byte[] GetTrasformedContent(byte[] source, int? sizeToScale = null)
+        private byte[] GetTrasformedContent(byte[] source, int? sizeToScale = null)
         {
             if (!sizeToScale.HasValue) return source;
 
-            //later should handle video and produce image preview 
-            using (var outputStream = new MemoryStream())
-            {
-                ImageBuilder.Current.Build(source, outputStream, new ResizeSettings
-                {
-                    MaxWidth = sizeToScale.Value,
-                    MaxHeight = sizeToScale.Value
-                });
-
-                return outputStream.ToArray();
-            }
+            return this.imageProcessingService.ResizeImage(source, sizeToScale.Value, sizeToScale.Value);
         }
     }
 }
