@@ -40,7 +40,6 @@ using WB.Enumerator.Native.WebInterview.Pipeline;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Shared.Web.Services;
-using WB.UI.WebTester.Hub;
 using WB.UI.WebTester.Infrastructure;
 using WB.UI.WebTester.Infrastructure.AppDomainSpecific;
 using WB.UI.WebTester.Services;
@@ -136,7 +135,7 @@ namespace WB.UI.WebTester
                     {
                         typeof(Startup).Assembly,
                         typeof(WebInterviewModule).Assembly,
-                        typeof(WebInterviewHub).Assembly,
+                        typeof(WebInterview).Assembly,
                         typeof(CategoricalOption).Assembly
                     }
                 }

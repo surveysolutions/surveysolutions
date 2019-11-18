@@ -18,7 +18,6 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Logging;
 using WB.UI.Shared.Web.Versions;
-using WB.UI.WebTester.Hub;
 using WB.UI.WebTester.Services;
 
 namespace WB.UI.WebTester
@@ -131,7 +130,7 @@ namespace WB.UI.WebTester
                     action = "Interview"
                 });
 
-                routes.MapHub<WebInterviewHub>("interview",
+                routes.MapHub<WebInterview>("interview",
                     options => { options.Transports = HttpTransportType.WebSockets | HttpTransportType.LongPolling; });
 
                 routes.MapControllerRoute(

@@ -49,7 +49,7 @@ const http = {
                 }
             },
 
-            async apiAnswerPost(id, actionName, params) {
+            async answer(id, actionName, params) {
                 if (id) {
                     store.dispatch("fetch", { id })
                 }
