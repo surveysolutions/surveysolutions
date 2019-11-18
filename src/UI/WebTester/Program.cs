@@ -3,6 +3,10 @@ using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NLog;
+using NLog.Config;
+using NLog.Targets;
+using NLog.Web;
 
 namespace WB.UI.WebTester
 {
@@ -10,7 +14,18 @@ namespace WB.UI.WebTester
     {
         public static void Main(string[] args)
         {
-            var logger = NLog.Web.NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
+            var config = new LoggingConfiguration();
+            var consoleTarget = new ColoredConsoleTarget
+            {
+                Name = "console",
+                Layout = @"${longdate}|${uppercase:${level}}|${logger:shortName=true}|${message} ${exception:format=tostring}|status: ${aspnet-response-statuscode}|url: ${aspnet-request-url}"
+            };
+
+            config.AddTarget(consoleTarget);
+            config.AddRuleForAllLevels(consoleTarget); // all to console
+            LogManager.Configuration = config;
+
+            var logger = LogManager.GetCurrentClassLogger();
             try
             {
                 CreateHostBuilder(args)
@@ -23,8 +38,7 @@ namespace WB.UI.WebTester
             }
             finally
             {
-                // Ensure to flush and stop internal timers/threads before application-exit (Avoid segmentation fault on Linux)
-                NLog.LogManager.Shutdown();
+                LogManager.Shutdown();
             }
         }
 
@@ -33,7 +47,10 @@ namespace WB.UI.WebTester
                 .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureLogging(logging =>
                 {
+                    logging.ClearProviders();
+                    logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
                 })
+                .UseNLog()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseWebRoot("Content");
