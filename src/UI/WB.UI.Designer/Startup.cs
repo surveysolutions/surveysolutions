@@ -101,6 +101,9 @@ namespace WB.UI.Designer
                 .AddRoles<DesignerIdentityRole>()
                 .AddEntityFrameworkStores<DesignerDbContext>();
 
+            services.AddHealthChecks()
+                .AddCheck<DatabaseConnectionCheck>("database");
+
             services
                 .AddAuthentication(sharedOptions =>
                 {
@@ -276,6 +279,8 @@ namespace WB.UI.Designer
                     new CultureInfo("sq")
                 };
             });
+
+            app.UseHealthChecks("/.hc");
 
             app.UseMvc(routes =>
             {
