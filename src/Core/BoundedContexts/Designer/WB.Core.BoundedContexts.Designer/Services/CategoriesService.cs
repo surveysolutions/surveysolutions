@@ -1,5 +1,5 @@
 ﻿using System;
-using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 
 namespace WB.Core.BoundedContexts.Designer.Services
 {
@@ -8,6 +8,11 @@ namespace WB.Core.BoundedContexts.Designer.Services
         public void CloneCategories(Guid questionnaireId, Guid categoriesId, Guid clonedQuestionnaireId, Guid clonedCategoriesId)
         {
             
+        }
+
+        public CategoriesFile GetTemplateAsExcelFile()
+        {
+            return null;
         }
 
         public void Store(Guid questionnaireId, Guid categoriesId, byte[] fileBytes)
