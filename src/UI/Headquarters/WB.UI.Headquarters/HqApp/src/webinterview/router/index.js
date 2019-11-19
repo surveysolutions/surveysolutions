@@ -66,10 +66,6 @@ function NewRouter(store) {
     // tslint:disable:no-string-literal
     router.beforeEach(async (to, from, next) => {
         if(Vue.$config.splashScreen) { next(); return; }
-        // await Vue.$api.hub({ interviewId: to.params["interviewId"] })
-
-        // if(to.params.sectionId == null)
-        //     await store.dispatch("changeSection", null)
         next();
     })
 

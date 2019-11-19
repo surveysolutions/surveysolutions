@@ -48,9 +48,13 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             return Ok();
         }
 
-        public class AnswerRequest<T>
+        public class AnswerRequest
         {
             public string Identity { get; set; }
+        }
+
+        public class AnswerRequest<T> : AnswerRequest
+        {
             public T Answer { get; set; }
         }
 
@@ -156,15 +160,15 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             return Ok();
         }
 
-        public class RemoveAnswerRequest
+        public class RemoveAnswerRequest : AnswerRequest
         {
-            public string QuestionId { get; set; }
+
         }
 
         [WebInterviewObserverNotAllowed]
         public virtual IHttpActionResult RemoveAnswer(Guid interviewId, RemoveAnswerRequest request)
         {
-            Identity identity = Identity.Parse(request.QuestionId);
+            Identity identity = Identity.Parse(request.Identity);
 
             try
             {
@@ -195,9 +199,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         [WebInterviewObserverNotAllowed]
         public abstract IHttpActionResult CompleteInterview(Guid interviewId, CompleteInterviewRequest completeInterviewRequest);
 
-        public class NewCommentRequest
+        public class NewCommentRequest : AnswerRequest
         {
-            public string QuestionId { get; set; }
             public string Comment { get; set; }
         }
 
@@ -205,7 +208,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         public virtual IHttpActionResult SendNewComment(Guid interviewId, NewCommentRequest request)
         {
-            var identity = Identity.Parse(request.QuestionId);
+            var identity = Identity.Parse(request.Identity);
             var command = new CommentAnswerCommand(interviewId, this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, request.Comment);
 
             this.commandService.Execute(command);

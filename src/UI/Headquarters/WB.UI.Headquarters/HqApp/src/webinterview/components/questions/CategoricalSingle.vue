@@ -53,7 +53,7 @@
                 },
                 set(value) {
                     this.sendAnswer(() => {
-                        this.$store.dispatch("answerSingleOptionQuestion", { answer: value, questionId: this.$me.id })
+                        this.$store.dispatch("answerSingleOptionQuestion", { answer: value, identity: this.$me.id })
                     })
                 }
             },

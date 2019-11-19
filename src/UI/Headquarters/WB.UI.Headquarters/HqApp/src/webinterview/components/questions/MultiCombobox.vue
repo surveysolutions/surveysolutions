@@ -73,13 +73,13 @@
 
                 let newAnswer = this.$me.answer.slice()
                 newAnswer.push(newValue)
-                this.$store.dispatch("answerMultiOptionQuestion", { answer: newAnswer, questionId: this.$me.id })
+                this.$store.dispatch("answerMultiOptionQuestion", { answer: newAnswer, identity: this.$me.id })
             },
             optionsSource(filter) {
                 const self = this;
                 const interviewId = this.$route.params.interviewId
                 const excludedOptionIds = self.$me.answer
-                const optionsPromise = Vue.$http.get('getTopFilteredOptionsForQuestionWithExclude', {interviewId, id:this.$me.id, filter, count:20, excludedOptionIds})
+                const optionsPromise = Vue.$api.interview.get('getTopFilteredOptionsForQuestionWithExclude', {interviewId, id:this.$me.id, filter, count:20, excludedOptionIds})
                 return optionsPromise
                     .then(options => {
                         return loFilter(options, (o) => {
@@ -96,13 +96,13 @@
                     const confirmMessage = this.$t("WebInterviewUI.ConfirmRosterRemove");
                     modal.confirm(confirmMessage, result => {
                         if (result) {
-                            this.$store.dispatch("answerMultiOptionQuestion", { answer: newAnswer, questionId: this.$me.id })
+                            this.$store.dispatch("answerMultiOptionQuestion", { answer: newAnswer, identity: this.$me.id })
                             return
                         } 
                     })
                 }
                 else {
-                    this.$store.dispatch("answerMultiOptionQuestion", { answer: newAnswer, questionId: this.$me.id })
+                    this.$store.dispatch("answerMultiOptionQuestion", { answer: newAnswer, identity: this.$me.id })
                 }
             }
         }

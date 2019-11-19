@@ -6,66 +6,69 @@ const httpPlugin = {
 
         const http = axios.create({
             baseURL: store.getters.basePath
-          });
-        
-        const api = {
-            async get(actionName, params) {
-                if (config.splashScreen) return
+        });
 
-                if (params == null) {
-                    params = {}
+        if (!Vue.hasOwnProperty("$api")) {
+            Vue.$api = {}
+        }
+
+        async function query(id, params, action) {
+            if (config.splashScreen) return
+
+            if (params == null) {
+                params = {}
+            }
+
+            if (id) {
+                store.dispatch("fetch", { id })
+                params.identity = id
+            }
+
+            params.interviewId = params.interviewId || store.state.route.params.interviewId
+
+            store.dispatch("fetchProgress", 1)
+
+            try {
+                const result = await action(params)
+                return result
+            } catch (err) {
+                if (id) {
+                    store.dispatch("setAnswerAsNotSaved", { id, message: err.statusText })
+                    store.dispatch("fetch", { id, done: true })
                 }
+                else {
+                    store.dispatch("UNHANDLED_ERROR", err)
+                }
+            } finally {
+                store.dispatch("fetchProgress", -1)
+            }
+        }
 
-                params.interviewId = store.state.route.params.interviewId
-
-                store.dispatch("fetchProgress", 1)
-
-                try {
+        const api = {
+            get(actionName, args) {
+                return query(null, args, async params => {
                     var headers = store.getters.isReviewMode === true ? { review: true } : {}
-
-                    console.log("$http", "get", actionName, params)
-
-                    const response = await axios.get(`${store.getters.basePath}api/webinterview/${actionName}`, {
-                        params: params,
+                    const response = await http.get(`api/webinterview/${actionName}`, {
+                        params,
                         responseType: 'json',
                         headers: headers
                     })
                     return response.data
-                } catch (err) {
-                    store.dispatch("UNHANDLED_ERROR", err)
-                } finally {
-                    store.dispatch("fetchProgress", -1)
-                }
+                })
             },
 
-            async answer(id, actionName, params) {
-                if (id) {
-                    store.dispatch("fetch", { id })
-                }
-
-                const interviewId = store.state.route.params.interviewId
-                store.dispatch("fetchProgress", 1)
-
-                try {
+            answer(id, actionName, args) {
+                return query(id, args, params => {
+                    const interviewId = params.interviewId
                     delete params.interviewId
-
                     var headers = store.getters.isReviewMode === true ? { review: true } : {}
-                    return await http.post(`/api/webinterview/commands/${actionName}?interviewId=${interviewId}`, params, {
+                    return http.post(`/api/webinterview/commands/${actionName}?interviewId=${interviewId}`, params, {
                         headers: headers
                     })
-                } catch (err) {
-                    if (id) {
-                        store.dispatch("setAnswerAsNotSaved", { id, message: err.statusText })
-                        store.dispatch("fetch", { id, done: true })
-                    } else {
-                        store.dispatch("UNHANDLED_ERROR", err)
-                    }
-                } finally {
-                    store.dispatch("fetchProgress", -1)
-                }
+                })
             },
 
-            async upload(url, id, file ) {
+            async upload(url, id, file) {
                 const state = store.state
                 const dispatch = store.dispatch
 
@@ -92,10 +95,8 @@ const httpPlugin = {
             }
         }
 
-        Object.defineProperty(Vue, "$http", {
-            get() {
-                return api;
-            }
+        Object.defineProperty(Vue.$api, "interview", {
+            get() { return api }
         })
     }
 }

@@ -1,26 +1,33 @@
 import * as signalR from "@microsoft/signalr";
-import config from "~/shared/config"
-import axios from 'axios'
 import Vue from 'vue'
 
 export default {
     name: 'wb-communicator',
 
+    props: {
+        interviewId: {
+            type: String,
+            required: true
+        }
+    },
+
     beforeMount() {
         const connection = new signalR.HubConnectionBuilder()
-            .withUrl("/interview?interviewId=" + this.$route.params.interviewId)
+            .withUrl("/interview?interviewId=" + this.interviewId)
             .build();
 
         const api = {
-            get: this.apiGet,
-
-            changeSection(to) {
-                return connection.send("changeSection", to)
+            changeSection(to, from) {
+                return connection.send("changeSection", to, from)
             }
         };
 
-        Object.defineProperty(Vue, "$api", {
-            get: function () { return api; }
+        if (!Vue.hasOwnProperty("$api")) {
+            Vue.$api = {}
+        }
+
+        Object.defineProperty(Vue.$api, "hub", {
+            get() { return api; }
         })
 
         connection.on("refreshEntities", (questions) => {
