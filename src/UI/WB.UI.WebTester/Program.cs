@@ -1,6 +1,7 @@
 using System;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NLog;
@@ -44,6 +45,13 @@ namespace WB.UI.WebTester
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration(c =>
+                {
+                    c.AddIniFile("appsettings.ini", false, true);
+                    c.AddIniFile("appsettings.cloud.ini", true, true);
+                    c.AddIniFile($"appsettings.{Environment.MachineName}.ini", true);
+                    c.AddIniFile("appsettings.Production.ini", true);
+                })
                 .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureLogging(logging =>
                 {
