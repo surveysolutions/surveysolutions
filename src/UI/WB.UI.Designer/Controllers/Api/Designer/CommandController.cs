@@ -17,6 +17,7 @@ using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
@@ -54,6 +55,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
         private readonly ITranslationsService translationsService;
+        private readonly ICategoriesService categoriesService;
 
         // Get the default form options so that we can use them to set the default limits for
         // request body data
@@ -66,7 +68,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             ICommandInflater commandPreprocessor,
             ILookupTableService lookupTableService,
             IAttachmentService attachmentService,
-            ITranslationsService translationsService)
+            ITranslationsService translationsService,
+            ICategoriesService categoriesService)
         {
             this.logger = logger;
             this.commandInflater = commandPreprocessor;
@@ -75,6 +78,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             this.lookupTableService = lookupTableService;
             this.attachmentService = attachmentService;
             this.translationsService = translationsService;
+            this.categoriesService = categoriesService;
         }
 
         public class AttachmentModel
@@ -311,6 +315,63 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             return Ok(resultMessage);
         }
 
+        [Route("~/api/command/categories")]
+        [HttpPost]
+        public async Task<IActionResult> UpdateCategories(TranslationModel model)
+        {
+            var commandType = typeof(AddOrUpdateCategories).Name;
+            AddOrUpdateCategories command;
+            try
+            {
+                command = (AddOrUpdateCategories)this.Deserialize(commandType, model.Command);
+                if (model.File != null)
+                {
+                    byte[] postedFile;
+                    using (var stream = new MemoryStream())
+                    {
+                        await model.File.CopyToAsync(stream);
+                        postedFile = stream.ToArray();
+                    }
+
+                    this.categoriesService.Store(command.QuestionnaireId,
+                        command.CategoriesId,
+                        postedFile);
+                }
+            }
+            catch (FormatException e)
+            {
+                return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
+            }
+            catch (ArgumentException e)
+            {
+                this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
+                return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
+            }
+            catch (InvalidExcelFileException e)
+            {
+                this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
+                return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
+            }
+
+            var commandResponse = this.ProcessCommand(command, commandType);
+
+            if (commandResponse.HasErrors || model.File == null)
+            {
+                await dbContext.SaveChangesAsync();
+                return commandResponse.Response;
+            }
+
+            //var storedTranslationsCount =
+            //    this.translationsService.Count(command.QuestionnaireId, command.TranslationId);
+            //var resultMessage = storedTranslationsCount == 1
+            //    ? string.Format(QuestionnaireEditor.TranslationsObtained, storedTranslationsCount)
+            //    : string.Format(QuestionnaireEditor.TranslationsObtained_plural, storedTranslationsCount);
+
+            await dbContext.SaveChangesAsync();
+
+            return Ok("Ok");
+        }
+
         public ICommand Deserialize(string commandType, string serializedCommand)
         {
             try
@@ -387,6 +448,9 @@ namespace WB.UI.Designer.Controllers.Api.Designer
              // Metadata
              { "UpdateMetadata", typeof (UpdateMetadata) },
              { nameof(PassOwnershipFromQuestionnaire), typeof(PassOwnershipFromQuestionnaire) },
+             //Categories commands
+             { "AddOrUpdateCategories", typeof (AddOrUpdateCategories) },
+             { "DeleteCategories", typeof (DeleteCategories) },
          };
 
         private Type GetTypeOfResultCommandOrThrowArgumentException(string commandType)
