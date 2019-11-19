@@ -49,8 +49,8 @@ namespace WB.UI.WebTester
             services.Configure<TesterConfiguration>(this.Configuration);
             services.AddHttpContextAccessor();
 
-            var healthChecksBuilder = services.AddHealthChecks();
-            healthChecksBuilder.AddCheck<DesignerConnectionCheck>("designer-connection");
+            services.AddHealthChecks()
+                .AddCheck<DesignerConnectionCheck>("designer-connection");
         }
 
         // ConfigureContainer is where you can register things directly

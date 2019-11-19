@@ -5,7 +5,6 @@ using WB.Core.Infrastructure.Versions;
 
 namespace WB.UI.WebTester.Controllers
 {
-    [Route("api")]
     public class DiagnosticsController : Controller
     {
         private readonly IProductVersion productVersion;
@@ -16,11 +15,10 @@ namespace WB.UI.WebTester.Controllers
         }
 
         [HttpGet]
-        [Route("version")]
+        [Route(".version")]
         public IActionResult Version()
         {
-            var stringContent = new StringContent(productVersion.ToString());
-            return StatusCode(StatusCodes.Status200OK, stringContent);
+            return Content(productVersion.ToString());
         }
     }
 }
