@@ -313,8 +313,14 @@
   <data name="SideBarTranslationName" xml:space="preserve">
     <value>translation name</value>
   </data>
+  <data name="SideBarCategoriesName" xml:space="preserve">
+    <value>name of categories</value>
+  </data>
   <data name="SideBarTranslationsCounter" xml:space="preserve">
     <value>{{count}} Translation</value>
+  </data>
+  <data name="SideBarCategoriesCounter" xml:space="preserve">
+    <value>{{count}} Categories</value>
   </data>
   <data name="SideBarTranslationsCounter_plural" xml:space="preserve">
     <value>{{count}} Translations</value>
@@ -322,11 +328,20 @@
   <data name="SideBarTranslationsEmptyLine1" xml:space="preserve">
     <value>Use this tab to manage questionnaire translations.</value>
   </data>
+  <data name="SideBarCategoriesEmptyLine1" xml:space="preserve">
+    <value>Use this tab to manage reusable categories.</value>
+  </data>
   <data name="SideBarTranslationsEmptyLine2" xml:space="preserve">
     <value>You may download and update translations to different languages.</value>
   </data>
+  <data name="SideBarCategoriesEmptyLine2" xml:space="preserve">
+    <value>You may download and update categories.</value>
+  </data>
   <data name="SideBarTranslationsEmptyLine3" xml:space="preserve">
     <value>Translation will be applied on original texts and override values. You may leave some texts empty to use default original translations.</value>
+  </data>
+  <data name="SideBarCategoriesEmptyLine3" xml:space="preserve">
+    <value>will be showed in list of reusable categories for any types of categorical questions.</value>
   </data>
   <data name="ToggleDropdown" xml:space="preserve">
     <value>Toggle Dropdown</value>
@@ -475,8 +490,14 @@
   <data name="SideBarTranslationsTitle" xml:space="preserve">
     <value>Translations</value>
   </data>
+  <data name="SideBarCategoriesTitle" xml:space="preserve">
+    <value>Categories</value>
+  </data>
   <data name="SideBarTranslationsUploadNew" xml:space="preserve">
     <value>Upload new translation</value>
+  </data>
+  <data name="SideBarCategoriesUploadNew" xml:space="preserve">
+    <value>Upload new categories</value>
   </data>
   <data name="AttachmentPreview" xml:space="preserve">
     <value>Attachment preview</value>
@@ -936,6 +957,9 @@ Table - the questions of the roster are shown in the same level as rows and colu
   <data name="HotkeysCloseTranslations" xml:space="preserve">
     <value>Close translations panel</value>
   </data>
+  <data name="HotkeysCloseCategories" xml:space="preserve">
+    <value>Close categories panel</value>
+  </data>
   <data name="HotkeysFocusTitle" xml:space="preserve">
     <value>Focus title field in editor</value>
   </data>
@@ -1043,6 +1067,9 @@ Table - the questions of the roster are shown in the same level as rows and colu
   </data>
   <data name="SideBarTranslationNoName" xml:space="preserve">
     <value>translation with no name</value>
+  </data>
+  <data name="SideBarCategoriesNoName" xml:space="preserve">
+    <value>categories with no name</value>
   </data>
   <data name="SideBarAttachmentNoName" xml:space="preserve">
     <value>attachment with no name</value>

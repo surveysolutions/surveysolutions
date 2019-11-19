@@ -162,6 +162,41 @@
                 return commandCall("DeleteTranslation", command);
             };
 
+            commandService.updateCategories = function (questionnaireId, categories) {
+                blockUI.start();
+
+                var command = {
+                    questionnaireId: questionnaireId,
+                    categoriesId: categories.categoriesId,
+                    oldCategoriesId: categories.oldCategoriesId,
+                    name: categories.name
+                };
+
+                return Upload.upload({
+                    url: urlCommands + '/categories',
+                    data: { file: _.isNull(categories.file) ? "" : categories.file, "command": JSON.stringify(command) }
+                }).then(function (response) {
+                    blockUI.stop();
+
+                    if (!_.isNull(categories.file))
+                        notificationService.notice(response.data);
+
+                    categories.file = null;
+
+                }).catch(function () {
+                    blockUI.stop();
+                });
+            };
+
+            commandService.deleteCategories = function (questionnaireId, categoriesId) {
+                var command = {
+                    questionnaireId: questionnaireId,
+                    categoriesId: categoriesId
+                };
+                return commandCall("DeleteCategories", command);
+            };
+
+
             commandService.setDefaultTranslation = function(questionnaireId, translationId) {
                 var command = {
                     questionnaireId: questionnaireId,

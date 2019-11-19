@@ -9,5 +9,10 @@ namespace WB.Core.BoundedContexts.Designer.Services
         {
             
         }
+
+        public void Store(Guid questionnaireId, Guid categoriesId, byte[] fileBytes)
+        {
+            
+        }
     }
 }

@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
@@ -77,7 +78,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, UpdateAudioQuestion>,
         ICommandPostProcessor<Questionnaire, UpdateMetadata>,
         ICommandPostProcessor<Questionnaire, PassOwnershipFromQuestionnaire>,
-        ICommandPostProcessor<Questionnaire, ImportQuestionnaireToHq>
+        ICommandPostProcessor<Questionnaire, ImportQuestionnaireToHq>,
+        ICommandPostProcessor<Questionnaire, AddOrUpdateCategories>,
+        ICommandPostProcessor<Questionnaire, DeleteCategories>
     {
         private readonly DesignerDbContext dbContext;
         private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;

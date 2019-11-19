@@ -1,7 +1,7 @@
 using System;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 
-namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations
+namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories
 {
     [Serializable]
     public class AddOrUpdateCategories : QuestionnaireCommand

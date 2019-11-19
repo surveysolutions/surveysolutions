@@ -6,5 +6,7 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
     {
         void CloneCategories(Guid questionnaireId, Guid categoriesId, Guid clonedQuestionnaireId,
             Guid clonedCategoriesId);
+
+        void Store(Guid questionnaireId, Guid categoriesId, byte[] fileBytes);
     }
 }
