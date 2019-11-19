@@ -70,7 +70,6 @@ try {
 
         Log-Block "Run configuration transformations" {
             RunConfigTransform $ProjectHeadquarters $BuildConfiguration
-            RunConfigTransform $ProjectWebTester $BuildConfiguration
         }
 
         if($noandroid.IsPresent -eq $False) 
@@ -116,16 +115,16 @@ try {
                 -ExcludeExtra:$false | % { if (-not $_) { Exit } }
         }
 
-        Log-Block "Building web packages and support tool" {
-            
+        Log-Block "Building HQ web package and support tool" {
             BuildWebPackage $ProjectHeadquarters $BuildConfiguration | % { if (-not $_) { Exit } }
-            BuildWebPackage $ProjectWebTester $BuildConfiguration | % { if (-not $_) { Exit } }
             BuildAndDeploySupportTool $SupportToolSolution $BuildConfiguration | % { if (-not $_) { Exit } }
         }
 
+        BuildAspNetCoreWebPackage $ProjectWebTester $BuildConfiguration $BuildNumber $branch | % { if (-not $_) { Exit } }
+        
         Log-Block "Collecting/building artifacts" {
             AddArtifacts $ProjectHeadquarters $BuildConfiguration -folder "Headquarters"
-            AddArtifacts $ProjectWebTester $BuildConfiguration -folder "WebTester"
+            MoveArtifacts "src\UI\WB.UI.WebTester\bin\Release\netcoreapp3.0\win-x64\publish\*" "WebTester"
         }
 
         Write-Host "##teamcity[publishArtifacts '$artifactsFolder']"
