@@ -9,22 +9,22 @@ export default {
     },
 
     actions: {
-        async setFlag({ commit, rootState, dispatch }, { questionId, hasFlag }) {
-            const interviewId = rootState.route.params.interviewId
-            await Vue.$api.post('setFlag', {interviewId, questionId, hasFlag})
-            commit("SET_FLAG", { questionId, hasFlag })
-            dispatch("refreshSearchResults")
+        setFlag({ commit, dispatch }, { questionId, hasFlag }) {
+            return Vue.$api.interview.answer(questionId, 'setFlag', { hasFlag })
+                .then(() => {
+                    commit("SET_FLAG", { questionId, hasFlag })
+                    dispatch("refreshSearchResults")
+                    dispatch("fetchEntity",  { id:  questionId })
+                })
         },
-        async fetchFlags({ commit, rootState }) {
-            const interviewId = rootState.route.params.interviewId
-            const flags = await Vue.$http.get('getFlags', {interviewId})
+        async fetchFlags({ commit }) {
+            const flags = await Vue.$api.interview.get('getFlags')
             commit("SET_FLAGS", { flags })
         }
     },
 
     mutations: {
         SET_FLAG(state, { questionId, hasFlag }) {
-
             if (hasFlag) {
                 Vue.set(state.flagged, questionId, true)
             } else {
@@ -36,7 +36,7 @@ export default {
             flags.forEach(flag => state.flagged[flag] = true)
         }
     },
-    
+
     getters: {
         flags(state) {
             return state.flagged

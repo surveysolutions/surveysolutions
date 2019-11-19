@@ -16,11 +16,6 @@
 
 <script lang="js">
     export default {
-        name: 'app',
-        // components: {
-        //     signalr: window.CONFIG.NetCore 
-        //         ? () => import('./components/signalr/core.signalr') 
-        //         : () => import('./components/signalr/old.signalr')
-        // }
+        name: 'app'
     }
 </script>

@@ -38,16 +38,6 @@ sync(store, router);
 
 const App = require("./App").default;
 
-import http from "./api/http";
-Vue.use(http, { store });
-
-// const webInterviewApi = import("./api").then(() => {
-
-// });
-
-// installApi(Vue, {
-//   store
-// });
 
 box.init(i18n, browserLanguage);
 
