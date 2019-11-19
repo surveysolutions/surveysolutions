@@ -307,24 +307,6 @@ function AddArtifacts($Project, $BuildConfiguration, $folder) {
     MoveArtifacts $zipfile, $cmdfile $folder
 }
 
-function AddNetCoreArtifacts($Project, $BuildConfiguration, $folder) {
-    $folder = ".\Artifacts\$folder"
-    Remove-Item $folder -Recurse -Force  -ErrorAction SilentlyContinue | Out-Null
-    New-Item $folder -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
-    $folder = Resolve-Path $folder
-    
-    $csproj = Get-ChildItem $Project;
-    $name = $csproj.BaseName;
-    Push-Location $csproj.Directory;
-    
-    try {
-        dotnet publish -c $BuildConfiguration -r win-x64 --self-contained -o $folder\$name
-        Compress-Archive -Path $folder\$name -DestinationPath $folder\$name.zip
-        Remove-Item $folder\$name -Recurse -Force  -ErrorAction SilentlyContinue | Out-Null
-    } finally {
-        Pop-Location
-    }
-}
 function MoveArtifacts([string[]] $items, $folder) {
     $artifactsFolder = "Artifacts"
     If (Test-Path "$artifactsFolder") {
@@ -338,7 +320,7 @@ function MoveArtifacts([string[]] $items, $folder) {
     New-Item -ItemType directory -Path "$artifactsFolder\$folder"
 
     foreach ($file in $items) {
-        Copy-Item "$file" "$artifactsFolder\$folder"
+        Copy-Item -Recurse "$file" "$artifactsFolder\$folder"
     }
 }
 
@@ -402,13 +384,13 @@ function BuildAspNetCoreWebPackage($Project, $BuildConfiguration, $BuildNumber, 
     return Log-Block "Building Asp.Net Core package for project $Project" {
         try {
             $arg = @("publish", $Project,  "-c", $BuildConfiguration,
-                "--version-suffix", $branch, "-v", "q"
+                "--version-suffix", $branch, "-v", "m"
                 "/p:PublishProfile=WebDeployPackage"
                 "/p:BuildNumber=$BuildNumber"
             )
 
             "dotnet $arg" | Out-Host
-            $result = & "dotnet" $arg 
+            $result = & "dotnet" $arg | Out-Host
             
             $ok = $LASTEXITCODE -eq 0
 
@@ -428,7 +410,6 @@ function BuildWebPackage($Project, $BuildConfiguration) {
         return Execute-MSBuild $Project $BuildConfiguration '/t:Package','/p:PackageTempRootDir=""'
     }
 }
-
 function UpdateSourceVersion($Version, $BuildNumber, [string]$file, [string] $branch) {
 	if($branch.ToLower() -eq 'release') {
 		$branch = ""
