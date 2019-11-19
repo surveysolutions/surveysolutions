@@ -9,7 +9,7 @@ const isDevMode = !utils.env.production;
 const config = {
     dist: "dist",
     hqViews: "../Views/Shared",
-    webTester: "../../../WebTester/Content/Dist"
+    webTester: "../../../WB.UI.WebTester/Content/Dist"
 };
 
 config.resources = {
