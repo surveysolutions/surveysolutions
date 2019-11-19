@@ -77,7 +77,7 @@ namespace WB.Enumerator.Native.WebInterview
         }
 
         
-        public async Task ChangeSection(string sectionId)
+        public async Task ChangeSection(string sectionId, string oldSectionId = null)
         {
             var interviewId = CallerInterviewId;
             var oldSection = this.Context.Items[SectionId] as string;

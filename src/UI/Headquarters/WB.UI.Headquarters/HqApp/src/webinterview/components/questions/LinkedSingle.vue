@@ -57,7 +57,9 @@
                 set(value) {
                     this.sendAnswer(() => {
                         const selectedOption = find(this.$me.options, { 'value': value });
-                        this.$store.dispatch("answerLinkedSingleOptionQuestion", { answer: selectedOption.rosterVector, questionIdentity: this.$me.id })
+                        this.$store.dispatch("answerLinkedSingleOptionQuestion", { 
+                            answer: selectedOption.rosterVector,
+                            identity: this.$me.id })
                     })
                 }
             },

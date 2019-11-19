@@ -18,7 +18,7 @@ export default {
 
     actions: {
         fetchSidebar: batchedAction(({ commit, rootState }, ids) => {
-            return Vue.$http.get('getSidebarChildSectionsOf',
+            return Vue.$api.interview.get('getSidebarChildSectionsOf',
                 {
                     interviewId: rootState.route.params.interviewId,
                     sectionId: rootState.route.params.sectionId || null, 
