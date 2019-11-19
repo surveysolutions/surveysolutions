@@ -9918,6 +9918,9 @@ dl dd:after {
   display: -ms-flexbox;
   display: flex; }
 
+.d-block {
+  display: block; }
+
 .f-row {
   -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
@@ -9960,6 +9963,9 @@ dl dd:after {
 
 .h-100 {
   height: 100%; }
+
+.w-100 {
+  width: 100%; }
 
 .font-bold {
   font-family: "RobotoBold"; }
