@@ -97,13 +97,13 @@ namespace WB.Services.Export.Host
             app.UseMetricServer();
             
             app.StartScheduler();
-            app.UseSchedulerMetrics();
-            app.UseHealthChecks("/.hc");
+            app.UseSchedulerMetrics();            
 
             app.UseRouting();
 
             app.UseEndpoints(e =>
             {
+                e.MapHealthChecks("/.hc");
                 e.MapControllers();
             });
 
