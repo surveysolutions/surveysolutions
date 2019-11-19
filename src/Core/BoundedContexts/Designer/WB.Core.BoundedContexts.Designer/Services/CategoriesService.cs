@@ -1,8 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Main.Core.Documents;
 using OfficeOpenXml;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.Core.BoundedContexts.Designer.Resources;
+using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Categories;
 
@@ -113,9 +119,53 @@ namespace WB.Core.BoundedContexts.Designer.Services
             }
         }
 
-        public void Store(Guid questionnaireId, Guid categoriesId, byte[] fileBytes)
+        public void Store(Guid questionnaireId, Guid categoriesId, byte[] excelRepresentation)
         {
-            
+            if (categoriesId == null) throw new ArgumentNullException(nameof(categoriesId));
+            if (excelRepresentation == null) throw new ArgumentNullException(nameof(excelRepresentation));
+
+            using (MemoryStream stream = new MemoryStream(excelRepresentation))
+            {
+                try
+                {
+                    using (ExcelPackage package = new ExcelPackage(stream))
+                    {
+                        if (package.Workbook.Worksheets.Count == 0)
+                        {
+                            throw new InvalidExcelFileException(ExceptionMessages.TranslationFileIsEmpty);
+                        }
+
+                        var worksheet = package.Workbook.Worksheets[0];
+
+                        var errors = this.Verify(worksheet).Take(10).ToList();
+                        if (errors.Any())
+                            throw new InvalidExcelFileException(ExceptionMessages.TranlationExcelFileHasErrors) {FoundErrors = errors};
+
+                        for (int rowNumber = 2; rowNumber <= worksheet.Dimension.End.Row; rowNumber++)
+                        {
+                            this.dbContext.CategoriesInstances.Add(new CategoriesInstance
+                            {
+                                QuestionnaireId = questionnaireId,
+                                CategoriesId = categoriesId,
+                                Id = worksheet.Cells[$"A{rowNumber}"].GetValue<int>(),
+                                ParentId = worksheet.Cells[$"B{rowNumber}"].GetValue<int?>(),
+                                Text = worksheet.Cells[$"C{rowNumber}"].GetValue<string>()
+                            });
+                        }
+
+                        this.dbContext.SaveChanges();
+                    }
+                }
+                catch (Exception e) when(e is NullReferenceException || e is InvalidDataException || e is COMException)
+                {
+                    throw new InvalidExcelFileException(ExceptionMessages.CategoriesCantBeExtracted, e);
+                }
+            }
+        }
+
+        private IEnumerable<TranslationValidationError> Verify(ExcelWorksheet worksheet)
+        {
+            yield break;
         }
     }
 }

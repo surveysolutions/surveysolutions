@@ -294,6 +294,9 @@
   <data name="TranslationsCantBeExtracted" xml:space="preserve">
     <value>Failed to extract translations from uploaded file</value>
   </data>
+  <data name="CategoriesCantBeExtracted" xml:space="preserve">
+    <value>Failed to extract categories from uploaded file</value>
+  </data>
   <data name="TranslationWorksheetIsMissing" xml:space="preserve">
     <value>Worksheet with translations not found</value>
   </data>
