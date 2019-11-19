@@ -305,7 +305,7 @@ gulp.task('inject', ['styles', 'libsJs'],
 }));
 
 gulp.task('webtester:fonts', function() {
-    return gulp.src(config.bootstrapFontFiles)
+    return gulp.src(config.fontsDir + "/*.*")
                .pipe(gulp.dest(config.webTester.targetFolder + config.webTester.fontsFolder));
 });
 
