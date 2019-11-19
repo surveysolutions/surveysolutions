@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
     <RootNamespace>WB.UI.Shared.Web</RootNamespace>
     <AssemblyVersion>5.22.20.0</AssemblyVersion>
     <FileVersion>5.22.20.0</FileVersion>
@@ -12,13 +13,10 @@
     <PackageReference Include="Autofac" Version="4.9.4" />
     <PackageReference Include="Castle.Core" Version="4.4.0" />
     <PackageReference Include="Iesi.Collections" Version="4.0.4" />
-    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor" Version="2.2.0" />
     <PackageReference Include="NHibernate" Version="5.2.6" />
     <PackageReference Include="Refit" Version="4.8.14" />
-    <PackageReference Include="System.Net.Http" Version="4.3.4" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0007" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,5 +28,4 @@
     <Folder Include="DependencyInjection\" />
     <Folder Include="Properties\" />
   </ItemGroup>
-
 </Project>
