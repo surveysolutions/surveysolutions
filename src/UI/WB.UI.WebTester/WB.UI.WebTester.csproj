@@ -8,10 +8,11 @@
 
     <PublishSingleFile>true</PublishSingleFile>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-    <EnableDefaultContentItems>False</EnableDefaultContentItems>
+
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Content\**\*.json" />
     <Content Include="Content\**\*.*" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
     <Content Include="appsettings.*.ini" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
     <Content Include="appsettings.ini" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
