@@ -1,6 +1,8 @@
+using System;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Questionnaire.Categories;
+using WB.UI.Designer.Resources;
 
 namespace WB.UI.Designer.Controllers.Api.Designer
 {
@@ -22,6 +24,18 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         {
             var categoriesFile = this.categoriesService.GetTemplateAsExcelFile();
 
+            if (categoriesFile == null) return NotFound();
+
+            return File(categoriesFile, "application/vnd.oasis.opendocument.spreadsheet",
+                $"{QuestionnaireEditor.SideBarCategoriesTitle}.xlsx");
+        }
+
+        [HttpGet]
+        [Route("{id:Guid}/xlsx/{categoriesId:Guid}")]
+        public IActionResult Get(Guid id, Guid categoriesId)
+        {
+            var categoriesFile = this.categoriesService.GetAsExcelFile(id, categoriesId);
+
             if (categoriesFile.ContentAsExcelFile == null) return NotFound();
 
             var categoriesName = string.IsNullOrEmpty(categoriesFile.CategoriesName)
@@ -30,7 +44,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
             var filename = this.fileSystemAccessor.MakeValidFileName($"[{categoriesName}]{categoriesFile.QuestionnaireTitle}");
 
-            return File(categoriesFile.ContentAsExcelFile, "application/vnd.oasis.opendocument.spreadsheet", $"{filename}.xlsx");
+            return File(categoriesFile.ContentAsExcelFile,
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{filename}.xlsx");
         }
     }
 }
