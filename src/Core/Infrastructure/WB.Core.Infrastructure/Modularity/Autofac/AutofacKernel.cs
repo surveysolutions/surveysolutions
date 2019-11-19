@@ -23,8 +23,6 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         {
             this.containerBuilder = containerBuilder;
 
-            //this.containerBuilder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
-
             this.containerBuilder.RegisterType<AutofacServiceLocatorAdapter>().As<IServiceLocator>().InstancePerLifetimeScope();
 
             var status = new UnderConstructionInfo();
@@ -61,6 +59,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
 
         public Task InitAsync(bool restartOnInitiazationError)
         {
+            this.containerBuilder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
             Container = containerBuilder.Build();
             return InitModules(restartOnInitiazationError);
         }
