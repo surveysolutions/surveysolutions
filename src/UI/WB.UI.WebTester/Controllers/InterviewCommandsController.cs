@@ -10,7 +10,6 @@ using WB.UI.WebTester.Services;
 namespace WB.UI.WebTester.Controllers
 {
     [ResponseCache(NoStore = true)]
-    //[CamelCase]
     [Route("api/webinterview/commands")]
     public class InterviewCommandsController : CommandsController
     {
