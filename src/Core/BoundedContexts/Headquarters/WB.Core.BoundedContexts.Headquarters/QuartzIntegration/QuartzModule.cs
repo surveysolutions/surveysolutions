@@ -4,6 +4,7 @@ using Npgsql;
 using NpgsqlTypes;
 using Quartz;
 using Quartz.Impl.AdoJobStore.Common;
+using Quartz.Spi;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -52,6 +53,7 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
                 return new QuartzSettings(con, instanceId, isClustered);
             });
             registry.BindAsSingleton<ISchedulerFactory, AutofacSchedulerFactory>();
+            registry.Bind<IJobFactory, AutofacJobFactory>();
             registry.BindToMethodInSingletonScope<IScheduler>(ctx => ctx.Get<ISchedulerFactory>().GetScheduler().Result);
         }
 
