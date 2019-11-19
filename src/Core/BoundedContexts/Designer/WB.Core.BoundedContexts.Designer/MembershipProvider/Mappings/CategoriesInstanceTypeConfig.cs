@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings
     {
         public void Configure(EntityTypeBuilder<CategoriesInstance> builder)
         {
-            builder.ToTable("categoriesinstances", "plainstore");
+            builder.ToTable("categories", "plainstore");
 
             builder.HasKey(x => new {x.QuestionnaireId, x.CategoriesId, x.Id});
 

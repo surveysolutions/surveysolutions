@@ -151,6 +151,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to extract categories from uploaded file.
+        /// </summary>
+        public static string CategoriesCantBeExtracted {
+            get {
+                return ResourceManager.GetString("CategoriesCantBeExtracted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to column.
         /// </summary>
         public static string Column {
