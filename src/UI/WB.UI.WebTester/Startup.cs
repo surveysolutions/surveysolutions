@@ -18,6 +18,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Logging;
 using WB.UI.Shared.Web.Versions;
+using WB.UI.WebTester.Infrastructure;
 using WB.UI.WebTester.Services;
 
 namespace WB.UI.WebTester
@@ -47,6 +48,9 @@ namespace WB.UI.WebTester
                 .AddNewtonsoftJsonProtocol();
             services.Configure<TesterConfiguration>(this.Configuration);
             services.AddHttpContextAccessor();
+
+            var healthChecksBuilder = services.AddHealthChecks();
+            healthChecksBuilder.AddCheck<DesignerConnectionCheck>("designer-connection");
         }
 
         // ConfigureContainer is where you can register things directly
@@ -122,6 +126,8 @@ namespace WB.UI.WebTester
 
             app.UseEndpoints(routes =>
             {
+                routes.MapHealthChecks(".hc");
+
                 routes.MapControllerRoute("Section", "WebTester/Interview/{id:Guid}/Section/{sectionId:Guid}", 
                     defaults: new { controller = "WebTester", action = "Section" });
 

@@ -26,6 +26,5 @@
 
   <ItemGroup>
     <Folder Include="DependencyInjection\" />
-    <Folder Include="Properties\" />
   </ItemGroup>
 </Project>
