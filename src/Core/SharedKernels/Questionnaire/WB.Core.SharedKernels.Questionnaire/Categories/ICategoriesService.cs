@@ -8,6 +8,7 @@ namespace WB.Core.SharedKernels.Questionnaire.Categories
             Guid clonedCategoriesId);
 
         void Store(Guid questionnaireId, Guid categoriesId, byte[] fileBytes);
-        CategoriesFile GetTemplateAsExcelFile();
+        byte[] GetTemplateAsExcelFile();
+        CategoriesFile GetAsExcelFile(Guid questionnaireId, Guid categoriesId);
     }
 }
