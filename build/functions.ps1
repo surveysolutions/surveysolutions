@@ -384,8 +384,9 @@ function BuildAspNetCoreWebPackage($Project, $BuildConfiguration, $BuildNumber, 
     return Log-Block "Building Asp.Net Core package for project $Project" {
         try {
             $arg = @("publish", $Project,  "-c", $BuildConfiguration,
-                "--version-suffix", $branch, "-v", "m"
-                "/p:PublishProfile=WebDeployPackage"
+                "--version-suffix", $branch,
+                "-v", "m",
+                "/p:PublishProfile=WebDeployPackage",
                 "/p:BuildNumber=$BuildNumber"
             )
 
