@@ -23,7 +23,7 @@ namespace WB.UI.Designer.Code
             {
                 await this.dbContext.AllowedAddress.FirstOrDefaultAsync(cancellationToken);
             }
-            catch (Exception e)
+            catch
             {
                 return HealthCheckResult.Unhealthy();
             }            
