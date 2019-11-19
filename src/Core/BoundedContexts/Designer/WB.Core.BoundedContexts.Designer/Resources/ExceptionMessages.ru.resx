@@ -337,4 +337,8 @@
     <data name="ImportOptions_MissingRequiredColumns" xml:space="preserve">
     <value>Некоторые колонки отсутствуют. Убедитесь что файл который Вы загружаете содержит обязательные поля</value>
   </data>
+  <data name="CategoriesCantBeExtracted" xml:space="preserve">
+      <value>Произошла ошибка при попытке разбора загруженного файла с категориями</value>
+      <comment>Произошла ошибка при попытке разбора загруженного файла с категориями</comment>
+  </data>
 </root>
