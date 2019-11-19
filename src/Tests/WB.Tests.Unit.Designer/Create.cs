@@ -72,6 +72,7 @@ using QuestionnaireView = WB.Core.BoundedContexts.Designer.Views.Questionnaire.E
 using Translation = WB.Core.SharedKernels.SurveySolutions.Documents.Translation;
 using TranslationInstance = WB.Core.BoundedContexts.Designer.Translations.TranslationInstance;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 
 namespace WB.Tests.Unit.Designer
 {

@@ -42,6 +42,7 @@ using WB.Infrastructure.Native.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.DependencyInjection;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Infrastructure.Native.Storage;
 
 namespace WB.Core.BoundedContexts.Designer

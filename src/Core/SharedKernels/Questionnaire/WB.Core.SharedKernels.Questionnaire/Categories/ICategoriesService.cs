@@ -1,6 +1,6 @@
 using System;
 
-namespace WB.Core.SharedKernels.Questionnaire.Translations
+namespace WB.Core.SharedKernels.Questionnaire.Categories
 {
     public interface ICategoriesService
     {
@@ -8,5 +8,6 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
             Guid clonedCategoriesId);
 
         void Store(Guid questionnaireId, Guid categoriesId, byte[] fileBytes);
+        CategoriesFile GetTemplateAsExcelFile();
     }
 }
