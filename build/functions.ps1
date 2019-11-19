@@ -135,31 +135,8 @@ function Log-StartBlock($blockStartName) {
 function Log-EndBlock($blockEndName) {
     "##teamcity[blockClosed name='$(TeamCityEncode $blockEndName)']" | Write-Host
 }
-
 function Log-Message($message) {
     "##teamcity[message text='$(TeamCityEncode $message)']" | Write-Host
-}
-
-function Log-Error($errorMessage, $details = $null) {
-    if($details -eq $null) {
-        $details = $errorMessage
-    }
-    $details = TeamCityEncode $details
-    $errMsg = TeamCityEncode $errorMessage
-    "##teamcity[message status='ERROR' text='$errMsg' errorDetails='$details' ]" | Write-Host
-    "##teamcity[buildProblem description='$errMsg']" | Write-Host
-}
-
-function Log-Progress($progressMessage, [ScriptBlock] $progressBlock) {
-    Log-StartProgress $progressMessage
-
-    try {
-        $result = & $progressBlock
-        return $result
-    }
-    finally {
-        Log-EndProgress $progressMessage
-    }
 }
 
 function Log-StartProgress($startProgressMessage) {
@@ -191,7 +168,7 @@ function versionCheck() {
     Write-host "MsBuild version: $(&(GetPathToMSBuild) /version /nologo)"
     Write-Host "Dotnet CLI version: $(dotnet --version)"
 
-    $(& $nuget help | select -First 1) | Out-Host
+    $(& $nuget help | Select-Object -First 1) | Out-Host
 }
 
 ##############################
@@ -291,9 +268,8 @@ function RunConfigTransform($Project, $BuildConfiguration) {
     $PathToConfigFile = Join-Path $file.directoryname "Web.config"
     $PathToTransformFile = Join-Path $file.directoryname "Web.$BuildConfiguration.config"
 
-    $command = "$(GetPathToConfigTransformator) $PathToConfigFile $PathToTransformFile $PathToConfigFile"
-    Write-Host $command
-    iex $command
+    "GetPathToConfigTransformator $PathToConfigFile $PathToTransformFile $PathToConfigFile" | Write-Verbose
+    & GetPathToConfigTransformator $PathToConfigFile $PathToTransformFile $PathToConfigFile 
 }
 
 function AddArtifacts($Project, $BuildConfiguration, $folder) {
@@ -380,18 +356,25 @@ function Execute-MSBuild($ProjectFile, $Configuration, $buildArgs = $null, $logI
     return $wasBuildSuccessfull
 }
 
-function BuildAspNetCoreWebPackage($Project, $BuildConfiguration, $BuildNumber, $branch) {
-    return Log-Block "Building Asp.Net Core package for project $Project" {
+function BuildAspNetCoreWebPackage
+{
+    [CmdletBinding()]
+    param ($Project, $BuildConfiguration, $BuildNumber, $branch)
+
+    return Log-Block "Building Asp.Net Core package for project $Project branch: $branch" {
         try {
-            $arg = @("publish", $Project,  "-c", $BuildConfiguration,
+            $arg = @("publish", 
+                $Project,
+                "-c", $BuildConfiguration,
+                "-v", "n",
                 "--version-suffix", $branch,
-                "-v", "m",
+                "--no-build", '--no-restore',
                 "/p:PublishProfile=WebDeployPackage",
                 "/p:BuildNumber=$BuildNumber"
             )
 
-            "dotnet $arg" | Out-Host
-            $result = & "dotnet" $arg | Out-Host
+            "dotnet $arg" | Write-Verbose
+            & dotnet $arg | Write-Host
             
             $ok = $LASTEXITCODE -eq 0
 
@@ -412,7 +395,7 @@ function BuildWebPackage($Project, $BuildConfiguration) {
     }
 }
 function UpdateSourceVersion($Version, $BuildNumber, [string]$file, [string] $branch) {
-	if($branch.ToLower() -eq 'release') {
+	if($branch -ieq 'release') {
 		$branch = ""
 	} else {
 		$branch = " $branch"
@@ -434,7 +417,7 @@ function UpdateSourceVersion($Version, $BuildNumber, [string]$file, [string] $br
     $NewFileVersion = 'AssemblyFileVersion("' + $ver + '")';
     $NewInformationalVerson = "AssemblyInformationalVersion(""$Version (build $BuildNumber)$branch"")"
 
-    $TmpFile = $tempFile = [System.IO.Path]::GetTempFileName()
+    $TmpFile = [System.IO.Path]::GetTempFileName()
 
     get-content $file | 
         % {$_ -replace 'AssemblyVersion\("[0-9]+(\.([0-9]+|\*)){1,3}"\)', $NewVersion } |
@@ -442,7 +425,7 @@ function UpdateSourceVersion($Version, $BuildNumber, [string]$file, [string] $br
         % {$_ -replace 'AssemblyInformationalVersion\("[0-9]+(\.([0-9]+|\*)){1,2} \(build [0-9]+\).*"\)', $NewInformationalVerson } > $TmpFile
 
     move-item $TmpFile $file -force
-    Write-Host "##teamcity[message text='Updated $file to version $ver']"
+    "##teamcity[message text='Updated $file to version $NewInformationalVerson']" | Write-Verbose
 }
 
 function GetVersionString([string]$Project) {
@@ -456,7 +439,7 @@ function GetVersionString([string]$Project) {
 
 function UpdateProjectVersion([string]$BuildNumber, [string]$ver, [string] $branch) {
     $foundFiles = get-childitem -include *AssemblyInfo.cs -recurse -ErrorAction SilentlyContinue | `
-        ? { $_.fullname -notmatch "\\*.Tests\\?" }
+        Where-Object { $_.fullname -notmatch "\\*.Tests\\?" }
     foreach ($file in $foundFiles) {
         UpdateSourceVersion -Version $ver -BuildNumber $BuildNumber -file $file -Branch $branch
     }
