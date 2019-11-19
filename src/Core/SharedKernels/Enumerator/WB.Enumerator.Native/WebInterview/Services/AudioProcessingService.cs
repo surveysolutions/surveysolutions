@@ -7,10 +7,9 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using CSCore;
-using CSCore.Codecs.WAV;
-using CSCore.MediaFoundation;
 using Microsoft.AspNetCore.Http;
+using NAudio.MediaFoundation;
+using NAudio.Wave;
 using StackExchange.Exceptional;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Infrastructure.Native.Monitoring;
@@ -22,13 +21,13 @@ namespace WB.Enumerator.Native.WebInterview.Services
         private readonly ILogger logger;
         private readonly IHttpContextAccessor httpContextAccessor;
 
-        private const int EncoderBufferSize = 64 * 1024; // just an 64Kb buffer to read
         private const string MimeType = @"audio/m4a";
 
         public AudioProcessingService(ILogger logger, IHttpContextAccessor httpContextAccessor)
         {
             this.logger = logger;
             this.httpContextAccessor = httpContextAccessor;
+            MediaFoundationApi.Startup();
             // single thread to process all audio compression requests
             // if there is need to process audio in more then one queue - duplicate line below
             Task.Factory.StartNew(AudioCompressionQueueProcessor);
@@ -52,22 +51,12 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 using (var ms = new MemoryStream(audio))
                 using (var wavFile = new WaveFileReader(ms))
                 {
-                    audioResult.Duration = wavFile.GetLength();
+                    audioResult.Duration = wavFile.TotalTime;
 
-                    using (var encoder = MediaFoundationEncoder.CreateAACEncoder(wavFile.WaveFormat, tempFile,
-                        64 * 1024 /* 64 Kb bitrate*/))
-                    {
-                        byte[] buffer = new byte[EncoderBufferSize];
-
-                        int read;
-                        wavFile.Position = 0;
-
-                        while ((read = wavFile.Read(buffer, 0, EncoderBufferSize)) > 0)
-                        {
-                            encoder.Write(buffer, 0, read);
-                        }
-                    }
+                    const int desiredBitRate = 64 * 1024;
+                    MediaFoundationEncoder.EncodeToAac(wavFile, tempFile,  desiredBitRate);
                 }
+
                 audioResult.Binary = File.ReadAllBytes(tempFile);
                 audioResult.MimeType = MimeType;
 
