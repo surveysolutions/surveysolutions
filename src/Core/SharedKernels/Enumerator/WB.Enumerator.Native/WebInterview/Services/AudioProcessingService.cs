@@ -43,7 +43,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
         private AudioFileInformation CompressData(byte[] audio)
         {
-            var tempFile = Path.GetTempFileName();
+            var tempFile = Path.ChangeExtension(Path.GetTempFileName(), ".aac");
             var audioResult = new AudioFileInformation();
 
             try
