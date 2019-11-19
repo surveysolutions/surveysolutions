@@ -5,15 +5,17 @@
     <AssemblyName>WB.UI.WebTester</AssemblyName>
     <RootNamespace>WB.UI.WebTester</RootNamespace>
     <LangVersion>latest</LangVersion>
+
+    <PublishSingleFile>true</PublishSingleFile>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <EnableDefaultContentItems>False</EnableDefaultContentItems>
   </PropertyGroup>
 
   <ItemGroup>
-    <!--<None Remove="Content\**\*.*" />-->
+    <Content Include="Content\**\*.*" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+    <Content Include="appsettings.*.ini" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+    <Content Include="appsettings.ini" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
     <None Remove="ErrorPages\genericError.html" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <!--<Content Include="Content\**\*.*" />-->
     <Content Include="ErrorPages\genericError.html" />
   </ItemGroup>
 
