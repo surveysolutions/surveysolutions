@@ -12,91 +12,84 @@ const options = Object.assign({
 }, argv)
 
 const puppeteer = require('puppeteer');
+const { Cluster } = require('puppeteer-cluster');
 
-(async () => {
-    const browser = await puppeteer.launch({
+const config = {
+    launchOptions: {
         ignoreHTTPSErrors: true,
         headless: !options.h,
         defaultViewport: { width: 1920, height: 1080 }
-    });
+    },
+    viewport: { width: 1920, height: 1080 }
+}
 
-    const designer = await browser.newPage();
+async function testWeb({ page }) {
+    await page.goto(options.address, { waitUntil: 'networkidle2' });
+    await page.type('#Input_Email', options.u)
+    await page.type('#Input_Password', options.p)
+    await page.click('[type="submit"]')
+    await page.waitForSelector("#questionnaire-table-header")
 
-    await designer.goto(options.address, { waitUntil: 'networkidle2' });
-    await designer.type('#Input_Email', options.u)
-    await designer.type('#Input_Password', options.p)
-    await designer.click('[type="submit"]')
-
-    console.log(chalk.green("Logged in"))
-    await designer.waitForSelector("#questionnaire-table-header")
-
-    console.log("Loading questionnaire")
-    await designer.goto(options.address + "/questionnaire/details/" + options.q)
-    await designer.waitForSelector('#webtest-btn')
-
-    const work = {
-        inWork: 0,
-        left: options.i
-    }
-
-    console.log(`Starting work. ${work.left} interviews left`)
-
-    browser.on("targetcreated", async target => {
-        try {
-            console.log(`target created. ${target.type()}`)
-            const tester = await target.page()
-            work.inWork += 1
-
+    var iterationDone = new Promise(async function(resolve) {
+        page.on("popup", async target => {
+            const tester = target
+    
             tester.waitForNavigation({
-                timeout: 90000
+                timeout: 20000
             })
-
+    
+            console.info(`tester : ${tester}`)
             await tester.waitForSelector("#loadingPixel", {
-                timeout: 90000
+                timeout: 20000
             })
-
+    
             var waitLoading = async () => {
-                await tester.waitForFunction((id) => {
+                await tester.waitForFunction(() => {
                     try {
-                        return document.getElementById(id).getAttribute('data-loading') === 'false'
+                        const result = document.getElementById('loadingPixel').getAttribute('data-loading') === 'false'
+                        return result
                     }
                     catch (e) {
                         return false;
                     }
-                }, 
+                },
                 {
                     timeout: 50000,
                     polling: 1000
-                }, 
-                'loadingPixel'
-                )
+                })
             }
-
+    
             await waitLoading()
             await tester.evaluate(() => window._api.router.push({ name: 'complete' }))
             await waitLoading()
             await tester.waitForSelector('#btnComplete')
             await tester.click('#btnComplete')
-        } catch (e) {
-            console.log(chalk.red("Error in interview"), e)
-        } finally {
-            work.inWork -= 1
-            work.left--
-        }
+            resolve()
+        })
+    
+        await page.goto(options.address + "/questionnaire/details/" + options.q)
+        await page.waitForSelector('#webtest-btn')
+        await page.click('#webtest-btn')
+    });
+    return iterationDone
+}
 
-        console.log("Completed interview. " + work.left + ' left')
 
-        if (work.left - work.inWork > 0) {
-            await designer.click('#webtest-btn')
-        } else {
-            if (work.inWork <= 0) {
-                await browser.close();
-            }
-        }
-    })
+(async () => {
 
-    for (var i = 0; i < Math.min(options.w, work.left); i++) {
-        await designer.click('#webtest-btn')
-    }
+    const cluster = await Cluster.launch({
+        concurrency: Cluster.CONCURRENCY_CONTEXT,
+        maxConcurrency: options.w,
+        puppeteerOptions: config.launchOptions
+    });
 
+    await cluster.task(testWeb);
+
+    for (let i = 1; i <= options.i; i++) {
+        cluster.queue(i);
+    };
+    console.info('all tasks are in queue')
+
+    await cluster.idle();
+    await cluster.close();
 })();
