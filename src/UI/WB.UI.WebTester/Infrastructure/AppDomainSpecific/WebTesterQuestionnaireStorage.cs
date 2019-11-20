@@ -12,8 +12,6 @@ namespace WB.UI.WebTester.Infrastructure
     {
         private readonly IWebTesterTranslationService translationStorage;
 
-        public PlainQuestionnaire Questionnaire { get; set; }
-
         public WebTesterQuestionnaireStorage(IWebTesterTranslationService translationStorage, 
             IQuestionOptionsRepository questionOptionsRepository,
             ISubstitutionService substitutionService)
@@ -31,31 +29,56 @@ namespace WB.UI.WebTester.Infrastructure
 
         public IQuestionnaire GetQuestionnaire(QuestionnaireIdentity identity, string language)
         {
-            string questionnaireCacheKey = language != null ? $"{identity}${language}" : $"{identity}";
+            if (language == null)
+            {
+                if (this.plainQuestionnairesCache.TryGetValue(identity.ToString(), out PlainQuestionnaire q))
+                {
+                    return q;
+                }
+            }
 
-            return this.plainQuestionnairesCache.GetOrAdd(questionnaireCacheKey,
-                s => this.translationStorage.Translate(Questionnaire, identity.Version,
-                    language));
+            string questionnaireCacheKey = $"{identity}${language}";
+
+            if (this.plainQuestionnairesCache.TryGetValue(questionnaireCacheKey, out PlainQuestionnaire q1))
+            {
+                return q1;
+            }
+
+            if (this.plainQuestionnairesCache.TryGetValue(identity.ToString(), out PlainQuestionnaire q3))
+            {
+                var result = this.translationStorage.Translate(q3, identity.Version,
+                    language);
+                this.plainQuestionnairesCache[questionnaireCacheKey] = result;
+                return result;
+            }
+
+            return null;
         }
         
         public void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument)
         {
-            Questionnaire = new PlainQuestionnaire(questionnaireDocument, version, questionOptionsRepository, substitutionService);
+            this.plainQuestionnairesCache[new QuestionnaireIdentity(id, version).ToString()] = 
+                 new PlainQuestionnaire(questionnaireDocument, version, questionOptionsRepository, substitutionService);
         }
 
         public QuestionnaireDocument GetQuestionnaireDocument(QuestionnaireIdentity identity)
         {
-            return Questionnaire.QuestionnaireDocument;
+            if (this.plainQuestionnairesCache.TryGetValue(identity.ToString(), out PlainQuestionnaire q))
+            {
+                return q.QuestionnaireDocument;
+            }
+
+            return null;
         }
 
         public QuestionnaireDocument GetQuestionnaireDocument(Guid id, long version)
         {
-            return Questionnaire.QuestionnaireDocument;
+            return this.GetQuestionnaireDocument(new QuestionnaireIdentity(id, version));
         }
 
         public void DeleteQuestionnaireDocument(Guid id, long version)
         {
-            Questionnaire = null;
+            this.plainQuestionnairesCache.TryRemove(new QuestionnaireIdentity(id, version).ToString(), out _);
         }
     }
 }
