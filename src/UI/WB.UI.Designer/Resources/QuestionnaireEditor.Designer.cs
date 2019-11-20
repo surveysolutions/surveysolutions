@@ -178,6 +178,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bind to reusable categories.
+        /// </summary>
+        public static string BindToReusableCategories {
+            get {
+                return ResourceManager.GetString("BindToReusableCategories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Cancel {
@@ -1980,6 +1989,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reusable categories.
+        /// </summary>
+        public static string ReusableCategories {
+            get {
+                return ResourceManager.GetString("ReusableCategories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add item.
         /// </summary>
         public static string RosterAddItem {
@@ -2088,6 +2106,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Roster&apos;s question.
+        /// </summary>
+        public static string RostersQuestion {
+            get {
+                return ResourceManager.GetString("RostersQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Roster ID.
         /// </summary>
         public static string RosterVariableName {
@@ -2183,6 +2210,15 @@ namespace WB.UI.Designer.Resources {
         public static string SectionVariableName {
             get {
                 return ResourceManager.GetString("SectionVariableName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select categories.
+        /// </summary>
+        public static string SelectCategories {
+            get {
+                return ResourceManager.GetString("SelectCategories", resourceCulture);
             }
         }
         
@@ -3357,6 +3393,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Source of categories.
+        /// </summary>
+        public static string SourceOfCategories {
+            get {
+                return ResourceManager.GetString("SourceOfCategories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Static text.
         /// </summary>
         public static string StaticText {
@@ -3623,6 +3668,15 @@ namespace WB.UI.Designer.Resources {
         public static string Upload {
             get {
                 return ResourceManager.GetString("Upload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User defined categories.
+        /// </summary>
+        public static string UserDefinedCategories {
+            get {
+                return ResourceManager.GetString("UserDefinedCategories", resourceCulture);
             }
         }
         
