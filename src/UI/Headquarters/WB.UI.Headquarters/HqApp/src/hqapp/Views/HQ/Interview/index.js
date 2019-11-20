@@ -24,10 +24,6 @@ export default class ReviewComponent {
                 props: {
                     navigateToPrefilled: true,
                     showHumburger: false
-                },
-                beforeEnter(to, from, next) {
-                    self.changeSection(null, from.params.sectionId)
-                    next()
                 }
             },
             {
@@ -37,10 +33,6 @@ export default class ReviewComponent {
                 props: {
                     navigateToPrefilled: true,
                     showHumburger: false
-                },
-                beforeEnter(to, from, next) {
-                    self.changeSection(null, from.params.sectionId)
-                    next()
                 }
             },
             {
@@ -50,20 +42,12 @@ export default class ReviewComponent {
                 props: {
                     navigateToPrefilled: true,
                     showHumburger: false
-                },
-                beforeEnter(to, from, next) {
-                    self.changeSection(null, from.params.sectionId)
-                    next()
                 }
             },
             {
                 path: 'Section/:sectionId',
                 name: 'section',
-                component: ReviewSection,
-                beforeEnter(to, from, next) {
-                    self.changeSection(to.params.sectionId, from.params.sectionid)
-                    next()
-                }
+                component: ReviewSection
             }
             ]
         }]
