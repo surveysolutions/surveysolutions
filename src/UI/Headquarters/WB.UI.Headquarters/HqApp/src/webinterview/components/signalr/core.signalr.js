@@ -44,7 +44,6 @@ export default {
         })
 
         connection.on("markAnswerAsNotSaved", (id, message) => {
-            this.$store.dispatch("fetchProgress", -1)
             this.$store.dispatch("fetch", { id, done: true })
             this.$store.dispatch("setAnswerAsNotSaved", { id, message })
         })
