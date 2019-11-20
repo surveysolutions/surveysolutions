@@ -10,13 +10,13 @@ namespace WB.UI.WebTester.Infrastructure
 {
     public class WebTesterQuestionnaireStorage : IQuestionnaireStorage
     {
-        private readonly IWebTesterTranslationService translationStorage;
+        private readonly IWebTesterTranslationService translationService;
 
-        public WebTesterQuestionnaireStorage(IWebTesterTranslationService translationStorage, 
+        public WebTesterQuestionnaireStorage(IWebTesterTranslationService translationService, 
             IQuestionOptionsRepository questionOptionsRepository,
             ISubstitutionService substitutionService)
         {
-            this.translationStorage = translationStorage;
+            this.translationService = translationService;
             this.questionOptionsRepository = questionOptionsRepository;
             this.substitutionService = substitutionService;
         }
@@ -29,30 +29,15 @@ namespace WB.UI.WebTester.Infrastructure
 
         public IQuestionnaire GetQuestionnaire(QuestionnaireIdentity identity, string language)
         {
-            if (language == null)
+            if (this.plainQuestionnairesCache.TryGetValue(identity.ToString(), out PlainQuestionnaire q))
             {
-                if (this.plainQuestionnairesCache.TryGetValue(identity.ToString(), out PlainQuestionnaire q))
+                if (language == null)
                 {
                     return q;
                 }
             }
 
-            string questionnaireCacheKey = $"{identity}${language}";
-
-            if (this.plainQuestionnairesCache.TryGetValue(questionnaireCacheKey, out PlainQuestionnaire q1))
-            {
-                return q1;
-            }
-
-            if (this.plainQuestionnairesCache.TryGetValue(identity.ToString(), out PlainQuestionnaire q3))
-            {
-                var result = this.translationStorage.Translate(q3, identity.Version,
-                    language);
-                this.plainQuestionnairesCache[questionnaireCacheKey] = result;
-                return result;
-            }
-
-            return null;
+            return this.translationService.Translate(q, identity.Version, language);
         }
         
         public void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument)
