@@ -5,10 +5,10 @@ const options = Object.assign({
     w: 5,
     i: 10,
     q: '6158dd074d64498f8a50e5e9828fda23', // enumeration question automation
-    u: 'admin',
+    u: 'andrii',
     p: '1',
     h: false,
-    address: "https://localhost/designer"
+    address: "https://localhost:5002"
 }, argv)
 
 const puppeteer = require('puppeteer');
@@ -17,15 +17,14 @@ const puppeteer = require('puppeteer');
     const browser = await puppeteer.launch({
         ignoreHTTPSErrors: true,
         headless: !options.h,
+        defaultViewport: { width: 1920, height: 1080 }
     });
 
     const designer = await browser.newPage();
 
-    await designer.setViewport({ width: 1600, height: 900 })
-
     await designer.goto(options.address, { waitUntil: 'networkidle2' });
-    await designer.type('#UserName', options.u)
-    await designer.type('#Password', options.p)
+    await designer.type('#Input_Email', options.u)
+    await designer.type('#Input_Password', options.p)
     await designer.click('[type="submit"]')
 
     console.log(chalk.green("Logged in"))
@@ -34,7 +33,7 @@ const puppeteer = require('puppeteer');
     console.log("Loading questionnaire")
     await designer.goto(options.address + "/questionnaire/details/" + options.q)
     await designer.waitForSelector('#webtest-btn')
-    
+
     const work = {
         inWork: 0,
         left: options.i
@@ -44,22 +43,43 @@ const puppeteer = require('puppeteer');
 
     browser.on("targetcreated", async target => {
         try {
+            console.log(`target created. ${target.type()}`)
             const tester = await target.page()
             work.inWork += 1
 
             tester.waitForNavigation({
                 timeout: 90000
             })
-            await tester.setViewport({ width: 1600, height: 900 })
-            await tester.waitForSelector("[data-id=SidebarCompleted]", {
+
+            await tester.waitForSelector("#loadingPixel", {
                 timeout: 90000
             })
-            await tester.evaluate("window._api.router.push({name: 'complete'})")
-            await tester.evaluate('window._api.store.dispatch("completeInterview", { comment: "test"})')          
-            
+
+            var waitLoading = async () => {
+                await tester.waitForFunction((id) => {
+                    try {
+                        return document.getElementById(id).getAttribute('data-loading') === 'false'
+                    }
+                    catch (e) {
+                        return false;
+                    }
+                }, 
+                {
+                    timeout: 50000,
+                    polling: 1000
+                }, 
+                'loadingPixel'
+                )
+            }
+
+            await waitLoading()
+            await tester.evaluate(() => window._api.router.push({ name: 'complete' }))
+            await waitLoading()
+            await tester.waitForSelector('#btnComplete')
+            await tester.click('#btnComplete')
         } catch (e) {
             console.log(chalk.red("Error in interview"), e)
-        } finally{
+        } finally {
             work.inWork -= 1
             work.left--
         }

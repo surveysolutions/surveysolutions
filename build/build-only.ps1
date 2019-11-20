@@ -100,7 +100,6 @@ try {
                 -KeystoreAlias 'wbcapipublish' `
                 -CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
                 -OutFileName "$(Split-Path $ProjectHeadquarters)\Client\$ExtPackageName" `
-                -branch $branch `
                 -NoCleanUp `
                 -ExcludeExtra:$false | % { if (-not $_) { Exit } }
 
