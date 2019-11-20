@@ -1248,7 +1248,7 @@ namespace WB.Tests.Unit.Designer
                 string validationExpression = null, string validationMessage = null, QuestionScope scope = QuestionScope.Interviewer, Option[] options = null,
                 Guid? linkedToQuestionId = null, bool areAnswersOrdered = false, int? maxAllowedAnswers = null, bool yesNoView = false,
                 string linkedFilterExpression = null, bool isFilteredCombobox = false, bool hideIfDisabled = false, 
-                List<ValidationCondition> validationConditions = null) => new UpdateMultiOptionQuestion(
+                List<ValidationCondition> validationConditions = null, Guid? categoriesId = null) => new UpdateMultiOptionQuestion(
                 Guid.NewGuid(),
                 questionId,
                 responsibleId,
@@ -1271,7 +1271,8 @@ namespace WB.Tests.Unit.Designer
                 yesNoView,
                 validationConditions ?? new List<ValidationCondition>(),
                 linkedFilterExpression,
-                isFilteredCombobox);
+                isFilteredCombobox,
+                categoriesId);
         }
 
         public static ValidationCondition ValidationCondition(string expression = "self != null", string message = "should be answered")

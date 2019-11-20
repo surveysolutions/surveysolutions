@@ -1130,7 +1130,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 command.LinkedFilterExpression,
                 false,
                 null,
-                null);
+                null,
+                categoriesId: command.CategoriesId);
 
             this.innerDocument.ReplaceEntity(question, newQuestion);
             
@@ -1203,7 +1204,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 command.LinkedFilterExpression,
                 false,
                 showAsList:command.ShowAsList,
-                showAsListThreshold: command.ShowAsListThreshold);
+                showAsListThreshold: command.ShowAsListThreshold,
+                categoriesId: command.CategoriesId);
 
             this.innerDocument.ReplaceEntity(question, newQuestion);
         }
@@ -2370,7 +2372,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             int? maxAnswerCount, bool? isFilteredCombobox, Guid? cascadeFromQuestionId,
             bool? yesNoView, IList<ValidationCondition> validationConditions,
             string linkedFilterExpression, bool isTimestamp,
-            bool? showAsList, int? showAsListThreshold)
+            bool? showAsList, int? showAsListThreshold, Guid? categoriesId = null)
         {
             AbstractQuestion question;
 
@@ -2381,7 +2383,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     {
                         AreAnswersOrdered = areAnswersOrdered ?? false,
                         MaxAllowedAnswers = maxAllowedAnswers,
-                        YesNoView = yesNoView ?? false
+                        YesNoView = yesNoView ?? false,
+                        CategoriesId = categoriesId
                     };
                     UpdateAnswerList(answers, question, linkedToQuestionId);
                     break;
@@ -2389,7 +2392,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     question = new SingleQuestion()
                     {
                         ShowAsList = showAsList ?? false,
-                        ShowAsListThreshold = showAsListThreshold
+                        ShowAsListThreshold = showAsListThreshold,
+                        CategoriesId = categoriesId
                     };
 
                     UpdateAnswerList(answers, question, linkedToQuestionId);
