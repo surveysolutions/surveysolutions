@@ -18,8 +18,6 @@ function Connector(store, interviewId, connected) {
 
     async function connect() {
         async function changeSection(sectionId) {
-            store.dispatch("fetchProgress", 1)
-
             try {
                 const state = jQuery.signalR[config.hubName].state
                 const oldSectionId = state.sectionId
@@ -28,8 +26,6 @@ function Connector(store, interviewId, connected) {
                 await wrap(hub.server.changeSection(sectionId, oldSectionId))
             } catch (err) {
                 store.dispatch("UNHANDLED_ERROR", err)
-            } finally {
-                store.dispatch("fetchProgress", -1)
             }
         }
 
@@ -80,7 +76,6 @@ function Connector(store, interviewId, connected) {
         }
 
         interviewProxy.client.markAnswerAsNotSaved = (id, message) => {
-            store.dispatch("fetchProgress", -1)
             store.dispatch("fetch", { id, done: true })
             store.dispatch("setAnswerAsNotSaved", { id, message })
         }
