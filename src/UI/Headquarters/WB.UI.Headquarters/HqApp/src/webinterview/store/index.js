@@ -49,7 +49,7 @@ const store = safeStore({
 
             
             const result = (loadedCount === 0 && totalCount > 0) || (loadedCount < totalCount) || state.fetch.loadingProgress || state.fetch.inProgress > 0;
-            if(totalCount == 0) return true;
+         //   if(totalCount == 0) return true;
 
             
             return result;
