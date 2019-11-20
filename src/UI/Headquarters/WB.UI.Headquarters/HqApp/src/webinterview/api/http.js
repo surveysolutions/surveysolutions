@@ -26,8 +26,6 @@ const httpPlugin = {
 
             params.interviewId = params.interviewId || store.state.route.params.interviewId
 
-            store.dispatch("fetchProgress", 1)
-
             try {
                 const result = await action(params)
                 return result
@@ -39,8 +37,6 @@ const httpPlugin = {
                 else {
                     store.dispatch("UNHANDLED_ERROR", err)
                 }
-            } finally {
-                store.dispatch("fetchProgress", -1)
             }
         }
 
