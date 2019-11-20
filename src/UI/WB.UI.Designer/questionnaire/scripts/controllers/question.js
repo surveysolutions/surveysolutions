@@ -120,6 +120,9 @@
                 $scope.activeQuestion.showAsList = question.showAsList;
                 $scope.activeQuestion.showAsListThreshold = question.showAsListThreshold;
 
+                $scope.activeQuestion.isLinkedToReusableCategories = !_.isEmpty(question.categoriesId);
+                $scope.activeQuestion.categoriesId = question.categoriesId;
+
                 if (!_.isNull($scope.questionForm) && !_.isUndefined($scope.questionForm)) {
                     $scope.questionForm.$setPristine();
                 }
@@ -297,7 +300,8 @@
                             yesNoView: $scope.activeQuestion.yesNoView,
                             isInteger: $scope.activeQuestion.isInteger,
                             linkedToType: $scope.activeQuestion.linkedToEntity == null ? null : $scope.activeQuestion.linkedToEntity.type,
-                            defaultDate: $scope.activeQuestion.defaultDate
+                            defaultDate: $scope.activeQuestion.defaultDate,
+                            categoriesId: $scope.activeQuestion.categoriesId
                         });
 
                         var notIsFilteredCombobox = !$scope.activeQuestion.isFilteredCombobox;
@@ -588,6 +592,10 @@
 
                 currentQuestion.isFilteredCombobox = isFilteredCombobox;
                 currentQuestion.yesNoView = yesNoView;
+
+                if (currentQuestion.isLinked)
+                    currentQuestion.isLinked = !isFilteredCombobox && !yesNoView;
+
                 markFormAsChanged();
             };
             
@@ -600,6 +608,50 @@
                     return dictionnaires.categoricalMultiKinds[0];
             };
 
+            $scope.getSourceOfCategories = function (currentQuestion) {
+                if (currentQuestion.isLinked)
+                    return $i18next.t('RostersQuestion');
+
+                return currentQuestion.isLinkedToReusableCategories === true
+                    ? $i18next.t('ReusableCategories')
+                    : $i18next.t('UserDefinedCategories');
+            };
+
+            $scope.changeIsReusableCategories = function (currentQuestion, isReusable) {
+                if (currentQuestion.isLinkedToReusableCategories === isReusable) return;
+
+                currentQuestion.isLinked = false;
+                currentQuestion.isLinkedToReusableCategories = isReusable;
+                if (!isReusable)
+                    currentQuestion.categoriesId = null;
+                
+                markFormAsChanged();
+            };
+
+            $scope.setIsLinkedQuestion = function (currentQuestion, isLinked) {
+                if (currentQuestion.isLinked === isLinked) return;
+
+                currentQuestion.isLinked = isLinked;
+
+                markFormAsChanged();
+            };
+
+            $scope.getSelectedCategories = function(currentQuestion) {
+                return _.find($scope.questionnaire.categories,
+                    function(c) { return c.categoriesId === currentQuestion.categoriesId; });
+            };
+
+            $scope.getCategoriesList = function() {
+                return $scope.questionnaire.categories;
+            };
+
+            $scope.setCategories = function (currentQuestion, categories) {
+                if (currentQuestion.categoriesId === categories.categoriesId) return;
+
+                currentQuestion.categoriesId = categories.categoriesId;
+                markFormAsChanged();
+            };
+
             $scope.$watch('activeQuestion.isLinked', function(newValue) {
                 if (!$scope.activeQuestion) {
                     return;
@@ -608,6 +660,8 @@
                     $scope.activeQuestion.yesNoView = false;
                     $scope.activeQuestion.isFilteredCombobox = false;
                     $scope.activeQuestion.optionsFilterExpression = null;
+                    $scope.activeQuestion.isLinkedToReusableCategories = false;
+                    $scope.activeQuestion.categoriesId = null;
                 } else {
                     $scope.activeQuestion.linkedToEntityId = null;
                     $scope.activeQuestion.linkedToEntity = null;

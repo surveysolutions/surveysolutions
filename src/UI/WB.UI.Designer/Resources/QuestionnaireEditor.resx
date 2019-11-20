@@ -625,6 +625,12 @@
   <data name="QuestionDisplayMode" xml:space="preserve">
     <value>Display mode</value>
   </data>
+  <data name="BindToReusableCategories" xml:space="preserve">
+    <value>Bind to reusable categories</value>
+  </data>
+  <data name="SelectCategories" xml:space="preserve">
+    <value>Select categories</value>
+  </data>
   <data name="QuestionScope" xml:space="preserve">
     <value>Question scope</value>
   </data>
@@ -822,6 +828,18 @@
   </data>
   <data name="SelectParentQuestionError" xml:space="preserve">
     <value>You must select the parent question</value>
+  </data>
+  <data name="UserDefinedCategories" xml:space="preserve">
+    <value>User defined categories</value>
+  </data>
+  <data name="ReusableCategories" xml:space="preserve">
+    <value>Reusable categories</value>
+  </data>
+  <data name="SourceOfCategories" xml:space="preserve">
+    <value>Source of categories</value>
+  </data>
+  <data name="RostersQuestion" xml:space="preserve">
+    <value>Roster's question</value>
   </data>
   <data name="SettingsInvite" xml:space="preserve">
     <value>Invite</value>

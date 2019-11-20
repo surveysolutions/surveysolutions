@@ -307,6 +307,7 @@
                         }
                         command.showAsListThreshold = question.showAsListThreshold;
                         command.showAsList = question.showAsList;
+                        command.categoriesId = question.categoriesId;
                         break;
                     case "MultyOption":
                         command.areAnswersOrdered = question.areAnswersOrdered;
@@ -316,6 +317,7 @@
                         command.yesNoView = question.yesNoView;
                         command.isFilteredCombobox = question.isFilteredCombobox || false;
                         command.options = !_.isEmpty(command.linkedToEntityId) || command.isFilteredCombobox ? null : question.options;
+                        command.categoriesId = question.categoriesId;
                         break;
                     case "Numeric":
                         command.isInteger = question.isInteger;

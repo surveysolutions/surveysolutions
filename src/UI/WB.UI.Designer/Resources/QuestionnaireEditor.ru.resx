@@ -1382,4 +1382,28 @@
       <value>список категорий без имени</value>
       <comment>список категорий без имени</comment>
   </data>
+  <data name="BindToReusableCategories" xml:space="preserve">
+      <value>Связать с категориями</value>
+      <comment>Связать с категориями</comment>
+  </data>
+  <data name="SelectCategories" xml:space="preserve">
+      <value>Выбрать категории</value>
+      <comment>Выбрать категории</comment>
+  </data>
+  <data name="UserDefinedCategories" xml:space="preserve">
+      <value>Категории определенные пользователем </value>
+      <comment>Определенные пользователем</comment>
+  </data>
+  <data name="SourceOfCategories" xml:space="preserve">
+      <value>Источник категорий</value>
+      <comment>Источник категорий</comment>
+  </data>
+  <data name="RostersQuestion" xml:space="preserve">
+      <value>Вопрос из ростера</value>
+      <comment>Вопрос из ростера</comment>
+  </data>
+  <data name="ReusableCategories" xml:space="preserve">
+      <value>Из списка категорий</value>
+      <comment>Из списка категорий</comment>
+  </data>
 </root>
