@@ -130,9 +130,7 @@ try {
         
         Log-Block "Collecting/building artifacts" {
             AddArtifacts $ProjectHeadquarters $BuildConfiguration -folder "Headquarters"
-
-            MoveArtifacts "src\UI\WB.UI.WebTester\obj\Release\package\WB.UI.WebTester.zip" "WebTester"
-            MoveArtifacts "src\UI\WB.UI.WebTester\obj\Release\package\WB.UI.WebTester.deploy.cmd" "WebTester"
+            AddArtifacts $ProjectWebTester $BuildConfiguration -folder "WebTester"
         }
 
         Write-Host "##teamcity[publishArtifacts '$artifactsFolder']"
