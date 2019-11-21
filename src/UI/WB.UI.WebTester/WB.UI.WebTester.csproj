@@ -6,7 +6,7 @@
     <RootNamespace>WB.UI.WebTester</RootNamespace>
     <LangVersion>latest</LangVersion>
 
-    <PublishSingleFile>true</PublishSingleFile>
+    <PublishSingleFile>false</PublishSingleFile>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
 
   </PropertyGroup>
