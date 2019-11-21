@@ -6,11 +6,8 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Enumerator.Native.WebInterview.Services
 {
@@ -19,7 +16,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IWebInterviewInvoker webInterviewInvoker;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
-        
+
         public WebInterviewNotificationService(IStatefulInterviewRepository statefulInterviewRepository,
             IQuestionnaireStorage questionnaireStorage,
             IWebInterviewInvoker webInterviewInvoker)
@@ -57,6 +54,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                      || questionnaire.GetSubstitutedQuestions(identity.Id).Any()
                      || questionnaire.GetSubstitutedGroups(identity.Id).Any()
                      || questionnaire.GetSubstitutedStaticTexts(identity.Id).Any()
+                     || questionnaire.ShowCascadingAsList(identity.Id)
                    ))
                 {
                     doesNeedRefreshSectionList = true;
@@ -100,9 +98,9 @@ namespace WB.Enumerator.Native.WebInterview.Services
             }
 
             if (doesNeedRefreshSectionList)
-                this.webInterviewInvoker.RefreshSection(interviewId); 
+                this.webInterviewInvoker.RefreshSection(interviewId);
             else
-                this.webInterviewInvoker.RefreshSectionState(interviewId); 
+                this.webInterviewInvoker.RefreshSectionState(interviewId);
         }
 
         public void ReloadInterview(Guid interviewId) => this.webInterviewInvoker.ReloadInterview(interviewId);
@@ -116,7 +114,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
             {
                 return;
             }
-            
+
             var clientGroupIdentity = this.GetClientGroupIdentity(questionId, interview);
 
             if (clientGroupIdentity != null)
@@ -140,7 +138,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
             var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(interview.QuestionnaireIdentity);
             if (questionnaire == null)
                 return;
-            
+
             var entitiesToRefresh = new List<(string section, Identity identity)>();
 
             foreach (var entity in entities)
@@ -176,7 +174,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     continue;
 
                 this.webInterviewInvoker.RefreshEntities(
-                    questionsGroupedByParent.Key, 
+                    questionsGroupedByParent.Key,
                     questionsGroupedByParent.Select(p => p.identity.ToString()).Distinct().ToArray());
             }
 
@@ -185,7 +183,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
         private string GetClientGroupIdentity(Identity identity, IStatefulInterview interview)
         {
-            if(this.IsQuestionPrefield(identity, interview))
+            if (this.IsQuestionPrefield(identity, interview))
             {
                 return WebInterview.GetConnectedClientPrefilledSectionKey(interview.Id);
             }
@@ -202,7 +200,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
             return (interview.GetQuestion(identity)
                 ?? interview.GetStaticText(identity)
                 ?? interview.GetRoster(identity)
-                ?? (IInterviewTreeNode) interview.GetGroup(identity))?.Parent?.Identity;
+                ?? (IInterviewTreeNode)interview.GetGroup(identity))?.Parent?.Identity;
         }
 
         private bool IsQuestionPrefield(Identity identity, IStatefulInterview interview)
