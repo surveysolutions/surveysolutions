@@ -128,6 +128,16 @@ function Log-Block($logBlockName, [ScriptBlock] $logBlock) {
     }
 }
 
+function Log-Error($errorMessage, $details = $null) {
+    if($details -eq $null) {
+        $details = $errorMessage
+    }
+    $details = TeamCityEncode $details
+    $errMsg = TeamCityEncode $errorMessage
+    "##teamcity[message status='ERROR' text='$errMsg' errorDetails='$details' ]" | Write-Host
+    "##teamcity[buildProblem description='$errMsg']" | Write-Host
+}
+
 function Log-StartBlock($blockStartName) {
     "##teamcity[blockOpened name='$(TeamCityEncode $blockStartName)']" | Write-Host
 }
