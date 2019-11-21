@@ -841,6 +841,9 @@
   <data name="RostersQuestion" xml:space="preserve">
     <value>Roster's question</value>
   </data>
+  <data name="QuestionRadioButtonList" xml:space="preserve">
+    <value>Radio button list</value>
+  </data>
   <data name="SettingsInvite" xml:space="preserve">
     <value>Invite</value>
   </data>

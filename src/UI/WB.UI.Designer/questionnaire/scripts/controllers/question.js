@@ -583,72 +583,99 @@
                 });
             };
 
-            $scope.changeCategoricalKind = function (currentQuestion, kind) {
+            $scope.changeCategoricalKind = function (kind) {
                 var isFilteredCombobox = kind.value === 3;
                 var yesNoView = kind.value === 2;
 
-                if (isFilteredCombobox === currentQuestion.isFilteredCombobox &&
-                    yesNoView === currentQuestion.yesNoView) return;
+                if (isFilteredCombobox === $scope.activeQuestion.isFilteredCombobox &&
+                    yesNoView === $scope.activeQuestion.yesNoView) return;
 
-                currentQuestion.isFilteredCombobox = isFilteredCombobox;
-                currentQuestion.yesNoView = yesNoView;
+                $scope.activeQuestion.isFilteredCombobox = isFilteredCombobox;
+                $scope.activeQuestion.yesNoView = yesNoView;
 
-                if (currentQuestion.isLinked)
-                    currentQuestion.isLinked = !isFilteredCombobox && !yesNoView;
+                if ($scope.activeQuestion.isLinked)
+                    $scope.activeQuestion.isLinked = !isFilteredCombobox && !yesNoView;
 
                 markFormAsChanged();
             };
             
-            $scope.getCategoricalKind = function (currentQuestion) {
-                if (currentQuestion.isFilteredCombobox)
+            $scope.getCategoricalKind = function () {
+                if ($scope.activeQuestion.isFilteredCombobox)
                     return dictionnaires.categoricalMultiKinds[2];
-                else if (currentQuestion.yesNoView)
+                else if ($scope.activeQuestion.yesNoView)
                     return dictionnaires.categoricalMultiKinds[1];
                 else
                     return dictionnaires.categoricalMultiKinds[0];
             };
 
-            $scope.getSourceOfCategories = function (currentQuestion) {
-                if (currentQuestion.isLinked)
+            $scope.getSourceOfCategories = function() {
+                if ($scope.activeQuestion.isLinked)
                     return $i18next.t('RostersQuestion');
 
-                return currentQuestion.isLinkedToReusableCategories === true
+                if ($scope.activeQuestion.isCascade || ($scope.activeQuestion.cascadeFromQuestionId || '') !== '')
+                    return $i18next.t('QuestionCascading');
+
+                return $scope.activeQuestion.isLinkedToReusableCategories === true
                     ? $i18next.t('ReusableCategories')
                     : $i18next.t('UserDefinedCategories');
             };
 
-            $scope.changeIsReusableCategories = function (currentQuestion, isReusable) {
-                if (currentQuestion.isLinkedToReusableCategories === isReusable) return;
+            $scope.changeIsReusableCategories = function(isReusable) {
+                if ($scope.activeQuestion.isLinkedToReusableCategories === isReusable) return;
 
-                currentQuestion.isLinked = false;
-                currentQuestion.isLinkedToReusableCategories = isReusable;
-                if (!isReusable)
-                    currentQuestion.categoriesId = null;
+                $scope.activeQuestion.isLinked = false;
+                $scope.activeQuestion.isCascade = false;
+                $scope.activeQuestion.categoriesId = null;
+                $scope.activeQuestion.isLinkedToReusableCategories = isReusable;
                 
                 markFormAsChanged();
             };
 
-            $scope.setIsLinkedQuestion = function (currentQuestion, isLinked) {
-                if (currentQuestion.isLinked === isLinked) return;
+            $scope.setIsLinkedQuestion = function () {
+                if ($scope.activeQuestion.isLinked === true) return;
 
-                currentQuestion.isLinked = isLinked;
+                $scope.activeQuestion.isLinked = true;
 
                 markFormAsChanged();
             };
 
-            $scope.getSelectedCategories = function(currentQuestion) {
-                return _.find($scope.questionnaire.categories,
-                    function(c) { return c.categoriesId === currentQuestion.categoriesId; });
+            $scope.getSelectedCategories = function() {
+                return _.find($scope.getCategoriesList(),
+                    function(c) { return c.categoriesId === $scope.activeQuestion.categoriesId; });
             };
 
             $scope.getCategoriesList = function() {
-                return $scope.questionnaire.categories;
+                return $scope.questionnaire.categories || [];
             };
 
-            $scope.setCategories = function (currentQuestion, categories) {
-                if (currentQuestion.categoriesId === categories.categoriesId) return;
+            $scope.setCategories = function (categories) {
+                if ($scope.activeQuestion.categoriesId === categories.categoriesId) return;
 
-                currentQuestion.categoriesId = categories.categoriesId;
+                $scope.activeQuestion.categoriesId = categories.categoriesId;
+                markFormAsChanged();
+            };
+
+            $scope.getCategoricalSingleDisplayMode = function() {
+                if ($scope.activeQuestion.isFilteredCombobox === true)
+                    return $i18next.t('QuestionComboBox');
+                else return $i18next.t('QuestionRadioButtonList');
+            };
+
+            $scope.setQuestionAsCombobox = function(isCombobox) {
+                if ($scope.activeQuestion.isFilteredCombobox === isCombobox) return;
+
+                $scope.activeQuestion.isCascade = false;
+                $scope.activeQuestion.isLinked = false;
+                $scope.activeQuestion.isFilteredCombobox = isCombobox;
+
+                markFormAsChanged();
+            };
+
+            $scope.setQuestionAsCascading = function () {
+                if ($scope.activeQuestion.isCascade === true) return;
+
+                $scope.activeQuestion.isCascade = true;
+
                 markFormAsChanged();
             };
 
@@ -659,8 +686,9 @@
                 if (newValue) {
                     $scope.activeQuestion.yesNoView = false;
                     $scope.activeQuestion.isFilteredCombobox = false;
+                    $scope.activeQuestion.isCascade = false;
                     $scope.activeQuestion.optionsFilterExpression = null;
-                    $scope.activeQuestion.isLinkedToReusableCategories = false;
+                    $scope.activeQuestion.isLinkedToReusableCategories = null;
                     $scope.activeQuestion.categoriesId = null;
                 } else {
                     $scope.activeQuestion.linkedToEntityId = null;
@@ -679,8 +707,10 @@
                             && $scope.activeQuestion.questionScope !== 'Hidden'
                             && $scope.activeQuestion.questionScope !== 'Supervisor') {
                             $scope.changeQuestionScope($scope.getQuestionScopeByValue('Interviewer'));
-                            $scope.activeQuestion.optionsFilterExpression = null;
                         }
+                        $scope.activeQuestion.optionsFilterExpression = null;
+                        $scope.activeQuestion.isLinkedToReusableCategories = null;
+                        $scope.activeQuestion.categoriesId = null;
                     } else {
                         $scope.activeQuestion.cascadeFromQuestionId = null;
                         $scope.activeQuestion.cascadeFromQuestion = null;
