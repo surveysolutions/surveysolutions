@@ -131,7 +131,7 @@ try {
         Log-Block "Collecting/building artifacts" {
             AddArtifacts $ProjectHeadquarters $BuildConfiguration -folder "Headquarters"
 
-            $testerZip = "src\UI\WB.UI.WebTester\Tester.zip"
+            $testerZip = "src\UI\WB.UI.WebTester\WB.UI.WebTester.zip"
             CreateZip "src\UI\WB.UI.WebTester\bin\Release\netcoreapp3.0\win-x64\publish" $testerZip
             MoveArtifacts $testerZip "WebTester"
             Remove-Item $testerZip -Force -ErrorAction SilentlyContinue
