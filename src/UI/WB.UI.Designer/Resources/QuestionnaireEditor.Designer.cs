@@ -1836,6 +1836,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Radio button list.
+        /// </summary>
+        public static string QuestionRadioButtonList {
+            get {
+                return ResourceManager.GetString("QuestionRadioButtonList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Question scope.
         /// </summary>
         public static string QuestionScope {
