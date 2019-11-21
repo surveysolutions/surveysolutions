@@ -93,6 +93,10 @@ function Connector(store, interviewId, connected) {
             queryString.interviewId = options.interviewId;
         }
 
+        if(store.getters.isReviewMode) {
+            queryString.review = true
+        }
+
         $.connection.hub.qs = _.assign(options, queryString);
 
         // { transport: supportedTransports }
