@@ -1406,4 +1406,8 @@
       <value>Из списка категорий</value>
       <comment>Из списка категорий</comment>
   </data>
+  <data name="QuestionRadioButtonList" xml:space="preserve">
+      <value>Переключатели</value>
+      <comment>Переключатели</comment>
+  </data>
 </root>
