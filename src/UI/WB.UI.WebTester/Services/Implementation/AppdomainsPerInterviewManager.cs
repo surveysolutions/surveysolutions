@@ -2,12 +2,9 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.IO;
 using Autofac;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
@@ -15,18 +12,16 @@ namespace WB.UI.WebTester.Services.Implementation
 {
     public class AppdomainsPerInterviewManager : IAppdomainsPerInterviewManager
     {
-        private readonly string binFolderPath;
         private readonly ILogger<AppdomainsPerInterviewManager> logger;
         private readonly ILifetimeScope rootScope;
 
         private readonly ConcurrentDictionary<Guid, Lazy<RemoteInterviewContainer>> appDomains = new ConcurrentDictionary<Guid, Lazy<RemoteInterviewContainer>>();
 
-        public AppdomainsPerInterviewManager(IWebHostEnvironment hosting,
+        public AppdomainsPerInterviewManager(
             ILogger<AppdomainsPerInterviewManager> logger,
             ILifetimeScope rootScope)
         {
 
-            this.binFolderPath = Path.Combine(hosting.ContentRootPath, "bin");
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.rootScope = rootScope;
         }
@@ -41,8 +36,7 @@ namespace WB.UI.WebTester.Services.Implementation
                 logger.LogDebug($"[lazy]Creating remote interview: {interviewId} for q: {questionnaireIdentity}");
                 return new RemoteInterviewContainer(
                     rootScope,
-                    interviewId,
-                    binFolderPath, 
+                    interviewId, 
                     questionnaireIdentity, 
                     supportingAssembly);
             }));
@@ -78,19 +72,6 @@ namespace WB.UI.WebTester.Services.Implementation
             }
             
             throw new ArgumentException("Cannot execute command. No remote domain were setted up");
-        }
-
-        public List<CategoricalOption> GetFirstTopFilteredOptionsForQuestion(Guid interviewId,
-            Identity questionIdentity,
-            int? parentQuestionValue, string filter, int itemsCount = 200, int[] excludedOptionIds = null)
-        {
-            if (appDomains.TryGetValue(interviewId, out var interview))
-            {
-                logger.LogDebug($"Execute remote interview GetFirstTopFilteredOptionsForQuestion: {interviewId}");
-                return interview.Value.statefulInterview.GetFirstTopFilteredOptionsForQuestion(questionIdentity, parentQuestionValue, filter, itemsCount, excludedOptionIds);
-            }
-
-            throw new ArgumentException("Cannot get first top filtered options. No remote domain were setted up");
         }
 
         public int? GetLastEventSequence(Guid interviewId)

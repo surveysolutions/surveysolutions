@@ -6,11 +6,8 @@ namespace WB.UI.WebTester.Services.Implementation
 {
     public class InterviewAssemblyLoadContext : AssemblyLoadContext, IDisposable
     {
-        private AssemblyDependencyResolver resolver;
-
-        public InterviewAssemblyLoadContext(string binPath) : base(isCollectible: true)
+        public InterviewAssemblyLoadContext() : base(isCollectible: true)
         {
-            resolver = new AssemblyDependencyResolver(binPath);
         }
 
         protected override Assembly Load(AssemblyName assemblyName)
