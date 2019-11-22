@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Autofac;
 using Ncqrs.Eventing;
-using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
@@ -14,7 +12,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Enumerator.Native.Questionnaire;
 using WB.Infrastructure.Native.Monitoring;
 using WB.UI.WebTester.Infrastructure;
 
@@ -28,7 +25,6 @@ namespace WB.UI.WebTester.Services.Implementation
 
         public RemoteInterviewContainer(ILifetimeScope rootScope,
             Guid interviewId,
-            string binFolderPath,
             QuestionnaireIdentity identity,
             string supportingAssembly)
         {
@@ -36,7 +32,7 @@ namespace WB.UI.WebTester.Services.Implementation
 
             using (var assemblyStream = new MemoryStream(Convert.FromBase64String(supportingAssembly)))
             {
-                context = new InterviewAssemblyLoadContext(binFolderPath);
+                context = new InterviewAssemblyLoadContext();
                 var assembly = context.LoadFromStream(assemblyStream);
 
                 AppDomainsAliveGauge.Inc();
