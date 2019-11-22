@@ -5,10 +5,9 @@
     <AssemblyName>WB.UI.WebTester</AssemblyName>
     <RootNamespace>WB.UI.WebTester</RootNamespace>
     <LangVersion>latest</LangVersion>
-
-    <PublishSingleFile>false</PublishSingleFile>
+    <PublishSingleFile>true</PublishSingleFile>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-
+    <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
   </PropertyGroup>
 
   <ItemGroup>
