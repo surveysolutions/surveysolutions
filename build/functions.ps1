@@ -373,17 +373,17 @@ function BuildAspNetCoreWebPackage
 
     return Log-Block "Building Asp.Net Core package for project $Project branch: $branch" {
         try {
-            $arg = @("publish", 
-                $Project,
-                "-c", $BuildConfiguration,
-                "-v", "n",
-                "--version-suffix", $branch,
-                "--no-build", '--no-restore',
+            $arg = @("publish"
+                $Project
+                "--configuration", $BuildConfiguration
+                "-v", "n"
+                "--version-suffix", $branch
+                '--runtime', 'win-x64'
                 "/p:PublishProfile=WebDeployPackage",
                 "/p:BuildNumber=$BuildNumber"
             )
 
-            "dotnet $arg" | Write-Verbose
+            "dotnet $arg" | Write-Host
             & dotnet $arg | Write-Host
             
             $ok = $LASTEXITCODE -eq 0
