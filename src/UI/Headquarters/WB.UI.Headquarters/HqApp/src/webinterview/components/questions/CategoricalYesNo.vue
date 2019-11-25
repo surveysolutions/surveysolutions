@@ -147,7 +147,7 @@
 
                 if (!this.$me.isRosterSize)
                 {
-                    this.$store.dispatch("answerYesNoQuestion", { questionId: this.$me.id, answer: newAnswer })
+                    this.$store.dispatch("answerYesNoQuestion", { identity: this.$me.id, answer: newAnswer })
                     return;
                 }
 
@@ -157,7 +157,7 @@
 
                 if (!isNeedRemoveRosters)
                 {
-                    this.$store.dispatch('answerYesNoQuestion', { questionId: this.$me.id, answer: newAnswer });
+                    this.$store.dispatch('answerYesNoQuestion', { identity: this.$me.id, answer: newAnswer });
                     return;
                 }
                 const rosterTitle = _.find(this.answeredOrAllOptions, { value: optionValue}).title
@@ -168,7 +168,7 @@
 
                 modal.confirm(confirmMessage,  result => {
                     if (result) {
-                        this.$store.dispatch("answerYesNoQuestion", { questionId: this.$me.id, answer: newAnswer })
+                        this.$store.dispatch("answerYesNoQuestion", { identity: this.$me.id, answer: newAnswer })
                         return;
                     } else {
                         // trigger update for checkboxes to override some vue optimizations

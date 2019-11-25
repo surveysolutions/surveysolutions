@@ -62,7 +62,7 @@
                 set(value) {
                     this.sendAnswer(() => {
                         const selectedOptions = map(value, (x) => { return find(this.$me.options, { 'value': x }).rosterVector; });
-                        this.$store.dispatch("answerLinkedMultiOptionQuestion", { answer: selectedOptions, questionIdentity: this.$me.id })
+                        this.$store.dispatch("answerLinkedMultiOptionQuestion", { answer: selectedOptions, identity: this.$me.id })
                     })
                 }
             },

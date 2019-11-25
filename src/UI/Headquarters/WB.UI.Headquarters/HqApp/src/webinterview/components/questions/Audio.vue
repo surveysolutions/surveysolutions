@@ -151,7 +151,7 @@ export default {
                     },
                     doneCallback: (blob) => {
                         self.$store.dispatch('answerAudioQuestion', {
-                            id: self.id,
+                            identity: self.id,
                             file: blob
                         })
                     }

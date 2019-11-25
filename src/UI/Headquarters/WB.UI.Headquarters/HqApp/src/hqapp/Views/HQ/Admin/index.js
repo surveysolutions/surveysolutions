@@ -22,10 +22,10 @@ export default class AdminComponent {
     initialize() {
         const VeeValidate = require('vee-validate');
         Vue.use(VeeValidate);
-        const installApi = require("~/webinterview/api").install
+        // const installApi = require("~/webinterview/api").install
 
-        installApi(Vue, {
-            store: this.rootStore
-        });
+        // installApi(Vue, {
+        //     store: this.rootStore
+        // });
     }
 }

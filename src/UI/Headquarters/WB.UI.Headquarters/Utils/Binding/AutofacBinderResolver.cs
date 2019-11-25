@@ -23,13 +23,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Binding
         /// <summary>
         /// The _kernel.
         /// </summary>
-        private readonly IContainer _kernel;
+        private readonly ILifetimeScope _kernel;
 
         #endregion
 
         #region Constructors and Destructors
 
-       public AutofacBinderResolver(IContainer kernel)
+       public AutofacBinderResolver(ILifetimeScope kernel)
         {
             this._kernel = kernel;
         }

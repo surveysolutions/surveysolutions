@@ -79,7 +79,7 @@
                         self.cleanValidity()
 
                         self.$store.dispatch('answerMultimediaQuestion', {
-                            id: self.id,
+                            identity: self.id,
                             file: self.$refs.uploader.files[0]
                         })
 

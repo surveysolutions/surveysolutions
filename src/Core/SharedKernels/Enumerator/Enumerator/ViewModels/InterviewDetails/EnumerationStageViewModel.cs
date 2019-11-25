@@ -38,7 +38,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly ICommandService commandService;
 
         readonly IUserInterfaceStateService userInterfaceStateService;
-        private readonly IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher;
 
         private NavigationState navigationState;
 
@@ -51,7 +50,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IInterviewViewModelFactory interviewViewModelFactory,
             IStatefulInterviewRepository interviewRepository,
             IUserInterfaceStateService userInterfaceStateService,
-            IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher,
             DynamicTextViewModel dynamicTextViewModel, 
             ICompositeCollectionInflationService compositeCollectionInflationService,
             IViewModelEventRegistry liteEventRegistry,
@@ -60,7 +58,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.interviewRepository = interviewRepository;
             this.userInterfaceStateService = userInterfaceStateService;
-            this.mvxMainThreadDispatcher = mvxMainThreadDispatcher;
             this.liteEventRegistry = liteEventRegistry;
             this.commandService = commandService;
 
