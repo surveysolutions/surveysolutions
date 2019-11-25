@@ -80,6 +80,14 @@ namespace WB.Core.BoundedContexts.Designer.Services
             };
         }
 
+        public IQueryable<CategoriesItem> GetCategoriesById(Guid id) =>
+            this.dbContext.CategoriesInstances.Where(x => x.CategoriesId == id).Select(x => new CategoriesItem
+            {
+                Id = x.Id,
+                ParentId = x.ParentId,
+                Text = x.Text
+            });
+
         private byte[] GetExcelFileContentEEPlus(Guid questionnaireId, Guid categoriesId)
         {
             using (ExcelPackage excelPackage = new ExcelPackage())

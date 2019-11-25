@@ -852,6 +852,7 @@
                                             <span ng-if="reference.type == 'Attachment'" class="icon icon-attachment icon-{{verificationStatus.typeOfMessageToBeShown}}"></span>
                                             <span ng-if="reference.type == 'Variable'" class="icon icon-variable icon-{{verificationStatus.typeOfMessageToBeShown}}"></span>
                                             <span ng-if="reference.type == 'Translation'" class="icon icon-translation icon-{{verificationStatus.typeOfMessageToBeShown}}"></span>
+                                            <span ng-if="reference.type == 'Categories'" class="icon icon-categories icon-{{verificationStatus.typeOfMessageToBeShown}}"></span>
                                             <span class="title">{{reference.title | escape}}</span>
                                             <span class="variable" ng-bind-html="reference.variable || '&nbsp;'">&nbsp;</span>
                                         </a>
