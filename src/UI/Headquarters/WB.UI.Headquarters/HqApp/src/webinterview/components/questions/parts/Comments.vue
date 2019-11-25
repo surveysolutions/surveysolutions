@@ -74,7 +74,7 @@
                 if (!com || !com.trim())
                     return
 
-                await this.$store.dispatch("sendNewComment", { questionId: this.$me.id, comment: com.trim() })
+                await this.$store.dispatch("sendNewComment", { identity: this.$me.id, comment: com.trim() })
 
                 this.comment = ''
                 if(evnt && evnt.target) {
@@ -83,7 +83,7 @@
             },
             async resolve() {
                 this.isResolving = true
-                await this.$store.dispatch('resolveComment', { questionId: this.questionId })
+                await this.$store.dispatch('resolveComment', { identity: this.questionId })
                 this.isResolving = false
             }
         },

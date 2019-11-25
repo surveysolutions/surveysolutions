@@ -1,6 +1,7 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNet.SignalR.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
@@ -18,29 +19,31 @@ namespace WB.Enumerator.Native.WebInterview.Pipeline
             this.productVersion = productVersion;
         }
 
-        private void ReloadIfOlderVersion(IHub hub)
+        private Task ReloadIfOlderVersion(Hub hub)
         {
-            if (this.productVersion.ToString() != hub.Context.QueryString[@"appVersion"])
+            var clientVersion = hub.Context.Items[@"appVersion"] as string;
+            if (this.productVersion.ToString() != clientVersion)
             {
-                hub.Clients.Caller.reloadInterview();
+                return hub.Clients.Caller.SendCoreAsync("reloadInterview", null, CancellationToken.None);
             }
+
+            return Task.CompletedTask;
         }
 
-        public Task OnConnected(IHub hub)
+        public Task OnConnected(Hub hub)
+        {
+            return this.ReloadIfOlderVersion(hub);
+        }
+
+        public Task OnDisconnected(Hub hub, Exception exception)
+        {
+            return Task.CompletedTask;
+        }
+
+        /*public Task OnReconnected(Hub hub)
         {
             this.ReloadIfOlderVersion(hub);
             return Task.CompletedTask;
-        }
-
-        public Task OnDisconnected(IHub hub, bool stopCalled)
-        {
-            return Task.CompletedTask;
-        }
-
-        public Task OnReconnected(IHub hub)
-        {
-            this.ReloadIfOlderVersion(hub);
-            return Task.CompletedTask;
-        }
+        }*/
     }
 }

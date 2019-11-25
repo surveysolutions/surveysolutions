@@ -15,7 +15,7 @@
           if (to.name === "section") {
               const sectionId = to.params["sectionId"]
               const interviewId = to.params["interviewId"]
-              return await Vue.$api.get('isEnabled', {interviewId, id:sectionId})
+              return await Vue.$api.interview.get('isEnabled', {interviewId, id:sectionId})
           }
     }
 
@@ -37,25 +37,6 @@
             if(this.$route.hash){
                 this.$store.dispatch("sectionRequireScroll", { id: this.$route.hash })
             }
-        },
-
-        async beforeRouteEnter (to, from, next) {
-            if(await checkSectionPermission(to)) {
-                next(vm => vm.$store.dispatch("changeSection", to.params.sectionId))
-                return;
-            }
-            
-            next(false);
-        },
-
-        async beforeRouteUpdate (to, from, next) {
-            if(await checkSectionPermission(to)) {
-                this.$store.dispatch("changeSection", to.params.sectionId)
-                next();
-                return;
-            }
-            
-            next(false);
         },
 
         watch: {

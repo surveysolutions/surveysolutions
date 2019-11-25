@@ -187,15 +187,20 @@
     <Compile Include="Compression\CompressionHandler.cs" />
     <Compile Include="Configuration\ExternalStoragesConfigSection.cs" />
     <Compile Include="DataAnnotations\ServerSideOnlyRegularExpressionAttribute.cs" />
+    <Compile Include="Extensions\ProgressiveDownload.cs" />
+    <Compile Include="Extensions\ProgressiveDownloadHelpers.cs" />
     <Compile Include="Filters\ControlPanelAccessAttribute.cs" />
+    <Compile Include="MembershipProvider\Accounts\PasswordPolicy.cs" />
+    <Compile Include="MembershipProvider\Settings\MembershipProviderSettings.cs" />
+    <Compile Include="MembershipProvider\Settings\PasswordPolicyFactory.cs" />
+    <Compile Include="Modules\ApiControllerExtensions.cs" />
+    <Compile Include="Services\IImageProcessingService.cs" />
     <Compile Include="Slack\ChannelsCollection.cs" />
     <Compile Include="Slack\ISlackMessageThrottler.cs" />
     <Compile Include="Slack\SlackApiClient.cs" />
     <Compile Include="Slack\SlackApiConfiguration.cs" />
     <Compile Include="Controllers\UnderConstructionController.cs" />
     <Compile Include="Extensions\IPrincipalExtensions.cs" />
-    <Compile Include="Extensions\ProgressiveDownload.cs" />
-    <Compile Include="Extensions\ProgressiveDownloadHelpers.cs" />
     <Compile Include="Filters\ApiNoCacheAttribute.cs" />
     <Compile Include="Attributes\NoTransactionAttribute.cs" />
     <Compile Include="Captcha\ICaptchaService.cs" />
@@ -237,10 +242,7 @@
     <Compile Include="Kernel\AutofacWebKernel.cs" />
     <Compile Include="Kernel\CustomWebApiDependencyResolver.cs" />
     <Compile Include="Mappings\ProductVersionChangeMap.cs" />
-    <Compile Include="MembershipProvider\Accounts\PasswordPolicy.cs" />
-    <Compile Include="MembershipProvider\Settings\MembershipProviderSettings.cs" />
     <Compile Include="Captcha\CaptchaModule.cs" />
-    <Compile Include="Modules\ApiControllerExtensions.cs" />
     <Compile Include="Modules\AutofacWebModuleAdapter.cs" />
     <Compile Include="Modules\Filters\FilterExtensions.cs" />
     <Compile Include="Modules\Filters\MvcActionFilter.cs" />
@@ -258,7 +260,6 @@
     <Compile Include="Modules\IWebIocRegistry.cs" />
     <Compile Include="Modules\IWebModule.cs" />
     <Compile Include="Modules\AutofacModuleExtensions.cs" />
-    <Compile Include="MembershipProvider\Settings\PasswordPolicyFactory.cs" />
     <Compile Include="Modules\LogRequestModule.cs" />
     <Compile Include="Modules\WebConfigurationModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -277,7 +278,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>UnderConstruction.resx</DependentUpon>
     </Compile>
-    <Compile Include="Services\IImageProcessingService.cs" />
     <Compile Include="Services\ImageProcessingService.cs" />
     <Compile Include="Settings\CoreSettings.cs" />
     <Compile Include="Settings\ISettingsProvider.cs" />
@@ -377,7 +377,6 @@
     <EmbeddedResource Include="Resources\UnderConstruction.zh.resx" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="MembershipProvider\Roles\" />
     <Folder Include="Modules\NonWebRequest\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

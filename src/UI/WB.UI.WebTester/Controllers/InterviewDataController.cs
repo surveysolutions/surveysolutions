@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Web.Http;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
-using WB.UI.Shared.Web.Attributes;
-using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.WebTester.Controllers
 {
-    [ApiNoCache]
-    [RoutePrefix("api/webinterview")]
-    [CamelCase]
+    [ResponseCache(NoStore = true)]
+    [Route("api/webinterview")]
     public class InterviewDataController : Enumerator.Native.WebInterview.Controllers.InterviewDataController
     {
         public InterviewDataController(IQuestionnaireStorage questionnaireRepository, IStatefulInterviewRepository statefulInterviewRepository, 
@@ -32,12 +29,14 @@ namespace WB.UI.WebTester.Controllers
 
         [HttpGet]
         [Route("getTopFilteredOptionsForQuestionWithExclude")]
-        public override DropdownItem[] GetTopFilteredOptionsForQuestion(Guid interviewId, string id, string filter, int count, [FromUri] int[] excludedOptionIds = null)
+        public override DropdownItem[] GetTopFilteredOptionsForQuestion(Guid interviewId, string id, string filter, int count,
+            [FromQuery(Name = "excludedOptionIds[]")] int[] excludedOptionIds)
             => base.GetTopFilteredOptionsForQuestion(interviewId, id, filter, count, excludedOptionIds);
 
         [HttpGet]
         [Route("getBreadcrumbs")]
-        public override BreadcrumbInfo GetBreadcrumbs(Guid interviewId, string sectionId = null) => base.GetBreadcrumbs(interviewId, sectionId);
+        public override BreadcrumbInfo GetBreadcrumbs(Guid interviewId, string sectionId = null) 
+            => base.GetBreadcrumbs(interviewId, sectionId);
 
         [HttpGet]
         [Route("getCompleteInfo")]
@@ -49,7 +48,7 @@ namespace WB.UI.WebTester.Controllers
 
         [HttpGet]
         [Route("getEntitiesDetails")]
-        public override InterviewEntity[] GetEntitiesDetails(Guid interviewId, [FromUri] string[] ids, string sectionId = null) => base.GetEntitiesDetails(interviewId, ids, sectionId);
+        public override InterviewEntity[] GetEntitiesDetails(Guid interviewId, [FromQuery(Name = "ids[]")] string[] ids, string sectionId = null) => base.GetEntitiesDetails(interviewId, ids, sectionId);
 
         [HttpGet]
         [Route("getFullSectionInfo")]
@@ -86,7 +85,8 @@ namespace WB.UI.WebTester.Controllers
 
         [HttpGet]
         [Route("getSidebarChildSectionsOf")]
-        public override Sidebar GetSidebarChildSectionsOf(Guid interviewId, [FromUri] string[] ids, string sectionId = null) => base.GetSidebarChildSectionsOf(interviewId, ids, sectionId);
+        public override Sidebar GetSidebarChildSectionsOf(Guid interviewId, [FromQuery(Name = "ids[]")] string[] ids, string sectionId = null) 
+            => base.GetSidebarChildSectionsOf(interviewId, ids, sectionId);
 
         [HttpGet]
         [Route("getInterviewDetails")]

@@ -93,7 +93,7 @@ export default {
             if (!com || !com.trim())
                 return
 
-            await this.$store.dispatch("sendNewComment", { questionId: this.item.id, comment: com.trim() })
+            await this.$store.dispatch("sendNewComment", { identity: this.item.id, comment: com.trim() })
 
             this.$store.dispatch("loadAdditionalInfo", { id: this.item.id });
 
