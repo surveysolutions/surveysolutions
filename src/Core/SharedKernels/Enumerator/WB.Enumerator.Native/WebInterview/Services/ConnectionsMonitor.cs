@@ -3,8 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNet.SignalR;
-using Microsoft.AspNet.SignalR.Transports;
+using Microsoft.AspNetCore.SignalR;
 using Ncqrs;
 using WB.Infrastructure.Native.Monitoring;
 
@@ -12,8 +11,9 @@ namespace WB.Enumerator.Native.WebInterview.Services
 {
     public class ConnectionsMonitor : IConnectionsMonitor
     {
-        private readonly ITransportHeartbeat transportHeartbeat;
+        //private readonly ITransportHeartbeat transportHeartbeat;
         private readonly IClock clock;
+        private readonly HubConnectionStore hubConnectionStore;
 
         private readonly ConcurrentDictionary<string, DateTime> connectedClients
             = new ConcurrentDictionary<string, DateTime>();
@@ -26,11 +26,12 @@ namespace WB.Enumerator.Native.WebInterview.Services
         // The number of seconds that have to pass to consider a connection invalid.
         private readonly TimeSpan zombieThreshold = TimeSpan.FromSeconds(30);
 
-        public ConnectionsMonitor(IClock clock)
+        public ConnectionsMonitor(IClock clock, HubConnectionStore hubConnectionStore)
         {
             // ITransportHeartbeat is registered by SignalR, and accessible only via GlobalHost resolver
-            this.transportHeartbeat = GlobalHost.DependencyResolver.Resolve<ITransportHeartbeat>();
+            //this.transportHeartbeat = GlobalHost.DependencyResolver.Resolve<ITransportHeartbeat>();
             this.clock = clock;
+            this.hubConnectionStore = hubConnectionStore;
             CommonMetrics.WebInterviewOpenConnections.Set(0);
         }
 
@@ -67,9 +68,9 @@ namespace WB.Enumerator.Native.WebInterview.Services
         // based on https://stackoverflow.com/a/21070978/41483
         public void Check()
         {
-            foreach (var connection in transportHeartbeat.GetConnections())
+            foreach (var connection in hubConnectionStore)
             {
-                if (!connection.IsAlive)
+                if (connection.ConnectionAborted.IsCancellationRequested)
                 {
                     Disconnected(connection.ConnectionId);
                     continue;

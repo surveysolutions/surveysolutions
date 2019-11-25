@@ -732,7 +732,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private Dictionary<string, IQuestionnaire> questionnairesCache = new Dictionary<string, IQuestionnaire>();
         private IQuestionOptionsRepository questionOptionsRepository;
 
-        private IQuestionnaire GetQuestionnaireOrThrow(string language)
+        protected virtual IQuestionnaire GetQuestionnaireOrThrow(string language)
         {
             var cacheKey = language ?? "Default-Language-9518C2F02FF54DC9A6BCB31507B03F06";
 

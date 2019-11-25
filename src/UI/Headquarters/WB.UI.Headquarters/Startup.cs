@@ -174,13 +174,20 @@ namespace WB.UI.Headquarters
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            WebInterviewModule.Configure(app, HqWebInterviewModule.HubPipelineModules);
+            WebInterviewModuleConfigure(app);
             app.Use(SetSessionStateBehavior).UseStageMarker(PipelineStage.MapHandler);
 
             app.UseAutofacWebApi(config);
         }
 
-        private void ConfigureAuth(IAppBuilder app, IContainer ioc)
+        public static void WebInterviewModuleConfigure(IAppBuilder app)
+        {
+            var resolver = GlobalHost.DependencyResolver;
+            (resolver.GetService(typeof(IConnectionsMonitor)) as IConnectionsMonitor)?.StartMonitoring();
+            app.MapSignalR(new HubConfiguration { EnableDetailedErrors = true, Resolver = resolver });
+        }
+
+        private void ConfigureAuth(IAppBuilder app, ILifetimeScope ioc)
         {
             var applicationSecuritySection = NConfigurator.Default.GetSection<HqSecuritySection>(@"applicationSecurity");
 
@@ -223,7 +230,7 @@ namespace WB.UI.Headquarters
             TimeSpan validateInterval, 
             Func<HqUserManager, HqUser, Task<ClaimsIdentity>> regenerateIdentityCallback,
             Func<ClaimsIdentity, Guid> getUserIdCallback,
-            IContainer ioc)
+            ILifetimeScope ioc)
         {
             if (getUserIdCallback == null)
                 throw new ArgumentNullException(nameof(getUserIdCallback));

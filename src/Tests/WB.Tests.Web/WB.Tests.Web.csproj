@@ -28,7 +28,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj" />
     <ProjectReference Include="..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj" />
-    <ProjectReference Include="..\..\UI\WB.UI.WebTester\WB.UI.WebTester.csproj" />
     <ProjectReference Include="..\WB.Tests.Abc\WB.Tests.Abc.csproj" />
   </ItemGroup>
 

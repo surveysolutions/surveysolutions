@@ -8,6 +8,7 @@ function setFetchState(state, id, done) {
     } else {
         if(!hasInState) Vue.set(state, $id, true)
     }
+    return Object.keys(state).length
 }
 
 const fetch = {
@@ -37,10 +38,6 @@ const fetch = {
             });
         },
 
-        fetchProgress({ commit }, amount) {
-            commit("SET_FETCH_IN_PROGRESS", amount);
-        },
-
         sectionRequireScroll({ commit }, { id }) {
             commit("SET_SCROLL_TARGET", id);
         },
@@ -65,18 +62,14 @@ const fetch = {
         },
         SET_FETCH(state, { id, ids, done }) {
             if (id) {
-                setFetchState(state.state, id, done)
+                state.inProgress = setFetchState(state.state, id, done)
             }
 
             if (ids) {
                 ids.forEach(element => {
-                    setFetchState(state.state, element, done)
+                    state.inProgress = setFetchState(state.state, element, done)
                 });
             }
-        },
-        SET_FETCH_IN_PROGRESS(state, amount) {
-            const inProgress = state.inProgress || 0;
-            state.inProgress = inProgress + amount;
         },
         SET_SCROLL_TARGET(state, id) {
             state.scroll.id = id;

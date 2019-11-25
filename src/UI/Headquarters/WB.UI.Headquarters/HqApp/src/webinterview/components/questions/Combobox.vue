@@ -46,13 +46,13 @@
         methods: {
             answerComboboxQuestion(newValue) {
                 this.sendAnswer(() => {
-                    this.$store.dispatch("answerSingleOptionQuestion", { answer: newValue, questionId: this.$me.id })
+                    this.$store.dispatch("answerSingleOptionQuestion", { answer: newValue, identity: this.$me.id })
                 })
             },
 
             optionsSource(filter) {
                 const interviewId = this.$route.params.interviewId
-                return Vue.$api.get('getTopFilteredOptionsForQuestion', {interviewId, id:this.$me.id, filter, count:50})
+                return Vue.$api.interview.get('getTopFilteredOptionsForQuestion', {interviewId, id:this.$me.id, filter, count:50})
             }
         }
     }

@@ -70,7 +70,6 @@
                     if (this.isInProgress) return
 
                     this.isInProgress = true
-                    this.$store.dispatch("fetchProgress", 1)
 
                     navigator.geolocation.getCurrentPosition(
                         (position) => { this.onPositionDetermined(position, this.id) },
@@ -112,7 +111,6 @@
                 }
 
                 this.markAnswerAsNotSavedWithMessage(message)
-                this.$store.dispatch("fetchProgress", -1)
                 this.isInProgress = false
             }
         }
