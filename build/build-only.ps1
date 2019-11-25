@@ -4,7 +4,8 @@ param([string]$VersionPrefix,
     [string]$BuildConfiguration = "Release",
     [string]$branch = "master",
     [switch]$nostatic,
-    [switch]$noandroid)
+    [switch]$noandroid,
+    [switch]$nosupport)
 
 $ErrorActionPreference = "Stop"
 
@@ -16,6 +17,8 @@ $ProjectHeadquarters = 'src\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarter
 $ProjectWebTester = 'src\UI\WB.UI.WebTester\WB.UI.WebTester.csproj'
 $MainSolution = 'src\WB without Xamarin.sln'
 $SupportToolSolution = 'src\Tools\support\support.sln'
+
+"VersionPrefix: $VersionPrefix, BuildNumber: $BuildNumber, branch: $branch, nostatic: $nostatic, noandroid: $noandroid" | Out-Host
 
 versionCheck
 "GIT_BRANCH: $ENV:GIT_BRANCH" | Out-Host
@@ -70,7 +73,6 @@ try {
 
         Log-Block "Run configuration transformations" {
             RunConfigTransform $ProjectHeadquarters $BuildConfiguration
-            RunConfigTransform $ProjectWebTester $BuildConfiguration
         }
 
         if($noandroid.IsPresent -eq $False) 
@@ -98,7 +100,6 @@ try {
                 -KeystoreAlias 'wbcapipublish' `
                 -CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
                 -OutFileName "$(Split-Path $ProjectHeadquarters)\Client\$ExtPackageName" `
-                -branch $branch `
                 -NoCleanUp `
                 -ExcludeExtra:$false | % { if (-not $_) { Exit } }
 
@@ -116,13 +117,17 @@ try {
                 -ExcludeExtra:$false | % { if (-not $_) { Exit } }
         }
 
-        Log-Block "Building web packages and support tool" {
-            
+        Log-Block "Building HQ web package and support tool" {
             BuildWebPackage $ProjectHeadquarters $BuildConfiguration | % { if (-not $_) { Exit } }
-            BuildWebPackage $ProjectWebTester $BuildConfiguration | % { if (-not $_) { Exit } }
-            BuildAndDeploySupportTool $SupportToolSolution $BuildConfiguration | % { if (-not $_) { Exit } }
+
+            if($nosupport.IsPresent -eq $False) {
+                BuildAndDeploySupportTool $SupportToolSolution $BuildConfiguration | % { if (-not $_) { Exit } }
+            }
         }
 
+        "BuildAspNetCoreWebPackage $ProjectWebTester $BuildConfiguration $BuildNumber $branch" | Write-Verbose
+        BuildAspNetCoreWebPackage $ProjectWebTester $BuildConfiguration $BuildNumber $branch | ForEach-Object { if (-not $_) { Exit 1 } }
+        
         Log-Block "Collecting/building artifacts" {
             AddArtifacts $ProjectHeadquarters $BuildConfiguration -folder "Headquarters"
             AddArtifacts $ProjectWebTester $BuildConfiguration -folder "WebTester"

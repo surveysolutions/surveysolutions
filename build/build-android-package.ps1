@@ -7,7 +7,6 @@ param([string]$VersionName = $null,
 [string]$CapiProject,
 [string]$OutFileName,
 [switch]$ExcludeExtra,
-[string]$branch,
 [string]$PlatformsOverride,
 [Switch]$NoCleanUp)
 

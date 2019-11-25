@@ -1,4 +1,5 @@
 import Vue from "vue"
+import { debounce } from "lodash"
 
 function forEachIfNeeded(data, each) {
     if (Array.isArray(data)) {
@@ -13,24 +14,23 @@ function forEachIfNeeded(data, each) {
 export function batchedAction(callback, fetchAction = "fetch", limit = null) {
     let queue = []
 
+    // Vue.nextTick seems to be a bit too fast now. So adding debounce to add for app more room for action batching
+    const tick = debounce(Vue.nextTick, 100)
+
     return (ctx, data) => {
         data = data || null
-        
+
         if (fetchAction != null) {
             forEachIfNeeded(data, id => ctx.dispatch(fetchAction, { id }))
         }
 
-        const isQueueWereEmpty = queue.length === 0
-
         forEachIfNeeded(data, item => queue.push(item))
 
-        if (isQueueWereEmpty) {
-            Vue.nextTick(() => {
+        tick(() => {
                 const ids = queue
                 queue = []
                 return callback(ctx, ids)
-            })
-        }
+        })
 
         if (limit && queue.length > limit) {
             const ids = queue

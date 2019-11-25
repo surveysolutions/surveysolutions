@@ -5,7 +5,6 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -14,7 +13,6 @@ using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.DependencyInjection;
 using WB.Core.Infrastructure.Modularity;
 using WB.UI.Designer.Code;
-using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Services;
 
 namespace WB.UI.Designer.Modules

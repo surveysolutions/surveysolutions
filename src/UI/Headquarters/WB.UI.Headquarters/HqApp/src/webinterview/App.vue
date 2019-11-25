@@ -1,7 +1,7 @@
 <template>
     <Layout>
+       
         <Navbar slot="header" />
-
         <div class="row" slot>
             <router-view name="sideBar">
             </router-view>
@@ -10,7 +10,7 @@
             </section>
             <IdleTimeoutService />
         </div>
-
+        
     </Layout>
 </template>
 
