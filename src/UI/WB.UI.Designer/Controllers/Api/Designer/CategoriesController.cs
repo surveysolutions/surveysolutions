@@ -36,7 +36,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         {
             var categoriesFile = this.categoriesService.GetAsExcelFile(id, categoriesId);
 
-            if (categoriesFile.ContentAsExcelFile == null) return NotFound();
+            if (categoriesFile.ContentFile == null) return NotFound();
 
             var categoriesName = string.IsNullOrEmpty(categoriesFile.CategoriesName)
                 ? "New categories"
@@ -44,7 +44,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
             var filename = this.fileSystemAccessor.MakeValidFileName($"[{categoriesName}]{categoriesFile.QuestionnaireTitle}");
 
-            return File(categoriesFile.ContentAsExcelFile,
+            return File(categoriesFile.ContentFile,
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{filename}.xlsx");
         }
     }
