@@ -1968,5 +1968,41 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0288_ValueAndTitleNumbersIsNotEquals", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Categories set has more than {0} categories.
+        /// </summary>
+        public static string WB0289 {
+            get {
+                return ResourceManager.GetString("WB0289", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Categories set has empty title(s).
+        /// </summary>
+        public static string WB0290 {
+            get {
+                return ResourceManager.GetString("WB0290", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ids of categories in categories set should be unique.
+        /// </summary>
+        public static string WB0291 {
+            get {
+                return ResourceManager.GetString("WB0291", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Some categories don&apos;t have a parent id.
+        /// </summary>
+        public static string WB0292 {
+            get {
+                return ResourceManager.GetString("WB0292", resourceCulture);
+            }
+        }
     }
 }
