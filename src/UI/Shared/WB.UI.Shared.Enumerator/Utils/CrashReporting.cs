@@ -1,9 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Android.Util;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.UI.Shared.Enumerator.Services;
 
 namespace WB.UI.Shared.Enumerator.Utils
@@ -24,21 +28,39 @@ namespace WB.UI.Shared.Enumerator.Utils
                     {
                         Crashes.GetErrorAttachments = report =>
                         {
-                            Log.Verbose("CrashReporting", "GetErrorAttachments");
                             var result =  new List<ErrorAttachmentLog>();
                             var pathToLocalDirectory = AndroidPathUtils.GetPathToInternalDirectory();
                             
                             var lastLogFile = Path.Combine(pathToLocalDirectory, "Logs", report.AppErrorTime.ToString("yyyy-MM-dd") + ".log");
 
-                            Log.Debug("CrashReporting", $"Appending appcenter attachment {lastLogFile}, exists: {File.Exists(lastLogFile)}");
-                            if (File.Exists(lastLogFile)&& new FileInfo(lastLogFile).Length < 2 * 1024 * 1024)
+                            if (File.Exists(lastLogFile)&& new FileInfo(lastLogFile).Length < 2 * 1024 * 1024 /* 2mb */)
                             {
-                                /* 2mb */
-                                result.Add(ErrorAttachmentLog.AttachmentWithText(File.ReadAllText(lastLogFile), "Log.txt"));
+                                var readAllText = File.ReadAllText(lastLogFile);
+                                string logsPrefix = string.Empty;
+                                if (ServiceLocator.Current != null)
+                                {
+                                    var settings = ServiceLocator.Current.GetInstance<IDeviceSettings>();
+                                    var settingsEndpoint = settings.Endpoint;
+                                    logsPrefix += "HQ URL: " + settingsEndpoint + Environment.NewLine;
+
+                                    var userId = ServiceLocator.Current.GetInstance<IPrincipal>();
+                                    if (userId.IsAuthenticated)
+                                    {
+                                        logsPrefix += "User login: " + userId.CurrentUserIdentity.Name + Environment.NewLine;
+                                    }
+                                    else
+                                    {
+                                        logsPrefix += "User login: Anonymous" + Environment.NewLine;
+                                    }
+                                }
+
+
+                                result.Add(ErrorAttachmentLog.AttachmentWithText(logsPrefix + readAllText, "Log.txt"));
                             }
 
                             return result;
                         };
+
                         Crashes.NotifyUserConfirmation(UserConfirmation.AlwaysSend);
 
                         AppCenter.Start(apiKey, typeof(Analytics), typeof(Crashes));
