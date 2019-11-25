@@ -91,7 +91,6 @@ namespace WB.Tests.Abc.TestFactories
                 interviewViewModelFactory ?? Mock.Of<IInterviewViewModelFactory>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 userInterfaceStateService ?? Mock.Of<IUserInterfaceStateService>(),
-                mvxMainThreadDispatcher ?? Stub.MvxMainThreadAsyncDispatcher(),
                 Create.ViewModel.DynamicTextViewModel(
                     eventRegistry: eventRegistry,
                     interviewRepository: interviewRepository),

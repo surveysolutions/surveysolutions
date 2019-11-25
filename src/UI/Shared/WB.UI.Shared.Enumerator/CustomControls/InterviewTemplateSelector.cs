@@ -13,8 +13,6 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 {
     public class InterviewTemplateSelector : IMvxTemplateSelector
     {
-        private const int UnknownViewType = -1;
-
         private static readonly Dictionary<Type, int> EntityTemplates = new Dictionary<Type, int>
         {
             {typeof (StaticTextViewModel), Resource.Layout.interview_static_text},
@@ -83,7 +81,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
                 if (enablementModel != null && !enablementModel.GetEnablementFromInterview())
                 {
-                    if (enablementModel.HideIfDisabled) return UnknownViewType;
+                    if (enablementModel.HideIfDisabled) return Resource.Layout.interview_empty_item;
 
                     if (typeOfViewModel == typeof(QuestionHeaderViewModel) || typeOfViewModel == typeof(FlatRosterTitleViewModel))
                         return Resource.Layout.interview_disabled_question;
@@ -116,7 +114,8 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
             return EntityTemplates.ContainsKey(typeOfViewModel)
                 ? EntityTemplates[typeOfViewModel]
-                : EntityTemplates.ContainsKey(typeOfViewModel.BaseType) ? EntityTemplates[typeOfViewModel.BaseType] : UnknownViewType;
+                : EntityTemplates.ContainsKey(typeOfViewModel.BaseType) ? EntityTemplates[typeOfViewModel.BaseType] :
+                    Resource.Layout.interview_empty_item;
         }
 
         private EnablementViewModel GetEnablementViewModel(object item)
