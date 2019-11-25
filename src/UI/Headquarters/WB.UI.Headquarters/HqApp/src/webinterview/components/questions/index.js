@@ -23,14 +23,14 @@ Vue.component("StaticText",         () => import(/* webpackChunkName: "questions
 Vue.component("TextList",           () => import(/* webpackChunkName: "questions" */"./TextList"))
 Vue.component("TextQuestion",       () => import(/* webpackChunkName: "questions" */"./TextQuestion"))
 Vue.component("Area",               () => import(/* webpackChunkName: "questions" */"./Area"))
-Vue.component("TableRoster",        () => import(/* webpackChunkName: "questions" */"./TableRoster"))
+Vue.component("TableRoster",        () => import(/* webpackChunkName: "table-roster" */"./TableRoster"))
 Vue.component("Unsupported",        () => import(/* webpackChunkName: "questions" */"./Unsupported"))
 
 
-Vue.component("TableRoster_TextQuestion",   () => import(/* webpackChunkName: "questions" */"./TableRoster.TextQuestion"))
-Vue.component("TableRoster_Integer",        () => import(/* webpackChunkName: "questions" */"./TableRoster.Integer"))
-Vue.component("TableRoster_Double",         () => import(/* webpackChunkName: "questions" */"./TableRoster.Double"))
-Vue.component("TableRoster_Unsupported",    () => import(/* webpackChunkName: "questions" */"./TableRoster.Unsupported"))
+Vue.component("TableRoster_TextQuestion",   () => import(/* webpackChunkName: "table-roster" */"./TableRoster.TextQuestion"))
+Vue.component("TableRoster_Integer",        () => import(/* webpackChunkName: "table-roster" */"./TableRoster.Integer"))
+Vue.component("TableRoster_Double",         () => import(/* webpackChunkName: "table-roster" */"./TableRoster.Double"))
+Vue.component("TableRoster_Unsupported",    () => import(/* webpackChunkName: "table-roster" */"./TableRoster.Unsupported"))
 
 
 Vue.component("wb-question",        () => import( /* webpackChunkName: "questions" */ "./Question"))

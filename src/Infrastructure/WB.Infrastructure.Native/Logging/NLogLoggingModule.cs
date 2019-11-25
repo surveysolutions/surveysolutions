@@ -20,9 +20,6 @@ namespace WB.Infrastructure.Native.Logging
             });
         }
 
-        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
-        {
-            return Task.CompletedTask;
-        }
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status) => Task.CompletedTask;
     }
 }

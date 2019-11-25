@@ -4,7 +4,6 @@ import CreateNew from "./CreateNew"
 import Details from "./Details"
 import localStore from "./store"
 
-
 import Vue from "vue"
 export default class AssignmentsComponent {
     constructor(rootStore) {
@@ -31,11 +30,6 @@ export default class AssignmentsComponent {
     initialize() {
         const VeeValidate = require('vee-validate');
         Vue.use(VeeValidate);
-        const installApi = require("~/webinterview/api").install
-
-        installApi(Vue, {
-            store: this.rootStore
-        });
     }
 
     get modules() {

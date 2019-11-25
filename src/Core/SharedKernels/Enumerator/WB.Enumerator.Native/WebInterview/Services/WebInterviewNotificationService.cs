@@ -6,11 +6,8 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Enumerator.Native.WebInterview.Services
@@ -226,7 +223,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
             var document = this.questionnaireStorage.GetQuestionnaireDocument(interview.QuestionnaireIdentity);
 
-            var entityIds = Enumerable.ToHashSet(document.Find<IComposite>(this.IsSupportFilterOptionCondition)
+            var entityIds = EnumerableExtensions.ToHashSet(document.Find<IComposite>(this.IsSupportFilterOptionCondition)
                 .Select(e => e.PublicKey));
 
             foreach (var entityId in entityIds)
