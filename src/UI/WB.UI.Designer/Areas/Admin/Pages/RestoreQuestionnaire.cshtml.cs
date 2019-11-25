@@ -18,6 +18,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Designer.Extensions;
 
@@ -33,6 +34,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
         private readonly IAttachmentService attachmentService;
         private readonly ITranslationsService translationsService;
         private readonly DesignerDbContext dbContext;
+        private readonly ICategoriesService categoriesService;
 
         public RestoreQuestionnaireModel(ILogger<RestoreQuestionnaireModel> logger, 
             ISerializer serializer, 
@@ -40,7 +42,8 @@ namespace WB.UI.Designer.Areas.Admin.Pages
             ILookupTableService lookupTableService, 
             IAttachmentService attachmentService, 
             ITranslationsService translationsService,
-            DesignerDbContext dbContext)
+            DesignerDbContext dbContext,
+            ICategoriesService categoriesService)
         {
             this.logger = logger;
             this.serializer = serializer;
@@ -49,6 +52,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
             this.attachmentService = attachmentService;
             this.translationsService = translationsService;
             this.dbContext = dbContext;
+            this.categoriesService = categoriesService;
         }
 
         public void OnGet()
@@ -159,6 +163,12 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                     (".xlsx".Equals(Path.GetExtension(zipEntryPathChunks[2]), StringComparison.InvariantCultureIgnoreCase) ||
                     ".ods".Equals(Path.GetExtension(zipEntryPathChunks[2]), StringComparison.InvariantCultureIgnoreCase));
 
+                bool isCollectionsEntry =
+                    zipEntryPathChunks.Length == 3 &&
+                    string.Equals(zipEntryPathChunks[1], "collections", StringComparison.CurrentCultureIgnoreCase) &&
+                    (".xlsx".Equals(Path.GetExtension(zipEntryPathChunks[2]), StringComparison.InvariantCultureIgnoreCase) ||
+                     ".ods".Equals(Path.GetExtension(zipEntryPathChunks[2]), StringComparison.InvariantCultureIgnoreCase));
+
                 if (isQuestionnaireDocumentEntry)
                 {
                     string textContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
@@ -241,6 +251,24 @@ namespace WB.UI.Designer.Areas.Admin.Pages
 
                     this.Success += $"[{zipEntry.FileName}].";
                     this.Success += $"    Restored translation '{translationId}' for questionnaire '{questionnaireId.FormatGuid()}'.";
+                    state.RestoredEntitiesCount++;
+                }
+                else if (isCollectionsEntry)
+                {
+                    var collectionsIdString = Path.GetFileNameWithoutExtension(zipEntryPathChunks[2]);
+                    byte[] excelContent = null;
+
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        zipStream.CopyTo(memoryStream);
+                        excelContent = memoryStream.ToArray();
+                    }
+
+                    var collectionsId = Guid.Parse(collectionsIdString);
+                    this.categoriesService.Store(questionnaireId, collectionsId, excelContent);
+
+                    this.Success += $"[{zipEntry.FileName}].";
+                    this.Success += $"    Restored categories '{collectionsId}' for questionnaire '{questionnaireId.FormatGuid()}'.";
                     state.RestoredEntitiesCount++;
                 }
                 else
