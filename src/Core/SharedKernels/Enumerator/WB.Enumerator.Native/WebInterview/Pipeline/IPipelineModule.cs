@@ -1,12 +1,13 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNet.SignalR.Hubs;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR;
 
 namespace WB.Enumerator.Native.WebInterview.Pipeline
 {
     public interface IPipelineModule
     {
-        Task OnConnected(IHub hub);
-        Task OnDisconnected(IHub hub, bool stopCalled);
-        Task OnReconnected(IHub hub);
+        Task OnConnected(Hub hub);
+        Task OnDisconnected(Hub hub, Exception exception);
+        //Task OnReconnected(Hub hub);
     }
 }

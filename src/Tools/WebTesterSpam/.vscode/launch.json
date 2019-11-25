@@ -8,6 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
+            "args": ["-i 1", "-w 1", "-h"],
             "program": "${workspaceFolder}/index.js"
         }
     ]

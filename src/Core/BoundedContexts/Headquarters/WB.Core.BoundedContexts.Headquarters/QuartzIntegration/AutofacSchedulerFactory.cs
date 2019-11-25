@@ -1,13 +1,14 @@
 ﻿using Quartz;
 using Quartz.Impl;
+using Quartz.Spi;
 
 namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 {
     public class AutofacSchedulerFactory : StdSchedulerFactory
     {
-        private readonly AutofacJobFactory autofacJobFactory;
+        private readonly IJobFactory autofacJobFactory;
 
-        public AutofacSchedulerFactory(AutofacJobFactory autofacJobFactory, IQuartzSettings quartzSettings): base(quartzSettings.GetSettings())
+        public AutofacSchedulerFactory(IJobFactory autofacJobFactory, IQuartzSettings quartzSettings): base(quartzSettings.GetSettings())
         {
             this.autofacJobFactory = autofacJobFactory;
         }
