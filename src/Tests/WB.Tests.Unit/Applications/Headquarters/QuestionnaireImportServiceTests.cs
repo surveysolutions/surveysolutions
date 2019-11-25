@@ -309,7 +309,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 unitOfWork,
                 globalInfoProvider,
                 designerApi ?? Mock.Of<IDesignerApi>(),
-                Mock.Of<IPlainKeyValueStorage<QuestionnairePdf>>());
+                Mock.Of<IPlainKeyValueStorage<QuestionnairePdf>>(),
+                Mock.Of<IPlainKeyValueStorage<QuestionnaireReusableCategories>>());
             return questionnaireImportService;
         }
     }
