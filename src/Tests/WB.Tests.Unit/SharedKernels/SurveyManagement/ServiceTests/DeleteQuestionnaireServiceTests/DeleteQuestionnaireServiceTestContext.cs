@@ -49,8 +49,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
                     new DeleteQuestionnaireJobScheduler(Mock.Of<IScheduler>()),
                     Mock.Of<IInvitationsDeletionService>(),
                     Mock.Of<IAggregateRootCacheCleaner>(),
-                    assignmentsToDeleteFactory ?? Mock.Of<IAssignmentsToDeleteFactory>(f => f.LoadBatch(It.IsAny<Guid>(), It.IsAny<long>()) == Enumerable.Empty<Assignment>().ToList())
-                    );
+                    assignmentsToDeleteFactory ?? Mock.Of<IAssignmentsToDeleteFactory>(f => f.LoadBatch(It.IsAny<Guid>(), It.IsAny<long>()) == Enumerable.Empty<Assignment>().ToList()),
+                    Mock.Of<IPlainKeyValueStorage<QuestionnaireReusableCategories>>());
         }
     }
 }
