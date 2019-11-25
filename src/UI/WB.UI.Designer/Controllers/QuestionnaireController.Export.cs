@@ -91,6 +91,12 @@ namespace WB.UI.Designer.Controllers
                 zipStream.PutFileEntry($"{questionnaireFolderName}/Translations/{translation.Id.FormatGuid()}.xlsx", excelFile.ContentAsExcelFile);
             }
 
+            foreach (var categories in questionnaireDocument.Categories)
+            {
+                var excelFile = this.categoriesService.GetAsExcelFile(id, categories.Id);
+                zipStream.PutFileEntry($"{questionnaireFolderName}/Categories/{categories.Id.FormatGuid()}.xlsx", excelFile.ContentAsExcelFile);
+            }
+
             zipStream.Finish();
             output.Position = 0;
             
