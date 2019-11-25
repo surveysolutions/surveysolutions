@@ -753,4 +753,16 @@
   <data name="WB0288_ValueAndTitleNumbersIsNotEquals" xml:space="preserve">
     <value>Label {1} for code {0} is a number different from the value being labeled.</value>
   </data>
+  <data name="WB0289" xml:space="preserve">
+    <value>Categories set has more than {0} categories</value>
+  </data>
+  <data name="WB0290" xml:space="preserve">
+    <value>Categories set has empty title(s)</value>
+  </data>
+  <data name="WB0291" xml:space="preserve">
+    <value>Ids of categories in categories set should be unique</value>
+  </data>
+  <data name="WB0292" xml:space="preserve">
+    <value>Some categories don't have a parent id</value>
+  </data>
 </root>

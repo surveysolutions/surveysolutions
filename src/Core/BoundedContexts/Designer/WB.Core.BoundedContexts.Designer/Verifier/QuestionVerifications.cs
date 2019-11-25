@@ -937,15 +937,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     );
         }
 
-        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Error<TEntity>(string code, Func<TEntity, MultiLanguageQuestionnaireDocument, bool> hasError, string message)
-            where TEntity : class, IComposite
-        {
-            return questionnaire =>
-                questionnaire
-                    .Find<TEntity>(entity => hasError(entity, questionnaire))
-                    .Select(entity => QuestionnaireVerificationMessage.Error(code, message, CreateReference(entity)));
-        }
-
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning<TEntity>(
             Func<TEntity, bool> hasError, string code, string message)
