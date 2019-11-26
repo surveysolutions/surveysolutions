@@ -131,9 +131,6 @@
     <Reference Include="GeoJSON.Net, Version=1.1.73.0, Culture=neutral, PublicKeyToken=42c00ea87f5f14d4, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\GeoJSON.Net.1.1.73\lib\net45\GeoJSON.Net.dll</HintPath>
     </Reference>
-    <Reference Include="HibernatingRhinos.Profiler.Appender">
-      <HintPath>E:\nhprof\NHibernate.Profiler-v5.0-Build-5026\Appender\net46\HibernatingRhinos.Profiler.Appender.dll</HintPath>
-    </Reference>
     <Reference Include="HtmlSanitizationLibrary, Version=4.3.0.0, Culture=neutral, PublicKeyToken=d127efab8a9c114f, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\AntiXSS.4.3.0\lib\net40\HtmlSanitizationLibrary.dll</HintPath>
     </Reference>

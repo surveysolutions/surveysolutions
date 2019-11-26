@@ -85,7 +85,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         {
             var userIds = asigneeInterviewersBySupervisor.Users.Select(x => x.UserId).ToList();
 
-            var allUsers = this.userRepository.Users.Where(x => userIds.Contains(x.Id)).Fetch(x => x.Roles).ToList();
+            var allUsers = this.userRepository.Users.Where(x => userIds.Contains(x.Id)).ToList();
 
             foreach (var user in asigneeInterviewersBySupervisor.Users)
             {
