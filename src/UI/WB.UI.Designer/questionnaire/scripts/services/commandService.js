@@ -183,6 +183,8 @@
 
                     categories.file = null;
 
+                    return response;
+
                 }).catch(function () {
                     blockUI.stop();
                 });

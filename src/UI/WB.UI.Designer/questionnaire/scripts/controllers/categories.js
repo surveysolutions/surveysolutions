@@ -76,13 +76,19 @@
                 var categories = { categoriesId: utilityService.guid() };
 
                 $scope.fileSelected(categories, file, function () {
-                    commandService.updateCategories($state.params.questionnaireId, categories).then(function () {
-                        categories.checkpoint = categories.checkpoint || {};
+                    commandService.updateCategories($state.params.questionnaireId, categories)
+                        .then(function (response) {
+                            if (response.status !== 200) return;
 
-                        dataBind(categories.checkpoint, categories);
-                        $scope.categoriesList.push(categories);
-                        setTimeout(function () { utilityService.focus("focusCategories" + categories.categoriesId); }, 500);
-                    });
+                            categories.checkpoint = categories.checkpoint || {};
+
+                            dataBind(categories.checkpoint, categories);
+                            $scope.categoriesList.push(categories);
+                            setTimeout(function() {
+                                    utilityService.focus("focusCategories" + categories.categoriesId);
+                                },
+                                500);
+                        });
                 });
             };
 

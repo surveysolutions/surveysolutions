@@ -339,4 +339,13 @@
   <data name="ImportOptions_ValueIsNotUnique" xml:space="preserve">
     <value>Duplicated category '{0}' with value '{1}'</value>
   </data>
+  <data name="Excel_Categories_Int_Invalid" xml:space="preserve">
+    <value>[{0}] Invalid numeric value</value>
+  </data>
+  <data name="Excel_Categories_Empty_Text" xml:space="preserve">
+    <value>[{0}] Empty text</value>
+  </data>
+  <data name="Excel_Categories_Empty_Value" xml:space="preserve">
+    <value>[{0}] Empty value</value>
+  </data>
 </root>

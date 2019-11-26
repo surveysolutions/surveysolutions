@@ -626,16 +626,7 @@ string code, Func<MultiLanguageQuestionnaireDocument, bool> hasError, string mes
                     ? new[] { QuestionnaireVerificationMessage.Warning(code, message) }
                     : Enumerable.Empty<QuestionnaireVerificationMessage>();
         }
-
-        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Error<TEntity>(string code, Func<TEntity, MultiLanguageQuestionnaireDocument, bool> hasError, string message)
-            where TEntity : class, IComposite
-        {
-            return questionnaire =>
-                questionnaire
-                    .Find<TEntity>(entity => hasError(entity, questionnaire))
-                    .Select(entity => QuestionnaireVerificationMessage.Error(code, message, CreateReference(entity)));
-        }
-
+        
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Critical<TEntity>(
             string code, Func<TEntity, MultiLanguageQuestionnaireDocument, bool> hasError,  string message)
             where TEntity : class, IComposite
