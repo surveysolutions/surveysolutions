@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings
         {
             builder.ToTable("categories", "plainstore");
 
-            builder.HasKey(x => new {x.QuestionnaireId, x.CategoriesId, x.Id});
+            builder.HasKey(x => new {x.QuestionnaireId, x.CategoriesId, x.Id, x.ParentId});
 
             builder.Property(e => e.QuestionnaireId).HasColumnName("questionnaireid");
             builder.Property(e => e.CategoriesId).HasColumnName("categoriesid");

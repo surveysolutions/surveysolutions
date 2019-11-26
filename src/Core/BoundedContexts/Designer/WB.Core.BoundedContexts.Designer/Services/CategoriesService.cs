@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.BoundedContexts.Designer.Verifier;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Categories;
@@ -140,31 +141,59 @@ namespace WB.Core.BoundedContexts.Designer.Services
                     using (ExcelPackage package = new ExcelPackage(stream))
                     {
                         if (package.Workbook.Worksheets.Count == 0)
-                        {
                             throw new InvalidExcelFileException(ExceptionMessages.TranslationFileIsEmpty);
-                        }
 
                         var worksheet = package.Workbook.Worksheets[0];
                         var headers = GetHeaders(worksheet);
 
+                        if(worksheet.Dimension.End.Row > AbstractVerifier.MaxOptionsCountInFilteredComboboxQuestion + 1)
+                            throw new InvalidExcelFileException(ExceptionMessages.Excel_Categories_More_Than_Limit.FormatString(AbstractVerifier.MaxOptionsCountInFilteredComboboxQuestion));
+
                         var errors = this.Verify(worksheet).Take(10).ToList();
                         if (errors.Any())
                             throw new InvalidExcelFileException(ExceptionMessages.TranlationExcelFileHasErrors) {FoundErrors = errors};
+
+
+                        var categoriesRows = new List<CategoriesRow>();
 
                         for (int rowNumber = 2; rowNumber <= worksheet.Dimension.End.Row; rowNumber++)
                         {
                             var categories = GetRowValues(worksheet, headers, rowNumber);
                             if(string.IsNullOrEmpty(categories.Id) && string.IsNullOrEmpty(categories.ParentId) && string.IsNullOrEmpty(categories.Text)) continue;
 
-                            this.dbContext.CategoriesInstances.Add(new CategoriesInstance
+                            categoriesRows.Add(categories);
+                        }
+
+                        var countOfCategoriesWithParentId = categoriesRows.Count(x => !string.IsNullOrEmpty(x.ParentId));
+                        if(countOfCategoriesWithParentId > 0 && countOfCategoriesWithParentId < categoriesRows.Count)
+                            throw new InvalidExcelFileException(ExceptionMessages.Excel_Categories_Empty_ParentId);
+
+                        var duplicatedCategories = categoriesRows.GroupBy(x => new {x.Id, x.ParentId})
+                            .Where(x => x.Count() > 1);
+
+                        if (duplicatedCategories.Any())
+                        {
+                            errors = duplicatedCategories.Select(x => new TranslationValidationError
+                            {
+                                Message = ExceptionMessages.Excel_Categories_Duplicated.FormatString(string.Join(",", x.Select(y => y.RowId))),
+                                ErrorAddress = $"{headers.IdIndex}{x.FirstOrDefault()?.RowId}"
+                            }).ToList();
+
+                            throw new InvalidExcelFileException(ExceptionMessages.TranlationExcelFileHasErrors) {FoundErrors = errors};
+                        }
+
+
+                        this.dbContext.CategoriesInstances.AddRange(categoriesRows.Select(categories =>
+                            new CategoriesInstance
                             {
                                 QuestionnaireId = questionnaireId,
                                 CategoriesId = categoriesId,
                                 Id = int.Parse(categories.Id),
-                                ParentId = string.IsNullOrEmpty(categories.ParentId) ? (int?)null : int.Parse(categories.ParentId),
-                                Text = categories.Text
-                            });
-                        }
+                                Text = categories.Text,
+                                ParentId = string.IsNullOrEmpty(categories.ParentId)
+                                    ? (int?) null
+                                    : int.Parse(categories.ParentId)
+                            }));
                     }
                 }
                 catch (Exception e) when(e is NullReferenceException || e is InvalidDataException || e is COMException)
@@ -203,13 +232,16 @@ namespace WB.Core.BoundedContexts.Designer.Services
             public string Id { get; set; }
             public string Text { get; set; }
             public string ParentId { get; set; }
+
+            public int RowId { get; set; }
         }
 
         private CategoriesRow GetRowValues(ExcelWorksheet worksheet, CategoriesHeaderMap headers, int rowNumber) => new CategoriesRow
         {
             Id = worksheet.Cells[$"{headers.IdIndex}{rowNumber}"].GetValue<string>(),
             Text = worksheet.Cells[$"{headers.TextIndex}{rowNumber}"].GetValue<string>(),
-            ParentId = worksheet.Cells[$"{headers.ParentIdIndex}{rowNumber}"].GetValue<string>()
+            ParentId = worksheet.Cells[$"{headers.ParentIdIndex}{rowNumber}"].GetValue<string>(),
+            RowId = rowNumber
         };
 
         private IEnumerable<TranslationValidationError> Verify(ExcelWorksheet worksheet)
@@ -237,34 +269,36 @@ namespace WB.Core.BoundedContexts.Designer.Services
 
                 if(string.IsNullOrEmpty(categories.Id) && string.IsNullOrEmpty(categories.ParentId) && string.IsNullOrEmpty(categories.Text)) continue;
 
-                var cellAddress = $"{headers.IdIndex}{rowNumber}";
+                var idAddress = $"{headers.IdIndex}{rowNumber}";
+                var parentIdAddress = $"{headers.ParentIdIndex}{rowNumber}";
+                var textAddress = $"{headers.TextIndex}{rowNumber}";
 
                 if (string.IsNullOrEmpty(categories.Id))
                     yield return new TranslationValidationError
                     {
-                        Message = string.Format(ExceptionMessages.Excel_Categories_Empty_Value, cellAddress),
-                        ErrorAddress = cellAddress
+                        Message = string.Format(ExceptionMessages.Excel_Categories_Empty_Value, idAddress),
+                        ErrorAddress = idAddress
                     };
 
                 if (!string.IsNullOrEmpty(categories.Id) && !int.TryParse(categories.Id, out _))
                     yield return new TranslationValidationError
                     {
-                        Message = string.Format(ExceptionMessages.Excel_Categories_Int_Invalid, cellAddress),
-                        ErrorAddress = cellAddress
+                        Message = string.Format(ExceptionMessages.Excel_Categories_Int_Invalid, idAddress),
+                        ErrorAddress = idAddress
                     };
 
                 if (!string.IsNullOrEmpty(categories.ParentId) && !int.TryParse(categories.ParentId, out _))
                     yield return new TranslationValidationError
                     {
-                        Message = string.Format(ExceptionMessages.Excel_Categories_Int_Invalid, cellAddress),
-                        ErrorAddress = cellAddress
+                        Message = string.Format(ExceptionMessages.Excel_Categories_Int_Invalid, parentIdAddress),
+                        ErrorAddress = parentIdAddress
                     };
 
                 if (string.IsNullOrEmpty(categories.Text))
                     yield return new TranslationValidationError
                     {
-                        Message = string.Format(ExceptionMessages.Excel_Categories_Empty_Text, cellAddress),
-                        ErrorAddress = cellAddress
+                        Message = string.Format(ExceptionMessages.Excel_Categories_Empty_Text, textAddress),
+                        ErrorAddress = textAddress
                     };
             }
         }
