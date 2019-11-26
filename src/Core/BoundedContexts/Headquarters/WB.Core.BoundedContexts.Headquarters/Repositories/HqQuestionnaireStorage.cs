@@ -30,8 +30,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
             INativeReadSideStorage<QuestionnaireCompositeItem, int> questionnaireItemsReader,
             IQuestionOptionsRepository questionOptionsRepository,
             ISubstitutionService substitutionService,
-            IInterviewExpressionStatePrototypeProvider expressionStatePrototypeProvider)
-            : base(repository, translationStorage, translator, questionOptionsRepository, substitutionService, expressionStatePrototypeProvider)
+            IInterviewExpressionStatePrototypeProvider expressionStatePrototypeProvider,
+            IReusableCategoriesStorage reusableCategoriesStorage)
+            : base(repository, translationStorage, translator, questionOptionsRepository, substitutionService, expressionStatePrototypeProvider, reusableCategoriesStorage)
         {
             this.questionnaireItemsWriter = questionnaireItemsWriter;
             this.questionnaireItemsReader = questionnaireItemsReader;

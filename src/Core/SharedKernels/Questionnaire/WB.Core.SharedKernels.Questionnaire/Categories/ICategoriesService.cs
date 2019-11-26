@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace WB.Core.SharedKernels.Questionnaire.Categories
@@ -18,6 +19,5 @@ namespace WB.Core.SharedKernels.Questionnaire.Categories
         byte[] GetTemplateAsExcelFile();
         CategoriesFile GetAsExcelFile(Guid questionnaireId, Guid categoriesId);
         IQueryable<CategoriesItem> GetCategoriesById(Guid id);
-        CategoriesFile GetPlainContentFile(Guid questionnaireId, Guid categoriesId);
     }
 }

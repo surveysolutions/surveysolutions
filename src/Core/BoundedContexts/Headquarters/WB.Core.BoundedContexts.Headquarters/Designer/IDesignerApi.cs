@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
         Task<RestFile> DownloadPdf(Guid questionnaireId, [Query] Guid? translation = null);
 
         [Get("/api/hq/categories/{questionnaireId}/{categoryId}")]
-        Task<QuestionnaireReusableCategories> GetReusableCategories(Guid questionnaireId, Guid categoryId);
+        Task<List<QuestionnaireReusableCategories>> GetReusableCategories(Guid questionnaireId, Guid categoryId);
     }
 
     public class DesignerQuestionnairesListFilter
