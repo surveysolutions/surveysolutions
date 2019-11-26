@@ -18,8 +18,10 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Questionnaire.Synchronization.Designer;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Enumerator.Native.Questionnaire;
@@ -32,7 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly ISupportedVersionProvider supportedVersionProvider;
         private readonly IStringCompressor zipUtils;
         private readonly IAttachmentContentService attachmentContentService;
-        private readonly IPlainKeyValueStorage<QuestionnaireReusableCategories> reusableCategoriesStorage;
+        private readonly IReusableCategoriesStorage reusableCategoriesStorage;
         private readonly IPlainKeyValueStorage<QuestionnaireLookupTable> lookupTablesStorage;
         private readonly IPlainKeyValueStorage<QuestionnairePdf> pdfStorage;
         private readonly IQuestionnaireVersionProvider questionnaireVersionProvider;
@@ -57,7 +59,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             IAuthorizedUser authorizedUser,
             IDesignerApi designerApi,
             IPlainKeyValueStorage<QuestionnairePdf> pdfStorage,
-            IPlainKeyValueStorage<QuestionnaireReusableCategories> reusableCategoriesStorage)
+            IReusableCategoriesStorage reusableCategoriesStorage)
         {
             this.supportedVersionProvider = supportedVersionProvider;
             this.zipUtils = zipUtils;
@@ -165,8 +167,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     {
                         this.logger.Debug($"Loading reusable category for questionnaire {questionnaireId}. Category id {category.Id}");
                         var reusableCategories = await this.designerApi.GetReusableCategories(questionnaire.PublicKey, category.Id);
-
-                        reusableCategoriesStorage.Store(reusableCategories, questionnaireIdentity, category.Id);
+                        var categoricalOptions = reusableCategories.Select(o => new CategoricalOption()
+                        {
+                            ParentValue = o.ParentId,
+                            Title = o.Text,
+                            Value = o.Id
+                        }).ToList();
+                        reusableCategoriesStorage.Store(questionnaireIdentity, category.Id, categoricalOptions);
                     }
                 }
 
