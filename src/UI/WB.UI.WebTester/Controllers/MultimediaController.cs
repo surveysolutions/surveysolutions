@@ -130,27 +130,25 @@ namespace WB.UI.WebTester.Controllers
 
             try
             {
-                using (var ms = new MemoryStream())
+                await using var ms = new MemoryStream();
+                await file.CopyToAsync(ms);
+
+                var fileContent = ms.ToArray();
+                this.imageProcessingService.Validate(fileContent);
+
+                fileName = GetPictureFileName(question.VariableName, questionIdentity.RosterVector);
+
+                var responsibleId = interview.CurrentResponsibleId;
+
+                this.mediaStorage.Store(new MultimediaFile
                 {
-                    await file.CopyToAsync(ms);
+                    Filename = fileName,
+                    Data = fileContent,
+                    MimeType = file.ContentType
+                }, fileName, interview.Id);
 
-                    var fileContent = ms.ToArray();
-                    this.imageProcessingService.ResizeImage(fileContent, 1,1);
-
-                    fileName = GetPictureFileName(question.VariableName, questionIdentity.RosterVector);
-
-                    var responsibleId = interview.CurrentResponsibleId;
-
-                    this.mediaStorage.Store(new MultimediaFile
-                    {
-                        Filename = fileName,
-                        Data = fileContent,
-                        MimeType = "image/jpg"
-                    }, fileName, interview.Id);
-
-                    this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
-                        responsibleId, questionIdentity.Id, questionIdentity.RosterVector, fileName));
-                }
+                this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
+                    responsibleId, questionIdentity.Id, questionIdentity.RosterVector, fileName));
             }
             catch (Exception e)
             {
