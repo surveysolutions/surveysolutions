@@ -190,7 +190,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             {
                 var interviewers = ApplyFilter(allUsers, null, false, UserRoles.Interviewer);
 
-                interviewers = ApplyFacetFilter(null, InterviewerFacet.None, interviewers, repository);
+                interviewers = ApplyFacetFilter(null, InterviewerFacet.None, interviewers);
 
                 interviewers = AppySupervisorFilter(supervisorId, interviewers);
 
@@ -224,7 +224,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             
             var interviewers = ApplyFilter(allUsers, searchBy, archived, UserRoles.Interviewer);
 
-            interviewers = ApplyFacetFilter(apkBuildVersion, facet, interviewers, repository);
+            interviewers = ApplyFacetFilter(apkBuildVersion, facet, interviewers);
 
             interviewers = AppySupervisorFilter(supervisorId, interviewers);
 
@@ -289,7 +289,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             {
                 var interviewers = ApplyFilter(allUsers, searchBy, archived, UserRoles.Interviewer);
 
-                interviewers = ApplyFacetFilter(apkBuildVersion, facet, interviewers, repository);
+                interviewers = ApplyFacetFilter(apkBuildVersion, facet, interviewers);
 
                 interviewers = AppySupervisorFilter(supervisorId, interviewers);
 
@@ -307,8 +307,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             return interviewers;
         }
 
-        private static IQueryable<HqUser> ApplyFacetFilter(int? apkBuildVersion, InterviewerFacet facet, IQueryable<HqUser> interviewers,
-            IUserRepository repository)
+        private static IQueryable<HqUser> ApplyFacetFilter(int? apkBuildVersion, InterviewerFacet facet, IQueryable<HqUser> interviewers)
         {
             switch (facet)
             {
@@ -321,10 +320,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                     break;
                 case InterviewerFacet.LowStorage:
                     interviewers = from i in interviewers
-                                    let deviceSyncInfo = repository.DeviceSyncInfos
-                                        .OrderByDescending(x => x.Id)
-                                        .FirstOrDefault(x => x.InterviewerId == i.Id)
-                                    where deviceSyncInfo.StorageFreeInBytes < InterviewerIssuesConstants.LowMemoryInBytesSize
+                                    where i.Profile.StorageFreeInBytes < InterviewerIssuesConstants.LowMemoryInBytesSize
                                     select i;
                     break;
                 case InterviewerFacet.NoAssignmentsReceived:

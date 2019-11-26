@@ -101,7 +101,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity.Providers
 
             ManyToOne(x => x.Profile, oto =>
             {
-                oto.Cascade(Cascade.None);
+                oto.Cascade(Cascade.All);
                 oto.Column("\"UserProfileId\"");
             });
         }
