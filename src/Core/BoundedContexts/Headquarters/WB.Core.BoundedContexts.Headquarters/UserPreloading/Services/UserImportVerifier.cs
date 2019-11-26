@@ -1,9 +1,9 @@
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
-using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 {
@@ -31,12 +31,12 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             var activeUserNames = allInterviewersAndSupervisors
                 .Where(u => !u.IsArchived)
                 .Select(u => u.UserName.ToLower())
-                .ToHashSet();
+                .ToImmutableHashSet();
 
             var archivedSupervisorNames = allInterviewersAndSupervisors
                 .Where(u => u.IsArchived && u.IsSupervisor)
                 .Select(u => u.UserName.ToLower())
-                .ToHashSet();
+                .ToImmutableHashSet();
 
             var archivedInterviewerNamesMappedOnSupervisorName = allInterviewersAndSupervisors
                 .Where(u => u.IsArchived && u.IsInterviewer)
@@ -72,8 +72,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             var activeSupervisorNames = allInterviewersAndSupervisors
                 .Where(u => !u.IsArchived && u.IsSupervisor)
                 .Select(u => u.UserName.ToLower())
-                .Distinct()
-                .ToHashSet();
+                .ToImmutableHashSet();
 
             var preloadedUsersGroupedByUserName =
                 usersToImport.GroupBy(x => x.Login.ToLower()).ToDictionary(x => x.Key, x => x.Count());
@@ -145,7 +144,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             return !this.phoneNumberValidationRegex.IsMatch(userPreloadingDataRecord.PhoneNumber);
         }
 
-        private bool LoginNameUsedByExistingUser(HashSet<string> activeUserNames, UserToImport userPreloadingDataRecord) 
+        private bool LoginNameUsedByExistingUser(ICollection<string> activeUserNames, UserToImport userPreloadingDataRecord) 
             => activeUserNames.Contains(userPreloadingDataRecord.Login.ToLower());
 
         private bool LoginDublicationInDataset(Dictionary<string, int> data,
@@ -172,7 +171,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         bool LoginOfArchiveUserCantBeReusedBecauseItExistsInOtherRole(
             Dictionary<string, string> archivedInterviewerNamesMappedOnSupervisorName,
-            HashSet<string> archivedSupervisorNames, UserToImport userPreloadingDataRecord)
+            ICollection<string> archivedSupervisorNames, UserToImport userPreloadingDataRecord)
         {
             var desiredRole = userPreloadingDataRecord.UserRole;
 
@@ -194,7 +193,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             => userPreloadingDataRecord.UserRole == 0;
 
         private bool SupervisorVerification(IList<UserToImport> data,
-            HashSet<string> activeSupervisors, UserToImport userPreloadingDataRecord)
+            ICollection<string> activeSupervisors, UserToImport userPreloadingDataRecord)
         {
             var role = userPreloadingDataRecord.UserRole;
             if (role != UserRoles.Interviewer)

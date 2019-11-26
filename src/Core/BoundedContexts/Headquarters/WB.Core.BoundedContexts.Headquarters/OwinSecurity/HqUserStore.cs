@@ -452,7 +452,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public virtual Task<TEntity> GetByIdAsync(object id) => DbEntitySet.FindAsync(id);
+        public virtual ValueTask<TEntity> GetByIdAsync(object id) => DbEntitySet.FindAsync(id);
 
         /// <summary>
         ///     FindAsync an entity by ID
