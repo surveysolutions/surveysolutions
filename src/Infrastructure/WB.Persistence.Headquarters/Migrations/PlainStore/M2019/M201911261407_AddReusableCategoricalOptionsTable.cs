@@ -10,7 +10,7 @@ namespace WB.Persistence.Headquarters.Migrations.PlainStore
             Create.Table("reusablecategoricaloptions")
                 .WithColumn("id").AsInt32().PrimaryKey().Identity()
                 .WithColumn("questionnaireid").AsGuid().NotNullable()
-                .WithColumn("version").AsInt32().NotNullable()
+                .WithColumn("questionnaireversion").AsInt32().NotNullable()
                 .WithColumn("categoriesid").AsGuid().NotNullable()
                 .WithColumn("sortindex").AsInt32().NotNullable()
                 .WithColumn("parentvalue").AsInt32().Nullable()
