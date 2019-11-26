@@ -9,18 +9,21 @@ namespace WB.Persistence.Headquarters.Migrations.PlainStore
         {
             Create.Table("reusablecategoricaloptions")
                 .WithColumn("id").AsInt32().PrimaryKey().Identity()
-                .WithColumn("questionnaireid").AsGuid().NotNullable()
-                .WithColumn("questionnaireversion").AsInt32().NotNullable()
-                .WithColumn("categoriesid").AsGuid().NotNullable()
+                .WithColumn("questionnaireid").AsGuid()
+                .WithColumn("questionnaireversion").AsInt32()
+                .WithColumn("categoriesid").AsGuid()
                 .WithColumn("sortindex").AsInt32().NotNullable()
                 .WithColumn("parentvalue").AsInt32().Nullable()
                 .WithColumn("value").AsInt32().NotNullable()
                 .WithColumn("text").AsString().NotNullable()
                 ;
 
-//            Create.ForeignKey("reusablecategoricaloptions_questionnairebrowseitems")
-//                .FromTable("questionnairebrowseitems").ForeignColumns("")
-//                .ToTable("reusablecategoricaloptions").PrimaryColumns("");
+            Create.Index("idx_categories_reusablecategoricaloptions").OnTable("reusablecategoricaloptions")
+                .OnColumn("categoriesid").Ascending()
+                .OnColumn("questionnaireid").Ascending()
+                .OnColumn("questionnaireversion").Ascending();
+            Create.Index("idx_sortindex_reusablecategoricaloptions").OnTable("reusablecategoricaloptions")
+                .OnColumn("sortindex");
         }
     }
 }
