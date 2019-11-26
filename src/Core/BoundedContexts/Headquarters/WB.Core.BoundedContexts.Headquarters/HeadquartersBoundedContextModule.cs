@@ -188,6 +188,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAssemblyService, AssemblyService>();
             registry.Bind<IExportSettings, Implementation.ExportSettings>();
             registry.Bind<IArchiveUtils, IProtectedArchiveUtils, ZipArchiveUtils>();
+            registry.Bind<IReusableCategoriesStorage, ReusableCategoriesStorage>();
             
             registry.Bind<IAllInterviewsFactory, AllInterviewsFactory>();
             registry.Bind<ITeamInterviewsFactory, TeamInterviewsFactory>();

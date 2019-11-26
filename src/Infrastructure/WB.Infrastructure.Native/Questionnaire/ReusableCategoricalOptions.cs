@@ -11,6 +11,6 @@ namespace WB.Infrastructure.Native.Questionnaire
         public virtual int Value { get; set; }
         public virtual int? ParentValue { get; set; }
         public virtual string Text { get; set; }
-        public virtual int Order { get; set; }
+        public virtual int SortIndex { get; set; }
     }
 }
