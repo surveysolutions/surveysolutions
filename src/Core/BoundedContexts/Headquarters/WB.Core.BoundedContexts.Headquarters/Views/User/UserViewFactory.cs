@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Caching.Memory;
@@ -93,7 +94,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 IsLockedByHQ = dbUser.IsLockedByHQ,
                 IsLockedBySupervisor = dbUser.IsLockedBySupervisor,
                 CreationDate = dbUser.CreationDate,
-                Roles = dbUser.Roles.Select(x => x.Role).ToHashSet(),
+                Roles = dbUser.Roles.Select(x => x.Role).ToImmutableHashSet(),
                 SecurityStamp = dbUser.SecurityStamp,
                 Supervisor = dbUser.SupervisorId.HasValue
                     ? new UserLight(dbUser.SupervisorId.Value, dbUser.SupervisorName)
