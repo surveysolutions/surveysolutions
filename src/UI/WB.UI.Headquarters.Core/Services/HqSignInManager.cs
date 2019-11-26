@@ -1,17 +1,17 @@
 using System;
-using System.Data.Entity.Utilities;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
-using Microsoft.AspNet.Identity;
-using Microsoft.Owin.Security;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using System.Threading;
 using System.Web;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity.Providers;
 
 namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
@@ -31,12 +31,12 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
     public class HqSignInManager : ISignInManager
     {
         private readonly HqUserManager UserManager;
-        private readonly IAuthenticationManager AuthenticationManager;
+        private readonly SignInManager<HqUser> AuthenticationManager;
         private readonly IHashCompatibilityProvider hashCompatibilityProvider;
         private IApiTokenProvider ApiTokenProvider { get; set; }
 
         public HqSignInManager(HqUserManager userManager, 
-            IAuthenticationManager authenticationManager,
+            SignInManager<HqUser> authenticationManager,
             IHashCompatibilityProvider hashCompatibilityProvider,
             IApiTokenProvider tokenProvider = null)
         {
@@ -55,38 +55,40 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             if (user.IsLockedByHeadquaters || user.IsLockedBySupervisor || user.IsArchived)
                 return SignInStatus.LockedOut;
 
-            await this.SignInAsync(user, isPersistent, false);
+            await this.SignInAsync(user, isPersistent);
 
             return SignInStatus.Success;
         }
      
         public async Task SignInAsObserverAsync(string userName)
         {
-            var userToObserve = await this.UserManager.FindByNameAsync(userName);
-            userToObserve.Claims.Add(new HqUserClaim
-            {
-                UserId = userToObserve.Id,
-                ClaimType = AuthorizedUser.ObserverClaimType,
-                ClaimValue = this.AuthenticationManager.User.Identity.Name
-            });
-            userToObserve.Claims.Add(new HqUserClaim
-            {
-                UserId = userToObserve.Id,
-                ClaimType = ClaimTypes.Role,
-                ClaimValue = Enum.GetName(typeof(UserRoles), UserRoles.Observer)
-            });
+            //var userToObserve = await this.UserManager.FindByNameAsync(userName);
+            //userToObserve.Claims.Add(new HqUserClaim
+            //{
+            //    UserId = userToObserve.Id,
+            //    ClaimType = AuthorizedUser.ObserverClaimType,
+            //    ClaimValue = this.AuthenticationManager.User.Identity.Name
+            //});
+            //userToObserve.Claims.Add(new HqUserClaim
+            //{
+            //    UserId = userToObserve.Id,
+            //    ClaimType = ClaimTypes.Role,
+            //    ClaimValue = Enum.GetName(typeof(UserRoles), UserRoles.Observer)
+            //});
 
-            await this.SignInAsync(userToObserve, true, true);
+            //await this.SignInAsync(userToObserve, true, true);
+            throw new NotImplementedException();
         }
 
         public async Task SignInBackFromObserverAsync()
         {
-            var observerName = this.AuthenticationManager.User.FindFirst(AuthorizedUser.ObserverClaimType)?.Value;
-            var observer = await this.UserManager.FindByNameAsync(observerName);
+            //var observerName = this.AuthenticationManager.User.FindFirst(AuthorizedUser.ObserverClaimType)?.Value;
+            //var observer = await this.UserManager.FindByNameAsync(observerName);
 
-            this.AuthenticationManager.SignOut();
+            //this.AuthenticationManager.SignOut();
 
-            await this.SignInAsync(observer, true, true);
+            //await this.SignInAsync(observer, true, true);
+            throw new NotImplementedException();
         }
 
         public async Task<IdentityResult> SignInWithAuthTokenAsync(string authorizationHeader, bool treatPasswordAsPlain, params UserRoles[] allowedRoles)
@@ -141,9 +143,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
                 return IdentityResult.Failed("Role");
             }
 
-            var identity = await this.UserManager.CreateIdentityAsync(userInfo, basicCredentials.Scheme.ToString());
-
-            SetPrincipal(identity);
+            await SignInAsync(userInfo, false);
 
             return IdentityResult.Success;
         }
@@ -157,8 +157,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             if (user.IsLockedByHeadquaters || user.IsLockedBySupervisor || user.IsArchived)
                 return SignInStatus.LockedOut;
             
-            var identity = await this.UserManager.CreateIdentityAsync(user, "Interviewer");
-            SetPrincipal(identity);
+            await SignInAsync(user, isPersistent);
 
             return SignInStatus.Success;
         }
@@ -172,39 +171,19 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             if (user.IsLockedByHeadquaters || user.IsArchived)
                 return SignInStatus.LockedOut;
             
-            var identity = await this.UserManager.CreateIdentityAsync(user, "Supervisor");
-            SetPrincipal(identity);
+            await SignInAsync(user, isPersistent);
 
             return SignInStatus.Success;
         }
 
-        private async Task SignInAsync(HqUser user, bool isPersistent, bool rememberBrowser)
+        private async Task SignInAsync(HqUser user, bool isPersistent)
         {
-            var userIdentity = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie).WithCurrentCulture();
-            // Clear any partial cookies from external or two factor partial sign ins
-            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie, DefaultAuthenticationTypes.TwoFactorCookie);
-            if (rememberBrowser)
-            {
-                var rememberBrowserIdentity = new ClaimsIdentity(DefaultAuthenticationTypes.TwoFactorRememberBrowserCookie);
-                rememberBrowserIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, Convert.ToString(user.Id, CultureInfo.InvariantCulture)));
-
-                AuthenticationManager.SignIn(new AuthenticationProperties { IsPersistent = isPersistent }, userIdentity, rememberBrowserIdentity);
-            }
-            else
-            {
-                AuthenticationManager.SignIn(new AuthenticationProperties { IsPersistent = isPersistent }, userIdentity);
-            }
+            await AuthenticationManager.SignInAsync(user, new AuthenticationProperties {IsPersistent = isPersistent});
         }
-        
-        private void SetPrincipal(ClaimsIdentity identity)
-        {
-            var principal = new ClaimsPrincipal(identity);
 
-            Thread.CurrentPrincipal = principal;
-            if (HttpContext.Current != null)
-            {
-                HttpContext.Current.User = principal;
-            }
+        public void SignOutAsync()
+        {
+            throw new NotImplementedException();
         }
 
         public Task<string> GenerateApiAuthTokenAsync(Guid userId)

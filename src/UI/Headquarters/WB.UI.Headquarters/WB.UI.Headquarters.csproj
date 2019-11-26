@@ -480,37 +480,6 @@
     <Content Include="App_GlobalResources\BatchUpload.zh.resx">
       <DependentUpon>BatchUpload.resx</DependentUpon>
     </Content>
-    <Content Include="App_GlobalResources\Common.ar.resx">
-      <LastGenOutput>Common.ar.designer.cs</LastGenOutput>
-      <DependentUpon>Common.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Common.es.resx">
-      <DependentUpon>Common.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Common.fr.resx">
-      <DependentUpon>Common.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Common.ka.resx">
-      <DependentUpon>Common.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Common.pt.resx">
-      <DependentUpon>Common.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Common.resx">
-      <SubType>Designer</SubType>
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Common.designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\Common.ro.resx">
-      <DependentUpon>Common.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Common.ru.resx">
-      <DependentUpon>Common.resx</DependentUpon>
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="App_GlobalResources\Common.zh.resx">
-      <DependentUpon>Common.resx</DependentUpon>
-    </Content>
     <Content Include="App_GlobalResources\Dashboard.ar.resx">
       <DependentUpon>Dashboard.resx</DependentUpon>
     </Content>
@@ -627,36 +596,6 @@
     </Content>
     <Content Include="App_GlobalResources\Import.zh.resx">
       <DependentUpon>Import.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\MainMenu.ar.resx">
-      <DependentUpon>MainMenu.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\MainMenu.es.resx">
-      <DependentUpon>MainMenu.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\MainMenu.fr.resx">
-      <DependentUpon>MainMenu.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\MainMenu.ka.resx">
-      <DependentUpon>MainMenu.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\MainMenu.pt.resx">
-      <DependentUpon>MainMenu.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\MainMenu.resx">
-      <SubType>Designer</SubType>
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>MainMenu.Designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\MainMenu.ro.resx">
-      <DependentUpon>MainMenu.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\MainMenu.ru.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>MainMenu.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\MainMenu.zh.resx">
-      <DependentUpon>MainMenu.resx</DependentUpon>
     </Content>
     <Content Include="App_GlobalResources\MapReport.ar.resx">
       <DependentUpon>MapReport.resx</DependentUpon>
@@ -970,10 +909,6 @@
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>BatchUpload.sq.designer.cs</LastGenOutput>
     </Content>
-    <Content Include="App_GlobalResources\Common.sq.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Common.sq.designer.cs</LastGenOutput>
-    </Content>
     <Content Include="App_GlobalResources\Dashboard.sq.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>Dashboard.sq.designer.cs</LastGenOutput>
@@ -989,10 +924,6 @@
     <Content Include="App_GlobalResources\Import.sq.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>Import.sq.designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\MainMenu.sq.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>MainMenu.sq.designer.cs</LastGenOutput>
     </Content>
     <Content Include="App_GlobalResources\MapReport.sq.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
@@ -1248,10 +1179,6 @@
       <DependentUpon>EnumNames.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\EnumNames.sq.resx" />
-    <EmbeddedResource Include="Resources\FieldsAndValidations.ro.resx">
-      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\FieldsAndValidations.sq.resx" />
     <EmbeddedResource Include="Resources\ImportQuestionnaire.ar.resx">
       <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
     </EmbeddedResource>
@@ -1296,9 +1223,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\EnumNames.es.resx">
       <DependentUpon>EnumNames.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\FieldsAndValidations.es.resx">
-      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ImportQuestionnaire.es.resx">
       <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
@@ -1350,13 +1274,6 @@
       <DependentUpon>OutdatedBrowser.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\OutdatedBrowser.sq.resx" />
-    <EmbeddedResource Include="Resources\Pages.es.resx">
-      <DependentUpon>Pages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Pages.ro.resx">
-      <DependentUpon>Pages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Pages.sq.resx" />
     <EmbeddedResource Include="Resources\PeriodicStatusReport.ar.resx">
       <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
     </EmbeddedResource>
@@ -1614,30 +1531,6 @@
     <EmbeddedResource Include="Resources\EnumNames.zh.resx">
       <DependentUpon>EnumNames.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\FieldsAndValidations.ar.resx">
-      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\FieldsAndValidations.fr.resx">
-      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\FieldsAndValidations.ka.resx">
-      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\FieldsAndValidations.pt.resx">
-      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\FieldsAndValidations.resx">
-      <SubType>Designer</SubType>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>FieldsAndValidations.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\FieldsAndValidations.ru.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\FieldsAndValidations.zh.resx">
-      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources\ImportQuestionnaire.ka.resx">
       <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
     </EmbeddedResource>
@@ -1723,31 +1616,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\OutdatedBrowser.zh.resx">
       <DependentUpon>OutdatedBrowser.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Pages.ar.resx">
-      <DependentUpon>Pages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Pages.fr.resx">
-      <DependentUpon>Pages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Pages.ka.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>Pages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Pages.pt.resx">
-      <DependentUpon>Pages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Pages.resx">
-      <SubType>Designer</SubType>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Pages.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Pages.ru.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>Pages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Pages.zh.resx">
-      <DependentUpon>Pages.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\PeriodicStatusReport.fr.resx">
       <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
@@ -2080,14 +1948,12 @@
     <Content Include="Views\Shared\_ListViewPagingScript.cshtml" />
     <Content Include="Views\Shared\_NoFilterListViewLayout.cshtml" />
     <Content Include="Views\Shared\_SharedAuthenticationLayout.cshtml" />
-    <Content Include="Views\Shared\Clickjacking.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\GlobalSettings.cshtml" />
     <Content Include="Views\Shared\LimitsIndicator.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Boolean.cshtml" />
     <Content Include="Scripts\moment.min.js.map" />
     <Content Include="Scripts\spin.min.js.map" />
-    <Content Include="Views\Account\LogOn.cshtml" />
     <Content Include="Views\Shared\_MainLayout.cshtml" />
     <Content Include="Views\Template\Import.cshtml" />
     <Content Include="Views\Template\ImportMode.cshtml" />
@@ -2167,7 +2033,6 @@
     <Content Include="Views\WebEmails\EmailText.cshtml" />
     <Content Include="Views\Reports\TeamStatusDuration.cshtml" />
     <Content Include="Views\WebInterview\_StartOrResumeForm.cshtml" />
-    <Content Include="Views\Shared\_PoweredBy.cshtml" />
     <Content Include="Views\DataExport\New.cshtml" />
     <Content Include="Views\Interviews\Index.cshtml" />
     <Content Include="Views\ControlPanel\ReevaluateInterview.cshtml" />
@@ -2207,11 +2072,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>BatchUpload.sq.resx</DependentUpon>
     </Compile>
-    <Compile Include="App_GlobalResources\Common.sq.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Common.sq.resx</DependentUpon>
-    </Compile>
     <Compile Include="App_GlobalResources\Dashboard.sq.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -2231,11 +2091,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Import.sq.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\MainMenu.sq.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MainMenu.sq.resx</DependentUpon>
     </Compile>
     <Compile Include="App_GlobalResources\MapReport.sq.designer.cs">
       <AutoGen>True</AutoGen>
@@ -2299,7 +2154,6 @@
     <Compile Include="Services\AspNetAppPathResolver.cs" />
     <Compile Include="Services\ClientApkProvider.cs" />
     <Compile Include="Services\DesignerUserCredentials.cs" />
-    <Compile Include="Services\HqSignInManager.cs" />
     <Compile Include="Services\IClientApkProvider.cs" />
     <Compile Include="API\DataCollection\Interviewer\InterviewerCommonWebApiConfig.cs" />
     <Compile Include="API\DataCollection\Interviewer\InterviewerInterviewsControllerBase.cs" />
@@ -2441,11 +2295,6 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="App_GlobalResources\Common.designer.cs">
-      <DependentUpon>Common.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Include="App_GlobalResources\HQ.designer.cs">
       <DependentUpon>HQ.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -2453,11 +2302,6 @@
     </Compile>
     <Compile Include="App_GlobalResources\Import.Designer.cs">
       <DependentUpon>Import.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Include="App_GlobalResources\MainMenu.Designer.cs">
-      <DependentUpon>MainMenu.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
@@ -2620,7 +2464,6 @@
     <Compile Include="Models\ChangeStateHistoryViewModel.cs" />
     <Compile Include="Models\ChartDataModel.cs" />
     <Compile Include="Models\CloneQuestionnaireModel.cs" />
-    <Compile Include="Models\CompanyLogo\CompanyLogo.cs" />
     <Compile Include="Models\ComponentModels\ComboboxModel.cs" />
     <Compile Include="Models\ExportSettingsModel.cs" />
     <Compile Include="Models\DeleteQuestionnaireRequestModel.cs" />
@@ -2653,9 +2496,7 @@
     <Compile Include="Models\JsonBaseResponse.cs" />
     <Compile Include="Models\JsonBundleCommandResponse.cs" />
     <Compile Include="Models\JsonCommandResponse.cs" />
-    <Compile Include="Models\LogOnModel.cs" />
     <Compile Include="Models\Account\ManageAccountModel.cs" />
-    <Compile Include="Models\MenuItem.cs" />
     <Compile Include="Models\PagingExtensions.cs" />
     <Compile Include="Models\PagingHelper.cs" />
     <Compile Include="Models\PreloadedDataConfirmationModel.cs" />
@@ -2716,11 +2557,6 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="Resources\FieldsAndValidations.Designer.cs">
-      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Include="Resources\ImportQuestionnaire.Designer.cs">
       <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -2743,11 +2579,6 @@
     </Compile>
     <Compile Include="Resources\OutdatedBrowser.Designer.cs">
       <DependentUpon>OutdatedBrowser.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Include="Resources\Pages.Designer.cs">
-      <DependentUpon>Pages.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
@@ -2841,6 +2672,7 @@
   <ItemGroup>
     <Folder Include="App_Data\Elmah\" />
     <Folder Include="Dependencies\dist\" />
+    <Folder Include="Models\CompanyLogo\" />
     <Folder Include="Views\WebInterviewSetupApi\" />
   </ItemGroup>
   <ItemGroup>
