@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
     internal class UserViewFactoryTestContext
     {
         protected static UserViewFactory CreateInterviewersViewFactory(IUserRepository userRepository)
-            => new UserViewFactory(userRepository, Create.Storage.NewMemoryCache());
+            => new UserViewFactory(userRepository, Create.Storage.NewMemoryCache(), Create.Storage.InMemoryPlainStorage<DeviceSyncInfo>());
 
         protected static IUserRepository CreateQueryableReadSideRepositoryReaderWithUsers( params HqUser[] users)
         {

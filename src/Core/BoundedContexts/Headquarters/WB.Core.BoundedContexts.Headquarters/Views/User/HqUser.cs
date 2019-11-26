@@ -154,8 +154,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
     public class HqUserProfile
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public virtual int Id { get; set; }
         public virtual string DeviceId { get; set; }
         public virtual DateTime? DeviceRegistrationDate { get; set; }

@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -13,9 +12,9 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 {
     internal class HqUserStore : IUserRepository
     {
-        private readonly UnitOfWork unitOfWork;
+        private readonly IUnitOfWork unitOfWork;
 
-        public HqUserStore(UnitOfWork unitOfWork)
+        public HqUserStore(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
         }
@@ -86,7 +85,6 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 
             unitOfWork.Session.Save(user);
             await unitOfWork.Session.FlushAsync();
-            unitOfWork.AcceptChanges();
         }
 
         public async Task UpdateAsync(HqUser user)
@@ -96,7 +94,6 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
                 throw new ArgumentNullException(nameof(user));
             }
             await unitOfWork.Session.UpdateAsync(user);
-            unitOfWork.AcceptChanges();
         }
 
         public Task<HqUser> FindByIdAsync(Guid userId)
