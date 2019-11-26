@@ -30,5 +30,8 @@ namespace WB.Enumerator.Native.Questionnaire.Impl
 
         public IEnumerable<CategoricalOption> GetOptionsByOptionValues(IQuestionnaire questionnaire, Guid questionId, int[] optionsValues, Translation translation) => 
             questionnaire.GetOptionsForQuestion(questionId, null, null, null).Where(x => optionsValues.Contains(x.Value));
+
+        private bool DoesSupportReusableCategories(IQuestionnaire questionnaire, Guid questionId)
+            => questionnaire.DoesSupportReusableCategories(questionId);
     }
 }
