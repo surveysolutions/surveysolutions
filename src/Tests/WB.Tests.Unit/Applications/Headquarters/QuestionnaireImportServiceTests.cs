@@ -18,6 +18,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Questionnaire.Synchronization.Designer;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -310,7 +311,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 globalInfoProvider,
                 designerApi ?? Mock.Of<IDesignerApi>(),
                 Mock.Of<IPlainKeyValueStorage<QuestionnairePdf>>(),
-                Mock.Of<IPlainKeyValueStorage<QuestionnaireReusableCategories>>());
+                Mock.Of<IReusableCategoriesStorage>());
             return questionnaireImportService;
         }
     }

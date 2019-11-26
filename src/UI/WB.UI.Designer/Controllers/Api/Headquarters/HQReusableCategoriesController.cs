@@ -3,7 +3,6 @@ using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.UI.Designer.Code.Attributes;
 
@@ -23,13 +22,12 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
 
         [HttpGet]
         [Route("{id}/{categoryId}")]
-        public IActionResult Get(string id, string categoryId)
+        public IActionResult Get(Guid id, Guid categoryId)
         {
-            var contentFile = this.categoriesService.GetPlainContentFile(Guid.Parse(id), Guid.Parse(categoryId));
+            var categories = this.categoriesService.GetCategoriesById(categoryId);
+            if (categories == null) return NotFound();
 
-            if (contentFile == null) return NotFound();
-
-            var result = JsonConvert.SerializeObject(contentFile, Formatting.None, new JsonSerializerSettings
+            var result = JsonConvert.SerializeObject(categories, Formatting.None, new JsonSerializerSettings
             { 
                 TypeNameHandling = TypeNameHandling.None
             });

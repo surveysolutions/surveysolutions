@@ -86,7 +86,8 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                 this.questionnaireItemsRepository, 
                 Mock.Of<IQuestionOptionsRepository>(),
                 Mock.Of<ISubstitutionService>(),
-                Create.Service.ExpressionStatePrototypeProvider());
+                Create.Service.ExpressionStatePrototypeProvider(),
+                Mock.Of<IReusableCategoriesStorage>());
 
             this.interviewFlagsStorage = new PostgresPlainStorageRepository<InterviewFlag>(IntegrationCreate.UnitOfWork(IntegrationCreate.SessionFactory(this.connectionString,
                 new List<Type>
@@ -129,7 +130,8 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                 questionnaireItemsRepositoryLocal, 
                 Mock.Of<IQuestionOptionsRepository>(),
                 Mock.Of<ISubstitutionService>(),
-                Create.Service.ExpressionStatePrototypeProvider());
+                Create.Service.ExpressionStatePrototypeProvider(),
+                Mock.Of<IReusableCategoriesStorage>());
 
             document.Id = document.PublicKey.FormatGuid();
             questionnaireStorageLocal.StoreQuestionnaire(document.PublicKey, questionnaireVersion, document);

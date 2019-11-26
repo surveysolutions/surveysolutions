@@ -4,7 +4,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
     public class QuestionnaireReusableCategories
     {
-        public string CategoriesName { set; get; }
-        public string ContentFile { set; get; }
+        public int Id { get; set; }
+        public int? ParentId { get; set; }
+        public string Text { get; set; }
     }
 }

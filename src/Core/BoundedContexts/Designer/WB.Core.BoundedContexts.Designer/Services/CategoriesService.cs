@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using CsvHelper;
-using CsvHelper.Configuration;
 using Main.Core.Documents;
 using OfficeOpenXml;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Translations;
@@ -130,47 +126,6 @@ namespace WB.Core.BoundedContexts.Designer.Services
 
                 return excelPackage.GetAsByteArray();
             }
-        }
-
-        public CategoriesFile GetPlainContentFile(Guid questionnaireId, Guid categoriesId)
-        {
-            var questionnaire = this.questionnaireStorage.GetById(questionnaireId.ToString("N"));
-
-            return new CategoriesFile
-            {
-                QuestionnaireTitle = questionnaire.Title,
-                CategoriesName = questionnaire.Categories.FirstOrDefault(x => x.Id == categoriesId)?.Name ?? string.Empty,
-                ContentFile = this.GetTabFileContent(questionnaireId, categoriesId)
-            };
-        }
-
-        private byte[] GetTabFileContent(Guid questionnaireId, Guid categoriesId)
-        {
-            using (var memoryStream = new MemoryStream())
-            {
-                using (var csvWriter = new CsvWriter(new StreamWriter(memoryStream), this.CreateCsvConfiguration()))
-                {
-                    csvWriter.WriteField("id");
-                    csvWriter.WriteField("parentid");
-                    csvWriter.WriteField("text");
-                    csvWriter.NextRecord();
-
-                    foreach (var row in this.dbContext.CategoriesInstances.Where(x => x.QuestionnaireId == questionnaireId && x.CategoriesId == categoriesId))
-                    {
-                        csvWriter.WriteField(row.Id);
-                        csvWriter.WriteField(row.ParentId);
-                        csvWriter.WriteField(row.Text);
-                        csvWriter.NextRecord();
-                    }
-                }
-
-                return memoryStream.ToArray();
-            }
-        }
-
-        private Configuration CreateCsvConfiguration()
-        {
-            return new Configuration { HasHeaderRecord = true, TrimOptions = TrimOptions.Trim, IgnoreQuotes = false, Delimiter = "\t", MissingFieldFound = null };
         }
 
         public void Store(Guid questionnaireId, Guid categoriesId, byte[] excelRepresentation)

@@ -5,9 +5,12 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
+using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
@@ -25,13 +28,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
         private readonly IQuestionOptionsRepository questionOptionsRepository;
         private readonly ISubstitutionService substitutionService;
         private readonly IInterviewExpressionStatePrototypeProvider expressionStatePrototypeProvider;
+        private readonly IReusableCategoriesStorage reusableCategoriesStorage;
 
         public QuestionnaireStorage(IPlainKeyValueStorage<QuestionnaireDocument> repository, 
             ITranslationStorage translationStorage, 
             IQuestionnaireTranslator translator,
             IQuestionOptionsRepository questionOptionsRepository,
             ISubstitutionService substitutionService,
-            IInterviewExpressionStatePrototypeProvider expressionStatePrototypeProvider)
+            IInterviewExpressionStatePrototypeProvider expressionStatePrototypeProvider,
+            IReusableCategoriesStorage reusableCategoriesStorage)
         {
             this.repository = repository;
             this.translationStorage = translationStorage;
@@ -39,6 +44,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             this.questionOptionsRepository = questionOptionsRepository;
             this.substitutionService = substitutionService;
             this.expressionStatePrototypeProvider = expressionStatePrototypeProvider ?? throw new ArgumentNullException(nameof(expressionStatePrototypeProvider));
+            this.reusableCategoriesStorage = reusableCategoriesStorage;
         }
 
         public virtual IQuestionnaire GetQuestionnaire(QuestionnaireIdentity identity, string language)
@@ -54,6 +60,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             if (questionnaireDocument == null || questionnaireDocument.IsDeleted)
                 return null;
 
+            if (questionnaireDocument.Categories.Any())
+            {
+                foreach (var question in questionnaireDocument.Find<ICategoricalQuestion>())
+                {
+                    if (question.CategoriesId.HasValue)
+                    {
+                        var options = reusableCategoriesStorage.GetOptions(identity, question.CategoriesId.Value);
+                        question.Answers = options.Select(o => new Answer()
+                        {
+                            AnswerText = o.Title,
+                            AnswerCode = o.Value,
+                            ParentCode = o.ParentValue
+                        }).ToList();
+                    }
+                }
+            }
+
             Translation translationId = null;
             if (language != null)
             {
@@ -68,7 +91,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             }
 
             var plainQuestionnaire = new PlainQuestionnaire(questionnaireDocument, identity.Version, 
-                questionOptionsRepository, substitutionService,translationId);
+                questionOptionsRepository, substitutionService, translationId);
 
             plainQuestionnaire.WarmUpPriorityCaches();
 
