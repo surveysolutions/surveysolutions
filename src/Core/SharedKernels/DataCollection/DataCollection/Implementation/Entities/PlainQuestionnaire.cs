@@ -396,6 +396,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return AnswerUtils.GetCategoricalOptionsFromQuestion(question, parentQuestionValue, searchFor, excludedOptionIds);
         }
 
+        public bool DoesSupportReusableCategories(Guid questionId)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+            CheckShouldQuestionSupportReusableCategories(question, questionId);
+            return (question as ICategoricalQuestion)?.CategoriesId.HasValue ?? false;
+        }
+
         public CategoricalOption GetOptionForQuestionByOptionText(Guid questionId, string optionText, int? parentQuestionValue)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
@@ -433,6 +440,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             if (questionTypeDoesNotSupportAnswerOptions)
                 throw new QuestionnaireException(
                     $"Cannot return answer options for question with id '{questionId}' because it's type {question.QuestionType} does not support answer options.");
+        }
+
+        private void CheckShouldQuestionSupportReusableCategories(IQuestion question, Guid questionId)
+        {
+            bool questionTypeDoesNotSupportReusableCategories
+                = question.QuestionType != QuestionType.SingleOption && 
+                  question.QuestionType != QuestionType.MultyOption;
+
+            if (questionTypeDoesNotSupportReusableCategories)
+                throw new QuestionnaireException(
+                    $"Cannot return answer options for question with id '{questionId}' because it's type {question.QuestionType} does not support reusable categories.");
         }
 
         public CategoricalOption GetOptionForQuestionByOptionValueFromStructure(Guid questionId, decimal optionValue)
