@@ -86,6 +86,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 
             unitOfWork.Session.Save(user);
             await unitOfWork.Session.FlushAsync();
+            unitOfWork.AcceptChanges();
         }
 
         public async Task UpdateAsync(HqUser user)
@@ -95,6 +96,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
                 throw new ArgumentNullException(nameof(user));
             }
             await unitOfWork.Session.UpdateAsync(user);
+            unitOfWork.AcceptChanges();
         }
 
         public Task<HqUser> FindByIdAsync(Guid userId)
