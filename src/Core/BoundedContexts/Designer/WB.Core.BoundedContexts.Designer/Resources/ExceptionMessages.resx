@@ -357,4 +357,7 @@
   <data name="Excel_Categories_More_Than_Limit" xml:space="preserve">
     <value>Categories set has more than {0} categories</value>
   </data>
+  <data name="Excel_NoCategories" xml:space="preserve">
+    <value>No categories in file</value>
+  </data>
 </root>

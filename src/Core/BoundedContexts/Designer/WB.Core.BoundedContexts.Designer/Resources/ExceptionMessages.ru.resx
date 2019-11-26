@@ -362,4 +362,8 @@
       <value>Количество категорий не может быть больше {0}</value>
       <comment>Идентификаторы категорий должны быть уникальными</comment>
   </data>
+  <data name="Excel_NoCategories" xml:space="preserve">
+      <value>В файле нет категорий</value>
+      <comment>В файле нет категорий</comment>
+  </data>
 </root>
