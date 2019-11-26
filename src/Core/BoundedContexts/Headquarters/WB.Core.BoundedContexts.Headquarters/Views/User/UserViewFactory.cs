@@ -122,54 +122,47 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
         public UserListView GetUsersByRole(int pageIndex, int pageSize, string orderBy, string searchBy, bool archived, UserRoles role)
         {
-            Func<IQueryable<HqUser>, IQueryable<InterviewersItem>> query =
-                allUsers => ApplyFilter(allUsers, searchBy, archived, role)
-                    .Select(x => new InterviewersItem
-                    {
-                        UserId = x.Id,
-                        CreationDate = x.CreationDate,
-                        Email = x.Email,
-                        IsArchived = x.IsArchived,
-                        IsLockedBySupervisor = x.IsLockedBySupervisor,
-                        IsLockedByHQ = x.IsLockedByHeadquaters,
-                        UserName = x.UserName,
-                        FullName = x.FullName,
-                        SupervisorName = allUsers.FirstOrDefault(pr => pr.Id == x.Profile.SupervisorId).UserName,
-                        DeviceId = x.Profile.DeviceId
-                    });
+            var allUsers = ApplyFilter(this.userRepository.Users, searchBy, archived, role)
+                .Select(x => new InterviewersItem
+                {
+                    UserId = x.Id,
+                    CreationDate = x.CreationDate,
+                    Email = x.Email,
+                    IsArchived = x.IsArchived,
+                    IsLockedBySupervisor = x.IsLockedBySupervisor,
+                    IsLockedByHQ = x.IsLockedByHeadquaters,
+                    UserName = x.UserName,
+                    FullName = x.FullName,
+                    DeviceId = x.Profile.DeviceId
+                });
 
             orderBy = string.IsNullOrWhiteSpace(orderBy) ? nameof(HqUser.UserName) : orderBy;
 
-            var filteredUsers = query
-                .PagedAndOrderedQuery(orderBy, pageIndex, pageSize)
-                .Invoke(this.userRepository.Users)
+            var filteredUsers = allUsers
+                .OrderUsingSortExpression(orderBy)
+                .Skip((pageIndex - 1) * pageSize).Take(pageSize)
                 .ToList();
 
             return new UserListView
             {
                 Page = pageIndex,
                 PageSize = pageSize,
-                TotalCount = query.Invoke(this.userRepository.Users).Count(),
+                TotalCount = allUsers.Count(),
                 Items = filteredUsers.ToList()
             };
         }
 
         public UsersView GetInterviewers(int pageSize, string searchBy, Guid? supervisorId, bool showLocked = false, bool? archived = false)
         {
-            Func<IQueryable<HqUser>, IQueryable<HqUser>> query = users =>
-            {
-                users = ApplyFilter(users, searchBy, archived, UserRoles.Interviewer)
-                    .Where(user => showLocked || (!user.IsLockedBySupervisor && !user.IsLockedByHeadquaters));
+            var users = ApplyFilter(this.userRepository.Users, searchBy, archived, UserRoles.Interviewer)
+                .Where(user => showLocked || (!user.IsLockedBySupervisor && !user.IsLockedByHeadquaters));
 
-                if (supervisorId.HasValue)
-                    users = users.Where(user => user.Profile.SupervisorId == supervisorId);
+            if (supervisorId.HasValue)
+                users = users.Where(user => user.Profile.SupervisorId == supervisorId);
 
-                return users;
-            };
-
-            var filteredUsers = query
-                .PagedAndOrderedQuery(nameof(HqUser.UserName), 1, pageSize)
-                .Invoke(this.userRepository.Users)
+            var filteredUsers = users
+                .OrderBy(x => x.UserName)
+                .Take(pageSize)
                 .ToList()
                 .Select(x => new UsersViewItem
                 {
@@ -180,7 +173,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
             var result = new UsersView
             {
-                TotalCountByQuery = query.Invoke(this.userRepository.Users).Count(),
+                TotalCountByQuery = users.Count(),
                 Users = filteredUsers.ToList()
             };
 
