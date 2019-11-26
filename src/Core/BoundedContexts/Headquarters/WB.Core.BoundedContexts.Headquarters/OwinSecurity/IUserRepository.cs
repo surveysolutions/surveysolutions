@@ -11,6 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
     public interface IUserRepository
     {
         IQueryable<HqUser> Users { get; }
+        IQueryable<DeviceSyncInfo> DeviceSyncInfos { get; }
         HqRole FindRole(Guid id);
 
         Task<string> GetSecurityStampAsync(HqUser user);
