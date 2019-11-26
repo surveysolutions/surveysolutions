@@ -355,7 +355,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
                 var sb = new StringBuilder();
                 sb.AppendLine(e.Message);
-                e.FoundErrors.ForEach(x => sb.AppendLine(x.Message));
+                e.FoundErrors?.ForEach(x => sb.AppendLine(x.Message));
 
                 return this.Error((int)HttpStatusCode.NotAcceptable, sb.ToString());
             }

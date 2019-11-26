@@ -348,4 +348,13 @@
   <data name="Excel_Categories_Empty_Value" xml:space="preserve">
     <value>[{0}] Empty value</value>
   </data>
+  <data name="Excel_Categories_Duplicated" xml:space="preserve">
+    <value>Duplicated categories in rows: {0}</value>
+  </data>
+  <data name="Excel_Categories_Empty_ParentId" xml:space="preserve">
+    <value>Some categories don't have a parent id</value>
+  </data>
+  <data name="Excel_Categories_More_Than_Limit" xml:space="preserve">
+    <value>Categories set has more than {0} categories</value>
+  </data>
 </root>

@@ -178,6 +178,24 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Duplicated categories in rows: {0}.
+        /// </summary>
+        public static string Excel_Categories_Duplicated {
+            get {
+                return ResourceManager.GetString("Excel_Categories_Duplicated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Some categories don&apos;t have a parent id.
+        /// </summary>
+        public static string Excel_Categories_Empty_ParentId {
+            get {
+                return ResourceManager.GetString("Excel_Categories_Empty_ParentId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to [{0}] Empty text.
         /// </summary>
         public static string Excel_Categories_Empty_Text {
@@ -201,6 +219,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string Excel_Categories_Int_Invalid {
             get {
                 return ResourceManager.GetString("Excel_Categories_Int_Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Categories set has more than {0} categories.
+        /// </summary>
+        public static string Excel_Categories_More_Than_Limit {
+            get {
+                return ResourceManager.GetString("Excel_Categories_More_Than_Limit", resourceCulture);
             }
         }
         
