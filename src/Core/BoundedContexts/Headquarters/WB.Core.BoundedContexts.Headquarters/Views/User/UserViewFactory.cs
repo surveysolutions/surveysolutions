@@ -379,14 +379,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
         public UsersView GetAllSupervisors(int pageSize, string searchBy, bool showLocked = false)
         {
-            Func<IQueryable<HqUser>, IQueryable<HqUser>> query = users =>
-                ApplyFilter(users, searchBy, false, UserRoles.Supervisor)
+            var users =
+                ApplyFilter(this.userRepository.Users, searchBy, false, UserRoles.Supervisor)
                     .Where(user => showLocked || !user.IsLockedByHeadquaters);
 
-            var filteredUsers = query
-                .PagedAndOrderedQuery(nameof(HqUser.UserName), 1, pageSize)
-                .Invoke(this.userRepository.Users)
-                .ToList()
+            var filteredUsers = users
+                .OrderBy(x => x.UserName)
+                .Take(pageSize)
                 .Select(x => new UsersViewItem
                 {
                     UserId = x.Id,
@@ -395,15 +394,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
             return new UsersView
             {
-                TotalCountByQuery = query.Invoke(this.userRepository.Users).Count(),
+                TotalCountByQuery = users.Count(),
                 Users = filteredUsers.ToList()
             };
         }
 
         public SupervisorsView GetSupervisors(int pageIndex, int pageSize, string orderBy, string searchBy, bool? archived = null)
         {
-            Func<IQueryable<HqUser>, IQueryable<SupervisorsQueryItem>> query =
-                allUsers => ApplyFilter(allUsers, searchBy, archived, UserRoles.Supervisor)
+            var allUsers = ApplyFilter(this.userRepository.Users, searchBy, archived, UserRoles.Supervisor)
                     .Select(supervisor => new SupervisorsQueryItem
                     {
                         IsLockedBySupervisor = supervisor.IsLockedBySupervisor,
@@ -417,8 +415,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
             orderBy = string.IsNullOrWhiteSpace(orderBy) ? nameof(HqUser.UserName) : orderBy;
 
-            List<SupervisorsQueryItem> usersPage = query.PagedAndOrderedQuery(orderBy, pageIndex, pageSize)
-                .Invoke(this.userRepository.Users)
+            List<SupervisorsQueryItem> usersPage = allUsers
+                .OrderUsingSortExpression(orderBy)
+                .Skip((pageIndex - 1) * pageSize).Take(pageSize)
                 .ToList();
 
             var filteredUsers = usersPage.Select(x => new SupervisorsItem
@@ -434,7 +433,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
             return new SupervisorsView
             {
-                TotalCount = query.Invoke(this.userRepository.Users).Count(),
+                TotalCount = allUsers.Count(),
                 Items = filteredUsers
             };
         }
