@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.Views.Device;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.User
 {
@@ -91,6 +92,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             Claims = new List<HqUserClaim>();
             Roles = new List<HqRole>();
             Logins = new List<HqUserLogin>();
+            DeviceSyncInfos = new HashSet<DeviceSyncInfo>();
         }
 
         public virtual HqUserProfile Profile { get; set; }
@@ -146,6 +148,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         public virtual Guid Id { get; set; }
 
         public virtual string UserName { get; set; }
+
+        public virtual ICollection<DeviceSyncInfo> DeviceSyncInfos { get; set; }
     }
 
     public class HqUserProfile
