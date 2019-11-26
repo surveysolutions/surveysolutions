@@ -206,7 +206,6 @@
     <Compile Include="Captcha\ICaptchaService.cs" />
     <Compile Include="Captcha\NoCaptchaProvider.cs" />
     <Compile Include="Captcha\HostedCaptchaProvider.cs" />
-    <Compile Include="Captcha\ICaptchaProvider.cs" />
     <Compile Include="Captcha\ReCaptchaProvider.cs" />
     <Compile Include="Captcha\Extensions.cs" />
     <Compile Include="Captcha\WebCacheBasedCaptchaService.cs" />

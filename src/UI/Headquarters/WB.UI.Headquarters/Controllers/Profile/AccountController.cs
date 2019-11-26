@@ -79,62 +79,6 @@ namespace WB.UI.Headquarters.Controllers
             }
         }
 
-        [HttpGet]
-        [AllowAnonymous]
-        public ActionResult LogOn(string returnUrl)
-        {
-            this.ViewBag.ActivePage = MenuItem.Logon;
-            this.ViewBag.ReturnUrl = returnUrl;
-            this.ViewBag.HasCompanyLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey) != null;
-
-            return this.View(new LogOnModel
-            {
-                RequireCaptcha = this.captchaService.ShouldShowCaptcha(null)
-            });
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<ActionResult> LogOn(LogOnModel model, string returnUrl)
-        {
-            this.ViewBag.ActivePage = MenuItem.Logon;
-            this.ViewBag.HasCompanyLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey) != null;
-            model.RequireCaptcha = this.captchaService.ShouldShowCaptcha(model.UserName);
-
-            if (model.RequireCaptcha && !this.captchaProvider.IsCaptchaValid(this))
-            {
-                this.ModelState.AddModelError("InvalidCaptcha", ErrorMessages.PleaseFillCaptcha);
-                return this.View(model);
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-            var signInResult = await this.signInManager.SignInAsync(model.UserName, model.Password, isPersistent: true);
-            switch (signInResult)
-            {
-                case SignInStatus.Success:
-                    this.captchaService.ResetFailedLogin(model.UserName);
-                    return RedirectToLocal(returnUrl);
-                case SignInStatus.LockedOut:
-                    this.captchaService.ResetFailedLogin(model.UserName);
-                    this.ModelState.AddModelError("LockedOut", ErrorMessages.SiteAccessNotAllowed);
-                    return View(model);
-                default:
-                    this.captchaService.RegisterFailedLogin(model.UserName);
-                    model.RequireCaptcha = this.captchaService.ShouldShowCaptcha(model.UserName);
-                    this.ModelState.AddModelError("InvalidCredentials", ErrorMessages.IncorrectUserNameOrPassword);
-                    return View(model);
-            }
-        }
-
-        public ActionResult LogOff()
-        {
-            this.authenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return this.Redirect("~/");
-        }
 
         [Authorize]
         public async Task<ActionResult> Manage()

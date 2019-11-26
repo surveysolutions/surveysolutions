@@ -8,6 +8,29 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Remove="Resources\Common.ar.resx" />
+    <EmbeddedResource Remove="Resources\Common.es.resx" />
+    <EmbeddedResource Remove="Resources\Common.fr.resx" />
+    <EmbeddedResource Remove="Resources\Common.ka.resx" />
+    <EmbeddedResource Remove="Resources\Common.pt.resx" />
+    <EmbeddedResource Remove="Resources\Common.resx" />
+    <EmbeddedResource Remove="Resources\Common.ro.resx" />
+    <EmbeddedResource Remove="Resources\Common.ru.resx" />
+    <EmbeddedResource Remove="Resources\Common.sq.resx" />
+    <EmbeddedResource Remove="Resources\Common.zh.resx" />
+    <EmbeddedResource Remove="Resources\MainMenu.ar.resx" />
+    <EmbeddedResource Remove="Resources\MainMenu.es.resx" />
+    <EmbeddedResource Remove="Resources\MainMenu.fr.resx" />
+    <EmbeddedResource Remove="Resources\MainMenu.ka.resx" />
+    <EmbeddedResource Remove="Resources\MainMenu.pt.resx" />
+    <EmbeddedResource Remove="Resources\MainMenu.resx" />
+    <EmbeddedResource Remove="Resources\MainMenu.ro.resx" />
+    <EmbeddedResource Remove="Resources\MainMenu.ru.resx" />
+    <EmbeddedResource Remove="Resources\MainMenu.sq.resx" />
+    <EmbeddedResource Remove="Resources\MainMenu.zh.resx" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="appsettings.Development.ini" />
     <None Remove="appsettings.ini" />
   </ItemGroup>
@@ -15,6 +38,68 @@
   <ItemGroup>
     <Content Include="appsettings.Development.ini" />
     <Content Include="appsettings.ini" />
+    <Content Include="Resources\Common.ar.resx">
+      <DependentUpon>Common.resx</DependentUpon>
+    </Content>
+    <Content Include="Resources\Common.es.resx">
+      <DependentUpon>Common.resx</DependentUpon>
+    </Content>
+    <Content Include="Resources\Common.fr.resx">
+      <DependentUpon>Common.resx</DependentUpon>
+    </Content>
+    <Content Include="Resources\Common.ka.resx">
+      <DependentUpon>Common.resx</DependentUpon>
+    </Content>
+    <Content Include="Resources\Common.pt.resx">
+      <DependentUpon>Common.resx</DependentUpon>
+    </Content>
+    <Content Include="Resources\Common.resx">
+      <SubType>Designer</SubType>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Common.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="Resources\Common.ro.resx">
+      <DependentUpon>Common.resx</DependentUpon>
+    </Content>
+    <Content Include="Resources\Common.ru.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Common.resx</DependentUpon>
+    </Content>
+    <Content Include="Resources\Common.sq.resx" />
+    <Content Include="Resources\Common.zh.resx">
+      <DependentUpon>Common.resx</DependentUpon>
+    </Content>
+    <Content Include="Resources\MainMenu.ar.resx">
+      <DependentUpon>MainMenu.resx</DependentUpon>
+    </Content>
+    <Content Include="Resources\MainMenu.es.resx">
+      <DependentUpon>MainMenu.resx</DependentUpon>
+    </Content>
+    <Content Include="Resources\MainMenu.fr.resx">
+      <DependentUpon>MainMenu.resx</DependentUpon>
+    </Content>
+    <Content Include="Resources\MainMenu.ka.resx">
+      <DependentUpon>MainMenu.resx</DependentUpon>
+    </Content>
+    <Content Include="Resources\MainMenu.pt.resx">
+      <DependentUpon>MainMenu.resx</DependentUpon>
+    </Content>
+    <Content Include="Resources\MainMenu.resx">
+      <SubType>Designer</SubType>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MainMenu.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="Resources\MainMenu.ro.resx">
+      <DependentUpon>MainMenu.resx</DependentUpon>
+    </Content>
+    <Content Include="Resources\MainMenu.ru.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>MainMenu.resx</DependentUpon>
+    </Content>
+    <Content Include="Resources\MainMenu.sq.resx" />
+    <Content Include="Resources\MainMenu.zh.resx">
+      <DependentUpon>MainMenu.resx</DependentUpon>
+    </Content>
   </ItemGroup>
 
 
@@ -24,11 +109,102 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
   </ItemGroup>
 
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj" />
+    <ProjectReference Include="..\Shared\WB.UI.Shared.Web.Core\WB.UI.Shared.Web.Core.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Compile Update="Resources\Common.designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Common.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\FieldsAndValidations.Designer.cs">
+      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\MainMenu.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>MainMenu.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Pages.Designer.cs">
+      <DependentUpon>Pages.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\FieldsAndValidations.ar.resx">
+      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\FieldsAndValidations.es.resx">
+      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\FieldsAndValidations.fr.resx">
+      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\FieldsAndValidations.ka.resx">
+      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\FieldsAndValidations.pt.resx">
+      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\FieldsAndValidations.resx">
+      <SubType>Designer</SubType>
+      <LastGenOutput>FieldsAndValidations.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\FieldsAndValidations.ro.resx">
+      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\FieldsAndValidations.ru.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\FieldsAndValidations.zh.resx">
+      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Pages.ar.resx">
+      <DependentUpon>Pages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Pages.es.resx">
+      <DependentUpon>Pages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Pages.fr.resx">
+      <DependentUpon>Pages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Pages.ka.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Pages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Pages.pt.resx">
+      <DependentUpon>Pages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Pages.resx">
+      <SubType>Designer</SubType>
+      <LastGenOutput>Pages.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Pages.ro.resx">
+      <DependentUpon>Pages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Pages.ru.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Pages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Pages.zh.resx">
+      <DependentUpon>Pages.resx</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
