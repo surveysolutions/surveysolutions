@@ -350,4 +350,16 @@
   <data name="Excel_Categories_Empty_Value" xml:space="preserve">
     <value>[{0}] Пустое значение</value>
   </data>
+  <data name="Excel_Categories_Duplicated" xml:space="preserve">
+      <value>Дубликаты категорий в строках: {0}</value>
+      <comment>Дубликаты категорий в строках: {0}</comment>
+  </data>
+  <data name="Excel_Categories_Empty_ParentId" xml:space="preserve">
+      <value>У некоторых категорий нет родительского идентификатора</value>
+      <comment>У некоторых категорий нет родительского идентификатора</comment>
+  </data>
+  <data name="Excel_Categories_More_Than_Limit" xml:space="preserve">
+      <value>Количество категорий не может быть больше {0}</value>
+      <comment>Идентификаторы категорий должны быть уникальными</comment>
+  </data>
 </root>

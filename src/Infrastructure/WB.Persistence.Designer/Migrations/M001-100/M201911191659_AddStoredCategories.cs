@@ -11,7 +11,7 @@ namespace WB.UI.Designer.Migrations.PlainStore
                 .WithColumn("questionnaireid").AsGuid().NotNullable().PrimaryKey()
                 .WithColumn("categoriesid").AsGuid().NotNullable().PrimaryKey()
                 .WithColumn("id").AsInt32().NotNullable().PrimaryKey()
-                .WithColumn("parentid").AsInt32().Nullable()
+                .WithColumn("parentid").AsInt32().Nullable().PrimaryKey()
                 .WithColumn("text").AsString().NotNullable();
         }
     }

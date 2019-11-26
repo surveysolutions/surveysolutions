@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         protected const int MaxExpressionLength = 10000;
         protected const int MaxOptionsCountInCascadingQuestion = 15000;
-        protected const int MaxOptionsCountInFilteredComboboxQuestion = 15000;
+        public const int MaxOptionsCountInFilteredComboboxQuestion = 15000;
 
         protected const int MaxOptionsCountInCategoricalOptionQuestion = 200;
 
