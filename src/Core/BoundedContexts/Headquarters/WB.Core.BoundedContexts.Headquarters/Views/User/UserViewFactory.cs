@@ -68,8 +68,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
             var dbUser =
                 (from user in query
-                join profile in this.userRepository.Users on user.Profile.SupervisorId equals profile.Id into supervisorInfo
-                from supervisor in supervisorInfo.DefaultIfEmpty()
                 select new
                 {
                     PublicKey = user.Id,
@@ -83,8 +81,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                     CreationDate = user.CreationDate,
                     Roles = user.Roles,
                     SecurityStamp = user.SecurityStamp,
-                    SupervisorId = supervisor == null ? (Guid?)null : supervisor.Id,
-                    SupervisorName = supervisor.UserName
+                    SupervisorId = user.Profile.SupervisorId
                 }).FirstOrDefault();
 
             if (dbUser == null) return null;
@@ -103,7 +100,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 Roles = dbUser.Roles.Select(x => x.Id.ToUserRole()).ToHashSet(),
                 SecurityStamp = dbUser.SecurityStamp,
                 Supervisor = dbUser.SupervisorId.HasValue
-                    ? new UserLight(dbUser.SupervisorId.Value, dbUser.SupervisorName)
+                    ? new UserLight(dbUser.SupervisorId.Value, this.userRepository.Users.FirstOrDefault(x => x.Id == dbUser.SupervisorId)?.UserName)
                     : null
             };
         }
@@ -324,25 +321,27 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                     break;
                 case InterviewerFacet.LowStorage:
                     interviewers = from i in interviewers
-                                   where i.DeviceSyncInfos
-                                          .FirstOrDefault().StorageFreeInBytes < InterviewerIssuesConstants.LowMemoryInBytesSize
-                                   select i;
+                                    let deviceSyncInfo = repository.DeviceSyncInfos
+                                        .OrderByDescending(x => x.Id)
+                                        .FirstOrDefault(x => x.InterviewerId == i.Id)
+                                    where deviceSyncInfo.StorageFreeInBytes < InterviewerIssuesConstants.LowMemoryInBytesSize
+                                    select i;
                     break;
                 case InterviewerFacet.NoAssignmentsReceived:
                     interviewers = from i in interviewers
-                                   let deviceSyncInfo = i.DeviceSyncInfos.Where(x => x.InterviewerId == i.Id)
+                                   let deviceSyncInfo = i.DeviceSyncInfos
                                    where !deviceSyncInfo.Any(s => s.Statistics.DownloadedQuestionnairesCount > 0)
                                    select i;
                     break;
                 case InterviewerFacet.NeverUploaded:
                     interviewers = from i in interviewers
-                                   let deviceSyncInfo = i.DeviceSyncInfos.Where(x => x.InterviewerId == i.Id)
+                                   let deviceSyncInfo = i.DeviceSyncInfos
                                    where !deviceSyncInfo.Any(s => s.Statistics.UploadedInterviewsCount > 0)
                                    select i;
                     break;
                 case InterviewerFacet.TabletReassigned:
                     interviewers = from i in interviewers
-                                   let deviceSyncInfo = i.DeviceSyncInfos.Where(x => x.InterviewerId == i.Id)
+                                   let deviceSyncInfo = i.DeviceSyncInfos
                                    where deviceSyncInfo.Select(s => s.DeviceId).Distinct().Count() > 1
                                    select i;
                     break;
