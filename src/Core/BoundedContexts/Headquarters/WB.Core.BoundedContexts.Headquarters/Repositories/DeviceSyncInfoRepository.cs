@@ -150,7 +150,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
         public double? GetAverageSynchronizationSpeedInBytesPerSeconds(Guid interviewerId)
             => this.dbContext.Session.Query<DeviceSyncInfo>().OrderByDescending(d => d.SyncDate)
                 .Where(d => d.InterviewerId == interviewerId && d.Statistics != null)        
-                .Take(5).Average(info => (double?)info.Statistics.TotalConnectionSpeed);
+                .Take(5).ToList().Average(info => info.Statistics.TotalConnectionSpeed);
 
         public DeviceSyncInfo GetLastFailedByInterviewerId(Guid interviewerId)
             => this.dbContext.Session.Query<DeviceSyncInfo>().OrderByDescending(deviceInfo => deviceInfo.Id)
