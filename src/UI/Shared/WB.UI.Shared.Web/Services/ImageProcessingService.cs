@@ -8,6 +8,13 @@ namespace WB.UI.Shared.Web.Services
 {
     public class ImageProcessingService : IImageProcessingService
     {
+        public void Validate(byte[] source)
+        {
+            using (var _ = Image.Load(source, out var _))
+            {
+            }
+        }
+
         public byte[] ResizeImage(byte[] source, int height, int width)
         {
             using (var outputStream = new MemoryStream())
@@ -15,8 +22,8 @@ namespace WB.UI.Shared.Web.Services
             {
                 image.Mutate(x => x.Resize(new ResizeOptions()
                 {
-                    Position = AnchorPositionMode.Center, 
-                    Mode = ResizeMode.Max, 
+                    Position = AnchorPositionMode.Center,
+                    Mode = ResizeMode.Max,
                     Size = new Size(width, height)
                 }));
                 image.SaveAsPng(outputStream);
