@@ -162,5 +162,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         public virtual Guid? SupervisorId { get; set; }
         public virtual string DeviceAppVersion { get; set; }
         public virtual int? DeviceAppBuildVersion { get; set; }
+        public virtual long? StorageFreeInBytes { get; set; }
     }
 }
