@@ -81,6 +81,16 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity.Providers
                     });
                 });
 
+            Set(x => x.DeviceSyncInfos, s =>
+            {
+                s.Cascade(Cascade.None);
+                s.Key(k =>
+                {
+                    k.Column("\"InterviewerId\"");
+                });
+                s.Inverse(true);
+            }, sm => sm.OneToMany());
+
             Bag(x => x.Roles, map =>
             {
                 map.Table("userroles");

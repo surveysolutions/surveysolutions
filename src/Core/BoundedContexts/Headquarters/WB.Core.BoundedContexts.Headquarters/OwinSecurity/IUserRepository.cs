@@ -10,7 +10,6 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 {
     public interface IUserRepository
     {
-        IQueryable<DeviceSyncInfo> DeviceSyncInfos { get; }
         IQueryable<HqUser> Users { get; }
         HqRole FindRole(Guid id);
 
