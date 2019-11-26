@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace WB.UI.Designer.Extensions
+namespace WB.UI.Shared.Web.Extensions
 {
     public static class LinkExtensions
     {
