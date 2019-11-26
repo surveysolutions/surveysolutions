@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Infrastructure.Native.Storage;
 
 namespace WB.Core.BoundedContexts.Headquarters.Repositories
@@ -22,6 +23,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
     {
         private readonly IReadSideRepositoryWriter<QuestionnaireCompositeItem, int> questionnaireItemsWriter;
         private readonly INativeReadSideStorage<QuestionnaireCompositeItem, int> questionnaireItemsReader;
+        private readonly IReusableCategoriesStorage reusableCategoriesStorage;
 
         public HqQuestionnaireStorage(IPlainKeyValueStorage<QuestionnaireDocument> repository,
             ITranslationStorage translationStorage,
@@ -32,10 +34,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
             ISubstitutionService substitutionService,
             IInterviewExpressionStatePrototypeProvider expressionStatePrototypeProvider,
             IReusableCategoriesStorage reusableCategoriesStorage)
-            : base(repository, translationStorage, translator, questionOptionsRepository, substitutionService, expressionStatePrototypeProvider, reusableCategoriesStorage)
+            : base(repository, translationStorage, translator, questionOptionsRepository, substitutionService, expressionStatePrototypeProvider)
         {
             this.questionnaireItemsWriter = questionnaireItemsWriter;
             this.questionnaireItemsReader = questionnaireItemsReader;
+            this.reusableCategoriesStorage = reusableCategoriesStorage;
         }
 
         public override void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument)
@@ -106,6 +109,26 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
 
                 return questionnaire;
             });
+        }
+
+        protected override void FillPlainQuestionnaireDataOnCreate(QuestionnaireIdentity identity, QuestionnaireDocument questionnaireDocument)
+        {
+            if (questionnaireDocument.Categories.Any())
+            {
+                foreach (var question in questionnaireDocument.Find<ICategoricalQuestion>())
+                {
+                    if (question.CategoriesId.HasValue)
+                    {
+                        var options = reusableCategoriesStorage.GetOptions(identity, question.CategoriesId.Value);
+                        question.Answers = options.Select(o => new Answer()
+                        {
+                            AnswerText = o.Title,
+                            AnswerCode = o.Value,
+                            ParentCode = o.ParentValue
+                        }).ToList();
+                    }
+                }
+            }
         }
     }
 }
