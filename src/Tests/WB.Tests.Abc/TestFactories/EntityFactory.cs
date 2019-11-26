@@ -1316,7 +1316,6 @@ namespace WB.Tests.Abc.TestFactories
                 PasswordHashSha1 = passwordHashSha1,
                 SecurityStamp = securityStamp ?? Guid.NewGuid().ToString()
             };
-            user.Roles.Add(new HqUserRole {UserId = user.Id, RoleId = role.ToUserId()});
 
             return user;
         }
