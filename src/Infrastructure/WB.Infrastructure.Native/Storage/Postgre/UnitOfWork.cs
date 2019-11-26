@@ -60,7 +60,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         public void Dispose()
         {
             if (isDisposed) return;
-
             transaction?.Dispose();
             session?.Dispose();
 

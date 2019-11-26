@@ -112,10 +112,9 @@ namespace WB.Tests.Integration.TeamViewFactoryTests
         protected IUserRepository SetupUserRepositoryWithSupervisor(Guid supervisorId)
         {
             var usersRepository = new Mock<IUserRepository>();
-            var supervisorRole = new HqUserRole()
+            var supervisorRole = new HqRole()
             {
-                RoleId = UserRoles.Supervisor.ToUserId(),
-                UserId = supervisorId
+                Id = UserRoles.Supervisor.ToUserId(),
             };
             var supervisorUser = new HqUser()
             {
