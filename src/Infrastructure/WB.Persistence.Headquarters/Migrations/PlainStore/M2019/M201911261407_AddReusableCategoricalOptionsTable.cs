@@ -12,7 +12,7 @@ namespace WB.Persistence.Headquarters.Migrations.PlainStore
                 .WithColumn("questionnaireid").AsGuid().NotNullable()
                 .WithColumn("version").AsInt32().NotNullable()
                 .WithColumn("categoriesid").AsGuid().NotNullable()
-                .WithColumn("order").AsInt32().NotNullable()
+                .WithColumn("sortindex").AsInt32().NotNullable()
                 .WithColumn("parentvalue").AsInt32().Nullable()
                 .WithColumn("value").AsInt32().NotNullable()
                 .WithColumn("text").AsString().NotNullable()

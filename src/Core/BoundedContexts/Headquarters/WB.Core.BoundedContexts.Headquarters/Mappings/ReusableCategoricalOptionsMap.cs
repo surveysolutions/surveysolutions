@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             });
 
             this.Property(x => x.CategoriesId, ptp => ptp.NotNullable(true));
-            this.Property(x => x.Order, ptp => ptp.NotNullable(true));
+            this.Property(x => x.SortIndex, ptp => ptp.NotNullable(true));
 
             this.Property(x => x.ParentValue);
             this.Property(x => x.Text, ptp => ptp.NotNullable(true));
