@@ -1044,6 +1044,12 @@ Table - the questions of the roster are shown in the same level as rows and colu
   <data name="TranslationsObtained_plural" xml:space="preserve">
     <value>Obtained {0} rows from translation file</value>
   </data>
+  <data name="CategoriesObtained" xml:space="preserve">
+    <value>Obtained {0} row from categories file</value>
+  </data>
+  <data name="CategoriesObtained_plural" xml:space="preserve">
+    <value>Obtained {0} rows from categories file</value>
+  </data>
   <data name="UnsavedChangesLeave" xml:space="preserve">
     <value>You will lose unsaved changes if you leave this page</value>
   </data>

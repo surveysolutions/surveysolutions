@@ -341,4 +341,13 @@
       <value>Произошла ошибка при попытке разбора загруженного файла с категориями</value>
       <comment>Произошла ошибка при попытке разбора загруженного файла с категориями</comment>
   </data>
+  <data name="Excel_Categories_Int_Invalid" xml:space="preserve">
+    <value>[{0}] Неверное целочисленное значение</value>
+  </data>
+  <data name="Excel_Categories_Empty_Text" xml:space="preserve">
+    <value>[{0}] Пустой текст</value>
+  </data>
+  <data name="Excel_Categories_Empty_Value" xml:space="preserve">
+    <value>[{0}] Пустое значение</value>
+  </data>
 </root>

@@ -178,6 +178,33 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to [{0}] Empty text.
+        /// </summary>
+        public static string Excel_Categories_Empty_Text {
+            get {
+                return ResourceManager.GetString("Excel_Categories_Empty_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [{0}] Empty value.
+        /// </summary>
+        public static string Excel_Categories_Empty_Value {
+            get {
+                return ResourceManager.GetString("Excel_Categories_Empty_Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [{0}] Invalid numeric value.
+        /// </summary>
+        public static string Excel_Categories_Int_Invalid {
+            get {
+                return ResourceManager.GetString("Excel_Categories_Int_Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fail attempt to add group {0} into group {1}. But group {1} doesnt exist in document {2}.
         /// </summary>
         public static string FailedToAddGroup {

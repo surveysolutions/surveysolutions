@@ -205,6 +205,24 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Obtained {0} row from categories file.
+        /// </summary>
+        public static string CategoriesObtained {
+            get {
+                return ResourceManager.GetString("CategoriesObtained", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Obtained {0} rows from categories file.
+        /// </summary>
+        public static string CategoriesObtained_plural {
+            get {
+                return ResourceManager.GetString("CategoriesObtained_plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change password.
         /// </summary>
         public static string ChangePassword {
