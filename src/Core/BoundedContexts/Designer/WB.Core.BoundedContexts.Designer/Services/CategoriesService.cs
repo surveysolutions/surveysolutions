@@ -164,6 +164,9 @@ namespace WB.Core.BoundedContexts.Designer.Services
                             categoriesRows.Add(categories);
                         }
 
+                        if(!categoriesRows.Any())
+                            throw new InvalidExcelFileException(ExceptionMessages.Excel_NoCategories);
+
                         var countOfCategoriesWithParentId = categoriesRows.Count(x => !string.IsNullOrEmpty(x.ParentId));
                         if(countOfCategoriesWithParentId > 0 && countOfCategoriesWithParentId < categoriesRows.Count)
                             throw new InvalidExcelFileException(ExceptionMessages.Excel_Categories_Empty_ParentId);
