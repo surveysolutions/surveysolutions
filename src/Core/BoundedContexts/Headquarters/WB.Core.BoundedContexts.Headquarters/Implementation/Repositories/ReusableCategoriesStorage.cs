@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
                     t.Where(categoricalOption => categoricalOption.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId
                                            && categoricalOption.QuestionnaireId.Version == questionnaireIdentity.Version
                                            && categoricalOption.CategoriesId == categoriesId)
-                    .OrderBy(o => o.Order)
+                    .OrderBy(o => o.SortIndex)
                     .Select(co => new CategoricalOption()
                         {
                             ParentValue = co.ParentValue,
@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
             {
                 CategoriesId = categoryId,
                 QuestionnaireId = questionnaireIdentity,
-                Order = index,
+                SortIndex = index,
                 ParentValue = option.ParentValue,
                 Text = option.Title,
                 Value = option.Value
