@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
@@ -252,7 +253,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             }
         }
 
-        public class TranslationModel
+        public class FileModel
         {
             public IFormFile File { get; set; }
             public string Command { get; set; }
@@ -261,7 +262,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         [Route("~/api/command/translation")]
         [HttpPost]
-        public async Task<IActionResult> UpdateTranslation(TranslationModel model)
+        public async Task<IActionResult> UpdateTranslation(FileModel model)
         {
             var commandType = typeof(AddOrUpdateTranslation).Name;
             AddOrUpdateTranslation command;
@@ -318,7 +319,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         [Route("~/api/command/categories")]
         [HttpPost]
-        public async Task<IActionResult> UpdateCategories(TranslationModel model)
+        public async Task<IActionResult> UpdateCategories(FileModel model)
         {
             var commandType = typeof(AddOrUpdateCategories).Name;
             AddOrUpdateCategories command;
@@ -351,26 +352,28 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             catch (InvalidExcelFileException e)
             {
                 this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
-                return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
+
+                var sb = new StringBuilder();
+                sb.AppendLine(e.Message);
+                e.FoundErrors.ForEach(x => sb.AppendLine(x.Message));
+
+                return this.Error((int)HttpStatusCode.NotAcceptable, sb.ToString());
             }
 
             var commandResponse = this.ProcessCommand(command, commandType);
 
             if (commandResponse.HasErrors || model.File == null)
-            {
-                await dbContext.SaveChangesAsync();
                 return commandResponse.Response;
-            }
-
-            //var storedTranslationsCount =
-            //    this.translationsService.Count(command.QuestionnaireId, command.TranslationId);
-            //var resultMessage = storedTranslationsCount == 1
-            //    ? string.Format(QuestionnaireEditor.TranslationsObtained, storedTranslationsCount)
-            //    : string.Format(QuestionnaireEditor.TranslationsObtained_plural, storedTranslationsCount);
 
             await dbContext.SaveChangesAsync();
 
-            return Ok("Ok");
+            var storedCategoriesCount = this.categoriesService.GetCategoriesById(command.CategoriesId).Count();
+
+            var resultMessage = storedCategoriesCount == 1
+                ? string.Format(QuestionnaireEditor.CategoriesObtained, storedCategoriesCount)
+                : string.Format(QuestionnaireEditor.CategoriesObtained_plural, storedCategoriesCount);
+
+            return Ok(resultMessage);
         }
 
         public ICommand Deserialize(string commandType, string serializedCommand)

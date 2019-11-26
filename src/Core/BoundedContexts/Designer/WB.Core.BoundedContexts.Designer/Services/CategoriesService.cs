@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableServic
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Categories;
 
@@ -189,6 +190,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
                         }
 
                         var worksheet = package.Workbook.Worksheets[0];
+                        var headers = GetHeaders(worksheet);
 
                         var errors = this.Verify(worksheet).Take(10).ToList();
                         if (errors.Any())
@@ -196,17 +198,18 @@ namespace WB.Core.BoundedContexts.Designer.Services
 
                         for (int rowNumber = 2; rowNumber <= worksheet.Dimension.End.Row; rowNumber++)
                         {
+                            var categories = GetRowValues(worksheet, headers, rowNumber);
+                            if(string.IsNullOrEmpty(categories.Id) && string.IsNullOrEmpty(categories.ParentId) && string.IsNullOrEmpty(categories.Text)) continue;
+
                             this.dbContext.CategoriesInstances.Add(new CategoriesInstance
                             {
                                 QuestionnaireId = questionnaireId,
                                 CategoriesId = categoriesId,
-                                Id = worksheet.Cells[$"A{rowNumber}"].GetValue<int>(),
-                                ParentId = worksheet.Cells[$"B{rowNumber}"].GetValue<int?>(),
-                                Text = worksheet.Cells[$"C{rowNumber}"].GetValue<string>()
+                                Id = int.Parse(categories.Id),
+                                ParentId = string.IsNullOrEmpty(categories.ParentId) ? (int?)null : int.Parse(categories.ParentId),
+                                Text = categories.Text
                             });
                         }
-
-                        this.dbContext.SaveChanges();
                     }
                 }
                 catch (Exception e) when(e is NullReferenceException || e is InvalidDataException || e is COMException)
@@ -216,9 +219,99 @@ namespace WB.Core.BoundedContexts.Designer.Services
             }
         }
 
+        private class CategoriesHeaderMap
+        {
+            public string IdIndex { get; set; }
+            public string ParentIdIndex { get; set; }
+            public string TextIndex { get; set; }
+        }
+
+        private CategoriesHeaderMap GetHeaders(ExcelWorksheet worksheet)
+        {
+            var headers = new List<Tuple<string, string>>()
+            {
+                new Tuple<string, string>(worksheet.Cells["A1"].GetValue<string>(), "A"),
+                new Tuple<string, string>(worksheet.Cells["B1"].GetValue<string>(), "B"),
+                new Tuple<string, string>(worksheet.Cells["C1"].GetValue<string>(), "C")
+            }.Where(kv => kv.Item1 != null).ToDictionary(k => k.Item1.Trim(), v => v.Item2);
+
+            return new CategoriesHeaderMap()
+            {
+                IdIndex = headers.GetOrNull("id"),
+                ParentIdIndex = headers.GetOrNull("parentid"),
+                TextIndex = headers.GetOrNull("text"),
+            };
+        }
+
+        private class CategoriesRow
+        {
+            public string Id { get; set; }
+            public string Text { get; set; }
+            public string ParentId { get; set; }
+        }
+
+        private CategoriesRow GetRowValues(ExcelWorksheet worksheet, CategoriesHeaderMap headers, int rowNumber) => new CategoriesRow
+        {
+            Id = worksheet.Cells[$"{headers.IdIndex}{rowNumber}"].GetValue<string>(),
+            Text = worksheet.Cells[$"{headers.TextIndex}{rowNumber}"].GetValue<string>(),
+            ParentId = worksheet.Cells[$"{headers.ParentIdIndex}{rowNumber}"].GetValue<string>()
+        };
+
         private IEnumerable<TranslationValidationError> Verify(ExcelWorksheet worksheet)
         {
-            yield break;
+            var headers = GetHeaders(worksheet);
+
+            if (headers.IdIndex == null)
+                yield return new TranslationValidationError
+                {
+                    Message = string.Format(ExceptionMessages.RequiredHeaderWasNotFound, "id"),
+                };
+            
+            if (headers.TextIndex == null)
+                yield return new TranslationValidationError
+                {
+                    Message = string.Format(ExceptionMessages.RequiredHeaderWasNotFound, "text"),
+                };
+
+            if (headers.IdIndex == null || headers.TextIndex == null)
+                yield break;
+
+            for (int rowNumber = 2; rowNumber <= worksheet.Dimension.End.Row; rowNumber++)
+            {
+                var categories = GetRowValues(worksheet, headers, rowNumber);
+
+                if(string.IsNullOrEmpty(categories.Id) && string.IsNullOrEmpty(categories.ParentId) && string.IsNullOrEmpty(categories.Text)) continue;
+
+                var cellAddress = $"{headers.IdIndex}{rowNumber}";
+
+                if (string.IsNullOrEmpty(categories.Id))
+                    yield return new TranslationValidationError
+                    {
+                        Message = string.Format(ExceptionMessages.Excel_Categories_Empty_Value, cellAddress),
+                        ErrorAddress = cellAddress
+                    };
+
+                if (!string.IsNullOrEmpty(categories.Id) && !int.TryParse(categories.Id, out _))
+                    yield return new TranslationValidationError
+                    {
+                        Message = string.Format(ExceptionMessages.Excel_Categories_Int_Invalid, cellAddress),
+                        ErrorAddress = cellAddress
+                    };
+
+                if (!string.IsNullOrEmpty(categories.ParentId) && !int.TryParse(categories.ParentId, out _))
+                    yield return new TranslationValidationError
+                    {
+                        Message = string.Format(ExceptionMessages.Excel_Categories_Int_Invalid, cellAddress),
+                        ErrorAddress = cellAddress
+                    };
+
+                if (string.IsNullOrEmpty(categories.Text))
+                    yield return new TranslationValidationError
+                    {
+                        Message = string.Format(ExceptionMessages.Excel_Categories_Empty_Text, cellAddress),
+                        ErrorAddress = cellAddress
+                    };
+            }
         }
     }
 }
