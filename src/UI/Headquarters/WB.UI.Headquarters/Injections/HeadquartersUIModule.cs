@@ -108,7 +108,7 @@ namespace WB.UI.Headquarters.Injections
             registry.Bind<IInterviewerProfileFactory, InterviewerProfileFactory>();
             registry.Bind<ITranslationsExportService, TranslationsExportService>();
             registry.Bind<IQuestionnaireExporter, QuestionnaireExporter>();
-            registry.Bind<IReusableCategoriesExporter, ReusableCategoriesExporter>();
+            registry.Bind<ICategoriesExportService, CategoriesExportService>();
 
             registry.Bind<IClientApkProvider, ClientApkProvider>();
             registry.Bind<IQRCodeHelper, QRCodeHelper>();

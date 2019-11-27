@@ -77,7 +77,7 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind<ICategoriesService, CategoriesService>();
             registry.Bind<ITranslationsExportService, TranslationsExportService>();
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
-            registry.Bind<IReusableCategoriesExporter, ReusableCategoriesExporter>();
+            registry.Bind<ICategoriesExportService, CategoriesExportService>();
 
             registry.BindAsSingleton<IStringCompressor, JsonCompressor>();
             registry.Bind<ISerializer, NewtonJsonSerializer>();
