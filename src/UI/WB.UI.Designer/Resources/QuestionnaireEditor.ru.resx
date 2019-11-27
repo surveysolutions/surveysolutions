@@ -1345,6 +1345,6 @@
       <comment>Сохранить как</comment>
   </data>
   <data name="Preview" xml:space="preserve">
-    <value>Просмотр</value>
+    <value>Просмотр ревизии №{{revision}}</value>
   </data>
 </root>
