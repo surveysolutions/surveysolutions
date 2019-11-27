@@ -30,7 +30,7 @@ namespace WB.UI.Headquarters.Services
         private readonly ITranslationsExportService translationsExportService;
         private readonly ITranslationManagementService translationManagementService;
         private readonly IReusableCategoriesStorage reusableCategoriesStorage;
-        private readonly IReusableCategoriesExporter reusableCategoriesExporter;
+        private readonly ICategoriesExportService reusableCategoriesExporter;
         private readonly IEntitySerializer<QuestionnaireDocument> serializer;
         private readonly ILogger logger;
 
@@ -38,7 +38,7 @@ namespace WB.UI.Headquarters.Services
             IEntitySerializer<QuestionnaireDocument> serializer, IPlainKeyValueStorage<QuestionnaireLookupTable> lookupTablesStorage, 
             ITranslationsExportService translationsExportService, ITranslationManagementService translationManagementService, 
             ILoggerProvider loggerProvider, IReusableCategoriesStorage reusableCategoriesStorage,
-            IReusableCategoriesExporter reusableCategoriesExporter)
+            ICategoriesExportService reusableCategoriesExporter)
         {
             this.questionnaireStorage = questionnaireStorage;
             this.contentService = contentService;
