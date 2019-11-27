@@ -1318,6 +1318,6 @@ Table - the questions of the roster are shown in the same level as rows and colu
     <value>Original</value>
   </data>
   <data name="Preview" xml:space="preserve">
-    <value>Preview</value>
+    <value>Preview revision #{{revision}}</value>
   </data>
 </root>
