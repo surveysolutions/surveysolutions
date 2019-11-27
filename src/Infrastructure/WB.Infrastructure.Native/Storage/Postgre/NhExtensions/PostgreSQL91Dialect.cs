@@ -351,8 +351,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
 
     public class TimeSpanType : PrimitiveType
     {
-        public TimeSpanType() : base(
-            new NpgsqlExtendedSqlType(DbType.Object, NpgsqlDbType.Interval))
+        public TimeSpanType() : base(new SqlType(DbType.Object))
         {
         }
 
@@ -364,20 +363,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
             cmd.Parameters[index].Value = value;
         }
 
-        public override object Get(DbDataReader rs, int index, ISessionImplementor session)
-        {
-            return rs[index];
-        }
+        public override object Get(DbDataReader rs, int index, ISessionImplementor session) => rs[index];
 
-        public override object Get(DbDataReader rs, string name, ISessionImplementor session)
-        {
-            return rs[name];
-        }
+        public override object Get(DbDataReader rs, string name, ISessionImplementor session) => rs[name];
 
-        public override string ObjectToSQLString(object value, Dialect dialect)
-        {
-            return $"interval '{value:G}'";
-        }
+        public override string ObjectToSQLString(object value, Dialect dialect) => $"interval '{value:G}'";
 
         public override Type PrimitiveClass { get; } = typeof(TimeSpan);
         public override object DefaultValue { get; } = TimeSpan.Zero;

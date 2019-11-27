@@ -41,13 +41,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
             var result = this.dbContext.Query(_ => _
                 .OrderByDescending(deviceInfo => deviceInfo.Id)
                 .FirstOrDefault(deviceInfo => deviceInfo.InterviewerId == interviewerId &&
-                                              deviceInfo.Statistics != null
-                                              && (deviceInfo.Statistics.DownloadedInterviewsCount > 0
+                                              (deviceInfo.Statistics.DownloadedInterviewsCount > 0
                                                   || deviceInfo.Statistics.UploadedInterviewsCount > 0
                                                   || deviceInfo.Statistics.DownloadedQuestionnairesCount > 0
                                                   || deviceInfo.Statistics.RejectedInterviewsOnDeviceCount > 0)));
 
-            return result ?? this.GetLastSuccessByInterviewerId(interviewerId);
+            return result ?? this.GetLastByInterviewerId(interviewerId);
         }
 
         public Dictionary<Guid, long> GetInterviewersTrafficUsage(Guid[] interviewersIds)
@@ -148,9 +147,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
         }
 
         public double? GetAverageSynchronizationSpeedInBytesPerSeconds(Guid interviewerId)
-            => this.dbContext.Query(devices => devices.OrderByDescending(d => d.SyncDate)
-                .Where(d => d.InterviewerId == interviewerId && d.Statistics != null)        
-                .Take(5).ToList().Average(info => info.Statistics.TotalConnectionSpeed));
+        {
+            var list = this.dbContext.Query(devices => devices.OrderByDescending(d => d.SyncDate)
+                .Where(d => d.InterviewerId == interviewerId && d.Statistics != null)
+                .Take(5).ToList());
+
+            return list.Count > 0 ? list.Average(info => info.Statistics.TotalConnectionSpeed) : 0;
+        }
 
         public DeviceSyncInfo GetLastFailedByInterviewerId(Guid interviewerId)
             => this.dbContext.Query(devices => devices.OrderByDescending(deviceInfo => deviceInfo.Id)
