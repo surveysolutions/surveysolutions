@@ -21,13 +21,15 @@ namespace WB.Core.BoundedContexts.Designer.Services
     {
         private readonly DesignerDbContext dbContext;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
-        private readonly IReusableCategoriesExporter reusableCategoriesExporter;
+        private readonly ICategoriesExportService categoriesExportService;
 
-        public CategoriesService(DesignerDbContext dbContext, IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage, IReusableCategoriesExporter reusableCategoriesExporter)
+        public CategoriesService(DesignerDbContext dbContext, 
+            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage, 
+            ICategoriesExportService categoriesExportService)
         {
             this.dbContext = dbContext;
             this.questionnaireStorage = questionnaireStorage;
-            this.reusableCategoriesExporter = reusableCategoriesExporter;
+            this.categoriesExportService = categoriesExportService;
         }
 
         public void CloneCategories(Guid questionnaireId, Guid categoriesId, Guid clonedQuestionnaireId, Guid clonedCategoriesId)
@@ -91,7 +93,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
                     ParentId = i.ParentId,
                     Text = i.Text
                 });
-            return reusableCategoriesExporter.GetAsExcelFile(items);
+            return categoriesExportService.GetAsExcelFile(items);
         }
 
         public IQueryable<CategoriesItem> GetCategoriesById(Guid id) =>

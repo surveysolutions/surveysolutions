@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using OfficeOpenXml;
 using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 
 namespace WB.Infrastructure.Native.Questionnaire
 {
-    public class ReusableCategoriesExporter : IReusableCategoriesExporter
+    public class CategoriesExportService : ICategoriesExportService
     {
         public byte[] GetAsExcelFile(IEnumerable<CategoriesItem> items)
         {
@@ -15,8 +14,8 @@ namespace WB.Infrastructure.Native.Questionnaire
                 var worksheet = excelPackage.Workbook.Worksheets.Add("Categories");
 
                 worksheet.Cells["A1"].Value = "id";
-                worksheet.Cells["B1"].Value = "parentid";
-                worksheet.Cells["C1"].Value = "text";
+                worksheet.Cells["B1"].Value = "text";
+                worksheet.Cells["C1"].Value = "parentid";
 
                 void FormatCell(string address)
                 {
@@ -36,9 +35,9 @@ namespace WB.Infrastructure.Native.Questionnaire
 
                     worksheet.Cells[$"A{currentRowNumber}"].Value = row.Id;
                     worksheet.Cells[$"A{currentRowNumber}"].Style.WrapText = true;
-                    worksheet.Cells[$"B{currentRowNumber}"].Value = row.ParentId;
+                    worksheet.Cells[$"B{currentRowNumber}"].Value = row.Text;
                     worksheet.Cells[$"B{currentRowNumber}"].Style.WrapText = true;
-                    worksheet.Cells[$"C{currentRowNumber}"].Value = row.Text;
+                    worksheet.Cells[$"C{currentRowNumber}"].Value = row.ParentId;
                     worksheet.Cells[$"C{currentRowNumber}"].Style.WrapText = true;
                 }
 
