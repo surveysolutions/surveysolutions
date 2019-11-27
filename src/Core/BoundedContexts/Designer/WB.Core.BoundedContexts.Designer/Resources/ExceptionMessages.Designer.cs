@@ -223,11 +223,29 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Categories set should have at least 2 categories.
+        /// </summary>
+        public static string Excel_Categories_Less_2_Options {
+            get {
+                return ResourceManager.GetString("Excel_Categories_Less_2_Options", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Categories set has more than {0} categories.
         /// </summary>
         public static string Excel_Categories_More_Than_Limit {
             get {
                 return ResourceManager.GetString("Excel_Categories_More_Than_Limit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [{0}] Text of category should be less than 250 characters.
+        /// </summary>
+        public static string Excel_Categories_Text_More_Than_250 {
+            get {
+                return ResourceManager.GetString("Excel_Categories_Text_More_Than_250", resourceCulture);
             }
         }
         
