@@ -35,7 +35,7 @@ namespace WB.UI.Headquarters.API.Export
             {
                 Id = userModel.Id,
                 UserName = userModel.UserName,
-                Roles = userModel.Roles.Select(r => r.Role.ToString()).ToArray()
+                Roles = userModel.Roles.Select(r => r.Id.ToString()).ToArray()
             });
         }
     }
