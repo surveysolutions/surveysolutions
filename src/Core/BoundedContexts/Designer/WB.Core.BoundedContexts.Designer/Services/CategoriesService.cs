@@ -166,9 +166,10 @@ namespace WB.Core.BoundedContexts.Designer.Services
 
                         ThrowIfNoCategories(categoriesRows);
                         ThrowIfLessThan2Categories(categoriesRows);
+                        ThrowIfTextLengthMoreThan250(categoriesRows, headers);
                         ThrowIfParentIdIsEmpty(categoriesRows);
                         ThrowIfDuplicatedByIdAndParentId(categoriesRows, headers);
-                        ThrowIfTextLengthMoreThan250(categoriesRows, headers);
+                        ThrowIfDuplicatedByParentIdAndText(categoriesRows, headers);
 
                         this.dbContext.CategoriesInstances.AddRange(categoriesRows.Select(categories =>
                             new CategoriesInstance
@@ -213,6 +214,25 @@ namespace WB.Core.BoundedContexts.Designer.Services
         {
             List<TranslationValidationError> errors;
             var duplicatedCategories = categoriesRows.GroupBy(x => new {x.Id, x.ParentId})
+                .Where(x => x.Count() > 1);
+
+            if (duplicatedCategories.Any())
+            {
+                errors = duplicatedCategories.Select(x => new TranslationValidationError
+                {
+                    Message = ExceptionMessages.Excel_Categories_Duplicated.FormatString(string.Join(",",
+                        x.Select(y => y.RowId))),
+                    ErrorAddress = $"{headers.IdIndex}{x.FirstOrDefault()?.RowId}"
+                }).ToList();
+
+                throw new InvalidExcelFileException(ExceptionMessages.TranlationExcelFileHasErrors) {FoundErrors = errors};
+            }
+        }
+
+        private static void ThrowIfDuplicatedByParentIdAndText(List<CategoriesRow> categoriesRows, CategoriesHeaderMap headers)
+        {
+            List<TranslationValidationError> errors;
+            var duplicatedCategories = categoriesRows.GroupBy(x => new {x.ParentId, x.Text})
                 .Where(x => x.Count() > 1);
 
             if (duplicatedCategories.Any())
