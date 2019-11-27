@@ -436,7 +436,8 @@ namespace WB.Tests.Unit.Designer
             string enablementCondition = null, string validationExpression = null, Guid? linkedToRosterId = null, string optionsFilterExpression = null,
             int? maxAllowedAnswers = null, string title = "test", bool featured = false,
             bool? filteredCombobox = null,
-            string linkedFilterExpression = null)
+            string linkedFilterExpression = null,
+            Guid? categoriesId = null)
         {
             return new MultyOptionsQuestion
             {
@@ -454,6 +455,7 @@ namespace WB.Tests.Unit.Designer
                 Featured = featured,
                 IsFilteredCombobox = filteredCombobox,
                 LinkedFilterExpression = linkedFilterExpression,
+                CategoriesId = categoriesId,
                 Properties = new QuestionProperties(false, true)
                 {
                     OptionsFilterExpression = optionsFilterExpression
