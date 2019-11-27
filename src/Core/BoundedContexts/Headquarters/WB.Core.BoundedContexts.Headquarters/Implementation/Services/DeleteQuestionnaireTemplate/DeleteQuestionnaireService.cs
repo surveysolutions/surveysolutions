@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Commands;
@@ -109,11 +110,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             try
             {
                 var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
+                var questionnaireDocument = questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
 
                 this.DeleteInterviews(questionnaireId, questionnaireVersion, userId);
                 this.DeleteTranslations(questionnaireId, questionnaireVersion);
-                this.DeleteLookupTables(questionnaireIdentity);
-                this.DeleteReusableCategories(questionnaireIdentity);
+                this.DeleteLookupTables(questionnaireIdentity, questionnaireDocument);
+                this.DeleteReusableCategories(questionnaireIdentity, questionnaireDocument);
 
                 var assignmentsImportStatus = this.importService.GetImportStatus();
 
@@ -176,10 +178,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
 
         }
 
-        private void DeleteLookupTables(QuestionnaireIdentity questionnaireIdentity)
+        private void DeleteLookupTables(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaireDocument)
         {
-            var questionnaireDocument = questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
-
             foreach (var lookupTableInfo in questionnaireDocument.LookupTables)
             {
                 var id = lookupTablesStorage.GetLookupKey(questionnaireIdentity, lookupTableInfo.Key);
@@ -187,10 +187,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             }
         }
 
-        private void DeleteReusableCategories(QuestionnaireIdentity questionnaireIdentity)
+        private void DeleteReusableCategories(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaireDocument)
         {
-            var questionnaireDocument = questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
-
             foreach (var categories in questionnaireDocument.Categories)
             {
                 var id = reusableCategoriesStorage.GetReusableCategoriesKey(questionnaireIdentity, categories.Id);
