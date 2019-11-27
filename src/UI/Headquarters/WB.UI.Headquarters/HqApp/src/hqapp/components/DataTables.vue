@@ -1,13 +1,14 @@
 <template>
     <div :class="wrapperClass">
+        <span id="loadingPixel" style="display:none" :data-loading="isProcessingFlag"></span>
         <table ref="table"
                class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes table-with-prefilled-column table-interviews responsive">
-            <thead ref="header"><slot name="header"></slot></thead>            
+            <thead ref="header"><slot name="header"></slot></thead>
             <tbody ref="body"></tbody>
             <transition name="fade">
                 <div class='dataTables_processing' v-if="isProcessing" :class="{ 'error': errorMessage != null }">
                     <div v-if="errorMessage" >{{errorMessage}}</div>
-                    <div v-else>Processing...</div>
+                    <div v-else>{{$t("Common.Processing")}}...</div>
                 </div>
             </transition>
         </table>
@@ -98,6 +99,7 @@ export default {
     data() {
         return {
             isProcessing: false,
+            isProcessingFlag: false,
             selectedRows: [],
             table: null,
             export: {
@@ -205,7 +207,7 @@ export default {
                     };
                 }
                         
-                options.ajax.data = (d) => {                    
+                options.ajax.data = (d) => {
                     this.addParamsToRequest(d);
                     self.errorMessage = null
                     // reducing length of GET request URI
@@ -343,6 +345,9 @@ export default {
 
         initProcessingBox() {
             const self = this
+            this.table.on('processing', function(evnt, dt, show) {
+                self.isProcessingFlag = show;
+            })
             this.table.on('processing', _.debounce(function(evnt, dt, show) {
                 self.isProcessing = show
             }, 250))
