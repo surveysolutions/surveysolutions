@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
@@ -8,6 +9,7 @@ using NHibernate;
 using NHibernate.Dialect;
 using NHibernate.Engine;
 using NHibernate.SqlTypes;
+using NHibernate.Type;
 using NHibernate.UserTypes;
 using Npgsql;
 using NpgsqlTypes;
@@ -345,5 +347,39 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
                 throw new FormatException($"Input '{rs[index]}' was not in the correct format.", ex);
             }
         }
+    }
+
+    public class TimeSpanType : PrimitiveType
+    {
+        public TimeSpanType() : base(
+            new NpgsqlExtendedSqlType(DbType.Object, NpgsqlDbType.Interval))
+        {
+        }
+
+        public override string Name { get; } = "TimeSpan";
+        public override Type ReturnedClass { get; } = typeof(TimeSpan);
+
+        public override void Set(DbCommand cmd, object value, int index, ISessionImplementor session)
+        {
+            cmd.Parameters[index].Value = value;
+        }
+
+        public override object Get(DbDataReader rs, int index, ISessionImplementor session)
+        {
+            return rs[index];
+        }
+
+        public override object Get(DbDataReader rs, string name, ISessionImplementor session)
+        {
+            return rs[name];
+        }
+
+        public override string ObjectToSQLString(object value, Dialect dialect)
+        {
+            return $"interval '{value:G}'";
+        }
+
+        public override Type PrimitiveClass { get; } = typeof(TimeSpan);
+        public override object DefaultValue { get; } = TimeSpan.Zero;
     }
 }

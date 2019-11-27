@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -100,7 +101,7 @@ namespace WB.UI.Headquarters.Controllers
                 PersonName = currentUser.FullName,
                 PhoneNumber = currentUser.PhoneNumber,
                 UserName = currentUser.UserName,
-                Role = currentUser.Roles.FirstOrDefault().Role.ToUiString(),
+                Role = currentUser.Roles.FirstOrDefault().Id.ToUserRole().ToUiString(),
                 UpdatePasswordAction = nameof(this.UpdateOwnPassword),
                 EditAction = nameof(Manage)
             };
@@ -178,7 +179,7 @@ namespace WB.UI.Headquarters.Controllers
             => !string.IsNullOrEmpty(model.OldPassword)
             && await this.userManager.CheckPasswordAsync(currentUser, model.OldPassword);
 
-        private static readonly UserRoles[] ObservableRoles = {UserRoles.Headquarter, UserRoles.Supervisor};
+        private static readonly Guid[] ObservableRoles = {UserRoles.Headquarter.ToUserId(), UserRoles.Supervisor.ToUserId()};
 
         [AuthorizeOr403(Roles = "Administrator, Observer")]
         public async Task<ActionResult> ObservePerson(string personName)
@@ -190,7 +191,7 @@ namespace WB.UI.Headquarters.Controllers
             if (user == null)
                 throw new HttpException(404, string.Empty);
 
-            if (!ObservableRoles.Contains(user.Roles.First().Role))
+            if (!ObservableRoles.Contains(user.Roles.First().Id))
                 throw new HttpException(404, string.Empty);
 
             //do not forget pass current user to display you are observing

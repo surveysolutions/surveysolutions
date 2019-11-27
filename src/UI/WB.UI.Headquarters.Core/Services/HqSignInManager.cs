@@ -138,7 +138,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
                 return IdentityResult.Failed("Locked");
             }
             
-            if (!allowedRoles.Contains(userInfo.Roles.First().Role))
+            if (!allowedRoles.Select(x => x.ToUserId()).Contains(userInfo.Roles.First().Id))
             {
                 return IdentityResult.Failed("Role");
             }

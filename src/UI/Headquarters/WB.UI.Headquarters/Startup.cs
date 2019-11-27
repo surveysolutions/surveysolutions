@@ -78,7 +78,6 @@ namespace WB.UI.Headquarters
         {
             Target.Register<SlackFatalNotificationsTarget>("slack");
             
-            ConfigureExceptionalStore();
             app.Use(RemoveServerNameFromHeaders);
 
             var autofacKernel = AutofacConfig.CreateKernel();
@@ -96,10 +95,10 @@ namespace WB.UI.Headquarters
             autofacKernel.ContainerBuilder.RegisterWebApiFilterProvider(config);
             autofacKernel.ContainerBuilder.RegisterWebApiModelBinderProvider();
 
-            var initTask = autofacKernel.InitAsync(
+            var initTask = Task.WhenAll(autofacKernel.InitAsync(
                     System.Configuration.ConfigurationManager.AppSettings
-                        .GetBool("RestartAppPoolOnInitializationError", true)
-                );
+                        .GetBool(@"RestartAppPoolOnInitializationError", true)
+                ), Task.Run(() => ConfigureExceptionalStore()));
 
             if (CoreSettings.IsDevelopmentEnvironment)
                 initTask.Wait();
@@ -365,7 +364,9 @@ namespace WB.UI.Headquarters
 
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
+            
             RazorGeneratorMvcStart.Start();
+            
 
             ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
         }
