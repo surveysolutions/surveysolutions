@@ -141,7 +141,7 @@ namespace WB.UI.Headquarters.Services
                         Text = c.Title
                     });
                     var bytes = this.reusableCategoriesExporter.GetAsExcelFile(categoriesItems);
-                    PutEntry($"Categories/{category.Id}.xlsx", bytes);
+                    PutEntry($"Categories/{category.Id.FormatGuid()}.xlsx", bytes);
                 }
             }
 
