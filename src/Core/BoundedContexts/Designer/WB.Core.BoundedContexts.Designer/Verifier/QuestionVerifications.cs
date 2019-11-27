@@ -648,22 +648,53 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         }
 
 
-        private static EntityVerificationResult<IComposite> CascadingComboboxOptionsHasNoParentOptions(IQuestion question, MultiLanguageQuestionnaireDocument document)
+        private EntityVerificationResult<IComposite> CascadingComboboxOptionsHasNoParentOptions(IQuestion question, MultiLanguageQuestionnaireDocument document)
         {
+            var categoricalQuestion = question as ICategoricalQuestion;
+            bool hasErrors = false;
+
             if (!question.CascadeFromQuestionId.HasValue)
-                return new EntityVerificationResult<IComposite> {HasErrors = false};
+                return new EntityVerificationResult<IComposite> {HasErrors = hasErrors};
 
             var parentQuestion = document.Find<SingleQuestion>(question.CascadeFromQuestionId.Value);
             if (parentQuestion == null)
-                return new EntityVerificationResult<IComposite> {HasErrors = false};
+                return new EntityVerificationResult<IComposite> {HasErrors = hasErrors};
 
-            var result = !question.Answers.All(childAnswer =>
-                parentQuestion.Answers.Any(
-                    parentAnswer => parentAnswer.AnswerValue == childAnswer.ParentValue));
+            if (!categoricalQuestion.CategoriesId.HasValue && !parentQuestion.CategoriesId.HasValue)
+            {
+                hasErrors = !question.Answers.All(childAnswer =>
+                    parentQuestion.Answers.Any(
+                        parentAnswer => parentAnswer.AnswerValue == childAnswer.ParentValue));
+            }
+            else if(categoricalQuestion.CategoriesId.HasValue && !parentQuestion.CategoriesId.HasValue)
+            {
+                var categories = this.categoriesService.GetCategoriesById(categoricalQuestion.CategoriesId.Value)
+                    .Select(x => new {x.Id, x.ParentId}).ToList();
+
+                hasErrors = !categories.All(childAnswer =>
+                    parentQuestion.Answers.Any(
+                        parentAnswer => parentAnswer.GetParsedValue() == childAnswer.ParentId));
+            }
+            else if(!categoricalQuestion.CategoriesId.HasValue && parentQuestion.CategoriesId.HasValue)
+            {
+                var parentCategories = this.categoriesService.GetCategoriesById(parentQuestion.CategoriesId.Value)
+                    .Select(x => new {x.Id, x.ParentId}).ToList();
+
+                hasErrors = !question.Answers.All(childAnswer =>
+                    parentCategories.Any(parentAnswer => parentAnswer.Id == childAnswer.GetParsedParentValue()));
+            }
+            else
+            {
+                var categories = this.categoriesService.GetCategoriesById(categoricalQuestion.CategoriesId.Value);
+                var parentCategories = this.categoriesService.GetCategoriesById(parentQuestion.CategoriesId.Value);
+
+                hasErrors = parentCategories.GroupJoin(categories, item => item.Id, item => item.ParentId,
+                    (pc, c) => c).Any(x => !x.Any());
+            }
 
             return new EntityVerificationResult<IComposite>
             {
-                HasErrors = result,
+                HasErrors = hasErrors,
                 ReferencedEntities = new List<IComposite> {question, parentQuestion}
             };
         }

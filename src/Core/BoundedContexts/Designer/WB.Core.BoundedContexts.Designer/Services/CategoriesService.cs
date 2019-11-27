@@ -52,8 +52,8 @@ namespace WB.Core.BoundedContexts.Designer.Services
                 var worksheet = excelPackage.Workbook.Worksheets.Add("Categories");
 
                 worksheet.Cells["A1"].Value = "id";
-                worksheet.Cells["B1"].Value = "parentid";
-                worksheet.Cells["C1"].Value = "text";
+                worksheet.Cells["B1"].Value = "text";
+                worksheet.Cells["C1"].Value = "parentid";
 
                 void FormatCell(string address)
                 {
