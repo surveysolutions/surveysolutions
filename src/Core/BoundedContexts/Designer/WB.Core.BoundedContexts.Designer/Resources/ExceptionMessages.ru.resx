@@ -366,4 +366,12 @@
       <value>В файле нет категорий</value>
       <comment>В файле нет категорий</comment>
   </data>
+  <data name="Excel_Categories_Less_2_Options" xml:space="preserve">
+      <value>Набор категорий должен содержать как минимум 2 категории</value>
+      <comment>Набор категорий должен содержать как минимум 2 категории</comment>
+  </data>
+  <data name="Excel_Categories_Text_More_Than_250" xml:space="preserve">
+      <value>[{0}] Текст категории должен быть меньше чем 250 символов</value>
+      <comment>[{0}] Текст категории должен быть меньше чем 250 символов</comment>
+  </data>
 </root>

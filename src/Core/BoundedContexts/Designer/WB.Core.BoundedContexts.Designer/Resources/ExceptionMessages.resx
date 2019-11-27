@@ -360,4 +360,10 @@
   <data name="Excel_NoCategories" xml:space="preserve">
     <value>No categories in file</value>
   </data>
+  <data name="Excel_Categories_Less_2_Options" xml:space="preserve">
+    <value>Categories set should have at least 2 categories</value>
+  </data>
+  <data name="Excel_Categories_Text_More_Than_250" xml:space="preserve">
+    <value>[{0}] Text of category should be less than 250 characters</value>
+  </data>
 </root>
