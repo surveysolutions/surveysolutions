@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data.Common;
 using Humanizer;
@@ -18,20 +19,22 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         private readonly ILogger logger;
         private readonly IEntitySerializer<TEntity> serializer;
 
+        static ConcurrentDictionary<Type, string> _tableNamesMap = new ConcurrentDictionary<Type, string>();
+            
+
         public PostgresKeyValueStorage(string connectionString, string schemaName, ILogger logger, IEntitySerializer<TEntity> serializer)
         {
             this.connectionString = connectionString;
             this.logger = logger;
             this.serializer = serializer;
 
-            
-            tableName = typeof(TEntity).GetInterfaces().Contains(typeof(IStorableEntity))?
-                typeof(TEntity).BaseType.Name.Pluralize() : 
-                typeof(TEntity).Name.Pluralize();
+            tableName = _tableNamesMap.GetOrAdd(typeof(TEntity), 
+                (type) => type.GetInterfaces().Contains(typeof(IStorableEntity))
+                    ? type.BaseType.Name.Pluralize() 
+                    : type.Name.Pluralize());
 
             if (!string.IsNullOrWhiteSpace(schemaName))
                 tableName = schemaName + "." + tableName;
-
             //this.EnshureTableExists();
         }
 

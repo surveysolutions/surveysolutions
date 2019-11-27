@@ -15,13 +15,6 @@ namespace WB.UI.Shared.Web.Modules
             var stringEtag = GetEtagValue(resultFile);
             var etag = $"\"{stringEtag}\"";
 
-            var incomingEtag = controller.HttpContext.Request.Headers[@"If-None-Match"];
-
-            if (string.Compare(incomingEtag, etag, StringComparison.InvariantCultureIgnoreCase) == 0)
-            {
-                return controller.StatusCode(403);
-            }
-
             return controller.File(resultFile, MediaTypeHeaderValue.Parse(contentType).ToString(), 
                 null, new Microsoft.Net.Http.Headers.EntityTagHeaderValue(etag));
         }
