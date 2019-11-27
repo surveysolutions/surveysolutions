@@ -2,6 +2,7 @@
 using NHibernate.Mapping.ByCode.Conformist;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 
 namespace WB.Core.BoundedContexts.Headquarters.Mappings
 {
@@ -82,7 +83,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.TotalUploadedBytes);
             Property(x => x.TotalDownloadedBytes);
             Property(x => x.TotalConnectionSpeed);
-            Property(x => x.TotalSyncDuration);
+            Property(x => x.TotalSyncDuration, m =>
+            {
+                m.Type<TimeSpanType>();
+            });
             Property(x => x.SyncFinishDate);
         }
     }

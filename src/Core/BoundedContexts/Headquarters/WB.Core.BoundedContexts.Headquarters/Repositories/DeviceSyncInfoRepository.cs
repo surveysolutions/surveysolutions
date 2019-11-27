@@ -5,65 +5,66 @@ using System.Threading.Tasks;
 using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.InterviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Repositories
 {
     internal class DeviceSyncInfoRepository : IDeviceSyncInfoRepository
     {
-        private readonly UnitOfWork dbContext;
+        private readonly IPlainStorageAccessor<DeviceSyncInfo> dbContext;
 
-        public DeviceSyncInfoRepository(UnitOfWork dbContext)
+        public DeviceSyncInfoRepository(IPlainStorageAccessor<DeviceSyncInfo> dbContext)
         {
             this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
 
         public void AddOrUpdate(DeviceSyncInfo deviceSyncInfo)
         {
-            this.dbContext.Session.Save(deviceSyncInfo);
+            this.dbContext.Store(deviceSyncInfo, null);
         }
 
         public DeviceSyncInfo GetLastByInterviewerId(Guid interviewerId)
         {
-            return this.dbContext.Session.Query<DeviceSyncInfo>().OrderByDescending(deviceInfo => deviceInfo.Id)
-                .FirstOrDefault(deviceInfo => deviceInfo.InterviewerId == interviewerId);
+            return this.dbContext.Query(_ => _.OrderByDescending(deviceInfo => deviceInfo.Id)
+                .FirstOrDefault(deviceInfo => deviceInfo.InterviewerId == interviewerId));
         }
 
         public DateTime? GetLastSyncronizationDate(Guid interviewerId)
         {
-            return this.dbContext.Session.Query<DeviceSyncInfo>().OrderByDescending(di => di.Id)
-                .FirstOrDefault(deviceInfo => deviceInfo.InterviewerId == interviewerId)?.SyncDate;
+            return this.dbContext.Query(_ => _.OrderByDescending(di => di.Id)
+                .FirstOrDefault(deviceInfo => deviceInfo.InterviewerId == interviewerId)?.SyncDate);
         }
 
         public DeviceSyncInfo GetLastSuccessByInterviewerId(Guid interviewerId)
         {
-            var result = this.dbContext.Session.Query<DeviceSyncInfo>()
+            var result = this.dbContext.Query(_ => _
                 .OrderByDescending(deviceInfo => deviceInfo.Id)
                 .FirstOrDefault(deviceInfo => deviceInfo.InterviewerId == interviewerId &&
                                               deviceInfo.Statistics != null
                                               && (deviceInfo.Statistics.DownloadedInterviewsCount > 0
                                                   || deviceInfo.Statistics.UploadedInterviewsCount > 0
                                                   || deviceInfo.Statistics.DownloadedQuestionnairesCount > 0
-                                                  || deviceInfo.Statistics.RejectedInterviewsOnDeviceCount > 0));
+                                                  || deviceInfo.Statistics.RejectedInterviewsOnDeviceCount > 0)));
 
             return result ?? this.GetLastSuccessByInterviewerId(interviewerId);
         }
 
         public Dictionary<Guid, long> GetInterviewersTrafficUsage(Guid[] interviewersIds)
         {
-            var trafficUsage = this.dbContext.Session.Query<DeviceSyncInfo>().Where(x => interviewersIds.Contains(x.InterviewerId))
+            var trafficUsage = this.dbContext.Query(devices => devices.Where(x => interviewersIds.Contains(x.InterviewerId))
                 .Select(x => new {x.InterviewerId, Traffic = x.Statistics.TotalDownloadedBytes + x.Statistics.TotalUploadedBytes})
                 .GroupBy(x => x.InterviewerId)
                 .Select(x => new {InterviewerId = x.Key, Traffic = x.Sum(s => (long?)s.Traffic) ?? 0})
-                .ToList();
+                .ToList());
 
             return trafficUsage.ToDictionary(x => x.InterviewerId, x => x.Traffic);
         }
 
         public IEnumerable<DeviceSyncInfo> GetLastSyncByInterviewersList(Guid[] interviewerIds)
         {
-            var syncWithNotEmptyStat =
-                (from device in this.dbContext.Session.Query<DeviceSyncInfo>()
+            var syncWithNotEmptyStat = this.dbContext.Query(devices => 
+                (from device in devices
                 where interviewerIds.Contains(device.InterviewerId)
                       && (device.Statistics != null &&
                           device.Statistics.DownloadedInterviewsCount +
@@ -78,9 +79,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
                 {
                     grouping.Key,
                     DeviceInfo = grouping.FirstOrDefault(g => g.Id == grouping.Max(d => d.Id))
-                }).ToList();
+                }).ToList());
 
-            var lastSync = (from device in this.dbContext.Session.Query<DeviceSyncInfo>()
+            var lastSync = this.dbContext.Query(devices => (from device in devices
                 where interviewerIds.Contains(device.InterviewerId)
                 group device by device.InterviewerId
                 into grouping
@@ -88,7 +89,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
                 {
                     grouping.Key,
                     DeviceInfo = grouping.FirstOrDefault(g => g.Id == grouping.Max(d => d.Id))
-                }).ToList();
+                }).ToList());
 
             foreach (var interviewerId in interviewerIds)
             {
@@ -106,12 +107,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
         }
 
         public int GetRegisteredDeviceCount(Guid interviewerId)
-            => this.dbContext.Session.Query<DeviceSyncInfo>()
+            => this.dbContext.Query(devices => devices
                 .Where(deviceInfo => deviceInfo.InterviewerId == interviewerId)
-                .Select(info => info.DeviceId).Distinct().Count();
+                .Select(info => info.DeviceId).Distinct().Count());
 
         public List<InterviewerDailyTrafficUsage> GetTrafficUsageForInterviewer(Guid interviewerId) =>
-            this.dbContext.Session.Query<DeviceSyncInfo>()
+            this.dbContext.Query(devices => devices
                 .Where(deviceInfo => deviceInfo.InterviewerId == interviewerId)
                 .GroupBy(x => x.SyncDate.Date, x => new
                 {
@@ -131,45 +132,44 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
                     Month = x.Key.Month,
                     Day = x.Key.Day
                 })
-                .ToList();
+                .ToList());
 
         public async Task<long> GetTotalTrafficUsageForInterviewer(Guid interviewerId)
         {
-            var totalTrafficUsed = await this.dbContext.Session.Query<DeviceSyncInfo>()
+            var totalTrafficUsed = this.dbContext.Query(devices => devices
                 .Where(deviceInfo => deviceInfo.InterviewerId == interviewerId)
                 .Select(x => new
                     {
                         TrafficUsed = x.Statistics.TotalUploadedBytes + x.Statistics.TotalDownloadedBytes
                     })
-                .ToListAsync();
-
+                .ToList());
 
             return totalTrafficUsed.Sum(x => x.TrafficUsed);
         }
 
         public double? GetAverageSynchronizationSpeedInBytesPerSeconds(Guid interviewerId)
-            => this.dbContext.Session.Query<DeviceSyncInfo>().OrderByDescending(d => d.SyncDate)
+            => this.dbContext.Query(devices => devices.OrderByDescending(d => d.SyncDate)
                 .Where(d => d.InterviewerId == interviewerId && d.Statistics != null)        
-                .Take(5).ToList().Average(info => info.Statistics.TotalConnectionSpeed);
+                .Take(5).ToList().Average(info => info.Statistics.TotalConnectionSpeed));
 
         public DeviceSyncInfo GetLastFailedByInterviewerId(Guid interviewerId)
-            => this.dbContext.Session.Query<DeviceSyncInfo>().OrderByDescending(deviceInfo => deviceInfo.Id)
-                .FirstOrDefault(deviceInfo => deviceInfo.InterviewerId == interviewerId && deviceInfo.Statistics == null);
+            => this.dbContext.Query(devices => devices.OrderByDescending(deviceInfo => deviceInfo.Id)
+                .FirstOrDefault(deviceInfo => deviceInfo.InterviewerId == interviewerId && deviceInfo.Statistics == null));
 
         public int GetSuccessSynchronizationsCount(Guid interviewerId)
-            => this.dbContext.Session.Query<DeviceSyncInfo>().OrderByDescending(deviceInfo => deviceInfo.Id)
-                .Count(deviceInfo => deviceInfo.InterviewerId == interviewerId && deviceInfo != null);
+            => this.dbContext.Query(devices => devices.OrderByDescending(deviceInfo => deviceInfo.Id)
+                .Count(deviceInfo => deviceInfo.InterviewerId == interviewerId && deviceInfo != null));
 
         public int GetFailedSynchronizationsCount(Guid interviewerId)
-            => this.dbContext.Session.Query<DeviceSyncInfo>().OrderByDescending(deviceInfo => deviceInfo.Id)
-                .Count(deviceInfo => deviceInfo.InterviewerId == interviewerId && deviceInfo.Statistics == null);
+            => this.dbContext.Query(devices => devices.OrderByDescending(deviceInfo => deviceInfo.Id)
+                .Count(deviceInfo => deviceInfo.InterviewerId == interviewerId && deviceInfo.Statistics == null));
         
         public SynchronizationActivity GetSynchronizationActivity(Guid interviewerId)
         {
             var toDay = DateTime.UtcNow;
             var fromDay = toDay.AddDays(-6);
 
-            var deviceInfoByPeriod = this.dbContext.Session.Query<DeviceSyncInfo>()
+            var deviceInfoByPeriod = this.dbContext.Query(devices => devices
                 .Where(syncInfo => syncInfo.InterviewerId == interviewerId && syncInfo.SyncDate > fromDay)
                 .Select(syncInfo => new DbDay
                 {
@@ -184,8 +184,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
                     SyncDate = syncInfo.SyncDate
                 })
                 .OrderBy(syncInfo => syncInfo.SyncDate)
-                .ToList();
-                
+                .ToList());
 
             return new SynchronizationActivity
             {
