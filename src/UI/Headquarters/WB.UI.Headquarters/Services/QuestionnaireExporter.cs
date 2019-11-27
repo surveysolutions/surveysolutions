@@ -13,7 +13,9 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 using WB.Enumerator.Native.Questionnaire;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.UI.Shared.Web.Extensions;
@@ -27,13 +29,16 @@ namespace WB.UI.Headquarters.Services
         private readonly IPlainKeyValueStorage<QuestionnaireLookupTable> lookupTablesStorage;
         private readonly ITranslationsExportService translationsExportService;
         private readonly ITranslationManagementService translationManagementService;
+        private readonly IReusableCategoriesStorage reusableCategoriesStorage;
+        private readonly IReusableCategoriesExporter reusableCategoriesExporter;
         private readonly IEntitySerializer<QuestionnaireDocument> serializer;
         private readonly ILogger logger;
 
         public QuestionnaireExporter(IQuestionnaireStorage questionnaireStorage, IAttachmentContentService contentService,
             IEntitySerializer<QuestionnaireDocument> serializer, IPlainKeyValueStorage<QuestionnaireLookupTable> lookupTablesStorage, 
             ITranslationsExportService translationsExportService, ITranslationManagementService translationManagementService, 
-            ILoggerProvider loggerProvider)
+            ILoggerProvider loggerProvider, IReusableCategoriesStorage reusableCategoriesStorage,
+            IReusableCategoriesExporter reusableCategoriesExporter)
         {
             this.questionnaireStorage = questionnaireStorage;
             this.contentService = contentService;
@@ -41,6 +46,8 @@ namespace WB.UI.Headquarters.Services
             this.lookupTablesStorage = lookupTablesStorage;
             this.translationsExportService = translationsExportService;
             this.translationManagementService = translationManagementService;
+            this.reusableCategoriesStorage = reusableCategoriesStorage;
+            this.reusableCategoriesExporter = reusableCategoriesExporter;
             this.logger = loggerProvider.GetForType(this.GetType());
         }
 
@@ -120,6 +127,21 @@ namespace WB.UI.Headquarters.Services
                         new QuestionnaireTranslation(translations));
 
                     PutEntry($"Translations/{translation.Id}.xlsx", translationFile.ContentAsExcelFile);
+                }
+
+                foreach (var category in questionnaire.Categories)
+                {
+                    var categories = this.reusableCategoriesStorage.GetOptions(questionnaireIdentity, category.Id);
+                    if(categories == null) continue;
+
+                    var categoriesItems = categories.Select(c => new CategoriesItem()
+                    {
+                        Id = c.Value,
+                        ParentId = c.ParentValue,
+                        Text = c.Title
+                    });
+                    var bytes = this.reusableCategoriesExporter.GetAsExcelFile(categoriesItems);
+                    PutEntry($"Categories/{category.Id}.xlsx", bytes);
                 }
             }
 
