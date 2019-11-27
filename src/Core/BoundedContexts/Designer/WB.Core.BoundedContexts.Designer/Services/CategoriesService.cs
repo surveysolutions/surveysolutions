@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Designer.Verifier;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Categories;
+using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 
 namespace WB.Core.BoundedContexts.Designer.Services
 {
@@ -20,11 +21,13 @@ namespace WB.Core.BoundedContexts.Designer.Services
     {
         private readonly DesignerDbContext dbContext;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
+        private readonly IReusableCategoriesExporter reusableCategoriesExporter;
 
-        public CategoriesService(DesignerDbContext dbContext, IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage)
+        public CategoriesService(DesignerDbContext dbContext, IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage, IReusableCategoriesExporter reusableCategoriesExporter)
         {
             this.dbContext = dbContext;
             this.questionnaireStorage = questionnaireStorage;
+            this.reusableCategoriesExporter = reusableCategoriesExporter;
         }
 
         public void CloneCategories(Guid questionnaireId, Guid categoriesId, Guid clonedQuestionnaireId, Guid clonedCategoriesId)
@@ -78,6 +81,19 @@ namespace WB.Core.BoundedContexts.Designer.Services
             };
         }
 
+        private byte[] GetExcelFileContentEEPlus(Guid questionnaireId, Guid categoriesId)
+        {
+            var items = this.dbContext.CategoriesInstances
+                .Where(x => x.QuestionnaireId == questionnaireId && x.CategoriesId == categoriesId)
+                .Select(i => new CategoriesItem()
+                {
+                    Id = i.Id,
+                    ParentId = i.ParentId,
+                    Text = i.Text
+                });
+            return reusableCategoriesExporter.GetAsExcelFile(items);
+        }
+
         public IQueryable<CategoriesItem> GetCategoriesById(Guid id) =>
             this.dbContext.CategoriesInstances.Where(x => x.CategoriesId == id).Select(x => new CategoriesItem
             {
@@ -85,49 +101,6 @@ namespace WB.Core.BoundedContexts.Designer.Services
                 ParentId = x.ParentId,
                 Text = x.Text
             });
-
-        private byte[] GetExcelFileContentEEPlus(Guid questionnaireId, Guid categoriesId)
-        {
-            using (ExcelPackage excelPackage = new ExcelPackage())
-            {
-                var worksheet = excelPackage.Workbook.Worksheets.Add("Categories");
-
-                worksheet.Cells["A1"].Value = "id";
-                worksheet.Cells["B1"].Value = "parentid";
-                worksheet.Cells["C1"].Value = "text";
-
-                void FormatCell(string address)
-                {
-                    var cell = worksheet.Cells[address];
-                    cell.Style.Font.Bold = true;
-                }
-
-                FormatCell("A1");
-                FormatCell("B1");
-                FormatCell("C1");
-
-                int currentRowNumber = 1;
-
-                foreach (var row in this.dbContext.CategoriesInstances.Where(x =>
-                    x.QuestionnaireId == questionnaireId && x.CategoriesId == categoriesId))
-                {
-                    currentRowNumber++;
-
-                    worksheet.Cells[$"A{currentRowNumber}"].Value = row.Id;
-                    worksheet.Cells[$"A{currentRowNumber}"].Style.WrapText = true;
-                    worksheet.Cells[$"B{currentRowNumber}"].Value = row.ParentId;
-                    worksheet.Cells[$"B{currentRowNumber}"].Style.WrapText = true;
-                    worksheet.Cells[$"C{currentRowNumber}"].Value = row.Text;
-                    worksheet.Cells[$"C{currentRowNumber}"].Style.WrapText = true;
-                }
-
-                worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
-                worksheet.Column(3).AutoFit();
-                worksheet.Protection.AllowFormatColumns = true;
-
-                return excelPackage.GetAsByteArray();
-            }
-        }
 
         public void Store(Guid questionnaireId, Guid categoriesId, byte[] excelRepresentation)
         {
