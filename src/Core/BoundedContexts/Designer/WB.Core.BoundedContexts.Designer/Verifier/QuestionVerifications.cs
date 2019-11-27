@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -18,10 +19,12 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
     public class QuestionVerifications : AbstractVerifier, IPartialVerifier
     {
         private readonly ISubstitutionService substitutionService;
+        private readonly ICategoriesService categoriesService;
 
-        public QuestionVerifications(ISubstitutionService substitutionService)
+        public QuestionVerifications(ISubstitutionService substitutionService, ICategoriesService categoriesService)
         {
             this.substitutionService = substitutionService;
+            this.categoriesService = categoriesService;
         }
 
         private IEnumerable<Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> ErrorsVerifiers => new[]
@@ -799,17 +802,21 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private static bool CategoricalQuestionHasLessThan2Options(ICategoricalQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            if (question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue)
+            if (question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue || question.CategoriesId.HasValue)
                 return false;
 
             return question.Answers == null || question.Answers.Count < 2;
         }
 
-        private static bool CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount(IMultyOptionsQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+        private bool CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount(IMultyOptionsQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            return question.MaxAllowedAnswers.HasValue &&
-                   !(question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue) &&
-                   (question.MaxAllowedAnswers.Value > question.Answers.Count);
+            if (!question.MaxAllowedAnswers.HasValue) return false;
+            if (question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue) return false;
+
+            if (question.CategoriesId.HasValue)
+                return question.MaxAllowedAnswers.Value > this.categoriesService.GetCategoriesById(question.CategoriesId.Value).Count();
+
+            return (question.MaxAllowedAnswers.Value > question.Answers.Count);
         }
 
         private static bool CategoricalMultianswerQuestionIsPrefilled(IMultyOptionsQuestion question, MultiLanguageQuestionnaireDocument questionnaire)

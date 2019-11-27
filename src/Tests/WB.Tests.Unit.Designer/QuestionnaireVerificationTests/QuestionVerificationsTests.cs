@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Main.Core.Entities.SubEntities;
+using Moq;
+using NHibernate.Collection.Generic;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Verifier;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 
 namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 {
@@ -86,6 +89,32 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 .Be(QuestionnaireVerificationReferenceType.Question);
 
             verificationMessages.Single(e => e.Code == "WB0076").References.First().Id.Should().Be(multiOptionId);
+        }
+
+        [Test]
+        public void when_verifying_questionnaire_with_categorical_multi_answers_question_that_has_max_allowed_answers_count_more_than_reusable_categories_count()
+        {
+            Guid multyOptionsQuestionId = Guid.Parse("10000000000000000000000000000000");
+            Guid categoriesId = Guid.Parse("11111111111111111111111111111111");
+
+            var questionnaire = CreateQuestionnaireDocument(Create.MultyOptionsQuestion(
+                multyOptionsQuestionId,
+                categoriesId: categoriesId,
+                maxAllowedAnswers: 3,
+                variable: "var1"
+            ));
+            var categoriesService = Mock.Of<ICategoriesService>(x =>
+                x.GetCategoriesById(categoriesId) == new List<CategoriesItem>()
+                {
+                    new CategoriesItem(),
+                    new CategoriesItem()
+                }.AsQueryable());
+
+            var verifier = CreateQuestionnaireVerifier(categoriesService: categoriesService);
+            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+            verificationMessages.Count().Should().Be(1);
+            verificationMessages.Single().Code.Should().Be("WB0021");
+            verificationMessages.Single().MessageLevel.Should().Be(VerificationMessageLevel.General);
         }
     }
 }
