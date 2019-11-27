@@ -33,6 +33,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEn
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandDeserialization;
+using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 using WB.Core.Synchronization.MetaInfo;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Services;
@@ -107,6 +108,7 @@ namespace WB.UI.Headquarters.Injections
             registry.Bind<IInterviewerProfileFactory, InterviewerProfileFactory>();
             registry.Bind<ITranslationsExportService, TranslationsExportService>();
             registry.Bind<IQuestionnaireExporter, QuestionnaireExporter>();
+            registry.Bind<IReusableCategoriesExporter, ReusableCategoriesExporter>();
 
             registry.Bind<IClientApkProvider, ClientApkProvider>();
             registry.Bind<IQRCodeHelper, QRCodeHelper>();
