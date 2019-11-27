@@ -8,21 +8,26 @@ namespace WB.UI.Shared.Web.Services
 {
     public class ImageProcessingService : IImageProcessingService
     {
+        public void Validate(byte[] source)
+        {
+            using var _ = Image.Load(source, out var format);
+        }
+
         public byte[] ResizeImage(byte[] source, int height, int width)
         {
-            using (var outputStream = new MemoryStream())
-            using (var image = Image.Load(source))
-            {
-                image.Mutate(x => x.Resize(new ResizeOptions
-                {
-                    Position = AnchorPositionMode.Center,
-                    Mode = ResizeMode.Max,
-                    Size = new Size(width, height)
-                }));
-                image.SaveAsPng(outputStream);
+            using var outputStream = new MemoryStream();
+            using var image = Image.Load(source);
 
-                return outputStream.ToArray();
-            }
+            image.Mutate(x => x.Resize(new ResizeOptions
+            {
+                Position = AnchorPositionMode.Center,
+                Mode = ResizeMode.Max,
+                Size = new Size(width, height)
+            }));
+
+            image.SaveAsPng(outputStream);
+
+            return outputStream.ToArray();
         }
     }
 }
