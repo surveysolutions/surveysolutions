@@ -351,8 +351,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
 
     public class TimeSpanType : PrimitiveType
     {
-        public TimeSpanType() : base(
-            new NpgsqlExtendedSqlType(DbType.Object, NpgsqlDbType.Interval))
+        public TimeSpanType() : base(new SqlType(DbType.Object))
         {
         }
 
