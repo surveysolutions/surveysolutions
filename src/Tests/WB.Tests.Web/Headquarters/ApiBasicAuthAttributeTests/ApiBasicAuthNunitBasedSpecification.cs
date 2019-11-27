@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
             this.UserStore.Setup(_ => _.GetSecurityStampAsync(It.IsAny<HqUser>()))
                 .Returns<HqUser>(x => Task.FromResult(x.SecurityStamp));
             this.UserStore.Setup(_ => _.GetRolesAsync(It.IsAny<Guid>()))
-                .Returns((Task.FromResult((IList<string>)hqUser.Roles.Select(x => x.Role.ToString()).ToList())));
+                .Returns((Task.FromResult((IList<string>)hqUser.Roles.Select(x => x.Name).ToList())));
         }
 
         protected Mock<IUserRepository> UserStore = new Mock<IUserRepository>();
