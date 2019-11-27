@@ -896,7 +896,7 @@ namespace WB.Tests.Unit.Designer
             Guid? linkedToQuestionId = null, Guid? cascadeFromQuestionId = null,
             decimal[] answerCodes = null, string title = null, bool hideIfDisabled = false,
             string linkedFilterExpression = null, Guid? linkedToRosterId = null, List<Answer> answers = null,
-            bool isPrefilled = false, bool isComboBox = false, bool showAsList = false)
+            bool isPrefilled = false, bool isComboBox = false, bool showAsList = false, Guid? categoriesId = null)
         {
             var publicKey = questionId ?? Guid.NewGuid();
             return new SingleQuestion
@@ -916,7 +916,8 @@ namespace WB.Tests.Unit.Designer
                 Featured = isPrefilled,
                 IsFilteredCombobox = isComboBox,
                 ShowAsList = showAsList,
-                QuestionScope = scope
+                QuestionScope = scope,
+                CategoriesId = categoriesId
             };
         }
 
