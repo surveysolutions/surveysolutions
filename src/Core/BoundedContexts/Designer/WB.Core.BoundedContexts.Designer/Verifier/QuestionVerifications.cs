@@ -4,6 +4,7 @@ using System.Linq;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -709,10 +710,17 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return question.QuestionScope != QuestionScope.Interviewer || questionnaire.Questionnaire.IsPreFilledQuestion(question);
         }
 
-        private static bool CategoricalOptionsCountMoreThanMaxOptionCount(ICategoricalQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
-            => !question.CascadeFromQuestionId.HasValue &&
-               !questionnaire.Questionnaire.IsFilteredComboboxQuestion(question) &&
-               question.Answers?.Count > MaxOptionsCountInCategoricalOptionQuestion;
+        private bool CategoricalOptionsCountMoreThanMaxOptionCount(ICategoricalQuestion question,
+            MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            if(question.CascadeFromQuestionId.HasValue) return false;
+            if (questionnaire.Questionnaire.IsFilteredComboboxQuestion(question)) return false;
+
+            if (question.CategoriesId.HasValue)
+                return this.categoriesService.GetCategoriesById(question.CategoriesId.Value).Count() > MaxOptionsCountInCategoricalOptionQuestion;
+
+            return question.Answers?.Count > MaxOptionsCountInCategoricalOptionQuestion;
+        }
 
         private static bool FilteredComboboxContainsMoreThanMaxOptions(ICategoricalQuestion question, MultiLanguageQuestionnaireDocument questionnaire) 
             => questionnaire.Questionnaire.IsFilteredComboboxQuestion(question) && question.Answers?.Count > MaxOptionsCountInFilteredComboboxQuestion;
