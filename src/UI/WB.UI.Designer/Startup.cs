@@ -155,6 +155,10 @@ namespace WB.UI.Designer
             {
                 config.UseExceptionalPageOnThrow = hostingEnvironment.IsDevelopment();
 
+                config.LogFilters.Header.Add("Authorization", "***");
+                config.LogFilters.Form.Add("Password", "***");
+                config.LogFilters.Form.Add("ConfirmPassword", "***");
+
                 if (config.Store.Type == "PostgreSql")
                 {
                     config.Store.TableName = "\"logs\".\"Errors\"";
