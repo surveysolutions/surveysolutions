@@ -109,8 +109,8 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             var categoriesService = Mock.Of<ICategoriesService>(x =>
                 x.GetCategoriesById(categoriesId) == new List<CategoriesItem>()
                 {
-                    new CategoriesItem(),
-                    new CategoriesItem()
+                    new CategoriesItem(){ Id = 1, Text = "opt1"},
+                    new CategoriesItem{Id = 2, Text = "opt2"}
                 }.AsQueryable());
 
             var verifier = CreateQuestionnaireVerifier(categoriesService: categoriesService);
@@ -337,6 +337,112 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             verificationMessages.Single(e => e.Code == "WB0076").References.Count().Should().Be(1);
             verificationMessages.Single(e => e.Code == "WB0076").References.First().Type.Should().Be(QuestionnaireVerificationReferenceType.Question);
             verificationMessages.Single(e => e.Code == "WB0076").References.First().Id.Should().Be(singleOptionId);
+        }
+
+        [Test]
+        public void when_verifying_questionnaire_with_multi_question_with_reusable_categories_and_ids_is_not_unique()
+        {
+            // assert
+            var multiQuestionId = Guid.Parse("10000000000000000000000000000000");
+            var categoriesId = Guid.Parse("11111111111111111111111111111111");
+
+            var questionnaire = CreateQuestionnaireDocument(
+                Create.MultyOptionsQuestion
+                (
+                    multiQuestionId,
+                    variable: "var",
+                    categoriesId: categoriesId
+                ));
+
+            var categoriesService = Mock.Of<ICategoriesService>(x =>
+                x.GetCategoriesById(categoriesId) == new List<CategoriesItem>()
+                {
+                    new CategoriesItem{ Id = 1,  Text =  "one"},
+                    new CategoriesItem{ Id = 1, Text =  "two"}
+                }.AsQueryable());
+
+            var verifier = CreateQuestionnaireVerifier(categoriesService: categoriesService);
+
+            // act
+            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+
+            // arrange
+            verificationMessages.ShouldContainError("WB0073");
+            verificationMessages.Single(e => e.Code == "WB0073").MessageLevel.Should().Be(VerificationMessageLevel.General);
+            verificationMessages.Single(e => e.Code == "WB0073").References.Count().Should().Be(1);
+            verificationMessages.Single(e => e.Code == "WB0073").References.First().Type.Should().Be(QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.Single(e => e.Code == "WB0073").References.First().Id.Should().Be(multiQuestionId);
+        }
+
+        [Test]
+        public void when_verifying_questionnaire_with_cascading_question_with_reusable_categories_and_ids_is_not_unique()
+        {
+            // assert
+            var questionId = Guid.Parse("10000000000000000000000000000000");
+            var categoriesId = Guid.Parse("11111111111111111111111111111111");
+
+            var questionnaire = CreateQuestionnaireDocument(
+                Create.SingleOptionQuestion
+                (
+                    questionId,
+                    variable: "var",
+                    categoriesId: categoriesId,
+                    cascadeFromQuestionId: Guid.NewGuid()
+                ));
+
+            var categoriesService = Mock.Of<ICategoriesService>(x =>
+                x.GetCategoriesById(categoriesId) == new List<CategoriesItem>()
+                {
+                    new CategoriesItem{ Id = 1,  Text =  "one"},
+                    new CategoriesItem{ Id = 1, Text =  "two"}
+                }.AsQueryable());
+
+            var verifier = CreateQuestionnaireVerifier(categoriesService: categoriesService);
+
+            // act
+            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+
+            // arrange
+            verificationMessages.ShouldContainError("WB0073");
+            verificationMessages.Single(e => e.Code == "WB0073").MessageLevel.Should().Be(VerificationMessageLevel.General);
+            verificationMessages.Single(e => e.Code == "WB0073").References.Count().Should().Be(1);
+            verificationMessages.Single(e => e.Code == "WB0073").References.First().Type.Should().Be(QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.Single(e => e.Code == "WB0073").References.First().Id.Should().Be(questionId);
+        }
+
+        [Test]
+        public void when_verifying_questionnaire_with_single_question_with_reusable_categories_and_ids_is_not_unique()
+        {
+            // assert
+            var questionId = Guid.Parse("10000000000000000000000000000000");
+            var categoriesId = Guid.Parse("11111111111111111111111111111111");
+
+            var questionnaire = CreateQuestionnaireDocument(
+                Create.SingleOptionQuestion
+                (
+                    questionId,
+                    variable: "var",
+                    categoriesId: categoriesId
+                ));
+
+            var categoriesService = Mock.Of<ICategoriesService>(x =>
+                x.GetCategoriesById(categoriesId) == new List<CategoriesItem>()
+                {
+                    new CategoriesItem{ Id = 1,  Text =  "one"},
+                    new CategoriesItem{ Id = 1, Text =  "two"}
+                }.AsQueryable());
+
+            var verifier = CreateQuestionnaireVerifier(categoriesService: categoriesService);
+
+            // act
+            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+
+            // arrange
+            verificationMessages.ShouldContainError("WB0073");
+            verificationMessages.Single(e => e.Code == "WB0073").MessageLevel.Should().Be(VerificationMessageLevel.General);
+            verificationMessages.Single(e => e.Code == "WB0073").References.Count().Should().Be(1);
+            verificationMessages.Single(e => e.Code == "WB0073").References.First().Type.Should().Be(QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.Single(e => e.Code == "WB0073").References.First().Id.Should().Be(questionId);
         }
     }
 }
