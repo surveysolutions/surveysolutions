@@ -1,3 +1,4 @@
+using System;
 using SQLite;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
@@ -27,5 +28,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public int SortOrder { get; set; }
 
         public string TranslationId { get; set; }
+
+        public string CategoryId { get; set; }
     }
 }

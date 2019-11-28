@@ -4,6 +4,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.SharedKernels.Enumerator.Services
@@ -22,11 +23,14 @@ namespace WB.Core.SharedKernels.Enumerator.Services
 
         void RemoveOptionsForQuestionnaire(QuestionnaireIdentity questionnaireId);
 
-        void StoreOptionsForQuestion(QuestionnaireIdentity questionnaireId, Guid questionId, 
-            List<Answer> answers, List<TranslationDto> optionsTranslations);
+        void StoreOptionsForQuestion(QuestionnaireIdentity questionnaireId, Guid questionId, List<Answer> answers, List<TranslationDto> optionsTranslations);
+
+        void StoreOptionsForCategory(QuestionnaireIdentity questionnaireIdentity, Guid categoryId, List<CategoriesItem> options, List<TranslationDto> translations);
 
         void StoreOptions(List<OptionView> options);
 
         bool IsEmpty();
+
+        CategoricalOption[] GetReusableCategoriesById(QuestionnaireIdentity questionnaireIdentity, Guid categoryId);
     }
 }
