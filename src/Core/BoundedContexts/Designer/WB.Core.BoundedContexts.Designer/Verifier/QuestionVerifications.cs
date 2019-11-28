@@ -462,10 +462,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return OptionsHasLongText(question.Answers);
         }
 
-        private static bool SpecialValuesMustBeUniqueForNumericlQuestion(INumericQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
-        {
-            return OptionsHaveUniqueValues(question.Answers);
-        }
+        private bool SpecialValuesMustBeUniqueForNumericlQuestion(INumericQuestion question, MultiLanguageQuestionnaireDocument questionnaire) 
+            => OptionsHaveUniqueValues(question);
 
         private static bool SpecialValuesCountMoreThanMaxOptionCount(INumericQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
@@ -731,13 +729,10 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                    (question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue);
         }
 
-        private static bool SpecialValueTitlesMustBeUnique(INumericQuestion question,
-            MultiLanguageQuestionnaireDocument questionnaire)
-        {
-            return HasUniqueOptionTitles(question.Answers);
-        }
+        private bool SpecialValueTitlesMustBeUnique(INumericQuestion question, 
+            MultiLanguageQuestionnaireDocument questionnaire) => HasUniqueOptionTitles(question);
 
-        private static bool OptionTitlesMustBeUniqueForCategoricalQuestion(IQuestion question,
+        private bool OptionTitlesMustBeUniqueForCategoricalQuestion(IQuestion question,
             MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (!(question is SingleQuestion || question is IMultyOptionsQuestion))
@@ -746,29 +741,29 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             if (question.CascadeFromQuestionId.HasValue) 
                 return false;
 
-            return HasUniqueOptionTitles(question.Answers);
+            return HasUniqueOptionTitles(question);
         }
 
-        private static bool HasUniqueOptionTitles(List<Answer> options)
+        private bool HasUniqueOptionTitles(IQuestion question)
         {
-            if (options != null)
+            if (question is ICategoricalQuestion categoriesQuestion && categoriesQuestion.CategoriesId.HasValue)
             {
-                var distinctTitlesCount = options
-                    .Where(x => x.AnswerText != null)
-                    .Select(x => x.AnswerText.Trim())
-                    .Distinct()
-                    .Count();
-
-                return distinctTitlesCount != options.Count;
+                return this.categoriesService.GetCategoriesById(categoriesQuestion.CategoriesId.Value)
+                    .Where(x => x.Text != null)
+                    .GroupBy(x => x.Text.Trim())
+                    .Any(x => x.Count() > 1);
             }
 
-            return false;
+            return question.Answers
+                       ?.Where(x => x.AnswerText != null)
+                       ?.GroupBy(x => x.AnswerText.Trim())
+                       ?.Any(x => x.Count() > 1) ?? false;
         }
 
-        private static bool OptionValuesMustBeUniqueForCategoricalQuestion(ICategoricalQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+        private bool OptionValuesMustBeUniqueForCategoricalQuestion(ICategoricalQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (!question.CascadeFromQuestionId.HasValue)
-                return OptionsHaveUniqueValues(question.Answers);
+                return OptionsHaveUniqueValues(question);
 
             if (CascadingHasCircularReference((SingleQuestion) question, questionnaire).HasErrors) return false;
 
@@ -785,7 +780,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 parentQuestionId = cascadingQuestion.CascadeFromQuestionId;
             }
 
-            if (parentQuestions.Count == 0) return OptionsHaveUniqueValues(question.Answers);
+            if (parentQuestions.Count == 0) return OptionsHaveUniqueValues(question);
 
             foreach (var questionAnswer in question.Answers)
             {
@@ -817,16 +812,19 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             public int GetHashCode(int[] obj) => obj.Aggregate(0, (current, i) => current ^ i.GetHashCode());
         }
 
-        private static bool OptionsHaveUniqueValues(List<Answer> options)
+        private bool OptionsHaveUniqueValues(IQuestion question)
         {
-            if (options != null)
+            if (question is ICategoricalQuestion categoriesQuestion && categoriesQuestion.CategoriesId.HasValue)
             {
-                var answersValues = options.Where(x => !string.IsNullOrWhiteSpace(x.AnswerValue))
-                    .Select(x => x.AnswerValue.Trim()).ToList();
-                return answersValues.Distinct().Count() != answersValues.Count();
+                return this.categoriesService.GetCategoriesById(categoriesQuestion.CategoriesId.Value)
+                    .GroupBy(x => x.Id)
+                    .Any(x => x.Count() > 1);
             }
 
-            return false;
+            return question.Answers
+                ?.Where(x => !string.IsNullOrWhiteSpace(x.AnswerValue))
+                ?.GroupBy(x => x.AnswerValue.Trim())
+                ?.Any(x => x.Count() > 1) ?? false;
         }
 
         private static bool QuestionTypeIsNotAllowed(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
