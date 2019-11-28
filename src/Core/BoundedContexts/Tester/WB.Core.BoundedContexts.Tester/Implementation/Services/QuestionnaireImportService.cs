@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 
 namespace WB.Core.BoundedContexts.Tester.Implementation.Services
 {
@@ -38,7 +39,8 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
         public void ImportQuestionnaire(QuestionnaireIdentity questionnaireIdentity,
             QuestionnaireDocument questionnaireDocument,
             string supportingAssembly,
-            TranslationDto[] translations)
+            TranslationDto[] translations,
+            ReusableCategoriesDto[] reusableCategories)
         {
             this.optionsRepository.RemoveOptionsForQuestionnaire(questionnaireIdentity);
 
@@ -56,10 +58,18 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
                 question.Answers = new List<Answer>();
             }
 
-            var questionsWithLongOptionsIds = questionsWithLongOptionsList.Select(x => x.PublicKey).ToList();
+            foreach (var category in reusableCategories)
+            {
+                var categoriesTranslations = translations.Where(x => x.QuestionnaireEntityId == category.Id).ToList();
+                this.optionsRepository.StoreOptionsForCategory(questionnaireIdentity, category.Id, category.Options, categoriesTranslations);
+            }
+
+            var questionsWithLongOptionsIds = questionsWithLongOptionsList.Select(x => x.PublicKey).ToHashSet();
+            var reusableCategoriesIds = questionnaireDocument.Categories.Select(x => x.Id).ToHashSet();
 
             List<TranslationInstance> filteredTranslations = translations
                 .Except(x => questionsWithLongOptionsIds.Contains(x.QuestionnaireEntityId) && x.Type == TranslationType.OptionTitle)
+                .Except(x => reusableCategoriesIds.Contains(x.QuestionnaireEntityId) && x.Type == TranslationType.OptionTitle)
                 .Select(translationDto => new TranslationInstance
                 {
                     QuestionnaireId = questionnaireIdentity.ToString(),

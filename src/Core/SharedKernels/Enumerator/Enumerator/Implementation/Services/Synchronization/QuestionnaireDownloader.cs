@@ -70,15 +70,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 }
 
                 var translationDtos = await this.synchronizationService.GetQuestionnaireTranslationAsync(questionnaireIdentity, cancellationToken);
-
-                var questionnaireApiView = await this.synchronizationService.GetQuestionnaireAsync(
-                    questionnaireIdentity,
-                    transferProgress,
-                    cancellationToken);
+                var reusableCategories = await this.synchronizationService.GetQuestionnaireReusableCategoriesAsync(questionnaireIdentity, cancellationToken);
+                var questionnaireApiView = await this.synchronizationService.GetQuestionnaireAsync(questionnaireIdentity, transferProgress, cancellationToken);
 
                 this.questionnairesAccessor.StoreQuestionnaire(questionnaireIdentity,
                     questionnaireApiView.QuestionnaireDocument,
-                    questionnaireApiView.AllowCensus, translationDtos);
+                    questionnaireApiView.AllowCensus, 
+                    translationDtos,
+                    reusableCategories);
 
                 await this.synchronizationService.LogQuestionnaireAsSuccessfullyHandledAsync(questionnaireIdentity);
                 statistics.SuccessfullyDownloadedQuestionnairesCount++;

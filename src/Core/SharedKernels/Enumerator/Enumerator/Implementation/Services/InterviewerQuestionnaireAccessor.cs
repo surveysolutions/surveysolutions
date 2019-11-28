@@ -16,6 +16,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
@@ -49,10 +50,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.translationsStorage = translationsStorage;
         }
 
-        public virtual void StoreQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string questionnaireDocument, bool census, List<TranslationDto> translationDtos)
+        public virtual void StoreQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string questionnaireDocument, bool census, 
+            List<TranslationDto> translationDtos, List<ReusableCategoriesDto> reusableCategoriesDtos)
         {
             var serializedQuestionnaireDocument = this.synchronizationSerializer.Deserialize<QuestionnaireDocument>(questionnaireDocument);
             serializedQuestionnaireDocument.ParseCategoricalQuestionOptions();
+
+            foreach (var reusableCategoryDto in reusableCategoriesDtos)
+            {
+                var categoryTranslations = translationDtos.Where(x => x.QuestionnaireEntityId == reusableCategoryDto.Id).ToList();
+                this.optionsRepository.StoreOptionsForCategory(questionnaireIdentity, reusableCategoryDto.Id, reusableCategoryDto.Options, categoryTranslations);
+            }
 
             optionsRepository.RemoveOptionsForQuestionnaire(questionnaireIdentity);
 

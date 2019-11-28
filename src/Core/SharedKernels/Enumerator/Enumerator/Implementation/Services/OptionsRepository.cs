@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
@@ -211,6 +212,20 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public bool IsEmpty() => this.optionsStorage.FirstOrDefault() == null;
 
+        public CategoricalOption[] GetReusableCategoriesById(QuestionnaireIdentity questionnaireId, Guid categoryId)
+        {
+            var questionnaireIdAsString = questionnaireId.ToString();
+            var categoryIdAsString = categoryId.FormatGuid();
+
+            var options = this.optionsStorage
+                .Where(x => x.QuestionnaireId == questionnaireIdAsString &&
+                            x.QuestionId == null &&
+                            x.CategoryId == categoryIdAsString)
+                .OrderBy(x => x.SortOrder);
+
+            return options.Select(ToCategoricalOption).ToArray();
+        }
+
         public void StoreOptionsForQuestion(QuestionnaireIdentity questionnaireIdentity, Guid questionId, List<Answer> answers, List<TranslationDto> translations)
         {
             var questionIdAsString = questionId.FormatGuid();
@@ -240,14 +255,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     Title = answer.AnswerText,
                     SearchTitle = answer.AnswerText?.ToLower(),
                     SortOrder = index,
-                    TranslationId = null
+                    TranslationId = null,
+                    CategoryId = null
                 };
 
                 optionsToSave.Add(optionView);
 
-                var translatedOptions = translations.Where(x => x.QuestionnaireEntityId == questionId &&
-                                                                x.TranslationIndex == answer.AnswerValue &&
-                                                                x.Type == TranslationType.OptionTitle)
+                var translatedOptions = translations.Where(x => x.QuestionnaireEntityId == questionId 
+                                                                && x.TranslationIndex == answer.AnswerValue
+                                                                && x.Type == TranslationType.OptionTitle)
                     .Select(y => new OptionView
                     {
                         Id = $"{questionnaireIdAsString}-{questionIdAsString}-{answer.AnswerValue}-{y.TranslationId.FormatGuid()}",
@@ -258,7 +274,62 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                         Title = y.Value,
                         SearchTitle = y.Value?.ToLower(),
                         SortOrder = ++index,
-                        TranslationId = y.TranslationId.FormatGuid()
+                        TranslationId = y.TranslationId.FormatGuid(),
+                        CategoryId = null
+                    }).ToList();
+
+                optionsToSave.AddRange(translatedOptions);
+
+                index++;
+            }
+
+            this.optionsStorage.Store(optionsToSave);
+        }
+
+        public void StoreOptionsForCategory(QuestionnaireIdentity questionnaireIdentity, Guid categoryId, List<CategoriesItem> options, List<TranslationDto> translations)
+        {
+            var categoryIdAsString = categoryId.FormatGuid();
+            var questionnaireIdAsString = questionnaireIdentity.ToString();
+
+            var optionsToSave = new List<OptionView>();
+
+            int index = 0;
+
+            foreach (var option in options)
+            {
+                var id = $"{questionnaireIdAsString}-{categoryIdAsString}-{option.Id}";
+
+                var optionView = new OptionView
+                {
+                    Id = id,
+                    QuestionnaireId = questionnaireIdAsString,
+                    QuestionId = null,
+                    Value = option.Id,
+                    ParentValue = option.ParentId,
+                    Title = option.Text,
+                    SearchTitle = option.Text?.ToLower(),
+                    SortOrder = index,
+                    TranslationId = null,
+                    CategoryId = categoryIdAsString
+                };
+
+                optionsToSave.Add(optionView);
+
+                var translatedOptions = translations.Where(x => x.QuestionnaireEntityId == categoryId
+                                                                && x.TranslationIndex == option.Id.ToString()
+                                                                && x.Type == TranslationType.OptionTitle)
+                    .Select(y => new OptionView
+                    {
+                        Id = $"{questionnaireIdAsString}-{categoryIdAsString}-{option.Id}-{y.TranslationId.FormatGuid()}",
+                        QuestionnaireId = questionnaireIdAsString,
+                        QuestionId = null,
+                        Value = option.Id,
+                        ParentValue = option.ParentId,
+                        Title = y.Value,
+                        SearchTitle = y.Value?.ToLower(),
+                        SortOrder = ++index,
+                        TranslationId = y.TranslationId.FormatGuid(),
+                        CategoryId = categoryIdAsString
                     }).ToList();
 
                 optionsToSave.AddRange(translatedOptions);
@@ -273,6 +344,5 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             this.optionsStorage.Store(options);
         }
-
     }
 }
