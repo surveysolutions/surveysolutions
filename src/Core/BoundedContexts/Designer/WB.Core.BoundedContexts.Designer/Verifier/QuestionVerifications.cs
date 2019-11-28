@@ -782,19 +782,25 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
             if (parentQuestions.Count == 0) return OptionsHaveUniqueValues(question);
 
-            foreach (var questionAnswer in question.Answers)
+            var categories = question.CategoriesId.HasValue
+                ? this.categoriesService.GetCategoriesById(question.CategoriesId.Value).Select(x => new {x.Id, x.ParentId}).ToList()
+                : question.Answers.Select(x => new {Id = (int) x.GetParsedValue(), ParentId = x.GetParsedParentValue()}).ToList();
+
+            foreach (var questionAnswer in categories)
             {
-                var valueAndParentValues = new List<int> {(int) questionAnswer.GetParsedValue()};
-                var parsedParentValue = questionAnswer.GetParsedParentValue();
+                var valueAndParentValues = new List<int> {questionAnswer.Id};
+                var parsedParentValue = questionAnswer.ParentId;
 
                 if (parsedParentValue.HasValue)
                     valueAndParentValues.Add(parsedParentValue.Value);
 
                 foreach (var parentQuestion in parentQuestions)
                 {
-                    parsedParentValue = parentQuestion.Answers
-                        .Find(x => (int) x.GetParsedValue() == valueAndParentValues?.LastOrDefault())
-                        ?.GetParsedParentValue();
+                    var lastParentId = valueAndParentValues?.LastOrDefault();
+
+                    parsedParentValue = parentQuestion.CategoriesId.HasValue
+                        ? this.categoriesService.GetCategoriesById(parentQuestion.CategoriesId.Value).FirstOrDefault(x => x.Id == lastParentId)?.ParentId
+                        : parentQuestion.Answers.Find(x => (int) x.GetParsedValue() == lastParentId)?.GetParsedParentValue();
 
                     if (parsedParentValue.HasValue)
                         valueAndParentValues.Add(parsedParentValue.Value);
