@@ -37,6 +37,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog
         CheckObsoleteInterviews,
         GetSupervisorApk,
         GetSupervisorApkPatch,
-        CheckIsPackageDuplicated
+        CheckIsPackageDuplicated,
+        GetReusableCategories,
     }
 }
