@@ -76,11 +76,11 @@ namespace WB.UI.Designer.Code.Attributes
             if (this.loginException != null)
             {
                 Response.StatusCode = loginException.ResponseStatusCode;
-                await Response.Body.WriteAsync(Encoding.UTF8.GetBytes(this.loginException.Message));
-
                 var feature = Response.HttpContext?.Features?.Get<IHttpResponseFeature>();
                 if (feature != null)
                     feature.ReasonPhrase = loginException.Message;
+
+                await Response.Body.WriteAsync(Encoding.UTF8.GetBytes(this.loginException.Message));
             }
         }
     }
