@@ -115,9 +115,6 @@ namespace WB.Core.BoundedContexts.Designer.Services
                 {
                     using (ExcelPackage package = new ExcelPackage(stream))
                     {
-                        if (package.Workbook.Worksheets.Count == 0)
-                            throw new InvalidExcelFileException(ExceptionMessages.TranslationFileIsEmpty);
-
                         var worksheet = package.Workbook.Worksheets[0];
                         var headers = GetHeaders(worksheet);
 
@@ -128,9 +125,10 @@ namespace WB.Core.BoundedContexts.Designer.Services
                         if (errors.Any())
                             throw new InvalidExcelFileException(ExceptionMessages.TranlationExcelFileHasErrors) {FoundErrors = errors};
 
+                        if (worksheet.Dimension.End.Row == 1)
+                            throw new InvalidExcelFileException(ExceptionMessages.Excel_NoCategories);
 
                         var categoriesRows = new List<CategoriesRow>();
-
                         for (int rowNumber = 2; rowNumber <= worksheet.Dimension.End.Row; rowNumber++)
                         {
                             var categories = GetRowValues(worksheet, headers, rowNumber);
@@ -296,10 +294,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
                 {
                     Message = string.Format(ExceptionMessages.RequiredHeaderWasNotFound, "text"),
                 };
-
-            if (headers.IdIndex == null || headers.TextIndex == null)
-                yield break;
-
+            
             for (int rowNumber = 2; rowNumber <= worksheet.Dimension.End.Row; rowNumber++)
             {
                 var categories = GetRowValues(worksheet, headers, rowNumber);
