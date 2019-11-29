@@ -14,6 +14,8 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Verifier;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.Questionnaire.Categories;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using MissingFieldException = CsvHelper.MissingFieldException;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
@@ -21,15 +23,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
     public class CategoricalOptionsImportService : ICategoricalOptionsImportService
     {
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
-        public CategoricalOptionsImportService(IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader)
+        private readonly ICategoriesService categoriesService;
+
+        public CategoricalOptionsImportService(IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
+            ICategoriesService categoriesService)
         {
             this.questionnaireDocumentReader = questionnaireDocumentReader;
+            this.categoriesService = categoriesService;
         }
 
         public ImportCategoricalOptionsResult ImportOptions(Stream file, string questionnaireId, Guid categoricalQuestionId)
         {
             var document = this.questionnaireDocumentReader.GetById(questionnaireId);
-            var question = document?.Find<IQuestion>(categoricalQuestionId);
+            var question = document?.Find<ICategoricalQuestion>(categoricalQuestionId);
 
             if (question == null)
                 return ImportCategoricalOptionsResult.Failed(string.Format(ExceptionMessages.QuestionCannotBeFound, categoricalQuestionId));
@@ -41,8 +47,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             var isCascadingQuestion = question.CascadeFromQuestionId.HasValue;
             if (isCascadingQuestion)
             {
-                var parentCascadingQuestion = document.Find<IQuestion>(question.CascadeFromQuestionId.Value);
-                if (parentCascadingQuestion.Answers.Count == 0)
+                var parentCascadingQuestion = document.Find<ICategoricalQuestion>(question.CascadeFromQuestionId.Value);
+
+                if (parentCascadingQuestion == null)
+                    return ImportCategoricalOptionsResult.Failed(string.Format(ExceptionMessages.QuestionCannotBeFound,
+                        question.CascadeFromQuestionId.Value));
+
+                if ((parentCascadingQuestion.CategoriesId.HasValue && 
+                    !this.categoriesService.GetCategoriesById(parentCascadingQuestion.CategoriesId.Value).Any()) || parentCascadingQuestion.Answers.Count == 0)
                 {
                     return ImportCategoricalOptionsResult.Failed(
                         string.Format(ExceptionMessages.NoParentCascadingOptions, parentCascadingQuestion.VariableName));
