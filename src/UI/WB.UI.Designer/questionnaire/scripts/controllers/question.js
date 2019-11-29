@@ -612,9 +612,6 @@
                 if ($scope.activeQuestion.isLinked)
                     return $i18next.t('RostersQuestion');
 
-                if ($scope.activeQuestion.isCascade || ($scope.activeQuestion.cascadeFromQuestionId || '') !== '')
-                    return $i18next.t('QuestionCascading');
-
                 return $scope.activeQuestion.isLinkedToReusableCategories === true
                     ? $i18next.t('ReusableCategories')
                     : $i18next.t('UserDefinedCategories');
@@ -624,7 +621,6 @@
                 if ($scope.activeQuestion.isLinkedToReusableCategories === isReusable) return;
 
                 $scope.activeQuestion.isLinked = false;
-                $scope.activeQuestion.isCascade = false;
                 $scope.activeQuestion.categoriesId = null;
                 $scope.activeQuestion.isLinkedToReusableCategories = isReusable;
                 
@@ -655,9 +651,13 @@
                 markFormAsChanged();
             };
 
-            $scope.getCategoricalSingleDisplayMode = function() {
+            $scope.getCategoricalSingleDisplayMode = function () {
+                if ($scope.activeQuestion.isCascade || ($scope.activeQuestion.cascadeFromQuestionId || '') !== '')
+                    return $i18next.t('QuestionCascading');
+
                 if ($scope.activeQuestion.isFilteredCombobox === true)
                     return $i18next.t('QuestionComboBox');
+
                 else return $i18next.t('QuestionRadioButtonList');
             };
 
@@ -674,6 +674,7 @@
             $scope.setQuestionAsCascading = function () {
                 if ($scope.activeQuestion.isCascade === true) return;
 
+                $scope.activeQuestion.isFilteredCombobox = true;
                 $scope.activeQuestion.isCascade = true;
 
                 markFormAsChanged();
@@ -709,8 +710,6 @@
                             $scope.changeQuestionScope($scope.getQuestionScopeByValue('Interviewer'));
                         }
                         $scope.activeQuestion.optionsFilterExpression = null;
-                        $scope.activeQuestion.isLinkedToReusableCategories = null;
-                        $scope.activeQuestion.categoriesId = null;
                     } else {
                         $scope.activeQuestion.cascadeFromQuestionId = null;
                         $scope.activeQuestion.cascadeFromQuestion = null;

@@ -19,6 +19,9 @@
                     <li role="presentation">
                         <a role="menuitem" tabindex="-1" ng-i18next="QuestionComboBox" ng-click="setQuestionAsCombobox(true)"></a>
                     </li>
+                    <li role="presentation">
+                        <a role="menuitem" tabindex="-1" ng-i18next="QuestionCascading" ng-click="setQuestionAsCascading()"></a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -47,9 +50,6 @@
                     </li>
                     <li role="presentation">
                         <a role="menuitem" tabindex="-1" ng-i18next="RostersQuestion" ng-if="!activeQuestion.isFilteredCombobox" ng-click="setIsLinkedQuestion()"></a>
-                    </li>
-                    <li role="presentation">
-                        <a role="menuitem" tabindex="-1" ng-i18next="QuestionCascading" ng-if="activeQuestion.isFilteredCombobox" ng-click="setQuestionAsCascading()"></a>
                     </li>
                 </ul>
             </div>
@@ -106,15 +106,6 @@
         <p></p>
     </div>
 </div>
-<div class="row" ng-if="activeQuestion.isCascade && (activeQuestion.cascadeFromQuestionId || '') !== '' && !activeQuestion.isLinkedToReusableCategories">
-    <div class="col-xs-12">
-        <a href="javascript:void(0);"
-           class="btn btn-link"
-           ng-click="editCascadingComboboxOptions()" ng-i18next="QuestionUploadOptions">
-        </a>
-        <p></p>
-    </div>
-</div>
 <div class="row" ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked && !activeQuestion.isCascade  && !activeQuestion.isLinkedToReusableCategories">
     <div class="col-xs-12">
         <div class="well well-sm" ng-if="activeQuestion.wereOptionsTruncated" ng-i18next="({count: 200})QuestionOptionsCut"></div>
@@ -135,7 +126,16 @@
 </div>
 <div class="row" ng-if="activeQuestion.isCascade">
     <div class="col-xs-12">
-        <div class="form-group" ng-include="'views/question-details/CascadingComboBox-Template.html'" />
+        <div class="form-group" ng-include="'views/question-details/CascadingComboBox-Template.html'"></div>
+        <p></p>
+    </div>
+</div>
+<div class="row" ng-if="activeQuestion.isCascade && (activeQuestion.cascadeFromQuestionId || '') !== '' && !activeQuestion.isLinkedToReusableCategories">
+    <div class="col-xs-12">
+        <a href="javascript:void(0);"
+           class="btn btn-link"
+           ng-click="editCascadingComboboxOptions()" ng-i18next="QuestionUploadOptions">
+        </a>
         <p></p>
     </div>
 </div>
