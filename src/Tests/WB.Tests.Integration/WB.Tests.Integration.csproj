@@ -39,8 +39,6 @@
     <PackageReference Include="AutoFixture" Version="4.11.0" />
     <PackageReference Include="Castle.Core" Version="4.4.0" />
     <PackageReference Include="Dapper" Version="2.0.4" />
-    <PackageReference Include="EntityFramework" Version="6.2.0" />
-    <PackageReference Include="EntityFramework6.Npgsql" Version="3.2.0" />
     <PackageReference Include="FluentAssertions" Version="5.9.0" />
     <PackageReference Include="FluentMigrator" Version="3.2.1" />
     <PackageReference Include="Humanizer.Core" Version="2.7.2" />

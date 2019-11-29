@@ -6,9 +6,9 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
 {
     internal class WebInterviewConfigurator : IWebInterviewConfigurator
     {
-        private readonly WebInterviewConfigProvider configs;
+        private readonly IWebInterviewConfigProvider configs;
 
-        public WebInterviewConfigurator(WebInterviewConfigProvider configs)
+        public WebInterviewConfigurator(IWebInterviewConfigProvider configs)
         {
             this.configs = configs ?? throw new ArgumentNullException(nameof(configs));
         }
