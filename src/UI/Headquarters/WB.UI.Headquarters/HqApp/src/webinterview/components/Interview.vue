@@ -23,11 +23,15 @@
             Vue.use(http, { store: this.$store });
         },
 
-        async beforeRouteUpdate(to, from, next) {
-            await this.changeSection(to.params.sectionId, from.params.sectionId)
-            next()
+        beforeRouteUpdate(to, from, next) {
+             return this.changeSection(to.params.sectionId, from.params.sectionId)
+                .then(() => next())
         },
-
+        watch: {
+            ["$route.params.sectionId"](to, from) {
+                 this.changeSection(to, from)
+            }
+        },
         computed: {
             interviewId() {
                 return this.$route.params.interviewId;
