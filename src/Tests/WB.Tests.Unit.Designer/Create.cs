@@ -1514,7 +1514,7 @@ namespace WB.Tests.Unit.Designer
             return new JsonPatchService(new ZipArchiveUtils());
         }
 
-        public static ICategoricalOptionsImportService CategoricalOptionsImportService(QuestionnaireDocument document)
+        public static ICategoricalOptionsImportService CategoricalOptionsImportService(QuestionnaireDocument document, ICategoriesService categoriesService = null)
             => new CategoricalOptionsImportService(
                 new InMemoryKeyValueStorage<QuestionnaireDocument>(
                     new Dictionary<string, QuestionnaireDocument>()
@@ -1523,7 +1523,7 @@ namespace WB.Tests.Unit.Designer
                             document.PublicKey.FormatGuid(),
                             document
                         }
-                    }));
+                    }), categoriesService: categoriesService ?? Mock.Of<ICategoriesService>());
 
         public static ClassificationsStorage ClassificationStorage(
             DesignerDbContext dbContext)
