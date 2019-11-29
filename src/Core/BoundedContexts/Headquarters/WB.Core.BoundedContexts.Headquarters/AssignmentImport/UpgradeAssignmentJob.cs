@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
         }
 
-        public void Configure()
+        public async Task Configure()
         {
             IJobDetail job = JobBuilder.Create<UpgradeAssignmentJob>()
                 .WithIdentity("assignment upgrade job", "Import")
@@ -59,9 +59,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     .RepeatForever())
                 .Build();
 
-            this.scheduler.ScheduleJob(job, trigger);
+            await this.scheduler.ScheduleJob(job, trigger);
 
-            this.scheduler.AddJob(job, true);
+            await this.scheduler.AddJob(job, true);
         }
     }
 }
