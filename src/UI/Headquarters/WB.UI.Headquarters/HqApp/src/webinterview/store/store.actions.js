@@ -123,7 +123,6 @@ export default {
 
     // called by server side. reload interview
     reloadInterview() {
-        Vue.$api.hub.stop()
         location.reload(true)
     },
 
