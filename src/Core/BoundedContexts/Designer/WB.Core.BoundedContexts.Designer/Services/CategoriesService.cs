@@ -92,7 +92,8 @@ namespace WB.Core.BoundedContexts.Designer.Services
                     Id = i.Id,
                     ParentId = i.ParentId,
                     Text = i.Text
-                });
+                })
+                .OrderBy(x => x.Id);
             return categoriesExportService.GetAsExcelFile(items);
         }
 
