@@ -133,17 +133,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
                 })
                 .ToList());
 
-        public async Task<long> GetTotalTrafficUsageForInterviewer(Guid interviewerId)
+        public Task<long> GetTotalTrafficUsageForInterviewer(Guid interviewerId)
         {
             var totalTrafficUsed = this.dbContext.Query(devices => devices
-                .Where(deviceInfo => deviceInfo.InterviewerId == interviewerId)
+                .Where(deviceInfo => deviceInfo.InterviewerId == interviewerId && deviceInfo.Statistics != null)
                 .Select(x => new
                     {
                         TrafficUsed = x.Statistics.TotalUploadedBytes + x.Statistics.TotalDownloadedBytes
                     })
                 .ToList());
 
-            return totalTrafficUsed.Sum(x => x.TrafficUsed);
+            return Task.FromResult(totalTrafficUsed.Sum(x => x.TrafficUsed));
         }
 
         public double? GetAverageSynchronizationSpeedInBytesPerSeconds(Guid interviewerId)
