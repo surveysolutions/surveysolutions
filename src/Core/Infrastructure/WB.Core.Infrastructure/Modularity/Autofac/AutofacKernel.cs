@@ -43,7 +43,8 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
             {
                 switch (module)
                 {
-                    case IModule iModule: return iModule.AsAutofac();
+                    case IModule iModule:
+                        return iModule.AsAutofac();
                     default:
                         throw new ArgumentException("Cant resolve module type: " + module.GetType());
                 }
@@ -91,14 +92,11 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
                 using (var scope = container.BeginLifetimeScope())
                 {
                     var serviceLocatorLocal = scope.Resolve<IServiceLocator>();
-                    var tasks = new List<Task>();
                     foreach (var module in initModules)
                     {
                         status.ClearMessage();
-                        tasks.Add(Task.Run(() => module.Init(serviceLocatorLocal, status)));
+                        await module.Init(serviceLocatorLocal, status);
                     }
-
-                    await Task.WhenAll(tasks);
                 }
 
                 status.Finish();
