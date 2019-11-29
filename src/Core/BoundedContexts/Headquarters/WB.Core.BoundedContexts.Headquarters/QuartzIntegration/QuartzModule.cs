@@ -20,9 +20,6 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
         private readonly string instanceId;
         private readonly bool isClustered;
 
-        private Task<IScheduler> Scheduler => SchedulerTask.Task;
-
-        private TaskCompletionSource<IScheduler> SchedulerTask { get; } = new TaskCompletionSource<IScheduler>();
         public QuartzModule(Assembly migrationsAssembly, 
             string nameSpace,
             string instanceId,
@@ -57,16 +54,16 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
             });
             registry.BindAsSingleton<ISchedulerFactory, AutofacSchedulerFactory>();
             registry.Bind<IJobFactory, AutofacJobFactory>();
-            registry.BindToMethod(() => Scheduler.Result);
+            registry.BindToMethodInSingletonScope<IScheduler>(ctx => ctx.Get<ISchedulerFactory>().GetScheduler().Result);
         }
 
-        public async Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             var connectionString = serviceLocator.GetInstance<UnitOfWorkConnectionSettings>();
             DatabaseManagement.InitDatabase(connectionString.ConnectionString, "quartz");
             var dbUpgradeSettings = new DbUpgradeSettings(migrationsAssembly, nameSpace);
             DbMigrationsRunner.MigrateToLatest(connectionString.ConnectionString, "quartz", dbUpgradeSettings);
-            SchedulerTask.SetResult(await serviceLocator.GetInstance<ISchedulerFactory>().GetScheduler());
+            return Task.CompletedTask;
         }
     }
 }
