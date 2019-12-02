@@ -16,8 +16,8 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         HqRole FindRole(Guid id);
 
         Task<string> GetSecurityStampAsync(HqUser user);
-        Task CreateAsync(HqUser user);
-        Task UpdateAsync(HqUser user);
+        Task<Microsoft.AspNetCore.Identity.IdentityResult> CreateAsync(HqUser user, CancellationToken cancellationToken = new CancellationToken());
+        Task<Microsoft.AspNetCore.Identity.IdentityResult> UpdateAsync(HqUser user, CancellationToken cancellationToken = new CancellationToken());
         Task<HqUser> FindByIdAsync(Guid userId, CancellationToken cancellationToken = new CancellationToken());
         Task<HqUser> FindByNameAsync(string userName, CancellationToken cancellationToken = new CancellationToken());
         HqUser FindById(Guid userId);

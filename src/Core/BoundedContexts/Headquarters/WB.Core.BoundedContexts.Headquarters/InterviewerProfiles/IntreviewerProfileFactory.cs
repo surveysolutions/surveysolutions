@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Headquarters.InterviewerProfiles
 
     public class InterviewerProfileFactory : IInterviewerProfileFactory
     {
-        private readonly HqUserManager userManager;
+        private readonly IUserRepository userManager;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewRepository;
         private readonly IDeviceSyncInfoRepository deviceSyncInfoRepository;
         private readonly IInterviewerVersionReader interviewerVersionReader;
@@ -45,7 +45,7 @@ namespace WB.Core.BoundedContexts.Headquarters.InterviewerProfiles
         private readonly IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage;
 
         public InterviewerProfileFactory(
-            HqUserManager userManager,
+            IUserRepository userManager,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewRepository,
             IDeviceSyncInfoRepository deviceSyncInfoRepository, 
             IInterviewerVersionReader interviewerVersionReader, 

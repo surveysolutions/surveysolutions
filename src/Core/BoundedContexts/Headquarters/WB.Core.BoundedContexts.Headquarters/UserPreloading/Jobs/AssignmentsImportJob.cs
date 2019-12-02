@@ -54,11 +54,9 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
 
                 Guid responsibleId;
 
-                using (var userManager = serviceLocator.GetInstance<HqUserManager>())
-                {
-                    responsibleId = (await userManager
-                        .FindByNameAsync(importProcessStatus.ResponsibleName)).Id;
-                }
+                var userManager = serviceLocator.GetInstance<IUserRepository>();
+                responsibleId = (await userManager
+                    .FindByNameAsync(importProcessStatus.ResponsibleName)).Id;
 
                 this.logger.Debug("Assignments import job: Started");
                 var sw = new Stopwatch();
