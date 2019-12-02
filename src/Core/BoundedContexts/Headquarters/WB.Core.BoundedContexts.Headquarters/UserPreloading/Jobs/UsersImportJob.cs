@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -74,7 +75,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
 
         private async Task CreateUserOrUnarchiveAndUpdateAsync(UserToImport userToCreate)
         {
-            using (var userManager = serviceLocator.GetInstance<HqUserManager>())
+            using(var userManager = serviceLocator.GetInstance<UserManager<HqUser>>())
             {
                 var user = await userManager.FindByNameAsync(userToCreate.Login);
                 if (user == null)
@@ -84,7 +85,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                     if (!string.IsNullOrEmpty(userToCreate.Supervisor))
                         supervisorId = (await userManager.FindByNameAsync(userToCreate.Supervisor))?.Id;
 
-                    await userManager.CreateUserAsync(new HqUser
+                    await userManager.CreateAsync(new HqUser
                     {
                         Id = Guid.NewGuid(),
                         UserName = userToCreate.Login,

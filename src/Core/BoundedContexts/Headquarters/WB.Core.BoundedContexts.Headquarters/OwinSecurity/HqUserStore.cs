@@ -87,19 +87,23 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             this.unitOfWork = unitOfWork;
         }
 
-        public override Task<Microsoft.AspNetCore.Identity.IdentityResult> CreateAsync(HqUser user, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<Microsoft.AspNetCore.Identity.IdentityResult> CreateAsync(HqUser user, CancellationToken cancellationToken = new CancellationToken())
         {
-            throw new NotImplementedException();
+            await unitOfWork.Session.SaveAsync(user, cancellationToken);
+            await unitOfWork.Session.FlushAsync(cancellationToken);
+            return Microsoft.AspNetCore.Identity.IdentityResult.Success;
         }
 
-        public override Task<Microsoft.AspNetCore.Identity.IdentityResult> UpdateAsync(HqUser user, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<Microsoft.AspNetCore.Identity.IdentityResult> UpdateAsync(HqUser user, CancellationToken cancellationToken = new CancellationToken())
         {
-            throw new NotImplementedException();
+            await this.unitOfWork.Session.UpdateAsync(user, cancellationToken);
+            return Microsoft.AspNetCore.Identity.IdentityResult.Success;
         }
 
-        public override Task<Microsoft.AspNetCore.Identity.IdentityResult> DeleteAsync(HqUser user, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<Microsoft.AspNetCore.Identity.IdentityResult> DeleteAsync(HqUser user, CancellationToken cancellationToken = new CancellationToken())
         {
-            throw new NotImplementedException();
+            await this.unitOfWork.Session.DeleteAsync(user, cancellationToken);
+            return Microsoft.AspNetCore.Identity.IdentityResult.Success;
         }
 
         public override Task<HqUser> FindByIdAsync(string userId, CancellationToken cancellationToken = new CancellationToken())
@@ -266,26 +270,6 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
                 throw new ArgumentNullException(nameof(user));
             }
             return Task.FromResult(user.SecurityStamp);
-        }
-
-        public async Task CreateAsync(HqUser user)
-        {
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
-
-            unitOfWork.Session.Save(user);
-            await unitOfWork.Session.FlushAsync();
-        }
-
-        public async Task UpdateAsync(HqUser user)
-        {
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
-            await unitOfWork.Session.UpdateAsync(user);
         }
 
         public HqUser FindById(Guid userId)

@@ -17,23 +17,6 @@
 
   <ItemGroup>
     <EmbeddedResource Remove="Resources\Common.ar.resx" />
-    <EmbeddedResource Remove="Resources\Common.es.resx" />
-    <EmbeddedResource Remove="Resources\Common.fr.resx" />
-    <EmbeddedResource Remove="Resources\Common.ka.resx" />
-    <EmbeddedResource Remove="Resources\Common.pt.resx" />
-    <EmbeddedResource Remove="Resources\Common.ro.resx" />
-    <EmbeddedResource Remove="Resources\Common.ru.resx" />
-    <EmbeddedResource Remove="Resources\Common.sq.resx" />
-    <EmbeddedResource Remove="Resources\Common.zh.resx" />
-    <EmbeddedResource Remove="Resources\MainMenu.ar.resx" />
-    <EmbeddedResource Remove="Resources\MainMenu.es.resx" />
-    <EmbeddedResource Remove="Resources\MainMenu.fr.resx" />
-    <EmbeddedResource Remove="Resources\MainMenu.ka.resx" />
-    <EmbeddedResource Remove="Resources\MainMenu.pt.resx" />
-    <EmbeddedResource Remove="Resources\MainMenu.ro.resx" />
-    <EmbeddedResource Remove="Resources\MainMenu.ru.resx" />
-    <EmbeddedResource Remove="Resources\MainMenu.sq.resx" />
-    <EmbeddedResource Remove="Resources\MainMenu.zh.resx" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,55 +29,6 @@
     <Content Include="appsettings.ini" />
     <Content Include="Resources\Common.ar.resx">
       <DependentUpon>Common.resx</DependentUpon>
-    </Content>
-    <Content Include="Resources\Common.es.resx">
-      <DependentUpon>Common.resx</DependentUpon>
-    </Content>
-    <Content Include="Resources\Common.fr.resx">
-      <DependentUpon>Common.resx</DependentUpon>
-    </Content>
-    <Content Include="Resources\Common.ka.resx">
-      <DependentUpon>Common.resx</DependentUpon>
-    </Content>
-    <Content Include="Resources\Common.pt.resx">
-      <DependentUpon>Common.resx</DependentUpon>
-    </Content>
-    <Content Include="Resources\Common.ro.resx">
-      <DependentUpon>Common.resx</DependentUpon>
-    </Content>
-    <Content Include="Resources\Common.ru.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>Common.resx</DependentUpon>
-    </Content>
-    <Content Include="Resources\Common.sq.resx" />
-    <Content Include="Resources\Common.zh.resx">
-      <DependentUpon>Common.resx</DependentUpon>
-    </Content>
-    <Content Include="Resources\MainMenu.ar.resx">
-      <DependentUpon>MainMenu.resx</DependentUpon>
-    </Content>
-    <Content Include="Resources\MainMenu.es.resx">
-      <DependentUpon>MainMenu.resx</DependentUpon>
-    </Content>
-    <Content Include="Resources\MainMenu.fr.resx">
-      <DependentUpon>MainMenu.resx</DependentUpon>
-    </Content>
-    <Content Include="Resources\MainMenu.ka.resx">
-      <DependentUpon>MainMenu.resx</DependentUpon>
-    </Content>
-    <Content Include="Resources\MainMenu.pt.resx">
-      <DependentUpon>MainMenu.resx</DependentUpon>
-    </Content>
-    <Content Include="Resources\MainMenu.ro.resx">
-      <DependentUpon>MainMenu.resx</DependentUpon>
-    </Content>
-    <Content Include="Resources\MainMenu.ru.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>MainMenu.resx</DependentUpon>
-    </Content>
-    <Content Include="Resources\MainMenu.sq.resx" />
-    <Content Include="Resources\MainMenu.zh.resx">
-      <DependentUpon>MainMenu.resx</DependentUpon>
     </Content>
   </ItemGroup>
 
@@ -121,10 +55,32 @@
 
 
   <ItemGroup>
+    <EmbeddedResource Update="Resources\Common.es.resx">
+      <DependentUpon>Common.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Common.fr.resx">
+      <DependentUpon>Common.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Common.ka.resx">
+      <DependentUpon>Common.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Common.pt.resx">
+      <DependentUpon>Common.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Common.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Common.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Common.ro.resx">
+      <DependentUpon>Common.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Common.ru.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Common.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Common.zh.resx">
+      <DependentUpon>Common.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\FieldsAndValidations.ar.resx">
       <DependentUpon>FieldsAndValidations.resx</DependentUpon>
@@ -156,10 +112,35 @@
     <EmbeddedResource Update="Resources\FieldsAndValidations.zh.resx">
       <DependentUpon>FieldsAndValidations.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\MainMenu.ar.resx">
+      <DependentUpon>MainMenu.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\MainMenu.es.resx">
+      <DependentUpon>MainMenu.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\MainMenu.fr.resx">
+      <DependentUpon>MainMenu.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\MainMenu.ka.resx">
+      <DependentUpon>MainMenu.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\MainMenu.pt.resx">
+      <DependentUpon>MainMenu.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\MainMenu.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MainMenu.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\MainMenu.ro.resx">
+      <DependentUpon>MainMenu.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\MainMenu.ru.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>MainMenu.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\MainMenu.zh.resx">
+      <DependentUpon>MainMenu.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Pages.ar.resx">
       <DependentUpon>Pages.resx</DependentUpon>
@@ -193,10 +174,4 @@
       <DependentUpon>Pages.resx</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-
-
-  <ItemGroup>
-    <Folder Include="Data\" />
-  </ItemGroup>
-
 </Project>

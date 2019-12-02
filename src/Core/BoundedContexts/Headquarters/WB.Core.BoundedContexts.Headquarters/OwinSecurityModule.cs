@@ -20,8 +20,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IUserRepository, HqUserStore>();
 
             
-            registry.Bind<HqUserManager>();
-
             registry.Bind<IApiTokenProvider, ApiAuthTokenProvider>();
             registry.Bind<IAuthorizedUser, AuthorizedUser>();
         }
