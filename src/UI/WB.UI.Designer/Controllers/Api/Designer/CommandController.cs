@@ -295,7 +295,12 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             catch (InvalidExcelFileException e)
             {
                 this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
-                return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
+
+                var sb = new StringBuilder();
+                sb.AppendLine(e.Message);
+                e.FoundErrors?.ForEach(x => sb.AppendLine(x.Message));
+
+                return this.Error((int)HttpStatusCode.NotAcceptable, sb.ToString());
             }
 
             var commandResponse = this.ProcessCommand(command, commandType);
