@@ -29,6 +29,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
 
         public string TranslationId { get; set; }
 
+        [Indexed]
         public string CategoryId { get; set; }
     }
 }
