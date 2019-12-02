@@ -111,11 +111,15 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
                         var translationsWithHeaderMap = sheetsWithTranslation.Select(CreateHeaderMap).ToList();
 
-                        var translationErrors = this.Verify(translationsWithHeaderMap).Take(10).ToList();
+                        var questionnaire = this.questionnaireStorage.GetById(questionnaireId.FormatGuid());
+                        var categories = questionnaire.Categories?
+                                             .ToDictionary(x => $"{TranslationExcelOptions.OptionsWorksheetPreffix}{x.Name.ToLower()}".ToLower(), x => x.Id)
+                                         ?? new Dictionary<string, Guid>();
+
+                        var translationErrors = this.Verify(translationsWithHeaderMap, categories).Take(10).ToList();
                         if (translationErrors.Any())
                             throw new InvalidExcelFileException(ExceptionMessages.TranlationExcelFileHasErrors) { FoundErrors = translationErrors };
 
-                        var questionnaire = this.questionnaireStorage.GetById(questionnaireId.FormatGuid());
                         Dictionary<Guid, bool> idsOfAllQuestionnaireEntities =
                             questionnaire.Children.TreeToEnumerable(x => x.Children).ToDictionary(composite => composite.PublicKey, x=>x is Group);
 
@@ -123,6 +127,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                         foreach (var translationWithHeaderMap in translationsWithHeaderMap)
                         {
                             var worksheet = translationWithHeaderMap.Worksheet;
+                            var worksheetName = worksheet.Name.ToLower();
                             var end = worksheet.Dimension.End.Row;
 
                             for (int rowNumber = 2; rowNumber <= end; rowNumber++)
@@ -131,23 +136,13 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
                                 if (string.IsNullOrWhiteSpace(importedTranslation.Translation)) continue;
 
-                                var questionnaireEntityId = Guid.Parse(importedTranslation.EntityId);
-                                if (!idsOfAllQuestionnaireEntities.Keys.Contains(questionnaireEntityId)) continue;
+                                var translationInstance = categories.ContainsKey(worksheetName)
+                                    ? GetCategoriesTranslation(questionnaireId, translationId, categories,
+                                        worksheetName, importedTranslation)
+                                    : GetQuestionnaireTranslation(questionnaireId, translationId,
+                                        importedTranslation, idsOfAllQuestionnaireEntities);
 
-                                var translationType = (TranslationType) Enum.Parse(typeof(TranslationType), importedTranslation.Type);
-
-                                var cleanedValue = this.GetCleanedValue(translationType, idsOfAllQuestionnaireEntities[questionnaireEntityId], importedTranslation.Translation);
-
-                                var translationInstance = new TranslationInstance
-                                {
-                                    Id = Guid.NewGuid(),
-                                    QuestionnaireId = questionnaireId,
-                                    TranslationId = translationId,
-                                    QuestionnaireEntityId = questionnaireEntityId,
-                                    Value = cleanedValue,
-                                    TranslationIndex = importedTranslation.OptionValueOrValidationIndexOrFixedRosterId,
-                                    Type = translationType
-                                };
+                                if(translationInstance == null) continue;
 
                                 translationInstances.Add(translationInstance);
                             }
@@ -178,6 +173,42 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                     throw new InvalidExcelFileException(ExceptionMessages.TranslationsCantBeExtracted, e);
                 }
             }
+        }
+
+        private TranslationInstance GetCategoriesTranslation(Guid questionnaireId, Guid translationId,
+            Dictionary<string, Guid> categories, string worksheetName, TranslationRow importedTranslation) =>
+            new TranslationInstance
+            {
+                Id = Guid.NewGuid(),
+                QuestionnaireId = questionnaireId,
+                TranslationId = translationId,
+                QuestionnaireEntityId = categories[worksheetName],
+                Value = this.GetCleanedValue(TranslationType.Categories, false, importedTranslation.Translation),
+                TranslationIndex = importedTranslation.OptionValueOrValidationIndexOrFixedRosterId,
+                Type = TranslationType.Categories
+            };
+
+        private TranslationInstance GetQuestionnaireTranslation(Guid questionnaireId, Guid translationId, TranslationRow importedTranslation,
+            Dictionary<Guid, bool> idsOfAllQuestionnaireEntities)
+        {
+            var questionnaireEntityId = Guid.Parse(importedTranslation.EntityId);
+            if (!idsOfAllQuestionnaireEntities.Keys.Contains(questionnaireEntityId)) return null;
+
+            var translationType = (TranslationType) Enum.Parse(typeof(TranslationType), importedTranslation.Type);
+
+            var cleanedValue = this.GetCleanedValue(translationType, idsOfAllQuestionnaireEntities[questionnaireEntityId],
+                importedTranslation.Translation);
+
+            return new TranslationInstance
+            {
+                Id = Guid.NewGuid(),
+                QuestionnaireId = questionnaireId,
+                TranslationId = translationId,
+                QuestionnaireEntityId = questionnaireEntityId,
+                Value = cleanedValue,
+                TranslationIndex = importedTranslation.OptionValueOrValidationIndexOrFixedRosterId,
+                Type = translationType
+            };
         }
 
         private TranslationsWithHeaderMap CreateHeaderMap(ExcelWorksheet worksheet)
@@ -215,12 +246,17 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             }
         }
 
-        private IEnumerable<TranslationValidationError> Verify(IEnumerable<TranslationsWithHeaderMap> sheetsWithTranslation)
+        private IEnumerable<TranslationValidationError> Verify(
+            IEnumerable<TranslationsWithHeaderMap> sheetsWithTranslation, Dictionary<string, Guid> categories)
         {
             var errors = new List<TranslationValidationError>();
             foreach (var worksheet in sheetsWithTranslation)
             {
-                errors.AddRange(this.Verify(worksheet).Take(10).ToList());
+                var validationErrors = (categories.ContainsKey(worksheet.Worksheet.Name.ToLower())
+                    ? this.VerifyCategories(worksheet)
+                    : this.Verify(worksheet)).Take(10).ToList();
+
+                errors.AddRange(validationErrors);
                 if (errors.Count >= 10)
                     return errors;
             }
@@ -324,6 +360,46 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 }
 
                 if (translationTypesWithIndexes.Contains(importedType) && string.IsNullOrWhiteSpace(importedTranslation.OptionValueOrValidationIndexOrFixedRosterId))
+                {
+                    var cellAddress = $"{worksheetWithHeadersMap.OptionValueOrValidationIndexOrFixedRosterIdIndex}{rowNumber}";
+
+                    yield return new TranslationValidationError
+                    {
+                        Message = string.Format(ExceptionMessages.TranslationCellIndexIsInvalid, TranslationExcelOptions.TranslationTypeColumnName, cellAddress),
+                        ErrorAddress = cellAddress
+                    };
+                }
+            }
+        }
+
+        private IEnumerable<TranslationValidationError> VerifyCategories(TranslationsWithHeaderMap worksheetWithHeadersMap)
+        {
+            var worksheet = worksheetWithHeadersMap.Worksheet;
+            var end = worksheet.Dimension.End.Row;
+            
+            if (worksheetWithHeadersMap.OptionValueOrValidationIndexOrFixedRosterIdIndex == null)
+                yield return new TranslationValidationError
+                {
+                    Message = string.Format(ExceptionMessages.RequiredHeaderWasNotFound, TranslationExcelOptions.OptionValueOrValidationIndexOrFixedRosterIdIndexColumnName),
+                };
+            if (worksheetWithHeadersMap.TranslationIndex == null)
+                yield return new TranslationValidationError
+                {
+                    Message = string.Format(ExceptionMessages.RequiredHeaderWasNotFound, TranslationExcelOptions.TranslationTextColumnName),
+                };
+
+            if (worksheetWithHeadersMap.OptionValueOrValidationIndexOrFixedRosterIdIndex == null
+                || worksheetWithHeadersMap.TranslationIndex == null)
+            {
+                yield break;
+            }
+
+
+            for (int rowNumber = 2; rowNumber <= end; rowNumber++)
+            {
+                var importedTranslation = GetExcelTranslation(worksheetWithHeadersMap, rowNumber);
+
+                if (string.IsNullOrWhiteSpace(importedTranslation.OptionValueOrValidationIndexOrFixedRosterId))
                 {
                     var cellAddress = $"{worksheetWithHeadersMap.OptionValueOrValidationIndexOrFixedRosterIdIndex}{rowNumber}";
 
