@@ -46,6 +46,12 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
 
         public bool IsEmpty() => !this.translations.Any();
 
+        public string GetCategoriesText(Guid categoriesId, int id, int? parentId) =>
+            this.translations.ContainsKey(categoriesId)
+                ? this.translations[categoriesId].SingleOrDefault(x =>
+                    x.Type == TranslationType.Categories && x.TranslationIndex == $"{id}${parentId}")?.Value
+                : null;
+
         private string GetTranslationByTypeAndIndex(Guid questionId, string answerOptionValue, TranslationType translationType)
         {
             if (this.translations.ContainsKey(questionId))
