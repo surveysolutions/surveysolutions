@@ -6,8 +6,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Tests.Abc;
 
-
-
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
 {
     internal class when_hq_filtering_by_archived : UserViewFactoryTestContext
