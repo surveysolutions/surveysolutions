@@ -750,7 +750,7 @@
       <value>Табличный ростер может содержать только тестовые и числовые вопросы.</value>
       <comment>Табличный ростер может содержать только тестовые и числовые вопросы.</comment>
   </data>
-  <data name="WB0286_TableRosterWorksOnlyInWebMode" xml:space="preserve">
+  <data name="WB0286_TableAndMatixRosterWorksOnlyInWebMode" xml:space="preserve">
       <value>Табличное представление доступно только в web режиме, на плпншетах это будет обычный режим.</value>
       <comment>Табличное представление доступно только в web режиме, на плпншетах это будет обычный режим.</comment>
   </data>
@@ -761,5 +761,14 @@
   <data name="WB0288_ValueAndTitleNumbersIsNotEquals" xml:space="preserve">
       <value>Заголовок {1} и код {0} числовые и отличается значениями</value>
       <comment>Заголовок {1} и код {0} числовые и отличается значениями</comment>
+  </data>
+  <data name="WB0290_MatrixRosterAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+      <value>Матричное представление может содержать не больше чем {0} вопросов.</value>
+  </data>
+  <data name="WB0289_MatrixRosterContainsOnlyAllowedQuestionTypes" xml:space="preserve">
+      <value>Матричное представление может содержать только категориальные не каскадные и не списковые вопросы.</value>
+  </data>
+  <data name="WB0291_MatrixRosterHasToContainNoSupervisorQuestions" xml:space="preserve">
+    <value>Матричное представление ростера не может содержать вопросы для супервизора.</value>
   </data>
 </root>
