@@ -159,7 +159,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         }
 
         [Test]
-        public void should_doesnt_allow_supervisor_questions_in_table_roster()
+        public void should_not_allow_supervisor_questions_in_table_roster()
         {
             Create.QuestionnaireDocumentWithOneChapter(
                     Create.NumericIntegerQuestion(id: Id.g1),
@@ -236,6 +236,85 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                         })
                 )
                 .ExpectError("WB0287");
+        }
+
+        [TestCase(QuestionType.Area)]
+        [TestCase(QuestionType.Audio)]
+        [TestCase(QuestionType.DateTime)]
+        [TestCase(QuestionType.GpsCoordinates)]
+        [TestCase(QuestionType.Multimedia)]
+        [TestCase(QuestionType.Numeric)]
+        [TestCase(QuestionType.QRBarcode)]
+        [TestCase(QuestionType.Text)]
+        [TestCase(QuestionType.TextList)]
+        public void should_allow_only_categorical_questions_in_matrix_roster(QuestionType questionType)
+        {
+            Create.QuestionnaireDocumentWithOneChapter(
+                    Create.NumericIntegerQuestion(id: Id.g1),
+                    Create.NumericRoster(rosterId: Id.g2, rosterSizeQuestionId: Id.g1, displayMode: RosterDisplayMode.Matrix,
+                        children: new IComposite[]
+                        {
+                            Create.Question(questionType: questionType),
+                        })
+                )
+                .ExpectError("WB0289");
+        }
+
+        [Test]
+        public void should_show_warning_on_matrix_roster()
+        {
+            Create.QuestionnaireDocumentWithOneChapter(
+                    Create.NumericIntegerQuestion(id: Id.g1),
+                    Create.NumericRoster(rosterId: Id.g2, rosterSizeQuestionId: Id.g1, displayMode: RosterDisplayMode.Matrix,
+                        children: new IComposite[]
+                        {
+                            Create.Question(),
+                        })
+                )
+                .ExpectWarning("WB0286");
+        }
+
+        [Test]
+        public void should_not_allow_supervisor_questions_in_matrix_roster()
+        {
+            Create.QuestionnaireDocumentWithOneChapter(
+                    Create.NumericIntegerQuestion(id: Id.g1),
+                    Create.NumericRoster(rosterId: Id.g2, rosterSizeQuestionId: Id.g1, displayMode: RosterDisplayMode.Matrix,
+                        children: new IComposite[]
+                        {
+                            Create.Question(scope: QuestionScope.Supervisor),
+                        })
+                )
+                .ExpectError("WB0291");
+        }
+
+        [Test]
+        public void should_not_allow_static_text_in_matrix_roster()
+        {
+            Create.QuestionnaireDocumentWithOneChapter(
+                Create.NumericIntegerQuestion(id: Id.g1),
+                Create.NumericRoster(rosterId: Id.g2, rosterSizeQuestionId: Id.g1, displayMode: RosterDisplayMode.Matrix,
+                    children: new IComposite[]
+                    {
+                        Create.StaticText()
+                    })
+                )
+                .ExpectError("WB0289");
+        }
+
+        [Test]
+        public void should_allow_only_1_questions_in_Matrix_roster()
+        {
+            Create.QuestionnaireDocumentWithOneChapter(
+                    Create.NumericIntegerQuestion(id: Id.g1),
+                    Create.NumericRoster(rosterId: Id.g2, rosterSizeQuestionId: Id.g1, displayMode: RosterDisplayMode.Matrix,
+                        children: new IComposite[]
+                        {
+                            Create.Question(),
+                            Create.Question()
+                        })
+                )
+                .ExpectError("WB0290");
         }
     }
 }
