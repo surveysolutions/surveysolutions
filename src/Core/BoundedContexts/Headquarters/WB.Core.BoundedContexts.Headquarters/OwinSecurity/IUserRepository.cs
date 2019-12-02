@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -17,8 +18,8 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         Task<string> GetSecurityStampAsync(HqUser user);
         Task CreateAsync(HqUser user);
         Task UpdateAsync(HqUser user);
-        Task<HqUser> FindByIdAsync(Guid userId);
-        Task<HqUser> FindByNameAsync(string userName);
+        Task<HqUser> FindByIdAsync(Guid userId, CancellationToken cancellationToken = new CancellationToken());
+        Task<HqUser> FindByNameAsync(string userName, CancellationToken cancellationToken = new CancellationToken());
         HqUser FindById(Guid userId);
         Task SetPasswordHashAsync(HqUser user, string hash);
         Task SetSecurityStampAsync(HqUser user, string newSecurityStamp);

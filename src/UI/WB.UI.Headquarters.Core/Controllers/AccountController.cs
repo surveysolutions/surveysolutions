@@ -1,14 +1,15 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Resources;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Designer.CommonWeb;
 using WB.UI.Headquarters.Models.CompanyLogo;
 using WB.UI.Shared.Web.Captcha;
-    
+
 namespace WB.UI.Headquarters.Controllers
 {
     public class AccountController : Controller
@@ -16,7 +17,18 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IPlainKeyValueStorage<CompanyLogo> appSettingsStorage;
         private readonly ICaptchaService captchaService;
         private readonly ICaptchaProvider captchaProvider;
-        private readonly HqSignInManager signInManager;
+        private readonly SignInManager<HqUser> signInManager;
+
+        public AccountController(IPlainKeyValueStorage<CompanyLogo> appSettingsStorage, 
+            ICaptchaService captchaService,
+            ICaptchaProvider captchaProvider,
+            SignInManager<HqUser> signInManager)
+        {
+            this.appSettingsStorage = appSettingsStorage;
+            this.captchaService = captchaService;
+            this.captchaProvider = captchaProvider;
+            this.signInManager = signInManager;
+        }
 
         [HttpGet]
         public IActionResult LogOn(string returnUrl)
@@ -50,22 +62,24 @@ namespace WB.UI.Headquarters.Controllers
                 return View(model);
             }
 
-            var signInResult = await this.signInManager.SignInAsync(model.UserName, model.Password, isPersistent: true);
-            switch (signInResult)
+            var signInResult = await this.signInManager.PasswordSignInAsync(model.UserName, model.Password, true, false);
+            if (signInResult.Succeeded)
             {
-                case SignInStatus.Success:
-                    this.captchaService.ResetFailedLogin(model.UserName);
-                    return Redirect(returnUrl);
-                case SignInStatus.LockedOut:
-                    this.captchaService.ResetFailedLogin(model.UserName);
-                    this.ModelState.AddModelError("LockedOut", ErrorMessages.SiteAccessNotAllowed);
-                    return View(model);
-                default:
-                    this.captchaService.RegisterFailedLogin(model.UserName);
-                    model.RequireCaptcha = this.captchaService.ShouldShowCaptcha(model.UserName);
-                    this.ModelState.AddModelError("InvalidCredentials", ErrorMessages.IncorrectUserNameOrPassword);
-                    return View(model);
+                this.captchaService.ResetFailedLogin(model.UserName);
+                return Redirect(returnUrl);
             }
+
+            if (signInResult.IsLockedOut)
+            {
+                this.captchaService.ResetFailedLogin(model.UserName);
+                this.ModelState.AddModelError("LockedOut", ErrorMessages.SiteAccessNotAllowed);
+                return View(model);
+            }
+
+            this.captchaService.RegisterFailedLogin(model.UserName);
+            model.RequireCaptcha = this.captchaService.ShouldShowCaptcha(model.UserName);
+            this.ModelState.AddModelError("InvalidCredentials", ErrorMessages.IncorrectUserNameOrPassword);
+            return View(model);
         }
 
         public IActionResult LogOff()
