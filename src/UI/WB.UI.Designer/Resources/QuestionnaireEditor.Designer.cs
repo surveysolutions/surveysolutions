@@ -907,7 +907,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to By default, a disabled item is greyed-out. Checking this option will hide a disabled question or section on a tablet..
+        ///   Looks up a localized string similar to By default, a disabled item is grayed-out. Checking this option will hide a disabled question or section on a tablet..
         /// </summary>
         public static string HelpHideIfDisabled {
             get {
@@ -972,7 +972,9 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Sub-Section - the questions of the roster are shown behind the buttons corresponding to roster instances.
         ///Flat - the questions of the roster are shown in the same level separated by headers corresponding to roster instances.
-        ///Table - the questions of the roster are shown in the same level as rows and columns of the table. Supported only in Web survey, tablet falls back to &apos;Sub-Section&apos; mode..
+        ///Table - the questions of the roster are shown in the same level as rows and columns of the table. 
+        ///Matrix - a categorical question of the roster is displayed as matrix. 
+        ///Table and Matrix views are supported only in Web survey, tablet falls back to &apos;Sub-Section&apos; mode..
         /// </summary>
         public static string HelpRosterDisplayMode {
             get {
@@ -2003,6 +2005,15 @@ namespace WB.UI.Designer.Resources {
         public static string RosterDisplayMode_Flat {
             get {
                 return ResourceManager.GetString("RosterDisplayMode_Flat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Matrix.
+        /// </summary>
+        public static string RosterDisplayMode_Matrix {
+            get {
+                return ResourceManager.GetString("RosterDisplayMode_Matrix", resourceCulture);
             }
         }
         

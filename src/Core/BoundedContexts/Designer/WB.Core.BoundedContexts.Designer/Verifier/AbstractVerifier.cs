@@ -51,6 +51,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         protected const int MaxQuestionsCountInSection = 400;
         protected const int MaxEntitiesInPlainModeGroup = 10;
         protected const int MaxEntitiesInTableRoster = 10;
+        protected const int MaxEntitiesInMatrixRoster = 1;
 
         public const string VariableRegularExpression = "^(?!.*[_]{2})[A-Za-z][_A-Za-z0-9]*(?<!_)$";
         public static readonly Regex VariableNameRegex = new Regex(VariableRegularExpression);
