@@ -56,13 +56,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             var serializedQuestionnaireDocument = this.synchronizationSerializer.Deserialize<QuestionnaireDocument>(questionnaireDocument);
             serializedQuestionnaireDocument.ParseCategoricalQuestionOptions();
 
+            optionsRepository.RemoveOptionsForQuestionnaire(questionnaireIdentity);
+
             foreach (var reusableCategoryDto in reusableCategoriesDtos)
             {
                 var categoryTranslations = translationDtos.Where(x => x.QuestionnaireEntityId == reusableCategoryDto.Id).ToList();
                 this.optionsRepository.StoreOptionsForCategory(questionnaireIdentity, reusableCategoryDto.Id, reusableCategoryDto.Options, categoryTranslations);
             }
-
-            optionsRepository.RemoveOptionsForQuestionnaire(questionnaireIdentity);
 
             var questionsWithLongOptionsList = serializedQuestionnaireDocument.Find<ICategoricalQuestion>(
                 x => x.CascadeFromQuestionId.HasValue || (x.IsFilteredCombobox ?? false)).ToList();
