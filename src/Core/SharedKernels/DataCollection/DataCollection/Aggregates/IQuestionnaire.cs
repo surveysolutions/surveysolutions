@@ -77,6 +77,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool DoesSupportReusableCategories(Guid questionId);
 
+        Guid? GetReusableCategoriesForQuestion(Guid questionId);
+
         CategoricalOption GetOptionForQuestionByOptionText(Guid questionId, string optionText, int? parentQuestionValue);
 
         CategoricalOption GetOptionForQuestionByOptionValue(Guid questionId, decimal optionValue);
