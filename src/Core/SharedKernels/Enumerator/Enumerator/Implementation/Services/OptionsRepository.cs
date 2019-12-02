@@ -306,7 +306,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             {
                 AnswerText = a.Text,
                 ParentCode = a.ParentId,
-                AnswerCode = a.Id
+                AnswerCode = a.Id,
+                AnswerValue = a.Id.ToString()
             }).ToList();
             StoreOptionsImpl(questionnaireIdentity, null, categoryId, answers, translations);
         }
@@ -353,7 +354,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 optionsToSave.Add(optionView);
 
                 var translatedOptions = translations.Where(x => (x.QuestionnaireEntityId == questionId || x.QuestionnaireEntityId == categoryId)
-                                                                && x.TranslationIndex == option.AnswerCode.ToString()
+                                                                && x.TranslationIndex == option.AnswerValue
                                                                 && x.Type == TranslationType.OptionTitle)
                     .Select(y => new OptionView
                     {
