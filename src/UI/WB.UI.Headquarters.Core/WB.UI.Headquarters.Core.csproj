@@ -8,11 +8,7 @@
   </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.0.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.0.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.0.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.0.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.0.0" />
+        <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="5.0.1" />
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="3.0.0" />
@@ -25,7 +21,6 @@
     <EmbeddedResource Remove="Resources\Common.fr.resx" />
     <EmbeddedResource Remove="Resources\Common.ka.resx" />
     <EmbeddedResource Remove="Resources\Common.pt.resx" />
-    <EmbeddedResource Remove="Resources\Common.resx" />
     <EmbeddedResource Remove="Resources\Common.ro.resx" />
     <EmbeddedResource Remove="Resources\Common.ru.resx" />
     <EmbeddedResource Remove="Resources\Common.sq.resx" />
@@ -35,7 +30,6 @@
     <EmbeddedResource Remove="Resources\MainMenu.fr.resx" />
     <EmbeddedResource Remove="Resources\MainMenu.ka.resx" />
     <EmbeddedResource Remove="Resources\MainMenu.pt.resx" />
-    <EmbeddedResource Remove="Resources\MainMenu.resx" />
     <EmbeddedResource Remove="Resources\MainMenu.ro.resx" />
     <EmbeddedResource Remove="Resources\MainMenu.ru.resx" />
     <EmbeddedResource Remove="Resources\MainMenu.sq.resx" />
@@ -65,11 +59,6 @@
     <Content Include="Resources\Common.pt.resx">
       <DependentUpon>Common.resx</DependentUpon>
     </Content>
-    <Content Include="Resources\Common.resx">
-      <SubType>Designer</SubType>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Common.Designer.cs</LastGenOutput>
-    </Content>
     <Content Include="Resources\Common.ro.resx">
       <DependentUpon>Common.resx</DependentUpon>
     </Content>
@@ -96,11 +85,6 @@
     <Content Include="Resources\MainMenu.pt.resx">
       <DependentUpon>MainMenu.resx</DependentUpon>
     </Content>
-    <Content Include="Resources\MainMenu.resx">
-      <SubType>Designer</SubType>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>MainMenu.Designer.cs</LastGenOutput>
-    </Content>
     <Content Include="Resources\MainMenu.ro.resx">
       <DependentUpon>MainMenu.resx</DependentUpon>
     </Content>
@@ -117,25 +101,16 @@
 
     <ItemGroup>
     <ProjectReference Include="..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\WB.Persistence.Headquarters\WB.Persistence.Headquarters.csproj" />
     <ProjectReference Include="..\Shared\WB.UI.Shared.Web.Core\WB.UI.Shared.Web.Core.csproj" />
   </ItemGroup>
 
 
   <ItemGroup>
-    <Compile Update="Resources\Common.designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Common.resx</DependentUpon>
-    </Compile>
     <Compile Update="Resources\FieldsAndValidations.Designer.cs">
       <DependentUpon>FieldsAndValidations.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\MainMenu.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>MainMenu.resx</DependentUpon>
     </Compile>
     <Compile Update="Resources\Pages.Designer.cs">
       <DependentUpon>Pages.resx</DependentUpon>
@@ -146,6 +121,11 @@
 
 
   <ItemGroup>
+    <EmbeddedResource Update="Resources\Common.resx">
+      <SubType>Designer</SubType>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Common.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\FieldsAndValidations.ar.resx">
       <DependentUpon>FieldsAndValidations.resx</DependentUpon>
     </EmbeddedResource>
@@ -175,6 +155,11 @@
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\FieldsAndValidations.zh.resx">
       <DependentUpon>FieldsAndValidations.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\MainMenu.resx">
+      <SubType>Designer</SubType>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MainMenu.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Pages.ar.resx">
       <DependentUpon>Pages.resx</DependentUpon>
@@ -207,6 +192,11 @@
     <EmbeddedResource Update="Resources\Pages.zh.resx">
       <DependentUpon>Pages.resx</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="Data\" />
   </ItemGroup>
 
 </Project>

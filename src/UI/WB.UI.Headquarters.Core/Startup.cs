@@ -1,17 +1,29 @@
 using System.Collections.Generic;
 using System.Globalization;
+using System.Reflection;
 using Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WB.Core.BoundedContexts.Headquarters;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Infrastructure.Native.Logging;
+using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Persistence.Headquarters.Migrations.Logs;
+using WB.Persistence.Headquarters.Migrations.PlainStore;
+using WB.Persistence.Headquarters.Migrations.ReadSide;
+using WB.Persistence.Headquarters.Migrations.Users;
+using WB.UI.Designer.CommonWeb;
+using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Versions;
 
 namespace WB.UI.Headquarters
@@ -34,11 +46,30 @@ namespace WB.UI.Headquarters
         public void ConfigureContainer(ContainerBuilder builder)
         {
             autofacKernel = new AutofacKernel(builder);
+
+            var mappingAssemblies = new List<Assembly> {typeof(HeadquartersBoundedContextModule).Assembly};
+            var unitOfWorkConnectionSettings = new UnitOfWorkConnectionSettings
+            {
+                ConnectionString = Configuration.GetConnectionString("DefaultConnection"),
+                ReadSideMappingAssemblies = mappingAssemblies,
+                PlainStorageSchemaName = "plainstore",
+                PlainMappingAssemblies = new List<Assembly>
+                {
+                    typeof(HeadquartersBoundedContextModule).Assembly,
+                    typeof(ProductVersionModule).Assembly,
+                },
+                PlainStoreUpgradeSettings = new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_Init).Namespace),
+                ReadSideUpgradeSettings = new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_InitDb).Namespace),
+                LogsUpgradeSettings = new DbUpgradeSettings(typeof(M201905171139_AddErrorsTable).Assembly, typeof(M201905171139_AddErrorsTable).Namespace),
+                UsersUpgradeSettings = DbUpgradeSettings.FromFirstMigration<M001_AddUsersHqIdentityModel>()
+            };
+
             autofacKernel.Load(
                 new NcqrsModule(),
                 new NLogLoggingModule(),
                 new InfrastructureModuleMobile(),
                 new DataCollectionSharedKernelModule(),
+                new OrmModule(unitOfWorkConnectionSettings),
                 //new CaptchaModule("recaptcha"),
                 new ProductVersionModule(typeof(Startup).Assembly));
         }
@@ -61,6 +92,14 @@ namespace WB.UI.Headquarters
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            services.AddIdentity<HqUser, HqRole>()
+                .AddUserStore<HqUserStore>()
+                .AddRoleStore<HqRoleStore>()
+                .AddUserManager<UserManager<HqUser>>();
+
+            services.AddTransient<ICaptchaService, WebCacheBasedCaptchaService>();
+            services.AddTransient<ICaptchaProvider, NoCaptchaProvider>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -69,7 +108,6 @@ namespace WB.UI.Headquarters
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
             }
             else
             {
