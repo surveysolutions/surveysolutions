@@ -242,7 +242,7 @@ namespace WB.Infrastructure.Native.Questionnaire
                 {
                     OriginalText = x.Text,
                     Translation = translation.GetCategoriesText(categories.Id, x.Id, x.ParentId),
-                    OptionValueOrValidationIndexOrFixedRosterId = x.Id.ToString(),
+                    OptionValueOrValidationIndexOrFixedRosterId = $"{x.Id}${x.ParentId}",
                     Sheet = $"{TranslationExcelOptions.OptionsWorksheetPreffix}{categories.Name}"
                 });
         }
