@@ -6,14 +6,16 @@ using System.Security.Authentication;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Identity;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.GenericSubdomains.Portable;
+using PasswordVerificationResult = WB.Core.GenericSubdomains.Portable.PasswordVerificationResult;
 
 namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 {
-    public class HqUserManager : IDisposable
+    public class HqUserManager :
+        IDisposable
     {
         /// <summary>
         ///     If true, will enable user lockout when users are created
