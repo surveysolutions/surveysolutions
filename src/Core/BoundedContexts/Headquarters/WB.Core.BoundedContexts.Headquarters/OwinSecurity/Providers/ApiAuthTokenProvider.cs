@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
+using PasswordVerificationResult = WB.Core.GenericSubdomains.Portable.PasswordVerificationResult;
 
 namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity.Providers
 {
@@ -11,16 +14,20 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity.Providers
     /// </summary>
     public class ApiAuthTokenProvider: IApiTokenProvider
     {
-        private readonly HqUserManager manager;
-        public ApiAuthTokenProvider(HqUserManager userManager)
+        private readonly IPasswordHasher passwordHasher;
+        private readonly UserManager<HqUser> manager;
+        public ApiAuthTokenProvider(IPasswordHasher passwordHasher,
+            UserManager<HqUser> userManager)
         {
+            this.passwordHasher = passwordHasher;
             this.manager = userManager;
         }
 
         public async Task<string> GenerateTokenAsync(Guid userId)
         {
-            var securityStamp = await this.manager.GetSecurityStampAsync(userId);
-            return this.manager.PasswordHasher.Hash(securityStamp); 
+            var user = await this.manager.FindByIdAsync(userId.FormatGuid());
+            var securityStamp = await this.manager.GetSecurityStampAsync(user);
+            return passwordHasher.Hash(securityStamp); 
         }
 
         private static readonly ConcurrentDictionary<(string stamp, string token), bool> HashCache 
@@ -28,12 +35,13 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity.Providers
 
         public async Task<bool> ValidateTokenAsync(Guid userId, string token)
         {
-            var securityStamp = await this.manager.GetSecurityStampAsync(userId);
+            var user = await this.manager.FindByIdAsync(userId.FormatGuid());
+            var securityStamp = await this.manager.GetSecurityStampAsync(user);
 
             if(HashCache.Count > 100_000) HashCache.Clear();
 
             return HashCache.GetOrAdd((securityStamp, token), 
-                t => this.manager.PasswordHasher.VerifyPassword(t.token, t.stamp) == PasswordVerificationResult.Success);
+                t => passwordHasher.VerifyPassword(t.token, t.stamp) == PasswordVerificationResult.Success);
         }
     }
 }
