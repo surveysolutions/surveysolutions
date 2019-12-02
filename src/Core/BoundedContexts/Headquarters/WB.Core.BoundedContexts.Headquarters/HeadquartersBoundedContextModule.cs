@@ -90,6 +90,7 @@ using System;
 using System.Net.Http.Headers;
 using System.Text;
 using WB.Core.BoundedContexts.Headquarters.Designer;
+using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters
 {   
@@ -200,8 +201,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAllUsersAndQuestionnairesFactory, AllUsersAndQuestionnairesFactory>();
             registry.Bind<IQuestionnairePreloadingDataViewFactory, QuestionnairePreloadingDataViewFactory>();
             registry.Bind<ITeamViewFactory, TeamViewFactory>();
-            registry.BindToMethod<IUserViewFactory>(context => 
-                new UserViewFactory(context.Resolve<IUserRepository>(), context.Resolve<IMemoryCache>()));
+            registry.Bind<IUserViewFactory, UserViewFactory>();
 
             registry.Bind<ITeamUsersAndQuestionnairesFactory, TeamUsersAndQuestionnairesFactory>();
             registry.Bind<IInterviewFactory, InterviewFactory>();

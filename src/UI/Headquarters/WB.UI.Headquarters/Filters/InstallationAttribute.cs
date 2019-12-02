@@ -26,7 +26,7 @@ namespace WB.UI.Headquarters.Filters
 
             var isInstallController = filterContext.Controller is InstallController;
             var adminRole = UserRoles.Administrator.ToUserId();
-            Installed = this.userRepository.Users.Any(user => user.Roles.Any(role => role.RoleId == adminRole));
+            Installed = this.userRepository.Users.Any(user => user.Roles.Any(role => role.Id== adminRole));
 
             if (isInstallController && Installed)
                 throw new HttpException(404, string.Empty);
