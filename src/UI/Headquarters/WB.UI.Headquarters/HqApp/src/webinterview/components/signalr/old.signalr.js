@@ -29,12 +29,16 @@ function Connector(store, interviewId, connected) {
             }
         }
 
+        function stop() {
+            hub.connection.stop()
+        }
+
         if (!Vue.hasOwnProperty("$api")) {
             Vue.$api = {}
         }
 
         Object.defineProperty(Vue.$api, "hub", {
-            get() { return { changeSection } }
+            get() { return { changeSection, stop } }
         })
 
         $script(config.signalrPath, signalrScriptLoaded);
