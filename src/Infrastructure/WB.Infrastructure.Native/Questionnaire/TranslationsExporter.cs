@@ -8,13 +8,22 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using OfficeOpenXml;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Infrastructure.Native.Questionnaire
 {
     public class TranslationsExportService : ITranslationsExportService
     {
+        private readonly ICategoriesService categoriesService;
+
+        public TranslationsExportService(ICategoriesService categoriesService)
+        {
+            this.categoriesService = categoriesService;
+        }
+
         private class TranslationRow
         {
             public string EntityId { get; set; }
@@ -168,6 +177,12 @@ namespace WB.Infrastructure.Native.Questionnaire
                     foreach (var translatedRosterTitle in GetTranslatedRosterTitles(group, translation))
                         yield return translatedRosterTitle;
             }
+
+            foreach (var categories in questionnaire.Categories)
+            {
+                foreach (var translatedOption in GetTranslatedOptions(categories, translation))
+                    yield return translatedOption;
+            }
         }
 
         private static TranslationRow GetTranslatedTitle(IComposite entity, ITranslation translation) => new TranslationRow
@@ -218,6 +233,18 @@ namespace WB.Infrastructure.Native.Questionnaire
                     OptionValueOrValidationIndexOrFixedRosterId = option.AnswerValue,
                     Sheet = isLongOptionsList ? $"{TranslationExcelOptions.OptionsWorksheetPreffix}{question.StataExportCaption}" : TranslationExcelOptions.WorksheetName
                 };
+        }
+
+        private IEnumerable<TranslationRow> GetTranslatedOptions(Categories categories, ITranslation translation)
+        {
+            return this.categoriesService.GetCategoriesById(categories.Id).Select(x =>
+                new TranslationRow
+                {
+                    OriginalText = x.Text,
+                    Translation = translation.GetCategoriesText(categories.Id, x.Id, x.ParentId),
+                    OptionValueOrValidationIndexOrFixedRosterId = x.Id.ToString(),
+                    Sheet = $"{TranslationExcelOptions.OptionsWorksheetPreffix}{categories.Name}"
+                });
         }
 
         private static IEnumerable<TranslationRow> GetTranslatedRosterTitles(IGroup group, ITranslation translation)
