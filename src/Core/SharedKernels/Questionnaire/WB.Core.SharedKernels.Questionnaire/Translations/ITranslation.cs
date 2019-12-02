@@ -12,5 +12,7 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
         string GetValidationMessage(Guid entityId, int validationOneBasedIndex);
         string GetFixedRosterTitle(Guid rosterId, decimal fixedRosterTitleValue);
         bool IsEmpty();
+
+        string GetCategoriesText(Guid categoriesId, int id, int? parentId);
     }
 }
