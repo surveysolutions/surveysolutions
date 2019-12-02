@@ -28,7 +28,7 @@ namespace WB.UI.Headquarters.Controllers
 {
     [LimitsFilter]
     [AuthorizeOr403(Roles = "Administrator, Headquarter")]
-    [Filters.ObserverNotAllowed]
+    [ObserverNotAllowed]
     [WebInterviewFeatureEnabled]
     public class WebInterviewSetupController : BaseController
     {

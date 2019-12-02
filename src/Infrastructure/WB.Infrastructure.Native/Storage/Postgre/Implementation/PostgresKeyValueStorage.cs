@@ -21,7 +21,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         static ConcurrentDictionary<Type, string> _tableNamesMap = new ConcurrentDictionary<Type, string>();
             
-
         public PostgresKeyValueStorage(string connectionString, string schemaName, ILogger logger, IEntitySerializer<TEntity> serializer)
         {
             this.connectionString = connectionString;
