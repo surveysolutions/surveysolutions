@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.UI.Headquarters.API.Filters;
 
 namespace WB.UI.Headquarters.API.Export
@@ -25,8 +26,7 @@ namespace WB.UI.Headquarters.API.Export
         {
             var userId = Guid.Parse(id);
             var userModel = this.userRepository.Users
-                .Where(user => user.Id == userId)
-                .SingleOrDefault();
+                .SingleOrDefault(user => user.Id == userId);
 
             if (userModel == null)
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, $"User with id {id} not found");
@@ -35,7 +35,7 @@ namespace WB.UI.Headquarters.API.Export
             {
                 Id = userModel.Id,
                 UserName = userModel.UserName,
-                Roles = userModel.Roles.Select(r => r.Role.ToString()).ToArray()
+                Roles = userModel.Roles.Select(r => r.Id.ToUserRole()).ToArray()
             });
         }
     }

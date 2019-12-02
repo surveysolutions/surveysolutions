@@ -193,5 +193,10 @@ namespace WB.Core.GenericSubdomains.Portable
         {
             return Int32.TryParse(value, out var result) ? result : @default;
         }
+
+        public static string WrapInQuote(this string value)
+        {
+            return '"' + value + '"';
+        }
     }
 }
