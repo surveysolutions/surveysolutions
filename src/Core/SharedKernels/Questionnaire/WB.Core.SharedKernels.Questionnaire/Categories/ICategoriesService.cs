@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace WB.Core.SharedKernels.Questionnaire.Categories
@@ -11,7 +10,7 @@ namespace WB.Core.SharedKernels.Questionnaire.Categories
 
         void Store(Guid questionnaireId, Guid categoriesId, byte[] fileBytes);
         byte[] GetTemplateAsExcelFile();
-        IQueryable<CategoriesItem> GetCategoriesById(Guid id);
+        IQueryable<CategoriesItem> GetCategoriesById(Guid questionnaireId, Guid id);
         CategoriesFile GetAsExcelFile(Guid questionnaireId, Guid categoriesId);
     }
 }
