@@ -31,7 +31,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersionService;
         private readonly ITopologicalSorter<Guid> topologicalSorter;
         private readonly IExpressionsPlayOrderProvider graphProvider;
-        private readonly ICategoriesService categoriesService;
 
 
         public QuestionnaireVerifier(IExpressionProcessor expressionProcessor, 
@@ -58,7 +57,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             this.questionnaireCompilationVersionService = questionnaireCompilationVersionService;
             this.topologicalSorter = topologicalSorter;
             this.graphProvider = graphProvider;
-            this.categoriesService = categoriesService;
 
             verifiers = new IPartialVerifier[]
             {

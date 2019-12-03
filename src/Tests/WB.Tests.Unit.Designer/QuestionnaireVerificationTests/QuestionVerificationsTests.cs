@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using NHibernate.Collection.Generic;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Verifier;
 using WB.Core.GenericSubdomains.Portable;
