@@ -1391,7 +1391,8 @@ namespace WB.Tests.Unit.Designer
             => new TranslationsService(
                 dbContext ?? Create.InMemoryDbContext(),
                 questionnaireStorage ?? Stub<IPlainKeyValueStorage<QuestionnaireDocument>>.Returning(Create.QuestionnaireDocument()),
-                new TranslationsExportService()
+                new TranslationsExportService(),
+                Mock.Of<ICategoriesService>()
             );
 
 
