@@ -70,6 +70,7 @@ namespace WB.UI.Headquarters
                 new InfrastructureModuleMobile(),
                 new DataCollectionSharedKernelModule(),
                 new OrmModule(unitOfWorkConnectionSettings),
+                new OwinSecurityModule(),
                 //new CaptchaModule("recaptcha"),
                 new ProductVersionModule(typeof(Startup).Assembly));
         }
@@ -95,8 +96,7 @@ namespace WB.UI.Headquarters
 
             services.AddIdentity<HqUser, HqRole>()
                 .AddUserStore<HqUserStore>()
-                .AddRoleStore<HqRoleStore>()
-                .AddUserManager<UserManager<HqUser>>();
+                .AddRoleStore<HqRoleStore>();
 
             services.AddTransient<ICaptchaService, WebCacheBasedCaptchaService>();
             services.AddTransient<ICaptchaProvider, NoCaptchaProvider>();

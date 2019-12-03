@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading;
@@ -12,79 +11,13 @@ using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 {
-    public class HqRoleStore : IRoleStore<HqRole>
-    {
-        private readonly IUnitOfWork uow;
-
-        public HqRoleStore(IUnitOfWork uow)
-        {
-            this.uow = uow;
-        }
-
-        public void Dispose()
-        {
-        }
-
-        public Task<Microsoft.AspNetCore.Identity.IdentityResult> CreateAsync(HqRole role, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Microsoft.AspNetCore.Identity.IdentityResult> UpdateAsync(HqRole role, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Microsoft.AspNetCore.Identity.IdentityResult> DeleteAsync(HqRole role, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<string> GetRoleIdAsync(HqRole role, CancellationToken cancellationToken)
-        {
-            return Task.FromResult(role.Id.ToString("N"));
-        }
-
-        public Task<string> GetRoleNameAsync(HqRole role, CancellationToken cancellationToken)
-        {
-            return Task.FromResult(role.Name);
-        }
-
-        public Task SetRoleNameAsync(HqRole role, string roleName, CancellationToken cancellationToken)
-        {
-            role.Name = roleName;
-            return Task.CompletedTask;
-        }
-
-        public Task<string> GetNormalizedRoleNameAsync(HqRole role, CancellationToken cancellationToken)
-        {
-            return Task.FromResult(role.Name.ToUpper());
-        }
-
-        public Task SetNormalizedRoleNameAsync(HqRole role, string normalizedName, CancellationToken cancellationToken)
-        {
-            return Task.CompletedTask;
-        }
-
-        public Task<HqRole> FindByIdAsync(string roleId, CancellationToken cancellationToken)
-        {
-            return uow.Session.GetAsync<HqRole>(Guid.Parse(roleId), cancellationToken);
-        }
-
-        public Task<HqRole> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
-        {
-            return uow.Session.QueryOver<HqRole>().WhereRestrictionOn(x => x.Name)
-                .IsInsensitiveLike(normalizedRoleName).SingleOrDefaultAsync(cancellationToken);
-        }
-    }
-
-    public class HqUserStore : 
+    public class HqUserStore :
         UserStoreBase<HqUser, Guid, HqUserClaim, HqUserLogin, HqUserToken>,
         IUserRepository
     {
         private readonly IUnitOfWork unitOfWork;
 
-        public HqUserStore(IUnitOfWork unitOfWork, IdentityErrorDescriber describer) : base (describer)
+        public HqUserStore(IUnitOfWork unitOfWork, IdentityErrorDescriber describer) : base(describer)
         {
             this.unitOfWork = unitOfWork;
         }
@@ -110,12 +43,12 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 
         public override Task<HqUser> FindByIdAsync(string userId, CancellationToken cancellationToken = new CancellationToken())
         {
-            return this.unitOfWork.Session.GetAsync<HqUser>(Guid.Parse(userId), cancellationToken);
+            return FindByIdAsync(Guid.Parse(userId), cancellationToken);
         }
 
         public Task<HqUser> FindByIdAsync(Guid userId, CancellationToken cancellationToken = new CancellationToken())
         {
-            return this.FindByIdAsync(userId.ToString("N"), cancellationToken);
+            return this.unitOfWork.Session.GetAsync<HqUser>(userId, cancellationToken);
         }
 
         public override async Task<HqUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken = new CancellationToken())
@@ -147,7 +80,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 
         public override Task<IList<Claim>> GetClaimsAsync(HqUser user, CancellationToken cancellationToken = new CancellationToken())
         {
-            return Task.FromResult(user.Claims.ToList() as IList<Claim>);
+            return Task.FromResult((IList<Claim>)Array.Empty<Claim>());
         }
 
         public override Task AddClaimsAsync(HqUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken = new CancellationToken())
