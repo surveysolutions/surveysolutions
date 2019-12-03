@@ -9,6 +9,7 @@ using OfficeOpenXml;
 using WB.Core.BoundedContexts.Designer.Commands;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Resources;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Categories;
@@ -71,23 +72,21 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         }
 
         public TranslationFile GetAsExcelFile(Guid questionnaireId, Guid translationId) =>
-            this.GetTranslationFileWithSpecifiedFormat(questionnaireId, translationId);
+            this.GetTranslationFile(questionnaireId, translationId);
 
         public TranslationFile GetTemplateAsExcelFile(Guid questionnaireId) =>
-            this.GetTemplateFileWithSpecifiedFormat(questionnaireId);
+            this.GetTranslationFile(questionnaireId);
 
-        private TranslationFile GetTranslationFileWithSpecifiedFormat(Guid questionnaireId, Guid translationId)
+        private TranslationFile GetTranslationFile(Guid questionnaireId, Guid? translationId = null)
         {
             var questionnaire = this.questionnaireStorage.GetById(questionnaireId.FormatGuid());
-            var translation = this.Get(questionnaireId, translationId);
-            return translationsExportService.GenerateTranslationFile(questionnaire, translationId, translation);
-        }
+            var translation = translationId.HasValue
+                ? this.Get(questionnaireId, translationId.Value)
+                : new QuestionnaireTranslation(new List<TranslationDto>());
 
-        private TranslationFile GetTemplateFileWithSpecifiedFormat(Guid questionnaireId)
-        {
-            var questionnaire = this.questionnaireStorage.GetById(questionnaireId.FormatGuid());
-            var translation = new QuestionnaireTranslation(new List<TranslationDto>());
-            return translationsExportService.GenerateTranslationFile(questionnaire, Guid.Empty, translation);
+            var categoriesService = new CategoriesService(questionnaireId, this.categoriesService);
+
+            return translationsExportService.GenerateTranslationFile(questionnaire, translationId ?? Guid.Empty, translation, categoriesService);
         }
 
         public void Store(Guid questionnaireId, Guid translationId, byte[] excelRepresentation)
@@ -414,6 +413,21 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                     };
                 }
             }
+        }
+
+        private class CategoriesService : ICategories
+        {
+            private readonly Guid questionnaireId;
+            private readonly ICategoriesService categoriesService;
+
+            public CategoriesService(Guid questionnaireId, ICategoriesService categoriesService)
+            {
+                this.questionnaireId = questionnaireId;
+                this.categoriesService = categoriesService;
+            }
+
+            public List<CategoriesItem> GetCategories(Guid categoriesId) =>
+                this.categoriesService.GetCategoriesById(questionnaireId, categoriesId).ToList();
         }
     }
 }
