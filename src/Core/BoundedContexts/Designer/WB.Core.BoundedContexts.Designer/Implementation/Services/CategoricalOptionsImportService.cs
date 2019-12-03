@@ -54,7 +54,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                         question.CascadeFromQuestionId.Value));
 
                 if ((parentCascadingQuestion.CategoriesId.HasValue && 
-                    !this.categoriesService.GetCategoriesById(parentCascadingQuestion.CategoriesId.Value).Any()) || parentCascadingQuestion.Answers.Count == 0)
+                    !this.categoriesService.GetCategoriesById(document.PublicKey, parentCascadingQuestion.CategoriesId.Value).Any()) || parentCascadingQuestion.Answers.Count == 0)
                 {
                     return ImportCategoricalOptionsResult.Failed(
                         string.Format(ExceptionMessages.NoParentCascadingOptions, parentCascadingQuestion.VariableName));

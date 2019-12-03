@@ -131,7 +131,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 {
                     Id = x.Id,
                     Name = x.Name,
-                    Items = this.categoriesService.GetCategoriesById(x.Id).Select(y => new PdfQuestionnaireModel.CategoriesItem
+                    Items = this.categoriesService.GetCategoriesById(questionnaire.PublicKey, x.Id).Select(y => new PdfQuestionnaireModel.CategoriesItem
                     {
                         Id = y.Id,
                         ParentId = y.ParentId,

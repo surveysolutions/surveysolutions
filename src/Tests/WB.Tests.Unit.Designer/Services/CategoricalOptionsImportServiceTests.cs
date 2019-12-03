@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.Designer.Services
                 });
 
             var categoriesService = Mock.Of<ICategoriesService>(x =>
-                x.GetCategoriesById(categoriesId) == Array.Empty<CategoriesItem>().AsQueryable());
+                x.GetCategoriesById(It.IsAny<Guid>(), categoriesId) == Array.Empty<CategoriesItem>().AsQueryable());
 
             var service = Create.CategoricalOptionsImportService(questionnaire, categoriesService);
 
