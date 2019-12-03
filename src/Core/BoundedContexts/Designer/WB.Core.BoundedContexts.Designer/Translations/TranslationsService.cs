@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.BoundedContexts.Designer.Translations
@@ -45,14 +46,17 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         private readonly DesignerDbContext dbContext;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
         private readonly ITranslationsExportService translationsExportService;
-        
+        private readonly ICategoriesService categoriesService;
+
         public TranslationsService(DesignerDbContext dbContext,
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
-            ITranslationsExportService translationsExportService)
+            ITranslationsExportService translationsExportService,
+            ICategoriesService categoriesService)
         {
             this.dbContext = dbContext;
             this.questionnaireStorage = questionnaireStorage;
             this.translationsExportService = translationsExportService;
+            this.categoriesService = categoriesService;
         }
 
         public ITranslation Get(Guid questionnaireId, Guid translationId)
@@ -76,7 +80,8 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         {
             var questionnaire = this.questionnaireStorage.GetById(questionnaireId.FormatGuid());
             var translation = this.Get(questionnaireId, translationId);
-            return translationsExportService.GenerateTranslationFile(questionnaire, translationId, translation);
+            var categories = GetCategoriesItems(questionnaire);
+            return translationsExportService.GenerateTranslationFile(questionnaire, translationId, translation, categories);
         }
 
         private TranslationFile GetTemplateFileWithSpecifiedFormat(Guid questionnaireId)
@@ -84,6 +89,16 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             var questionnaire = this.questionnaireStorage.GetById(questionnaireId.FormatGuid());
             var translation = new QuestionnaireTranslation(new List<TranslationDto>());
             return translationsExportService.GenerateTranslationFile(questionnaire, Guid.Empty, translation);
+        }
+
+        private List<CategoriesItem> GetCategoriesItems(QuestionnaireDocument questionnaire)
+        {
+            List<CategoriesItem> options = new List<CategoriesItem>();
+            foreach (var category in questionnaire.Categories)
+            {
+                categoriesService.GetCategoriesById(category.Id).Where(ci => ci.)
+            }
+
         }
 
         public void Store(Guid questionnaireId, Guid translationId, byte[] excelRepresentation)

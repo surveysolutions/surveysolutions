@@ -121,10 +121,13 @@ namespace WB.UI.Headquarters.Services
                     var translations = this.translationManagementService.GetAll(questionnaireIdentity, translation.Id);
 
                     if(translations == null) continue;
-                    
+
+                    reusableCategoriesStorage.GetOptions(questionnaireIdentity, )
+
                     var translationFile = this.translationsExportService.GenerateTranslationFile(questionnaire,
                         translation.Id,
-                        new QuestionnaireTranslation(translations));
+                        new QuestionnaireTranslation(translations),
+                        categoriesItems);
 
                     PutEntry($"Translations/{translation.Id}.xlsx", translationFile.ContentAsExcelFile);
                 }
