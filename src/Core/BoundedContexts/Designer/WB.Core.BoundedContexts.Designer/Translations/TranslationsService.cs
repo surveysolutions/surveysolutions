@@ -80,8 +80,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         {
             var questionnaire = this.questionnaireStorage.GetById(questionnaireId.FormatGuid());
             var translation = this.Get(questionnaireId, translationId);
-            var categories = GetCategoriesItems(questionnaire);
-            return translationsExportService.GenerateTranslationFile(questionnaire, translationId, translation, categories);
+            return translationsExportService.GenerateTranslationFile(questionnaire, translationId, translation);
         }
 
         private TranslationFile GetTemplateFileWithSpecifiedFormat(Guid questionnaireId)
@@ -89,16 +88,6 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             var questionnaire = this.questionnaireStorage.GetById(questionnaireId.FormatGuid());
             var translation = new QuestionnaireTranslation(new List<TranslationDto>());
             return translationsExportService.GenerateTranslationFile(questionnaire, Guid.Empty, translation);
-        }
-
-        private List<CategoriesItem> GetCategoriesItems(QuestionnaireDocument questionnaire)
-        {
-            List<CategoriesItem> options = new List<CategoriesItem>();
-            foreach (var category in questionnaire.Categories)
-            {
-                categoriesService.GetCategoriesById(category.Id).Where(ci => ci.)
-            }
-
         }
 
         public void Store(Guid questionnaireId, Guid translationId, byte[] excelRepresentation)

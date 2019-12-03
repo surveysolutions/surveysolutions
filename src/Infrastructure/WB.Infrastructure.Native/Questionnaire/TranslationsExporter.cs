@@ -28,25 +28,24 @@ namespace WB.Infrastructure.Native.Questionnaire
             public string Sheet { get; set; } = TranslationExcelOptions.WorksheetName;
         }
         
-        public TranslationFile GenerateTranslationFile(QuestionnaireDocument questionnaire, Guid translationId, ITranslation translation, List<CategoriesItem> categoriesItems)
+        public TranslationFile GenerateTranslationFile(QuestionnaireDocument questionnaire, Guid translationId, ITranslation translation, ICategories categories)
         {
             var translationFile = new TranslationFile
             {
                 QuestionnaireTitle = questionnaire.Title,
                 TranslationName = questionnaire.Translations.FirstOrDefault(x => x.Id == translationId)?.Name ?? string.Empty,
                 ContentAsExcelFile = this.GetExcelFileContentEEPlus(questionnaire, 
-                    translation ?? new QuestionnaireTranslation(new List<TranslationDto>()), 
-                    categoriesItems ?? new List<CategoriesItem>())
+                    translation ?? new QuestionnaireTranslation(new List<TranslationDto>()),  categories)
             };
 
             return translationFile;
         }
         
-        private byte[] GetExcelFileContentEEPlus(QuestionnaireDocument questionnaire, ITranslation translation, List<CategoriesItem> categoriesItems)
+        private byte[] GetExcelFileContentEEPlus(QuestionnaireDocument questionnaire, ITranslation translation, ICategories categories)
         {
             using (ExcelPackage excelPackage = new ExcelPackage())
             {
-                var textsToTranslateGroupedBySheets = GetTranslatedTexts(questionnaire, translation, categoriesItems)
+                var textsToTranslateGroupedBySheets = GetTranslatedTexts(questionnaire, translation, categories)
                     .OrderByDescending(x => x.Sheet)
                     .GroupBy(x => x.Sheet)
                     .ToDictionary(x => x.Key, x => x.ToList());
@@ -145,7 +144,7 @@ namespace WB.Infrastructure.Native.Questionnaire
             worksheet.Column(i).AutoFit();
         }
 
-        private IEnumerable<TranslationRow> GetTranslatedTexts(QuestionnaireDocument questionnaire, ITranslation translation, List<CategoriesItem> categoriesItems)
+        private IEnumerable<TranslationRow> GetTranslatedTexts(QuestionnaireDocument questionnaire, ITranslation translation, ICategories categoriesService)
         {
             foreach (var entity in questionnaire.Children.TreeToEnumerable(x => x.Children))
             {
@@ -175,8 +174,7 @@ namespace WB.Infrastructure.Native.Questionnaire
 
             foreach (var categories in questionnaire.Categories)
             {
-                var items = categoriesItems.Where(c => c.Id == categories.Id);
-                foreach (var translatedOption in GetTranslatedOptions(translation, items))
+                foreach (var translatedOption in GetTranslatedOptions(questionnaire.PublicKey, categories, translation, categoriesService))
                     yield return translatedOption;
             }
         }
@@ -231,9 +229,8 @@ namespace WB.Infrastructure.Native.Questionnaire
                 };
         }
 
-        private IEnumerable<TranslationRow> GetTranslatedOptions(Categories categories, ITranslation translation, List<CategoriesItem> categoriesItems)
-        {
-            return categoriesItems.Select(x =>
+        private IEnumerable<TranslationRow> GetTranslatedOptions(Guid questionnaireId, Categories categories, ITranslation translation, ICategories categoriesService) =>
+            categoriesService.GetCategories(questionnaireId, categories.Id).Select(x =>
                 new TranslationRow
                 {
                     OriginalText = x.Text,
@@ -241,7 +238,6 @@ namespace WB.Infrastructure.Native.Questionnaire
                     OptionValueOrValidationIndexOrFixedRosterId = $"{x.Id}${x.ParentId}",
                     Sheet = $"{TranslationExcelOptions.OptionsWorksheetPreffix}{categories.Name}"
                 });
-        }
 
         private static IEnumerable<TranslationRow> GetTranslatedRosterTitles(IGroup group, ITranslation translation)
             => from fixedRoster in @group.FixedRosterTitles
