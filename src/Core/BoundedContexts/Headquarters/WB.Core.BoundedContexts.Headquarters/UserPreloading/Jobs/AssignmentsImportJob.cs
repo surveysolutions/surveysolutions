@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
 
                 var allAssignmentIds = assignmentsImportService.GetAllAssignmentIdsToImport();
                 
-                if (importProcessStatus?.ProcessStatus != AssignmentsImportProcessStatus.Import)
+                if (importProcessStatus.ProcessStatus != AssignmentsImportProcessStatus.Import)
                     return;
 
                 Guid responsibleId;
@@ -57,7 +57,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                 using (var userManager = serviceLocator.GetInstance<HqUserManager>())
                 {
                     responsibleId = (await userManager
-                        .FindByNameAsync(importProcessStatus.ResponsibleName)).Id;
+                        .FindByNameAsync(importProcessStatus.ResponsibleName).ConfigureAwait(false)).Id;
                 }
 
                 this.logger.Debug("Assignments import job: Started");
