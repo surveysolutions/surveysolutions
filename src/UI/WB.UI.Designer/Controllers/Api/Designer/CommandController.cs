@@ -372,7 +372,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
             await dbContext.SaveChangesAsync();
 
-            var storedCategoriesCount = this.categoriesService.GetCategoriesById(command.CategoriesId).Count();
+            var storedCategoriesCount = this.categoriesService.GetCategoriesById(command.QuestionnaireId, command.CategoriesId).Count();
 
             var resultMessage = storedCategoriesCount == 1
                 ? string.Format(QuestionnaireEditor.CategoriesObtained, storedCategoriesCount)

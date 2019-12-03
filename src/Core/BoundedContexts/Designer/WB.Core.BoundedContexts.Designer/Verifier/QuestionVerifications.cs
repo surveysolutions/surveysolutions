@@ -463,7 +463,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         }
 
         private bool SpecialValuesMustBeUniqueForNumericlQuestion(INumericQuestion question, MultiLanguageQuestionnaireDocument questionnaire) 
-            => OptionsHaveUniqueValues(question);
+            => OptionsHaveUniqueValues(question, questionnaire.PublicKey);
 
         private static bool SpecialValuesCountMoreThanMaxOptionCount(INumericQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
@@ -667,7 +667,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             }
             else if(categoricalQuestion.CategoriesId.HasValue && !parentQuestion.CategoriesId.HasValue)
             {
-                var categories = this.categoriesService.GetCategoriesById(categoricalQuestion.CategoriesId.Value)
+                var categories = this.categoriesService.GetCategoriesById(document.PublicKey, categoricalQuestion.CategoriesId.Value)
                     .Select(x => new {x.Id, x.ParentId}).ToList();
 
                 hasErrors = !categories.All(childAnswer =>
@@ -676,7 +676,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             }
             else if(!categoricalQuestion.CategoriesId.HasValue && parentQuestion.CategoriesId.HasValue)
             {
-                var parentCategories = this.categoriesService.GetCategoriesById(parentQuestion.CategoriesId.Value)
+                var parentCategories = this.categoriesService.GetCategoriesById(document.PublicKey, parentQuestion.CategoriesId.Value)
                     .Select(x => new {x.Id, x.ParentId}).ToList();
 
                 hasErrors = !question.Answers.All(childAnswer =>
@@ -684,8 +684,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             }
             else
             {
-                var categories = this.categoriesService.GetCategoriesById(categoricalQuestion.CategoriesId.Value);
-                var parentCategories = this.categoriesService.GetCategoriesById(parentQuestion.CategoriesId.Value);
+                var categories = this.categoriesService.GetCategoriesById(document.PublicKey, categoricalQuestion.CategoriesId.Value);
+                var parentCategories = this.categoriesService.GetCategoriesById(document.PublicKey, parentQuestion.CategoriesId.Value);
 
                 hasErrors = parentCategories.GroupJoin(categories, item => item.Id, item => item.ParentId,
                     (pc, c) => c).Any(x => !x.Any());
@@ -715,7 +715,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             if (questionnaire.Questionnaire.IsFilteredComboboxQuestion(question)) return false;
 
             if (question.CategoriesId.HasValue)
-                return this.categoriesService.GetCategoriesById(question.CategoriesId.Value).Count() > MaxOptionsCountInCategoricalOptionQuestion;
+                return this.categoriesService.GetCategoriesById(questionnaire.PublicKey, question.CategoriesId.Value).Count() > MaxOptionsCountInCategoricalOptionQuestion;
 
             return question.Answers?.Count > MaxOptionsCountInCategoricalOptionQuestion;
         }
@@ -730,7 +730,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         }
 
         private bool SpecialValueTitlesMustBeUnique(INumericQuestion question, 
-            MultiLanguageQuestionnaireDocument questionnaire) => HasUniqueOptionTitles(question);
+            MultiLanguageQuestionnaireDocument questionnaire) => HasUniqueOptionTitles(question, questionnaire.PublicKey);
 
         private bool OptionTitlesMustBeUniqueForCategoricalQuestion(IQuestion question,
             MultiLanguageQuestionnaireDocument questionnaire)
@@ -741,14 +741,14 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             if (question.CascadeFromQuestionId.HasValue) 
                 return false;
 
-            return HasUniqueOptionTitles(question);
+            return HasUniqueOptionTitles(question, questionnaire.PublicKey);
         }
 
-        private bool HasUniqueOptionTitles(IQuestion question)
+        private bool HasUniqueOptionTitles(IQuestion question, Guid questionnaireId)
         {
             if (question is ICategoricalQuestion categoriesQuestion && categoriesQuestion.CategoriesId.HasValue)
             {
-                return this.categoriesService.GetCategoriesById(categoriesQuestion.CategoriesId.Value)
+                return this.categoriesService.GetCategoriesById(questionnaireId, categoriesQuestion.CategoriesId.Value)
                     .Where(x => x.Text != null)
                     .GroupBy(x => x.Text.Trim())
                     .Any(x => x.Count() > 1);
@@ -763,7 +763,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private bool OptionValuesMustBeUniqueForCategoricalQuestion(ICategoricalQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (!question.CascadeFromQuestionId.HasValue)
-                return OptionsHaveUniqueValues(question);
+                return OptionsHaveUniqueValues(question, questionnaire.PublicKey);
 
             if (CascadingHasCircularReference((SingleQuestion) question, questionnaire).HasErrors) return false;
 
@@ -780,10 +780,10 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 parentQuestionId = cascadingQuestion.CascadeFromQuestionId;
             }
 
-            if (parentQuestions.Count == 0) return OptionsHaveUniqueValues(question);
+            if (parentQuestions.Count == 0) return OptionsHaveUniqueValues(question, questionnaire.PublicKey);
 
             var categories = question.CategoriesId.HasValue
-                ? this.categoriesService.GetCategoriesById(question.CategoriesId.Value).Select(x => new {x.Id, x.ParentId}).ToList()
+                ? this.categoriesService.GetCategoriesById(questionnaire.PublicKey, question.CategoriesId.Value).Select(x => new {x.Id, x.ParentId}).ToList()
                 : question.Answers.Select(x => new {Id = (int) x.GetParsedValue(), ParentId = x.GetParsedParentValue()}).ToList();
 
             foreach (var questionAnswer in categories)
@@ -799,7 +799,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     var lastParentId = valueAndParentValues?.LastOrDefault();
 
                     parsedParentValue = parentQuestion.CategoriesId.HasValue
-                        ? this.categoriesService.GetCategoriesById(parentQuestion.CategoriesId.Value).FirstOrDefault(x => x.Id == lastParentId)?.ParentId
+                        ? this.categoriesService.GetCategoriesById(questionnaire.PublicKey, parentQuestion.CategoriesId.Value).FirstOrDefault(x => x.Id == lastParentId)?.ParentId
                         : parentQuestion.Answers.Find(x => (int) x.GetParsedValue() == lastParentId)?.GetParsedParentValue();
 
                     if (parsedParentValue.HasValue)
@@ -818,11 +818,11 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             public int GetHashCode(int[] obj) => obj.Aggregate(0, (current, i) => current ^ i.GetHashCode());
         }
 
-        private bool OptionsHaveUniqueValues(IQuestion question)
+        private bool OptionsHaveUniqueValues(IQuestion question, Guid questionnaireId)
         {
             if (question is ICategoricalQuestion categoriesQuestion && categoriesQuestion.CategoriesId.HasValue)
             {
-                return this.categoriesService.GetCategoriesById(categoriesQuestion.CategoriesId.Value)
+                return this.categoriesService.GetCategoriesById(questionnaireId, categoriesQuestion.CategoriesId.Value)
                     .GroupBy(x => x.Id)
                     .Any(x => x.Count() > 1);
             }
@@ -857,7 +857,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             if (question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue) return false;
 
             if (question.CategoriesId.HasValue)
-                return question.MaxAllowedAnswers.Value > this.categoriesService.GetCategoriesById(question.CategoriesId.Value).Count();
+                return question.MaxAllowedAnswers.Value > this.categoriesService.GetCategoriesById(questionnaire.PublicKey, question.CategoriesId.Value).Count();
 
             return (question.MaxAllowedAnswers.Value > question.Answers.Count);
         }

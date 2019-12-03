@@ -97,8 +97,8 @@ namespace WB.Core.BoundedContexts.Designer.Services
             return categoriesExportService.GetAsExcelFile(items);
         }
 
-        public IQueryable<CategoriesItem> GetCategoriesById(Guid id) =>
-            this.dbContext.CategoriesInstances.Where(x => x.CategoriesId == id).Select(x => new CategoriesItem
+        public IQueryable<CategoriesItem> GetCategoriesById(Guid questionnaireId, Guid id) =>
+            this.dbContext.CategoriesInstances.Where(x => x.QuestionnaireId == questionnaireId && x.CategoriesId == id).Select(x => new CategoriesItem
             {
                 Id = x.Id,
                 ParentId = x.ParentId,

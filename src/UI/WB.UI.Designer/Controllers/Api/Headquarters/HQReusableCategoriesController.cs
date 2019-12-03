@@ -24,7 +24,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
         [Route("{id}/{categoryId}")]
         public IActionResult Get(Guid id, Guid categoryId)
         {
-            var categories = this.categoriesService.GetCategoriesById(categoryId);
+            var categories = this.categoriesService.GetCategoriesById(id, categoryId);
             if (categories == null) return NotFound();
 
             var result = JsonConvert.SerializeObject(categories, Formatting.None, new JsonSerializerSettings
