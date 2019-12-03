@@ -5,6 +5,6 @@ namespace WB.Core.SharedKernels.Questionnaire.Categories
 {
     public interface ICategories
     {
-        List<CategoriesItem> GetCategories(Guid questionnaireId, Guid categoriesId);
+        List<CategoriesItem> GetCategories(Guid categoriesId);
     }
 }
