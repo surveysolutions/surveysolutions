@@ -17,13 +17,6 @@ namespace WB.Infrastructure.Native.Questionnaire
 {
     public class TranslationsExportService : ITranslationsExportService
     {
-        private readonly ICategoriesService categoriesService;
-
-        public TranslationsExportService(ICategoriesService categoriesService)
-        {
-            this.categoriesService = categoriesService;
-        }
-
         private class TranslationRow
         {
             public string EntityId { get; set; }
@@ -35,23 +28,25 @@ namespace WB.Infrastructure.Native.Questionnaire
             public string Sheet { get; set; } = TranslationExcelOptions.WorksheetName;
         }
         
-        public TranslationFile GenerateTranslationFile(QuestionnaireDocument questionnaire, Guid translationId, ITranslation translation = null)
+        public TranslationFile GenerateTranslationFile(QuestionnaireDocument questionnaire, Guid translationId, ITranslation translation, List<CategoriesItem> categoriesItems)
         {
             var translationFile = new TranslationFile
             {
                 QuestionnaireTitle = questionnaire.Title,
                 TranslationName = questionnaire.Translations.FirstOrDefault(x => x.Id == translationId)?.Name ?? string.Empty,
-                ContentAsExcelFile = this.GetExcelFileContentEEPlus(questionnaire, translation ?? new QuestionnaireTranslation(new List<TranslationDto>()))
+                ContentAsExcelFile = this.GetExcelFileContentEEPlus(questionnaire, 
+                    translation ?? new QuestionnaireTranslation(new List<TranslationDto>()), 
+                    categoriesItems ?? new List<CategoriesItem>())
             };
 
             return translationFile;
         }
         
-        private byte[] GetExcelFileContentEEPlus(QuestionnaireDocument questionnaire, ITranslation translation)
+        private byte[] GetExcelFileContentEEPlus(QuestionnaireDocument questionnaire, ITranslation translation, List<CategoriesItem> categoriesItems)
         {
             using (ExcelPackage excelPackage = new ExcelPackage())
             {
-                var textsToTranslateGroupedBySheets = GetTranlsatedTexts(questionnaire, translation)
+                var textsToTranslateGroupedBySheets = GetTranslatedTexts(questionnaire, translation, categoriesItems)
                     .OrderByDescending(x => x.Sheet)
                     .GroupBy(x => x.Sheet)
                     .ToDictionary(x => x.Key, x => x.ToList());
@@ -150,7 +145,7 @@ namespace WB.Infrastructure.Native.Questionnaire
             worksheet.Column(i).AutoFit();
         }
 
-        private IEnumerable<TranslationRow> GetTranlsatedTexts(QuestionnaireDocument questionnaire, ITranslation translation)
+        private IEnumerable<TranslationRow> GetTranslatedTexts(QuestionnaireDocument questionnaire, ITranslation translation, List<CategoriesItem> categoriesItems)
         {
             foreach (var entity in questionnaire.Children.TreeToEnumerable(x => x.Children))
             {
@@ -180,7 +175,8 @@ namespace WB.Infrastructure.Native.Questionnaire
 
             foreach (var categories in questionnaire.Categories)
             {
-                foreach (var translatedOption in GetTranslatedOptions(categories, translation))
+                var items = categoriesItems.Where(c => c.Id == categories.Id);
+                foreach (var translatedOption in GetTranslatedOptions(translation, items))
                     yield return translatedOption;
             }
         }
@@ -235,9 +231,9 @@ namespace WB.Infrastructure.Native.Questionnaire
                 };
         }
 
-        private IEnumerable<TranslationRow> GetTranslatedOptions(Categories categories, ITranslation translation)
+        private IEnumerable<TranslationRow> GetTranslatedOptions(Categories categories, ITranslation translation, List<CategoriesItem> categoriesItems)
         {
-            return this.categoriesService.GetCategoriesById(categories.Id).Select(x =>
+            return categoriesItems.Select(x =>
                 new TranslationRow
                 {
                     OriginalText = x.Text,
