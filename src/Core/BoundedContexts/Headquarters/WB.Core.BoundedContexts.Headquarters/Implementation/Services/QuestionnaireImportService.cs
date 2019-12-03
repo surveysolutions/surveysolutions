@@ -22,6 +22,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Synchronization.Designer;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Enumerator.Native.Questionnaire;
@@ -167,11 +168,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     {
                         this.logger.Debug($"Loading reusable category for questionnaire {questionnaireId}. Category id {category.Id}");
                         var reusableCategories = await this.designerApi.GetReusableCategories(questionnaire.PublicKey, category.Id);
-                        var categoricalOptions = reusableCategories.Select(o => new CategoricalOption()
+                        var categoricalOptions = reusableCategories.Select(o => new CategoriesItem()
                         {
-                            ParentValue = o.ParentId,
-                            Title = o.Text,
-                            Value = o.Id
+                            ParentId = o.ParentId,
+                            Text = o.Text,
+                            Id = o.Id
                         }).ToList();
                         reusableCategoriesStorage.Store(questionnaireIdentity, category.Id, categoricalOptions);
                     }

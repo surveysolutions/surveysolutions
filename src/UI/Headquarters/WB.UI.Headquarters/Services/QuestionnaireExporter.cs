@@ -6,6 +6,7 @@ using System.Text;
 using Ionic.Zlib;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
+using WB.Core.BoundedContexts.Headquarters.ReusableCategories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -124,7 +125,8 @@ namespace WB.UI.Headquarters.Services
 
                     var translationFile = this.translationsExportService.GenerateTranslationFile(questionnaire,
                         translation.Id,
-                        new QuestionnaireTranslation(translations));
+                        new QuestionnaireTranslation(translations),
+                        new QuestionnaireReusableCategoriesAccessor(questionnaireIdentity, reusableCategoriesStorage));
 
                     PutEntry($"Translations/{translation.Id}.xlsx", translationFile.ContentAsExcelFile);
                 }
@@ -134,13 +136,7 @@ namespace WB.UI.Headquarters.Services
                     var categories = this.reusableCategoriesStorage.GetOptions(questionnaireIdentity, category.Id);
                     if(categories == null) continue;
 
-                    var categoriesItems = categories.Select(c => new CategoriesItem()
-                    {
-                        Id = c.Value,
-                        ParentId = c.ParentValue,
-                        Text = c.Title
-                    });
-                    var bytes = this.reusableCategoriesExporter.GetAsExcelFile(categoriesItems);
+                    var bytes = this.reusableCategoriesExporter.GetAsExcelFile(categories);
                     PutEntry($"Categories/{category.Id.FormatGuid()}.xlsx", bytes);
                 }
             }

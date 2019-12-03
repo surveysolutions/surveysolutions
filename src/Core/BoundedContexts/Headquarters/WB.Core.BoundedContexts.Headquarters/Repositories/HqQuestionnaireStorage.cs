@@ -122,9 +122,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
                         var options = reusableCategoriesStorage.GetOptions(identity, question.CategoriesId.Value);
                         question.Answers = options.Select(o => new Answer()
                         {
-                            AnswerText = o.Title,
-                            AnswerCode = o.Value,
-                            ParentCode = o.ParentValue
+                            AnswerText = o.Text,
+                            AnswerCode = o.Id,
+                            ParentCode = o.ParentId
                         }).ToList();
                     }
                 }

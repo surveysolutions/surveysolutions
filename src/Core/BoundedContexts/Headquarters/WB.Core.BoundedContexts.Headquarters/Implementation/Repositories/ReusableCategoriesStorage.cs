@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Infrastructure.Native.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
             this.storageAccessor = storageAccessor;
         }
 
-        public IEnumerable<CategoricalOption> GetOptions(QuestionnaireIdentity questionnaireIdentity, Guid categoriesId)
+        public IEnumerable<CategoriesItem> GetOptions(QuestionnaireIdentity questionnaireIdentity, Guid categoriesId)
         {
             var categoricalOptions = this.storageAccessor
                 .Query(t =>
@@ -26,11 +26,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
                                            && categoricalOption.QuestionnaireId.Version == questionnaireIdentity.Version
                                            && categoricalOption.CategoriesId == categoriesId)
                     .OrderBy(o => o.SortIndex)
-                    .Select(co => new CategoricalOption()
+                    .Select(co => new CategoriesItem()
                         {
-                            ParentValue = co.ParentValue,
-                            Title = co.Text,
-                            Value = co.Value
+                            ParentId = co.ParentValue,
+                            Text = co.Text,
+                            Id = co.Value
                         })
                     .ToList()
                 );
@@ -38,16 +38,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
             return categoricalOptions;
         }
 
-        public void Store(QuestionnaireIdentity questionnaireIdentity, Guid categoryId, List<CategoricalOption> reusableCategories)
+        public void Store(QuestionnaireIdentity questionnaireIdentity, Guid categoryId, List<CategoriesItem> reusableCategories)
         {
             var enumerable = reusableCategories.Select((option, index) => new ReusableCategoricalOptions()
             {
                 CategoriesId = categoryId,
                 QuestionnaireId = questionnaireIdentity,
                 SortIndex = index,
-                ParentValue = option.ParentValue,
-                Text = option.Title,
-                Value = option.Value
+                ParentValue = option.ParentId,
+                Text = option.Text,
+                Value = option.Id
             }).Select(x => Tuple.Create(x, (object)x));
 
             this.storageAccessor.Store(enumerable);
