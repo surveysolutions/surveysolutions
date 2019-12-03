@@ -1,7 +1,8 @@
 using System;
 using System.Linq;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 
-namespace WB.Core.SharedKernels.Questionnaire.Categories
+namespace WB.Core.BoundedContexts.Designer.Services
 {
     public interface ICategoriesService
     {

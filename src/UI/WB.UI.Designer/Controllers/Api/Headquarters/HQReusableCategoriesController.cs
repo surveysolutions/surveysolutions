@@ -3,6 +3,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.UI.Designer.Code.Attributes;
 
