@@ -75,9 +75,11 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
 
         private async Task CreateUserOrUnarchiveAndUpdateAsync(UserToImport userToCreate)
         {
-            using(var userManager = serviceLocator.GetInstance<UserManager<HqUser>>())
+            using (var userManager = serviceLocator.GetInstance<UserManager<HqUser>>())
             {
+                var userRepository = serviceLocator.GetInstance<IUserRepository>();
                 var user = await userManager.FindByNameAsync(userToCreate.Login);
+
                 if (user == null)
                 {
                     Guid? supervisorId = null;
@@ -85,7 +87,8 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                     if (!string.IsNullOrEmpty(userToCreate.Supervisor))
                         supervisorId = (await userManager.FindByNameAsync(userToCreate.Supervisor))?.Id;
 
-                    await userManager.CreateAsync(new HqUser
+                    var role = userRepository.FindRole(userToCreate.UserRole.ToUserId());
+                    var hqUser = new HqUser
                     {
                         Id = Guid.NewGuid(),
                         UserName = userToCreate.Login,
@@ -98,7 +101,9 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                                 SupervisorId = supervisorId
                             }
                             : null,
-                    }, userToCreate.Password, userToCreate.UserRole);
+                    };
+                    hqUser.Roles.Add(role);
+                    await userManager.CreateAsync(hqUser, userToCreate.Password);
                 }
                 else
                 {
@@ -107,7 +112,9 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                     user.PhoneNumber = userToCreate.PhoneNumber;
                     user.IsArchived = false;
 
-                    await userManager.UpdateUserAsync(user, userToCreate.Password);
+                    await userManager.UpdateAsync(user);
+                    string passwordResetToken = await userManager.GeneratePasswordResetTokenAsync(user);
+                    await userManager.ResetPasswordAsync(user, passwordResetToken, userToCreate.Password);
                 }
             }
         }

@@ -7,6 +7,10 @@
     <AssemblyName>WB.UI.Headquarters</AssemblyName>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Services\HqSignInManager.cs" />
+  </ItemGroup>
+
     <ItemGroup>
         <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="5.0.1" />
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
@@ -173,5 +177,10 @@
     <EmbeddedResource Update="Resources\Pages.zh.resx">
       <DependentUpon>Pages.resx</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="Services\" />
   </ItemGroup>
 </Project>
