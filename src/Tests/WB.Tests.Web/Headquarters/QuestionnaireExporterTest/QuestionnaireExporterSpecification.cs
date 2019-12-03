@@ -130,7 +130,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.QuestionnaireExp
         [Test]
         public void should_generate_export_translation()
         {
-            MockOf<ITranslationsExportService>().Verify(s => s.GenerateTranslationFile(questionnaireDocument, Id.g1, It.IsAny<ITranslation>(), It.IsAny<List<CategoriesItem>>()), Times.Once);
+            MockOf<ITranslationsExportService>().Verify(s => s.GenerateTranslationFile(questionnaireDocument, Id.g1, It.IsAny<ITranslation>(), It.IsAny<ICategories>()), Times.Once);
         }
 
         [Test]

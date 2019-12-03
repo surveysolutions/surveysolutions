@@ -122,12 +122,9 @@ namespace WB.UI.Headquarters.Services
 
                     if(translations == null) continue;
 
-                    reusableCategoriesStorage.GetOptions(questionnaireIdentity, )
-
                     var translationFile = this.translationsExportService.GenerateTranslationFile(questionnaire,
                         translation.Id,
-                        new QuestionnaireTranslation(translations),
-                        categoriesItems);
+                        new QuestionnaireTranslation(translations));
 
                     PutEntry($"Translations/{translation.Id}.xlsx", translationFile.ContentAsExcelFile);
                 }
