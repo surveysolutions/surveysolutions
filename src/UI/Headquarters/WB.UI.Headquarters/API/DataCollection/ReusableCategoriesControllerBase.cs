@@ -29,14 +29,7 @@ namespace WB.UI.Headquarters.API.DataCollection
             var reusableCategoriesDtos = questionnaireDocument.Categories.Select(c => new ReusableCategoriesDto()
             {
                 Id = c.Id,
-                Options = this.reusableCategoriesStorage.GetOptions(questionnaireIdentity, c.Id)
-                    .Select(o => new CategoriesItem()
-                    {
-                        Id = o.Value,
-                        ParentId = o.ParentValue,
-                        Text = o.Title
-                    })
-                    .ToList()
+                Options = this.reusableCategoriesStorage.GetOptions(questionnaireIdentity, c.Id).ToList()
             });
 
             return Request.CreateResponse(HttpStatusCode.OK, reusableCategoriesDtos);
