@@ -42,37 +42,39 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 
         public Task<string> GetRoleIdAsync(HqRole role, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(role.Id.ToString("N"));
         }
 
         public Task<string> GetRoleNameAsync(HqRole role, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(role.Name);
         }
 
         public Task SetRoleNameAsync(HqRole role, string roleName, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            role.Name = roleName;
+            return Task.CompletedTask;
         }
 
         public Task<string> GetNormalizedRoleNameAsync(HqRole role, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(role.Name.ToUpper());
         }
 
         public Task SetNormalizedRoleNameAsync(HqRole role, string normalizedName, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public Task<HqRole> FindByIdAsync(string roleId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return uow.Session.GetAsync<HqRole>(Guid.Parse(roleId), cancellationToken);
         }
 
         public Task<HqRole> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return uow.Session.QueryOver<HqRole>().WhereRestrictionOn(x => x.Name)
+                .IsInsensitiveLike(normalizedRoleName).SingleOrDefaultAsync(cancellationToken);
         }
     }
 
@@ -196,7 +198,15 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 
         public override Task AddLoginAsync(HqUser user, UserLoginInfo login, CancellationToken cancellationToken = new CancellationToken())
         {
-            throw new NotImplementedException();
+            user.Logins.Add(new HqUserLogin
+            {
+                UserId = user.Id,
+                ProviderKey = login.ProviderKey,
+                LoginProvider = login.LoginProvider,
+                ProviderDisplayName = login.ProviderDisplayName
+            });
+
+            return Task.CompletedTask;
         }
 
         public override Task RemoveLoginAsync(HqUser user, string loginProvider, string providerKey,
@@ -212,31 +222,11 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 
         public override Task<HqUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken = new CancellationToken())
         {
-            throw new NotImplementedException();
+            return this.unitOfWork.Session.QueryOver<HqUser>().WhereRestrictionOn(x => x.Email)
+                .IsInsensitiveLike(normalizedEmail).SingleOrDefaultAsync(cancellationToken);
         }
 
         public override IQueryable<HqUser> Users => unitOfWork.Session.Query<HqUser>();
-
-        public Task<IList<string>> GetRolesAsync(Guid userId)
-        {
-            var user = FindById(userId);
-
-            IList<string> roleNames = user.Roles.Select(x => x.Name).ToList();
-
-            return Task.FromResult(roleNames);
-        }
-
-        public async Task<IEnumerable<Claim>> GetClaimsAsync(Guid userId)
-        {
-            var user = await FindByIdAsync(userId);
-            if (user == null)
-            {
-                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, "UserId {0} not found.",
-                    userId));
-            }
-            
-            return user.Claims.Select(c => new Claim(c.ClaimType, c.ClaimValue)).ToList();
-        }
 
         public Task<string> GetEmailAsync(HqUser user)
         {
@@ -263,48 +253,9 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             return this.unitOfWork.Session.Get<HqRole>(id);
         }
 
-        public Task<string> GetSecurityStampAsync(HqUser user)
-        {
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
-            return Task.FromResult(user.SecurityStamp);
-        }
-
         public HqUser FindById(Guid userId)
         {
             return unitOfWork.Session.Get<HqUser>(userId);
-        }
-
-        public Task SetPasswordHashAsync(HqUser user, string hash)
-        {
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
-            user.PasswordHash = hash;
-            return Task.FromResult(0);
-        }
-
-        public Task SetSecurityStampAsync(HqUser user, string newSecurityStamp)
-        {
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
-            user.SecurityStamp = newSecurityStamp;
-            return Task.FromResult(0);
-        }
-
-        public Task SetLockoutEnabledAsync(HqUser user, bool isLockoutEnabled)
-        {
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
-            user.LockoutEnabled = isLockoutEnabled;
-            return Task.FromResult(0);
         }
     }
 }
