@@ -1387,12 +1387,11 @@ namespace WB.Tests.Unit.Designer
 
         public static TranslationsService TranslationsService(
             DesignerDbContext dbContext = null,
-            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage = null,
-            ICategoriesService categoriesService = null)
+            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage = null)
             => new TranslationsService(
                 dbContext ?? Create.InMemoryDbContext(),
                 questionnaireStorage ?? Stub<IPlainKeyValueStorage<QuestionnaireDocument>>.Returning(Create.QuestionnaireDocument()),
-                new TranslationsExportService(categoriesService ?? Mock.Of<ICategoriesService>())
+                new TranslationsExportService()
             );
 
 

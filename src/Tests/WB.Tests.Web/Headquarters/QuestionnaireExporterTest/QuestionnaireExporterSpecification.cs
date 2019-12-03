@@ -15,6 +15,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.Questionnaire;
@@ -129,7 +130,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.QuestionnaireExp
         [Test]
         public void should_generate_export_translation()
         {
-            MockOf<ITranslationsExportService>().Verify(s => s.GenerateTranslationFile(questionnaireDocument, Id.g1, It.IsAny<ITranslation>()), Times.Once);
+            MockOf<ITranslationsExportService>().Verify(s => s.GenerateTranslationFile(questionnaireDocument, Id.g1, It.IsAny<ITranslation>(), It.IsAny<List<CategoriesItem>>()), Times.Once);
         }
 
         [Test]
