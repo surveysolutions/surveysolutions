@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
-namespace WB.Enumerator.Native.WebInterview
+namespace WB.Core.Infrastructure.Domain
 {
     public interface IInScopeExecutor
     {
