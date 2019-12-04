@@ -305,8 +305,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             var answers = options.Select(a => new Answer()
             {
                 AnswerText = a.Text,
-                ParentCode = a.ParentId,
-                AnswerCode = a.Id,
+                ParentValue = a.ParentId.ToString(),
                 AnswerValue = a.Id.ToString()
             }).ToList();
             StoreOptionsImpl(questionnaireIdentity, null, categoryId, answers, translations);
