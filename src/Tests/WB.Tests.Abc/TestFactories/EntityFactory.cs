@@ -82,6 +82,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.NonConficltingNamespace;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -1120,7 +1121,8 @@ namespace WB.Tests.Abc.TestFactories
             string optionsFilterExpression = null,
             List<Answer> answers = null,
             bool isPrefilled = false,
-            int? showAsListThreshold = null)
+            int? showAsListThreshold = null,
+            Guid? categoryId = null)
         {
             answers = answers ?? (answerCodes ?? new decimal[] { 1, 2, 3 }).Select(a => Create.Entity.Answer(a.ToString(), a)).ToList();
             if (parentCodes != null)
@@ -1151,7 +1153,8 @@ namespace WB.Tests.Abc.TestFactories
                     OptionsFilterExpression = optionsFilterExpression
                 },
                 ShowAsList = showAsListThreshold.HasValue,
-                ShowAsListThreshold = showAsListThreshold
+                ShowAsListThreshold = showAsListThreshold,
+                CategoriesId = categoryId 
             };
         }
 
@@ -1166,7 +1169,8 @@ namespace WB.Tests.Abc.TestFactories
             Guid? linkedToRosterId = null,
             string linkedFilter = null,
             string optionsFilter = null,
-            bool showAsList = false)
+            bool showAsList = false,
+            Guid? categoryId = null)
             => new SingleQuestion
             {
                 QuestionType = QuestionType.SingleOption,
@@ -1185,7 +1189,8 @@ namespace WB.Tests.Abc.TestFactories
                 {
                     OptionsFilterExpression = optionsFilter
                 },
-                ShowAsList = showAsList
+                ShowAsList = showAsList,
+                CategoriesId = categoryId,
             };
 
         public StaticText StaticText(
@@ -2446,6 +2451,16 @@ namespace WB.Tests.Abc.TestFactories
             asDynamic.MessageHtml = message ?? "Message html";
 
             return email;
+        }
+
+        public CategoriesItem CategoriesItem(string text, int id, int? parentId = null)
+        {
+            return new CategoriesItem()
+            {
+                Id = id,
+                Text = text,
+                ParentId = parentId
+            };
         }
     }
 }
