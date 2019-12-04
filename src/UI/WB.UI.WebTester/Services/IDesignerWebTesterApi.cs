@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Refit;
 using WB.Core.SharedKernels.Questionnaire.Api;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 
@@ -20,6 +21,9 @@ namespace WB.UI.WebTester.Services
 
         [Get("/api/webtester/{token}/translations")]
         Task<List<TranslationDto>> GetTranslationsAsync(string token);
+
+        [Get("/api/webtester/{token}/categories")]
+        Task<List<CategoriesDto>> GetCategoriesAsync(string token);
 
         [Get("/api/webtester/Scenarios/{token}/{scenarioId}")]
         Task<string> GetScenario(string token, int scenarioId);

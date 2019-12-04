@@ -161,6 +161,7 @@ namespace WB.UI.WebTester
             // TODO: Find a generic place for each of the dependencies below
             registry.Bind<IInterviewExpressionStatePrototypeProvider, InterviewExpressionStatePrototypeProvider>();
             registry.Bind<ITranslationManagementService, TranslationManagementService>();
+            registry.Bind<ICategoriesManagementService, CategoriesManagementService>();
             registry.Bind<ISubstitutionTextFactory, SubstitutionTextFactory>();
             registry.Bind<ISubstitutionService, SubstitutionService>();
             registry.Bind<IInterviewTreeBuilder, InterviewTreeBuilder>();

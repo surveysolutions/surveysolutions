@@ -21,6 +21,7 @@ namespace WB.UI.WebTester.Services.Implementation
         private readonly ITranslationManagementService translationManagementService;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentStorage;
         private readonly ICacheStorage<QuestionnaireAttachment, string> attachmentsStorage;
+        private readonly ICategoriesManagementService categoriesManagementService;
 
         private static long version;
 
@@ -30,7 +31,8 @@ namespace WB.UI.WebTester.Services.Implementation
             IAppdomainsPerInterviewManager appdomainsPerInterviewManager,
             ITranslationManagementService translationManagementService,
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentStorage,
-            ICacheStorage<QuestionnaireAttachment, string> attachmentsStorage)
+            ICacheStorage<QuestionnaireAttachment, string> attachmentsStorage,
+            ICategoriesManagementService categoriesManagementService)
         {
             this.questionnaireStorage = questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
             this.webTesterApi = webTesterApi ?? throw new ArgumentNullException(nameof(webTesterApi));
@@ -38,6 +40,7 @@ namespace WB.UI.WebTester.Services.Implementation
             this.translationManagementService = translationManagementService ?? throw new ArgumentNullException(nameof(translationManagementService));
             this.questionnaireDocumentStorage = questionnaireDocumentStorage ?? throw new ArgumentNullException(nameof(questionnaireDocumentStorage));
             this.attachmentsStorage = attachmentsStorage ?? throw new ArgumentNullException(nameof(attachmentsStorage));
+            this.categoriesManagementService = categoriesManagementService ?? throw new ArgumentNullException(nameof(categoriesManagementService));
         }
 
         public Dictionary<Guid, QuestionnaireIdentity> TokenToQuestionnaireMap { get; } = new Dictionary<Guid, QuestionnaireIdentity>();
@@ -80,6 +83,8 @@ namespace WB.UI.WebTester.Services.Implementation
                 });
             }
 
+            var categories = await webTesterApi.GetCategoriesAsync(designerToken.ToString());
+
             lock (TokenToQuestionnaireMap)
             {
                 TokenToQuestionnaireMap[designerToken] = questionnaireIdentity;
@@ -102,6 +107,16 @@ namespace WB.UI.WebTester.Services.Implementation
                     Type = x.Type,
                     TranslationIndex = x.TranslationIndex,
                     TranslationId = x.TranslationId
+                }));
+
+                this.categoriesManagementService.Delete(questionnaireIdentity);
+                this.categoriesManagementService.Store(categories.Select(x => new CategoriesInstance
+                {
+                    QuestionnaireId = questionnaireIdentity,
+                    CategoriesId = x.CategoriesId,
+                    Id = x.Id,
+                    ParentId = x.ParentId,
+                    Text = x.Text
                 }));
             }
 
