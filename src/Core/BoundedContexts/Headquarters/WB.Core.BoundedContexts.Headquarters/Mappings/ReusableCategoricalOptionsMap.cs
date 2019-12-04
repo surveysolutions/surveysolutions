@@ -1,8 +1,7 @@
-﻿using CsvHelper.Configuration;
-using NHibernate.Mapping.ByCode;
+﻿using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Infrastructure.Native.Questionnaire;
+using ReusableCategoricalOptions = WB.Core.BoundedContexts.Headquarters.ReusableCategories.ReusableCategoricalOptions;
 
 namespace WB.Core.BoundedContexts.Headquarters.Mappings
 {

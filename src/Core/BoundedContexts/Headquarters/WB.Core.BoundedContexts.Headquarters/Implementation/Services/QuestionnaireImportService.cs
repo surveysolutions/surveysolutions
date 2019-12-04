@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Main.Core.Documents;
-using Refit;
 using Polly;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.Designer;
@@ -17,14 +13,11 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernel.Structures.Synchronization.Designer;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Synchronization.Designer;
-using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Enumerator.Native.Questionnaire;
 using WB.Infrastructure.Native.Storage.Postgre;
 
@@ -168,13 +161,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     {
                         this.logger.Debug($"Loading reusable category for questionnaire {questionnaireId}. Category id {category.Id}");
                         var reusableCategories = await this.designerApi.GetReusableCategories(questionnaire.PublicKey, category.Id);
-                        var categoricalOptions = reusableCategories.Select(o => new CategoriesItem()
-                        {
-                            ParentId = o.ParentId,
-                            Text = o.Text,
-                            Id = o.Id
-                        }).ToList();
-                        reusableCategoriesStorage.Store(questionnaireIdentity, category.Id, categoricalOptions);
+                        reusableCategoriesStorage.Store(questionnaireIdentity, category.Id, reusableCategories);
                     }
                 }
 

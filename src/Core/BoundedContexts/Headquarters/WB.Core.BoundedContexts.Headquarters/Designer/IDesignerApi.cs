@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Synchronization.Designer;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
@@ -49,7 +50,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
         Task<RestFile> DownloadPdf(Guid questionnaireId, [Query] Guid? translation = null);
 
         [Get("/api/hq/categories/{questionnaireId}/{categoryId}")]
-        Task<List<QuestionnaireReusableCategories>> GetReusableCategories(Guid questionnaireId, Guid categoryId);
+        Task<List<CategoriesItem>> GetReusableCategories(Guid questionnaireId, Guid categoryId);
     }
 
     public class DesignerQuestionnairesListFilter
