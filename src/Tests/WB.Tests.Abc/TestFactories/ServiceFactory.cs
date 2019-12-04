@@ -72,6 +72,7 @@ using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.DenormalizerStorage;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.FileSystem;
