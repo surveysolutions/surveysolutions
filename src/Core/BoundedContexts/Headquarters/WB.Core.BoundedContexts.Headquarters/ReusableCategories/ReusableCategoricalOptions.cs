@@ -1,7 +1,7 @@
 ﻿using System;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
-namespace WB.Infrastructure.Native.Questionnaire
+namespace WB.Core.BoundedContexts.Headquarters.ReusableCategories
 {
     public class ReusableCategoricalOptions
     {
