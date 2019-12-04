@@ -1203,7 +1203,7 @@
   <data name="GetLatestSupervisorApp" xml:space="preserve">
     <value>下载最新的督导员程序</value>
   </data>
-  <data name="InterviewerProfile_DownloadedInterviewsCount" xml:space="preserve">
+  <data name="InterviewerProfile_DownloadedAssignmentsCount" xml:space="preserve">
     <value>调查员已收到的访谈</value>
   </data>
   <data name="InterviewerProfile_IncomingTraffic" xml:space="preserve">

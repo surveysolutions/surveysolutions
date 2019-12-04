@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Headquarters.InterviewerProfiles
         public string ConnectionType { get; set; }
         public string ConnectionSubType { get; set; }
         public int QuestionnairesReceived { get; set; }
-        public int InterviewsReceived { get; set; }
+        public int AssignmentsReceived { get; set; }
         public int CompletedInterviewsReceivedFromInterviewer { get; set; }
         public int AssignmentsThatHaveBeenStarted { get; set; }
         public bool HasDeviceInfo { get; set; }

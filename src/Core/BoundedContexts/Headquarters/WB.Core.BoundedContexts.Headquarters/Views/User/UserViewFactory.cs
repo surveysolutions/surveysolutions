@@ -255,7 +255,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             var supervisorIds = filteredUsers.Select(x => x.SupervisorId).ToArray();
 
             var deviceSyncInfos = this.devicesSyncInfos.Query(_ => _
-                .Where(d => interviewersIds.Contains(d.InterviewerId))
+                .Where(d => interviewersIds.Contains(d.InterviewerId) && d.Statistics != null)
                 .GroupBy(d => d.InterviewerId)
                 .Select(g => new
                 {
