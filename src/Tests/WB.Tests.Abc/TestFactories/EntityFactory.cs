@@ -665,7 +665,8 @@ namespace WB.Tests.Abc.TestFactories
             bool areAnswersOrdered = false,
             string optionsFilter = null,
             string linkedFilter = null,
-            int? maxAllowedAnswers = null)
+            int? maxAllowedAnswers = null,
+            Guid? categoryId = null)
             => new MultyOptionsQuestion
             {
                 QuestionType = QuestionType.MultyOption,
@@ -680,7 +681,8 @@ namespace WB.Tests.Abc.TestFactories
                 AreAnswersOrdered = areAnswersOrdered,
                 LinkedFilterExpression = linkedFilter,
                 MaxAllowedAnswers = maxAllowedAnswers,
-                Properties = { OptionsFilterExpression = optionsFilter }
+                Properties = { OptionsFilterExpression = optionsFilter },
+                CategoriesId = categoryId,
             };
 
         public NumericQuestion NumericIntegerQuestion(Guid? id = null,
