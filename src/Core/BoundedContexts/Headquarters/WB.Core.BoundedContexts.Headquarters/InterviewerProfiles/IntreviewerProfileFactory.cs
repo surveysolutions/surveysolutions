@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json;
+using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -365,7 +366,7 @@ namespace WB.Core.BoundedContexts.Headquarters.InterviewerProfiles
                     x.ConnectionType,
                     x.ConnectionSubType,
                     x.QuestionnairesReceived,
-                    x.InterviewsReceived,
+                    x.AssignmentsReceived,
                     x.CompletedInterviewsReceivedFromInterviewer,
                     x.AssignmentsThatHaveBeenStarted,
                     x.NewInterviewsOnDevice,
@@ -377,6 +378,7 @@ namespace WB.Core.BoundedContexts.Headquarters.InterviewerProfiles
         private IEnumerable<InterviewerProfileToExport> GetProfilesForInterviewers(Guid[] interviewersIds)
         {
             var interviewerProfiles = this.userManager.Users.Where(x => interviewersIds.Contains(x.Id))
+                .Fetch(x => x.Profile)
                 .Where(x => x!= null)
                 .ToList();
 
@@ -513,7 +515,7 @@ namespace WB.Core.BoundedContexts.Headquarters.InterviewerProfiles
             profile.ConnectionSubType = lastSuccessDeviceInfo.NetworkSubType;
             profile.AssignmentsThatHaveBeenStarted = lastSuccessDeviceInfo.NumberOfStartedInterviews;
             profile.QuestionnairesReceived = lastSuccessDeviceInfo.Statistics?.DownloadedQuestionnairesCount ?? 0;
-            profile.InterviewsReceived = lastSuccessDeviceInfo.Statistics?.DownloadedInterviewsCount ?? 0;
+            profile.AssignmentsReceived = lastSuccessDeviceInfo.Statistics?.NewAssignmentsCount ?? 0;
             profile.CompletedInterviewsReceivedFromInterviewer = lastSuccessDeviceInfo.Statistics?.UploadedInterviewsCount ?? 0;
             profile.NewInterviewsOnDevice = lastSuccessDeviceInfo.Statistics?.NewInterviewsOnDeviceCount ?? 0;
             profile.RejectedInterviewsOnDevice = lastSuccessDeviceInfo.Statistics?.RejectedInterviewsOnDeviceCount ?? 0;
