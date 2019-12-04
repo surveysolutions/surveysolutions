@@ -3,42 +3,24 @@ using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.Infrastructure.Aggregates;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 
 namespace WB.Core.Infrastructure.CommandBus.Implementation
 {
     public class CommandService : ICommandService
     {
-        private readonly IEventSourcedAggregateRootRepository eventSourcedRepository;
-        private readonly IPlainAggregateRootRepository plainRepository;
         private readonly IAggregateLock aggregateLock;
-        private readonly ILiteEventBus eventBus;
         private readonly IServiceLocator serviceLocator;
-        private readonly IAggregateRootCacheCleaner aggregateRootCacheCleaner;
-        private readonly ICommandsMonitoring commandsMonitoring;
 
         private static int executingCommandsCount = 0;
         private static readonly object executionCountLock = new object();
         private TaskCompletionSource<object> executionAwaiter = null;
 
-        public CommandService(
-            IEventSourcedAggregateRootRepository eventSourcedRepository,
-            ILiteEventBus eventBus,
-            IServiceLocator serviceLocator,
-            IPlainAggregateRootRepository plainRepository,
-            IAggregateLock aggregateLock,
-            IAggregateRootCacheCleaner aggregateRootCacheCleaner,
-            ICommandsMonitoring commandsMonitoring)
+        public CommandService(IServiceLocator serviceLocator,
+            IAggregateLock aggregateLock)
         {
-            this.eventSourcedRepository = eventSourcedRepository;
-            this.eventBus = eventBus;
-            this.serviceLocator = serviceLocator;
-            this.plainRepository = plainRepository;
-            this.aggregateLock = aggregateLock;
-            this.aggregateRootCacheCleaner = aggregateRootCacheCleaner;
-            this.commandsMonitoring = commandsMonitoring;
+            this.serviceLocator = serviceLocator ?? throw new ArgumentNullException(nameof(serviceLocator));
+            this.aggregateLock = aggregateLock ?? throw new ArgumentNullException(nameof(aggregateLock));
         }
 
         public Task ExecuteAsync(ICommand command, string origin, CancellationToken cancellationToken)
