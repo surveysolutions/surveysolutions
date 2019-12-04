@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
                     Mock.Of<IInvitationsDeletionService>(),
                     Mock.Of<IAggregateRootCacheCleaner>(),
                     assignmentsToDeleteFactory ?? Mock.Of<IAssignmentsToDeleteFactory>(f => f.LoadBatch(It.IsAny<Guid>(), It.IsAny<long>()) == Enumerable.Empty<Assignment>().ToList()),
-                    Mock.Of<IPlainKeyValueStorage<QuestionnaireReusableCategories>>());
+                    Mock.Of<IReusableCategoriesStorage>());
         }
     }
 }

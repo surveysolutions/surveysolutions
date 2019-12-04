@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
         private readonly IAggregateRootCacheCleaner aggregateRootCacheCleaner;
         private readonly IAssignmentsToDeleteFactory assignmentsToDeleteFactory;
         private readonly IPlainKeyValueStorage<QuestionnaireLookupTable> lookupTablesStorage;
-        private readonly IPlainKeyValueStorage<QuestionnaireReusableCategories> reusableCategoriesStorage;
+        private readonly IReusableCategoriesStorage reusableCategoriesStorage;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly DeleteQuestionnaireJobScheduler deleteQuestionnaireTask;
 
@@ -59,7 +59,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             IInvitationsDeletionService invitationsDeletionService,
             IAggregateRootCacheCleaner aggregateRootCacheCleaner,
             IAssignmentsToDeleteFactory assignmentsToDeleteFactory,
-            IPlainKeyValueStorage<QuestionnaireReusableCategories> reusableCategoriesStorage)
+            IReusableCategoriesStorage reusableCategoriesStorage)
         {
             this.interviewsToDeleteFactory = interviewsToDeleteFactory;
             this.commandService = commandService;
@@ -191,8 +191,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
         {
             foreach (var categories in questionnaireDocument.Categories)
             {
-                var id = reusableCategoriesStorage.GetReusableCategoriesKey(questionnaireIdentity, categories.Id);
-                reusableCategoriesStorage.Remove(id);
+                reusableCategoriesStorage.RemoveCategories(questionnaireIdentity, categories.Id);
             }
         }
 
