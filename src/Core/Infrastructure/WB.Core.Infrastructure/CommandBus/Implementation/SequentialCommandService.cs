@@ -5,9 +5,7 @@ using System.Threading;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 
 namespace WB.Core.Infrastructure.CommandBus.Implementation
@@ -31,13 +29,8 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
         private readonly ConcurrentQueue<CommandDescriptor> queue = new ConcurrentQueue<CommandDescriptor>();
         private readonly object lockObject = new object();
 
-        public SequentialCommandService(IEventSourcedAggregateRootRepository eventSourcedRepository, 
-            ILiteEventBus eventBus, 
-            IServiceLocator serviceLocator, 
-            IPlainAggregateRootRepository plainRepository,
-            IAggregateLock aggregateLock,
-            IAggregateRootCacheCleaner aggregateRootCacheCleaner,
-            ICommandsMonitoring monitoring)
+        public SequentialCommandService(IServiceLocator serviceLocator,
+            IAggregateLock aggregateLock)
             : base(serviceLocator, 
                 aggregateLock) { }
 
