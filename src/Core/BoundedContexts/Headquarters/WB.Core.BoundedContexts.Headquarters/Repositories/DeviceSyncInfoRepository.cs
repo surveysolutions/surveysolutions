@@ -77,7 +77,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
                 select new
                 {
                     grouping.Key,
-                    DeviceInfo = grouping.FirstOrDefault(g => g.Id == grouping.Max(d => d.Id))
+                    DeviceInfoId = grouping.Max(x => x.Id)
                 }).ToList());
 
             var lastSync = this.dbContext.Query(devices => (from device in devices
@@ -87,22 +87,25 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
                 select new
                 {
                     grouping.Key,
-                    DeviceInfo = grouping.FirstOrDefault(g => g.Id == grouping.Max(d => d.Id))
+                    DeviceInfoId = grouping.Max(x => x.Id)
                 }).ToList());
 
+            List<int> requiredDeviceInfos = new List<int>();
             foreach (var interviewerId in interviewerIds)
             {
                 var notEmptyStat = syncWithNotEmptyStat.FirstOrDefault(x => x.Key == interviewerId);
                 if (notEmptyStat != null)
                 {
-                    yield return notEmptyStat.DeviceInfo;
+                    requiredDeviceInfos.Add(notEmptyStat.DeviceInfoId);
                     continue;
                 }
 
                 var lastStat = lastSync.FirstOrDefault(x => x.Key == interviewerId);
                 if (lastStat!=null)
-                    yield return lastStat.DeviceInfo;
+                    requiredDeviceInfos.Add(lastStat.DeviceInfoId);
             }
+
+            return this.dbContext.Query(_ => _.Where(x => requiredDeviceInfos.Contains(x.Id)).ToList());
         }
 
         public int GetRegisteredDeviceCount(Guid interviewerId)
@@ -110,28 +113,36 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
                 .Where(deviceInfo => deviceInfo.InterviewerId == interviewerId)
                 .Select(info => info.DeviceId).Distinct().Count());
 
-        public List<InterviewerDailyTrafficUsage> GetTrafficUsageForInterviewer(Guid interviewerId) =>
-            this.dbContext.Query(devices => devices
-                .Where(deviceInfo => deviceInfo.InterviewerId == interviewerId)
-                .GroupBy(x => x.SyncDate.Date, x => new
-                {
-                    Date = x.SyncDate,
-                    TotalUploadedBytes = x.Statistics == null ? 0 : x.Statistics.TotalUploadedBytes,
-                    TotalDownloadedBytes = x.Statistics == null ? 0 : x.Statistics.TotalDownloadedBytes
-                })
-                .OrderByDescending(x => x.Key)
-                .Take(30)
-                .ToList()
+        public List<InterviewerDailyTrafficUsage> GetTrafficUsageForInterviewer(Guid interviewerId)
+        {
+            var dbData = this.dbContext.Query(devices =>
+            {
+                return devices
+                    .Where(deviceInfo => deviceInfo.InterviewerId == interviewerId)
+                    .GroupBy(x => x.SyncDate.Date)
+                    .Select(group => new {
+                        Key = group.Key,
+                        DownloadBytes = group.Sum(s => s.Statistics.TotalDownloadedBytes),
+                        UploadedBytes = group.Sum(s => s.Statistics.TotalUploadedBytes)
+                        })
+                    .OrderByDescending(x => x.Key)
+                    .Take(30)
+                    .ToList();
+            });
+            
+            var list = dbData
                 .OrderBy(x => x.Key)
                 .Select(x => new InterviewerDailyTrafficUsage
                 {
-                    DownloadedBytes = x.Sum(s => s.TotalDownloadedBytes),
-                    UploadedBytes = x.Sum(s => s.TotalUploadedBytes),
+                    DownloadedBytes = x.DownloadBytes,
+                    UploadedBytes = x.UploadedBytes,
                     Year = x.Key.Year,
                     Month = x.Key.Month,
                     Day = x.Key.Day
-                })
-                .ToList());
+                }).ToList();
+
+            return list;
+        }
 
         public Task<long> GetTotalTrafficUsageForInterviewer(Guid interviewerId)
         {
