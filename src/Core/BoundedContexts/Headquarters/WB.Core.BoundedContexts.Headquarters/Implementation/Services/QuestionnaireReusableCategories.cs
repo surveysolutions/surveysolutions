@@ -1,11 +1,9 @@
 ﻿using System;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
-    public class QuestionnaireReusableCategories
+    public class QuestionnaireReusableCategories : CategoriesItem
     {
-        public int Id { get; set; }
-        public int? ParentId { get; set; }
-        public string Text { get; set; }
     }
 }

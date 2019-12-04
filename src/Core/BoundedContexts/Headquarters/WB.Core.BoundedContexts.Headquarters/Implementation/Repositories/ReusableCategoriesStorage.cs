@@ -52,5 +52,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
 
             this.storageAccessor.Store(enumerable);
         }
+
+        public void RemoveCategories(QuestionnaireIdentity questionnaireIdentity, Guid categoriesId)
+        {
+            var items = this.storageAccessor
+                .Query(t =>
+                    t.Where(categoricalOption => categoricalOption.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId
+                                                 && categoricalOption.QuestionnaireId.Version == questionnaireIdentity.Version
+                                                 && categoricalOption.CategoriesId == categoriesId)
+                ).ToList();
+
+            this.storageAccessor.Remove(items);
+        }
     }
 }
