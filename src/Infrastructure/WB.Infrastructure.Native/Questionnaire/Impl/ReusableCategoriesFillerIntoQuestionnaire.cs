@@ -8,7 +8,7 @@ using WB.Infrastructure.Native.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Headquarters.ReusableCategories
 {
-    class ReusableCategoriesFillerIntoQuestionnaire : IReusableCategoriesFillerIntoQuestionnaire
+    public class ReusableCategoriesFillerIntoQuestionnaire : IReusableCategoriesFillerIntoQuestionnaire
     {
         private readonly IReusableCategoriesStorage reusableCategoriesStorage;
 
