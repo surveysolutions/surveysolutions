@@ -1,7 +1,7 @@
 ﻿using Main.Core.Documents;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
-namespace WB.Core.BoundedContexts.Headquarters.ReusableCategories
+namespace WB.Infrastructure.Native.Questionnaire
 {
     public interface IReusableCategoriesFillerIntoQuestionnaire
     {
