@@ -19,6 +19,7 @@ export default {
         var entitiesToDelete = differenceBy(state.entities, sectionData, 'identity');
         forEach(entitiesToDelete, entity => {
             Vue.delete(state.entityDetails, entity.identity)
+            Vue.delete(state.fetch.state, entity.identity)
         });
         state.entities = sectionData
     },
