@@ -18,6 +18,7 @@ using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.Questionnaire.Impl;
 using WB.Infrastructure.Native.Questionnaire;
+using WB.Infrastructure.Native.Questionnaire.Impl;
 using WB.Infrastructure.Native.Storage;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
