@@ -7,6 +7,7 @@ using Main.Core.Documents;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
 using Refit;
+using WB.Core.BoundedContexts.Headquarters.ReusableCategories;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -38,6 +39,8 @@ using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.Enumerator.Native.WebInterview.Pipeline;
 using WB.Enumerator.Native.WebInterview.Services;
+using WB.Infrastructure.Native.Questionnaire;
+using WB.Infrastructure.Native.Questionnaire.Impl;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Shared.Web.Services;
 using WB.UI.WebTester.Infrastructure;
@@ -169,6 +172,8 @@ namespace WB.UI.WebTester
             registry.Bind<IQuestionOptionsRepository, QuestionnaireQuestionOptionsRepository>();
             registry.BindAsSingleton<IInterviewExpressionStateUpgrader, InterviewExpressionStateUpgrader>();
             registry.Bind<IVariableToUIStringService, VariableToUIStringService>();
+            registry.Bind<IReusableCategoriesStorage, ReusableCategoriesStorage>();
+            registry.Bind<IReusableCategoriesFillerIntoQuestionnaire, ReusableCategoriesFillerIntoQuestionnaire>();
         }
 
         public static Type[] HubPipelineModules => Array.Empty<Type>();//[]
