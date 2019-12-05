@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.ReusableCategories;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Questionnaire.Categories;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
 {
@@ -63,6 +66,28 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
                 ).ToList();
 
             this.storageAccessor.Remove(items);
+        }
+
+        public void FillCategoriesIntoQuestionnaireDocument(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaireDocument)
+        {
+            if (questionnaireDocument.Categories.Any())
+            {
+                foreach (var question in questionnaireDocument.Find<ICategoricalQuestion>())
+                {
+                    if (question.CategoriesId.HasValue)
+                    {
+                        var options = GetOptions(questionnaireIdentity, question.CategoriesId.Value);
+                        question.Answers = options.Select(option => new Answer()
+                        {
+                            AnswerCode = option.Id,
+                            AnswerText = option.Text,
+                            ParentCode = option.ParentId,
+                            ParentValue = option.ParentId?.ToString(),
+                            AnswerValue = option.Id.ToString(),
+                        }).ToList();
+                    }
+                }
+            }
         }
     }
 }

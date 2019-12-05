@@ -113,22 +113,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
 
         protected override void FillPlainQuestionnaireDataOnCreate(QuestionnaireIdentity identity, QuestionnaireDocument questionnaireDocument)
         {
-            if (questionnaireDocument.Categories.Any())
-            {
-                foreach (var question in questionnaireDocument.Find<ICategoricalQuestion>())
-                {
-                    if (question.CategoriesId.HasValue)
-                    {
-                        var options = reusableCategoriesStorage.GetOptions(identity, question.CategoriesId.Value);
-                        question.Answers = options.Select(o => new Answer()
-                        {
-                            AnswerText = o.Text,
-                            AnswerCode = o.Id,
-                            ParentCode = o.ParentId
-                        }).ToList();
-                    }
-                }
-            }
+            reusableCategoriesStorage.FillCategoriesIntoQuestionnaireDocument(identity, questionnaireDocument);
         }
     }
 }
