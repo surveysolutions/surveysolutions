@@ -97,6 +97,17 @@ namespace WB.UI.WebTester.Services.Implementation
                     this.attachmentsStorage.Store(attachment,attachment.Content.Id, designerToken);
                 }
                 
+                this.categoriesManagementService.RemoveCategories(questionnaireIdentity);
+                categories.GroupBy(x => x.CategoriesId).ForEach(x =>
+                {
+                    this.categoriesManagementService.Store(questionnaireIdentity, x.Key, x.Select(x => new CategoriesItem
+                    {
+                        Id = x.Id,
+                        ParentId = x.ParentId,
+                        Text = x.Text
+                    }).ToList());
+                });
+
                 this.questionnaireStorage.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId,
                     questionnaireIdentity.Version,
                     questionnaire.Document);
@@ -111,17 +122,6 @@ namespace WB.UI.WebTester.Services.Implementation
                     TranslationIndex = x.TranslationIndex,
                     TranslationId = x.TranslationId
                 }));
-
-                this.categoriesManagementService.RemoveCategories(questionnaireIdentity);
-                categories.GroupBy(x => x.CategoriesId).ForEach(x =>
-                {
-                    this.categoriesManagementService.Store(questionnaireIdentity, x.Key, x.Select(x => new CategoriesItem
-                    {
-                        Id = x.Id,
-                        ParentId = x.ParentId,
-                        Text = x.Text
-                    }).ToList());
-                });
             }
 
             this.appdomainsPerInterviewManager.SetupForInterview(designerToken,
