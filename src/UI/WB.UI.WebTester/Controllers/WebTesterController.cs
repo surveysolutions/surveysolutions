@@ -22,21 +22,17 @@ namespace WB.UI.WebTester.Controllers
         private const string SaveScenarioSessionKey = "SaveScenarioAvailable";
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IEvictionNotifier evictionService;
-        private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IInterviewFactory interviewFactory;
         private readonly IOptions<TesterConfiguration> testerConfig;
 
         public WebTesterController(
-
             IStatefulInterviewRepository statefulInterviewRepository,
             IEvictionNotifier evictionService,
-            IQuestionnaireStorage questionnaireStorage,
             IInterviewFactory interviewFactory,
             IOptions<TesterConfiguration> testerConfig)
         {
             this.statefulInterviewRepository = statefulInterviewRepository ?? throw new ArgumentNullException(nameof(statefulInterviewRepository));
             this.evictionService = evictionService;
-            this.questionnaireStorage = questionnaireStorage;
             this.interviewFactory = interviewFactory;
             this.testerConfig = testerConfig;
         }
