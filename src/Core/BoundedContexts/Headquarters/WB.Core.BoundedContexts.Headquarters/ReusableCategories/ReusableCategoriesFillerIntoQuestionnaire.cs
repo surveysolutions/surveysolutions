@@ -17,11 +17,13 @@ namespace WB.Core.BoundedContexts.Headquarters.ReusableCategories
             this.reusableCategoriesStorage = reusableCategoriesStorage;
         }
 
-        public void FillCategoriesIntoQuestionnaireDocument(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaireDocument)
+        public QuestionnaireDocument FillCategoriesIntoQuestionnaireDocument(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument originalDocument)
         {
-            if (questionnaireDocument.Categories.Any())
+            var filledDocument = originalDocument.Clone();
+
+            if (filledDocument.Categories.Any())
             {
-                foreach (var question in questionnaireDocument.Find<ICategoricalQuestion>())
+                foreach (var question in filledDocument.Find<ICategoricalQuestion>())
                 {
                     if (question.CategoriesId.HasValue)
                     {
@@ -37,6 +39,8 @@ namespace WB.Core.BoundedContexts.Headquarters.ReusableCategories
                     }
                 }
             }
+
+            return filledDocument;
         }
     }
 }

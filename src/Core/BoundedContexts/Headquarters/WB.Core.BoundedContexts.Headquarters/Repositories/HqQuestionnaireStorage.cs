@@ -112,9 +112,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
             });
         }
 
-        protected override void FillPlainQuestionnaireDataOnCreate(QuestionnaireIdentity identity, QuestionnaireDocument questionnaireDocument)
+        protected override QuestionnaireDocument FillPlainQuestionnaireDataOnCreate(QuestionnaireIdentity identity, QuestionnaireDocument questionnaireDocument)
         {
-            categoriesFillerIntoQuestionnaire.FillCategoriesIntoQuestionnaireDocument(identity, questionnaireDocument);
+            return categoriesFillerIntoQuestionnaire.FillCategoriesIntoQuestionnaireDocument(identity, questionnaireDocument);
         }
     }
 }

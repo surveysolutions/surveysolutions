@@ -5,7 +5,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Web.Http;
-using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.ReusableCategories;
 using WB.Core.GenericSubdomains.Portable;
@@ -41,11 +40,11 @@ namespace WB.UI.Headquarters.API.Export
         public HttpResponseMessage Get(string id)
         {
             var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
-            QuestionnaireDocument questionnaireDocumentVersioned = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
-            categoriesFillerIntoQuestionnaire.FillCategoriesIntoQuestionnaireDocument(questionnaireIdentity, questionnaireDocumentVersioned);
+            var questionnaireDocument = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
+            questionnaireDocument = categoriesFillerIntoQuestionnaire.FillCategoriesIntoQuestionnaireDocument(questionnaireIdentity, questionnaireDocument);
 
             var response = new HttpResponseMessage();
-            response.Content = new StringContent(this.serializer.Serialize(questionnaireDocumentVersioned), Encoding.UTF8, "application/json");
+            response.Content = new StringContent(this.serializer.Serialize(questionnaireDocument), Encoding.UTF8, "application/json");
             return response;
         }
 
