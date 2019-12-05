@@ -5,6 +5,6 @@ namespace WB.Core.BoundedContexts.Headquarters.ReusableCategories
 {
     public interface IReusableCategoriesFillerIntoQuestionnaire
     {
-        void FillCategoriesIntoQuestionnaireDocument(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaireDocument);
+        QuestionnaireDocument FillCategoriesIntoQuestionnaireDocument(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaireDocument);
     }
 }
