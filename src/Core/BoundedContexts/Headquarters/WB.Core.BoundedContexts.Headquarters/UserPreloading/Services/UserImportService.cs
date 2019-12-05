@@ -87,8 +87,8 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                 UserName = x.UserName,
                 IsArchived = x.IsArchived,
                 SupervisorId = x.Profile.SupervisorId,
-                IsSupervisor = x.Roles.Any(role => role.RoleId == supervisorRoleId),
-                IsInterviewer = x.Roles.Any(role => role.RoleId == interviewerRoleId)
+                IsSupervisor = x.Roles.Any(role => role.Id == supervisorRoleId),
+                IsInterviewer = x.Roles.Any(role => role.Id == interviewerRoleId)
             }).ToArray();
 
             var validations = this.userImportVerifier.GetEachUserValidations(allInterviewersAndSupervisors);

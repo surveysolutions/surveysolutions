@@ -43,7 +43,8 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
             {
                 switch (module)
                 {
-                    case IModule iModule: return iModule.AsAutofac();
+                    case IModule iModule:
+                        return iModule.AsAutofac();
                     default:
                         throw new ArgumentException("Cant resolve module type: " + module.GetType());
                 }
@@ -53,15 +54,16 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
             {
                 this.containerBuilder.RegisterModule(autofacModule);
             }
+
             initModules.AddRange(modules);
         }
 
 
-        public Task InitAsync(bool restartOnInitiazationError)
+        public async Task InitAsync(bool restartOnInitiazationError)
         {
             this.containerBuilder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
             Container = containerBuilder.Build();
-            return InitModules(restartOnInitiazationError);
+            await InitModules(restartOnInitiazationError);
         }
 
         public Task InitCoreAsync(ILifetimeScope container, bool restartOnInitiazationError)
