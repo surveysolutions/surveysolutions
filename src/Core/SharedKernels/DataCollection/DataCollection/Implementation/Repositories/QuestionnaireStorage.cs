@@ -55,7 +55,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             if (questionnaireDocument == null || questionnaireDocument.IsDeleted)
                 return null;
 
-            FillPlainQuestionnaireDataOnCreate(identity, questionnaireDocument);
+            questionnaireDocument = FillPlainQuestionnaireDataOnCreate(identity, questionnaireDocument);
 
             Translation translationId = null;
             if (language != null)
@@ -84,9 +84,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             return plainQuestionnaire;
         }
 
-        protected virtual void FillPlainQuestionnaireDataOnCreate(QuestionnaireIdentity identity, QuestionnaireDocument questionnaireDocument)
+        protected virtual QuestionnaireDocument FillPlainQuestionnaireDataOnCreate(QuestionnaireIdentity identity, QuestionnaireDocument questionnaireDocument)
         {
-
+            return questionnaireDocument;
         }
 
         public virtual void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument)
