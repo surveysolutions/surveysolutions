@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.ReusableCategories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
@@ -23,7 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
     {
         private readonly IReadSideRepositoryWriter<QuestionnaireCompositeItem, int> questionnaireItemsWriter;
         private readonly INativeReadSideStorage<QuestionnaireCompositeItem, int> questionnaireItemsReader;
-        private readonly IReusableCategoriesStorage reusableCategoriesStorage;
+        private readonly IReusableCategoriesFillerIntoQuestionnaire categoriesFillerIntoQuestionnaire;
 
         public HqQuestionnaireStorage(IPlainKeyValueStorage<QuestionnaireDocument> repository,
             ITranslationStorage translationStorage,
@@ -33,12 +34,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
             IQuestionOptionsRepository questionOptionsRepository,
             ISubstitutionService substitutionService,
             IInterviewExpressionStatePrototypeProvider expressionStatePrototypeProvider,
-            IReusableCategoriesStorage reusableCategoriesStorage)
+            IReusableCategoriesFillerIntoQuestionnaire categoriesFillerIntoQuestionnaire)
             : base(repository, translationStorage, translator, questionOptionsRepository, substitutionService, expressionStatePrototypeProvider)
         {
             this.questionnaireItemsWriter = questionnaireItemsWriter;
             this.questionnaireItemsReader = questionnaireItemsReader;
-            this.reusableCategoriesStorage = reusableCategoriesStorage;
+            this.categoriesFillerIntoQuestionnaire = categoriesFillerIntoQuestionnaire;
         }
 
         public override void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument)
@@ -113,7 +114,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
 
         protected override void FillPlainQuestionnaireDataOnCreate(QuestionnaireIdentity identity, QuestionnaireDocument questionnaireDocument)
         {
-            reusableCategoriesStorage.FillCategoriesIntoQuestionnaireDocument(identity, questionnaireDocument);
+            categoriesFillerIntoQuestionnaire.FillCategoriesIntoQuestionnaireDocument(identity, questionnaireDocument);
         }
     }
 }
