@@ -72,6 +72,7 @@ using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.DenormalizerStorage;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.FileSystem;
@@ -134,14 +135,21 @@ namespace WB.Tests.Abc.TestFactories
             IAggregateRootCacheCleaner aggregateRootCacheCleaner = null,
             IEventStore eventStore = null)
         {
-            return new CommandService(
-                repository ?? Mock.Of<IEventSourcedAggregateRootRepository>(),
-                eventBus ?? Mock.Of<IEventBus>(),
-                serviceLocator ?? Mock.Of<IServiceLocator>(),
-                plainRepository ?? Mock.Of<IPlainAggregateRootRepository>(),
-                aggregateLock ?? Stub.Lock(),
-                aggregateRootCacheCleaner ?? Mock.Of<IAggregateRootCacheCleaner>(),
-                Mock.Of<ICommandsMonitoring>());
+            var locatorMock = 
+                serviceLocator != null ?
+            Mock.Get(serviceLocator) : new Mock<IServiceLocator>();
+
+            locatorMock.Setup(x => x.GetInstance<IInScopeExecutor>())
+                .Returns(() => new NoScopeInScopeExecutor(locatorMock.Object));
+            locatorMock.Setup(x => x.GetInstance<ICommandExecutor>())
+                .Returns(new CommandExecutor(repository ?? Mock.Of<IEventSourcedAggregateRootRepository>(),
+                    eventBus ?? Mock.Of<IEventBus>(),
+                    locatorMock.Object,
+                    plainRepository ?? Mock.Of<IPlainAggregateRootRepository>(),
+                    aggregateRootCacheCleaner ?? Mock.Of<IAggregateRootCacheCleaner>(),
+                    Mock.Of<ICommandsMonitoring>()));
+
+            return new CommandService(locatorMock.Object, aggregateLock ?? Stub.Lock());
         }
 
         public AttachmentContentService AttachmentContentService(
