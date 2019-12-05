@@ -4,11 +4,14 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Main.Core.Documents;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.Questionnaire;
+using WB.Infrastructure.Native.Questionnaire;
 using WB.UI.WebTester.Controllers;
 
 namespace WB.UI.WebTester.Services.Implementation
@@ -21,7 +24,7 @@ namespace WB.UI.WebTester.Services.Implementation
         private readonly ITranslationManagementService translationManagementService;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentStorage;
         private readonly ICacheStorage<QuestionnaireAttachment, string> attachmentsStorage;
-        private readonly ICategoriesManagementService categoriesManagementService;
+        private readonly IReusableCategoriesStorage categoriesManagementService;
 
         private static long version;
 
@@ -32,7 +35,7 @@ namespace WB.UI.WebTester.Services.Implementation
             ITranslationManagementService translationManagementService,
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentStorage,
             ICacheStorage<QuestionnaireAttachment, string> attachmentsStorage,
-            ICategoriesManagementService categoriesManagementService)
+            IReusableCategoriesStorage categoriesManagementService)
         {
             this.questionnaireStorage = questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
             this.webTesterApi = webTesterApi ?? throw new ArgumentNullException(nameof(webTesterApi));
@@ -109,15 +112,16 @@ namespace WB.UI.WebTester.Services.Implementation
                     TranslationId = x.TranslationId
                 }));
 
-                this.categoriesManagementService.Delete(questionnaireIdentity);
-                this.categoriesManagementService.Store(categories.Select(x => new CategoriesInstance
+                this.categoriesManagementService.RemoveCategories(questionnaireIdentity);
+                categories.GroupBy(x => x.CategoriesId).ForEach(x =>
                 {
-                    QuestionnaireId = questionnaireIdentity,
-                    CategoriesId = x.CategoriesId,
-                    Id = x.Id,
-                    ParentId = x.ParentId,
-                    Text = x.Text
-                }));
+                    this.categoriesManagementService.Store(questionnaireIdentity, x.Key, x.Select(x => new CategoriesItem
+                    {
+                        Id = x.Id,
+                        ParentId = x.ParentId,
+                        Text = x.Text
+                    }).ToList());
+                });
             }
 
             this.appdomainsPerInterviewManager.SetupForInterview(designerToken,

@@ -5,6 +5,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
+using WB.Infrastructure.Native.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Headquarters.ReusableCategories
 {

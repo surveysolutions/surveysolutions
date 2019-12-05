@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using WB.Core.BoundedContexts.Headquarters.ReusableCategories;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Questionnaire.Categories;
 
-namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
+namespace WB.Infrastructure.Native.Questionnaire.Impl
 {
     public class ReusableCategoriesStorage : IReusableCategoriesStorage
     {
@@ -53,16 +51,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
             this.storageAccessor.Store(enumerable);
         }
 
-        public void RemoveCategories(QuestionnaireIdentity questionnaireIdentity, Guid categoriesId)
+        public void RemoveCategories(QuestionnaireIdentity questionnaireIdentity)
         {
-            var items = this.storageAccessor
-                .Query(t =>
-                    t.Where(categoricalOption => categoricalOption.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId
-                                                 && categoricalOption.QuestionnaireId.Version == questionnaireIdentity.Version
-                                                 && categoricalOption.CategoriesId == categoriesId)
-                ).ToList();
-
-            this.storageAccessor.Remove(items);
+            this.storageAccessor.Remove(t =>
+                t.Where(categoricalOption => categoricalOption.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId
+                                             && categoricalOption.QuestionnaireId.Version == questionnaireIdentity.Version)
+            );
         }
     }
 }

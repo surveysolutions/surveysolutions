@@ -91,6 +91,8 @@ using System.Net.Http.Headers;
 using System.Text;
 using WB.Core.BoundedContexts.Headquarters.Designer;
 using WB.Core.BoundedContexts.Headquarters.ReusableCategories;
+using WB.Infrastructure.Native.Questionnaire;
+using WB.Infrastructure.Native.Questionnaire.Impl;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters

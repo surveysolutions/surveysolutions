@@ -3,6 +3,7 @@ using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Infrastructure.Native.Questionnaire;
 using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1

@@ -1,7 +1,7 @@
 ﻿using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using WB.Core.Infrastructure.PlainStorage;
-using ReusableCategoricalOptions = WB.Core.BoundedContexts.Headquarters.ReusableCategories.ReusableCategoricalOptions;
+using ReusableCategoricalOptions = WB.Infrastructure.Native.Questionnaire.ReusableCategoricalOptions;
 
 namespace WB.Core.BoundedContexts.Headquarters.Mappings
 {
