@@ -12,6 +12,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Infrastructure.Native.Questionnaire;
 using WB.UI.Headquarters.API.Filters;
 
 namespace WB.UI.Headquarters.API.Export

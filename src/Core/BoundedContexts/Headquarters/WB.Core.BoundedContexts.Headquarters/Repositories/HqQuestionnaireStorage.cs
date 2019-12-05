@@ -16,6 +16,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Questionnaire.Documents;
+using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Storage;
 
 namespace WB.Core.BoundedContexts.Headquarters.Repositories
