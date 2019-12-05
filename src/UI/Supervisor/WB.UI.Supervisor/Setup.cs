@@ -7,11 +7,9 @@ using Android.Widget;
 using Autofac;
 using Autofac.Extras.MvvmCross;
 using Autofac.Features.ResolveAnything;
-using MvvmCross;
 using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.Converters;
 using MvvmCross.IoC;
-using MvvmCross.Platforms.Android.Presenters;
 using MvvmCross.Views;
 using WB.Core.BoundedContexts.Supervisor;
 using WB.Core.BoundedContexts.Supervisor.Services;
@@ -25,7 +23,6 @@ using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator;
-using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -34,9 +31,7 @@ using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Converters;
 using WB.UI.Shared.Enumerator.CustomBindings;
-using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Shared.Enumerator.Services;
-using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Shared.Enumerator.Services.Logging;
 using WB.UI.Shared.Enumerator.Utils;
 using WB.UI.Supervisor.Activities;
@@ -50,7 +45,11 @@ namespace WB.UI.Supervisor
     {
         public Setup()
         {
+#if PRODUCTION
+            CrashReporting.Init("6986daa4-3eb1-44df-a9b5-3bb2b5c264dc");
+#else
             CrashReporting.Init("80bf6bc0-7188-4591-9213-0d4895a5e041");
+#endif
         }
 
         protected override IMvxViewsContainer InitializeViewLookup(IDictionary<Type, Type> viewModelViewLookup)
