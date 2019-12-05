@@ -8,6 +8,7 @@ using NHibernate;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.ReusableCategories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
@@ -87,7 +88,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                 Mock.Of<IQuestionOptionsRepository>(),
                 Mock.Of<ISubstitutionService>(),
                 Create.Service.ExpressionStatePrototypeProvider(),
-                Mock.Of<IReusableCategoriesStorage>());
+                Mock.Of<IReusableCategoriesFillerIntoQuestionnaire>());
 
             this.interviewFlagsStorage = new PostgresPlainStorageRepository<InterviewFlag>(IntegrationCreate.UnitOfWork(IntegrationCreate.SessionFactory(this.connectionString,
                 new List<Type>
@@ -131,7 +132,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                 Mock.Of<IQuestionOptionsRepository>(),
                 Mock.Of<ISubstitutionService>(),
                 Create.Service.ExpressionStatePrototypeProvider(),
-                Mock.Of<IReusableCategoriesStorage>());
+                Mock.Of<IReusableCategoriesFillerIntoQuestionnaire>());
 
             document.Id = document.PublicKey.FormatGuid();
             questionnaireStorageLocal.StoreQuestionnaire(document.PublicKey, questionnaireVersion, document);

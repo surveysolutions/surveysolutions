@@ -7,6 +7,7 @@ using System.Text;
 using System.Web.Http;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
+using WB.Core.BoundedContexts.Headquarters.ReusableCategories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
@@ -23,15 +24,15 @@ namespace WB.UI.Headquarters.API.Export
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly ISerializer serializer;
         private readonly IPlainKeyValueStorage<QuestionnairePdf> pdfStorage;
-        private readonly IReusableCategoriesStorage reusableCategoriesStorage;
+        private readonly IReusableCategoriesFillerIntoQuestionnaire categoriesFillerIntoQuestionnaire;
 
         public QuestionnaireApiController(IQuestionnaireStorage questionnaireStorage, ISerializer serializer, IPlainKeyValueStorage<QuestionnairePdf> pdfStorage,
-            IReusableCategoriesStorage reusableCategoriesStorage)
+            IReusableCategoriesFillerIntoQuestionnaire categoriesFillerIntoQuestionnaire)
         {
             this.questionnaireStorage = questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
             this.serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
             this.pdfStorage = pdfStorage ?? throw new ArgumentNullException(nameof(pdfStorage));
-            this.reusableCategoriesStorage = reusableCategoriesStorage;
+            this.categoriesFillerIntoQuestionnaire = categoriesFillerIntoQuestionnaire;
         }
 
         [Route("{id}")]
@@ -41,7 +42,7 @@ namespace WB.UI.Headquarters.API.Export
         {
             var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
             QuestionnaireDocument questionnaireDocumentVersioned = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
-            reusableCategoriesStorage.FillCategoriesIntoQuestionnaireDocument(questionnaireIdentity, questionnaireDocumentVersioned);
+            categoriesFillerIntoQuestionnaire.FillCategoriesIntoQuestionnaireDocument(questionnaireIdentity, questionnaireDocumentVersioned);
 
             var response = new HttpResponseMessage();
             response.Content = new StringContent(this.serializer.Serialize(questionnaireDocumentVersioned), Encoding.UTF8, "application/json");

@@ -11,6 +11,5 @@ namespace WB.Core.SharedKernels.DataCollection.Repositories
         IEnumerable<CategoriesItem> GetOptions(QuestionnaireIdentity identity, Guid categoriesId);
         void Store(QuestionnaireIdentity questionnaireIdentity, Guid categoryId, List<CategoriesItem> reusableCategories);
         void RemoveCategories(QuestionnaireIdentity questionnaireIdentity, Guid categoriesId);
-        void FillCategoriesIntoQuestionnaireDocument(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaireDocument);
     }
 }

@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.ReusableCategories;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -129,6 +130,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Repositories
             fixture.Register<INativeReadSideStorage<QuestionnaireCompositeItem, int>>(() => inmemory);
             fixture.Register<IReusableCategoriesStorage>(() => reusableCategoriesStorage);
             fixture.Register<IQuestionOptionsRepository>(() => new QuestionnaireQuestionOptionsRepository());
+            fixture.Register<IReusableCategoriesFillerIntoQuestionnaire>(() => new ReusableCategoriesFillerIntoQuestionnaire(reusableCategoriesStorage));
             var storage = fixture.Create<HqQuestionnaireStorage>();
             storage.StoreQuestionnaire(questionnaire.PublicKey, 1, questionnaire);
 
