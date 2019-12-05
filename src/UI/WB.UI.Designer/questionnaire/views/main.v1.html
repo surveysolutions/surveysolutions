@@ -55,6 +55,7 @@
                     </span>
                     <span class="error-message strong" ng-show="questionnaire.isReadOnlyForUser" ng-i18next>ReadOnly</span>
                     <input id="webtest-btn" type="button" class="btn" ng-if="questionnaire.webTestAvailable && questionnaire.questionnaireRevision === null" ng-i18next="[value]Test" value="Test" ng-click="webTest()" />
+                    <span class="error-message strong" ng-show="questionnaire.previewRevision !== null" ng-i18next="({revision: questionnaire.previewRevision })Preview"></span>
                 </div>
             </div>
         </div>

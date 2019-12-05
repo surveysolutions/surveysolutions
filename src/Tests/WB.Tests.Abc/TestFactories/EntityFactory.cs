@@ -1298,6 +1298,12 @@ namespace WB.Tests.Abc.TestFactories
                 Roles = new SortedSet<UserRoles>(new[] {role})
             };
 
+        public HqRole HqRole(UserRoles role) => new HqRole
+        {
+            Id = role.ToUserId(),
+            Name = role.ToString()
+        };
+
         public HqUser HqUser(Guid? userId = null, Guid? supervisorId = null, bool? isArchived = null,
             string userName = "name", bool isLockedByHQ = false, UserRoles role = UserRoles.Interviewer,
             string deviceId = null, string passwordHash = null, string passwordHashSha1 = null, string interviewerVersion = null,
@@ -1321,9 +1327,9 @@ namespace WB.Tests.Abc.TestFactories
                 },
                 PasswordHash = passwordHash,
                 PasswordHashSha1 = passwordHashSha1,
+                Roles = new List<HqRole> { Create.Entity.HqRole(role) },
                 SecurityStamp = securityStamp ?? Guid.NewGuid().ToString()
             };
-            user.Roles.Add(new HqUserRole {UserId = user.Id, RoleId = role.ToUserId()});
 
             return user;
         }

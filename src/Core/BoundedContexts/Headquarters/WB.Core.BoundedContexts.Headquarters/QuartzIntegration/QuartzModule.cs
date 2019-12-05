@@ -60,11 +60,9 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             var connectionString = serviceLocator.GetInstance<UnitOfWorkConnectionSettings>();
-
             DatabaseManagement.InitDatabase(connectionString.ConnectionString, "quartz");
             var dbUpgradeSettings = new DbUpgradeSettings(migrationsAssembly, nameSpace);
             DbMigrationsRunner.MigrateToLatest(connectionString.ConnectionString, "quartz", dbUpgradeSettings);
-
             return Task.CompletedTask;
         }
     }

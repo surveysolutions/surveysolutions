@@ -126,14 +126,16 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
 
             questionnaireInfoView.SharedPersons = sharedPersons;
 
+            questionnaireInfoView.PreviewRevision = revision.Version;
             if (revision.Revision != null)
             {
                 questionnaireInfoView.IsReadOnlyForUser = true;
+                questionnaireInfoView.PreviewRevision = revision.Version;
             }
             else
             {
                 questionnaireInfoView.IsReadOnlyForUser = person == null || (!person.IsOwner && person.ShareType != ShareType.Edit);
-
+                questionnaireInfoView.PreviewRevision = null;
             }
             questionnaireInfoView.IsSharedWithUser = person != null;
             questionnaireInfoView.WebTestAvailable = this.questionnaireCompilationVersion.GetById(listItem.PublicId)?.Version == null;

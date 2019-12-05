@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Headquarters.InterviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
+using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Implementation;
@@ -45,7 +46,9 @@ namespace WB.Tests.Abc.TestFactories
         public TestInMemoryWriter<TEntity, TKey> InMemoryReadSideStorage<TEntity, TKey>() where TEntity : class, IReadSideRepositoryEntity => new TestInMemoryWriter<TEntity, TKey>();
 
         public IUserViewFactory UserViewFactory(params HqUser[] users) => new UserViewFactory(
-            this.UserRepository(users), NewMemoryCache());
+            this.UserRepository(users),
+            NewMemoryCache(),
+            Create.Storage.InMemoryPlainStorage<DeviceSyncInfo>());
 
         public IUserRepository UserRepository(params HqUser[] users)
             => Mock.Of<IUserRepository>(x => x.Users == users.AsQueryable());

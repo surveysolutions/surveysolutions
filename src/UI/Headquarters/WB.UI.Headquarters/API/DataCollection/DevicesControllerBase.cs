@@ -105,6 +105,7 @@ namespace WB.UI.Headquarters.API.DataCollection
 
             user.Profile.DeviceAppBuildVersion = info.AppBuildVersion;
             user.Profile.DeviceAppVersion = info.AppVersion;
+            user.Profile.StorageFreeInBytes = info.StorageInfo?.Free;
 
             await this.userManager.UpdateAsync(user);
 
