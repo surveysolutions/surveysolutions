@@ -38,8 +38,6 @@ namespace WB.Enumerator.Native.WebInterview
                 await pipelineModule.OnDisconnected(this, stopCalled);
             }
             
-            await UnregisterClient();
-
             await base.OnDisconnected(stopCalled);
         }
 
@@ -66,23 +64,18 @@ namespace WB.Enumerator.Native.WebInterview
             }
         }
 
-        private async Task UnregisterClient()
-        {
-            var interviewId = CallerInterviewId;
-            var sectionId = Clients.CallerState.sectionId as string;
-
-            await Groups.Remove(Context.ConnectionId, GetGroupNameBySectionIdentity(sectionId, interviewId));
-            await Groups.Remove(Context.ConnectionId, interviewId);
-        }
-
         public async Task ChangeSection(string newSection, string oldSectionId)
         {
             var interviewId = CallerInterviewId;
             
             if (interviewId != null)
             {
-                await Groups.Remove(Context.ConnectionId, GetGroupNameBySectionIdentity(oldSectionId, interviewId));
-                await Groups.Add(Context.ConnectionId, GetGroupNameBySectionIdentity(newSection, interviewId));
+                var contextConnectionId = Context.ConnectionId;
+                var oldGroupName = GetGroupNameBySectionIdentity(oldSectionId, interviewId);
+                var newGroup = GetGroupNameBySectionIdentity(newSection, interviewId);
+
+                await Groups.Remove(contextConnectionId, oldGroupName);
+                await Groups.Add(contextConnectionId, newGroup);
             }
         }
 

@@ -19,6 +19,9 @@ export default {
         const api = {
             changeSection(to, from) {
                 return connection.send("changeSection", to, from)
+            },
+            stop(){
+                return connection.stop()
             }
         };
 

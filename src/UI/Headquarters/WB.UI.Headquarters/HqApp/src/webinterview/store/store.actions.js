@@ -88,12 +88,12 @@ export default {
         return Vue.$api.interview.answer(questionIdentity, 'answerLinkedToListSingleQuestion', { answer })
     },
 
-    answerMultimediaQuestion({ }, { id, file }) {
-        return Vue.$api.interview.upload(Vue.$config.imageUploadUri, id, file)
+    answerMultimediaQuestion({ }, { identity, file }) {
+        return Vue.$api.interview.upload(Vue.$config.imageUploadUri, identity, file)
     },
 
-    answerAudioQuestion({ }, { id, file }) {
-        return Vue.$api.interview.upload(Vue.$config.audioUploadUri, id, file)
+    answerAudioQuestion({ }, { identity, file }) {
+        return Vue.$api.interview.upload(Vue.$config.audioUploadUri, identity, file)
     },
 
     answerQRBarcodeQuestion({ }, { identity, text }) {
@@ -123,7 +123,6 @@ export default {
 
     // called by server side. reload interview
     reloadInterview() {
-        // Vue.$api.stop()
         location.reload(true)
     },
 
@@ -293,7 +292,7 @@ export default {
     },
 
     stop() {
-        
+        Vue.$api.hub.stop() 
     },
 
     changeSection({ }, { to, from }) {

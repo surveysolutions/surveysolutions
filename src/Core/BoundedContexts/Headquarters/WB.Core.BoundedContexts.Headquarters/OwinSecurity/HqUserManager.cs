@@ -6,7 +6,6 @@ using System.Security.Authentication;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
-using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -156,7 +155,9 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         public virtual async Task<IdentityResult> CreateUserAsync(HqUser user, string password, UserRoles role)
         {
             user.CreationDate = DateTime.UtcNow;
-            user.Roles.Add(new HqUserRole {UserId = user.Id, RoleId = role.ToUserId()});
+
+            var roleEntity = store.FindRole(role.ToUserId());
+            user.Roles.Add(roleEntity);
 
             var result = await this.UpdatePasswordAsync(user, password);
 
@@ -305,7 +306,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             return result;
         }
 
-        public Task<bool> IsExistAnyUser() => this.store.Users.AnyAsync();
+        public bool IsExistAnyUser() => this.store.Users.Any();
 
         /// <summary>
         ///     Create a user with no password
@@ -445,7 +446,6 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         {
             if (disposing && !_disposed)
             {
-                store.Dispose();
                 _disposed = true;
             }
         }

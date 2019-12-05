@@ -3,65 +3,35 @@
     See https://bitbucket.org/thirteen/switchstartupproject/src/tip/Configuration.md
 */
 {
-    /*  Configuration File Version  */
-    "Version": 3,
-    
-    /*  Create an item in the dropdown list for each project in the solution?  */
-    "ListAllProjects": false,
+  "$schema": "https://bitbucket.org/thirteen/switchstartupproject/raw/85bd45bb849a73baaf43a8157cd523f65ffb7e9c/SwitchStartupProject/Configuration/ConfigurationSchema.json",
+  /*  Configuration File Version  */
+  "Version": 3,
 
-    /*
-        Dictionary of named configurations with one or multiple startup projects
-        and optional parameters like command line arguments and working directory.
-        Example:
+  /*  Create an item in the dropdown list for each project in the solution?  */
+  "ListAllProjects": false,
 
-        "MultiProjectConfigurations": {
-            "A + B (Ext)": {
-                "Projects": {
-                    "MyProjectA": {},
-                    "MyProjectB": {
-                        "CommandLineArguments": "1234",
-                        "WorkingDirectory": "%USERPROFILE%\\test",
-                        "StartExternalProgram": "c:\\myprogram.exe"
-                    }
-                }
-            },
-            "A + B": {
-                "Projects": {
-                    "MyProjectA": {},
-                    "MyProjectB": {
-                        "CommandLineArguments": "",
-                        "WorkingDirectory": "",
-                        "StartProject": true
-                    }
-                }
-            },
-            "D": {
-                "Projects": {
-                    "MyProjectD": {}
-                }
-            }
+  "MultiProjectConfigurations": {
+    "HQ": {
+      "Projects": {
+        "WB.UI.Headquarters": {}
+      }
+    },
+    "Services.Export": {
+      "Projects": {
+        "WB.Services.Export.Host": {
+          "StartProject": true
         }
-    */
-    "MultiProjectConfigurations": {
-      "HQ": {
-        "Projects": {
-          "WB.UI.Headquarters": {}
+      }
+    },
+    "WebTester": {
+      "Projects": {
+        "WB.UI.Designer": {
+          "ProfileName": "WB.UI.Designer"
+        },
+        "WB.UI.WebTester": {
+          "ProfileName": "WebTester"
         }
-      },
-      "Services.Export": {
-        "Projects": {
-          "WB.Services.Export.Host": {
-            "StartProject": true
-          }
-        }
-      },
-      "WebTester": {
-          "Projects": {
-            "WB.UI.Designer": {
-              "StartBrowserWithURL": "https://localhost:5002/questionnaire/details/6158dd074d64498f8a50e5e9828fda23"
-            },
-            "WB.UI.WebTester":  {}
-          } 
-      } 
+      }
     }
+  }
 }

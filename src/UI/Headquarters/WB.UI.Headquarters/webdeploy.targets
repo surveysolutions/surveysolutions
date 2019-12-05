@@ -49,10 +49,22 @@
       <ArcGISRuntimeFolderMask>ArcGISRuntime*</ArcGISRuntimeFolderMask>
     </PropertyGroup>
     <ItemGroup>
-        <ArcGISRuntime Include="$([System.IO.Directory]::GetDirectories(&quot;$(_PackageTempDir)&quot;, &quot;$(ArcGISRuntimeFolderMask)&quot;))" />
+      <ArcGISRuntime Include="$([System.IO.Directory]::GetDirectories(&quot;$(_PackageTempDir)&quot;, &quot;$(ArcGISRuntimeFolderMask)&quot;))" />
     </ItemGroup>
     <Message Text="Delete Esri Extra folder: @(ArcGISRuntime)" Importance="high" />
     <RemoveDir Directories="@(ArcGISRuntime)" />
   </Target>
+
+
+    <Target Name="DeleteRoslyn" AfterTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy" Condition="'$(NCrunch)' != '1'">
+        <PropertyGroup>
+            <ArcGISRuntimeFolderMask>bin\roslyn</ArcGISRuntimeFolderMask>
+        </PropertyGroup>
+        <ItemGroup>
+            <ArcGISRuntime Include="$([System.IO.Directory]::GetDirectories(&quot;$(_PackageTempDir)&quot;, &quot;$(ArcGISRuntimeFolderMask)&quot;))" />
+        </ItemGroup>
+        <Message Text="Delete Roslyn folder: @(ArcGISRuntime)" Importance="high" />
+        <RemoveDir Directories="@(ArcGISRuntime)" />
+    </Target>
 
 </Project>
