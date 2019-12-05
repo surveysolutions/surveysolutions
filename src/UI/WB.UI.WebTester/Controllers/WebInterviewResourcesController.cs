@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Buffers;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Net.Http.Headers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Services;
 using WB.UI.WebTester.Services;
@@ -51,7 +45,7 @@ namespace WB.UI.WebTester.Controllers
 
         [HttpGet]
         [Route("content")]
-        public IActionResult Content([FromQuery] string interviewId, [FromQuery] string contentId)
+        public IActionResult GetContent([FromQuery] string interviewId, [FromQuery] string contentId)
         {
             var attachment = attachmentStorage.Get(contentId, Guid.Parse(interviewId));
             if (attachment == null)
