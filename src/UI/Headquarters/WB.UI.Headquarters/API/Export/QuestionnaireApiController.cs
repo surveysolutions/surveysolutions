@@ -23,12 +23,15 @@ namespace WB.UI.Headquarters.API.Export
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly ISerializer serializer;
         private readonly IPlainKeyValueStorage<QuestionnairePdf> pdfStorage;
+        private readonly IReusableCategoriesStorage reusableCategoriesStorage;
 
-        public QuestionnaireApiController(IQuestionnaireStorage questionnaireStorage, ISerializer serializer, IPlainKeyValueStorage<QuestionnairePdf> pdfStorage)
+        public QuestionnaireApiController(IQuestionnaireStorage questionnaireStorage, ISerializer serializer, IPlainKeyValueStorage<QuestionnairePdf> pdfStorage,
+            IReusableCategoriesStorage reusableCategoriesStorage)
         {
             this.questionnaireStorage = questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
             this.serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
             this.pdfStorage = pdfStorage ?? throw new ArgumentNullException(nameof(pdfStorage));
+            this.reusableCategoriesStorage = reusableCategoriesStorage;
         }
 
         [Route("{id}")]
@@ -38,6 +41,8 @@ namespace WB.UI.Headquarters.API.Export
         {
             var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
             QuestionnaireDocument questionnaireDocumentVersioned = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
+            reusableCategoriesStorage.FillCategoriesIntoQuestionnaireDocument(questionnaireIdentity, questionnaireDocumentVersioned);
+
             var response = new HttpResponseMessage();
             response.Content = new StringContent(this.serializer.Serialize(questionnaireDocumentVersioned), Encoding.UTF8, "application/json");
             return response;
