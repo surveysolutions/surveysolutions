@@ -23,6 +23,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.Questionnaire;
+using WB.Infrastructure.Native.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQuestionnaireTemplate
 {
@@ -189,10 +190,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
 
         private void DeleteReusableCategories(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaireDocument)
         {
-            foreach (var categories in questionnaireDocument.Categories)
-            {
-                reusableCategoriesStorage.RemoveCategories(questionnaireIdentity, categories.Id);
-            }
+            reusableCategoriesStorage.RemoveCategories(questionnaireIdentity);
         }
 
         private void DeleteTranslations(Guid questionnaireId, long questionnaireVersion)
