@@ -94,6 +94,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="Resources\TabletLogs.Designer.cs">
+      <DependentUpon>TabletLogs.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Update="Resources\Users.Designer.cs">
       <DependentUpon>Users.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -232,6 +237,14 @@
     </EmbeddedResource>
       <EmbeddedResource Update="Resources\FieldsAndValidations.sq.resx">
           <DependentUpon>FieldsAndValidations.resx</DependentUpon>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\TabletLogs.resx">
+        <SubType>Designer</SubType>
+        <LastGenOutput>TabletLogs.Designer.cs</LastGenOutput>
+        <Generator>PublicResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\TabletLogs.ru.resx">
+          <DependentUpon>TabletLogs.resx</DependentUpon>
       </EmbeddedResource>
   </ItemGroup>
 </Project>

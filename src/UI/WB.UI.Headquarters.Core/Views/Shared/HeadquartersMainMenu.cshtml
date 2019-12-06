@@ -1,9 +1,11 @@
 ﻿@using WB.Core.BoundedContexts.Headquarters.Resources
 @using WB.Core.BoundedContexts.Headquarters.Services
+@using WB.Core.SharedKernels.SurveyManagement.Web.Models
+@using WB.UI.Headquarters.Services
+@inject IAuthorizedUser authorizedUser
 
 @{
     var page = ViewBag.ActivePage ?? MenuItem.Logon;
-    var isCurrentUserObserver = DependencyResolver.Current.GetService<IAuthorizedUser>().IsObserver;
 }
 <ul class="nav navbar-nav">
     <li class="dropdown @(page == MenuItem.MapReport || 
@@ -38,7 +40,7 @@
         <ul class="dropdown-menu">
             @Html.MainMenuItem("Index", "Supervisor", @MainMenu.Supervisors, MenuItem.Teams)
             @Html.MainMenuItem("Index", "Interviewers", @MainMenu.Interviewers, MenuItem.Interviewers)
-            @if (!isCurrentUserObserver)
+            @if (!authorizedUser.IsObserver)
             {
                 @Html.MainMenuItem("Upload", "Users", @MainMenu.UserBatchUpload, MenuItem.UserBatchUpload)
             }
@@ -60,7 +62,6 @@
     }
 </ul>
 <ul class="nav navbar-nav navbar-right" role="menu">
-    @Html.Partial("QueueIndicator")
     <li><a href="http://support.mysurvey.solutions/headquarters" target="_blank" title="Help">@MainMenu.Help</a></li>
     <li class="dropdown @(page == MenuItem.ManageAccount ? "active" : "")">
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@User.Identity.Name">
@@ -71,6 +72,4 @@
             <li>@Html.ActionLink(Common.Logoff, "LogOff", "Account", new {area = string.Empty}, null)</li>
         </ul>
     </li>
-
-    @Html.Partial("LimitsIndicator")
 </ul>
