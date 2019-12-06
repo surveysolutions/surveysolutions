@@ -208,7 +208,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
             foreach (var elementId in ids)
             {
-                if (questionnaire.IsTableRoster(elementId.Id))
+                if (questionnaire.IsTableRoster(elementId.Id) || questionnaire.IsMatrixRoster(elementId.Id))
                 {
                     var tableRosterIdentity = new Identity(elementId.Id, sectionIdentity.RosterVector);
                     if (!groupIds.Contains(tableRosterIdentity))
@@ -334,7 +334,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             if (questionnaire == null) return null;
 
             ReadOnlyCollection<Guid> parentIds = questionnaire.GetParentsStartingFromTop(groupId.Id)
-                .Except(id => questionnaire.IsFlatRoster(id) || questionnaire.IsTableRoster(id))
+                .Except(id => questionnaire.IsFlatRoster(id) || questionnaire.IsTableRoster(id) || questionnaire.IsMatrixRoster(id))
                 .ToReadOnlyCollection();
 
             var breadCrumbs = new List<Breadcrumb>();
@@ -579,6 +579,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                     return InterviewEntityType.GroupTitle;
                 if (callerQuestionnaire.IsTableRoster(entityId))
                     return InterviewEntityType.TableRoster;
+                if (callerQuestionnaire.IsMatrixRoster(entityId))
+                    return InterviewEntityType.MatrixRoster;
                 return InterviewEntityType.Group;
             }
 

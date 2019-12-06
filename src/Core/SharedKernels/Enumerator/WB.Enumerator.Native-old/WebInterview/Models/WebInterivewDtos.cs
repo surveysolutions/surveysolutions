@@ -251,7 +251,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
     {
         public Validity Validity { get; set; } = new Validity();
 
-        public TableRosterQuestionReference[] Questions { get; set; }
+        public RosterQuestionReference[] Questions { get; set; }
 
         public TableRosterInstance[] Instances { get; set; }
     }
@@ -264,14 +264,23 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public Validity Validity { get; set; } = new Validity();
     }
 
-    public class TableRosterQuestionReference 
+
+    public class RosterQuestionReference 
     {
         public string Id { get; set; }
         public string Title { get; set; }
         public string EntityType { get; set; }
         public string Instruction { get; set; }
     }
-    
+
+    public class TableRosterQuestionReference : RosterQuestionReference
+    {
+    }
+
+    public class MatrixRosterQuestionReference : RosterQuestionReference
+    {
+        public CategoricalOption[] Options { get; set; }
+    }
 
     public class Sidebar
     {

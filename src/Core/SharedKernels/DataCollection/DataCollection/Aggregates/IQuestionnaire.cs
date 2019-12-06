@@ -294,6 +294,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         DateTime? GetDefaultDateForDateQuestion(Guid dateQuestionId);
         bool IsFlatRoster(Guid groupId);
         bool IsTableRoster(Guid groupId);
+        bool IsMatrixRoster(Guid groupId);
 
         bool ShowCascadingAsList(Guid id);
         int? GetCascadingAsListThreshold(Guid id);
