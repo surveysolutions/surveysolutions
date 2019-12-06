@@ -1,8 +1,8 @@
 <template>
-    <div style="display:flex;" class="options-group" v-bind:class="{ 'dotted': noOptions }" v-if="!disabled">
-                <div class="radio" v-for="option in answeredOrAllOptions" :key="$me.id + '_' + option.value">
-                    <div style="width:220px;border: 1px solid #E5E5E5; margin:3px;" class="field"> 
-                        <input style="text-align:center; vertical-align:middle" class="wb-radio" type="radio" 
+    <div class="options-group h-100 d-flex" v-bind:class="{ 'dotted': noOptions }" v-if="!disabled">
+                <div class="radio cell-bordered" v-for="option in editorParams.question.options" :key="$me.id + '_' + option.value">
+                    <div style="width:220px; text-align:center; " class="field"> 
+                        <input v-if="answeredOrAllOptions.some(e => e.value === option.value)" class="wb-radio" type="radio" 
                           :id="`${$me.id}_${option.value}`" 
                           :name="$me.id" 
                           :value="option.value" 
@@ -12,11 +12,9 @@
                         <label :for="$me.id + '_' + option.value">
                             <span class="tick"></span> 
                         </label>
-                        <wb-remove-answer :id-suffix="`_opt_${option.value}`"/>
+                        <!--wb-remove-answer :id-suffix="`_opt_${option.value}`"/-->
                     </div>
-                </div>                
-                <div v-if="noOptions" class="options-not-available">{{ $t("WebInterviewUI.OptionsAvailableAfterAnswer") }}</div>
-                <wb-lock />
+                </div>
             </div>
 </template>
 
@@ -63,16 +61,13 @@
             },
             answerSingle(value) {
                 this.$store.dispatch("answerSingleOptionQuestion", { answer: value, identity: this.$me.id })
-            },
-            questionId()  {
-                return this.params.value.identity
-            },            
+            },                       
             toggleOptions(){
                 this.showAllOptions = !this.showAllOptions;
             }
         },
         mounted() {
-            this.answer = this.$me.answer
+            this.answer = this.$me.answer            
         }
     }
 </script>
