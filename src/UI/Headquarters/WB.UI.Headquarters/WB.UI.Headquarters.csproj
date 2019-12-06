@@ -1282,12 +1282,6 @@
       <DependentUpon>SyncLogMessages.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\SyncLogMessages.sq.resx" />
-    <EmbeddedResource Include="Resources\TabletLogs.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>TabletLogs.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\TabletLogs.ru.resx" />
     <EmbeddedResource Include="Resources\TabletSyncMessages.ar.resx">
       <DependentUpon>TabletSyncMessages.resx</DependentUpon>
     </EmbeddedResource>
@@ -2092,11 +2086,6 @@
     <Compile Include="API\PublicApi\Models\AuditLogApiView.cs" />
     <Compile Include="Controllers\QuestionnairesController.cs" />
     <Compile Include="Models\QuestionnaireDetailsModel.cs" />
-    <Compile Include="Resources\TabletLogs.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>TabletLogs.resx</DependentUpon>
-    </Compile>
     <Compile Include="Resources\Questionnaire.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
