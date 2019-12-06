@@ -1028,6 +1028,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.GetGroup(entityId)?.DisplayMode == RosterDisplayMode.Table;
         }
 
+        public bool IsMatrixRoster(Guid entityId)
+        {
+            return this.GetGroup(entityId)?.DisplayMode == RosterDisplayMode.Matrix;
+        }
+
         public bool ShowCascadingAsList(Guid questionId)
         {
             if (!this.IsQuestionCascading(questionId))

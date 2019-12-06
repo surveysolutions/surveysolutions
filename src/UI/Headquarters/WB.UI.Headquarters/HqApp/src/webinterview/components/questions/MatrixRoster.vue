@@ -1,5 +1,5 @@
 <template>
-    <div class="question table-view scroller" :id="hash">
+    <div class="question table-view scroller" :id="hash">        
         <ag-grid-vue 
             ref="tableRoster"
             class="ag-theme-customStyles"
@@ -27,14 +27,14 @@
     import { debounce, every, some } from "lodash"
     import { AgGridVue } from "ag-grid-vue";
 
-    import TableRoster_QuestionEditor from "./TableRoster.QuestionEditor";
-    import TableRoster_ViewAnswer from "./TableRoster.ViewAnswer";
-    import TableRoster_RosterTitle from "./TableRoster.RosterTitle";
-    import TableRoster_QuestionTitle from "./TableRoster.QuestionTitle";
-    import TableRoster_CategoricalSingle from "./MatrixRoster.CategoricalSingle";
+    import MatrixRoster_QuestionEditor from "./MatrixRoster.QuestionEditor";
+    //import TableRoster_ViewAnswer from "./TableRoster.ViewAnswer";
+    import MatrixRoster_RosterTitle from "./MatrixRoster.RosterTitle";
+    import MatrixRoster_QuestionTitle from "./MatrixRoster.QuestionTitle";
+    import MatrixRoster_CategoricalSingle from "./MatrixRoster.CategoricalSingle";
 
     export default {
-        name: 'TableRoster',
+        name: 'MatrixRoster',
         mixins: [entityDetails],
         
         data() {
@@ -51,11 +51,11 @@
 
         components: {
             AgGridVue,
-            TableRoster_ViewAnswer,
-            TableRoster_QuestionEditor,
-            TableRoster_RosterTitle,
-            TableRoster_QuestionTitle,
-            TableRoster_CategoricalSingle
+            //TableRoster_ViewAnswer,
+            MatrixRoster_QuestionEditor,
+            MatrixRoster_RosterTitle,
+            MatrixRoster_QuestionTitle,
+            MatrixRoster_CategoricalSingle
         },
 
         beforeMount() {
@@ -65,7 +65,7 @@
                 width: 220, // set every column width
                 height: 76,
                 resizable: true,
-                editable: true, // make every column editable
+                editable: false, // make every column editable
                 autoHeight: true,
             };
 
@@ -93,7 +93,9 @@
         computed: {
             gridOptions() {
                 return {
-                    stopEditingWhenGridLosesFocus: true
+                    suppressClickEdit:true,
+                    suppressCellSelection:true
+                    //stopEditingWhenGridLosesFocus: true
                 }
             }
         },
@@ -105,34 +107,36 @@
                     (question, key) => {
                         return {
                             headerName: question.title, 
-                            headerComponentFramework: 'TableRoster_QuestionTitle',
+                            headerComponentFramework: 'MatrixRoster_QuestionTitle',
                             headerComponentParams: {
-                                title: question.title,
+                                //title: question.title,
                                 instruction: question.instruction,
                                 question: question
                             },
+                            width:question.options.length * 226,
                             field: question.id, 
-                            cellRendererFramework: 'TableRoster_ViewAnswer',
+                            cellRendererFramework: 'MatrixRoster_QuestionEditor',
                             cellRendererParams: {
                                 id: question.id,
-                                question: question
+                                question: question,
+                                value: question
                             },
-                            cellEditorFramework: 'TableRoster_QuestionEditor', 
-                            cellEditorParams: {
-                                id: question.id,
-                                value: question,
-                            },
+                            //cellEditorFramework: 'MatrixRoster_QuestionEditor', 
+                            //cellEditorParams: {
+                            //    id: question.id,
+                            //    value: question,
+                            //},
                         };
                     }
                 );
                 columnsFromQuestions.unshift({
-                    headerName: this.$me.title, 
+                    headerName: "",//this.$me.title, 
                     field: "rosterTitle", 
                     autoHeight: true, 
                     pinned: true, 
                     editable: false,                     
                     cellStyle: {minHeight: '40px'}, 
-                    cellRendererFramework: 'TableRoster_RosterTitle',
+                    cellRendererFramework: 'MatrixRoster_RosterTitle',
                     cellRendererParams: { }
                 })
                 this.columnDefs = columnsFromQuestions
