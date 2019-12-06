@@ -16,7 +16,6 @@ using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -135,7 +134,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
                     assignment.IsAudioRecordingEnabled
                 );
 
-                await this.commandService.ExecuteAsync(createInterviewCommand);
+                this.commandService.Execute(createInterviewCommand);
                 assignment.CreatedInterviewsCount = (assignment.CreatedInterviewsCount ?? 0) + 1;
                 assignmentsRepository.Store(assignment);
                 var formatGuid = interviewId.FormatGuid();
@@ -145,9 +144,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
 
                 return interviewId;
             }
-            catch (InterviewException e)
+            catch (Exception e)
             {
-                logger.Error($"Failed to create interview {interviewId}. {e.ToString()}", e);
+                logger.Error($"Failed to create interview {interviewId}. {e}", e);
                 await userInteractionService.AlertAsync(string.Format(EnumeratorUIResources.FailedToCreateInterview, e.Message), UIResources.Error);
             }
 
