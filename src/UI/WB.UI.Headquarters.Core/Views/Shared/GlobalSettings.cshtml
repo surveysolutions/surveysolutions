@@ -39,13 +39,6 @@
                    },
                    clientDateTimeFormat = Extensions.ClientDateTimeFormat,
                    config = new {
-                    syncQueue = new {
-                        enabled = DependencyResolver.Current.GetService<SyncSettings>().UseBackgroundJobForProcessingPackages,
-                        lengthUrl = Url.RouteUrl("DefaultApiWithAction", new
-                        {
-                            httproute = "", controller = "ControlPanelApi", action = "GetIncomingPackagesQueueLength"
-                        })
-                    },
                     basePath = Url.Content("~/"),
                     dataTableTranslationsUrl = Url.RouteUrl("DefaultApi", new
                     {
