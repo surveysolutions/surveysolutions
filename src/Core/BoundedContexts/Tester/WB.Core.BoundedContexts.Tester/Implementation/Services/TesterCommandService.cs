@@ -3,10 +3,8 @@ using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
@@ -16,16 +14,10 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
     {
         private readonly IExecutedCommandsStorage executedCommandsStorage;
 
-        public TesterCommandService(IEventSourcedAggregateRootRepository eventSourcedRepository,
-            ILiteEventBus eventBus,
-            IServiceLocator serviceLocator,
-            IPlainAggregateRootRepository plainRepository,
+        public TesterCommandService(IServiceLocator serviceLocator,
             IAggregateLock aggregateLock,
-            IAggregateRootCacheCleaner aggregateRootCacheCleaner,
-            IExecutedCommandsStorage executedCommandsStorage,
-            ICommandsMonitoring monitoring) : 
-                base(eventSourcedRepository, eventBus, 
-                     serviceLocator, plainRepository, aggregateLock, aggregateRootCacheCleaner, monitoring)
+            IExecutedCommandsStorage executedCommandsStorage) : 
+                base(serviceLocator, aggregateLock)
         {
             this.executedCommandsStorage = executedCommandsStorage;
         }
