@@ -78,6 +78,11 @@
                     font-style: italic;
                 }
             }
+            .radio{
+                display: flex;
+                align-items: center;
+                flex-direction: row;
+            }
         }
         .ag-cell:not(.ag-cell-last-left-pinned){
             .cell-unit{
@@ -148,6 +153,14 @@
                 
             }
 
+        }
+        .cell-bordered{
+            border: 1px solid #e5e5e5;
+            border-bottom: none;
+            border-top: none;
+            &:first-of-type{
+                border-left: none;
+            }
         }
     }
     .cell-wrap-text {

@@ -1,14 +1,13 @@
 <template>
-    <div style="display:flex;" class="options-group" v-bind:class="{ 'dotted': noOptions }" v-if="!disabled">
+    <div class="options-group h-100 d-flex" v-bind:class="{ 'dotted': noOptions }" v-if="!disabled">
         <div
-          class="form-group"
-          v-for="option in answeredOrAllOptions"
+          class="cell-bordered d-flex" style="align-items:center;"
+          v-for="option in editorParams.question.options"
           :key="$me.id + '_' + option.value"
-          v-bind:class="{ 'unavailable-option locked-option': isProtected(option.value) }"
-        >
-        <div style="width:220px;border: 1px solid #E5E5E5; margin:3px;">
+          v-bind:class="{ 'unavailable-option locked-option': isProtected(option.value) }">
+        <div style="width:220px;text-align: center;">
           <input
-            style="text-align:center; vertical-align:middle"
+            v-if="answeredOrAllOptions.some(e => e.value === option.value)"
             class="wb-checkbox"
             type="checkbox"
             :id="$me.id + '_' + option.value"
@@ -20,17 +19,12 @@
             v-disabledWhenUnchecked="{
                                 maxAnswerReached: allAnswersGiven,
                                 answerNotAllowed: !$me.acceptAnswer,
-                                forceDisabled: isProtected(option.value) }"
-          />
+                                forceDisabled: isProtected(option.value) }"/>
           <label :for="$me.id + '_' + option.value">
             <span class="tick"></span>            
-          </label>
-          <div class="badge" v-if="$me.ordered">{{ getAnswerOrder(option.value) }}</div>
-          <div class="lock"></div>
+          </label>          
           </div>
-        </div>        
-        <div v-if="noOptions" class="options-not-available">{{ $t("WebInterviewUI.OptionsAvailableAfterAnswer") }}</div>
-        <wb-lock />
+        </div>
       </div>
 </template>
 
