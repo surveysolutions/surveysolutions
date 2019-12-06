@@ -71,21 +71,21 @@ export default {
     answerTextListQuestion({ }, { identity, rows }) {
         return Vue.$api.interview.answer(identity, 'answerTextListQuestion', { answer: rows })
     },
-    answerLinkedSingleOptionQuestion({ }, { questionIdentity, answer }) {
-        return Vue.$api.interview.answer(questionIdentity, 'answerLinkedSingleOptionQuestion', { answer })
+    answerLinkedSingleOptionQuestion({ }, { identity, answer }) {
+        return Vue.$api.interview.answer(identity, 'answerLinkedSingleOptionQuestion', { answer })
     },
-    answerLinkedMultiOptionQuestion({ }, { questionIdentity, answer }) {
-        return Vue.$api.interview.answer(questionIdentity, 'answerLinkedMultiOptionQuestion', { answer })
-    },
-
-    // TODO: there is no usages, check
-    answerLinkedToListMultiQuestion({ }, { questionIdentity, answer }) {
-        return Vue.$api.interview.answer(questionIdentity, 'answerLinkedToListMultiQuestion', {  answer })
+    answerLinkedMultiOptionQuestion({ }, { identity, answer }) {
+        return Vue.$api.interview.answer(identity, 'answerLinkedMultiOptionQuestion', { answer })
     },
 
     // TODO: there is no usages, check
-    answerLinkedToListSingleQuestion({ }, { questionIdentity, answer }) {
-        return Vue.$api.interview.answer(questionIdentity, 'answerLinkedToListSingleQuestion', { answer })
+    answerLinkedToListMultiQuestion({ }, { identity, answer }) {
+        return Vue.$api.interview.answer(identity, 'answerLinkedToListMultiQuestion', {  answer })
+    },
+
+    // TODO: there is no usages, check
+    answerLinkedToListSingleQuestion({ }, { identity, answer }) {
+        return Vue.$api.interview.answer(identity, 'answerLinkedToListSingleQuestion', { answer })
     },
 
     answerMultimediaQuestion({ }, { identity, file }) {

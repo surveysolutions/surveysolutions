@@ -1386,9 +1386,9 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Assignments received by Interviewer.
         /// </summary>
-        public static string InterviewerProfile_DownloadedInterviewsCount {
+        public static string InterviewerProfile_DownloadedAssignmentsCount {
             get {
-                return ResourceManager.GetString("InterviewerProfile_DownloadedInterviewsCount", resourceCulture);
+                return ResourceManager.GetString("InterviewerProfile_DownloadedAssignmentsCount", resourceCulture);
             }
         }
         

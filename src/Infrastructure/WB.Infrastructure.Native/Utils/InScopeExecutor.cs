@@ -1,4 +1,6 @@
-﻿namespace WB.Enumerator.Native.WebInterview
+﻿using WB.Core.Infrastructure.Domain;
+
+namespace WB.Enumerator.Native.WebInterview
 {
     public static class InScopeExecutor
     {
