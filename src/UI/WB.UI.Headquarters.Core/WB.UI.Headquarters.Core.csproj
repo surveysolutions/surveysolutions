@@ -11,17 +11,14 @@
     <Compile Remove="Services\HqSignInManager.cs" />
   </ItemGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="5.0.1" />
-        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0" />
-        <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="3.0.0" />
-        <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-    </ItemGroup>
-
   <ItemGroup>
-    <EmbeddedResource Remove="Resources\Common.ar.resx" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="5.0.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="3.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
   </ItemGroup>
+
 
   <ItemGroup>
     <None Remove="appsettings.Development.ini" />
@@ -34,10 +31,42 @@
     <Content Include="Resources\Common.ar.resx">
       <DependentUpon>Common.resx</DependentUpon>
     </Content>
+    <Content Include="Resources\Users.ar.resx">
+      <DependentUpon>Users.resx</DependentUpon>
+    </Content>
+    <Content Include="Resources\Users.es.resx">
+      <DependentUpon>Users.resx</DependentUpon>
+    </Content>
+    <Content Include="Resources\Users.fr.resx">
+      <DependentUpon>Users.resx</DependentUpon>
+    </Content>
+    <Content Include="Resources\Users.ka.resx">
+      <DependentUpon>Users.resx</DependentUpon>
+    </Content>
+    <Content Include="Resources\Users.pt.resx">
+      <DependentUpon>Users.resx</DependentUpon>
+    </Content>
+    <Content Include="Resources\Users.resx">
+      <SubType>Designer</SubType>
+      <LastGenOutput>Users.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </Content>
+    <Content Include="Resources\Users.ro.resx">
+      <DependentUpon>Users.resx</DependentUpon>
+    </Content>
+    <Content Include="Resources\Users.ru.resx">
+      <DependentUpon>Users.resx</DependentUpon>
+    </Content>
+    <Content Include="Resources\Users.sq.resx">
+      <DependentUpon>Users.resx</DependentUpon>
+    </Content>
+    <Content Include="Resources\Users.zh.resx">
+      <DependentUpon>Users.resx</DependentUpon>
+    </Content>
   </ItemGroup>
 
 
-    <ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj" />
     <ProjectReference Include="..\..\Infrastructure\WB.Persistence.Headquarters\WB.Persistence.Headquarters.csproj" />
     <ProjectReference Include="..\Shared\WB.UI.Shared.Web.Core\WB.UI.Shared.Web.Core.csproj" />
@@ -52,6 +81,21 @@
     </Compile>
     <Compile Update="Resources\Pages.Designer.cs">
       <DependentUpon>Pages.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\Common.Designer.cs">
+      <DependentUpon>Common.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\MainMenu.Designer.cs">
+      <DependentUpon>MainMenu.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\Users.Designer.cs">
+      <DependentUpon>Users.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
@@ -149,6 +193,9 @@
     <EmbeddedResource Update="Resources\Pages.ar.resx">
       <DependentUpon>Pages.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Pages.sq.resx">
+      <DependentUpon>Pages.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Pages.es.resx">
       <DependentUpon>Pages.resx</DependentUpon>
     </EmbeddedResource>
@@ -177,10 +224,14 @@
     <EmbeddedResource Update="Resources\Pages.zh.resx">
       <DependentUpon>Pages.resx</DependentUpon>
     </EmbeddedResource>
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Folder Include="Services\" />
+    <EmbeddedResource Update="Resources\MainMenu.sq.resx">
+      <DependentUpon>MainMenu.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Common.sq.resx">
+      <DependentUpon>Common.resx</DependentUpon>
+    </EmbeddedResource>
+      <EmbeddedResource Update="Resources\FieldsAndValidations.sq.resx">
+          <DependentUpon>FieldsAndValidations.resx</DependentUpon>
+      </EmbeddedResource>
   </ItemGroup>
 </Project>

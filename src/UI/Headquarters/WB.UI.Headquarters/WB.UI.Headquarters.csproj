@@ -797,35 +797,6 @@
     <Content Include="App_GlobalResources\TakeNewInterview.ru.resx">
       <DependentUpon>TakeNewInterview.resx</DependentUpon>
     </Content>
-    <Content Include="App_GlobalResources\Users.ar.resx">
-      <DependentUpon>Users.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Users.es.resx">
-      <DependentUpon>Users.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Users.fr.resx">
-      <DependentUpon>Users.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Users.ka.resx">
-      <DependentUpon>Users.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Users.pt.resx">
-      <DependentUpon>Users.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Users.resx">
-      <SubType>Designer</SubType>
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Users.Designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\Users.ro.resx">
-      <DependentUpon>Users.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Users.ru.resx">
-      <DependentUpon>Users.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Users.zh.resx">
-      <DependentUpon>Users.resx</DependentUpon>
-    </Content>
     <Content Include="Content\app.css" />
     <Content Include="Content\bootstrap-datepicker.css" />
     <Content Include="Content\bootstrap-datepicker.min.css" />
@@ -949,10 +920,6 @@
     <Content Include="App_GlobalResources\TakeNewInterview.sq.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>TakeNewInterview.sq.designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\Users.sq.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Users.sq.designer.cs</LastGenOutput>
     </Content>
     <EmbeddedResource Include="Content\img\no_image_found.jpg" />
     <Content Include="Content\img\sort_asc.png" />
@@ -1883,7 +1850,6 @@
     <None Include="parameters.xml">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="Views\Shared\HeadquartersMainMenu.cshtml" />
     <Content Include="Views\Supervisor\Create.cshtml" />
     <Content Include="Views\Supervisor\Edit.cshtml" />
     <Content Include="Views\Supervisor\Index.cshtml" />
@@ -1900,17 +1866,14 @@
     <Content Include="Views\HQ\TakeNewAssignment.cshtml" />
     <Content Include="Views\ControlPanel\CreateHeadquarters.cshtml" />
     <Content Include="Views\ControlPanel\ResetPrivilegedUserPassword.cshtml" />
-    <Content Include="Views\Shared\SupervisorMainMenu.cshtml" />
     <Content Include="Views\ControlPanel\ReexportInterviews.cshtml" />
     <Content Include="Views\ControlPanel\CreateAdmin.cshtml" />
-    <Content Include="Views\Shared\AdminMainMenu.cshtml" />
     <Content Include="Views\Headquarters\Create.cshtml" />
     <Content Include="Views\Headquarters\Edit.cshtml" />
     <Content Include="Views\Headquarters\Index.cshtml" />
     <Content Include="Views\Observer\Create.cshtml" />
     <Content Include="Views\Observer\Edit.cshtml" />
     <Content Include="Views\Observer\Index.cshtml" />
-    <Content Include="Views\Shared\ObserverMainMenu.cshtml" />
     <Content Include="Views\Shared\Profile\_EditorLayout.cshtml" />
     <Content Include="Views\ApiUser\Create.cshtml" />
     <Content Include="Views\ApiUser\Edit.cshtml" />
@@ -1946,8 +1909,6 @@
     <Content Include="Views\Shared\_NoFilterListViewLayout.cshtml" />
     <Content Include="Views\Shared\_SharedAuthenticationLayout.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\GlobalSettings.cshtml" />
-    <Content Include="Views\Shared\LimitsIndicator.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Boolean.cshtml" />
     <Content Include="Scripts\moment.min.js.map" />
     <Content Include="Scripts\spin.min.js.map" />
@@ -1967,7 +1928,6 @@
     <Content Include="Views\WebInterview\OutdatedBrowser.cshtml" />
     <Content Include="Views\WebInterview\Finish.cshtml" />
     <Content Include="Views\WebInterview\Error.cshtml" />
-    <Content Include="Views\Shared\QueueIndicator.cshtml" />
     <Content Include="Views\Interviewer\Profile.cshtml" />
     <Content Include="Views\Shared\_notice.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\TextBoxFormField.cshtml" />
@@ -1986,7 +1946,6 @@
     <Content Include="Views\Shared\typeahead.cshtml" />
     <Content Include="Views\Download\Index.cshtml" />
     <Content Include="Views\SurveySetup\InterviewVerificationProgress.cshtml" />
-    <Content Include="Views\Shared\InterviewerMainMenu.cshtml" />
     <Content Include="Views\InterviewerHq\Index.cshtml" />
     <Content Include="Views\InterviewerHq\Interviews.cshtml" />
     <Content Include="Views\Reports\InterviewersAndDevices.cshtml" />
@@ -2123,11 +2082,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>TakeNewInterview.sq.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\Users.sq.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Users.sq.resx</DependentUpon>
     </Compile>
     <Compile Include="API\WebInterview\InterviewCommandsController.cs" />
     <Compile Include="API\WebInterview\InterviewDataController.cs" />
@@ -2324,11 +2278,6 @@
     </Compile>
     <Compile Include="App_GlobalResources\TakeNewInterview.Designer.cs">
       <DependentUpon>TakeNewInterview.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Include="App_GlobalResources\Users.Designer.cs">
-      <DependentUpon>Users.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
@@ -2641,7 +2590,6 @@
     <Compile Include="Services\InterviewImportColumn.cs" />
     <Compile Include="Services\QuestionnaireExporter.cs" />
     <Compile Include="Services\VersionCheckService.cs" />
-    <Compile Include="Services\IVersionCheckService.cs" />
     <Compile Include="Services\WebInterviewEmailRenderer.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utils\Attributes\CompressContentAttribute.cs" />
@@ -2657,7 +2605,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -2771,8 +2718,7 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.2.1\build\net452\Esri.ArcGISRuntime.WPF.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.2.1\build\net452\Esri.ArcGISRuntime.WPF.targets'))" />
     <Error Condition="!Exists('..\..\..\..\packages\RazorGenerator.MsBuild.2.5.0\build\RazorGenerator.MsBuild.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\RazorGenerator.MsBuild.2.5.0\build\RazorGenerator.MsBuild.targets'))" />
-    <Error Condition="'$(Configuration)' == 'Debug' and !Exists('..\..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" 
-        Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="'$(Configuration)' == 'Debug' and !Exists('..\..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
     <Error Condition="!Exists('..\..\..\..\packages\Refit.4.7.51\build\net461\refit.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Refit.4.7.51\build\net461\refit.targets'))" />
   </Target>
   <Import Project="..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.2.1\build\net452\Esri.ArcGISRuntime.WPF.targets" Condition="Exists('..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.2.1\build\net452\Esri.ArcGISRuntime.WPF.targets')" />
