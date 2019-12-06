@@ -10,6 +10,7 @@ using WB.UI.WebTester.Services;
 
 namespace WB.UI.WebTester.Controllers
 {
+    [Route("api/ScenariosApi")]
     public class ScenariosApiController : Controller
     {
         private readonly ICacheStorage<List<InterviewCommand>, Guid> executedCommandsStorage;
@@ -32,6 +33,8 @@ namespace WB.UI.WebTester.Controllers
         }
 
         [ResponseCache(NoStore = true)]
+        [HttpGet]
+        [Route("{id}")]
         public IActionResult Get(string id)
         {
             var interview = statefulInterviewRepository.Get(id);

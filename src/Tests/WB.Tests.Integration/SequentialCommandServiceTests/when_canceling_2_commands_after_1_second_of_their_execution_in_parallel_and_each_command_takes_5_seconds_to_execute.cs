@@ -34,7 +34,9 @@ namespace WB.Tests.Integration.SequentialCommandServiceTests
             }
         }
 
-        [NUnit.Framework.Test] public void should_execute_only_first_command () {
+        [NUnit.Framework.Test]
+        public void should_execute_only_first_command()
+        {
             CommandRegistry
                 .Setup<Aggregate>()
                 .Handles<StoreNameFor5Seconds>(command => command.AggregateId, aggregate => aggregate.StoreNameFor5Seconds);
@@ -49,7 +51,7 @@ namespace WB.Tests.Integration.SequentialCommandServiceTests
             executedCommands.Should().BeEquivalentTo("first");
         }
 
-        public void BecauseOf() 
+        public void BecauseOf()
         {
             try
             {
