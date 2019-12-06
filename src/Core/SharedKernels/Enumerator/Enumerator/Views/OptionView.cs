@@ -4,10 +4,10 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.SharedKernels.Enumerator.Views
 {
-    public class OptionView : IPlainStorageEntity
+    public class OptionView : IPlainStorageEntity<int?>
     {
-        [PrimaryKey]
-        public string Id { get; set; }
+        [PrimaryKey, AutoIncrement]
+        public int? Id { get; set; }
 
         [Indexed]
         public string  QuestionnaireId { get; set; }
