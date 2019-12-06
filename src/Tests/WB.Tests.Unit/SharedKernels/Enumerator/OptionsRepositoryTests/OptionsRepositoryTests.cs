@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
                 answerCodes: answerCodes,
                 isFilteredCombobox: true);
 
-            var storage = new OptionsRepository(new SqliteInmemoryStorage<OptionView>());
+            var storage = new OptionsRepository(new SqliteInmemoryStorage<OptionView, int?>());
 
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
             storage.StoreOptionsForQuestion(questionnaireIdentity, questionId, question.Answers, new List<TranslationDto>());
@@ -75,7 +75,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
                 }
             };
 
-            var storage = new OptionsRepository(new SqliteInmemoryStorage<OptionView>());
+            var storage = new OptionsRepository(new SqliteInmemoryStorage<OptionView, int?>());
 
             storage.StoreOptionsForQuestion(questionnaireIdentity, questionId, question.Answers, translations);
 
@@ -129,7 +129,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
                 }
             };
 
-            var storage = new OptionsRepository(new SqliteInmemoryStorage<OptionView>());
+            var storage = new OptionsRepository(new SqliteInmemoryStorage<OptionView, int?>());
 
             storage.StoreOptionsForQuestion(questionnaireIdentity, questionId, question.Answers, translations);
 
@@ -175,7 +175,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
                 }
             };
 
-            var storage = new OptionsRepository(new SqliteInmemoryStorage<OptionView>());
+            var storage = new OptionsRepository(new SqliteInmemoryStorage<OptionView, int?>());
             storage.StoreOptionsForQuestion(questionnaireIdentity, questionId, question.Answers, translations);
             var filteredQuestionOption = storage.GetQuestionOption(questionnaireIdentity, questionId, 1.ToString(), null, translationId);
 
@@ -217,7 +217,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
                 }
             };
 
-            var storage = new OptionsRepository(new SqliteInmemoryStorage<OptionView>());
+            var storage = new OptionsRepository(new SqliteInmemoryStorage<OptionView, int?>());
             storage.StoreOptionsForQuestion(questionnaireIdentity, questionId, question.Answers, translations);
 
             // Assert
@@ -250,7 +250,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
                 isFilteredCombobox: true);
 
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
-            var storage = new OptionsRepository(new SqliteInmemoryStorage<OptionView>());
+            var storage = new OptionsRepository(new SqliteInmemoryStorage<OptionView, int?>());
             storage.StoreOptionsForQuestion(questionnaireIdentity, questionId, question.Answers, new List<TranslationDto>());
 
             // act
@@ -271,7 +271,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
                 Text = o.ToString()
             }).ToList();
 
-            var storage = new OptionsRepository(new SqliteInmemoryStorage<OptionView>());
+            var storage = new OptionsRepository(new SqliteInmemoryStorage<OptionView, int?>());
 
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
             storage.StoreOptionsForCategory(questionnaireIdentity, categoryId, answerCodes, new List<TranslationDto>());
@@ -309,7 +309,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
                 }
             };
 
-            var storage = new OptionsRepository(new SqliteInmemoryStorage<OptionView>());
+            var storage = new OptionsRepository(new SqliteInmemoryStorage<OptionView, int?>());
 
             storage.StoreOptionsForCategory(questionnaireIdentity, categoryId, options, translations);
 
@@ -354,7 +354,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
                 }
             };
 
-            var storage = new OptionsRepository(new SqliteInmemoryStorage<OptionView>());
+            var storage = new OptionsRepository(new SqliteInmemoryStorage<OptionView, int?>());
 
             storage.StoreOptionsForCategory(questionnaireIdentity, categoryId, options, translations);
 
@@ -394,7 +394,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
                 }
             };
 
-            var storage = new OptionsRepository(new SqliteInmemoryStorage<OptionView>());
+            var storage = new OptionsRepository(new SqliteInmemoryStorage<OptionView, int?>());
             storage.StoreOptionsForCategory(questionnaireIdentity, categoryId, options, translations);
             var filteredQuestionOption = storage.GetCategoryOption(questionnaireIdentity, categoryId, 1.ToString(), null, translationId);
 
@@ -429,7 +429,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
                 }
             };
 
-            var storage = new OptionsRepository(new SqliteInmemoryStorage<OptionView>());
+            var storage = new OptionsRepository(new SqliteInmemoryStorage<OptionView, int?>());
             storage.StoreOptionsForCategory(questionnaireIdentity, categoryId, options, translations);
 
             // Assert
@@ -457,7 +457,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
             var categoryId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
-            var storage = new OptionsRepository(new SqliteInmemoryStorage<OptionView>());
+            var storage = new OptionsRepository(new SqliteInmemoryStorage<OptionView, int?>());
             storage.StoreOptionsForCategory(questionnaireIdentity, categoryId, options, new List<TranslationDto>());
 
             // act

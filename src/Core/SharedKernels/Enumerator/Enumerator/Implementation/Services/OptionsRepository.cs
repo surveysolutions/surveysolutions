@@ -16,9 +16,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     public class OptionsRepository : IOptionsRepository
     {
-        private readonly IPlainStorage<OptionView> optionsStorage;
+        private readonly IPlainStorage<OptionView, int?> optionsStorage;
         
-        public OptionsRepository(IPlainStorage<OptionView> optionsStorage)
+        public OptionsRepository(IPlainStorage<OptionView, int?> optionsStorage)
         {
             this.optionsStorage = optionsStorage;
         }
@@ -334,11 +334,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     parentValue = decimal.Parse(option.ParentValue, NumberStyles.Number, CultureInfo.InvariantCulture);
                 }
 
-                var id = $"{questionnaireIdAsString}-{questionIdAsString}{categoryIdAsString}-{option.AnswerValue}";
-
                 var optionView = new OptionView
                 {
-                    Id = id,
                     QuestionnaireId = questionnaireIdAsString,
                     QuestionId = questionIdAsString,
                     Value = value,
@@ -357,7 +354,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                                                                 && x.Type == TranslationType.OptionTitle)
                     .Select(y => new OptionView
                     {
-                        Id = $"{questionnaireIdAsString}-{questionIdAsString}{categoryIdAsString}-{option.AnswerValue}-{y.TranslationId.FormatGuid()}",
                         QuestionnaireId = questionnaireIdAsString,
                         QuestionId = questionIdAsString,
                         Value = value,
