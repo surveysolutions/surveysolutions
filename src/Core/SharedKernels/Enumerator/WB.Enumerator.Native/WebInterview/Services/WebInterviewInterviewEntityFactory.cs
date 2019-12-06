@@ -62,7 +62,9 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     : interview.GetGroup(Identity.Parse(parentId))?.Children
                         .OfType<InterviewTreeGroup>().Where(g => !g.IsDisabled());
 
-                children = children.Where(e => !questionnaire.IsFlatRoster(e.Identity.Id) && !questionnaire.IsTableRoster(e.Identity.Id));
+                children = children.Where(e => !questionnaire.IsFlatRoster(e.Identity.Id) 
+                                               && !questionnaire.IsTableRoster(e.Identity.Id) 
+                                               && !questionnaire.IsMatrixRoster(e.Identity.Id));
 
                 foreach (var child in children ?? Array.Empty<InterviewTreeGroup>())
                 {
@@ -83,6 +85,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                             !c.IsDisabled() 
                             && !questionnaire.IsFlatRoster(c.Identity.Id)
                             && !questionnaire.IsTableRoster(c.Identity.Id)
+                            && !questionnaire.IsMatrixRoster(c.Identity.Id)
                             );
                     });
                 }
@@ -341,7 +344,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 return GetRosterInstanceEntity(callerInterview, questionnaire, isReviewMode, roster, identity);
             }
 
-            if (questionnaire.IsTableRoster(identity.Id))
+            if (questionnaire.IsTableRoster(identity.Id) || questionnaire.IsMatrixRoster(identity.Id))
             {
                 var parentGroupId = questionnaire.GetParentGroup(identity.Id);
                 var parentGroup = callerInterview.GetGroup(new Identity(parentGroupId.Value, identity.RosterVector));
@@ -536,7 +539,9 @@ namespace WB.Enumerator.Native.WebInterview.Services
         public Identity GetUIParent(IStatefulInterview interview, IQuestionnaire questionnaire, Identity identity)
         {
             var parent = interview.GetParentGroup(identity);
-            while (parent != null && (questionnaire.IsFlatRoster(parent.Id) || questionnaire.IsTableRoster(parent.Id)))
+            while (parent != null && (questionnaire.IsFlatRoster(parent.Id) 
+                                      || questionnaire.IsTableRoster(parent.Id) 
+                                      || questionnaire.IsMatrixRoster(parent.Id)))
             {
                 parent = interview.GetParentGroup(parent);
             }
