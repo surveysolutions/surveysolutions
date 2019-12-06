@@ -160,6 +160,9 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidEnvironment Include="AndroidEnvironment.txt" />
+    <None Include="Directory.Build.props">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </None>

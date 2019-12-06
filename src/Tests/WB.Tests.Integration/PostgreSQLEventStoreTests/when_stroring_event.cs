@@ -85,8 +85,6 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
             eventStream.Select(x => x.GlobalSequence).Should().NotContain(0);
         }
         
-        [NUnit.Framework.Test] public void should_count_stored_events () => eventStore.CountOfAllEvents(); // it should not fail
-
         [OneTimeTearDown]
         public void TearDown()
         {
