@@ -1,21 +1,10 @@
 <template>
     <popover class="w-100 d-block" :enable="hasInstructions" trigger="hover-focus" append-to="body"><!-- v-bind:style="{ width: getWidth() + 'px!important' }"-->
-        <div class="ag-cell-label-container" v-bind:class="{ 'has-instruction' : hasInstructions }">    
-            <div class="ag-header-cell-label" style="padding:0px;">
-                <div v-if="question.entityType =='CategoricalSingle' || question.entityType =='CategoricalMulti'" 
-                class="ag-header-cell-text" style="display:flex;">
-                    <div v-for="option in getOptions" :key="question.id + '_' + option.value">
-                        <div style="width:220px;border: 1px solid #E5E5E5; margin:3px;">{{option.title}}</div>                         
-                    </div>
-                </div> 
-                 
+        <div class="ag-cell-label-container" style="flex-direction:row; justify-content: flex-start;" v-if="question.entityType =='CategoricalSingle' || question.entityType =='CategoricalMulti'">    
+            <div class="ag-header-cell-label cell-bordered" v-for="option in getOptions" :key="question.id + '_' + option.value" style="max-width: 222px;">                
+                <span>{{option.title}}</span>                                             
             </div>
-        </div>
-        <!--template slot="popover">
-            <div class="instruction-tooltip">        
-                <span v-dateTimeFormatting v-html="instruction"></span>
-            </div>
-        </template-->        
+        </div>               
     </popover>
 </template>
 
@@ -32,16 +21,12 @@
                 question: null
             }
         }, 
-        computed: {    
-            //$me() { return this.$store.state.webinterview.entityDetails[this.question.identity] },
+        computed: {
             getOptions(){                
                 return this.question.options;                
             }
         },
-        methods: {
-            getWidth(){
-                return this.getOptions.length * 226; 
-            }
+        methods: {            
         },
         created() {
             this.title = this.params.title

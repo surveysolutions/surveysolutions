@@ -1,5 +1,9 @@
-<template>
+<template>    
     <div class="question table-view scroller" :id="hash">        
+        <h5 v-dateTimeFormatting v-html="title"></h5>
+        <div class="information-block instruction" v-if="instructions">            
+            <p v-dateTimeFormatting v-html="instructions"></p>
+        </div>
         <ag-grid-vue 
             ref="tableRoster"
             class="ag-theme-customStyles"
@@ -27,8 +31,7 @@
     import { debounce, every, some } from "lodash"
     import { AgGridVue } from "ag-grid-vue";
 
-    import MatrixRoster_QuestionEditor from "./MatrixRoster.QuestionEditor";
-    //import TableRoster_ViewAnswer from "./TableRoster.ViewAnswer";
+    import MatrixRoster_QuestionEditor from "./MatrixRoster.QuestionEditor";    
     import MatrixRoster_RosterTitle from "./MatrixRoster.RosterTitle";
     import MatrixRoster_QuestionTitle from "./MatrixRoster.QuestionTitle";
     import MatrixRoster_CategoricalSingle from "./MatrixRoster.CategoricalSingle";
@@ -46,12 +49,13 @@
                 gridApi: null,
                 columnApi: null,
                 countOfInstances: 0,
+                title: null,
+                instructions: null                
             }
         },
 
         components: {
-            AgGridVue,
-            //TableRoster_ViewAnswer,
+            AgGridVue,            
             MatrixRoster_QuestionEditor,
             MatrixRoster_RosterTitle,
             MatrixRoster_QuestionTitle,
@@ -60,6 +64,8 @@
 
         beforeMount() {
             this.countOfInstances = this.$me.instances.length
+            this.title = this.$me.questions.length > 0 ? this.$me.questions[0].title : null            
+            this.instructions = this.$me.questions.length > 0 ? this.$me.questions[0].instruction : null
 
             this.defaultColDef = {
                 width: 220, // set every column width
@@ -113,7 +119,8 @@
                                 instruction: question.instruction,
                                 question: question
                             },
-                            width:question.options.length * 226,
+                            width:question.options.length * 222,
+                            
                             field: question.id, 
                             cellRendererFramework: 'MatrixRoster_QuestionEditor',
                             cellRendererParams: {
