@@ -49,14 +49,14 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
 
                 var allAssignmentIds = assignmentsImportService.GetAllAssignmentIdsToImport();
                 
-                if (importProcessStatus?.ProcessStatus != AssignmentsImportProcessStatus.Import)
+                if (importProcessStatus.ProcessStatus != AssignmentsImportProcessStatus.Import)
                     return;
 
                 Guid responsibleId;
 
                 var userManager = serviceLocator.GetInstance<IUserRepository>();
                 responsibleId = (await userManager
-                    .FindByNameAsync(importProcessStatus.ResponsibleName)).Id;
+                        .FindByNameAsync(importProcessStatus.ResponsibleName).ConfigureAwait(false)).Id;
 
                 this.logger.Debug("Assignments import job: Started");
                 var sw = new Stopwatch();

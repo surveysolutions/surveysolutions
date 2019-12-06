@@ -352,7 +352,7 @@
                             method: "POST",
                             url: this.saveScenarioUrl,
                             data: { 
-                                scenarioText: scenario,
+                                scenarioText: JSON.stringify(scenario),
                                 scenarioId: this.selectedSaveOption === 'updateExisting' ? this.selectedScenarioOption : "",
                                 scenarioTitle: this.newScenarioName
                             },
