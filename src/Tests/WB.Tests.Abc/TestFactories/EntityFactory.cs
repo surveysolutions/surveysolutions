@@ -2470,5 +2470,10 @@ namespace WB.Tests.Abc.TestFactories
                 ParentId = parentId
             };
         }
+
+        public Categories Categories(Guid id)
+        {
+            return new Categories() { Id = id };
+        }
     }
 }
