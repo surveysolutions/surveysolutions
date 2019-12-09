@@ -1,8 +1,13 @@
 ﻿using System.Diagnostics;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.UI.Headquarters.Models;
 
 namespace WB.UI.Headquarters.Controllers
@@ -10,17 +15,19 @@ namespace WB.UI.Headquarters.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-        private readonly IAuthorizedUser authorizedUser;
+        private readonly UserManager<HqUser> userManager;
 
-        public HomeController(IAuthorizedUser authorizedUser)
+        public HomeController(UserManager<HqUser> userManager)
         {
-            this.authorizedUser = authorizedUser;
+            this.userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var roleForCurrentUser = this.authorizedUser.Role;
-
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await userManager.FindByIdAsync(userId);
+            var roleForCurrentUser = user.Roles.Select(x => x.Id.ToUserRole()).FirstOrDefault();
+            
             switch (roleForCurrentUser)
             {
                 case UserRoles.Headquarter:

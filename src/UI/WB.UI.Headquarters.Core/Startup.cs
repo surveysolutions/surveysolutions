@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Modularity.Autofac;
@@ -24,6 +25,7 @@ using WB.Persistence.Headquarters.Migrations.ReadSide;
 using WB.Persistence.Headquarters.Migrations.Users;
 using WB.UI.Designer.CommonWeb;
 using WB.UI.Headquarters.Configs;
+using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Versions;
 
@@ -94,13 +96,20 @@ namespace WB.UI.Headquarters
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddHttpContextAccessor();
 
             services.AddIdentity<HqUser, HqRole>()
                 .AddUserStore<HqUserStore>()
                 .AddRoleStore<HqRoleStore>();
 
+            services.ConfigureApplicationCookie(opt =>
+            {
+                opt.LoginPath = "/Account/LogOn";
+            });
+
             services.AddTransient<ICaptchaService, WebCacheBasedCaptchaService>();
             services.AddTransient<ICaptchaProvider, NoCaptchaProvider>();
+            services.AddTransient<IAuthorizedUser, AuthorizedUser>();
 
             // configuration
             services.Configure<GoogleMapsConfig>(this.Configuration.GetSection("GoogleMap"));
