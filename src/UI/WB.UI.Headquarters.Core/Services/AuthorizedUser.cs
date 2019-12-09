@@ -1,17 +1,24 @@
 using System;
 using System.Security.Claims;
-using System.Threading;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 
-namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
+namespace WB.UI.Headquarters.Services
 {
     public class AuthorizedUser : IAuthorizedUser
     {
+        private readonly IHttpContextAccessor httpContextAccessor;
         public const string ObserverClaimType = "observer";
-        public const string DeviceClaimType = "device";
 
-        private ClaimsPrincipal User => Thread.CurrentPrincipal as ClaimsPrincipal;
+        public AuthorizedUser(IHttpContextAccessor httpContextAccessor)
+        {
+            this.httpContextAccessor = httpContextAccessor;
+        }
+
+        private ClaimsPrincipal User => httpContextAccessor.HttpContext.User;
 
         public bool IsSupervisor => this.IsCurrentUserInRole(UserRoles.Supervisor);
 
@@ -34,10 +41,5 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         }
 
         public string UserName => this.User.Identity.Name;
-
-        public string DeviceId => this.User.FindFirst(DeviceClaimType)?.Value;
-
-        public UserRoles Role
-            => (UserRoles)Enum.Parse(typeof(UserRoles), this.User.FindFirst(ClaimTypes.Role).Value);
     }
 }

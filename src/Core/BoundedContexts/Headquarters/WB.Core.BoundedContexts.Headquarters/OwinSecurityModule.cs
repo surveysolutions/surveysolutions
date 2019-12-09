@@ -24,7 +24,6 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             
             registry.Bind<IApiTokenProvider, ApiAuthTokenProvider>();
-            registry.Bind<IAuthorizedUser, AuthorizedUser>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
