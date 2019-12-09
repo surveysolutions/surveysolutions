@@ -69,8 +69,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             List<Option> optionViews;
 
-            var test = this.optionsStorage.LoadAll();
-
             do
             {
                 optionViews = this.optionsStorage
@@ -289,7 +287,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             var options = this.optionsStorage
                 .Where(x => x.QuestionnaireId == questionnaireIdAsString &&
                             x.QuestionId == null &&
-                            x.CategoryId == categoryIdAsString)
+                            x.CategoryId == categoryIdAsString &&
+                            x.TranslationId == null)
                 .OrderBy(x => x.SortOrder);
 
             return options.Select(ToCategoricalOption).ToArray();
