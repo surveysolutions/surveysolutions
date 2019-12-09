@@ -348,9 +348,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
                 optionsToSave.Add(optionView);
 
-                var translatedOptions = translations.Where(x => (x.QuestionnaireEntityId == questionId || x.QuestionnaireEntityId == categoryId)
-                                                                && x.TranslationIndex == option.AnswerValue
-                                                                && x.Type == TranslationType.OptionTitle)
+                var translatedOptions = translations.Where(x => (x.QuestionnaireEntityId == questionId && x.Type == TranslationType.OptionTitle)|| 
+                                                                (x.QuestionnaireEntityId == categoryId && x.Type == TranslationType.Categories)
+                                                                && x.TranslationIndex == $"{option.AnswerValue}${option.ParentValue}")
                     .Select(y => new OptionView
                     {
                         QuestionnaireId = questionnaireIdAsString,
