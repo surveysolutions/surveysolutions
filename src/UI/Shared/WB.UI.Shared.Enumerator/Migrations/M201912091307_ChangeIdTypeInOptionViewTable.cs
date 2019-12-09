@@ -21,28 +21,31 @@ namespace WB.UI.Shared.Enumerator.Migrations
                 [PrimaryKey, AutoIncrement]
                 public int? Id { get; set; }
 
-                [Indexed]
+                [Indexed(Name = "entity_idx", Order = 1)]
                 public string QuestionnaireId { get; set; }
 
-                [Indexed]
+                [Indexed(Name = "entity_idx", Order = 2)]
                 public string QuestionId { get; set; }
 
-                public decimal Value { get; set; }
+                [Indexed(Name = "entity_idx", Order = 3)]
+                public string CategoryId { get; set; }
+
+                [Indexed(Name = "entity_idx", Order = 4)]
+                public string TranslationId { get; set; }
 
                 [Indexed]
+                public decimal Value { get; set; }
+
                 public string Title { get; set; }
 
                 [Indexed]
                 public string SearchTitle { get; set; }
 
+                [Indexed]
                 public decimal? ParentValue { get; set; }
 
-                public int SortOrder { get; set; }
-
-                public string TranslationId { get; set; }
-
                 [Indexed]
-                public string CategoryId { get; set; }
+                public int SortOrder { get; set; }
             }
         }       
         
