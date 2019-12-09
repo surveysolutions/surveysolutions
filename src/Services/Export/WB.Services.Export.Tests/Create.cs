@@ -39,15 +39,15 @@ namespace WB.Services.Export.Tests
             Guid? interviewId = null,
             string interviewKey = null,
             InterviewStatus status = InterviewStatus.InterviewerAssigned,
-            Guid? responsibleId = null, 
-            string responsibleName = null, 
-            int numberOfInterviewers = 0, 
-            int numberRejectionsBySupervisor = 0, 
-            int numberRejectionsByHq = 0, 
-            int numberValidQuestions = 0, 
-            int numberInvalidEntities = 0, 
-            int numberUnansweredQuestions = 0, 
-            int numberCommentedQuestions = 0, 
+            Guid? responsibleId = null,
+            string responsibleName = null,
+            int numberOfInterviewers = 0,
+            int numberRejectionsBySupervisor = 0,
+            int numberRejectionsByHq = 0,
+            int numberValidQuestions = 0,
+            int numberInvalidEntities = 0,
+            int numberUnansweredQuestions = 0,
+            int numberCommentedQuestions = 0,
             long? interviewDuration = null)
             => new InterviewDiagnosticsInfo
             {
@@ -116,8 +116,8 @@ namespace WB.Services.Export.Tests
             return questionnaireDocument;
         }
 
-        public static TextQuestion TextQuestion(Guid? id = null, 
-            string questionText = null, 
+        public static TextQuestion TextQuestion(Guid? id = null,
+            string questionText = null,
             string variable = null,
             string variableLabel = null,
             string instructions = null)
@@ -162,7 +162,7 @@ namespace WB.Services.Export.Tests
                 StatusChangeOriginatorName = originatorName,
                 InterviewerName = interviewerName,
                 SupervisorName = supervisorName,
-                
+
             };
 
         public static InterviewActionsExporter InterviewActionsExporter(ITenantApi<IHeadquartersApi> tenantApi,
@@ -181,7 +181,7 @@ namespace WB.Services.Export.Tests
         public static TabularFormatExportService ReadSideToTabularFormatExportService(QuestionnaireExportStructure questionnaireExportStructure,
             ITenantApi<IHeadquartersApi> tenantApi,
             IFileSystemAccessor fileSystemAccessor = null,
-            ICsvWriter csvWriter = null, 
+            ICsvWriter csvWriter = null,
             IQuestionnaireStorage questionnaireStorage = null)
         {
             return new TabularFormatExportService(Mock.Of<ILogger<TabularFormatExportService>>(),
@@ -213,7 +213,7 @@ namespace WB.Services.Export.Tests
         }
 
         public static MultyOptionsQuestion MultyOptionsQuestion(Guid? id = null,
-            IEnumerable<Answer> options = null, 
+            IEnumerable<Answer> options = null,
             Guid? linkedToQuestionId = null,
             string variable = null,
             bool yesNoView = false,
@@ -291,7 +291,7 @@ namespace WB.Services.Export.Tests
             return new InterviewsExporter(new ExportQuestionService(),
                 interviewFactory ?? Mock.Of<IInterviewFactory>(),
                 Create.InterviewErrorsExporter(),
-                csvWriter ?? Mock.Of<ICsvWriter>(), 
+                csvWriter ?? Mock.Of<ICsvWriter>(),
                 Mock.Of<IOptions<ExportServiceSettings>>(s => s.Value == new ExportServiceSettings()),
                 Mock.Of<ILogger<InterviewsExporter>>());
         }
@@ -319,10 +319,10 @@ namespace WB.Services.Export.Tests
         {
             return new Identity(id ?? Guid.NewGuid(), rosterVector ?? RosterVector.Empty);
         }
-        public static InterviewEntity InterviewEntity(Guid? interviewId = null, 
-            EntityType entityType = EntityType.Question, 
-            Identity identity = null, 
-            int[] invalidValidations = null, 
+        public static InterviewEntity InterviewEntity(Guid? interviewId = null,
+            EntityType entityType = EntityType.Question,
+            Identity identity = null,
+            int[] invalidValidations = null,
             bool isEnabled = true,
             int? asInt = null,
             DateTime? asDateTime = null,
@@ -393,9 +393,9 @@ namespace WB.Services.Export.Tests
             return QuestionnaireDocumentWithOneChapter(chapterId: null, children: children);
         }
 
-        public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? chapterId = null, 
+        public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? chapterId = null,
             Guid? id = null,
-            string variable =null,
+            string variable = null,
             params IQuestionnaireEntity[] children)
         {
             var questionnaireDocumentWithOneChapter = new QuestionnaireDocument
@@ -422,7 +422,7 @@ namespace WB.Services.Export.Tests
             return columnNames?.Select(x => new HeaderColumn() { Name = x, Title = x }).ToList() ?? new List<HeaderColumn>();
         }
 
-        public static TextListQuestion TextListQuestion(Guid? questionId = null, 
+        public static TextListQuestion TextListQuestion(Guid? questionId = null,
             string variable = null,
             string text = "Question T",
             bool preFilled = false,
@@ -439,7 +439,7 @@ namespace WB.Services.Export.Tests
                 VariableLabel = label,
                 ValidationConditions = validationConditions?.ToList(),
                 MaxAnswerCount = maxAnswersCount
-               
+
             };
 
         public static IInterviewFactory InterviewFactory()
@@ -472,7 +472,7 @@ namespace WB.Services.Export.Tests
             };
 
         public static GpsCoordinateQuestion GpsCoordinateQuestion(Guid? questionId = null, string variable = "var1", bool isPrefilled = false, string title = null,
-            string label=null)
+            string label = null)
             => new GpsCoordinateQuestion
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
@@ -502,7 +502,7 @@ namespace WB.Services.Export.Tests
         }
 
         public static DateTimeQuestion DateTimeQuestion(
-            Guid? questionId = null, 
+            Guid? questionId = null,
             string variable = null, string text = null, bool isTimestamp = false)
             => new DateTimeQuestion()
             {
@@ -533,7 +533,7 @@ namespace WB.Services.Export.Tests
             return new AnsweredYesNoOption(value, isYes);
         }
 
-        public static SingleQuestion SingleOptionQuestion(Guid? id = null, 
+        public static SingleQuestion SingleOptionQuestion(Guid? id = null,
             string questionText = null,
             string variable = null,
             IEnumerable<Answer> options = null,
@@ -545,7 +545,7 @@ namespace WB.Services.Export.Tests
                 QuestionType = QuestionType.SingleOption,
                 PublicKey = id ?? Guid.NewGuid(),
                 QuestionText = questionText,
-                VariableName = variable?? "single",
+                VariableName = variable ?? "single",
                 LinkedToQuestionId = linkedToQuestionId
             };
         }
@@ -588,7 +588,10 @@ namespace WB.Services.Export.Tests
         public static EventsFactory Event = new EventsFactory();
         public static EntityFactory Entity = new EntityFactory();
 
-        public static ServiceProvider SetupEventsProcessor(ServiceCollection services, IHeadquartersApi api, bool withDefaultEventsFilter = false)
+        public static ServiceProvider SetupEventsProcessor(ServiceCollection services, 
+            IHeadquartersApi api, 
+            bool withDefaultEventsFilter = false,
+            bool noEventsHandlerLogger = false)
         {
             services.AddMockObject<ITenantApi<IHeadquartersApi>, IHeadquartersApi>(
                 s => s.For(It.IsAny<TenantInfo>()), api);
@@ -613,6 +616,11 @@ namespace WB.Services.Export.Tests
             services.AddMock<IDataExportProcessesService>();
             services.AddTransient<EventsProcessor>();
             services.AddTransient<IEventsHandler, EventsHandler>();
+            services.AddMock<ILogger<EventsProcessor>>();
+
+            if(!noEventsHandlerLogger) services.AddMock<ILogger<EventsHandler>>();
+            
+            services.AddOptions();
 
             var provider = services.BuildServiceProvider();
             provider.SetTenant(new TenantInfo("http://localhost", TenantId.None, "test"));
@@ -640,7 +648,7 @@ namespace WB.Services.Export.Tests
                 userStorage ?? Mock.Of<IUserStorage>());
         }
 
-        public static AssignmentAction AssignmentAction(long globalSequence, int assignmentId, DateTime timestampUtc, AssignmentExportedAction exportedAction, 
+        public static AssignmentAction AssignmentAction(long globalSequence, int assignmentId, DateTime timestampUtc, AssignmentExportedAction exportedAction,
             Guid originatorId, Guid responsibleId, string oldValue = null, string newValue = null, string comment = null)
         {
             return new AssignmentAction()
@@ -706,7 +714,7 @@ namespace WB.Services.Export.Tests
 
         public Event NumericRealQuestionAnswered(Guid questionId, decimal answer, Guid interviewId, RosterVector rosterVector)
         {
-            return Event(new NumericRealQuestionAnswered() { Answer = answer, QuestionId = questionId, RosterVector = rosterVector}, interviewId, null, null);
+            return Event(new NumericRealQuestionAnswered() { Answer = answer, QuestionId = questionId, RosterVector = rosterVector }, interviewId, null, null);
         }
 
         public Event TextListQuestionAnswered(Guid questionId, Tuple<decimal, string>[] answer, Guid interviewId)
@@ -716,12 +724,12 @@ namespace WB.Services.Export.Tests
 
         public Event RosterInstancesAdded(Guid interviewId, Guid rosterId, RosterVector outerRosterVector, int rosterInstanceId)
         {
-            return Event(new RosterInstancesAdded() { Instances = new[] { new AddedRosterInstance() { GroupId = rosterId, OuterRosterVector = outerRosterVector, RosterInstanceId = rosterInstanceId },  }}, interviewId, null, null);
+            return Event(new RosterInstancesAdded() { Instances = new[] { new AddedRosterInstance() { GroupId = rosterId, OuterRosterVector = outerRosterVector, RosterInstanceId = rosterInstanceId }, } }, interviewId, null, null);
         }
 
         public Event RosterInstancesRemoved(Guid interviewId, Guid rosterId, RosterVector outerRosterVector, int rosterInstanceId)
         {
-            return Event(new RosterInstancesRemoved() { Instances = new[] { new AddedRosterInstance() { GroupId = rosterId, OuterRosterVector = outerRosterVector, RosterInstanceId = rosterInstanceId },  }}, interviewId, null, null);
+            return Event(new RosterInstancesRemoved() { Instances = new[] { new AddedRosterInstance() { GroupId = rosterId, OuterRosterVector = outerRosterVector, RosterInstanceId = rosterInstanceId }, } }, interviewId, null, null);
         }
 
         public Event QuestionsEnabled(Guid interviewId, Identity[] questions)
@@ -777,9 +785,9 @@ namespace WB.Services.Export.Tests
 
     public static class EventExtensions
     {
-        public static PublishedEvent<T> ToPublishedEvent<T>(this Event @event) where T:IEvent
+        public static PublishedEvent<T> ToPublishedEvent<T>(this Event @event) where T : IEvent
         {
-            return (PublishedEvent<T>) @event.AsPublishedEvent();
+            return (PublishedEvent<T>)@event.AsPublishedEvent();
         }
     }
 }

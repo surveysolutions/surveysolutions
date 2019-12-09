@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
             };
             userManagerMock = new Mock<TestHqUserManager>();
             userManagerMock.Setup(o => o.CreateUserAsync(Moq.It.IsAny<HqUser>(), inputModel.Password, UserRoles.ApiUser))
-                .Returns(() => Task.FromResult(IdentityResult.Success));
+                .Returns(() => Task.FromResult(WB.Core.BoundedContexts.Headquarters.OwinSecurity.IdentityResult.Success));
             controller = CreateApiUserController(userManager: userManagerMock.Object);
 
             BecauseOf();

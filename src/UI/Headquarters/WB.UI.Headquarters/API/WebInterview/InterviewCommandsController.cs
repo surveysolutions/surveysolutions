@@ -137,7 +137,6 @@ namespace WB.UI.Headquarters.API.WebInterview
             return Ok();
         }
 
-
         public class ApproveInterviewRequest
         {
             public string Comment { get; set; }
@@ -167,7 +166,6 @@ namespace WB.UI.Headquarters.API.WebInterview
             public string Comment { get; set; }
             public Guid? AssignTo { get; set; }
         }
-
 
         [HttpPost]
         [WebInterviewObserverNotAllowed]
@@ -205,9 +203,8 @@ namespace WB.UI.Headquarters.API.WebInterview
         }
 
 
-        public class ResolveCommentRequest
+        public class ResolveCommentRequest : AnswerRequest
         {
-            public string QuestionId { get; set; }
         }
 
         [HttpPost]
@@ -217,7 +214,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         public IHttpActionResult ResolveComment(Guid interviewId, [FromBody]ResolveCommentRequest resolveCommentRequest)
         {
-            var identity = Identity.Parse(resolveCommentRequest.QuestionId);
+            var identity = Identity.Parse(resolveCommentRequest.Identity);
             var command = new ResolveCommentAnswerCommand(interviewId,
                 this.GetCommandResponsibleId(interviewId),
                 identity.Id,
@@ -227,19 +224,17 @@ namespace WB.UI.Headquarters.API.WebInterview
             return Ok();
         }
 
-        public class SetFlagRequest
+        public class SetFlagRequest : AnswerRequest
         {
-            public string QuestionId { get; set; }
             public bool HasFlag { get; set; }
         }
-
 
         [HttpPost]
         [Route("setFlag")]
         [WebInterviewObserverNotAllowed]
         public IHttpActionResult SetFlag(Guid interviewId, [FromBody] SetFlagRequest request)
         {
-            this.interviewFactory.SetFlagToQuestion(interviewId, Identity.Parse(request.QuestionId), request.HasFlag);
+            this.interviewFactory.SetFlagToQuestion(interviewId, Identity.Parse(request.Identity), request.HasFlag);
             return Ok();
         }
     }

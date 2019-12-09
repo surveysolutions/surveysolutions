@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Autofac;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.Domain;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage.Postgre;
 

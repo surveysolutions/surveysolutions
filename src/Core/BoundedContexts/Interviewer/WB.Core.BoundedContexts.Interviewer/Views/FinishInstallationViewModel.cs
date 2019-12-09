@@ -26,15 +26,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             ILogger logger,
             IQRBarcodeScanService qrBarcodeScanService,
             ISerializer serializer,
-            IUserInteractionService userInteractionService) 
+            IUserInteractionService userInteractionService,
+            IAuditLogService auditLogService) 
             : base(viewModelNavigationService, principal, deviceSettings, synchronizationService, 
-                logger, qrBarcodeScanService, serializer, userInteractionService)
+                logger, qrBarcodeScanService, serializer, userInteractionService, auditLogService)
         {
             this.passwordHasher = passwordHasher;
             this.interviewerPrincipal = principal;
             this.synchronizationService = synchronizationService;
         }
-
+         
         protected override async Task RelinkUserToAnotherDeviceAsync(RestCredentials credentials, CancellationToken token)
         {
             var identity = await GenerateInterviewerIdentity(credentials, token);

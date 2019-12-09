@@ -100,6 +100,7 @@
                                                         v-if="selectedSaveOption === 'saveNew'">
                                                         <label for="txtScenarioName" class="control-label">{{this.$t('WebInterviewUI.SaveScenarioName')}}</label>
                                                         <input
+                                                            maxlength="32"
                                                             id="txtScenarioName"
                                                             class="form-control" 
                                                             v-model="newScenarioName"/>
@@ -351,7 +352,7 @@
                             method: "POST",
                             url: this.saveScenarioUrl,
                             data: { 
-                                scenarioText: scenario,
+                                scenarioText: JSON.stringify(scenario),
                                 scenarioId: this.selectedSaveOption === 'updateExisting' ? this.selectedScenarioOption : "",
                                 scenarioTitle: this.newScenarioName
                             },

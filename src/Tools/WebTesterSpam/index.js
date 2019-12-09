@@ -8,75 +8,93 @@ const options = Object.assign({
     u: 'admin',
     p: '1',
     h: false,
-    address: "https://localhost/designer"
+    address: "https://localhost:5002"
 }, argv)
 
-const puppeteer = require('puppeteer');
+const { Cluster } = require('puppeteer-cluster');
 
-(async () => {
-    const browser = await puppeteer.launch({
+const config = {
+    launchOptions: {
         ignoreHTTPSErrors: true,
         headless: !options.h,
+        defaultViewport: { width: 1920, height: 1080 }
+    },
+    viewport: { width: 1920, height: 1080 }
+}
+
+let webTestersSpammed = 0;
+
+async function testWeb({ page }) {
+    await page.goto(options.address, { waitUntil: 'networkidle2' });
+    await page.type('#Input_Email', options.u)
+    await page.type('#Input_Password', options.p)
+    await page.click('[type="submit"]')
+    await page.waitForSelector("#questionnaire-table-header")
+
+    async function webTesterIteration(tester) {
+        await tester.waitForNavigation({
+            timeout: 20000,
+            waitUntil: 'networkidle2'
+        })
+
+        await tester.waitForSelector("#loadingPixel", { timeout: 20000 })
+
+        var waitLoading = async () => {
+            await tester.waitForFunction(() => {
+                try {
+                    const result = document.getElementById('loadingPixel').getAttribute('data-loading') === 'false'
+                    return result
+                }
+                catch (e) {
+                    return false;
+                }
+            },
+                {
+                    timeout: 50000,
+                    polling: 1000
+                })
+        }
+
+        await waitLoading()
+        await tester.evaluate(() => window._api.router.push({ name: 'complete' }))
+        await waitLoading()
+        await tester.waitForSelector('#btnComplete')
+        // await tester.click('#btnComplete')
+        await tester.close()
+    }
+
+    await page.goto(options.address + "/questionnaire/details/" + options.q)
+    await page.waitForSelector('#webtest-btn')
+
+    for (var i = 0; i < 10; i++) {
+        const iterationDone = new Promise(async function (resolve) {
+            page.once("popup", async tester => {
+                await webTesterIteration(tester)
+                resolve()
+            })
+        });
+
+        await page.click('#webtest-btn')
+        await iterationDone
+        webTestersSpammed += 1;
+        console.log("Web testers done: " + webTestersSpammed)
+    }
+}
+
+(async () => {
+    const cluster = await Cluster.launch({
+        concurrency: Cluster.CONCURRENCY_CONTEXT,
+        maxConcurrency: options.w,
+        puppeteerOptions: config.launchOptions
     });
 
-    const designer = await browser.newPage();
+    await cluster.task(testWeb);
 
-    await designer.setViewport({ width: 1600, height: 900 })
+    for (let i = 1; i <= options.i; i++) {
+        cluster.queue(i);
+    };
+    console.info('all tasks are in queue')
 
-    await designer.goto(options.address, { waitUntil: 'networkidle2' });
-    await designer.type('#UserName', options.u)
-    await designer.type('#Password', options.p)
-    await designer.click('[type="submit"]')
-
-    console.log(chalk.green("Logged in"))
-    await designer.waitForSelector("#questionnaire-table-header")
-
-    console.log("Loading questionnaire")
-    await designer.goto(options.address + "/questionnaire/details/" + options.q)
-    await designer.waitForSelector('#webtest-btn')
-    
-    const work = {
-        inWork: 0,
-        left: options.i
-    }
-
-    console.log(`Starting work. ${work.left} interviews left`)
-
-    browser.on("targetcreated", async target => {
-        try {
-            const tester = await target.page()
-            work.inWork += 1
-
-            tester.waitForNavigation({
-                timeout: 90000
-            })
-            await tester.setViewport({ width: 1600, height: 900 })
-            await tester.waitForSelector("[data-id=SidebarCompleted]", {
-                timeout: 90000
-            })
-            await tester.evaluate("window._api.router.push({name: 'complete'})")
-            await tester.evaluate('window._api.store.dispatch("completeInterview", { comment: "test"})')          
-            
-        } catch (e) {
-            console.log(chalk.red("Error in interview"), e)
-        } finally{
-            work.inWork -= 1
-            work.left--
-        }
-
-        console.log("Completed interview. " + work.left + ' left')
-
-        if (work.left - work.inWork > 0) {
-            await designer.click('#webtest-btn')
-        } else {
-            if (work.inWork <= 0) {
-                await browser.close();
-            }
-        }
-    })
-
-    for (var i = 0; i < Math.min(options.w, work.left); i++) {
-        await designer.click('#webtest-btn')
-    }
-
+    await cluster.idle();
+    await cluster.close();
 })();

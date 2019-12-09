@@ -1,41 +1,54 @@
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
+using System.Globalization;
 using System.Linq;
 using System.Security.Authentication;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
-using Microsoft.AspNet.Identity;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using IPasswordHasher = Microsoft.AspNet.Identity.IPasswordHasher;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 {
-    public class HqUserManager : UserManager<HqUser, Guid>
+    public class HqUserManager : IDisposable
     {
-        private readonly IHashCompatibilityProvider hashCompatibilityProvider;
-        private readonly ISystemLog auditLog;
-        private IUserPasswordStore<HqUser, Guid> PasswordStore => this.Store as IUserPasswordStore<HqUser, Guid>;
+        /// <summary>
+        ///     If true, will enable user lockout when users are created
+        /// </summary>
+        public bool UserLockoutEnabledByDefault { get; set; }
 
-        public HqUserManager(IUserStore<HqUser, Guid> store, 
+        public IIdentityPasswordHasher PasswordHasher => this.passwordHasher;
+        public virtual IQueryable<HqUser> Users => this.store.Users;
+        public bool SupportsUserSecurityStamp => true;
+
+        private readonly IUserRepository store;
+        private readonly IHashCompatibilityProvider hashCompatibilityProvider;
+        private readonly IIdentityPasswordHasher passwordHasher;
+        private readonly IPasswordValidator passwordValidator;
+        private readonly IIdentityValidator identityValidator;
+        private readonly ISystemLog auditLog;
+
+        public HqUserManager(IUserRepository store, 
             IHashCompatibilityProvider hashCompatibilityProvider, 
-            IPasswordHasher passwordHasher, 
-            IIdentityValidator<string> identityValidator, 
+            IIdentityPasswordHasher passwordHasher, 
+            IPasswordValidator passwordValidator, 
+            IIdentityValidator identityValidator,
             ISystemLog auditLog)
-            : base(store)
         {
+            this.store = store;
             this.hashCompatibilityProvider = hashCompatibilityProvider;
+            this.passwordHasher = passwordHasher;
+            this.passwordValidator = passwordValidator;
+            this.identityValidator = identityValidator;
             this.auditLog = auditLog;
-            this.PasswordHasher = passwordHasher;
-            this.PasswordValidator = identityValidator;
         }
 
         public async Task<IdentityResult> ChangePasswordAsync(HqUser user, string newPassword)
         {
-            var result = await this.UpdatePassword(PasswordStore, user, newPassword);
+            var result = await this.UpdatePasswordAsync(user, newPassword);
 
             if (result.Succeeded)
             {
@@ -45,20 +58,47 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             return result;
         }
 
-        public override async Task<ClaimsIdentity> CreateIdentityAsync(HqUser user, string authenticationType)
+        public async Task<ClaimsIdentity> CreateIdentityAsync(HqUser user, string authenticationType)
         {
-            var userIdentity = await base.CreateIdentityAsync(user, authenticationType);
+            ThrowIfDisposed();
+
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+
+            var id = new ClaimsIdentity(authenticationType, ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+            id.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString(), ClaimValueTypes.String));
+            id.AddClaim(new Claim(ClaimsIdentity.DefaultNameClaimType, user.UserName, ClaimValueTypes.String));
+            id.AddClaim(new Claim("http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider", "ASP.NET Identity",
+                ClaimValueTypes.String));
+
+            id.AddClaim(new Claim("AspNet.Identity.SecurityStamp",
+                await this.GetSecurityStampAsync(user.Id)));
+
+            IList<string> roles = await this.GetRolesAsync(user.Id);
+            foreach (string roleName in roles)
+                id.AddClaim(new Claim(ClaimsIdentity.DefaultRoleClaimType, roleName, ClaimValueTypes.String));
+
+            id.AddClaims(await this.GetClaimsAsync(user.Id));
 
             if (user.Profile?.DeviceId != null)
-                userIdentity.AddClaim(new Claim(AuthorizedUser.DeviceClaimType, user.Profile.DeviceId));
+                id.AddClaim(new Claim(AuthorizedUser.DeviceClaimType, user.Profile.DeviceId));
 
-            return userIdentity;
+            return id;
         }
 
-        protected override async Task<IdentityResult> UpdatePassword(IUserPasswordStore<HqUser, Guid> passwordStore, HqUser user, string newPassword)
+        protected async Task<IdentityResult> UpdatePasswordAsync(HqUser user, string newPassword)
         {
             this.UpdateSha1PasswordIfNeeded(user, newPassword);
-            return await base.UpdatePassword(passwordStore, user, newPassword);
+            
+            var result = await passwordValidator.ValidateAsync(newPassword);
+            if (!result.Succeeded)
+            {
+                return result;
+            }
+            await store.SetPasswordHashAsync(user, passwordHasher.Hash(newPassword));
+            await UpdateSecurityStampInternal(user);
+
+            return IdentityResult.Success;
         }
 
         [Obsolete("Since 5.19. Can be removed as soon as there is no usages of IN app version < 5.19")]
@@ -70,11 +110,11 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             }
         }
         
-        protected override async Task<bool> VerifyPasswordAsync(IUserPasswordStore<HqUser, Guid> store, HqUser user, string password)
+        protected async Task<bool> VerifyPasswordAsync(HqUser user, string password)
         {
             if (user == null || password == null) return false;
 
-            var result = this.PasswordHasher.VerifyHashedPassword(user.PasswordHash, password) == PasswordVerificationResult.Success;
+            var result = passwordHasher.VerifyPassword(user.PasswordHash, password) == PasswordVerificationResult.Success;
 
             if (!result)
             {
@@ -115,9 +155,11 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         public virtual async Task<IdentityResult> CreateUserAsync(HqUser user, string password, UserRoles role)
         {
             user.CreationDate = DateTime.UtcNow;
-            user.Roles.Add(new HqUserRole {UserId = user.Id, RoleId = role.ToUserId()});
 
-            var result = await this.UpdatePassword(PasswordStore, user, password);
+            var roleEntity = store.FindRole(role.ToUserId());
+            user.Roles.Add(roleEntity);
+
+            var result = await this.UpdatePasswordAsync(user, password);
 
             if (result.Succeeded)
             {
@@ -140,17 +182,9 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             return await this.UpdateAsync(user);
         }
 
-        public virtual IdentityResult UpdateUser(HqUser user, string password)
-        {
-            if (!string.IsNullOrWhiteSpace(password))
-                this.ChangePasswordAsync(user, password).RunSynchronously();
-
-            return this.Update(user);
-        }
-
         public virtual async Task<IEnumerable<IdentityResult>> ArchiveSupervisorAndDependentInterviewersAsync(Guid supervisorId)
         {
-            var supervisorAndDependentInterviewers = this.Users.Where(
+            var supervisorAndDependentInterviewers = this.store.Users.Where(
                 user => user.Profile != null && user.Profile.SupervisorId == supervisorId || user.Id == supervisorId).ToList();
 
             var result = new List<IdentityResult>();
@@ -163,9 +197,9 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             return result;
         }
 
-        public virtual void LinkDeviceToInterviewerOrSupervisor(Guid interviewerId, string deviceId, DateTime deviceRegistrationDate)
+        public virtual async Task LinkDeviceToInterviewerOrSupervisorAsync(Guid interviewerId, string deviceId, DateTime deviceRegistrationDate)
         {
-            var currentUser = this.FindById(interviewerId);
+            var currentUser = await this.FindByIdAsync(interviewerId);
 
             if (currentUser == null || currentUser.IsArchivedOrLocked)
             {
@@ -180,7 +214,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 
             currentUser.Profile.DeviceId = deviceId;
             currentUser.Profile.DeviceRegistrationDate = deviceRegistrationDate;
-            this.UpdateUser(currentUser, null);
+            await this.UpdateUserAsync(currentUser, null);
         }
 
         public virtual async Task<IdentityResult> MoveUserToAnotherTeamAsync(Guid interviewerId, Guid newSupervisorId, Guid previousSupervisorId)
@@ -201,7 +235,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         {
             var archiveUserResults = new List<IdentityResult>();
 
-            var usersToArhive = this.Users.Where(user => userIds.Contains(user.Id)).ToList();
+            var usersToArhive = this.store.Users.Where(user => userIds.Contains(user.Id)).ToList();
             foreach (HqUser userToArchive in usersToArhive)
             {
                 if (userToArchive.IsInRole(UserRoles.Supervisor))
@@ -222,7 +256,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         {
             var archiveUserResults = new List<IdentityResult>();
 
-            var usersToUnarhive = this.Users.Where(user => userIds.Contains(user.Id)).ToList();
+            var usersToUnarhive = this.store.Users.Where(user => userIds.Contains(user.Id)).ToList();
             foreach (var userToUnarchive in usersToUnarhive)
             {
                 var unArchiveResult = await this.UnarchiveUserAsync(userToUnarchive);
@@ -272,9 +306,148 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             return result;
         }
 
-        public Task<bool> IsExistAnyUser()
+        public bool IsExistAnyUser() => this.store.Users.Any();
+
+        /// <summary>
+        ///     Create a user with no password
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public virtual async Task<IdentityResult> CreateAsync(HqUser user)
         {
-            return this.Users.AnyAsync();
+            ThrowIfDisposed();
+            await UpdateSecurityStampInternal(user);
+            var result = await identityValidator.ValidateAsync(user);
+            if (!result.Succeeded)
+            {
+                return result;
+            }
+            if (UserLockoutEnabledByDefault)
+            {
+                await store.SetLockoutEnabledAsync(user, true);
+            }
+            await store.CreateAsync(user);
+            return IdentityResult.Success;
+        }
+
+        /// <summary>
+        ///     Update a user
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public virtual async Task<IdentityResult> UpdateAsync(HqUser user)
+        {
+            ThrowIfDisposed();
+            if (user == null)
+            {
+                throw new ArgumentNullException("user");
+            }
+
+            var result = await identityValidator.ValidateAsync(user);
+            if (!result.Succeeded)
+            {
+                return result;
+            }
+            await store.UpdateAsync(user);
+            return IdentityResult.Success;
+        }
+
+        /// <summary>
+        ///     Find a user by id
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public virtual Task<HqUser> FindByIdAsync(Guid userId)
+        {
+            ThrowIfDisposed();
+            return store.FindByIdAsync(userId);
+        }
+
+        /// <summary>
+        ///     Find a user by user name
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <returns></returns>
+        public virtual Task<HqUser> FindByNameAsync(string userName)
+        {
+            ThrowIfDisposed();
+            if (userName == null)
+            {
+                throw new ArgumentNullException("userName");
+            }
+            return store.FindByNameAsync(userName);
+        }
+
+        /// <summary>
+        ///     Returns true if the password is valid for the user
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public virtual async Task<bool> CheckPasswordAsync(HqUser user, string password)
+        {
+            ThrowIfDisposed();
+            return await VerifyPasswordAsync(user, password);
+        }
+        
+        /// <summary>
+        ///     Returns the current security stamp for a user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public virtual async Task<string> GetSecurityStampAsync(Guid userId)
+        {
+            ThrowIfDisposed();
+            var user = await FindByIdAsync(userId);
+            if (user == null)
+            {
+                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, "The UserId cannot be found.",
+                    userId));
+            }
+            return await this.store.GetSecurityStampAsync(user);
+        }
+
+        
+        // Update the security stamp if the store supports it
+        internal async Task UpdateSecurityStampInternal(HqUser user) 
+            => await store.SetSecurityStampAsync(user, NewSecurityStamp());
+
+        private static string NewSecurityStamp() => Guid.NewGuid().ToString();
+
+        private void ThrowIfDisposed()
+        {
+            if (_disposed)
+            {
+                throw new ObjectDisposedException(GetType().Name);
+            }
+        }
+
+        public Task<IList<string>> GetRolesAsync(Guid userId) => this.store.GetRolesAsync(userId);
+
+        public Task<IEnumerable<Claim>> GetClaimsAsync(Guid userId) => this.store.GetClaimsAsync(userId);
+
+
+        /// <summary>
+        ///     Dispose this object
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+
+        private bool _disposed;
+        /// <summary>
+        ///     When disposing, actually dispose the store
+        /// </summary>
+        /// <param name="disposing"></param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing && !_disposed)
+            {
+                _disposed = true;
+            }
         }
     }
 }

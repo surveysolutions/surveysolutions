@@ -1,6 +1,8 @@
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.DependencyInjection;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -19,9 +21,6 @@ namespace WB.Core.SharedKernels.DataCollection
             registry.Bind<StatefulInterview>(true);
         }
 
-        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
-        {
-            return Task.CompletedTask;
-        }
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status) => Task.CompletedTask;
     }
 }

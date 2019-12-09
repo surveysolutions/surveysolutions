@@ -48,7 +48,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             await base.Initialize();
             if (interviewId == Guid.Empty) throw new ArgumentException(nameof(interviewId));
 
-            this.Answer = await this.imageFileStorage.GetInterviewBinaryData(this.interviewId, this.fileName);
+            this.Answer = await this.imageFileStorage.GetInterviewBinaryDataAsync(this.interviewId, this.fileName);
 
             if (this.Answer == null)
                 throw new ArgumentException(nameof(Answer));

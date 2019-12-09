@@ -4,6 +4,8 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
+using WB.Core.Infrastructure.DependencyInjection;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Modularity;
@@ -16,8 +18,6 @@ namespace WB.Core.Infrastructure
     {
         public void Load(IIocRegistry registry)
         {
-            registry.Bind<IClock, DateTimeBasedClock>();
-
             registry.Bind<IEventSourcedAggregateRootRepositoryWithCache, EventSourcedAggregateRootRepositoryWithCache>();
             registry.BindToRegisteredInterface<IEventSourcedAggregateRootRepository, IEventSourcedAggregateRootRepositoryWithCache>(); 
             registry.BindToRegisteredInterface<IEventSourcedAggregateRootRepositoryCacheCleaner, IEventSourcedAggregateRootRepositoryWithCache>(); 
@@ -25,11 +25,10 @@ namespace WB.Core.Infrastructure
             registry.BindAsSingleton<IAggregateLock, AggregateLock>();
             registry.BindAsSingleton<ICommandsMonitoring, TraceCommandsMonitoring>();
             registry.BindAsSingleton<IDenormalizerRegistry, DenormalizerRegistry>();
+            registry.Bind<IInScopeExecutor, NoScopeInScopeExecutor>();
+            registry.Bind<ICommandExecutor, CommandExecutor>();
         }
 
-        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
-        {
-            return Task.CompletedTask;
-        }
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status) => Task.CompletedTask;
     }
 }

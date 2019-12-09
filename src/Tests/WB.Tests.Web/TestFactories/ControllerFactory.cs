@@ -32,14 +32,15 @@ using WB.UI.Headquarters.API.DataCollection.Interviewer;
 using WB.UI.Headquarters.Code.CommandTransformation;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Services;
+using WB.UI.Shared.Web.Services;
 using AssignmentsController = WB.UI.Headquarters.API.PublicApi.AssignmentsController;
 
 namespace WB.Tests.Web.TestFactories
 {
     internal class ControllerFactory
     {
-        public Core.SharedKernels.SurveyManagement.Web.Controllers.AttachmentsController AttachmentsController(IAttachmentContentService attachmentContentService)
-            => new Core.SharedKernels.SurveyManagement.Web.Controllers.AttachmentsController(attachmentContentService);
+        public Core.SharedKernels.SurveyManagement.Web.Controllers.AttachmentsController AttachmentsController(IAttachmentContentService attachmentContentService, IImageProcessingService imageProcessingService = null)
+            => new Core.SharedKernels.SurveyManagement.Web.Controllers.AttachmentsController(attachmentContentService, imageProcessingService ?? Mock.Of<IImageProcessingService>());
 
         public ReportsController ReportsController(
             IMapReport mapReport = null,

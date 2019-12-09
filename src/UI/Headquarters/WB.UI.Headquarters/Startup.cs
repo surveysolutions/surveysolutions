@@ -38,6 +38,7 @@ using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
@@ -78,7 +79,6 @@ namespace WB.UI.Headquarters
         {
             Target.Register<SlackFatalNotificationsTarget>("slack");
             
-            ConfigureExceptionalStore();
             app.Use(RemoveServerNameFromHeaders);
 
             var autofacKernel = AutofacConfig.CreateKernel();
@@ -96,10 +96,10 @@ namespace WB.UI.Headquarters
             autofacKernel.ContainerBuilder.RegisterWebApiFilterProvider(config);
             autofacKernel.ContainerBuilder.RegisterWebApiModelBinderProvider();
 
-            var initTask = autofacKernel.InitAsync(
+            var initTask = Task.WhenAll(autofacKernel.InitAsync(
                     System.Configuration.ConfigurationManager.AppSettings
-                        .GetBool("RestartAppPoolOnInitializationError", true)
-                );
+                        .GetBool(@"RestartAppPoolOnInitializationError", true)
+                ), Task.Run(() => ConfigureExceptionalStore()));
 
             if (CoreSettings.IsDevelopmentEnvironment)
                 initTask.Wait();
@@ -131,7 +131,7 @@ namespace WB.UI.Headquarters
             var logger = container.Resolve<ILoggerProvider>().GetFor<Startup>();
             logger.Info($@"Starting Headquarters {container.Resolve<IProductVersion>()}");
 
-            ConfigureAuth(app, container);
+            ConfigureAuth(app);
             
             InitializeMVC();
             ConfigureWebApi(app, config);
@@ -174,13 +174,20 @@ namespace WB.UI.Headquarters
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            WebInterviewModule.Configure(app, HqWebInterviewModule.HubPipelineModules);
+            WebInterviewModuleConfigure(app);
             app.Use(SetSessionStateBehavior).UseStageMarker(PipelineStage.MapHandler);
 
             app.UseAutofacWebApi(config);
         }
 
-        private void ConfigureAuth(IAppBuilder app, IContainer ioc)
+        public static void WebInterviewModuleConfigure(IAppBuilder app)
+        {
+            var resolver = GlobalHost.DependencyResolver;
+            (resolver.GetService(typeof(IConnectionsMonitor)) as IConnectionsMonitor)?.StartMonitoring();
+            app.MapSignalR(new HubConfiguration { EnableDetailedErrors = true, Resolver = resolver });
+        }
+
+        private void ConfigureAuth(IAppBuilder app)
         {
             var applicationSecuritySection = NConfigurator.Default.GetSection<HqSecuritySection>(@"applicationSecurity");
 
@@ -193,11 +200,10 @@ namespace WB.UI.Headquarters
                 LoginPath = new PathString(@"/Account/LogOn"),
                 Provider = new CookieAuthenticationProvider
                 {
-                    OnValidateIdentity = OnValidateIdentity<HqUserManager, HqUser, Guid>(
+                    OnValidateIdentity = OnValidateIdentity(
                             validateInterval: TimeSpan.FromMinutes(30),
                             regenerateIdentityCallback: (manager, user) => manager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie),
-                            getUserIdCallback: (id) => Guid.Parse(id.GetUserId()),
-                            ioc: ioc),
+                            getUserIdCallback: (id) => Guid.Parse(id.GetUserId())),
 
                     OnApplyRedirect = ctx => ctx.ApplyNonApiRedirect()
                 },
@@ -214,22 +220,14 @@ namespace WB.UI.Headquarters
         ///     Rejects the identity if the stamp changes, and otherwise will call regenerateIdentity to sign in a new
         ///     ClaimsIdentity
         /// </summary>
-        /// <typeparam name="TManager"></typeparam>
-        /// <typeparam name="TUser"></typeparam>
-        /// <typeparam name="TKey"></typeparam>
         /// <param name="validateInterval"></param>
         /// <param name="regenerateIdentityCallback"></param>
         /// <param name="getUserIdCallback"></param>
-        /// <param name="ioc"></param>
         /// <returns></returns>
-        public static Func<CookieValidateIdentityContext, Task> OnValidateIdentity<TManager, TUser, TKey>(
+        public static Func<CookieValidateIdentityContext, Task> OnValidateIdentity(
             TimeSpan validateInterval, 
-            Func<TManager, TUser, Task<ClaimsIdentity>> regenerateIdentityCallback,
-            Func<ClaimsIdentity, TKey> getUserIdCallback,
-            IContainer ioc)
-            where TManager : UserManager<TUser, TKey>
-            where TUser : class, IUser<TKey>
-            where TKey : IEquatable<TKey>
+            Func<HqUserManager, HqUser, Task<ClaimsIdentity>> regenerateIdentityCallback,
+            Func<ClaimsIdentity, Guid> getUserIdCallback)
         {
             if (getUserIdCallback == null)
                 throw new ArgumentNullException(nameof(getUserIdCallback));
@@ -253,7 +251,8 @@ namespace WB.UI.Headquarters
 
                 if (validate)
                 {
-                    var manager = ioc.Resolve<TManager>();
+                    var manager = DependencyResolver.Current.GetService<HqUserManager>();
+
                     var userId = getUserIdCallback(context.Identity);
                     if (manager != null && userId != null)
                     {
@@ -364,7 +363,9 @@ namespace WB.UI.Headquarters
 
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
+            
             RazorGeneratorMvcStart.Start();
+            
 
             ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
         }

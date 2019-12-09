@@ -4,12 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Questionnaire.Api;
+using WB.UI.WebTester.Infrastructure;
 using WB.UI.WebTester.Resources;
 using WB.UI.WebTester.Services;
 
@@ -20,26 +22,26 @@ namespace WB.UI.WebTester.Controllers
         private const string SaveScenarioSessionKey = "SaveScenarioAvailable";
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IEvictionNotifier evictionService;
-        private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IInterviewFactory interviewFactory;
+        private readonly IOptions<TesterConfiguration> testerConfig;
 
         public WebTesterController(
             IStatefulInterviewRepository statefulInterviewRepository,
             IEvictionNotifier evictionService,
-            IQuestionnaireStorage questionnaireStorage,
-            IInterviewFactory interviewFactory)
+            IInterviewFactory interviewFactory,
+            IOptions<TesterConfiguration> testerConfig)
         {
             this.statefulInterviewRepository = statefulInterviewRepository ?? throw new ArgumentNullException(nameof(statefulInterviewRepository));
             this.evictionService = evictionService;
-            this.questionnaireStorage = questionnaireStorage;
             this.interviewFactory = interviewFactory;
+            this.testerConfig = testerConfig;
         }
 
-        public ActionResult Run(Guid id, string sid, string saveScenarioAvailable, int? scenarioId = null)
+        public IActionResult Run(Guid id, string sid, string saveScenarioAvailable, int? scenarioId = null)
         {
             if (!string.IsNullOrEmpty(saveScenarioAvailable) && bool.TryParse(saveScenarioAvailable, out var saveScenarioAvailableBool))
             {
-                Session[SaveScenarioSessionKey] = saveScenarioAvailableBool;
+                this.HttpContext.Session.SetInt32(SaveScenarioSessionKey, saveScenarioAvailableBool ? 1 : 0);
             }
 
             return this.View(new InterviewPageModel
@@ -50,7 +52,7 @@ namespace WB.UI.WebTester.Controllers
             });
         }
 
-        public async Task<ActionResult> Redirect(Guid id, string originalInterviewId, string scenarioId)
+        public async Task<IActionResult> Redirect(Guid id, string originalInterviewId, string scenarioId)
         {
             if (this.statefulInterviewRepository.Get(id.FormatGuid()) != null)
             {
@@ -88,19 +90,19 @@ namespace WB.UI.WebTester.Controllers
             return this.Redirect($"~/WebTester/Interview/{id.FormatGuid()}/Cover");
         }
 
-        public ActionResult Interview(string id)
+        public IActionResult Interview(string id)
         {
             try
             {
                 var interviewPageModel = GetInterviewPageModel(id);
                 if (interviewPageModel == null)
-                    throw new HttpException(404, string.Empty);
+                    return StatusCode(StatusCodes.Status404NotFound, string.Empty);
 
                 return View(interviewPageModel);
             }
             catch (ApiException e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
-                throw new HttpException(404, string.Empty);
+                return StatusCode(StatusCodes.Status404NotFound, string.Empty);
             }
         }
 
@@ -113,40 +115,45 @@ namespace WB.UI.WebTester.Controllers
                 return null;
             }
 
-            var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+            WebTesterStatefulInterview webTesterInterview = (WebTesterStatefulInterview) interview;
 
+            var questionnaire =
+                webTesterInterview.Questionnaire;
+
+            var designerUrl = testerConfig.Value.DesignerAddress;
             var reloadQuestionnaireUrl =
-                $"{ConfigurationSource.Configuration["DesignerAddress"]}/WebTesterReload/Index/{interview.QuestionnaireIdentity.QuestionnaireId}?interviewId={id}";
+                $"{designerUrl}/WebTesterReload/Index/{interview.QuestionnaireIdentity.QuestionnaireId}?interviewId={id}";
 
-            var saveScenarioDesignerUrl = $"{ConfigurationSource.Configuration["DesignerAddress"]}/api/WebTester/Scenarios/{interview.QuestionnaireIdentity.QuestionnaireId}";
+            var saveScenarioDesignerUrl = $"{designerUrl}/api/WebTester/Scenarios/{interview.QuestionnaireIdentity.QuestionnaireId}";
                 
             var interviewPageModel = new InterviewPageModel
             {
                 Id = id,
                 Title = $"{questionnaire.Title} | Web Tester",
-                GoogleMapsKey = ConfigurationSource.Configuration["GoogleMapApiKey"],
+                GoogleMapsKey = testerConfig.Value.GoogleMapApiKey,
                 ReloadQuestionnaireUrl = reloadQuestionnaireUrl
             };
-            if (Session[SaveScenarioSessionKey] != null && (bool)Session[SaveScenarioSessionKey])
+            var saveFlagInt = this.HttpContext.Session.GetInt32(SaveScenarioSessionKey);
+            if (saveFlagInt.HasValue && saveFlagInt == 1)
             {
                 interviewPageModel.GetScenarioUrl = Url.Content("~/api/ScenariosApi");
                 interviewPageModel.SaveScenarioUrl = saveScenarioDesignerUrl;
-                interviewPageModel.DesignerUrl = ConfigurationSource.Configuration["DesignerAddress"];
+                interviewPageModel.DesignerUrl = designerUrl;
             }
             
             return interviewPageModel;
         }
 
-        public ActionResult Section(string id, string sectionId)
+        public IActionResult Section(string id, string sectionId)
         {
             var interview = this.statefulInterviewRepository.Get(id);
 
             if (interview == null)
             {
-                throw new HttpException(404, string.Empty);
+                return StatusCode(StatusCodes.Status404NotFound, string.Empty);
             }
 
-            var targetSectionIsEnabled = interview?.IsEnabled(Identity.Parse(sectionId));
+            var targetSectionIsEnabled = interview.IsEnabled(Identity.Parse(sectionId));
             if (targetSectionIsEnabled != true)
             {
                 var firstSectionId = interview.GetAllEnabledGroupsAndRosters().First().Identity.ToString();
@@ -158,7 +165,7 @@ namespace WB.UI.WebTester.Controllers
             var model = GetInterviewPageModel(id);
             if (model == null)
             {
-                throw new HttpException(404, string.Empty);
+                return StatusCode(StatusCodes.Status404NotFound, string.Empty);
             }
 
             return this.View("Interview", model);
