@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.Services
             interviewerPlainInterviewFileStorage.StoreInterviewBinaryData(interviewId1, imageName, imageFileBytes, null);
 
             //act
-            var resImage = await interviewerPlainInterviewFileStorage.GetInterviewBinaryData(interviewId2, imageName);
+            var resImage = await interviewerPlainInterviewFileStorage.GetInterviewBinaryDataAsync(interviewId2, imageName);
 
             //assert
             Mock.Get(fileSystemAccessor).Verify(x => x.WriteAllBytes(filePathToImage, imageFileBytes), Times.Once);

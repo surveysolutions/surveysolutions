@@ -23,7 +23,8 @@
 <script lang="js">
 
     import { entityDetails } from "../mixins"
-    
+    import Vue from "vue"
+
     class GpsAnswer {
         constructor(latitude,
             longitude,
@@ -83,11 +84,14 @@
                 });
             },
             onPositionDetermined(position, questionId) {
+                console.log('onPositionDetermined')
                 this.$store.dispatch('answerGpsQuestion', {
                     identity: questionId,
                     answer: new GpsAnswer(position.coords.latitude, position.coords.longitude, position.coords.accuracy, position.coords.altitude, position.timestamp)
+                }).then(() => {
+                    this.isInProgress = false
+                    this.$store.dispatch("fetchProgress", -1)
                 })
-                this.isInProgress = false
             },
             onPositionDeterminationFailed(error) {
                 var message = "";

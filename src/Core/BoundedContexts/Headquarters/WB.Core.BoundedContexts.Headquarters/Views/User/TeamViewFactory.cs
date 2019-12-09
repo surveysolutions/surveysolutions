@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using Dapper;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Infrastructure.Native.Fetching;
 using WB.Infrastructure.Native.Storage.Postgre;
-using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.User
@@ -86,11 +85,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         {
             var userIds = asigneeInterviewersBySupervisor.Users.Select(x => x.UserId).ToList();
 
-            var allUsers = this.userRepository.Users.Where(x => userIds.Contains(x.Id)).Include(x => x.Roles).ToList();
+            var allUsers = this.userRepository.Users.Where(x => userIds.Contains(x.Id)).ToList();
 
             foreach (var user in asigneeInterviewersBySupervisor.Users)
             {
-                user.IconClass = allUsers.FirstOrDefault(x => x.Id == user.UserId).Roles.FirstOrDefault().Role.ToString()
+                user.IconClass = allUsers.FirstOrDefault(x => x.Id == user.UserId).Roles.FirstOrDefault().Id.ToString()
                     .ToLower();
             }
         }

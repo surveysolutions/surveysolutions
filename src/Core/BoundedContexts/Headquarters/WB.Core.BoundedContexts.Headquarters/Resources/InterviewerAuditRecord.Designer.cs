@@ -142,6 +142,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Installation finished.
+        /// </summary>
+        public static string FinishInstallation {
+            get {
+                return ResourceManager.GetString("FinishInstallation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User {0} logged in application.
         /// </summary>
         public static string Login {

@@ -6,8 +6,13 @@ function setFetchState(state, id, done) {
     if (done) {
         if (hasInState) Vue.delete(state, $id);
     } else {
-        if(!hasInState) Vue.set(state, $id, true)
+        if (!hasInState) Vue.set(state, $id, true)
     }
+    return Object.keys(state).length
+}
+
+function updateFetchProgress(state) {
+    state.inProgress = Object.keys(state.state).length > 0 || state.requestInProgress > 0 || state.loadingProgress;
 }
 
 const fetch = {
@@ -20,7 +25,8 @@ const fetch = {
             uploaded: null,
             total: null
         },
-        inProgress: 0,
+        requestInProgress: 0,
+        inProgress: false,
         state: {}
     },
     getters: {
@@ -40,7 +46,6 @@ const fetch = {
         fetchProgress({ commit }, amount) {
             commit("SET_FETCH_IN_PROGRESS", amount);
         },
-
         sectionRequireScroll({ commit }, { id }) {
             commit("SET_SCROLL_TARGET", id);
         },
@@ -73,16 +78,19 @@ const fetch = {
                     setFetchState(state.state, element, done)
                 });
             }
+
+            updateFetchProgress(state);
         },
         SET_FETCH_IN_PROGRESS(state, amount) {
-            const inProgress = state.inProgress || 0;
-            state.inProgress = inProgress + amount;
+            state.requestInProgress = state.requestInProgress + amount;
+            updateFetchProgress(state);
         },
         SET_SCROLL_TARGET(state, id) {
             state.scroll.id = id;
         },
         SET_LOADING_PROGRESS(state, value) {
             state.loadingProgress = value;
+            updateFetchProgress(state);
         }
     }
 };

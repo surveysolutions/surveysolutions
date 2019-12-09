@@ -72,11 +72,11 @@ namespace WB.UI.Designer.Models
             }
 
             Guid? revision = null;
-
+            int sequence = 0;
             if (parts.Length == 2)
             {
                 QuestionnaireChangeRecord history;
-                if (int.TryParse(parts[1], out var sequence))
+                if (int.TryParse(parts[1], out sequence))
                 {
                     history = await db.QuestionnaireChangeRecords.SingleOrDefaultAsync(r =>
                         r.QuestionnaireId == questionnaireId.FormatGuid() && r.Sequence == sequence);
@@ -94,10 +94,11 @@ namespace WB.UI.Designer.Models
                 else
                 {
                     revision = Guid.Parse(history.QuestionnaireChangeRecordId);
+                    sequence = history.Sequence;
                 }
             } 
 
-            bindingContext.Result = ModelBindingResult.Success(new QuestionnaireRevision(questionnaireId, revision));
+            bindingContext.Result = ModelBindingResult.Success(new QuestionnaireRevision(questionnaireId, revision, revision != null? (int?)sequence : null));
         }
     }
 

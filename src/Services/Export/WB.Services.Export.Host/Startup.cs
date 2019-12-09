@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Prometheus;
-using Prometheus.Advanced;
+
+using Serilog;
 using WB.Services.Export.Checks;
 using WB.Services.Export.Host.Infra;
 using WB.Services.Export.Host.Jobs;
@@ -16,44 +18,38 @@ using WB.Services.Export.Infrastructure;
 using WB.Services.Export.InterviewDataStorage.EfMappings;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Scheduler;
+using WB.Services.Scheduler.Stats;
 using WB.Services.Scheduler.Storage;
 
 namespace WB.Services.Export.Host
 {
     public class Startup
     {
-        private readonly ILogger<Startup> logger;
-
-        public Startup(IConfiguration configuration, ILogger<Startup> logger)
+        public Startup(IConfiguration configuration)
         {
-            logger.LogInformation("Export service started. version {version}", 
-                FileVersionInfo.GetVersionInfo(this.GetType().Assembly.Location).ProductVersion);
-
-            this.logger = logger;
             Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
             var webConfig = Configuration["webConfigs"];
 
             // should we go to web config for connection string?
             if (webConfig != null)
             {
-                WebConfigReader.Read(Configuration, webConfig, logger);
+                WebConfigReader.Read(Configuration, webConfig);
             }
 
             services.AddTransient<TenantModelBinder>();
-            services.AddMvcCore(ops =>
+
+            services.AddControllers(opts =>
             {
-                ops.ModelBinderProviders.Insert(0, new TenantEntityBinderProvider());
-                ops.Filters.Add<TenantInfoPropagationActionFilter>();
-            })
-            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-            .AddJsonFormatters();
+                opts.ModelBinderProviders.Insert(0, new TenantEntityBinderProvider());
+                opts.Filters.Add<TenantInfoPropagationActionFilter>();
+            }).AddNewtonsoftJson();
 
             services.AddTransient<IDataExportProcessesService, PostgresDataExportProcessesService>();
 
@@ -63,20 +59,9 @@ namespace WB.Services.Export.Host
 
             services.RegisterJobHandler<ExportJobRunner>(ExportJobRunner.Name);
             services.AddScoped(typeof(ITenantApi<>), typeof(TenantApi<>));
-            services.AddDbContext<TenantDbContext>(builder => {
-                builder.ReplaceService<IModelCacheKeyFactory, TenantModelCacheKeyFactory>();
-            });
-            services.AddTransient<IOnDemandCollector, AppVersionCollector>();
-
-            services.AddSingleton<ICollectorRegistry>(c =>
+            services.AddDbContext<TenantDbContext>(builder =>
             {
-                var registry = DefaultCollectorRegistry.Instance;
-                var collectors = c.GetServices<IOnDemandCollector>();
-
-                registry.RegisterOnDemandCollectors(collectors);
-                registry.RegisterOnDemandCollector<DotNetStatsCollector>();
-                
-                return registry;
+                builder.ReplaceService<IModelCacheKeyFactory, TenantModelCacheKeyFactory>();
             });
 
             var healthChecksBuilder = services.AddHealthChecks();
@@ -90,27 +75,40 @@ namespace WB.Services.Export.Host
                 .AddDbContextCheck<JobContext>("Database");
 
             services.Configure(Configuration);
-            
-            #if RANDOMSCHEMA && DEBUG
-            TenantInfoExtension.AddSchemaDebugTag(Process.GetCurrentProcess().Id.ToString() + "_");
-            #endif
 
-            // Create the IServiceProvider based on the container.
-            return services.BuildServiceProvider();
+#if RANDOMSCHEMA && DEBUG
+            TenantInfoExtension.AddSchemaDebugTag(Process.GetCurrentProcess().Id.ToString() + "_");
+#endif
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        // ReSharper disable once UnusedMember.Global Used by Aspnet core
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
+            logger.LogInformation("Export service started. version {version}",
+                FileVersionInfo.GetVersionInfo(this.GetType().Assembly.Location).ProductVersion);
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseMetricServer();
+            
             app.StartScheduler();
-            app.UseHealthChecks("/.hc");
-            app.UseMetricServer("/metrics", app.ApplicationServices.GetService<ICollectorRegistry>());
-            app.UseMvc();
+            app.UseSchedulerMetrics();            
+
+            app.UseRouting();
+
+            app.UseEndpoints(e =>
+            {
+                e.MapHealthChecks("/.hc");
+                e.MapControllers();
+            });
+
+            Log.Logger.Information("Export service started. version {version}");
+
         }
     }
 }

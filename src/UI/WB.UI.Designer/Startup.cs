@@ -17,6 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using Ncqrs.Domain.Storage;
 using Newtonsoft.Json.Serialization;
 using reCAPTCHA.AspNetCore;
 using StackExchange.Exceptional;
@@ -27,6 +28,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.DependencyInjection;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.Versions;
 using WB.Infrastructure.Native.Files;
@@ -34,7 +36,6 @@ using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Attributes;
 using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.CommonWeb;
-using WB.UI.Designer.DependencyInjection;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Modules;
@@ -99,6 +100,9 @@ namespace WB.UI.Designer
                 .AddDefaultIdentity<DesignerIdentityUser>()
                 .AddRoles<DesignerIdentityRole>()
                 .AddEntityFrameworkStores<DesignerDbContext>();
+
+            services.AddHealthChecks()
+                .AddCheck<DatabaseConnectionCheck>("database");
 
             services
                 .AddAuthentication(sharedOptions =>
@@ -193,6 +197,7 @@ namespace WB.UI.Designer
             services.AddTransient<IEmailSender, MailSender>();
             services.AddTransient<IViewRenderingService, ViewRenderingService>();
             services.AddTransient<IQuestionnaireHelper, QuestionnaireHelper>();
+            services.AddTransient<IDomainRepository, DomainRepository>();
             services.AddScoped<ILoggedInUser, LoggedInUser>();
 
             services.Configure<CompilerSettings>(Configuration.GetSection("CompilerSettings"));
@@ -206,7 +211,6 @@ namespace WB.UI.Designer
             aspCoreKernel.Load(
                 new EventFreeInfrastructureModule(),
                 new InfrastructureModule(),
-                new NcqrsModule(),
                 new DesignerBoundedContextModule(),
                 new QuestionnaireVerificationModule(),
                 new FileInfrastructureModule(),
@@ -279,6 +283,8 @@ namespace WB.UI.Designer
                     new CultureInfo("sq")
                 };
             });
+
+            app.UseHealthChecks("/.hc");
 
             app.UseMvc(routes =>
             {

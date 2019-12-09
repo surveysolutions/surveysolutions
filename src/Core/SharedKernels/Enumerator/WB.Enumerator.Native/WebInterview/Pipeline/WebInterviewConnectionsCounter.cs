@@ -1,6 +1,7 @@
+using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
-using Microsoft.AspNet.SignalR.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace WB.Enumerator.Native.WebInterview.Pipeline
 {
@@ -14,22 +15,22 @@ namespace WB.Enumerator.Native.WebInterview.Pipeline
             this.connectionsMonitor = connectionsMonitor;
         }
         
-        public Task OnConnected(IHub hub)
+        public Task OnConnected(Hub hub)
         {
             connectionsMonitor.Connected(hub.Context.ConnectionId);
             return Task.CompletedTask;
         }
 
-        public Task OnDisconnected(IHub hub, bool stopCalled)
+        public Task OnDisconnected(Hub hub, Exception exception)
         {
             connectionsMonitor.Disconnected(hub.Context.ConnectionId);
             return Task.CompletedTask;
         }
 
-        public Task OnReconnected(IHub hub)
+        /*public Task OnReconnected(Hub hub)
         {
             connectionsMonitor.Connected(hub.Context.ConnectionId);
             return Task.CompletedTask;
-        }
+        }*/
     }
 }

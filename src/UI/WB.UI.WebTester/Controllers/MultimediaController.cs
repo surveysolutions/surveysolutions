@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -44,11 +44,11 @@ namespace WB.UI.WebTester.Controllers
             this.imageProcessingService = imageProcessingService;
         }
 
-        public ActionResult AudioRecord(string interviewId, string fileName)
+        public IActionResult AudioRecord(string interviewId, string fileName)
         {
             if (!Guid.TryParse(interviewId, out var id))
             {
-                return HttpNotFound();
+                return StatusCode(StatusCodes.Status404NotFound);
             }
 
             MultimediaFile file = null;
@@ -58,13 +58,13 @@ namespace WB.UI.WebTester.Controllers
             }
 
             if (file == null || file.Data.Length == 0)
-                return HttpNotFound();
+                return StatusCode(StatusCodes.Status404NotFound);
 
             return this.File(file.Data, file.MimeType, fileName);
         }
 
         [HttpPost]
-        public async Task<ActionResult> Audio(string interviewId, string questionId, HttpPostedFileBase file)
+        public async Task<ActionResult> Audio(string interviewId, string questionId, IFormFile file)
         {
             IStatefulInterview interview = this.statefulInterviewRepository.Get(interviewId);
 
@@ -80,7 +80,7 @@ namespace WB.UI.WebTester.Controllers
             {
                 using (var ms = new MemoryStream())
                 {
-                    await file.InputStream.CopyToAsync(ms);
+                    await file.CopyToAsync(ms);
 
                     byte[] bytes = ms.ToArray();
 
@@ -106,6 +106,7 @@ namespace WB.UI.WebTester.Controllers
             catch (Exception e)
             {
                 webInterviewNotificationService.MarkAnswerAsNotSaved(Guid.Parse(interviewId), questionIdentity, e);
+                //webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, questionId, WebInterview.GetUiMessageFromException(e));
                 throw;
             }
 
@@ -113,7 +114,7 @@ namespace WB.UI.WebTester.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Image(string interviewId, string questionId, HttpPostedFileBase file)
+        public async Task<ActionResult> Image(string interviewId, string questionId, IFormFile file)
         {
             IStatefulInterview interview = this.statefulInterviewRepository.Get(interviewId);
 
@@ -129,26 +130,25 @@ namespace WB.UI.WebTester.Controllers
 
             try
             {
-                using (var ms = new MemoryStream())
+                await using var ms = new MemoryStream();
+                await file.CopyToAsync(ms);
+
+                var fileContent = ms.ToArray();
+                this.imageProcessingService.Validate(fileContent);
+
+                fileName = GetPictureFileName(question.VariableName, questionIdentity.RosterVector);
+
+                var responsibleId = interview.CurrentResponsibleId;
+
+                this.mediaStorage.Store(new MultimediaFile
                 {
-                    await file.InputStream.CopyToAsync(ms);
+                    Filename = fileName,
+                    Data = fileContent,
+                    MimeType = file.ContentType
+                }, fileName, interview.Id);
 
-                    this.imageProcessingService.ValidateImage(ms.ToArray());
-
-                    fileName = GetPictureFileName(question.VariableName, questionIdentity.RosterVector);
-
-                    var responsibleId = interview.CurrentResponsibleId;
-
-                    this.mediaStorage.Store(new MultimediaFile
-                    {
-                        Filename = fileName,
-                        Data = ms.ToArray(),
-                        MimeType = "image/jpg"
-                    }, fileName, interview.Id);
-
-                    this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
-                        responsibleId, questionIdentity.Id, questionIdentity.RosterVector, fileName));
-                }
+                this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
+                    responsibleId, questionIdentity.Id, questionIdentity.RosterVector, fileName));
             }
             catch (Exception e)
             {

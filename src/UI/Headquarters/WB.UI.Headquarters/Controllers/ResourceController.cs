@@ -32,7 +32,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             byte[] file = null; 
             if(fileName != null)
-                file = await this.imageFileRepository.GetInterviewBinaryData(interviewId, fileName);
+                file = await this.imageFileRepository.GetInterviewBinaryDataAsync(interviewId, fileName);
 
             if (file == null || file.Length == 0)
                 return

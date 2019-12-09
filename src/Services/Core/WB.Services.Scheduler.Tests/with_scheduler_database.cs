@@ -21,14 +21,12 @@ namespace WB.Services.Scheduler.Tests
 
         protected async Task CreateNewJobs(params JobItem[] jobs)
         {
-            using (var scope = serviceProvider.CreateScope())
-            {
-                var jobService = scope.ServiceProvider.GetService<JobService>();
+            using var scope = serviceProvider.CreateScope();
+            var jobService = scope.ServiceProvider.GetService<JobService>();
 
-                foreach (var job in jobs)
-                {
-                    await jobService.AddNewJobAsync(job);
-                }
+            foreach (var job in jobs)
+            {
+                await jobService.AddNewJobAsync(job);
             }
         }
     }
@@ -58,20 +56,20 @@ namespace WB.Services.Scheduler.Tests
 
         [SetUp]
         public async Task Init()
-        {
-            var person = new Bogus.Person();
-            this.SchemaName = "test_schema_" + person.UserName.ToLowerInvariant().Replace(".", "");
+        {            
+            this.SchemaName = "test_schema";
+
             Console.WriteLine(SchemaName);
-            using (var scope = PrepareOneTime().CreateScope())
-            {
-                var db = scope.ServiceProvider.GetService<JobContext>();
+            using var scope = PrepareOneTime().CreateScope();
+            var db = scope.ServiceProvider.GetService<JobContext>();
 
-                await EnsurePublicSchemaExists(db.Database);
-                await db.Database.MigrateAsync();
-                await db.Database.ExecuteSqlCommandAsync("ALTER SCHEMA scheduler RENAME TO " + SchemaName);
-            }
+            try { await db.Database.ExecuteSqlRawAsync($"DROP SCHEMA IF EXISTS " + SchemaName + " CASCADE"); }
+            catch { }
+
+            await EnsurePublicSchemaExists(db.Database);
+            await db.Database.MigrateAsync();
+            await db.Database.ExecuteSqlRawAsync("ALTER SCHEMA scheduler RENAME TO " + SchemaName);
         }
-
           
         private static async Task EnsurePublicSchemaExists(DatabaseFacade db)
         {
@@ -91,23 +89,20 @@ namespace WB.Services.Scheduler.Tests
         [TearDown]
         public async Task Down()
         {
-            using (var scope = PrepareOneTime().CreateScope())
-            {
-                var db = scope.ServiceProvider.GetService<JobContext>();
+            using var scope = PrepareOneTime().CreateScope();
+            var db = scope.ServiceProvider.GetService<JobContext>();
                 
-                await db.Database.ExecuteSqlCommandAsync($"DROP SCHEMA " + SchemaName +" CASCADE");
-                await db.Database.ExecuteSqlCommandAsync($"DROP Table public.\"__EFMigrationsHistory\"");
-            }
+            await db.Database.ExecuteSqlRawAsync($"DROP SCHEMA " + SchemaName +" CASCADE");
+            await db.Database.ExecuteSqlRawAsync($"DROP Table public.\"__EFMigrationsHistory\"");
+            // db.Database.CommitTransaction();
         }
 
         [OneTimeTearDown]
         public async Task OneTimeTearDown()
         {
-            using (var scope = PrepareOneTime().CreateScope())
-            {
-                var db = scope.ServiceProvider.GetService<JobContext>();
-                await db.Database.EnsureDeletedAsync();
-            }
+            using var scope = PrepareOneTime().CreateScope();
+            var db = scope.ServiceProvider.GetService<JobContext>();
+            await db.Database.EnsureDeletedAsync();
         }
 
         protected IConfiguration Configuration => new ConfigurationBuilder()

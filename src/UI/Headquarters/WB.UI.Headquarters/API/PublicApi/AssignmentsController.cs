@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
@@ -110,7 +111,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         [Route("")]
         [Localizable(false)]
         [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true)]
-        public AssignmentsListView List([FromUri(SuppressPrefixCheck = true, Name = "")] AssignmentsListFilter filter)
+        public async Task<AssignmentsListView> List([FromUri(SuppressPrefixCheck = true, Name = "")] AssignmentsListFilter filter)
         {
             filter = filter ?? new AssignmentsListFilter
             {
@@ -125,7 +126,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                 questionnaireId = null;
             }
 
-            var responsible = GetResponsibleIdPersonFromRequestValue(filter.Responsible);
+            var responsible = await GetResponsibleIdPersonFromRequestValueAsync(filter.Responsible);
 
             AssignmentsWithoutIdentifingData result = this.assignmentViewFactory.Load(new AssignmentsInputModel
             {
@@ -179,9 +180,9 @@ namespace WB.UI.Headquarters.API.PublicApi
         [HttpPost]
         [Route]
         [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true)]
-        public CreateAssignmentResult Create(CreateAssignmentApiRequest createItem)
+        public async Task<CreateAssignmentResult> Create(CreateAssignmentApiRequest createItem)
         {
-            var responsible = this.GetResponsibleIdPersonFromRequestValue(createItem?.Responsible);
+            var responsible = await this.GetResponsibleIdPersonFromRequestValueAsync(createItem?.Responsible);
 
             this.VerifyAssigneeInRoles(responsible, createItem?.Responsible, UserRoles.Interviewer, UserRoles.Supervisor);
 
@@ -331,11 +332,11 @@ namespace WB.UI.Headquarters.API.PublicApi
         [HttpPatch]
         [Route("{id:int}/assign")]
         [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true)]
-        public AssignmentDetails Assign(int id, [FromBody] AssignmentAssignRequest assigneeRequest)
+        public async Task<AssignmentDetails> Assign(int id, [FromBody] AssignmentAssignRequest assigneeRequest)
         {
             var assignment = assignmentsStorage.GetAssignment(id) ?? throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            var responsibleUser = this.GetResponsibleIdPersonFromRequestValue(assigneeRequest?.Responsible);
+            var responsibleUser = await this.GetResponsibleIdPersonFromRequestValueAsync(assigneeRequest?.Responsible);
 
             this.VerifyAssigneeInRoles(responsibleUser, assigneeRequest?.Responsible, UserRoles.Interviewer,
                 UserRoles.Supervisor);
@@ -359,7 +360,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             }
         }
 
-        private HqUser GetResponsibleIdPersonFromRequestValue(string responsible)
+        private async Task<HqUser> GetResponsibleIdPersonFromRequestValueAsync(string responsible)
         {
             if (string.IsNullOrWhiteSpace(responsible))
             {
@@ -367,8 +368,8 @@ namespace WB.UI.Headquarters.API.PublicApi
             }
 
             return Guid.TryParse(responsible, out Guid responsibleUserId)
-                ? this.userManager.FindById(responsibleUserId)
-                : this.userManager.FindByName(responsible);
+                ? await this.userManager.FindByIdAsync(responsibleUserId)
+                : await this.userManager.FindByNameAsync(responsible);
         }
 
         /// <summary>

@@ -109,7 +109,7 @@ namespace WB.Tests.Web.TestFactories
                 PasswordHash = passwordHash,
                 PasswordHashSha1 = passwordHashSha1
             };
-            user.Roles.Add(new HqUserRole { UserId = user.Id, RoleId = role.ToUserId() });
+            user.Roles.Add(new HqRole { Id = role.ToUserId() });
 
             return user;
         }

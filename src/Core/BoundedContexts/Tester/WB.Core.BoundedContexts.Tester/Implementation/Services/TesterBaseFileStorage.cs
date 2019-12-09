@@ -26,12 +26,14 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
                 this.fileSystemAccessor.CreateDirectory(this.basePath);
         }
 
-        public Task<byte[]> GetInterviewBinaryData(Guid interviewId, string fileName)
+        public Task<byte[]> GetInterviewBinaryDataAsync(Guid interviewId, string fileName) 
+            => Task.FromResult(this.GetInterviewBinaryData(interviewId, fileName));
+
+        public byte[] GetInterviewBinaryData(Guid interviewId, string fileName)
         {
             var filePath = this.GetPathToFile(fileName);
-            if (!this.fileSystemAccessor.IsFileExists(filePath))
-                return null;
-            return Task.FromResult(this.fileSystemAccessor.ReadAllBytes(filePath));
+
+            return !fileSystemAccessor.IsFileExists(filePath) ? null : fileSystemAccessor.ReadAllBytes(filePath);
         }
 
         public Task<List<InterviewBinaryDataDescriptor>> GetBinaryFilesForInterview(Guid interviewId)

@@ -41,7 +41,7 @@
 
 <script>
 import { DateFormats } from "~/shared/helpers";
-import vue from "vue"
+import Vue from "vue"
 
 export default {
   data: function() {
@@ -58,7 +58,7 @@ export default {
     },
     async show() {
       if (this.items == null){
-        this.items = await vue.$api.get('getStatusesHistory', {interviewId: this.$route.params.interviewId});
+        this.items = await Vue.$api.interview.get('getStatusesHistory');
       }
 
       this.$refs.modal.modal();

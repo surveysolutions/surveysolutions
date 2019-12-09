@@ -91,7 +91,6 @@ namespace WB.Tests.Abc.TestFactories
                 interviewViewModelFactory ?? Mock.Of<IInterviewViewModelFactory>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 userInterfaceStateService ?? Mock.Of<IUserInterfaceStateService>(),
-                mvxMainThreadDispatcher ?? Stub.MvxMainThreadAsyncDispatcher(),
                 Create.ViewModel.DynamicTextViewModel(
                     eventRegistry: eventRegistry,
                     interviewRepository: interviewRepository),
@@ -517,7 +516,8 @@ namespace WB.Tests.Abc.TestFactories
             ILogger logger = null,
             IQRBarcodeScanService qrBarcodeScanService = null,
             ISerializer serializer = null,
-            IUserInteractionService userInteractionService = null)
+            IUserInteractionService userInteractionService = null,
+            IAuditLogService auditLogService = null)
             => new FinishInstallationViewModel(viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>(),
                 principal ?? Mock.Of<IPrincipal>(x => x.CurrentUserIdentity == Create.Other.SupervisorIdentity(null, null, null, null)),
                 passwordHasher?? Mock.Of<IPasswordHasher>(),
@@ -527,7 +527,8 @@ namespace WB.Tests.Abc.TestFactories
                 logger ?? Mock.Of<ILogger>(),
                 qrBarcodeScanService ?? Mock.Of<IQRBarcodeScanService>(),
                 serializer?? Mock.Of <ISerializer>(),
-                userInteractionService?? Mock.Of<IUserInteractionService>());
+                userInteractionService?? Mock.Of<IUserInteractionService>(),
+                auditLogService ?? Mock.Of<IAuditLogService>());
 
         public ConnectedDeviceSynchronizationViewModel ConnectedDeviceSynchronizationViewModel()
             => new ConnectedDeviceSynchronizationViewModel();

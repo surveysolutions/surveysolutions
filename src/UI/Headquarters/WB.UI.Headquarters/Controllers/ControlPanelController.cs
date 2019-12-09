@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -26,6 +27,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -54,6 +56,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IJsonAllTypesSerializer serializer;
         private readonly IClientApkProvider clientApkProvider;
         private readonly IAuthorizedUser currentUser;
+        private readonly IFileSystemAccessor fileSystemAccessor;
 
         public ControlPanelController(
             IServiceLocator serviceLocator,
@@ -68,7 +71,8 @@ namespace WB.UI.Headquarters.Controllers
             IUserViewFactory userViewFactory, 
             IJsonAllTypesSerializer serializer,
             IClientApkProvider clientApkProvider,
-            IAuthorizedUser currentUser)
+            IAuthorizedUser currentUser, 
+            IFileSystemAccessor fileSystemAccessor)
              : base(commandService: commandService, logger: logger)
         {
             this.userManager = userManager;
@@ -82,6 +86,7 @@ namespace WB.UI.Headquarters.Controllers
             this.serializer = serializer;
             this.clientApkProvider = clientApkProvider;
             this.currentUser = currentUser;
+            this.fileSystemAccessor = fileSystemAccessor;
         }
 
         public ActionResult CreateHeadquarters()
@@ -206,23 +211,36 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult Versions() => this.View();
 
+        [Localizable(false)]
         public ActionResult AppUpdates()
         {
             var folder = clientApkProvider.ApkClientsFolder();
             var appFiles = Directory.EnumerateFiles(folder);
+
+            var sb = new StringBuilder();
 
             return View(appFiles
                 .Select(app => new FileInfo(app))
                 .OrderBy(fi => fi.Name)
                 .Select(fi =>
                 {
-                    int? version = null;
+                    sb.Clear();
+
+                    sb.Append("<strong>");
+                    sb.Append(fi.Name);
+
                     if (fi.Name.EndsWith(".apk", StringComparison.OrdinalIgnoreCase))
                     {
-                        version = this.androidPackageReader.Read(fi.FullName)?.Version;
+                        var version = this.androidPackageReader.Read(fi.FullName)?.Version;
+                        if(version != null) sb.Append($" [ver:{version}]");
+                        var hash = Convert.ToBase64String(this.fileSystemAccessor.ReadHash(fi.FullName));
+                        sb.Append($" [md5:{hash}]");
                     }
 
-                    return $"<strong>{fi.Name}{(version.HasValue ? $" [ver. {version}]" : "")}</strong> ({fi.Length.Bytes().ToString("0.00")}) {fi.LastWriteTimeUtc}";
+                    sb.Append("</strong>");
+                    sb.Append($" ({fi.Length.Bytes().ToString("0.00")}) {fi.LastWriteTimeUtc}");
+
+                    return sb.ToString();
                 }).ToList());
         }
 
