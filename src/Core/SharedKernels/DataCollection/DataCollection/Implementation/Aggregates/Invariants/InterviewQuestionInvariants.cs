@@ -437,7 +437,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         private InterviewQuestionInvariants RequireOptionExists(decimal value)
         {
-            var availableValues = this.Questionnaire.GetOptionForQuestionByOptionValue(this.QuestionId, value);
+            var availableValues = this.Questionnaire.DoesSupportReusableCategories(this.QuestionId)
+                ? this.questionOptionsRepository.GetOptionForQuestionByOptionValue(this.Questionnaire, this.QuestionId, value, null)
+                : this.Questionnaire.GetOptionForQuestionByOptionValue(this.QuestionId, value);
 
             if (availableValues == null)
                 throw new AnswerNotAcceptedException(
@@ -489,7 +491,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         private InterviewQuestionInvariants RequireOptionsExist(IReadOnlyCollection<int> values)
         {
-            var availableValues = (this.Questionnaire.IsQuestionFilteredCombobox(this.QuestionId)
+            var availableValues = (this.Questionnaire.IsQuestionFilteredCombobox(this.QuestionId) || this.Questionnaire.DoesSupportReusableCategories(this.QuestionId)
                 ? this.questionOptionsRepository.GetOptionsByOptionValues(this.Questionnaire, this.QuestionId, values.ToArray(), this.Questionnaire.Translation).Select(x => x.Value)
                 : this.Questionnaire.GetMultiSelectAnswerOptionsAsValues(this.QuestionId)).ToArray();
 

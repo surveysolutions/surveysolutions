@@ -2475,5 +2475,17 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new Categories() { Id = id };
         }
+
+        public OptionView OptionView(QuestionnaireIdentity questionnaireId, int value, string text, int? parentId, Guid categoryId)
+        {
+            return new OptionView()
+            {
+                CategoryId = categoryId.FormatGuid(),
+                Value = value,
+                Title = text,
+                ParentValue = parentId,
+                QuestionnaireId = questionnaireId.ToString()
+            };
+        }
     }
 }
