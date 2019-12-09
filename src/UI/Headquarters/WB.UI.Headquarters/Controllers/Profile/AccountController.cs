@@ -53,33 +53,6 @@ namespace WB.UI.Headquarters.Controllers
             this.appSettingsStorage = appSettingsStorage;
         }
 
-        [HttpGet]
-        public ActionResult Index()
-        {
-            var roleForCurrentUser = this.authorizedUser.Role;
-
-            switch (roleForCurrentUser)
-            {
-                case UserRoles.Headquarter:
-                    return this.RedirectToAction("SurveysAndStatuses", "Reports");
-
-                case UserRoles.Supervisor:
-                    return this.RedirectToAction("SurveysAndStatusesForSv", "Reports");
-
-                case UserRoles.Administrator:
-                    return this.RedirectToAction("SurveysAndStatuses", "Reports");
-
-                case UserRoles.Observer:
-                    return this.RedirectToAction("Index", "Headquarters");
-
-                case UserRoles.Interviewer:
-                    return this.RedirectToAction("CreateNew", "InterviewerHq");
-
-                default:
-                    return this.RedirectToAction("NotFound", "Error");
-            }
-        }
-
 
         [Authorize]
         public async Task<ActionResult> Manage()

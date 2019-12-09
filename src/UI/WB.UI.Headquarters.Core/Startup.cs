@@ -23,6 +23,7 @@ using WB.Persistence.Headquarters.Migrations.PlainStore;
 using WB.Persistence.Headquarters.Migrations.ReadSide;
 using WB.Persistence.Headquarters.Migrations.Users;
 using WB.UI.Designer.CommonWeb;
+using WB.UI.Headquarters.Configs;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Versions;
 
@@ -100,6 +101,9 @@ namespace WB.UI.Headquarters
 
             services.AddTransient<ICaptchaService, WebCacheBasedCaptchaService>();
             services.AddTransient<ICaptchaProvider, NoCaptchaProvider>();
+
+            // configuration
+            services.Configure<GoogleMapsConfig>(this.Configuration.GetSection("GoogleMap"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
