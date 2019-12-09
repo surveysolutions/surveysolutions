@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -140,7 +141,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
 
         public AttachmentContent GetContentDetails(string attachmentContentId)
         {
-            return this.dbContext.AttachmentContents.Select(content => new AttachmentContent
+            return this.dbContext.AttachmentContents.AsNoTracking().Select(content => new AttachmentContent
             {
                 ContentId = content.ContentId,
                 ContentType = content.ContentType,

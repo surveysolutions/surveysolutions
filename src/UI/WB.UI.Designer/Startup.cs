@@ -127,8 +127,8 @@ namespace WB.UI.Designer
 
             services.AddRouting(options => options.LowercaseUrls = true);
             services.AddMvc()                    
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-                .AddJsonOptions(options =>
+                .SetCompatibilityVersion(CompatibilityVersion.Latest)
+                .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                     options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
@@ -281,17 +281,16 @@ namespace WB.UI.Designer
             });
 
             app.UseHealthChecks("/.hc");
-
-            app.UseMvc(routes =>
+            app.UseRouting();
+            app.UseAuthorization();
+            app.UseEndpoints(routes =>
             {
-                routes.MapRoute(
-                    name: "areas",
-                    template: "{area:exists}/{controller=Questionnaire}/{action=My}/{id?}"
+                routes.MapControllerRoute(
+                    name: "areas", "{area:exists}/{controller=Questionnaire}/{action=My}/{id?}"
                 );
 
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Questionnaire}/{action=Index}/{id?}");
+                routes.MapControllerRoute(
+                    name: "default", "{controller=Questionnaire}/{action=Index}/{id?}");
             });
 
             var initTask = aspCoreKernel.InitAsync(serviceProvider);

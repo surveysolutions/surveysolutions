@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
-using Microsoft.AspNetCore.Mvc.Internal;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -222,7 +221,8 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
 
             var questionnaireHtml = RenderActionResultToString(nameof(RenderQuestionnaire), questionnaire).Result;
 
-            ControllerContext.RouteData.Routers.Add(AttributeRouting.CreateAttributeMegaRoute(serviceProvider));
+            // TODO: FIX ME PLEASE. Broken during migration to 3.1 core
+            //ControllerContext.RouteData.Routers.Add(AttributeRouting.CreateAttributeMegaRoute(serviceProvider));
             var pageFooterUrl = new UrlHelper(ControllerContext).Link("QuestionnaireFooter", new { });
 
             Task.Factory.StartNew(() =>
@@ -268,7 +268,9 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
             var routeData = new RouteData();
             routeData.Values.Add("area", "Pdf");
             routeData.Values.Add("controller", "Pdf");
-            routeData.Routers.Add(AttributeRouting.CreateAttributeMegaRoute(serviceProvider));
+
+            // TODO: FIX ME PLEASE. Broken during migration to 3.1 core
+            // routeData.Routers.Add(AttributeRouting.CreateAttributeMegaRoute(serviceProvider));
             
             var actionContext = new ActionContext(httpContext, routeData, new ActionDescriptor() { RouteValues = new Dictionary<string, string>{{"area", "Pdf"}}});
 
