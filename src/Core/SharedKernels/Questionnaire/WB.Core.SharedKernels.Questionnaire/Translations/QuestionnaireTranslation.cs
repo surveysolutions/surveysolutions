@@ -30,8 +30,8 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
         public string GetInstruction(Guid questionId)
             => this.GetUniqueTranslationByType(questionId, TranslationType.Instruction);
 
-        public string GetAnswerOption(Guid questionId, string answerOptionValue)
-            => this.GetTranslationByTypeAndIndex(questionId, answerOptionValue, TranslationType.OptionTitle);
+        public string GetAnswerOption(Guid questionId, string answerOptionValue, string answerParentValue)
+            => this.GetTranslationByTypeAndIndex(questionId, $"{answerOptionValue}${answerParentValue}", TranslationType.OptionTitle);
 
         public string GetSpecialValue(Guid questionId, string answerOptionValue)
             => this.GetTranslationByTypeAndIndex(questionId, answerOptionValue, TranslationType.SpecialValue);
@@ -46,22 +46,13 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
 
         public bool IsEmpty() => !this.translations.Any();
 
-        public string GetCategoriesText(Guid categoriesId, int id, int? parentId) =>
-            this.translations.ContainsKey(categoriesId)
-                ? this.translations[categoriesId].SingleOrDefault(x =>
-                    x.Type == TranslationType.Categories && x.TranslationIndex == $"{id}${parentId}")?.Value
+        public string GetCategoriesText(Guid categoriesId, int id, int? parentId)
+            => this.GetTranslationByTypeAndIndex(categoriesId, $"{id}${parentId}", TranslationType.Categories);
+
+        private string GetTranslationByTypeAndIndex(Guid questionOrCategoriesId, string answerOptionValue, TranslationType translationType) =>
+            this.translations.ContainsKey(questionOrCategoriesId)
+                ? this.translations[questionOrCategoriesId].SingleOrDefault(x => x.Type == translationType && x.TranslationIndex == answerOptionValue)?.Value
                 : null;
-
-        private string GetTranslationByTypeAndIndex(Guid questionId, string answerOptionValue, TranslationType translationType)
-        {
-            if (this.translations.ContainsKey(questionId))
-            {
-                var translationInstance = this.translations[questionId].SingleOrDefault(x => x.Type == translationType && x.TranslationIndex == answerOptionValue);
-                return translationInstance?.Value;
-            }
-
-            return null;
-        }
 
         private string GetUniqueTranslationByType(Guid entityId, TranslationType translationType)
         {
