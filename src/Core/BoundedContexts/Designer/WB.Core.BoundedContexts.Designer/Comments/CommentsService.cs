@@ -91,8 +91,9 @@ namespace WB.Core.BoundedContexts.Designer.Comments
         public List<CommentThread> LoadCommentThreads(Guid questionnaireId)
         {
             var questionnaire = questionnaireStorage.GetById(questionnaireId.FormatGuid()).AsReadOnly();
-            var commentForEntity = dbContext.CommentInstances
-                .Where(x => x.QuestionnaireId == questionnaireId).GroupBy(x => x.EntityId).ToList()
+
+            var commentForEntity = dbContext.CommentInstances.AsNoTracking()
+                .Where(x => x.QuestionnaireId == questionnaireId).ToList().GroupBy(x => x.EntityId)
                 .Select(x => new CommentThread(
                     x.Select(CreateCommentView).OrderByDescending(c => c.Date).ToArray(),
                     CreateCommentedEntity(questionnaire, x.Key)))

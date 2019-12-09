@@ -118,7 +118,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             if (!sizeToScale.HasValue) return source;
             using (var outputStream = new MemoryStream())
             {
-                using (Image<Rgba32> image = Image.Load(source, out var format))
+                using (Image image = Image.Load(source, out var format))
                 {
                     image.Mutate(ctx => ctx.Resize(sizeToScale.Value, sizeToScale.Value)); 
                     image.Save(outputStream, format); 
