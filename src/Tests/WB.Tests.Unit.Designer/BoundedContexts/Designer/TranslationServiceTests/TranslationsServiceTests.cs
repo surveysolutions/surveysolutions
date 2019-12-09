@@ -450,7 +450,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         {
             using (ExcelPackage package = new ExcelPackage())
             {
-                var worksheet = package.Workbook.Worksheets.Add($"@@_{categoriesName}");
+                var worksheet = package.Workbook.Worksheets.Add($"@@@_{categoriesName}");
 
                 for (var row = 0; row < data.Length; row++)
                 for (var column = 0; column < data[row].Length; column++)
