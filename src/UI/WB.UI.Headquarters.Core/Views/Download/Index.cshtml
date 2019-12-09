@@ -1,12 +1,11 @@
 ﻿@using WB.Core.BoundedContexts.Headquarters.Services
-@using WB.Core.GenericSubdomains.Portable.ServiceLocation
 @using WB.Core.Infrastructure.Versions
-@using WB.Core.SharedKernels.SurveyManagement.Web.Code
 @using WB.UI.Shared.Web.Extensions
 @model WB.UI.Headquarters.Models.DownloadModel
+@inject IQRCodeHelper qRCodeHelper
+@inject IProductVersion productVersion
 @{
     Layout = null;
-    var qRCodeHelper = DependencyResolver.Current.GetService<IQRCodeHelper>();
 }
 <!DOCTYPE html>
 <html>
@@ -15,7 +14,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@Pages.DownloadPage_PageTitle</title>
-    @this.GenerateFavicon(Url.Content("~/Dependencies/img/identity/favicon-hq"))
+    @Html.GenerateFavicon(Url.Content("~/Dependencies/img/identity/favicon-hq"))
     <!-- cssLibs:css -->
     <link rel="stylesheet" href="@Url.Content("~/Dependencies/build/libs.css")">
     <!-- endinject -->
@@ -43,9 +42,9 @@
                         <div class="hq-apps-wrapper">
                             <h2>@Pages.DownloadPage_Welcome</h2>
                             <div class="form-actions">
-                                <a href="@Url.HttpRouteUrl("DefaultApiWithAction", new {action = "GetLatestVersion", controller = "InterviewerSync"})" class="get-interviewer-app" id="dowload">
+                                <a asp-action="GetLatestVersion" asp-controller="InterviewerSync" class="get-interviewer-app" id="dowload">
                                     <span>@Pages.GetLatestApp</span>
-                                    <span class="version">@Pages.DownloadPage_Version @(DependencyResolver.Current.GetService<IProductVersion>())</span>
+                                    <span class="version">@Pages.DownloadPage_Version @(productVersion.ToString())</span>
                                 </a>
                                 @if (qRCodeHelper.SupportQRCodeGeneration())
                                 {
@@ -79,20 +78,12 @@
             &copy; @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">@Pages.Layout_WorldBank</a>, @Pages.Layout_RightsReserved <a href="https://www.worldbank.org/en/about/legal">@Pages.Layout_Legal</a>.
         </div>
         <div class="text-left">
-            @(DependencyResolver.Current.GetService<IProductVersion>())
-            @if (AppSettings.IsDebugBuilded)
-            {
-                <span id="build-config">[.NET Debug]</span>
-            }
-            @if (HttpContext.Current.IsDebuggingEnabled)
-            {
-                <span id="compile-config" style="color: red">Web Debug</span>
-            }
+            @(productVersion.ToString())
             <span>|</span>
             <a href="@Url.Action("Index","Download")">@Common.GetInterviewerApp</a>
         </div>
         <div class="text-left">
-            @Html.Partial("_PoweredBy")
+            <partial name="_PoweredBy" />
         </div>
     </div>
 </footer>
@@ -104,11 +95,11 @@
         var qr = document.getElementById('download-qr');
         if( chkbox.checked )
         {
-            link.href = "@Url.HttpRouteUrl("DefaultApiWithAction", new { action = "GetLatestVersion", controller = "InterviewerSync" })";
+            link.href = "@Url.RouteUrl(new { action = "GetLatestVersion", controller = "InterviewerSync" })";
             qr.src = "@Model.QRBase64Apk";
              
         } else {
-            link.href = "@Url.HttpRouteUrl("DefaultApiWithAction", new { action = "GetLatestExtendedVersion", controller = "InterviewerSync" })";     
+            link.href = "@Url.RouteUrl(new { action = "GetLatestExtendedVersion", controller = "InterviewerSync" })";     
             qr.src = "@Model.QRBase64ApkWithMaps";
         }
     }

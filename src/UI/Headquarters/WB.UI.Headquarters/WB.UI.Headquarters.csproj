@@ -1938,7 +1938,6 @@
     <Content Include="Views\Shared\_ListDataTablePagingScript.cshtml" />
     <Content Include="Views\TabletReport\_ListViewStatusesScript.cshtml" />
     <Content Include="Views\Shared\typeahead.cshtml" />
-    <Content Include="Views\Download\Index.cshtml" />
     <Content Include="Views\SurveySetup\InterviewVerificationProgress.cshtml" />
     <Content Include="Views\InterviewerHq\Index.cshtml" />
     <Content Include="Views\InterviewerHq\Interviews.cshtml" />
@@ -1970,7 +1969,6 @@
     <Content Include="Views\SurveySetup\UpgradeProgress.cshtml" />
     <Content Include="Views\SurveySetup\InterviewImportIsInProgress.cshtml" />
     <Content Include="Views\UnderConstruction\Index.cshtml" />
-    <Content Include="Views\Download\Supervisor.cshtml" />
     <Content Include="Views\ControlPanel\AppUpdates.cshtml" />
     <Content Include="Views\ControlPanel\ExportService.cshtml" />
     <Content Include="Views\Reports\CumulativeInterviewChart.cshtml" />
@@ -2304,7 +2302,6 @@
     <Compile Include="Controllers\AssignmentsController.cs" />
     <Compile Include="Controllers\InterviewerAuditLogController.cs" />
     <Compile Include="Controllers\AuditLogController.cs" />
-    <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Controllers\InterviewerHqController.cs" />
     <Compile Include="Controllers\MapsApiController.cs" />
     <Compile Include="Controllers\MapsController.cs" />
@@ -2334,7 +2331,6 @@
     <Compile Include="Injections\LocalExportServiceRunner.cs" />
     <Compile Include="Models\Admin\EmailProviders.cs" />
     <Compile Include="Models\Admin\SettingsModel.cs" />
-    <Compile Include="Models\DownloadModel.cs" />
     <Compile Include="Models\InterviewsDataTableRequest.cs" />
     <Compile Include="Models\Maps\MapsModel.cs" />
     <Compile Include="Models\Maps\UserMapModel.cs" />
