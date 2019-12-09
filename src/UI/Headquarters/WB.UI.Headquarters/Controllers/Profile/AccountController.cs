@@ -144,7 +144,7 @@ namespace WB.UI.Headquarters.Controllers
         public async Task<ActionResult> UpdateOwnPassword([Bind(Prefix = "UpdateOwnPassword")]ManageAccountModel model)
         {
             var currentUser = await this.userManager.FindByIdAsync(this.authorizedUser.Id);
-            var resultModel = GetCurrentUserModel();
+            var resultModel = await GetCurrentUserModel();
 
             model.Id = currentUser.Id;
 
