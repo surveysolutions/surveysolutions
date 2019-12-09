@@ -1,5 +1,6 @@
 using System;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Tests.Abc
 {
@@ -43,5 +44,8 @@ namespace WB.Tests.Abc
         public static readonly Identity IdentityA_0 = Create.Entity.Identity(gA, new RosterVector(new[] { 0.0m }));
         public static readonly Identity IdentityB_0 = Create.Entity.Identity(gB, new RosterVector(new[] { 0.0m }));
         public static readonly Identity IdentityC_0 = Create.Entity.Identity(gC, new RosterVector(new[] { 0.0m }));
+
+        public static readonly QuestionnaireIdentity QuestionnaireIdentity1 = Create.Entity.QuestionnaireIdentity(g1, 1);
+
     }
 }
