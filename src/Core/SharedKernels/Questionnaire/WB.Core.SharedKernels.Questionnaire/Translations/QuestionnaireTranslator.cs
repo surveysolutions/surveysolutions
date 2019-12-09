@@ -61,7 +61,7 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
 
         private static void TranslateAnswerOptions(IQuestion question, ITranslation translation)
         {
-            var categoriesId = (question as ICategoricalQuestion).CategoriesId;
+            var categoriesId = (question as ICategoricalQuestion)?.CategoriesId;
 
             foreach (var answerOption in question.Answers)
             {
