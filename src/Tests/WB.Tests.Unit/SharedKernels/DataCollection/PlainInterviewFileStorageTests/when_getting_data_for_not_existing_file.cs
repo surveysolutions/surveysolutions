@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainInterviewFileStorageTe
         public async Task should_result_Be_equal_to_null()
         {
             imageFileRepository = CreatePlainFileRepository(fileSystemAccessor: FileSystemAccessorMock.Object);
-            result = await imageFileRepository.GetInterviewBinaryData(interviewId, fileName1);
+            result = await imageFileRepository.GetInterviewBinaryDataAsync(interviewId, fileName1);
             result.Should().BeNull();
         }
 

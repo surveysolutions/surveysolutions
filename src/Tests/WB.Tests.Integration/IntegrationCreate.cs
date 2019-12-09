@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using Moq;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using NHibernate;
 using NHibernate.Cfg;
@@ -31,6 +32,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection;
@@ -293,14 +295,19 @@ namespace WB.Tests.Integration
 
         public static SequentialCommandService SequentialCommandService(IEventSourcedAggregateRootRepository repository = null, ILiteEventBus eventBus = null)
         {
-            return new SequentialCommandService(
-                repository ?? Mock.Of<IEventSourcedAggregateRootRepository>(),
-                eventBus ?? Mock.Of<ILiteEventBus>(),
-                Mock.Of<IServiceLocator>(),
-                Mock.Of<IPlainAggregateRootRepository>(),
-                new AggregateLock(),
-                Mock.Of<IAggregateRootCacheCleaner>(),
-                Mock.Of<ICommandsMonitoring>());
+            var locatorMock = new Mock<IServiceLocator>();
+
+            locatorMock.Setup(x => x.GetInstance<IInScopeExecutor>())
+                .Returns(() => new NoScopeInScopeExecutor(locatorMock.Object));
+            locatorMock.Setup(x => x.GetInstance<ICommandExecutor>())
+                .Returns(new CommandExecutor(repository ?? Mock.Of<IEventSourcedAggregateRootRepository>(),
+                    eventBus ?? Mock.Of<IEventBus>(),
+                    locatorMock.Object,
+                    Mock.Of<IPlainAggregateRootRepository>(),
+                    Mock.Of<IAggregateRootCacheCleaner>(),
+                    Mock.Of<ICommandsMonitoring>()));
+
+            return new SequentialCommandService(locatorMock.Object, Stub.Lock());
         }
 
         public static Answer Answer(string answer, decimal value, decimal? parentValue = null)

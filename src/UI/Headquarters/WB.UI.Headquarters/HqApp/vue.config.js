@@ -175,6 +175,7 @@ module.exports = {
                     json: JSON.stringify(locales),
                     dictionary: localization.getDictionaryDefinition(locales)
                 };
+                options.page = page;
                 options.isHot = isHot;
                 options.assetsPath = pages[page].assetsPath || assetsPath;
                 options.minify = false;

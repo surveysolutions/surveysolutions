@@ -119,8 +119,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (multimediaQuestion.IsAnswered())
             {
                 var multimediaAnswer = multimediaQuestion.GetAnswer();
-                this.Answer = 
-                    Task.Run<byte[]>(async () => await this.imageFileStorage.GetInterviewBinaryData(this.interviewId, multimediaAnswer.FileName)).Result;
+                this.Answer =  this.imageFileStorage.GetInterviewBinaryData(this.interviewId, multimediaAnswer.FileName);
             }
 
             this.eventRegistry.Subscribe(this, interviewId);
@@ -193,7 +192,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                             {
                                 await this.Answering.SendAnswerQuestionCommandAsync(command);
                                 this.Answer =
-                                    await this.imageFileStorage.GetInterviewBinaryData(this.interviewId,
+                                    await this.imageFileStorage.GetInterviewBinaryDataAsync(this.interviewId,
                                         pictureFileName);
                                 this.QuestionState.Validity.ExecutedWithoutExceptions();
                             }

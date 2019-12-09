@@ -21,7 +21,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             if (String.IsNullOrWhiteSpace(source))
                 return Array.Empty<string>();
 
-            return cache.GetOrAdd(source, s =>
+            return cache.GetOrAdd(source + selfVariable, s =>
             {
                 var allOccurenses = AllowedSubstitutionVariableNameRx.Matches(s)
                     .OfType<Match>()

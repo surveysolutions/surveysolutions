@@ -17,9 +17,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
             this.externalFileStorage = externalFileStorage;
         }
 
-        public Task<byte[]> GetInterviewBinaryData(Guid interviewId, string filename)
+        public Task<byte[]> GetInterviewBinaryDataAsync(Guid interviewId, string filename)
         {
             return this.externalFileStorage.GetBinaryAsync(GetPath(interviewId, filename));
+        }
+
+        public byte[] GetInterviewBinaryData(Guid interviewId, string fileName)
+        {
+            throw new NotImplementedException();
         }
 
         public string GetPath(Guid interviewId, string filename = null) => $"images/{interviewId.FormatGuid()}/{filename ?? String.Empty}";
@@ -33,7 +38,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
             {
                 var filename = file.Path.Substring(prefix.Length);
                 return new InterviewBinaryDataDescriptor(interviewId, filename, "image/jpg",
-                    () => this.GetInterviewBinaryData(interviewId, GetPath(interviewId, filename)));
+                    () => this.GetInterviewBinaryDataAsync(interviewId, GetPath(interviewId, filename)));
             }).ToList();
         }
 

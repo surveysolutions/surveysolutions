@@ -20,7 +20,7 @@ const connectionStore = {
         disconnected({state, commit}) {
             if (state.isReconnecting && !state.isDisconnected) {
                 commit("IS_DISCONNECTED", true)
-                Vue.$api.stop()
+                // Vue.$api.stop()
                 
                 modal.alert({
                     title: Vue.$t("WebInterviewUI.Disconnected"),

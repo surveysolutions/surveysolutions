@@ -1,8 +1,7 @@
-﻿using System.Data.Entity;
-using System.Linq;
+﻿using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.InterviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -14,7 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
     internal class UserViewFactoryTestContext
     {
         protected static UserViewFactory CreateInterviewersViewFactory(IUserRepository userRepository)
-            => new UserViewFactory(userRepository, Create.Storage.NewMemoryCache());
+            => new UserViewFactory(userRepository, Create.Storage.NewMemoryCache(), Create.Storage.InMemoryPlainStorage<DeviceSyncInfo>());
 
         protected static IUserRepository CreateQueryableReadSideRepositoryReaderWithUsers( params HqUser[] users)
         {

@@ -56,9 +56,9 @@ window.__setLocaleData__ = function(data) { window.CONFIG.locale.data = data; }
 </script>
 <% for (var css in htmlWebpackPlugin.files.css) { %>
 <link href='<%= urlContent(htmlWebpackPlugin.files.css[css]) %>' rel="stylesheet">
-<% } %>
+<% } %><% if( htmlWebpackPlugin.options.page != 'webtester') { %> 
 <link href='@Url.Content("~/signalr/hubs")' rel="preload" as="script">
-<script src="@localePath"></script>
+<% } else { %><script>window.CONFIG.NetCore = true</script><% } %><script src="@localePath"></script>
 <!-- files.chunks --> 
 <% for (var chunk in htmlWebpackPlugin.files.chunks) { %>
 <!-- files.chunks[<%= chunk %>] --> 

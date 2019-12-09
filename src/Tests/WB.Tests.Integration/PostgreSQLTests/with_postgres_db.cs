@@ -29,20 +29,6 @@ namespace WB.Tests.Integration.PostgreSQLTests
                 }
                 connection.Close();
             }
-
-            /*var cnSection = TestsConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-
-            if (cnSection.ConnectionStrings.ConnectionStrings["Postgres"] != null)
-            {
-                cnSection.ConnectionStrings.ConnectionStrings.Remove("Postgres");
-            }
-            cnSection.ConnectionStrings.ConnectionStrings.Add(new ConnectionStringSettings("Postgres", ConnectionStringBuilder.ConnectionString)
-            {
-                ProviderName = "Npgsql"
-            });
-            cnSection.Save();
-
-            TestsConfigurationManager.RefreshSection("connectionStrings");*/
         }
 
         [OneTimeTearDown]

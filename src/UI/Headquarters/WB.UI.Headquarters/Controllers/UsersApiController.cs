@@ -78,12 +78,12 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [CamelCase]
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public DataTableResponse<InterviewerListItem> AllInterviewers([FromBody] DataTableRequestWithFilter reqest)
+        public async Task<DataTableResponse<InterviewerListItem>> AllInterviewers([FromBody] DataTableRequestWithFilter reqest)
         {
             Guid? supervisorId = null;
 
             if (!string.IsNullOrWhiteSpace(reqest.SupervisorName))
-                supervisorId = this.userManager.FindByName(reqest.SupervisorName)?.Id;
+                supervisorId = (await this.userManager.FindByNameAsync(reqest.SupervisorName))?.Id;
 
             // Headquarter and Admin can view interviewers by any supervisor
             // Supervisor can view only their interviewers
@@ -131,14 +131,14 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public HttpResponseMessage AllInterviewers([FromUri] DataTableRequestWithFilter reqest, [FromUri] string exportType)
+        public async Task<HttpResponseMessage> AllInterviewers([FromUri] DataTableRequestWithFilter reqest, [FromUri] string exportType)
         {
             Guid? supervisorId = null;
 
             Enum.TryParse(exportType, true, out ExportFileType type);
 
             if (!string.IsNullOrWhiteSpace(reqest.SupervisorName))
-                supervisorId = this.userManager.FindByName(reqest.SupervisorName)?.Id;
+                supervisorId = (await this.userManager.FindByNameAsync(reqest.SupervisorName))?.Id;
 
             // Headquarter and Admin can view interviewers by any supervisor
             // Supervisor can view only their interviewers

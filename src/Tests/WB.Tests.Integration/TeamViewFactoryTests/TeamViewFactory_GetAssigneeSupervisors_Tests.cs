@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Threading.Tasks;
-using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;

@@ -217,7 +217,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 {
                     UserName = x.UserName,
                     IsArchived = x.IsArchived,
-                    IsInterviewer = x.Roles.Any(role => role.RoleId == interviewerRoleId)
+                    IsInterviewer = x.Roles.Any(role => role.Id == interviewerRoleId)
                 }).ToArray();
                 
             var userMappings = availableUsers.Where(y => y.IsArchived == false && y.IsInterviewer == true)

@@ -117,7 +117,7 @@ namespace WB.Services.Export.Interview
                     query.Append(" INNER JOIN ");
                 }
 
-                query.Append($"    \"{group.EnablementTableName}\" enablement "); 
+                query.Append($"    \"{group.EnablementTableName}\" enablement ");
                 if (group.DoesSupportDataTable)
                 {
                     query.AppendFormat("ON data.{0} = enablement.{0}{1}",
@@ -130,7 +130,7 @@ namespace WB.Services.Export.Interview
                     }
                 }
             }
-            
+
             if (group.DoesSupportValidityTable)
             {
                 wherePrefix = "validity";
@@ -143,7 +143,7 @@ namespace WB.Services.Export.Interview
 
                     if (group.IsInsideRoster)
                     {
-                        query.AppendFormat("   AND {0}.{1} = validity.{1} {2}", 
+                        query.AppendFormat("   AND {0}.{1} = validity.{1} {2}",
                             joinToTable,
                             InterviewDatabaseConstants.RosterVector,
                             Environment.NewLine);
@@ -151,7 +151,7 @@ namespace WB.Services.Export.Interview
                 }
             }
 
-            query.AppendFormat("WHERE {0}.{1} = ANY(@ids){2}", 
+            query.AppendFormat("WHERE {0}.{1} = ANY(@ids){2}",
                 wherePrefix,
                 InterviewDatabaseConstants.InterviewId,
                 Environment.NewLine);
@@ -169,11 +169,6 @@ namespace WB.Services.Export.Interview
 
             foreach (var questionnaireEntity in @group.Children)
             {
-                //2cd54b4e-4de1-582e-c327-a006eeebf89a
-                if (questionnaireEntity.PublicKey == Guid.Parse("2cd54b4e-4de1-582e-c327-a006eeebf89a"))
-                {
-                    int a = 5;
-                }
                 if (questionnaireEntity is Question question)
                 {
                     columnsCollector.Add($" {alias}.\"{question.ColumnName}\" as \"{alias}__{question.ColumnName}\" ");

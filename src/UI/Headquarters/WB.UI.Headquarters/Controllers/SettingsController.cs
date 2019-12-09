@@ -1,7 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using ImageResizer;
 using Resources;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -71,7 +71,7 @@ namespace WB.UI.Headquarters.Controllers
 
                             try
                             {
-                                this.imageProcessingService.ValidateImage(array);
+                                this.imageProcessingService.ResizeImage(array, 1, 1);
 
                                 this.appSettingsStorage.Store(new CompanyLogo
                                 {
@@ -79,7 +79,7 @@ namespace WB.UI.Headquarters.Controllers
                                 }, CompanyLogo.CompanyLogoStorageKey);
                                 WriteToTempData(Alerts.SUCCESS, Settings.LogoUpdated);
                             }
-                            catch (ImageCorruptedException)
+                            catch (Exception)
                             {
                                 WriteToTempData(Alerts.ERROR, Settings.LogoNotUpdated);
                             }

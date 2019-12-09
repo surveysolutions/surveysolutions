@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using ddidotnet;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WB.Services.Export.CsvExport;
@@ -67,7 +68,7 @@ namespace WB.Services.Export
             services.AddTransient<IQuestionnaireLabelFactory, QuestionnaireLabelFactory>();
             services.AddTransient<IExportFileNameService, ExportExportFileNameService>();
             services.AddTransient<IArchiveUtils, ZipArchiveUtils>();
-            services.AddTransient<IExternalArtifactsStorage, S3ArtifactsStorage>();
+            
             services.AddTransient<ITabularDataToExternalStatPackageExportService, TabularDataToExternalStatPackageExportService>();
             services.AddTransient<ITabFileReader, TabFileReader>();
             services.AddTransient<IDatasetWriterFactory, DatasetWriterFactory>();
@@ -78,7 +79,6 @@ namespace WB.Services.Export
             services.AddTransient<IExportArchiveHandleService, ExportArchiveHandleService>();
             services.AddTransient<IDdiMetadataAccessor, DdiMetadataAccessor>();
             services.AddTransient<IDdiMetadataFactory, DdiMetadataFactory>();
-            services.AddTransient<IMetadataWriter, MetadataWriter>();
             services.AddTransient<IMetaDescriptionFactory, MetaDescriptionFactory>();
             services.AddTransient<IExportJob, ExportJob>();
             services.AddTransient<IDatabaseSchemaService, DatabaseSchemaService>();

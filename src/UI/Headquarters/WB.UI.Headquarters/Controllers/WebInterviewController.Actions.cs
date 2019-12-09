@@ -103,7 +103,7 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     await file.InputStream.CopyToAsync(ms);
 
-                    this.imageProcessingService.ValidateImage(ms.ToArray());
+                    this.imageProcessingService.Validate(ms.ToArray());
 
                     filename = AnswerUtils.GetPictureFileName(question.VariableName, questionIdentity.RosterVector);
                     var responsibleId = interview.CurrentResponsibleId;

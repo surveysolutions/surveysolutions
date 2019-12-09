@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo
@@ -48,5 +49,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         public bool? HideIfDisabled { get; set; }
 
         public List<ScenarioView> Scenarios { get; set; }
+        
+        public int? PreviewRevision { get; set; }
     }
 }
