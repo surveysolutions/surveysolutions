@@ -56,7 +56,7 @@
             @Html.MainMenuItem("Index", "Maps", @MainMenu.Maps, MenuItem.Maps)
         </ul>
     </li>
-    @if (!isCurrentUserObserver)
+    @if (!authorizedUser.IsObserver)
     {
         @Html.MainMenuItem("New", "DataExport", @MainMenu.DataExport, MenuItem.DataExport)
     }

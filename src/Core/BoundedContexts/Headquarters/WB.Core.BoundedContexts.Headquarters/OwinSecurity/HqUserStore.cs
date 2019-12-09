@@ -80,7 +80,9 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 
         public override Task<IList<Claim>> GetClaimsAsync(HqUser user, CancellationToken cancellationToken = new CancellationToken())
         {
-            return Task.FromResult((IList<Claim>)Array.Empty<Claim>());
+            IList<Claim> claims = user.Claims.Select(x => new Claim(x.ClaimType, x.ClaimValue)).ToList();
+
+            return Task.FromResult(claims);
         }
 
         public override Task AddClaimsAsync(HqUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken = new CancellationToken())
