@@ -1,26 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
+using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.UI.Headquarters.Models;
 
-namespace WB.UI.Headquarters.Core.Controllers
+namespace WB.UI.Headquarters.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IAuthorizedUser authorizedUser;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IAuthorizedUser authorizedUser)
         {
-            _logger = logger;
+            this.authorizedUser = authorizedUser;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var roleForCurrentUser = this.authorizedUser.Role;
+
+            switch (roleForCurrentUser)
+            {
+                case UserRoles.Headquarter:
+                    return this.RedirectToAction("SurveysAndStatuses", "Reports");
+
+                case UserRoles.Supervisor:
+                    return this.RedirectToAction("SurveysAndStatusesForSv", "Reports");
+
+                case UserRoles.Administrator:
+                    return this.RedirectToAction("SurveysAndStatuses", "Reports");
+
+                case UserRoles.Observer:
+                    return this.RedirectToAction("Index", "Headquarters");
+
+                case UserRoles.Interviewer:
+                    return this.RedirectToAction("CreateNew", "InterviewerHq");
+
+                default:
+                    return this.RedirectToAction("NotFound", "Error");
+            }
         }
 
         public IActionResult Privacy()

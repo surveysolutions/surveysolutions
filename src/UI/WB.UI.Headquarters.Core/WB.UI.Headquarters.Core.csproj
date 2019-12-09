@@ -80,6 +80,11 @@
 
 
   <ItemGroup>
+    <Compile Update="Resources\DataTables.Designer.cs">
+      <DependentUpon>DataTables.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Update="Resources\FieldsAndValidations.Designer.cs">
       <DependentUpon>FieldsAndValidations.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -140,6 +145,35 @@
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Common.zh.resx">
       <DependentUpon>Common.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\DataTables.ar.resx">
+      <DependentUpon>DataTables.resx</DependentUpon>
+    </EmbeddedResource>
+      <EmbeddedResource Update="Resources\DataTables.sq.resx">
+          <DependentUpon>DataTables.resx</DependentUpon>
+      </EmbeddedResource>
+    <EmbeddedResource Update="Resources\DataTables.es.resx">
+      <DependentUpon>DataTables.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\DataTables.fr.resx">
+      <DependentUpon>DataTables.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\DataTables.ka.resx">
+      <DependentUpon>DataTables.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\DataTables.resx">
+      <SubType>Designer</SubType>
+      <LastGenOutput>DataTables.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\DataTables.ro.resx">
+      <DependentUpon>DataTables.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\DataTables.ru.resx">
+      <DependentUpon>DataTables.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\DataTables.zh.resx">
+      <DependentUpon>DataTables.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\FieldsAndValidations.ar.resx">
       <DependentUpon>FieldsAndValidations.resx</DependentUpon>

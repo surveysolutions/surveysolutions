@@ -118,11 +118,6 @@ namespace ASP
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
 
-        public static IHtmlString AsJsonValue(this object obj)
-        {
-            return new HtmlString(JsonConvert.SerializeObject(obj, asJsonValueSettings));
-        }
-        
         public static IHtmlString RenderHqConfig(this HtmlHelper helper, object model, string title = null)
         {
             string titleString = title ?? (string) helper.ViewBag.Title?.ToString() ?? null;
