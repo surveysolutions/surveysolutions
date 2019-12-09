@@ -1,14 +1,13 @@
 ﻿using System.Net.Http;
-using System.Web.Http;
+using Microsoft.AspNetCore.Mvc;
 using WB.UI.Headquarters.Resources;
 
-namespace WB.UI.Headquarters.API.Resources
+namespace WB.UI.Headquarters.Controllers.Api.Resources
 {
-    [System.Web.Http.AllowAnonymous]
-    public class DataTableTranslationsController : ApiController
+    public class DataTableTranslationsController : ControllerBase
     {
         [HttpGet]
-        public HttpResponseMessage Get()
+        public IActionResult Get()
         {
             var result = new
             {
@@ -38,7 +37,7 @@ namespace WB.UI.Headquarters.API.Resources
                 }
             };
 
-            return Request.CreateResponse(result);
+            return new JsonResult(result);
         }
     }
 }

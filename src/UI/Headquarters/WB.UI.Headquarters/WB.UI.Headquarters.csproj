@@ -1115,13 +1115,6 @@
       <DependentUpon>AuditLog.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\AuditLog.sq.resx" />
-    <EmbeddedResource Include="Resources\DataTables.ar.resx">
-      <DependentUpon>DataTables.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\DataTables.ro.resx">
-      <DependentUpon>DataTables.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\DataTables.sq.resx" />
     <EmbeddedResource Include="Resources\Details.ar.resx">
       <DependentUpon>Details.resx</DependentUpon>
     </EmbeddedResource>
@@ -1163,12 +1156,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\AuditLog.zh.resx">
       <DependentUpon>AuditLog.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\DataTables.es.resx">
-      <DependentUpon>DataTables.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\DataTables.fr.resx">
-      <DependentUpon>DataTables.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Details.es.resx">
       <DependentUpon>Details.resx</DependentUpon>
@@ -1430,20 +1417,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\AuditLog.ru.resx">
       <DependentUpon>AuditLog.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\DataTables.ka.resx">
-      <DependentUpon>DataTables.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\DataTables.resx">
-      <SubType>Designer</SubType>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>DataTables.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\DataTables.ru.resx">
-      <DependentUpon>DataTables.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\DataTables.zh.resx">
-      <DependentUpon>DataTables.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Details.ka.resx">
       <DependentUpon>Details.resx</DependentUpon>
@@ -2225,7 +2198,6 @@
     <Compile Include="API\PublicApi\QuestionnairesController.cs" />
     <Compile Include="API\ReportDataApiController.cs" />
     <Compile Include="API\Resources\CompanyLogoController.cs" />
-    <Compile Include="API\Resources\DataTableTranslationsController.cs" />
     <Compile Include="API\Resources\WebInterviewResourcesController.cs" />
     <Compile Include="API\PublicApi\UsersController.cs" />
     <Compile Include="App_GlobalResources\BatchUpload.Designer.cs">
@@ -2467,11 +2439,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>AuditLog.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources\DataTables.Designer.cs">
-      <DependentUpon>DataTables.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="Resources\Details.Designer.cs">
       <DependentUpon>Details.resx</DependentUpon>
