@@ -106,7 +106,9 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                         }
 
                         var sheetsWithTranslation = package.Workbook.Worksheets
-                            .Where(x => x.Name == TranslationExcelOptions.WorksheetName || x.Name.StartsWith(TranslationExcelOptions.OptionsWorksheetPreffix))
+                            .Where(x => x.Name == TranslationExcelOptions.WorksheetName ||
+                                        x.Name.StartsWith(TranslationExcelOptions.OptionsWorksheetPreffix) ||
+                                        x.Name.StartsWith(TranslationExcelOptions.CategoriesWorksheetPreffix))
                             .ToList();
 
                         if (!sheetsWithTranslation.Any())
@@ -116,7 +118,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
                         var questionnaire = this.questionnaireStorage.GetById(questionnaireId.FormatGuid());
                         var categories = questionnaire.Categories?
-                                             .ToDictionary(x => $"{TranslationExcelOptions.OptionsWorksheetPreffix}{x.Name.ToLower()}".ToLower(), x => x.Id)
+                                             .ToDictionary(x => $"{TranslationExcelOptions.CategoriesWorksheetPreffix}{x.Name.ToLower()}".ToLower(), x => x.Id)
                                          ?? new Dictionary<string, Guid>();
 
                         var translationErrors = this.Verify(translationsWithHeaderMap, categories).Take(10).ToList();

@@ -119,7 +119,8 @@ namespace WB.Infrastructure.Native.Questionnaire
 
         private string GenerateWorksheetName(List<string> addedWorksheetNames, string newWorksheetName)
         {
-            if (!newWorksheetName.StartsWith(TranslationExcelOptions.OptionsWorksheetPreffix)) return newWorksheetName;
+            if (!newWorksheetName.StartsWith(TranslationExcelOptions.OptionsWorksheetPreffix) &&
+                !newWorksheetName.StartsWith(TranslationExcelOptions.CategoriesWorksheetPreffix)) return newWorksheetName;
 
             newWorksheetName = newWorksheetName.Substring(0, newWorksheetName.Length > 31 ? 31 : newWorksheetName.Length);
 
@@ -223,8 +224,8 @@ namespace WB.Infrastructure.Native.Questionnaire
                     Variable = question.VariableName,
                     Type = question.QuestionType == QuestionType.Numeric ? TranslationType.SpecialValue.ToString("G") : TranslationType.OptionTitle.ToString("G"),
                     OriginalText = option.AnswerText,
-                    Translation = question.QuestionType == QuestionType.Numeric ? translation.GetSpecialValue(question.PublicKey, option.AnswerValue) : translation.GetAnswerOption(question.PublicKey, option.AnswerValue),
-                    OptionValueOrValidationIndexOrFixedRosterId = option.AnswerValue,
+                    Translation = question.QuestionType == QuestionType.Numeric ? translation.GetSpecialValue(question.PublicKey, option.AnswerValue) : translation.GetAnswerOption(question.PublicKey, option.AnswerValue, option.ParentValue),
+                    OptionValueOrValidationIndexOrFixedRosterId = $"{option.AnswerValue}${option.ParentValue}",
                     Sheet = isLongOptionsList ? $"{TranslationExcelOptions.OptionsWorksheetPreffix}{question.StataExportCaption}" : TranslationExcelOptions.WorksheetName
                 };
         }
@@ -236,7 +237,7 @@ namespace WB.Infrastructure.Native.Questionnaire
                     OriginalText = x.Text,
                     Translation = translation.GetCategoriesText(categories.Id, x.Id, x.ParentId),
                     OptionValueOrValidationIndexOrFixedRosterId = $"{x.Id}${x.ParentId}",
-                    Sheet = $"{TranslationExcelOptions.OptionsWorksheetPreffix}{categories.Name}"
+                    Sheet = $"{TranslationExcelOptions.CategoriesWorksheetPreffix}{categories.Name}"
                 });
 
         private static IEnumerable<TranslationRow> GetTranslatedRosterTitles(IGroup group, ITranslation translation)
