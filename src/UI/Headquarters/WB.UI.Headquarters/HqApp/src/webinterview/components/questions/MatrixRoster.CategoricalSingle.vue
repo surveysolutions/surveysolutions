@@ -1,5 +1,6 @@
 <template>
-    <div class="options-group h-100 d-flex" v-bind:class="{ 'dotted': noOptions }" v-if="!disabled">
+<popover :enable="question.validity.messages.length > 0 || question.validity.warnings.length > 0" trigger="hover-focus" append-to="body">
+    <div :class="questionStyle" v-if="!disabled">        
                 <div class="radio cell-bordered" v-for="option in editorParams.question.options" :key="$me.id + '_' + option.value">
                     <div style="width:220px; text-align:center; " class="field"> 
                         <input v-if="answeredOrAllOptions.some(e => e.value === option.value)" class="wb-radio" type="radio" 
@@ -11,11 +12,27 @@
                           @change="change">
                         <label :for="$me.id + '_' + option.value">
                             <span class="tick"></span> 
-                        </label>
-                        <!--wb-remove-answer :id-suffix="`_opt_${option.value}`"/-->
+                        </label>                        
                     </div>
                 </div>
-            </div>
+
+
+            <template slot="popover">
+                <div class="error-tooltip" v-if="!question.validity.isValid">
+                    <h6 style="text-transform:uppercase;" v-if="question.validity.errorMessage">{{ $t("WebInterviewUI.AnswerWasNotSaved") }}</h6>
+                    <template v-for="message in question.validity.messages">
+                        <span v-dateTimeFormatting v-html="message" :key="message"></span>
+                    </template>
+                </div>
+                <div class="warning-tooltip" v-else-if="question.validity.warnings.length > 0">        
+                    <template v-for="message in question.validity.warnings">
+                        <span v-dateTimeFormatting v-html="message" :key="message"></span>
+                    </template>
+                </div>
+            </template>                
+         
+    </div>
+    </popover>
 </template>
 
 <script lang="js">
@@ -30,10 +47,24 @@
         data() {
             return {
                 showAllOptions: false,
-                answer: null
+                answer: null,
+                question : null,
+                lastUpdate: null,
+                questionId: null
             }
         }, 
+        watch: {
+            ["$watchedQuestion"](watchedQuestion) {
+                if (watchedQuestion.updatedAt != this.lastUpdate) {
+                    this.question = watchedQuestion
+                    this.cacheQuestionData()
+                }
+            }
+        },
         computed: {
+            $watchedQuestion() {
+                return this.$store.state.webinterview.entityDetails[this.questionId] 
+            },
             shouldShowAnsweredOptionsOnly(){
                 return shouldShowAnsweredOptionsOnlyForSingle(this);
             },
@@ -51,9 +82,21 @@
                 
                 var self = this;
                 return [find(this.$me.options, function(o) { return o.value == self.answer; })];
+            },
+            questionStyle() {
+                return [{
+                    'disabled-question' : this.question.isDisabled,
+                    'has-error' : !this.question.validity.isValid,
+                    'has-warnings' : this.question.validity.warnings.length > 0,
+                    'not-applicable' : this.question.isLocked,
+                    'syncing': this.isFetchInProgress
+                }, 'cell-unit', 'options-group', ' h-100',' d-flex']
             }            
         },
         methods: {
+            cacheQuestionData() {
+                this.lastUpdate = this.question.updatedAt
+            },
             change() {
                 this.sendAnswer(() => {
                     this.answerSingle(this.answer);
@@ -65,6 +108,11 @@
             toggleOptions(){
                 this.showAllOptions = !this.showAllOptions;
             }
+        },        
+        created() {
+            this.questionId = this.editorParams.value.identity
+            this.question = this.$watchedQuestion
+            this.cacheQuestionData()
         },
         mounted() {
             this.answer = this.$me.answer            
