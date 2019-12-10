@@ -27,6 +27,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         protected abstract string ApiVersion { get; }
         protected abstract string ApiUrl { get; }
 
+        protected string EnumeratorApiVersion => "v1";
+        protected string EnumeratorApiUrl => "api/enumerator/";
+        protected string EnumeratorApplicationUrl => string.Concat(EnumeratorApiUrl, EnumeratorApiVersion);
+
+
         protected string ApplicationUrl => string.Concat(ApiUrl, ApiVersion);
         
         protected string AuditLogController => string.Concat(ApplicationUrl, "/auditlog");
@@ -38,7 +43,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         protected string AssignmentsController => string.Concat(ApplicationUrl, "/assignments");
         protected string TranslationsController => string.Concat(ApplicationUrl, "/translations");
         protected string AttachmentContentController => string.Concat(ApplicationUrl, "/attachments");
-        protected string ReusableCategoriesController => string.Concat(ApplicationUrl, "/categories");
+        protected string ReusableCategoriesController => string.Concat(EnumeratorApplicationUrl, "/categories");
         
         protected string LogoUrl => string.Concat(ApplicationUrl, "/companyLogo");
         protected string TenantIdUrl => string.Concat(ApplicationUrl, "/tenantId");

@@ -43,7 +43,6 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor
             config.TypedRoute("api/supervisor/compatibility/{deviceid}/{deviceSyncProtocolVersion}",
                 c => c.Action<SupervisorApiController>(x => x.CheckCompatibility(Param.Any<string>(), Param.Any<int>(), Param.Any<string>())));
             config.TypedRoute("api/supervisor/v1/translations/{id}", c => c.Action<TranslationsApiV1Controller>(x => x.Get(Param.Any<string>())));
-            config.TypedRoute("api/supervisor/v1/categories/{id}", c => c.Action<ReusableCategoriesApiV1Controller>(x => x.Get(Param.Any<string>())));
             config.TypedRoute("api/supervisor/v1/companyLogo", c => c.Action<SettingsV1Controller>(x => x.CompanyLogo()));
             config.TypedRoute("api/supervisor/v1/tenantId", c => c.Action<SettingsV1Controller>(x => x.TenantId()));
             config.TypedRoute("api/supervisor/v1/autoupdate", c => c.Action<SettingsV1Controller>(x => x.AutoUpdateEnabled()));
