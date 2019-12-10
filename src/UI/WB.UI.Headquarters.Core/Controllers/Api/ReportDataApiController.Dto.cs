@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Net.Http;
-using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports.Views;
@@ -102,7 +101,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             return new InterviewExportedAction[0];
         }
 
-        private HttpResponseMessage CreateReportResponse(string exportType, ReportView report, string reportName)
+        private IActionResult CreateReportResponse(string exportType, ReportView report, string reportName)
         {
             if(!Enum.TryParse(exportType, true, out ExportFileType type))
             {
@@ -112,11 +111,10 @@ namespace WB.UI.Headquarters.Controllers.Api
             var exportFile = this.exportFactory.CreateExportFile(type);
 
             Stream exportFileStream = new MemoryStream(exportFile.GetFileBytes(report));
-            var result = new ProgressiveDownload(this.Request).ResultMessage(exportFileStream, exportFile.MimeType);
-
-            result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(@"attachment")
+            var result = new FileStreamResult(exportFileStream, exportFile.MimeType)
             {
-                FileNameStar = $@"{this.fileSystemAccessor.MakeValidFileName(reportName)}{exportFile.FileExtension}"
+                FileDownloadName =
+                    $"{this.fileSystemAccessor.MakeValidFileName(reportName)}{exportFile.FileExtension}"
             };
             return result;
         }

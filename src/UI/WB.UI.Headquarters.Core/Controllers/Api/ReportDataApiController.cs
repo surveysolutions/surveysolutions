@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Dropbox.Api.TeamLog;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Factories;
@@ -22,11 +21,12 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Models.Api;
+using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Controllers.Api  
 {
     [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-    [ApiNoCache]
+    [ResponseCache(NoStore = true)]
     public partial class ReportDataApiController : ControllerBase
     {
         const int MaxPageSize = 50000;
@@ -95,7 +95,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
                 var report = this.teamsAndStatusesReport.GetReport(input);
 
-                return this.CreateReportResponse(exportType, report, EventCategory.Reports.Report_Team_Members_and_Statuses);
+                return this.CreateReportResponse(exportType, report, Reports.Report_Number_of_Completed_Interviews);
             }
             
             var view = this.teamsAndStatusesReport.GetBySupervisorAndDependentInterviewers(input);
@@ -168,7 +168,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
                 var report = this.quantityReport.GetReport(input);
 
-                return this.CreateReportResponse(exportType, report, EventCategory.Reports.Report_Number_of_Completed_Interviews);
+                return this.CreateReportResponse(exportType, report, Reports.Report_Number_of_Completed_Interviews);
             }
 
             return new JsonResult(this.quantityReport.Load(input));
@@ -199,7 +199,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
                 var report = this.quantityReport.GetReport(input);
 
-                return this.CreateReportResponse(exportType, report, EventCategory.Reports.Report_Number_of_Completed_Interviews);
+                return this.CreateReportResponse(exportType, report, Reports.Report_Number_of_Completed_Interviews);
             }
 
             return new JsonResult(this.quantityReport.Load(input));
@@ -231,7 +231,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
                 var report = this.speedReport.GetReport(input);
 
-                return this.CreateReportResponse(exportType, report, EventCategory.Reports.Report_Average_Interview_Duration);
+                return this.CreateReportResponse(exportType, report, Reports.Report_Average_Interview_Duration);
             }
 
             return new JsonResult(this.speedReport.Load(input));
@@ -262,7 +262,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
                 var report = this.speedReport.GetReport(input);
 
-                return this.CreateReportResponse(exportType, report, EventCategory.Reports.Report_Speed_Between_Statuses_By_Supervisors);
+                return this.CreateReportResponse(exportType, report, Reports.Report_Speed_Between_Statuses_By_Supervisors);
             }
 
             return new JsonResult(this.speedReport.Load(input));
@@ -294,7 +294,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
                 var report = this.speedReport.GetReport(input);
 
-                return this.CreateReportResponse(exportType, report, EventCategory.Reports.Report_Speed_Between_Statuses_By_Interviewers);
+                return this.CreateReportResponse(exportType, report, Reports.Report_Speed_Between_Statuses_By_Interviewers);
             }
 
             return new JsonResult(this.speedReport.Load(input));
@@ -325,7 +325,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
                 var report = this.speedReport.GetReport(input);
 
-                return this.CreateReportResponse(exportType, report, EventCategory.Reports.Report_Average_Interview_Duration);
+                return this.CreateReportResponse(exportType, report, Reports.Report_Average_Interview_Duration);
             }
 
             return new JsonResult(this.speedReport.Load(input));
@@ -351,7 +351,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
                 var report = this.teamsAndStatusesReport.GetReport(input);
 
-                return this.CreateReportResponse(exportType, report, EventCategory.Reports.Report_Teams_and_Statuses);
+                return this.CreateReportResponse(exportType, report, Reports.Report_Teams_and_Statuses);
             }
 
             var view = this.teamsAndStatusesReport.GetBySupervisors(input);
@@ -386,7 +386,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
                 var report = this.surveysAndStatusesReport.GetReport(input);
 
-                return this.CreateReportResponse(exportType, report, EventCategory.Reports.Report_Surveys_and_Statuses);
+                return this.CreateReportResponse(exportType, report, Reports.Report_Surveys_and_Statuses);
             }
             
             var view = this.surveysAndStatusesReport.Load(input);
@@ -420,7 +420,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
                 var report = this.surveysAndStatusesReport.GetReport(input);
 
-                return this.CreateReportResponse(exportType, report, EventCategory.Reports.Report_Surveys_and_Statuses);
+                return this.CreateReportResponse(exportType, report, Reports.Report_Surveys_and_Statuses);
             }
 
             var view = this.surveysAndStatusesReport.Load(input);
@@ -457,7 +457,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
                 var report = await this.deviceInterviewersReport.GetReportAsync(input);
 
-                return this.CreateReportResponse(exportType, report, EventCategory.Reports.Report_Devices_and_Interviewers);
+                return this.CreateReportResponse(exportType, report, Reports.Report_Devices_and_Interviewers);
             }
 
             var data = await this.deviceInterviewersReport.LoadAsync(input);
@@ -504,7 +504,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             {
                 var report = await this.statusDurationReport.GetReportAsync(input);
 
-                return this.CreateReportResponse(exportType, report, EventCategory.Reports.Report_Status_Duration);
+                return this.CreateReportResponse(exportType, report, Reports.Report_Status_Duration);
             }
 
             var data = await this.statusDurationReport.LoadAsync(input);
@@ -537,7 +537,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             {
                 var report = await this.statusDurationReport.GetReportAsync(input);
 
-                return this.CreateReportResponse(exportType, report, EventCategory.Reports.Report_Status_Duration);
+                return this.CreateReportResponse(exportType, report, Reports.Report_Status_Duration);
             }
 
             var data = await this.statusDurationReport.LoadAsync(input);
