@@ -29,7 +29,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="NLog" Version="4.6.8" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.9.0" />
-    <PackageReference Include="refit" Version="4.8.14" />
+    <PackageReference Include="refit" Version="5.0.23" />
     <PackageReference Include="System.Reactive" Version="4.2.0" />
   </ItemGroup>
 
