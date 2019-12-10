@@ -370,9 +370,105 @@
     <value>Si</value>
   </data>
   <data name="CommentPosting" xml:space="preserve">
-    <value>Posting...</value>
+    <value>Destino...</value>
   </data>
   <data name="InterviewReceivedCantModify" xml:space="preserve">
     <value>La entrevista ha sido recibida por un entrevistador y no puede modificarse</value>
+  </data>
+  <data name="EmailLink_Header" xml:space="preserve">
+    <value>Ingrese su dirección de correo electrónico</value>
+  </data>
+  <data name="EmailLink_Message" xml:space="preserve">
+    <value>Le enviaremos un mensaje con el enlace para reanudar la entrevista si necesita continuar más tarde.</value>
+  </data>
+  <data name="EmailLink_ResumeAnyTime" xml:space="preserve">
+    <value>Puede cancelar ahora y continuar con la entrevista. Y puede enviarlo más tarde haciendo clic en el elemento 'Enlace de reanudar correo electrónico' en el menú superior.</value>
+  </data>
+  <data name="EmailLink_Placeholder" xml:space="preserve">
+    <value>Ingrese correo electrónico</value>
+  </data>
+  <data name="EmailLink_InvalidEmail" xml:space="preserve">
+    <value>{{email}} es una dirección de correo electrónico no válida</value>
+  </data>
+  <data name="EmailLink_EmailResumeLink" xml:space="preserve">
+    <value>Enlace de currículum por correo electrónico</value>
+  </data>
+  <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
+    <value>¿Está seguro de que desea eliminar la lista relacionada '{{rosterTitle}}'?</value>
+  </data>
+  <data name="SaveScenario" xml:space="preserve">
+    <value>Guardar escenario</value>
+  </data>
+  <data name="Resolve" xml:space="preserve">
+    <value>Resolver</value>
+    <comment>Resolve comment button text</comment>
+  </data>
+  <data name="ResolveHint" xml:space="preserve">
+    <value>Los comentarios resueltos están ocultos por defecto, pero pueden ser revisados por todos los participantes de la entrevista.</value>
+  </data>
+  <data name="HideResolved" xml:space="preserve">
+    <value>Ocultar resuelto</value>
+  </data>
+  <data name="ShowResolved" xml:space="preserve">
+    <value>Mostrar resuelto</value>
+  </data>
+  <data name="SaveScenarioOptions" xml:space="preserve">
+    <value>Seleccionar escenario para reemplazar</value>
+  </data>
+  <data name="SaveScenarioDesignerLogin" xml:space="preserve">
+    <value>La sesión en la aplicación Designer ha caducado. Inicie sesión en la aplicación Designer para poder guardar.</value>
+  </data>
+  <data name="SaveScenarioGoToDesigner" xml:space="preserve">
+    <value>Diseñador abierto</value>
+  </data>
+  <data name="NoQuestionnaireAccess" xml:space="preserve">
+    <value>No tienes acceso al cuestionario</value>
+  </data>
+  <data name="SaveScenarioName" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="SaveScenarioOptions_ReplaceExisting" xml:space="preserve">
+    <value>Remplaza el existente</value>
+  </data>
+  <data name="SaveScenarioOptions_SaveNew" xml:space="preserve">
+    <value>Guardar nuevo</value>
+  </data>
+  <data name="AreaRecord" xml:space="preserve">
+    <value>Área de edición</value>
+  </data>
+  <data name="CoverBrokenPackegeText" xml:space="preserve">
+    <value>¡Atención! Esta entrevista tiene datos corruptos, &lt;br /&gt;
+solo está disponible la versión previa de la entrevista. &lt;br /&gt;
+Póngase en contacto con el soporte para obtener asistencia.</value>
+  </data>
+  <data name="CoverBrokenPackegeTitle" xml:space="preserve">
+    <value>Error: esta entrevista está dañada</value>
+  </data>
+  <data name="Interview_Overview_AdditionalInformation" xml:space="preserve">
+    <value>Información adicional de la pregunta</value>
+  </data>
+  <data name="Interview_Overview_NotAnswered" xml:space="preserve">
+    <value>No contestado</value>
+  </data>
+  <data name="LoadingQuestionnaire" xml:space="preserve">
+    <value>Cargando cuestionario. Por favor espera...</value>
+  </data>
+  <data name="MultimediaNotSupported" xml:space="preserve">
+    <value>La reproducción multimedia no es compatible con su navegador. Puedes descargarlo en su lugar.</value>
+  </data>
+  <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
+    <value>El valor ingresado no puede ser menor que la respuesta protegida</value>
+  </data>
+  <data name="ShowOnMap" xml:space="preserve">
+    <value>Mostrar en el mapa</value>
+  </data>
+  <data name="WarningsHeader" xml:space="preserve">
+    <value>Advertencias</value>
+  </data>
+  <data name="WebTesterSessionOver" xml:space="preserve">
+    <value>La sesión del probador ha terminado</value>
+  </data>
+  <data name="WebTesterSessionOverMessage" xml:space="preserve">
+    <value>Por favor cierra esta página. Puede abrir uno nuevo volviendo al sitio del Diseñador</value>
   </data>
 </root>
