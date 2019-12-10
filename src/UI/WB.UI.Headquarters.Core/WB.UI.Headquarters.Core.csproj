@@ -105,6 +105,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="Resources\Reports.designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Reports.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\TabletLogs.Designer.cs">
       <DependentUpon>TabletLogs.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -277,6 +282,39 @@
     </EmbeddedResource>
       <EmbeddedResource Update="Resources\FieldsAndValidations.sq.resx">
           <DependentUpon>FieldsAndValidations.resx</DependentUpon>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Reports.ar.resx">
+        <DependentUpon>Reports.resx</DependentUpon>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Reports.es.resx">
+        <DependentUpon>Reports.resx</DependentUpon>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Reports.fr.resx">
+        <DependentUpon>Reports.resx</DependentUpon>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Reports.ka.resx">
+        <DependentUpon>Reports.resx</DependentUpon>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Reports.pt.resx">
+        <DependentUpon>Reports.resx</DependentUpon>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Reports.resx">
+        <SubType>Designer</SubType>
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Reports.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Reports.ro.resx">
+        <DependentUpon>Reports.resx</DependentUpon>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Reports.ru.resx">
+        <SubType>Designer</SubType>
+        <DependentUpon>Reports.resx</DependentUpon>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Reports.sq.resx">
+        <DependentUpon>Reports.resx</DependentUpon>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Reports.zh.resx">
+        <DependentUpon>Reports.resx</DependentUpon>
       </EmbeddedResource>
       <EmbeddedResource Update="Resources\TabletLogs.resx">
         <SubType>Designer</SubType>
