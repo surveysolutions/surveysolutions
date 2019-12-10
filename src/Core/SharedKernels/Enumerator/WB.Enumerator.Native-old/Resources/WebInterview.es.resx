@@ -285,4 +285,77 @@
   <data name="PoweredBy" xml:space="preserve">
     <value>Powered by</value>
   </data>
+  <data name="EnterPasswordText" xml:space="preserve">
+    <value>Este enlace está protegido con contraseña, que se distribuyó con el enlace. Por favor ingrésalo aquí</value>
+  </data>
+  <data name="Complete" xml:space="preserve">
+    <value>Completar</value>
+  </data>
+  <data name="Email_InvitationTemplate_Message" xml:space="preserve">
+    <value>¡Bienvenido a % SURVEYNAME%!
+
+Para realizar la encuesta, haga clic en el siguiente enlace: %SURVEYLINK% e ingrese su contraseña: %PASSWORD%
+ 
+¡Gracias por su cooperación!</value>
+  </data>
+  <data name="Email_InvitationTemplate_Subject" xml:space="preserve">
+    <value>Invitación para participar en%SURVEYNAME%</value>
+  </data>
+  <data name="Email_NoResponse_Message" xml:space="preserve">
+    <value>¡Recibió este recordatorio porque no ha comenzado a responder a %SURVEYNAME%!
+ 
+Para realizar la encuesta, haga clic en el siguiente enlace: %SURVEYLINK% e ingrese su contraseña: %PASSWORD%
+ 
+¡Gracias por su cooperación!</value>
+  </data>
+  <data name="Email_NoResponse_Subject" xml:space="preserve">
+    <value>Recordatorio, no olvides participar en %SURVEYNAME%</value>
+  </data>
+  <data name="Email_PartialResponse_Message" xml:space="preserve">
+    <value>Recibe este recordatorio porque ha comenzado a responder a %SURVEYNAME%, pero no ha completado el proceso.
+ 
+Para continuar la encuesta, haga clic en el siguiente enlace: %SURVEYLINK% e ingrese su contraseña: %PASSWORD%.
+ 
+Responda todas las preguntas aplicables y haga clic en el botón "COMPLETO" para enviar sus respuestas.
+ 
+¡Gracias por su cooperación!</value>
+  </data>
+  <data name="Email_PartialResponse_Subject" xml:space="preserve">
+    <value>Recordatorio, complete su respuesta a %SURVEYNAME%</value>
+  </data>
+  <data name="Email_RejectEmail_Message" xml:space="preserve">
+    <value>¡Gracias por participar en %SURVEYNAME%!
+ 
+Mientras procesaba su respuesta, nuestro personal encontró algunos problemas, que por este medio le solicitamos que revise.
+ 
+Para continuar la encuesta, haga clic en el siguiente enlace: %SURVEYLINK% e ingrese su contraseña: %PASSWORD%.
+ 
+Agradeceríamos que intente abordar todos los problemas marcados en su respuesta y haga clic en el botón "COMPLETAR" para enviar sus respuestas.
+ 
+¡Gracias por su cooperación!</value>
+  </data>
+  <data name="Email_RejectEmail_Subject" xml:space="preserve">
+    <value>Su acción es necesaria en %SURVEYNAME%</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="InterviewSizeLimitReached" xml:space="preserve">
+    <value>La entrevista contiene el número total de instancias de la lista y preguntas que exceden los límites del sistema.</value>
+  </data>
+  <data name="NoteForSupervisor" xml:space="preserve">
+    <value>Nota para el supervisor</value>
+  </data>
+  <data name="ResumeInterview" xml:space="preserve">
+    <value>Reanudar entrevista</value>
+  </data>
+  <data name="ResumeInterviewDescription" xml:space="preserve">
+    <value>Hemos notado que ya ha comenzado esta entrevista, pero no la terminó.</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Iniciar nueva entrevista</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Advertencia</value>
+  </data>
 </root>
