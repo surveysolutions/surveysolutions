@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="5.0.1" />
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.0.0">
       <PrivateAssets>all</PrivateAssets>
@@ -20,9 +21,9 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="3.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
 
@@ -80,6 +81,11 @@
 
 
   <ItemGroup>
+    <Compile Update="Resources\AuditLog.Designer.cs">
+      <DependentUpon>AuditLog.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Update="Resources\DataTables.Designer.cs">
       <DependentUpon>DataTables.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -124,6 +130,32 @@
 
 
   <ItemGroup>
+    <EmbeddedResource Update="Resources\AuditLog.ar.resx">
+      <DependentUpon>AuditLog.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\AuditLog.es.resx">
+      <DependentUpon>AuditLog.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\AuditLog.fr.resx">
+      <DependentUpon>AuditLog.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\AuditLog.resx">
+      <SubType>Designer</SubType>
+      <LastGenOutput>AuditLog.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\AuditLog.ro.resx">
+      <DependentUpon>AuditLog.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\AuditLog.ru.resx">
+      <DependentUpon>AuditLog.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\AuditLog.zh.resx">
+      <DependentUpon>AuditLog.resx</DependentUpon>
+    </EmbeddedResource>
+      <EmbeddedResource Update="Resources\AuditLog.sq.resx">
+          <DependentUpon>AuditLog.resx</DependentUpon>
+      </EmbeddedResource>
     <EmbeddedResource Update="Resources\Common.es.resx">
       <DependentUpon>Common.resx</DependentUpon>
     </EmbeddedResource>

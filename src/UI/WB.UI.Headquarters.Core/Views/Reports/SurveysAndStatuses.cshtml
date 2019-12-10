@@ -1,6 +1,4 @@
 ﻿@using System.Web
-@using Dropbox.Api.TeamLog
-@using Microsoft.Security.Application
 @using WB.Core.BoundedContexts.Headquarters.Resources
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 @using WB.Core.SharedKernels.SurveyManagement.Web.Models
@@ -14,10 +12,10 @@
 @section scripts
 {
 
-    @Scripts.Render("~/js/main-no-libs")
+    @*@Scripts.Render("~/js/main-no-libs")
     @Scripts.Render("~/js/list")
     @Scripts.Render("~/js/surveysandstatuses")
-    @Scripts.Render("~/js/common")
+    @Scripts.Render("~/js/common")*@
 
     <script type="text/javascript">
         var $interviewsUrl = '@Url.Action("Index", "Interviews")';
@@ -34,7 +32,7 @@
                      id = Model.QuestionnaireId
                  })';
             var responsiblesUrl =
-                '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "AssigneeSupervisors"})';
+                '@Url.RouteUrl("DefaultApiWithAction", new { controller = "Teams", action = "AssigneeSupervisors"})';
 
             var model = new Supervisor.VM.SurveysAndStatuses($surveyAndStatusesReportUrl, responsiblesUrl);
             model.getDataTableColumns = function () {
@@ -146,14 +144,14 @@
                 </div>
             </aside>
             <div class="main-information reports">
-                @Html.Partial("_alerts")
+                <partial name="_alerts" />
                 <div class="page-header clearfix">
                     <h1>@Pages.SurveysAndStatuses_Overview</h1>
                     <i>@Pages.SurveysAndStatuses_HeadquartersDescription</i>
                     <p>
                         @if (Model.QuestionnaireId.HasValue)
                         {
-                            @Html.ActionLink(EventCategory.Reports.ToAllQuestionnaires, "SurveysAndStatuses")
+                            @Html.ActionLink(Reports.ToAllQuestionnaires, "SurveysAndStatuses")
                         }
                     </p>
                 </div>
@@ -163,24 +161,25 @@
                         <thead>
                         <tr>
                             <th class="without-break changed-recently" data-class="without-break changed-recently" data-name="QuestionnaireTitle" data-data="questionnaireTitle">
-                                @EventCategory.Reports.SurveyName
+                                @Reports.SurveyName
                             </th>
                             @if (Model.QuestionnaireId.HasValue) {
-                                <th class="version" data-class="type-numeric version centered-italic" data-name="QuestionnaireVersion" data-data="questionnaireVersion" data-th="@EventCategory.Reports.TemplateVersion">@EventCategory.Reports.TemplateVersion</th>
+                                <th class="version" data-class="type-numeric version centered-italic" data-name="QuestionnaireVersion" data-data="questionnaireVersion" data-th="@Reports.TemplateVersion">@Reports.TemplateVersion</th>
                             }
-                            <th data-class="type-numeric" data-name="SupervisorAssignedCount" data-data="supervisorAssignedCount">@EventCategory.Reports.SupervisorAssigned</th>
-                            <th data-class="type-numeric" data-name="InterviewerAssignedCount" data-data="interviewerAssignedCount">@EventCategory.Reports.InterviewerAssigned</th>
-                            <th data-class="type-numeric" data-name="CompletedCount" data-data="completedCount">@EventCategory.Reports.Completed</th>
-                            <th data-class="type-numeric" data-name="RejectedBySupervisorCount" data-data="rejectedBySupervisorCount">@EventCategory.Reports.RejectedBySupervisor</th>
-                            <th data-class="type-numeric" data-name="ApprovedBySupervisorCount" data-data="approvedBySupervisorCount">@EventCategory.Reports.ApprovedBySupervisor</th>
-                            <th data-class="type-numeric" data-name="RejectedByHeadquartersCount" data-data="rejectedByHeadquartersCount">@EventCategory.Reports.RejectedByHQ</th>
-                            <th data-class="type-numeric" data-name="ApprovedByHeadquartersCount" data-data="approvedByHeadquartersCount">@EventCategory.Reports.ApprovedByHQ</th>
+                            <th data-class="type-numeric" data-name="SupervisorAssignedCount" data-data="supervisorAssignedCount">@Reports.SupervisorAssigned</th>
+                            <th data-class="type-numeric" data-name="InterviewerAssignedCount" data-data="interviewerAssignedCount">@Reports.InterviewerAssigned</th>
+                            <th data-class="type-numeric" data-name="CompletedCount" data-data="completedCount">@Reports.Completed</th>
+                            <th data-class="type-numeric" data-name="RejectedBySupervisorCount" data-data="rejectedBySupervisorCount">@Reports.RejectedBySupervisor</th>
+                            <th data-class="type-numeric" data-name="ApprovedBySupervisorCount" data-data="approvedBySupervisorCount">@Reports.ApprovedBySupervisor</th>
+                            <th data-class="type-numeric" data-name="RejectedByHeadquartersCount" data-data="rejectedByHeadquartersCount">@Reports.RejectedByHQ</th>
+                            <th data-class="type-numeric" data-name="ApprovedByHeadquartersCount" data-data="approvedByHeadquartersCount">@Reports.ApprovedByHQ</th>
                             <th data-class="type-numeric" data-name="TotalCount" data-data="totalCount">@Common.Total</th>
                         </tr>
                         </thead>
                     </table>
                 </div>
-                @Html.Partial("_export-buttons")
+
+                <partial name="_export-buttons" />
             </div>
         </div>
     </div>
