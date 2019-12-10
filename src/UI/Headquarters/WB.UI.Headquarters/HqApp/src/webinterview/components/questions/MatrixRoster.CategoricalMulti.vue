@@ -1,5 +1,5 @@
 <template>
-    <div class="options-group h-100 d-flex" v-bind:class="{ 'dotted': noOptions }" v-if="!disabled">
+    <div :class='questionStyle' v-if="!disabled">
         <div
           class="cell-bordered d-flex" style="align-items:center;"
           v-for="option in editorParams.question.options"
@@ -40,10 +40,24 @@
         data() {
             return {
                 showAllOptions: false,
-                answer: []
+                question: null,
+                answer: [],
+                lastUpdate: null,
+                questionId: null
             }
         }, 
+        watch: {
+            ["$watchedQuestion"](watchedQuestion) {
+                if (watchedQuestion.updatedAt != this.lastUpdate) {
+                    this.question = watchedQuestion
+                    this.cacheQuestionData()
+                }
+            }
+        },
         computed: {
+            $watchedQuestion() {
+                return this.$store.state.webinterview.entityDetails[this.questionId] 
+            },
             shouldShowAnsweredOptionsOnly(){
                 return shouldShowAnsweredOptionsOnlyForSingle(this);
             },
@@ -67,9 +81,21 @@
             },
             allAnswersGiven() {
                 return this.$me.maxSelectedAnswersCount && this.$me.answer.length >= this.$me.maxSelectedAnswersCount;
-            }
+            },
+            questionStyle() {
+                return [{
+                    'disabled-question' : this.question.isDisabled,
+                    'has-error' : !this.question.validity.isValid,
+                    'has-warnings' : this.question.validity.warnings.length > 0,
+                    'not-applicable' : this.question.isLocked,
+                    'syncing': this.isFetchInProgress
+                }, 'cell-unit', 'options-group', ' h-100',' d-flex']
+            } 
         },
         methods: {
+            cacheQuestionData() {
+                this.lastUpdate = this.question.updatedAt
+            },
             change() {
                 this.sendAnswer(() => {
                     this.answerMulti(this.answer);
@@ -125,6 +151,11 @@
                 var answerIndex = this.$me.answer.indexOf(answerValue)
                 return answerIndex > -1 ? answerIndex + 1 : ""
             },
+        },
+        created() {
+            this.questionId = this.editorParams.value.identity
+            this.question = this.$watchedQuestion
+            this.cacheQuestionData()
         },
         mounted() {
             this.answer = this.$me.answer
