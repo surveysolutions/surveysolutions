@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -29,7 +27,6 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.DependencyInjection;
-using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.Versions;
 using WB.Infrastructure.Native.Files;
 using WB.UI.Designer.Code;
@@ -281,16 +278,16 @@ namespace WB.UI.Designer
             });
 
             app.UseHealthChecks("/.hc");
+
             app.UseRouting();
             app.UseAuthorization();
+
             app.UseEndpoints(routes =>
             {
                 routes.MapControllerRoute(
-                    name: "areas", "{area:exists}/{controller=Questionnaire}/{action=My}/{id?}"
-                );
-
-                routes.MapControllerRoute(
-                    name: "default", "{controller=Questionnaire}/{action=Index}/{id?}");
+                    name: "default", 
+                    pattern: "{controller=Questionnaire}/{action=Index}/{id?}");
+                routes.MapRazorPages();
             });
 
             var initTask = aspCoreKernel.InitAsync(serviceProvider);
