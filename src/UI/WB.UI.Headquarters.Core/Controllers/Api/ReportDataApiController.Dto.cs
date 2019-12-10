@@ -7,11 +7,9 @@ using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
-using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.Models.Api;
-using WB.UI.Shared.Web.Extensions;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
+namespace WB.UI.Headquarters.Controllers.Api
 {
     public partial class ReportDataApiController
     {
