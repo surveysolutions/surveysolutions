@@ -1,51 +1,49 @@
-﻿using AutoMapper;
-using Main.Core.Entities.SubEntities;
-using Microsoft.AspNet.Identity;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web.Http;
+using AutoMapper;
+using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Headquarters.API.PublicApi.Models;
-using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.CommandTransformation;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Shared.Web.Exceptions;
 
-namespace WB.UI.Headquarters.API.PublicApi
+namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 {
-    [RoutePrefix("api/v1/assignments")]
-    public class AssignmentsController : BaseApiServiceController
+    [Route("api/v1/assignments")]
+    [Localizable(false)]
+    public class AssignmentsController : ControllerBase
     {
         private readonly IAssignmentsService assignmentsStorage;
         private readonly IAssignmentViewFactory assignmentViewFactory;
         private readonly IMapper mapper;
-        private readonly HqUserManager userManager;
+        private readonly UserManager<HqUser> userManager;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly ISystemLog auditLog;
+        private readonly ICommandTransformator commandTransformator;
         private readonly IInterviewCreatorFromAssignment interviewCreatorFromAssignment;
         private readonly IPreloadedDataVerifier verifier;
-        private readonly ICommandTransformator commandTransformator;
         private readonly IAssignmentFactory assignmentFactory;
         private readonly IInvitationService invitationService;
         private readonly IAssignmentPasswordGenerator passwordGenerator;
@@ -56,18 +54,18 @@ namespace WB.UI.Headquarters.API.PublicApi
             IAssignmentViewFactory assignmentViewFactory,
             IAssignmentsService assignmentsStorage,
             IMapper mapper,
-            HqUserManager userManager,
-            ILogger logger,
+            UserManager<HqUser> userManager,
+            ILogger<AssignmentsController> logger,
             IQuestionnaireStorage questionnaireStorage,
             ISystemLog auditLog,
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment,
             IPreloadedDataVerifier verifier,
-            ICommandTransformator commandTransformator,
-            IAssignmentFactory assignmentFactory, 
-            IInvitationService invitationService, 
+            IAssignmentFactory assignmentFactory,
+            IInvitationService invitationService,
             IAssignmentPasswordGenerator passwordGenerator,
             ICommandService commandService,
-            IAuthorizedUser authorizedUser) : base(logger)
+            IAuthorizedUser authorizedUser,
+            ICommandTransformator commandTransformator)
         {
             this.assignmentViewFactory = assignmentViewFactory;
             this.assignmentsStorage = assignmentsStorage;
@@ -77,12 +75,12 @@ namespace WB.UI.Headquarters.API.PublicApi
             this.auditLog = auditLog;
             this.interviewCreatorFromAssignment = interviewCreatorFromAssignment;
             this.verifier = verifier;
-            this.commandTransformator = commandTransformator;
             this.assignmentFactory = assignmentFactory;
             this.invitationService = invitationService;
             this.passwordGenerator = passwordGenerator;
             this.commandService = commandService;
             this.authorizedUser = authorizedUser;
+            this.commandTransformator = commandTransformator;
         }
 
         /// <summary>
@@ -92,13 +90,14 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <response code="404">Assignment cannot be found</response>
         [HttpGet]
         [Route("{id:int}")]
-        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true)]
-        public FullAssignmentDetails Details(int id)
+        [Authorize(Roles = "ApiUser, Administrator")]
+        public ActionResult<FullAssignmentDetails> Details(int id)
         {
-            Assignment assignment = assignmentsStorage.GetAssignment(id)
-                ?? throw new HttpResponseException(HttpStatusCode.NotFound);
-
-            return this.mapper.Map<FullAssignmentDetails>(assignment);
+            Assignment assignment = assignmentsStorage.GetAssignment(id);
+            if (assignment == null)
+                return StatusCode(StatusCodes.Status404NotFound);
+            var result = this.mapper.Map<FullAssignmentDetails>(assignment);
+            return result;
         }
 
         /// <summary>
@@ -108,10 +107,9 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <returns>List of assignments</returns>
         /// <returns code="406">Incorrect filtering data provided</returns>
         [HttpGet]
-        [Route("")]
-        [Localizable(false)]
-        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true)]
-        public async Task<AssignmentsListView> List([FromUri(SuppressPrefixCheck = true, Name = "")] AssignmentsListFilter filter)
+        //[Route("")]
+        [Authorize(Roles = "ApiUser, Administrator")]
+        public async Task<ActionResult<AssignmentsListView>> List([FromQuery] AssignmentsListFilter filter)
         {
             filter = filter ?? new AssignmentsListFilter
             {
@@ -127,24 +125,31 @@ namespace WB.UI.Headquarters.API.PublicApi
             }
 
             var responsible = await GetResponsibleIdPersonFromRequestValueAsync(filter.Responsible);
-
-            AssignmentsWithoutIdentifingData result = this.assignmentViewFactory.Load(new AssignmentsInputModel
+            try
             {
-                QuestionnaireId = questionnaireId?.QuestionnaireId,
-                QuestionnaireVersion = questionnaireId?.Version,
-                ResponsibleId = responsible?.Id,
-                Order = MapOrder(filter.Order),
-                Limit = filter.Limit,
-                Offset = filter.Offset,
-                SearchBy = filter.SearchBy,
-                ShowArchive = filter.ShowArchive,
-                SupervisorId = filter.SupervisorId,
-            });
 
-            var listView = new AssignmentsListView(result.Page, result.PageSize, result.TotalCount, filter.Order);
+                AssignmentsWithoutIdentifingData result = this.assignmentViewFactory.Load(new AssignmentsInputModel
+                {
+                    QuestionnaireId = questionnaireId?.QuestionnaireId,
+                    QuestionnaireVersion = questionnaireId?.Version,
+                    ResponsibleId = responsible?.Id,
+                    Order = MapOrder(filter.Order),
+                    Limit = filter.Limit,
+                    Offset = filter.Offset,
+                    SearchBy = filter.SearchBy,
+                    ShowArchive = filter.ShowArchive,
+                    SupervisorId = filter.SupervisorId,
+                });
 
-            listView.Assignments = this.mapper.Map<List<AssignmentViewItem>>(result.Items);
-            return listView;
+                var listView = new AssignmentsListView(result.Page, result.PageSize, result.TotalCount, filter.Order);
+
+                listView.Assignments = this.mapper.Map<List<AssignmentViewItem>>(result.Items);
+                return listView;
+            }
+            catch (NotSupportedException)
+            {
+                return StatusCode(StatusCodes.Status406NotAcceptable);
+            }
 
             string MapOrder(string input)
             {
@@ -165,7 +170,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                     case "createdatutc": return $"CreatedAtUtc {direction}";
                 }
 
-                throw new HttpResponseException(HttpStatusCode.NotAcceptable);
+                throw new NotSupportedException();
             }
         }
 
@@ -178,23 +183,32 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <response code="404">Questionnaire or responsible user not found</response>
         /// <response code="406">Responsible user provided in request cannot be assigned to assignment</response>
         [HttpPost]
-        [Route]
-        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true)]
-        public async Task<CreateAssignmentResult> Create(CreateAssignmentApiRequest createItem)
+        [Authorize(Roles = "ApiUser, Administrator")]
+        //[ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true)]
+        public async Task<ActionResult<CreateAssignmentResult>> Create(CreateAssignmentApiRequest createItem)
         {
             var responsible = await this.GetResponsibleIdPersonFromRequestValueAsync(createItem?.Responsible);
 
-            this.VerifyAssigneeInRoles(responsible, createItem?.Responsible, UserRoles.Interviewer, UserRoles.Supervisor);
+            try
+            {
+                this.VerifyAssigneeInRoles(responsible, createItem?.Responsible, UserRoles.Interviewer, UserRoles.Supervisor);
+            }
+            catch (HttpException e)
+            {
+                return StatusCode(e.StatusCode, e.Message);
+            }
 
             if (!QuestionnaireIdentity.TryParse(createItem.QuestionnaireId, out QuestionnaireIdentity questionnaireId))
             {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound, $@"Questionnaire not found: {createItem?.QuestionnaireId}"));
+                return StatusCode(StatusCodes.Status404NotFound,
+                    $"Questionnaire not found: {createItem?.QuestionnaireId}");
             }
 
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireId, null);
 
             if (questionnaire == null)
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound, $@"Questionnaire not found: {createItem?.QuestionnaireId}"));
+                return StatusCode(StatusCodes.Status404NotFound,
+                    $"Questionnaire not found: {createItem?.QuestionnaireId}");
 
             int? quantity;
             switch (createItem.Quantity)
@@ -214,34 +228,33 @@ namespace WB.UI.Headquarters.API.PublicApi
 
             //verify email
             if (!string.IsNullOrEmpty(createItem.Email) && AssignmentConstants.EmailRegex.Match(createItem.Email).Length <= 0)
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, 
-                    "Invalid Email"));
+                return StatusCode(StatusCodes.Status400BadRequest, "Invalid Email");
 
             //verify pass
             if (!string.IsNullOrEmpty(password))
             {
                 if ((password.Length < AssignmentConstants.PasswordLength ||
                      AssignmentConstants.PasswordStrength.Match(password).Length <= 0))
-                    throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest,
-                        "Invalid Password. At least 6 numbers and upper case letters or single symbol '?' to generate password"));
+                    return StatusCode(StatusCodes.Status400BadRequest,
+                        "Invalid Password. At least 6 numbers and upper case letters or single symbol '?' to generate password");
             }
 
             //assignment with email must have quantity = 1
             if (!string.IsNullOrEmpty(createItem.Email) && createItem.Quantity != 1)
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest,
-                    "For assignments with provided email allowed quantity is 1"));
+                return StatusCode(StatusCodes.Status400BadRequest,
+                    "For assignments with provided email allowed quantity is 1");
 
             if ((!string.IsNullOrEmpty(createItem.Email) || !string.IsNullOrEmpty(password)) && createItem.WebMode != true)
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest,
-                    "For assignments having Email or Password Web Mode should be activated"));
+                return StatusCode(StatusCodes.Status400BadRequest,
+                    "For assignments having Email or Password Web Mode should be activated");
 
             if (createItem.Quantity == 1 && (createItem.WebMode == null || createItem.WebMode == true) &&
                 string.IsNullOrEmpty(createItem.Email) && !string.IsNullOrEmpty(createItem.Password))
             {
                 var hasPasswordInDb = this.assignmentsStorage.DoesExistPasswordInDb(questionnaireId, password);
                 if (hasPasswordInDb)
-                    throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest,
-                        "Password is not unique. Password by assignment for web mode with quantity 1 should be unique"));
+                    return StatusCode(StatusCodes.Status400BadRequest,
+                        "Password is not unique. Password by assignment for web mode with quantity 1 should be unique");
             }
 
             List<InterviewAnswer> answers = new List<InterviewAnswer>();
@@ -257,14 +270,14 @@ namespace WB.UI.Headquarters.API.PublicApi
                 }
                 catch (Exception ae)
                 {
-                    throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest,
+                    return StatusCode(StatusCodes.Status400BadRequest,
                         (string.IsNullOrEmpty(item.Identity)
                             ? "Question Identity cannot be parsed. Expected format: GuidWithoutDashes_Int1-Int2, where _Int1-Int2 - codes of parent rosters (empty if question is not inside any roster). For example: 11111111111111111111111111111111_0-1 should be used for question on the second level"
                             : "Question cannot be identified by provided variable name") +
                         Environment.NewLine +
-                        ae.Message));
+                        ae.Message);
                 }
-                KeyValuePair<Guid, AbstractAnswer> answer;
+                KeyValuePair<Guid, AbstractAnswer>? answer = null;
                 try
                 {
                     answer = this.commandTransformator.ParseQuestionAnswer(new UntypedQuestionAnswer
@@ -276,16 +289,16 @@ namespace WB.UI.Headquarters.API.PublicApi
                 }
                 catch (Exception ae)
                 {
-                    throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest,
+                    return StatusCode(StatusCodes.Status400BadRequest,
                         $"Answer '{item.Answer}' cannot be parsed for question with Identity '{item.Identity}' and variable '{item.Variable}'." +
                         Environment.NewLine +
-                        ae.Message));
+                        ae.Message);
                 }
 
                 answers.Add(new InterviewAnswer
                 {
                     Identity = identity,
-                    Answer = answer.Value
+                    Answer = answer.Value.Value
                 });
             }
 
@@ -297,7 +310,7 @@ namespace WB.UI.Headquarters.API.PublicApi
 
             if (result != null)
             {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, new CreateAssignmentResult
+                return StatusCode(StatusCodes.Status400BadRequest, new CreateAssignmentResult
                 {
                     Assignment = mapper.Map<AssignmentDetails>(assignment),
                     VerificationStatus = new ImportDataVerificationState
@@ -307,14 +320,14 @@ namespace WB.UI.Headquarters.API.PublicApi
                             new PanelImportVerificationError("PL0011", result.ErrorMessage)
                         }
                     }
-                }));
+                });
             }
 
             interviewCreatorFromAssignment.CreateInterviewIfQuestionnaireIsOld(responsible.Id, questionnaireId, assignment.Id, answers);
             assignment = this.assignmentsStorage.GetAssignmentByAggregateRootId(assignment.PublicKey);
 
             this.invitationService.CreateInvitationForWebInterview(assignment);
-            
+
             return new CreateAssignmentResult
             {
                 Assignment = mapper.Map<AssignmentDetails>(assignment)
@@ -331,15 +344,26 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <response code="406">Assignee cannot be assigned to assignment</response>
         [HttpPatch]
         [Route("{id:int}/assign")]
-        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true)]
-        public async Task<AssignmentDetails> Assign(int id, [FromBody] AssignmentAssignRequest assigneeRequest)
+        [Authorize(Roles = "ApiUser, Administrator")]
+        public async Task<ActionResult<AssignmentDetails>> Assign(int id, [FromBody] AssignmentAssignRequest assigneeRequest)
         {
-            var assignment = assignmentsStorage.GetAssignment(id) ?? throw new HttpResponseException(HttpStatusCode.NotFound);
+            var assignment = assignmentsStorage.GetAssignment(id);
+            if (assignment == null)
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
 
             var responsibleUser = await this.GetResponsibleIdPersonFromRequestValueAsync(assigneeRequest?.Responsible);
 
-            this.VerifyAssigneeInRoles(responsibleUser, assigneeRequest?.Responsible, UserRoles.Interviewer,
-                UserRoles.Supervisor);
+            try
+            {
+                this.VerifyAssigneeInRoles(responsibleUser, assigneeRequest?.Responsible, UserRoles.Interviewer,
+                    UserRoles.Supervisor);
+            }
+            catch (HttpException e)
+            {
+                return StatusCode(e.StatusCode, e.Message);
+            }
 
             commandService.Execute(new ReassignAssignment(assignment.PublicKey, authorizedUser.Id, responsibleUser.Id, assignment.Comments));
 
@@ -350,13 +374,13 @@ namespace WB.UI.Headquarters.API.PublicApi
         {
             if (responsibleUser == null)
             {
-                throw new HttpResponseException(this.Request.CreateResponse(HttpStatusCode.NotFound,
-                    $@"User not found: {providedValue}"));
+                throw new HttpException(HttpStatusCode.NotFound,
+                    $@"User not found: {providedValue}");
             }
 
             if (!roles.Any(responsibleUser.IsInRole))
             {
-                throw new HttpResponseException(HttpStatusCode.NotAcceptable);
+                throw new HttpException(HttpStatusCode.NotAcceptable);
             }
         }
 
@@ -367,8 +391,8 @@ namespace WB.UI.Headquarters.API.PublicApi
                 return null;
             }
 
-            return Guid.TryParse(responsible, out Guid responsibleUserId)
-                ? await this.userManager.FindByIdAsync(responsibleUserId)
+            return Guid.TryParse(responsible, out Guid _)
+                ? await this.userManager.FindByIdAsync(responsible)
                 : await this.userManager.FindByNameAsync(responsible);
         }
 
@@ -381,13 +405,17 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <response code="404">Assignment not found</response>
         [HttpPatch]
         [Route("{id:int}/changeQuantity")]
-        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true)]
-        public AssignmentDetails ChangeQuantity(int id, [FromBody] int? quantity)
+        [Authorize(Roles = "ApiUser, Administrator")]
+        public ActionResult<AssignmentDetails> ChangeQuantity(int id, [FromBody] int? quantity)
         {
-            var assignment = assignmentsStorage.GetAssignment(id) ?? throw new HttpResponseException(HttpStatusCode.NotFound);
+            var assignment = assignmentsStorage.GetAssignment(id);
+            if (assignment == null)
+            {
+                return NotFound();
+            }
 
             if (!string.IsNullOrEmpty(assignment.Email) || !string.IsNullOrEmpty(assignment.Password))
-                throw new HttpResponseException(HttpStatusCode.NotAcceptable);
+                return StatusCode(StatusCodes.Status406NotAcceptable);
 
             commandService.Execute(new UpdateAssignmentQuantity(assignment.PublicKey, authorizedUser.Id, quantity));
             this.auditLog.AssignmentSizeChanged(id, quantity);
@@ -403,10 +431,15 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <response code="404">Assignment not found</response>
         [HttpPatch]
         [Route("{id:int}/archive")]
-        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true)]
-        public AssignmentDetails Archive(int id)
+        [Authorize(Roles = "ApiUser, Administrator")]
+        public ActionResult<AssignmentDetails> Archive(int id)
         {
-            var assignment = assignmentsStorage.GetAssignment(id) ?? throw new HttpResponseException(HttpStatusCode.NotFound);
+            var assignment = assignmentsStorage.GetAssignment(id);
+
+            if (assignment == null)
+            {
+                return NotFound();
+            }
 
             commandService.Execute(new ArchiveAssignment(assignment.PublicKey, authorizedUser.Id));
 
@@ -421,10 +454,12 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <response code="404">Assignment not found</response>
         [HttpPatch]
         [Route("{id:int}/unarchive")]
-        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true)]
-        public AssignmentDetails Unarchive(int id)
+        [Authorize(Roles = "ApiUser, Administrator")]
+        public ActionResult<AssignmentDetails> Unarchive(int id)
         {
-            var assignment = assignmentsStorage.GetAssignment(id) ?? throw new HttpResponseException(HttpStatusCode.NotFound);
+            var assignment = assignmentsStorage.GetAssignment(id);
+            if (assignment == null)
+                return NotFound();
 
             commandService.Execute(new UnarchiveAssignment(assignment.PublicKey, authorizedUser.Id));
 
@@ -439,11 +474,14 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <response code="404">Assignment not found</response>
         [HttpGet]
         [Route("{id:int}/recordAudio")]
-        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
-        public AssignmentAudioRecordingEnabled AudioRecoding(int id)
+        [Authorize(Roles = "ApiUser, Headquarter, Administrator")]
+        public ActionResult<AssignmentAudioRecordingEnabled> AudioRecoding(int id)
         {
-            var assignment = assignmentsStorage.GetAssignment(id) ?? throw new HttpResponseException(HttpStatusCode.NotFound);
-            if (assignment.Archived) throw new HttpResponseException(HttpStatusCode.NotFound);
+            var assignment = assignmentsStorage.GetAssignment(id);
+            if (assignment == null || assignment.Archived)
+            {
+                return NotFound();
+            }
 
             return new AssignmentAudioRecordingEnabled
             {
@@ -460,16 +498,17 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <response code="404">Assignment not found</response>
         [HttpPatch]
         [Route("{id:int}/recordAudio")]
-        [ObserverNotAllowedApi]
-        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
-        public HttpResponseMessage AudioRecodingPatch(int id, [FromBody] UpdateRecordingRequest request)
+        [ObserverNotAllowed]
+        [Authorize(Roles = "ApiUser, Headquarter, Administrator")]
+        public ActionResult AudioRecodingPatch(int id, [FromBody] UpdateRecordingRequest request)
         {
-            var assignment = assignmentsStorage.GetAssignment(id) ?? throw new HttpResponseException(HttpStatusCode.NotFound);
-            if (assignment.Archived) throw new HttpResponseException(HttpStatusCode.NotFound);
+            var assignment = assignmentsStorage.GetAssignment(id);
+            if(assignment == null || assignment.Archived) 
+                return NotFound();
 
             commandService.Execute(new UpdateAssignmentAudioRecording(assignment.PublicKey, authorizedUser.Id, request.Enabled));
 
-            return Request.CreateResponse(HttpStatusCode.NoContent);
+            return NoContent();
         }
 
         /// <summary>
@@ -480,11 +519,12 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <response code="404">Assignment not found</response>
         [HttpGet]
         [Route("{id:int}/assignmentQuantitySettings")]
-        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
-        public AssignmentQuantitySettings AssignmentQuantitySettings(int id)
+        [Authorize(Roles = "ApiUser, Headquarter, Administrator")]
+        public ActionResult<AssignmentQuantitySettings> AssignmentQuantitySettings(int id)
         {
-            var assignment = assignmentsStorage.GetAssignment(id) ?? throw new HttpResponseException(HttpStatusCode.NotFound);
-            if (assignment.Archived) throw new HttpResponseException(HttpStatusCode.NotFound);
+            var assignment = assignmentsStorage.GetAssignment(id);
+            if(assignment == null || assignment.Archived) 
+                return NotFound();
 
             return new AssignmentQuantitySettings
             {
@@ -501,21 +541,21 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <response code="409">Quantity cannot be changed. Assignment either archived or has web mode enabled</response>
         [HttpPost]
         [Route("{id:int}/close")]
-        [ObserverNotAllowedApi]
-        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
-        public HttpResponseMessage Close(int id)
+        [ObserverNotAllowed]
+        [Authorize(Roles = "ApiUser, Headquarter, Administrator")]
+        public ActionResult Close(int id)
         {
             var assignment = assignmentsStorage.GetAssignment(id);
-            if (assignment == null)
-                return Request.CreateResponse(HttpStatusCode.NotFound);
+            if(assignment == null) 
+                return NotFound();
             if (!assignment.QuantityCanBeChanged)
-                return Request.CreateResponse(HttpStatusCode.Conflict);
+                return Conflict();
 
             this.commandService.Execute(new UpdateAssignmentQuantity(assignment.PublicKey,
                 this.authorizedUser.Id,
                 assignment.InterviewSummaries.Count));
 
-            return Request.CreateResponse(HttpStatusCode.OK);
+            return Ok();
         }
     }
 }
