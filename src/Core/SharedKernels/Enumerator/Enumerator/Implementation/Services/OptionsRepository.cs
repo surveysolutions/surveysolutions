@@ -350,7 +350,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
                 var translatedOptions = translations.Where(x => (x.QuestionnaireEntityId == questionId || x.QuestionnaireEntityId == categoryId)
                                                                 && x.TranslationIndex == option.AnswerValue
-                                                                && x.Type == TranslationType.OptionTitle)
+                                                                && x.Type == TranslationType.Categories)
                     .Select(y => new OptionView
                     {
                         QuestionnaireId = questionnaireIdAsString,
