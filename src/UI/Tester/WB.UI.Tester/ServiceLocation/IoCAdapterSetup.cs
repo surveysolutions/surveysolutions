@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Autofac.Extras.MvvmCross;
 using MvvmCross.IoC;
 using WB.Core.BoundedContexts.Tester;
@@ -23,7 +24,7 @@ namespace WB.UI.Tester.ServiceLocation
                : AndroidPathUtils.GetPathToExternalDirectory();
 
             AutofacKernel kernel = new AutofacKernel();
-            
+
             kernel.Load(
                 new NcqrsModule(),
                 new InfrastructureModuleMobile(),
@@ -35,7 +36,7 @@ namespace WB.UI.Tester.ServiceLocation
                 new EnumeratorSharedKernelModule()
                 );
 
-            kernel.InitAsync(true).Wait();
+            Task.Run(() => kernel.InitAsync(true)).Wait();
 
             return new AutofacMvxIocProvider(kernel.Container);
         }
