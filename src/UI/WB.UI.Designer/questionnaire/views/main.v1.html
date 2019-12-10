@@ -55,7 +55,7 @@
                     </span>
                     <span class="error-message strong" ng-show="questionnaire.isReadOnlyForUser" ng-i18next>ReadOnly</span>
                     <input id="webtest-btn" type="button" class="btn" ng-if="questionnaire.webTestAvailable && questionnaire.questionnaireRevision === null" ng-i18next="[value]Test" value="Test" ng-click="webTest()" />
-                    <span class="error-message strong" ng-show="questionnaire.previewRevision !== null" ng-i18next="({revision: questionnaire.previewRevision })Preview"></span>
+                    <span class="error-message strong" ng-show="questionnaire.previewRevision !== null && questionnaire.previewRevision !== undefined" ng-i18next="({revision: questionnaire.previewRevision })Preview"></span>
                 </div>
             </div>
         </div>
@@ -200,7 +200,7 @@
 
                     </form>
                     <div class="button-holder">
-                        <input type="button" class="btn lighter-hover" ng-i18next="[value]SideBarAddMacro" value="ADD NEW Macro" ng-click="addNewMacro()">
+                        <input type="button" class="btn lighter-hover" ng-disabled="isReadOnlyForUser" ng-i18next="[value]SideBarAddMacro" value="ADD NEW Macro" ng-click="addNewMacro()">
                     </div>
                 </perfect-scrollbar>
             </div>
@@ -253,7 +253,7 @@
                         </ul>
                     </form>
                     <div class="button-holder">
-                        <input type="button" class="btn lighter-hover" ng-i18next="[value]SideBarLookupTableAdd" value="ADD NEW Lookup table" ng-click="addNewLookupTable()">
+                        <input type="button" class="btn lighter-hover" ng-disabled="isReadOnlyForUser" ng-i18next="[value]SideBarLookupTableAdd" value="ADD NEW Lookup table" ng-click="addNewLookupTable()">
                     </div>
                 </perfect-scrollbar>
             </div>
@@ -652,7 +652,8 @@
                                 </li>
                             </ul>
                             <div class="form-buttons-holder" ng-class="{dirty: metadata.form.$dirty }">
-                                <button type="submit" class="btn btn-lg ng-isolate-scope" ng-disabled="metadata.form.$invalid" ng-class="{ 'btn-primary': metadata.form.$dirty }" ng-click="saveMetadata();$event.stopPropagation()" ng-i18next>Save</button>
+                                <button type="submit" class="btn btn-lg ng-isolate-scope" ng-disabled="isReadOnlyForUser || metadata.form.$invalid" ng-class="{ 'btn-primary': metadata.form.$dirty }" 
+                                        ng-click="saveMetadata();$event.stopPropagation()" ng-i18next>Save</button>
                                 <button type="button" class="btn btn-lg btn-link ng-isolate-scope" ng-click="cancelMetadata();$event.stopPropagation()" ng-i18next>Cancel</button>
                             </div>
                         </ng-form>
