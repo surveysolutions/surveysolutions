@@ -467,5 +467,54 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
             Assert.That(cascadingOption, Is.Not.Null);
             Assert.That(cascadingOption.Value, Is.EqualTo(4));
         }
+
+
+        [Test]
+        public void should_return_categories_options_respecting_translation_with_filter()
+        {
+            var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
+
+            var categoryId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            var options = Enumerable.Range(1, 100)
+                .Reverse()
+                .Select(answerCode => Create.Entity.CategoriesItem(answerCode.ToString(), answerCode))
+                .ToList();
+
+            var translationId = Guid.Parse("1AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
+            var translations = new List<TranslationDto>()
+            {
+                new TranslationDto()
+                {
+                    TranslationId = translationId,
+                    QuestionnaireEntityId = categoryId,
+                    TranslationIndex = 11.ToString(),
+                    Value = 11 + "b",
+                    Type = TranslationType.Categories
+                },
+                new TranslationDto()
+                {
+                    TranslationId = translationId,
+                    QuestionnaireEntityId = categoryId,
+                    TranslationIndex = 17.ToString(),
+                    Value = 17 + "a",
+                    Type = TranslationType.Categories
+                }
+            };
+
+            var storage = new OptionsRepository(new SqliteInmemoryStorage<OptionView, int?>());
+
+            storage.StoreOptionsForCategory(questionnaireIdentity, categoryId, options, translations);
+
+            var filteredQuestionOptions = storage.GetFilteredCategoriesOptions(questionnaireIdentity, categoryId, null, "1", translationId).ToList();
+
+            var actual = filteredQuestionOptions.Select(x => x.Value).ToList();
+            Assert.That(actual, Is.Not.Empty);
+            Assert.That(actual.Count, Is.EqualTo(20));
+            Assert.That(actual, Is.Ordered.Descending);
+            Assert.That(filteredQuestionOptions[18].Title, Is.EqualTo("10"));
+            Assert.That(filteredQuestionOptions[17].Title, Is.EqualTo("11b"));
+            Assert.That(filteredQuestionOptions[11].Title, Is.EqualTo("17a"));
+        }
     }
 }
