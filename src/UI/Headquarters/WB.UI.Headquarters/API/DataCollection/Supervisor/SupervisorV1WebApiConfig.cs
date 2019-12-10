@@ -6,6 +6,7 @@ using System.Web.Http;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
+using WB.UI.Headquarters.API.DataCollection.Enumerator.v1;
 using WB.UI.Headquarters.API.DataCollection.Supervisor.v1;
 
 namespace WB.UI.Headquarters.API.DataCollection.Supervisor

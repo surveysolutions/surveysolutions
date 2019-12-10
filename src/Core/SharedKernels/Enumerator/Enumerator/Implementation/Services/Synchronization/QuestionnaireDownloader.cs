@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -70,7 +71,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 }
 
                 var translationDtos = await this.synchronizationService.GetQuestionnaireTranslationAsync(questionnaireIdentity, cancellationToken);
+                this.logger.Trace($"Get translations for questionnaire {questionnaireIdentity}. {translationDtos.Count} records.");
+
                 var reusableCategories = await this.synchronizationService.GetQuestionnaireReusableCategoriesAsync(questionnaireIdentity, cancellationToken);
+                this.logger.Trace($"Get categories for questionnaire {questionnaireIdentity}. {reusableCategories.Count} categories with {reusableCategories.Sum(c => c.Options.Count)} sum of items.");
+
                 var questionnaireApiView = await this.synchronizationService.GetQuestionnaireAsync(questionnaireIdentity, transferProgress, cancellationToken);
 
                 this.questionnairesAccessor.StoreQuestionnaire(questionnaireIdentity,

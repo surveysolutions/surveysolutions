@@ -5,6 +5,7 @@ using System.Web.Http;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
+using WB.UI.Headquarters.API.DataCollection.Enumerator.v1;
 using WB.UI.Headquarters.API.DataCollection.Interviewer.v2;
 
 namespace WB.UI.Headquarters.API.DataCollection.Interviewer
@@ -34,7 +35,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
             config.TypedRoute("api/interviewer/v2/users/supervisor", c => c.Action<UsersApiV2Controller>(x => x.Supervisor()));
             config.TypedRoute("api/interviewer/v2/users/hasdevice", c => c.Action<UsersApiV2Controller>(x => x.HasDevice()));
             config.TypedRoute("api/interviewer/v2/translations/{id}", c => c.Action<TranslationsApiV2Controller>(x => x.Get(Param.Any<string>())));
-            config.TypedRoute("api/interviewer/v2/categories/{id}", c => c.Action<ReusableCategoriesApiV2Controller>(x => x.Get(Param.Any<string>())));
+            config.TypedRoute("api/interviewer/v2/categories/{id}", c => c.Action<ReusableCategoriesApiV1Controller>(x => x.Get(Param.Any<string>())));
             config.TypedRoute("api/interviewer/v2/companyLogo", c => c.Action<SettingsV2Controller>(x => x.CompanyLogo()));
             config.TypedRoute("api/interviewer/v2/tenantId", c => c.Action<SettingsV2Controller>(x => x.TenantId()));
             config.TypedRoute("api/interviewer/v2/autoupdate", c => c.Action<SettingsV2Controller>(x => x.AutoUpdateEnabled()));
