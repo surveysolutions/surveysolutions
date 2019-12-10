@@ -1074,13 +1074,6 @@
       <DependentUpon>Assignments.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Assignments.sq.resx" />
-    <EmbeddedResource Include="Resources\AuditLog.ar.resx">
-      <DependentUpon>AuditLog.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AuditLog.ro.resx">
-      <DependentUpon>AuditLog.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AuditLog.sq.resx" />
     <EmbeddedResource Include="Resources\Details.ar.resx">
       <DependentUpon>Details.resx</DependentUpon>
     </EmbeddedResource>
@@ -1113,15 +1106,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Assignments.es.resx">
       <DependentUpon>Assignments.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AuditLog.es.resx">
-      <DependentUpon>AuditLog.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AuditLog.fr.resx">
-      <DependentUpon>AuditLog.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AuditLog.zh.resx">
-      <DependentUpon>AuditLog.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Details.es.resx">
       <DependentUpon>Details.resx</DependentUpon>
@@ -1375,14 +1359,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Assignments.zh.resx">
       <DependentUpon>Assignments.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AuditLog.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>AuditLog.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AuditLog.ru.resx">
-      <DependentUpon>AuditLog.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Details.ka.resx">
       <DependentUpon>Details.resx</DependentUpon>
@@ -1832,7 +1808,6 @@
     <Content Include="Views\Reports\SurveysAndStatusesForSv.cshtml" />
     <Content Include="Views\Reports\TeamMembersAndStatuses.cshtml" />
     <Content Include="Views\TabletReport\PackagesInfo.cshtml" />
-    <Content Include="Views\Shared\_alerts.cshtml" />
     <Content Include="Views\Shared\_ControlPanelLayout.cshtml" />
     <Content Include="Views\Shared\_LayoutForErrorPage.cshtml" />
     <Content Include="Views\Shared\_LayoutWithoutSidebar.cshtml" />
@@ -1844,7 +1819,6 @@
     <Content Include="Views\Shared\EditorTemplates\Boolean.cshtml" />
     <Content Include="Scripts\moment.min.js.map" />
     <Content Include="Scripts\spin.min.js.map" />
-    <Content Include="Views\Shared\_MainLayout.cshtml" />
     <Content Include="Views\Template\Import.cshtml" />
     <Content Include="Views\Template\ImportMode.cshtml" />
     <Content Include="Views\SurveySetup\InterviewImportVerificationErrors.cshtml" />
@@ -1882,13 +1856,11 @@
     <Content Include="Views\Reports\InterviewersAndDevices.cshtml" />
     <Content Include="Views\Shared\Interviews\_InterviewStatusHistoryModal.cshtml" />
     <Content Include="Views\Reports\StatusDuration.cshtml" />
-    <Content Include="Views\Shared\_export-buttons.cshtml" />
     <Content Include="Views\Assignments\index.cshtml" />
     <Content Include="Views\Shared\ClientTimezoneOffset.cshtml" />
     <Content Include="Views\WebInterview\Index.cshtml" />
     <Content Include="Views\AuditLog\Index.cshtml" />
     <Content Include="Views\Interview\Review.cshtml" />
-    <Content Include="Views\Shared\_AdminLayout.cshtml" />
     <Content Include="Views\Shared\_MainLayoutHq.cshtml" />
     <Content Include="Views\Maps\Details.cshtml" />
     <Content Include="Views\Maps\MapPreview.cshtml" />
@@ -2308,7 +2280,6 @@
     <Compile Include="Models\ChangeStateHistoryViewModel.cs" />
     <Compile Include="Models\ChartDataModel.cs" />
     <Compile Include="Models\CloneQuestionnaireModel.cs" />
-    <Compile Include="Models\ComponentModels\ComboboxModel.cs" />
     <Compile Include="Models\ExportSettingsModel.cs" />
     <Compile Include="Models\DeleteQuestionnaireRequestModel.cs" />
     <Compile Include="Models\DocumentFilter.cs" />
@@ -2369,11 +2340,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Assignments.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources\AuditLog.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AuditLog.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\Details.Designer.cs">
       <DependentUpon>Details.resx</DependentUpon>
@@ -2504,6 +2470,7 @@
     <Folder Include="App_Data\Elmah\" />
     <Folder Include="Dependencies\dist\" />
     <Folder Include="Models\CompanyLogo\" />
+    <Folder Include="Models\ComponentModels\" />
     <Folder Include="Views\WebInterviewSetupApi\" />
   </ItemGroup>
   <ItemGroup>
