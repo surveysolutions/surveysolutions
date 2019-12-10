@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web.Http;
-using Resources;
+using Dropbox.Api.TeamLog;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -20,22 +20,14 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.UI.Headquarters.API;
-using WB.UI.Headquarters.Code;
-using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Models.Api;
-using WB.UI.Headquarters.Models.ComponentModels;
-using WB.UI.Shared.Web.Attributes;
-using WB.UI.Shared.Web.Filters;
 
-
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Api  
+namespace WB.UI.Headquarters.Controllers.Api  
 {
     [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
     [ApiNoCache]
-    public partial class ReportDataApiController : BaseApiController
+    public partial class ReportDataApiController : ControllerBase
     {
         const int MaxPageSize = 50000;
 
@@ -68,7 +60,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             IDeviceInterviewersReport deviceInterviewersReport,
             IExportFactory exportFactory,
             IFileSystemAccessor fileSystemAccessor)
-            : base(commandService, logger)
         {
             this.authorizedUser = authorizedUser;
             this.surveysAndStatusesReport = surveysAndStatusesReport;
@@ -85,8 +76,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         }
 
         [HttpGet]
-        [CamelCase]
-        public HttpResponseMessage SupervisorTeamMembersAndStatusesReport([FromUri]TeamsAndStatusesFilter filter, [FromUri]string exportType = null)
+        public IActionResult SupervisorTeamMembersAndStatusesReport([FromQuery]TeamsAndStatusesFilter filter, [FromQuery]string exportType = null)
         {
             var input = new TeamsAndStatusesInputModel
             {
@@ -105,11 +95,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
                 var report = this.teamsAndStatusesReport.GetReport(input);
 
-                return this.CreateReportResponse(exportType, report, Reports.Report_Team_Members_and_Statuses);
+                return this.CreateReportResponse(exportType, report, EventCategory.Reports.Report_Team_Members_and_Statuses);
             }
             
             var view = this.teamsAndStatusesReport.GetBySupervisorAndDependentInterviewers(input);
-            return this.Request.CreateResponse(new TeamsAndStatusesReportResponse
+            return new JsonResult(new TeamsAndStatusesReportResponse
             {
                 Draw = filter.Draw + 1,
                 RecordsTotal = view.TotalCount,
@@ -146,7 +136,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         }
 
         [HttpGet]
-        [CamelCase]
         public List<string> QuestionInfo(Guid id, long? version)
         {
             var variables = this.mapReport.GetGpsQuestionsByQuestionnaire(id, version);
@@ -154,7 +143,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         }
 
         [HttpGet]
-        public HttpResponseMessage QuantityByInterviewers([FromUri]QuantityByInterviewersReportModel data, [FromUri]string exportType = null)
+        public IActionResult QuantityByInterviewers([FromQuery]QuantityByInterviewersReportModel data, [FromQuery]string exportType = null)
         {
             var input = new QuantityByInterviewersReportInputModel
             {
@@ -179,14 +168,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
                 var report = this.quantityReport.GetReport(input);
 
-                return this.CreateReportResponse(exportType, report, Reports.Report_Number_of_Completed_Interviews);
+                return this.CreateReportResponse(exportType, report, EventCategory.Reports.Report_Number_of_Completed_Interviews);
             }
 
-            return this.Request.CreateResponse(this.quantityReport.Load(input));
+            return new JsonResult(this.quantityReport.Load(input));
         }
 
         [HttpGet]
-        public HttpResponseMessage QuantityBySupervisors([FromUri]QuantityBySupervisorsReportModel data, [FromUri]string exportType = null)
+        public IActionResult QuantityBySupervisors([FromQuery]QuantityBySupervisorsReportModel data, [FromQuery]string exportType = null)
         {
             var input = new QuantityBySupervisorsReportInputModel
             {
@@ -210,14 +199,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
                 var report = this.quantityReport.GetReport(input);
 
-                return this.CreateReportResponse(exportType, report, Reports.Report_Number_of_Completed_Interviews);
+                return this.CreateReportResponse(exportType, report, EventCategory.Reports.Report_Number_of_Completed_Interviews);
             }
 
-            return this.Request.CreateResponse(this.quantityReport.Load(input));
+            return new JsonResult(this.quantityReport.Load(input));
         }
 
         [HttpGet]
-        public HttpResponseMessage SpeedByInterviewers([FromUri]SpeedByInterviewersReportModel data, [FromUri]string exportType = null)
+        public IActionResult SpeedByInterviewers([FromQuery]SpeedByInterviewersReportModel data, [FromQuery]string exportType = null)
         {
             var input = new SpeedByInterviewersReportInputModel
             {
@@ -242,14 +231,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
                 var report = this.speedReport.GetReport(input);
 
-                return this.CreateReportResponse(exportType, report, Reports.Report_Average_Interview_Duration);
+                return this.CreateReportResponse(exportType, report, EventCategory.Reports.Report_Average_Interview_Duration);
             }
 
-            return this.Request.CreateResponse(this.speedReport.Load(input));
+            return new JsonResult(this.speedReport.Load(input));
         }
 
         [HttpGet]
-        public HttpResponseMessage SpeedBetweenStatusesBySupervisors([FromUri]SpeedBySupervisorsReportModel filter, [FromUri]string exportType = null)
+        public IActionResult SpeedBetweenStatusesBySupervisors([FromQuery]SpeedBySupervisorsReportModel filter, [FromQuery]string exportType = null)
         {
             var input = new SpeedBetweenStatusesBySupervisorsReportInputModel
             {
@@ -273,14 +262,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
                 var report = this.speedReport.GetReport(input);
 
-                return this.CreateReportResponse(exportType, report, Reports.Report_Speed_Between_Statuses_By_Supervisors);
+                return this.CreateReportResponse(exportType, report, EventCategory.Reports.Report_Speed_Between_Statuses_By_Supervisors);
             }
 
-            return this.Request.CreateResponse(this.speedReport.Load(input));
+            return new JsonResult(this.speedReport.Load(input));
         }
 
         [HttpGet]
-        public HttpResponseMessage SpeedBetweenStatusesByInterviewers([FromUri]SpeedByInterviewersReportModel filter, [FromUri]string exportType = null)
+        public IActionResult SpeedBetweenStatusesByInterviewers([FromQuery]SpeedByInterviewersReportModel filter, [FromQuery]string exportType = null)
         {
             var input = new SpeedBetweenStatusesByInterviewersReportInputModel
             {
@@ -305,14 +294,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
                 var report = this.speedReport.GetReport(input);
 
-                return this.CreateReportResponse(exportType, report, Reports.Report_Speed_Between_Statuses_By_Interviewers);
+                return this.CreateReportResponse(exportType, report, EventCategory.Reports.Report_Speed_Between_Statuses_By_Interviewers);
             }
 
-            return this.Request.CreateResponse(this.speedReport.Load(input));
+            return new JsonResult(this.speedReport.Load(input));
         }
 
         [HttpGet]
-        public HttpResponseMessage SpeedBySupervisors([FromUri]SpeedBySupervisorsReportModel data, [FromUri]string exportType = null)
+        public IActionResult SpeedBySupervisors([FromQuery]SpeedBySupervisorsReportModel data, [FromQuery]string exportType = null)
         {
             var input = new SpeedBySupervisorsReportInputModel
             {
@@ -336,15 +325,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
                 var report = this.speedReport.GetReport(input);
 
-                return this.CreateReportResponse(exportType, report, Reports.Report_Average_Interview_Duration);
+                return this.CreateReportResponse(exportType, report, EventCategory.Reports.Report_Average_Interview_Duration);
             }
 
-            return this.Request.CreateResponse(this.speedReport.Load(input));
+            return new JsonResult(this.speedReport.Load(input));
         }
 
         [HttpGet]
-        [CamelCase]
-        public HttpResponseMessage HeadquarterSupervisorsAndStatusesReport([FromUri]TeamsAndStatusesFilter filter, [FromUri]string exportType = null)
+        public IActionResult HeadquarterSupervisorsAndStatusesReport([FromQuery]TeamsAndStatusesFilter filter, [FromQuery]string exportType = null)
         {
 
             var input = new TeamsAndStatusesByHqInputModel
@@ -363,11 +351,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
                 var report = this.teamsAndStatusesReport.GetReport(input);
 
-                return this.CreateReportResponse(exportType, report, Reports.Report_Teams_and_Statuses);
+                return this.CreateReportResponse(exportType, report, EventCategory.Reports.Report_Teams_and_Statuses);
             }
 
             var view = this.teamsAndStatusesReport.GetBySupervisors(input);
-            return this.Request.CreateResponse(new TeamsAndStatusesReportResponse
+            return new JsonResult(new TeamsAndStatusesReportResponse
             {
                 Draw = filter.Draw + 1,
                 RecordsTotal = view.TotalCount,
@@ -378,8 +366,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         }
 
         [HttpGet]
-        [CamelCase]
-        public HttpResponseMessage SupervisorSurveysAndStatusesReport(Guid? id = null,[FromUri]SurveysAndStatusesFilter filter = null, [FromUri]string exportType = null)
+        public IActionResult SupervisorSurveysAndStatusesReport(Guid? id = null,[FromQuery]ReportDataApiController.SurveysAndStatusesFilter filter = null, [FromQuery]string exportType = null)
         {
             var teamLeadName = this.authorizedUser.UserName;
             var input = new SurveysAndStatusesReportInputModel
@@ -399,12 +386,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
                 var report = this.surveysAndStatusesReport.GetReport(input);
 
-                return this.CreateReportResponse(exportType, report, Reports.Report_Surveys_and_Statuses);
+                return this.CreateReportResponse(exportType, report, EventCategory.Reports.Report_Surveys_and_Statuses);
             }
             
             var view = this.surveysAndStatusesReport.Load(input);
 
-            return this.Request.CreateResponse(new SurveysAndStatusesDataTableResponse
+            return new JsonResult(new ReportDataApiController.SurveysAndStatusesDataTableResponse
             {
                 Draw = filter.Draw + 1,
                 RecordsTotal = view.TotalCount,
@@ -415,8 +402,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         }
 
         [HttpGet]
-        [CamelCase]
-        public HttpResponseMessage HeadquarterSurveysAndStatusesReport(Guid? id = null, [FromUri]SurveysAndStatusesFilter filter = null, [FromUri]string exportType = null)
+        public IActionResult HeadquarterSurveysAndStatusesReport(Guid? id = null, [FromQuery]ReportDataApiController.SurveysAndStatusesFilter filter = null, [FromQuery]string exportType = null)
         {
             var input = new SurveysAndStatusesReportInputModel
             {
@@ -434,12 +420,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
                 var report = this.surveysAndStatusesReport.GetReport(input);
 
-                return this.CreateReportResponse(exportType, report, Reports.Report_Surveys_and_Statuses);
+                return this.CreateReportResponse(exportType, report, EventCategory.Reports.Report_Surveys_and_Statuses);
             }
 
             var view = this.surveysAndStatusesReport.Load(input);
 
-            return this.Request.CreateResponse(new SurveysAndStatusesDataTableResponse
+            return new JsonResult(new ReportDataApiController.SurveysAndStatusesDataTableResponse
             {
                 Draw = filter.Draw + 1,
                 RecordsTotal = view.TotalCount,
@@ -452,9 +438,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
-        [CamelCase]
-        public async Task<HttpResponseMessage> DeviceInterviewers([FromUri]DeviceInterviewersFilter request, Guid? id = null, 
-            [FromUri]string exportType = null)
+        public async Task<IActionResult> DeviceInterviewers([FromQuery]ReportDataApiController.DeviceInterviewersFilter request, Guid? id = null, 
+            [FromQuery]string exportType = null)
         {
             var input = new DeviceByInterviewersReportInputModel
             {
@@ -472,12 +457,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
                 var report = await this.deviceInterviewersReport.GetReportAsync(input);
 
-                return this.CreateReportResponse(exportType, report, Reports.Report_Devices_and_Interviewers);
+                return this.CreateReportResponse(exportType, report, EventCategory.Reports.Report_Devices_and_Interviewers);
             }
 
             var data = await this.deviceInterviewersReport.LoadAsync(input);
 
-            return this.Request.CreateResponse(new DeviceInterviewersDataTableResponse
+            return new JsonResult(new ReportDataApiController.DeviceInterviewersDataTableResponse
             {
                 Draw = request.Draw + 1,
                 RecordsTotal = data.TotalCount,
@@ -504,8 +489,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
-        [CamelCase]
-        public async Task<HttpResponseMessage> StatusDuration([FromUri] StatusDurationRequest request, [FromUri] string exportType = null)
+        public async Task<IActionResult> StatusDuration([FromQuery] ReportDataApiController.StatusDurationRequest request, [FromQuery] string exportType = null)
         {
             var input = new StatusDurationInputModel
             {
@@ -520,12 +504,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             {
                 var report = await this.statusDurationReport.GetReportAsync(input);
 
-                return this.CreateReportResponse(exportType, report, Reports.Report_Status_Duration);
+                return this.CreateReportResponse(exportType, report, EventCategory.Reports.Report_Status_Duration);
             }
 
             var data = await this.statusDurationReport.LoadAsync(input);
 
-            return this.Request.CreateResponse(new StatusDurationDataTableResponse
+            return new JsonResult(new ReportDataApiController.StatusDurationDataTableResponse
             {
                 Draw = request.Draw + 1,
                 RecordsTotal = data.TotalCount,
@@ -538,8 +522,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpGet]
         [Authorize(Roles = "Supervisor")]
-        [CamelCase]
-        public async Task<HttpResponseMessage> TeamStatusDuration([FromUri] StatusDurationRequest request, [FromUri] string exportType = null)
+        public async Task<IActionResult> TeamStatusDuration([FromQuery] ReportDataApiController.StatusDurationRequest request, [FromQuery] string exportType = null)
         {
             var input = new StatusDurationInputModel
             {
@@ -554,12 +537,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             {
                 var report = await this.statusDurationReport.GetReportAsync(input);
 
-                return this.CreateReportResponse(exportType, report, Reports.Report_Status_Duration);
+                return this.CreateReportResponse(exportType, report, EventCategory.Reports.Report_Status_Duration);
             }
 
             var data = await this.statusDurationReport.LoadAsync(input);
 
-            return this.Request.CreateResponse(new StatusDurationDataTableResponse
+            return new JsonResult(new ReportDataApiController.StatusDurationDataTableResponse
             {
                 Draw = request.Draw + 1,
                 RecordsTotal = data.TotalCount,

@@ -705,36 +705,6 @@
     <Content Include="App_GlobalResources\QuestionnaireImport.zh.resx">
       <DependentUpon>QuestionnaireImport.resx</DependentUpon>
     </Content>
-    <Content Include="App_GlobalResources\Reports.ar.resx">
-      <DependentUpon>Reports.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Reports.es.resx">
-      <DependentUpon>Reports.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Reports.fr.resx">
-      <DependentUpon>Reports.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Reports.ka.resx">
-      <DependentUpon>Reports.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Reports.pt.resx">
-      <DependentUpon>Reports.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Reports.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <SubType>Designer</SubType>
-      <LastGenOutput>Reports.designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\Reports.ro.resx">
-      <DependentUpon>Reports.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Reports.ru.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>Reports.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Reports.zh.resx">
-      <DependentUpon>Reports.resx</DependentUpon>
-    </Content>
     <Content Include="App_GlobalResources\Settings.ar.resx">
       <DependentUpon>Settings.resx</DependentUpon>
     </Content>
@@ -908,10 +878,6 @@
     <Content Include="App_GlobalResources\QuestionnaireImport.sq.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>QuestionnaireImport.sq.designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\Reports.sq.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Reports.sq.designer.cs</LastGenOutput>
     </Content>
     <Content Include="App_GlobalResources\Settings.sq.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
@@ -1829,7 +1795,6 @@
     <Content Include="Views\Reports\MapReport.cshtml" />
     <Content Include="Views\HQ\SampleCreationResult.cshtml" />
     <Content Include="Views\Reports\TeamsAndStatuses.cshtml" />
-    <Content Include="Views\Reports\SurveysAndStatuses.cshtml" />
     <Content Include="Views\HQ\TakeNewAssignment.cshtml" />
     <Content Include="Views\ControlPanel\CreateHeadquarters.cshtml" />
     <Content Include="Views\ControlPanel\ResetPrivilegedUserPassword.cshtml" />
@@ -2033,11 +1998,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>QuestionnaireImport.sq.resx</DependentUpon>
     </Compile>
-    <Compile Include="App_GlobalResources\Reports.sq.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reports.sq.resx</DependentUpon>
-    </Compile>
     <Compile Include="App_GlobalResources\Settings.sq.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -2115,7 +2075,6 @@
     <Compile Include="API\PublicApi\Models\Statistics\QuestionDto.cs" />
     <Compile Include="API\PublicApi\Models\Statistics\SurveyStatisticsQuery.cs" />
     <Compile Include="API\UsersTypeaheadController.cs" />
-    <Compile Include="API\ReportDataApiController.Dto.cs" />
     <Compile Include="API\DataCollection\Supervisor\v1\SupervisorApiController.cs" />
     <Compile Include="API\DataCollection\Supervisor\v1\DevicesApiV1Controller.cs" />
     <Compile Include="API\DataCollection\Supervisor\v1\UsersApiController.cs" />
@@ -2158,11 +2117,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Maps.resx</DependentUpon>
     </Compile>
-    <Compile Include="App_GlobalResources\Reports.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reports.resx</DependentUpon>
-    </Compile>
     <Compile Include="App_Start\MainModule.cs" />
     <Compile Include="App_Start\AutofacConfig.cs" />
     <Compile Include="App_Start\RazorGeneratorMvcStart.cs" />
@@ -2196,7 +2150,6 @@
     <Compile Include="API\PublicApi\AssignmentsPublicApiMapProfile.cs" />
     <Compile Include="API\PublicApi\Models\InterviewerUserApiDetails.cs" />
     <Compile Include="API\PublicApi\QuestionnairesController.cs" />
-    <Compile Include="API\ReportDataApiController.cs" />
     <Compile Include="API\Resources\CompanyLogoController.cs" />
     <Compile Include="API\Resources\WebInterviewResourcesController.cs" />
     <Compile Include="API\PublicApi\UsersController.cs" />
@@ -2308,9 +2261,6 @@
     <Compile Include="Models\Maps\UserMapModel.cs" />
     <Compile Include="Models\Maps\UserMapLinkModel.cs" />
     <Compile Include="Models\Maps\MapDetailsModel.cs" />
-    <Compile Include="Models\Reports\StatusDurationModel.cs" />
-    <Compile Include="Models\Reports\DevicesInterviewersModel.cs" />
-    <Compile Include="Models\Reports\SurveysAndStatusesModel.cs" />
     <Compile Include="Models\TeamsAndStatusesModel.cs" />
     <Compile Include="Models\UpgradeAssignmentsModel.cs" />
     <Compile Include="Models\User\ResponsibleComboboxModel.cs" />
@@ -2330,10 +2280,7 @@
     <Compile Include="Models\Account\FinishIntallationModel.cs" />
     <Compile Include="Models\Account\IPasswordRequired.cs" />
     <Compile Include="Models\Account\UserModelBase.cs" />
-    <Compile Include="Models\Api\AssignmentProfile.cs" />
-    <Compile Include="Models\Api\TeamsAndStatusesReportResponse.cs" />
     <Compile Include="Models\InterviewerHqModel.cs" />
-    <Compile Include="Models\Reports\MapReportModel.cs" />
     <Compile Include="Models\VersionCheck\VersionCheckingInfo.cs" />
     <Compile Include="Filters\WebInterviewAuthorizeAttribute.cs" />
     <Compile Include="Filters\WebInterviewFeatureEnabledAttribute.cs" />
@@ -2348,17 +2295,11 @@
     <Compile Include="Filters\TypedDirectRouteProvider.cs" />
     <Compile Include="Models\AllQuestionnairesListViewModel.cs" />
     <Compile Include="API\PublicApi\Models\AssignChangeApiModel.cs" />
-    <Compile Include="Models\Api\BaseApiView.cs" />
-    <Compile Include="Models\Api\DataTableRequestModelWithFilter.cs" />
-    <Compile Include="Models\Api\DataTableResponseModel.cs" />
-    <Compile Include="Models\Api\DataTableRequestModel.cs" />
     <Compile Include="API\PublicApi\Models\InterviewApiDetails.cs" />
     <Compile Include="API\PublicApi\Models\InterviewApiItem.cs" />
     <Compile Include="API\PublicApi\Models\InterviewApiView.cs" />
-    <Compile Include="Models\Api\Interview\QuestionApiItem.cs" />
     <Compile Include="API\PublicApi\Models\QuestionnaireApiItem.cs" />
     <Compile Include="API\PublicApi\Models\QuestionnaireApiView.cs" />
-    <Compile Include="Models\Api\QuestionnaireToBeImported.cs" />
     <Compile Include="API\PublicApi\Models\UserApiDetails.cs" />
     <Compile Include="API\PublicApi\Models\UserApiItem.cs" />
     <Compile Include="API\PublicApi\Models\UserApiView.cs" />
@@ -2393,7 +2334,6 @@
     <Compile Include="Models\InterviewerModel.cs" />
     <Compile Include="Models\InterviewersFilter.cs" />
     <Compile Include="Models\InterviewersModel.cs" />
-    <Compile Include="Models\InterviewsStatisticsViewModel.cs" />
     <Compile Include="Models\InterviewSummaryViewModel.cs" />
     <Compile Include="Models\InverviewChangeStateHistoryView.cs" />
     <Compile Include="Models\JsonBaseResponse.cs" />
@@ -2404,11 +2344,6 @@
     <Compile Include="Models\PagingHelper.cs" />
     <Compile Include="Models\PreloadedDataConfirmationModel.cs" />
     <Compile Include="Models\PreloadedDataInterviewProgressModel.cs" />
-    <Compile Include="Models\QuantityByInterviewersReportModel.cs" />
-    <Compile Include="Models\QuantityBySupervisorsReportModel.cs" />
-    <Compile Include="Models\SpeedByInterviewersReportModel.cs" />
-    <Compile Include="Models\SpeedBySupervisorsReportModel.cs" />
-    <Compile Include="Models\TeamsAndStatusesFilter.cs" />
     <Compile Include="Models\TabletInfoReportListViewModel.cs" />
     <Compile Include="Models\Template\ImportQuestionnaireList.cs" />
     <Compile Include="Models\Template\QuestionnaireListItemModel.cs" />

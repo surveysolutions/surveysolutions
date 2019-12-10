@@ -1,6 +1,9 @@
-﻿@using Microsoft.Security.Application
+﻿@using System.Web
+@using Dropbox.Api.TeamLog
+@using Microsoft.Security.Application
 @using WB.Core.BoundedContexts.Headquarters.Resources
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
+@using WB.Core.SharedKernels.SurveyManagement.Web.Models
 @model WB.UI.Headquarters.Models.Reports.SurveysAndStatusesModel
 @{
     Layout = "~/Views/Shared/_MainLayout.cshtml";
@@ -150,7 +153,7 @@
                     <p>
                         @if (Model.QuestionnaireId.HasValue)
                         {
-                            @Html.ActionLink(Reports.ToAllQuestionnaires, "SurveysAndStatuses")
+                            @Html.ActionLink(EventCategory.Reports.ToAllQuestionnaires, "SurveysAndStatuses")
                         }
                     </p>
                 </div>
@@ -160,18 +163,18 @@
                         <thead>
                         <tr>
                             <th class="without-break changed-recently" data-class="without-break changed-recently" data-name="QuestionnaireTitle" data-data="questionnaireTitle">
-                                @Reports.SurveyName
+                                @EventCategory.Reports.SurveyName
                             </th>
                             @if (Model.QuestionnaireId.HasValue) {
-                                <th class="version" data-class="type-numeric version centered-italic" data-name="QuestionnaireVersion" data-data="questionnaireVersion" data-th="@Reports.TemplateVersion">@Reports.TemplateVersion</th>
+                                <th class="version" data-class="type-numeric version centered-italic" data-name="QuestionnaireVersion" data-data="questionnaireVersion" data-th="@EventCategory.Reports.TemplateVersion">@EventCategory.Reports.TemplateVersion</th>
                             }
-                            <th data-class="type-numeric" data-name="SupervisorAssignedCount" data-data="supervisorAssignedCount">@Reports.SupervisorAssigned</th>
-                            <th data-class="type-numeric" data-name="InterviewerAssignedCount" data-data="interviewerAssignedCount">@Reports.InterviewerAssigned</th>
-                            <th data-class="type-numeric" data-name="CompletedCount" data-data="completedCount">@Reports.Completed</th>
-                            <th data-class="type-numeric" data-name="RejectedBySupervisorCount" data-data="rejectedBySupervisorCount">@Reports.RejectedBySupervisor</th>
-                            <th data-class="type-numeric" data-name="ApprovedBySupervisorCount" data-data="approvedBySupervisorCount">@Reports.ApprovedBySupervisor</th>
-                            <th data-class="type-numeric" data-name="RejectedByHeadquartersCount" data-data="rejectedByHeadquartersCount">@Reports.RejectedByHQ</th>
-                            <th data-class="type-numeric" data-name="ApprovedByHeadquartersCount" data-data="approvedByHeadquartersCount">@Reports.ApprovedByHQ</th>
+                            <th data-class="type-numeric" data-name="SupervisorAssignedCount" data-data="supervisorAssignedCount">@EventCategory.Reports.SupervisorAssigned</th>
+                            <th data-class="type-numeric" data-name="InterviewerAssignedCount" data-data="interviewerAssignedCount">@EventCategory.Reports.InterviewerAssigned</th>
+                            <th data-class="type-numeric" data-name="CompletedCount" data-data="completedCount">@EventCategory.Reports.Completed</th>
+                            <th data-class="type-numeric" data-name="RejectedBySupervisorCount" data-data="rejectedBySupervisorCount">@EventCategory.Reports.RejectedBySupervisor</th>
+                            <th data-class="type-numeric" data-name="ApprovedBySupervisorCount" data-data="approvedBySupervisorCount">@EventCategory.Reports.ApprovedBySupervisor</th>
+                            <th data-class="type-numeric" data-name="RejectedByHeadquartersCount" data-data="rejectedByHeadquartersCount">@EventCategory.Reports.RejectedByHQ</th>
+                            <th data-class="type-numeric" data-name="ApprovedByHeadquartersCount" data-data="approvedByHeadquartersCount">@EventCategory.Reports.ApprovedByHQ</th>
                             <th data-class="type-numeric" data-name="TotalCount" data-data="totalCount">@Common.Total</th>
                         </tr>
                         </thead>
