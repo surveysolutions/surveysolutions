@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 
-namespace WB.UI.Headquarters.Services
+namespace WB.UI.Headquarters.Filters
 {
     public class ActivePageAttribute : ResultFilterAttribute
     {

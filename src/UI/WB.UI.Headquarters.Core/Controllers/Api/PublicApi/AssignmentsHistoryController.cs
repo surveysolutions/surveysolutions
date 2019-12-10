@@ -1,22 +1,15 @@
-﻿using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Web.Http;
-using System.Web.Http.Description;
-using Main.Core.Entities.SubEntities;
-using Swashbuckle.Swagger.Annotations;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.UI.Headquarters.Code;
-using WB.UI.Shared.Web.Attributes;
 
-namespace WB.UI.Headquarters.API.PublicApi
+namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 {
-    [RoutePrefix("api/v1/assignments")]
-    [CamelCase]
-    public class AssignmentsHistoryController: BaseApiServiceController
+    [Route("api/v1/assignments")]
+    public class AssignmentsHistoryController: ControllerBase
     {
         private readonly IAssignmentsService assignmentsService;
         private readonly IAuthorizedUser user;
@@ -26,9 +19,8 @@ namespace WB.UI.Headquarters.API.PublicApi
         public AssignmentsHistoryController(
             IAssignmentsService assignmentsService,
             IAuthorizedUser user,
-            ILogger logger, 
             IUserViewFactory userViewFactory, 
-            IAssignmentViewFactory viewFactory) : base(logger)
+            IAssignmentViewFactory viewFactory)
         {
             this.assignmentsService = assignmentsService;
             this.user = user;
@@ -49,24 +41,26 @@ namespace WB.UI.Headquarters.API.PublicApi
         [HttpGet]
         [SwaggerOperation(Tags = new[] { "Assignments" })]
         [Route("{id:int}/history")]
-        [ResponseType(typeof(AssignmentHistory))]
-        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Supervisor, UserRoles.Headquarter, UserRoles.Administrator, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
-        public async Task<HttpResponseMessage> History(int id, [FromUri]int start = 0, [FromUri]int length = 30)
+        [Authorize(Roles = "ApiUser, Supervisor, Headquarter, Administrator")]
+        public async Task<ActionResult<AssignmentHistory>> History(int id, [FromQuery]int start = 0, [FromQuery]int length = 30)
         {
             var assignment = this.assignmentsService.GetAssignment(id);
-            if (assignment == null) return Request.CreateResponse(HttpStatusCode.NotFound);
+            if (assignment == null)
+            {
+                return NotFound();
+            }
 
             if (this.user.IsSupervisor && assignment.ResponsibleId != this.user.Id)
             {
                 var responsible = this.userViewFactory.GetUser(assignment.ResponsibleId);
                 if (!responsible.IsInterviewer())
-                    return Request.CreateResponse(HttpStatusCode.Forbidden);
+                    return Forbid();
                 if(responsible.Supervisor.Id != this.user.Id)
-                    return Request.CreateResponse(HttpStatusCode.Forbidden);
+                    return Forbid();
             }
 
             AssignmentHistory result = await this.viewFactory.LoadHistoryAsync(assignment.PublicKey, start, length);
-            return Request.CreateResponse(result);
+            return result;
         }
     }
 }

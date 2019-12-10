@@ -1924,7 +1924,6 @@
     <Compile Include="API\DataCollection\Enumerator\EnumeratorWebApiConfig.cs" />
     <Compile Include="API\DataCollection\Enumerator\LogsApiController.cs" />
     <Compile Include="API\Export\UserExportApiController.cs" />
-    <Compile Include="API\PublicApi\AssignmentsHistoryController.cs" />
     <Compile Include="App_GlobalResources\BatchUpload.sq.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1986,7 +1985,6 @@
     <Compile Include="Controllers\DiagnosticsController.cs" />
     <Compile Include="API\WebInterview\Pipeline\WebInterviewDataAuthorizeAttribute.cs" />
     <Compile Include="Controllers\InterviewsController.cs" />
-    <Compile Include="API\PublicApi\Models\AuditLogApiView.cs" />
     <Compile Include="Controllers\QuestionnairesController.cs" />
     <Compile Include="Models\QuestionnaireDetailsModel.cs" />
     <Compile Include="Resources\Questionnaire.Designer.cs">
@@ -2030,22 +2028,6 @@
     <Compile Include="API\DataCollection\Interviewer\InterviewerV2WebApiConfig.cs" />
     <Compile Include="API\DataCollection\Interviewer\v2\MapsApiV2Controller.cs" />
     <Compile Include="API\DataCollection\Interviewer\v3\InterviewsApiV3Controller.cs" />
-    <Compile Include="API\PublicApi\AssignmentsController.cs" />
-    <Compile Include="API\PublicApi\Models\AssignmentQuantitySettings.cs" />
-    <Compile Include="API\PublicApi\Models\AssignmentAudioRecordingEnabled.cs" />
-    <Compile Include="API\PublicApi\Models\GlobalNoticeApiView.cs" />
-    <Compile Include="API\PublicApi\Models\QuestionApiView.cs" />
-    <Compile Include="API\PublicApi\Models\InterviewApiStatistics.cs" />
-    <Compile Include="API\PublicApi\Models\QuestionAnswerView.cs" />
-    <Compile Include="API\PublicApi\Models\RecordAudioRequest.cs" />
-    <Compile Include="API\PublicApi\Models\SetGlobalNoticeApiModel.cs" />
-    <Compile Include="API\PublicApi\Models\TypeaheadApiView.cs" />
-    <Compile Include="API\PublicApi\Models\UpdateRecordingRequest.cs" />
-    <Compile Include="API\PublicApi\SettingsController.cs" />
-    <Compile Include="API\PublicApi\StatisticsController.cs" />
-    <Compile Include="API\PublicApi\Models\Statistics\QuestionnaireDto.cs" />
-    <Compile Include="API\PublicApi\Models\Statistics\QuestionDto.cs" />
-    <Compile Include="API\PublicApi\Models\Statistics\SurveyStatisticsQuery.cs" />
     <Compile Include="API\UsersTypeaheadController.cs" />
     <Compile Include="API\DataCollection\Supervisor\v1\SupervisorApiController.cs" />
     <Compile Include="API\DataCollection\Supervisor\v1\DevicesApiV1Controller.cs" />
@@ -2094,9 +2076,6 @@
     <Compile Include="App_Start\RazorGeneratorMvcStart.cs" />
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="Code\AutoMapperResolutionContextExtensions.cs" />
-    <Compile Include="API\PublicApi\BaseApiServiceController.cs" />
-    <Compile Include="API\PublicApi\IncludeOnlyPublicApiDocumentFilter.cs" />
-    <Compile Include="API\PublicApi\ExportController.cs" />
     <Compile Include="API\ClientApkInfo.cs" />
     <Compile Include="API\DataCollection\Interviewer\v2\SettingsV2Controller.cs" />
     <Compile Include="API\DataCollection\Interviewer\v2\TranslationsApiV2Controller.cs" />
@@ -2116,15 +2095,9 @@
     <Compile Include="API\DataCollection\Interviewer\v2\InterviewsApiV2Controller.cs" />
     <Compile Include="API\DataCollection\Interviewer\v2\QuestionnairesApiV2Controller.cs" />
     <Compile Include="API\DataCollection\Interviewer\v2\UsersApiV2Controller.cs" />
-    <Compile Include="API\PublicApi\InterviewsController.cs" />
     <Compile Include="API\ProgressiveDownloadResult.cs" />
-    <Compile Include="API\PublicApi\Models\Assignments.cs" />
-    <Compile Include="API\PublicApi\AssignmentsPublicApiMapProfile.cs" />
-    <Compile Include="API\PublicApi\Models\InterviewerUserApiDetails.cs" />
-    <Compile Include="API\PublicApi\QuestionnairesController.cs" />
     <Compile Include="API\Resources\CompanyLogoController.cs" />
     <Compile Include="API\Resources\WebInterviewResourcesController.cs" />
-    <Compile Include="API\PublicApi\UsersController.cs" />
     <Compile Include="App_GlobalResources\BatchUpload.Designer.cs">
       <DependentUpon>BatchUpload.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -2170,12 +2143,6 @@
     <Compile Include="App_Start\UserPreloadingConfigurationSection.cs" />
     <Compile Include="Code\ApiBasicAuthAttribute.cs" />
     <Compile Include="Code\AppSettings.cs" />
-    <Compile Include="Code\CommandDeserialization\SurveyManagementCommandDeserializer.cs" />
-    <Compile Include="Code\CommandTransformation\CommandTransformator.cs" />
-    <Compile Include="Code\CommandTransformation\CreateInterviewControllerCommand.cs" />
-    <Compile Include="Code\CommandTransformation\ICommandTransformator.cs" />
-    <Compile Include="Code\CommandTransformation\IntreviewCommand.cs" />
-    <Compile Include="Code\CommandTransformation\UntypedQuestionAnswer.cs" />
     <Compile Include="Code\AuthorizeOr403Attribute.cs" />
     <Compile Include="Code\EnumToStringConverter.cs" />
     <Compile Include="Code\HtmlEncodeStringPropertiesConverter.cs" />
@@ -2266,15 +2233,6 @@
     <Compile Include="Filters\TokenValidationAuthorizationAttribute.cs" />
     <Compile Include="Filters\TypedDirectRouteProvider.cs" />
     <Compile Include="Models\AllQuestionnairesListViewModel.cs" />
-    <Compile Include="API\PublicApi\Models\AssignChangeApiModel.cs" />
-    <Compile Include="API\PublicApi\Models\InterviewApiDetails.cs" />
-    <Compile Include="API\PublicApi\Models\InterviewApiItem.cs" />
-    <Compile Include="API\PublicApi\Models\InterviewApiView.cs" />
-    <Compile Include="API\PublicApi\Models\QuestionnaireApiItem.cs" />
-    <Compile Include="API\PublicApi\Models\QuestionnaireApiView.cs" />
-    <Compile Include="API\PublicApi\Models\UserApiDetails.cs" />
-    <Compile Include="API\PublicApi\Models\UserApiItem.cs" />
-    <Compile Include="API\PublicApi\Models\UserApiView.cs" />
     <Compile Include="Models\BatchUploadModel.cs" />
     <Compile Include="Models\ChangeSettingsModel.cs" />
     <Compile Include="Models\ChangeStateHistoryViewModel.cs" />
