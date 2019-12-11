@@ -510,7 +510,9 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     {
                         case QuestionType.SingleOption:
                         case QuestionType.MultyOption:
-                            return question.IsFilteredCombobox == true || question.CascadeFromQuestionId != null;
+                            return question.IsFilteredCombobox == true 
+                                   || question.CascadeFromQuestionId != null 
+                                   || (question as MultyOptionsQuestion)?.YesNoView == true;
                         default: return true;
                     }
                 return true;

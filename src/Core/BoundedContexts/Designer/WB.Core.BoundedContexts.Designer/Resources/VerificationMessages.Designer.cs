@@ -1970,7 +1970,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Matrix roster allows to use only categorical non combobox or cascading questions..
+        ///   Looks up a localized string similar to Matrix roster allows to use only simple categorical questions: combobox, cascading or yes/no modes are not allowed..
         /// </summary>
         public static string WB0289_MatrixRosterContainsOnlyAllowedQuestionTypes {
             get {
