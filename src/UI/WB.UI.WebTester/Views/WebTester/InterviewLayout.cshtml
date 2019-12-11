@@ -10,13 +10,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@Model.Title</title>
-    
-    <!-- css_markup:css -->
-    <link rel='stylesheet' async href='@Url.Content(@"~/Content/Build/markup.css")' >
-    <!-- endinject -->
-    <!-- css_markupWebInterview:css -->
-    <link rel='stylesheet' async href='@Url.Content(@"~/Content/Build/markup-web-interview.css")' >
-    <!-- endinject -->
+
+    <inject component="markup" type="css"></inject>
+    <inject component="markup-web-interview" type="css"></inject>
 </head>
 <body class="gray-background">
     <script>
