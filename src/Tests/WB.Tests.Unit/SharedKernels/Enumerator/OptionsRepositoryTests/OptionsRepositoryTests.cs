@@ -71,7 +71,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
                     QuestionnaireEntityId = questionId,
                     TranslationIndex = "1$",
                     Value = optionTranslationValue,
-                    Type = TranslationType.Categories
+                    Type = TranslationType.OptionTitle
                 }
             };
 
@@ -488,7 +488,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
                 {
                     TranslationId = translationId,
                     QuestionnaireEntityId = categoryId,
-                    TranslationIndex = 11.ToString(),
+                    TranslationIndex = $"11$",
                     Value = 11 + "b",
                     Type = TranslationType.Categories
                 },
@@ -496,7 +496,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
                 {
                     TranslationId = translationId,
                     QuestionnaireEntityId = categoryId,
-                    TranslationIndex = 17.ToString(),
+                    TranslationIndex = $"17$",
                     Value = 17 + "a",
                     Type = TranslationType.Categories
                 }
