@@ -47,12 +47,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                                 .ToArray();
                         }
 
-                        getCategoricalOptionText = (option) => questionnaire.GetAnswerOptionTitle(questionId, option);
+                        getCategoricalOptionText = (option) => questionnaire.GetAnswerOptionTitle(questionId, option, null);
                         break;
 
                     case QuestionType.SingleOption:
                         answer = System.Convert.ToDecimal(answer, CultureInfo.InvariantCulture);
-                        getCategoricalOptionText = (option) => questionnaire.GetAnswerOptionTitle(questionId, option);
+                        getCategoricalOptionText = (option) => questionnaire.GetAnswerOptionTitle(questionId, option, null);
                         break;
 
                     case QuestionType.Numeric:

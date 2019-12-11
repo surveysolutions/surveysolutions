@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         CategoricalOption GetQuestionOption(QuestionnaireIdentity questionnaireId, Guid questionId, string optionText, int? parentQuestionValue, Guid? translationId);
 
         CategoricalOption GetQuestionOptionByValue(QuestionnaireIdentity questionnaireId, Guid questionId, 
-            decimal optionValue, Guid? translationId);
+            decimal optionValue, int? parentValue, Guid? translationId);
 
         CategoricalOption[] GetOptionsByValues(QuestionnaireIdentity questionnaireId, Guid questionId, int[] optionValues, Guid? translationId);
 
@@ -36,7 +36,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
 
         CategoricalOption[] GetReusableCategoriesById(QuestionnaireIdentity questionnaireIdentity, Guid categoryId);
         CategoricalOption GetCategoryOption(QuestionnaireIdentity questionnaireIdentity, Guid categoryId, string optionText, int? parentQuestionValue, Guid? translationId);
-        CategoricalOption GetCategoryOptionByValue(QuestionnaireIdentity questionnaireIdentity, Guid categoryId, decimal optionValue, Guid? translationId);
+        CategoricalOption GetCategoryOptionByValue(QuestionnaireIdentity questionnaireIdentity, Guid categoryId, decimal optionValue, int? parentQuestionValue, Guid? translationId);
         CategoricalOption[] GetCategoryOptionsByValues(QuestionnaireIdentity questionnaireIdentity, Guid categoryId, int[] optionsValues, Guid? translationId);
     }
 }
