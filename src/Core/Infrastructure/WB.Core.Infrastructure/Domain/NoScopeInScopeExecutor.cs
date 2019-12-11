@@ -1,38 +1,36 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Autofac;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Enumerator.Native.WebInterview;
 
-namespace WB.UI.WebTester.Infrastructure
+namespace WB.Core.Infrastructure.Domain
 {
     public class NoScopeInScopeExecutor : IInScopeExecutor
     {
-        private readonly ILifetimeScope lifetimeScope;
+        private readonly IServiceLocator lifetimeScope;
 
-        public NoScopeInScopeExecutor(ILifetimeScope rootScope)
+        public NoScopeInScopeExecutor(IServiceLocator rootScope)
         {
             lifetimeScope = rootScope;
         }
 
         public void Execute(Action<IServiceLocator> action)
         {
-            action(lifetimeScope.Resolve<IServiceLocator>());
+            action(lifetimeScope);
         }
 
         public T Execute<T>(Func<IServiceLocator, T> func)
         {
-            return func(lifetimeScope.Resolve<IServiceLocator>());
+            return func(lifetimeScope);
         }
 
         public Task<T> ExecuteAsync<T>(Func<IServiceLocator, Task<T>> func)
         {
-            return func(lifetimeScope.Resolve<IServiceLocator>());
+            return func(lifetimeScope);
         }
 
         public Task ExecuteAsync(Func<IServiceLocator, Task> func)
         {
-            return func(lifetimeScope.Resolve<IServiceLocator>());
+            return func(lifetimeScope);
         }
     }
 }
