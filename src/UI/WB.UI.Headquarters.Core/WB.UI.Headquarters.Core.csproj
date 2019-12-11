@@ -2,9 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <UserSecretsId>aspnet-WB.UI.Headquarters.Core-27A6C9E8-7D91-4D6F-8A7E-6A5EF835A29B</UserSecretsId>
     <RootNamespace>WB.UI.Headquarters</RootNamespace>
     <AssemblyName>WB.UI.Headquarters</AssemblyName>
+    <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -156,9 +158,9 @@
     <EmbeddedResource Update="Resources\AuditLog.zh.resx">
       <DependentUpon>AuditLog.resx</DependentUpon>
     </EmbeddedResource>
-      <EmbeddedResource Update="Resources\AuditLog.sq.resx">
-          <DependentUpon>AuditLog.resx</DependentUpon>
-      </EmbeddedResource>
+    <EmbeddedResource Update="Resources\AuditLog.sq.resx">
+      <DependentUpon>AuditLog.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Common.es.resx">
       <DependentUpon>Common.resx</DependentUpon>
     </EmbeddedResource>
@@ -189,9 +191,9 @@
     <EmbeddedResource Update="Resources\DataTables.ar.resx">
       <DependentUpon>DataTables.resx</DependentUpon>
     </EmbeddedResource>
-      <EmbeddedResource Update="Resources\DataTables.sq.resx">
-          <DependentUpon>DataTables.resx</DependentUpon>
-      </EmbeddedResource>
+    <EmbeddedResource Update="Resources\DataTables.sq.resx">
+      <DependentUpon>DataTables.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\DataTables.es.resx">
       <DependentUpon>DataTables.resx</DependentUpon>
     </EmbeddedResource>
@@ -315,54 +317,55 @@
     <EmbeddedResource Update="Resources\Common.sq.resx">
       <DependentUpon>Common.resx</DependentUpon>
     </EmbeddedResource>
-      <EmbeddedResource Update="Resources\FieldsAndValidations.sq.resx">
-          <DependentUpon>FieldsAndValidations.resx</DependentUpon>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Reports.ar.resx">
-        <DependentUpon>Reports.resx</DependentUpon>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Reports.es.resx">
-        <DependentUpon>Reports.resx</DependentUpon>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Reports.fr.resx">
-        <DependentUpon>Reports.resx</DependentUpon>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Reports.ka.resx">
-        <DependentUpon>Reports.resx</DependentUpon>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Reports.pt.resx">
-        <DependentUpon>Reports.resx</DependentUpon>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Reports.resx">
-        <SubType>Designer</SubType>
-        <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>Reports.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Reports.ro.resx">
-        <DependentUpon>Reports.resx</DependentUpon>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Reports.ru.resx">
-        <SubType>Designer</SubType>
-        <DependentUpon>Reports.resx</DependentUpon>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Reports.sq.resx">
-        <DependentUpon>Reports.resx</DependentUpon>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Reports.zh.resx">
-        <DependentUpon>Reports.resx</DependentUpon>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\TabletLogs.resx">
-        <SubType>Designer</SubType>
-        <LastGenOutput>TabletLogs.Designer.cs</LastGenOutput>
-        <Generator>PublicResXFileCodeGenerator</Generator>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\TabletLogs.ru.resx">
-          <DependentUpon>TabletLogs.resx</DependentUpon>
-      </EmbeddedResource>
+    <EmbeddedResource Update="Resources\FieldsAndValidations.sq.resx">
+      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Reports.ar.resx">
+      <DependentUpon>Reports.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Reports.es.resx">
+      <DependentUpon>Reports.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Reports.fr.resx">
+      <DependentUpon>Reports.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Reports.ka.resx">
+      <DependentUpon>Reports.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Reports.pt.resx">
+      <DependentUpon>Reports.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Reports.resx">
+      <SubType>Designer</SubType>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Reports.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Reports.ro.resx">
+      <DependentUpon>Reports.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Reports.ru.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Reports.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Reports.sq.resx">
+      <DependentUpon>Reports.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Reports.zh.resx">
+      <DependentUpon>Reports.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\TabletLogs.resx">
+      <SubType>Designer</SubType>
+      <LastGenOutput>TabletLogs.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\TabletLogs.ru.resx">
+      <DependentUpon>TabletLogs.resx</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
 
 
   <ItemGroup>
     <Folder Include="Pages\" />
+    <Folder Include="wwwroot\apidocs\" />
   </ItemGroup>
 </Project>

@@ -82,6 +82,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <param name="version">Questionnaire version</param>
         /// <returns>List of questions</returns>
         [Route(@"questions")]
+        [HttpGet]
         public List<QuestionDto> GetQuestions(string questionnaireId, long? version = null)
         {
             var questionsList = this.interviewReportDataRepository
@@ -141,6 +142,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         }
 
         [Route(@"questionnaires")]
+        [HttpGet]
         public List<QuestionnaireDto> GetQuestionnairesList()
         {
             var allQuestionnaires = this.questionnaireBrowseViewFactory.Load(new QuestionnaireBrowseInputModel());
