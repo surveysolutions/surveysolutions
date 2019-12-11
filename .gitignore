@@ -108,3 +108,9 @@ src/UI/WB.UI.Designer/wwwroot
 /src/UI/WebTester/Content/
 /src/UI/WebTester/Content/Dist
 /src/UI/WebTester/Views/Shared/partial.webtester.cshtml
+/src/UI/WB.UI.Frontend/dist
+/src/UI/WB.UI.Frontend/locale
+/src/UI/WB.UI.Headquarters.Core/wwwroot/static/
+/src/UI/WB.UI.Frontend/styles/build/
+/src/UI/WB.UI.Frontend/styles/dist/
+/src/UI/WB.UI.Headquarters.Core/wwwroot/lib/
