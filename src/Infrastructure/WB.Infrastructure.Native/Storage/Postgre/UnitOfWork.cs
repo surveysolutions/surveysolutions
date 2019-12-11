@@ -33,7 +33,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         {
             if (isDisposed) throw new ObjectDisposedException(nameof(UnitOfWork));
             this.session?.Flush();
-            transaction?.Commit();
+
+            if(transaction?.IsActive == true)
+                transaction.Commit();
         }
 
         public ISession Session

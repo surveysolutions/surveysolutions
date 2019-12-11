@@ -39,7 +39,6 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
-using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
@@ -93,7 +92,10 @@ using WB.Core.BoundedContexts.Headquarters.Designer;
 using WB.Core.BoundedContexts.Headquarters.ReusableCategories;
 using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Questionnaire.Impl;
+using WB.Core.BoundedContexts.Headquarters.Implementation;
+using WB.Core.Infrastructure.Domain;
 using WB.Infrastructure.Native.Storage.Postgre;
+using ExportSettings = WB.Core.BoundedContexts.Headquarters.DataExport.ExportSettings;
 
 namespace WB.Core.BoundedContexts.Headquarters
 {   
@@ -326,6 +328,7 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.Bind<IDesignerApiFactory, DesignerApiFactory>();
             registry.BindToMethod(ctx => ctx.Resolve<IDesignerApiFactory>().Get());
+            registry.Bind<IInScopeExecutor, UnitOfWorkInScopeExecutor>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
