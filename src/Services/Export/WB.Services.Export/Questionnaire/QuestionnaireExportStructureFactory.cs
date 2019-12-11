@@ -534,7 +534,9 @@ namespace WB.Services.Export.Questionnaire
             QuestionnaireDocument questionnaire)
         {
             var typedQuestion = question as MultyOptionsQuestion;
-            var columnCount = typedQuestion?.IsFilteredCombobox ?? false ? Constants.MaxLongRosterRowCount : question.Answers.Count;
+            var columnCount = typedQuestion?.IsFilteredCombobox ?? false
+                ? (typedQuestion.MaxAllowedAnswers ?? Constants.MaxLongRosterRowCount)
+                : question.Answers.Count;
 
             headerItems.Add(question.PublicKey,
                 this.CreateExportedQuestionHeaderForMultiColumnItem(question, columnCount,
