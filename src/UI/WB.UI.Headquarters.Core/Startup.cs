@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Reflection;
 using Autofac;
 using Microsoft.AspNetCore.Builder;
@@ -9,6 +11,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
@@ -68,7 +71,7 @@ namespace WB.UI.Headquarters
             };
 
             builder.RegisterAssemblyTypes(typeof(Startup).Assembly)
-                .Where(x => x.Namespace.Contains("Services.Impl"))
+                .Where(x => x?.Namespace?.Contains("Services.Impl") == true)
                 .AsImplementedInterfaces();
 
             autofacKernel.Load(
@@ -115,6 +118,18 @@ namespace WB.UI.Headquarters
             services.AddTransient<ICaptchaProvider, NoCaptchaProvider>();
             services.AddTransient<IAuthorizedUser, AuthorizedUser>();
 
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "Survey Solutions API",
+                    Version = "v1"
+                });
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });
+
             // configuration
             services.Configure<GoogleMapsConfig>(this.Configuration.GetSection("GoogleMap"));
         }
@@ -139,6 +154,13 @@ namespace WB.UI.Headquarters
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Survey Solutions API V1");
+                c.RoutePrefix = string.Empty;
+            });
 
             app.UseRequestLocalization(opt =>
             {

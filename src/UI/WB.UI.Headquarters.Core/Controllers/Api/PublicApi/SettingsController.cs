@@ -29,6 +29,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// Set global notice for the headquarters application
         /// </summary>
         [Route("globalnotice")]
+        [HttpPut]
         [SwaggerResponse(204, "Global notice set")]
         [SwaggerResponse(400, "Message text missing")]
         public ActionResult PutGlobalNotice([FromBody]SetGlobalNoticeApiModel request)
@@ -45,6 +46,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// </summary>
         [Route("globalnotice")]
         [SwaggerResponse(204, "Global notice removed")]
+        [HttpDelete]
         public ActionResult DeleteGlobalNotice()
         {
             this.appSettingsStorage.Remove(AppSetting.GlobalNoticeKey);
@@ -55,6 +57,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// Get global notice for the headquarters application
         /// </summary>
         [Route("globalnotice")]
+        [HttpGet]
         [SwaggerResponse(200, "Gets current global notice for the headquarters application", typeof(GlobalNoticeApiView))]
         public ActionResult<GlobalNoticeApiView> GetGlobalNotice()
         {

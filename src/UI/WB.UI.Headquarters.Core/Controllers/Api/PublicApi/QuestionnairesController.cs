@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -28,8 +27,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private readonly ISerializer serializer;
         protected readonly IQuestionnaireStorage questionnaireStorage;
 
-        public QuestionnairesController(ILogger<QuestionnairesController> logger,
-            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
+        public QuestionnairesController(IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IAllInterviewsFactory allInterviewsViewFactory,
             ISerializer serializer,
             IQuestionnaireStorage questionnaireStorage, 
@@ -52,7 +50,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Authorize(Roles = "ApiUser, Administrator")]
         public QuestionnaireApiView Questionnaires(int limit = 10, int offset = 1)
         {
-            var input = new QuestionnaireBrowseInputModel()
+            var input = new QuestionnaireBrowseInputModel
             {
                 Page = offset.CheckAndRestrictOffset(),
                 PageSize = limit.CheckAndRestrictLimit(),
