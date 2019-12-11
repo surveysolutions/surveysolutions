@@ -17,6 +17,7 @@ using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Logging;
+using WB.UI.Shared.Web;
 using WB.UI.Shared.Web.Controllers;
 using WB.UI.Shared.Web.Versions;
 using WB.UI.WebTester.Infrastructure;
@@ -55,6 +56,8 @@ namespace WB.UI.WebTester
 
             services.AddHealthChecks()
                 .AddCheck<DesignerConnectionCheck>("designer-connection");
+
+            services.UseSharedWeb();
         }
 
         // ConfigureContainer is where you can register things directly
