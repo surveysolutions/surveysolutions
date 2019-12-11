@@ -1,24 +1,22 @@
 ﻿using System;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-using Main.Core.Entities.SubEntities;
-using Swashbuckle.Swagger.Annotations;
+using System.ComponentModel;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.UI.Headquarters.API.PublicApi.Models;
-using WB.UI.Headquarters.Code;
 
-namespace WB.UI.Headquarters.API.PublicApi
+namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 {
     /// <summary>
     /// Provides a methods for managing settings
     /// </summary>
-    [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true)]
-    [RoutePrefix(@"api/v1/settings")]
-    [SwaggerResponseRemoveDefaults]
-    public class SettingsController : ApiController
+    [Authorize(Roles = "ApiUser, Administrator")]
+    [Route(@"api/v1/settings")]
+    [Localizable(false)]
+    public class SettingsController : ControllerBase
     {
         private readonly IPlainKeyValueStorage<GlobalNotice> appSettingsStorage;
 
@@ -33,12 +31,13 @@ namespace WB.UI.Headquarters.API.PublicApi
         [Route("globalnotice")]
         [SwaggerResponse(204, "Global notice set")]
         [SwaggerResponse(400, "Message text missing")]
-        public HttpResponseMessage PutGlobalNotice([FromBody]SetGlobalNoticeApiModel request)
+        public ActionResult PutGlobalNotice([FromBody]SetGlobalNoticeApiModel request)
         {
-            if (string.IsNullOrEmpty(request?.Message)) return Request.CreateResponse(HttpStatusCode.BadRequest);
+            if (string.IsNullOrEmpty(request?.Message))
+                return BadRequest();
 
             this.appSettingsStorage.Store(new GlobalNotice { Message = request.Message }, AppSetting.GlobalNoticeKey);
-            return Request.CreateResponse(HttpStatusCode.NoContent);
+            return NoContent();
         }
 
         /// <summary>
@@ -46,10 +45,10 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// </summary>
         [Route("globalnotice")]
         [SwaggerResponse(204, "Global notice removed")]
-        public HttpResponseMessage DeleteGlobalNotice()
+        public ActionResult DeleteGlobalNotice()
         {
             this.appSettingsStorage.Remove(AppSetting.GlobalNoticeKey);
-            return Request.CreateResponse(HttpStatusCode.NoContent);
+            return NoContent();
         }
 
         /// <summary>
@@ -57,15 +56,14 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// </summary>
         [Route("globalnotice")]
         [SwaggerResponse(200, "Gets current global notice for the headquarters application", typeof(GlobalNoticeApiView))]
-        public HttpResponseMessage GetGlobalNotice()
+        public ActionResult<GlobalNoticeApiView> GetGlobalNotice()
         {
             var globalNotice = this.appSettingsStorage.GetById(AppSetting.GlobalNoticeKey) ?? new GlobalNotice();
 
-            return Request.CreateResponse(HttpStatusCode.OK,
-                new GlobalNoticeApiView
-                {
-                    Message = globalNotice.Message
-                });
+            return new GlobalNoticeApiView
+            {
+                Message = globalNotice.Message
+            };
         }
     }
 }

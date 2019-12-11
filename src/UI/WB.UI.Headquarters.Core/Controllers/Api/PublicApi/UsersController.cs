@@ -1,35 +1,28 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Web.Http;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using WB.Core.BoundedContexts.Headquarters.Users;
+using WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAuditLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Headquarters.API.PublicApi.Models;
-using WB.UI.Headquarters.Code;
-using WB.UI.Shared.Web.Extensions;
 
-namespace WB.UI.Headquarters.API.PublicApi
+namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 {
-    [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true)]
-    [RoutePrefix("api/v1")]
-    public class UsersController : BaseApiServiceController
+    [Authorize(Roles = "ApiUser, Administrator")]
+    [Route("api/v1")]
+    public class UsersController : ControllerBase
     {
         private readonly IUserViewFactory usersFactory;
-        private readonly HqUserManager userManager;
+        private readonly IUserArchiveService userManager;
         private readonly IAuditLogService auditLogService;
 
-        public UsersController(ILogger logger,
-            IUserViewFactory usersFactory,
-            HqUserManager userManager,
+        public UsersController(IUserViewFactory usersFactory,
+            IUserArchiveService userManager,
             IAuditLogService auditLogService)
-            : base(logger)
         {
             this.usersFactory = usersFactory;
             this.userManager = userManager;
@@ -64,13 +57,13 @@ namespace WB.UI.Headquarters.API.PublicApi
         [HttpGet]
         [Route("supervisors/{id:guid}")]
         [Route("users/{id:guid}")]
-        public UserApiDetails Details(Guid id)
+        public ActionResult<UserApiDetails> Details(Guid id)
         {
             var user = this.usersFactory.GetUser(new UserViewInputModel(id));
 
             if (user == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                return NotFound();
             }
 
             return new UserApiDetails(user);
@@ -85,13 +78,13 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <response code="404">Interviewer was not found</response>
         [HttpGet]
         [Route("interviewers/{id:guid}")]
-        public InterviewerUserApiDetails InterviewerDetails(Guid id)
+        public ActionResult<InterviewerUserApiDetails> InterviewerDetails(Guid id)
         {
             var user = this.usersFactory.GetUser(new UserViewInputModel(id));
 
             if (user == null || !user.Roles.Contains(UserRoles.Interviewer))
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                return NotFound();
             }
 
             return new InterviewerUserApiDetails(user);
@@ -107,7 +100,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <response code="406">User is not an interviewer or supervisor</response>
         [HttpPatch]
         [Route("users/{id}/archive")]
-        public async Task<IHttpActionResult> Archive(string id)
+        public async Task<ActionResult> Archive(string id)
         {
             Guid userGuid;
             if (!Guid.TryParse(id, out userGuid))
@@ -122,8 +115,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             }
             if (!(user.Roles.Contains(UserRoles.Interviewer) || user.Roles.Contains(UserRoles.Supervisor)))
             {
-                return this.StatusCode(HttpStatusCode.NotAcceptable);
-
+                return StatusCode((int) HttpStatusCode.NotAcceptable);
             }
 
             if (user.IsSupervisor())
@@ -147,10 +139,9 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <response code="406">User is not an interviewer or supervisor</response>
         [HttpPatch]
         [Route("users/{id}/unarchive")]
-        public async Task<IHttpActionResult> UnArchive(string id)
+        public async Task<ActionResult> UnArchive(string id)
         {
-            Guid userGuid;
-            if (!Guid.TryParse(id, out userGuid))
+            if (!Guid.TryParse(id, out var userGuid))
             {
                 return this.BadRequest();
             }
@@ -163,7 +154,7 @@ namespace WB.UI.Headquarters.API.PublicApi
 
             if (!(user.Roles.Contains(UserRoles.Interviewer) || user.Roles.Contains(UserRoles.Supervisor)))
             {
-                return this.StatusCode(HttpStatusCode.NotAcceptable);
+                return StatusCode((int) HttpStatusCode.NotAcceptable);
             }
 
             await this.userManager.UnarchiveUsersAsync(new[] { userGuid });

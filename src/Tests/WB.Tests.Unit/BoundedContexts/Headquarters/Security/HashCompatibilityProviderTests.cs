@@ -1,7 +1,7 @@
 ﻿using System;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity.Providers;
+using WB.Core.BoundedContexts.Headquarters.Users.Providers;
 using WB.Core.Infrastructure.Versions;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.Security
