@@ -2,11 +2,9 @@ using System;
 using System.Security.Claims;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.User;
 
-namespace WB.UI.Headquarters.Services
+namespace WB.UI.Headquarters.Services.Impl
 {
     public class AuthorizedUser : IAuthorizedUser
     {

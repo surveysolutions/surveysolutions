@@ -4,32 +4,44 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using WB.Core.BoundedContexts.Headquarters;
-using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.EmailProviders;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
+using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.BoundedContexts.Headquarters.Users;
+using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Enumerator.Native.WebInterview;
+using WB.Infrastructure.Native.Files;
 using WB.Infrastructure.Native.Logging;
 using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Persistence.Headquarters.Migrations.Events;
 using WB.Persistence.Headquarters.Migrations.Logs;
 using WB.Persistence.Headquarters.Migrations.PlainStore;
 using WB.Persistence.Headquarters.Migrations.ReadSide;
 using WB.Persistence.Headquarters.Migrations.Users;
 using WB.UI.Designer.CommonWeb;
 using WB.UI.Headquarters.Configs;
-using WB.UI.Headquarters.Services;
+using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.Captcha;
+using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Versions;
 
 namespace WB.UI.Headquarters
@@ -54,9 +66,10 @@ namespace WB.UI.Headquarters
             autofacKernel = new AutofacKernel(builder);
 
             var mappingAssemblies = new List<Assembly> {typeof(HeadquartersBoundedContextModule).Assembly};
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
             var unitOfWorkConnectionSettings = new UnitOfWorkConnectionSettings
             {
-                ConnectionString = Configuration.GetConnectionString("DefaultConnection"),
+                ConnectionString = connectionString,
                 ReadSideMappingAssemblies = mappingAssemblies,
                 PlainStorageSchemaName = "plainstore",
                 PlainMappingAssemblies = new List<Assembly>
@@ -74,15 +87,96 @@ namespace WB.UI.Headquarters
                 .Where(x => x?.Namespace?.Contains("Services.Impl") == true)
                 .AsImplementedInterfaces();
 
+            var eventStoreSettings = new PostgreConnectionSettings
+            {
+                ConnectionString = connectionString,
+                SchemaName = "events"
+            };
+
+            var eventStoreModule = new PostgresWriteSideModule(eventStoreSettings, 
+                new DbUpgradeSettings(typeof(M001_AddEventSequenceIndex).Assembly, typeof(M001_AddEventSequenceIndex).Namespace));
+
             autofacKernel.Load(
                 new NcqrsModule(),
+                eventStoreModule,
+                new InfrastructureModule(),
                 new NLogLoggingModule(),
-                new InfrastructureModuleMobile(),
+                new DataCollectionSharedKernelModule(),
+                new WebInterviewModule(),
                 new DataCollectionSharedKernelModule(),
                 new OrmModule(unitOfWorkConnectionSettings),
                 new OwinSecurityModule(),
+                new FileStorageModule("?", false, "bucket", "region", "prefix", "endpoint"),
+                new FileInfrastructureModule(),
                 //new CaptchaModule("recaptcha"),
-                new ProductVersionModule(typeof(Startup).Assembly));
+                new ProductVersionModule(typeof(Startup).Assembly),
+                GetHqBoundedContextModule());
+        }
+
+        private HeadquartersBoundedContextModule GetHqBoundedContextModule()
+        {
+            string appDataDirectory = Configuration["DataStorePath"];
+
+            var configurationSection = Configuration.GetSection("PreLoading").Get<PreloadingConfig>();
+            var sampleImportSettings = new SampleImportSettings(
+                 configurationSection.InterviewsImportParallelTasksLimit);
+
+            var trackingSection = Configuration.GetSection("Tracking").Get<TrackingConfig>();
+
+            var userPreloadingSettings =
+                new UserPreloadingSettings(
+                    configurationSection.MaxAllowedRecordNumber,
+                    loginFormatRegex: UserModel.UserNameRegularExpression,
+                    emailFormatRegex: configurationSection.EmailFormatRegex,
+                    passwordFormatRegex: configurationSection.PasswordStrengthRegularExpression,
+                    phoneNumberFormatRegex: configurationSection.PhoneNumberFormatRegex,
+                    fullNameMaxLength: UserModel.PersonNameMaxLength,
+                    phoneNumberMaxLength: UserModel.PhoneNumberLength,
+                    personNameFormatRegex: UserModel.PersonNameRegex);
+
+            var synchronizationSettings = new SyncSettings(origin: Constants.SupervisorSynchronizationOrigin);
+
+            ExternalStoragesSettings externalStoragesSettings = new FakeExternalStoragesSettings();
+
+            if (Configuration.GetSection("ExternalStorages").Exists())
+            {
+                var externalStoragesSection = Configuration.GetSection("ExternalStorages").Get<ExternalStoragesConfig>();
+                externalStoragesSettings = new ExternalStoragesSettings
+                {
+                    OAuth2 = new ExternalStoragesSettings.OAuth2Settings
+                    {
+                        RedirectUri = externalStoragesSection.OAuth2.RedirectUri,
+                        ResponseType = externalStoragesSection.OAuth2.ResponseType,
+                        OneDrive = new ExternalStoragesSettings.ExternalStorageOAuth2Settings
+                        {
+                            ClientId = externalStoragesSection.OAuth2.OneDrive.ClientId,
+                            AuthorizationUri = externalStoragesSection.OAuth2.OneDrive.AuthorizationUri,
+                            Scope = externalStoragesSection.OAuth2.OneDrive.Scope
+                        },
+                        Dropbox = new ExternalStoragesSettings.ExternalStorageOAuth2Settings
+                        {
+                            ClientId = externalStoragesSection.OAuth2.Dropbox.ClientId,
+                            AuthorizationUri = externalStoragesSection.OAuth2.Dropbox.AuthorizationUri,
+                            Scope = externalStoragesSection.OAuth2.Dropbox.Scope
+                        },
+                        GoogleDrive = new ExternalStoragesSettings.ExternalStorageOAuth2Settings
+                        {
+                            ClientId = externalStoragesSection.OAuth2.GoogleDrive.ClientId,
+                            AuthorizationUri = externalStoragesSection.OAuth2.GoogleDrive.AuthorizationUri,
+                            Scope = externalStoragesSection.OAuth2.GoogleDrive.Scope
+                        },
+                    }
+                };
+            }
+
+            return new HeadquartersBoundedContextModule(appDataDirectory,
+                userPreloadingSettings,
+                sampleImportSettings,
+                synchronizationSettings,
+                new TrackingSettings(trackingSection.WebInterviewPauseResumeGraceTimespan),
+                externalStoragesSettings: externalStoragesSettings,
+                fileSystemEmailServiceSettings: new FileSystemEmailServiceSettings(false, null, null, null, null, null)
+            );
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -100,6 +194,7 @@ namespace WB.UI.Headquarters
                 .AddNewtonsoftJsonProtocol();
 
             services.AddHttpContextAccessor();
+            services.AddAutoMapper(typeof(Startup));
 
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -116,8 +211,9 @@ namespace WB.UI.Headquarters
 
             services.AddTransient<ICaptchaService, WebCacheBasedCaptchaService>();
             services.AddTransient<ICaptchaProvider, NoCaptchaProvider>();
-            services.AddTransient<IAuthorizedUser, AuthorizedUser>();
+            services.AddScoped<UnitOfWorkActionFilter>();
 
+            services.AddMvc(mvc => { mvc.Filters.AddService<UnitOfWorkActionFilter>(1); });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
@@ -132,6 +228,7 @@ namespace WB.UI.Headquarters
 
             // configuration
             services.Configure<GoogleMapsConfig>(this.Configuration.GetSection("GoogleMap"));
+            services.Configure<PreloadingConfig>(this.Configuration.GetSection("PreLoading"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -147,6 +244,9 @@ namespace WB.UI.Headquarters
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            InitModules(app, env);
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -187,6 +287,20 @@ namespace WB.UI.Headquarters
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+        }
+
+        private void InitModules(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            var initTask = autofacKernel.InitCoreAsync(app.ApplicationServices.GetAutofacRoot(), false);
+
+            if (!env.IsDevelopment())
+            {
+                initTask.Wait();
+            }
+            else
+            {
+                initTask.Wait(TimeSpan.FromSeconds(10));
+            }
         }
     }
 }

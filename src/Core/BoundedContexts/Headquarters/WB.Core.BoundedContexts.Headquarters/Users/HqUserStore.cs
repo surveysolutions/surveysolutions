@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Identity;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -13,6 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users
 {
     public class HqUserStore :
         UserStoreBase<HqUser, Guid, HqUserClaim, HqUserLogin, HqUserToken>,
+        IUserRoleStore<HqUser>,
         IUserRepository
     {
         private readonly IUnitOfWork unitOfWork;
@@ -191,6 +193,43 @@ namespace WB.Core.BoundedContexts.Headquarters.Users
         public HqUser FindById(Guid userId)
         {
             return unitOfWork.Session.Get<HqUser>(userId);
+        }
+
+        public Task AddToRoleAsync(HqUser user, string roleName, CancellationToken cancellationToken)
+        {
+            var roleValue = Enum.Parse<UserRoles>(roleName);
+            var roleToAddTo = FindRole(roleValue.ToUserId());
+
+            user.Roles.Add(roleToAddTo);
+            return Task.CompletedTask;
+        }
+
+        public Task RemoveFromRoleAsync(HqUser user, string roleName, CancellationToken cancellationToken)
+        {
+            var userRole = user.Roles.FirstOrDefault(x => x.Name.Equals(roleName, StringComparison.OrdinalIgnoreCase));
+            if(userRole != null)
+            {
+                user.Roles.Remove(userRole);
+            }
+
+            return Task.CompletedTask;
+        }
+
+        public Task<IList<string>> GetRolesAsync(HqUser user, CancellationToken cancellationToken)
+        {
+            var userRoles = (IList<string>)user.Roles.Select(x => x.Name).ToList();
+            return Task.FromResult(userRoles);
+        }
+
+        public Task<bool> IsInRoleAsync(HqUser user, string roleName, CancellationToken cancellationToken)
+        {
+            var roleValue = Enum.Parse<UserRoles>(roleName);
+            return Task.FromResult(user.IsInRole(roleValue));
+        }
+
+        public Task<IList<HqUser>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }
