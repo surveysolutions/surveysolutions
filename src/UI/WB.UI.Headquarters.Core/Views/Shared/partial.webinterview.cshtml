@@ -1,0 +1,43 @@
+@{ 
+  var locales = new System.Collections.Generic.Dictionary<string, string> {
+    { "ar", "locale/webinterview/ar.42375966a49e.json" },{ "es", "locale/webinterview/es.b0ae15fa984b.json" },{ "fr", "locale/webinterview/fr.b105467ba35d.json" },{ "en", "locale/webinterview/en.ecf1978b6927.json" },{ "ro", "locale/webinterview/ro.f262978019cb.json" },{ "ru", "locale/webinterview/ru.c8e477e90c34.json" },{ "sq", "locale/webinterview/sq.1b3aa1deb7ab.json" },{ "zh", "locale/webinterview/zh.466b9939b52b.json" },{ "ka", "locale/webinterview/ka.27147233582c.json" },{ "pt", "locale/webinterview/pt.0d08f0b6a241.json" },{ "uk-UA", "locale/webinterview/uk-UA.fdbe292c27c3.json" }
+  };
+    
+  var current = System.Globalization.CultureInfo.CurrentUICulture.Name.Split('-')[0];
+  if (!locales.ContainsKey(current))
+  {
+      current = "en";
+  }
+  var localePath = Url.Content("~/static/" + locales[current]);
+}
+
+<script>
+window.CONFIG.basePath = '@Url.Content("~/")';
+window.CONFIG.assetsPath = '@Url.Content("~/static/")';
+window.CONFIG.locale = {
+    locale: '@System.Globalization.CultureInfo.CurrentUICulture.Name',
+    locales: {"ar":"locale/webinterview/ar.42375966a49e.json","es":"locale/webinterview/es.b0ae15fa984b.json","fr":"locale/webinterview/fr.b105467ba35d.json","en":"locale/webinterview/en.ecf1978b6927.json","ro":"locale/webinterview/ro.f262978019cb.json","ru":"locale/webinterview/ru.c8e477e90c34.json","sq":"locale/webinterview/sq.1b3aa1deb7ab.json","zh":"locale/webinterview/zh.466b9939b52b.json","ka":"locale/webinterview/ka.27147233582c.json","pt":"locale/webinterview/pt.0d08f0b6a241.json","uk-UA":"locale/webinterview/uk-UA.fdbe292c27c3.json"}
+};
+// JSONP callback to load localization from '@localePath'
+window.__setLocaleData__ = function(data) { window.CONFIG.locale.data = data; }
+</script>
+
+<link href='@Url.Content("~/static/css/chunk-vendors.701d5d92.css")' rel="stylesheet">
+ 
+<link href='@Url.Content("~/signalr/hubs")' rel="preload" as="script">
+<script src="@localePath"></script>
+<!-- files.chunks --> 
+
+<!-- files.chunks[chunk-common] --> 
+<!-- files.chunks[/js/chunk-common.36e8c116.js] --> 
+<script src='@Url.Content("~/static/js/chunk-common.36e8c116.js")'></script>
+
+<!-- files.chunks[chunk-vendors] --> 
+<!-- files.chunks[/js/chunk-vendors.8b55a562.js] --> 
+<script src='@Url.Content("~/static/js/chunk-vendors.8b55a562.js")'></script>
+
+<!-- files.chunks[webinterview] --> 
+<!-- files.chunks[/js/webinterview.1ade6662.js] --> 
+<script src='@Url.Content("~/static/js/webinterview.1ade6662.js")'></script>
+
+

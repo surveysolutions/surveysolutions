@@ -1,0 +1,45 @@
+@{ 
+  var locales = new System.Collections.Generic.Dictionary<string, string> {
+    { "ar", "locale/hq/ar.489ab30190fa.json" },{ "es", "locale/hq/es.fbb34225b605.json" },{ "fr", "locale/hq/fr.d901f72876c5.json" },{ "en", "locale/hq/en.bce856d5278a.json" },{ "ro", "locale/hq/ro.7a86fd646c66.json" },{ "ru", "locale/hq/ru.57c389fb2c4b.json" },{ "sq", "locale/hq/sq.f9ed5bf55437.json" },{ "zh", "locale/hq/zh.574dc0b8369a.json" },{ "ka", "locale/hq/ka.9434d031b32a.json" },{ "pt", "locale/hq/pt.04241f5badd0.json" },{ "uk-UA", "locale/hq/uk-UA.d2a88526672b.json" }
+  };
+    
+  var current = System.Globalization.CultureInfo.CurrentUICulture.Name.Split('-')[0];
+  if (!locales.ContainsKey(current))
+  {
+      current = "en";
+  }
+  var localePath = Url.Content("~/static/" + locales[current]);
+}
+
+<script>
+window.CONFIG.basePath = '@Url.Content("~/")';
+window.CONFIG.assetsPath = '@Url.Content("~/static/")';
+window.CONFIG.locale = {
+    locale: '@System.Globalization.CultureInfo.CurrentUICulture.Name',
+    locales: {"ar":"locale/hq/ar.489ab30190fa.json","es":"locale/hq/es.fbb34225b605.json","fr":"locale/hq/fr.d901f72876c5.json","en":"locale/hq/en.bce856d5278a.json","ro":"locale/hq/ro.7a86fd646c66.json","ru":"locale/hq/ru.57c389fb2c4b.json","sq":"locale/hq/sq.f9ed5bf55437.json","zh":"locale/hq/zh.574dc0b8369a.json","ka":"locale/hq/ka.9434d031b32a.json","pt":"locale/hq/pt.04241f5badd0.json","uk-UA":"locale/hq/uk-UA.d2a88526672b.json"}
+};
+// JSONP callback to load localization from '@localePath'
+window.__setLocaleData__ = function(data) { window.CONFIG.locale.data = data; }
+</script>
+
+<link href='@Url.Content("~/static/css/chunk-vendors.701d5d92.css")' rel="stylesheet">
+
+<link href='@Url.Content("~/static/css/hq.28f4dc6d.css")' rel="stylesheet">
+ 
+<link href='@Url.Content("~/signalr/hubs")' rel="preload" as="script">
+<script src="@localePath"></script>
+<!-- files.chunks --> 
+
+<!-- files.chunks[chunk-common] --> 
+<!-- files.chunks[/js/chunk-common.36e8c116.js] --> 
+<script src='@Url.Content("~/static/js/chunk-common.36e8c116.js")'></script>
+
+<!-- files.chunks[chunk-vendors] --> 
+<!-- files.chunks[/js/chunk-vendors.8b55a562.js] --> 
+<script src='@Url.Content("~/static/js/chunk-vendors.8b55a562.js")'></script>
+
+<!-- files.chunks[hq] --> 
+<!-- files.chunks[/js/hq.8c88fdf8.js] --> 
+<script src='@Url.Content("~/static/js/hq.8c88fdf8.js")'></script>
+
+
