@@ -2209,10 +2209,8 @@
     <Compile Include="Filters\ActivePageAttribute.cs" />
     <Compile Include="Filters\BrowsersRestriction.cs" />
     <Compile Include="Filters\ObserverNotAllowedAttribute.cs" />
-    <Compile Include="Implementation\Services\InterviewCreatorFromAssignment.cs" />
     <Compile Include="Models\Account\FinishIntallationModel.cs" />
     <Compile Include="Models\Account\IPasswordRequired.cs" />
-    <Compile Include="Models\Account\UserModelBase.cs" />
     <Compile Include="Models\InterviewerHqModel.cs" />
     <Compile Include="Models\VersionCheck\VersionCheckingInfo.cs" />
     <Compile Include="Filters\WebInterviewAuthorizeAttribute.cs" />
@@ -2272,7 +2270,6 @@
     <Compile Include="Models\Template\QuestionnaireListItemModel.cs" />
     <Compile Include="Models\UserBatchUploadModel.cs" />
     <Compile Include="Models\Account\UserEditModel.cs" />
-    <Compile Include="Models\Account\UserModel.cs" />
     <Compile Include="Models\UserPreloading\AllUserPreloadingProcessesRequest.cs" />
     <Compile Include="Models\UserPreloading\UserPreloadingProcessesView.cs" />
     <Compile Include="Models\UserPreloading\UserPreloadingProcessState.cs" />

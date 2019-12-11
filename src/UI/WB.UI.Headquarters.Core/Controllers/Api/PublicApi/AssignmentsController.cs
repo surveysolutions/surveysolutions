@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
@@ -55,7 +54,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             IAssignmentsService assignmentsStorage,
             IMapper mapper,
             UserManager<HqUser> userManager,
-            ILogger<AssignmentsController> logger,
             IQuestionnaireStorage questionnaireStorage,
             ISystemLog auditLog,
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment,

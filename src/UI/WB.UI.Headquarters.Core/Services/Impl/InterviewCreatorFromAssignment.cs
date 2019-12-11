@@ -11,27 +11,24 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEn
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Services;
 
-namespace WB.UI.Headquarters.Implementation.Services
+namespace WB.UI.Headquarters.Services.Impl
 {
     public class InterviewCreatorFromAssignment : IInterviewCreatorFromAssignment
     {
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IInterviewUniqueKeyGenerator interviewKeyGenerator;
-        private readonly IInterviewAnswerSerializer answerSerializer;
         private readonly ICommandService commandService;
         private readonly IUserViewFactory userViewFactory;
         private readonly IAuthorizedUser authorizedUser;
 
         public InterviewCreatorFromAssignment(IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IInterviewUniqueKeyGenerator interviewKeyGenerator,
-            IInterviewAnswerSerializer answerSerializer,
             ICommandService commandService,
             IUserViewFactory userViewFactory,
             IAuthorizedUser authorizedUser)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.interviewKeyGenerator = interviewKeyGenerator;
-            this.answerSerializer = answerSerializer;
             this.commandService = commandService;
             this.userViewFactory = userViewFactory;
             this.authorizedUser = authorizedUser;
