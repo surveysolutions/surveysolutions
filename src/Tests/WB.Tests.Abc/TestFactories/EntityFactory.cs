@@ -87,6 +87,7 @@ using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 using WB.Infrastructure.Native.Storage;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
 
@@ -2485,6 +2486,25 @@ namespace WB.Tests.Abc.TestFactories
                 Title = text,
                 ParentValue = parentId,
                 QuestionnaireId = questionnaireId.ToString()
+            };
+        }
+
+        public ReusableCategoriesDto ReusableCategoriesDto(Guid? id = null, int count = 5)
+        {
+            return new ReusableCategoriesDto()
+            {
+                Id = id ?? Guid.NewGuid(),
+                Options = Enumerable.Range(1, count).Select(i => CategoriesItem(i.ToString(), i)).ToList()
+            };
+        }
+
+
+        public ReusableCategoriesDto ReusableCategoriesDto(Guid? id, List<CategoriesItem> items)
+        {
+            return new ReusableCategoriesDto()
+            {
+                Id = id ?? Guid.NewGuid(),
+                Options = items
             };
         }
     }
