@@ -39,6 +39,7 @@ using WB.Persistence.Headquarters.Migrations.ReadSide;
 using WB.Persistence.Headquarters.Migrations.Users;
 using WB.UI.Designer.CommonWeb;
 using WB.UI.Headquarters.Configs;
+using WB.UI.Headquarters.Controllers.Api.PublicApi;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Configuration;
@@ -213,7 +214,11 @@ namespace WB.UI.Headquarters
             services.AddTransient<ICaptchaProvider, NoCaptchaProvider>();
             services.AddScoped<UnitOfWorkActionFilter>();
 
-            services.AddMvc(mvc => { mvc.Filters.AddService<UnitOfWorkActionFilter>(1); });
+            services.AddMvc(mvc =>
+            {
+                mvc.Filters.AddService<UnitOfWorkActionFilter>(1);
+                mvc.Conventions.Add(new OnlyPublicApiConvention());
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
