@@ -562,12 +562,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
 
             string GetCategoricalAnswerOptionText(decimal answerOptionValue) =>
-                this.Tree.GetOptionForQuestionByOptionValue(this.Identity.Id, answerOptionValue);
+                this.Tree.GetOptionForQuestionByOptionValue(this.Identity.Id, answerOptionValue, null);
 
             if (this.IsSingleFixedOption || this.IsCascading)
             {
-                var answer = ((InterviewTreeSingleOptionQuestion)this.InterviewQuestion).GetAnswer();              
-                return answer.GetAnswerAsText(this.Tree.Questionnaire, this.Identity.Id);
+                int? parentAnswer = null;
+
+                if (this.InterviewQuestion is InterviewTreeCascadingQuestion cascading)
+                    parentAnswer = cascading.GetCascadingParentQuestion()?.GetAnswer()?.SelectedValue;
+
+                var answer = ((InterviewTreeSingleOptionQuestion)this.InterviewQuestion).GetAnswer();
+
+                return answer.GetAnswerAsText(this.Tree.Questionnaire, this.Identity.Id, parentAnswer);
             }
             if (this.IsMultiFixedOption)
                 return AnswerUtils.AnswerToString(((InterviewTreeMultiOptionQuestion)this.InterviewQuestion).GetAnswer()?.ToDecimals()?.ToArray(), GetCategoricalAnswerOptionText);
@@ -1225,7 +1231,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public override void RunImportInvariants(InterviewQuestionInvariants questionInvariants)
         {
-            questionInvariants.RequireFixedSingleOptionPreloadValueAllowed(answer.SelectedValue);
+            questionInvariants.RequireFixedSingleOptionPreloadValueAllowed(answer.SelectedValue, null);
         }
 
         public override AbstractAnswer Answer => this.answer;
@@ -1490,7 +1496,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public override void RunImportInvariants(InterviewQuestionInvariants questionInvariants)
         {
             var questionnaire = this.question.Tree.Questionnaire;
-            questionInvariants.RequireFixedSingleOptionAnswerAllowed(GetAnswer().SelectedValue, new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version));
+
+            var parentValue = question?.GetAsInterviewTreeCascadingQuestion()?.GetCascadingParentQuestion()?.GetAnswer()
+                ?.SelectedValue;
+
+            questionInvariants.RequireFixedSingleOptionAnswerAllowed(GetAnswer().SelectedValue, parentValue,
+                new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version));
         }
 
         public override string ToString() => string.Join(", ", this.GetCascadingParentQuestion()?.GetAnswer());

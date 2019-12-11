@@ -131,7 +131,7 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
             return question.Answers.SingleOrDefault(x => x.AnswerText == optionText).ToCategoricalOption();
         }
 
-        public static CategoricalOption GetOptionForQuestionByOptionValue(IQuestion question, decimal optionValue)
+        public static CategoricalOption GetOptionForQuestionByOptionValue(IQuestion question, decimal optionValue, decimal? parentValue)
         {
             if (question.QuestionType == QuestionType.Numeric)
             {
@@ -144,16 +144,9 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
                         .ToCategoricalOption();
             }
 
-            if (question.Answers.Any(x => x.AnswerCode.HasValue))
-            {
-                return question.Answers.Single(answer => answer.AnswerCode == optionValue).ToCategoricalOption();
-            }
-            else
-            {
-                return question.Answers.Single(answer => optionValue == ParseAnswerOptionValueOrThrow(answer.AnswerValue, question.PublicKey))
-                    .ToCategoricalOption();
-            }
-
+            return question.Answers.Find(answer =>
+                    answer.GetParsedValue() == optionValue && answer.GetParsedParentValue() == parentValue)
+                .ToCategoricalOption();
         }
 
         private static decimal ParseAnswerOptionValueOrThrow(string value, Guid questionId)

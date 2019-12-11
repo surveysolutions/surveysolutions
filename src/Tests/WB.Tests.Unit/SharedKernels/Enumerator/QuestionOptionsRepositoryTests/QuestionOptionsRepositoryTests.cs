@@ -83,10 +83,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.QuestionOptionsRepositoryTests
 
             var storage = new QuestionOptionsRepository(optionsRepository);
 
-            storage.GetOptionForQuestionByOptionValue(questionnaire, questionId, 7, null);
+            storage.GetOptionForQuestionByOptionValue(questionnaire, questionId, 7, null, null);
 
-            Mock.Get(optionsRepository).Verify(s => s.GetQuestionOptionByValue(questionnaire.QuestionnaireIdentity, questionId, 7, null), Times.Once);
-            Mock.Get(optionsRepository).Verify(s => s.GetCategoryOptionByValue(questionnaire.QuestionnaireIdentity, It.IsAny<Guid>(), 7, null), Times.Never);
+            Mock.Get(optionsRepository).Verify(s => s.GetQuestionOptionByValue(questionnaire.QuestionnaireIdentity, questionId, 7, null, null), Times.Once);
+            Mock.Get(optionsRepository).Verify(s => s.GetCategoryOptionByValue(questionnaire.QuestionnaireIdentity, It.IsAny<Guid>(), 7, null, null), Times.Never);
         }
 
         [Test]
@@ -99,10 +99,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.QuestionOptionsRepositoryTests
 
             var storage = new QuestionOptionsRepository(optionsRepository);
 
-            storage.GetOptionForQuestionByOptionValue(questionnaire, questionId, 7, null);
+            storage.GetOptionForQuestionByOptionValue(questionnaire, questionId, 7, null, null);
 
-            Mock.Get(optionsRepository).Verify(s => s.GetQuestionOptionByValue(questionnaire.QuestionnaireIdentity, questionId, 7, null), Times.Never);
-            Mock.Get(optionsRepository).Verify(s => s.GetCategoryOptionByValue(questionnaire.QuestionnaireIdentity, categoryId, 7, null), Times.Once);
+            Mock.Get(optionsRepository).Verify(s => s.GetQuestionOptionByValue(questionnaire.QuestionnaireIdentity, questionId, 7, null, null), Times.Never);
+            Mock.Get(optionsRepository).Verify(s => s.GetCategoryOptionByValue(questionnaire.QuestionnaireIdentity, categoryId, 7, null, null), Times.Once);
         }
 
         [Test]

@@ -65,7 +65,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         private readonly ConcurrentDictionary<Guid, ReadOnlyCollection<int>> cacheOfMultiSelectAnswerOptionsAsValues = new ConcurrentDictionary<Guid, ReadOnlyCollection<int>>();
 
-        private readonly ConcurrentDictionary<Guid, ConcurrentDictionary<decimal, CategoricalOption>> cacheOfAnswerOptions = new ConcurrentDictionary<Guid, ConcurrentDictionary<decimal, CategoricalOption>>();
+        private readonly ConcurrentDictionary<Guid, ConcurrentDictionary<string, CategoricalOption>> cacheOfAnswerOptions = new ConcurrentDictionary<Guid, ConcurrentDictionary<string, CategoricalOption>>();
         private readonly ConcurrentDictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingStaticTexts = new ConcurrentDictionary<Guid, IEnumerable<Guid>>();
 
 
@@ -466,31 +466,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     $"Cannot return answer options for question with id '{questionId}' because it's type {question.QuestionType} does not support reusable categories.");
         }
 
-        public CategoricalOption GetOptionForQuestionByOptionValueFromStructure(Guid questionId, decimal optionValue)
+        public CategoricalOption GetOptionForQuestionByOptionValueFromStructure(Guid questionId, decimal optionValue, int? parentValue)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
             CheckShouldQestionProvideOptions(question, questionId);
 
-            return AnswerUtils.GetOptionForQuestionByOptionValue(question, optionValue);
+            return AnswerUtils.GetOptionForQuestionByOptionValue(question, optionValue, parentValue);
         }
 
-        public string GetAnswerOptionTitle(Guid questionId, decimal answerOptionValue) => this.GetAnswerOption(questionId, answerOptionValue).Title;
+        public string GetAnswerOptionTitle(Guid questionId, decimal answerOptionValue, int? answerParentValue) => this.GetAnswerOption(questionId, answerOptionValue, answerParentValue).Title;
+        
+        private CategoricalOption GetAnswerOption(Guid questionId, decimal answerOptionValue, int? answerParentValue)
+            => this.cacheOfAnswerOptions.GetOrAdd(questionId, x => new ConcurrentDictionary<string, CategoricalOption>())
+                        .GetOrAdd($"{answerOptionValue}${answerParentValue}", GetAnswerOptionImpl(questionId, answerOptionValue, answerParentValue));
 
-        public int GetCascadingParentValue(Guid questionId, decimal answerOptionValue)
-        {
-            var answerOption = this.GetAnswerOption(questionId, answerOptionValue);
-            if (!answerOption.ParentValue.HasValue)
-                throw new QuestionnaireException(
-                    $"Answer option has no parent value. Option value: {answerOptionValue}, Question id: '{questionId}'.");
-
-            return answerOption.ParentValue.Value;
-        }
-
-        private CategoricalOption GetAnswerOption(Guid questionId, decimal answerOptionValue)
-            => this.cacheOfAnswerOptions.GetOrAdd(questionId, x => new ConcurrentDictionary<decimal, CategoricalOption>())
-                        .GetOrAdd(answerOptionValue, GetAnswerOptionImpl(questionId, answerOptionValue));
-
-        private CategoricalOption GetAnswerOptionImpl(Guid questionId, decimal optionValue)
+        private CategoricalOption GetAnswerOptionImpl(Guid questionId, decimal optionValue, int? answerParentValue)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
             CheckShouldQestionProvideOptions(question, questionId);
@@ -498,15 +488,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             if (DoesQuestionOptionsInOptionsRepository(question))
             {
                 return questionOptionsRepository.GetOptionForQuestionByOptionValue(this,
-                    questionId, optionValue, this.translation);
+                    questionId, optionValue, answerParentValue, this.translation);
             }
 
-            return AnswerUtils.GetOptionForQuestionByOptionValue(question, optionValue);
+            return AnswerUtils.GetOptionForQuestionByOptionValue(question, optionValue, answerParentValue);
         }
 
-        public CategoricalOption GetOptionForQuestionByOptionValue(Guid questionId, decimal optionValue)
+        public CategoricalOption GetOptionForQuestionByOptionValue(Guid questionId, decimal optionValue, int? answerParentValue)
         {
-            return GetAnswerOption(questionId, optionValue);
+            return GetAnswerOption(questionId, optionValue, answerParentValue);
         }
 
         public IEnumerable<CategoricalOption> GetOptionsForQuestionFromStructure(Guid questionId, int? parentQuestionValue, string filter, int[] excludedOptionIds = null)

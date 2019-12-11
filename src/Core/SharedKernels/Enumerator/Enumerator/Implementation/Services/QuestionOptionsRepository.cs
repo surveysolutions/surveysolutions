@@ -45,13 +45,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         }
 
         public CategoricalOption GetOptionForQuestionByOptionValue(IQuestionnaire questionnaire,
-            Guid questionId, decimal optionValue, Translation translation)
+            Guid questionId, decimal optionValue, int? parentQuestionValue, Translation translation)
         {
             var categoryId = questionnaire.GetReusableCategoriesForQuestion(questionId);
-            if (categoryId.HasValue)
-                return this.optionsRepository.GetCategoryOptionByValue(new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version), categoryId.Value, optionValue, translation?.Id);
+            var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version);
 
-            return this.optionsRepository.GetQuestionOptionByValue(new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version), questionId, optionValue, translation?.Id);
+            return categoryId.HasValue
+                ? this.optionsRepository.GetCategoryOptionByValue(questionnaireIdentity, categoryId.Value, optionValue, parentQuestionValue, translation?.Id)
+                : this.optionsRepository.GetQuestionOptionByValue(questionnaireIdentity, questionId, optionValue, parentQuestionValue, translation?.Id);
         }
 
         public IEnumerable<CategoricalOption> GetOptionsByOptionValues(IQuestionnaire questionnaire, Guid questionId,

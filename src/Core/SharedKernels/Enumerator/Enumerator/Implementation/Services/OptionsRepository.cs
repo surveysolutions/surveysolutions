@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
@@ -23,6 +24,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.optionsStorage = optionsStorage;
         }
 
+        [DebuggerDisplay("{Value} {TranslationId == null ? Title : Title +\"(translation)\"}")]
         private class Option: OptionValue
         {
             public string Title { get; set; }
@@ -32,6 +34,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             public string TranslationId { get; set; }
         }
 
+        [DebuggerDisplay("{Value}")]
         private class OptionValue
         {
             public decimal Value { get; set; }
@@ -177,18 +180,18 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             };
         }
 
-        public CategoricalOption GetQuestionOptionByValue(QuestionnaireIdentity questionnaireId, Guid questionId, decimal optionValue, Guid? translationId)
+        public CategoricalOption GetQuestionOptionByValue(QuestionnaireIdentity questionnaireId, Guid questionId, decimal optionValue, int? parentValue, Guid? translationId)
         {
-            return GetOptionByValue(questionnaireId, questionId, null, optionValue, translationId);
+            return GetOptionByValue(questionnaireId, questionId, null, optionValue, parentValue, translationId);
         }
 
         public CategoricalOption GetCategoryOptionByValue(QuestionnaireIdentity questionnaireId, Guid categoryId,
-            decimal optionValue, Guid? translationId)
+            decimal optionValue, int? parentValue, Guid? translationId)
         {
-            return GetOptionByValue(questionnaireId, null, categoryId, optionValue, translationId);
+            return GetOptionByValue(questionnaireId, null, categoryId, optionValue, parentValue, translationId);
         }
 
-        private CategoricalOption GetOptionByValue(QuestionnaireIdentity questionnaireId, Guid? questionId, Guid? categoryId, decimal optionValue, Guid? translationId)
+        private CategoricalOption GetOptionByValue(QuestionnaireIdentity questionnaireId, Guid? questionId, Guid? categoryId, decimal optionValue, int? parentValue, Guid? translationId)
         {
             if (!categoryId.HasValue && !questionId.HasValue)
                 throw new ArgumentException("Should specify questionId or categoryId");
@@ -348,8 +351,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
                 optionsToSave.Add(optionView);
 
-                var translatedOptions = translations.Where(x => (x.QuestionnaireEntityId == questionId && x.Type == TranslationType.OptionTitle)|| 
-                                                                (x.QuestionnaireEntityId == categoryId && x.Type == TranslationType.Categories)
+                var translatedOptions = translations.Where(x => ((x.QuestionnaireEntityId == questionId && x.Type == TranslationType.OptionTitle)|| 
+                                                                (x.QuestionnaireEntityId == categoryId && x.Type == TranslationType.Categories))
                                                                 && x.TranslationIndex == $"{option.AnswerValue}${option.ParentValue}")
                     .Select(y => new OptionView
                     {

@@ -25,8 +25,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
         {
             Guid questionId = Guid.NewGuid();
             var questionnaire = Mock.Of<IQuestionnaire>(q => q.GetQuestionType(questionId) == questionType
-                && q.GetAnswerOptionTitle(questionId, 1) == "title1"
-                && q.GetAnswerOptionTitle(questionId, 2) == "title2");
+                && q.GetAnswerOptionTitle(questionId, 1, null) == "title1"
+                && q.GetAnswerOptionTitle(questionId, 2, null) == "title2");
 
             var converter = Create.Service.AnswerToStringConverter();
 

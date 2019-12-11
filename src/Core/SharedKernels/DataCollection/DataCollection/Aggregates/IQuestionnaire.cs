@@ -81,17 +81,15 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         CategoricalOption GetOptionForQuestionByOptionText(Guid questionId, string optionText, int? parentQuestionValue);
 
-        CategoricalOption GetOptionForQuestionByOptionValue(Guid questionId, decimal optionValue);
+        CategoricalOption GetOptionForQuestionByOptionValue(Guid questionId, decimal optionValue, int? answerParentValue);
 
         IEnumerable<CategoricalOption> GetOptionsForQuestionFromStructure(Guid questionId, int? parentQuestionValue, string filter, int[] excludedOptionIds = null);
 
         CategoricalOption GetOptionForQuestionByOptionTextFromStructure(Guid questionId, string optionText, int? parentQuestionValue);
 
-        CategoricalOption GetOptionForQuestionByOptionValueFromStructure(Guid questionId, decimal optionValue);
+        CategoricalOption GetOptionForQuestionByOptionValueFromStructure(Guid questionId, decimal optionValue, int? parentQuestionValue);
 
-        string GetAnswerOptionTitle(Guid questionId, decimal answerOptionValue);
-
-        int GetCascadingParentValue(Guid questionId, decimal answerOptionValue);
+        string GetAnswerOptionTitle(Guid questionId, decimal answerOptionValue, int? answerParentValue);
 
         int? GetMaxSelectedAnswerOptions(Guid questionId);
 
