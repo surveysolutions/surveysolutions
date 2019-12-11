@@ -1,26 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Web.Http.Description;
-using Swashbuckle.Swagger;
+﻿using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
-namespace WB.UI.Headquarters.API.PublicApi
+namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 {
-    public class IncludeOnlyPublicApiDocumentFilter : IDocumentFilter
+    public class OnlyPublicApiConvention : IActionModelConvention
     {
-        public void Apply(SwaggerDocument swaggerDoc, SchemaRegistry schemaRegistry, IApiExplorer apiExplorer)
+        public void Apply(ActionModel action)
         {
-            IDictionary<string, PathItem> pathsToKeep = new SortedDictionary<string, PathItem>();
-            foreach (ApiDescription apiDescription in apiExplorer.ApiDescriptions)
-            {
-                var controllerTypeNamespace = apiDescription.ActionDescriptor.ControllerDescriptor.ControllerType.Namespace;
-
-                if (controllerTypeNamespace.Contains("PublicApi"))
-                {
-                    var pathToRemove = $"/{apiDescription.Route.RouteTemplate.TrimEnd('/')}";
-                    pathsToKeep[pathToRemove] = swaggerDoc.paths[pathToRemove];
-                }
-            }
-
-            swaggerDoc.paths = pathsToKeep;
+            action.ApiExplorer.IsVisible = 
+                action.Controller?.ControllerType?.Namespace?.Contains("PublicApi") == true;
         }
     }
+
 }
