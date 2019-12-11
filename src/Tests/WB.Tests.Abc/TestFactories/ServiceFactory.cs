@@ -30,18 +30,17 @@ using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
-using WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog;
-using WB.Core.BoundedContexts.Headquarters.InterviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
-using WB.Core.BoundedContexts.Headquarters.UserPreloading;
-using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
-using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
-using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
-using WB.Core.BoundedContexts.Headquarters.UserProfile;
+using WB.Core.BoundedContexts.Headquarters.Users;
+using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading;
+using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Dto;
+using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services;
+using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Tasks;
+using WB.Core.BoundedContexts.Headquarters.Users.UserProfile;
+using WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAuditLog;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -1132,7 +1131,7 @@ namespace WB.Tests.Abc.TestFactories
             return result.Object;
         }
         
-        public  WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog.IAuditLogService AuditLogService(
+        public  Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAuditLog.IAuditLogService AuditLogService(
             IAuditLogFactory auditLogFactory,
             IAuthorizedUser authorizedUser = null)
         {

@@ -4,7 +4,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Caching.Memory;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
+using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
 using WB.Core.BoundedContexts.Headquarters.Views.Responsible;

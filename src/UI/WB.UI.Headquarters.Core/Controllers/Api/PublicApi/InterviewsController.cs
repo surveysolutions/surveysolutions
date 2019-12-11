@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-using System.Web.Http.Description;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
@@ -25,11 +24,11 @@ using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Code;
 
-namespace WB.UI.Headquarters.API.PublicApi
+namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 {
-    [RoutePrefix("api/v1/interviews")]
-    [ApiBasicAuth(new [] {UserRoles.ApiUser, UserRoles.Administrator }, TreatPasswordAsPlain = true)]
-    public class InterviewsController : BaseApiServiceController
+    [Route("api/v1/interviews")]
+    [Authorize(Roles = "ApiUser, Administrator")]
+    public class InterviewsController : ControllerBase
     {
         private readonly IAllInterviewsFactory allInterviewsViewFactory;
         private readonly IInterviewHistoryFactory interviewHistoryViewFactory;
@@ -39,10 +38,11 @@ namespace WB.UI.Headquarters.API.PublicApi
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly ICommandService commandService;
         private readonly IAuthorizedUser authorizedUser;
+        private readonly ILogger<InterviewsController> logger;
         private readonly IStatefullInterviewSearcher statefullInterviewSearcher;
         private readonly IInterviewDiagnosticsFactory diagnosticsFactory;
 
-        public InterviewsController(ILogger logger,
+        public InterviewsController(
             IAllInterviewsFactory allInterviewsViewFactory,
             IInterviewHistoryFactory interviewHistoryViewFactory,
             IUserViewFactory userViewFactory,
@@ -51,8 +51,9 @@ namespace WB.UI.Headquarters.API.PublicApi
             IQuestionnaireStorage questionnaireStorage,
             ICommandService commandService,
             IAuthorizedUser authorizedUser,
+            ILogger<InterviewsController> logger,
             IStatefullInterviewSearcher statefullInterviewSearcher,
-            IInterviewDiagnosticsFactory diagnosticsFactory) : base(logger)
+            IInterviewDiagnosticsFactory diagnosticsFactory)
         {
             this.allInterviewsViewFactory = allInterviewsViewFactory;
             this.interviewHistoryViewFactory = interviewHistoryViewFactory;
@@ -62,6 +63,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             this.questionnaireStorage = questionnaireStorage;
             this.commandService = commandService;
             this.authorizedUser = authorizedUser;
+            this.logger = logger;
             this.statefullInterviewSearcher = statefullInterviewSearcher;
             this.diagnosticsFactory = diagnosticsFactory;
         }
@@ -78,14 +80,13 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <param name="page">Page number (starting from 1)</param>
         /// <returns></returns>
         [HttpGet]
-        [Route("")]
         public InterviewApiView InterviewsFiltered(Guid? questionnaireId = null, long? questionnaireVersion = null,
             InterviewStatus? status = null, Guid? interviewId = null, int pageSize = 10, int page = 1)
         {
             var input = new AllInterviewsInputModel
             {
-                Page = this.CheckAndRestrictOffset(page),
-                PageSize = this.CheckAndRestrictLimit(pageSize),
+                Page = page.CheckAndRestrictOffset(),
+                PageSize = pageSize.CheckAndRestrictLimit(),
                 QuestionnaireId = questionnaireId,
                 QuestionnaireVersion = questionnaireVersion,
                 Statuses = status.HasValue ? new[] { status.Value } : null,
@@ -103,11 +104,11 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests.</param>
         [HttpGet]
         [Route("{id:guid}")]
-        public InterviewApiDetails Get(Guid id)
+        public ActionResult<InterviewApiDetails> Get(Guid id)
         {
             var interview = this.statefulInterviewRepository.Get(id.ToString());
             if (interview == null)
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                return NotFound();
 
             return new InterviewApiDetails(interview);
         }
@@ -119,12 +120,12 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <returns></returns>
         [HttpGet]
         [Route("{id:guid}/stats")]
-        public InterviewApiStatistics Stats(Guid id)
+        public ActionResult<InterviewApiStatistics> Stats(Guid id)
         {
             var interview = this.statefulInterviewRepository.Get(id.ToString());
             if (interview == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                return NotFound();
             }
 
             var statistics = this.statefullInterviewSearcher.GetStatistics(interview);
@@ -162,13 +163,13 @@ namespace WB.UI.Headquarters.API.PublicApi
 
         [HttpGet]
         [Route("{id:guid}/history")]
-        public InterviewHistoryView InterviewHistory(Guid id)
+        public ActionResult<InterviewHistoryView> InterviewHistory(Guid id)
         {
             var interview = this.interviewHistoryViewFactory.Load(id);
 
             if (interview == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                return NotFound();
             }
 
             return interview;
@@ -184,19 +185,18 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <returns></returns>
         [HttpPost]
         [Route("{id:guid}/comment-by-variable/{variable}")]
-        [ApiBasicAuth(new [] {UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Headquarter, UserRoles.ApiUser, UserRoles.Administrator }, 
-            TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
-        public HttpResponseMessage CommentByVariable(Guid id, string variable, RosterVector rosterVector, string comment)
+        [Authorize(Roles = "Supervisor, Interviewer, ApiUser, Administrator")]
+        public ActionResult CommentByVariable(Guid id, string variable, RosterVector rosterVector, string comment)
         {
-            var questionnaireIdentity = this.GetQuestionnaireIdByInterviewOrThrow(id);
+            var questionnaireIdentity = this.GetQuestionnaireIdForInterview(id);
 
             var questionnaire = questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
 
             var question = questionnaire.GetQuestionByVariable(variable);
 
             if (question == null)
-                throw new HttpResponseException(this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable,
-                    @"Question was not found."));
+                return StatusCode(StatusCodes.Status406NotAcceptable,
+                    "Question was not found.");
 
             return this.CommentAnswer(id, Identity.Create(question.PublicKey, rosterVector), comment);
         }
@@ -210,19 +210,19 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <returns></returns>
         [HttpPost]
         [Route("{id:guid}/comment/{questionId}")]
-        [ApiBasicAuth(new [] {UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Headquarter, UserRoles.ApiUser, UserRoles.Administrator }, 
-            TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
-        public HttpResponseMessage CommentByIdentity(Guid id, string questionId, string comment)
+        [Authorize(Roles = "Supervisor, Interviewer, ApiUser, Administrator")]
+        public ActionResult CommentByIdentity(Guid id, string questionId, string comment)
         {
-            this.GetQuestionnaireIdByInterviewOrThrow(id);
+            var q = this.GetQuestionnaireIdForInterview(id);
+            if (q == null) return NotFound();
 
             if(!Identity.TryParse(questionId, out var questionIdentity))
-                return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, $@"bad {nameof(questionId)} format");
+                return StatusCode(StatusCodes.Status400BadRequest, $@"bad {nameof(questionId)} format");
 
             return CommentAnswer(id, questionIdentity, comment);
         }
 
-        private HttpResponseMessage CommentAnswer(Guid id, Identity questionIdentity, string comment)
+        private ActionResult CommentAnswer(Guid id, Identity questionIdentity, string comment)
         {
             var command = new CommentAnswerCommand(id, this.authorizedUser.Id, questionIdentity.Id,
                 questionIdentity.RosterVector, comment);
@@ -242,17 +242,18 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <response code="406">Target responsible was not found or it is not an interviewer</response>
         [HttpPatch]
         [Route("{id:guid}/assign")]
-        public HttpResponseMessage Assign(Guid id, AssignChangeApiModel request)
+        public ActionResult Assign(Guid id, AssignChangeApiModel request)
         {
-            this.GetQuestionnaireIdByInterviewOrThrow(id);
+            var q = this.GetQuestionnaireIdForInterview(id);
+            if (q == null) return NotFound();
 
             var userInfo = this.userViewFactory.GetUser(request.ResponsibleId.HasValue ? new UserViewInputModel(request.ResponsibleId.Value): new UserViewInputModel(request.ResponsibleName, null));
 
             if(userInfo == null)
-                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "User was not found.");
+                return StatusCode(StatusCodes.Status406NotAcceptable, "User was not found.");
 
             if(!userInfo.Roles.Contains(UserRoles.Interviewer))
-                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "User is not an interviewer.");
+                return StatusCode(StatusCodes.Status406NotAcceptable, "User is not an interviewer.");
             
             return this.TryExecuteCommand(new AssignResponsibleCommand(id, this.authorizedUser.Id, userInfo.PublicKey, userInfo.Supervisor.Id));
         }
@@ -267,9 +268,10 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <response code="406">Target interview was in status that was not ready to be approved</response>
         [HttpPatch]
         [Route("{id:guid}/approve")]
-        public HttpResponseMessage Approve(Guid id, string comment = null)
+        public ActionResult Approve(Guid id, string comment = null)
         {
-            this.GetQuestionnaireIdByInterviewOrThrow(id);
+            var q = this.GetQuestionnaireIdForInterview(id);
+            if (q == null) return NotFound();
             
             return this.TryExecuteCommand(new ApproveInterviewCommand(id, this.authorizedUser.Id, comment));
         }
@@ -284,9 +286,10 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <response code="406">Target interview was in status that was not ready to be rejected</response>
         [HttpPatch]
         [Route("{id:guid}/reject")]
-        public HttpResponseMessage Reject(Guid id, string comment = null)
+        public ActionResult Reject(Guid id, string comment = null)
         {
-            this.GetQuestionnaireIdByInterviewOrThrow(id);
+            var q = this.GetQuestionnaireIdForInterview(id);
+            if (q == null) return NotFound();
             
             return this.TryExecuteCommand(new RejectInterviewCommand(id, this.authorizedUser.Id, comment));
         }
@@ -301,9 +304,10 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <response code="406">Target interview was in status that was not ready to be approved</response>
         [HttpPatch]
         [Route("{id:guid}/hqapprove")]
-        public HttpResponseMessage HQApprove(Guid id, string comment = null)
+        public ActionResult HQApprove(Guid id, string comment = null)
         {
-            this.GetQuestionnaireIdByInterviewOrThrow(id);
+            var q = this.GetQuestionnaireIdForInterview(id);
+            if (q == null) return NotFound();
             
             return this.TryExecuteCommand(new HqApproveInterviewCommand(id, this.authorizedUser.Id, comment));
         }
@@ -318,9 +322,10 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <response code="406">Target interview was in status that was not ready to be rejected</response>
         [HttpPatch]
         [Route("{id:guid}/hqreject")]
-        public HttpResponseMessage HQReject(Guid id, string comment = null)
+        public ActionResult HQReject(Guid id, string comment = null)
         {
-            this.GetQuestionnaireIdByInterviewOrThrow(id);
+            var q = this.GetQuestionnaireIdForInterview(id);
+            if (q == null) return NotFound();
             
             return this.TryExecuteCommand(new HqRejectInterviewCommand(id, this.authorizedUser.Id, comment));
         }
@@ -335,9 +340,10 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <response code="406">Target interview was in status that was not ready to be rejected</response>
         [HttpPatch]
         [Route("{id:guid}/hqunapprove")]
-        public HttpResponseMessage HQUnapprove(Guid id, string comment = null)
+        public ActionResult HQUnapprove(Guid id, string comment = null)
         {
-            this.GetQuestionnaireIdByInterviewOrThrow(id);
+            var q = this.GetQuestionnaireIdForInterview(id);
+            if (q == null) return NotFound();
             
             return this.TryExecuteCommand(new UnapproveByHeadquartersCommand(id, this.authorizedUser.Id, comment));
         }
@@ -352,17 +358,18 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <response code="406">Interview cannot be reassigned. Check response for error description</response>
         [HttpPatch]
         [Route("{id:guid}/assignsupervisor")]
-        public HttpResponseMessage PostAssignSupervisor(Guid id, AssignChangeApiModel request)
+        public ActionResult PostAssignSupervisor(Guid id, AssignChangeApiModel request)
         {
-            this.GetQuestionnaireIdByInterviewOrThrow(id);
+            var q = this.GetQuestionnaireIdForInterview(id);
+            if (q == null) return NotFound();
 
             var userInfo = this.userViewFactory.GetUser(request.ResponsibleId.HasValue ? new UserViewInputModel(request.ResponsibleId.Value) : new UserViewInputModel(request.ResponsibleName, null));
 
             if (userInfo == null)
-                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "User was not found.");
+                return StatusCode(StatusCodes.Status406NotAcceptable, "User was not found.");
 
             if (!userInfo.Roles.Contains(UserRoles.Supervisor))
-                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "User is not a supervisor.");
+                return StatusCode(StatusCodes.Status406NotAcceptable, "User is not a supervisor.");
             
             return this.TryExecuteCommand(new AssignSupervisorCommand(id, this.authorizedUser.Id, userInfo.PublicKey));
         }
@@ -376,16 +383,17 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <response code="406">Target interview was in status that was not ready to be deleted</response>
         [HttpDelete]
         [Route("{id:guid}")]
-        public HttpResponseMessage Delete(Guid id)
+        public ActionResult Delete(Guid id)
         {
-            this.GetQuestionnaireIdByInterviewOrThrow(id);
+            var q = this.GetQuestionnaireIdForInterview(id);
+            if (q == null) return NotFound();
             
             return this.TryExecuteCommand(new DeleteInterviewCommand(id, this.authorizedUser.Id));
         }
         
         #endregion
 
-        private HttpResponseMessage TryExecuteCommand(InterviewCommand command)
+        private ActionResult TryExecuteCommand(InterviewCommand command)
         {
             try
             {
@@ -393,11 +401,11 @@ namespace WB.UI.Headquarters.API.PublicApi
             }
             catch (InterviewException interviewExc)
             {
-                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, interviewExc.Message);
+                return StatusCode(StatusCodes.Status406NotAcceptable, interviewExc.Message);
             }
             catch (Exception exc)
             {
-                this.Logger.Error($"Error during execution of {command.GetType()}", new Exception(null, exc)
+                this.logger.LogError($"Error during execution of {command.GetType()}", new Exception(null, exc)
                 {
                     Data =
                     {
@@ -405,20 +413,16 @@ namespace WB.UI.Headquarters.API.PublicApi
                         {"CommandUserId", command.UserId}
                     }
                 });
-                throw new HttpResponseException(HttpStatusCode.InternalServerError);
+
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
-            return this.Request.CreateResponse(HttpStatusCode.OK);
+            return Ok();
         }
 
-        private QuestionnaireIdentity GetQuestionnaireIdByInterviewOrThrow(Guid id)
+        private QuestionnaireIdentity GetQuestionnaireIdForInterview(Guid id)
         {
             var interviewRefs = this.interviewReferences.GetQuestionnaireIdentity(id);
-            if (interviewRefs == null)
-            {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-            }
-
             return interviewRefs;
         }
     }

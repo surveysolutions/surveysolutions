@@ -1,19 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
-using System.Web.Http;
-using System.Web.Http.Description;
-using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
-using WB.Core.BoundedContexts.Headquarters.Questionnaires;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -22,10 +17,10 @@ using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 
-namespace WB.UI.Headquarters.API.PublicApi
+namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 {
-    [RoutePrefix("api/v1/questionnaires")]
-    public class QuestionnairesController : BaseApiServiceController
+    [Route("api/v1/questionnaires")]
+    public class QuestionnairesController : ControllerBase
     {
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItems;
@@ -33,13 +28,12 @@ namespace WB.UI.Headquarters.API.PublicApi
         private readonly ISerializer serializer;
         protected readonly IQuestionnaireStorage questionnaireStorage;
 
-        public QuestionnairesController(ILogger logger,
+        public QuestionnairesController(ILogger<QuestionnairesController> logger,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IAllInterviewsFactory allInterviewsViewFactory,
             ISerializer serializer,
             IQuestionnaireStorage questionnaireStorage, 
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItems)
-            : base(logger)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.allInterviewsViewFactory = allInterviewsViewFactory;
@@ -55,13 +49,13 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <param name="offset">Skip rows</param>
         [HttpGet]
         [Route("")]
-        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
+        [Authorize(Roles = "ApiUser, Administrator")]
         public QuestionnaireApiView Questionnaires(int limit = 10, int offset = 1)
         {
             var input = new QuestionnaireBrowseInputModel()
             {
-                Page = this.CheckAndRestrictOffset(offset),
-                PageSize = this.CheckAndRestrictLimit(limit),
+                Page = offset.CheckAndRestrictOffset(),
+                PageSize = limit.CheckAndRestrictLimit(),
             };
 
             var questionnairesFromStore = this.questionnaireBrowseViewFactory.Load(input);
@@ -71,13 +65,13 @@ namespace WB.UI.Headquarters.API.PublicApi
 
         [HttpGet]
         [Route("{id:guid}/{version:long?}")]
-        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
+        [Authorize(Roles = "ApiUser, Administrator")]
         public QuestionnaireApiView Questionnaires(Guid id, long? version = null, int limit = 10, int offset = 1)
         {
-            var input = new QuestionnaireBrowseInputModel()
+            var input = new QuestionnaireBrowseInputModel
             {
-                Page = this.CheckAndRestrictOffset(offset),
-                PageSize = this.CheckAndRestrictLimit(limit),
+                Page = offset.CheckAndRestrictOffset(),
+                PageSize = limit.CheckAndRestrictLimit(),
                 QuestionnaireId = id,
                 Version = version
             };
@@ -93,40 +87,38 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <returns></returns>
         [HttpGet]
         [Route("statuses")]
-        [ResponseType(typeof(InterviewStatus))]
-        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
-        public IEnumerable<string> QuestionnairesStatuses()
+        [ProducesResponseType(typeof(InterviewStatus), 200)]
+        [Authorize(Roles = "ApiUser, Administrator")]
+        public ActionResult<IEnumerable<string>> QuestionnairesStatuses()
         {
             return Enum.GetNames(typeof(InterviewStatus));
         }
 
         [HttpGet]
         [Route("{id:guid}/{version:long}/document")]
-        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
-        public HttpResponseMessage QuestionnaireDocument(Guid id, long version)
+        [Authorize(Roles = "ApiUser, Administrator")]
+        public ActionResult QuestionnaireDocument(Guid id, long version)
         {
             var questionnaireDocumentVersioned = this.questionnaireStorage.GetQuestionnaireDocument(id, version);
 
             if (questionnaireDocumentVersioned == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                return NotFound();
             }
 
             var questionnaireDocumentVersionedSerialized = this.serializer.Serialize(questionnaireDocumentVersioned);
-            var response = this.Request.CreateResponse(HttpStatusCode.OK);
-            response.Content = new StringContent(questionnaireDocumentVersionedSerialized, Encoding.UTF8, "application/json");
-            return response;
+            return Content(questionnaireDocumentVersionedSerialized, "application/json", Encoding.UTF8);
         }
 
         [HttpGet]
         [Route("{id:guid}/{version:long}/interviews")]
-        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
+        [Authorize(Roles = "ApiUser, Administrator")]
         public InterviewApiView Interviews(Guid id, long version, int limit = 10, int offset = 1)
         {
             var input = new AllInterviewsInputModel
             {
-                Page = this.CheckAndRestrictOffset(offset),
-                PageSize = this.CheckAndRestrictLimit(limit),
+                Page = offset.CheckAndRestrictOffset(),
+                PageSize = limit.CheckAndRestrictLimit(),
                 QuestionnaireId = id,
                 QuestionnaireVersion = version
             };
@@ -146,9 +138,9 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <response code="404">Questionnaire cannot be found</response>
         [HttpPost]
         [Route("{id:guid}/{version:long}/recordAudio", Name = "RecordAudioSetting")]
-        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
-        [ObserverNotAllowedApi]
-        public HttpResponseMessage RecordAudio(Guid id, long version, [FromBody]RecordAudioRequest requestData)
+        [Authorize(Roles = "ApiUser, Administrator, Headquarter")]
+        [ObserverNotAllowed]
+        public ActionResult RecordAudio(Guid id, long version, [FromBody]RecordAudioRequest requestData)
         {
             var questionnaire = 
                 this.questionnaireBrowseItems.Query(_ => _.FirstOrDefault(
@@ -160,12 +152,12 @@ namespace WB.UI.Headquarters.API.PublicApi
             
             if (questionnaire == null)
             {
-                return Request.CreateResponse(HttpStatusCode.NotFound);
+                return NotFound();
             }
 
             questionnaire.IsAudioRecordingEnabled = requestData.Enabled;
 
-            return Request.CreateResponse(HttpStatusCode.NoContent);
+            return NoContent();
         }
     }
 }
