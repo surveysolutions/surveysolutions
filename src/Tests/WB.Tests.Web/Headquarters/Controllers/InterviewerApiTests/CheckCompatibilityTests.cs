@@ -74,7 +74,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
             var syncProtocolVersionProvider = Mock.Of<IInterviewerSyncProtocolVersionProvider>(x =>
                 x.GetProtocolVersion() == InterviewerSyncProtocolVersionProvider.ProtectedVariablesIntroduced);
 
-            var productVersion = Mock.Of<IProductVersion>(x => x.ToString() == "18.06.0.0 (build 0)");
+            var productVersion = Mock.Of<IProductVersion>(x => x.ToString() == "19.08.0.0 (build 0)");
 
             var assignments =
                 Mock.Of<IAssignmentsService>(x => x.GetAssignments(It.IsAny<Guid>()) == new List<Assignment>());
@@ -90,7 +90,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
                 assignmentsService: assignments,
                 authorizedUser: authorizedUser,
                 interviewerSettings: interviewerSettingsStorage);
-            interviewerApiController.Request.Headers.UserAgent.Add(new ProductInfoHeaderValue("org.worldbank.solutions.interviewer", "18.04.0.0"));;
+            interviewerApiController.Request.Headers.UserAgent.Add(new ProductInfoHeaderValue("org.worldbank.solutions.interviewer", "19.08.0.0"));;
 
             // Act
             HttpResponseMessage httpResponseMessage = interviewerApiController.CheckCompatibility(deviceId, 7060);
@@ -174,12 +174,12 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
             Assert.That(httpResponseMessage.StatusCode, Is.EqualTo(HttpStatusCode.UpgradeRequired));
         }
 
-        [TestCase("18.12.0.0 (build 0)", "18.03.0.0", HttpStatusCode.UpgradeRequired)]
-        [TestCase("18.12.0.0 (build 0)", "18.04.0.0", HttpStatusCode.OK)]
-        [TestCase("18.06.0.0 (build 0)", "18.06.0.0", HttpStatusCode.OK)]
-        [TestCase("18.06.0.1 (build 0)", "18.06.0.0", HttpStatusCode.OK)]
-        [TestCase("18.06.0.4 (build 0)", "18.06.0.4", HttpStatusCode.OK)]
-        [TestCase("19.08.0 (build 0)", "19.08.2 (build 25689)", HttpStatusCode.NotAcceptable)]
+        [TestCase("19.12.0.0 (build 0)", "19.07.0.0", HttpStatusCode.UpgradeRequired)]
+        [TestCase("19.12.0.0 (build 0)", "19.08.0.0", HttpStatusCode.OK)]
+        [TestCase("19.10.0.0 (build 0)", "19.10.0.0", HttpStatusCode.OK)]
+        [TestCase("19.10.0.1 (build 0)", "19.10.0.0", HttpStatusCode.OK)]
+        [TestCase("19.10.0.4 (build 0)", "19.10.0.4", HttpStatusCode.OK)]
+        [TestCase("20.09.0 (build 0)", "20.09.2 (build 25689)", HttpStatusCode.NotAcceptable)]
         public void when_set_setting_to_autoUpdateEnabled_to_false_should_return_correct_upgrade_result(
             string hqVersion, string appVersion, HttpStatusCode result)
         {
