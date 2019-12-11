@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using WB.UI.Headquarters.Resources;
 using WB.UI.Shared.Web.DataAnnotations;
 

@@ -186,7 +186,6 @@
     <Compile Include="Attributes\CamelCaseAttribute.cs" />
     <Compile Include="Compression\CompressionHandler.cs" />
     <Compile Include="Configuration\ExternalStoragesConfigSection.cs" />
-    <Compile Include="DataAnnotations\ServerSideOnlyRegularExpressionAttribute.cs" />
     <Compile Include="Extensions\ProgressiveDownload.cs" />
     <Compile Include="Extensions\ProgressiveDownloadHelpers.cs" />
     <Compile Include="Filters\ControlPanelAccessAttribute.cs" />
@@ -217,9 +216,6 @@
     <Compile Include="Configuration\IConfigurationManager.cs" />
     <Compile Include="Configuration\HqSecuritySection.cs" />
     <Compile Include="Controllers\BaseMessageDisplayController.cs" />
-    <Compile Include="DataAnnotations\PasswordRegularExpressionAttribute.cs" />
-    <Compile Include="DataAnnotations\PasswordStringLengthAttribute.cs" />
-    <Compile Include="DataAnnotations\DataAnnotationsConfig.cs" />
     <Compile Include="Extensions\Alerts.cs" />
     <Compile Include="Extensions\ModelStateDictionaryHelper.cs" />
     <Compile Include="Extensions\LinkExtensions.cs" />

@@ -2,7 +2,7 @@
 
 namespace WB.UI.Shared.Web.Configuration
 {
-    public class ExternalStoragesConfigSection : ConfigurationSection
+    public class ExternalStoragesConfig : ConfigurationSection
     {
         private const string oauth2 = "oauth2";
 

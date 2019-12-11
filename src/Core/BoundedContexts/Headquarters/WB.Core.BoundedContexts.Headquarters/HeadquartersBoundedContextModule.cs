@@ -91,6 +91,8 @@ using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAuditLog;
 using WB.Core.Infrastructure.Domain;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Infrastructure.Native.Storage.Postgre;
 using ExportSettings = WB.Core.BoundedContexts.Headquarters.DataExport.ExportSettings;
 
@@ -100,40 +102,25 @@ namespace WB.Core.BoundedContexts.Headquarters
     public class HeadquartersBoundedContextModule : IModule
     {
         private readonly string currentFolderPath;
-        private readonly SyncPackagesProcessorBackgroundJobSetting syncPackagesProcessorBackgroundJobSetting;
-        private readonly int? interviewLimitCount;
-        private readonly string syncDirectoryName;
         private readonly ExternalStoragesSettings externalStoragesSettings;
         private readonly FileSystemEmailServiceSettings fileSystemEmailServiceSettings;
         private readonly UserPreloadingSettings userPreloadingSettings;
-        private readonly ExportSettings exportSettings;
-        private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly SampleImportSettings sampleImportSettings;
         private readonly SyncSettings syncSettings;
         private readonly TrackingSettings trackingSettings;
 
         public HeadquartersBoundedContextModule(string currentFolderPath,
-            SyncPackagesProcessorBackgroundJobSetting syncPackagesProcessorBackgroundJobSetting,
             UserPreloadingSettings userPreloadingSettings,
-            ExportSettings exportSettings,
-            InterviewDataExportSettings interviewDataExportSettings,
             SampleImportSettings sampleImportSettings,
             SyncSettings syncSettings,
             TrackingSettings trackingSettings, 
-            int? interviewLimitCount = null,
-            string syncDirectoryName = "SYNC",
             ExternalStoragesSettings externalStoragesSettings = null,
             FileSystemEmailServiceSettings fileSystemEmailServiceSettings = null)
         {
             this.userPreloadingSettings = userPreloadingSettings;
-            this.exportSettings = exportSettings;
-            this.interviewDataExportSettings = interviewDataExportSettings;
             this.sampleImportSettings = sampleImportSettings;
             this.currentFolderPath = currentFolderPath;
-            this.syncPackagesProcessorBackgroundJobSetting = syncPackagesProcessorBackgroundJobSetting;
-            this.interviewLimitCount = interviewLimitCount;
             this.syncSettings = syncSettings;
-            this.syncDirectoryName = syncDirectoryName;
             this.externalStoragesSettings = externalStoragesSettings;
             this.fileSystemEmailServiceSettings = fileSystemEmailServiceSettings;
             this.trackingSettings = trackingSettings;
@@ -152,8 +139,6 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.BindToConstant<SyncSettings>(() => this.syncSettings);
             registry.BindToConstant<TrackingSettings>(() => this.trackingSettings);
-
-            registry.BindToConstant<InterviewPreconditionsServiceSettings>(() => new InterviewPreconditionsServiceSettings(this.interviewLimitCount));
 
             registry.Bind<Questionnaire>();
             registry.Bind<IPlainAggregateRootRepository<Questionnaire>, QuestionnaireRepository>();
@@ -230,9 +215,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.BindAsSingleton<IInterviewerSyncProtocolVersionProvider, InterviewerSyncProtocolVersionProvider>();
             registry.BindAsSingleton<ISupervisorSyncProtocolVersionProvider, SupervisorSyncProtocolVersionProvider>();
 
-            registry.BindToConstant<SyncPackagesProcessorBackgroundJobSetting>(() => this.syncPackagesProcessorBackgroundJobSetting);
-            registry.Bind<InterviewDetailsBackgroundSchedulerTask>();
-
             registry.Bind<IEnumeratorGroupStateCalculationStrategy, EnumeratorGroupGroupStateCalculationStrategy>();
             registry.Bind<ISupervisorGroupStateCalculationStrategy, SupervisorGroupStateCalculationStrategy>();
 
@@ -268,9 +250,6 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.BindToConstant<SampleImportSettings>(() => sampleImportSettings);
 
-            registry.BindToConstant<InterviewDataExportSettings>(() => this.interviewDataExportSettings);
-            registry.BindToConstant<ExportSettings>(() => this.exportSettings);
-
             registry.Bind<IDataExportFileAccessor, DataExportFileAccessor>();
          
             registry.Bind<ITabularFormatExportService, ReadSideToTabularFormatExportService>();
@@ -302,6 +281,9 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAssignmentFactory, AssignmentFactory>();
             registry.Bind<IAssignmentPasswordGenerator, AssignmentPasswordGenerator>();
             registry.Bind<IInterviewReportDataRepository, InterviewReportDataRepository>();
+            registry.Bind<IInterviewExpressionStateUpgrader, InterviewExpressionStateUpgrader>();
+            registry.Bind<IInterviewTreeBuilder, InterviewTreeBuilder>();
+            registry.BindAsSingleton<IInterviewAnswerSerializer, NewtonInterviewAnswerJsonSerializer>();
 
             registry.Bind<ISystemLogViewFactory, SystemLogViewFactory>();
             

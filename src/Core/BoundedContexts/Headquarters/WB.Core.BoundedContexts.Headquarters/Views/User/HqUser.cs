@@ -44,6 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         {
             Users = new List<HqUser>();
         }
+
         public virtual ICollection<HqUser> Users { get; set; }
     }
 
