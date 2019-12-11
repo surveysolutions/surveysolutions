@@ -2196,9 +2196,7 @@
     <Compile Include="API\DataCollection\AppApiControllerBase.cs" />
     <Compile Include="API\DataCollection\Enumerator\EnumeratorWebApiConfig.cs" />
     <Compile Include="API\DataCollection\Enumerator\LogsApiController.cs" />
-    <Compile Include="API\DataCollection\Interviewer\v2\ReusableCategoriesApiV2Controller.cs" />
-    <Compile Include="API\DataCollection\ReusableCategoriesControllerBase.cs" />
-    <Compile Include="API\DataCollection\Supervisor\v1\ReusableCategoriesApiV1Controller.cs" />
+    <Compile Include="API\DataCollection\Enumerator\v1\ReusableCategoriesApiV1Controller.cs" />
     <Compile Include="API\Export\UserExportApiController.cs" />
     <Compile Include="API\PublicApi\AssignmentsHistoryController.cs" />
     <Compile Include="App_GlobalResources\BatchUpload.sq.designer.cs">
