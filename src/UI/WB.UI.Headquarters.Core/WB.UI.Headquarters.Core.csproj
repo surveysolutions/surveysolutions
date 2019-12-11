@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\Api\PublicApi\IncludeOnlyPublicApiDocumentFilter.cs" />
     <Compile Remove="Services\HqSignInManager.cs" />
   </ItemGroup>
 

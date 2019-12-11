@@ -10,8 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WB.Core.BoundedContexts.Headquarters;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Modularity.Autofac;
@@ -66,6 +66,10 @@ namespace WB.UI.Headquarters
                 LogsUpgradeSettings = new DbUpgradeSettings(typeof(M201905171139_AddErrorsTable).Assembly, typeof(M201905171139_AddErrorsTable).Namespace),
                 UsersUpgradeSettings = DbUpgradeSettings.FromFirstMigration<M001_AddUsersHqIdentityModel>()
             };
+
+            builder.RegisterAssemblyTypes(typeof(Startup).Assembly)
+                .Where(x => x.Namespace.Contains("Services.Impl"))
+                .AsImplementedInterfaces();
 
             autofacKernel.Load(
                 new NcqrsModule(),

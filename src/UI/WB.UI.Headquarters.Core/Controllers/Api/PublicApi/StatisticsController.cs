@@ -5,16 +5,13 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Formatting;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
-using System.Web.Http;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
@@ -32,16 +29,15 @@ using WB.Infrastructure.Native.Sanitizer;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.API.PublicApi.Models.Statistics;
 using WB.UI.Headquarters.Code;
-using WB.UI.Shared.Web.Extensions;
 
-namespace WB.UI.Headquarters.API.PublicApi
+namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 {
     /// <summary>
     /// Provides a methods for managing report related actions
     /// </summary>
-    [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Headquarter, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
-    [RoutePrefix(@"api/v1/statistics")]
-    public class StatisticsController : ApiController
+    [Authorize(Roles = "ApiUser, Administrator, Supervisor, Headquarter")]
+    [Route(@"api/v1/statistics")]
+    public class StatisticsController : ControllerBase
     {
         private readonly ISurveyStatisticsReport surveyStatisticsReport;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
@@ -168,16 +164,16 @@ namespace WB.UI.Headquarters.API.PublicApi
                 }).ToList();
         }
 
-        private HttpResponseMessage ReturnEmptyResult(SurveyStatisticsQuery query)
+        private ActionResult ReturnEmptyResult(SurveyStatisticsQuery query)
         {
             if (!query.exportType.HasValue)
             {
-                return Request.CreateResponse(HttpStatusCode.OK, new
+                return Ok(new
                 {
                     data = new string[0],
                     recordsTotal = 0,
                     recordsFiltered = 0
-                }, new JsonMediaTypeFormatter());
+                });
             }
             else
             {
@@ -201,7 +197,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         [Localizable(false)]
         [HttpGet]
         [Route(@"")]
-        public HttpResponseMessage Report([FromUri] SurveyStatisticsQuery query)
+        public ActionResult Report([FromQuery] SurveyStatisticsQuery query)
         {
             if (query.QuestionnaireId == null)
             {
@@ -245,8 +241,8 @@ namespace WB.UI.Headquarters.API.PublicApi
             if (question.LinkedToQuestionId != null
                 || question.LinkedToRosterId != null)
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound,
-                    $"Cannot build report for Single Question that linked to roster or other questions"));
+                return NotFound(
+                    $"Cannot build report for Single Question that linked to roster or other questions");
             }
 
             var conditionalQuestion = GetQuestionByGuidOrStataCaption(query.ConditionalQuestion);
@@ -289,10 +285,8 @@ namespace WB.UI.Headquarters.API.PublicApi
 
             if (query.exportType == null)
             {
-                var response = Request.CreateResponse(HttpStatusCode.OK);
                 var reportJson = report.AsDataTablesJson(query.Draw);
-                response.Content = new StringContent(reportJson.ToString(), Encoding.UTF8, "application/json");
-                return response;
+                return Content(reportJson.ToString(), "application/json", Encoding.UTF8);
             }
 
             return CreateReportResponse(query.exportType.Value, report,
@@ -300,20 +294,16 @@ namespace WB.UI.Headquarters.API.PublicApi
 
         }      
 
-        private HttpResponseMessage CreateReportResponse(
+        private ActionResult CreateReportResponse(
             ExportFileType exportType, ReportView report, string reportName)
         {
             var exportFile = this.exportFactory.CreateExportFile(exportType);
 
             Stream exportFileStream = new MemoryStream(exportFile.GetFileBytes(report));
-            var result = new ProgressiveDownload(this.Request).ResultMessage(exportFileStream, exportFile.MimeType);
 
-            result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(@"attachment")
-            {
-                FileNameStar = $@"{this.fileSystemAccessor.MakeValidFileName(reportName)}{exportFile.FileExtension}"
-            };
-
-            return result;
+            var file = File(exportFileStream, exportFile.MimeType,
+                $"{this.fileSystemAccessor.MakeValidFileName(reportName)}{exportFile.FileExtension}");
+            return file;
         }
     }
 }
