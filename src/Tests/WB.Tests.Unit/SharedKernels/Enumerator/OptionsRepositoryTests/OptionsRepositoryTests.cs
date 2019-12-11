@@ -69,7 +69,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
                 {
                     TranslationId = translationId,
                     QuestionnaireEntityId = questionId,
-                    TranslationIndex = 1.ToString(),
+                    TranslationIndex = "1$",
                     Value = optionTranslationValue,
                     Type = TranslationType.OptionTitle
                 }
@@ -115,7 +115,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
                 {
                     TranslationId = translationId,
                     QuestionnaireEntityId = questionId,
-                    TranslationIndex = 11.ToString(),
+                    TranslationIndex = $"11$",
                     Value = 11.ToString() + "b",
                     Type = TranslationType.OptionTitle
                 },
@@ -123,7 +123,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
                 {
                     TranslationId = translationId,
                     QuestionnaireEntityId = questionId,
-                    TranslationIndex = 21.ToString(),
+                    TranslationIndex = $"21$",
                     Value = 21.ToString() + "a",
                     Type = TranslationType.OptionTitle
                 }
@@ -221,7 +221,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
             storage.StoreOptionsForQuestion(questionnaireIdentity, questionId, question.Answers, translations);
 
             // Assert
-            var filteredQuestionOption = storage.GetQuestionOptionByValue(questionnaireIdentity, questionId, 1, translationId);
+            var filteredQuestionOption = storage.GetQuestionOptionByValue(questionnaireIdentity, questionId, 1, null, translationId);
              
             CategoricalOption[] filteredOption1 = storage.GetOptionsByValues(questionnaireIdentity, questionId, new[] {1}, translationId);
 
@@ -303,9 +303,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
                 {
                     TranslationId = translationId,
                     QuestionnaireEntityId = categoryId,
-                    TranslationIndex = 1.ToString(),
+                    TranslationIndex = $"1$",
                     Value = optionTranslationValue,
-                    Type = TranslationType.OptionTitle
+                    Type = TranslationType.Categories
                 }
             };
 
@@ -433,7 +433,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
             storage.StoreOptionsForCategory(questionnaireIdentity, categoryId, options, translations);
 
             // Assert
-            var filteredQuestionOption = storage.GetCategoryOptionByValue(questionnaireIdentity, categoryId, 1, translationId);
+            var filteredQuestionOption = storage.GetCategoryOptionByValue(questionnaireIdentity, categoryId, 1, null, translationId);
              
             CategoricalOption[] filteredOption1 = storage.GetCategoryOptionsByValues(questionnaireIdentity, categoryId, new[] {1}, translationId);
 

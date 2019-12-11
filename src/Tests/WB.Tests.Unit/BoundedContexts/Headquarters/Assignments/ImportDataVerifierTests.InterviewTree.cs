@@ -66,10 +66,10 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             // assert
             Assert.That(verificationError.ErrorMessage, Does.Contain("PL0011"));
             Assert.That(verificationError.ErrorMessage, Does.Contain($"Error during import of assignment with answers: {answerOnParentQuestion}, {answer}."));
-            Assert.That(verificationError.ErrorMessage, Does.Contain("Exception: Selected value do not correspond to the parent answer selected value"));
-            Assert.That(verificationError.ErrorMessage, Does.Contain($"Question ID: {cascadingQuestionId.FormatGuid()}"));
+            Assert.That(verificationError.ErrorMessage, Does.Contain("Exception: Provided answer is not in the list part of predefined answers"));
+            Assert.That(verificationError.ErrorMessage, Does.Contain($"Question ID: {cascadingQuestionId}"));
             Assert.That(verificationError.ErrorMessage, Does.Contain($"ProvidedAnswer: {answer}"));
-            Assert.That(verificationError.ErrorMessage, Does.Contain($"ParentValue: {expectedParentValue}"));
+            Assert.That(verificationError.ErrorMessage, Does.Contain($"ParentValue: {answerOnParentQuestion}"));
         }
     }
 }
