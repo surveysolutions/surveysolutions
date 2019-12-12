@@ -150,10 +150,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public async Task<AssignmentHistory> LoadHistoryAsync(Guid assignmentPublicKey, int offset, int limit)
         {
-            var events = await this.hqEventStore.GetEventsInReverseOrderAsync(assignmentPublicKey, offset, limit);
+            var events = await this.hqEventStore.GetEventsInReverseOrderAsync(assignmentPublicKey, offset, limit)
+                .ConfigureAwait(false);
             var result = new AssignmentHistory();
 
-            var totalLength = await this.hqEventStore.TotalEventsCountAsync(assignmentPublicKey);
+            var totalLength = await this.hqEventStore.TotalEventsCountAsync(assignmentPublicKey).ConfigureAwait(false);
             result.RecordsFiltered = totalLength;
 
             foreach (IEvent committedEvent in events.Select(x => x.Payload))

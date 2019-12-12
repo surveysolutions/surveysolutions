@@ -78,6 +78,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         private readonly ConcurrentDictionary<Guid, UserView> cacheUserDocument = new ConcurrentDictionary<Guid, UserView>();
 
         private readonly InterviewDataExportSettings interviewDataExportSettings;
+
         public InterviewParaDataEventHandler(
             IReadSideRepositoryWriter<InterviewHistoryView> readSideStorage,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader,
