@@ -5,7 +5,7 @@
             <p v-dateTimeFormatting v-html="instructions"></p>
         </div>
         <ag-grid-vue 
-            ref="tableRoster"
+            ref="matrixRoster"
             class="ag-theme-customStyles"
             style="height:500px"
             domLayout='normal'
@@ -158,7 +158,7 @@
                         var instanceAsRow = {
                             rosterVector: instance.rosterVector,
                             rosterTitle: { 
-                                tableRoster: self,
+                                matrixRoster: self,
                                 rowIndex: key,
                             }, 
                         };
@@ -188,7 +188,7 @@
                 if (event.finished !== false) {
                     const MIN_HEIGHT = 16;
                     event.api.setHeaderHeight(MIN_HEIGHT);
-                    const headerCells = $(this.$refs.tableRoster.$el).find('.ag-header-cell-label');
+                    const headerCells = $(this.$refs.matrixRoster.$el).find('.ag-header-cell-label');
                     let minHeight = MIN_HEIGHT;
                     for (let index = 0; index < headerCells.length; index++) {
                         const cell = headerCells[index];
@@ -206,11 +206,11 @@
             setTableRosterHeight() {
                 if (this.$me.instances.length > 10) {
                     this.gridApi.setDomLayout('normal')
-                    this.$refs.tableRoster.$el.style.height = '500px';
+                    this.$refs.matrixRoster.$el.style.height = '500px';
                 }
                 else {
                     this.gridApi.setDomLayout('autoHeight');
-                    this.$refs.tableRoster.$el.style.height = '';
+                    this.$refs.matrixRoster.$el.style.height = '';
                 }
             },
 

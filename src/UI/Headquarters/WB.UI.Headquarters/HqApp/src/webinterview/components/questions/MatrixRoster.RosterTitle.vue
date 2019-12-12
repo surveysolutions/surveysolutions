@@ -11,17 +11,17 @@
         data() {
             return {
                 rowIndex : null,
-                tableRoster : null,
+                matrixRoster : null,
             }
         }, 
         computed: {
             roster(){
-                return this.tableRoster.$me.instances[this.rowIndex];
+                return this.matrixRoster.$me.instances[this.rowIndex];
             },
         },
         created() {
             this.rowIndex = this.params.value.rowIndex
-            this.tableRoster = this.params.value.tableRoster
+            this.matrixRoster = this.params.value.matrixRoster
         }
     }
 </script>
