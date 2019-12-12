@@ -1,6 +1,6 @@
 <template>
 <popover :enable="question.validity.messages.length > 0 || question.validity.warnings.length > 0" trigger="hover-focus" append-to="body">
-    <div :class="questionStyle" v-if="!disabled">        
+    <div :class="questionStyle">        
                 <div class="radio cell-bordered" v-for="option in editorParams.question.options" :key="$me.id + '_' + option.value">
                     <div style="width:220px; text-align:center; " class="field"> 
                         <input v-if="answeredOrAllOptions.some(e => e.value === option.value)" class="wb-radio" type="radio" 
