@@ -674,7 +674,7 @@ namespace WB.Tests.Unit.Designer
         }
 
         public static QuestionnaireDocument QuestionnaireDocument(
-            string variable, Guid? id = null, string title = null, IEnumerable<IComposite> children = null, Guid? userId = null)
+            string variable, Guid? id = null, string title = null, IEnumerable<IComposite> children = null, Guid? userId = null, Categories[] categories = null)
         {
             return new QuestionnaireDocument
             {
@@ -682,7 +682,8 @@ namespace WB.Tests.Unit.Designer
                 Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>()),
                 Title = title,
                 VariableName = variable,
-                CreatedBy = userId ?? Guid.NewGuid()
+                CreatedBy = userId ?? Guid.NewGuid(),
+                Categories = categories?.ToList()
             };
         }
 
@@ -1614,5 +1615,8 @@ namespace WB.Tests.Unit.Designer
 
         public static QuestionnaireRevision QuestionnaireRevision(Guid questionnaireId, Guid rev)
             => new QuestionnaireRevision(questionnaireId, rev);
+
+        public static Categories Categories(Guid? id = null, string name = null) =>
+            new Categories {Id = id ?? Guid.NewGuid(), Name = name};
     }
 }
