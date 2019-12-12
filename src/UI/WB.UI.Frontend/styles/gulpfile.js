@@ -49,68 +49,68 @@ const config = {
     fontsDir: '../../WB.UI.Headquarters.Core/wwwroot/lib',
     buildDir: './build',
     buildDistDir: '../../WB.UI.Headquarters.Core/wwwroot/lib',
-    filesToInject: [
-        {
-            file: "LogOn.cshtml",
-            folder: '../Views/Account/'
-        },
-        {
-            file: "_AdminLayout.cshtml",
-            folder: '../Views/Shared/'
-        },
-        {
-            file: "_MainLayout.cshtml",
-            folder: '../Views/Shared/'
-        },
-        {
-            file: "_MainLayoutHq.cshtml",
-            folder: '../Views/Shared/'
-        },
-        {
-            file: "Review.cshtml",
-            folder: '../Views/Interview/'
-        },
-        {
-            file: "Index.cshtml",
-            folder: '../Views/WebInterview/'
-        },
-        {
-            file: "TakeNewAssignment.cshtml",
-            folder: '../Views/HQ/'
-        },
-        {
-            file: "Index.cshtml",
-            folder: '../Views/Download/'
-        },
-		{
-            file: "Supervisor.cshtml",
-            folder: '../Views/Download/'
-        },
-        {
-            file: "_WebInterviewLayout.cshtml",
-            folder: '../Views/WebInterview/'
-        },       
-		{
-            file: "Index.cshtml",
-            folder: '../Views/UnderConstruction/'
-        },
-        {
-            file: "InterviewLayout.cshtml",
-            folder: "../../../WB.UI.WebTester/Views/WebTester/",
-            contentPrefix: "~/Content/Styles/",
-            plain: true
-        }
-    ],
+    // filesToInject: [
+    //     {
+    //         file: "LogOn.cshtml",
+    //         folder: '../Views/Account/'
+    //     },
+    //     {
+    //         file: "_AdminLayout.cshtml",
+    //         folder: '../Views/Shared/'
+    //     },
+    //     {
+    //         file: "_MainLayout.cshtml",
+    //         folder: '../Views/Shared/'
+    //     },
+    //     {
+    //         file: "_MainLayoutHq.cshtml",
+    //         folder: '../Views/Shared/'
+    //     },
+    //     {
+    //         file: "Review.cshtml",
+    //         folder: '../Views/Interview/'
+    //     },
+    //     {
+    //         file: "Index.cshtml",
+    //         folder: '../Views/WebInterview/'
+    //     },
+    //     {
+    //         file: "TakeNewAssignment.cshtml",
+    //         folder: '../Views/HQ/'
+    //     },
+    //     {
+    //         file: "Index.cshtml",
+    //         folder: '../Views/Download/'
+    //     },
+	// 	{
+    //         file: "Supervisor.cshtml",
+    //         folder: '../Views/Download/'
+    //     },
+    //     {
+    //         file: "_WebInterviewLayout.cshtml",
+    //         folder: '../Views/WebInterview/'
+    //     },       
+	// 	{
+    //         file: "Index.cshtml",
+    //         folder: '../Views/UnderConstruction/'
+    //     },
+    //     {
+    //         file: "InterviewLayout.cshtml",
+    //         folder: "../../../WB.UI.WebTester/Views/WebTester/",
+    //         contentPrefix: "~/Content/Styles/",
+    //         plain: true
+    //     }
+    // ],
     cssFilesToWatch: './css/*.scss"',
     cssSource: './css/markup.scss',
     cssAppInject: 'cssApp',
     cssLibsInject: 'cssLibs',
     jsLibsInject: 'jsLibs',
     css: {
-        markup: "./css/markup.scss",
-        ["markup-web-interview"]: "./css/markup-web-interview.scss",
-        ["markup-specific"]: "./css/markup-specific.scss",
-        ["markup-interview-review"]: "./css/markup-interview-review.scss"
+        markup:                     "./css/markup.scss",
+        ["markup-web-interview"]:   "./css/markup-web-interview.scss",
+        ["markup-specific"]:        "./css/markup-specific.scss",
+        ["markup-interview-review"]:"./css/markup-interview-review.scss"
     },
     webTester: {
         targetFolder: '../../WB.UI.WebTester/Content/',
@@ -252,57 +252,57 @@ gulp.task('libsCss', ["checkSources"], wrapPipe(function (success, error) {
         .pipe(gulp.dest(config.buildDistDir));
 }));
 
-gulp.task('inject', ['styles', 'libsJs'],
-    wrapPipe((success, error) => {
-        if (!config.production) return util.noop();
+// gulp.task('inject', ['styles', 'libsJs'],
+//     wrapPipe((success, error) => {
+//         if (!config.production) return util.noop();
         
-        var cssLibs = gulp.src(config.buildDistDir + '/libs-*.min.css', { read: false });
-        var jsLibs = gulp.src(config.buildDistDir + '/libs-*.min.js', { read: false });
+//         var cssLibs = gulp.src(config.buildDistDir + '/libs-*.min.css', { read: false });
+//         var jsLibs = gulp.src(config.buildDistDir + '/libs-*.min.js', { read: false });
 
-        var tasks = config.filesToInject.map(function (fileToInject) {
+//         var tasks = config.filesToInject.map(function (fileToInject) {
 
-            function transform(filepath) {
-                const contentPrefix = fileToInject.contentPrefix || "~/Dependencies"
-                filepath = fileToInject.plain ? path.basename(filepath) : filepath
-                const url = '@Url.Content("' + contentPrefix + filepath + '")';
+//             function transform(filepath) {
+//                 const contentPrefix = fileToInject.contentPrefix || "~/Dependencies"
+//                 filepath = fileToInject.plain ? path.basename(filepath) : filepath
+//                 const url = '@Url.Content("' + contentPrefix + filepath + '")';
     
-                if (filepath.endsWith(".css")) {
-                    return "<link rel='stylesheet' async href='" + url + "' >";
-                }
-                else if (filepath.endsWith(".js")) {
-                    return " <script type='text/javascript' src='" + url + "'></script>";
-                }
+//                 if (filepath.endsWith(".css")) {
+//                     return "<link rel='stylesheet' async href='" + url + "' >";
+//                 }
+//                 else if (filepath.endsWith(".js")) {
+//                     return " <script type='text/javascript' src='" + url + "'></script>";
+//                 }
     
-                return inject.transform.apply(inject.transform, arguments);
-            }
+//                 return inject.transform.apply(inject.transform, arguments);
+//             }
     
-            function inject(files, name) {
-                const options = { relative: false, name, transform };
-                return plugins.inject(files, options).on('error', error);
-            }
+//             function inject(files, name) {
+//                 const options = { relative: false, name, transform };
+//                 return plugins.inject(files, options).on('error', error);
+//             }
 
-            var target = gulp.src(fileToInject.folder + fileToInject.file);
+//             var target = gulp.src(fileToInject.folder + fileToInject.file);
 
-            var pipe = target
-                .pipe(inject(cssLibs, config.cssLibsInject))
-                .pipe(inject(jsLibs, config.jsLibsInject));
+//             var pipe = target
+//                 .pipe(inject(cssLibs, config.cssLibsInject))
+//                 .pipe(inject(jsLibs, config.jsLibsInject));
 
-            Object.keys(config.css).forEach(key => {
-                const conf = config.css[key];
+//             Object.keys(config.css).forEach(key => {
+//                 const conf = config.css[key];
 
-                const injectKey = "css_" + _.camelCase(key); // css_markup, css_markupWebInterview, css_markupSpecific
-                const cssApp = gulp.src(config.buildDistDir + '/' + key + '-[a-f0-9]*.min.css', { read: false });
+//                 const injectKey = "css_" + _.camelCase(key); // css_markup, css_markupWebInterview, css_markupSpecific
+//                 const cssApp = gulp.src(config.buildDistDir + '/' + key + '-[a-f0-9]*.min.css', { read: false });
 
-                pipe = pipe.pipe(inject(cssApp, injectKey));
-            });
+//                 pipe = pipe.pipe(inject(cssApp, injectKey));
+//             });
 
-            pipe = pipe.pipe(gulp.dest(fileToInject.folder));
+//             pipe = pipe.pipe(gulp.dest(fileToInject.folder));
 
-            return pipe;
-        });
+//             return pipe;
+//         });
 
-        return tasks;
-}));
+//         return tasks;
+// }));
 
 gulp.task('webtester:fonts', function() {
     return gulp.src(config.fontsDir + "/*.*")
@@ -339,8 +339,7 @@ gulp.task('webtester', ['webtester:fonts', 'webtester:styles', 'webtester:js', '
 
 gulp.task('clean', function () {
     var buildDir = gulp.src(config.buildDistDir + '/*');
-    var tester2 = gulp.src(config.webTester.targetFolder + config.webTester.scriptsFolder);
-    
+    var tester2 = gulp.src(config.webTester.targetFolder + config.webTester.scriptsFolder);    
 
     return merge(buildDir, tester2).pipe(plugins.clean({read: false, force: true}));
 });

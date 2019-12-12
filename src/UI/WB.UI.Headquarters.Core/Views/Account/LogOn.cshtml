@@ -15,16 +15,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HQ Login</title>
 
-    <!-- css_markup:css -->
-    <link rel="stylesheet" href="@Url.Content("~/Dependencies/build/markup.css")">
-    <!-- endinject -->
+    <inject component="markup" type="css" async></inject>
+    @*<inject component="hq" type="js"></inject>*@
+
     @if (ViewBag.HasCompanyLogo)
     {
-        <link rel="preload" href="@Url.Content("~/api/CompanyLogo/Thumbnail")" as="image"/>
+        <link rel="preload" href="@Url.Content("~/api/CompanyLogo/Thumbnail")" as="image" />
     }
-    <link rel="preload" href="@Url.Content("~/Dependencies/img/HQ-login-3_05.png")" as="image" />
+    @*<link rel="preload" href="@Url.Content("~/static/img/HQ-login-3_05.png")" as="image" />*@
 
-    @Html.GenerateFavicon(Url.Content("~/Dependencies/img/identity/favicon-hq"))
+    @Html.GenerateFavicon(Url.Content("~/static/img/identity/favicon-hq"))
 </head>
 <body>
     <header>
