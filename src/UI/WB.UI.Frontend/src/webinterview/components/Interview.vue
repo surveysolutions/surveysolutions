@@ -14,9 +14,8 @@
         name: 'WebInterviwew',
 
         components: {
-            signalr: window.CONFIG.NetCore 
-                ? () => import(/* webpackChunkName: "core-signalr" */ './signalr/core.signalr') 
-                : () => import(/* webpackChunkName: "old-signalr" */ './signalr/old.signalr')
+            signalr: () => import(/* webpackChunkName: "core-signalr" */ './signalr/core.signalr') 
+                
         },
 
         beforeMount() {
