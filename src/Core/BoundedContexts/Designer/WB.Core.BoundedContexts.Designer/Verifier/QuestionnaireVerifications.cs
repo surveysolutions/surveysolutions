@@ -109,6 +109,13 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                         Name = r.Name,
                         Reference = CreateReference(r)
                     })
+                ).Union(questionnaire.Categories
+                    .Where(x => !string.IsNullOrEmpty(x.Name))
+                    .Select(r => new
+                    {
+                        Name = r.Name,
+                        Reference = QuestionnaireEntityReference.CreateForCategories(r.Id)
+                    })
                 ).Union(questionnaire.VariableName.ToEnumerable()
                     .Where(x => !string.IsNullOrEmpty(x))
                     .Select(r => new
@@ -116,6 +123,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                         Name = r,
                         Reference = QuestionnaireEntityReference.CreateForQuestionnaire(questionnaire.PublicKey)
                     })
+
                 ).ToList();
 
 
