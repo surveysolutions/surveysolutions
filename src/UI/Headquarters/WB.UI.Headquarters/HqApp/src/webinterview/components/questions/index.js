@@ -25,16 +25,16 @@ Vue.component("TextQuestion",       () => import(/* webpackChunkName: "questions
 Vue.component("Area",               () => import(/* webpackChunkName: "questions" */"./Area"))
 Vue.component("TableRoster",        () => import(/* webpackChunkName: "table-roster" */"./TableRoster"))
 Vue.component("Unsupported",        () => import(/* webpackChunkName: "questions" */"./Unsupported"))
-Vue.component("MatrixRoster",        () => import(/* webpackChunkName: "table-roster" */"./MatrixRoster"))
+Vue.component("MatrixRoster",        () => import(/* webpackChunkName: "matrix-roster" */"./MatrixRoster"))
 
 Vue.component("TableRoster_TextQuestion",   () => import(/* webpackChunkName: "table-roster" */"./TableRoster.TextQuestion"))
 Vue.component("TableRoster_Integer",        () => import(/* webpackChunkName: "table-roster" */"./TableRoster.Integer"))
 Vue.component("TableRoster_Double",         () => import(/* webpackChunkName: "table-roster" */"./TableRoster.Double"))
 Vue.component("TableRoster_Unsupported",    () => import(/* webpackChunkName: "table-roster" */"./TableRoster.Unsupported"))
 
-Vue.component("MatrixRoster_CategoricalSingle",   () => import(/* webpackChunkName: "table-roster" */"./MatrixRoster.CategoricalSingle"))
-Vue.component("MatrixRoster_CategoricalMulti",   () => import(/* webpackChunkName: "table-roster" */"./MatrixRoster.CategoricalMulti"))
-Vue.component("MatrixRoster_Unsupported",    () => import(/* webpackChunkName: "table-roster" */"./MatrixRoster.Unsupported"))
+Vue.component("MatrixRoster_CategoricalSingle",   () => import(/* webpackChunkName: "matrix-roster" */"./MatrixRoster.CategoricalSingle"))
+Vue.component("MatrixRoster_CategoricalMulti",   () => import(/* webpackChunkName: "matrix-roster" */"./MatrixRoster.CategoricalMulti"))
+Vue.component("MatrixRoster_Unsupported",    () => import(/* webpackChunkName: "matrix-roster" */"./MatrixRoster.Unsupported"))
 
 Vue.component("wb-question",        () => import( /* webpackChunkName: "questions" */ "./Question"))
 Vue.component("wb-humburger",       () => import( /* webpackChunkName: "questions" */ "./ui/humburger"))
