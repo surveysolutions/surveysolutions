@@ -469,7 +469,7 @@ export default {
     },
 
     components: {
-        signalr: () => import(/* webpackChunkName: "old-signalr" */ '~/webinterview/components/signalr/old.signalr'),
+        signalr: () => import(/* webpackChunkName: "core-signalr" */ '~/webinterview/components/signalr/core.signalr'),
     },
 
     beforeMount() {
