@@ -18,8 +18,7 @@
             :grid-options="gridOptions"
 
             @grid-ready="onGridReady"
-            @column-resized="autosizeHeaders"
-            @cell-editing-stopped="endCellEditting">
+            @column-resized="autosizeHeaders">
         </ag-grid-vue>
     </div>
 </template>
@@ -101,7 +100,6 @@
                 return {
                     suppressClickEdit:true,
                     suppressCellSelection:true
-                    //stopEditingWhenGridLosesFocus: true
                 }
             }
         },
@@ -225,11 +223,7 @@
                 if(this.$store && this.$store.state.route.hash === "#" + this.id) {
                     this.doScroll(); 
                 }
-            },
-
-            endCellEditting(event) {
-                event.api.resetRowHeights();
-		    }
+            }
         }
     }
 </script>
