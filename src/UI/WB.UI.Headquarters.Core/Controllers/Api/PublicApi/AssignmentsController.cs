@@ -15,6 +15,7 @@ using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.CommandBus;
@@ -37,7 +38,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private readonly IAssignmentsService assignmentsStorage;
         private readonly IAssignmentViewFactory assignmentViewFactory;
         private readonly IMapper mapper;
-        private readonly UserManager<HqUser> userManager;
+        private readonly IUserRepository userManager;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly ISystemLog auditLog;
         private readonly ICommandTransformator commandTransformator;
@@ -53,7 +54,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             IAssignmentViewFactory assignmentViewFactory,
             IAssignmentsService assignmentsStorage,
             IMapper mapper,
-            UserManager<HqUser> userManager,
+            IUserRepository userManager,
             IQuestionnaireStorage questionnaireStorage,
             ISystemLog auditLog,
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment,
@@ -390,8 +391,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 return null;
             }
 
-            return Guid.TryParse(responsible, out Guid _)
-                ? await this.userManager.FindByIdAsync(responsible)
+            return Guid.TryParse(responsible, out Guid responsibleGuid)
+                ? await this.userManager.FindByIdAsync(responsibleGuid)
                 : await this.userManager.FindByNameAsync(responsible);
         }
 
@@ -555,6 +556,39 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 assignment.InterviewSummaries.Count));
 
             return Ok();
+        }
+
+        /// <summary>
+        /// Gets history of the assignment
+        /// </summary>
+        /// <param name="id">Assignment id</param>
+        /// <param name="start"></param>
+        /// <param name="length">Limit of events to return</param>
+        /// <response code="200">Assignment history</response>
+        /// <response code="403">Assignment cannot accessed by logged in user</response>
+        /// <response code="404">Assignment cannot be found</response>
+        [HttpGet]
+        [Route("{id:int}/history")]
+        [Authorize(Roles = "ApiUser, Supervisor, Headquarter, Administrator")]
+        public async Task<ActionResult<AssignmentHistory>> History(int id, [FromQuery]int start = 0, [FromQuery]int length = 30)
+        {
+            var assignment = this.assignmentsStorage.GetAssignment(id);
+            if (assignment == null)
+            {
+                return NotFound();
+            }
+
+            if (this.authorizedUser.IsSupervisor && assignment.ResponsibleId != this.authorizedUser.Id)
+            {
+                var responsible = await this.userManager.FindByIdAsync(assignment.ResponsibleId);
+                if (!responsible.IsInRole(UserRoles.Interviewer))
+                    return Forbid();
+                if(responsible.Profile.SupervisorId != this.authorizedUser.Id)
+                    return Forbid();
+            }
+
+            AssignmentHistory result = await this.assignmentViewFactory.LoadHistoryAsync(assignment.PublicKey, start, length);
+            return result;
         }
     }
 }
