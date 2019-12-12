@@ -4,14 +4,12 @@ using System.Linq;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -105,6 +103,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             WarningForCollection(SameTitle, "WB0266", VerificationMessages.WB0266_SameTitle),
             Warning(NoPrefilledQuestions, "WB0216", VerificationMessages.WB0216_NoPrefilledQuestions),
             WarningByValueAndTitleNumbersIsNotEqualsInCategoricalQuestions,
+            Warning<ICategoricalQuestion, ICategoricalQuestion>("WB0296", QuestionsHasSameCategories, VerificationMessages.WB0296)
         };
 
         private bool IdentifyingQuestionInSectionWithEnablingCondition(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
@@ -323,6 +322,26 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     yield return QuestionnaireVerificationMessage.Warning("WB0288", message, reference);
                 }
             }
+        }
+
+        private static EntityVerificationResult<ICategoricalQuestion> QuestionsHasSameCategories(ICategoricalQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            if (question.Answers == null || !question.Answers.Any())
+                return new EntityVerificationResult<ICategoricalQuestion> {HasErrors = false};
+
+            var duplicatedQuestionsByCategories = questionnaire.Find<ICategoricalQuestion>(x =>
+                x != question && x.Answers != null && question.Answers.SequenceEqual(x.Answers));
+
+            if (duplicatedQuestionsByCategories.Any())
+            {
+                return new EntityVerificationResult<ICategoricalQuestion>
+                {
+                    HasErrors = true,
+                    ReferencedEntities = duplicatedQuestionsByCategories
+                };
+            }
+
+            return new EntityVerificationResult<ICategoricalQuestion> {HasErrors = false};
         }
 
         private static IEnumerable<QuestionnaireVerificationMessage> Error_ManyGpsPrefilledQuestions_WB0006(MultiLanguageQuestionnaireDocument document)
@@ -952,6 +971,17 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 let verificationResult = verifyEntity(entity, questionnaire)
                 where verificationResult.HasErrors
                 select QuestionnaireVerificationMessage.Error(code, message, verificationResult.ReferencedEntities.Select(x => CreateReference(x)).ToArray());
+        }
+
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning<TEntity, TReferencedEntity>(string code, Func<TEntity, MultiLanguageQuestionnaireDocument, EntityVerificationResult<TReferencedEntity>> verifyEntity, string message)
+            where TEntity : class, IComposite
+            where TReferencedEntity : class, IComposite
+        {
+            return questionnaire =>
+                from entity in questionnaire.Find<TEntity>(_ => true)
+                let verificationResult = verifyEntity(entity, questionnaire)
+                where verificationResult.HasErrors
+                select QuestionnaireVerificationMessage.Warning(code, message, verificationResult.ReferencedEntities.Select(x => CreateReference(x)).ToArray());
         }
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> ErrorForTranslation<TEntity>(string code, Func<TEntity, MultiLanguageQuestionnaireDocument, bool> hasError, string message)

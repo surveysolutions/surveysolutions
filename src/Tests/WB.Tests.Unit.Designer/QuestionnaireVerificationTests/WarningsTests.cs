@@ -835,5 +835,21 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                     new Answer() { AnswerValue = "10", AnswerText = "10+" }, 
                 })
                 .ExpectWarning("WB0288");
+
+        [Test]
+        public void when_2_categorical_questions_have_the_same_categories()
+            => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
+            {
+                Create.SingleOptionQuestion(answers: new List<Answer>
+                {
+                    new Answer() {AnswerValue = "1", AnswerText = "1", ParentValue = "1"},
+                    new Answer() {AnswerValue = "2", AnswerText = "2", ParentValue = "1"}
+                }),
+                Create.MultyOptionsQuestion(options: new List<Answer>
+                {
+                    new Answer() {AnswerValue = "1", AnswerText = "1", ParentValue = "1"},
+                    new Answer() {AnswerValue = "2", AnswerText = "2", ParentValue = "1"}
+                }),
+            }).ExpectWarning("WB0296");
     }
 }
