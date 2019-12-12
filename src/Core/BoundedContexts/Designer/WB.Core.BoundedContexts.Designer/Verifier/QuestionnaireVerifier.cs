@@ -69,7 +69,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 new QuestionnaireVerifications(substitutionService, keywordsProvider), 
                 new StaticTextVerifications(), 
                 new TranslationVerifications(translationService), 
-                new VariableVerifications(substitutionService)
+                new VariableVerifications(substitutionService),
+                new CategoriesVerifications(keywordsProvider), 
             };
         }
        
