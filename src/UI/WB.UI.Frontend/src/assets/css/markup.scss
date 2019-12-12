@@ -1,7 +1,6 @@
 @import "variables";
 $icon-font-path: '../fonts/';
-@import "../node_modules/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
-
+@import "../../../node_modules/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
 @import "mixins";
 @import "buttons";
 @import "navbar";

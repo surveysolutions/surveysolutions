@@ -26,6 +26,8 @@
     @Html.GenerateFavicon(Url.Content("~/Content/identity/favicon-hq"))
 
     <title>@ViewBag.Title</title>
+    
+    <inject component="markup" type="css" async="true"></inject>
 
     <!-- cssLibs:css -->
     <link rel="stylesheet" href="@Url.Content("~/Dependencies/build/libs.css")">
