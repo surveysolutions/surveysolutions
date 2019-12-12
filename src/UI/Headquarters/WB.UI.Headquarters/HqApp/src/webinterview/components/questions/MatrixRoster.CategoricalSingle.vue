@@ -1,5 +1,5 @@
 <template>
-<popover :enable="question.validity.messages.length > 0 || question.validity.warnings.length > 0" trigger="hover-focus" append-to="body">
+<popover  trigger="hover-focus" append-to="body">
     <div :class="questionStyle">        
                 <div class="radio cell-bordered" v-for="option in editorParams.question.options" :key="$me.id + '_' + option.value">
                     <div style="width:220px; text-align:center; " class="field"> 
@@ -7,7 +7,7 @@
                           :id="`${$me.id}_${option.value}`" 
                           :name="$me.id" 
                           :value="option.value" 
-                          :disabled="!$me.acceptAnswer" 
+                          :disabled="disabled" 
                           v-model="answer"
                           @change="change">
                         <label :for="$me.id + '_' + option.value">
@@ -15,7 +15,6 @@
                         </label>                        
                     </div>
                 </div>
-
 
             <template slot="popover">
                 <div class="error-tooltip" v-if="!question.validity.isValid">
@@ -29,8 +28,7 @@
                         <span v-dateTimeFormatting v-html="message" :key="message"></span>
                     </template>
                 </div>
-            </template>                
-         
+            </template>
     </div>
     </popover>
 </template>

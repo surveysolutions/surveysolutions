@@ -12,7 +12,7 @@
             :id="$me.id + '_' + option.value"
             :name="$me.id"
             :value="option.value"
-            :disabled="!$me.acceptAnswer"
+            :disabled="disabled"
             v-model="answer"
             @change="change"
             v-disabledWhenUnchecked="{
