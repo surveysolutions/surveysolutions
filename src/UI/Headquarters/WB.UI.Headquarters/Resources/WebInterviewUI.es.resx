@@ -382,7 +382,7 @@
     <value>Le enviaremos un mensaje con el enlace para reanudar la entrevista si necesita continuar más tarde.</value>
   </data>
   <data name="EmailLink_ResumeAnyTime" xml:space="preserve">
-    <value>Puede cancelar ahora y continuar con la entrevista. Y puede enviarlo más tarde haciendo clic en el elemento 'Enlace de reanudar correo electrónico' en el menú superior.</value>
+    <value>Puede cancelar ahora y continuar con la entrevista. Y puede enviarlo más tarde haciendo clic en el elemento 'Enlace para reanudar' en el menú superior.</value>
   </data>
   <data name="EmailLink_Placeholder" xml:space="preserve">
     <value>Ingrese correo electrónico</value>
@@ -391,7 +391,7 @@
     <value>{{email}} es una dirección de correo electrónico no válida</value>
   </data>
   <data name="EmailLink_EmailResumeLink" xml:space="preserve">
-    <value>Enlace de currículum por correo electrónico</value>
+    <value>Enlace para reanudar</value>
   </data>
   <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
     <value>¿Está seguro de que desea eliminar la lista relacionada '{{rosterTitle}}'?</value>
