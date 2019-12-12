@@ -365,24 +365,42 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     this.ApplyValidity(rosterInstance.Validity, rosterInstance.Status);
                 });
 
-                var questions = questionnaire.GetChildQuestions(identity.Id)
-                    .Select(questionId => new TableRosterQuestionReference()
-                    {
-                        Id = questionId.FormatGuid(),
-                        Title = questionnaire.GetQuestionTitle(questionId),
-                        Instruction = questionnaire.GetQuestionInstruction(questionId),
-                        EntityType = GetEntityTypeInTableRoster(questionId, questionnaire).ToString(),
-                    })
-                    .ToArray();
-
-                var result = new TableRoster()
+                if (questionnaire.IsTableRoster(identity.Id))
                 {
-                    Id = id,
-                    Title = questionnaire.GetGroupTitle(identity.Id),
-                    Questions = questions,
-                    Instances = tableRosterInstances
-                };
-                return result;
+                    return new TableRoster()
+                    {
+                        Id = id,
+                        Title = questionnaire.GetGroupTitle(identity.Id),
+                        Questions = questionnaire.GetChildQuestions(identity.Id)
+                            .Select(questionId => new TableRosterQuestionReference()
+                            {
+                                Id = questionId.FormatGuid(),
+                                Title = questionnaire.GetQuestionTitle(questionId),
+                                Instruction = questionnaire.GetQuestionInstruction(questionId),
+                                EntityType = GetEntityTypeInTableRoster(questionId, questionnaire).ToString(),
+                            }).ToArray(),
+                        Instances = tableRosterInstances
+                    };
+                }
+
+                if (questionnaire.IsMatrixRoster(identity.Id))
+                {
+                    return new MatrixRoster()
+                    {
+                        Id = id,
+                        Title = questionnaire.GetGroupTitle(identity.Id),
+                        Questions = questionnaire.GetChildQuestions(identity.Id)
+                            .Select(questionId => new MatrixRosterQuestionReference()
+                            {
+                                Id = questionId.FormatGuid(),
+                                Title = questionnaire.GetQuestionTitle(questionId),
+                                Instruction = questionnaire.GetQuestionInstruction(questionId),
+                                EntityType = GetEntityTypeInMatrixRoster(questionId, questionnaire).ToString(),
+                                Options = questionnaire.GetOptionsForQuestion(questionId, null, null, new int[0]).ToArray()
+                            }).ToArray(),
+                        Instances = tableRosterInstances
+                    };
+                }
             }
 
             return null;
@@ -401,6 +419,23 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 default:
                     return InterviewEntityType.Unsupported;
             }
+
+        }
+
+        private static InterviewEntityType GetEntityTypeInMatrixRoster(Guid entityId, IQuestionnaire callerQuestionnaire)
+        {
+            switch (callerQuestionnaire.GetQuestionType(entityId))
+            {
+                case QuestionType.SingleOption:
+                    return InterviewEntityType.CategoricalSingle;
+                case QuestionType.MultyOption:
+                    return callerQuestionnaire.IsQuestionYesNo(entityId)
+                        ? InterviewEntityType.CategoricalYesNo
+                        : InterviewEntityType.CategoricalMulti;
+                default:
+                    return InterviewEntityType.Unsupported;
+            }
+
         }
 
         private InterviewGroupOrRosterInstance GetRosterInstanceEntity(IStatefulInterview callerInterview, IQuestionnaire questionnaire,

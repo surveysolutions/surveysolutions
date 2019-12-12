@@ -247,13 +247,21 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public Validity Validity { get; set; } = new Validity();
     }
     
-    public class TableRoster : InterviewEntity
+    public class RosterEntity : InterviewEntity
     {
         public Validity Validity { get; set; } = new Validity();
-
-        public RosterQuestionReference[] Questions { get; set; }
-
+        
         public TableRosterInstance[] Instances { get; set; }
+    }
+
+    public class TableRoster : RosterEntity
+    {
+        public TableRosterQuestionReference[] Questions { get; set; }
+    }
+
+    public class MatrixRoster : RosterEntity
+    {
+        public MatrixRosterQuestionReference[] Questions { get; set; }
     }
 
     public class TableRosterInstance : InterviewEntity
