@@ -2031,5 +2031,14 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0295", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questions have the same categories. Use reusable categories instead.
+        /// </summary>
+        public static string WB0296 {
+            get {
+                return ResourceManager.GetString("WB0296", resourceCulture);
+            }
+        }
     }
 }

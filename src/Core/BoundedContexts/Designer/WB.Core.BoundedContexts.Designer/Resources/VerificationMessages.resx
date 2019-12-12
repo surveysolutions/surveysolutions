@@ -774,4 +774,7 @@
   <data name="WB0295" xml:space="preserve">
     <value>Name of categories shouldn't start with digit or underscore</value>
   </data>
+  <data name="WB0296" xml:space="preserve">
+    <value>Questions have the same categories. Use reusable categories instead</value>
+  </data>
 </root>
