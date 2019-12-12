@@ -387,7 +387,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
                 if (questionnaire.IsMatrixRoster(identity.Id))
                 {
-                    return new TableRoster()
+                    return new MatrixRoster()
                     {
                         Id = id,
                         Title = questionnaire.GetGroupTitle(identity.Id),

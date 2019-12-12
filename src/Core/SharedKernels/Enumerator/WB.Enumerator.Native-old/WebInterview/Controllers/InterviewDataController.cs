@@ -428,7 +428,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 var interviewEntity = this.interviewEntityFactory.GetEntityDetails(id, callerInterview, questionnaire, IsReviewMode());
                 interviewEntities.Add(interviewEntity);
 
-                if (interviewEntity is TableRoster tableRoster)
+                if (interviewEntity is RosterEntity tableRoster)
                 {
                     foreach (var tableRosterInstance in tableRoster.Instances)
                     {
