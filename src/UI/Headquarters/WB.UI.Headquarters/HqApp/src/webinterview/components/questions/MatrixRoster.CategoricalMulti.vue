@@ -101,9 +101,9 @@
                     this.answerMulti(this.answer);
                 });
             },
-            questionId()  {
-                return this.params.value.identity
-            },
+            //questionId()  {
+            //    return this.params.value.identity
+            //},
             answerMulti(value) {
                 if (!this.$me.isRosterSize) {
                     this.$store.dispatch("answerMultiOptionQuestion", { answer: value, identity: this.$me.id })
