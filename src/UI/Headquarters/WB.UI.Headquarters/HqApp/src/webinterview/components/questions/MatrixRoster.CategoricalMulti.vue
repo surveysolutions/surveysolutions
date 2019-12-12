@@ -1,7 +1,6 @@
 <template>
-    <div :class='questionStyle' v-if="!disabled">
-        <div
-          class="cell-bordered d-flex" style="align-items:center;"
+    <div :class='questionStyle' >
+        <div class="cell-bordered d-flex" style="align-items:center;"
           v-for="option in editorParams.question.options"
           :key="$me.id + '_' + option.value"
           v-bind:class="{ 'unavailable-option locked-option': isProtected(option.value) }">
@@ -30,6 +29,7 @@
 
 <script lang="js">
     import Vue from 'vue'
+    import { filter } from "lodash"
     import { entityDetails, tableCellEditor } from "../mixins"
     import { shouldShowAnsweredOptionsOnlyForSingle } from "./question_helpers"
 
