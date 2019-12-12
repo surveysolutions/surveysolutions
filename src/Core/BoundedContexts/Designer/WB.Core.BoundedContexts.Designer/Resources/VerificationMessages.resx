@@ -753,4 +753,25 @@
   <data name="WB0288_ValueAndTitleNumbersIsNotEquals" xml:space="preserve">
     <value>Label {1} for code {0} is a number different from the value being labeled.</value>
   </data>
+  <data name="WB0289" xml:space="preserve">
+    <value>Name of categories shouldn't be longer than {0} characters.</value>
+  </data>
+  <data name="WB0290" xml:space="preserve">
+    <value>Name of categories shouldn't end with underscore</value>
+  </data>
+  <data name="WB0291" xml:space="preserve">
+    <value>Name of categories shouldn't have two and more consecutive underscore characters.</value>
+  </data>
+  <data name="WB0292" xml:space="preserve">
+    <value>Name of categories should not be empty.</value>
+  </data>
+  <data name="WB0293" xml:space="preserve">
+    <value>Name of categories cannot be a reserved word.</value>
+  </data>
+  <data name="WB0294" xml:space="preserve">
+    <value>Name of categories should contain only letters, digits and underscore character</value>
+  </data>
+  <data name="WB0295" xml:space="preserve">
+    <value>Name of categories shouldn't start with digit or underscore</value>
+  </data>
 </root>
