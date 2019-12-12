@@ -74,14 +74,18 @@ const pages = {
 };
 
 module.exports = {
-    pages,
+    pages: Object.assign(pages, {
+        "markup":                   { entry: "src/assets/css/markup.scss" },
+        "markup-specific":          { entry: "src/assets/css/markup-specific.scss" },
+        "markup-web-interview":     { entry: "src/assets/css/markup-web-interview.scss" },
+        "markup-interview-review":  { entry: "src/assets/css/markup-interview-review.scss" }
+    }),
 
     devServer: {
         contentBase: join("dist"),
         publicPath: "/headquarters/hqapp/dist/",
         hot: true,
         compress: false,
-
         headers: { "Access-Control-Allow-Origin": "*" },
         host: "localhost",
         port: 8080,
@@ -154,6 +158,14 @@ module.exports = {
                                 "*.json"
                             ),
                             destination: join("dist")
+                        },
+                        {
+                            source: join("dist", "img", "*.*"),
+                            destination: join(hqFolder, "wwwroot", "static", "img")
+                        },
+                        {
+                            source: join("dist", "fonts", "*.*"),
+                            destination: join(hqFolder, "wwwroot", "static", "fonts")
                         }
                     ]
                 }
@@ -184,6 +196,7 @@ module.exports = {
             .set("~", join("src"));
 
         Object.keys(pages).forEach(page => {
+            if(pages[page].filename != null) 
             config.plugin("html-" + page).tap(args => {
                 const options = args[0];
 

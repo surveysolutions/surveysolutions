@@ -68,11 +68,7 @@ gulp.task("hq", ["build"], function() {
         .pipe(gulp.dest(config.hq));
 });
 
-gulp.task("styles", cb => {
-    run("yarn", isDevMode ? ["gulp"] : ["gulp", "--production"], cb, join("styles"));
-})
-
-gulp.task("default", ["cleanup", "styles", "build", "webTester", "hq"].filter(x => x));
+gulp.task("default", ["cleanup",  "build", "webTester", "hq"].filter(x => x));
 
 gulp.task("cleanup", cb => {
     if (!isDevMode || process.env.FORCE_CLEANUP) {
