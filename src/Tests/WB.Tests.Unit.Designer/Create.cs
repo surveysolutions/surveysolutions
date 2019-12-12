@@ -683,7 +683,7 @@ namespace WB.Tests.Unit.Designer
                 Title = title,
                 VariableName = variable,
                 CreatedBy = userId ?? Guid.NewGuid(),
-                Categories = categories?.ToList()
+                Categories = categories?.ToList() ?? new List<Categories>()
             };
         }
 
