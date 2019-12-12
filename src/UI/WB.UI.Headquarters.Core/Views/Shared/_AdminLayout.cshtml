@@ -5,7 +5,7 @@
 @using WB.UI.Shared.Web.Extensions
 @inject IAuthorizedUser authorizedUser
 @inject IProductVersion productVersion
-@inject IVersionCheckService versionCheckService
+@*@inject IVersionCheckService versionCheckService*@
 @*@functions{
         public string TokenHeaderValue()
         {
@@ -26,22 +26,15 @@
     @Html.GenerateFavicon(Url.Content("~/Content/identity/favicon-hq"))
 
     <title>@ViewBag.Title</title>
-    
+
     <inject component="markup" type="css" async="true"></inject>
 
-    <!-- cssLibs:css -->
-    <link rel="stylesheet" href="@Url.Content("~/Dependencies/build/libs.css")">
-    <!-- endinject -->
-    <!-- css_markup:css -->
-    <link rel="stylesheet" async href="@Url.Content("~/Dependencies/build/markup.css")">
-    <!-- endinject -->
     @RenderSection("styles", false)
     @if (!(ViewBag.ExcludeMarkupSpecific == true))
     {
-        <!-- css_markupSpecific:css -->
-        <link rel='stylesheet' async href='@Url.Content("~/Dependencies/build/markup-specific.css")'>
-        <!-- endinject -->
+        <inject component="markup-specific" type="css" async="true"></inject>
     }
+
     @RenderSection(@"JsLibsHeader", false)
 
     <partial name="GlobalSettings" />
@@ -123,15 +116,15 @@
                 @(productVersion.ToString())
                 <span>|</span>
                 <a href="@Url.Action("Index","Download")">@Common.GetInterviewerApp</a>
-                @if (versionCheckService.DoesNewVersionExist())
+                @*if (versionCheckService.DoesNewVersionExist())
                 {
                     <div>
                         <span style="background-color: #ff8;">@Common.NewVersionAvailable @(versionCheckService.GetNewVersionString()) </span>
                     </div>
-                }
+                }*@
             </div>
             <div class="text-right">
-                <partial name="_PoweredBy"/>
+                @*<partial name="_PoweredBy"/>*@
             </div>
         </div>
     </footer>

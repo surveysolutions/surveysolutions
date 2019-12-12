@@ -219,6 +219,7 @@ namespace WB.UI.Headquarters
                 mvc.Filters.AddService<UnitOfWorkActionFilter>(1);
                 mvc.Conventions.Add(new OnlyPublicApiConvention());
             });
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
@@ -261,10 +262,10 @@ namespace WB.UI.Headquarters
             app.UseAuthorization();
 
             app.UseSwagger();
+
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Survey Solutions API V1");
-                c.RoutePrefix = string.Empty;
             });
 
             app.UseRequestLocalization(opt =>
@@ -287,9 +288,14 @@ namespace WB.UI.Headquarters
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapDefaultControllerRoute();
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Reports}/{action=SurveyAndStatuses}/{id?}", 
+                    defaults: new
+                    {
+                        controller = "Reports", action = "SurveyAndStatuses"
+                    });
                 endpoints.MapRazorPages();
             });
         }
