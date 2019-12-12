@@ -20,15 +20,18 @@ using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Enumerator.Native.WebInterview;
+using WB.Infrastructure.Native;
 using WB.Infrastructure.Native.Files;
 using WB.Infrastructure.Native.Logging;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -96,6 +99,8 @@ namespace WB.UI.Headquarters
 
             var eventStoreModule = new PostgresWriteSideModule(eventStoreSettings, 
                 new DbUpgradeSettings(typeof(M001_AddEventSequenceIndex).Assembly, typeof(M001_AddEventSequenceIndex).Namespace));
+
+            builder.Register<EventBusSettings>((ctx) => new EventBusSettings()); // TODO REMOVE KP-13449
 
             autofacKernel.Load(
                 new NcqrsModule(),
@@ -170,9 +175,14 @@ namespace WB.UI.Headquarters
                 };
             }
 
+            var exportServiceConfig = Configuration.GetSection("Export").Get<ExportServiceConfig>();
+
+            InterviewDataExportSettings exportSettings = new InterviewDataExportSettings(exportServiceConfig.ExportServiceUrl, exportServiceConfig.LimitOfCachedItemsByDenormalizer);
+
             return new HeadquartersBoundedContextModule(appDataDirectory,
                 userPreloadingSettings,
                 sampleImportSettings,
+                exportSettings,
                 synchronizationSettings,
                 new TrackingSettings(trackingSection.WebInterviewPauseResumeGraceTimespan),
                 externalStoragesSettings: externalStoragesSettings,

@@ -17,7 +17,6 @@ using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
-using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
@@ -41,7 +40,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Templates;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
@@ -80,10 +78,6 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
-using System.Net.Http;
-using System;
-using System.Net.Http.Headers;
-using System.Text;
 using WB.Core.BoundedContexts.Headquarters.Designer;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Users;
@@ -91,10 +85,9 @@ using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAuditLog;
 using WB.Core.Infrastructure.Domain;
+using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Utils;
-using WB.Infrastructure.Native.Storage.Postgre;
-using ExportSettings = WB.Core.BoundedContexts.Headquarters.DataExport.ExportSettings;
 
 namespace WB.Core.BoundedContexts.Headquarters
 {   
@@ -106,19 +99,22 @@ namespace WB.Core.BoundedContexts.Headquarters
         private readonly FileSystemEmailServiceSettings fileSystemEmailServiceSettings;
         private readonly UserPreloadingSettings userPreloadingSettings;
         private readonly SampleImportSettings sampleImportSettings;
+        private readonly InterviewDataExportSettings exportSettings;
         private readonly SyncSettings syncSettings;
         private readonly TrackingSettings trackingSettings;
 
         public HeadquartersBoundedContextModule(string currentFolderPath,
             UserPreloadingSettings userPreloadingSettings,
             SampleImportSettings sampleImportSettings,
+            InterviewDataExportSettings exportSettings,
             SyncSettings syncSettings,
-            TrackingSettings trackingSettings, 
+            TrackingSettings trackingSettings,
             ExternalStoragesSettings externalStoragesSettings = null,
             FileSystemEmailServiceSettings fileSystemEmailServiceSettings = null)
         {
             this.userPreloadingSettings = userPreloadingSettings;
             this.sampleImportSettings = sampleImportSettings;
+            this.exportSettings = exportSettings;
             this.currentFolderPath = currentFolderPath;
             this.syncSettings = syncSettings;
             this.externalStoragesSettings = externalStoragesSettings;
@@ -136,6 +132,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.BindAsSingleton<IInMemoryEventStore, InMemoryEventStore>();
             
             registry.BindToConstant(() => this.externalStoragesSettings);
+            registry.BindToConstant(() => this.exportSettings);
 
             registry.BindToConstant<SyncSettings>(() => this.syncSettings);
             registry.BindToConstant<TrackingSettings>(() => this.trackingSettings);
@@ -174,7 +171,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IQuestionnaireVersionProvider, QuestionnaireVersionProvider>();
             registry.Bind<ITranslationManagementService, TranslationManagementService>();
             registry.Bind<IAssemblyService, AssemblyService>();
-            registry.Bind<IExportSettings, Implementation.ExportSettings>();
+            registry.Bind<IExportSettings, ExportSettings>();
             registry.Bind<IArchiveUtils, IProtectedArchiveUtils, ZipArchiveUtils>();
             
             registry.Bind<IAllInterviewsFactory, AllInterviewsFactory>();
@@ -284,6 +281,9 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IInterviewExpressionStateUpgrader, InterviewExpressionStateUpgrader>();
             registry.Bind<IInterviewTreeBuilder, InterviewTreeBuilder>();
             registry.BindAsSingleton<IInterviewAnswerSerializer, NewtonInterviewAnswerJsonSerializer>();
+
+            registry.Bind<IEventSourcedAggregateRootRepository, EventSourcedAggregateRootRepositoryWithWebCache>();
+            registry.Bind<IAggregateRootCacheCleaner, EventSourcedAggregateRootRepositoryWithWebCache>();
 
             registry.Bind<ISystemLogViewFactory, SystemLogViewFactory>();
             
