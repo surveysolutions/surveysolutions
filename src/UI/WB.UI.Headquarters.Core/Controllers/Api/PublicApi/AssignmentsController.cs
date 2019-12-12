@@ -107,7 +107,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <returns>List of assignments</returns>
         /// <returns code="406">Incorrect filtering data provided</returns>
         [HttpGet]
-        //[Route("")]
+        [Route("")]
         [Authorize(Roles = "ApiUser, Administrator")]
         public async Task<ActionResult<AssignmentsListView>> List([FromQuery] AssignmentsListFilter filter)
         {
@@ -184,6 +184,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="406">Responsible user provided in request cannot be assigned to assignment</response>
         [HttpPost]
         [Authorize(Roles = "ApiUser, Administrator")]
+        [Route("")]
         //[ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true)]
         public async Task<ActionResult<CreateAssignmentResult>> Create(CreateAssignmentApiRequest createItem)
         {
@@ -345,6 +346,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPatch]
         [Route("{id:int}/assign")]
         [Authorize(Roles = "ApiUser, Administrator")]
+        [Route("")]
         public async Task<ActionResult<AssignmentDetails>> Assign(int id, [FromBody] AssignmentAssignRequest assigneeRequest)
         {
             var assignment = assignmentsStorage.GetAssignment(id);

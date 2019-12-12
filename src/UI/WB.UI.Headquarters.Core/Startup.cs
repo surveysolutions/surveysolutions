@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
@@ -240,6 +241,37 @@ namespace WB.UI.Headquarters
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
+                c.OrderActionsBy(x =>
+                {
+
+                    var sort = new StringBuilder(x.ActionDescriptor.RouteValues["controller"]);
+                    sort.Append("_");
+                    if (x.HttpMethod == "GET")
+                    {
+                        sort.Append("A");
+                    }
+                    else if (x.HttpMethod == "PATCH")
+                    {
+                        sort.Append("B");
+                    }
+                    else if (x.HttpMethod == "POST")
+                    {
+                        sort.Append("C");
+                    }
+                    else if (x.HttpMethod == "PUT")
+                    {
+                        sort.Append("D");
+                    }
+                    else if (x.HttpMethod == "DELETE")
+                    {
+                        sort.Append("E");
+                    }
+
+                    sort.Append("_");
+                    sort.Append(x.ActionDescriptor.AttributeRouteInfo.Template);
+                    var result = sort.ToString();
+                    return result;
+                });
             });
 
             // configuration
