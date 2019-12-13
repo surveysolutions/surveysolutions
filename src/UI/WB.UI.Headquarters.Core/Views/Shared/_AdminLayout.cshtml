@@ -27,6 +27,9 @@
 
     <title>@ViewBag.Title</title>
 
+    <script>
+        window.CONFIG = { basePath: '@Url.Content(@"~/")' }
+    </script>
     <inject component="markup" type="css" async="true" fallback-to-js="true"></inject>
 
     @RenderSection("styles", false)

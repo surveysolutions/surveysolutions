@@ -70,7 +70,7 @@ namespace WB.UI.Headquarters.Code
 
                 if (match.Groups["component"].Value != Component) continue;
 
-                if (Extension == Type.css)
+                if (extension == Type.css)
                 {
                     output.TagName = "link";
                     output.Attributes.Add("rel", "stylesheet");
@@ -84,7 +84,7 @@ namespace WB.UI.Headquarters.Code
                     break;
                 }
 
-                if (Extension == Type.js)
+                if (extension == Type.js)
                 {
                     output.TagName = "script";
                     output.Attributes.Add("rel", "stylesheet");
