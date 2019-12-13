@@ -1979,7 +1979,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Matrix mode allowed only for rosters with no more than {0} questions..
+        ///   Looks up a localized string similar to Matrix mode allowed only for rosters with no more than {0} question(s)..
         /// </summary>
         public static string WB0290_MatrixRosterAllowedOnlyForGroupWithNoMoreThanElements {
             get {

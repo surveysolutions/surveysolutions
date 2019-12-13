@@ -757,7 +757,7 @@
       <value>Matrix roster allows to use only simple categorical questions: combobox, cascading or yes/no modes are not allowed.</value>
   </data>
   <data name="WB0290_MatrixRosterAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
-      <value>Matrix mode allowed only for rosters with no more than {0} questions.</value>
+      <value>Matrix mode allowed only for rosters with no more than {0} question(s).</value>
   </data>
   <data name="WB0291_MatrixRosterHasToContainNoSupervisorQuestions" xml:space="preserve">
     <value>Matrix roster has to contain no supervisor questions.</value>
