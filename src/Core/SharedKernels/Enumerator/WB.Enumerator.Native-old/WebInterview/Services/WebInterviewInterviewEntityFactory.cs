@@ -398,7 +398,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                                 Title = questionnaire.GetQuestionTitle(questionId),
                                 Instruction = questionnaire.GetQuestionInstruction(questionId),
                                 EntityType = GetEntityTypeInMatrixRoster(questionId, questionnaire).ToString(),
-                                Options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200, null).ToArray()
+                                Options = questionnaire.GetOptionsForQuestion(questionId, null, null, new int[0]).ToArray()
                             }).ToArray(),
                         Instances = tableRosterInstances
                     };

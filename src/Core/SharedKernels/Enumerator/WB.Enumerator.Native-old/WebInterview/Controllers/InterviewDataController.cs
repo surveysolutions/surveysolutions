@@ -51,9 +51,9 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             }
         };
 
-        protected IQuestionnaire GetCallerQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
+        protected IQuestionnaire GetCallerQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string translation = null)
         {
-            return questionnaireRepository.GetQuestionnaire(questionnaireIdentity, null);
+            return questionnaireRepository.GetQuestionnaire(questionnaireIdentity, translation);
         }
 
         protected IStatefulInterview GetCallerInterview(Guid interviewId)
@@ -414,7 +414,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             var callerInterview = this.GetCallerInterview(interviewId);
             if (callerInterview == null) return null;
 
-            var questionnaire = this.GetCallerQuestionnaire(callerInterview.QuestionnaireIdentity);
+            var questionnaire = this.GetCallerQuestionnaire(callerInterview.QuestionnaireIdentity, callerInterview.Language);
             var interviewEntities = new List<InterviewEntity>();
 
             foreach (var id in ids)
