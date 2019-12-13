@@ -86,7 +86,7 @@ namespace WB.Services.Export.Host
         // ReSharper disable once UnusedMember.Global Used by Aspnet core
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
-            logger.LogInformation("Export service started. version {version}",
+            logger.LogInformation("Export service starting. version {version}",
                 FileVersionInfo.GetVersionInfo(this.GetType().Assembly.Location).ProductVersion);
             
             if (env.IsDevelopment())
@@ -107,7 +107,7 @@ namespace WB.Services.Export.Host
                 e.MapControllers();
             });
 
-            Log.Logger.Information("Export service started. version {version}");
+            Log.Logger.Information("Export service started.");
 
         }
     }

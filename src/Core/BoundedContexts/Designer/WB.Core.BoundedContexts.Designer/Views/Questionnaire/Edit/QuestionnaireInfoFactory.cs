@@ -667,14 +667,22 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             {
                 var rosterScope = document.GetRosterScope(roster);
                 filteredQuestions = document.Find<IQuestion>()
-                    .Where(x => x.QuestionType != QuestionType.Multimedia && x.QuestionType != QuestionType.GpsCoordinates)
+                    .Where(x => x.QuestionType == QuestionType.SingleOption 
+                                || x.QuestionType == QuestionType.Numeric
+                                || x.QuestionType == QuestionType.Text
+                                || x.QuestionType == QuestionType.DateTime
+                                || x.QuestionType == QuestionType.QRBarcode)
                     .Where(x => document.GetRosterScope(x).Equals(rosterScope))
                     .ToList();
             }
             else
             {
                 filteredQuestions = document.Find<IQuestion>()
-                    .Where(x => x.QuestionType != QuestionType.Multimedia && x.QuestionType != QuestionType.GpsCoordinates)
+                    .Where(x => x.QuestionType == QuestionType.SingleOption
+                                || x.QuestionType == QuestionType.Numeric
+                                || x.QuestionType == QuestionType.Text
+                                || x.QuestionType == QuestionType.DateTime
+                                || x.QuestionType == QuestionType.QRBarcode)
                     .Where(x => x.GetParent()?.PublicKey == roster.PublicKey)
                     .ToList();
             }
