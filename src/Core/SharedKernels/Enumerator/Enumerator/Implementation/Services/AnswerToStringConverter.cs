@@ -14,6 +14,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
     {
         public string Convert(object answer, Guid questionId, IQuestionnaire questionnaire)
         {
+            if(!questionnaire.IsPrefilled(questionId)) throw new NotSupportedException("Only identifying question can be converted to string");
+
             Func<decimal, string> getCategoricalOptionText = null;
 
             var questionType = questionnaire.GetQuestionType(questionId);
