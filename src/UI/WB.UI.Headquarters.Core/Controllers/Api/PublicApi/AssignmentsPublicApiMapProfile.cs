@@ -31,14 +31,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             this.CreateMap<IdentifyingAnswer, AssignmentIdentifyingDataItem>()
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.Answer))
-                .ForMember(x => x.Variable, opts => opts.MapFrom(
-                    (answer, dest, value, ctx) => GetVariableName(ctx, answer.Identity.Id)))
+                .ForMember(x => x.Variable, opts => opts.MapFrom(x => x.VariableName))
                 .ForMember(x => x.Identity, opts => opts.MapFrom(x => x.Identity.ToString()));
 
             this.CreateMap<AssignmentIdentifyingQuestionRow, AssignmentIdentifyingDataItem>()
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.Answer))
-                .ForMember(x => x.Variable, opts => opts.MapFrom(
-                    (answer, dest, value, ctx) => GetVariableName(ctx, answer.Identity.Id)))
+                .ForMember(x => x.Variable, opts => opts.MapFrom(x => x.Variable))
                 .ForMember(x => x.Identity, opts => opts.MapFrom(x => x.Identity.ToString()));
 
             this.CreateMap<AssignmentRow, AssignmentViewItem>()
@@ -52,14 +50,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 .ForMember(x => x.UpdatedAtUtc, opts => opts.MapFrom(x => x.UpdatedAtUtc))
                 .ForMember(x => x.Archived, opts => opts.MapFrom(x => x.Archived))
                 .ForMember(x => x.IdentifyingQuestions, opts => opts.MapFrom(x => x.IdentifyingQuestions));
-        }
-
-        private string GetVariableName(ResolutionContext ctx, Guid? questionId)
-        {
-            if (questionId == null) return null;
-
-            var questionnaire = (IQuestionnaire)ctx.Items["Questionnaire"];
-            return questionnaire.GetQuestionVariableName(questionId.Value);
         }
     }
 }
