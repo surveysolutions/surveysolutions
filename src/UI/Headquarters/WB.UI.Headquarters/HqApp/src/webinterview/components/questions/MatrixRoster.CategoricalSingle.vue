@@ -16,7 +16,7 @@
                 </div>
             </template>
 
-    </popover>        
+        </popover>        
             <div class="radio cell-bordered" v-for="option in editorParams.question.options" :key="$me.id + '_' + option.value">
                     <div style="width:220px; text-align:center; " class="field"> 
                         <input v-if="answeredOrAllOptions.some(e => e.value === option.value)" class="wb-radio" type="radio" 
