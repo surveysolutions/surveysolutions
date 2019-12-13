@@ -27,12 +27,12 @@
 
     <title>@ViewBag.Title</title>
 
-    <inject component="markup" type="css" async="true"></inject>
+    <inject component="markup" type="css" async="true" fallback-to-js="true"></inject>
 
     @RenderSection("styles", false)
     @if (!(ViewBag.ExcludeMarkupSpecific == true))
     {
-        <inject component="markup-specific" type="css" async="true"></inject>
+        <inject component="markup-specific" type="css" async="true"  fallback-to-js="true"></inject>
     }
 
     @RenderSection(@"JsLibsHeader", false)

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace WB.UI.Headquarters.Code
 {
+    [HtmlTargetElement("inject")]
     public class InjectTagHelper : TagHelper
     {
         private readonly IWebHostEnvironment webHostEnvironment;
@@ -35,15 +36,33 @@ namespace WB.UI.Headquarters.Code
 
         public enum Type { css, js}
 
+        [HtmlAttributeName("fallback-to-js")]
+        public bool FallbackToJs { get; set; }
+
         [HtmlAttributeName("type")]
         public Type Extension { get; set; }
 
-        private static readonly Regex ComponentMatcher = new Regex(@"(?<component>[\w\d-]*)\.([\da-f]*)\.(min\.)?(css|js)", RegexOptions.Compiled);
+        private static readonly Regex ComponentMatcher = new Regex(@"(?<component>[\w\d-]*)\.([\da-f]*)?\.?(min\.)?(css|js)", RegexOptions.Compiled);
 
         // TODO: Add memory caching
         public override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            foreach (var entry in webHostEnvironment.WebRootFileProvider.GetDirectoryContents("static/" + Extension))
+            var extension = Extension;
+
+            InjectTag(output, extension);
+
+            if (output.TagName == "inject" && FallbackToJs)
+            {
+                InjectTag(output, Type.js);
+            }
+
+            output.PreElement.AppendHtml($"<!-- {Component}.{Extension} -->");
+            return Task.CompletedTask;
+        }
+
+        private void InjectTag(TagHelperOutput output, Type extension)
+        {
+            foreach (var entry in webHostEnvironment.WebRootFileProvider.GetDirectoryContents("static/" + extension))
             {
                 var match = ComponentMatcher.Match(entry.Name);
 
@@ -51,33 +70,31 @@ namespace WB.UI.Headquarters.Code
 
                 if (match.Groups["component"].Value != Component) continue;
 
-                switch (Extension)
+                if (Extension == Type.css)
                 {
-                    case Type.css:
-                        output.TagName = "link";
-                        output.Attributes.Add("rel", "stylesheet");
-                        output.Attributes.Add("href", GetServerPath(entry.PhysicalPath));
-                        output.TagMode = TagMode.SelfClosing;
-                        if (Async)
-                        {
-                            output.Attributes.Add(new TagHelperAttribute("async"));
-                        }
+                    output.TagName = "link";
+                    output.Attributes.Add("rel", "stylesheet");
+                    output.Attributes.Add("href", GetServerPath(entry.PhysicalPath));
+                    output.TagMode = TagMode.SelfClosing;
+                    if (Async)
+                    {
+                        output.Attributes.Add(new TagHelperAttribute("async"));
+                    }
 
-                        break;
-                    case Type.js:
-                        output.TagName = "script";
-                        output.Attributes.Add("rel", "stylesheet");
-                        output.Attributes.Add("src", GetServerPath(entry.PhysicalPath));
-                        output.TagMode = TagMode.StartTagAndEndTag;
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
+                    break;
                 }
 
-                break;
-            }
+                if (Extension == Type.js)
+                {
+                    output.TagName = "script";
+                    output.Attributes.Add("rel", "stylesheet");
+                    output.Attributes.Add("src", GetServerPath(entry.PhysicalPath));
+                    output.TagMode = TagMode.StartTagAndEndTag;
+                    break;
+                }
 
-            return Task.CompletedTask;
+                throw new ArgumentOutOfRangeException();
+            }
         }
 
         private string GetServerPath(string file)
