@@ -96,7 +96,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             if (assignment == null)
                 return StatusCode(StatusCodes.Status404NotFound);
             var questionnaire = questionnaireStorage.GetQuestionnaire(assignment.QuestionnaireId, null);
-            var result = this.mapper.Map<FullAssignmentDetails>(assignment, opt => opt.Items["Questionnaire"] = questionnaire);
+            var result = this.mapper.Map<FullAssignmentDetails>(assignment);
             return result;
         }
 
