@@ -37,18 +37,19 @@ namespace WB.UI.Designer.Controllers.Api.Tester
             var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
             var categoriesIds = questionnaireView.Source.Categories.Select(x => x.Id).ToList();
 
-            var categoriesInstances = await this.dbContext.CategoriesInstances.Where(x => x.QuestionnaireId == id && categoriesIds.Contains(x.CategoriesId))
-                                                     .ToListAsync();
-            var result = categoriesInstances.GroupBy(c => c.CategoriesId).Select(x => new ReusableCategoriesDto
-            {
-                Id = x.Key,
-                Options = x.Select(o => new CategoriesItem()
+            var result = await this.dbContext.CategoriesInstances
+                .Where(x => x.QuestionnaireId == id && categoriesIds.Contains(x.CategoriesId))
+                .GroupBy(c => c.CategoriesId)
+                .Select(x => new ReusableCategoriesDto
                 {
-                    Id = o.Id,
-                    ParentId = o.ParentId,
-                    Text = o.Text
-                }).ToList()
-            }).ToArray();
+                    Id = x.Key,
+                    Options = x.Select(o => new CategoriesItem()
+                    {
+                        Id = o.Id,
+                        ParentId = o.ParentId,
+                        Text = o.Text
+                    }).ToList()
+                }).ToArrayAsync();
 
             return Ok(result);
         }
