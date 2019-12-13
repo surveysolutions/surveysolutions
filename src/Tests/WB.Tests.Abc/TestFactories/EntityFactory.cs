@@ -791,6 +791,9 @@ namespace WB.Tests.Abc.TestFactories
         public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document = null, long version = 1)
             => Create.Entity.PlainQuestionnaire(document, version, null);
 
+        public PlainQuestionnaire PlainQuestionnaire(params IComposite[] children)
+            => Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument(null, children), 1L, null);
+
         public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document, long version, 
             Translation translation = null, 
             ISubstitutionService substitutionService = null, 

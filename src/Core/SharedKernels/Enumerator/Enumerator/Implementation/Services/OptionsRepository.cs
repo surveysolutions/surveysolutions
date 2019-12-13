@@ -201,7 +201,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             var categoryIdAsString = categoryId.FormatGuid();
             var translationIdAsString = translationId.FormatGuid();
 
-            var categoricalQuestionOption = GetOptionByValue(optionValue, questionnaireIdAsString, questionIdAsString, categoryIdAsString, translationIdAsString);
+            var categoricalQuestionOption = GetOptionByValue(optionValue, parentValue, questionnaireIdAsString, questionIdAsString, categoryIdAsString, translationIdAsString);
 
             if (categoricalQuestionOption == null)
                 return null;
@@ -214,19 +214,16 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             };
         }
 
-        private OptionView GetOptionByValue(decimal optionValue, string questionnaireIdAsString, string questionIdAsString, string categoryIdAsString,
-            string translationIdAsString)
-        {
-            OptionView categoricalQuestionOption = this.optionsStorage
-                .Where(x => x.QuestionnaireId == questionnaireIdAsString &&
-                            x.QuestionId == questionIdAsString &&
-                            x.CategoryId == categoryIdAsString &&
-                            x.Value == optionValue &&
-                            (x.TranslationId == translationIdAsString || x.TranslationId == null))
+        private OptionView GetOptionByValue(decimal optionValue, int? parentValue, string questionnaireIdAsString,
+            string questionIdAsString, string categoryIdAsString, string translationIdAsString) =>
+            this.optionsStorage.Where(x => x.QuestionnaireId == questionnaireIdAsString &&
+                                           x.QuestionId == questionIdAsString &&
+                                           x.CategoryId == categoryIdAsString &&
+                                           x.Value == optionValue &&
+                                           (parentValue == null || x.ParentValue == parentValue) &&
+                                           (x.TranslationId == translationIdAsString || x.TranslationId == null))
                 .OrderBy(x => x.TranslationId == null)
                 .FirstOrDefault();
-            return categoricalQuestionOption;
-        }
 
         public CategoricalOption[] GetOptionsByValues(QuestionnaireIdentity questionnaireId, Guid questionId, int[] optionValues, Guid? translationId)
         {
@@ -256,7 +253,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             for (int i = 0; i < values.Length; i++)
             {
-                var option = GetOptionByValue(values[i], questionnaireIdAsString, questionIdAsString, categoryIdAsString,
+                var option = GetOptionByValue(values[i], null, questionnaireIdAsString, questionIdAsString, categoryIdAsString,
                     translationIdAsString);
                 result.Add(ToCategoricalOption(option));
             }
