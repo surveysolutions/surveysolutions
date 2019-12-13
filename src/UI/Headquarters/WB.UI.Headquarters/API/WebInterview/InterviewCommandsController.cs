@@ -16,6 +16,7 @@ using WB.Enumerator.Native.WebInterview.Controllers;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.UI.Headquarters.API.WebInterview.Pipeline;
 using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Filters;
 
@@ -25,6 +26,7 @@ namespace WB.UI.Headquarters.API.WebInterview
     [WebInterviewDataAuthorize]
     [CamelCase]
     [RoutePrefix("api/webinterview/commands")]
+    [WebInterviewObserverNotAllowedActionFilter]
     public class InterviewCommandsController : CommandsController
     {
         private readonly IAuthorizedUser authorizedUser;
