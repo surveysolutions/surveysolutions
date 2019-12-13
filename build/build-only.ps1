@@ -49,20 +49,12 @@ try {
         New-Item "$artifactsFolder\stats" -Type Directory -Force | Out-Null
 
         if($nostatic -eq $False){
-            BuildStaticContent "Hq Deps" "src\UI\Headquarters\WB.UI.Headquarters\Dependencies" | % { if (-not $_) {
-                Log-Error 'Unexpected error occurred in BuildStaticContent while build static content for HQ Deps'
+
+            BuildStaticContent "WB.UI.FrontEnd" "src\UI\WB.UI.FrontEnd" @("build") | % { if (-not $_) {
+                Log-Error 'Unexpected error occurred in BuildStaticContent while build static content for WB.UI.FrontEnd'
                 Exit 
             }}
 
-            BuildStaticContent "Hq App" "src\UI\Headquarters\WB.UI.Headquarters\HqApp" | % { if (-not $_) {
-                Log-Error 'Unexpected error occurred in BuildStaticContent while build static content for HQ App'
-                Exit 
-            } else {
-                Move-Item ".\dist\stats.html" "$artifactsFolder\stats\HqApp.html" -ErrorAction SilentlyContinue
-                Move-Item ".\dist\shared_vendor.stats.html" "$artifactsFolder\stats\HqApp.vendor.html" -ErrorAction SilentlyContinue
-                New-Item "$artifactsFolder\coverage" -Type Directory -Force
-                Move-Item ".\.coverage" "$artifactsFolder\coverage\hqapp" -ErrorAction SilentlyContinue
-            }}
             
             CreateZip "$artifactsFolder\stats" "$artifactsFolder\stats.zip"
             CreateZip "$artifactsFolder\coverage" "$artifactsFolder\coverage.zip"
