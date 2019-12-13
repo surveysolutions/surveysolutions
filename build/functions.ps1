@@ -205,7 +205,7 @@ function versionCheck() {
 #
 # to execute pre build step - use script with name `preproduction`
 ##############################
-function BuildStaticContent($blockName, $targetLocation, $runTests = $false) {
+function BuildStaticContent($blockName, $targetLocation, $cmd = @("gulp","--production")) {
     Push-Location $targetLocation
     try {
         Log-Block $blockName {
@@ -219,8 +219,8 @@ function BuildStaticContent($blockName, $targetLocation, $runTests = $false) {
                 return $wasBuildSuccessfull
             }
     
-            Log-Message "Running gulp --production"
-            &yarn gulp --production | Write-Host
+            Log-Message "Running $cmd"
+            &yarn $cmd | Write-Host
     
             $wasBuildSuccessfull = $LASTEXITCODE -eq 0
             if (-not $wasBuildSuccessfull) {
