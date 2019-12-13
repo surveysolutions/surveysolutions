@@ -20,9 +20,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                 Create.NumericIntegerQuestion(q1Id, variable:"num_question", title: "num_question"),
                 Create.Roster(rosterId: g2Id, title: "roster", variable:  "roster", rosterType: RosterSizeSourceType.Question, rosterSizeQuestionId: q1Id, children: new IComposite[]
                 {
-                    
                     Create.TextQuestion(q2Id, variable:"text_question"),
-                    Create.GpsCoordinateQuestion(q3Id, "gps_q")
+                    Create.GpsCoordinateQuestion(q3Id, "gps_q"),
+                    Create.DateTimeQuestion(q4Id, variable:"date_question"),
+                    Create.MultimediaQuestion(q5Id, variable:"multimedia_question"),
+                    Create.QRBarcodeQuestion(q6Id, variable:"qr_question"),
+                    Create.MultyOptionsQuestion(q7Id, variable:"multioption_question"),
+                    Create.SingleOptionQuestion(q8Id, variable:"singleoption_question"),
+                    Create.NumericRealQuestion(q9Id, variable:"real_question"),
+                    Create.TextListQuestion(q10Id, variable:"list_question"),
                 }),
                 
             });
@@ -38,7 +44,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
             result = factory.GetRosterEditView(questionnaireId, g2Id);
         
         [NUnit.Framework.Test] public void should_return_grouped_list_of_title_questions_size_2 () =>
-            result.NumericIntegerTitles.Count.Should().Be(2);
+            result.NumericIntegerTitles.Count.Should().Be(6);
        
         private static QuestionnaireInfoFactory factory;
         private static NewEditRosterView result;
