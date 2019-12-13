@@ -5,6 +5,7 @@ using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.QuestionOptionsRepositoryTests
@@ -138,6 +139,31 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.QuestionOptionsRepositoryTests
             Mock.Get(optionsRepository).Verify(s => s.GetCategoryOptionsByValues(questionnaire.QuestionnaireIdentity, categoryId, optionValues, null), Times.Once);
         }
 
+        [Test]
+        public void when_call_GetOptionForQuestionByOptionValue_should_get_categorical_option_for_question_by_value_and_parent_value()
+        {
+            // arrange
+            var questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            var categoryId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            var questionnaire = Create.Entity.PlainQuestionnaire(new[]
+            {
+                Create.Entity.SingleOptionQuestion(questionId, categoryId: categoryId)
+            });
+
+            var storage = Create.Storage.QuestionOptionsRepository(
+                Create.Storage.OptionsRepository(
+                    Create.Storage.SqliteInmemoryStorage<OptionView, int?>(
+                        Create.Entity.OptionView(questionnaire.QuestionnaireIdentity, 1, "opt 1", 1, categoryId),
+                        Create.Entity.OptionView(questionnaire.QuestionnaireIdentity, 1, "opt 2", 2, categoryId))));
+
+            // act
+            var option = storage.GetOptionForQuestionByOptionValue(questionnaire, questionId, 1, 2, null);
+
+            // assert
+            Assert.That(option.Value, Is.EqualTo(1));
+            Assert.That(option.ParentValue, Is.EqualTo(2));
+            Assert.That(option.Title, Is.EqualTo("opt 2"));
+        }
 
 
         private static PlainQuestionnaire CreateQuestionnaireWithOneCategoricalQuestion(Guid questionId, Guid? reusableCategoryId = null)
