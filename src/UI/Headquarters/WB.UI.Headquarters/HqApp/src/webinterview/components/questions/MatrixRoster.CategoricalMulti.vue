@@ -29,12 +29,12 @@
             :id="$me.id + '_' + option.value"
             :name="$me.id"
             :value="option.value"
-            :disabled="disabled"
+            
             v-model="answer"
             @change="change"
             v-disabledWhenUnchecked="{
                                 maxAnswerReached: allAnswersGiven,
-                                answerNotAllowed: !$me.acceptAnswer,
+                                answerNotAllowed: disabled,
                                 forceDisabled: isProtected(option.value) }"/>
           <label :for="$me.id + '_' + option.value">
             <span class="tick"></span>            
