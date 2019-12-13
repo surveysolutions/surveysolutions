@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
             {
                 QuestionnaireTitle = questionnaire.Title,
                 CategoriesName = questionnaire.Categories.FirstOrDefault(x => x.Id == categoriesId)?.Name ?? string.Empty,
-                ContentFile = this.GetExcelFileContentEEPlus(questionnaireId, categoriesId)
+                Content = this.GetExcelFileContentEEPlus(questionnaireId, categoriesId)
             };
         }
 
