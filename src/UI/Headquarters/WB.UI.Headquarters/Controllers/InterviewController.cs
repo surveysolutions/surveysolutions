@@ -117,37 +117,30 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         private ApproveRejectAllowed GetApproveReject(InterviewSummary interviewSummary)
         {
-            ApproveRejectAllowed approveRejectAllowed;
-            if (this.authorizedUser.IsObserving)
-            {
-                approveRejectAllowed = new ApproveRejectAllowed();
-            }
-            else
-            {
-                approveRejectAllowed = new ApproveRejectAllowed
-                {
-                    SupervisorApproveAllowed = (interviewSummary.Status == InterviewStatus.Completed ||
-                                                interviewSummary.Status == InterviewStatus.RejectedByHeadquarters) &&
-                                               authorizedUser.IsSupervisor,
-                    HqOrAdminApproveAllowed = (interviewSummary.Status == InterviewStatus.Completed ||
-                                               interviewSummary.Status == InterviewStatus.ApprovedBySupervisor) &&
-                                              (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator),
-                    SupervisorRejectAllowed = (interviewSummary.Status == InterviewStatus.Completed ||
-                                               interviewSummary.Status == InterviewStatus.RejectedByHeadquarters) &&
-                                              authorizedUser.IsSupervisor,
-                    HqOrAdminRejectAllowed = (interviewSummary.Status == InterviewStatus.Completed ||
-                                              interviewSummary.Status == InterviewStatus.ApprovedBySupervisor) &&
-                                             (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator),
-                    HqOrAdminUnapproveAllowed = interviewSummary.Status == InterviewStatus.ApprovedByHeadquarters &&
-                                                (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator),
-                    InterviewersListUrl = Url.RouteUrl("DefaultApiWithAction",
-                        new { httproute = "", controller = "Teams", action = "InterviewersCombobox" })
-                };
+            ApproveRejectAllowed approveRejectAllowed = new ApproveRejectAllowed();
+            approveRejectAllowed.InterviewersListUrl = Url.RouteUrl("DefaultApiWithAction",
+                new { httproute = "", controller = "Teams", action = "InterviewersCombobox" });
 
-
-                approveRejectAllowed.InterviewerShouldbeSelected =
-                    approveRejectAllowed.SupervisorRejectAllowed && !interviewSummary.IsAssignedToInterviewer;
+            if(!this.authorizedUser.IsObserving)
+            {
+                approveRejectAllowed.HqOrAdminUnapproveAllowed = interviewSummary.Status == InterviewStatus.ApprovedByHeadquarters &&
+                                                                 (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator);
+                approveRejectAllowed.HqOrAdminRejectAllowed = (interviewSummary.Status == InterviewStatus.Completed ||
+                                                               interviewSummary.Status == InterviewStatus.ApprovedBySupervisor) &&
+                                                              (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator);
+                approveRejectAllowed.SupervisorRejectAllowed = (interviewSummary.Status == InterviewStatus.Completed ||
+                                                                interviewSummary.Status == InterviewStatus.RejectedByHeadquarters) &&
+                                                               authorizedUser.IsSupervisor;
+                approveRejectAllowed.HqOrAdminApproveAllowed = (interviewSummary.Status == InterviewStatus.Completed ||
+                                                                interviewSummary.Status == InterviewStatus.ApprovedBySupervisor) &&
+                                                               (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator);
+                approveRejectAllowed.SupervisorApproveAllowed = (interviewSummary.Status == InterviewStatus.Completed ||
+                                                                 interviewSummary.Status == InterviewStatus.RejectedByHeadquarters) &&
+                                                                authorizedUser.IsSupervisor;
             }
+
+            approveRejectAllowed.InterviewerShouldbeSelected =
+                approveRejectAllowed.SupervisorRejectAllowed && !interviewSummary.IsAssignedToInterviewer;
 
             return approveRejectAllowed;
         }
