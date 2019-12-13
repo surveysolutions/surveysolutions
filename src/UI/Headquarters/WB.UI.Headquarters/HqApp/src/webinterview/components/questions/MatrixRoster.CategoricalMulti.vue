@@ -48,7 +48,6 @@
     import Vue from 'vue'
     import { filter } from "lodash"
     import { entityDetails, tableCellEditor } from "../mixins"
-    import { shouldShowAnsweredOptionsOnlyForSingle } from "./question_helpers"
 
     export default {
         name: 'MatrixRoster_CategoricalMulti',
@@ -75,9 +74,7 @@
             $watchedQuestion() {
                 return this.$store.state.webinterview.entityDetails[this.questionId] 
             },
-            shouldShowAnsweredOptionsOnly(){
-                return shouldShowAnsweredOptionsOnlyForSingle(this);
-            },
+            
             disabled() {
                 if (this.$me.isDisabled || this.$me.isLocked || !this.$me.acceptAnswer)
                     return true
@@ -86,15 +83,8 @@
             noOptions() {
                 return this.$me.options == null || this.$me.options.length == 0
             },
-            answeredOrAllOptions(){
-                if(!this.shouldShowAnsweredOptionsOnly){
-                    return this.$me.options;
-                }
-                
-                var self = this;
-                return filter(this.$me.options, function(o) { 
-                    return self.$me.answer.indexOf(o.value) >= 0; 
-                });
+            answeredOrAllOptions(){               
+                return this.$me.options;                
             },
             allAnswersGiven() {
                 return this.$me.maxSelectedAnswersCount && this.$me.answer.length >= this.$me.maxSelectedAnswersCount;
