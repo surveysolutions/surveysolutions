@@ -22,7 +22,7 @@
         var $allQuestionnaires = '@HttpUtility.JavaScriptStringEncode(Strings.AllQuestionnaires)';
         var $selfUrl = '@Url.Action("SurveysAndStatuses")';
         var totalRowClass = 'total-row';
-        $(function() {
+        @*$(function() {
             var $surveyAndStatusesReportUrl =
                 '@Url.RouteUrl("DefaultApiWithAction", new
                  {
@@ -114,7 +114,7 @@
                 link += '&status=' + interviewStatus;
 
             return link + '"\">' + formatedNumber + "</a>";
-        }
+        }*@
     </script>
 }
 
