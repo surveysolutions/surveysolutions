@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
-using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.Questionnaire.Documents;
@@ -94,31 +93,18 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
 
         public static IEnumerable<CategoricalOption> GetCategoricalOptionsFromQuestion(IQuestion question, int? parentQuestionValue, string filter, int[] excludeOptionIds = null)
         {
-            CategoricalOption ToOptionByValue(Answer answer) =>
-                new CategoricalOption
-                {
-                    Value = Convert.ToInt32(ParseAnswerOptionValueOrThrow(answer.AnswerValue, question.PublicKey)),
-                    Title = answer.AnswerText,
-                    ParentValue = string.IsNullOrEmpty(answer.ParentValue)
-                        ? (int?)null
-                        : Convert.ToInt32(ParseAnswerOptionParentValueOrThrow(answer.ParentValue, question.PublicKey))
-                };
-
-            CategoricalOption ToOptionByCode(Answer answer) =>
-                new CategoricalOption
-                {
-                    Value = Convert.ToInt32(answer.AnswerCode.Value),
-                    Title = answer.AnswerText,
-                    ParentValue = answer.ParentCode.HasValue ? Convert.ToInt32(answer.ParentCode.Value) : (int?) null
-                };
-
             filter = filter ?? string.Empty;
 
             foreach (var answer in question.Answers)
             {
                 if (answer.AnswerText.IndexOf(filter, StringComparison.OrdinalIgnoreCase) < 0) continue;
 
-                var categoricalOption = answer.AnswerCode.HasValue ? ToOptionByCode(answer) : ToOptionByValue(answer);
+                var categoricalOption = new CategoricalOption
+                {
+                    Title = answer.AnswerText, 
+                    Value = (int)answer.GetParsedValue(),
+                    ParentValue = answer.GetParsedParentValue()
+                };
 
                 if(excludeOptionIds?.Contains(categoricalOption.Value) ?? false) continue;
                 if (categoricalOption.ParentValue == parentQuestionValue || parentQuestionValue == null)
@@ -131,48 +117,11 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
             return question.Answers.SingleOrDefault(x => x.AnswerText == optionText).ToCategoricalOption();
         }
 
-        public static CategoricalOption GetOptionForQuestionByOptionValue(IQuestion question, decimal optionValue, decimal? parentValue)
-        {
-            if (question.QuestionType == QuestionType.Numeric)
-            {
-                if (!question.Answers.Any())
-                    return null;
-
-                return question.Answers.Any(x => x.AnswerCode.HasValue) ?
-                    question.Answers.SingleOrDefault(answer => answer.AnswerCode == optionValue).ToCategoricalOption() :
-                    question.Answers.SingleOrDefault(answer => optionValue == ParseAnswerOptionValueOrThrow(answer.AnswerValue, question.PublicKey))
-                        .ToCategoricalOption();
-            }
-
-            return question.Answers.Find(answer =>
-                    answer.GetParsedValue() == optionValue && answer.GetParsedParentValue() == parentValue)
-                .ToCategoricalOption();
-        }
-
-        private static decimal ParseAnswerOptionValueOrThrow(string value, Guid questionId)
-        {
-            decimal parsedValue;
-
-            if (!decimal.TryParse(value, NumberStyles.Number, CultureInfo.InvariantCulture, out parsedValue))
-                throw new QuestionnaireException(string.Format(
-                    "Cannot parse answer option value '{0}' as decimal. Question id: '{1}'.",
-                    value, questionId));
-
-            return parsedValue;
-        }
-
-        private static decimal ParseAnswerOptionParentValueOrThrow(string value, Guid questionId)
-        {
-            decimal parsedValue;
-
-            if (!decimal.TryParse(value, NumberStyles.Number, CultureInfo.InvariantCulture, out parsedValue))
-                throw new QuestionnaireException(string.Format(
-                    "Cannot parse answer option parent value '{0}' as decimal. Question id: '{1}'.",
-                    value, questionId));
-
-            return parsedValue;
-        }
-
+        public static CategoricalOption GetOptionForQuestionByOptionValue(IQuestion question, decimal optionValue, decimal? parentValue) =>
+            question.Answers.Find(answer => answer.GetParsedValue() == optionValue &&
+                                            (question.CascadeFromQuestionId.HasValue && answer.GetParsedParentValue() == parentValue ||
+                                             !question.CascadeFromQuestionId.HasValue))
+                ?.ToCategoricalOption();
 
         public static string GetPictureFileName(string variableName, RosterVector rosterVector) => $"{variableName}__{rosterVector}.jpg";
     }

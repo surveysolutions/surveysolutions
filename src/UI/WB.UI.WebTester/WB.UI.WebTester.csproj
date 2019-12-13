@@ -14,6 +14,7 @@
     <Content Remove="Content\**\*.json" />
     <Content Include="Content\**\*.*" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
     <Content Include="appsettings.*.ini" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+    <Content Remove="appsettings.rla376582.ini" />
     <Content Include="appsettings.ini" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
     <None Remove="ErrorPages\genericError.html" />
     <Content Include="ErrorPages\genericError.html" />
