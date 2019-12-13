@@ -13,6 +13,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
         public static void MigrateToLatest(string connectionString, string schemaName,
             DbUpgradeSettings dbUpgradeSettings)
         {
+            return;
             var npgConnBuilder = new NpgsqlConnectionStringBuilder(connectionString);
             npgConnBuilder.CommandTimeout = 0;
 
