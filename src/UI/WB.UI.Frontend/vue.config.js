@@ -77,8 +77,9 @@ const pages = {
 
 module.exports = {
     pages: Object.assign(pages, {
+        "hq_legacy": { entry: "src/hq_legacy/index.js" },
         "markup": { entry: "src/assets/css/markup.scss" },
-        "markup-specific": { entry: "src/assets/css/markup-specific.scss" },
+        "markup-specific": { entry: "src/assets/css/markup-specific.scss", output: 'library '},
         "markup-web-interview": { entry: "src/assets/css/markup-web-interview.scss" },
         "markup-interview-review": { entry: "src/assets/css/markup-interview-review.scss" }
     }),
@@ -110,15 +111,15 @@ module.exports = {
                 destination: "./locale/.resources"
             }])
 
-        // config.plugin('stats')
-        //     .use(StatsPlugin, ['stats.json',
-        //         {
-        //             chunks: true,
-        //             assets: false,
-        //             chunkModules: false,
-        //             modules: false,
-        //             children: false
-        //         }]);
+        config.plugin('stats')
+            .use(StatsPlugin, ['stats.json',
+                {
+                    chunks: true,
+                    assets: false,
+                    chunkModules: false,
+                    modules: false,
+                    children: false
+                }]);
 
         config.merge({
             optimization: {
@@ -144,7 +145,7 @@ module.exports = {
 
         config.plugin('cleanup-dists')
             .use(CleanupPlugin, [{
-                verbose: true,
+              //  verbose: true,
                 dangerouslyAllowCleanPatternsOutsideProject: true,
                 dry: false,
                 cleanOnceBeforeBuildPatterns: [
@@ -159,7 +160,7 @@ module.exports = {
 
         config.plugin("fileManager").use(FileManagerPlugin, [
             {
-                verbose: true,
+               // verbose: true,
                 onEnd: {
                     copy: [
                         {

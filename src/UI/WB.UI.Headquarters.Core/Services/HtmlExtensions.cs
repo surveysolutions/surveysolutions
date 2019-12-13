@@ -16,18 +16,24 @@ namespace WB.UI.Headquarters.Services
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
 
-        public static IHtmlContent  MainMenuItem(this IHtmlHelper html, string actionName, string controllerName, string linkText, MenuItem renderedPage)
+        public static IHtmlContent MainMenuItem(this IHtmlHelper html, string actionName, string controllerName, string linkText, MenuItem renderedPage)
         {
             var page = html.ViewBag.ActivePage ?? MenuItem.Logon;
             string isActive = page == renderedPage ? "active" : String.Empty;
+            var actionLink = html.ActionLink(linkText, actionName, controllerName, new { area = "", id = "" }, new { title = linkText });
 
-            string liStartTag = $"<li class='{isActive}'>{Environment.NewLine}";
-            var part2 = html.ActionLink(linkText, actionName, controllerName, new {area = "", id = ""}, new { title = linkText });
+            TagBuilder tag = new TagBuilder("li");
 
-            return new HtmlString(liStartTag + part2 + $"{Environment.NewLine}</li>");
+            if (page == renderedPage)
+            {
+                tag.AddCssClass("active");
+            }
+
+            tag.InnerHtml.AppendHtml(actionLink);
+            return tag;
         }
 
-        public static IHtmlContent ActivePage(this IHtmlHelper html)
+        public static HtmlString ActivePage(this IHtmlHelper html)
         {
             MenuItem page = html.ViewBag.ActivePage ?? MenuItem.Logon;
             return new HtmlString(GetMenuItemTitle(page));
