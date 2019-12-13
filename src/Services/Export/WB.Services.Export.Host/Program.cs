@@ -153,7 +153,7 @@ namespace WB.Services.Export.Host
                         c.AddCommandLine(args);
                     });
 
-                    //  web.UseSerilog();
+                     web.UseSerilog();
                 });
         }
 
