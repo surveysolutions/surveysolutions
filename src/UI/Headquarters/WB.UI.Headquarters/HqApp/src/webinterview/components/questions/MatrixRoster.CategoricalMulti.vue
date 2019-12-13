@@ -1,5 +1,22 @@
 <template>
-    <div :class='questionStyle' >
+    <div :class='questionStyle' :id='`mr_view_${questionId}`'>
+        <popover  trigger="hover-focus" append-to="body" :enable="question.validity.messages.length > 0 || question.validity.warnings.length > 0" style="position: absolute;z-index: 1000;">
+            <a class="cell-content has-tooltip" type="primary" data-role="trigger"></a>
+            <template slot="popover">
+                <div class="error-tooltip" v-if="!question.validity.isValid">
+                    <h6 style="text-transform:uppercase;" v-if="question.validity.errorMessage">{{ $t("WebInterviewUI.AnswerWasNotSaved") }}</h6>
+                    <template v-for="message in question.validity.messages">
+                        <span v-dateTimeFormatting v-html="message" :key="message"></span>
+                    </template>
+                </div>
+                <div class="warning-tooltip" v-else-if="question.validity.warnings.length > 0">        
+                    <template v-for="message in question.validity.warnings">
+                        <span v-dateTimeFormatting v-html="message" :key="message"></span>
+                    </template>
+                </div>
+            </template>
+
+        </popover>
         <div class="cell-bordered d-flex" style="align-items:center;"
           v-for="option in editorParams.question.options"
           :key="$me.id + '_' + option.value"
