@@ -38,7 +38,6 @@
 <script lang="js">
     import Vue from 'vue'
     import { entityDetails, tableCellEditor } from "../mixins"
-    import { shouldShowAnsweredOptionsOnlyForSingle } from "./question_helpers"
 
     export default {
         name: 'MatrixRoster_CategoricalSingle',
@@ -65,9 +64,7 @@
             $watchedQuestion() {
                 return this.$store.state.webinterview.entityDetails[this.questionId] 
             },
-            shouldShowAnsweredOptionsOnly(){
-                return shouldShowAnsweredOptionsOnlyForSingle(this);
-            },
+            
             disabled() {
                 if (this.$me.isDisabled || this.$me.isLocked || !this.$me.acceptAnswer)
                     return true
@@ -77,11 +74,7 @@
                 return this.$me.options == null || this.$me.options.length == 0
             },
             answeredOrAllOptions(){
-                if(!this.shouldShowAnsweredOptionsOnly)
-                    return this.$me.options;
-                
-                var self = this;
-                return [find(this.$me.options, function(o) { return o.value == self.answer; })];
+                return this.$me.options;
             },
             questionStyle() {
                 return [{
