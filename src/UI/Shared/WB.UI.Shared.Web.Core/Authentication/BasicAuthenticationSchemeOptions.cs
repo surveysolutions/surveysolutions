@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 
-namespace WB.UI.Designer.Code.Attributes
+namespace WB.UI.Shared.Web.Authentication
 {
     public class BasicAuthenticationSchemeOptions : AuthenticationSchemeOptions
     {

@@ -4,11 +4,15 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -42,9 +46,11 @@ using WB.Persistence.Headquarters.Migrations.PlainStore;
 using WB.Persistence.Headquarters.Migrations.ReadSide;
 using WB.Persistence.Headquarters.Migrations.Users;
 using WB.UI.Designer.CommonWeb;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Configs;
 using WB.UI.Headquarters.Controllers.Api.PublicApi;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Shared.Web.Authentication;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Versions;
@@ -70,7 +76,7 @@ namespace WB.UI.Headquarters
         {
             autofacKernel = new AutofacKernel(builder);
 
-            var mappingAssemblies = new List<Assembly> {typeof(HeadquartersBoundedContextModule).Assembly};
+            var mappingAssemblies = new List<Assembly> { typeof(HeadquartersBoundedContextModule).Assembly };
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
             var unitOfWorkConnectionSettings = new UnitOfWorkConnectionSettings
             {
@@ -98,7 +104,7 @@ namespace WB.UI.Headquarters
                 SchemaName = "events"
             };
 
-            var eventStoreModule = new PostgresWriteSideModule(eventStoreSettings, 
+            var eventStoreModule = new PostgresWriteSideModule(eventStoreSettings,
                 new DbUpgradeSettings(typeof(M001_AddEventSequenceIndex).Assembly, typeof(M001_AddEventSequenceIndex).Namespace));
 
             builder.Register<EventBusSettings>((ctx) => new EventBusSettings()); // TODO REMOVE KP-13449
@@ -219,7 +225,52 @@ namespace WB.UI.Headquarters
             services.ConfigureApplicationCookie(opt =>
             {
                 opt.LoginPath = "/Account/LogOn";
+                opt.Events = new CookieAuthenticationEvents
+                {
+
+                    OnRedirectToLogin = ctx =>
+                    {
+                        if (ctx.Request.Path.StartsWithSegments("/api") && ctx.Response.StatusCode == 200)
+                        {
+                            ctx.Response.StatusCode = 401;
+                        }
+
+                        return Task.CompletedTask;
+                    },
+                    OnRedirectToAccessDenied = ctx =>
+                    {
+                        if (ctx.Request.Path.StartsWithSegments("/api") && ctx.Response.StatusCode == 200)
+                        {
+                            ctx.Response.StatusCode = 403;
+                        }
+
+                        return Task.CompletedTask;
+                    }
+                };
             });
+
+            services
+                .AddAuthentication(sharedOptions =>
+                {
+                    sharedOptions.DefaultScheme = "boc";
+                    sharedOptions.DefaultChallengeScheme = "boc";
+                })
+                .AddPolicyScheme("boc", "Basic or cookie", options =>
+                {
+                    options.ForwardDefaultSelector = context =>
+                    {
+                        if (context.Request.Headers.ContainsKey("Authorization"))
+                        {
+                            return "basic";
+                        }
+
+                        return IdentityConstants.ApplicationScheme;
+                    };
+                })
+                .AddScheme<BasicAuthenticationSchemeOptions, BasicAuthenticationHandler>("basic", opts =>
+                    {
+                        opts.Realm = "WB.Headquarters";
+                    });
 
             services.AddTransient<ICaptchaService, WebCacheBasedCaptchaService>();
             services.AddTransient<ICaptchaProvider, NoCaptchaProvider>();
@@ -231,48 +282,7 @@ namespace WB.UI.Headquarters
                 mvc.Conventions.Add(new OnlyPublicApiConvention());
             });
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Title = "Survey Solutions API",
-                    Version = "v1"
-                });
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                c.IncludeXmlComments(xmlPath);
-                c.OrderActionsBy(x =>
-                {
-
-                    var sort = new StringBuilder(x.ActionDescriptor.RouteValues["controller"]);
-                    sort.Append("_");
-                    if (x.HttpMethod == "GET")
-                    {
-                        sort.Append("A");
-                    }
-                    else if (x.HttpMethod == "PATCH")
-                    {
-                        sort.Append("B");
-                    }
-                    else if (x.HttpMethod == "POST")
-                    {
-                        sort.Append("C");
-                    }
-                    else if (x.HttpMethod == "PUT")
-                    {
-                        sort.Append("D");
-                    }
-                    else if (x.HttpMethod == "DELETE")
-                    {
-                        sort.Append("E");
-                    }
-
-                    sort.Append("_");
-                    sort.Append(x.ActionDescriptor.AttributeRouteInfo.Template);
-                    var result = sort.ToString();
-                    return result;
-                });
-            });
+            services.AddHqSwaggerGen();
 
             // configuration
             services.Configure<GoogleMapsConfig>(this.Configuration.GetSection("GoogleMap"));
@@ -305,10 +315,7 @@ namespace WB.UI.Headquarters
 
             app.UseSwagger();
 
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Survey Solutions API V1");
-            });
+            app.UseHqSwaggerUI();
 
             app.UseRequestLocalization(opt =>
             {
@@ -333,10 +340,11 @@ namespace WB.UI.Headquarters
                 endpoints.MapDefaultControllerRoute();
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Reports}/{action=SurveyAndStatuses}/{id?}", 
+                    pattern: "{controller=Reports}/{action=SurveyAndStatuses}/{id?}",
                     defaults: new
                     {
-                        controller = "Reports", action = "SurveyAndStatuses"
+                        controller = "Reports",
+                        action = "SurveyAndStatuses"
                     });
                 endpoints.MapRazorPages();
             });
