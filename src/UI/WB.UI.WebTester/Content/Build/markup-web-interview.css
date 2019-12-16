@@ -418,8 +418,6 @@ span.image-zoom-box, span.image-option {
       -webkit-box-direction: normal;
           -ms-flex-direction: row;
               flex-direction: row; }
-  .table-view .ag-theme-customStyles .ag-cell:not(.ag-cell-last-left-pinned) .cell-unit {
-    background: #FFFFFF; }
   .table-view .ag-theme-customStyles .cell-unit {
     width: 100%;
     height: 100%;

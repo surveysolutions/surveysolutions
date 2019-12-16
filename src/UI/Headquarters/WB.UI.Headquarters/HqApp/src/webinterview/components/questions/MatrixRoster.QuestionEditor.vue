@@ -6,6 +6,7 @@
             v-bind:id="question.identity" 
             :editorParams="params">
         </component>
+        <wb-progress :visible="isFetchInProgress" />
     </div>
 </template>
 
@@ -23,6 +24,10 @@
         computed: {
             $me() {
                 return this.$store.state.webinterview.entityDetails[this.question.identity] 
+            },
+            isFetchInProgress() {
+                const result = this.$store.state.webinterview.fetch.state[this.question.identity]
+                return result
             }
         },
         methods: {
@@ -55,14 +60,3 @@
         }
     }
 </script>
-
-
-
-
-
-
-
-
-
-
-

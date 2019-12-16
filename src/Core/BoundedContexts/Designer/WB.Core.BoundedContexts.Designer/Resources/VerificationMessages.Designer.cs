@@ -1988,11 +1988,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Matrix roster has to contain no supervisor questions..
+        ///   Looks up a localized string similar to Matrix roster has to contain no supervisor or identifying questions..
         /// </summary>
-        public static string WB0291_MatrixRosterHasToContainNoSupervisorQuestions {
+        public static string WB0291_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions {
             get {
-                return ResourceManager.GetString("WB0291_MatrixRosterHasToContainNoSupervisorQuestions", resourceCulture);
+                return ResourceManager.GetString("WB0291_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions", resourceCulture);
             }
         }
     }

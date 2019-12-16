@@ -30,8 +30,7 @@
     import TableRoster_QuestionEditor from "./TableRoster.QuestionEditor";
     import TableRoster_ViewAnswer from "./TableRoster.ViewAnswer";
     import TableRoster_RosterTitle from "./TableRoster.RosterTitle";
-    import TableRoster_QuestionTitle from "./TableRoster.QuestionTitle";
-    import TableRoster_CategoricalSingle from "./MatrixRoster.CategoricalSingle";
+    import TableRoster_QuestionTitle from "./TableRoster.QuestionTitle";    
 
     export default {
         name: 'TableRoster',

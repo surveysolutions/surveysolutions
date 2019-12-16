@@ -768,7 +768,7 @@
   <data name="WB0289_MatrixRosterContainsOnlyAllowedQuestionTypes" xml:space="preserve">
       <value>Матричное представление может содержать только категориальные не каскадные и не списковые вопросы.</value>
   </data>
-  <data name="WB0291_MatrixRosterHasToContainNoSupervisorQuestions" xml:space="preserve">
-    <value>Матричное представление ростера не может содержать вопросы для супервизора.</value>
+  <data name="WB0291_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions" xml:space="preserve">
+    <value>Матричное представление ростера не может содержать идентифицирующие вопросы и вопросы для супервизора.</value>
   </data>
 </root>

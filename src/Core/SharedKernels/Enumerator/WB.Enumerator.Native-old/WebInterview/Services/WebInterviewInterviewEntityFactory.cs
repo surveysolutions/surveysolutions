@@ -63,10 +63,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     : interview.GetGroup(Identity.Parse(parentId))?.Children
                         .OfType<InterviewTreeGroup>().Where(g => !g.IsDisabled());
 
-                children = children.Where(e => !questionnaire.IsFlatRoster(e.Identity.Id) 
-                                               && !questionnaire.IsTableRoster(e.Identity.Id)
-                                               && !questionnaire.IsMatrixRoster(e.Identity.Id)
-                                               );
+                children = children.Where(e => !questionnaire.IsCustomViewRoster(e.Identity.Id));
 
                 foreach (var child in children ?? Array.Empty<InterviewTreeGroup>())
                 {
@@ -85,10 +82,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         sidebarPanel.Current = visibleSections.Contains(g.Identity);
                         sidebarPanel.HasChildren = g.Children.OfType<InterviewTreeGroup>().Any(c => 
                             !c.IsDisabled() 
-                            && !questionnaire.IsFlatRoster(c.Identity.Id)
-                            && !questionnaire.IsTableRoster(c.Identity.Id)
-                            && !questionnaire.IsMatrixRoster(c.Identity.Id)
-                            );
+                            && !questionnaire.IsCustomViewRoster(c.Identity.Id)
+                        );
                     });
                 }
             }
@@ -576,9 +571,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
         public Identity GetUIParent(IStatefulInterview interview, IQuestionnaire questionnaire, Identity identity)
         {
             var parent = interview.GetParentGroup(identity);
-            while (parent != null && (questionnaire.IsFlatRoster(parent.Id) 
-                                      || questionnaire.IsTableRoster(parent.Id)
-                                      || questionnaire.IsMatrixRoster(parent.Id)))
+            while (parent != null && questionnaire.IsCustomViewRoster(parent.Id))
             {
                 parent = interview.GetParentGroup(parent);
             }
