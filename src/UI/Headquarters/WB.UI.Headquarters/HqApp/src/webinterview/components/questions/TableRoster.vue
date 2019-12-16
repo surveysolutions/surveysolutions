@@ -53,8 +53,7 @@
             TableRoster_ViewAnswer,
             TableRoster_QuestionEditor,
             TableRoster_RosterTitle,
-            TableRoster_QuestionTitle,
-            TableRoster_CategoricalSingle
+            TableRoster_QuestionTitle
         },
 
         beforeMount() {
