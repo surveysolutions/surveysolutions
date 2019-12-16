@@ -54,7 +54,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                         question.CascadeFromQuestionId.Value));
 
                 if ((parentCascadingQuestion.CategoriesId.HasValue && 
-                    !this.categoriesService.GetCategoriesById(document.PublicKey, parentCascadingQuestion.CategoriesId.Value).Any()) || parentCascadingQuestion.Answers.Count == 0)
+                    !this.categoriesService.GetCategoriesById(document.PublicKey, parentCascadingQuestion.CategoriesId.Value).Any()) || 
+                    (!parentCascadingQuestion.CategoriesId.HasValue && parentCascadingQuestion.Answers.Count == 0))
                 {
                     return ImportCategoricalOptionsResult.Failed(
                         string.Format(ExceptionMessages.NoParentCascadingOptions, parentCascadingQuestion.VariableName));
@@ -103,14 +104,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             var result = new Dictionary<string, (int value, int? parentValue)[]>();
 
-            IQuestion cascadingQuestion = null;
+            ICategoricalQuestion cascadingQuestion = null;
 
             while (parentQuestionId != null)
             {
-                cascadingQuestion = document.Find<IQuestion>(parentQuestionId.Value);
+                cascadingQuestion = document.Find<ICategoricalQuestion>(parentQuestionId.Value);
 
                 result.Add(cascadingQuestion.VariableName,
-                    cascadingQuestion.Answers.Select(x => ((int) x.GetParsedValue(), x.GetParsedParentValue())).ToArray());
+                    cascadingQuestion.CategoriesId.HasValue
+                        ? this.categoriesService.GetCategoriesById(document.PublicKey, cascadingQuestion.CategoriesId.Value).ToList().Select(x => (x.Id, x.ParentId)).ToArray()
+                        : cascadingQuestion.Answers.Select(x => ((int) x.GetParsedValue(), x.GetParsedParentValue())).ToArray());
 
                 parentQuestionId = cascadingQuestion.CascadeFromQuestionId;
             }
