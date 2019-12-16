@@ -334,7 +334,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             if (questionnaire == null) return null;
 
             ReadOnlyCollection<Guid> parentIds = questionnaire.GetParentsStartingFromTop(groupId.Id)
-                .Except(id => questionnaire.IsFlatRoster(id) || questionnaire.IsTableRoster(id) || questionnaire.IsMatrixRoster(id))
+                .Except(id => questionnaire.IsCustomViewRoster(id))
                 .ToReadOnlyCollection();
 
             var breadCrumbs = new List<Breadcrumb>();

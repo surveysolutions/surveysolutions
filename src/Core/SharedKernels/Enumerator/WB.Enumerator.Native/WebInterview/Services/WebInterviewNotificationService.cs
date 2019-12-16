@@ -73,9 +73,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     var parent = this.GetParentIdentity(currentEntity, interview);
                     if (parent != null)
                     {
-                        if (questionnaire.IsFlatRoster(parent.Id) 
-                            || questionnaire.IsTableRoster(parent.Id) 
-                            || questionnaire.IsMatrixRoster(parent.Id))
+                        if (questionnaire.IsCustomViewRoster(parent.Id))
                         {
                             var parentGroupIdentity = GetParentIdentity(parent, interview);
                             var connectedClientSectionKey = WebInterview.GetConnectedClientSectionKey(parentGroupIdentity, interview.Id);

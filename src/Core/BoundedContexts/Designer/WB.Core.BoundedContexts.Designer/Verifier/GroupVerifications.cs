@@ -62,7 +62,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error<IGroup>(TableRosterContainsOnlyAllowedQuestionTypes, "WB0285", VerificationMessages.WB0285_TableRosterContainsOnlyAllowedQuestionTypes),
             Error<IGroup>(MatrixRosterContainsOnlyAllowedQuestionTypes, "WB0289", VerificationMessages.WB0289_MatrixRosterContainsOnlyAllowedQuestionTypes),
             Error<IGroup>(MatrixRosterHasMoreThanAllowedEntities, "WB0290", string.Format(VerificationMessages.WB0290_MatrixRosterAllowedOnlyForGroupWithNoMoreThanElements, MaxEntitiesInMatrixRoster)),
-            Error<IGroup>(MatrixRosterHasToContainNoSupervisorQuestions, "WB0291", VerificationMessages.WB0291_MatrixRosterHasToContainNoSupervisorQuestions),
+            Error<IGroup>(MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions, "WB0291", VerificationMessages.WB0291_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions),
 
             Warning(LargeNumberOfRosters, "WB0200", VerificationMessages.WB0200_LargeNumberOfRostersIsCreated),
             Warning<IGroup>(TooManyQuestionsInGroup, "WB0201", string.Format(VerificationMessages.WB0201_LargeNumberOfQuestionsInGroup, MaxQuestionsCountInSubSection)),
@@ -518,11 +518,12 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 return true;
             });
 
-        private static bool MatrixRosterHasToContainNoSupervisorQuestions(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
+        private static bool MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
             => group.DisplayMode == RosterDisplayMode.Matrix && group.Children.Any(composite =>
             {
                 if (composite is IQuestion question)
-                    return question.QuestionScope == QuestionScope.Supervisor;
+                    return question.QuestionScope == QuestionScope.Supervisor 
+                           || question.QuestionScope == QuestionScope.Headquarter;
                 return false;
             });
 

@@ -759,7 +759,7 @@
   <data name="WB0290_MatrixRosterAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
       <value>Matrix mode allowed only for rosters with no more than {0} question(s).</value>
   </data>
-  <data name="WB0291_MatrixRosterHasToContainNoSupervisorQuestions" xml:space="preserve">
-    <value>Matrix roster has to contain no supervisor questions.</value>
+  <data name="WB0291_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions" xml:space="preserve">
+    <value>Matrix roster has to contain no supervisor or identifying questions.</value>
   </data>
 </root>

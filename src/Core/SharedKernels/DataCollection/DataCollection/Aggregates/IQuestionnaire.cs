@@ -295,6 +295,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsFlatRoster(Guid groupId);
         bool IsTableRoster(Guid groupId);
         bool IsMatrixRoster(Guid groupId);
+        bool IsCustomViewRoster(Guid groupId);
 
         bool ShowCascadingAsList(Guid id);
         int? GetCascadingAsListThreshold(Guid id);
