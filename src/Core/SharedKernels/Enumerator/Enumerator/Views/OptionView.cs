@@ -21,14 +21,14 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         [Indexed(Name = "entity_idx", Order = 4)]
         public string TranslationId { get; set; }
 
-        [Indexed]
+        [Indexed(Name = "OptionView_Value")]
         public decimal Value { get; set; }
 
         public string Title { get; set; }
 
         public string SearchTitle { get; set; }
 
-        [Indexed]
+        [Indexed(Name = "OptionView_ParentValue")]
         public decimal? ParentValue { get; set; }
 
         public int SortOrder { get; set; }
