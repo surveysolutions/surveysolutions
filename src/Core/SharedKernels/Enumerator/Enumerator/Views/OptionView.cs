@@ -26,13 +26,11 @@ namespace WB.Core.SharedKernels.Enumerator.Views
 
         public string Title { get; set; }
 
-        [Indexed]
         public string SearchTitle { get; set; }
 
         [Indexed]
         public decimal? ParentValue { get; set; }
 
-        [Indexed]
         public int SortOrder { get; set; }
     }
 }
