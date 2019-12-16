@@ -33,18 +33,16 @@ namespace WB.UI.Shared.Enumerator.Migrations
                 [Indexed(Name = "entity_idx", Order = 4)]
                 public string TranslationId { get; set; }
 
-                [Indexed]
+                [Indexed(Name = "OptionView_Value")]
                 public decimal Value { get; set; }
 
                 public string Title { get; set; }
 
-                [Indexed]
                 public string SearchTitle { get; set; }
 
-                [Indexed]
+                [Indexed(Name = "OptionView_ParentValue")]
                 public decimal? ParentValue { get; set; }
 
-                [Indexed]
                 public int SortOrder { get; set; }
             }
         }       
