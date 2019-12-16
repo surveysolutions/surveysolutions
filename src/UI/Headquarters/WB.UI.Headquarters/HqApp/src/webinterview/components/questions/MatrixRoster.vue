@@ -6,7 +6,7 @@
         </div>
         <ag-grid-vue 
             ref="matrixRoster"
-            class="ag-theme-customStyles"
+            class="ag-theme-customStyles roster-matrix"
             style="height:500px"
             domLayout='normal'
             rowHeight="40"
