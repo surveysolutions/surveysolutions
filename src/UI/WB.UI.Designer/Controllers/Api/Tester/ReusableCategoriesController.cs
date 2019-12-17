@@ -45,7 +45,7 @@ namespace WB.UI.Designer.Controllers.Api.Tester
                     Id = x.Key,
                     Options = x.Select(o => new CategoriesItem()
                     {
-                        Id = o.Id,
+                        Id = o.Value,
                         ParentId = o.ParentId,
                         Text = o.Text
                     }).ToList()
