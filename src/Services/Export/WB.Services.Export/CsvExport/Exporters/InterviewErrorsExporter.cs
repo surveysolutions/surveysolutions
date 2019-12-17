@@ -133,7 +133,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                     {
                         if (exportFileHeader.VariableValueLabels.Any())
                         {
-                            doContent.AppendLabel(exportFileHeader.Title, exportFileHeader.VariableValueLabels);
+                            doContent.DefineLabel(exportFileHeader.Title, exportFileHeader.VariableValueLabels);
                             doContent.AppendLabelToValuesMatching(exportFileHeader.Title, exportFileHeader.Title);
                         }
 
