@@ -82,7 +82,7 @@ namespace WB.Services.Export.Ddi.Implementation
                                     questionItem.QuestionText, 
                                     this.GetDdiVariableScale(questionItem.QuestionType));
 
-                                foreach (VariableValueLabel variableValueLabel in variableLabel.VariableValueLabels)
+                                foreach (VariableValueLabel variableValueLabel in variableLabel.VariableValues)
                                 {
                                     if (decimal.TryParse(variableValueLabel.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out var value))
                                         metadataWriter.AddValueLabelToVariable(variable, value, variableValueLabel.Label);
@@ -98,7 +98,7 @@ namespace WB.Services.Export.Ddi.Implementation
                                     this.GetDdiDataType(variableItem.Type), variableLabel.Label, null,
                                     variableItem.Expression, this.GetDdiVariableScale(variableItem.Type));
 
-                                foreach (VariableValueLabel variableValueLabel in variableLabel.VariableValueLabels)
+                                foreach (VariableValueLabel variableValueLabel in variableLabel.VariableValues)
                                 {
                                     if (decimal.TryParse(variableValueLabel.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out var value))
                                         metadataWriter.AddValueLabelToVariable(variable, value, variableValueLabel.Label);

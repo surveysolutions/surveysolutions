@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -19,7 +21,22 @@ namespace WB.Services.Export.CsvExport.Exporters
 
         public void BuildInsheet(string fileName)
         {
+            var doFileHeader = ReadHeaderFile();
+            doContent.Append(doFileHeader);
+
             doContent.AppendLine($"insheet using \"{fileName}\", tab case names");
+        }
+
+        private string ReadHeaderFile()
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "WB.Services.Export.DoFileHeader.txt";
+
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                return reader.ReadToEnd();
+            }
         }
 
         public void AppendLabelToValuesMatching(string variableName, string labelName)
@@ -37,7 +54,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             doContent.AppendLine($"capture label variable {variableName} `\"{this.RemoveNotAllowedCharsAndDecode(labelName)}\"'");
         }
 
-        public void AppendLabel(string labelName, IEnumerable<VariableValueLabel> labels)
+        public void DefineLabel(string labelName, IEnumerable<VariableValueLabel> labels)
         {
             //stata allows only int values less 2,147,483,620 to be labeled
             //stata doesn't allow to declare empty dictionaries
