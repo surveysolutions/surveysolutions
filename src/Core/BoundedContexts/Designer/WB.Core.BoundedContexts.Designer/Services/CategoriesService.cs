@@ -89,7 +89,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
                 .Where(x => x.QuestionnaireId == questionnaireId && x.CategoriesId == categoriesId)
                 .Select(i => new CategoriesItem()
                 {
-                    Id = i.Id,
+                    Id = i.Value,
                     ParentId = i.ParentId,
                     Text = i.Text
                 })
@@ -100,7 +100,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
         public IQueryable<CategoriesItem> GetCategoriesById(Guid questionnaireId, Guid id) =>
             this.dbContext.CategoriesInstances.Where(x => x.QuestionnaireId == questionnaireId && x.CategoriesId == id).Select(x => new CategoriesItem
             {
-                Id = x.Id,
+                Id = x.Value,
                 ParentId = x.ParentId,
                 Text = x.Text
             });
@@ -150,7 +150,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
                             {
                                 QuestionnaireId = questionnaireId,
                                 CategoriesId = categoriesId,
-                                Id = int.Parse(categories.Id),
+                                Value = int.Parse(categories.Id),
                                 Text = categories.Text,
                                 ParentId = string.IsNullOrEmpty(categories.ParentId)
                                     ? (int?) null
