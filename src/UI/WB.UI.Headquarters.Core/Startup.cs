@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.IO.Compression;
+using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,9 +16,11 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
@@ -225,6 +229,16 @@ namespace WB.UI.Headquarters
             services.ConfigureApplicationCookie(opt =>
             {
                 opt.LoginPath = "/Account/LogOn";
+                opt.ForwardDefaultSelector = ctx =>
+                {
+                    if (ctx.Request.Headers.ContainsKey(HeaderNames.Authorization))
+                    {
+                        AuthenticationHeaderValue authHeader = AuthenticationHeaderValue.Parse(ctx.Request.Headers[HeaderNames.Authorization]);
+                        return authHeader.Scheme;
+                    }
+
+                    return null;
+                };
                 opt.Events = new CookieAuthenticationEvents
                 {
 
@@ -235,6 +249,7 @@ namespace WB.UI.Headquarters
                             ctx.Response.StatusCode = 401;
                         }
 
+                        ctx.Response.Redirect(ctx.RedirectUri);
                         return Task.CompletedTask;
                     },
                     OnRedirectToAccessDenied = ctx =>
@@ -244,37 +259,47 @@ namespace WB.UI.Headquarters
                             ctx.Response.StatusCode = 403;
                         }
 
+                        ctx.Response.Redirect(ctx.RedirectUri);
                         return Task.CompletedTask;
                     }
                 };
             });
 
             services
-                .AddAuthentication(sharedOptions =>
+                .AddAuthentication(IdentityConstants.ApplicationScheme)
+                .AddScheme<BasicAuthenticationSchemeOptions, BasicAuthenticationHandler>("Basic", opts =>
                 {
-                    sharedOptions.DefaultScheme = "boc";
-                    sharedOptions.DefaultChallengeScheme = "boc";
+                    opts.Realm = "WB.Headquarters";
                 })
-                .AddPolicyScheme("boc", "Basic or cookie", options =>
+                .AddScheme<AuthTokenAuthenticationSchemeOptions, AuthTokenAuthenticationHandler>("AuthToken", opts =>
                 {
-                    options.ForwardDefaultSelector = context =>
-                    {
-                        if (context.Request.Headers.ContainsKey("Authorization"))
-                        {
-                            return "basic";
-                        }
-
-                        return IdentityConstants.ApplicationScheme;
-                    };
-                })
-                .AddScheme<BasicAuthenticationSchemeOptions, BasicAuthenticationHandler>("basic", opts =>
-                    {
-                        opts.Realm = "WB.Headquarters";
-                    });
+                });
 
             services.AddTransient<ICaptchaService, WebCacheBasedCaptchaService>();
             services.AddTransient<ICaptchaProvider, NoCaptchaProvider>();
             services.AddScoped<UnitOfWorkActionFilter>();
+
+            services.Configure<GzipCompressionProviderOptions>(options =>
+            {
+                options.Level = CompressionLevel.Optimal;
+            });
+ 
+            services.AddResponseCompression(options =>
+            {
+                options.EnableForHttps = true;
+                options.Providers.Add<GzipCompressionProvider>();
+            });
+
+            services.Configure<BrotliCompressionProviderOptions>(options =>
+            {
+                options.Level = CompressionLevel.Optimal;
+            });
+ 
+            services.AddResponseCompression(options =>
+            {
+                options.EnableForHttps = true;    
+                options.Providers.Add<BrotliCompressionProvider>();
+            });
 
             services.AddMvc(mvc =>
             {
@@ -305,7 +330,6 @@ namespace WB.UI.Headquarters
 
             InitModules(app, env);
 
-            app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
@@ -315,6 +339,7 @@ namespace WB.UI.Headquarters
 
             app.UseSwagger();
 
+            app.UseResponseCompression();
             app.UseHqSwaggerUI();
 
             app.UseRequestLocalization(opt =>
