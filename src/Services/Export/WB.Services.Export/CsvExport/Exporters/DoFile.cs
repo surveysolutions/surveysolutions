@@ -21,21 +21,25 @@ namespace WB.Services.Export.CsvExport.Exporters
 
         public void BuildInsheet(string fileName)
         {
-            var doFileHeader = ReadHeaderFile();
-            doContent.Append(doFileHeader);
-
+            AppendHeaderFromFile();
             doContent.AppendLine($"insheet using \"{fileName}\", tab case names");
         }
 
-        private string ReadHeaderFile()
+        private void AppendHeaderFromFile()
         {
             var assembly = Assembly.GetExecutingAssembly();
             var resourceName = "WB.Services.Export.DoFileHeader.txt";
 
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
-            using (StreamReader reader = new StreamReader(stream))
             {
-                return reader.ReadToEnd();
+                if (stream == null)
+                    return;
+
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    var doFileHeader = reader.ReadToEnd();
+                    doContent.Append(doFileHeader);
+                }
             }
         }
 

@@ -150,14 +150,14 @@ namespace WB.Services.Export.Services
 
                 meta.Variables[index] = new DatasetVariable(meta.Variables[index].VarName)
                 {
-                    Storage = GetStorageType(variableLabels.ValueType)
+                    Storage = GetStorageType(variableLabels.Label.ValueType)
                 };
 
-                meta.Variables[index].VarLabel = variableLabels.Label;
+                meta.Variables[index].VarLabel = variableLabels.Label.LabelName;
 
                 var valueSet = new ValueSet();
 
-                foreach (var variableValueLabel in variableLabels.VariableValues)
+                foreach (var variableValueLabel in variableLabels.Label.VariableValues)
                 {
                     double value;
                     if (double.TryParse(variableValueLabel.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out value))
