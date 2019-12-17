@@ -157,7 +157,7 @@ namespace WB.Services.Export.Services
 
                 var valueSet = new ValueSet();
 
-                foreach (var variableValueLabel in variableLabels.VariableValueLabels)
+                foreach (var variableValueLabel in variableLabels.VariableValues)
                 {
                     double value;
                     if (double.TryParse(variableValueLabel.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out value))

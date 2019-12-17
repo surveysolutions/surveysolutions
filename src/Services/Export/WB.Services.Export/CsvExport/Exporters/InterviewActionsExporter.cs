@@ -94,7 +94,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             {
                 if (actionFileColumn.VariableValueLabels.Any())
                 {
-                    doContent.AppendLabel(actionFileColumn.Title, actionFileColumn.VariableValueLabels);
+                    doContent.DefineLabel(actionFileColumn.Title, actionFileColumn.VariableValueLabels);
                     doContent.AppendLabelToValuesMatching(actionFileColumn.Title, actionFileColumn.Title);
                 }
 
