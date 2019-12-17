@@ -37,14 +37,14 @@ namespace WB.Services.Scheduler
 
             services.AddTransient<IHostedSchedulerService, CleanupService>();
             services.AddTransient<IHostedSchedulerService, WorkCancellationTrackService>();
-            services.AddTransient<IHostedSchedulerService, JobProgressReportService>();
+          
             services.AddTransient<IHostedSchedulerService, JobWorkersManageService>();
 
             services.AddSingleton<IJobCancellationNotifier, JobCancellationNotifier>();
             services.AddTransient<IJobService, JobService>();
-            services.AddSingleton<IJobProgressReporter, JobProgressReporter>();
             services.AddTransient<IJobWorker, JobWorker>();
             services.AddTransient<IJobExecutor, JobExecutor>();
+            services.AddProgressReporter();
 
             services.AddDbContext<JobContext>(ops =>
                 ops
@@ -53,6 +53,14 @@ namespace WB.Services.Scheduler
             services.Configure<JobSettings>(jobSettingsSection);
 
             services.RegisterJobHandler<StaleJobCleanupService>(StaleJobCleanupService.Name);
+        }
+
+        public static void AddProgressReporter(this IServiceCollection services)
+        {
+            services.AddSingleton<Services.IJobProgressReporter, JobProgressReporterBackgroundService>();
+            services.AddHostedService(sl=> sl.GetService<Services.IJobProgressReporter>() as JobProgressReporterBackgroundService);
+
+            services.AddTransient<IJobProgressReportWriter, JobProgressReportWriter>();
         }
 
         public static void RegisterJobHandler<THandler>(this IServiceCollection services, string name) where THandler : class
