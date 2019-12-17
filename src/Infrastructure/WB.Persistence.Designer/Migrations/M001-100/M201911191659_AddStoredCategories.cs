@@ -10,9 +10,13 @@ namespace WB.UI.Designer.Migrations.PlainStore
             Create.Table("categories")
                 .WithColumn("questionnaireid").AsGuid()
                 .WithColumn("categoriesid").AsGuid()
-                .WithColumn("id").AsInt32()
+                .WithColumn("id").AsInt32().PrimaryKey().Identity()
+                .WithColumn("value").AsInt32()
                 .WithColumn("parentid").AsInt32().Nullable()
                 .WithColumn("text").AsString();
+
+            Create.Index().OnTable("categories").OnColumn("questionnaireid").Ascending().OnColumn("categoriesid")
+                .Ascending();
         }
     }
 }

@@ -4,11 +4,12 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories
 {
     public class CategoriesInstance
     {
+        public virtual int Id { get; set; }
         public virtual Guid QuestionnaireId { get; set; }
 
         public virtual Guid CategoriesId { get; set; }
 
-        public virtual int Id { get; set; }
+        public virtual int Value { get; set; }
         public virtual int? ParentId { get; set; }
         public virtual string Text { get; set; }
 
@@ -16,7 +17,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories
         {
             QuestionnaireId = this.QuestionnaireId,
             CategoriesId = this.CategoriesId,
-            Id = this.Id,
+            Value = this.Value,
             ParentId = this.ParentId,
             Text = this.Text
         };

@@ -160,7 +160,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
                 .Select(x => new CategoriesDto
                 {
                     CategoriesId = x.CategoriesId,
-                    Id = x.Id,
+                    Id = x.Value,
                     ParentId = x.ParentId,
                     Text = x.Text
                 })
