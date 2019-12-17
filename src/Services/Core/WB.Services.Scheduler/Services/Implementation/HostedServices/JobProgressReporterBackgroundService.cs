@@ -1,57 +1,49 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using WB.Services.Scheduler.Model;
 using WB.Services.Scheduler.Model.Events;
 
-namespace WB.Services.Scheduler.Services.Implementation
+namespace WB.Services.Scheduler.Services.Implementation.HostedServices
 {
-    internal class JobProgressReporter : IJobProgressReporter
+    internal class JobProgressReporterBackgroundService : BackgroundService, Services.IJobProgressReporter
     {
-        private readonly IJobCancellationNotifier jobCancellationNotifier;
-        private readonly ILogger<JobProgressReporter> logger;
+        private readonly ILogger<JobProgressReporterBackgroundService> logger;
         private readonly TaskCompletionSource<bool> queueCompletion = new TaskCompletionSource<bool>();
 
-        public JobProgressReporter(IServiceProvider serviceProvider, IJobCancellationNotifier jobCancellationNotifier, ILogger<JobProgressReporter> logger)
+        public JobProgressReporterBackgroundService(IServiceProvider serviceProvider, 
+            ILogger<JobProgressReporterBackgroundService> logger)
         {
-            this.jobCancellationNotifier = jobCancellationNotifier;
+         
             this.logger = logger;
             this.serviceProvider = serviceProvider;
         }
 
-        public void StartProgressReporter()
+        protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            Task.Factory.StartNew(async () =>
+            return Task.Run(async () =>
             {
-                using var scope = serviceProvider.CreateScope();
-                var db = scope.ServiceProvider.GetRequiredService<JobContext>();
-
+                logger.LogInformation("JobProgressReporterBackgroundService started");
                 foreach (var task in queue.GetConsumingEnumerable())
                 {
-                    using (var tr = await db.Database.BeginTransactionAsync())
+                    try
                     {
-                        var job = await db.Jobs.Where(j => j.Id == task.Id).SingleOrDefaultAsync();
-                        job.Handle(task);
-                        db.Jobs.Update(job);
-
-                        if (task is CancelJobEvent)
-                        {
-                            await jobCancellationNotifier.NotifyOnJobCancellationAsync(job.Id);
-                        }
-
-                        await db.SaveChangesAsync();
-                        logger.LogTrace(task.ToString());
-                        await tr.CommitAsync();
+                        using var scope = serviceProvider.CreateScope();
+                        var runner = scope.ServiceProvider.GetRequiredService<IJobProgressReportWriter>();
+                        await runner.WriteReportAsync(task, stoppingToken);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.LogError("Progress reporting queue got an exception", e);
                     }
                 }
 
                 queueCompletion.SetResult(true);
-            }, TaskCreationOptions.LongRunning);
+            }, stoppingToken);
         }
 
         public void CompleteJob(long jobId)
@@ -68,8 +60,8 @@ namespace WB.Services.Scheduler.Services.Implementation
 
         public void UpdateJobData(long jobId, string key, object value)
         {
-            if(!queue.IsAddingCompleted)
-            queue.Add(new UpdateDataEvent(jobId, key, value));
+            if (!queue.IsAddingCompleted)
+                queue.Add(new UpdateDataEvent(jobId, key, value));
         }
 
         public void CancelJob(long jobId, string reason)
@@ -88,10 +80,12 @@ namespace WB.Services.Scheduler.Services.Implementation
         readonly BlockingCollection<IJobEvent> queue = new BlockingCollection<IJobEvent>();
         private readonly IServiceProvider serviceProvider;
 
-        public void Dispose()
+        public override void Dispose()
         {
-            if(!queue.IsCompleted)
+            if (!queue.IsCompleted)
                 queue.CompleteAdding();
+            
+            base.Dispose();
         }
     }
 }

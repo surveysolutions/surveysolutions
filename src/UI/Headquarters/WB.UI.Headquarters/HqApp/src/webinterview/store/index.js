@@ -46,12 +46,7 @@ const store = safeStore({
             }
 
             const totalCount = state.entities != null ? state.entities.length : 0
-
-            
-            const result = (loadedCount === 0 && totalCount > 0) || (loadedCount < totalCount) || state.fetch.inProgress;
-         //   if(totalCount == 0) return true;
-
-            
+            const result = (loadedCount === 0 && totalCount > 0) || (loadedCount < totalCount) || state.fetch.inProgress || state.fetch.loadingProgress;
             return result;
         },
         addCommentsAllowed(state) {
