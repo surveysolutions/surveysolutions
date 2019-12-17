@@ -39,31 +39,6 @@ namespace WB.UI.Headquarters.Utils
             return url.AbsoluteUri;
         }
 
-        public static bool RequestHasMatchingFileHash(this HttpRequestMessage request, byte[] hash)
-        {
-            var expectedHash = $@"""{Convert.ToBase64String(hash)}""";
-
-            if (request.Headers.IfNoneMatch.Any(tag => tag.Tag == expectedHash))
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public static Version GetProductVersionFromUserAgent(this HttpRequestMessage request, string productName)
-        {
-            foreach (var product in request.Headers?.UserAgent)
-            {
-                if ((product.Product?.Name.StartsWith(productName, StringComparison.OrdinalIgnoreCase) ?? false)
-                    && Version.TryParse(product.Product.Version, out Version version))
-                {
-                    return version;
-                }
-            }
-
-            return null;
-        }
-
+     
     }
 }
