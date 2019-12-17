@@ -2,6 +2,7 @@
 using System.Net.Http.Headers;
 using System.Text;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Net.Http.Headers;
 
 namespace WB.UI.Shared.Web.Authentication
 {
@@ -9,7 +10,7 @@ namespace WB.UI.Shared.Web.Authentication
     {
         public static BasicCredentials ParseBasicCredentials(this IHeaderDictionary headerDictionary)
         {
-            var authHeader = AuthenticationHeaderValue.Parse(headerDictionary["Authorization"]);
+            AuthenticationHeaderValue authHeader = AuthenticationHeaderValue.Parse(headerDictionary[HeaderNames.Authorization]);
             var credentialBytes = Convert.FromBase64String(authHeader.Parameter);
             var credentials = Encoding.UTF8.GetString(credentialBytes).Split(':');
             var username = credentials[0];

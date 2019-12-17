@@ -7,9 +7,20 @@
     <RootNamespace>WB.UI.Headquarters</RootNamespace>
     <AssemblyName>WB.UI.Headquarters</AssemblyName>
     <NoWarn>$(NoWarn);1591</NoWarn>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\Api\DataCollection\Supervisor\**" />
+    <Content Remove="Controllers\Api\DataCollection\Supervisor\**" />
+    <EmbeddedResource Remove="Controllers\Api\DataCollection\Supervisor\**" />
+    <None Remove="Controllers\Api\DataCollection\Supervisor\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\Api\DataCollection\Interviewer\InterviewerCommonWebApiConfig.cs" />
+    <Compile Remove="Controllers\Api\DataCollection\Interviewer\InterviewerV3WebApiConfig.cs" />
+    <Compile Remove="Controllers\Api\DataCollection\Interviewer\v3\InterviewsApiV3Controller.cs" />
     <Compile Remove="Services\HqSignInManager.cs" />
   </ItemGroup>
 
@@ -124,6 +135,11 @@
     </Compile>
     <Compile Update="Resources\TabletLogs.Designer.cs">
       <DependentUpon>TabletLogs.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\TabletSyncMessages.Designer.cs">
+      <DependentUpon>TabletSyncMessages.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
@@ -362,10 +378,40 @@
     <EmbeddedResource Update="Resources\TabletLogs.ru.resx">
       <DependentUpon>TabletLogs.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\TabletSyncMessages.ar.resx">
+      <DependentUpon>TabletSyncMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\TabletSyncMessages.es.resx">
+      <DependentUpon>TabletSyncMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\TabletSyncMessages.fr.resx">
+      <DependentUpon>TabletSyncMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\TabletSyncMessages.ka.resx">
+      <DependentUpon>TabletSyncMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\TabletSyncMessages.pt.resx">
+      <DependentUpon>TabletSyncMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\TabletSyncMessages.resx">
+      <SubType>Designer</SubType>
+      <LastGenOutput>TabletSyncMessages.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\TabletSyncMessages.ro.resx">
+      <DependentUpon>TabletSyncMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\TabletSyncMessages.ru.resx">
+      <DependentUpon>TabletSyncMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\TabletSyncMessages.zh.resx">
+      <DependentUpon>TabletSyncMessages.resx</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
 
 
   <ItemGroup>
+    <Folder Include="Controllers\Api\DataCollection\Interviewer\v3\" />
     <Folder Include="Pages\" />
     <Folder Include="wwwroot\apidocs\" />
   </ItemGroup>
