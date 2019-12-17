@@ -23,6 +23,10 @@
                             <td>{{formatUtcDate(model.importDateUtc)}}</td>
                         </tr>
                         <tr>
+                            <td>{{$t('Dashboard.ImportedBy')}}</td>
+                            <td>{{model.importedBy != null ? $t('Dashboard.ImportedByText', { role: $t('Roles.' + model.importedBy.role), name: model.importedBy.name }) : ""}}</td>
+                        </tr>
+                        <tr>
                             <td>{{$t('Dashboard.LastEntryDate')}}</td>
                             <td>{{formatUtcDate(model.lastEntryDateUtc)}}</td>
                         </tr>
