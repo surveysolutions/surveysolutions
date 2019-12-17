@@ -1,6 +1,6 @@
 <template>
     <div :class='questionStyle' :id='`mr_view_${questionId}`'>
-        <popover  trigger="hover-focus" append-to="body" :enable="question.validity.messages.length > 0 || question.validity.warnings.length > 0" style="position: absolute;z-index: 1000;">
+        <popover  class="tooltip-wrapper" trigger="hover-focus" append-to="body" :enable="question.validity.messages.length > 0 || question.validity.warnings.length > 0">
             <a class="cell-content has-tooltip" type="primary" data-role="trigger"></a>
             <template slot="popover">
                 <div class="error-tooltip" v-if="!question.validity.isValid">
@@ -21,7 +21,7 @@
           v-for="option in editorParams.question.options"
           :key="$me.id + '_' + option.value"
           v-bind:class="{ 'unavailable-option locked-option': isProtected(option.value) }">
-        <div style="width:220px;text-align: center;">
+        <div style="width:220px;" class="field">
           <input
             v-if="answeredOrAllOptions.some(e => e.value === option.value)"
             class="wb-checkbox"
