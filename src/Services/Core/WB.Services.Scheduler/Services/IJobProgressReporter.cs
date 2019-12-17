@@ -6,7 +6,6 @@ namespace WB.Services.Scheduler.Services
 {
     public interface IJobProgressReporter : IDisposable
     {
-        void StartProgressReporter();
         void CompleteJob(long jobId);
         void FailJob(long jobId, Exception exception);
         void UpdateJobData(long jobId, string key, object value);
