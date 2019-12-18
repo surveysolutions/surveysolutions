@@ -16,6 +16,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
+using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTests
 {
@@ -44,7 +45,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
 
         [Test]
         public void should_not_be_questionnaire_stored_to_local_storage() => mockOfQuestionnaireImportService.Verify(
-            _ => _.ImportQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<string>(), new TranslationDto[0]),
+            _ => _.ImportQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<string>(), new TranslationDto[0], new ReusableCategoriesDto[0]),
             Times.Never);
 
         [Test]

@@ -33,8 +33,8 @@
 
             <div class="form-group input-variable-name col-xs-5 pull-right">
                 <label for="edit-question-variable-name" class="wb-label">{{'QuestionVariableName' | i18next }}<help key="variableName" placement="left" /></label><br />
-                <input id="edit-question-variable-name" type="text" 
-                       ng-model="activeQuestion.variable" 
+                <input id="edit-question-variable-name" type="text"
+                       ng-model="activeQuestion.variable"
                        spellcheck="false"
                        class="form-control" maxlength="32">
             </div>
@@ -73,7 +73,7 @@
 
                 <input id="cb-hide-instructions" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.hideInstructions" />
                 <label for="cb-hide-instructions"><span></span>{{'QuestionHideInstruction' | i18next}} <help key="hideInstructions" /></label>
-                
+
                 <div class="pseudo-form-control">
                     <div id="edit-question-instructions"
                          ui-ace="{ onLoad : setupAceForSubstitutions, require: ['ace/ext/language_tools'] }" ng-model="activeQuestion.instructions"></div>
@@ -91,13 +91,13 @@
             <label for="edit-question-enablement-condition">{{'EnablingCondition' | i18next}} <help key="conditionExpression" /></label>
 
             <input type="checkbox" class="wb-checkbox" disabled="disabled" checked="checked" ng-if="questionnaire.hideIfDisabled"
-                    title="{{ 'HideIfDisabledNested' | i18next }}" />
-                    
-            <input id="cb-hideIfDisabled" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.hideIfDisabled" ng-if="!questionnaire.hideIfDisabled"/>
+                   title="{{ 'HideIfDisabledNested' | i18next }}" />
+
+            <input id="cb-hideIfDisabled" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.hideIfDisabled" ng-if="!questionnaire.hideIfDisabled" />
             <label for="cb-hideIfDisabled"><span title="{{questionnaire.hideIfDisabled ? ('HideIfDisabledNested' | i18next) : ''}}"></span>{{'HideIfDisabled' | i18next}} <help key="hideIfDisabled" /></label>
 
             <div class="pseudo-form-control">
-                <div id="edit-question-enablement-condition" 
+                <div id="edit-question-enablement-condition"
                      ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" ng-model="activeQuestion.enablementCondition"></div>
             </div>
         </div>
@@ -105,20 +105,20 @@
         <div class="form-group validation-group" ng-if="doesQuestionSupportValidations()" ng-repeat="validation in activeQuestion.validationConditions" id="validationCondition{{$index}}">
             <div class="validation-group-marker"></div>
             <label>{{'ValidationCondition' | i18next}} {{$index + 1}} <help key="validationExpression" /></label>
-			
-	        <input id="cb-isWarning{{$index}}" type="checkbox" class="wb-checkbox" ng-model="validation.severity" ng-true-value="'Warning'" ng-false-value="'Error'" />
-	        <label for="cb-isWarning{{$index}}"><span></span>{{'IsWarning' | i18next}}</label>
 
-	        <button class="btn delete-btn-sm delete-validation-condition" ng-click="removeValidationCondition($index)" tabindex="-1"></button>
+            <input id="cb-isWarning{{$index}}" type="checkbox" class="wb-checkbox" ng-model="validation.severity" ng-true-value="'Warning'" ng-false-value="'Error'" />
+            <label for="cb-isWarning{{$index}}"><span></span>{{'IsWarning' | i18next}}</label>
+
+            <button class="btn delete-btn-sm delete-validation-condition" ng-click="removeValidationCondition($index)" tabindex="-1"></button>
 
             <div class="pseudo-form-control">
-                <div ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" 
+                <div ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }"
                      ng-attr-id="{{'validation-expression-' + $index}}"
-                     ng-model="validation.expression" 
+                     ng-model="validation.expression"
                      ng-attr-tabindex="{{$index + 1}}"></div>
             </div>
 
-            <label for="validationMessage{{$index}}" class="validation-message">{{'ErrorMessage' | i18next}} <help key="validationMessage"/></label>
+            <label for="validationMessage{{$index}}" class="validation-message">{{'ErrorMessage' | i18next}} <help key="validationMessage" /></label>
             <div class="pseudo-form-control">
                 <div ng-attr-id="{{'validation-message-' + $index}}" ng-attr-tabindex="{{$index + 1}}"
                      ui-ace="{ onLoad : setupAceForSubstitutions, require: ['ace/ext/language_tools'] }" ng-model="validation.message"></div>
@@ -128,103 +128,98 @@
             <button type="button" class="btn btn-lg btn-link" ng-click="addValidationCondition()" ng-i18next="AddValidationRule"></button>
         </div>
 
-    <div class="form-group">
-        <div class="form-group pull-right">
-            <label for="Question-scope">{{'QuestionScope' | i18next }}&nbsp;</label>
+        <div class="form-group">
+            <div class="form-group pull-right">
+                <label for="Question-scope">{{'QuestionScope' | i18next }}&nbsp;</label>
 
-            <div class="btn-group dropup " uib-dropdown>
-                <button class="btn dropdown-toggle" id="Question-scope" uib-dropdown-toggle type="button">
-                    {{ (getQuestionScopes(activeQuestion) | filter : {value : activeQuestion.questionScope})[0].text | i18next }}
-                    <span class="dropdown-arrow"></span>
-                </button>
+                <div class="btn-group dropup " uib-dropdown>
+                    <button class="btn dropdown-toggle" id="Question-scope" uib-dropdown-toggle type="button">
+                        {{ (getQuestionScopes(activeQuestion) | filter : {value : activeQuestion.questionScope})[0].text | i18next }}
+                        <span class="dropdown-arrow"></span>
+                    </button>
 
-                <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu1">
-                    <li role="presentation" ng-repeat="scope in getQuestionScopes(activeQuestion)">
-                        <a role="menuitem" tabindex="-1" ng-click="changeQuestionScope(scope)">
-                            {{scope.text}}
-                        </a>
-                    </li>
-                </ul>
+                    <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu1">
+                        <li role="presentation" ng-repeat="scope in getQuestionScopes(activeQuestion)">
+                            <a role="menuitem" tabindex="-1" ng-click="changeQuestionScope(scope)">
+                                {{scope.text}}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
 
     <script type="text/ng-template" id="categorical-filter-expression">
-        <div class="form-group" ng-if="!activeQuestion.isLinked && !activeQuestion.isCascade">
-            <label class="wb-label" for="optionsFilterExpression" ng-i18next="QuestionFilter"></label>
-            <div class="pseudo-form-control">
-                <div id="optionsFilterExpression" ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" ng-model="activeQuestion.optionsFilterExpression"></div>
+            <div class="form-group" ng-hide="activeQuestion.isCascade == true">
+                <label class="wb-label" for="optionsFilterExpression" ng-i18next="QuestionFilter"></label>
+                <div class="pseudo-form-control">
+                    <div id="optionsFilterExpression" ng-if="activeQuestion.isLinked" ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" ng-model="activeQuestion.optionsFilterExpression"></div>
+                    <div id="optionsFilterExpression" ng-else ui-ace="{ onLoad : aceLoadedForOtionFilter, require: ['ace/ext/language_tools'] }" ng-model="activeQuestion.linkedFilterExpression"></div>
+                </div>
             </div>
-        </div>
-    </script>
+        </script>
 
-    <script type="text/ng-template" id="linkTemplate.html">
-        <div id="sourceOfLinkedEntity" class="dropdown-with-breadcrumbs-and-icons">
-            <input type="hidden" name="linkedToEntity" ng-model="activeQuestion.linkedToEntity" ng-required="true" />
-            <label for="linkedEntitySource" ng-i18next="QuestionLinkedDescr"></label>
-            <div class="btn-group" uib-dropdown>
-                <button class="btn dropdown-toggle" uib-dropdown-toggle id="linkedEntitySource" type="button">
-                    <span class="select-placeholder" ng-if="(activeQuestion.linkedToEntity.title || '') == ''" ng-i18next="SelectQuestion"></span>
+        <script type="text/ng-template" id="linkTemplate.html">
+            <div id="sourceOfLinkedEntity" class="dropdown-with-breadcrumbs-and-icons">
+                <input type="hidden" name="linkedToEntity" ng-model="activeQuestion.linkedToEntity" ng-required="true" />
+                <label for="linkedEntitySource" ng-i18next="QuestionLinkedDescr"></label>
+                <div class="btn-group" uib-dropdown>
+                    <button class="btn dropdown-toggle" uib-dropdown-toggle id="linkedEntitySource" type="button">
+                        <span class="select-placeholder" ng-if="(activeQuestion.linkedToEntity.title || '') == ''" ng-i18next="SelectQuestion"></span>
 
-                    <span class="selected-item" ng-if="(activeQuestion.linkedToEntity.title || '') !== ''">
-                        <span class="path">{{activeQuestion.linkedToEntity.breadcrumbs}}</span>
-                        <span class="chosen-item" ng-if="activeQuestion.linkedToEntity.type!=='roster'">
-                            <i class="dropdown-icon" ng-class="'icon-'+activeQuestion.linkedToEntity.type"></i>
-                            {{activeQuestion.linkedToEntity.title | escape}}  (<span class="var-name-line">{{activeQuestion.linkedToEntity.varName}}</span>)
+                        <span class="selected-item" ng-if="(activeQuestion.linkedToEntity.title || '') !== ''">
+                            <span class="path">{{activeQuestion.linkedToEntity.breadcrumbs}}</span>
+                            <span class="chosen-item" ng-if="activeQuestion.linkedToEntity.type!=='roster'">
+                                <i class="dropdown-icon" ng-class="'icon-'+activeQuestion.linkedToEntity.type"></i>
+                                {{activeQuestion.linkedToEntity.title | escape}}  (<span class="var-name-line">{{activeQuestion.linkedToEntity.varName}}</span>)
+                            </span>
+                            <span class="linked-roster-source" ng-if="activeQuestion.linkedToEntity.type==='roster'">
+                                {{activeQuestion.linkedToEntity.title | escape}}  (<span class="var-name-line">{{activeQuestion.linkedToEntity.varName}}</span>)
+                            </span>
                         </span>
-                        <span class="linked-roster-source" ng-if="activeQuestion.linkedToEntity.type==='roster'">
-                            {{activeQuestion.linkedToEntity.title | escape}}  (<span class="var-name-line">{{activeQuestion.linkedToEntity.varName}}</span>)
-                        </span>
-                    </span>
-                    <span class="dropdown-arrow"></span>
-                </button>
+                        <span class="dropdown-arrow"></span>
+                    </button>
 
-                <ul class="dropdown-menu" role="menu">
-                    <li role="presentation" ng-class="{'dropdown-header': breadCrumb.isSectionPlaceHolder}" ng-repeat="breadCrumb in sourceOfLinkedEntities track by $index">
-                        <span ng-if="breadCrumb.isSectionPlaceHolder">{{::breadCrumb.title}}</span>
+                    <ul class="dropdown-menu" role="menu">
+                        <li role="presentation" ng-class="{'dropdown-header': breadCrumb.isSectionPlaceHolder}" ng-repeat="breadCrumb in sourceOfLinkedEntities track by $index">
+                            <span ng-if="breadCrumb.isSectionPlaceHolder">{{::breadCrumb.title}}</span>
 
-                        <a ng-if="!breadCrumb.isSectionPlaceHolder && breadCrumb.type==='roster'"
-                            ng-click="setLinkSource(breadCrumb.id, activeQuestion.linkedFilterExpression)"
-                            role="menuitem"
-                            tabindex="-1"
-                            class="linked-roster-source"
-                            href="javascript:void(0);">
-                            <div>
-                                <i class="dropdown-icon icon-{{breadCrumb.questionType || 'none'}}"></i>
-                                <span ng-bind-html="breadCrumb.title | escape"></span>
-                            </div>
-                            <div class="var-block">
-                                <span class="var-name" ng-bind-html="breadCrumb.varName"></span>
-                            </div>
-                        </a>
+                            <a ng-if="!breadCrumb.isSectionPlaceHolder && breadCrumb.type==='roster'"
+                               ng-click="setLinkSource(breadCrumb.id, activeQuestion.linkedFilterExpression)"
+                               role="menuitem"
+                               tabindex="-1"
+                               class="linked-roster-source"
+                               href="javascript:void(0);">
+                                <div>
+                                    <i class="dropdown-icon icon-{{breadCrumb.questionType || 'none'}}"></i>
+                                    <span ng-bind-html="breadCrumb.title | escape"></span>
+                                </div>
+                                <div class="var-block">
+                                    <span class="var-name" ng-bind-html="breadCrumb.varName"></span>
+                                </div>
+                            </a>
 
-                        <a ng-if="!breadCrumb.isSectionPlaceHolder && breadCrumb.type!=='roster'"
-                            ng-click="setLinkSource(breadCrumb.id, activeQuestion.linkedFilterExpression)"
-                            role="menuitem"
-                            tabindex="-1"
-                            class="linked-question-source"
-                            href="javascript:void(0);">
-                            <div>
-                                <i class="dropdown-icon icon-{{breadCrumb.type}}"></i>
-                                <span ng-bind-html="breadCrumb.title | escape"></span>
-                            </div>
-                            <div class="var-block">
-                                <span class="var-name" ng-bind-html="breadCrumb.varName"></span>
-                            </div>
-                        </a>
-                    </li>
-                </ul>
+                            <a ng-if="!breadCrumb.isSectionPlaceHolder && breadCrumb.type!=='roster'"
+                               ng-click="setLinkSource(breadCrumb.id, activeQuestion.linkedFilterExpression)"
+                               role="menuitem"
+                               tabindex="-1"
+                               class="linked-question-source"
+                               href="javascript:void(0);">
+                                <div>
+                                    <i class="dropdown-icon icon-{{breadCrumb.type}}"></i>
+                                    <span ng-bind-html="breadCrumb.title | escape"></span>
+                                </div>
+                                <div class="var-block">
+                                    <span class="var-name" ng-bind-html="breadCrumb.varName"></span>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <p class="help-block ng-cloak" ng-show="questionForm.linkedToEntity.$error.required" ng-i18next="QuestionMustBeBound">
+                </p>
             </div>
-            <p class="help-block ng-cloak" ng-show="questionForm.linkedToEntity.$error.required" ng-i18next="QuestionMustBeBound">
-            </p>
-            <hr />
-            <label for="optionsFilterExpression" ng-i18next>QuestionFilter</label>
-
-            <div class="pseudo-form-control">
-                <div id="optionsFilterExpression" ui-ace="{ onLoad : activeQuestion.isLinked ? aceLoadedForOtionFilter : aceLoaded, require: ['ace/ext/language_tools'] }" ng-model="activeQuestion.linkedFilterExpression"></div>
-            </div>
-        </div>
-    </script>
+        </script>
     </div>
     <div class="form-buttons-holder">
         <div class="pull-left">

@@ -8,8 +8,10 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using OfficeOpenXml;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Infrastructure.Native.Questionnaire
 {
@@ -26,23 +28,24 @@ namespace WB.Infrastructure.Native.Questionnaire
             public string Sheet { get; set; } = TranslationExcelOptions.WorksheetName;
         }
         
-        public TranslationFile GenerateTranslationFile(QuestionnaireDocument questionnaire, Guid translationId, ITranslation translation = null)
+        public TranslationFile GenerateTranslationFile(QuestionnaireDocument questionnaire, Guid translationId, ITranslation translation, ICategories categoriesService)
         {
             var translationFile = new TranslationFile
             {
                 QuestionnaireTitle = questionnaire.Title,
                 TranslationName = questionnaire.Translations.FirstOrDefault(x => x.Id == translationId)?.Name ?? string.Empty,
-                ContentAsExcelFile = this.GetExcelFileContentEEPlus(questionnaire, translation ?? new QuestionnaireTranslation(new List<TranslationDto>()))
+                ContentAsExcelFile = this.GetExcelFileContentEEPlus(questionnaire, 
+                    translation ?? new QuestionnaireTranslation(new List<TranslationDto>()),  categoriesService)
             };
 
             return translationFile;
         }
         
-        private byte[] GetExcelFileContentEEPlus(QuestionnaireDocument questionnaire, ITranslation translation)
+        private byte[] GetExcelFileContentEEPlus(QuestionnaireDocument questionnaire, ITranslation translation, ICategories categoriesService)
         {
             using (ExcelPackage excelPackage = new ExcelPackage())
             {
-                var textsToTranslateGroupedBySheets = GetTranlsatedTexts(questionnaire, translation)
+                var textsToTranslateGroupedBySheets = GetTranslatedTexts(questionnaire, translation, categoriesService)
                     .OrderByDescending(x => x.Sheet)
                     .GroupBy(x => x.Sheet)
                     .ToDictionary(x => x.Key, x => x.ToList());
@@ -116,7 +119,8 @@ namespace WB.Infrastructure.Native.Questionnaire
 
         private string GenerateWorksheetName(List<string> addedWorksheetNames, string newWorksheetName)
         {
-            if (!newWorksheetName.StartsWith(TranslationExcelOptions.OptionsWorksheetPreffix)) return newWorksheetName;
+            if (!newWorksheetName.StartsWith(TranslationExcelOptions.OptionsWorksheetPreffix) &&
+                !newWorksheetName.StartsWith(TranslationExcelOptions.CategoriesWorksheetPreffix)) return newWorksheetName;
 
             newWorksheetName = newWorksheetName.Substring(0, newWorksheetName.Length > 31 ? 31 : newWorksheetName.Length);
 
@@ -141,7 +145,7 @@ namespace WB.Infrastructure.Native.Questionnaire
             worksheet.Column(i).AutoFit();
         }
 
-        private IEnumerable<TranslationRow> GetTranlsatedTexts(QuestionnaireDocument questionnaire, ITranslation translation)
+        private IEnumerable<TranslationRow> GetTranslatedTexts(QuestionnaireDocument questionnaire, ITranslation translation, ICategories categoriesService)
         {
             foreach (var entity in questionnaire.Children.TreeToEnumerable(x => x.Children))
             {
@@ -167,6 +171,12 @@ namespace WB.Infrastructure.Native.Questionnaire
                 if (group != null)
                     foreach (var translatedRosterTitle in GetTranslatedRosterTitles(group, translation))
                         yield return translatedRosterTitle;
+            }
+
+            foreach (var categories in questionnaire.Categories)
+            {
+                foreach (var translatedOption in GetTranslatedOptions(categories, translation, categoriesService))
+                    yield return translatedOption;
             }
         }
 
@@ -214,11 +224,21 @@ namespace WB.Infrastructure.Native.Questionnaire
                     Variable = question.VariableName,
                     Type = question.QuestionType == QuestionType.Numeric ? TranslationType.SpecialValue.ToString("G") : TranslationType.OptionTitle.ToString("G"),
                     OriginalText = option.AnswerText,
-                    Translation = question.QuestionType == QuestionType.Numeric ? translation.GetSpecialValue(question.PublicKey, option.AnswerValue) : translation.GetAnswerOption(question.PublicKey, option.AnswerValue),
-                    OptionValueOrValidationIndexOrFixedRosterId = option.AnswerValue,
+                    Translation = question.QuestionType == QuestionType.Numeric ? translation.GetSpecialValue(question.PublicKey, option.AnswerValue) : translation.GetAnswerOption(question.PublicKey, option.AnswerValue, option.ParentValue),
+                    OptionValueOrValidationIndexOrFixedRosterId = $"{option.AnswerValue}${option.ParentValue}",
                     Sheet = isLongOptionsList ? $"{TranslationExcelOptions.OptionsWorksheetPreffix}{question.StataExportCaption}" : TranslationExcelOptions.WorksheetName
                 };
         }
+
+        private IEnumerable<TranslationRow> GetTranslatedOptions(Categories categories, ITranslation translation, ICategories categoriesService) =>
+            categoriesService.GetCategories(categories.Id).Select(x =>
+                new TranslationRow
+                {
+                    OriginalText = x.Text,
+                    Translation = translation.GetCategoriesText(categories.Id, x.Id, x.ParentId),
+                    OptionValueOrValidationIndexOrFixedRosterId = $"{x.Id}${x.ParentId}",
+                    Sheet = $"{TranslationExcelOptions.CategoriesWorksheetPreffix}{categories.Name}"
+                });
 
         private static IEnumerable<TranslationRow> GetTranslatedRosterTitles(IGroup group, ITranslation translation)
             => from fixedRoster in @group.FixedRosterTitles

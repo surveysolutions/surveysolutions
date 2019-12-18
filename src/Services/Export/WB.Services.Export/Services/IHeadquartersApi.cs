@@ -19,6 +19,9 @@ namespace WB.Services.Export.Services
         [Get("/api/export/v1/questionnaire/{id}")]
         Task<QuestionnaireDocument> GetQuestionnaireAsync([AliasAs("id")] QuestionnaireId questionnaireId);
 
+        [Get("/api/export/v1/questionnaire/{questionnaireId}/category/{categoryId}")]
+        Task<CategoryItem[]> GetCategoriesAsync(QuestionnaireId questionnaireId, Guid categoryId);
+
         [Get("/api/export/v1/questionnaire/{id}/pdf")]
         Task<HttpContent> GetPdfAsync([AliasAs("id")] QuestionnaireId questionnaireId, Guid? translation = null);
 

@@ -256,7 +256,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 return;
 
             roster.UpdateRosterTitle((questionId, answerOptionValue) => this.questionnaire
-                .GetOptionForQuestionByOptionValue(questionId, answerOptionValue).Title);
+                .GetOptionForQuestionByOptionValue(questionId, answerOptionValue, null).Title);
         }
 
         public void UpdateVariable(InterviewTreeVariable variable)

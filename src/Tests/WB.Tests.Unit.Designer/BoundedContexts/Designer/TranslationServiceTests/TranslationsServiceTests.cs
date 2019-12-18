@@ -7,10 +7,12 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
+using OfficeOpenXml;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTests
 {
@@ -250,6 +252,179 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             Assert.That(validationError.Message.Contains(TranslationExcelOptions.EntityIdColumnName), Is.True);
         }
 
+        [Test]
+        public void when_verifying_translations_from_excel_file_with_categories_and_without_translation_column()
+        {
+            //assert
+            Guid questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            Guid translationId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            var categoriesId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+            var categoriesName = "mycat";
+
+
+            byte[] fileStream = CreateExcel(categoriesName, new[]
+            {
+                new[]
+                {
+                    "Index", "Original text"
+                }
+            });
+
+            var plainStorageAccessor = Create.InMemoryDbContext();
+
+            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId);
+            questionnaire.Categories = new List<Categories>
+            {
+                new Categories{ Id = categoriesId, Name = categoriesName}
+            };
+
+            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
+            questionnaires.SetReturnsDefault(questionnaire);
+
+            var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
+
+            //act
+            var exception = Assert.Throws<InvalidExcelFileException>(() => service.Store(questionnaireId, translationId, fileStream));
+
+            //assert
+            Assert.That(exception, Is.Not.Null);
+
+            Assert.That(exception.FoundErrors.Count, Is.EqualTo(1));
+
+            var validationError = exception.FoundErrors.Single();
+            Assert.That(validationError.Message.Contains(TranslationExcelOptions.TranslationTextColumnName), Is.True);
+        }
+
+        [Test]
+        public void when_verifying_translations_from_excel_file_with_categories_and_without_index_column()
+        {
+            //assert
+            Guid questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            Guid translationId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            var categoriesId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+            var categoriesName = "mycat";
+
+
+            byte[] fileStream = CreateExcel(categoriesName, new[]
+            {
+                new[]
+                {
+                    "Original text", "Translation"
+                }
+            });
+
+            var plainStorageAccessor = Create.InMemoryDbContext();
+
+            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId);
+            questionnaire.Categories = new List<Categories>
+            {
+                new Categories{ Id = categoriesId, Name = categoriesName}
+            };
+
+            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
+            questionnaires.SetReturnsDefault(questionnaire);
+
+            var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
+
+            //act
+            var exception = Assert.Throws<InvalidExcelFileException>(() => service.Store(questionnaireId, translationId, fileStream));
+
+            //assert
+            Assert.That(exception, Is.Not.Null);
+
+            Assert.That(exception.FoundErrors.Count, Is.EqualTo(1));
+
+            var validationError = exception.FoundErrors.Single();
+            Assert.That(validationError.Message.Contains(TranslationExcelOptions.OptionValueOrValidationIndexOrFixedRosterIdIndexColumnName), Is.True);
+        }
+
+        [Test]
+        public void when_verifying_translations_from_excel_file_with_categories_and_index_cell_is_empty()
+        {
+            //assert
+            Guid questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            Guid translationId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            var categoriesId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+            var categoriesName = "mycat";
+
+
+            byte[] fileStream = CreateExcelWithHeader(categoriesName, new[]
+            {
+                new[]
+                {
+                    "", "original text", "translation"
+                }
+            });
+
+            var plainStorageAccessor = Create.InMemoryDbContext();
+
+            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId);
+            questionnaire.Categories = new List<Categories>
+            {
+                new Categories{ Id = categoriesId, Name = categoriesName}
+            };
+
+            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
+            questionnaires.SetReturnsDefault(questionnaire);
+
+            var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
+
+            //act
+            var exception = Assert.Throws<InvalidExcelFileException>(() => service.Store(questionnaireId, translationId, fileStream));
+
+            //assert
+            Assert.That(exception, Is.Not.Null);
+
+            Assert.That(exception.FoundErrors.Count, Is.EqualTo(1));
+
+            var validationError = exception.FoundErrors.Single();
+            Assert.That(validationError.Message.Contains("invalid index at [A2]"), Is.True);
+        }
+
+        [Test]
+        public void when_storing_translations_from_excel_file_with_categories()
+        {
+            //assert
+            Guid questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            Guid translationId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            var categoriesId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+            var categoriesName = "mycat";
+
+            byte[] fileStream = CreateExcelWithHeader(categoriesName, new[]
+            {
+                new[]
+                {
+                    "1$1", "original text", "translation"
+                }
+            });
+
+            var plainStorageAccessor = Create.InMemoryDbContext();
+
+            var questionnaire = Create.QuestionnaireDocument(questionnaireId);
+            questionnaire.Categories = new List<Categories>
+            {
+                new Categories{ Id = categoriesId, Name = categoriesName}
+            };
+
+            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
+            questionnaires.SetReturnsDefault(questionnaire);
+
+            var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
+
+            //act
+            service.Store(questionnaireId, translationId, fileStream);
+
+            //assert
+            Assert.That(plainStorageAccessor.TranslationInstances.Count(), Is.EqualTo(1));
+
+            var translationInstance = plainStorageAccessor.TranslationInstances.First();
+            Assert.That(translationInstance.Value, Is.EqualTo("translation"));
+            Assert.That(translationInstance.QuestionnaireEntityId, Is.EqualTo(categoriesId));
+            Assert.That(translationInstance.Type, Is.EqualTo(TranslationType.Categories));
+            Assert.That(translationInstance.QuestionnaireId, Is.EqualTo(questionnaireId));
+            Assert.That(translationInstance.TranslationIndex, Is.EqualTo("1$1"));
+        }
+
         private byte[] GetEmbendedFileContent(string fileName)
         {
             var testType = typeof(TranslationsServiceTests);
@@ -260,6 +435,28 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             {
                 manifestResourceStream.CopyTo(memoryStream);
                 return memoryStream.ToArray();
+            }
+        }
+
+        private static byte[] CreateExcelWithHeader(string categoriesName, string[][] data)
+        {
+            var listOfData = data.ToList();
+            listOfData.Insert(0, new[] {"Index", "Original text", "Translation"});
+
+            return CreateExcel(categoriesName, listOfData.ToArray());
+        }
+
+        private static byte[] CreateExcel(string categoriesName, string[][] data)
+        {
+            using (ExcelPackage package = new ExcelPackage())
+            {
+                var worksheet = package.Workbook.Worksheets.Add($"@@@_{categoriesName}");
+
+                for (var row = 0; row < data.Length; row++)
+                for (var column = 0; column < data[row].Length; column++)
+                    worksheet.Cells[row + 1, column + 1].Value = data[row][column];
+
+                return package.GetAsByteArray();
             }
         }
     }

@@ -31,7 +31,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             IQuestionnaireTranslator translator,
             IQuestionOptionsRepository questionOptionsRepository,
             ISubstitutionService substitutionService,
-            IInterviewExpressionStatePrototypeProvider expressionStatePrototypeProvider)
+            IInterviewExpressionStatePrototypeProvider expressionStatePrototypeProvider
+            )
         {
             this.repository = repository;
             this.translationStorage = translationStorage;
@@ -54,6 +55,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             if (questionnaireDocument == null || questionnaireDocument.IsDeleted)
                 return null;
 
+            questionnaireDocument = FillPlainQuestionnaireDataOnCreate(identity, questionnaireDocument);
+
             Translation translationId = null;
             if (language != null)
             {
@@ -68,7 +71,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             }
 
             var plainQuestionnaire = new PlainQuestionnaire(questionnaireDocument, identity.Version, 
-                questionOptionsRepository, substitutionService,translationId);
+                questionOptionsRepository, substitutionService, translationId);
 
             plainQuestionnaire.WarmUpPriorityCaches();
 
@@ -79,6 +82,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             }
 
             return plainQuestionnaire;
+        }
+
+        protected virtual QuestionnaireDocument FillPlainQuestionnaireDataOnCreate(QuestionnaireIdentity identity, QuestionnaireDocument questionnaireDocument)
+        {
+            return questionnaireDocument;
         }
 
         public virtual void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument)

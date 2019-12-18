@@ -89,6 +89,9 @@ using System;
 using System.Net.Http.Headers;
 using System.Text;
 using WB.Core.BoundedContexts.Headquarters.Designer;
+using WB.Core.BoundedContexts.Headquarters.ReusableCategories;
+using WB.Infrastructure.Native.Questionnaire;
+using WB.Infrastructure.Native.Questionnaire.Impl;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.Infrastructure.Domain;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -191,7 +194,9 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAssemblyService, AssemblyService>();
             registry.Bind<IExportSettings, Implementation.ExportSettings>();
             registry.Bind<IArchiveUtils, IProtectedArchiveUtils, ZipArchiveUtils>();
-            
+            registry.Bind<IReusableCategoriesStorage, ReusableCategoriesStorage>();
+            registry.Bind<IReusableCategoriesFillerIntoQuestionnaire, ReusableCategoriesFillerIntoQuestionnaire>();
+
             registry.Bind<IAllInterviewsFactory, AllInterviewsFactory>();
             registry.Bind<ITeamInterviewsFactory, TeamInterviewsFactory>();
             registry.Bind<IChangeStatusFactory, ChangeStatusFactory>();
