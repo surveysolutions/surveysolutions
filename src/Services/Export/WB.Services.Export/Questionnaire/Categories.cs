@@ -8,12 +8,13 @@ namespace WB.Services.Export.Questionnaire
         public Guid Id { get; set; }
         public string Name { get; set; }
 
-        public IEnumerable<CategoryItem> Values { get; set; }
+        public CategoryItem[] Values { get; set; }
     }
 
     public class CategoryItem
     {
-        public string Title { get; set; }
-        public int Value { get; set; }
+        public int Id { get; set; }
+        public int? ParentId { get; set; }
+        public string Text { get; set; }
     }
 }
