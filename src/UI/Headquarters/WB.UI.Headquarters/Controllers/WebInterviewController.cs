@@ -12,7 +12,6 @@ using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -25,8 +24,10 @@ using WB.UI.Shared.Web.Captcha;
 using Microsoft.AspNet.Identity;
 using StackExchange.Exceptional;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
+using WB.Core.BoundedContexts.Headquarters.ValueObjects;
+using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Services;
@@ -57,6 +58,8 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IInvitationService invitationService;
         private readonly INativeReadSideStorage<InterviewSummary> interviewSummary;
         private readonly IInvitationMailingService invitationMailingService;
+
+        private readonly IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage;
 
         private const string CapchaCompletedKey = "CaptchaCompletedKey";
         private const string PasswordVerifiedKey = "PasswordVerifiedKey";
@@ -112,7 +115,8 @@ namespace WB.UI.Headquarters.Controllers
             IPauseResumeQueue pauseResumeQueue,
             IInvitationService invitationService,
             INativeReadSideStorage<InterviewSummary> interviewSummary,
-            IInvitationMailingService invitationMailingService)
+            IInvitationMailingService invitationMailingService,
+            IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage)
             : base(commandService, logger)
         {
             this.commandService = commandService;
@@ -159,10 +163,15 @@ namespace WB.UI.Headquarters.Controllers
 
         private WebInterviewIndexPageModel GetInterviewModel(string interviewId, WebInterviewConfig webInterviewConfig)
         {
+            var emailSettings = this.emailProviderSettingsStorage.GetById(AppSetting.EmailProviderSettings);
+            
+            bool isAskForEmailAvailable = 
+                emailSettings != null && emailSettings.Provider != EmailProvider.None;
+
             return new WebInterviewIndexPageModel
             {
                 Id = interviewId,
-                AskForEmail = Request.Cookies.Get(AskForEmail)?.Value ?? "false",
+                AskForEmail = isAskForEmailAvailable ? "false" : Request.Cookies.Get(AskForEmail)?.Value ?? "false",
                 CustomMessages = webInterviewConfig.CustomMessages
             };
         }
