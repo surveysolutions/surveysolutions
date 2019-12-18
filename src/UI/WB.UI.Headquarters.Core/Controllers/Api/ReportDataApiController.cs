@@ -27,7 +27,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 {
     [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
     [ResponseCache(NoStore = true)]
-    public partial class ReportDataApiController : ControllerBase
+    public partial class ReportDataControllerBase : ControllerBase
     {
         const int MaxPageSize = 50000;
 
@@ -45,7 +45,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         private readonly IExportFactory exportFactory;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
-        public ReportDataApiController(
+        public ReportDataControllerBase(
             ICommandService commandService,
             IAuthorizedUser authorizedUser,
             ILogger logger,
@@ -366,7 +366,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpGet]
-        public IActionResult SupervisorSurveysAndStatusesReport(Guid? id = null,[FromQuery]ReportDataApiController.SurveysAndStatusesFilter filter = null, [FromQuery]string exportType = null)
+        public IActionResult SupervisorSurveysAndStatusesReport(Guid? id = null,[FromQuery]ReportDataControllerBase.SurveysAndStatusesFilter filter = null, [FromQuery]string exportType = null)
         {
             var teamLeadName = this.authorizedUser.UserName;
             var input = new SurveysAndStatusesReportInputModel
@@ -391,7 +391,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             
             var view = this.surveysAndStatusesReport.Load(input);
 
-            return new JsonResult(new ReportDataApiController.SurveysAndStatusesDataTableResponse
+            return new JsonResult(new ReportDataControllerBase.SurveysAndStatusesDataTableResponse
             {
                 Draw = filter.Draw + 1,
                 RecordsTotal = view.TotalCount,
@@ -402,7 +402,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpGet]
-        public IActionResult HeadquarterSurveysAndStatusesReport(Guid? id = null, [FromQuery]ReportDataApiController.SurveysAndStatusesFilter filter = null, [FromQuery]string exportType = null)
+        public IActionResult HeadquarterSurveysAndStatusesReport(Guid? id = null, [FromQuery]ReportDataControllerBase.SurveysAndStatusesFilter filter = null, [FromQuery]string exportType = null)
         {
             var input = new SurveysAndStatusesReportInputModel
             {
@@ -425,7 +425,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             var view = this.surveysAndStatusesReport.Load(input);
 
-            return new JsonResult(new ReportDataApiController.SurveysAndStatusesDataTableResponse
+            return new JsonResult(new ReportDataControllerBase.SurveysAndStatusesDataTableResponse
             {
                 Draw = filter.Draw + 1,
                 RecordsTotal = view.TotalCount,
@@ -438,7 +438,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
-        public async Task<IActionResult> DeviceInterviewers([FromQuery]ReportDataApiController.DeviceInterviewersFilter request, Guid? id = null, 
+        public async Task<IActionResult> DeviceInterviewers([FromQuery]ReportDataControllerBase.DeviceInterviewersFilter request, Guid? id = null, 
             [FromQuery]string exportType = null)
         {
             var input = new DeviceByInterviewersReportInputModel
@@ -462,7 +462,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             var data = await this.deviceInterviewersReport.LoadAsync(input);
 
-            return new JsonResult(new ReportDataApiController.DeviceInterviewersDataTableResponse
+            return new JsonResult(new ReportDataControllerBase.DeviceInterviewersDataTableResponse
             {
                 Draw = request.Draw + 1,
                 RecordsTotal = data.TotalCount,
@@ -489,7 +489,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
-        public async Task<IActionResult> StatusDuration([FromQuery] ReportDataApiController.StatusDurationRequest request, [FromQuery] string exportType = null)
+        public async Task<IActionResult> StatusDuration([FromQuery] ReportDataControllerBase.StatusDurationRequest request, [FromQuery] string exportType = null)
         {
             var input = new StatusDurationInputModel
             {
@@ -509,7 +509,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             var data = await this.statusDurationReport.LoadAsync(input);
 
-            return new JsonResult(new ReportDataApiController.StatusDurationDataTableResponse
+            return new JsonResult(new ReportDataControllerBase.StatusDurationDataTableResponse
             {
                 Draw = request.Draw + 1,
                 RecordsTotal = data.TotalCount,
@@ -522,7 +522,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         [HttpGet]
         [Authorize(Roles = "Supervisor")]
-        public async Task<IActionResult> TeamStatusDuration([FromQuery] ReportDataApiController.StatusDurationRequest request, [FromQuery] string exportType = null)
+        public async Task<IActionResult> TeamStatusDuration([FromQuery] ReportDataControllerBase.StatusDurationRequest request, [FromQuery] string exportType = null)
         {
             var input = new StatusDurationInputModel
             {
@@ -542,7 +542,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             var data = await this.statusDurationReport.LoadAsync(input);
 
-            return new JsonResult(new ReportDataApiController.StatusDurationDataTableResponse
+            return new JsonResult(new ReportDataControllerBase.StatusDurationDataTableResponse
             {
                 Draw = request.Draw + 1,
                 RecordsTotal = data.TotalCount,

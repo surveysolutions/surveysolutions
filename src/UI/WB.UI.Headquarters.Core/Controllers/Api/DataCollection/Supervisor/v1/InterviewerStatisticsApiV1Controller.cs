@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
-using System.Web.Http;
-using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.SharedKernels.DataCollection.WebApi;
-using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 {
-    [ApiBasicAuth(new[] { UserRoles.Supervisor })]
-    public class InterviewerStatisticsApiV1Controller : ApiController
+    [Authorize(Roles = "Supervisor")]
+    public class InterviewerStatisticsApiV1Controller : ControllerBase
     {
         private readonly IDeviceSyncInfoRepository deviceSyncInfoRepository;
 
@@ -22,7 +21,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
         }
 
         [HttpPost]
-        public HttpResponseMessage Post(InterviewerSyncStatisticsApiView statistics)
+        [Route("api/supervisor/v1/interviewerStatistics")]
+        public IActionResult Post(InterviewerSyncStatisticsApiView statistics)
         {
             var deviceInfo = this.deviceSyncInfoRepository.GetLastByInterviewerId(statistics.InterviewerId);
             deviceInfo.Statistics = new SyncStatistics
@@ -45,7 +45,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
             };
 
             this.deviceSyncInfoRepository.AddOrUpdate(deviceInfo);
-            return Request.CreateResponse(HttpStatusCode.NoContent);
+            return NoContent();
         }
     }
 }

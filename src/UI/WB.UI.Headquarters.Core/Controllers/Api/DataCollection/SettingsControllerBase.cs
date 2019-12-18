@@ -63,11 +63,11 @@ namespace WB.UI.Headquarters.API.DataCollection
             };
         }
 
-        public virtual bool AutoUpdateEnabled() => false;
+        public virtual IActionResult AutoUpdateEnabled() =>  new JsonResult(false);
 
-        public virtual string PublicKeyForEncryption() =>
-            Convert.ToBase64String(this.secureStorage.Retrieve(RsaEncryptionService.PublicKey));
+        public virtual IActionResult PublicKeyForEncryption() =>
+            new JsonResult(Convert.ToBase64String(this.secureStorage.Retrieve(RsaEncryptionService.PublicKey)));
 
-        public virtual bool NotificationsEnabled() => true;
+        public virtual IActionResult NotificationsEnabled() => new JsonResult(true);
     }
 }

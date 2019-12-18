@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web.Http;
-using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
@@ -14,7 +14,8 @@ using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 {
-    [ApiBasicAuth(UserRoles.Supervisor)]
+    [Authorize(Roles = "Supervisor")]
+    [Route("api/supervisor/v1/assignments")]
     public class AssignmentsApiV1Controller : AssignmentsControllerBase
     {
         private readonly IAssignmentsService assignmentsService;
@@ -31,15 +32,18 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 
         [WriteToSyncLog(SynchronizationLogType.GetAssignment)]
         [HttpGet]
-        public override Task<AssignmentApiDocument> GetAssignmentAsync(int id, CancellationToken cancellationToken)
-            => base.GetAssignmentAsync(id, cancellationToken);
+        [Route("{id:int}")]
+        public override ActionResult<AssignmentApiDocument> GetAssignment(int id)
+            => base.GetAssignment(id);
 
         [WriteToSyncLog(SynchronizationLogType.GetAssignmentsList)]
         [HttpGet]
+        [Route("")]
         public override Task<List<AssignmentApiView>> GetAssignmentsAsync(CancellationToken cancellationToken)
             => base.GetAssignmentsAsync(cancellationToken);
 
         [HttpPost]
-        public override HttpResponseMessage Received(int id) => base.Received(id);
+        [Route("{id:int}/Received")]
+        public override IActionResult Received(int id) => base.Received(id);
     }
 }

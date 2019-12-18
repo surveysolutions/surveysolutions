@@ -85,6 +85,7 @@ using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAuditLog;
 using WB.Core.Infrastructure.Domain;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -166,6 +167,14 @@ namespace WB.Core.BoundedContexts.Headquarters
             //registry.BindToMethod<Func<IInterviewsToDeleteFactory>>(context => () => context.Get<IInterviewsToDeleteFactory>());
             registry.Bind<IInterviewHistoryFactory, InterviewHistoryFactory>();
             registry.Bind<IInterviewStatisticsReportDenormalizer, InterviewStatisticsReportDenormalizer>();
+            registry.Bind<InterviewSummaryCompositeDenormalizer>();
+            registry.Bind<InterviewSummaryDenormalizer>();
+            registry.Bind<StatusChangeHistoryDenormalizerFunctional>();
+            registry.Bind<InterviewStatusTimeSpanDenormalizer>();
+            registry.Bind<InterviewGeoLocationAnswersDenormalizer>();
+            registry.Bind<InterviewExportedCommentariesDenormalizer>();
+            registry.Bind<CumulativeChartDenormalizer>();
+            registry.Bind<AssignmentDenormalizer>();
             registry.Bind<IInterviewInformationFactory, InterviewerInterviewsFactory>();
             registry.Bind<IDatasetWriterFactory, DatasetWriterFactory>();
             registry.Bind<IQuestionnaireLabelFactory, QuestionnaireLabelFactory>();
@@ -312,6 +321,12 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IDesignerApiFactory, DesignerApiFactory>();
             registry.BindToMethod(ctx => ctx.Resolve<IDesignerApiFactory>().Get());
             registry.Bind<IInScopeExecutor, UnitOfWorkInScopeExecutor>();
+
+            registry.BindWithConstructorArgumentInPerLifetimeScope<ILiteEventBus, NcqrCompatibleEventDispatcher>(
+                "eventBusSettings",
+                new EventBusSettings()); // todo restore KP-13449
+
+            registry.Bind<AssignmentAggregateRoot>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
