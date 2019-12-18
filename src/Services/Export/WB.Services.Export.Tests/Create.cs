@@ -218,7 +218,9 @@ namespace WB.Services.Export.Tests
             string variable = null,
             bool yesNoView = false,
             Guid? linkedToRosterId = null,
-            bool areAnswersOrdered = false)
+            bool areAnswersOrdered = false,
+            bool? isFilteredCombobox = null,
+            int? maxAnswersCount = null)
             => new MultyOptionsQuestion
             {
                 QuestionType = QuestionType.MultyOption,
@@ -228,7 +230,9 @@ namespace WB.Services.Export.Tests
                 LinkedToRosterId = linkedToRosterId,
                 VariableName = variable,
                 YesNoView = yesNoView,
-                AreAnswersOrdered = areAnswersOrdered
+                AreAnswersOrdered = areAnswersOrdered,
+                IsFilteredCombobox = isFilteredCombobox,
+                MaxAllowedAnswers = maxAnswersCount
             };
 
         public static Answer Option(string text, string value)
