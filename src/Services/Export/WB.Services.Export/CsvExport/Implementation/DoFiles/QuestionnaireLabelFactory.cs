@@ -59,11 +59,12 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
                     if (labelReferenceId.HasValue && !isMultiOptionQuestion)
                     {
                         var labels = level.ReusableLabels.First(l => l.Key == labelReferenceId.Value).Value;
-                        variableValueLabel = labels.Labels
-                            .Select(label => new VariableValueLabel(label.Caption, label.Title?.RemoveHtmlTags() ?? string.Empty))
-                            .ToArray();
+                        var labelValue = new DataExportLabelValue(labels.Name?.RemoveHtmlTags() ?? string.Empty, labelReferenceId.Value);
+                        variableLabels.Add(new DataExportVariable(headerColumn.Name, headerItem.PublicKey, labelValue));
+                        continue;
                     }
-                    else if (hasLabels)
+
+                    if (hasLabels)
                     {
                         variableValueLabel = ((ExportedQuestionHeaderItem)headerItem).Labels
                             .Select(label => new VariableValueLabel(label.Caption, label.Title?.RemoveHtmlTags() ?? string.Empty))

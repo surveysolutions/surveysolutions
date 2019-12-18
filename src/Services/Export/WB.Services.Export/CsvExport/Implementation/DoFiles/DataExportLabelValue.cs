@@ -8,23 +8,11 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
 {
     public class DataExportLabelValue
     {
-        private readonly Dictionary<string, VariableValueLabel> variableValueLabels;
-
         public DataExportLabelValue(string labelName, Guid? entityId, VariableValueLabel[] variableValues)
         {
             this.LabelName = labelName;
             this.EntityId = entityId;
-
-            var uniqueValues = from v in variableValues
-                group v by v.Value
-                into g
-                where g.Count() == 1
-                select new
-                {
-                    Value = g.Key,
-                    Label = g.Single()
-                };
-            this.variableValueLabels = uniqueValues.ToDictionary(x => x.Value, x => x.Label);
+            this.VariableValues = variableValues;
 
             this.IsReference = false;
         }
@@ -32,13 +20,14 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
         {
             this.LabelName = labelName;
             this.EntityId = entityId;
+            this.VariableValues = new VariableValueLabel[0];
 
             this.IsReference = true;
         }
 
         public string LabelName { get; private set; }
         public Guid? EntityId { get; private set; }
-        public VariableValueLabel[] VariableValues => this.variableValueLabels.Values.ToArray();
+        public VariableValueLabel[] VariableValues { get; }
         public bool IsReference { get; private set; }
     }
 }
