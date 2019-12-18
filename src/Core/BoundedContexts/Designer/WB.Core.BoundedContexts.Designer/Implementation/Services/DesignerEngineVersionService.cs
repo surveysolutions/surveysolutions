@@ -180,7 +180,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             },
             new QuestionnaireContentVersion
             {
-                Version = ApiVersion.MaxQuestionnaireVersion, // old versions for history and could be removed later
+                Version = 27, // old versions for history and could be removed later
                 NewFeatures = new []
                 {
                     new QuestionnaireFeature
@@ -230,6 +230,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                                                                        && q.QuestionScope == QuestionScope.Supervisor 
                                                                        && q.CascadeFromQuestionId.HasValue).Any(),
                         Description = "Contains cascading question with supervisor scope"
+                    }
+                }
+            },
+            new QuestionnaireContentVersion
+            {
+                Version = ApiVersion.MaxQuestionnaireVersion, 
+                NewFeatures = new []
+                {
+                    new QuestionnaireFeature
+                    {
+                        HasQuestionnaire = questionnaire =>  questionnaire.Categories.Any(),
+                        Description = "Contains reusable categories"
                     }
                 }
             },

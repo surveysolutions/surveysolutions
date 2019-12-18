@@ -11,7 +11,8 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
         Attachment = 60,
         Variable = 70,
         Translation = 80,
-        Questionnaire = 90
+        Questionnaire = 90,
+        Categories = 100
     }
 
     public enum QuestionnaireVerificationReferenceProperty

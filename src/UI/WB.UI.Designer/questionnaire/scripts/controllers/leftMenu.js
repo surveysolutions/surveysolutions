@@ -11,11 +11,12 @@
             $scope.isUnfoldedTranslations = false;
             $scope.isUnfoldedMetadata = false;
             $scope.isUnfoldedComments = false;
+            $scope.isUnfoldedCategories = false;
 
 
             var closeOpenPanelIfAny = function() {
                 if (!($scope.isUnfoldedChapters || $scope.isUnfoldedScenarios || $scope.isUnfoldedMacros || $scope.isUnfoldedLookupTables || $scope.isUnfoldedAttachments 
-                    || $scope.isUnfoldedTranslations || $scope.isUnfoldedMetadata  || $scope.isUnfoldedComments))
+                    || $scope.isUnfoldedTranslations || $scope.isUnfoldedMetadata  || $scope.isUnfoldedComments || $scope.isUnfoldedCategories))
                     return;
 
                 if ($scope.isUnfoldedChapters) {
@@ -42,6 +43,9 @@
                 if ($scope.isUnfoldedComments) {
                     $rootScope.$broadcast("closeCommentsRequested", {});
                 }
+                if ($scope.isUnfoldedCategories) {
+                    $rootScope.$broadcast("closeCategoriesRequested", {});
+                }
 
             };
 
@@ -54,6 +58,7 @@
                 $scope.isUnfoldedTranslations = false;
                 $scope.isUnfoldedMetadata = false;
                 $scope.isUnfoldedComments = false;
+                $scope.isUnfoldedCategories = false;
             }
 
             $scope.unfoldChapters = function () {
@@ -62,6 +67,15 @@
                 closeOpenPanelIfAny();
                 $scope.isUnfoldedChapters = true;
                 $rootScope.$broadcast("openChaptersList", {});
+            };
+
+            $scope.unfoldCategories = function () {
+                if ($scope.isUnfoldedCategories)
+                    return;
+
+                closeOpenPanelIfAny();
+                $scope.isUnfoldedCategories = true;
+                $rootScope.$broadcast("openCategories", {});
             };
 
             $scope.unfoldMacros = function () {
@@ -127,6 +141,10 @@
                 $rootScope.$broadcast("openComments", {});
             };
 
+            $scope.$on('openCategoriesList', function () {
+                $scope.isUnfoldedCategories = true;
+            });
+
             $scope.$on('openChaptersList', function () {
                 $scope.isUnfoldedChapters = true;
             });
@@ -157,6 +175,10 @@
 
             $scope.$on('openMacrosList', function () {
                 $scope.isUnfoldedMacros = true;
+            });
+
+            $scope.$on('closeCategories', function () {
+                closeAllPanel();
             });
 
             $scope.$on('closeChaptersList', function () {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.ReusableCategories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
@@ -14,6 +15,8 @@ using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.Questionnaire.Documents;
+using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Storage;
 
 namespace WB.Core.BoundedContexts.Headquarters.Repositories
@@ -22,6 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
     {
         private readonly IReadSideRepositoryWriter<QuestionnaireCompositeItem, int> questionnaireItemsWriter;
         private readonly INativeReadSideStorage<QuestionnaireCompositeItem, int> questionnaireItemsReader;
+        private readonly IReusableCategoriesFillerIntoQuestionnaire categoriesFillerIntoQuestionnaire;
 
         public HqQuestionnaireStorage(IPlainKeyValueStorage<QuestionnaireDocument> repository,
             ITranslationStorage translationStorage,
@@ -30,11 +34,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
             INativeReadSideStorage<QuestionnaireCompositeItem, int> questionnaireItemsReader,
             IQuestionOptionsRepository questionOptionsRepository,
             ISubstitutionService substitutionService,
-            IInterviewExpressionStatePrototypeProvider expressionStatePrototypeProvider)
+            IInterviewExpressionStatePrototypeProvider expressionStatePrototypeProvider,
+            IReusableCategoriesFillerIntoQuestionnaire categoriesFillerIntoQuestionnaire)
             : base(repository, translationStorage, translator, questionOptionsRepository, substitutionService, expressionStatePrototypeProvider)
         {
             this.questionnaireItemsWriter = questionnaireItemsWriter;
             this.questionnaireItemsReader = questionnaireItemsReader;
+            this.categoriesFillerIntoQuestionnaire = categoriesFillerIntoQuestionnaire;
         }
 
         public override void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument)
@@ -105,6 +111,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
 
                 return questionnaire;
             });
+        }
+
+        protected override QuestionnaireDocument FillPlainQuestionnaireDataOnCreate(QuestionnaireIdentity identity, QuestionnaireDocument questionnaireDocument)
+        {
+            return categoriesFillerIntoQuestionnaire.FillCategoriesIntoQuestionnaireDocument(identity, questionnaireDocument);
         }
     }
 }

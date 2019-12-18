@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
@@ -30,6 +32,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Implementation;
@@ -54,6 +57,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
         private readonly ITranslationsService translationsService;
+        private readonly ICategoriesService categoriesService;
 
         // Get the default form options so that we can use them to set the default limits for
         // request body data
@@ -66,7 +70,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             ICommandInflater commandPreprocessor,
             ILookupTableService lookupTableService,
             IAttachmentService attachmentService,
-            ITranslationsService translationsService)
+            ITranslationsService translationsService,
+            ICategoriesService categoriesService)
         {
             this.logger = logger;
             this.commandInflater = commandPreprocessor;
@@ -75,6 +80,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             this.lookupTableService = lookupTableService;
             this.attachmentService = attachmentService;
             this.translationsService = translationsService;
+            this.categoriesService = categoriesService;
         }
 
         public class AttachmentModel
@@ -247,7 +253,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             }
         }
 
-        public class TranslationModel
+        public class FileModel
         {
             public IFormFile File { get; set; }
             public string Command { get; set; }
@@ -256,7 +262,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         [Route("~/api/command/translation")]
         [HttpPost]
-        public async Task<IActionResult> UpdateTranslation(TranslationModel model)
+        public async Task<IActionResult> UpdateTranslation(FileModel model)
         {
             var commandType = typeof(AddOrUpdateTranslation).Name;
             AddOrUpdateTranslation command;
@@ -289,7 +295,12 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             catch (InvalidExcelFileException e)
             {
                 this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
-                return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
+
+                var sb = new StringBuilder();
+                sb.AppendLine(e.Message);
+                e.FoundErrors?.ForEach(x => sb.AppendLine(x.Message));
+
+                return this.Error((int)HttpStatusCode.NotAcceptable, sb.ToString());
             }
 
             var commandResponse = this.ProcessCommand(command, commandType);
@@ -307,6 +318,65 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 : string.Format(QuestionnaireEditor.TranslationsObtained_plural, storedTranslationsCount);
 
             await dbContext.SaveChangesAsync();
+
+            return Ok(resultMessage);
+        }
+
+        [Route("~/api/command/categories")]
+        [HttpPost]
+        public async Task<IActionResult> UpdateCategories(FileModel model)
+        {
+            var commandType = typeof(AddOrUpdateCategories).Name;
+            AddOrUpdateCategories command;
+            try
+            {
+                command = (AddOrUpdateCategories)this.Deserialize(commandType, model.Command);
+                if (model.File != null)
+                {
+                    byte[] postedFile;
+                    using (var stream = new MemoryStream())
+                    {
+                        await model.File.CopyToAsync(stream);
+                        postedFile = stream.ToArray();
+                    }
+
+                    this.categoriesService.Store(command.QuestionnaireId,
+                        command.CategoriesId,
+                        postedFile);
+                }
+            }
+            catch (FormatException e)
+            {
+                return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
+            }
+            catch (ArgumentException e)
+            {
+                this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
+                return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
+            }
+            catch (InvalidExcelFileException e)
+            {
+                this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
+
+                var sb = new StringBuilder();
+                sb.AppendLine(e.Message);
+                e.FoundErrors?.ForEach(x => sb.AppendLine(x.Message));
+
+                return this.Error((int)HttpStatusCode.NotAcceptable, sb.ToString());
+            }
+
+            var commandResponse = this.ProcessCommand(command, commandType);
+
+            if (commandResponse.HasErrors || model.File == null)
+                return commandResponse.Response;
+
+            await dbContext.SaveChangesAsync();
+
+            var storedCategoriesCount = this.categoriesService.GetCategoriesById(command.QuestionnaireId, command.CategoriesId).Count();
+
+            var resultMessage = storedCategoriesCount == 1
+                ? string.Format(QuestionnaireEditor.CategoriesObtained, storedCategoriesCount)
+                : string.Format(QuestionnaireEditor.CategoriesObtained_plural, storedCategoriesCount);
 
             return Ok(resultMessage);
         }
@@ -387,6 +457,9 @@ namespace WB.UI.Designer.Controllers.Api.Designer
              // Metadata
              { "UpdateMetadata", typeof (UpdateMetadata) },
              { nameof(PassOwnershipFromQuestionnaire), typeof(PassOwnershipFromQuestionnaire) },
+             //Categories commands
+             { "AddOrUpdateCategories", typeof (AddOrUpdateCategories) },
+             { "DeleteCategories", typeof (DeleteCategories) },
          };
 
         private Type GetTypeOfResultCommandOrThrowArgumentException(string commandType)

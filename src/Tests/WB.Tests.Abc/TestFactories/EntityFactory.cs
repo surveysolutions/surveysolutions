@@ -82,10 +82,12 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.NonConficltingNamespace;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 using WB.Infrastructure.Native.Storage;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
 
@@ -664,7 +666,8 @@ namespace WB.Tests.Abc.TestFactories
             bool areAnswersOrdered = false,
             string optionsFilter = null,
             string linkedFilter = null,
-            int? maxAllowedAnswers = null)
+            int? maxAllowedAnswers = null,
+            Guid? categoryId = null)
             => new MultyOptionsQuestion
             {
                 QuestionType = QuestionType.MultyOption,
@@ -679,7 +682,8 @@ namespace WB.Tests.Abc.TestFactories
                 AreAnswersOrdered = areAnswersOrdered,
                 LinkedFilterExpression = linkedFilter,
                 MaxAllowedAnswers = maxAllowedAnswers,
-                Properties = { OptionsFilterExpression = optionsFilter }
+                Properties = { OptionsFilterExpression = optionsFilter },
+                CategoriesId = categoryId,
             };
 
         public NumericQuestion NumericIntegerQuestion(Guid? id = null,
@@ -786,6 +790,9 @@ namespace WB.Tests.Abc.TestFactories
 
         public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document = null, long version = 1)
             => Create.Entity.PlainQuestionnaire(document, version, null);
+
+        public PlainQuestionnaire PlainQuestionnaire(params IComposite[] children)
+            => Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument(null, children), 1L, null);
 
         public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document, long version, 
             Translation translation = null, 
@@ -1120,7 +1127,8 @@ namespace WB.Tests.Abc.TestFactories
             string optionsFilterExpression = null,
             List<Answer> answers = null,
             bool isPrefilled = false,
-            int? showAsListThreshold = null)
+            int? showAsListThreshold = null,
+            Guid? categoryId = null)
         {
             answers = answers ?? (answerCodes ?? new decimal[] { 1, 2, 3 }).Select(a => Create.Entity.Answer(a.ToString(), a)).ToList();
             if (parentCodes != null)
@@ -1151,7 +1159,8 @@ namespace WB.Tests.Abc.TestFactories
                     OptionsFilterExpression = optionsFilterExpression
                 },
                 ShowAsList = showAsListThreshold.HasValue,
-                ShowAsListThreshold = showAsListThreshold
+                ShowAsListThreshold = showAsListThreshold,
+                CategoriesId = categoryId 
             };
         }
 
@@ -1166,7 +1175,8 @@ namespace WB.Tests.Abc.TestFactories
             Guid? linkedToRosterId = null,
             string linkedFilter = null,
             string optionsFilter = null,
-            bool showAsList = false)
+            bool showAsList = false,
+            Guid? categoryId = null)
             => new SingleQuestion
             {
                 QuestionType = QuestionType.SingleOption,
@@ -1185,7 +1195,8 @@ namespace WB.Tests.Abc.TestFactories
                 {
                     OptionsFilterExpression = optionsFilter
                 },
-                ShowAsList = showAsList
+                ShowAsList = showAsList,
+                CategoriesId = categoryId,
             };
 
         public StaticText StaticText(
@@ -2452,6 +2463,52 @@ namespace WB.Tests.Abc.TestFactories
             asDynamic.MessageHtml = message ?? "Message html";
 
             return email;
+        }
+
+        public CategoriesItem CategoriesItem(string text, int id, int? parentId = null)
+        {
+            return new CategoriesItem()
+            {
+                Id = id,
+                Text = text,
+                ParentId = parentId
+            };
+        }
+
+        public Categories Categories(Guid id)
+        {
+            return new Categories() { Id = id };
+        }
+
+        public OptionView OptionView(QuestionnaireIdentity questionnaireId, int value, string text, int? parentId, Guid categoryId)
+        {
+            return new OptionView()
+            {
+                CategoryId = categoryId.FormatGuid(),
+                Value = value,
+                Title = text,
+                ParentValue = parentId,
+                QuestionnaireId = questionnaireId.ToString()
+            };
+        }
+
+        public ReusableCategoriesDto ReusableCategoriesDto(Guid? id = null, int count = 5)
+        {
+            return new ReusableCategoriesDto()
+            {
+                Id = id ?? Guid.NewGuid(),
+                Options = Enumerable.Range(1, count).Select(i => CategoriesItem(i.ToString(), i)).ToList()
+            };
+        }
+
+
+        public ReusableCategoriesDto ReusableCategoriesDto(Guid? id, List<CategoriesItem> items)
+        {
+            return new ReusableCategoriesDto()
+            {
+                Id = id ?? Guid.NewGuid(),
+                Options = items
+            };
         }
     }
 }

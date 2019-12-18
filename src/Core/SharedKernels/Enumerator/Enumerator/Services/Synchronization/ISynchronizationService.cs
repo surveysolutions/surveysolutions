@@ -8,6 +8,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 
 namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
 {
@@ -60,5 +61,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
         Task LogAssignmentAsHandledAsync(int id, CancellationToken cancellationToken);
         Task<string> GetPublicKeyForEncryptionAsync(CancellationToken cancellationToken);
         Task<bool> AreNotificationsEnabledAsync(CancellationToken token);
+        Task<List<ReusableCategoriesDto>> GetQuestionnaireReusableCategoriesAsync(QuestionnaireIdentity questionnaireIdentity, CancellationToken cancellationToken);
     }
 }

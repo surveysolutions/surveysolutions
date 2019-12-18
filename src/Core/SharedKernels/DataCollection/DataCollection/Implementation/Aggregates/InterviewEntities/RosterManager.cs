@@ -225,7 +225,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             base.UpdateRoster(roster, parentIdentity, rosterIdentity, sortIndex);
 
-            var rosterTitle = questionnaire.GetAnswerOptionTitle(rosterSizeQuestionId, rosterIdentity.RosterVector.Last());
+            var rosterTitle = questionnaire.GetAnswerOptionTitle(rosterSizeQuestionId, rosterIdentity.RosterVector.Last(), null);
             roster.SetRosterTitle(rosterTitle);
         }
     }
@@ -284,7 +284,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             base.UpdateRoster(roster, parentIdentity, rosterIdentity, sortIndex);
 
-            var rosterTitle = questionnaire.GetAnswerOptionTitle(rosterSizeQuestionId, rosterIdentity.RosterVector.Last());
+            var rosterTitle = questionnaire.GetAnswerOptionTitle(rosterSizeQuestionId, rosterIdentity.RosterVector.Last(), null);
             roster.SetRosterTitle(rosterTitle);
         }
     }

@@ -8,5 +8,6 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
         public const string TranslationTextColumnName = "Translation";
         public const string WorksheetName = "Translations";
         public const string OptionsWorksheetPreffix = "@@_";
+        public const string CategoriesWorksheetPreffix = "@@@_";
     }
 }

@@ -289,5 +289,32 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 
             verificationMessages.ShouldNotContainError("WB0281");
         }
+
+        [Test]
+        public void when_verifying_questionnaire_that_has_categories_with_not_unique_name()
+        {
+            // arrange
+            var questionId = Guid.Parse("22222222222222222222222222222222");
+            var categoriesId = Guid.Parse("11111111111111111111111111111111");
+
+            var questionnaire = Create.QuestionnaireDocument("qVar", children: new IComposite[]
+            {
+                Create.TextQuestion(questionId, variable: "q")
+            }, categories: new[] {Create.Categories(categoriesId, "q")});
+
+            var verifier = CreateQuestionnaireVerifier();
+
+            // act
+            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+
+            // assert
+            verificationMessages.ShouldContainCritical("WB0026");
+            verificationMessages.GetCritical("WB0026").MessageLevel.Should().Be(VerificationMessageLevel.Critical);
+            verificationMessages.GetCritical("WB0026").References.Count().Should().Be(2);
+            verificationMessages.GetCritical("WB0026").References.First().Type.Should().Be(QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.GetCritical("WB0026").References.First().Id.Should().Be(questionId);
+            verificationMessages.GetCritical("WB0026").References.Last().Type.Should().Be(QuestionnaireVerificationReferenceType.Categories);
+            verificationMessages.GetCritical("WB0026").References.Last().Id.Should().Be(categoriesId);
+        }
     }
 }
