@@ -825,7 +825,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public CategoricalOption GetOptionForQuestionWithoutFilter(Identity question, int value, int? parentQuestionValue = null)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-            return questionnaire.GetOptionForQuestionByOptionValue(question.Id, value);
+            return questionnaire.GetOptionForQuestionByOptionValue(question.Id, value, parentQuestionValue);
         }
 
         public CategoricalOption GetOptionForQuestionWithFilter(Identity question, string optionText, int? parentQuestionValue = null)
@@ -1191,8 +1191,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
             else
             {
+                var parentValue = treeQuestion.GetAsInterviewTreeCascadingQuestion()?.GetCascadingParentQuestion()
+                    ?.GetAnswer()?.SelectedValue;
+
                 new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree, questionOptionsRepository)
-                    .RequireFixedSingleOptionAnswerAllowed(selectedValue, this.QuestionnaireIdentity);
+                    .RequireFixedSingleOptionAnswerAllowed(selectedValue, parentValue, this.QuestionnaireIdentity);
             }
 
             var changedInterviewTree = CloneTree();
@@ -2741,7 +2744,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 else
                 {
                     roster.UpdateRosterTitle((questionId, answerOptionValue) =>
-                        questionnaire.GetOptionForQuestionByOptionValue(questionId, answerOptionValue).Title);
+                        questionnaire.GetOptionForQuestionByOptionValue(questionId, answerOptionValue, null).Title);
                 }
             }
         }

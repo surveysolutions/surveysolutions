@@ -25,7 +25,8 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             bool yesNoView,
             List<ValidationCondition> validationConditions,
             string linkedFilterExpression,
-            bool isFilteredCombobox)
+            bool isFilteredCombobox,
+            Guid? categoriesId)
             : base(
                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, 
                 commonQuestionParameters: commonQuestionParameters,
@@ -41,6 +42,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             this.MaxAllowedAnswers = maxAllowedAnswers;
             this.YesNoView = yesNoView;
             this.IsFilteredCombobox = isFilteredCombobox;
+            this.CategoriesId = categoriesId;
         }
 
         public bool IsFilteredCombobox { get; set; }
@@ -58,5 +60,6 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
         public bool YesNoView { get; set; }
 
         public Option[] Options { get; set; }
+        public Guid? CategoriesId { get; set; }
     }
 }

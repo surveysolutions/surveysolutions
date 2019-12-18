@@ -116,7 +116,8 @@ namespace WB.Tests.Unit.Designer
             bool isFilteredCombobox = false,
             Guid? cascadeFromQuestionId = null,
             bool showAsList = false,
-            int? showAsListThreshold = null)
+            int? showAsListThreshold = null,
+            Guid? categoriesId = null)
         {
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestion(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
 
@@ -148,7 +149,8 @@ namespace WB.Tests.Unit.Designer
                         validationExpression: null,
                         validationMessage: null,
                         showAsList: showAsList,
-                        showAsListThreshold: showAsListThreshold));
+                        showAsListThreshold: showAsListThreshold,
+                        categoriesId: categoriesId));
 
             if (isFilteredCombobox || cascadeFromQuestionId.HasValue)
             {
