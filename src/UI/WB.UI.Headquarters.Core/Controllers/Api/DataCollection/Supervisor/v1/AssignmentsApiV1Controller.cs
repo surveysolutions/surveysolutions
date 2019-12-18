@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -12,7 +11,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.UI.Headquarters.Code;
 
-namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
+namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
 {
     [Authorize(Roles = "Supervisor")]
     [Route("api/supervisor/v1/assignments")]

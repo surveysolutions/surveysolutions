@@ -12,7 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 
-namespace WB.UI.Headquarters.API.DataCollection
+namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
     public abstract class QuestionnairesControllerBase : ControllerBase
     {

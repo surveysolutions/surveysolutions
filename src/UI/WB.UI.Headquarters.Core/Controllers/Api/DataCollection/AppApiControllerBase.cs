@@ -5,8 +5,7 @@ using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.Infrastructure.PlainStorage;
 
-
-namespace WB.UI.Headquarters.API.DataCollection
+namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
     public class AppControllerBaseBase : ControllerBase
     {

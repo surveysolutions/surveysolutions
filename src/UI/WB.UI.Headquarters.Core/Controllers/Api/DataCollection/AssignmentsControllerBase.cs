@@ -9,7 +9,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 
-namespace WB.UI.Headquarters.API.DataCollection
+namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
     public abstract class AssignmentsControllerBase : ControllerBase
     {

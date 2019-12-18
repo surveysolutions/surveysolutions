@@ -1,4 +1,4 @@
-﻿using System.Net.Http;
+﻿using WB.UI.Headquarters.Code;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +10,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 
-namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
+namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
 {
     [Authorize(Roles ="Interviewer")]
     [Route("api/interviewer/v2/devices")]
@@ -36,10 +36,12 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
 
         [HttpGet]
         [Route("current/{id}/{version}")]
+        [WriteToSyncLog(SynchronizationLogType.CanSynchronize)]
         public override IActionResult CanSynchronize(string id, int version) => base.CanSynchronize(id, version);
 
         [HttpPost]
         [Route("link/{id}/{version:int}")]
+        [WriteToSyncLog(SynchronizationLogType.LinkToDevice)]
         public override Task<IActionResult> LinkCurrentResponsibleToDevice(string id, int version) => base.LinkCurrentResponsibleToDevice(id, version);
 
         [HttpPost]

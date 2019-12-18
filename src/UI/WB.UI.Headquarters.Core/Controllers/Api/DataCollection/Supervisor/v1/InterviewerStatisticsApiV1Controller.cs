@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Net;
-using System.Net.Http;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 
-namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
+namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
 {
     [Authorize(Roles = "Supervisor")]
     public class InterviewerStatisticsApiV1Controller : ControllerBase

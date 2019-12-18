@@ -6,7 +6,7 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Enumerator.Native.Questionnaire;
 using WB.UI.Headquarters.Code;
 
-namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
+namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
 {
     [Authorize(Roles = "Supervisor")]
     public class TranslationsApiV1Controller : TranslationsControllerBase

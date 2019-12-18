@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.UI.Headquarters.Models.CompanyLogo;
 
-namespace WB.UI.Headquarters.API.DataCollection
+namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
     public abstract class SettingsControllerBase : ControllerBase
     {

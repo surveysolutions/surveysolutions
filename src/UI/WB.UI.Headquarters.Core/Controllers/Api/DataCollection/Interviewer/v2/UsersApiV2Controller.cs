@@ -1,17 +1,16 @@
 ﻿using System;
-using System.IO;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
+using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.UI.Headquarters.Code;
 
-namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
+namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
 {
     [Route("api/interviewer/v2/users")]
     public class UsersApiV2Controller : UsersControllerBase
@@ -57,6 +56,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
 
         [HttpPost]
         [Route("login")]
+        [WriteToSyncLog(SynchronizationLogType.InterviewerLogin)]
         public async Task<ActionResult<string>> Login([FromBody]LogonInfo userLogin)
         {
             var user = await this.userManager.FindByNameAsync(userLogin.Username);
