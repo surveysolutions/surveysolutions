@@ -73,6 +73,17 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
                 };
             }
 
+            if (reference.Type == QuestionnaireVerificationReferenceType.Categories)
+            {
+                var categories = questionnaireDocument.Categories.First(x => x.Id == reference.Id);
+                return new QuestionnaireEntityExtendedReference
+                {
+                    ItemId = reference.Id.FormatGuid(),
+                    Type = QuestionnaireVerificationReferenceType.Categories,
+                    Title = categories.Name
+                };
+            }
+
             var item = questionnaireDocument.Find<IComposite>(reference.Id);
             var parent = item;
             while (parent != null)

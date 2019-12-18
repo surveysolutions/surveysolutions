@@ -26,6 +26,7 @@ namespace Main.Core.Documents
             this.LookupTables = new Dictionary<Guid, LookupTable>();
             this.Attachments = new List<Attachment>();
             this.Translations = new List<Translation>();
+            this.Categories = new List<Categories>();
 
             if(children == null)
                 this.children = new List<IComposite>();
@@ -61,6 +62,8 @@ namespace Main.Core.Documents
         public List<Attachment> Attachments { get; set; }
 
         public List<Translation> Translations { get; set; }
+
+        public List<Categories> Categories { get; set; }
 
         public Guid? DefaultTranslation { get; set; }
 
@@ -505,6 +508,9 @@ namespace Main.Core.Documents
 
             doc.Translations = new List<Translation>();
             this.Translations.ForEach(x => doc.Translations.Add(x.Clone()));
+
+            doc.Categories = new List<Categories>();
+            this.Categories.ForEach(x => doc.Categories.Add(x.Clone()));
 
             if(this.EntitiesIdMap != null)
             doc.EntitiesIdMap = new Dictionary<Guid, int>(this.EntitiesIdMap);

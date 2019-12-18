@@ -7,10 +7,12 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
@@ -29,19 +31,22 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         private readonly PdfSettings pdfSettings;
         private readonly IQuestionnaireTranslator questionnaireTranslator;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
+        private readonly ICategoriesService categoriesService;
 
         public PdfFactory(
             DesignerDbContext dbContext, 
             ITranslationsService translationService,
             IOptions<PdfSettings> pdfSettings,
             IQuestionnaireTranslator questionnaireTranslator,
-            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage)
+            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
+            ICategoriesService categoriesService)
         {
             this.dbContext = dbContext;
             this.translationService = translationService;
             this.pdfSettings = pdfSettings.Value;
             this.questionnaireTranslator = questionnaireTranslator;
             this.questionnaireStorage = questionnaireStorage;
+            this.categoriesService = categoriesService;
         }
 
         public PdfQuestionnaireModel Load(string questionnaireId, Guid requestedByUserId, string requestedByUserName, Guid? translation, bool useDefaultTranslation)
@@ -122,8 +127,18 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 QuestionsWithLongOptionsFilterExpression = Find<IQuestion>(allItems, x => x.Properties.OptionsFilterExpression?.Length > this.pdfSettings.VariableExpressionExcerptLength || x.LinkedFilterExpression?.Length > this.pdfSettings.VariableExpressionExcerptLength).ToList(),
                 QuestionsWithLongOptionsList = Find<IQuestion>(allItems, x => x.QuestionType != QuestionType.Numeric && x.Answers?.Count > this.pdfSettings.OptionsExcerptCount).ToList(),
                 VariableWithLongExpressions = Find<IVariable>(allItems, x => x.Expression?.Length > this.pdfSettings.VariableExpressionExcerptLength).ToList(),
-                QuestionsWithLongSpecialValuesList = Find<IQuestion>(allItems, x => x.QuestionType == QuestionType.Numeric && x.Answers?.Count > this.pdfSettings.OptionsExcerptCount).ToList()
-
+                QuestionsWithLongSpecialValuesList = Find<IQuestion>(allItems, x => x.QuestionType == QuestionType.Numeric && x.Answers?.Count > this.pdfSettings.OptionsExcerptCount).ToList(),
+                CategoriesList = questionnaire.Categories.Select(x => new PdfQuestionnaireModel.Categories
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Items = this.categoriesService.GetCategoriesById(questionnaire.PublicKey, x.Id).Select(y => new PdfQuestionnaireModel.CategoriesItem
+                    {
+                        Id = y.Id,
+                        ParentId = y.ParentId,
+                        Text = y.Text
+                    }).ToList()
+                }).ToList()
             };
 
             pdfView.FillStatistics(allItems, pdfView.Statistics);

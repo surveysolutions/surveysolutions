@@ -294,6 +294,9 @@ angular.module('designerApp')
                 } else if (reference.type.toLowerCase() === "translation") {
                     $scope.verificationStatus.visible = false;
                     $rootScope.$broadcast("openTranslations", { focusOn: reference.itemId });
+                } else if (reference.type.toLowerCase() === "categories") {
+                    $scope.verificationStatus.visible = false;
+                    $rootScope.$broadcast("openCategories", { focusOn: reference.itemId });
                 } else {
                     $state.go('questionnaire.chapter.' + reference.type.toLowerCase(), {
                         chapterId: reference.chapterId,

@@ -435,6 +435,91 @@
         </div>
     </div>
 
+
+    <div class="left-side-panel categories" ng-class="{unfolded: isFolded }" ng-controller="CategoriesCtrl">
+        <div class="foldback-region" ng-click="foldback();$event.stopPropagation()"></div>
+        <div class="left-side-panel-content categories-panel">
+            <div class="foldback-button-region" ng-click="foldback();$event.stopPropagation()">
+                <div class="foldback-button"></div>
+            </div>
+            <div class="categories">
+                <perfect-scrollbar class="scroller">
+                    <h3 ng-i18next="[i18next]({count: categoriesList.length })SideBarCategoriesCounter"></h3>
+
+                    <div class="empty-list" ng-show="categoriesList.length == 0">
+                        <p ng-i18next="SideBarCategoriesEmptyLine1"></p>
+                        <p ng-i18next="SideBarCategoriesEmptyLine2"></p>
+                        <p>
+                            <span class="variable-name" ng-i18next="VariableName"></span>
+                            {{'SideBarCategoriesEmptyLine3' | i18next}}
+                        </p>
+                    </div>
+                    <form role="form" name="categoriesForm" novalidate>
+                        <div class="categories-list">
+                            <ng-form name="categories.form" ng-repeat="categories in categoriesList">
+                                <div class="categories-panel-item" ng-class="{'has-error': categories.form.name.$error.pattern}"
+                                     ngf-drop="" ngf-change="fileSelected(categories, $file)"
+                                     ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
+                                    <a href ng-click="deleteCategories($index)" class="btn delete-btn" tabindex="-1"></a>
+                                    <div class="categories-content">
+                                        <input focus-on-out="focusCategories{{categories.categoriesId}}"
+                                               required=""
+                                               ng-i18next="[placeholder]SideBarCategoriesName"
+                                               maxlength="32"
+                                               spellcheck="false"
+                                               ng-model="categories.name"
+                                               name="name"
+                                               class="form-control table-name"
+                                               type="text" />
+                                        <div class="drop-box" ng-i18next="SideBarLookupTableDropFile">
+                                            Drop File here
+                                        </div>
+                                        <div class="actions" ng-class="{dirty: categories.form.$dirty }">
+                                            <div ng-show="categories.form.$dirty" class="pull-left">
+                                                <button type="submit" ng-disabled="categories.form.$invalid" class="btn lighter-hover" ng-click="saveCategories(categories);$event.stopPropagation()"
+                                                        ng-i18next>
+                                                    Save
+                                                </button>
+                                                <button type="button" class="btn lighter-hover" ng-click="cancel(categories);$event.stopPropagation()" ng-i18next>Cancel</button>
+                                            </div>
+
+                                            <div class="permanent-actions pull-right">
+                                                <a href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId  + '/xlsx/' + categories.categoriesId}}" class="btn btn-default"
+                                                   target="_blank" ng-i18next>SideBarTranslationDownloadXlsx</a>
+
+                                                <button ng-hide="categories.form.$dirty" ng-disabled="isReadOnlyForUser" class="btn btn-default" ngf-select="" ngf-max-size="10MB" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+                                                        ngf-change="fileSelected(categories, $file);$event.stopPropagation()" type="button">
+                                                    <span ng-i18next>Update</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-form>
+                        </div>
+                    </form>
+                    <div class="button-holder">
+                        <p>
+                            <span ng-i18next="SideBarTranslationGetTemplate"></span>
+                            <a class="btn btn-default" href="{{downloadBaseUrl + '/template' }}" target="_blank" ng-i18next>
+                                SideBarTranslationGetTemplateLinkTextXlsx
+                            </a>
+                        </p>
+                        <p>
+                            <input type="button" ng-i18next="[value]SideBarCategoriesUploadNew" value="Upload new categories"
+                                   class="btn lighter-hover" ngf-select
+                                   ngf-change="createAndUploadFile($file);$event.stopPropagation()"
+                                   ngf-max-size="10MB"
+                                   accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+                                   ngf-select-disabled="isReadOnlyForUser"
+                                   ngf-drop-disabled="isReadOnlyForUser" />
+                        </p>
+                    </div>
+                </perfect-scrollbar>
+            </div>
+        </div>
+    </div>
+
     <div class="left-side-panel metadata" ng-class="{unfolded: isFolded }" ng-controller="MetadataCtrl">
         <div class="foldback-region" ng-click="foldback();$event.stopPropagation()"></div>
         <div class="left-side-panel-content metadata-panel">
@@ -717,6 +802,7 @@
             <li><a class="left-menu-chapters" ng-class="{unfolded: isUnfoldedChapters }" ng-click="unfoldChapters();" ng-i18next="[title]SideBarSectionsTitle"></a></li>
             <li><a class="left-menu-metadata" ng-class="{unfolded: isUnfoldedMetadata }" ng-click="unfoldMetadata();" ng-i18next="[title]SideBarMetadataTitle"></a></li>
             <li><a class="left-menu-translations" ng-class="{unfolded: isUnfoldedTranslations }" ng-click="unfoldTranslations();" ng-i18next="[title]SideBarTranslationsTitle"></a></li>
+            <li><a class="left-menu-categories" ng-class="{unfolded: isUnfoldedCategories }" ng-click="unfoldCategories();" ng-i18next="[title]SideBarCategoriesTitle"></a></li>
             <li><a class="left-menu-scenarios" ng-if="questionnaire.questionnaireRevision === null" ng-class="{unfolded: isUnfoldedScenarios }" ng-click="unfoldScenarios();" ng-i18next="[title]SideBarScenarioTitle"></a></li>
             <li><a class="left-menu-macroses" ng-class="{unfolded: isUnfoldedMacros }" ng-click="unfoldMacros();" ng-i18next="[title]SideBarMacroTitle"></a></li>
             <li><a class="left-menu-lookupTables" ng-class="{unfolded: isUnfoldedLookupTables }" ng-click="unfoldLookupTables();" ng-i18next="[title]SideBarLookupTitle"></a></li>
@@ -767,6 +853,7 @@
                                             <span ng-if="reference.type == 'Attachment'" class="icon icon-attachment icon-{{verificationStatus.typeOfMessageToBeShown}}"></span>
                                             <span ng-if="reference.type == 'Variable'" class="icon icon-variable icon-{{verificationStatus.typeOfMessageToBeShown}}"></span>
                                             <span ng-if="reference.type == 'Translation'" class="icon icon-translation icon-{{verificationStatus.typeOfMessageToBeShown}}"></span>
+                                            <span ng-if="reference.type == 'Categories'" class="icon icon-categories icon-{{verificationStatus.typeOfMessageToBeShown}}"></span>
                                             <span class="title">{{reference.title | escape}}</span>
                                             <span class="variable" ng-bind-html="reference.variable || '&nbsp;'">&nbsp;</span>
                                         </a>
