@@ -165,7 +165,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
 
                 bool isCollectionsEntry =
                     zipEntryPathChunks.Length == 3 &&
-                    string.Equals(zipEntryPathChunks[1], "collections", StringComparison.CurrentCultureIgnoreCase) &&
+                    string.Equals(zipEntryPathChunks[1], "categories", StringComparison.CurrentCultureIgnoreCase) &&
                     (".xlsx".Equals(Path.GetExtension(zipEntryPathChunks[2]), StringComparison.InvariantCultureIgnoreCase) ||
                      ".ods".Equals(Path.GetExtension(zipEntryPathChunks[2]), StringComparison.InvariantCultureIgnoreCase));
 
