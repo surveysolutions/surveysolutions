@@ -83,6 +83,21 @@ namespace WB.Core.BoundedContexts.Designer.Services
             };
         }
 
+        public void DeleteAllByQuestionnaireId(Guid questionnaireId)
+        {
+            var questionnaire = this.questionnaireStorage.GetById(questionnaireId.FormatGuid());
+            if (questionnaire == null)
+                return;
+
+            foreach (var categories in questionnaire.Categories)
+            {
+                this.dbContext.CategoriesInstances.RemoveRange(
+                    this.dbContext.CategoriesInstances.Where(x => x.CategoriesId == categories.Id && x.QuestionnaireId == questionnaireId));
+            }
+
+            this.dbContext.SaveChanges();
+        }
+
         private byte[] GetExcelFileContentEEPlus(Guid questionnaireId, Guid categoriesId)
         {
             var items = this.dbContext.CategoriesInstances
@@ -98,12 +113,15 @@ namespace WB.Core.BoundedContexts.Designer.Services
         }
 
         public IQueryable<CategoriesItem> GetCategoriesById(Guid questionnaireId, Guid id) =>
-            this.dbContext.CategoriesInstances.Where(x => x.QuestionnaireId == questionnaireId && x.CategoriesId == id).Select(x => new CategoriesItem
-            {
-                Id = x.Value,
-                ParentId = x.ParentId,
-                Text = x.Text
-            });
+            this.dbContext.CategoriesInstances
+                .Where(x => x.QuestionnaireId == questionnaireId && x.CategoriesId == id)
+                .OrderBy(x => x.SortIndex)
+                .Select(x => new CategoriesItem
+                {
+                    Id = x.Value,
+                    ParentId = x.ParentId,
+                    Text = x.Text
+                });
 
         public void Store(Guid questionnaireId, Guid categoriesId, byte[] excelRepresentation)
         {
@@ -129,33 +147,35 @@ namespace WB.Core.BoundedContexts.Designer.Services
                         if (worksheet.Dimension.End.Row == 1)
                             throw new InvalidExcelFileException(ExceptionMessages.Excel_NoCategories);
 
-                        var categoriesRows = new List<CategoriesRow>();
+                        int sortIndex = 0;
+                        var categoriesRows = new SortedList<int, CategoriesRow>();
+
                         for (int rowNumber = 2; rowNumber <= worksheet.Dimension.End.Row; rowNumber++)
                         {
                             var categories = GetRowValues(worksheet, headers, rowNumber);
                             if(string.IsNullOrEmpty(categories.Id) && string.IsNullOrEmpty(categories.ParentId) && string.IsNullOrEmpty(categories.Text)) continue;
 
-                            categoriesRows.Add(categories);
+                            categoriesRows.Add(sortIndex++, categories);
                         }
 
-                        ThrowIfNoCategories(categoriesRows);
-                        ThrowIfLessThan2Categories(categoriesRows);
-                        ThrowIfTextLengthMoreThan250(categoriesRows, headers);
-                        ThrowIfParentIdIsEmpty(categoriesRows);
-                        ThrowIfDuplicatedByIdAndParentId(categoriesRows, headers);
-                        ThrowIfDuplicatedByParentIdAndText(categoriesRows, headers);
+                        ThrowIfNoCategories(categoriesRows.Values);
+                        ThrowIfLessThan2Categories(categoriesRows.Values);
+                        ThrowIfTextLengthMoreThan250(categoriesRows.Values, headers);
+                        ThrowIfParentIdIsEmpty(categoriesRows.Values);
+                        ThrowIfDuplicatedByIdAndParentId(categoriesRows.Values, headers);
+                        ThrowIfDuplicatedByParentIdAndText(categoriesRows.Values, headers);
 
-                        this.dbContext.CategoriesInstances.AddRange(categoriesRows.Select(categories =>
-                            new CategoriesInstance
-                            {
-                                QuestionnaireId = questionnaireId,
-                                CategoriesId = categoriesId,
-                                Value = int.Parse(categories.Id),
-                                Text = categories.Text,
-                                ParentId = string.IsNullOrEmpty(categories.ParentId)
-                                    ? (int?) null
-                                    : int.Parse(categories.ParentId)
-                            }));
+                        this.dbContext.CategoriesInstances.AddRange(categoriesRows.Select(x => new CategoriesInstance
+                        {
+                            SortIndex = x.Key,
+                            QuestionnaireId = questionnaireId,
+                            CategoriesId = categoriesId,
+                            Value = int.Parse(x.Value.Id),
+                            Text = x.Value.Text,
+                            ParentId = string.IsNullOrEmpty(x.Value.ParentId)
+                                ? (int?) null
+                                : int.Parse(x.Value.ParentId)
+                        }));
                     }
                 }
                 catch (Exception e) when(e is NullReferenceException || e is InvalidDataException || e is COMException)
@@ -165,26 +185,26 @@ namespace WB.Core.BoundedContexts.Designer.Services
             }
         }
 
-        private static void ThrowIfNoCategories(List<CategoriesRow> categoriesRows)
+        private static void ThrowIfNoCategories(IList<CategoriesRow> categoriesRows)
         {
             if (!categoriesRows.Any())
                 throw new InvalidExcelFileException(ExceptionMessages.Excel_NoCategories);
         }
 
-        private static void ThrowIfLessThan2Categories(List<CategoriesRow> categoriesRows)
+        private static void ThrowIfLessThan2Categories(IList<CategoriesRow> categoriesRows)
         {
             if (categoriesRows.Count < 2)
                 throw new InvalidExcelFileException(ExceptionMessages.Excel_Categories_Less_2_Options);
         }
 
-        private static void ThrowIfParentIdIsEmpty(List<CategoriesRow> categoriesRows)
+        private static void ThrowIfParentIdIsEmpty(IList<CategoriesRow> categoriesRows)
         {
             var countOfCategoriesWithParentId = categoriesRows.Count(x => !string.IsNullOrEmpty(x.ParentId));
             if (countOfCategoriesWithParentId > 0 && countOfCategoriesWithParentId < categoriesRows.Count)
                 throw new InvalidExcelFileException(ExceptionMessages.Excel_Categories_Empty_ParentId);
         }
 
-        private static void ThrowIfDuplicatedByIdAndParentId(List<CategoriesRow> categoriesRows, CategoriesHeaderMap headers)
+        private static void ThrowIfDuplicatedByIdAndParentId(IList<CategoriesRow> categoriesRows, CategoriesHeaderMap headers)
         {
             List<TranslationValidationError> errors;
             var duplicatedCategories = categoriesRows.GroupBy(x => new {x.Id, x.ParentId})
@@ -203,7 +223,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
             }
         }
 
-        private static void ThrowIfDuplicatedByParentIdAndText(List<CategoriesRow> categoriesRows, CategoriesHeaderMap headers)
+        private static void ThrowIfDuplicatedByParentIdAndText(IList<CategoriesRow> categoriesRows, CategoriesHeaderMap headers)
         {
             List<TranslationValidationError> errors;
             var duplicatedCategories = categoriesRows.GroupBy(x => new {x.ParentId, x.Text})
@@ -222,7 +242,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
             }
         }
 
-        private static void ThrowIfTextLengthMoreThan250(List<CategoriesRow> categoriesRows, CategoriesHeaderMap headers)
+        private static void ThrowIfTextLengthMoreThan250(IList<CategoriesRow> categoriesRows, CategoriesHeaderMap headers)
         {
             List<TranslationValidationError> errors;
             var rows = categoriesRows.Where(x => x.Text?.Length > AbstractVerifier.MaxOptionLength);
