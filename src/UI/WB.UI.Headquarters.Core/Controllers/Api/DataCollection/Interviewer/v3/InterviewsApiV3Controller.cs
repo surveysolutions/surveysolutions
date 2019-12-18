@@ -56,12 +56,12 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v3
         [HttpPost]
         [Route("{id:guid}")]
         [WriteToSyncLog(SynchronizationLogType.PostInterviewV3)]
-        public IActionResult Post(InterviewPackageApiView package) => base.PostV3(package);
+        public IActionResult Post([FromBody]InterviewPackageApiView package) => base.PostV3(package);
 
         [HttpPost]
         [Route("CheckObsoleteInterviews")]
         [WriteToSyncLog(SynchronizationLogType.CheckObsoleteInterviews)]
-        public ActionResult<List<Guid>> CheckObsoleteInterviews(List<ObsoletePackageCheck> knownPackages)
+        public ActionResult<List<Guid>> CheckObsoleteInterviews([FromBody]List<ObsoletePackageCheck> knownPackages)
         {
             List<Guid> obsoleteInterviews = new List<Guid>();
             foreach (var obsoletePackageCheck in knownPackages)
