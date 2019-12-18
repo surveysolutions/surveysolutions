@@ -78,7 +78,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="CsvExport\Exporters\DoFileHeader.txt" />
+    <EmbeddedResource Include="CsvExport\Exporters\DoFileHeader.txt" />
   </ItemGroup>
 
 </Project>
