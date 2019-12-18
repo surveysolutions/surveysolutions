@@ -24,15 +24,15 @@ namespace WB.UI.Headquarters.API.Export
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly ISerializer serializer;
         private readonly IPlainKeyValueStorage<QuestionnairePdf> pdfStorage;
-        private readonly IReusableCategoriesFillerIntoQuestionnaire categoriesFillerIntoQuestionnaire;
+        private readonly IReusableCategoriesStorage reusableCategoriesStorage;
 
         public QuestionnaireApiController(IQuestionnaireStorage questionnaireStorage, ISerializer serializer, IPlainKeyValueStorage<QuestionnairePdf> pdfStorage,
-            IReusableCategoriesFillerIntoQuestionnaire categoriesFillerIntoQuestionnaire)
+            IReusableCategoriesStorage reusableCategoriesStorage)
         {
             this.questionnaireStorage = questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
             this.serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
             this.pdfStorage = pdfStorage ?? throw new ArgumentNullException(nameof(pdfStorage));
-            this.categoriesFillerIntoQuestionnaire = categoriesFillerIntoQuestionnaire;
+            this.reusableCategoriesStorage = reusableCategoriesStorage;
         }
 
         [Route("{id}")]
@@ -42,7 +42,6 @@ namespace WB.UI.Headquarters.API.Export
         {
             var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
             var questionnaireDocument = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
-            questionnaireDocument = categoriesFillerIntoQuestionnaire.FillCategoriesIntoQuestionnaireDocument(questionnaireIdentity, questionnaireDocument);
 
             var response = new HttpResponseMessage();
             response.Content = new StringContent(this.serializer.Serialize(questionnaireDocument), Encoding.UTF8, "application/json");
@@ -64,6 +63,22 @@ namespace WB.UI.Headquarters.API.Export
             response.Content = new ByteArrayContent(pdf.Content);
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
 
+            return response;
+        }
+
+        [Route("{id}/category/{categoryId}")]
+        [ServiceApiKeyAuthorization]
+        [HttpGet]
+        public HttpResponseMessage Category(string id, Guid categoryId)
+        {
+            var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
+            var categoriesItems = reusableCategoriesStorage.GetOptions(questionnaireIdentity, categoryId);
+
+            if (categoriesItems == null) 
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+
+            var response = new HttpResponseMessage();
+            response.Content = new StringContent(this.serializer.Serialize(categoriesItems), Encoding.UTF8, "application/json");
             return response;
         }
     }

@@ -134,7 +134,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                         if (exportFileHeader.VariableValueLabels.Any())
                         {
                             doContent.DefineLabel(exportFileHeader.Title, exportFileHeader.VariableValueLabels);
-                            doContent.AppendLabelToValuesMatching(exportFileHeader.Title, exportFileHeader.Title);
+                            doContent.AssignValuesToVariable(exportFileHeader.Title, exportFileHeader.Title);
                         }
 
                         doContent.AppendLabelToVariableMatching(exportFileHeader.Title, exportFileHeader.Description);

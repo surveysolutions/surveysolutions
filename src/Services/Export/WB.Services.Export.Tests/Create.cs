@@ -551,7 +551,7 @@ namespace WB.Services.Export.Tests
         }
 
         public static QuestionnaireLevelLabels QuestionnaireLevelLabels(string levelName = "level", params DataExportVariable[] variableLabels)
-            => new QuestionnaireLevelLabels(levelName, variableLabels);
+            => new QuestionnaireLevelLabels(levelName, variableLabels, null);
 
         public static DataExportVariable LabeledVariable(string variableName = "var", string label = "lbl", Guid? questionId = null, params VariableValueLabel[] variableValueLabels)
             => new DataExportVariable(variableName, label, questionId, variableValueLabels, ExportValueType.Unknown);

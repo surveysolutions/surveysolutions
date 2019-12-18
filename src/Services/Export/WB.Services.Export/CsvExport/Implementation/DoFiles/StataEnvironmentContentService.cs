@@ -77,19 +77,30 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
 
         private void BuildLabelsForLevel(DoFile doContent, QuestionnaireLevelLabels questionnaireLevelLabels)
         {
-            foreach (var variableLabel in questionnaireLevelLabels.LabeledVariable)
+            foreach (var predefinedValue in questionnaireLevelLabels.PredefinedLabels)
+            {
+                string labelName = this.CreateLabelName(predefinedValue.LabelName);
+                doContent.DefineLabel(labelName, predefinedValue.VariableValues);
+            }
+
+            foreach (var labeledVariable in questionnaireLevelLabels.LabeledVariable)
             {
                 doContent.AppendLine();
-                if (variableLabel.VariableValueLabels.Any())
+
+                if (labeledVariable.Label.IsReference)
                 {
-                    string labelName = this.CreateLabelName(variableLabel.VariableName);
-
-                    doContent.AppendLabel(labelName, variableLabel.VariableValueLabels);
-
-                    doContent.AppendLabelToValuesMatching(variableLabel.VariableName, labelName);
+                    string labelName = this.CreateLabelName(labeledVariable.Label.LabelName);
+                    doContent.AssignValuesToVariable(labeledVariable.VariableName, labelName);
                 }
 
-                doContent.AppendLabelToVariableMatching(variableLabel.VariableName, variableLabel.Label);
+                if (labeledVariable.Label.VariableValues.Any())
+                {
+                    string labelName = this.CreateLabelName(labeledVariable.VariableName);
+                    doContent.DefineLabel(labelName, labeledVariable.Label.VariableValues);
+                    doContent.AssignValuesToVariable(labeledVariable.VariableName, labelName);
+                }
+
+                doContent.AppendLabelToVariableMatching(labeledVariable.VariableName, labeledVariable.Label.LabelName);
             }
         }
 

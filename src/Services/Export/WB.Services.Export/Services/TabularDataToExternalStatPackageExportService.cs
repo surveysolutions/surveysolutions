@@ -150,7 +150,7 @@ namespace WB.Services.Export.Services
 
                 meta.Variables[index] = new DatasetVariable(meta.Variables[index].VarName)
                 {
-                    Storage = GetStorageType(variableLabels.Label.ValueType)
+                    Storage = GetStorageType(variableLabels.ValueType)
                 };
 
                 meta.Variables[index].VarLabel = variableLabels.Label.LabelName;
