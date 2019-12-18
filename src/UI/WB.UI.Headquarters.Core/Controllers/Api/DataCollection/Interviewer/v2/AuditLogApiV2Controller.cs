@@ -15,6 +15,6 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
 
         [HttpPost]
         [Route("api/interviewer/v2/auditlog")]
-        public override IActionResult Post(AuditLogEntitiesApiView entities) => base.Post(entities);
+        public override IActionResult Post([FromBody]AuditLogEntitiesApiView entities) => base.Post(entities);
     }
 }

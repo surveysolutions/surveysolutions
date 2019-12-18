@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.Synchronization.MetaInfo;
+using WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer;
 
 namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
 {
