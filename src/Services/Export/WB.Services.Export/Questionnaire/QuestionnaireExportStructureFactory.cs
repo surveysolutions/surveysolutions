@@ -211,14 +211,6 @@ namespace WB.Services.Export.Questionnaire
             };
 
             exportedHeaderItem.Labels = new List<LabelItem>();
-            if (question.Answers != null)
-            {
-                foreach (var answer in question.Answers)
-                {
-                    exportedHeaderItem.Labels.Add(new LabelItem(answer));
-                }
-            }
-
             if (question is ICategoricalQuestion categoricalQuestion && categoricalQuestion.CategoriesId.HasValue)
             {
                 exportedHeaderItem.LabelReferenceId = categoricalQuestion.CategoriesId;
@@ -230,8 +222,15 @@ namespace WB.Services.Export.Questionnaire
                         new ReusableLabels()
                         {
                             Name = categories.Name,
-                            Labels = categories.Values.Select(o => new LabelItem(o.Value.ToString(), o.Title)).ToArray()
+                            Labels = categories.Values.Select(o => new LabelItem(o.Id.ToString(), o.Text)).ToArray()
                         };
+                }
+            }
+            else if (question.Answers != null)
+            {
+                foreach (var answer in question.Answers)
+                {
+                    exportedHeaderItem.Labels.Add(new LabelItem(answer));
                 }
             }
 
@@ -305,7 +304,9 @@ namespace WB.Services.Export.Questionnaire
                 }
                 else
                 {
-                    var columnValue = int.Parse(question.Answers[i].AnswerValue);
+                    var columnValue = asCategorical.CategoriesId.HasValue 
+                        ? questionnaire.Categories.First(c => c.Id == asCategorical.CategoriesId.Value).Values[i].Id
+                        : int.Parse(question.Answers[i].AnswerValue);
 
                     headerColumn.Name = string.Format(GeneratedTitleExportFormat,
                         question.VariableName, DecimalToHeaderConverter.ToHeader(columnValue));
@@ -319,7 +320,11 @@ namespace WB.Services.Export.Questionnaire
 
                     if (question.QuestionType == QuestionType.MultyOption)
                     {
-                        headerColumn.Title = $"{questionLabel}:{question.Answers[i].AnswerText}";
+                        var optionText = asCategorical?.CategoriesId.HasValue ?? false
+                            ? questionnaire.Categories.First(c => c.Id == asCategorical.CategoriesId.Value).Values[i].Text
+                            : question.Answers[i].AnswerText;
+
+                        headerColumn.Title = $"{questionLabel}:{optionText}";
                     }
                     if (question.QuestionType == QuestionType.TextList)
                     {
@@ -552,7 +557,11 @@ namespace WB.Services.Export.Questionnaire
             QuestionnaireDocument questionnaire)
         {
             var typedQuestion = question as MultyOptionsQuestion;
-            var columnCount = typedQuestion?.IsFilteredCombobox ?? false ? Constants.MaxLongRosterRowCount : question.Answers.Count;
+            var columnCount = typedQuestion?.IsFilteredCombobox ?? false 
+                ? Constants.MaxLongRosterRowCount 
+                : typedQuestion?.CategoriesId.HasValue ?? false
+                    ? questionnaire.Categories.First(c => c.Id == typedQuestion.CategoriesId.Value).Values.Length
+                    : question.Answers.Count;
 
             headerStructureForLevel.HeaderItems.Add(question.PublicKey,
                 this.CreateExportedQuestionHeaderForMultiColumnItem(question, columnCount,

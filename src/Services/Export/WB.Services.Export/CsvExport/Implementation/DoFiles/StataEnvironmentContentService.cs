@@ -79,6 +79,8 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
         {
             foreach (var predefinedValue in questionnaireLevelLabels.PredefinedLabels)
             {
+                doContent.AppendLine();
+
                 string labelName = this.CreateLabelName(predefinedValue.LabelName);
                 doContent.DefineLabel(labelName, predefinedValue.VariableValues);
             }
