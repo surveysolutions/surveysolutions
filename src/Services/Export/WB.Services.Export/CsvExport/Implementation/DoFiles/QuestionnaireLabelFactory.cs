@@ -16,6 +16,10 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
             var level = structure.HeaderToLevelMap[levelRosterVector];
 
             var variableLabels = new List<DataExportVariable>();
+            var predefinedLabels = level.ReusableLabels.Select(o => new DataExportLabelValue(
+                o.Value.Name, 
+                o.Key, 
+                o.Value.Labels.Select(label => new VariableValueLabel(label.Caption, label.Title?.RemoveHtmlTags() ?? string.Empty)).ToArray()));
 
             var levelVariableValueLabel = Array.Empty<VariableValueLabel>();
             if (level.LevelLabels != null)
@@ -44,14 +48,22 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
 
             foreach (IExportedHeaderItem headerItem in level.HeaderItems.Values)
             {
-                bool hasLabels = (headerItem as ExportedQuestionHeaderItem)?.Labels?.Count > 0 
-                                 && ((ExportedQuestionHeaderItem)headerItem).QuestionType != QuestionType.MultyOption;
+                var isMultiOptionQuestion = (headerItem as ExportedQuestionHeaderItem)?.QuestionType == QuestionType.MultyOption;
+                var hasLabels = (headerItem as ExportedQuestionHeaderItem)?.Labels?.Count > 0 && !isMultiOptionQuestion;
+                var labelReferenceId = (headerItem as ExportedQuestionHeaderItem)?.LabelReferenceId;
 
                 foreach (var headerColumn in headerItem.ColumnHeaders)
                 {
                     var variableValueLabel = Array.Empty<VariableValueLabel>();
 
-                    if (hasLabels)
+                    if (labelReferenceId.HasValue && !isMultiOptionQuestion)
+                    {
+                        var labels = level.ReusableLabels.First(l => l.Key == labelReferenceId.Value).Value;
+                        variableValueLabel = labels.Labels
+                            .Select(label => new VariableValueLabel(label.Caption, label.Title?.RemoveHtmlTags() ?? string.Empty))
+                            .ToArray();
+                    }
+                    else if (hasLabels)
                     {
                         variableValueLabel = ((ExportedQuestionHeaderItem)headerItem).Labels
                             .Select(label => new VariableValueLabel(label.Caption, label.Title?.RemoveHtmlTags() ?? string.Empty))
@@ -75,8 +87,9 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
             for (int i = 0; i < levelRosterVector.Length; i++)
             {
                 if (i == 0)
-                    
+                {
                     variableLabels.Add(new DataExportVariable(ServiceColumns.InterviewId, "Unique 32-character long identifier of the interview", null, Array.Empty<VariableValueLabel>(), ExportValueType.String));
+                }
                 else
                 {
                     var parentRosterVector = new ValueVector<Guid>(levelRosterVector.Take(i));
@@ -91,13 +104,13 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
                 }
             }
 
-            return new QuestionnaireLevelLabels(level.LevelName, variableLabels.ToArray());
+            return new QuestionnaireLevelLabels(level.LevelName, variableLabels.ToArray(), predefinedLabels.ToArray());
         }
 
         public QuestionnaireLevelLabels[] CreateLabelsForQuestionnaire(QuestionnaireExportStructure structure)
         {
-            return structure.HeaderToLevelMap.Values.Select(
-                        x => this.CreateLabelsForQuestionnaireLevel(structure, x.LevelScopeVector)).ToArray();
+            return structure.HeaderToLevelMap.Values.Select(x => 
+                this.CreateLabelsForQuestionnaireLevel(structure, x.LevelScopeVector)).ToArray();
         }
     }
 }

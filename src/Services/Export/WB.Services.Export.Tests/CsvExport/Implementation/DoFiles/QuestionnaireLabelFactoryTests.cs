@@ -98,7 +98,7 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
             var labels = factory.CreateLabelsForQuestionnaire(exportStructure);
 
             // Assert
-            Assert.That(labels[1].LabeledVariable[0].Label.ValueType, Is.EqualTo(ExportValueType.NumericInt));
+            Assert.That(labels[1].LabeledVariable[0].ValueType, Is.EqualTo(ExportValueType.NumericInt));
         }
 
         [Test]
