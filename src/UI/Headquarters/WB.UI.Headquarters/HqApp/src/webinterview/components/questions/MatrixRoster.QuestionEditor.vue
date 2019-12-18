@@ -1,5 +1,5 @@
 <template>
-    <div class="ag-input-text-wrapper">
+    <div class="ag-input-text-wrapper" :id="hash">
         <component ref='editQuestionComponent' 
             :key="question.identity" 
             v-bind:is="'MatrixRoster_' + question.entityType" 
@@ -12,15 +12,26 @@
 
 <script lang="js">
     import Vue from 'vue'
+    import { getLocationHash } from "~/shared/helpers"
+    import { debounce } from "lodash"
 
     export default {
         name: 'MatrixRoster_QuestionEditor',
         
         data() {
             return {
-                question: null
+                question: null,
+                id: ''
             }
         }, 
+        watch: {
+            ["$store.getters.scrollState"]() {
+                 this.scroll();
+            },
+        },
+        mounted() {
+            this.scroll();
+        },
         computed: {
             $me() {
                 return this.$store.state.webinterview.entityDetails[this.question.identity] 
@@ -28,6 +39,9 @@
             isFetchInProgress() {
                 const result = this.$store.state.webinterview.fetch.state[this.question.identity]
                 return result
+            },
+            hash() {
+                return getLocationHash(this.question.identity)
             }
         },
         methods: {
@@ -53,10 +67,23 @@
             destroy() {
                 if (this.$refs.editQuestionComponent.destroy)
                     this.$refs.editQuestionComponent.destroy()
+            },
+            doScroll: debounce(function() {
+                if(this.$store.getters.scrollState ==  "#" + this.id){
+                    window.scroll({ top: this.$parent.$parent.$el.offsetTop, behavior: "smooth" })
+                    this.$store.dispatch("resetScroll")
+                }
+            }, 200),
+
+            scroll() {
+                if(this.$store && this.$store.state.route.hash === "#" + this.id) {
+                    this.doScroll(); 
+                }
             }
         },
         created() {
             this.question = this.params.value
+            this.id = this.question.identity
         }
     }
 </script>
