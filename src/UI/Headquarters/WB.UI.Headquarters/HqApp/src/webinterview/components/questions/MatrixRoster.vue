@@ -213,7 +213,7 @@
             },
 
             doScroll: debounce(function() {
-                if(this.$store.getters.scrollState == this.id){
+                if(this.$store.getters.scrollState == "#" + this.id){
                     window.scroll({ top: this.$el.offsetTop, behavior: "smooth" })
                     this.$store.dispatch("resetScroll")
                 }
