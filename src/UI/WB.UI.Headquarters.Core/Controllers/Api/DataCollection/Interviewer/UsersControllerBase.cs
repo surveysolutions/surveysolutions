@@ -4,7 +4,7 @@ using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 
-namespace WB.UI.Headquarters.API.DataCollection.Interviewer
+namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
 {
     public abstract class UsersControllerBase : ControllerBase
     {

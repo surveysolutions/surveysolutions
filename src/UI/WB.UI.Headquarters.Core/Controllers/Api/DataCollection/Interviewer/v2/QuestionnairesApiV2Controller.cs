@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 
-namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
+namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
 {
     [Authorize(Roles = "Interviewer")]
     [Route("api/interviewer/v2/questionnaires")]

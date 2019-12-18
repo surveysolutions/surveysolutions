@@ -10,15 +10,16 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
+using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Services;
 
-namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
+namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
 {
     [Route("api/supervisor")]
     public class SupervisorControllerBase : AppControllerBaseBase

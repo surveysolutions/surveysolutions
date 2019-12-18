@@ -4,7 +4,7 @@ using WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAuditLog
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 
-namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
+namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
 {
     [Authorize(Roles = "Interviewer")]
     public class AuditLogApiV2Controller : AuditLogControllerBase

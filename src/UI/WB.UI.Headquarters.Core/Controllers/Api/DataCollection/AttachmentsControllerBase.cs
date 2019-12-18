@@ -2,7 +2,7 @@
 using Microsoft.Net.Http.Headers;
 using WB.Core.BoundedContexts.Headquarters.Services;
 
-namespace WB.UI.Headquarters.API.DataCollection
+namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
     public abstract class AttachmentsControllerBase : ControllerBase
     {

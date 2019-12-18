@@ -7,7 +7,6 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.Synchronization.MetaInfo;
-using WB.UI.Headquarters.API.DataCollection;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
 {
