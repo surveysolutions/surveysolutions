@@ -6,7 +6,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation;
 using WB.Core.SharedKernels.DataCollection.Services;
 
-namespace WB.UI.Headquarters.Implementation.Services
+namespace WB.UI.Headquarters.Services.Impl
 {
     internal class SecureStorage : ISecureStorage
     {
