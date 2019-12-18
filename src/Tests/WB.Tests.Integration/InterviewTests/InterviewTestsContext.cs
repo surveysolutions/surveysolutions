@@ -122,7 +122,7 @@ namespace WB.Tests.Integration.InterviewTests
 
             var questionOptionsRepository = optionsRepository ?? Create.Storage.QuestionnaireQuestionOptionsRepository();
 
-            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument, 1 , 
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument, questionnaireIdentity.Version, 
                 questionOptionsRepository: questionOptionsRepository);
             questionnaire.ExpressionStorageType = GetLatestExpressionStorage(assemblyLoadContext, questionnaireDocument).GetType();
 

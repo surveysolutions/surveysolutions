@@ -541,9 +541,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
         }
 
-        public string GetOptionForQuestionByOptionValue(Guid questionId, decimal answerOptionValue)
+        public string GetOptionForQuestionByOptionValue(Guid questionId, decimal answerOptionValue, int? parentValue)
         {
-            var option = this.Questionnaire.GetOptionForQuestionByOptionValue(questionId, answerOptionValue);
+            var option = this.Questionnaire.GetOptionForQuestionByOptionValue(questionId, answerOptionValue, parentValue);
             if(Questionnaire.GetQuestionType(questionId) == QuestionType.Numeric && option == null)
                 return null;
 

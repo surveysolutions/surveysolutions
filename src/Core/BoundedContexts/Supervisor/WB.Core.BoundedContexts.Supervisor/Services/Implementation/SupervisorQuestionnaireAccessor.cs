@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 
 namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
 {
@@ -30,7 +31,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         }
 
         public override void StoreQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string questionnaireDocument, bool census,
-            List<TranslationDto> translationDtos)
+            List<TranslationDto> translationDtos, List<ReusableCategoriesDto> reusableCategories)
         {
             this.rawQuestionnaireDocuments.Store(new RawQuestionnaireDocumentView
             {
@@ -38,7 +39,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
                 Document = questionnaireDocument
             });
 
-            base.StoreQuestionnaire(questionnaireIdentity, questionnaireDocument, census, translationDtos);
+            base.StoreQuestionnaire(questionnaireIdentity, questionnaireDocument, census, translationDtos, reusableCategories);
         }
 
         public override void RemoveQuestionnaire(QuestionnaireIdentity questionnaireIdentity)

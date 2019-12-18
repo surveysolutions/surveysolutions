@@ -6,6 +6,7 @@ using System.Text;
 using Ionic.Zlib;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
+using WB.Core.BoundedContexts.Headquarters.ReusableCategories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -13,9 +14,12 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 using WB.Enumerator.Native.Questionnaire;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
+using WB.Infrastructure.Native.Questionnaire;
 using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.Services
@@ -27,13 +31,16 @@ namespace WB.UI.Headquarters.Services
         private readonly IPlainKeyValueStorage<QuestionnaireLookupTable> lookupTablesStorage;
         private readonly ITranslationsExportService translationsExportService;
         private readonly ITranslationManagementService translationManagementService;
+        private readonly IReusableCategoriesStorage reusableCategoriesStorage;
+        private readonly ICategoriesExportService reusableCategoriesExporter;
         private readonly IEntitySerializer<QuestionnaireDocument> serializer;
         private readonly ILogger logger;
 
         public QuestionnaireExporter(IQuestionnaireStorage questionnaireStorage, IAttachmentContentService contentService,
             IEntitySerializer<QuestionnaireDocument> serializer, IPlainKeyValueStorage<QuestionnaireLookupTable> lookupTablesStorage, 
             ITranslationsExportService translationsExportService, ITranslationManagementService translationManagementService, 
-            ILoggerProvider loggerProvider)
+            ILoggerProvider loggerProvider, IReusableCategoriesStorage reusableCategoriesStorage,
+            ICategoriesExportService reusableCategoriesExporter)
         {
             this.questionnaireStorage = questionnaireStorage;
             this.contentService = contentService;
@@ -41,6 +48,8 @@ namespace WB.UI.Headquarters.Services
             this.lookupTablesStorage = lookupTablesStorage;
             this.translationsExportService = translationsExportService;
             this.translationManagementService = translationManagementService;
+            this.reusableCategoriesStorage = reusableCategoriesStorage;
+            this.reusableCategoriesExporter = reusableCategoriesExporter;
             this.logger = loggerProvider.GetForType(this.GetType());
         }
 
@@ -114,12 +123,22 @@ namespace WB.UI.Headquarters.Services
                     var translations = this.translationManagementService.GetAll(questionnaireIdentity, translation.Id);
 
                     if(translations == null) continue;
-                    
+
                     var translationFile = this.translationsExportService.GenerateTranslationFile(questionnaire,
                         translation.Id,
-                        new QuestionnaireTranslation(translations));
+                        new QuestionnaireTranslation(translations),
+                        new QuestionnaireReusableCategoriesAccessor(questionnaireIdentity, reusableCategoriesStorage));
 
                     PutEntry($"Translations/{translation.Id}.xlsx", translationFile.ContentAsExcelFile);
+                }
+
+                foreach (var category in questionnaire.Categories)
+                {
+                    var categories = this.reusableCategoriesStorage.GetOptions(questionnaireIdentity, category.Id);
+                    if(categories == null) continue;
+
+                    var bytes = this.reusableCategoriesExporter.GetAsExcelFile(categories);
+                    PutEntry($"Categories/{category.Id.FormatGuid()}.xlsx", bytes);
                 }
             }
 

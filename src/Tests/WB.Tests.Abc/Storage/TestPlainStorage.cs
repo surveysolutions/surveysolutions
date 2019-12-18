@@ -1,73 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using WB.Core.Infrastructure.PlainStorage;
+﻿using System.Collections.Generic;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.Implementation;
 
 namespace WB.Tests.Abc.Storage
 {
-    public class TestPlainStorage<T> : IPlainStorageAccessor<T> where T : class
+    public class TestPlainStorage<T> : InMemoryPlainStorageAccessor<T> where T : class
     {
-        private readonly Dictionary<object, T> entites;
-
-        public TestPlainStorage() : this(null)
-        {
-
-        }
-        public TestPlainStorage(Dictionary<object, T> entites = null)
-        {
-            this.entites = entites ?? new Dictionary<object, T>();
-        }
-
-        public T GetById(object id)
-        {
-            if (!this.entites.ContainsKey(id))
-                return null;
-            return this.entites[id];
-        }
-
-        public void Remove(object id)
-        {
-            this.entites.Remove(id);
-        }
-
-        public void Remove(IEnumerable<T> entities)
-        {
-            foreach (var entity in entities)
-            {
-                var itemToRemove = this.entites.SingleOrDefault(x => x.Value.Equals(entity));
-                this.entites.Remove(itemToRemove.Key);
-            }
-        }
-
-        public virtual void Store(T entity, object id)
-        {
-            if (id != null && this.entites.ContainsKey(id))
-            {
-                this.entites[id] = entity;
-            }
-            else
-            {
-                this.entites.Add(id ?? this.entites.Count + 1, entity);
-            }
-        }
-
-        public void Store(IEnumerable<Tuple<T, object>> entitiesToStore)
-        {
-            foreach (var keyValuePair in entitiesToStore)
-            {
-                this.Store(keyValuePair.Item1, keyValuePair.Item2);
-            }
-        }
-
-        public void Flush()
+        public TestPlainStorage()
         {
         }
 
-        public TResult Query<TResult>(Func<IQueryable<T>, TResult> query)
-        {
-            return query.Invoke(this.entites.Values.AsQueryable());
-        }
-
-        public void Clear() { this.entites.Clear();}
+        public TestPlainStorage(Dictionary<object, T> entities) =>
+            entities.ForEach(x => base.inMemoryStorage.Add(x.Key, x.Value));
     }
 }
