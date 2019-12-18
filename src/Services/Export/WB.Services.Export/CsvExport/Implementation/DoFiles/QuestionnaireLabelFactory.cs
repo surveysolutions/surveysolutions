@@ -16,10 +16,12 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
             var level = structure.HeaderToLevelMap[levelRosterVector];
 
             var variableLabels = new List<DataExportVariable>();
-            var predefinedLabels = level.ReusableLabels.Select(o => new DataExportLabelValue(
-                o.Value.Name, 
-                o.Key, 
-                o.Value.Labels.Select(label => new VariableValueLabel(label.Caption, label.Title?.RemoveHtmlTags() ?? string.Empty)).ToArray()));
+            var predefinedLabels = level.ReusableLabels
+                .Select(o => new DataExportLabelValue(
+                    o.Value.Name, 
+                    o.Key, 
+                    o.Value.Labels.Select(label => new VariableValueLabel(label.Caption, label.Title?.RemoveHtmlTags() ?? string.Empty)).ToArray()))
+                .ToArray();
 
             var levelVariableValueLabel = Array.Empty<VariableValueLabel>();
             if (level.LevelLabels != null)
@@ -105,7 +107,7 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
                 }
             }
 
-            return new QuestionnaireLevelLabels(level.LevelName, variableLabels.ToArray(), predefinedLabels.ToArray());
+            return new QuestionnaireLevelLabels(level.LevelName, variableLabels.ToArray(), predefinedLabels);
         }
 
         public QuestionnaireLevelLabels[] CreateLabelsForQuestionnaire(QuestionnaireExportStructure structure)

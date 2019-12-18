@@ -12,7 +12,18 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
         {
             this.LabelName = labelName;
             this.EntityId = entityId;
-            this.VariableValues = variableValues;
+
+            var uniqueValues = from v in variableValues
+                group v by v.Value
+                into g
+                where g.Count() == 1
+                select new
+                {
+                    Value = g.Key,
+                    Label = g.Single()
+                };
+            this.VariableValues = uniqueValues.ToDictionary(x => x.Value, x => x.Label).Values.ToArray();
+            //this.VariableValues = variableValues;
 
             this.IsReference = false;
         }

@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -47,6 +48,9 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
 
                 if (questionnaire == null) return null;
                 questionnaire.QuestionnaireId = questionnaireId;
+
+                if (questionnaire.Categories == null)
+                    questionnaire.Categories = new List<Categories>();
 
                 foreach (var category in questionnaire.Categories)
                 {
