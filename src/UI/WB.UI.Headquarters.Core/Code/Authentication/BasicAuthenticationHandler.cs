@@ -8,7 +8,7 @@ using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.UI.Shared.Web.Authentication;
 
-namespace WB.UI.Headquarters.Code
+namespace WB.UI.Headquarters.Code.Authentication
 {
     public class BasicAuthenticationHandler : AuthenticationHandler<BasicAuthenticationSchemeOptions>
     {
