@@ -48,6 +48,11 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
                 if (questionnaire == null) return null;
                 questionnaire.QuestionnaireId = questionnaireId;
 
+                foreach (var category in questionnaire.Categories)
+                {
+                    category.Values = await this.tenantContext.Api.GetCategoriesAsync(questionnaireId, category.Id);
+                }
+
                 logger.LogDebug("Got questionnaire document from tenant: {tenantName}. {questionnaireId} [{tableName}]",
                     this.tenantContext.Tenant.Name, questionnaire.QuestionnaireId, questionnaire.TableName);
 

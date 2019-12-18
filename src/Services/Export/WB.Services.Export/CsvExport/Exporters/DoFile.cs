@@ -43,7 +43,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             }
         }
 
-        public void AppendLabelToValuesMatching(string variableName, string labelName)
+        public void AssignValuesToVariable(string variableName, string labelName)
         {
             doContent.AppendLine($"label values {variableName} {labelName}");
         }
