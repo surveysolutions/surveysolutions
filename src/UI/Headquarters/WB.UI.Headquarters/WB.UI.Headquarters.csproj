@@ -2104,7 +2104,6 @@
     <Compile Include="Code\CustomAutofacHubActivator.cs" />
     <Compile Include="Implementation\Maps\JsonMapResponse.cs" />
     <Compile Include="Implementation\Maps\MapService.cs" />
-    <Compile Include="Implementation\Services\SecureStorage.cs" />
     <Compile Include="Injections\ILocalExportServiceRunner.cs" />
     <Compile Include="Injections\LocalExportServiceRunner.cs" />
     <Compile Include="Models\Admin\EmailProviders.cs" />
@@ -2333,6 +2332,7 @@
   <ItemGroup>
     <Folder Include="App_Data\Elmah\" />
     <Folder Include="Dependencies\dist\" />
+    <Folder Include="Implementation\Services\" />
     <Folder Include="Models\CompanyLogo\" />
     <Folder Include="Models\ComponentModels\" />
     <Folder Include="Views\WebInterviewSetupApi\" />

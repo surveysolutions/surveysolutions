@@ -247,8 +247,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
             }
 
             return this.userToDeviceService.GetLinkedDeviceId(this.authorizedUser.Id) != deviceId
-                ? (IActionResult) StatusCode((int) HttpStatusCode.Forbidden)
-                : StatusCode((int) HttpStatusCode.OK, @"449634775");
+                ? (IActionResult) Forbid()
+                : new JsonResult("449634775");
         }
 
         //private ClientVersionFromUserAgent GetClientVersionFromUserAgent(HttpRequest request)

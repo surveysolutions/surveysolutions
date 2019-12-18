@@ -7,6 +7,7 @@ using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Anemonis.AspNetCore.RequestDecompression;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
@@ -51,6 +52,7 @@ using WB.Persistence.Headquarters.Migrations.ReadSide;
 using WB.Persistence.Headquarters.Migrations.Users;
 using WB.UI.Designer.CommonWeb;
 using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Code.Authentication;
 using WB.UI.Headquarters.Configs;
 using WB.UI.Headquarters.Controllers.Api.PublicApi;
 using WB.UI.Headquarters.Filters;
@@ -222,58 +224,7 @@ namespace WB.UI.Headquarters
             services.AddRazorPages();
             services.AddHttpContextAccessor();
 
-            services.AddIdentity<HqUser, HqRole>()
-                .AddUserStore<HqUserStore>()
-                .AddRoleStore<HqRoleStore>();
-
-            services.ConfigureApplicationCookie(opt =>
-            {
-                opt.LoginPath = "/Account/LogOn";
-                opt.ForwardDefaultSelector = ctx =>
-                {
-                    if (ctx.Request.Headers.ContainsKey(HeaderNames.Authorization))
-                    {
-                        AuthenticationHeaderValue authHeader = AuthenticationHeaderValue.Parse(ctx.Request.Headers[HeaderNames.Authorization]);
-                        return authHeader.Scheme;
-                    }
-
-                    return null;
-                };
-                opt.Events = new CookieAuthenticationEvents
-                {
-
-                    OnRedirectToLogin = ctx =>
-                    {
-                        if (ctx.Request.Path.StartsWithSegments("/api") && ctx.Response.StatusCode == 200)
-                        {
-                            ctx.Response.StatusCode = 401;
-                        }
-
-                        ctx.Response.Redirect(ctx.RedirectUri);
-                        return Task.CompletedTask;
-                    },
-                    OnRedirectToAccessDenied = ctx =>
-                    {
-                        if (ctx.Request.Path.StartsWithSegments("/api") && ctx.Response.StatusCode == 200)
-                        {
-                            ctx.Response.StatusCode = 403;
-                        }
-
-                        ctx.Response.Redirect(ctx.RedirectUri);
-                        return Task.CompletedTask;
-                    }
-                };
-            });
-
-            services
-                .AddAuthentication(IdentityConstants.ApplicationScheme)
-                .AddScheme<BasicAuthenticationSchemeOptions, BasicAuthenticationHandler>("Basic", opts =>
-                {
-                    opts.Realm = "WB.Headquarters";
-                })
-                .AddScheme<AuthTokenAuthenticationSchemeOptions, AuthTokenAuthenticationHandler>("AuthToken", opts =>
-                {
-                });
+            services.AddHqAuthorization();
 
             services.AddTransient<ICaptchaService, WebCacheBasedCaptchaService>();
             services.AddTransient<ICaptchaProvider, NoCaptchaProvider>();
@@ -294,6 +245,12 @@ namespace WB.UI.Headquarters
             {
                 options.Level = CompressionLevel.Optimal;
             });
+
+            services.AddRequestDecompression(o =>
+            {
+                o.Providers.Add<GzipDecompressionProvider>();
+            });
+
  
             services.AddResponseCompression(options =>
             {
@@ -340,6 +297,8 @@ namespace WB.UI.Headquarters
             app.UseSwagger();
 
             app.UseResponseCompression();
+            app.UseRequestDecompression();
+
             app.UseHqSwaggerUI();
 
             app.UseRequestLocalization(opt =>

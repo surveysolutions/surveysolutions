@@ -16,11 +16,13 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
     [Route("api/interviewer/v2/users")]
     public class UsersApiV2Controller : UsersControllerBase
     {
+        private readonly UserManager<HqUser> userManager;
         private readonly SignInManager<HqUser> signInManager;
         private readonly IApiTokenProvider apiAuthTokenProvider;
 
         public UsersApiV2Controller(
             IAuthorizedUser authorizedUser,
+            UserManager<HqUser> userManager,
             SignInManager<HqUser> signInManager,
             IUserViewFactory userViewFactory,
             IApiTokenProvider apiAuthTokenProvider,
@@ -29,6 +31,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
                 userViewFactory: userViewFactory,
                 userToDeviceService)
         {
+            this.userManager = userManager;
             this.signInManager = signInManager;
             this.apiAuthTokenProvider = apiAuthTokenProvider;
         }
@@ -54,22 +57,20 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
 
         [HttpPost]
         [Route("login")]
-        public async Task<ActionResult<string>> Login(LogonInfo userLogin)
+        public async Task<ActionResult<string>> Login([FromBody]LogonInfo userLogin)
         {
-            var reader = new StreamReader(Request.Body);
-            var body = await reader.ReadToEndAsync();
+            var user = await this.userManager.FindByNameAsync(userLogin.Username);
 
-            var signinresult = await this.signInManager.PasswordSignInAsync(userLogin.Username, userLogin.Password, false, false);
-
-            if (signinresult.Succeeded)
+            if (user == null || user.IsLockedByHeadquaters || user.IsLockedBySupervisor || user.IsArchived)
+                return Unauthorized();
+            var signInResult = await this.signInManager.CheckPasswordSignInAsync(user, userLogin.Password, false);
+            if (signInResult.Succeeded)
             {
-                var userId = Guid.Parse(this.User.FindFirstValue(ClaimTypes.NameIdentifier));
-                var authToken = await this.apiAuthTokenProvider.GenerateTokenAsync(userId);
-
-                return authToken;
+                var authToken = await this.apiAuthTokenProvider.GenerateTokenAsync(user.Id);
+                return new JsonResult(authToken);
             }
 
-            return StatusCode(StatusCodes.Status401Unauthorized);
+            return Unauthorized();
         }
     }
 }
