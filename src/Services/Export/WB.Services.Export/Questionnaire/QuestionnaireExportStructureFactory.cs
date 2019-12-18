@@ -558,7 +558,7 @@ namespace WB.Services.Export.Questionnaire
         {
             var typedQuestion = question as MultyOptionsQuestion;
             var columnCount = typedQuestion?.IsFilteredCombobox ?? false 
-                ? Constants.MaxLongRosterRowCount 
+                ? (typedQuestion.MaxAllowedAnswers ?? Constants.MaxLongRosterRowCount)
                 : typedQuestion?.CategoriesId.HasValue ?? false
                     ? questionnaire.Categories.First(c => c.Id == typedQuestion.CategoriesId.Value).Values.Length
                     : question.Answers.Count;

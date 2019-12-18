@@ -8,5 +8,6 @@ namespace WB.Services.Export.Questionnaire
         public bool AreAnswersOrdered { get; set; }
         public bool? IsFilteredCombobox { get; set; }
         public Guid? CategoriesId { get; set; }
+        public int? MaxAllowedAnswers { get; set; }
     }
 }
