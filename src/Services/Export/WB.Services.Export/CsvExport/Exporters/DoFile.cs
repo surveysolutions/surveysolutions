@@ -27,14 +27,11 @@ namespace WB.Services.Export.CsvExport.Exporters
 
         private void AppendHeaderFromFile()
         {
-            var assembly = Assembly.GetExecutingAssembly();
-            var resourceName = "WB.Services.Export.DoFileHeader.txt";
+            var assembly = Assembly.GetAssembly(typeof(DoFile));
+            var resourceName = "WB.Services.Export.CsvExport.Exporters.DoFileHeader.txt";
 
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
             {
-                if (stream == null)
-                    return;
-
                 using (StreamReader reader = new StreamReader(stream))
                 {
                     var doFileHeader = reader.ReadToEnd();
