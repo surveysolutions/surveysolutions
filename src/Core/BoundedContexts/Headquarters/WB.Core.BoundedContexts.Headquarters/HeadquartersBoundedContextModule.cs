@@ -236,6 +236,7 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.RegisterDenormalizer<InterviewSummaryCompositeDenormalizer>();
             registry.RegisterDenormalizer<CumulativeChartDenormalizer>();
+            registry.Bind<InterviewCacheWarmupPreProcessor>();
 
             registry.Bind<IInterviewPackagesService, IInterviewBrokenPackagesService, InterviewPackagesService>();
 
@@ -439,9 +440,6 @@ namespace WB.Core.BoundedContexts.Headquarters
                     .SkipValidationFor<HqRejectInterviewCommand>()
                     .SkipValidationFor<UnapproveByHeadquartersCommand>()
             );
-
-            CommandRegistry.Configure<StatefulInterview, SynchronizeInterviewEventsCommand>(configuration => configuration.ValidatedBy<SurveyManagementInterviewCommandValidator>());
-            CommandRegistry.Configure<StatefulInterview, CreateInterview>(configuration => configuration.ValidatedBy<SurveyManagementInterviewCommandValidator>());
 
             return Task.CompletedTask;
         }
