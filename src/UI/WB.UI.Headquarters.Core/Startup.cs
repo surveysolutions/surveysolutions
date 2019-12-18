@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text;
@@ -17,6 +18,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -125,7 +127,7 @@ namespace WB.UI.Headquarters
                 new DataCollectionSharedKernelModule(),
                 new OrmModule(unitOfWorkConnectionSettings),
                 new OwinSecurityModule(),
-                new FileStorageModule("?", false, "bucket", "region", "prefix", "endpoint"),
+                new FileStorageModule(Configuration["DataStorePath"], false, "bucket", "region", "prefix", "endpoint"),
                 new FileInfrastructureModule(),
                 //new CaptchaModule("recaptcha"),
                 new ProductVersionModule(typeof(Startup).Assembly),
@@ -262,6 +264,11 @@ namespace WB.UI.Headquarters
             {
                 mvc.Filters.AddService<UnitOfWorkActionFilter>(1);
                 mvc.Conventions.Add(new OnlyPublicApiConvention());
+                var noContentFormatter = mvc.OutputFormatters.OfType<HttpNoContentOutputFormatter>().FirstOrDefault();
+                if (noContentFormatter != null)
+                {
+                    noContentFormatter.TreatNullValueAsNoContent = false;
+                }
             });
 
             services.AddHqSwaggerGen();
@@ -269,6 +276,7 @@ namespace WB.UI.Headquarters
             // configuration
             services.Configure<GoogleMapsConfig>(this.Configuration.GetSection("GoogleMap"));
             services.Configure<PreloadingConfig>(this.Configuration.GetSection("PreLoading"));
+            services.Configure<ApkConfig>(this.Configuration.GetSection("Apks"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

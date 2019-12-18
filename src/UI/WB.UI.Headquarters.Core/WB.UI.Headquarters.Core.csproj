@@ -20,7 +20,6 @@
   <ItemGroup>
     <Compile Remove="Controllers\Api\DataCollection\Interviewer\InterviewerCommonWebApiConfig.cs" />
     <Compile Remove="Controllers\Api\DataCollection\Interviewer\InterviewerV3WebApiConfig.cs" />
-    <Compile Remove="Controllers\Api\DataCollection\Interviewer\v3\InterviewsApiV3Controller.cs" />
     <Compile Remove="Services\HqSignInManager.cs" />
   </ItemGroup>
 
@@ -45,12 +44,14 @@
 
 
   <ItemGroup>
-    <None Remove="appsettings.Development.ini" />
     <None Remove="appsettings.ini" />
+    <None Remove="appsettings.magpie.ini"/>
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="appsettings.Development.ini" />
+    <Content Include="appsettings.magpie.ini">
+        <DependentUpon>appsettings.ini</DependentUpon>
+    </Content>
     <Content Include="appsettings.ini" />
     <Content Include="Resources\Common.ar.resx">
       <DependentUpon>Common.resx</DependentUpon>
@@ -412,7 +413,6 @@
 
 
   <ItemGroup>
-    <Folder Include="Controllers\Api\DataCollection\Interviewer\v3\" />
     <Folder Include="Pages\" />
     <Folder Include="wwwroot\apidocs\" />
   </ItemGroup>

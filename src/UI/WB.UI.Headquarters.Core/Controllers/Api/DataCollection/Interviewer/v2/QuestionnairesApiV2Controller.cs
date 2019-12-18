@@ -32,7 +32,14 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
         }
 
         [HttpGet]
-        [Route("")]
+        [Route("census")]
+        public ActionResult<List<QuestionnaireIdentity>> Census()
+        {
+            return Ok(new List<QuestionnaireIdentity>());
+        }
+
+        [HttpGet]
+        [Route("list")]
         public override ActionResult<List<QuestionnaireIdentity>> List() => base.List();
 
         [HttpGet]
