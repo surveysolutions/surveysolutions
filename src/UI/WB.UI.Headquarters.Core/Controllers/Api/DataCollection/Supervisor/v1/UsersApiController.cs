@@ -1,62 +1,72 @@
-﻿using System.Net;
-using System.Threading.Tasks;
-using System.Web.Http;
-using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.SharedKernels.DataCollection.WebApi;
-using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 {
-    public class UserApiController : ApiController
+    [Route("api/supervisor/v1/users")]
+    public class UserControllerBase : ControllerBase
     {
         protected readonly IAuthorizedUser authorizedUser;
-        protected readonly IUserViewFactory userViewFactory;
-        protected readonly HqSignInManager signInManager;
+        protected readonly IUserRepository userViewFactory;
+        private readonly SignInManager<HqUser> signInManager;
+        private readonly IApiTokenProvider apiAuthTokenProvider;
 
-        public UserApiController(
+        public UserControllerBase(
             IAuthorizedUser authorizedUser,
-            IUserViewFactory userViewFactory,
-            HqSignInManager signInManager)
+            IUserRepository userViewFactory,
+            SignInManager<HqUser> signInManager, 
+            IApiTokenProvider apiAuthTokenProvider)
         {
             this.authorizedUser = authorizedUser;
             this.userViewFactory = userViewFactory;
             this.signInManager = signInManager;
+            this.apiAuthTokenProvider = apiAuthTokenProvider;
         }
 
         [HttpGet]
-        [ApiBasicAuth(UserRoles.Supervisor)]
-        //[WriteToSyncLog(SynchronizationLogType.GetSupervisor)]
+        [Authorize(Roles = "Supervisor")]
+        [Route("current")]
         public virtual SupervisorApiView Current()
         {
-            var user = this.userViewFactory.GetUser(new UserViewInputModel(this.authorizedUser.Id));
+            var user = this.userViewFactory.FindById(this.authorizedUser.Id);
 
             return new SupervisorApiView()
             {
-                Id = user.PublicKey,
+                Id = user.Id,
                 Email = user.Email
             };
         }
 
         [HttpGet]
-        [ApiBasicAuth(UserRoles.Supervisor)]
-        //[WriteToSyncLog(SynchronizationLogType.HasInterviewerDevice)]
-        public virtual bool HasDevice() => !string.IsNullOrEmpty(this.authorizedUser.DeviceId);
+        [Authorize(Roles = "Supervisor")]
+        [Route("hasdevice")]
+        public virtual async Task<bool> HasDevice()
+        {
+            var user = await this.userViewFactory.FindByIdAsync(this.authorizedUser.Id);
+            return !string.IsNullOrEmpty(user.Profile?.DeviceId);
+        }
 
         [HttpPost]
-        //[WriteToSyncLog(SynchronizationLogType.SupervisorLogin)]
-        public async Task<string> Login(LogonInfo userLogin)
+        [Route("login")]
+        public async Task<ActionResult<string>> Login([FromBody]LogonInfo userLogin)
         {
-            var signInResult = await this.signInManager.SignInSupervisorAsync(userLogin.Username, userLogin.Password);
+            var user = await this.userViewFactory.FindByNameAsync(userLogin.Username);
 
-            if (signInResult == SignInStatus.Success)
+            var signInResult = await this.signInManager.CheckPasswordSignInAsync(user, userLogin.Password, false);
+
+            if (signInResult.Succeeded)
             {
-                return await this.signInManager.GenerateApiAuthTokenAsync(authorizedUser.Id);
+                var authToken = await this.apiAuthTokenProvider.GenerateTokenAsync(user.Id);
+                return new JsonResult(authToken);
             }
 
-            throw new HttpResponseException(HttpStatusCode.Unauthorized);
+            return Unauthorized();
         }
 
     }

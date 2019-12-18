@@ -1,30 +1,30 @@
 ﻿using System;
 using System.Threading.Tasks;
-using System.Web.Http;
-using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.SharedKernels.DataCollection.WebApi;
-using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 {
-    [ApiBasicAuth(new[] { UserRoles.Supervisor })]
-    public class InterviewerDeviceInfoApiV1Controller : ApiController
+    [Authorize(Roles = "Supervisor")]
+    public class InterviewerDeviceInfoApiV1Controller : ControllerBase
     {
         private readonly IDeviceSyncInfoRepository deviceSyncInfoRepository;
-        private readonly HqUserManager userManager;
+        private readonly IUserRepository userRepository;
 
         public InterviewerDeviceInfoApiV1Controller(IDeviceSyncInfoRepository deviceSyncInfoRepository,
-            HqUserManager userManager)
+            IUserRepository userRepository)
         {
             this.deviceSyncInfoRepository = deviceSyncInfoRepository;
-            this.userManager = userManager;
+            this.userRepository = userRepository;
         }
 
         [HttpPost]
-        public async Task<IHttpActionResult> Post(DeviceInfoApiView info)
+        [Route("api/supervisor/v1/interviewerTabletInfos")]
+        public async Task<IActionResult> Post(DeviceInfoApiView info)
         {
             if (info == null)
                 return this.BadRequest("Server cannot accept empty package content.");
@@ -37,7 +37,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
             var userId = info.UserId;
             DateTime deviceInfoReceivedDate = info.ReceivedDate.Value.UtcDateTime;
 
-            var user = await this.userManager.FindByIdAsync(userId.Value);
+            var user = await this.userRepository.FindByIdAsync(userId.Value);
 
             if (user == null)
                 return this.BadRequest("User was not found.");
@@ -81,8 +81,6 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 
             user.Profile.DeviceAppBuildVersion = info.AppBuildVersion;
             user.Profile.DeviceAppVersion = info.AppVersion;
-
-            await this.userManager.UpdateAsync(user);
 
             return this.Ok();
         }

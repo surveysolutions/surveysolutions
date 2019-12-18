@@ -1,15 +1,18 @@
-﻿using System.Net.Http;
+﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web.Http;
-using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 {
-    [ApiBasicAuth(new[] { UserRoles.Supervisor })]
+    [Authorize(Roles = "Supervisor")]
+    [Route("api/supervisor/v1/maps")]
     public class MapsApiV1Controller : MapsControllerBase
     {
         public MapsApiV1Controller(IMapStorageService mapRepository, IAuthorizedUser authorizedUser) : base(mapRepository, authorizedUser)
@@ -23,10 +26,12 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetMapList)]
-        public override HttpResponseMessage GetMaps() => base.GetMaps();
+        [Route("")]
+        public override ActionResult<List<MapView>> GetMaps() => base.GetMaps();
 
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetMap)]
-        public override Task<HttpResponseMessage> GetMapContent([FromUri] string id) => base.GetMapContent(id);
+        [Route("{id}")]
+        public override Task<IActionResult> GetMapContent([FromQuery] string id) => base.GetMapContent(id);
     }
 }

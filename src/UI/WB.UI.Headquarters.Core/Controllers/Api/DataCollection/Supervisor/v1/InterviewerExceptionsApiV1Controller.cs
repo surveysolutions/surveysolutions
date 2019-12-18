@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Web.Http;
-using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.WebApi;
-using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 {
-    [ApiBasicAuth(new[] { UserRoles.Supervisor })]
-    public class InterviewerExceptionsApiV1Controller : ApiController
+    [Authorize(Roles = "Supervisor")]
+    public class InterviewerExceptionsApiV1Controller : ControllerBase
     {
         private readonly IPlainStorageAccessor<SynchronizationLogItem> syncLogRepository;
 
@@ -20,7 +19,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
         }
 
         [HttpPost]
-        public IHttpActionResult Post(List<InterviewerExceptionInfo> exceptions)
+        [Route("api/supervisor/v1/interviewerExceptions")]
+        public IActionResult Post([FromBody]List<InterviewerExceptionInfo> exceptions)
         {
             foreach (var exception in exceptions)
             {

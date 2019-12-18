@@ -28,7 +28,7 @@ using WB.UI.Headquarters.Services;
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
 {
     [Route("api/interviewer")]
-    public class InterviewerApiController : AppApiControllerBase
+    public class InterviewerControllerBase : AppControllerBaseBase
     {
         protected readonly ITabletInformationService tabletInformationService;
         protected readonly IUserViewFactory userViewFactory;
@@ -48,7 +48,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             WithMaps = 2
         }
 
-        public InterviewerApiController(ITabletInformationService tabletInformationService,
+        public InterviewerControllerBase(ITabletInformationService tabletInformationService,
             IUserViewFactory userViewFactory,
             IInterviewerSyncProtocolVersionProvider syncVersionProvider,
             IAuthorizedUser authorizedUser,

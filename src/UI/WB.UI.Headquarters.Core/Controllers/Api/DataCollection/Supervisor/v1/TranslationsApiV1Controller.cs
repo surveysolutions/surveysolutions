@@ -1,13 +1,14 @@
-﻿using System.Net.Http;
-using System.Web.Http;
-using Main.Core.Entities.SubEntities;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Enumerator.Native.Questionnaire;
 using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 {
-    [ApiBasicAuth(new[] { UserRoles.Supervisor })]
+    [Authorize(Roles = "Supervisor")]
     public class TranslationsApiV1Controller : TranslationsControllerBase
     {
         public TranslationsApiV1Controller(ITranslationManagementService translations) : base(translations)
@@ -16,7 +17,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetTranslations)]
-        public override HttpResponseMessage Get(string id) => base.Get(id);
+        [Route("api/supervisor/v1/translations/{id}")]
+        public override ActionResult<List<TranslationDto>> Get(string id) => base.Get(id);
     }
 
 }

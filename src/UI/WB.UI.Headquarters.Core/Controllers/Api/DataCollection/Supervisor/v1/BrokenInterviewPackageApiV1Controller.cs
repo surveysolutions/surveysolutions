@@ -1,14 +1,13 @@
-﻿using System.Web.Http;
-using Main.Core.Entities.SubEntities;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.WebApi;
-using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 {
-    [ApiBasicAuth(new[] { UserRoles.Supervisor })]
-    public class BrokenInterviewPackageApiV1Controller : ApiController
+    [Authorize(Roles = "Supervisor")]
+    public class BrokenInterviewPackageApiV1Controller : ControllerBase
     {
         private readonly IPlainStorageAccessor<BrokenInterviewPackage> brokenInterviewPackageStorage;
 
@@ -18,7 +17,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
         }
 
         [HttpPost]
-        public IHttpActionResult Post(BrokenInterviewPackageApiView package)
+        [Route("api/supervisor/v1/brokenInterviews")]
+        public IActionResult Post([FromBody]BrokenInterviewPackageApiView package)
         {
             if (package == null)
                 return this.BadRequest("Server cannot accept empty package content.");
