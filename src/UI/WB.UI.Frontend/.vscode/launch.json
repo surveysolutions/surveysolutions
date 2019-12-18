@@ -46,6 +46,15 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "Debug build styles",
+            "program": "${workspaceFolder}/node_modules/@vue/cli-service/bin/vue-cli-service.js",
+            "args": [
+                "build", "--css"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "Debug SERVE",
             "program": "${workspaceFolder}/node_modules/@vue/cli-service/bin/vue-cli-service.js",
             "args": [

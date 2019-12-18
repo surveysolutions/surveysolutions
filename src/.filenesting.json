@@ -1,0 +1,28 @@
+{
+  "help": "https://go.microsoft.com/fwlink/?linkid=866610",
+  "root": true,
+  "dependentFileProviders": {
+    "add": {
+      "fileToFile": {
+        "add": {
+          "_AdminLayout.cshtml": [
+            "_AdminLayout.Template.cshtml"
+          ]
+        }
+      },
+      "pathSegment": {
+        "add": {
+          ".*": [
+            ".resx"
+          ]
+        }
+      },
+      "extensionToExtension": {
+        "add": {
+          ".Designer.cs": [ ".resx" ],
+          ".designer.cs": [ ".resx" ]
+        }
+      } 
+    }
+  }
+}

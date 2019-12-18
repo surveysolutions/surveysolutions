@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
@@ -7,9 +9,79 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Newtonsoft.Json;
 
 namespace WB.UI.Headquarters.Code
 {
+    [HtmlTargetElement("locale")]
+    public class LocaleTagHelper : TagHelper
+    {
+        private readonly IWebHostEnvironment webHostEnvironment;
+        private readonly IUrlHelperFactory urlHelperFactory;
+
+        [ViewContext]
+        [HtmlAttributeNotBound]
+        public ViewContext ViewContext { get; set; }
+
+        public LocaleTagHelper(IWebHostEnvironment webHostEnvironment, IUrlHelperFactory urlHelperFactory)
+        {
+            this.webHostEnvironment = webHostEnvironment;
+            this.urlHelperFactory = urlHelperFactory;
+        }
+
+        public override int Order => 1;
+
+        [HtmlAttributeName("component")]
+        public string Component { get; set; }
+
+        [HtmlAttributeName("path")]
+        public string Path { get; set; } = "locale/";
+
+        private static readonly Regex ComponentMatcher = new Regex(@"(?<component>[\w\d-]*)\.([\da-f]*)?\.?(min\.)?(json)", RegexOptions.Compiled);
+
+        // TODO: Add memory caching
+        public override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        {
+            var files = webHostEnvironment.WebRootFileProvider.GetDirectoryContents(Path.TrimEnd('/') + "/" + Component);
+
+            Dictionary<string, string> locales = new Dictionary<string, string>();
+
+            foreach (var file in files)
+            {
+                var match = ComponentMatcher.Match(file.Name);
+
+                if (match.Success == false) continue;
+
+                locales.Add(match.Groups["component"].Value, GetServerPath(file.PhysicalPath));
+            }
+
+            output.TagName = "script";
+            var current = System.Globalization.CultureInfo.CurrentUICulture.Name.Split('-')[0];
+            if (!locales.ContainsKey(current))
+            {
+                current = "en";
+            }
+
+            output.Content.AppendHtml($@"
+window.CONFIG.locale = {{
+    locale: '{current}',
+    locales: '{JsonConvert.SerializeObject(locales)}'
+}};
+// JSONP callback to load localization from '@localePath'
+window.__setLocaleData__ = function(data) {{ window.CONFIG.locale.data = data; }}
+");
+            output.PostElement.AppendHtml($"<script src='{locales[current]}'></script>");
+            output.PreElement.AppendHtml($"<!-- Locale {Component} -->");
+            return Task.CompletedTask;
+        }
+
+        private string GetServerPath(string file)
+        {
+            var contentRootPath = file.Replace(webHostEnvironment.WebRootPath, "~");
+            return urlHelperFactory.GetUrlHelper(ViewContext).Content(contentRootPath.Replace("\\", "/"));
+        }
+    }
+
     [HtmlTargetElement("inject")]
     public class InjectTagHelper : TagHelper
     {
@@ -20,12 +92,12 @@ namespace WB.UI.Headquarters.Code
         [HtmlAttributeNotBound]
         public ViewContext ViewContext { get; set; }
 
-        public InjectTagHelper(IWebHostEnvironment webHostEnvironment, IUrlHelperFactory  urlHelperFactory)
+        public InjectTagHelper(IWebHostEnvironment webHostEnvironment, IUrlHelperFactory urlHelperFactory)
         {
             this.webHostEnvironment = webHostEnvironment;
             this.urlHelperFactory = urlHelperFactory;
         }
-        
+
         public override int Order => 1;
 
         [HtmlAttributeName("component")]
@@ -34,7 +106,7 @@ namespace WB.UI.Headquarters.Code
         [HtmlAttributeName("async")]
         public bool Async { get; set; }
 
-        public enum Type { css, js}
+        public enum Type { css, js }
 
         [HtmlAttributeName("fallback-to-js")]
         public bool FallbackToJs { get; set; }

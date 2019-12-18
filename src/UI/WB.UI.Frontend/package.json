@@ -5,9 +5,11 @@
   "scripts": {
     "serve": "cross-env HOT_MODE=1 vue-cli-service serve",
     "build": "vue-cli-service build",
+    "styles": "vue-cli-service build --css",
+    "styles:dev": "vue-cli-service build --css --mode development",
     "dev": "vue-cli-service build --mode development",
     "lint": "vue-cli-service lint",
-    "hot": "gulp hot",
+    "hot": "vue-cli-service watch",
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
