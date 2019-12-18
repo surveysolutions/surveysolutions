@@ -63,6 +63,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
 
             if (user == null || user.IsLockedByHeadquaters || user.IsLockedBySupervisor || user.IsArchived)
                 return Unauthorized();
+
             var signInResult = await this.signInManager.CheckPasswordSignInAsync(user, userLogin.Password, false);
             if (signInResult.Succeeded)
             {

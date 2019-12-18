@@ -11,13 +11,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Controllers\Api\DataCollection\Supervisor\**" />
-    <Content Remove="Controllers\Api\DataCollection\Supervisor\**" />
-    <EmbeddedResource Remove="Controllers\Api\DataCollection\Supervisor\**" />
-    <None Remove="Controllers\Api\DataCollection\Supervisor\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Remove="Controllers\Api\DataCollection\Interviewer\InterviewerCommonWebApiConfig.cs" />
     <Compile Remove="Controllers\Api\DataCollection\Interviewer\InterviewerV3WebApiConfig.cs" />
     <Compile Remove="Services\HqSignInManager.cs" />
@@ -45,7 +38,7 @@
 
   <ItemGroup>
     <None Remove="appsettings.ini" />
-    <None Remove="appsettings.magpie.ini"/>
+    <None Remove="appsettings.magpie.ini" />
   </ItemGroup>
 
   <ItemGroup>

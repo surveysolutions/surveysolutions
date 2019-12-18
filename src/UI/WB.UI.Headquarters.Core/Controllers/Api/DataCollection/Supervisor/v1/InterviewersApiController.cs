@@ -1,36 +1,30 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web.Http;
-using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.SharedKernels.DataCollection.WebApi;
-using WB.UI.Headquarters.Code;
-using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 {
-    public class InterviewersApiController : ApiController
+    public class InterviewersControllerBase : ControllerBase
     {
         protected readonly IUserViewFactory userViewFactory;
         protected readonly IAuthorizedUser authorizedUser;
-        private readonly HqSignInManager signInManager;
 
-        public InterviewersApiController(
+        public InterviewersControllerBase(
             IUserViewFactory userViewFactory,
-            IAuthorizedUser authorizedUser,
-            HqSignInManager signInManager)
+            IAuthorizedUser authorizedUser)
         {
             this.userViewFactory = userViewFactory;
             this.authorizedUser = authorizedUser;
-            this.signInManager = signInManager;
         }
 
-        [ApiBasicAuth(UserRoles.Supervisor)]
+        [Authorize(Roles = "Supervisor")]
         [HttpGet]
-        [ApiNoCache]
-        public List<InterviewerFullApiView> Get()
+        [Route("api/supervisor/v1/interviewers")]
+        public ActionResult<List<InterviewerFullApiView>> Get()
         {
             return this.userViewFactory.GetInterviewers(this.authorizedUser.Id).ToList();
         }

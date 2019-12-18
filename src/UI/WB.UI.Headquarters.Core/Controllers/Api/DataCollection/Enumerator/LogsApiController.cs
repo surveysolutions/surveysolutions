@@ -14,13 +14,13 @@ using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Enumerator
 {
-    public class LogsApiController : ControllerBase
+    public class LogsControllerBase : ControllerBase
     {
         private readonly SignInManager<HqUser> signInManager;
         private readonly IUserViewFactory userViewFactory;
         private readonly IPlainStorageAccessor<TabletLog> logs;
 
-        public LogsApiController(SignInManager<HqUser> signInManager, 
+        public LogsControllerBase(SignInManager<HqUser> signInManager, 
             IUserViewFactory userViewFactory, 
             IPlainStorageAccessor<TabletLog> logs)
         {

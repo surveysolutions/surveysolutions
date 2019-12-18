@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Authorization;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -12,10 +13,10 @@ using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.DataCollection.Supervisor
 {
-    [ApiBasicAuth(new[] { UserRoles.Supervisor })]
+    [Authorize(Roles = "Supervisor")]
     public class SupervisorInterviewsControllerBase : InterviewsControllerBase
     {
-        public SupervisorInterviewsControllerBase(IImageFileStorage imageFileStorage, IAudioFileStorage audioFileStorage, IAuthorizedUser authorizedUser, IInterviewInformationFactory interviewsFactory, IInterviewPackagesService packagesService, ICommandService commandService, IMetaInfoBuilder metaBuilder, IJsonAllTypesSerializer synchronizationSerializer, IHeadquartersEventStore eventStore, IAudioAuditFileStorage audioAuditFileStorage) : 
+        public SupervisorInterviewsControllerBase(IImageFileStorage imageFileStorage, IAudioFileStorage audioFileStorage, IAuthorizedUser authorizedUser, IInterviewInformationFactory interviewsFactory, IInterviewPackagesService packagesService, ICommandService commandService, IMetaInfoBuilder metaBuilder, IJsonAllTypesSerializer synchronizationSerializer, IHeadquartersEventStore eventStore, IAudioAuditFileStorage audioAuditFileStorage) :
             base(imageFileStorage, audioFileStorage, authorizedUser, interviewsFactory, packagesService, commandService, metaBuilder, synchronizationSerializer, eventStore, audioAuditFileStorage)
         {
         }

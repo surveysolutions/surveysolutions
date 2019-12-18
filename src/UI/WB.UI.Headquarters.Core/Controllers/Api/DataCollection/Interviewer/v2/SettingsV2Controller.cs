@@ -30,17 +30,17 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
 
         [HttpGet]
         [Route("autoupdate")]
-        public override bool AutoUpdateEnabled() =>
-            this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings).IsAutoUpdateEnabled();
+        public override IActionResult AutoUpdateEnabled() =>
+            new JsonResult(this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings).IsAutoUpdateEnabled());
 
         [HttpGet]
         [Route("encryption-key")]
-        public override string PublicKeyForEncryption() => base.PublicKeyForEncryption();
+        public override IActionResult PublicKeyForEncryption() => base.PublicKeyForEncryption();
 
         [HttpGet]
         [Route("notifications")]
-        public override bool NotificationsEnabled() =>
-            this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings).IsDeviceNotificationsEnabled();
+        public override IActionResult NotificationsEnabled() =>
+            new JsonResult(this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings).IsDeviceNotificationsEnabled());
 
         [HttpGet]
         [Route("tenantId")]
