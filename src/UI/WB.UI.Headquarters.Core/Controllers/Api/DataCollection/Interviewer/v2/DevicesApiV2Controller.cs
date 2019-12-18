@@ -50,7 +50,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
 
         [HttpPost]
         [Route("statistics")]
-        public override long Statistics([FromBody]SyncStatisticsApiView statistics) => base.Statistics(statistics);
+        public override IActionResult Statistics([FromBody]SyncStatisticsApiView statistics) => base.Statistics(statistics);
 
         [HttpPost]
         [Route("exception")]

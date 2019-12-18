@@ -112,7 +112,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             return this.Ok();
         }
 
-        public virtual long Statistics(SyncStatisticsApiView statistics)
+        public virtual IActionResult Statistics(SyncStatisticsApiView statistics)
         {
             var deviceInfo = this.deviceSyncInfoRepository.GetLastByInterviewerId(this.authorizedUser.Id);
             deviceInfo.Statistics = new SyncStatistics
@@ -135,7 +135,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             };
 
             this.deviceSyncInfoRepository.AddOrUpdate(deviceInfo);
-            return DateTime.UtcNow.ToEpochTime();
+            return new JsonResult(DateTime.UtcNow.ToEpochTime());
         }
 
         public virtual IActionResult UnexpectedException(UnexpectedExceptionApiView exception)
