@@ -46,14 +46,14 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
 
         [HttpPost]
         [Route("info")]
-        public override Task<IActionResult> Info(DeviceInfoApiView info) => base.Info(info);
+        public override Task<IActionResult> Info([FromBody]DeviceInfoApiView info) => base.Info(info);
 
         [HttpPost]
         [Route("statistics")]
-        public override long Statistics(SyncStatisticsApiView statistics) => base.Statistics(statistics);
+        public override long Statistics([FromBody]SyncStatisticsApiView statistics) => base.Statistics(statistics);
 
         [HttpPost]
         [Route("exception")]
-        public override IActionResult UnexpectedException(UnexpectedExceptionApiView exception) => base.UnexpectedException(exception);
+        public override IActionResult UnexpectedException([FromBody]UnexpectedExceptionApiView exception) => base.UnexpectedException(exception);
     }
 }

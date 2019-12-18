@@ -27,6 +27,7 @@ using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
+using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.BoundedContexts.Headquarters.Users;
@@ -344,7 +345,10 @@ namespace WB.UI.Headquarters
 
         private void InitModules(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            var initTask = autofacKernel.InitCoreAsync(app.ApplicationServices.GetAutofacRoot(), false);
+            var lifetimeScope = app.ApplicationServices.GetAutofacRoot();
+            var initTask = autofacKernel.InitCoreAsync(lifetimeScope, false);
+
+            InScopeExecutor.Init(new UnitOfWorkInScopeExecutor(lifetimeScope));
 
             if (!env.IsDevelopment())
             {

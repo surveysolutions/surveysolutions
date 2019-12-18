@@ -40,7 +40,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
         [HttpPost]
         [Route("{id:guid}")]
         [WriteToSyncLog(SynchronizationLogType.PostInterview)]
-        public IActionResult Post(InterviewPackageApiView package)
+        public IActionResult Post([FromBody]InterviewPackageApiView package)
         {
             if (string.IsNullOrEmpty(package.Events))
                 return this.BadRequest("Server cannot accept empty package content.");
