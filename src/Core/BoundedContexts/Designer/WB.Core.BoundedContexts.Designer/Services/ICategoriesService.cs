@@ -13,5 +13,6 @@ namespace WB.Core.BoundedContexts.Designer.Services
         byte[] GetTemplateAsExcelFile();
         IQueryable<CategoriesItem> GetCategoriesById(Guid questionnaireId, Guid id);
         CategoriesFile GetAsExcelFile(Guid questionnaireId, Guid categoriesId);
+        void DeleteAllByQuestionnaireId(Guid questionnaireId);
     }
 }

@@ -157,6 +157,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
 
             var model = this.designerDbContext.CategoriesInstances
                 .Where(x => x.QuestionnaireId == questionnaireId && actualCategories.Contains(x.CategoriesId))
+                .OrderBy(x => x.SortIndex)
                 .Select(x => new CategoriesDto
                 {
                     CategoriesId = x.CategoriesId,

@@ -8,9 +8,10 @@ namespace WB.UI.Designer.Migrations.PlainStore
         public override void Up()
         {
             Create.Table("categories")
+                .WithColumn("id").AsInt32().PrimaryKey().Identity()
                 .WithColumn("questionnaireid").AsGuid()
                 .WithColumn("categoriesid").AsGuid()
-                .WithColumn("id").AsInt32().PrimaryKey().Identity()
+                .WithColumn("sortindex").AsInt32()
                 .WithColumn("value").AsInt32()
                 .WithColumn("parentid").AsInt32().Nullable()
                 .WithColumn("text").AsString();
