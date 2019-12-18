@@ -3,7 +3,7 @@ using WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAuditLog
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 
-namespace WB.UI.Headquarters.API.DataCollection
+namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
     public abstract class AuditLogControllerBase : ControllerBase
     {

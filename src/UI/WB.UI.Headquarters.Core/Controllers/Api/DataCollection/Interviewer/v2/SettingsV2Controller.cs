@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.UI.Headquarters.Models.CompanyLogo;
 
-namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
+namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
 {
     [Authorize(Roles = "Interviewer")]
     [Route("api/interviewer/v2")]
