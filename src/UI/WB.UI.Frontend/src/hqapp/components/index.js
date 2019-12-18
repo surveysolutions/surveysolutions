@@ -24,16 +24,16 @@ Vue.component("Checkbox", Checkbox)
 Vue.component("Radio", Radio)
 Vue.component("DatePicker", DatePicker)
 
-export default {
-    Confirm,
-    DataTables,
-    FilterBlock,
-    Filters,
-    HqLayout,
-    ModalFrame,
-    Typeahead,
-    TextInput,
-    Checkbox,
-    Radio,
-    DatePicker
-}
+// export default {
+//     Confirm,
+//     DataTables,
+//     FilterBlock,
+//     Filters,
+//     HqLayout,
+//     ModalFrame,
+//     Typeahead,
+//     TextInput,
+//     Checkbox,
+//     Radio,
+//     DatePicker
+// }

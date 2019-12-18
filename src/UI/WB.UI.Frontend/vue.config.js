@@ -20,8 +20,8 @@ const CleanupPlugin = require('clean-webpack-plugin').CleanWebpackPlugin;
 const pages = {
     hq: {
         entry: "src/hqapp/main.js",
-        filename: path.join(hqFolder, "Views", "Shared", "partial.hq.cshtml"),
-        template: "tools/template.ejs",
+        filename: path.join(hqFolder, "Views", "Shared", "_AdminLayout.cshtml"),
+        template: path.join(hqFolder, "Views", "Shared", "_AdminLayout.Template.cshtml"),
         assetsPath: "~/static/",
         locales: [
             "Details",
@@ -48,41 +48,52 @@ const pages = {
             "TabletLogs"
         ]
     },
-    webinterview: {
-        entry: "src/webinterview/main.js",
-        filename: path.join(
-            hqFolder,
-            "Views",
-            "Shared",
-            "partial.webinterview.cshtml"
-        ),
-        assetsPath: "~/static/",
-        template: "tools/template.ejs",
-        locales: ["WebInterviewUI", "WebInterview", "Common"]
-    },
-    webtester: {
-        entry: "src/webinterview/main.js",
-        filename: path.join(
-            uiFolder,
-            "WB.UI.WebTester",
-            "Views",
-            "Shared",
-            "partial.webtester.cshtml"
-        ),
-        template: "tools/template.ejs",
-        assetsPath: "~/Content/app/",
-        locales: ["WebInterviewUI", "WebInterview", "Common"]
-    }
+    // webinterview: {
+    //     entry: "src/webinterview/main.js",
+    //     filename: path.join(
+    //         hqFolder,
+    //         "Views",
+    //         "Shared",
+    //         "partial.webinterview.cshtml"
+    //     ),
+    //     assetsPath: "~/static/",
+    //     template: "tools/template.ejs",
+    //     locales: ["WebInterviewUI", "WebInterview", "Common"]
+    // },
+    // webtester: {
+    //     entry: "src/webinterview/main.js",
+    //     filename: path.join(
+    //         uiFolder,
+    //         "WB.UI.WebTester",
+    //         "Views",
+    //         "Shared",
+    //         "partial.webtester.cshtml"
+    //     ),
+    //     template: "tools/template.ejs",
+    //     assetsPath: "~/Content/app/",
+    //     locales: ["WebInterviewUI", "WebInterview", "Common"]
+    // },
+    // "hq_legacy": { entry: "src/hq_legacy/index.js" }
 };
 
+const fileTargets = [
+    { source: join("locale", ".resources", "**", "*.json"), destination: join("dist") },
+
+    { source: join("dist", "img", "*.*"), destination: path.join(hqFolder, "wwwroot", "img") },
+    { source: join("dist", "fonts", "*.*"), destination: path.join(hqFolder, "wwwroot", "fonts") },
+    { source: join("dist", "css", "*.*"), destination: path.join(hqFolder, "wwwroot", "css") },
+    { source: join("dist", "js", "*.*"), destination: path.join(hqFolder, "wwwroot", "js") },
+    { source: join("dist", "locale", "hq", "*.*"), destination: path.join(hqFolder, "wwwroot", "locale", "hq") },
+    { source: join("dist", "locale", "webinterview", "*.*"), destination: path.join(hqFolder, "wwwroot", "locale", "webinterview") },
+
+    { source: join("dist", "img", "*.*"), destination: path.join(webTesterFolder, "wwwroot", "img") },
+    { source: join("dist", "fonts", "*.*"), destination: path.join(webTesterFolder, "wwwroot", "fonts") },
+    { source: join("dist", "css", "*.*"), destination: path.join(webTesterFolder, "wwwroot", "css") },
+    { source: join("dist", "js", "*.*"), destination: path.join(webTesterFolder, "wwwroot", "js") },
+]
+
 module.exports = {
-    pages: Object.assign(pages, {
-        "hq_legacy": { entry: "src/hq_legacy/index.js" },
-        "markup": { entry: "src/assets/css/markup.scss" },
-        "markup-specific": { entry: "src/assets/css/markup-specific.scss", output: 'library '},
-        "markup-web-interview": { entry: "src/assets/css/markup-web-interview.scss" },
-        "markup-interview-review": { entry: "src/assets/css/markup-interview-review.scss" }
-    }),
+    pages,
 
     devServer: {
         contentBase: join("dist"),
@@ -100,6 +111,18 @@ module.exports = {
     ],
 
     chainWebpack: config => {
+        config.plugin("fileManager").use(FileManagerPlugin, [{
+            //verbose: true,
+            onEnd: { copy: fileTargets }
+        }]);
+
+        config.plugin('cleanup-dists').use(CleanupPlugin, [{
+            //  verbose: true,
+            dangerouslyAllowCleanPatternsOutsideProject: true,
+            dry: false,
+            cleanOnceBeforeBuildPatterns: fileTargets.map(target => target.destination)
+        }]);
+
         config.plugin("localization")
             .use(LocalizationPlugin, [{
                 patterns: [
@@ -111,30 +134,30 @@ module.exports = {
                 destination: "./locale/.resources"
             }])
 
-        config.plugin('stats')
-            .use(StatsPlugin, ['stats.json',
-                {
-                    chunks: true,
-                    assets: false,
-                    chunkModules: false,
-                    modules: false,
-                    children: false
-                }]);
+        // config.plugin('stats')
+        //     .use(StatsPlugin, ['stats.json',
+        //         {
+        //             chunks: true,
+        //             assets: false,
+        //             chunkModules: false,
+        //             modules: false,
+        //             children: false
+        //         }]);
 
-        config.merge({
-            optimization: {
-                splitChunks: {
-                    cacheGroups: {
-                        commons: {
-                            name: 'chunk-common',
-                            test: /[\\\/]node_modules[\\\/](autonumeric|moment)/,
-                            priority: 1,
-                            chunks: 'all'
-                        }
-                    }
-                }
-            }
-        });
+        // config.merge({
+        //     optimization: {
+        //         splitChunks: {
+        //             cacheGroups: {
+        //                 commons: {
+        //                     name: 'chunk-common',
+        //                     test: /[\\\/]node_modules[\\\/](autonumeric|moment)/,
+        //                     priority: 1,
+        //                     chunks: 'all'
+        //                 }
+        //             }
+        //         }
+        //     }
+        // });
 
         config.plugin("provide").use(webpack.ProvidePlugin, [{
             _: "lodash",
@@ -143,50 +166,11 @@ module.exports = {
             moment: "moment"
         }]);
 
-        config.plugin('cleanup-dists')
-            .use(CleanupPlugin, [{
-              //  verbose: true,
-                dangerouslyAllowCleanPatternsOutsideProject: true,
-                dry: false,
-                cleanOnceBeforeBuildPatterns: [
-                    path.join(hqFolder, 'Views', 'Shared', 'partial.*.cshtml'),
-                    path.join(hqFolder, 'wwwroot', 'static', '**', '*.*'),
-                    path.join(webTesterFolder, 'Views', 'Shared', 'partial.*.cshtml')]
-            }]);
 
         config.plugin("runtime").use(RuntimePublicPathPlugin, [{
             runtimePublicPath: "window.CONFIG.assetsPath"
         }]);
 
-        config.plugin("fileManager").use(FileManagerPlugin, [
-            {
-               // verbose: true,
-                onEnd: {
-                    copy: [
-                        {
-                            source: join("locale", ".resources", "**", "*.json"),
-                            destination: join("dist")
-                        },
-                        {
-                            source: join("dist", "img", "*.*"),
-                            destination: path.join(hqFolder, "wwwroot", "static", "img")
-                        },
-                        {
-                            source: join("dist", "fonts", "*.*"),
-                            destination: path.join(hqFolder, "wwwroot", "static", "fonts")
-                        },
-                        {
-                            source: join("dist", "js", "*.*"),
-                            destination: path.join(hqFolder, "wwwroot", "static", "js")
-                        },
-                        {
-                            source: join("dist", "css", "*.*"),
-                            destination: path.join(hqFolder, "wwwroot", "static", "css")
-                        }
-                    ]
-                }
-            }
-        ]);
 
         if (isHot) {
             config.plugin("writefile").use(WriteFilePlugin, [
@@ -212,42 +196,10 @@ module.exports = {
             .set("~", join("src"));
 
         Object.keys(pages).forEach(page => {
-
-            if (pages[page].filename == null) {
-                config.plugins.delete("html-" + page);
-                config.plugins.delete("prefetch-" + page);
-                config.plugins.delete("preload-" + page);
-            } else {
-                config.plugin("html-" + page).tap(args => {
-                    const options = args[0];
-
-                    const baseTempalateGenerator = options.templateParameters;
-
-                    options.templateParameters = function (compilation, assets, options) {
-                        const result = baseTempalateGenerator(compilation, assets, options)
-                        const localization = compilation.compiler.localization;
-                        const locales = localization.writeFiles(
-                            join("locale", ".resources"),
-                            path.join("locale", page),
-                            pages[page].locales
-                        );
-
-                        result.htmlWebpackPlugin.options.locales = {
-                            json: JSON.stringify(locales),
-                            dictionary: localization.getDictionaryDefinition(locales)
-                        };
-
-                        return result
-                    }
-
-                    options.page = page;
-                    options.isHot = isHot;
-                    options.assetsPath = pages[page].assetsPath || assetsPath;
-                    options.minify = false;
-                    options.inject = false;
-                    return args;
-                });
-            }
+            config.plugin("html-" + page).tap(args => {
+                args[0].minify = false
+                return args;
+            });
         });
     }
 };
