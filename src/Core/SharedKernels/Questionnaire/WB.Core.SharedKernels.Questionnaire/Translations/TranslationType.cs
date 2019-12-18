@@ -8,6 +8,7 @@
         Instruction = 3,
         OptionTitle = 4,
         FixedRosterTitle = 5,
-        SpecialValue = 6
+        SpecialValue = 6,
+        Categories = 7
     }
 }

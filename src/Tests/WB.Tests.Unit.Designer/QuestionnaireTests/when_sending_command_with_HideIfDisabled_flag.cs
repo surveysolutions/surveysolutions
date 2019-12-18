@@ -98,7 +98,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                     validationExpression: null,
                     validationMessage: null,
                     showAsList: false,
-                    showAsListThreshold: null));
+                    showAsListThreshold: null,
+                    categoriesId: null));
 
             questionnaire.UpdateTextQuestion(
                 new UpdateTextQuestion(questionnaire.Id,questionTextId, responsibleId,

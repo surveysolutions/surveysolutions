@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -14,7 +15,7 @@ namespace WB.Core.SharedKernels.DataCollection.Repositories
             Guid questionId, string optionText, int? parentQuestionValue, Translation translationId);
 
         CategoricalOption GetOptionForQuestionByOptionValue(IQuestionnaire questionnaire, 
-            Guid questionId, decimal optionValue, Translation translationId);
+            Guid questionId, decimal optionValue, int? parentQuestionValue, Translation translationId);
 
         IEnumerable<CategoricalOption> GetOptionsByOptionValues(IQuestionnaire questionnaire, Guid questionId,
             int[] optionsValues, Translation translation);

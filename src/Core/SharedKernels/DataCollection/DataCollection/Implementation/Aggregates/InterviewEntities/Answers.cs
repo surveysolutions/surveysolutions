@@ -162,7 +162,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return Value.GetHashCode();
         }
     }
-
+    
     [DebuggerDisplay("{ToString()}")]
 
     public class CategoricalFixedSingleOptionAnswer : AbstractAnswer
@@ -182,9 +182,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public override string ToString() => SelectedValue.ToString();
                 
-        public string GetAnswerAsText(IQuestionnaire questionnaire, Guid questionId)
+        public string GetAnswerAsText(IQuestionnaire questionnaire, Guid questionId, int? parentAnswer)
         {
-            return questionnaire.GetOptionForQuestionByOptionValue(questionId, SelectedValue).Title;
+            return questionnaire.GetOptionForQuestionByOptionValue(questionId, SelectedValue, parentAnswer).Title;
         }
 
         protected bool Equals(CategoricalFixedSingleOptionAnswer other)

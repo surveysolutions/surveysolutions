@@ -17,14 +17,14 @@ namespace WB.UI.Shared.Enumerator.Migrations
         private readonly IInterviewerQuestionnaireAccessor questionnaireRepository;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IOptionsRepository optionsRepository;
-        private readonly IPlainStorage<OptionView> optionsStorage;
+        private readonly IPlainStorage<OptionView, int?> optionsStorage;
         private readonly IPlainStorage<TranslationInstance> translationsStorage;
 
         public UpdateOptionsForMultiComboboxQuestions(
             IInterviewerQuestionnaireAccessor questionnaireRepository,
             IQuestionnaireStorage questionnaireStorage,
             IOptionsRepository optionsRepository,
-            IPlainStorage<OptionView> optionsStorage,
+            IPlainStorage<OptionView, int?> optionsStorage,
             IPlainStorage<TranslationInstance> translationsStorage)
         {
             this.questionnaireRepository = questionnaireRepository;

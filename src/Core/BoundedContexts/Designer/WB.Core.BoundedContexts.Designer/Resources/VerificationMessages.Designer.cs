@@ -1970,29 +1970,101 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Name of categories shouldn&apos;t be longer than {0} characters..
+        /// </summary>
+        public static string WB0289 {
+            get {
+                return ResourceManager.GetString("WB0289", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name of categories shouldn&apos;t end with underscore.
+        /// </summary>
+        public static string WB0290 {
+            get {
+                return ResourceManager.GetString("WB0290", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name of categories shouldn&apos;t have two and more consecutive underscore characters..
+        /// </summary>
+        public static string WB0291 {
+            get {
+                return ResourceManager.GetString("WB0291", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name of categories should not be empty..
+        /// </summary>
+        public static string WB0292 {
+            get {
+                return ResourceManager.GetString("WB0292", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name of categories cannot be a reserved word..
+        /// </summary>
+        public static string WB0293 {
+            get {
+                return ResourceManager.GetString("WB0293", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name of categories should contain only letters, digits and underscore character.
+        /// </summary>
+        public static string WB0294 {
+            get {
+                return ResourceManager.GetString("WB0294", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name of categories shouldn&apos;t start with digit or underscore.
+        /// </summary>
+        public static string WB0295 {
+            get {
+                return ResourceManager.GetString("WB0295", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questions have the same categories. Use reusable categories instead.
+        /// </summary>
+        public static string WB0296 {
+            get {
+                return ResourceManager.GetString("WB0296", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Matrix roster allows to use only simple categorical questions: combobox, cascading or yes/no modes are not allowed..
         /// </summary>
-        public static string WB0289_MatrixRosterContainsOnlyAllowedQuestionTypes {
+        public static string WB0297_MatrixRosterContainsOnlyAllowedQuestionTypes {
             get {
-                return ResourceManager.GetString("WB0289_MatrixRosterContainsOnlyAllowedQuestionTypes", resourceCulture);
+                return ResourceManager.GetString("WB0297_MatrixRosterContainsOnlyAllowedQuestionTypes", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Matrix mode allowed only for rosters with no more than {0} question(s)..
         /// </summary>
-        public static string WB0290_MatrixRosterAllowedOnlyForGroupWithNoMoreThanElements {
+        public static string WB0298_MatrixRosterAllowedOnlyForGroupWithNoMoreThanElements {
             get {
-                return ResourceManager.GetString("WB0290_MatrixRosterAllowedOnlyForGroupWithNoMoreThanElements", resourceCulture);
+                return ResourceManager.GetString("WB0298_MatrixRosterAllowedOnlyForGroupWithNoMoreThanElements", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Matrix roster has to contain no supervisor or identifying questions..
         /// </summary>
-        public static string WB0291_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions {
+        public static string WB0299_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions {
             get {
-                return ResourceManager.GetString("WB0291_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions", resourceCulture);
+                return ResourceManager.GetString("WB0299_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions", resourceCulture);
             }
         }
     }

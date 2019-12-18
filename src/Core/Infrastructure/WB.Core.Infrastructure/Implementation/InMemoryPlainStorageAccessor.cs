@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.Infrastructure.Implementation
@@ -8,7 +9,7 @@ namespace WB.Core.Infrastructure.Implementation
     public class InMemoryPlainStorageAccessor<TEntity> : IPlainStorageAccessor<TEntity>, IPlainKeyValueStorage<TEntity>
         where TEntity : class
     {
-        private readonly Dictionary<object,TEntity> inMemoryStorage = new Dictionary<object, TEntity>(); 
+        protected readonly Dictionary<object,TEntity> inMemoryStorage = new Dictionary<object, TEntity>(); 
 
         public TEntity GetById(object id)
         {
@@ -32,9 +33,15 @@ namespace WB.Core.Infrastructure.Implementation
             }
         }
 
+        public void Remove(Func<IQueryable<TEntity>, IQueryable<TEntity>> query)
+            => this.Remove(query.Invoke(this.inMemoryStorage.Values.AsQueryable()));
+
         public void Store(TEntity entity, object id)
         {
-            this.inMemoryStorage[id] = entity;
+            if (id != null && this.inMemoryStorage.ContainsKey(id))
+                this.inMemoryStorage[id] = entity;
+            else
+                this.inMemoryStorage.Add(id ?? this.inMemoryStorage.Count + 1, entity);
         }
 
         public void Store(IEnumerable<Tuple<TEntity, object>> entities)
@@ -44,6 +51,8 @@ namespace WB.Core.Infrastructure.Implementation
                 this.Store(entity.Item1,entity.Item2);
             }
         }
+
+        public void Store(IEnumerable<TEntity> entities) => entities.ForEach(x => this.Store(x, x));
 
         public void Flush()
         {
