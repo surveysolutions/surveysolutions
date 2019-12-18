@@ -86,6 +86,7 @@ using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAuditLog;
 using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Utils;
 
@@ -268,6 +269,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<ISystemLog, SystemLog>();
             registry.Bind<IUserToDeviceService, UserToDeviceService>();
             registry.Bind<IAuditLogReader, AuditLogReader>();
+            registry.Bind<IEncryptionService, RsaEncryptionService>();
 
             registry.BindAsSingleton<IPauseResumeQueue, PauseResumeQueue>();
             registry.Bind<IAuditLogFactory, AuditLogFactory>();

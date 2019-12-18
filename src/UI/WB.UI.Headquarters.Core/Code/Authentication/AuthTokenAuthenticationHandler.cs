@@ -16,7 +16,6 @@ namespace WB.UI.Headquarters.Code
 {
     public class AuthTokenAuthenticationHandler : AuthenticationHandler<AuthTokenAuthenticationSchemeOptions>
     {
-        private readonly SignInManager<HqUser> signInManager;
         private readonly IUserRepository userRepository;
         private readonly IApiTokenProvider authTokenProvider;
 
@@ -24,11 +23,9 @@ namespace WB.UI.Headquarters.Code
             ILoggerFactory logger,
             UrlEncoder encoder, 
             ISystemClock clock,
-            SignInManager<HqUser> signInManager,
             IUserRepository userRepository,
             IApiTokenProvider authTokenProvider) : base(options, logger, encoder, clock)
         {
-            this.signInManager = signInManager;
             this.userRepository = userRepository;
             this.authTokenProvider = authTokenProvider;
         }
@@ -44,23 +41,29 @@ namespace WB.UI.Headquarters.Code
             }
             catch (Exception e)
             {
-                return AuthenticateResult.Fail(e.Message);
+                Logger.Log(LogLevel.Information, e, "failed to authorize");
+                return AuthenticateResult.NoResult();
             }
 
             var user = await userRepository.FindByNameAsync(creds.Username);
             var verificationResult = await authTokenProvider.ValidateTokenAsync(user.Id, creds.Password);
             if (verificationResult)
             {
-                await this.signInManager.SignInAsync(user, false, "AuthToken");
                 var claims = new ClaimsIdentity(new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, user.UserName),
                     new Claim(ClaimTypes.NameIdentifier, user.Id.FormatGuid())
                 });
-                return AuthenticateResult.Success(new AuthenticationTicket(new ClaimsPrincipal(claims), "AuthToken"));
+
+                foreach (var userRole in user.Roles)
+                {
+                    claims.AddClaim(new Claim(ClaimTypes.Role, userRole.Name));
+                }
+
+                return AuthenticateResult.Success(new AuthenticationTicket(new ClaimsPrincipal(claims), Scheme.Name));
             }
 
-            return AuthenticateResult.NoResult();
+            return AuthenticateResult.Fail("Invalid auth token");
         }
     }
 }
