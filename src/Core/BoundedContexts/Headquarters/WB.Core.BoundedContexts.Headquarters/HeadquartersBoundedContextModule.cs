@@ -89,6 +89,7 @@ using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.Synchronization.MetaInfo;
 
 namespace WB.Core.BoundedContexts.Headquarters
 {   
@@ -270,6 +271,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IUserToDeviceService, UserToDeviceService>();
             registry.Bind<IAuditLogReader, AuditLogReader>();
             registry.Bind<IEncryptionService, RsaEncryptionService>();
+            registry.Bind<IMetaInfoBuilder, MetaInfoBuilder>();
 
             registry.BindAsSingleton<IPauseResumeQueue, PauseResumeQueue>();
             registry.Bind<IAuditLogFactory, AuditLogFactory>();

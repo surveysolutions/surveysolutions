@@ -2,9 +2,8 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
+using System.Security.Claims;
 using System.Threading.Tasks;
-using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -21,11 +20,14 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
+using WB.UI.Headquarters.API;
+using WB.UI.Headquarters.API.DataCollection;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Services;
 
-namespace WB.UI.Headquarters.API.DataCollection.Interviewer
+namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
 {
+    [Route("api/interviewer")]
     public class InterviewerApiController : AppApiControllerBase
     {
         protected readonly ITabletInformationService tabletInformationService;
@@ -35,10 +37,9 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
         private readonly IProductVersion productVersion;
         private readonly IAssignmentsService assignmentsService;
         private readonly IClientApkProvider clientApkProvider;
-        private readonly SignInManager<HqUser> signInManager;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IInterviewInformationFactory interviewFactory;
-        private IUserToDeviceService userToDeviceService;
+        private readonly IUserToDeviceService userToDeviceService;
         
         public enum ClientVersionFromUserAgent
         {
@@ -52,7 +53,6 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
             IInterviewerSyncProtocolVersionProvider syncVersionProvider,
             IAuthorizedUser authorizedUser,
             IProductVersion productVersion,
-            SignInManager<HqUser> signInManager,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IInterviewInformationFactory interviewFactory,
             IAssignmentsService assignmentsService,
@@ -67,111 +67,110 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
             this.syncVersionProvider = syncVersionProvider;
             this.authorizedUser = authorizedUser;
             this.productVersion = productVersion;
-            this.signInManager = signInManager;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.interviewFactory = interviewFactory;
             this.assignmentsService = assignmentsService;
             this.clientApkProvider = clientApkProvider;
             this.userToDeviceService = userToDeviceService;
         }
-        
-        //[HttpGet]
-        //public virtual IActionResult Get()
-        //{
-        //    var clientVersion = GetClientVersionFromUserAgent(this.Request);
-        //    if (clientVersion == ClientVersionFromUserAgent.WithMaps)
-        //        return this.clientApkProvider.GetApkAsHttpResponse(Request, ClientApkInfo.InterviewerExtendedFileName, ClientApkInfo.InterviewerResponseFileName);
 
-        //    return this.clientApkProvider.GetApkAsHttpResponse(Request, ClientApkInfo.InterviewerFileName, ClientApkInfo.InterviewerResponseFileName);
-        //}
-        
-        //[HttpGet]
-        //public virtual IActionResult GetExtended()
-        //{
-        //    var clientVersion = GetClientVersionFromUserAgent(this.Request);
-        //    if (clientVersion == ClientVersionFromUserAgent.WithoutMaps)
-        //        return this.clientApkProvider.GetApkAsHttpResponse(Request, ClientApkInfo.InterviewerFileName, ClientApkInfo.InterviewerResponseFileName);
+        [HttpGet]
+        [Route("")]
+        public virtual IActionResult Get()
+        {
+            var clientVersion = GetClientVersionFromUserAgent(this.Request);
+            if (clientVersion == ClientVersionFromUserAgent.WithMaps)
+                return this.clientApkProvider.GetApkAsHttpResponse(Request, ClientApkInfo.InterviewerExtendedFileName, ClientApkInfo.InterviewerResponseFileName);
 
-        //    return this.clientApkProvider.GetApkAsHttpResponse(Request, ClientApkInfo.InterviewerExtendedFileName, ClientApkInfo.InterviewerResponseFileName);
-        //}
+            return this.clientApkProvider.GetApkAsHttpResponse(Request, ClientApkInfo.InterviewerFileName, ClientApkInfo.InterviewerResponseFileName);
+        }
 
-        //[HttpGet]
-        //public virtual IActionResult Patch(int deviceVersion)
-        //{            
-        //    var clientVersion = GetClientVersionFromUserAgent(this.Request);
-        //    if(clientVersion == ClientVersionFromUserAgent.WithMaps)
-        //        return this.clientApkProvider.GetPatchFileAsHttpResponse(Request, $@"WBCapi.{deviceVersion}.Ext.delta");
+        [HttpGet]
+        [Route("extended")]
+        public virtual IActionResult GetExtended()
+        {
+            var clientVersion = GetClientVersionFromUserAgent(this.Request);
+            if (clientVersion == ClientVersionFromUserAgent.WithoutMaps)
+                return this.clientApkProvider.GetApkAsHttpResponse(Request, ClientApkInfo.InterviewerFileName, ClientApkInfo.InterviewerResponseFileName);
 
-        //    return this.clientApkProvider.GetPatchFileAsHttpResponse(Request, $@"WBCapi.{deviceVersion}.delta");
-        //}
+            return this.clientApkProvider.GetApkAsHttpResponse(Request, ClientApkInfo.InterviewerExtendedFileName, ClientApkInfo.InterviewerResponseFileName);
+        }
 
-        //[HttpGet]
-        //public virtual IActionResult PatchExtended(int deviceVersion)
-        //{
-        //    var clientVersion = GetClientVersionFromUserAgent(this.Request);
-        //    if (clientVersion == ClientVersionFromUserAgent.WithoutMaps)
-        //        return this.clientApkProvider.GetPatchFileAsHttpResponse(Request, $@"WBCapi.{deviceVersion}.delta");
+        [HttpGet]
+        [Route("patch/{deviceVersion:int}")]
+        public virtual IActionResult Patch(int deviceVersion)
+        {
+            var clientVersion = GetClientVersionFromUserAgent(this.Request);
+            if (clientVersion == ClientVersionFromUserAgent.WithMaps)
+                return this.clientApkProvider.GetPatchFileAsHttpResponse(Request, $@"WBCapi.{deviceVersion}.Ext.delta");
 
-        //    return this.clientApkProvider.GetPatchFileAsHttpResponse(Request, $@"WBCapi.{deviceVersion}.Ext.delta");
-        //}
-      
-        //[HttpGet]
-        //public virtual int? GetLatestVersion()
-        //{
-        //    var clientVersion = GetClientVersionFromUserAgent(this.Request);
-        //    if (clientVersion == ClientVersionFromUserAgent.WithMaps)
-        //        return this.clientApkProvider.GetLatestVersion(ClientApkInfo.InterviewerExtendedFileName);
+            return this.clientApkProvider.GetPatchFileAsHttpResponse(Request, $@"WBCapi.{deviceVersion}.delta");
+        }
 
-        //    return this.clientApkProvider.GetLatestVersion(ClientApkInfo.InterviewerFileName);
-        //}
+        [HttpGet]
+        [Route("extended/patch/{deviceVersion:int}")]
+        public virtual IActionResult PatchExtended(int deviceVersion)
+        {
+            var clientVersion = GetClientVersionFromUserAgent(this.Request);
+            if (clientVersion == ClientVersionFromUserAgent.WithoutMaps)
+                return this.clientApkProvider.GetPatchFileAsHttpResponse(Request, $@"WBCapi.{deviceVersion}.delta");
 
-        //[HttpGet]
-        //public virtual int? GetLatestExtendedVersion()
-        //{
-        //    var clientVersion = GetClientVersionFromUserAgent(this.Request);
-        //    if (clientVersion == ClientVersionFromUserAgent.WithoutMaps)
-        //        return this.clientApkProvider.GetLatestVersion(ClientApkInfo.InterviewerFileName);
+            return this.clientApkProvider.GetPatchFileAsHttpResponse(Request, $@"WBCapi.{deviceVersion}.Ext.delta");
+        }
 
-        //    return this.clientApkProvider.GetLatestVersion(ClientApkInfo.InterviewerExtendedFileName);
-        //}
+        [HttpGet]
+        [Route("latestversion")]
+        public virtual ActionResult<int?> GetLatestVersion()
+        {
+            var clientVersion = GetClientVersionFromUserAgent(this.Request);
+            if (clientVersion == ClientVersionFromUserAgent.WithMaps)
+                return this.clientApkProvider.GetLatestVersion(ClientApkInfo.InterviewerExtendedFileName);
 
-        //[HttpPost]
-        //public virtual async Task<IActionResult> PostTabletInformation(IFormFile formFile)
-        //{
-        //    if (formFile == null)
-        //    {
-        //        return StatusCode(StatusCodes.Status415UnsupportedMediaType);
-        //    }
+            return Ok(this.clientApkProvider.GetLatestVersion(ClientApkInfo.InterviewerFileName));
+        }
 
-        //    if (Request.Headers.ContainsKey(HeaderNames.Authorization))
-        //    {
-        //        var authHeader = Request.Headers[HeaderNames.Authorization].ToString();
+        [HttpGet]
+        [Route("extended/latestversion")]
+        public virtual ActionResult<int?> GetLatestExtendedVersion()
+        {
+            var clientVersion = GetClientVersionFromUserAgent(this.Request);
+            if (clientVersion == ClientVersionFromUserAgent.WithoutMaps)
+                return this.clientApkProvider.GetLatestVersion(ClientApkInfo.InterviewerFileName);
 
-        //        await signInManager.SignInWithAuthTokenAsync(authHeader, false, UserRoles.Interviewer);
-        //    }
+            return Ok(this.clientApkProvider.GetLatestVersion(ClientApkInfo.InterviewerExtendedFileName));
+        }
 
-        //    var formData = new MemoryStream();
-        //    await formFile.CopyToAsync(formData);
+        [HttpPost]
+        [Route("v2/tabletInfo")]
+        public virtual async Task<IActionResult> PostTabletInformation(IFormFile formFile)
+        {
+            if (formFile == null)
+            {
+                return StatusCode(StatusCodes.Status415UnsupportedMediaType);
+            }
 
-        //    var deviceId = this.Request.Headers["DeviceId"].Single();
+            var formData = new MemoryStream();
+            await formFile.CopyToAsync(formData);
 
-        //    var userId = User.Identity.GetUserId();
+            var deviceId = this.Request.Headers["DeviceId"].Single();
 
-        //    var user = userId != null
-        //        ? this.userViewFactory.GetUser(new UserViewInputModel(Guid.Parse(userId)))
-        //        : null;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        //    this.tabletInformationService.SaveTabletInformation(
-        //        content: formData.ToArray(),
-        //        androidId: deviceId,
-        //        user: user);
+            var user = userId != null
+                ? this.userViewFactory.GetUser(new UserViewInputModel(Guid.Parse(userId)))
+                : null;
 
-        //    return Ok();
-        //}
+            this.tabletInformationService.SaveTabletInformation(
+                content: formData.ToArray(),
+                androidId: deviceId,
+                user: user);
+
+            return Ok();
+        }
 
         [Authorize(Roles = "Interviewer")]
         [HttpGet]
-        [Route("api/interviewer/compatibility/{deviceid}/{deviceSyncProtocolVersion}")]
+        [Route("compatibility/{deviceid}/{deviceSyncProtocolVersion}")]
         public virtual IActionResult CheckCompatibility(string deviceId, int deviceSyncProtocolVersion, string tenantId = null)
         {
             int serverSyncProtocolVersion = this.syncVersionProvider.GetProtocolVersion();
@@ -251,20 +250,22 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
                 : new JsonResult("449634775");
         }
 
-        //private ClientVersionFromUserAgent GetClientVersionFromUserAgent(HttpRequest request)
-        //{
-        //    if (request.Headers?.UserAgent != null)
-        //    {
-        //        foreach (var product in request.Headers?.UserAgent)
-        //        {
-        //            if (product.Product?.Name.Equals(@"maps",StringComparison.OrdinalIgnoreCase)??false)
-        //            {
-        //                return ClientVersionFromUserAgent.WithMaps;
-        //            }
-        //        }
-        //        return ClientVersionFromUserAgent.WithoutMaps;
-        //    }
-        //    return ClientVersionFromUserAgent.Unknown;
-        //}
+        private ClientVersionFromUserAgent GetClientVersionFromUserAgent(HttpRequest request)
+        {
+            if (request.Headers.ContainsKey(HeaderNames.UserAgent))
+            {
+                foreach (var product in request.Headers[HeaderNames.UserAgent])
+                {
+                    if(product.Contains("maps",StringComparison.OrdinalIgnoreCase))
+                    {
+                        return ClientVersionFromUserAgent.WithMaps;
+                    }
+                }
+
+                return ClientVersionFromUserAgent.WithoutMaps;
+            }
+
+            return ClientVersionFromUserAgent.Unknown;
+        }
     }
 }
