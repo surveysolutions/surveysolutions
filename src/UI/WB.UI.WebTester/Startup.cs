@@ -57,7 +57,6 @@ namespace WB.UI.WebTester
             services.AddHealthChecks()
                 .AddCheck<DesignerConnectionCheck>("designer-connection");
 
-            services.UseSharedWeb();
         }
 
         // ConfigureContainer is where you can register things directly
