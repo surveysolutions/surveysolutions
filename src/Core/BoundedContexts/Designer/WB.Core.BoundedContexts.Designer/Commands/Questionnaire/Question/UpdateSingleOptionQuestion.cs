@@ -26,7 +26,8 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             List<ValidationCondition> validationConditions,
             string linkedFilterExpression,
             bool showAsList,
-            int? showAsListThreshold)
+            int? showAsListThreshold,
+            Guid? categoriesId)
             : base(
                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, 
                 commonQuestionParameters: commonQuestionParameters,
@@ -43,6 +44,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             this.CascadeFromQuestionId = cascadeFromQuestionId;
             this.ShowAsList = showAsList;
             this.ShowAsListThreshold = showAsListThreshold;
+            this.CategoriesId = categoriesId;
         }
 
         public int? ShowAsListThreshold { get; set; }
@@ -62,5 +64,6 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
         public string LinkedFilterExpression { get; set; }
 
         public Option[] Options { get; set; }
+        public Guid? CategoriesId { get; set; }
     }
 }

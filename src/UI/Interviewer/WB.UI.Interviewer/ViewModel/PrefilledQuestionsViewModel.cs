@@ -101,7 +101,7 @@ namespace WB.UI.Interviewer.ViewModel
             var interviewId = Guid.Parse(InterviewId);
             
             if (IsAudioRecordingEnabled == true)
-                Task.Run(() => audioAuditService.StopAudioRecordingAsync(interviewId));
+                audioAuditService.StopAudioRecording(interviewId);
 
             base.ViewDisappearing();
         }

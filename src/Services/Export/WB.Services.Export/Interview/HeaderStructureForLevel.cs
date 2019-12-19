@@ -14,15 +14,18 @@ namespace WB.Services.Export.Interview
         public bool IsTextListScope { get; set; }
 
         public IDictionary<Guid, IExportedHeaderItem> HeaderItems { get; set; }
-        
+        public IDictionary<Guid, ReusableLabels> ReusableLabels { get; set; }
+
         public HeaderStructureForLevel()
         {
             this.HeaderItems = new Dictionary<Guid, IExportedHeaderItem>();
+            this.ReusableLabels = new Dictionary<Guid, ReusableLabels>();
         }
+    }
 
-        public bool ContainsQuestion(Guid questionId)
-        {
-            return this.HeaderItems.ContainsKey(questionId);
-        }
+    public class ReusableLabels
+    {
+        public string Name { get; set; }
+        public LabelItem[] Labels { get; set; }
     }
 }

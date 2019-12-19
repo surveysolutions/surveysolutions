@@ -59,6 +59,20 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             public List<ValidationCondition> ValidationConditions { get; set; }
         }
 
+        public class Categories
+        {
+            public Guid Id { get; set; }
+            public string Name { get; set; }
+            public List<CategoriesItem> Items { get; set; }
+        }
+
+        public class CategoriesItem
+        {
+            public int Id { get; set; }
+            public int? ParentId { get; set; }
+            public string Text { get; set; }
+        }
+
         private readonly QuestionnaireDocument questionnaire;
         public PdfSettings Settings { get; }
 
@@ -89,6 +103,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public List<EntityWithLongCondition> ItemsWithLongConditions { get; internal set; }
 
         public List<IVariable> VariableWithLongExpressions { get; internal set; }
+
+        public List<Categories> CategoriesList { get; internal set; }
 
         public string Title => this.questionnaire.Title;
         public QuestionnaireMetaInfo Metadata { get; internal set; } 
