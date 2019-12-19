@@ -17,63 +17,58 @@ const webTesterFolder = path.join(uiFolder, "WB.UI.WebTester");
 const StatsPlugin = require('stats-webpack-plugin')
 const CleanupPlugin = require('clean-webpack-plugin').CleanWebpackPlugin;
 
+
+const locales = {
+    hq: ["Assignments", "Common", "Dashboard", "DataExport", "DataTables",
+        "Details", "DevicesInterviewers", "Interviews", "MainMenu", "MapReport",
+        "Pages", "Report", "Settings", "Strings", "TabletLogs", "UploadUsers",
+        "Users", "WebInterview", "WebInterviewSettings", "WebInterviewSetup", "WebInterviewUI"],
+    webtester: ["WebInterviewUI", "WebInterview", "Common"],
+    webinterview: ["WebInterviewUI", "WebInterview", "Common"]
+}
+
 const pages = {
-    hq: {
+
+    finishInstallation: {
+        entry: "src/pages/finishInstallation.js",
+        filename: path.join(hqFolder, "Views", "Shared", "_FinishInstallation.cshtml"),
+        template: path.join(hqFolder, "Views", "Shared", "_FinishInstallation.Template.cshtml"),
+        locales: null
+    },
+
+    hq_legacy: {
+        entry: "src/pages/hq_legacy.js",
+        filename: path.join(hqFolder, "Views", "Shared", "_AdminLayout_Legacy.cshtml"),
+        template: path.join(hqFolder, "Views", "Shared", "_AdminLayout_Legacy.Template.cshtml"),
+        locales: null
+    },
+
+    logon: {
+        entry: "src/pages/logon.js",
+        filename: path.join(hqFolder, "Views", "Shared", "_Logon.cshtml"),
+        template: path.join(hqFolder, "Views", "Shared", "_Logon.Template.cshtml"),
+        locales: null
+    },
+
+    hq_vue: {
         entry: "src/hqapp/main.js",
         filename: path.join(hqFolder, "Views", "Shared", "_AdminLayout.cshtml"),
         template: path.join(hqFolder, "Views", "Shared", "_AdminLayout.Template.cshtml"),
-        assetsPath: "~/static/",
-        locales: [
-            "Details",
-            "Pages",
-            "WebInterviewUI",
-            "WebInterview",
-            "DataTables",
-            "Common",
-            "Users",
-            "Interviews",
-            "Assignments",
-            "Strings",
-            "Report",
-            "Reports",
-            "DevicesInterviewers",
-            "UploadUsers",
-            "MainMenu",
-            "WebInterviewSetup",
-            "WebInterviewSettings",
-            "MapReport",
-            "Settings",
-            "DataExport",
-            "Dashboard",
-            "TabletLogs"
-        ]
+        locales: "hq"
     },
-    // webinterview: {
-    //     entry: "src/webinterview/main.js",
-    //     filename: path.join(
-    //         hqFolder,
-    //         "Views",
-    //         "Shared",
-    //         "partial.webinterview.cshtml"
-    //     ),
-    //     assetsPath: "~/static/",
-    //     template: "tools/template.ejs",
-    //     locales: ["WebInterviewUI", "WebInterview", "Common"]
-    // },
-    // webtester: {
-    //     entry: "src/webinterview/main.js",
-    //     filename: path.join(
-    //         uiFolder,
-    //         "WB.UI.WebTester",
-    //         "Views",
-    //         "Shared",
-    //         "partial.webtester.cshtml"
-    //     ),
-    //     template: "tools/template.ejs",
-    //     assetsPath: "~/Content/app/",
-    //     locales: ["WebInterviewUI", "WebInterview", "Common"]
-    // },
-    // "hq_legacy": { entry: "src/hq_legacy/index.js" }
+
+    webinterview: {
+        entry: "src/webinterview/main.js",
+        filename: path.join(hqFolder, "Views", "Shared", "_WebInterview.cshtml"),
+        template: path.join(hqFolder, "Views", "Shared", "_WebInterview.Template.cshtml"),
+        locales: locales.webinterview
+    },
+    webtester: {
+        entry: "src/webinterview/main.js",
+        filename: path.join(webTesterFolder, "Views", "Shared", "_Layout.cshtml"),
+        template: path.join(webTesterFolder, "Views", "Shared", "_Layout.Template.cshtml"),
+        locales: "webtester"
+    }
 };
 
 const fileTargets = [
