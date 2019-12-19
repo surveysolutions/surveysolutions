@@ -236,7 +236,7 @@ namespace WB.Services.Export.Tests
                 YesNoView = yesNoView,
                 AreAnswersOrdered = areAnswersOrdered,
                 IsFilteredCombobox = isFilteredCombobox,
-                MaxAllowedAnswers = maxAnswersCount
+                MaxAllowedAnswers = maxAnswersCount,
                 CategoriesId = categoryId,
                 VariableLabel = variableLabel,
                 QuestionText = questionText,

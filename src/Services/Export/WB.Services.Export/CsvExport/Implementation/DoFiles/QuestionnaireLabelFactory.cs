@@ -58,25 +58,25 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
                 {
                     DataExportValue value = null;
 
-                    var variableLabel = headerColumn.Title?.RemoveHtmlTags() ?? string.Empty;
 
                     if (labelReferenceId.HasValue && !isMultiOptionQuestion)
                     {
                         var labels = level.ReusableLabels.First(l => l.Key == labelReferenceId.Value).Value;
-                        value = new DataExportValue(labels.Name?.RemoveHtmlTags() ?? string.Empty, labelReferenceId.Value);
+                        value = new DataExportValue(labels.Name, labelReferenceId.Value);
                     }
                     else if (hasLabels)
                     {
                         var variableValueLabel = ((ExportedQuestionHeaderItem)headerItem).Labels
                             .Select(label => new VariableValueLabel(label.Caption, label.Title?.RemoveHtmlTags() ?? string.Empty))
                             .ToArray();
-                        value = new DataExportValue(variableLabel, headerItem.PublicKey, variableValueLabel);
+                        value = new DataExportValue(headerColumn.Name, headerItem.PublicKey, variableValueLabel);
                     }
                     else
                     {
-                        value = new DataExportValue(variableLabel, headerItem.PublicKey, Array.Empty<VariableValueLabel>());
+                        value = new DataExportValue(headerColumn.Name, headerItem.PublicKey, Array.Empty<VariableValueLabel>());
                     }
 
+                    var variableLabel = headerColumn.Title?.RemoveHtmlTags() ?? string.Empty;
                     variableLabels.Add(new DataExportVariable(headerColumn.Name, variableLabel, headerItem.PublicKey, headerColumn.ExportType, value));
                 }
             }
