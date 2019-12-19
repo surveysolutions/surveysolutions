@@ -61,6 +61,42 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enumerator&apos;s Profile editing.
+        /// </summary>
+        internal static string AllowInterviewerUpdateProfile {
+            get {
+                return ResourceManager.GetString("AllowInterviewerUpdateProfile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allow enumerators update their contact information in the profile.
+        /// </summary>
+        internal static string AllowInterviewerUpdateProfileDesc {
+            get {
+                return ResourceManager.GetString("AllowInterviewerUpdateProfileDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Web Interview Email Notifications.
+        /// </summary>
+        internal static string AllowWebInterviewEmailNotifications {
+            get {
+                return ResourceManager.GetString("AllowWebInterviewEmailNotifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allow Web Interview respondent to send emails (effective if mail provider was set up).
+        /// </summary>
+        internal static string AllowWebInterviewEmailNotificationsDesc {
+            get {
+                return ResourceManager.GetString("AllowWebInterviewEmailNotificationsDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to If checked then only latest version of Interviewer/Supervisor application can synchronize with Headquarters.
         /// </summary>
         internal static string AutoUpdateDescription {
@@ -102,24 +138,6 @@ namespace Resources {
         internal static string DeviceNotificationsDescription {
             get {
                 return ResourceManager.GetString("DeviceNotificationsDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Enumerator&apos;s Profile editing.
-        /// </summary>
-        internal static string AllowInterviewerUpdateProfile {
-            get {
-                return ResourceManager.GetString("AllowInterviewerUpdateProfile", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Allow enumerators update their contact information in the profile.
-        /// </summary>
-        internal static string AllowInterviewerUpdateProfileDesc {
-            get {
-                return ResourceManager.GetString("AllowInterviewerUpdateProfileDesc", resourceCulture);
             }
         }
         
@@ -615,6 +633,15 @@ namespace Resources {
         internal static string UserProfileSettings_Title {
             get {
                 return ResourceManager.GetString("UserProfileSettings_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Web interview Settings.
+        /// </summary>
+        internal static string WebInterviewEmailNotifications_Title {
+            get {
+                return ResourceManager.GetString("WebInterviewEmailNotifications_Title", resourceCulture);
             }
         }
     }
