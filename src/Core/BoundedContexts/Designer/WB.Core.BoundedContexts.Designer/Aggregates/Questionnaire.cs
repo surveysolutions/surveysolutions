@@ -191,11 +191,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
 
             foreach (var categories in clonedDocument.Categories)
-            {
-                var newCategoriesId = Guid.NewGuid();
-                this.categoriesService.CloneCategories(document.PublicKey, categories.Id, clonedDocument.PublicKey, newCategoriesId);
-                categories.Id = newCategoriesId;
-            }
+                this.categoriesService.CloneCategories(document.PublicKey, categories.Id, clonedDocument.PublicKey, categories.Id);
 
             this.innerDocument = clonedDocument;
         }
@@ -906,7 +902,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 linkedFilterExpression: null,
                 isTimestamp: false,
                 showAsList:null,
-                showAsListThreshold: null);
+                showAsListThreshold: null,
+                categoriesId: null);
 
             this.innerDocument.Add(question, command.ParentGroupId);
             
@@ -983,6 +980,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         false,
                         null,
+                        null,
                         null);
 
             this.innerDocument.ReplaceEntity(question, newQuestion);
@@ -1027,6 +1025,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         false,
                         null,
+                        null,
                         null);
 
             this.innerDocument.ReplaceEntity(question, newQuestion);
@@ -1069,6 +1068,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 command.ValidationConditions,
                 null,
                 command.IsTimestamp,
+                null,
                 null,
                 null);
 
@@ -1252,7 +1252,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 null,
                 false,
                 null,
-                null);
+                null,
+                categoricalQuestion.CategoriesId);
 
             this.innerDocument.ReplaceEntity(categoricalQuestion, newQuestion);
         }
@@ -1289,7 +1290,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 null,
                 false,
                 null,
-                null);
+                null,
+                categoricalOneAnswerQuestion.CategoriesId);
 
             this.innerDocument.ReplaceEntity(categoricalOneAnswerQuestion, newQuestion);
         }
@@ -1328,7 +1330,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 null,
                 false,
                 categoricalOneAnswerQuestion.ShowAsList,
-                categoricalOneAnswerQuestion.ShowAsListThreshold);
+                categoricalOneAnswerQuestion.ShowAsListThreshold,
+                categoricalOneAnswerQuestion.CategoriesId);
 
             this.innerDocument.ReplaceEntity(question, newQuestion);
         }
@@ -1381,6 +1384,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 command.ValidationConditions,
                 null,
                 false,
+                null,
                 null,
                 null);
 
@@ -1490,6 +1494,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     null,
                     false,
                     null,
+                    null,
                     null);
 
             if (question != null)
@@ -1545,6 +1550,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 new List<ValidationCondition>(),
                 null,
                 false,
+                null,
                 null,
                 null);
 
@@ -1602,6 +1608,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 null,
                 false,
                 null,
+                null,
                 null);
             newQuestion.IsSignature = command.IsSignature;
             if (question != null)
@@ -1645,6 +1652,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     command.ValidationConditions,
                     null,
                     false,
+                    null,
                     null,
                     null);
 
