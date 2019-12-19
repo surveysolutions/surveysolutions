@@ -50,7 +50,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 var hqUser = new HqUser
                 {
-                    Id = Guid.Parse(@"00000000000000000000000000000001"),
+                    Id = Guid.Parse(@"00000000000040000000000000000001"),
                     FullName = @"Administrator",
                     UserName = model.UserName,
                     Email = model.Email

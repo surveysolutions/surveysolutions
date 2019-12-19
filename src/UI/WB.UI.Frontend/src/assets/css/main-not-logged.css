@@ -1,0 +1,38 @@
+﻿/*Clickjacking protection*/
+
+html, body, #container { height: 100%; }
+body > #container { height: auto; min-height: 100%; }
+
+#content { padding-bottom: 6em; }
+
+.form-signin {
+    max-width: 650px;
+    margin: 140px auto 20px;
+}
+
+.form-actions {
+    margin-top: 20px;
+    margin-bottom: 0px;
+}
+
+.form-horizontal .form-actions {
+    padding-left: 30px;
+}
+
+/* Sticky footer style
+-------------------------------------------------- */
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 100px;
+}
+
+#footer {
+ clear: both;
+ position: relative;
+ z-index: 10;
+ height: 3em;
+ margin-top: -6em;
+}
