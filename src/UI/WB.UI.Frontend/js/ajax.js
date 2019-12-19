@@ -150,7 +150,7 @@ var Ajax = function (notifier) {
         }
 
         var requestHeaders = {};
-        requestHeaders[input.settings.acsrf.tokenName] = input.settings.acsrf.token;
+        //requestHeaders[input.settings.acsrf.tokenName] = input.settings.acsrf.token;
 
         return $.ajax({
             url: requestUrl,

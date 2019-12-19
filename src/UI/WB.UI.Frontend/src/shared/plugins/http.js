@@ -4,7 +4,8 @@ import axios from "axios"
 export default {
     install: function (vue) {
         /*  determine options  */
-        axios.defaults.headers.common[global.input.settings.acsrf.tokenName] = global.input.settings.acsrf.token;
+        
+        //axios.defaults.headers.common[global.input.settings.acsrf.tokenName] = global.input.settings.acsrf.token;
 
         // /*  expose a global API method  */
         Object.defineProperty(vue, '$http', {

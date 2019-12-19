@@ -167,12 +167,12 @@ module.exports = {
         //}
         //});
 
-        config.plugin("provide").use(webpack.ProvidePlugin, [{
-            _: "lodash",
-            $: "jquery",
-            jQuery: "jquery",
-            moment: "moment"
-        }]);
+         config.plugin("provide").use(webpack.ProvidePlugin, [{
+        //     _: "lodash",
+             $: "jquery",
+             jQuery: "jquery",
+        //     moment: "moment"
+         }]);
 
 
         config.plugin("runtime").use(RuntimePublicPathPlugin, [{

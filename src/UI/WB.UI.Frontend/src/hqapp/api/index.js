@@ -51,8 +51,8 @@ class MapsReport {
         this.http = http
     }
 
-    async GpsQuestionsByQuestionnaire(questionnaireId, version){ 
-        return await this.http.get(`api/ReportDataApi/QuestionInfo/${questionnaireId}?version=${version}`)
+    GpsQuestionsByQuestionnaire(questionnaireId, version){ 
+        return this.http.get(`api/ReportDataApi/QuestionInfo/${questionnaireId}?version=${version}`)
     }
 
     async Report(request) {
