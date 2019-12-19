@@ -6,11 +6,11 @@ using WB.Services.Export.Interview;
 
 namespace WB.Services.Export.CsvExport.Implementation.DoFiles
 {
-    public class DataExportLabelValue
+    public class DataExportValue
     {
-        public DataExportLabelValue(string labelName, Guid? entityId, VariableValueLabel[] variableValues)
+        public DataExportValue(string name, Guid? entityId, VariableValueLabel[] variableValues)
         {
-            this.LabelName = labelName;
+            this.Name = name;
             this.EntityId = entityId;
 
             var uniqueValues = from v in variableValues
@@ -27,16 +27,16 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
 
             this.IsReference = false;
         }
-        public DataExportLabelValue(string labelName, Guid? entityId)
+        public DataExportValue(string name, Guid? entityId)
         {
-            this.LabelName = labelName;
+            this.Name = name;
             this.EntityId = entityId;
             this.VariableValues = new VariableValueLabel[0];
 
             this.IsReference = true;
         }
 
-        public string LabelName { get; private set; }
+        public string Name { get; private set; }
         public Guid? EntityId { get; private set; }
         public VariableValueLabel[] VariableValues { get; }
         public bool IsReference { get; private set; }

@@ -213,17 +213,22 @@ namespace WB.Services.Export.Questionnaire
             exportedHeaderItem.Labels = new List<LabelItem>();
             if (question is ICategoricalQuestion categoricalQuestion && categoricalQuestion.CategoriesId.HasValue)
             {
-                exportedHeaderItem.LabelReferenceId = categoricalQuestion.CategoriesId;
-
-                if (!headerStructureForLevel.ReusableLabels.ContainsKey(categoricalQuestion.CategoriesId.Value))
+                var isMultiWithoutPredefineCategories = question is MultyOptionsQuestion multyOptionsQuestion
+                                                        && multyOptionsQuestion.IsFilteredCombobox.HasValue;
+                if (!isMultiWithoutPredefineCategories)
                 {
-                    var categories = questionnaire.Categories.First(c => c.Id == categoricalQuestion.CategoriesId.Value);
-                    headerStructureForLevel.ReusableLabels[categoricalQuestion.CategoriesId.Value] =
-                        new ReusableLabels()
-                        {
-                            Name = categories.Name,
-                            Labels = categories.Values.Select(o => new LabelItem(o.Id.ToString(), o.Text)).ToArray()
-                        };
+                    exportedHeaderItem.LabelReferenceId = categoricalQuestion.CategoriesId;
+
+                    if (!headerStructureForLevel.ReusableLabels.ContainsKey(categoricalQuestion.CategoriesId.Value))
+                    {
+                        var categories = questionnaire.Categories.First(c => c.Id == categoricalQuestion.CategoriesId.Value);
+                        headerStructureForLevel.ReusableLabels[categoricalQuestion.CategoriesId.Value] =
+                            new ReusableLabels()
+                            {
+                                Name = categories.Name,
+                                Labels = categories.Values.Select(o => new LabelItem(o.Id.ToString(), o.Text)).ToArray()
+                            };
+                    }
                 }
             }
             else if (question.Answers != null)
