@@ -1,3 +1,0 @@
-import 'jquery'
-import 'bootstrap';
-
