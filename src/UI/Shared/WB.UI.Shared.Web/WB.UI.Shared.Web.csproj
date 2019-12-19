@@ -189,7 +189,6 @@
     <Compile Include="Extensions\ProgressiveDownload.cs" />
     <Compile Include="Extensions\ProgressiveDownloadHelpers.cs" />
     <Compile Include="Filters\ControlPanelAccessAttribute.cs" />
-    <Compile Include="MembershipProvider\Accounts\PasswordPolicy.cs" />
     <Compile Include="MembershipProvider\Settings\MembershipProviderSettings.cs" />
     <Compile Include="MembershipProvider\Settings\PasswordPolicyFactory.cs" />
     <Compile Include="Modules\ApiControllerExtensions.cs" />
@@ -371,6 +370,7 @@
     <EmbeddedResource Include="Resources\UnderConstruction.zh.resx" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="MembershipProvider\Accounts\" />
     <Folder Include="Modules\NonWebRequest\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

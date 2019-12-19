@@ -77,8 +77,8 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         {
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(Container));
 
-            var initTask = Task.Run(async () =>
-                await InitModules(Container.Resolve<UnderConstructionInfo>(), Container, restartOnInitiazationError));
+            var initTask = Task.Run(() =>
+                InitModules(Container.Resolve<UnderConstructionInfo>(), Container, restartOnInitiazationError));
             return initTask;
         }
 

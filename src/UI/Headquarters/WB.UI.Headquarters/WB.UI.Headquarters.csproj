@@ -1734,7 +1734,6 @@
     <Content Include="Views\Supervisor\Edit.cshtml" />
     <Content Include="Views\Supervisor\Index.cshtml" />
     <Content Include="Views\Shared\_NoAuthenticationLayout.cshtml" />
-    <Content Include="Views\Install\Finish.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\AdminMenu.cshtml" />
     <Content Include="Views\Template\LoginToDesigner.cshtml" />
@@ -2127,10 +2126,8 @@
     <Compile Include="Filters\ActivePageAttribute.cs" />
     <Compile Include="Filters\BrowsersRestriction.cs" />
     <Compile Include="Filters\ObserverNotAllowedAttribute.cs" />
-    <Compile Include="Models\Account\FinishIntallationModel.cs" />
     <Compile Include="Models\Account\IPasswordRequired.cs" />
     <Compile Include="Models\InterviewerHqModel.cs" />
-    <Compile Include="Models\VersionCheck\VersionCheckingInfo.cs" />
     <Compile Include="Filters\WebInterviewAuthorizeAttribute.cs" />
     <Compile Include="Filters\WebInterviewFeatureEnabledAttribute.cs" />
     <Compile Include="Controllers\WebInterviewSetupController.cs" />
@@ -2158,12 +2155,10 @@
     <Compile Include="Controllers\QuestionnairesApiController.cs" />
     <Compile Include="Controllers\DesignerQuestionnairesApiController.cs" />
     <Compile Include="Controllers\HQController.cs" />
-    <Compile Include="Controllers\InstallController.cs" />
     <Compile Include="Controllers\Profile\HeadquartersController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\TypeExtensions.cs" />
     <Compile Include="Filters\FormMultipartEncodedMediaTypeFormatter .cs" />
-    <Compile Include="Filters\InstallationAttribute.cs" />
     <Compile Include="Controllers\Profile\SupervisorController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
     <Compile Include="Injections\HeadquartersUIModule.cs" />
@@ -2304,7 +2299,6 @@
     <Compile Include="Services\IInterviewCreatorFromAssignment.cs" />
     <Compile Include="Services\InterviewImportColumn.cs" />
     <Compile Include="Services\QuestionnaireExporter.cs" />
-    <Compile Include="Services\VersionCheckService.cs" />
     <Compile Include="Services\WebInterviewEmailRenderer.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utils\Attributes\CompressContentAttribute.cs" />

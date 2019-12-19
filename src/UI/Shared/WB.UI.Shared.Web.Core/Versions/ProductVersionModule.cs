@@ -24,17 +24,15 @@ namespace WB.UI.Shared.Web.Versions
             registry.Bind<IProductVersionHistory, ProductVersionHistory>();
         }
 
-        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
+        public async Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             if (shouldStoreVersionToDb)
             {
                 var unitOfWork = serviceLocator.GetInstance<IUnitOfWork>();
                 serviceLocator.GetInstance<IProductVersionHistory>()
                               .RegisterCurrentVersion();
-                unitOfWork.AcceptChanges();
+                await unitOfWork.AcceptChangesAsync();
             }
-
-            return Task.CompletedTask;
         }
 
         public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status)
