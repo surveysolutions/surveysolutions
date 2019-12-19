@@ -63,6 +63,7 @@ const pages = {
         template: path.join(hqFolder, "Views", "Shared", "_WebInterview.Template.cshtml"),
         locales: locales.webinterview
     },
+
     webtester: {
         entry: "src/webinterview/main.js",
         filename: path.join(webTesterFolder, "Views", "Shared", "_Layout.cshtml"),
@@ -129,30 +130,42 @@ module.exports = {
                 destination: "./locale/.resources"
             }])
 
-        // config.plugin('stats')
-        //     .use(StatsPlugin, ['stats.json',
-        //         {
-        //             chunks: true,
-        //             assets: false,
-        //             chunkModules: false,
-        //             modules: false,
-        //             children: false
-        //         }]);
+        config.plugin('stats')
+            .use(StatsPlugin, ['stats.json',
+                {
+                    chunks: true,
+                    assets: false,
+                    chunkModules: false,
+                    modules: false,
+                    children: false
+                }]);
 
-        // config.merge({
-        //     optimization: {
-        //         splitChunks: {
-        //             cacheGroups: {
-        //                 commons: {
-        //                     name: 'chunk-common',
-        //                     test: /[\\\/]node_modules[\\\/](autonumeric|moment)/,
-        //                     priority: 1,
-        //                     chunks: 'all'
-        //                 }
-        //             }
+        config.merge({
+            optimization: {
+                splitChunks: {
+                    cacheGroups: {
+                        vendors: {
+                            name: 'chunk-vendors',
+                            test: /[\\\/]node_modules[\\\/]((?!(moment|vee-validate|autonumeric|bootstrap-select)).*)[\\/]/,
+                            priority: -10,
+                            chunks: 'initial'
+                        }
+                    }
+                }
+            }
+        });
+        // splitChunks: {
+        //     cacheGroups: {
+        //         commons: {
+        //             name: 'chunk-common',
+        //             test: /[\\\/]node_modules[\\\/](autonumeric|moment)/,
+        //             priority: 1,
+        //             chunks: 'all'
         //         }
         //     }
-        // });
+        // }
+        //}
+        //});
 
         config.plugin("provide").use(webpack.ProvidePlugin, [{
             _: "lodash",
