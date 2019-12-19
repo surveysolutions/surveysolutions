@@ -23,6 +23,7 @@ using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.Captcha;
 using Microsoft.AspNet.Identity;
 using StackExchange.Exceptional;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Views;
@@ -60,6 +61,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IInvitationMailingService invitationMailingService;
 
         private readonly IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage;
+        private readonly IPlainKeyValueStorage<WebInterviewSettings> webInterviewSettingsStorage;
 
         private const string CapchaCompletedKey = "CaptchaCompletedKey";
         private const string PasswordVerifiedKey = "PasswordVerifiedKey";
@@ -116,7 +118,8 @@ namespace WB.UI.Headquarters.Controllers
             IInvitationService invitationService,
             INativeReadSideStorage<InterviewSummary> interviewSummary,
             IInvitationMailingService invitationMailingService,
-            IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage)
+            IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage,
+            IPlainKeyValueStorage<WebInterviewSettings> webInterviewSettingsStorage)
             : base(commandService, logger)
         {
             this.commandService = commandService;
@@ -137,6 +140,8 @@ namespace WB.UI.Headquarters.Controllers
             this.invitationService = invitationService;
             this.interviewSummary = interviewSummary;
             this.invitationMailingService = invitationMailingService;
+            this.emailProviderSettingsStorage = emailProviderSettingsStorage;
+            this.webInterviewSettingsStorage = webInterviewSettingsStorage;
         }
 
         [WebInterviewAuthorize]
@@ -167,6 +172,11 @@ namespace WB.UI.Headquarters.Controllers
             
             bool isAskForEmailAvailable = 
                 emailSettings != null && emailSettings.Provider != EmailProvider.None;
+
+            if (isAskForEmailAvailable)
+            {
+                isAskForEmailAvailable = this.webInterviewSettingsStorage.GetById(AppSetting.WebInterviewSettings)?.AllowEmails ?? false;
+            }
 
             return new WebInterviewIndexPageModel
             {
