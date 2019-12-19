@@ -43,19 +43,18 @@
 
 
   <ItemGroup>
+    <None Remove="appsettings.*.magpie.ini" />
     <None Remove="appsettings.ini" />
-    <None Remove="appsettings.magpie.ini" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="appsettings.magpie.ini">
-        <DependentUpon>appsettings.ini</DependentUpon>
+    <Content Include="appsettings.*.ini">
+      <DependentUpon>appsettings.ini</DependentUpon>
     </Content>
     <Content Include="appsettings.ini" />
   </ItemGroup>
 
-
-  <ItemGroup>
+    <ItemGroup>
     <ProjectReference Include="..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj" />
     <ProjectReference Include="..\..\Core\SharedKernels\Enumerator\WB.Enumerator.Native\WB.Enumerator.Native.Core.csproj" />
     <ProjectReference Include="..\..\Infrastructure\WB.Persistence.Headquarters\WB.Persistence.Headquarters.csproj" />
