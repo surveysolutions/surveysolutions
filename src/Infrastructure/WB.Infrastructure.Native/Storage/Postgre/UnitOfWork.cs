@@ -2,6 +2,7 @@
 using System.Data;
 using System.Diagnostics;
 using System.Threading;
+using System.Threading.Tasks;
 using NHibernate;
 using NHibernate.Impl;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -36,6 +37,18 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
             if(transaction?.IsActive == true)
                 transaction.Commit();
+        }
+
+        public async Task AcceptChangesAsync()
+        {
+            if (isDisposed) throw new ObjectDisposedException(nameof(UnitOfWork));
+            if (this.session != null)
+            {
+                await this.session.FlushAsync().ConfigureAwait(false);
+            }
+
+            if(transaction?.IsActive == true)
+                await transaction.CommitAsync().ConfigureAwait(false);
         }
 
         public ISession Session

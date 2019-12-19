@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Filters
             var executedContext = await next.Invoke();
             if (executedContext.Exception == null)
             {
-                unitOfWork.AcceptChanges();
+                await unitOfWork.AcceptChangesAsync();
             }
             else
             {
