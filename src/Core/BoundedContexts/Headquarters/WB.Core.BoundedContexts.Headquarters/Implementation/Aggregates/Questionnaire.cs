@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Commands;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
@@ -26,6 +27,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
         private readonly IQuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage;
         private readonly IPlainStorageAccessor<TranslationInstance> translations;
+        private readonly IAuthorizedUser authorizedUser;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
         private Guid Id { get; set; }
@@ -35,13 +37,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             IQuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor, 
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage,
             IFileSystemAccessor fileSystemAccessor, 
-            IPlainStorageAccessor<TranslationInstance> translations)
+            IPlainStorageAccessor<TranslationInstance> translations,
+            IAuthorizedUser authorizedUser)
         {
             this.questionnaireStorage = questionnaireStorage;
             this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
             this.questionnaireBrowseItemStorage = questionnaireBrowseItemStorage;
             this.fileSystemAccessor = fileSystemAccessor;
             this.translations = translations;
+            this.authorizedUser = authorizedUser;
         }
 
         public void SetId(Guid id) => this.Id = id;
@@ -130,7 +134,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
 
             this.questionnaireBrowseItemStorage.Store(
                 new QuestionnaireBrowseItem(questionnaireDocument, identity.Version, isCensus,
-                    questionnaireContentVersion, isSupportAssignments, isSupportExportVariables, comment),
+                    questionnaireContentVersion, isSupportAssignments, isSupportExportVariables, comment, this.authorizedUser.Id),
                 projectionId);
         }
 
