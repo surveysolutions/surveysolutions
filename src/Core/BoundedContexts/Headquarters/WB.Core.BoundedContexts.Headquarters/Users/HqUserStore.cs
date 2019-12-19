@@ -26,8 +26,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Users
 
         public override async Task<Microsoft.AspNetCore.Identity.IdentityResult> CreateAsync(HqUser user, CancellationToken cancellationToken = new CancellationToken())
         {
+            user.SecurityStamp = Guid.NewGuid().ToString();
+            user.CreationDate = DateTime.UtcNow;
+
             await unitOfWork.Session.SaveAsync(user, cancellationToken);
-            await unitOfWork.Session.FlushAsync(cancellationToken);
             return Microsoft.AspNetCore.Identity.IdentityResult.Success;
         }
 
@@ -197,7 +199,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users
 
         public Task AddToRoleAsync(HqUser user, string roleName, CancellationToken cancellationToken)
         {
-            var roleValue = Enum.Parse<UserRoles>(roleName);
+            var roleValue = Enum.Parse<UserRoles>(roleName, true);
             var roleToAddTo = FindRole(roleValue.ToUserId());
 
             user.Roles.Add(roleToAddTo);
@@ -223,7 +225,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users
 
         public Task<bool> IsInRoleAsync(HqUser user, string roleName, CancellationToken cancellationToken)
         {
-            var roleValue = Enum.Parse<UserRoles>(roleName);
+            var roleValue = Enum.Parse<UserRoles>(roleName, true);
             return Task.FromResult(user.IsInRole(roleValue));
         }
 
