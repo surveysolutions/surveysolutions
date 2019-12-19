@@ -4,6 +4,9 @@ namespace WB.UI.Headquarters.Models.Reports
 {
     public class SurveysAndStatusesModel
     {
-        public Guid? QuestionnaireId { get; set; }
+        public string DataUrl { get; set; }
+        public string ReportName { get; set; }
+        public string Subtitle { get; set; }
+        public string ResponsiblesUrl { get; set; }
     }
 }

@@ -10,13 +10,9 @@
 <head>
     <title>@ViewBag.Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>
-        window.CONFIG.assetsPath = {}
-        window.CONFIG.assetsPath = '@Url.Content("~/")';
-    </script>
     @Html.GenerateFavicon(Url.Content("~/static/img/identity/favicon-hq"))
-<link href="/js/chunk-vendors.js" rel="preload" as="script"><link href="/js/finishInstallation.js" rel="preload" as="script"></head>
+<link href="/js/chunk-common.js" rel="preload" as="script"><link href="/js/chunk-vendors.js" rel="preload" as="script"><link href="/js/finishInstallation.js" rel="preload" as="script"></head>
 <body>
     @RenderBody()
-<script type="text/javascript" src="/js/chunk-vendors.js"></script><script type="text/javascript" src="/js/finishInstallation.js"></script><script type="text/javascript" src="/js/chunk-common.js"></script></body>
+<script type="text/javascript" src="/js/chunk-vendors.js"></script><script type="text/javascript" src="/js/chunk-common.js"></script><script type="text/javascript" src="/js/finishInstallation.js"></script></body>
 </html>

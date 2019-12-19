@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
-using Npgsql;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
@@ -19,15 +18,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         private const string ReportBySupervisors = "DeviceInterviewersReport";
         private const string ReportByInterviewers = "DevicesInterviewersForSupervisor";
 
-        private readonly UnitOfWorkConnectionSettings plainStorageSettings;
+        private readonly IUnitOfWork unitOfWork;
         private readonly IInterviewerVersionReader interviewerVersionReader;
         private readonly IUserViewFactory userViewFactory;
 
-        public DeviceInterviewersReport(UnitOfWorkConnectionSettings plainStorageSettings,
+        public DeviceInterviewersReport(IUnitOfWork unitOfWork,
             IInterviewerVersionReader interviewerVersionReader,
             IUserViewFactory userViewFactory)
         {
-            this.plainStorageSettings = plainStorageSettings;
+            this.unitOfWork = unitOfWork;
             this.interviewerVersionReader = interviewerVersionReader;
             this.userViewFactory = userViewFactory;
         }
@@ -49,29 +48,28 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             var sql = GetSqlTexts(input.SupervisorId.HasValue ? ReportByInterviewers : ReportBySupervisors);
             var fullQuery = string.Format(sql, order.ToSqlOrderBy());
 
-            using (var connection = new NpgsqlConnection(plainStorageSettings.ConnectionString))
+            var connection = unitOfWork.Session.Connection;
+            var rows = await connection.QueryAsync<DeviceInterviewersReportLine>(fullQuery, new
             {
-                var rows = await connection.QueryAsync<DeviceInterviewersReportLine>(fullQuery, new
-                {
-                    latestAppBuildVersion = targetInterviewerVersion,
-                    neededFreeStorageInBytes = InterviewerIssuesConstants.LowMemoryInBytesSize,
-                    minutesMismatch = InterviewerIssuesConstants.MinutesForWrongTime,
-                    targetAndroidSdkVersion = InterviewerIssuesConstants.MinAndroidSdkVersion,
-                    limit = input.PageSize,
-                    offset = input.Page,
-                    filter = input.Filter + "%",
-                    supervisorId = input.SupervisorId
-                });
-                int totalCount = await GetTotalRowsCountAsync(fullQuery, targetInterviewerVersion, input, connection);
-                var totalRow = await GetTotalLine(fullQuery, input.SupervisorId, targetInterviewerVersion, input.Filter, connection);
+                latestAppBuildVersion = targetInterviewerVersion,
+                neededFreeStorageInBytes = InterviewerIssuesConstants.LowMemoryInBytesSize,
+                minutesMismatch = InterviewerIssuesConstants.MinutesForWrongTime,
+                targetAndroidSdkVersion = InterviewerIssuesConstants.MinAndroidSdkVersion,
+                limit = input.PageSize,
+                offset = input.Page,
+                filter = input.Filter + "%",
+                supervisorId = input.SupervisorId
+            });
+            int totalCount = await GetTotalRowsCountAsync(fullQuery, targetInterviewerVersion, input, connection);
+            var totalRow = await GetTotalLine(fullQuery, input.SupervisorId, targetInterviewerVersion, input.Filter,
+                connection);
 
-                return new DeviceInterviewersReportView
-                {
-                    Items = rows,
-                    TotalCount = totalCount,
-                    TotalRow = totalRow
-                };
-            }
+            return new DeviceInterviewersReportView
+            {
+                Items = rows,
+                TotalCount = totalCount,
+                TotalRow = totalRow
+            };
         }
 
         private async Task<int> GetTotalRowsCountAsync(string sql, int? targetInterviewerVersion, DeviceByInterviewersReportInputModel input, IDbConnection connection)
