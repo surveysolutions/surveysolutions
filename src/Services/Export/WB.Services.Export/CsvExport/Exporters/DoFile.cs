@@ -40,9 +40,9 @@ namespace WB.Services.Export.CsvExport.Exporters
             }
         }
 
-        public void AssignValuesToVariable(string variableName, string labelName)
+        public void AssignValuesToVariable(string variableName, string valueName)
         {
-            doContent.AppendLine($"label values {variableName} {labelName}");
+            doContent.AppendLine($"label values {variableName} {valueName}");
         }
 
         public void AppendLabelToVariableMatching(string variableName, string labelName)

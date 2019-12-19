@@ -64,16 +64,16 @@ namespace WB.Services.Export.CsvExport.Exporters
             {
                 doContent.AppendLine();
 
+                string valueName = this.CreateLabelName(labeledVariable.Value.Name);
+
                 if (labeledVariable.Value.IsReference)
                 {
-                    string labelName = this.CreateLabelName(labeledVariable.Value.Name);
-                    doContent.AssignValuesToVariable(labeledVariable.VariableName, labelName);
+                    doContent.AssignValuesToVariable(labeledVariable.VariableName, valueName);
                 }
                 else if (labeledVariable.Value.VariableValues.Any())
                 {
-                    string labelName = this.CreateLabelName(labeledVariable.VariableName);
-                    doContent.DefineLabel(labelName, labeledVariable.Value.VariableValues);
-                    doContent.AssignValuesToVariable(labeledVariable.VariableName, labelName);
+                    doContent.DefineLabel(valueName, labeledVariable.Value.VariableValues);
+                    doContent.AssignValuesToVariable(labeledVariable.VariableName, valueName);
                 }
 
                 doContent.AppendLabelToVariableMatching(labeledVariable.VariableName, labeledVariable.VariableLabel);

@@ -15,7 +15,7 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
             this.VariableName = variableName;
             this.VariableLabel = variableLabel;
             this.ValueType = valueType;
-            this.Value = new DataExportValue(variableLabel, entityId, variableValueLabels);
+            this.Value = new DataExportValue(variableName, entityId, variableValueLabels);
             this.EntityId = entityId;
         }
 
