@@ -3,12 +3,14 @@
 
 @{
     ViewBag.Title = Users.FinishInstallation;
+    Layout = null;
 }
 <!DOCTYPE html>
 <html>
 <head>
     <title>@ViewBag.Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <inject component="markup" type="css" async></inject>
     @Html.GenerateFavicon(Url.Content("~/static/img/identity/favicon-hq"))
 </head>
 <body>
@@ -18,6 +20,8 @@
                 <h2>@Users.FinishInstallation</h2>
                 @Users.CreateAdmin
             </div>
+            
+            @Html.ValidationSummary()
 
             <form method="post">
                 @Html.AntiForgeryToken()

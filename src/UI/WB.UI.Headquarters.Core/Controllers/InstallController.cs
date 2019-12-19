@@ -57,16 +57,17 @@ namespace WB.UI.Headquarters.Controllers
                 };
                 var creationResult = await this.userManager.CreateAsync(hqUser, model.Password);
 
-                await this.userManager.AddToRoleAsync(hqUser, UserRoles.Administrator.ToString());
-
                 if (creationResult.Succeeded)
                 {
+                    await this.userManager.AddToRoleAsync(hqUser, UserRoles.Administrator.ToString());
+
                     await this.signInManager.SignInAsync(hqUser, false);
 
                     this.supportedVersionProvider.RememberMinSupportedVersion();
 
                     return this.RedirectToAction("Index", "Headquarters");
                 }
+
 
                 foreach (var error in creationResult.Errors)
                 {
