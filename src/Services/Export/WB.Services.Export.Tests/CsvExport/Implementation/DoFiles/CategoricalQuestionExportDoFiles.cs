@@ -193,7 +193,7 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
 
             var exportStructure = CreateQuestionnaireExportStructure(questionnaireCategories, new IQuestionnaireEntity[]
             {
-                Create.MultyOptionsQuestion(variable: "multiQuestion1", isFiltered: true, options: answers, questionText: "to be or not to be"),
+                Create.MultyOptionsQuestion(variable: "multiQuestion1", isFilteredCombobox:true, options: answers, questionText: "to be or not to be"),
             });
             var exporter = CreateInterviewsDoFilesExporter(s => stataGeneratedContent = s);
 
@@ -209,8 +209,8 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
 
             var exportStructure = CreateQuestionnaireExportStructure(questionnaireCategories, new IQuestionnaireEntity[]
             {
-                Create.MultyOptionsQuestion(variable: "multiQuestion1", isFiltered: true, options: answers, questionText: "to be or not to be"),
-                Create.MultyOptionsQuestion(variable: "multiQuestion2", isFiltered: true, options: answers, questionText: "To Be?", variableLabel: "label"),
+                Create.MultyOptionsQuestion(variable: "multiQuestion1", isFilteredCombobox:true, options: answers, questionText: "to be or not to be"),
+                Create.MultyOptionsQuestion(variable: "multiQuestion2", isFilteredCombobox:true, options: answers, questionText: "To Be?", variableLabel: "label"),
             });
             var exporter = CreateInterviewsDoFilesExporter(s => stataGeneratedContent = s);
 
@@ -226,8 +226,8 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
 
             var exportStructure = CreateQuestionnaireExportStructure(questionnaireCategories, new IQuestionnaireEntity[]
             {
-                Create.MultyOptionsQuestion(variable: "multiQuestion1", isFiltered: true, categoryId: Id.g1, questionText: "to be or not to be"),
-                Create.MultyOptionsQuestion(variable: "multiQuestion2", isFiltered: true, options: answers, questionText: "to be?"),
+                Create.MultyOptionsQuestion(variable: "multiQuestion1", isFilteredCombobox:true, categoryId: Id.g1, questionText: "to be or not to be"),
+                Create.MultyOptionsQuestion(variable: "multiQuestion2", isFilteredCombobox:true, options: answers, questionText: "to be?"),
             });
             var exporter = CreateInterviewsDoFilesExporter(s => stataGeneratedContent = s);
 
@@ -248,8 +248,8 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
                 Create.SingleOptionQuestion(variable: "singleQuestion2", options: answers, questionText: "or not be single?"),
                 Create.MultyOptionsQuestion(variable: "filteredQuestion1", categoryId: Id.g1, questionText: "to be multi?"),
                 Create.MultyOptionsQuestion(variable: "filteredQuestion2", options: answers, questionText: "or not to be?"),
-                Create.MultyOptionsQuestion(variable: "multiQuestion1", isFiltered: true, categoryId: Id.g1, questionText: "to be multi filtered?"),
-                Create.MultyOptionsQuestion(variable: "multiQuestion2", isFiltered: true, options: answers, questionText: "or not to be filtered?"),
+                Create.MultyOptionsQuestion(variable: "multiQuestion1", isFilteredCombobox: true, categoryId: Id.g1, questionText: "to be multi filtered?"),
+                Create.MultyOptionsQuestion(variable: "multiQuestion2", isFilteredCombobox: true, options: answers, questionText: "or not to be filtered?"),
             });
             var exporter = CreateInterviewsDoFilesExporter(s => stataGeneratedContent = s);
 
