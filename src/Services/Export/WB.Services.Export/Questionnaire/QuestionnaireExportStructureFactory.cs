@@ -123,7 +123,8 @@ namespace WB.Services.Export.Questionnaire
             }
         }
 
-        private ExportedQuestionHeaderItem CreateExportedQuestionHeaderItem(Question question, QuestionnaireDocument questionnaire, int? lengthOfRosterVectorWhichNeedToBeExported)
+        private ExportedQuestionHeaderItem CreateExportedQuestionHeaderItem(Question question, QuestionnaireDocument questionnaire,
+            HeaderStructureForLevel headerStructureForLevel, int? lengthOfRosterVectorWhichNeedToBeExported)
         {
             var exportedHeaderItem = new ExportedQuestionHeaderItem();
 
@@ -159,7 +160,9 @@ namespace WB.Services.Export.Questionnaire
                     exportedHeaderItem.QuestionSubType = QuestionSubtype.MultiOptionOrdered;
                 }
                 else if (multiOptionQuestion.IsFilteredCombobox ?? false)
+                {
                     exportedHeaderItem.QuestionSubType = QuestionSubtype.MultyOption_Combobox;
+                }
             }
 
             if (question is DateTimeQuestion dateTimeQuestion)
@@ -208,7 +211,22 @@ namespace WB.Services.Export.Questionnaire
             };
 
             exportedHeaderItem.Labels = new List<LabelItem>();
-            if (question.Answers != null)
+            if (question is ICategoricalQuestion categoricalQuestion && categoricalQuestion.CategoriesId.HasValue)
+            {
+                exportedHeaderItem.LabelReferenceId = categoricalQuestion.CategoriesId;
+
+                if (!headerStructureForLevel.ReusableLabels.ContainsKey(categoricalQuestion.CategoriesId.Value))
+                {
+                    var categories = questionnaire.Categories.First(c => c.Id == categoricalQuestion.CategoriesId.Value);
+                    headerStructureForLevel.ReusableLabels[categoricalQuestion.CategoriesId.Value] =
+                        new ReusableLabels()
+                        {
+                            Name = categories.Name,
+                            Labels = categories.Values.Select(o => new LabelItem(o.Id.ToString(), o.Text)).ToArray()
+                        };
+                }
+            }
+            else if (question.Answers != null)
             {
                 foreach (var answer in question.Answers)
                 {
@@ -262,13 +280,14 @@ namespace WB.Services.Export.Questionnaire
 
         private ExportedQuestionHeaderItem CreateExportedQuestionHeaderForMultiColumnItem(Question question, int columnCount,
             QuestionnaireDocument questionnaire,
-            int? lengthOfRosterVectorWhichNeedToBeExported)
+            int? lengthOfRosterVectorWhichNeedToBeExported,
+            HeaderStructureForLevel headerStructureForLevel)
         {
             var isQuestionLinked = IsQuestionLinked(question);
             var asCategorical = question as MultyOptionsQuestion;
             var isMultiCombobox = asCategorical?.IsFilteredCombobox ?? false;
 
-            var exportedHeaderItem = this.CreateExportedQuestionHeaderItem(question, questionnaire, lengthOfRosterVectorWhichNeedToBeExported);
+            var exportedHeaderItem = this.CreateExportedQuestionHeaderItem(question, questionnaire, headerStructureForLevel, lengthOfRosterVectorWhichNeedToBeExported);
             this.ThrowIfQuestionIsNotMultiSelectOrTextList(question);
 
             exportedHeaderItem.ColumnValues = new int[columnCount];
@@ -285,7 +304,9 @@ namespace WB.Services.Export.Questionnaire
                 }
                 else
                 {
-                    var columnValue = int.Parse(question.Answers[i].AnswerValue);
+                    var columnValue = asCategorical.CategoriesId.HasValue 
+                        ? questionnaire.Categories.First(c => c.Id == asCategorical.CategoriesId.Value).Values[i].Id
+                        : int.Parse(question.Answers[i].AnswerValue);
 
                     headerColumn.Name = string.Format(GeneratedTitleExportFormat,
                         question.VariableName, DecimalToHeaderConverter.ToHeader(columnValue));
@@ -295,12 +316,15 @@ namespace WB.Services.Export.Questionnaire
 
                 if (!isQuestionLinked && !isMultiCombobox)
                 {
-                    var questionLabel =
-                        string.IsNullOrEmpty(question.VariableLabel) ? question.QuestionText : question.VariableLabel;
+                    var questionLabel = string.IsNullOrEmpty(question.VariableLabel) ? question.QuestionText : question.VariableLabel;
 
                     if (question.QuestionType == QuestionType.MultyOption)
                     {
-                        headerColumn.Title = $"{questionLabel}:{question.Answers[i].AnswerText}";
+                        var optionText = asCategorical?.CategoriesId.HasValue ?? false
+                            ? questionnaire.Categories.First(c => c.Id == asCategorical.CategoriesId.Value).Values[i].Text
+                            : question.Answers[i].AnswerText;
+
+                        headerColumn.Title = $"{questionLabel}:{optionText}";
                     }
                     if (question.QuestionType == QuestionType.TextList)
                     {
@@ -444,35 +468,34 @@ namespace WB.Services.Export.Questionnaire
                     if (this.IsQuestionMultiOption(question))
                     {
                         if (question.LinkedToRosterId.HasValue)
-                            this.AddHeadersForLinkedMultiOptions(headerStructureForLevel.HeaderItems, question, questionnaire, maxValuesForRosterSizeQuestions);
+                        {
+                            this.AddHeadersForLinkedMultiOptions(headerStructureForLevel, question, questionnaire, maxValuesForRosterSizeQuestions);
+                        }
                         else if (question.LinkedToQuestionId.HasValue)
                         {
-                            var linkToQuestion =
-                                questionnaire.FirstOrDefault<Question>(
-                                    x => x.PublicKey == question.LinkedToQuestionId.Value);
+                            var linkToQuestion = questionnaire.FirstOrDefault<Question>(x => x.PublicKey == question.LinkedToQuestionId.Value);
 
                             if (linkToQuestion.QuestionType == QuestionType.TextList)
-                            {
-                                this.AddHeadersForLinkedToListMultiOptions(headerStructureForLevel.HeaderItems, question, linkToQuestion, questionnaire);
-                            }
+                                this.AddHeadersForLinkedToListMultiOptions(headerStructureForLevel, question, linkToQuestion, questionnaire);
                             else
-                                this.AddHeadersForLinkedMultiOptions(headerStructureForLevel.HeaderItems, question, questionnaire, maxValuesForRosterSizeQuestions);
+                                this.AddHeadersForLinkedMultiOptions(headerStructureForLevel, question, questionnaire, maxValuesForRosterSizeQuestions);
                         }
-
-                        else this.AddHeadersForMultiOptions(headerStructureForLevel.HeaderItems, question, questionnaire);
+                        else
+                        {
+                            this.AddHeadersForMultiOptions(headerStructureForLevel, question, questionnaire);
+                        }
                     }
                     else if (this.IsQuestionTextList(question))
                     {
-                        this.AddHeadersForTextList(headerStructureForLevel.HeaderItems, question, questionnaire);
+                        this.AddHeadersForTextList(headerStructureForLevel, question, questionnaire);
+                    }
+                    else if (question is GpsCoordinateQuestion)
+                    {
+                        this.AddHeadersForGpsQuestion(headerStructureForLevel, question, questionnaire);
                     }
                     else
                     {
-                        if (question is GpsCoordinateQuestion)
-                            this.AddHeadersForGpsQuestion(headerStructureForLevel.HeaderItems, question,
-                                questionnaire);
-                        else
-                            this.AddHeaderForSingleColumnExportQuestion(headerStructureForLevel.HeaderItems, question,
-                                questionnaire);
+                        this.AddHeaderForSingleColumnExportQuestion(headerStructureForLevel, question, questionnaire);
                     }
                     continue;
                 }
@@ -510,69 +533,77 @@ namespace WB.Services.Export.Questionnaire
             headerItems.Add(variable.PublicKey, this.CreateExportedVariableHeaderItem(variable));
         }
 
-        private void AddHeadersForLinkedMultiOptions(IDictionary<Guid, IExportedHeaderItem> headerItems, Question question,
+        private void AddHeadersForLinkedMultiOptions(HeaderStructureForLevel headerStructureForLevel, Question question,
             QuestionnaireDocument questionnaire,
             Dictionary<Guid, int> maxValuesForRosterSizeQuestions)
         {
-            headerItems.Add(question.PublicKey,
+            headerStructureForLevel.HeaderItems.Add(question.PublicKey,
                 this.CreateExportedQuestionHeaderForMultiColumnItem(question,
                     this.GetRostersSizeForLinkedQuestion(question, questionnaire, maxValuesForRosterSizeQuestions),
                     questionnaire,
-                    this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire)));
+                    this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire),
+                    headerStructureForLevel));
         }
 
-        private void AddHeaderForSingleColumnExportQuestion(IDictionary<Guid, IExportedHeaderItem> headerItems, Question question,
+        private void AddHeaderForSingleColumnExportQuestion(HeaderStructureForLevel headerStructureForLevel, Question question,
             QuestionnaireDocument questionnaire)
         {
-            headerItems.Add(question.PublicKey,
-                this.CreateExportedQuestionHeaderItem(question,
-                    questionnaire,
-                    this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire)));
+            var lengthOfRosterVectorWhichNeedToBeExported = this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire);
+            var headerItem = this.CreateExportedQuestionHeaderItem(question, questionnaire, headerStructureForLevel, lengthOfRosterVectorWhichNeedToBeExported);
+            headerStructureForLevel.HeaderItems.Add(question.PublicKey, headerItem);
         }
 
-        private void AddHeadersForMultiOptions(IDictionary<Guid, IExportedHeaderItem> headerItems, Question question,
+        private void AddHeadersForMultiOptions(HeaderStructureForLevel headerStructureForLevel, Question question,
             QuestionnaireDocument questionnaire)
         {
             var typedQuestion = question as MultyOptionsQuestion;
-            var columnCount = typedQuestion?.IsFilteredCombobox ?? false ? Constants.MaxLongRosterRowCount : question.Answers.Count;
+            var columnCount = typedQuestion?.IsFilteredCombobox ?? false 
+                ? (typedQuestion.MaxAllowedAnswers ?? Constants.MaxLongRosterRowCount)
+                : typedQuestion?.CategoriesId.HasValue ?? false
+                    ? questionnaire.Categories.First(c => c.Id == typedQuestion.CategoriesId.Value).Values.Length
+                    : question.Answers.Count;
 
-            headerItems.Add(question.PublicKey,
+            headerStructureForLevel.HeaderItems.Add(question.PublicKey,
                 this.CreateExportedQuestionHeaderForMultiColumnItem(question, columnCount,
                     questionnaire,
-                    this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire)));
+                    this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire),
+                    headerStructureForLevel));
         }
 
-        private void AddHeadersForTextList(IDictionary<Guid, IExportedHeaderItem> headerItems, Question question,
+        private void AddHeadersForTextList(HeaderStructureForLevel headerStructureForLevel, Question question,
             QuestionnaireDocument questionnaire)
         {
             var textListQuestion = question as TextListQuestion;
             var maxCount = textListQuestion?.MaxAnswerCount ?? Constants.MaxLongRosterRowCount;
-            headerItems.Add(question.PublicKey,
+            headerStructureForLevel.HeaderItems.Add(question.PublicKey,
                 this.CreateExportedQuestionHeaderForMultiColumnItem(question, maxCount,
                     questionnaire,
-                    this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire)));
+                    this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire),
+                    headerStructureForLevel));
         }
 
-        private void AddHeadersForLinkedToListMultiOptions(IDictionary<Guid, IExportedHeaderItem> headerItems,
+        private void AddHeadersForLinkedToListMultiOptions(HeaderStructureForLevel headerStructureForLevel,
             Question question,
             Question linkToTextListQuestion,
             QuestionnaireDocument questionnaire)
         {
             var textListQuestion = linkToTextListQuestion as TextListQuestion;
-            var maxCount = (textListQuestion == null ? null : textListQuestion.MaxAnswerCount) ?? Constants.MaxLongRosterRowCount;
+            var maxCount = textListQuestion?.MaxAnswerCount ?? Constants.MaxLongRosterRowCount;
 
-            headerItems.Add(question.PublicKey,
+            headerStructureForLevel.HeaderItems.Add(question.PublicKey,
                  this.CreateExportedQuestionHeaderForMultiColumnItem(question, maxCount,
                      questionnaire,
-                     this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire)));
+                     this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire),
+                     headerStructureForLevel));
         }
 
-        private void AddHeadersForGpsQuestion(IDictionary<Guid, IExportedHeaderItem> headerItems, Question question,
+        private void AddHeadersForGpsQuestion(HeaderStructureForLevel headerStructureForLevel, Question question,
             QuestionnaireDocument questionnaire)
         {
             var gpsColumns = GeoPosition.PropertyNames;
             var gpsQuestionExportHeader = this.CreateExportedQuestionHeaderItem(question,
                 questionnaire,
+                headerStructureForLevel,
                 this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire));
 
             gpsQuestionExportHeader.ColumnHeaders = new List<HeaderColumn>();
@@ -591,7 +622,7 @@ namespace WB.Services.Export.Questionnaire
                 });
             }
 
-            headerItems.Add(question.PublicKey, gpsQuestionExportHeader);
+            headerStructureForLevel.HeaderItems.Add(question.PublicKey, gpsQuestionExportHeader);
         }
 
         private int GetRostersSizeForLinkedQuestion(Question question, QuestionnaireDocument questionnaire,

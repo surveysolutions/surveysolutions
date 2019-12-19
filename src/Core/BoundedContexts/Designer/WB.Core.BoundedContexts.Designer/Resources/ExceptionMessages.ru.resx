@@ -337,4 +337,41 @@
     <data name="ImportOptions_MissingRequiredColumns" xml:space="preserve">
     <value>Некоторые колонки отсутствуют. Убедитесь что файл который Вы загружаете содержит обязательные поля</value>
   </data>
+  <data name="CategoriesCantBeExtracted" xml:space="preserve">
+      <value>Произошла ошибка при попытке разбора загруженного файла с категориями</value>
+      <comment>Произошла ошибка при попытке разбора загруженного файла с категориями</comment>
+  </data>
+  <data name="Excel_Categories_Int_Invalid" xml:space="preserve">
+    <value>[{0}] Неверное целочисленное значение</value>
+  </data>
+  <data name="Excel_Categories_Empty_Text" xml:space="preserve">
+    <value>[{0}] Пустой текст</value>
+  </data>
+  <data name="Excel_Categories_Empty_Value" xml:space="preserve">
+    <value>[{0}] Пустое значение</value>
+  </data>
+  <data name="Excel_Categories_Duplicated" xml:space="preserve">
+      <value>Дубликаты категорий в строках: {0}</value>
+      <comment>Дубликаты категорий в строках: {0}</comment>
+  </data>
+  <data name="Excel_Categories_Empty_ParentId" xml:space="preserve">
+      <value>У некоторых категорий нет родительского идентификатора</value>
+      <comment>У некоторых категорий нет родительского идентификатора</comment>
+  </data>
+  <data name="Excel_Categories_More_Than_Limit" xml:space="preserve">
+      <value>Количество категорий не может быть больше {0}</value>
+      <comment>Идентификаторы категорий должны быть уникальными</comment>
+  </data>
+  <data name="Excel_NoCategories" xml:space="preserve">
+      <value>В файле нет категорий</value>
+      <comment>В файле нет категорий</comment>
+  </data>
+  <data name="Excel_Categories_Less_2_Options" xml:space="preserve">
+      <value>Набор категорий должен содержать как минимум 2 категории</value>
+      <comment>Набор категорий должен содержать как минимум 2 категории</comment>
+  </data>
+  <data name="Excel_Categories_Text_More_Than_250" xml:space="preserve">
+      <value>[{0}] Текст категории должен быть меньше чем 250 символов</value>
+      <comment>[{0}] Текст категории должен быть меньше чем 250 символов</comment>
+  </data>
 </root>

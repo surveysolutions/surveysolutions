@@ -6,11 +6,14 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Api;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 
 namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSyncHandlers
 {
@@ -22,6 +25,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         private readonly IPlainStorage<TranslationInstance> translationsStorage;
         private readonly IPlainStorage<RawQuestionnaireDocumentView> rawQuestionnaireDocumentStorage;
         private readonly IPlainStorage<DeletedQuestionnaire> deletedQuestionnairesStorage;
+        private readonly IOptionsRepository optionsRepository;
 
         public SupervisorQuestionnairesHandler(
             IInterviewerQuestionnaireAccessor questionnairesAccessor,
@@ -29,7 +33,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             IPlainStorage<TranslationInstance> translationsStorage,
             IPlainStorage<RawQuestionnaireDocumentView> rawQuestionnaireDocumentStorage,
             IAttachmentContentStorage attachmentContentStorage, 
-            IPlainStorage<DeletedQuestionnaire> deletedQuestionnairesStorage)
+            IPlainStorage<DeletedQuestionnaire> deletedQuestionnairesStorage,
+            IOptionsRepository optionsRepository)
         {
             this.questionnairesAccessor = questionnairesAccessor;
             this.questionnaireAssemblyAccessor = questionnaireAssemblyAccessor;
@@ -37,6 +42,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             this.rawQuestionnaireDocumentStorage = rawQuestionnaireDocumentStorage;
             this.attachmentContentStorage = attachmentContentStorage;
             this.deletedQuestionnairesStorage = deletedQuestionnairesStorage;
+            this.optionsRepository = optionsRepository;
         }
 
         public void Register(IRequestHandler requestHandler)
@@ -47,6 +53,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             requestHandler.RegisterHandler<GetQuestionnaireTranslationRequest, GetQuestionnaireTranslationResponse>(GetQuestionnaireTranslation);
             requestHandler.RegisterHandler<GetAttachmentContentsRequest, GetAttachmentContentsResponse>(GetAttachmentContents);
             requestHandler.RegisterHandler<GetAttachmentContentRequest, GetAttachmentContentResponse>(GetAttachmentContent);
+            requestHandler.RegisterHandler<GetQuestionnaireReusableCategoriesRequest, GetQuestionnaireReusableCategoriesResponse>(GetQuestionnaireReusableCategories);
         }
 
         private Task<GetAttachmentContentResponse> GetAttachmentContent(GetAttachmentContentRequest request)
@@ -101,6 +108,29 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                     TranslationId = tr.TranslationId,
                     TranslationIndex = tr.TranslationIndex
                 }).ToList()
+            });
+        }
+
+        public Task<GetQuestionnaireReusableCategoriesResponse> GetQuestionnaireReusableCategories(GetQuestionnaireReusableCategoriesRequest request)
+        {
+            //var identity = request.QuestionnaireIdentity.ToString();
+            var questionnaire = this.questionnairesAccessor.GetQuestionnaire(request.QuestionnaireIdentity);
+
+            var reusableCategoriesDtos = questionnaire.Categories.Select(c => new ReusableCategoriesDto()
+            {
+                Id = c.Id,
+                Options = this.optionsRepository.GetReusableCategoriesById(request.QuestionnaireIdentity, c.Id)
+                    .Select(o => new CategoriesItem()
+                    {
+                        Id = o.Value,
+                        ParentId = o.ParentValue,
+                        Text = o.Title
+                    }).ToList()
+            });
+
+            return Task.FromResult(new GetQuestionnaireReusableCategoriesResponse()
+            {
+                Categories = reusableCategoriesDtos.ToList()
             });
         }
 

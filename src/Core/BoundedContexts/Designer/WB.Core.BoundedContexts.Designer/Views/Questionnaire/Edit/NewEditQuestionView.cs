@@ -69,5 +69,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         public bool ShowAsList { get; set; }
         public int? ShowAsListThreshold { get; set; }
+        public string CategoriesId { get; set; }
     }
 }

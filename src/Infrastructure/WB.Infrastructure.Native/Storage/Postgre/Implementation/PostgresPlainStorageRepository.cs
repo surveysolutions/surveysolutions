@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
 using NHibernate.Linq;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
@@ -41,18 +42,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             }
         }
 
-        public void Store(TEntity entity, object id)
-        {
-            this.GetSession().SaveOrUpdate(entity);
-        }
+        public void Remove(Func<IQueryable<TEntity>, IQueryable<TEntity>> query) => query.Invoke(GetSession().Query<TEntity>()).Delete();
 
-        public void Store(IEnumerable<Tuple<TEntity, object>> entities)
-        {
-            foreach (var entity in entities)
-            {
-                this.Store(entity.Item1, entity.Item2);
-            }
-        }
+        public void Store(TEntity entity, object id) => this.Store(new[] {entity});
+        public void Store(IEnumerable<Tuple<TEntity, object>> entities) => this.Store(entities.Select(x => x.Item1));
+        public void Store(IEnumerable<TEntity> entities) => entities.ForEach(this.GetSession().SaveOrUpdate);
 
         public void Flush()
         {

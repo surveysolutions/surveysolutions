@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Main.Core.Documents;
-using Refit;
 using Polly;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.Designer;
@@ -17,12 +13,13 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Synchronization.Designer;
-using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Enumerator.Native.Questionnaire;
+using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
@@ -32,6 +29,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly ISupportedVersionProvider supportedVersionProvider;
         private readonly IStringCompressor zipUtils;
         private readonly IAttachmentContentService attachmentContentService;
+        private readonly IReusableCategoriesStorage reusableCategoriesStorage;
         private readonly IPlainKeyValueStorage<QuestionnaireLookupTable> lookupTablesStorage;
         private readonly IPlainKeyValueStorage<QuestionnairePdf> pdfStorage;
         private readonly IQuestionnaireVersionProvider questionnaireVersionProvider;
@@ -55,7 +53,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             IUnitOfWork unitOfWork,
             IAuthorizedUser authorizedUser,
             IDesignerApi designerApi,
-            IPlainKeyValueStorage<QuestionnairePdf> pdfStorage)
+            IPlainKeyValueStorage<QuestionnairePdf> pdfStorage,
+            IReusableCategoriesStorage reusableCategoriesStorage)
         {
             this.supportedVersionProvider = supportedVersionProvider;
             this.zipUtils = zipUtils;
@@ -69,6 +68,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.authorizedUser = authorizedUser;
             this.designerApi = designerApi;
             this.pdfStorage = pdfStorage;
+            this.reusableCategoriesStorage = reusableCategoriesStorage;
             this.lookupTablesStorage = lookupTablesStorage;
         }
 
@@ -92,15 +92,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                 var minSupported = this.supportedVersionProvider.GetMinVerstionSupportedByInterviewer();
 
-                if (includePdf)
-                    await TriggerPdfRendering(questionnaireId);
+                await TriggerPdfRendering(questionnaireId, includePdf);
 
                 var questionnairePackage = await this.designerApi.GetQuestionnaire(questionnaireId, supportedVersion, minSupported);
                                 
                 QuestionnaireDocument questionnaire = this.zipUtils.DecompressString<QuestionnaireDocument>(questionnairePackage.Questionnaire);
 
-                if (includePdf)
-                    await TriggerPdfTranslationsRendering(questionnaire);
+                await TriggerPdfTranslationsRendering(questionnaire, includePdf);
 
                 var questionnaireContentVersion = questionnairePackage.QuestionnaireContentVersion;
                 var questionnaireAssembly = questionnairePackage.QuestionnaireAssembly;
@@ -157,6 +155,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     }
                 }
 
+                this.logger.Debug($"checking reusable categories for questionnaire {questionnaireId}");
+                if (questionnaire.Categories.Any())
+                {
+                    foreach (var category in questionnaire.Categories)
+                    {
+                        this.logger.Debug($"Loading reusable category for questionnaire {questionnaireId}. Category id {category.Id}");
+                        var reusableCategories = await this.designerApi.GetReusableCategories(questionnaire.PublicKey, category.Id);
+                        reusableCategoriesStorage.Store(questionnaireIdentity, category.Id, reusableCategories);
+                    }
+                }
+
                 logger.Verbose($"commandService.Execute.new ImportFromDesigner: {questionnaire.Title}({questionnaire.PublicKey} rev.{questionnaire.Revision})");
                 this.commandService.Execute(new ImportFromDesigner(
                     this.authorizedUser.Id,
@@ -178,9 +187,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 });
 
                 logger.Verbose($"DownloadAndStorePdf: {questionnaire.Title}({questionnaire.PublicKey} rev.{questionnaire.Revision})");
-                if (includePdf)
-                    await DownloadAndStorePdf(questionnaireIdentity, questionnaire);
 
+                await DownloadAndStorePdf(questionnaireIdentity, questionnaire, includePdf);
 
                 this.auditLog.QuestionnaireImported(questionnaire.Title, questionnaireIdentity);
 
@@ -243,13 +251,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             }
         }
 
-        private async Task TriggerPdfRendering(Guid questionnaireId)
+        private async Task TriggerPdfRendering(Guid questionnaireId, bool includePdf)
         {
-            await this.designerApi.GetPdfStatus(questionnaireId);
+            if (includePdf)
+                await this.designerApi.GetPdfStatus(questionnaireId);
         }
 
-        private async Task TriggerPdfTranslationsRendering(QuestionnaireDocument questionnaire)
+        private async Task TriggerPdfTranslationsRendering(QuestionnaireDocument questionnaire, bool includePdf)
         {
+            if (!includePdf)
+                return;
+
             this.logger.Debug($"Requesting pdf generator to start working for questionnaire {questionnaire.PublicKey}");
                         
             foreach (var questionnaireTranslation in questionnaire.Translations)
@@ -259,8 +271,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         }
 
         private async Task DownloadAndStorePdf(QuestionnaireIdentity questionnaireIdentity,
-            QuestionnaireDocument questionnaire)
+            QuestionnaireDocument questionnaire, bool includePdf)
         {
+            if (!includePdf)
+                return;
+
             var pdfRetry = Policy
                 .HandleResult<PdfStatus>(x => x.ReadyForDownload == false && x.CanRetry != true)
                 .WaitAndRetryForeverAsync(_ => TimeSpan.FromSeconds(3));

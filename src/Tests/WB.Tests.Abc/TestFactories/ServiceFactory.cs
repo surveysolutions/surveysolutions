@@ -112,6 +112,8 @@ using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
+using WB.Infrastructure.Native.Questionnaire;
+using WB.Infrastructure.Native.Questionnaire.Impl;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Tests.Abc.Storage;
@@ -1143,6 +1145,11 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new AssignmentsService(assignments, 
                 interviewAnswerSerializer ?? Mock.Of<IInterviewAnswerSerializer>());
+        }
+
+        public IReusableCategoriesFillerIntoQuestionnaire ReusableCategoriesFillerIntoQuestionnaire(IReusableCategoriesStorage reusableCategoriesStorage)
+        {
+            return new ReusableCategoriesFillerIntoQuestionnaire(reusableCategoriesStorage);
         }
     }
 

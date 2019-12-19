@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Commands;
@@ -22,6 +23,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.Questionnaire;
+using WB.Infrastructure.Native.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQuestionnaireTemplate
 {
@@ -41,6 +43,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
         private readonly IAggregateRootCacheCleaner aggregateRootCacheCleaner;
         private readonly IAssignmentsToDeleteFactory assignmentsToDeleteFactory;
         private readonly IPlainKeyValueStorage<QuestionnaireLookupTable> lookupTablesStorage;
+        private readonly IReusableCategoriesStorage reusableCategoriesStorage;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly DeleteQuestionnaireJobScheduler deleteQuestionnaireTask;
 
@@ -56,7 +59,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             DeleteQuestionnaireJobScheduler deleteQuestionnaireTask,
             IInvitationsDeletionService invitationsDeletionService,
             IAggregateRootCacheCleaner aggregateRootCacheCleaner,
-            IAssignmentsToDeleteFactory assignmentsToDeleteFactory)
+            IAssignmentsToDeleteFactory assignmentsToDeleteFactory,
+            IReusableCategoriesStorage reusableCategoriesStorage)
         {
             this.interviewsToDeleteFactory = interviewsToDeleteFactory;
             this.commandService = commandService;
@@ -71,6 +75,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             this.invitationsDeletionService = invitationsDeletionService;
             this.aggregateRootCacheCleaner = aggregateRootCacheCleaner;
             this.assignmentsToDeleteFactory = assignmentsToDeleteFactory;
+            this.reusableCategoriesStorage = reusableCategoriesStorage;
         }
 
         public async Task DisableQuestionnaire(Guid questionnaireId, long questionnaireVersion, Guid? userId)
@@ -106,10 +111,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             try
             {
                 var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
+                var questionnaireDocument = questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
 
                 this.DeleteInterviews(questionnaireId, questionnaireVersion, userId);
                 this.DeleteTranslations(questionnaireId, questionnaireVersion);
-                this.DeleteLookupTables(questionnaireIdentity);
+                this.DeleteLookupTables(questionnaireIdentity, questionnaireDocument);
+                this.DeleteReusableCategories(questionnaireIdentity, questionnaireDocument);
 
                 var assignmentsImportStatus = this.importService.GetImportStatus();
 
@@ -172,15 +179,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
 
         }
 
-        private void DeleteLookupTables(QuestionnaireIdentity questionnaireIdentity)
+        private void DeleteLookupTables(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaireDocument)
         {
-            var questionnaireDocument = questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
-
             foreach (var lookupTableInfo in questionnaireDocument.LookupTables)
             {
                 var id = lookupTablesStorage.GetLookupKey(questionnaireIdentity, lookupTableInfo.Key);
                 lookupTablesStorage.Remove(id);
             }
+        }
+
+        private void DeleteReusableCategories(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaireDocument)
+        {
+            reusableCategoriesStorage.RemoveCategories(questionnaireIdentity);
         }
 
         private void DeleteTranslations(Guid questionnaireId, long questionnaireVersion)

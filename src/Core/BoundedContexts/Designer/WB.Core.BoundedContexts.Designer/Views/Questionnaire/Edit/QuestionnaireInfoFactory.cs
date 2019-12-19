@@ -504,6 +504,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     questionView.LinkedFilterExpression = multyOptionsQuestion.LinkedFilterExpression;
                     questionView.Options = CreateCategoricalOptions(multyOptionsQuestion.Answers);
                     questionView.OptionsFilterExpression = multyOptionsQuestion.Properties.OptionsFilterExpression;
+                    questionView.CategoriesId = multyOptionsQuestion.CategoriesId.FormatGuid();
                     return questionView;
                 case QuestionType.TextList:
                     var textListQuestion = (ITextListQuestion) question;
@@ -527,6 +528,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     questionView.OptionsFilterExpression = singleoptionQuestion.Properties.OptionsFilterExpression;
                     questionView.ShowAsList = singleoptionQuestion.ShowAsList;
                     questionView.ShowAsListThreshold = singleoptionQuestion.ShowAsListThreshold;
+                    questionView.CategoriesId = singleoptionQuestion.CategoriesId.FormatGuid();
                     return questionView;
                 case QuestionType.Text:
                     var textQuestion = (TextQuestion)question;
