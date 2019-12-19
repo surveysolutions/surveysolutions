@@ -1,41 +1,30 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Net.Http.Headers;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Anemonis.AspNetCore.RequestDecompression;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Net.Http.Headers;
-using Microsoft.OpenApi.Models;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Storage;
-using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
-using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.EventBus;
@@ -44,7 +33,6 @@ using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Enumerator.Native.WebInterview;
-using WB.Infrastructure.Native;
 using WB.Infrastructure.Native.Files;
 using WB.Infrastructure.Native.Logging;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -59,7 +47,6 @@ using WB.UI.Headquarters.Code.Authentication;
 using WB.UI.Headquarters.Configs;
 using WB.UI.Headquarters.Controllers.Api.PublicApi;
 using WB.UI.Headquarters.Filters;
-using WB.UI.Shared.Web.Authentication;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Versions;
@@ -130,9 +117,10 @@ namespace WB.UI.Headquarters
                 new OwinSecurityModule(),
                 new FileStorageModule(Configuration["DataStorePath"], false, "bucket", "region", "prefix", "endpoint"),
                 new FileInfrastructureModule(),
+                GetHqBoundedContextModule(),
                 //new CaptchaModule("recaptcha"),
-                new ProductVersionModule(typeof(Startup).Assembly),
-                GetHqBoundedContextModule());
+                new ProductVersionModule(typeof(Startup).Assembly)
+                );
         }
 
         private HeadquartersBoundedContextModule GetHqBoundedContextModule()
@@ -232,6 +220,7 @@ namespace WB.UI.Headquarters
             services.AddTransient<ICaptchaService, WebCacheBasedCaptchaService>();
             services.AddTransient<ICaptchaProvider, NoCaptchaProvider>();
             services.AddScoped<UnitOfWorkActionFilter>();
+            services.AddScoped<InstallationFilter>();
 
             services.Configure<GzipCompressionProviderOptions>(options =>
             {
@@ -264,6 +253,7 @@ namespace WB.UI.Headquarters
             services.AddMvc(mvc =>
             {
                 mvc.Filters.AddService<UnitOfWorkActionFilter>(1);
+                mvc.Filters.AddService<InstallationFilter>(100);
                 mvc.Conventions.Add(new OnlyPublicApiConvention());
                 var noContentFormatter = mvc.OutputFormatters.OfType<HttpNoContentOutputFormatter>().FirstOrDefault();
                 if (noContentFormatter != null)
@@ -278,6 +268,7 @@ namespace WB.UI.Headquarters
             services.Configure<GoogleMapsConfig>(this.Configuration.GetSection("GoogleMap"));
             services.Configure<PreloadingConfig>(this.Configuration.GetSection("PreLoading"));
             services.Configure<ApkConfig>(this.Configuration.GetSection("Apks"));
+            services.Configure<PasswordPolicyConfig>(this.Configuration.GetSection("PasswordPolicy"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

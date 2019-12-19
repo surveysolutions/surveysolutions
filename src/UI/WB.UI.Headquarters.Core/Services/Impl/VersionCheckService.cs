@@ -2,15 +2,15 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Versions;
 using WB.Enumerator.Native.WebInterview;
-using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Configs;
 using WB.UI.Headquarters.Models.VersionCheck;
 
-namespace WB.UI.Headquarters.Services
+namespace WB.UI.Headquarters.Services.Impl
 {
     public class VersionCheckService : IVersionCheckService
     {
@@ -24,17 +24,20 @@ namespace WB.UI.Headquarters.Services
         private readonly IPlainKeyValueStorage<VersionCheckingInfo> appSettingsStorage;
 
         private readonly IProductVersion productVersion;
-        
+        private readonly IOptions<VersionCheckConfig> versionCheckConfig;
+
         public VersionCheckService(IPlainKeyValueStorage<VersionCheckingInfo> appSettingsStorage,
-            IProductVersion productVersion)
+            IProductVersion productVersion,
+            IOptions<VersionCheckConfig> versionCheckConfig)
         {
             this.appSettingsStorage = appSettingsStorage;
             this.productVersion = productVersion;
+            this.versionCheckConfig = versionCheckConfig;
         }
 
         public bool DoesNewVersionExist()
         {
-            if (!ApplicationSettings.NewVersionCheckEnabled)
+            if (!versionCheckConfig.Value.NewVersionCheckEnabled)
             {
                 return false;
             }
@@ -51,7 +54,7 @@ namespace WB.UI.Headquarters.Services
 
         private void SetVersion()
         {
-            if (ApplicationSettings.NewVersionCheckEnabled && !string.IsNullOrEmpty(ApplicationSettings.NewVersionCheckUrl))
+            if (versionCheckConfig.Value.NewVersionCheckEnabled && !string.IsNullOrEmpty(versionCheckConfig.Value.NewVersionCheckUrl))
             {
                 if (AvailableVersion == null)
                 {
@@ -77,7 +80,7 @@ namespace WB.UI.Headquarters.Services
             try
             {
                 var versionInfo =
-                    await DoRequestJsonAsync<VersionCheckingInfo>(ApplicationSettings.NewVersionCheckUrl);
+                    await DoRequestJsonAsync<VersionCheckingInfo>(versionCheckConfig.Value.NewVersionCheckUrl);
 
                 AvailableVersion = versionInfo;
                 LastLoadedAt = DateTime.Now;

@@ -13,7 +13,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
         public static void MigrateToLatest(string connectionString, string schemaName,
             DbUpgradeSettings dbUpgradeSettings)
         {
-            return;
             var npgConnBuilder = new NpgsqlConnectionStringBuilder(connectionString);
             npgConnBuilder.CommandTimeout = 0;
 
@@ -46,8 +45,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
                 
                 // Instantiate the runner
                 var runner = scope.ServiceProvider.GetRequiredService<IMigrationRunner>();
-
-                
 
                 // Execute the migrations
                 runner.MigrateUp();
