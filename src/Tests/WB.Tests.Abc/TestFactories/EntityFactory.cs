@@ -892,8 +892,8 @@ namespace WB.Tests.Abc.TestFactories
                 Variable = variable
             };
 
-        public QuestionnaireBrowseItem QuestionnaireBrowseItem(QuestionnaireDocument questionnaire, bool supportsAssignments = true, bool allowExportVariables = true, string comment = null)
-            => new QuestionnaireBrowseItem(questionnaire, 1, false, 1, supportsAssignments, allowExportVariables, comment);
+        public QuestionnaireBrowseItem QuestionnaireBrowseItem(QuestionnaireDocument questionnaire, bool supportsAssignments = true, bool allowExportVariables = true, string comment = null, Guid? importedBy = null)
+            => new QuestionnaireBrowseItem(questionnaire, 1, false, 1, supportsAssignments, allowExportVariables, comment, importedBy);
 
         public QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
             => new QuestionnaireDocument
