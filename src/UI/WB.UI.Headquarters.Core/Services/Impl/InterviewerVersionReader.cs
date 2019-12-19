@@ -1,10 +1,9 @@
 ﻿using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.UI.Headquarters.API;
-using WB.UI.Headquarters.Services;
 
-namespace WB.UI.Headquarters.Code
+namespace WB.UI.Headquarters.Services.Impl
 {
-    class InterviewerVersionReader : IInterviewerVersionReader
+    public class InterviewerVersionReader : IInterviewerVersionReader
     {
         private readonly IClientApkProvider clientApkProvider;
 
@@ -13,12 +12,6 @@ namespace WB.UI.Headquarters.Code
             this.clientApkProvider = clientApkProvider;
         }
 
-        public int? Version
-        {
-            get
-            {
-                return this.clientApkProvider.GetLatestVersion(ClientApkInfo.InterviewerFileName);
-            }
-        }
+        public int? Version => this.clientApkProvider.GetLatestVersion(ClientApkInfo.InterviewerFileName);
     }
 }

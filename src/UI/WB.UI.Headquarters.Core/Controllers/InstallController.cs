@@ -65,7 +65,7 @@ namespace WB.UI.Headquarters.Controllers
 
                     this.supportedVersionProvider.RememberMinSupportedVersion();
 
-                    return this.RedirectToAction("Index", "Headquarters");
+                    return this.Redirect("~/");
                 }
 
 

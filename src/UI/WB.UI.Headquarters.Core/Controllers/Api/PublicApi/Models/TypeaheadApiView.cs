@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
 
-namespace WB.UI.Headquarters.API.PublicApi.Models
+namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Models
 {
     public class TypeaheadApiView : BaseApiView
     {
