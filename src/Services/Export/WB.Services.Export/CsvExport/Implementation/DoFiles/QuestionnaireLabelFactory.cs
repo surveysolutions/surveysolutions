@@ -17,7 +17,7 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
 
             var variableLabels = new List<DataExportVariable>();
             var predefinedLabels = level.ReusableLabels
-                .Select(o => new DataExportLabelValue(
+                .Select(o => new DataExportValue(
                     o.Value.Name, 
                     o.Key, 
                     o.Value.Labels.Select(label => new VariableValueLabel(label.Caption, label.Title?.RemoveHtmlTags() ?? string.Empty)).ToArray()))
@@ -56,27 +56,28 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
 
                 foreach (var headerColumn in headerItem.ColumnHeaders)
                 {
-                    var variableValueLabel = Array.Empty<VariableValueLabel>();
+                    DataExportValue value = null;
+
+                    var variableLabel = headerColumn.Title?.RemoveHtmlTags() ?? string.Empty;
 
                     if (labelReferenceId.HasValue && !isMultiOptionQuestion)
                     {
                         var labels = level.ReusableLabels.First(l => l.Key == labelReferenceId.Value).Value;
-                        var labelValue = new DataExportLabelValue(labels.Name?.RemoveHtmlTags() ?? string.Empty, labelReferenceId.Value);
-                        variableLabels.Add(new DataExportVariable(headerColumn.Name, headerItem.PublicKey, labelValue));
-                        continue;
+                        value = new DataExportValue(labels.Name?.RemoveHtmlTags() ?? string.Empty, labelReferenceId.Value);
                     }
-
-                    if (hasLabels)
+                    else if (hasLabels)
                     {
-                        variableValueLabel = ((ExportedQuestionHeaderItem)headerItem).Labels
+                        var variableValueLabel = ((ExportedQuestionHeaderItem)headerItem).Labels
                             .Select(label => new VariableValueLabel(label.Caption, label.Title?.RemoveHtmlTags() ?? string.Empty))
                             .ToArray();
+                        value = new DataExportValue(variableLabel, headerItem.PublicKey, variableValueLabel);
+                    }
+                    else
+                    {
+                        value = new DataExportValue(variableLabel, headerItem.PublicKey, Array.Empty<VariableValueLabel>());
                     }
 
-                    variableLabels.Add(
-                        new DataExportVariable(headerColumn.Name, 
-                            headerColumn.Title?.RemoveHtmlTags() ?? string.Empty, 
-                            headerItem.PublicKey, variableValueLabel, headerColumn.ExportType));
+                    variableLabels.Add(new DataExportVariable(headerColumn.Name, variableLabel, headerItem.PublicKey, headerColumn.ExportType, value));
                 }
             }
 
