@@ -74,26 +74,6 @@ $(function () {
 
     $('form').preventDoubleSubmission();
 
-    var syncQueueConfig = globalSettings.config.syncQueue;
-    if (syncQueueConfig.enabled) {
-        var updateQueueLength = function () {
-            $.ajax({
-                url: syncQueueConfig.lengthUrl,
-                type: 'get',
-                dataType: 'json',
-                success: function (data) {
-                    $('#sync-queue-size').text(data);
-                    if (data > 0) {
-                        $('#IncomingPackagesQueueIndicator').fadeIn();
-                    } else {
-                        $('#IncomingPackagesQueueIndicator').fadeOut();
-                    }
-                }
-            });
-        }
-
-        setInterval(updateQueueLength, 3000);
-    }
         
     window.ajustNoticeHeight();
     window.ajustDetailsPanelHeight();

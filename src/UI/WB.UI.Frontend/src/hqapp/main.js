@@ -1,6 +1,7 @@
 import "bootstrap";
 import "bootstrap-select";
 
+
 import Vue from "vue";
 import { sync } from "vuex-router-sync";
 import Vuei18n from "~/shared/plugins/locale";

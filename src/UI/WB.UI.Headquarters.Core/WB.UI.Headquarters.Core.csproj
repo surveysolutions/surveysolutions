@@ -18,9 +18,11 @@
 
   <ItemGroup>
     <PackageReference Include="Anemonis.AspNetCore.RequestDecompression" Version="1.6.0" />
+    <PackageReference Include="AntiXSS.NetStandard" Version="0.1.87" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
+    
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.0.0">
       <PrivateAssets>all</PrivateAssets>
@@ -35,6 +37,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="5.0.0-rc4" />
   </ItemGroup>
 
+  <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+      <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.0" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <None Remove="appsettings.ini" />
@@ -46,41 +52,6 @@
         <DependentUpon>appsettings.ini</DependentUpon>
     </Content>
     <Content Include="appsettings.ini" />
-    <Content Include="Resources\Common.ar.resx">
-      <DependentUpon>Common.resx</DependentUpon>
-    </Content>
-    <Content Include="Resources\Users.ar.resx">
-      <DependentUpon>Users.resx</DependentUpon>
-    </Content>
-    <Content Include="Resources\Users.es.resx">
-      <DependentUpon>Users.resx</DependentUpon>
-    </Content>
-    <Content Include="Resources\Users.fr.resx">
-      <DependentUpon>Users.resx</DependentUpon>
-    </Content>
-    <Content Include="Resources\Users.ka.resx">
-      <DependentUpon>Users.resx</DependentUpon>
-    </Content>
-    <Content Include="Resources\Users.pt.resx">
-      <DependentUpon>Users.resx</DependentUpon>
-    </Content>
-    <Content Include="Resources\Users.resx">
-      <SubType>Designer</SubType>
-      <LastGenOutput>Users.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </Content>
-    <Content Include="Resources\Users.ro.resx">
-      <DependentUpon>Users.resx</DependentUpon>
-    </Content>
-    <Content Include="Resources\Users.ru.resx">
-      <DependentUpon>Users.resx</DependentUpon>
-    </Content>
-    <Content Include="Resources\Users.sq.resx">
-      <DependentUpon>Users.resx</DependentUpon>
-    </Content>
-    <Content Include="Resources\Users.zh.resx">
-      <DependentUpon>Users.resx</DependentUpon>
-    </Content>
   </ItemGroup>
 
 
@@ -91,322 +62,29 @@
     <ProjectReference Include="..\Shared\WB.UI.Shared.Web.Core\WB.UI.Shared.Web.Core.csproj" />
   </ItemGroup>
 
-
-  <ItemGroup>
-    <Compile Update="Resources\AuditLog.Designer.cs">
-      <DependentUpon>AuditLog.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\DataTables.Designer.cs">
-      <DependentUpon>DataTables.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\FieldsAndValidations.Designer.cs">
-      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\Pages.Designer.cs">
-      <DependentUpon>Pages.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\Common.Designer.cs">
-      <DependentUpon>Common.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\MainMenu.Designer.cs">
-      <DependentUpon>MainMenu.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\Reports.designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Reports.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\TabletLogs.Designer.cs">
-      <DependentUpon>TabletLogs.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\TabletSyncMessages.Designer.cs">
-      <DependentUpon>TabletSyncMessages.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\Users.Designer.cs">
-      <DependentUpon>Users.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <EmbeddedResource Update="Resources\AuditLog.ar.resx">
-      <DependentUpon>AuditLog.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\AuditLog.es.resx">
-      <DependentUpon>AuditLog.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\AuditLog.fr.resx">
-      <DependentUpon>AuditLog.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\AuditLog.resx">
-      <SubType>Designer</SubType>
-      <LastGenOutput>AuditLog.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\AuditLog.ro.resx">
-      <DependentUpon>AuditLog.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\AuditLog.ru.resx">
-      <DependentUpon>AuditLog.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\AuditLog.zh.resx">
-      <DependentUpon>AuditLog.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\AuditLog.sq.resx">
-      <DependentUpon>AuditLog.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Common.es.resx">
-      <DependentUpon>Common.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Common.fr.resx">
-      <DependentUpon>Common.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Common.ka.resx">
-      <DependentUpon>Common.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Common.pt.resx">
-      <DependentUpon>Common.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Common.resx">
-      <SubType>Designer</SubType>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Common.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Common.ro.resx">
-      <DependentUpon>Common.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Common.ru.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>Common.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Common.zh.resx">
-      <DependentUpon>Common.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\DataTables.ar.resx">
-      <DependentUpon>DataTables.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\DataTables.sq.resx">
-      <DependentUpon>DataTables.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\DataTables.es.resx">
-      <DependentUpon>DataTables.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\DataTables.fr.resx">
-      <DependentUpon>DataTables.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\DataTables.ka.resx">
-      <DependentUpon>DataTables.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\DataTables.resx">
-      <SubType>Designer</SubType>
-      <LastGenOutput>DataTables.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\DataTables.ro.resx">
-      <DependentUpon>DataTables.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\DataTables.ru.resx">
-      <DependentUpon>DataTables.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\DataTables.zh.resx">
-      <DependentUpon>DataTables.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\FieldsAndValidations.ar.resx">
-      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\FieldsAndValidations.es.resx">
-      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\FieldsAndValidations.fr.resx">
-      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\FieldsAndValidations.ka.resx">
-      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\FieldsAndValidations.pt.resx">
-      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\FieldsAndValidations.resx">
-      <SubType>Designer</SubType>
-      <LastGenOutput>FieldsAndValidations.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\FieldsAndValidations.ro.resx">
-      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\FieldsAndValidations.ru.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\FieldsAndValidations.zh.resx">
-      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\MainMenu.ar.resx">
-      <DependentUpon>MainMenu.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\MainMenu.es.resx">
-      <DependentUpon>MainMenu.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\MainMenu.fr.resx">
-      <DependentUpon>MainMenu.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\MainMenu.ka.resx">
-      <DependentUpon>MainMenu.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\MainMenu.pt.resx">
-      <DependentUpon>MainMenu.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\MainMenu.resx">
-      <SubType>Designer</SubType>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>MainMenu.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\MainMenu.ro.resx">
-      <DependentUpon>MainMenu.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\MainMenu.ru.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>MainMenu.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\MainMenu.zh.resx">
-      <DependentUpon>MainMenu.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Pages.ar.resx">
-      <DependentUpon>Pages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Pages.sq.resx">
-      <DependentUpon>Pages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Pages.es.resx">
-      <DependentUpon>Pages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Pages.fr.resx">
-      <DependentUpon>Pages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Pages.ka.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>Pages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Pages.pt.resx">
-      <DependentUpon>Pages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Pages.resx">
-      <SubType>Designer</SubType>
-      <LastGenOutput>Pages.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Pages.ro.resx">
-      <DependentUpon>Pages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Pages.ru.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>Pages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Pages.zh.resx">
-      <DependentUpon>Pages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\MainMenu.sq.resx">
-      <DependentUpon>MainMenu.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Common.sq.resx">
-      <DependentUpon>Common.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\FieldsAndValidations.sq.resx">
-      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Reports.ar.resx">
-      <DependentUpon>Reports.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Reports.es.resx">
-      <DependentUpon>Reports.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Reports.fr.resx">
-      <DependentUpon>Reports.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Reports.ka.resx">
-      <DependentUpon>Reports.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Reports.pt.resx">
-      <DependentUpon>Reports.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Reports.resx">
-      <SubType>Designer</SubType>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Reports.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Reports.ro.resx">
-      <DependentUpon>Reports.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Reports.ru.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>Reports.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Reports.sq.resx">
-      <DependentUpon>Reports.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Reports.zh.resx">
-      <DependentUpon>Reports.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\TabletLogs.resx">
-      <SubType>Designer</SubType>
-      <LastGenOutput>TabletLogs.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\TabletLogs.ru.resx">
-      <DependentUpon>TabletLogs.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\TabletSyncMessages.ar.resx">
-      <DependentUpon>TabletSyncMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\TabletSyncMessages.es.resx">
-      <DependentUpon>TabletSyncMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\TabletSyncMessages.fr.resx">
-      <DependentUpon>TabletSyncMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\TabletSyncMessages.ka.resx">
-      <DependentUpon>TabletSyncMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\TabletSyncMessages.pt.resx">
-      <DependentUpon>TabletSyncMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\TabletSyncMessages.resx">
-      <SubType>Designer</SubType>
-      <LastGenOutput>TabletSyncMessages.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\TabletSyncMessages.ro.resx">
-      <DependentUpon>TabletSyncMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\TabletSyncMessages.ru.resx">
-      <DependentUpon>TabletSyncMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\TabletSyncMessages.zh.resx">
-      <DependentUpon>TabletSyncMessages.resx</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-
-
   <ItemGroup>
     <Folder Include="Pages\" />
     <Folder Include="wwwroot\apidocs\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="*.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\MapReport.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>MapReport.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\MapReport.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MapReport.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>
