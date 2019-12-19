@@ -1,8 +1,6 @@
 import "bootstrap";
 import "bootstrap-select";
 
-import "../assets/css/markup.scss"
-import "../assets/css/markup-specific.scss"
 
 import Vue from "vue";
 import { sync } from "vuex-router-sync";

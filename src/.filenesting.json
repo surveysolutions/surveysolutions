@@ -5,9 +5,7 @@
     "add": {
       "fileToFile": {
         "add": {
-          "_AdminLayout.cshtml": [
-            "_AdminLayout.Template.cshtml"
-          ]
+         
         }
       },
       "pathSegment": {
@@ -20,7 +18,10 @@
       "extensionToExtension": {
         "add": {
           ".Designer.cs": [ ".resx" ],
-          ".designer.cs": [ ".resx" ]
+          ".designer.cs": [ ".resx" ],
+          ".cshtml": [
+              ".Template.cshtml"
+          ]
         }
       } 
     }
