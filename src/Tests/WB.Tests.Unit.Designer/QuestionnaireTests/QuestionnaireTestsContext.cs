@@ -5,6 +5,7 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
@@ -13,6 +14,7 @@ using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
+    [TestOf(typeof(Questionnaire))]
     internal class QuestionnaireTestsContext
     {
         public static T GetSingleEvent<T>(EventContext eventContext)
