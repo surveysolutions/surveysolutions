@@ -17,25 +17,8 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
     [IgnoreLineEndings(true)]
     [UseReporter(typeof(DiffReporter), typeof(NUnitReporter))]
     [TestOf(typeof(InterviewsDoFilesExporter))]
-    internal class CategoricalQuestionExportDoFiles : StataEnvironmentContentGeneratorTestContext
+    internal class CategoricalQuestionExportDoFiles : QuestionsExportDoFilesContext
     {
-        [Test]
-        public void when_two_text_question_should_create_correct_do_file()
-        {
-            string stataGeneratedContent = "";
-
-            var exportStructure = CreateQuestionnaireExportStructure(questionnaireCategories, new IQuestionnaireEntity[]
-            {
-                Create.TextQuestion(variable: "textQuestion1", questionText: "is it ?"),
-                Create.TextQuestion(variable: "textQuestion2", questionText: "to be or not to be", variableLabel: "it is variable label"),
-            });
-            var exporter = CreateInterviewsDoFilesExporter(s => stataGeneratedContent = s);
-
-            exporter.ExportDoFiles(exportStructure, "", CancellationToken.None);
-
-            Approvals.Verify(stataGeneratedContent);
-        }
-
         [Test]
         public void when_one_single_question_use_reusable_categories_should_create_correct_do_file()
         {
@@ -43,7 +26,7 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
 
             var exportStructure = CreateQuestionnaireExportStructure(questionnaireCategories, new IQuestionnaireEntity[]
             {
-                Create.SingleOptionQuestion(variable: "singleQuestion1", questionText: "to be or not to be", categoryId: Id.g1),
+                Create.SingleOptionQuestion(variable: "singleQuestion1", questionText: "questionText #1", categoryId: Id.g1),
             });
             var exporter = CreateInterviewsDoFilesExporter(s => stataGeneratedContent = s);
 
@@ -59,8 +42,8 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
 
             var exportStructure = CreateQuestionnaireExportStructure(questionnaireCategories, new IQuestionnaireEntity[]
             {
-                Create.SingleOptionQuestion(variable: "singleQuestion1", categoryId: Id.g1, questionText: "to be or not to be"),
-                Create.SingleOptionQuestion(variable: "singleQuestion2", categoryId: Id.g1, questionText: "To Be?", variableLabel: "label"),
+                Create.SingleOptionQuestion(variable: "singleQuestion1", categoryId: Id.g1, questionText: "questionText #1"),
+                Create.SingleOptionQuestion(variable: "singleQuestion2", categoryId: Id.g1, questionText: "questionText #2", variableLabel: "label #2"),
             });
             var exporter = CreateInterviewsDoFilesExporter(s => stataGeneratedContent = s);
 
@@ -76,7 +59,7 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
 
             var exportStructure = CreateQuestionnaireExportStructure(questionnaireCategories, new IQuestionnaireEntity[]
             {
-                Create.MultyOptionsQuestion(variable: "multiQuestion1", categoryId: Id.g1, questionText: "to be or not to be"),
+                Create.MultyOptionsQuestion(variable: "multiQuestion1", categoryId: Id.g1, questionText: "questionText #1"),
             });
             var exporter = CreateInterviewsDoFilesExporter(s => stataGeneratedContent = s);
 
@@ -92,8 +75,8 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
 
             var exportStructure = CreateQuestionnaireExportStructure(questionnaireCategories, new IQuestionnaireEntity[]
             {
-                Create.MultyOptionsQuestion(variable: "multiQuestion1", categoryId: Id.g1, questionText: "to be or not to be"),
-                Create.MultyOptionsQuestion(variable: "multiQuestion2", categoryId: Id.g1, questionText: "To Be?", variableLabel: "label"),
+                Create.MultyOptionsQuestion(variable: "multiQuestion1", categoryId: Id.g1, questionText: "questionText #1"),
+                Create.MultyOptionsQuestion(variable: "multiQuestion2", categoryId: Id.g1, questionText: "questionText #2", variableLabel: "label #2"),
             });
             var exporter = CreateInterviewsDoFilesExporter(s => stataGeneratedContent = s);
 
@@ -109,7 +92,7 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
 
             var exportStructure = CreateQuestionnaireExportStructure(questionnaireCategories, new IQuestionnaireEntity[]
             {
-                Create.SingleOptionQuestion(variable: "singleQuestion1", options: answers, questionText: "to be or not to be"),
+                Create.SingleOptionQuestion(variable: "singleQuestion1", options: answers, questionText: "questionText #1"),
             });
             var exporter = CreateInterviewsDoFilesExporter(s => stataGeneratedContent = s);
 
@@ -126,8 +109,8 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
 
             var exportStructure = CreateQuestionnaireExportStructure(questionnaireCategories, new IQuestionnaireEntity[]
             {
-                Create.SingleOptionQuestion(variable: "singleQuestion1", options: answers, questionText: "to be or not to be"),
-                Create.SingleOptionQuestion(variable: "singleQuestion2", options: answers, questionText: "To Be?", variableLabel: "label"),
+                Create.SingleOptionQuestion(variable: "singleQuestion1", options: answers, questionText: "questionText #1"),
+                Create.SingleOptionQuestion(variable: "singleQuestion2", options: answers, questionText: "questionText #2", variableLabel: "label #2"),
             });
             var exporter = CreateInterviewsDoFilesExporter(s => stataGeneratedContent = s);
 
@@ -143,7 +126,7 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
 
             var exportStructure = CreateQuestionnaireExportStructure(questionnaireCategories, new IQuestionnaireEntity[]
             {
-                Create.MultyOptionsQuestion(variable: "multiQuestion1", options: answers, questionText: "to be or not to be"),
+                Create.MultyOptionsQuestion(variable: "multiQuestion1", options: answers, questionText: "questionText #1"),
             });
             var exporter = CreateInterviewsDoFilesExporter(s => stataGeneratedContent = s);
 
@@ -159,8 +142,8 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
 
             var exportStructure = CreateQuestionnaireExportStructure(questionnaireCategories, new IQuestionnaireEntity[]
             {
-                Create.MultyOptionsQuestion(variable: "multiQuestion1", options: answers, questionText: "to be or not to be"),
-                Create.MultyOptionsQuestion(variable: "multiQuestion2", options: answers, questionText: "To Be?", variableLabel: "label"),
+                Create.MultyOptionsQuestion(variable: "multiQuestion1", options: answers, questionText: "questionText #1"),
+                Create.MultyOptionsQuestion(variable: "multiQuestion2", options: answers, questionText: "questionText #2", variableLabel: "label #2"),
             });
             var exporter = CreateInterviewsDoFilesExporter(s => stataGeneratedContent = s);
 
@@ -176,8 +159,8 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
 
             var exportStructure = CreateQuestionnaireExportStructure(questionnaireCategories, new IQuestionnaireEntity[]
             {
-                Create.MultyOptionsQuestion(variable: "multiQuestion1", categoryId: Id.g1, questionText: "to be or not to be"),
-                Create.MultyOptionsQuestion(variable: "multiQuestion2", options: answers, questionText: "to be?", variableLabel:"label"),
+                Create.MultyOptionsQuestion(variable: "multiQuestion1", categoryId: Id.g1, questionText: "questionText #1"),
+                Create.MultyOptionsQuestion(variable: "multiQuestion2", options: answers, questionText: "questionText #2", variableLabel:"label #2"),
             });
             var exporter = CreateInterviewsDoFilesExporter(s => stataGeneratedContent = s);
 
@@ -193,7 +176,7 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
 
             var exportStructure = CreateQuestionnaireExportStructure(questionnaireCategories, new IQuestionnaireEntity[]
             {
-                Create.MultyOptionsQuestion(variable: "multiQuestion1", isFilteredCombobox:true, options: answers, questionText: "to be or not to be"),
+                Create.MultyOptionsQuestion(variable: "multiQuestion1", isFilteredCombobox:true, options: answers, questionText: "questionText #1"),
             });
             var exporter = CreateInterviewsDoFilesExporter(s => stataGeneratedContent = s);
 
@@ -209,8 +192,8 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
 
             var exportStructure = CreateQuestionnaireExportStructure(questionnaireCategories, new IQuestionnaireEntity[]
             {
-                Create.MultyOptionsQuestion(variable: "multiQuestion1", isFilteredCombobox:true, options: answers, questionText: "to be or not to be"),
-                Create.MultyOptionsQuestion(variable: "multiQuestion2", isFilteredCombobox:true, options: answers, questionText: "To Be?", variableLabel: "label"),
+                Create.MultyOptionsQuestion(variable: "multiQuestion1", isFilteredCombobox:true, options: answers, questionText: "questionText #1"),
+                Create.MultyOptionsQuestion(variable: "multiQuestion2", isFilteredCombobox:true, options: answers, questionText: "questionText #2", variableLabel: "label #2"),
             });
             var exporter = CreateInterviewsDoFilesExporter(s => stataGeneratedContent = s);
 
@@ -226,8 +209,26 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
 
             var exportStructure = CreateQuestionnaireExportStructure(questionnaireCategories, new IQuestionnaireEntity[]
             {
-                Create.MultyOptionsQuestion(variable: "multiQuestion1", isFilteredCombobox:true, categoryId: Id.g1, questionText: "to be or not to be"),
-                Create.MultyOptionsQuestion(variable: "multiQuestion2", isFilteredCombobox:true, options: answers, questionText: "to be?"),
+                Create.MultyOptionsQuestion(variable: "multiQuestion1", isFilteredCombobox:true, categoryId: Id.g1, questionText: "questionText #1"),
+                Create.MultyOptionsQuestion(variable: "multiQuestion2", isFilteredCombobox:true, options: answers, questionText: "questionText #2"),
+            });
+            var exporter = CreateInterviewsDoFilesExporter(s => stataGeneratedContent = s);
+
+            exporter.ExportDoFiles(exportStructure, "", CancellationToken.None);
+
+            Approvals.Verify(stataGeneratedContent);
+        }
+
+
+        [Test]
+        public void when_two_multi_filtered_questions_With_reusable_categories_should_create_correct_do_file()
+        {
+            string stataGeneratedContent = "";
+
+            var exportStructure = CreateQuestionnaireExportStructure(questionnaireCategories, new IQuestionnaireEntity[]
+            {
+                Create.MultyOptionsQuestion(variable: "multiQuestion1", isFilteredCombobox:true, categoryId: Id.g1, questionText: "questionText #1"),
+                Create.MultyOptionsQuestion(variable: "multiQuestion2", isFilteredCombobox:true, categoryId: Id.g1, questionText: "questionText #2"),
             });
             var exporter = CreateInterviewsDoFilesExporter(s => stataGeneratedContent = s);
 
@@ -244,12 +245,12 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
 
             var exportStructure = CreateQuestionnaireExportStructure(questionnaireCategories, new IQuestionnaireEntity[]
             {
-                Create.SingleOptionQuestion(variable: "singleQuestion1", categoryId: Id.g1, questionText: "to be single?"),
-                Create.SingleOptionQuestion(variable: "singleQuestion2", options: answers, questionText: "or not be single?"),
-                Create.MultyOptionsQuestion(variable: "filteredQuestion1", categoryId: Id.g1, questionText: "to be multi?"),
-                Create.MultyOptionsQuestion(variable: "filteredQuestion2", options: answers, questionText: "or not to be?"),
-                Create.MultyOptionsQuestion(variable: "multiQuestion1", isFilteredCombobox: true, categoryId: Id.g1, questionText: "to be multi filtered?"),
-                Create.MultyOptionsQuestion(variable: "multiQuestion2", isFilteredCombobox: true, options: answers, questionText: "or not to be filtered?"),
+                Create.SingleOptionQuestion(variable: "singleQuestion1", categoryId: Id.g1, questionText: "questionText #1"),
+                Create.SingleOptionQuestion(variable: "singleQuestion2", options: answers, questionText: "questionText #2"),
+                Create.MultyOptionsQuestion(variable: "filteredQuestion1", categoryId: Id.g1, questionText: "questionText #3"),
+                Create.MultyOptionsQuestion(variable: "filteredQuestion2", options: answers, questionText: "questionText #4"),
+                Create.MultyOptionsQuestion(variable: "multiQuestion1", isFilteredCombobox: true, categoryId: Id.g1, questionText: "questionText #5"),
+                Create.MultyOptionsQuestion(variable: "multiQuestion2", isFilteredCombobox: true, options: answers, questionText: "questionText #6"),
             });
             var exporter = CreateInterviewsDoFilesExporter(s => stataGeneratedContent = s);
 
@@ -258,42 +259,24 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
             Approvals.Verify(stataGeneratedContent);
         }
 
-
-        private IInterviewsDoFilesExporter CreateInterviewsDoFilesExporter(Action<string> returnContentAction)
-        {
-            var fileSystemAccessor = CreateFileSystemAccessor(returnContentAction);
-            var exporter = Create.InterviewsDoFilesExporter(fileSystemAccessor);
-            return exporter;
-        }
-
-        private QuestionnaireExportStructure CreateQuestionnaireExportStructure(List<Categories> reusableCategories, IQuestionnaireEntity[] children)
-        {
-            var questionnaireDocument = Create.QuestionnaireDocument(children: children);
-            questionnaireDocument.Categories = reusableCategories;
-
-            var exportStructureFactory = new QuestionnaireExportStructureFactory(Mock.Of<IQuestionnaireStorage>());
-            var exportStructure = exportStructureFactory.CreateQuestionnaireExportStructure(questionnaireDocument);
-            return exportStructure;
-        }
-
         private static Answer[] answers = new Answer[]
         {
-            Create.Answer("title #1", 1),
-            Create.Answer("title #2", 2),
-            Create.Answer("title #3", 3),
-            Create.Answer("title #4", 4),
-            Create.Answer("title #5", 5),
+            Create.Answer("title #111", 101),
+            Create.Answer("title #112", 102),
+            Create.Answer("title #113", 103),
+            Create.Answer("title #114", 104),
+            Create.Answer("title #115", 105),
         };
 
         private static readonly List<Categories> questionnaireCategories = new List<Categories>
         {
             Create.Entity.Categories(Id.g1, name: "reusableCategory1", values: new CategoryItem[]
             {
-                Create.Entity.CategoryItem(1, "title #1"),
-                Create.Entity.CategoryItem(2, "title #2"),
-                Create.Entity.CategoryItem(3, "title #3"),
-                Create.Entity.CategoryItem(4, "title #4"),
-                Create.Entity.CategoryItem(5, "title #5"),
+                Create.Entity.CategoryItem(201, "title #211"),
+                Create.Entity.CategoryItem(202, "title #212"),
+                Create.Entity.CategoryItem(203, "title #213"),
+                Create.Entity.CategoryItem(204, "title #214"),
+                Create.Entity.CategoryItem(205, "title #215"),
             }),
         };
     }

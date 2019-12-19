@@ -1,7 +1,7 @@
 ﻿clear
-insheet using "_.tab", tab case names
+insheet using "questionnaire_var.tab", tab case names
 
-label define reusableCategory1 1 `"title #1"' 2 `"title #2"' 3 `"title #3"' 4 `"title #4"' 5 `"title #5"' 
+label define reusableCategory1 201 `"title #211"' 202 `"title #212"' 203 `"title #213"' 204 `"title #214"' 205 `"title #215"' 
 
 label variable interview__id `"Unique 32-character long identifier of the interview"'
 
@@ -16,7 +16,7 @@ label values interview__status interview__status
 label variable interview__status `"Status of the interview"'
 
 label values singleQuestion1 reusableCategory1
-label variable singleQuestion1 `"to be or not to be"'
+label variable singleQuestion1 `"questionText #1"'
 
 label values singleQuestion2 reusableCategory1
-label variable singleQuestion2 `"label"'
+label variable singleQuestion2 `"label #2"'
