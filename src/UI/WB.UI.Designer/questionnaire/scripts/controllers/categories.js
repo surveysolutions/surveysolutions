@@ -84,6 +84,8 @@
 
                             dataBind(categories.checkpoint, categories);
                             $scope.categoriesList.push(categories);
+                            updateQuestionnaireCategories();
+
                             setTimeout(function() {
                                     utilityService.focus("focusCategories" + categories.categoriesId);
                                 },
@@ -135,6 +137,8 @@
                 commandService.updateCategories($state.params.questionnaireId, categories).then(function () {
                     dataBind(categories.checkpoint, categories);
                     categories.form.$setPristine();
+
+                    updateQuestionnaireCategories();
                 });
             };
 
@@ -164,6 +168,8 @@
                         commandService.deleteCategories($state.params.questionnaireId, categories.categoriesId).then(
                             function() {
                                 $scope.categoriesList.splice(index, 1);
+
+                                updateQuestionnaireCategories();
                             });
                     }
                 });
@@ -188,4 +194,14 @@
             $rootScope.$on('questionnaireLoaded', function () {
                 $scope.loadCategories();
             });
+
+            var updateQuestionnaireCategories = function() {
+                if ($scope.categoriesList === null)
+                    return;
+
+                $scope.questionnaire.categories = _.map($scope.categoriesList,
+                    function(categoriesDto) {
+                        return { categoriesId: categoriesDto.categoriesId, name: categoriesDto.name };
+                    });
+            };
         });
