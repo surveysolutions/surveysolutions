@@ -1963,7 +1963,6 @@
     <Compile Include="API\Export\InterviewsExportBinaryApiController.cs" />
     <Compile Include="API\Export\QuestionnaireApiController.cs" />
     <Compile Include="API\Filters\ServiceApiKeyAuthorizationAttribute.cs" />
-    <Compile Include="API\UsersTypeaheadController.cs" />
     <Compile Include="API\WebInterview\HqWebInterviewModule.cs" />
     <Compile Include="API\WebInterview\IReviewAllowedService.cs" />
     <Compile Include="API\WebInterview\IWebInterviewAllowService.cs" />
@@ -2062,7 +2061,6 @@
     <Compile Include="Code\HtmlHelper.cs" />
     <Compile Include="Code\HttpForbiddenResult.cs" />
     <Compile Include="Code\ILifetimeHub.cs" />
-    <Compile Include="Code\InterviewerVersionReader.cs" />
     <Compile Include="Code\ApplicationSettings.cs" />
     <Compile Include="Code\MessageHandler\BasicAuthMessageHandler.cs" />
     <Compile Include="Code\QRCodeHelper.cs" />

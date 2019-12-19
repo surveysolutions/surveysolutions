@@ -5,6 +5,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Reports;
+using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -17,11 +18,26 @@ namespace WB.UI.Headquarters.Controllers
             this.mapReport = mapReport;
         }
 
-
         [Authorize(Roles = "Administrator, Headquarter")]
         [ActivePage(MenuItem.SurveyAndStatuses)]
-        public ActionResult SurveysAndStatuses(SurveysAndStatusesModel model)
+        public ActionResult SurveysAndStatuses()
         {
+            var model = new SurveysAndStatusesModel();
+            model.DataUrl = Url.RouteUrl(
+                new
+                {
+                    controller = "ReportDataApi",
+                    action = "HeadquarterSurveysAndStatusesReport"
+                });
+
+            model.ResponsiblesUrl = Url.RouteUrl(new
+            {
+                controller = "UsersTypeahead",
+                action = "Supervisors"
+            });
+
+            model.ReportName = Pages.SurveysAndStatuses_Overview;
+            model.Subtitle = Pages.SurveysAndStatuses_HeadquartersDescription;
             return this.View(model);
         }
 

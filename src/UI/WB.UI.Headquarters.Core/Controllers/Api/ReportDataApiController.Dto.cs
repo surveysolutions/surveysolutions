@@ -10,7 +10,7 @@ using WB.UI.Headquarters.Models.Api;
 
 namespace WB.UI.Headquarters.Controllers.Api
 {
-    public partial class ReportDataControllerBase
+    public partial class ReportDataApiController
     {
         public class SurveysAndStatusesDataTableResponse : DataTableResponse<HeadquarterSurveysAndStatusesReportLine>
         {
