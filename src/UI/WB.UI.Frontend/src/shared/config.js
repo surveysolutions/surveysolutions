@@ -1,7 +1,7 @@
 const config = global.CONFIG;
 
 /*  the Plugin */
-export default _.assign(global.CONFIG || {}, {
+export default Object.assign(global.CONFIG || {}, {
     install(Vue) {
 
         config.hubName = config.hubName || "interview"
