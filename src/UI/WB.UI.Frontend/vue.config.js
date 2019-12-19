@@ -163,7 +163,7 @@ module.exports = {
 
 
         config.plugin("runtime").use(RuntimePublicPathPlugin, [{
-            runtimePublicPath: "window.CONFIG.assetsPath"
+            runtimePublicPath: "window.CONFIG == null ? '/' : window.CONFIG.assetsPath || '/'"
         }]);
 
 
