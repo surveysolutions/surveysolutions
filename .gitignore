@@ -115,3 +115,9 @@ src/UI/WB.UI.Designer/wwwroot
 /src/UI/WB.UI.Frontend/styles/dist/
 /src/UI/WB.UI.Headquarters.Core/wwwroot/lib/
 /src/UI/WB.UI.WebTester/wwwroot
+/src/UI/WB.UI.Headquarters.Core/Views/Shared/_AdminLayout.cshtml
+/src/UI/WB.UI.Headquarters.Core/Views/Shared/_AdminLayout_Legacy.cshtml
+/src/UI/WB.UI.Headquarters.Core/Views/Shared/_FinishInstallation.cshtml
+/src/UI/WB.UI.Headquarters.Core/Views/Shared/_Logon.cshtml
+/src/UI/WB.UI.Headquarters.Core/Views/Shared/_WebInterview.cshtml
+/src/UI/WB.UI.WebTester/Views/Shared/_Layout.cshtml
