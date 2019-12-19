@@ -220,7 +220,11 @@ namespace WB.Services.Export.Tests
             Guid? linkedToRosterId = null,
             bool areAnswersOrdered = false,
             bool? isFilteredCombobox = null,
-            int? maxAnswersCount = null)
+            int? maxAnswersCount = null,
+            Guid? categoryId = null,
+            string variableLabel = null,
+            string questionText = null
+            )
             => new MultyOptionsQuestion
             {
                 QuestionType = QuestionType.MultyOption,
@@ -233,6 +237,9 @@ namespace WB.Services.Export.Tests
                 AreAnswersOrdered = areAnswersOrdered,
                 IsFilteredCombobox = isFilteredCombobox,
                 MaxAllowedAnswers = maxAnswersCount
+                CategoriesId = categoryId,
+                VariableLabel = variableLabel,
+                QuestionText = questionText,
             };
 
         public static Answer Option(string text, string value)
@@ -541,7 +548,9 @@ namespace WB.Services.Export.Tests
             string questionText = null,
             string variable = null,
             IEnumerable<Answer> options = null,
-            Guid? linkedToQuestionId = null)
+            Guid? linkedToQuestionId = null,
+            Guid? categoryId = null,
+            string variableLabel = null)
         {
             return new SingleQuestion
             {
@@ -550,7 +559,9 @@ namespace WB.Services.Export.Tests
                 PublicKey = id ?? Guid.NewGuid(),
                 QuestionText = questionText,
                 VariableName = variable ?? "single",
-                LinkedToQuestionId = linkedToQuestionId
+                LinkedToQuestionId = linkedToQuestionId,
+                CategoriesId = categoryId,
+                VariableLabel = variableLabel,
             };
         }
 
@@ -676,6 +687,19 @@ namespace WB.Services.Export.Tests
                 fileSystem ?? Mock.Of<IFileSystemAccessor>(),
                 Mock.Of<ILogger<PdfExporter>>());
         }
+
+        internal static IInterviewsDoFilesExporter InterviewsDoFilesExporter(IFileSystemAccessor fileSystemAccessor, QuestionnaireLabelFactory questionnaireLabelFactory = null)
+        {
+            return new InterviewsDoFilesExporter(
+                fileSystemAccessor, 
+                questionnaireLabelFactory ?? Create.QuestionnaireLabelFactory()
+                );
+        }
+
+        private static IQuestionnaireLabelFactory QuestionnaireLabelFactory()
+        {
+            return new QuestionnaireLabelFactory();
+        }
     }
 
     public class EventsFactory
@@ -784,6 +808,26 @@ namespace WB.Services.Export.Tests
         public InterviewReference InterviewReference()
         {
             return new InterviewReference();
+        }
+
+        public Categories Categories(Guid id, string name = null, CategoryItem[] values = null)
+        {
+            return new Categories()
+            {
+                Id = id,
+                Name = name ?? string.Empty,
+                Values = values ?? new CategoryItem[0]
+            };
+        }
+
+        public CategoryItem CategoryItem(int value, string title, int? parentId = null)
+        {
+            return new CategoryItem()
+            {
+                Id = value,
+                Text = title,
+                ParentId = parentId
+            };
         }
     }
 

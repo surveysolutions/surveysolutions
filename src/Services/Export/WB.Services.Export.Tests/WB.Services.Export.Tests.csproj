@@ -44,6 +44,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="CsvExport\Implementation\DoFiles\CategoricalQuestionExportDoFiles-approved\" />
     <Folder Include="InterviewDataExport\InterviewDataDenormalizerTests-approved\" />
   </ItemGroup>
 
