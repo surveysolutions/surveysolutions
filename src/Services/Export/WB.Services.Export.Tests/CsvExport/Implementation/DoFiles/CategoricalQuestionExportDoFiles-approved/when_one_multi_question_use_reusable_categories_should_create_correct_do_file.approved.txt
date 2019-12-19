@@ -1,5 +1,5 @@
 ﻿clear
-insheet using "_.tab", tab case names
+insheet using "questionnaire_var.tab", tab case names
 
 label variable interview__id `"Unique 32-character long identifier of the interview"'
 
@@ -13,12 +13,12 @@ label define interview__status 0 `"Restored"' 20 `"Created"' 40 `"SupervisorAssi
 label values interview__status interview__status
 label variable interview__status `"Status of the interview"'
 
-label variable multiQuestion1__1 `"to be or not to be:title #1"'
+label variable multiQuestion1__201 `"questionText #1:title #211"'
 
-label variable multiQuestion1__2 `"to be or not to be:title #2"'
+label variable multiQuestion1__202 `"questionText #1:title #212"'
 
-label variable multiQuestion1__3 `"to be or not to be:title #3"'
+label variable multiQuestion1__203 `"questionText #1:title #213"'
 
-label variable multiQuestion1__4 `"to be or not to be:title #4"'
+label variable multiQuestion1__204 `"questionText #1:title #214"'
 
-label variable multiQuestion1__5 `"to be or not to be:title #5"'
+label variable multiQuestion1__205 `"questionText #1:title #215"'

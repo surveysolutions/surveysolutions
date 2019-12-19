@@ -1,5 +1,5 @@
 ﻿clear
-insheet using "_.tab", tab case names
+insheet using "questionnaire_var.tab", tab case names
 
 label variable interview__id `"Unique 32-character long identifier of the interview"'
 
@@ -13,6 +13,6 @@ label define interview__status 0 `"Restored"' 20 `"Created"' 40 `"SupervisorAssi
 label values interview__status interview__status
 label variable interview__status `"Status of the interview"'
 
-label variable textQuestion1 `"is it ?"'
+label variable textQuestion1 `"questionText #1"'
 
-label variable textQuestion2 `"it is variable label"'
+label variable textQuestion2 `"variable Label #2"'

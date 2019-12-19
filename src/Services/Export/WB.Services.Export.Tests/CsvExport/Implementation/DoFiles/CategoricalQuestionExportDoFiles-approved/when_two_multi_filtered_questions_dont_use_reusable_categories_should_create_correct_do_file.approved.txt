@@ -1,5 +1,5 @@
 ﻿clear
-insheet using "_.tab", tab case names
+insheet using "questionnaire_var.tab", tab case names
 
 label variable interview__id `"Unique 32-character long identifier of the interview"'
 
