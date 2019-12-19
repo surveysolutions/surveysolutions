@@ -41,10 +41,10 @@
 
                 <ul class="dropdown-menu" role="menu">
                     <li role="presentation">
-                        <a role="menuitem" tabindex="-1" ng-i18next="UserDefinedCategories" ng-click="changeIsReusableCategories(false)"></a>
+                        <a role="menuitem" tabindex="-1" ng-i18next="UserDefinedCategories" ng-click="setUserDefinedCategories()"></a>
                     </li>
                     <li role="presentation">
-                        <a role="menuitem" tabindex="-1" ng-i18next="ReusableCategories" ng-click="changeIsReusableCategories(true)"></a>
+                        <a role="menuitem" tabindex="-1" ng-i18next="ReusableCategories" ng-click="setIsReusableCategories()"></a>
                     </li>
                     <li role="presentation">
                         <a role="menuitem" tabindex="-1" ng-i18next="RostersQuestion" ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.yesNoView" ng-click="setIsLinkedQuestion()"></a>
