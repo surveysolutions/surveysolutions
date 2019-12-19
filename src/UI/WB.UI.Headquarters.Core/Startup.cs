@@ -226,7 +226,7 @@ namespace WB.UI.Headquarters
             {
                 options.Level = CompressionLevel.Optimal;
             });
- 
+
             services.AddResponseCompression(options =>
             {
                 options.EnableForHttps = true;
@@ -243,10 +243,9 @@ namespace WB.UI.Headquarters
                 o.Providers.Add<GzipDecompressionProvider>();
             });
 
- 
             services.AddResponseCompression(options =>
             {
-                options.EnableForHttps = true;    
+                options.EnableForHttps = true;
                 options.Providers.Add<BrotliCompressionProvider>();
             });
 
@@ -260,7 +259,11 @@ namespace WB.UI.Headquarters
                 {
                     noContentFormatter.TreatNullValueAsNoContent = false;
                 }
-            });
+            })
+#if DEBUG
+                .AddRazorRuntimeCompilation()
+#endif
+                ;
 
             services.AddHqSwaggerGen();
 
