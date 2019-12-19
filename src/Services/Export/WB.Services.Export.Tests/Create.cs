@@ -449,8 +449,7 @@ namespace WB.Services.Export.Tests
                 Featured = preFilled,
                 VariableLabel = label,
                 ValidationConditions = validationConditions?.ToList(),
-                MaxAnswerCount = maxAnswersCount
-
+                MaxAnswerCount = maxAnswersCount,
             };
 
         public static IInterviewFactory InterviewFactory()
