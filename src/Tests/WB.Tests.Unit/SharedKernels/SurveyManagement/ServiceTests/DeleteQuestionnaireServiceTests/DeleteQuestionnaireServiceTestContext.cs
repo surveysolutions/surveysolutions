@@ -19,6 +19,7 @@ using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.Questionnaire;
+using WB.Infrastructure.Native.Questionnaire;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuestionnaireServiceTests
@@ -49,8 +50,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
                     new DeleteQuestionnaireJobScheduler(Mock.Of<IScheduler>()),
                     Mock.Of<IInvitationsDeletionService>(),
                     Mock.Of<IAggregateRootCacheCleaner>(),
-                    assignmentsToDeleteFactory ?? Mock.Of<IAssignmentsToDeleteFactory>(f => f.LoadBatch(It.IsAny<Guid>(), It.IsAny<long>()) == Enumerable.Empty<Assignment>().ToList())
-                    );
+                    assignmentsToDeleteFactory ?? Mock.Of<IAssignmentsToDeleteFactory>(f => f.LoadBatch(It.IsAny<Guid>(), It.IsAny<long>()) == Enumerable.Empty<Assignment>().ToList()),
+                    Mock.Of<IReusableCategoriesStorage>());
         }
     }
 }

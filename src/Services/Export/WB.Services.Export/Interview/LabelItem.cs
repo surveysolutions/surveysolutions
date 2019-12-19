@@ -14,6 +14,12 @@ namespace WB.Services.Export.Interview
             this.Title = answer.AnswerText;
         }
 
+        public LabelItem(string value, string title)
+        {
+            this.Caption = value;
+            this.Title = title;
+        }
+
         public string Caption { get; set; }
         public string Title { get; set; }
     }

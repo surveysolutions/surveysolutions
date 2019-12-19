@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Tests.Unit.Designer.Services;
 using WB.UI.Designer.Code;
@@ -45,8 +46,8 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                 questionnaireHelper ?? Mock.Of<IQuestionnaireHelper>(),
                 Mock.Of<IPublicFoldersStorage>(),
                 Mock.Of<IAttachmentService>(),
-                Mock.Of<ITranslationsService>()
-            );
+                Mock.Of<ITranslationsService>(), 
+                categoriesService: Mock.Of<ICategoriesService>());
             questionnaireController.ControllerContext = new ControllerContext
             {
                 HttpContext = new DefaultHttpContext

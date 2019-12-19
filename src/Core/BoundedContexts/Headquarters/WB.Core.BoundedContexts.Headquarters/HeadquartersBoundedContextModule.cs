@@ -79,6 +79,9 @@ using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
 using WB.Core.BoundedContexts.Headquarters.Designer;
+using WB.Core.BoundedContexts.Headquarters.ReusableCategories;
+using WB.Infrastructure.Native.Questionnaire;
+using WB.Infrastructure.Native.Questionnaire.Impl;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading;
@@ -184,7 +187,9 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAssemblyService, AssemblyService>();
             registry.Bind<IExportSettings, ExportSettings>();
             registry.Bind<IArchiveUtils, IProtectedArchiveUtils, ZipArchiveUtils>();
-            
+            registry.Bind<IReusableCategoriesStorage, ReusableCategoriesStorage>();
+            registry.Bind<IReusableCategoriesFillerIntoQuestionnaire, ReusableCategoriesFillerIntoQuestionnaire>();
+
             registry.Bind<IAllInterviewsFactory, AllInterviewsFactory>();
             registry.Bind<ITeamInterviewsFactory, TeamInterviewsFactory>();
             registry.Bind<IChangeStatusFactory, ChangeStatusFactory>();

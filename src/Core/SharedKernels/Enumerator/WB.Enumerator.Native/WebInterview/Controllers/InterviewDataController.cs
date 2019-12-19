@@ -611,8 +611,6 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                     if (callerQuestionnaire.IsQuestionLinked(entityId)
                         || callerQuestionnaire.IsQuestionLinkedToRoster(entityId))
                         return InterviewEntityType.LinkedSingle;
-                    if (callerQuestionnaire.IsQuestionFilteredCombobox(entityId))
-                        return InterviewEntityType.Combobox;
                     if (callerQuestionnaire.IsQuestionCascading(entityId))
                     {
                         if (callerQuestionnaire.ShowCascadingAsList(entityId))
@@ -629,6 +627,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
                         return InterviewEntityType.Combobox;
                     }
+                    if (callerQuestionnaire.IsQuestionFilteredCombobox(entityId))
+                        return InterviewEntityType.Combobox;
                     else
                         return InterviewEntityType.CategoricalSingle;
                 case QuestionType.Numeric:

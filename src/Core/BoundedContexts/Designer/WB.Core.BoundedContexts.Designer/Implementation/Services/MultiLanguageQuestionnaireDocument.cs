@@ -27,6 +27,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public Dictionary<Guid, LookupTable> LookupTables => this.Questionnaire.LookupTables;
         public List<Attachment> Attachments => this.Questionnaire.Attachments;
         public List<Translation> Translations => this.Questionnaire.Translations;
+        public List<Categories> Categories => this.Questionnaire.Categories;
         public string Title => this.Questionnaire.Title;
         public string VariableName => this.Questionnaire.VariableName;
         public Guid PublicKey => this.Questionnaire.PublicKey;

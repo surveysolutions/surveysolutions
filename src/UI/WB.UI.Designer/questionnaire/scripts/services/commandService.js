@@ -162,6 +162,43 @@
                 return commandCall("DeleteTranslation", command);
             };
 
+            commandService.updateCategories = function (questionnaireId, categories) {
+                blockUI.start();
+
+                var command = {
+                    questionnaireId: questionnaireId,
+                    categoriesId: categories.categoriesId,
+                    oldCategoriesId: categories.oldCategoriesId,
+                    name: categories.name
+                };
+
+                return Upload.upload({
+                    url: urlCommands + '/categories',
+                    data: { file: _.isNull(categories.file) ? "" : categories.file, "command": JSON.stringify(command) }
+                }).then(function (response) {
+                    blockUI.stop();
+
+                    if (!_.isNull(categories.file))
+                        notificationService.notice(response.data);
+
+                    categories.file = null;
+
+                    return response;
+
+                }).catch(function () {
+                    blockUI.stop();
+                });
+            };
+
+            commandService.deleteCategories = function (questionnaireId, categoriesId) {
+                var command = {
+                    questionnaireId: questionnaireId,
+                    categoriesId: categoriesId
+                };
+                return commandCall("DeleteCategories", command);
+            };
+
+
             commandService.setDefaultTranslation = function(questionnaireId, translationId) {
                 var command = {
                     questionnaireId: questionnaireId,
@@ -272,6 +309,7 @@
                         }
                         command.showAsListThreshold = question.showAsListThreshold;
                         command.showAsList = question.showAsList;
+                        command.categoriesId = question.categoriesId;
                         break;
                     case "MultyOption":
                         command.areAnswersOrdered = question.areAnswersOrdered;
@@ -281,6 +319,7 @@
                         command.yesNoView = question.yesNoView;
                         command.isFilteredCombobox = question.isFilteredCombobox || false;
                         command.options = !_.isEmpty(command.linkedToEntityId) || command.isFilteredCombobox ? null : question.options;
+                        command.categoriesId = question.categoriesId;
                         break;
                     case "Numeric":
                         command.isInteger = question.isInteger;

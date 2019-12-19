@@ -18,6 +18,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
@@ -213,6 +214,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 new ApplicationSettingsRequest(), token);
 
             return response.NotificationsEnabled;
+        }
+
+        public async Task<List<ReusableCategoriesDto>> GetQuestionnaireReusableCategoriesAsync(QuestionnaireIdentity questionnaireIdentity,
+            CancellationToken cancellationToken = default)
+        {
+            var response = await this.syncClient
+                .SendAsync<GetQuestionnaireReusableCategoriesRequest, GetQuestionnaireReusableCategoriesResponse>(
+                    new GetQuestionnaireReusableCategoriesRequest
+                    {
+                        QuestionnaireIdentity = questionnaireIdentity
+                    }, cancellationToken);
+
+            return response.Categories;
         }
 
         public Task UploadAuditLogEntityAsync(AuditLogEntitiesApiView auditLogEntity, CancellationToken token = default)

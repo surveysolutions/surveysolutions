@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Tester
         {
             registry.BindAsSingleton<IEventStore, InMemoryEventStore>();
             registry.BindAsSingleton<IPlainKeyValueStorage<QuestionnaireDocument>, InMemoryKeyValueStorage<QuestionnaireDocument>>();
-            registry.BindAsSingleton<IPlainStorage<OptionView>, InMemoryPlainStorage<OptionView>>();
+            registry.BindAsSingleton<IPlainStorage<OptionView, int?>, InMemoryPlainStorage<OptionView, int?>>();
             registry.BindAsSingleton<IQuestionnaireStorage, QuestionnaireStorage>();
             registry.BindAsSingleton<IExecutedCommandsStorage, ExecutedCommandsStorage>();
 

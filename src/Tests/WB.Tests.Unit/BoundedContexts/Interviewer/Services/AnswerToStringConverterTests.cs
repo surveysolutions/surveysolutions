@@ -24,9 +24,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
         public void when_get_answer_it_should_stored_to_correct_string(object answer, QuestionType questionType, string result)
         {
             Guid questionId = Guid.NewGuid();
-            var questionnaire = Mock.Of<IQuestionnaire>(q => q.GetQuestionType(questionId) == questionType
-                && q.GetAnswerOptionTitle(questionId, 1) == "title1"
-                && q.GetAnswerOptionTitle(questionId, 2) == "title2");
+            var questionnaire = Mock.Of<IQuestionnaire>(
+                   q => q.GetQuestionType(questionId) == questionType
+                && q.GetAnswerOptionTitle(questionId, 1, null) == "title1"
+                && q.GetAnswerOptionTitle(questionId, 2, null) == "title2"
+                && q.IsPrefilled(questionId) == true);
 
             var converter = Create.Service.AnswerToStringConverter();
 
@@ -44,7 +46,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
 
             var questionnaire = Create.Entity.PlainQuestionnaire(
                 Create.Entity.QuestionnaireDocumentWithOneChapter(
-                    Create.Entity.DateTimeQuestion(Id.g1, isTimestamp: false))
+                    Create.Entity.DateTimeQuestion(Id.g1, isTimestamp: false, preFilled: true))
                 );
             var converter = Create.Service.AnswerToStringConverter();
 
@@ -64,7 +66,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
             
             var questionnaire = Create.Entity.PlainQuestionnaire(
                 Create.Entity.QuestionnaireDocumentWithOneChapter(
-                    Create.Entity.DateTimeQuestion(Id.g1, isTimestamp: true))
+                    Create.Entity.DateTimeQuestion(Id.g1, isTimestamp: true, preFilled: true))
             );
             var converter = Create.Service.AnswerToStringConverter();
 
@@ -73,6 +75,23 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
 
             // assert
             Assert.That(stringAnswer, Is.EqualTo(dt.ToString(DateTimeFormat.DateWithTimeFormat)));
+        }
+
+        [Test]
+        public void when_convert_answer_to_string_and_question_is_not_identifying_then_should_throw_not_supported_exception()
+        {
+            DateTime dt = new DateTime(2010, 4, 15, 14, 30, 0);
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                    Create.Entity.DateTimeQuestion(Id.g1, isTimestamp: false, preFilled: false)
+            );
+            var converter = Create.Service.AnswerToStringConverter();
+
+            // act
+            var exception = Assert.Catch<NotSupportedException>(() => converter.Convert(dt, Id.g1, questionnaire));
+
+            // assert
+            Assert.That(exception, Is.Not.Null);
         }
     }
 }
