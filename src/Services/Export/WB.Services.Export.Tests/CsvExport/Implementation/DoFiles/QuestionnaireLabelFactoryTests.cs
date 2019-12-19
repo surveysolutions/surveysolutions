@@ -22,7 +22,7 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
             var labels = factory.CreateLabelsForQuestionnaire(exportStructure);
 
             // Assert
-            Assert.That(labels[0].LabeledVariable[1].Label.LabelName, Does.Not.Contain("<strong>").And.Not.Contain("</strong>"));
+            Assert.That(labels[0].LabeledVariable[1].Value.Name, Does.Not.Contain("<strong>").And.Not.Contain("</strong>"));
         }
 
         [Test]
@@ -59,8 +59,8 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
             var labels = factory.CreateLabelsForQuestionnaire(exportStructure);
 
             // Assert
-            Assert.That(labels[1].LabeledVariable[0].Label.VariableValues[0].Label, Is.EqualTo("a"));
-            Assert.That(labels[2].LabeledVariable[0].Label.VariableValues[1].Label, Is.EqualTo("bbb"));
+            Assert.That(labels[1].LabeledVariable[0].Value.VariableValues[0].Label, Is.EqualTo("a"));
+            Assert.That(labels[2].LabeledVariable[0].Value.VariableValues[1].Label, Is.EqualTo("bbb"));
         }
 
 
@@ -135,7 +135,7 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
             var labels = factory.CreateLabelsForQuestionnaire(exportStructure);
 
             // Assert
-            Assert.That(labels[1].LabeledVariable.Where(x=>x.Label.VariableValues.Length > 0).Count, Is.EqualTo(1));
+            Assert.That(labels[1].LabeledVariable.Where(x=>x.Value.VariableValues.Length > 0).Count, Is.EqualTo(1));
             
         }
 
@@ -167,7 +167,7 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
 
             // assert
             DataExportVariable questionnaireLevelLabels = structure[0]["singleOption"];
-            Assert.That(questionnaireLevelLabels.Label.VariableValues, Is.Empty);
+            Assert.That(questionnaireLevelLabels.Value.VariableValues, Is.Empty);
         }   
     }
 }
