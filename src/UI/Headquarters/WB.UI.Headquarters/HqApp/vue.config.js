@@ -41,7 +41,8 @@ const pages = {
             "Settings",
             "DataExport",
             "Dashboard",
-            "TabletLogs"
+            "TabletLogs",
+			"Roles"
         ]
     },
     webinterview: {
