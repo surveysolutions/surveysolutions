@@ -25,6 +25,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 {
     [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
     [ResponseCache(NoStore = true)]
+    [Route("api/ReportDataApi")]
     public partial class ReportDataApiController : ControllerBase
     {
         const int MaxPageSize = 50000;
@@ -397,6 +398,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpGet]
+        [Route("HeadquarterSurveysAndStatusesReport")]
         public IActionResult HeadquarterSurveysAndStatusesReport(Guid? id = null, [FromQuery]ReportDataApiController.SurveysAndStatusesFilter filter = null, [FromQuery]string exportType = null)
         {
             var input = new SurveysAndStatusesReportInputModel
