@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Polly;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,7 +8,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
-using Polly;
 using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
@@ -17,17 +17,20 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
         private readonly IHttpClientFactory httpClientFactory;
         private readonly IRestServiceSettings restServiceSettings;
         private readonly IHttpStatistician httpStatistician;
+        private readonly ILogger logger;
 
         private const int ChunkSize = 1024 * 1024; // 1Mb chunk
 
         public FastBinaryFilesHttpHandler(
             IHttpClientFactory httpClientFactory,
             IRestServiceSettings restServiceSettings,
-            IHttpStatistician httpStatistician)
+            IHttpStatistician httpStatistician,
+            ILogger logger)
         {
             this.httpClientFactory = httpClientFactory;
             this.restServiceSettings = restServiceSettings;
             this.httpStatistician = httpStatistician;
+            this.logger = logger;
         }
 
         public static bool SupportRangeRequests(HttpResponseMessage response)
@@ -64,24 +67,21 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             var responseLength = response.Content.Headers.ContentLength ?? throw new ArgumentException("ContentLength required");
             var originalRequest = Clone(response.RequestMessage);
 
+            // Canceling pending request, that return info about range support
             response.Dispose();
             http.CancelPendingRequests();
+
+            // each chunk downloader will create own HttpClient
             http.Dispose();
 
             var result = new byte[responseLength];
-
-            // blocking collection with back pressure - i.e. adding will blocked while queue is full
-            var chunksQueue = new BlockingCollection<Chunk>(this.restServiceSettings.MaxDegreeOfParallelism);
+            var chunksQueue = new BlockingCollection<Chunk>();
 
             var downloaders = new List<Task>();
             var downloaderIds = 0;
             var totalTime = new Stopwatch();
             long totalBytesReceived = 0;
-
-            // we will calculate average chunk download speed in bytes/sec
-            var avgChunkDownloadSpeed = new SimpleRunningAverage(5);
-            avgChunkDownloadSpeed.Add(ChunkSize);
-
+            
             async Task<bool> ChunkDownloader()
             {
                 var id = Interlocked.Increment(ref downloaderIds);
@@ -90,7 +90,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 var httpClient = httpClientFactory.CreateClient(this.httpStatistician);
 
                 var progress = new TransferProgress { TotalBytesToReceive = responseLength };
-                Debug.WriteLine($"Downloader#{id}: Waiting for chunks");
+                logger.Trace($"Downloader#{id}: Waiting for chunks");
 
                 foreach (var chunk in chunksQueue.GetConsumingEnumerable())
                 {
@@ -100,9 +100,9 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                     chunkTimer.Restart();
 
                     var block = await Policy.Handle<Exception>()
-                        .WaitAndRetryAsync(3, (i) => TimeSpan.FromSeconds(1), (e, t, i) =>
+                        .WaitAndRetryAsync(3, i => TimeSpan.FromSeconds(1), (e, t, i) =>
                         {
-                            Debug.WriteLine($"Downloader#{id}: Retry due to exception: {e.Message}");
+                            logger.Warn($"Downloader#{id}: Retry due to exception: {e.Message}", e);
                         })
                         .ExecuteAsync(() => httpClient.SendAsync(rangeRequest, HttpCompletionOption.ResponseHeadersRead, token))
                         .ConfigureAwait(false);
@@ -110,18 +110,14 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                     // fastest way to read whole response without allocating byte[] twice.
                     var buffer = await block.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
 
+                    // fill result array with acquired buffer data
                     Array.Copy(buffer, 0, result, chunk.From, chunk.Length);
 
                     chunkTimer.Stop();
                     totalBytesReceived = Interlocked.Add(ref totalBytesReceived, chunk.Length);
-
-                    lock (avgChunkDownloadSpeed)
-                    {
-                        avgChunkDownloadSpeed.Add(chunk.Length / chunkTimer.Elapsed.TotalSeconds);
-                    }
-
-                    Debug.WriteLine($"Downloader#{id} - Chunk#{chunk.Index}" +
-                                    $"[{chunk.From} - {chunk.To} = {chunk.Length}] - {totalBytesReceived}");
+                    
+                    logger.Trace($"Downloader#{id} - Chunk#{chunk.Index}" +
+                                  $"[{chunk.From} - {chunk.To} = {chunk.Length}] - {totalBytesReceived}");
                     token.ThrowIfCancellationRequested();
 
                     if (transferProgress == null) continue;
@@ -132,7 +128,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                     transferProgress.Report(progress);
                 }
 
-                Debug.WriteLine($"Downloader#{id}: Exiting.");
+                logger.Trace($"Downloader#{id}: Completed all chunk downloads. Exiting");
                 return true;
             }
 
@@ -162,14 +158,14 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
             chunksQueue.CompleteAdding();
 
-            Debug.WriteLine($"Competed adding, waiting for all");
+            logger.Trace($"Competed adding, waiting for all");
 
             await Task.WhenAll(downloaders).ConfigureAwait(false);
-            Debug.WriteLine($"Download completed");
+            logger.Trace($"Download completed");
 
             if (transferProgress != null)
             {
-                var progress = new TransferProgress {TotalBytesToReceive = responseLength};
+                var progress = new TransferProgress { TotalBytesToReceive = responseLength };
                 progress.BytesReceived = totalBytesReceived;
                 progress.ProgressPercentage = progress.BytesReceived.PercentOf(responseLength);
                 progress.Speed = progress.BytesReceived / totalTime.Elapsed.TotalSeconds;
