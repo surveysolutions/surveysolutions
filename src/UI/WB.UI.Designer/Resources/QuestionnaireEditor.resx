@@ -1036,7 +1036,7 @@ Table - the questions of the roster are shown in the same level as rows and colu
     <value>Are you sure you want to delete "{{trimmedTitle}}"?</value>
   </data>
   <data name="DeleteConfirmCategories" xml:space="preserve">
-    <value>Are you sure you want to delete categories "{{trimmedTitle}}"? Source of categories for categorical questions depentent on it will be changed to user defined categories</value>
+    <value>Are you sure you want to delete set of categories "{{trimmedTitle}}"? Source of categories for categorical questions dependent on it will be changed to user defined categories</value>
   </data>
   <data name="UntitledQuestion" xml:space="preserve">
     <value>Untitled question</value>
