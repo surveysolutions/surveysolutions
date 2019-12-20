@@ -325,7 +325,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         }
         private IEnumerable<QuestionnaireEntityReference[]> QuestionsHasSameCategories(MultiLanguageQuestionnaireDocument questionnaire)
         {
-            var questionsWithDuplicates  = new List<Guid>();
+            var questionsWithDuplicates  = new HashSet<Guid>();
 
             foreach (var question in questionnaire.Find<ICategoricalQuestion>())
             {
@@ -333,16 +333,17 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 if(questionsWithDuplicates.Contains(question.PublicKey)) continue;
 
                 var duplicatedQuestionsByCategories = questionnaire
-                    .Find<ICategoricalQuestion>(x => x != question && x.Answers != null && question.Answers.SequenceEqual(x.Answers))
-                    .Select(x => x.PublicKey);
+                    .Find<ICategoricalQuestion>(x =>
+                        x.Answers != null &&
+                        question.Answers.Where(y => y.HasValue()).SequenceEqual(x.Answers.Where(y => y.HasValue())))
+                    .Select(x => x.PublicKey)
+                    .ToArray();
 
-                if (duplicatedQuestionsByCategories.Any())
+                if (duplicatedQuestionsByCategories.Length > 1)
                 {
-                    questionsWithDuplicates.Add(question.PublicKey);
-                    questionsWithDuplicates.AddRange(duplicatedQuestionsByCategories);
+                    questionsWithDuplicates.UnionWith(duplicatedQuestionsByCategories);
 
-                    yield return new[] {question.PublicKey}.Union(duplicatedQuestionsByCategories)
-                        .Select(QuestionnaireEntityReference.CreateForQuestion).ToArray();
+                    yield return duplicatedQuestionsByCategories.Select(QuestionnaireEntityReference.CreateForQuestion).ToArray();
                 }
             }
         }
