@@ -407,8 +407,17 @@ span.image-zoom-box, span.image-option {
         text-transform: none;
         letter-spacing: normal;
         font-style: italic; }
-  .table-view .ag-theme-customStyles .ag-cell:not(.ag-cell-last-left-pinned) .cell-unit {
-    background: #FFFFFF; }
+    .table-view .ag-theme-customStyles .ag-cell .radio {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: center;
+          -ms-flex-align: center;
+              align-items: center;
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+          -ms-flex-direction: row;
+              flex-direction: row; }
   .table-view .ag-theme-customStyles .cell-unit {
     width: 100%;
     height: 100%;
@@ -461,6 +470,12 @@ span.image-zoom-box, span.image-option {
       background-position: 0 0;
       background-color: rgba(255, 46, 0, 0.2);
       border-color: #FF2E00; }
+  .table-view .ag-theme-customStyles .cell-bordered {
+    border: 1px solid #e5e5e5;
+    border-bottom: none;
+    border-top: none; }
+    .table-view .ag-theme-customStyles .cell-bordered:first-of-type {
+      border-left: none; }
 
 .table-view .cell-wrap-text {
   white-space: normal !important; }

@@ -1,8 +1,12 @@
-<template>
-    <div class="question table-view scroller" :id="hash">
+<template>    
+    <div class="question table-view scroller" :id="hash">        
+        <h5 v-dateTimeFormatting v-html="title"></h5>
+        <div class="information-block instruction" v-if="instructions">            
+            <p v-dateTimeFormatting v-html="instructions"></p>
+        </div>
         <ag-grid-vue 
-            ref="tableRoster"
-            class="ag-theme-customStyles"
+            ref="matrixRoster"
+            class="ag-theme-customStyles roster-matrix"
             style="height:500px"
             domLayout='normal'
             rowHeight="40"
@@ -14,8 +18,7 @@
             :grid-options="gridOptions"
 
             @grid-ready="onGridReady"
-            @column-resized="autosizeHeaders"
-            @cell-editing-stopped="endCellEditting">
+            @column-resized="autosizeHeaders">
         </ag-grid-vue>
     </div>
 </template>
@@ -27,13 +30,13 @@
     import { debounce, every, some } from "lodash"
     import { AgGridVue } from "ag-grid-vue";
 
-    import TableRoster_QuestionEditor from "./TableRoster.QuestionEditor";
-    import TableRoster_ViewAnswer from "./TableRoster.ViewAnswer";
-    import TableRoster_RosterTitle from "./TableRoster.RosterTitle";
-    import TableRoster_QuestionTitle from "./TableRoster.QuestionTitle";    
+    import MatrixRoster_QuestionEditor from "./MatrixRoster.QuestionEditor";    
+    import MatrixRoster_RosterTitle from "./MatrixRoster.RosterTitle";
+    import MatrixRoster_QuestionTitle from "./MatrixRoster.QuestionTitle";
+    import MatrixRoster_CategoricalSingle from "./MatrixRoster.CategoricalSingle";
 
     export default {
-        name: 'TableRoster',
+        name: 'MatrixRoster',
         mixins: [entityDetails],
         
         data() {
@@ -45,25 +48,29 @@
                 gridApi: null,
                 columnApi: null,
                 countOfInstances: 0,
+                title: null,
+                instructions: null                
             }
         },
 
         components: {
-            AgGridVue,
-            TableRoster_ViewAnswer,
-            TableRoster_QuestionEditor,
-            TableRoster_RosterTitle,
-            TableRoster_QuestionTitle
+            AgGridVue,            
+            MatrixRoster_QuestionEditor,
+            MatrixRoster_RosterTitle,
+            MatrixRoster_QuestionTitle,
+            MatrixRoster_CategoricalSingle
         },
 
         beforeMount() {
             this.countOfInstances = this.$me.instances.length
+            this.title = this.$me.questions.length > 0 ? this.$me.questions[0].title : null            
+            this.instructions = this.$me.questions.length > 0 ? this.$me.questions[0].instruction : null
 
             this.defaultColDef = {
                 width: 220, // set every column width
                 height: 76,
                 resizable: true,
-                editable: true, // make every column editable
+                editable: false, // make every column editable
                 autoHeight: true,
             };
 
@@ -91,7 +98,8 @@
         computed: {
             gridOptions() {
                 return {
-                    stopEditingWhenGridLosesFocus: true
+                    suppressClickEdit:true,
+                    suppressCellSelection:true
                 }
             }
         },
@@ -103,34 +111,37 @@
                     (question, key) => {
                         return {
                             headerName: question.title, 
-                            headerComponentFramework: 'TableRoster_QuestionTitle',
+                            headerComponentFramework: 'MatrixRoster_QuestionTitle',
                             headerComponentParams: {
-                                title: question.title,
+                                //title: question.title,
                                 instruction: question.instruction,
                                 question: question
                             },
+                            width:question.options.length * 222,
+                            
                             field: question.id, 
-                            cellRendererFramework: 'TableRoster_ViewAnswer',
+                            cellRendererFramework: 'MatrixRoster_QuestionEditor',
                             cellRendererParams: {
                                 id: question.id,
-                                question: question
+                                question: question,
+                                value: question
                             },
-                            cellEditorFramework: 'TableRoster_QuestionEditor', 
-                            cellEditorParams: {
-                                id: question.id,
-                                value: question,
-                            },
+                            //cellEditorFramework: 'MatrixRoster_QuestionEditor', 
+                            //cellEditorParams: {
+                            //    id: question.id,
+                            //    value: question,
+                            //},
                         };
                     }
                 );
                 columnsFromQuestions.unshift({
-                    headerName: this.$me.title, 
+                    headerName: "",//this.$me.title, 
                     field: "rosterTitle", 
                     autoHeight: true, 
                     pinned: true, 
                     editable: false,                     
                     cellStyle: {minHeight: '40px'}, 
-                    cellRendererFramework: 'TableRoster_RosterTitle',
+                    cellRendererFramework: 'MatrixRoster_RosterTitle',
                     cellRendererParams: { }
                 })
                 this.columnDefs = columnsFromQuestions
@@ -145,7 +156,7 @@
                         var instanceAsRow = {
                             rosterVector: instance.rosterVector,
                             rosterTitle: { 
-                                tableRoster: self,
+                                matrixRoster: self,
                                 rowIndex: key,
                             }, 
                         };
@@ -175,7 +186,7 @@
                 if (event.finished !== false) {
                     const MIN_HEIGHT = 16;
                     event.api.setHeaderHeight(MIN_HEIGHT);
-                    const headerCells = $(this.$refs.tableRoster.$el).find('.ag-header-cell-label');
+                    const headerCells = $(this.$refs.matrixRoster.$el).find('.ag-header-cell-label');
                     let minHeight = MIN_HEIGHT;
                     for (let index = 0; index < headerCells.length; index++) {
                         const cell = headerCells[index];
@@ -193,16 +204,16 @@
             setTableRosterHeight() {
                 if (this.$me.instances.length > 10) {
                     this.gridApi.setDomLayout('normal')
-                    this.$refs.tableRoster.$el.style.height = '500px';
+                    this.$refs.matrixRoster.$el.style.height = '500px';
                 }
                 else {
                     this.gridApi.setDomLayout('autoHeight');
-                    this.$refs.tableRoster.$el.style.height = '';
+                    this.$refs.matrixRoster.$el.style.height = '';
                 }
             },
 
             doScroll: debounce(function() {
-                if(this.$store.getters.scrollState == this.id){
+                if(this.$store.getters.scrollState == "#" + this.id){
                     window.scroll({ top: this.$el.offsetTop, behavior: "smooth" })
                     this.$store.dispatch("resetScroll")
                 }
@@ -212,11 +223,7 @@
                 if(this.$store && this.$store.state.route.hash === "#" + this.id) {
                     this.doScroll(); 
                 }
-            },
-
-            endCellEditting(event) {
-                event.api.resetRowHeights();
-		    }
+            }
         }
     }
 </script>
