@@ -146,23 +146,23 @@ import routeSync from "~/shared/routeSync";
 
 const mapStyles = [
     {
-        url: "../Content/img/google-maps-markers/m1.png",
+        url: "/img/google-maps-markers/m1.png",
         dark: true
     },
     {
-        url: "../Content/img/google-maps-markers/m2.png",
+        url: "/img/google-maps-markers/m2.png",
         dark: false
     },
     {
-        url: "../Content/img/google-maps-markers/m3.png",
+        url: "/img/google-maps-markers/m3.png",
         dark: true
     },
     {
-        url: "../Content/img/google-maps-markers/m4.png",
+        url: "/img/google-maps-markers/m4.png",
         dark: true
     },
     {
-        url: "../Content/img/google-maps-markers/m5.png",
+        url: "/img/google-maps-markers/m5.png",
         dark: true
     }
 ];
@@ -549,8 +549,8 @@ export default {
             
             this.infoWindow.close(self.map);
 
-            this.totalAnswers = data.TotalPoint;
-            const features = data.FeatureCollection.features;
+            this.totalAnswers = data.totalPoint;
+            const features = data.featureCollection.features;
             const heatmapData = { data: [] };
 
             this.map.data.forEach(feature => {
@@ -597,10 +597,10 @@ export default {
                 if (this.totalAnswers === 0) {
                     this.map.setZoom(1);
                 } else {
-                    const bounds = data.InitialBounds;
+                    const bounds = data.initialBounds;
 
-                    const sw = new google.maps.LatLng(bounds.South, bounds.West);
-                    const ne = new google.maps.LatLng(bounds.North, bounds.East);
+                    const sw = new google.maps.LatLng(bounds.south, bounds.west);
+                    const ne = new google.maps.LatLng(bounds.north, bounds.east);
                     const latlngBounds = new google.maps.LatLngBounds(sw, ne);
                     this.isMapReloaded = true;
                     this.map.fitBounds(latlngBounds);
