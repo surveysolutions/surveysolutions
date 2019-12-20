@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web.Http;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -12,23 +11,19 @@ using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.UI.Headquarters.Code;
-using WB.UI.Headquarters.Models;
+using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Api;
 using WB.UI.Headquarters.Models.ComponentModels;
 using WB.UI.Headquarters.Models.Template;
-using WB.UI.Shared.Web.Attributes;
-using WB.UI.Shared.Web.Filters;
 
-namespace WB.UI.Headquarters.Controllers
+namespace WB.UI.Headquarters.Controllers.Api
 {
-   
     [ApiValidationAntiForgeryToken]
-    public class QuestionnairesApiController : BaseApiController
+    [Route("api/[controller]/[action]/{id?}")]
+    [ResponseCache(NoStore = true)]
+    public class QuestionnairesApiController : ControllerBase
     {
         private readonly IAuthorizedUser authorizedUser;
         private const int DEFAULTPAGESIZE = 12;
@@ -38,12 +33,10 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IDeleteQuestionnaireService deleteQuestionnaireService;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
 
-        public QuestionnairesApiController(
-            ICommandService commandService, IAuthorizedUser authorizedUser, ILogger logger,
+        public QuestionnairesApiController(IAuthorizedUser authorizedUser, 
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IDeleteQuestionnaireService deleteQuestionnaireService,
             IWebInterviewConfigProvider webInterviewConfigProvider)
-            : base(commandService, logger)
         {
             this.authorizedUser = authorizedUser;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
@@ -52,7 +45,6 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
-        [CamelCase]
         [Authorize(Roles = "Administrator, Headquarter, Interviewer")]
         public DataTableResponse<QuestionnaireListItemModel> Questionnaires([FromBody] DataTableRequest request)
         {
@@ -105,17 +97,15 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Administrator")]
-        public async Task<JsonCommandResponse> DeleteQuestionnaire(DeleteQuestionnaireRequestModel request)
+        public async Task<JsonResult> DeleteQuestionnaire(DeleteQuestionnaireRequestModel request)
         {
             await deleteQuestionnaireService.DisableQuestionnaire(request.QuestionnaireId, request.Version, this.authorizedUser.Id);
             
-            return new JsonCommandResponse { IsSuccess = true };
+            return new JsonResult(new { IsSuccess = true });
         }
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        [CamelCase]
-        [ApiNoCache]
         public ComboboxModel QuestionnairesWithVersions(Guid? id = null, string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
         {
             if (id != null) 
@@ -138,7 +128,6 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        [CamelCase]
         public ComboboxModel QuestionnairesCombobox(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE, bool censusOnly = false)
         {
             var questionnaires = this.questionnaireBrowseViewFactory.Load(new QuestionnaireBrowseInputModel
@@ -154,8 +143,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        [CamelCase]
-        public HttpResponseMessage QuestionnairesComboboxById(string questionnaireIdentity, bool censusOnly = false)
+        public IActionResult QuestionnairesComboboxById(string questionnaireIdentity, bool censusOnly = false)
         {
             var identity = QuestionnaireIdentity.Parse(questionnaireIdentity);
 
@@ -171,16 +159,16 @@ namespace WB.UI.Headquarters.Controllers
             if (questionnaireItems.Count > 0)
             {
                 var firstHit = questionnaireItems[0];
-                return Request.CreateResponse(HttpStatusCode.OK,
+                return Ok(
                     new
                     {
                         Id = firstHit.Id,
                         Title = firstHit.Title,
-                        @Version = firstHit.Version
+                        Version = firstHit.Version
                     });
             }
 
-            return Request.CreateResponse(HttpStatusCode.NotFound);
+            return NotFound();
         }
     }
 }

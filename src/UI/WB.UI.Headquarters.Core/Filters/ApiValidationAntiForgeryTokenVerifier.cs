@@ -1,5 +1,4 @@
-﻿using System.Web.Helpers;
-
+﻿
 namespace WB.UI.Shared.Web.Filters
 {
     public class ApiValidationAntiForgeryTokenVerifier : ITokenVerifier
@@ -20,7 +19,7 @@ namespace WB.UI.Shared.Web.Filters
                     formToken = tokens[1].Trim();
                 }
 
-                AntiForgery.Validate(cookieToken, formToken);
+                //AntiForgery.Validate(cookieToken, formToken);
 
                 isTokenValid = true;
             }

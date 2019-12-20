@@ -20,12 +20,14 @@ using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
+using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Modularity.Autofac;
@@ -39,6 +41,7 @@ using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Persistence.Headquarters.Migrations.Events;
 using WB.Persistence.Headquarters.Migrations.Logs;
 using WB.Persistence.Headquarters.Migrations.PlainStore;
+using WB.Persistence.Headquarters.Migrations.Quartz;
 using WB.Persistence.Headquarters.Migrations.ReadSide;
 using WB.Persistence.Headquarters.Migrations.Users;
 using WB.UI.Designer.CommonWeb;
@@ -118,9 +121,20 @@ namespace WB.UI.Headquarters
                 new FileStorageModule(Configuration["DataStorePath"], false, "bucket", "region", "prefix", "endpoint"),
                 new FileInfrastructureModule(),
                 GetHqBoundedContextModule(),
+                GetQuartzModule(),
                 //new CaptchaModule("recaptcha"),
                 new ProductVersionModule(typeof(Startup).Assembly)
                 );
+        }
+
+        private QuartzModule GetQuartzModule()
+        {
+            var schedulerSection = this.Configuration.GetSection("Scheduler");
+
+            return new QuartzModule(typeof(M201905151013_AddQuartzTables).Assembly, 
+                typeof(M201905151013_AddQuartzTables).Namespace, 
+                schedulerSection["InstanceId"], 
+                schedulerSection["IsClustered"].ToBool(false));
         }
 
         private HeadquartersBoundedContextModule GetHqBoundedContextModule()
@@ -272,6 +286,7 @@ namespace WB.UI.Headquarters
             services.Configure<PreloadingConfig>(this.Configuration.GetSection("PreLoading"));
             services.Configure<ApkConfig>(this.Configuration.GetSection("Apks"));
             services.Configure<PasswordPolicyConfig>(this.Configuration.GetSection("PasswordPolicy"));
+            services.Configure<SchedulerConfig>(this.Configuration.GetSection("Scheduler"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

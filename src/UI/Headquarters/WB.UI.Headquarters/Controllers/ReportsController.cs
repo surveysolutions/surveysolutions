@@ -54,60 +54,6 @@ namespace WB.UI.Headquarters.Controllers
         }
 
 
-        [AuthorizeOr403(Roles = "Administrator, Headquarter")]
-        [ActivePage(MenuItem.Summary)]
-        public ActionResult SupervisorsAndStatuses()
-        {
-            var model = new TeamsAndStatusesModel
-            {
-                DataUrl = Url.RouteUrl("DefaultApiWithAction",
-                    new
-                    {
-                        httproute = "",
-                        controller = "ReportDataApi",
-                        action = "HeadquarterSupervisorsAndStatusesReport"
-                    }),
-                QuestionnairesUrl = Url.RouteUrl("DefaultApiWithAction",
-                    new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesWithVersions"}),
-                QuestionnaireByIdUrl = Url.RouteUrl("DefaultApiWithAction",
-                    new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesComboboxById"}),
-                InterviewsUrl = Url.Action("Index", "Interviews"),
-                AllTeamsTitle = Strings.AllTeams,
-                TeamTitle = Users.Supervisors,
-                ReportName = Reports.TeamsAndStatuses,
-                Subtitle = Reports.TeamsAndStatuses_HeadquartersSubtitle
-            };
-            return this.View("TeamsAndStatuses", model);
-        }
-
-
-        [AuthorizeOr403(Roles = "Supervisor")]
-        [ActivePage(MenuItem.Summary)]
-        public ActionResult TeamMembersAndStatuses()
-        {
-            var model = new TeamsAndStatusesModel
-            {
-                DataUrl = Url.RouteUrl("DefaultApiWithAction",
-                    new
-                    {
-                        httproute = "",
-                        controller = "ReportDataApi",
-                        action = "SupervisorTeamMembersAndStatusesReport"
-                    }),
-                QuestionnairesUrl = Url.RouteUrl("DefaultApiWithAction",
-                    new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesWithVersions"}),
-                QuestionnaireByIdUrl = Url.RouteUrl("DefaultApiWithAction",
-                    new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesComboboxById"}),
-                InterviewsUrl = Url.Action("Index", "Interviews"),
-                AllTeamsTitle = Strings.AllInterviewers,
-                TeamTitle = Pages.TeamMember,
-                ReportName = Reports.Report_Team_Members_and_Statuses,
-                Subtitle = Reports.TeamsAndStatuses_SupervisorSubtitle,
-                IsSupervisorMode = true,
-            };
-            return this.View(model);
-        }
-
         [AuthorizeOr403(Roles = "Administrator, Supervisor, Headquarter")]
         [ActivePage(MenuItem.MapReport)]
         public ActionResult MapReport()

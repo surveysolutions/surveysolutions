@@ -2037,7 +2037,6 @@
     <Content Include="Views\SurveySetup\BatchUpload.cshtml" />
     <Content Include="Views\Reports\MapReport.cshtml" />
     <Content Include="Views\HQ\SampleCreationResult.cshtml" />
-    <Content Include="Views\Reports\TeamsAndStatuses.cshtml" />
     <Content Include="Views\Reports\SurveysAndStatuses.cshtml" />
     <Content Include="Views\HQ\TakeNewAssignment.cshtml" />
     <Content Include="Views\ControlPanel\CreateHeadquarters.cshtml" />
@@ -2577,7 +2576,6 @@
     <Compile Include="Models\Reports\StatusDurationModel.cs" />
     <Compile Include="Models\Reports\DevicesInterviewersModel.cs" />
     <Compile Include="Models\Reports\SurveysAndStatusesModel.cs" />
-    <Compile Include="Models\TeamsAndStatusesModel.cs" />
     <Compile Include="Models\UpgradeAssignmentsModel.cs" />
     <Compile Include="Models\User\ResponsibleComboboxModel.cs" />
     <Compile Include="Models\User\ResponsibleComboboxOptionModel.cs" />
@@ -2612,7 +2610,6 @@
     <Compile Include="Filters\ObserverNotAllowedApiAttribute.cs" />
     <Compile Include="Filters\TokenValidationAuthorizationAttribute.cs" />
     <Compile Include="Filters\TypedDirectRouteProvider.cs" />
-    <Compile Include="Models\AllQuestionnairesListViewModel.cs" />
     <Compile Include="API\PublicApi\Models\AssignChangeApiModel.cs" />
     <Compile Include="Models\Api\BaseApiView.cs" />
     <Compile Include="Models\Api\DataTableRequestModelWithFilter.cs" />
@@ -2636,13 +2633,11 @@
     <Compile Include="Models\CompanyLogo\CompanyLogo.cs" />
     <Compile Include="Models\ComponentModels\ComboboxModel.cs" />
     <Compile Include="Models\ExportSettingsModel.cs" />
-    <Compile Include="Models\DeleteQuestionnaireRequestModel.cs" />
     <Compile Include="Models\DocumentFilter.cs" />
     <Compile Include="Models\DocumentListViewModel.cs" />
     <Compile Include="Models\ExportModel.cs" />
     <Compile Include="Controllers\Profile\ObserverController.cs" />
     <Compile Include="Controllers\InterviewsApiController.cs" />
-    <Compile Include="Controllers\QuestionnairesApiController.cs" />
     <Compile Include="Controllers\DesignerQuestionnairesApiController.cs" />
     <Compile Include="Controllers\HQController.cs" />
     <Compile Include="Controllers\InstallController.cs" />
@@ -2680,7 +2675,6 @@
     <Compile Include="Models\TeamsAndStatusesFilter.cs" />
     <Compile Include="Models\TabletInfoReportListViewModel.cs" />
     <Compile Include="Models\Template\ImportQuestionnaireList.cs" />
-    <Compile Include="Models\Template\QuestionnaireListItemModel.cs" />
     <Compile Include="Models\UserBatchUploadModel.cs" />
     <Compile Include="Models\Account\UserEditModel.cs" />
     <Compile Include="Models\Account\UserModel.cs" />
