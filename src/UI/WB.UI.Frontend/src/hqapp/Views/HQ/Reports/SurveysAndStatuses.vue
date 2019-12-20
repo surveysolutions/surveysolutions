@@ -25,12 +25,14 @@
             :addParamsToRequest="addFilteringParams"
             :no-search="true"
             exportable
+            :hasTotalRow="questionnaireId != null"
         ></DataTables>
     </HqLayout>
 </template>
 <script>
 
-import routeSync from "~/shared/routeSync";
+import routeSync from "~/shared/routeSync"
+import escape from "lodash"
 
 export default {
     mixins: [routeSync],
@@ -39,10 +41,19 @@ export default {
             responsible: null,
         }
     },
+    mounted() {
+        if(this.$route.query.responsible) {
+            this.responsible = {key: '1', value: this.$route.query.responsible}
+        }
+    },
     methods: {
         addFilteringParams(data) {
             if (this.responsible) {
-                data.responsibleName = this.responsible.value;
+                data.responsibleName = this.responsible.value
+            }
+          
+            if(this.questionnaireId) {
+                data.questionnaireId = this.questionnaireId
             }
         },
         selectResponsible(value) {
@@ -55,6 +66,11 @@ export default {
             if(this.$refs.table != null) {
                 this.$refs.table.reload()
             }
+        },
+        getLinkToInterviews(data, row, status) {
+            const responsibleName = (this.responsible || {}).value
+            const url = `${this.$config.model.interviewsUrl}?templateId=${row.questionnaireId}&templateVersion=${row.questionnaireVersion}&responsible=${encodeURI(responsibleName || '')}&status=${status}`
+            return `<a href=${url}>${escape(data)}</a>`
         }
     },
     watch: {
@@ -65,55 +81,124 @@ export default {
     computed: {
         tableOptions() {
             var self = this
+            let columns = [
+                {
+                    data: 'questionnaireTitle',
+                    title: this.$t('Reports.SurveyName'),
+                    className: 'without-break changed-recently',
+                    render(data, type, row) {
+                        if(self.questionnaireId != null) {
+                            if (!data) {
+                                return self.$t('Strings.AllQuestionnaires')
+                            }
+                            return escape(data)
+                        }
+                        
+                        return `<a href=${window.location}?questionnaireId=${row.questionnaireId}>${escape(data)}</a>`
+                    }
+                },
+                {
+                    data: 'supervisorAssignedCount',
+                    className: 'type-numeric',
+                    title: this.$t('Reports.SupervisorAssigned'),
+                    render(data, type, row) {
+                        return self.getLinkToInterviews(
+                                data,
+                                row,
+                                "SupervisorAssigned")
+                    }
+                },
+                {
+                    data: 'interviewerAssignedCount',
+                    className: 'type-numeric',
+                    title: this.$t('Reports.InterviewerAssigned'),
+                    render(data, type, row) {
+                        return self.getLinkToInterviews(
+                                data,
+                                row,
+                                "InterviewerAssigned")
+                    }
+                },
+                {
+                    data: 'completedCount',
+                    className: 'type-numeric',
+                    title: this.$t('Reports.Completed'),
+                    render(data, type, row) {
+                        return self.getLinkToInterviews(
+                                data,
+                                row,
+                                "Completed")
+                    }
+                },
+                {
+                    data: 'rejectedBySupervisorCount',
+                    className: 'type-numeric',
+                    title: this.$t('Reports.RejectedBySupervisor'),
+                    render(data, type, row) {
+                        return self.getLinkToInterviews(
+                                data,
+                                row,
+                                "RejectedBySupervisor")
+                    }
+                },
+                {
+                    data: 'approvedBySupervisorCount',
+                    className: 'type-numeric',
+                    title: this.$t('Reports.ApprovedBySupervisor'),
+                    render(data, type, row) {
+                        return self.getLinkToInterviews(
+                                data,
+                                row,
+                                "ApprovedBySupervisor")
+                    }
+                },
+                {
+                    data: 'rejectedByHeadquartersCount',
+                    className: 'type-numeric',
+                    title: this.$t('Reports.RejectedByHQ'),
+                    render(data, type, row) {
+                        return self.getLinkToInterviews(
+                                data,
+                                row,
+                                "RejectedByHeadquarters")
+                    }
+                },
+                {
+                    data: 'approvedByHeadquartersCount',
+                    className: 'type-numeric',
+                    title: this.$t('Reports.ApprovedByHQ'),
+                    render(data, type, row) {
+                        return self.getLinkToInterviews(
+                                data,
+                                row,
+                                "ApprovedByHeadquarters")
+                    }
+                },
+                {
+                    data: 'totalCount',
+                    className: 'type-numeric',
+                    title: this.$t('Common.Total'),
+                    render(data, type, row) {
+                        return self.getLinkToInterviews(
+                                data,
+                                row,
+                                "")
+                    }
+                }
+            ]
+
+            if(self.questionnaireId) {
+                columns.splice(1, 0, 
+                {
+                    data: 'questionnaireVersion',
+                    className: 'type-numeric version centered-italic',
+                    title: this.$t('Reports.TemplateVersion')
+                })
+            }
+
             return {
                 deferLoading: 0,
-                columns: [
-                    {
-                        data: 'questionnaireTitle',
-                        title: this.$t('Reports.SurveyName'),
-                        className: 'without-break changed-recently'
-                    },
-                    {
-                        data: 'supervisorAssignedCount',
-                        className: 'type-numeric',
-                        title: this.$t('Reports.SupervisorAssigned')
-                    },
-                    {
-                        data: 'interviewerAssignedCount',
-                        className: 'type-numeric',
-                        title: this.$t('Reports.InterviewerAssigned')
-                    },
-                    {
-                        data: 'completedCount',
-                        className: 'type-numeric',
-                        title: this.$t('Reports.Completed')
-                    },
-                    {
-                        data: 'rejectedBySupervisorCount',
-                        className: 'type-numeric',
-                        title: this.$t('Reports.RejectedBySupervisor')
-                    },
-                    {
-                        data: 'approvedBySupervisorCount',
-                        className: 'type-numeric',
-                        title: this.$t('Reports.ApprovedBySupervisor')
-                    },
-                    {
-                        data: 'rejectedByHeadquartersCount',
-                        className: 'type-numeric',
-                        title: this.$t('Reports.RejectedByHQ')
-                    },
-                    {
-                        data: 'approvedByHeadquartersCount',
-                        className: 'type-numeric',
-                        title: this.$t('Reports.ApprovedByHQ')
-                    },
-                    {
-                        data: 'totalCount',
-                        className: 'type-numeric',
-                        title: this.$t('Common.Total')
-                    }
-                ],
+                columns: columns,
                 ajax: {
                     url: this.$config.model.dataUrl,
                     type: 'GET',
@@ -130,6 +215,9 @@ export default {
                         .attr('nowrap', 'nowrap')
                 },
             }
+        },
+        questionnaireId() {
+            return this.$route.query.questionnaireId
         }
     }
 }
