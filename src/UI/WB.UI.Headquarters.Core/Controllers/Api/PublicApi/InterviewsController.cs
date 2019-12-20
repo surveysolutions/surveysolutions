@@ -28,7 +28,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 {
     [Route("api/v1/interviews")]
     [Authorize(Roles = "ApiUser, Administrator")]
-    public class InterviewsController : ControllerBase
+    public class InterviewsPublicApiController : ControllerBase
     {
         private readonly IAllInterviewsFactory allInterviewsViewFactory;
         private readonly IInterviewHistoryFactory interviewHistoryViewFactory;
@@ -38,11 +38,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly ICommandService commandService;
         private readonly IAuthorizedUser authorizedUser;
-        private readonly ILogger<InterviewsController> logger;
+        private readonly ILogger<InterviewsPublicApiController> logger;
         private readonly IStatefullInterviewSearcher statefullInterviewSearcher;
         private readonly IInterviewDiagnosticsFactory diagnosticsFactory;
 
-        public InterviewsController(
+        public InterviewsPublicApiController(
             IAllInterviewsFactory allInterviewsViewFactory,
             IInterviewHistoryFactory interviewHistoryViewFactory,
             IUserViewFactory userViewFactory,
@@ -51,7 +51,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             IQuestionnaireStorage questionnaireStorage,
             ICommandService commandService,
             IAuthorizedUser authorizedUser,
-            ILogger<InterviewsController> logger,
+            ILogger<InterviewsPublicApiController> logger,
             IStatefullInterviewSearcher statefullInterviewSearcher,
             IInterviewDiagnosticsFactory diagnosticsFactory)
         {

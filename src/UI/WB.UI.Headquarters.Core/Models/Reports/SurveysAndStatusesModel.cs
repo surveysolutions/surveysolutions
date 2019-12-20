@@ -8,5 +8,6 @@ namespace WB.UI.Headquarters.Models.Reports
         public string ReportName { get; set; }
         public string Subtitle { get; set; }
         public string ResponsiblesUrl { get; set; }
+        public string InterviewsUrl { get; set; }
     }
 }
