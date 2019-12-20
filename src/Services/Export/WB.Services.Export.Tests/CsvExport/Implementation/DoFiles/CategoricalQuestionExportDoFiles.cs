@@ -203,7 +203,7 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
         }
 
         [Test]
-        public void when_two_multi_filtered_questions_With_and_without_reusable_categories_should_create_correct_do_file()
+        public void when_two_multi_filtered_questions_with_differant_source_should_create_correct_do_file()
         {
             string stataGeneratedContent = "";
 
