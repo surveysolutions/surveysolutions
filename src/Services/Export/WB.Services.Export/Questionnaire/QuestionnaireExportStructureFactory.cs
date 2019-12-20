@@ -214,7 +214,8 @@ namespace WB.Services.Export.Questionnaire
             if (question is ICategoricalQuestion categoricalQuestion && categoricalQuestion.CategoriesId.HasValue)
             {
                 var isMultiWithoutPredefineCategories = question is MultyOptionsQuestion multyOptionsQuestion
-                                                        /*&& multyOptionsQuestion.IsFilteredCombobox.HasValue*/;
+                                                        && multyOptionsQuestion.IsFilteredCombobox == true;
+
                 if (!isMultiWithoutPredefineCategories)
                 {
                     exportedHeaderItem.LabelReferenceId = categoricalQuestion.CategoriesId;

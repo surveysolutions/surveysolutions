@@ -444,7 +444,7 @@ namespace WB.Services.Export.Tests
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 QuestionText = text,
-                QuestionType = QuestionType.Text,
+                QuestionType = QuestionType.TextList,
                 VariableName = variable ?? "vv" + Guid.NewGuid().ToString("N"),
                 Featured = preFilled,
                 VariableLabel = label,
