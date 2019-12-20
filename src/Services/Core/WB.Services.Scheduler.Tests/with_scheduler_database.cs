@@ -31,11 +31,37 @@ namespace WB.Services.Scheduler.Tests
         }
     }
 
-    public abstract class with_scheduler_database
+    public abstract class with_service_collection
     {
         protected Mock<IOptions<JobSettings>> jobSettingsMock;
         protected string SchemaName;
 
+        protected IServiceCollection NewServiceCollection()
+        {
+            var services = new ServiceCollection()
+                .AddDbContext<JobContext>(ops =>
+                    ops.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+            
+            jobSettingsMock = new Mock<IOptions<JobSettings>>();
+
+            jobSettingsMock.Setup(m => m.Value).Returns(() => new JobSettings()
+            {
+                SchemaName = SchemaName
+            });
+
+            services.AddSingleton(jobSettingsMock.Object);
+            services.AddTransient(typeof(ILogger<>), typeof(NullLogger<>));
+            return services;
+        }
+
+        protected IConfiguration Configuration => new ConfigurationBuilder()
+            .AddJsonFile($@"appsettings.json", true)
+            .Build();
+
+    }
+
+    public abstract class with_scheduler_database : with_service_collection
+    {
         protected IServiceCollection NewServiceCollection()
         {
             var services = new ServiceCollection()
@@ -105,10 +131,7 @@ namespace WB.Services.Scheduler.Tests
             await db.Database.EnsureDeletedAsync();
         }
 
-        protected IConfiguration Configuration => new ConfigurationBuilder()
-            .AddJsonFile($@"appsettings.json", true)
-            .Build();
-
+     
         private IServiceProvider PrepareOneTime()
         {
             var services = NewServiceCollection();

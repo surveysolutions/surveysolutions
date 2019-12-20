@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         private readonly IPauseResumeQueue pauseResumeQueue;
 
         public InterviewController(
-            ICommandService commandService, 
+            ICommandService commandService,
             IAuthorizedUser authorizedUser,
             ILogger logger,
             IInterviewSummaryViewFactory interviewSummaryViewFactory,
@@ -109,7 +109,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 InterviewDuration = interviewSummary.InterviewDuration?.Humanize(),
                 ResponsibleRole = interviewSummary.ResponsibleRole.ToString(),
                 ResponsibleProfileUrl = interviewSummary.ResponsibleRole == UserRoles.Interviewer ?
-                                            Url.Action("Profile", "Interviewer", new {id = interviewSummary.ResponsibleId}) : 
+                                            Url.Action("Profile", "Interviewer", new { id = interviewSummary.ResponsibleId }) :
                                             "javascript:void(0);",
                 InterviewsUrl = Url.Action("Index", "Interviews")
             });
@@ -117,20 +117,31 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         private ApproveRejectAllowed GetApproveReject(InterviewSummary interviewSummary)
         {
-            var approveRejectAllowed = new ApproveRejectAllowed
+            ApproveRejectAllowed approveRejectAllowed = new ApproveRejectAllowed();
+            approveRejectAllowed.InterviewersListUrl = Url.RouteUrl("DefaultApiWithAction",
+                new { httproute = "", controller = "Teams", action = "InterviewersCombobox" });
+
+            if(!this.authorizedUser.IsObserving)
             {
-                SupervisorApproveAllowed = (interviewSummary.Status == InterviewStatus.Completed || interviewSummary.Status == InterviewStatus.RejectedByHeadquarters) &&
-                                           authorizedUser.IsSupervisor,
-                HqOrAdminApproveAllowed = (interviewSummary.Status == InterviewStatus.Completed || interviewSummary.Status == InterviewStatus.ApprovedBySupervisor) &&
-                                          (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator),
-                SupervisorRejectAllowed = (interviewSummary.Status == InterviewStatus.Completed || interviewSummary.Status == InterviewStatus.RejectedByHeadquarters) &&
-                                          authorizedUser.IsSupervisor,
-                HqOrAdminRejectAllowed = (interviewSummary.Status == InterviewStatus.Completed || interviewSummary.Status == InterviewStatus.ApprovedBySupervisor) &&
-                                         (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator),
-                HqOrAdminUnapproveAllowed = interviewSummary.Status == InterviewStatus.ApprovedByHeadquarters && (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator),
-                InterviewersListUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "InterviewersCombobox" })
-        };
-            approveRejectAllowed.InterviewerShouldbeSelected = approveRejectAllowed.SupervisorRejectAllowed && !interviewSummary.IsAssignedToInterviewer;
+                approveRejectAllowed.HqOrAdminUnapproveAllowed = interviewSummary.Status == InterviewStatus.ApprovedByHeadquarters &&
+                                                                 (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator);
+                approveRejectAllowed.HqOrAdminRejectAllowed = (interviewSummary.Status == InterviewStatus.Completed ||
+                                                               interviewSummary.Status == InterviewStatus.ApprovedBySupervisor) &&
+                                                              (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator);
+                approveRejectAllowed.SupervisorRejectAllowed = (interviewSummary.Status == InterviewStatus.Completed ||
+                                                                interviewSummary.Status == InterviewStatus.RejectedByHeadquarters) &&
+                                                               authorizedUser.IsSupervisor;
+                approveRejectAllowed.HqOrAdminApproveAllowed = (interviewSummary.Status == InterviewStatus.Completed ||
+                                                                interviewSummary.Status == InterviewStatus.ApprovedBySupervisor) &&
+                                                               (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator);
+                approveRejectAllowed.SupervisorApproveAllowed = (interviewSummary.Status == InterviewStatus.Completed ||
+                                                                 interviewSummary.Status == InterviewStatus.RejectedByHeadquarters) &&
+                                                                authorizedUser.IsSupervisor;
+            }
+
+            approveRejectAllowed.InterviewerShouldbeSelected =
+                approveRejectAllowed.SupervisorRejectAllowed && !interviewSummary.IsAssignedToInterviewer;
+
             return approveRejectAllowed;
         }
 
@@ -142,12 +153,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public ActionResult InterviewAreaFrame(Guid id, string questionId)
         {
             InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(id);
-            
+
             if (interviewSummary == null)
                 return HttpNotFound();
 
             bool isAccessAllowed = CurrentUserCanAccessInterview(interviewSummary);
-            if(!isAccessAllowed)
+            if (!isAccessAllowed)
                 return HttpNotFound();
 
             var identity = Identity.Parse(questionId);
@@ -158,7 +169,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             var geometryType = questionnaire.GetQuestionByVariable(questionnaire.GetQuestionVariableName(identity.Id)).Properties
                 .GeometryType;
 
-            return this.View(new GeographyPreview(){AreaAnswer = area, Geometry = geometryType ?? GeometryType.Polygon});
+            return this.View(new GeographyPreview() { AreaAnswer = area, Geometry = geometryType ?? GeometryType.Polygon });
         }
     }
 
@@ -177,7 +188,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         }
 
         public string Id { get; set; }
-        
+
         public string Key { get; set; }
 
         public DateTime LastUpdatedAtUtc { get; set; }

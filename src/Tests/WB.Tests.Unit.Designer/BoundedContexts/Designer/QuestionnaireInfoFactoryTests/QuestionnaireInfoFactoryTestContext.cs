@@ -74,6 +74,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
         protected static Guid q6Id = Guid.Parse("66666666666666666000000000000000");
         protected static Guid q7Id = Guid.Parse("77777777777777777000000000000000");
         protected static Guid q8Id = Guid.Parse("88888888888888888000000000000000");
+        protected static Guid q9Id = Guid.Parse("99999999999999999000000000000000");
+        protected static Guid q10Id = Guid.Parse("10101010101010101000000000000000");
         protected static Guid numericQuestionId = Guid.NewGuid();
 
         protected static Guid st1Id = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
