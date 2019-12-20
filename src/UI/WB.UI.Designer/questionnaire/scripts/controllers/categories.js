@@ -119,9 +119,8 @@
                     categories.name = categories.meta.fileName.replace(/\.[^/.]+$/, "");
 
                 var fileNameLength = categories.name.length;
-                categories.name =
-                    categories.name.substring(0, fileNameLength < maxNameLength ? fileNameLength : maxNameLength);
-                categories.oldCategoriesId = categories.CategoriesId;
+                categories.name = categories.name.substring(0, fileNameLength < maxNameLength ? fileNameLength : maxNameLength);
+                categories.oldCategoriesId = categories.categoriesId;
                 categories.categoriesId = utilityService.guid();
 
                 if (!_.isUndefined(categories.form)) {
