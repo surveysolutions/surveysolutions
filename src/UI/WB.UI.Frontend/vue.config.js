@@ -75,14 +75,14 @@ const pages = {
 const fileTargets = [
     { source: join("locale", ".resources", "**", "*.json"), destination: join("dist") },
 
-    { source: join("dist", "img", "*.*"), destination: path.join(hqFolder, "wwwroot", "img") },
-    { source: join("dist", "fonts", "*.*"), destination: path.join(hqFolder, "wwwroot", "fonts") },
+    { source: join("dist", "img", "**" , "*.*"), destination: path.join(hqFolder, "wwwroot", "img") },
+    { source: join("dist", "fonts", "**", "*.*"), destination: path.join(hqFolder, "wwwroot", "fonts") },
     { source: join("dist", "css", "*.*"), destination: path.join(hqFolder, "wwwroot", "css") },
     { source: join("dist", "js", "*.*"), destination: path.join(hqFolder, "wwwroot", "js") },
     { source: join("dist", "locale", "hq", "*.*"), destination: path.join(hqFolder, "wwwroot", "locale", "hq") },
     { source: join("dist", "locale", "webinterview", "*.*"), destination: path.join(hqFolder, "wwwroot", "locale", "webinterview") },
 
-    { source: join("dist", "img", "*.*"), destination: path.join(webTesterFolder, "wwwroot", "img") },
+    { source: join("dist", "img", "**", "*.*"), destination: path.join(webTesterFolder, "wwwroot", "img") },
     { source: join("dist", "fonts", "*.*"), destination: path.join(webTesterFolder, "wwwroot", "fonts") },
     { source: join("dist", "css", "*.*"), destination: path.join(webTesterFolder, "wwwroot", "css") },
     { source: join("dist", "js", "*.*"), destination: path.join(webTesterFolder, "wwwroot", "js") },
