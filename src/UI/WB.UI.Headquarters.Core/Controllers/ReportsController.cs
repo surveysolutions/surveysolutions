@@ -59,23 +59,15 @@ namespace WB.UI.Headquarters.Controllers
         {
             var model = new TeamsAndStatusesModel
             {
-                DataUrl = Url.RouteUrl("DefaultApiWithAction",
-                    new
-                    {
-                        httproute = "",
-                        controller = "ReportDataApi",
-                        action = "SupervisorTeamMembersAndStatusesReport"
-                    }),
-                QuestionnairesUrl = Url.RouteUrl("DefaultApiWithAction",
-                    new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesWithVersions"}),
-                QuestionnaireByIdUrl = Url.RouteUrl("DefaultApiWithAction",
-                    new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesComboboxById"}),
+                DataUrl = Url.Action("SupervisorTeamMembersAndStatusesReport", "ReportDataApi"),
+                QuestionnairesUrl = Url.Action("QuestionnairesWithVersions", "QuestionnairesApi"),
+                QuestionnaireByIdUrl = Url.Action("QuestionnairesComboboxById", "QuestionnairesApi"),
                 InterviewsUrl = Url.Action("Index", "Interviews"),
                 AllTeamsTitle = Strings.AllInterviewers,
                 TeamTitle = Pages.TeamMember,
                 ReportName = Reports.Report_Team_Members_and_Statuses,
                 Subtitle = Reports.TeamsAndStatuses_SupervisorSubtitle,
-                IsSupervisorMode = true,
+                IsSupervisorMode = true
             };
             return this.View(model);
         }
