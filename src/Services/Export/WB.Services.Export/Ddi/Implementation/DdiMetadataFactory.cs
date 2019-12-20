@@ -77,7 +77,7 @@ namespace WB.Services.Export.Ddi.Implementation
                                 var variable = metadataWriter.AddDdiVariableToFile(hhDataFile, 
                                     variableLabel.VariableName,
                                     this.GetDdiDataType(questionItem.QuestionType), 
-                                    variableLabel.Value.Name,
+                                    variableLabel.VariableLabel,
                                     questionItem.Instructions,
                                     questionItem.QuestionText, 
                                     this.GetDdiVariableScale(questionItem.QuestionType));
@@ -110,7 +110,7 @@ namespace WB.Services.Export.Ddi.Implementation
                         else
                         {
                             metadataWriter.AddDdiVariableToFile(hhDataFile, variableLabel.VariableName,
-                                DdiDataType.DynString, variableLabel.Value.Name, null, null, null);
+                                DdiDataType.DynString, variableLabel.VariableLabel, null, null, null);
                         }
                     }
                 }
