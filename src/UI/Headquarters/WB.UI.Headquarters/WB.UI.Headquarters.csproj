@@ -2297,6 +2297,7 @@
     <Compile Include="Controllers\InterviewsController.cs" />
     <Compile Include="API\PublicApi\Models\AuditLogApiView.cs" />
     <Compile Include="Controllers\QuestionnairesController.cs" />
+    <Compile Include="Filters\WebInterviewObserverNotAllowedActionFilter.cs" />
     <Compile Include="Models\QuestionnaireDetailsModel.cs" />
     <Compile Include="Resources\TabletLogs.Designer.cs">
       <AutoGen>True</AutoGen>
