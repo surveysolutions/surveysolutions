@@ -103,7 +103,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             WarningForCollection(SameTitle, "WB0266", VerificationMessages.WB0266_SameTitle),
             Warning(NoPrefilledQuestions, "WB0216", VerificationMessages.WB0216_NoPrefilledQuestions),
             WarningByValueAndTitleNumbersIsNotEqualsInCategoricalQuestions,
-            Warning<ICategoricalQuestion, ICategoricalQuestion>("WB0296", QuestionsHasSameCategories, VerificationMessages.WB0296)
+            WarningForCollection(QuestionsHasSameCategories, "WB0296", VerificationMessages.WB0296)
         };
 
         private bool IdentifyingQuestionInSectionWithEnablingCondition(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
@@ -323,25 +323,28 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 }
             }
         }
-
-        private static EntityVerificationResult<ICategoricalQuestion> QuestionsHasSameCategories(ICategoricalQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+        private IEnumerable<QuestionnaireEntityReference[]> QuestionsHasSameCategories(MultiLanguageQuestionnaireDocument questionnaire)
         {
-            if (question.Answers == null || !question.Answers.Any())
-                return new EntityVerificationResult<ICategoricalQuestion> {HasErrors = false};
+            var questionsWithDeplicates  = new List<Guid>();
 
-            var duplicatedQuestionsByCategories = questionnaire.Find<ICategoricalQuestion>(x =>
-                x != question && x.Answers != null && question.Answers.SequenceEqual(x.Answers));
-
-            if (duplicatedQuestionsByCategories.Any())
+            foreach (var question in questionnaire.Find<ICategoricalQuestion>())
             {
-                return new EntityVerificationResult<ICategoricalQuestion>
-                {
-                    HasErrors = true,
-                    ReferencedEntities = duplicatedQuestionsByCategories
-                };
-            }
+                if(question.Answers == null || question.Answers.Count == 0) continue;
+                if(questionsWithDeplicates.Contains(question.PublicKey)) continue;
 
-            return new EntityVerificationResult<ICategoricalQuestion> {HasErrors = false};
+                var duplicatedQuestionsByCategories = questionnaire
+                    .Find<ICategoricalQuestion>(x => x != question && x.Answers != null && question.Answers.SequenceEqual(x.Answers))
+                    .Select(x => x.PublicKey);
+
+                if (duplicatedQuestionsByCategories.Any())
+                {
+                    questionsWithDeplicates.Add(question.PublicKey);
+                    questionsWithDeplicates.AddRange(duplicatedQuestionsByCategories);
+
+                    yield return new[] {question.PublicKey}.Union(duplicatedQuestionsByCategories)
+                        .Select(QuestionnaireEntityReference.CreateForQuestion).ToArray();
+                }
+            }
         }
 
         private static IEnumerable<QuestionnaireVerificationMessage> Error_ManyGpsPrefilledQuestions_WB0006(MultiLanguageQuestionnaireDocument document)
@@ -972,18 +975,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 where verificationResult.HasErrors
                 select QuestionnaireVerificationMessage.Error(code, message, verificationResult.ReferencedEntities.Select(x => CreateReference(x)).ToArray());
         }
-
-        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning<TEntity, TReferencedEntity>(string code, Func<TEntity, MultiLanguageQuestionnaireDocument, EntityVerificationResult<TReferencedEntity>> verifyEntity, string message)
-            where TEntity : class, IComposite
-            where TReferencedEntity : class, IComposite
-        {
-            return questionnaire =>
-                from entity in questionnaire.Find<TEntity>(_ => true)
-                let verificationResult = verifyEntity(entity, questionnaire)
-                where verificationResult.HasErrors
-                select QuestionnaireVerificationMessage.Warning(code, message, verificationResult.ReferencedEntities.Select(x => CreateReference(x)).ToArray());
-        }
-
+        
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> ErrorForTranslation<TEntity>(string code, Func<TEntity, MultiLanguageQuestionnaireDocument, bool> hasError, string message)
             where TEntity : class, IComposite
         {
