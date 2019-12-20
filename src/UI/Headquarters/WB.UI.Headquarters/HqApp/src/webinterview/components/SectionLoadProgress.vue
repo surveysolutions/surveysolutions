@@ -36,7 +36,7 @@
         },
         computed: {
             isLoading() {
-                return this.$store.getters.loadingProgress;
+                return this.$store.state.webinterview.fetch.loadingProgress;
             }
         }
     }

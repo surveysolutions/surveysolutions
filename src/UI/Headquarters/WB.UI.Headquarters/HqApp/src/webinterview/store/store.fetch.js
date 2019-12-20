@@ -12,7 +12,7 @@ function setFetchState(state, id, done) {
 }
 
 function updateFetchProgress(state) {
-    state.inProgress = Object.keys(state.state).length > 0 || state.requestInProgress > 0 || state.loadingProgress;
+    state.inProgress = Object.keys(state.state).length > 0 || state.requestInProgress > 0;
 }
 
 const fetch = {
@@ -90,7 +90,6 @@ const fetch = {
         },
         SET_LOADING_PROGRESS(state, value) {
             state.loadingProgress = value;
-            updateFetchProgress(state);
         }
     }
 };

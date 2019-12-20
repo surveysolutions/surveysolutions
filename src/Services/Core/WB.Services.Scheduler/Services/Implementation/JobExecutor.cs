@@ -51,24 +51,22 @@ namespace WB.Services.Scheduler.Services.Implementation
                 {
                     if (SchedulerGlobalConfiguration.JubRunnerHandlers.TryGetValue(job.Type, out var runner))
                     {
-                        using (var tr = await db.Database.BeginTransactionAsync(token))
+                        await using var tr = await db.Database.BeginTransactionAsync(token);
+
+                        await db.AcquireXactLockAsync(job.Id);
+
+                        var exportJob = serviceProvider.GetService(runner) as IJob;
+
+                        if (exportJob == null)
                         {
-                            await db.AcquireXactLockAsync(job.Id);
-
-                            var exportJob = serviceProvider.GetService(runner) as IJob;
-
-                            if (exportJob == null)
-                            {
-                                progressReporter.FailJob(job.Id, new NotImplementedException("Cannot handle job of type: " + job.Type));
-                                return;
-                            }
-
-                            await exportJob.ExecuteAsync(job.Args, new JobExecutingContext(job),
-                                linkedCancellation.Token);
-                            progressReporter.CompleteJob(job.Id);
-
-                            tr.Commit();
+                            progressReporter.FailJob(job.Id, new NotImplementedException("Cannot handle job of type: " + job.Type));
+                            return;
                         }
+
+                        await exportJob.ExecuteAsync(job.Args, new JobExecutingContext(job),  linkedCancellation.Token);
+                        progressReporter.CompleteJob(job.Id);
+
+                        await tr.CommitAsync(linkedCancellation.Token);
                     }
                 }
                 catch (OperationCanceledException oce)
