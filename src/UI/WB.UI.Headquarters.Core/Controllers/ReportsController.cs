@@ -23,21 +23,13 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult SurveysAndStatuses()
         {
             var model = new SurveysAndStatusesModel();
-            model.DataUrl = Url.RouteUrl(
-                new
-                {
-                    controller = "ReportDataApi",
-                    action = "HeadquarterSurveysAndStatusesReport"
-                });
-
-            model.ResponsiblesUrl = Url.RouteUrl(new
-            {
-                controller = "UsersTypeahead",
-                action = "Supervisors"
-            });
+            model.DataUrl = Url.Action("HeadquarterSurveysAndStatusesReport", "ReportDataApi");
+            model.InterviewsUrl = Url.Action("Index", "Interviews");
+            model.ResponsiblesUrl = Url.Action("Supervisors", "UsersTypeahead");
 
             model.ReportName = Pages.SurveysAndStatuses_Overview;
             model.Subtitle = Pages.SurveysAndStatuses_HeadquartersDescription;
+
             return this.View(model);
         }
 
