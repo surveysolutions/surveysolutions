@@ -174,7 +174,7 @@
                 
                 this.markerCluster = new MarkerClusterer(this.map, markers,
                 {
-                    imagePath: '../../Content/img/google-maps-markers/m',
+                    imagePath: './img/google-maps-markers/m',
                     enableRetinaIcons: true,
                     minimumClusterSize: this.minimumClusterSize,
                     averageCenter: true

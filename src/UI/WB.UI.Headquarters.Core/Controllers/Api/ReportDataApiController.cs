@@ -25,7 +25,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 {
     [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
     [ResponseCache(NoStore = true)]
-    [Route("api/ReportDataApi")]
+    [Route("api/[controller]/[action]/{id?}")]
     public partial class ReportDataApiController : ControllerBase
     {
         const int MaxPageSize = 50000;
@@ -106,7 +106,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpPost]
-        public MapReportView MapReport(MapReportInputModel data)
+        public MapReportView MapReport([FromBody] MapReportInputModel data)
         {
             return this.mapReport.Load(data);
         }
@@ -118,21 +118,21 @@ namespace WB.UI.Headquarters.Controllers.Api
             var result = new QuestionnaireAndVersionsView
             {
                 Items = questionnaireBrowseView.Items.GroupBy(x => x.QuestionnaireId).Select(x => x.First())
-                                               .Select(x => new QuestionnaireAndVersionsItem {
-                                                        QuestionnaireId = x.QuestionnaireId,
-                                                        Title = x.Title,
-                                                        Versions = questionnaireBrowseView.Items
-                                                                                          .Where(q => q.QuestionnaireId == x.QuestionnaireId)
-                                                                                          .Select(y => y.Version)
-                                                                                          .ToArray()
-                                                    }).ToArray(),
+                   .Select(x => new QuestionnaireAndVersionsItem {
+                            QuestionnaireId = x.QuestionnaireId,
+                            Title = x.Title,
+                            Versions = questionnaireBrowseView.Items
+                              .Where(q => q.QuestionnaireId == x.QuestionnaireId)
+                              .Select(y => y.Version)
+                              .ToArray()
+                        }).ToArray(),
                 TotalCount = questionnaireBrowseView.TotalCount
             };
             return result;
         }
 
         [HttpGet]
-        public List<string> QuestionInfo(Guid id, long? version)
+        public List<string> QuestionInfo([FromRoute]Guid id, [FromQuery] long? version = null)
         {
             var variables = this.mapReport.GetGpsQuestionsByQuestionnaire(id, version);
             return variables;
@@ -398,7 +398,6 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpGet]
-        [Route("HeadquarterSurveysAndStatusesReport")]
         public IActionResult HeadquarterSurveysAndStatusesReport(Guid? id = null, [FromQuery]ReportDataApiController.SurveysAndStatusesFilter filter = null, [FromQuery]string exportType = null)
         {
             var input = new SurveysAndStatusesReportInputModel
