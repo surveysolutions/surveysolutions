@@ -756,8 +756,7 @@ namespace WB.Tests.Abc.TestFactories
             sessionProvider = sessionProvider ?? Mock.Of<IUnitOfWork>(x => x.Session == session);
             userViewFactory = userViewFactory ?? Mock.Of<IUserViewFactory>();
 
-            return new AssignmentsImportService(userViewFactory,
-                verifier ?? ImportDataVerifier(),
+            return new AssignmentsImportService(verifier ?? ImportDataVerifier(),
                 authorizedUser ?? Mock.Of<IAuthorizedUser>(),
                 sessionProvider,
                 importAssignmentsProcessRepository ?? Mock.Of<IPlainStorageAccessor<AssignmentsImportProcess>>(),
