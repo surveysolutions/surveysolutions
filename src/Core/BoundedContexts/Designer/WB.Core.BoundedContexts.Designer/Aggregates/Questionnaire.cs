@@ -571,6 +571,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
             this.innerDocument.Categories.RemoveAll(x => x.Id == command.CategoriesId);
+
+            this.innerDocument.Find<ICategoricalQuestion>(x => x.CategoriesId == command.CategoriesId)
+                .ForEach(x => x.CategoriesId = null);
         }
 
         #endregion

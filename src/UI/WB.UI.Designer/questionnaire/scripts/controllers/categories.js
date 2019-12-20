@@ -160,8 +160,12 @@
             $scope.deleteCategories = function(index) {
                 var categories = $scope.categoriesList[index];
                 var categoriesName = categories.name || $i18next.t('SideBarCategoriesNoName');
+                
+                var trimmedCategoriesName = utilityService.trimText(categoriesName);
+                var message = $i18next.t('DeleteConfirmCategories', { trimmedTitle: trimmedCategoriesName });
+
                 var modalInstance =
-                    confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(categoriesName));
+                    confirmService.open(utilityService.createDeletePopup(message));
 
                 modalInstance.result.then(function(confirmResult) {
                     if (confirmResult === 'ok') {
@@ -203,5 +207,7 @@
                     function(categoriesDto) {
                         return { categoriesId: categoriesDto.categoriesId, name: categoriesDto.name };
                     });
+
+                $rootScope.$broadcast("updateCategories", {});
             };
         });
