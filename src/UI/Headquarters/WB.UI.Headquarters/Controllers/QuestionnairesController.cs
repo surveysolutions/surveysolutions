@@ -7,6 +7,7 @@ using System.Web.UI;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -26,6 +27,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IQuestionnaireBrowseViewFactory browseViewFactory;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         private readonly IPlainKeyValueStorage<QuestionnairePdf> pdfStorage;
+        private readonly IUserViewFactory userViewFactory;
         private readonly IRestServiceSettings restServiceSettings;
 
         public QuestionnairesController(
@@ -33,13 +35,15 @@ namespace WB.UI.Headquarters.Controllers
             IQuestionnaireBrowseViewFactory browseViewFactory,
             IWebInterviewConfigProvider webInterviewConfigProvider,
             IRestServiceSettings restServiceSettings,
-            IPlainKeyValueStorage<QuestionnairePdf> pdfStorage)
+            IPlainKeyValueStorage<QuestionnairePdf> pdfStorage,
+            IUserViewFactory userViewFactory)
         {
             this.questionnaireStorage = questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
             this.browseViewFactory = browseViewFactory ?? throw new ArgumentNullException(nameof(browseViewFactory));
             this.webInterviewConfigProvider = webInterviewConfigProvider ?? throw new ArgumentNullException(nameof(webInterviewConfigProvider));
             this.restServiceSettings = restServiceSettings ?? throw new ArgumentNullException(nameof(restServiceSettings));
             this.pdfStorage = pdfStorage ?? throw new ArgumentNullException(nameof(pdfStorage));
+            this.userViewFactory = userViewFactory;
         }
 
         [OutputCache(Duration = 1200)]
@@ -47,21 +51,34 @@ namespace WB.UI.Headquarters.Controllers
         {
             var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
+            var browseItem = browseViewFactory.GetById(questionnaireIdentity);
+
             var model = new QuestionnaireDetailsModel
             {
                 Title = questionnaire.Title,
-                Version = questionnaire.Version
+                Version = questionnaire.Version,
+                ImportDateUtc = browseItem.ImportDate.GetValueOrDefault(),
+                LastEntryDateUtc = browseItem.LastEntryDate,
+                CreationDateUtc = browseItem.CreationDate,
+                WebMode = this.webInterviewConfigProvider.Get(questionnaireIdentity).Started,
+                AudioAudit = browseItem.IsAudioRecordingEnabled,
+                DesignerUrl = $"{this.restServiceSettings.Endpoint.TrimEnd('/')}/" +
+                              $"questionnaire/details/{questionnaire.QuestionnaireId:N}${questionnaire.Revision}",
+                Comment = browseItem.Comment
             };
 
-            var browseItem = browseViewFactory.GetById(questionnaireIdentity);
-            model.ImportDateUtc = browseItem.ImportDate.GetValueOrDefault();
-            model.LastEntryDateUtc = browseItem.LastEntryDate;
-            model.CreationDateUtc = browseItem.CreationDate;
-            model.WebMode = this.webInterviewConfigProvider.Get(questionnaireIdentity).Started;
-            model.AudioAudit = browseItem.IsAudioRecordingEnabled;
-            model.DesignerUrl = $"{this.restServiceSettings.Endpoint.TrimEnd('/')}/" +
-                $"questionnaire/details/{questionnaire.QuestionnaireId:N}${questionnaire.Revision}";
-            model.Comment = browseItem.Comment;
+            if (browseItem.ImportedBy.HasValue)
+            {
+                var user = this.userViewFactory.GetUser(browseItem.ImportedBy.Value);
+                if (user != null)
+                {
+                    model.ImportedBy = new QuestionnaireDetailsModel.User
+                    {
+                        Role = Enum.GetName(typeof(UserRoles), user.Roles.First()),
+                        Name = user.UserName
+                    };
+                }
+            }
 
             var mainPdfFile = this.pdfStorage.HasNotEmptyValue(questionnaireIdentity.ToString());
             if (mainPdfFile)

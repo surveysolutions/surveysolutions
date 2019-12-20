@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     new QuestionnaireFeature
                     {
                           HasQuestionnaire = questionnaire =>  questionnaire.Translations.Any(),
-                          Description = "Multilanguage questionnaire"
+                          Description = "Multi-language questionnaire"
                     }
                 }
             },
@@ -242,6 +242,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     {
                         HasQuestionnaire = questionnaire =>  questionnaire.Categories.Any(),
                         Description = "Contains reusable categories"
+                    },
+                    new QuestionnaireFeature
+                    {
+                        HasQuestionnaire = questionnaire => questionnaire.Find<IGroup>(q => q.DisplayMode == RosterDisplayMode.Matrix).Any(),
+                        Description = "Contains roster with Matrix display mode"
                     }
                 }
             },
