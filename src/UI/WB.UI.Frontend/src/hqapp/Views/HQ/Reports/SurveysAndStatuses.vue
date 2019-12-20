@@ -12,7 +12,8 @@
                     data-vv-name="responsibleId"
                     data-vv-as="responsible"
                     :placeholder="$t('Strings.AllTeams')"
-                    :value="responsibleId"
+                    :value="responsible" 
+                    v-on:selected="selectResponsible"
                     :fetch-url="$config.model.responsiblesUrl"
                 />
             </FilterBlock>
@@ -28,17 +29,37 @@
     </HqLayout>
 </template>
 <script>
+
+import routeSync from "~/shared/routeSync";
+
 export default {
+    mixins: [routeSync],
     data() {
         return {
-            responsibleId: null,
+            responsible: null,
         }
     },
     methods: {
-         addFilteringParams(data) {
-            if (this.responsibleId) {
-                data.responsibleId = this.responsibleId.key;
+        addFilteringParams(data) {
+            if (this.responsible) {
+                data.responsibleName = this.responsible.value;
             }
+        },
+        selectResponsible(value) {
+            this.responsible = value
+            this.onChange(s => {
+                s.responsible = (value || {}).value == null ? null : value.value
+            })
+        },
+        reloadTable() {
+            if(this.$refs.table != null) {
+                this.$refs.table.reload()
+            }
+        }
+    },
+    watch: {
+        responsible() {
+            this.reloadTable()
         }
     },
     computed: {
@@ -109,7 +130,7 @@ export default {
                         .attr('nowrap', 'nowrap')
                 },
             }
-        },
-    },
+        }
+    }
 }
 </script>
