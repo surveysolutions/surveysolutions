@@ -329,13 +329,14 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
             foreach (var question in questionnaire.Find<ICategoricalQuestion>())
             {
-                if(question.Answers == null || question.Answers.Count == 0) continue;
+                var categories = question.Answers?.Where(y => y.HasValue())?.ToArray();
+
+                if(categories == null || categories.Length == 0) continue;
                 if(questionsWithDuplicates.Contains(question.PublicKey)) continue;
 
                 var duplicatedQuestionsByCategories = questionnaire
                     .Find<ICategoricalQuestion>(x =>
-                        x.Answers != null &&
-                        question.Answers.Where(y => y.HasValue()).SequenceEqual(x.Answers.Where(y => y.HasValue())))
+                        x.Answers != null && categories.SequenceEqual(x.Answers.Where(y => y.HasValue())))
                     .Select(x => x.PublicKey)
                     .ToArray();
 
