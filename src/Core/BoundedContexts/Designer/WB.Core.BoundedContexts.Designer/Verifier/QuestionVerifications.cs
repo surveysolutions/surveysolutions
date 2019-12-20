@@ -325,12 +325,12 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         }
         private IEnumerable<QuestionnaireEntityReference[]> QuestionsHasSameCategories(MultiLanguageQuestionnaireDocument questionnaire)
         {
-            var questionsWithDeplicates  = new List<Guid>();
+            var questionsWithDuplicates  = new List<Guid>();
 
             foreach (var question in questionnaire.Find<ICategoricalQuestion>())
             {
                 if(question.Answers == null || question.Answers.Count == 0) continue;
-                if(questionsWithDeplicates.Contains(question.PublicKey)) continue;
+                if(questionsWithDuplicates.Contains(question.PublicKey)) continue;
 
                 var duplicatedQuestionsByCategories = questionnaire
                     .Find<ICategoricalQuestion>(x => x != question && x.Answers != null && question.Answers.SequenceEqual(x.Answers))
@@ -338,8 +338,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
                 if (duplicatedQuestionsByCategories.Any())
                 {
-                    questionsWithDeplicates.Add(question.PublicKey);
-                    questionsWithDeplicates.AddRange(duplicatedQuestionsByCategories);
+                    questionsWithDuplicates.Add(question.PublicKey);
+                    questionsWithDuplicates.AddRange(duplicatedQuestionsByCategories);
 
                     yield return new[] {question.PublicKey}.Union(duplicatedQuestionsByCategories)
                         .Select(QuestionnaireEntityReference.CreateForQuestion).ToArray();
