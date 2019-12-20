@@ -83,6 +83,7 @@ using WB.Core.BoundedContexts.Headquarters.ReusableCategories;
 using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Questionnaire.Impl;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
+using WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services;
@@ -154,6 +155,10 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IPreloadedDataVerifier, ImportDataVerifier>();
 
             registry.Bind<IExportFileNameService, ExportExportFileNameService>();
+            registry.Bind<IDeleteQuestionnaireService, DeleteQuestionnaireService>();
+            registry.Bind<IAssignmentsImportService, AssignmentsImportService>();
+            registry.Bind<IAssignmentsImportFileConverter, AssignmentsImportFileConverter>();
+            registry.Bind<DeleteQuestionnaireJobScheduler>();
 
             registry.BindAsSingleton<IStringCompressor, JsonCompressor>();
             registry.Bind<ISerializer, NewtonJsonSerializer>();

@@ -222,12 +222,9 @@
     <Compile Include="Filters\ApiTransactionFilter.cs" />
     <Compile Include="Filters\TransactionFilter.cs" />
     <Compile Include="Filters\UnderConstructionFilter.cs" />
-    <Compile Include="Filters\ApiValidationAntiForgeryTokenVerifier.cs" />
     <Compile Include="Filters\EnforceHttpsHandler.cs" />
-    <Compile Include="Filters\ITokenVerifier.cs" />
     <Compile Include="Filters\RequireSecureConnectionAttribute.cs" />
     <Compile Include="Filters\LocalOrDevelopmentAccessOnlyAttribute.cs" />
-    <Compile Include="Filters\ApiValidationAntiForgeryTokenAttribute.cs" />
     <Compile Include="Filters\NoCacheAttribute.cs" />
     <Compile Include="Filters\TokenValidationAuthorizationFilter.cs" />
     <Compile Include="Implementation\Services\VirtualPathService.cs" />

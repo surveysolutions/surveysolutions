@@ -1,0 +1,13 @@
+﻿@using WB.Core.SharedKernels.SurveyManagement.Web.Models
+@using WB.UI.Headquarters.Code
+@model WB.UI.Headquarters.Models.Reports.TeamsAndStatusesModel
+@{
+    ViewBag.Title = Reports.TeamsAndStatuses;
+    ViewBag.ActivePage = MenuItem.TeamMembersAndStatuses;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@section Scripts{
+    @Html.RenderHqConfig(Model)
+}
+
+<div id="vueApp"></div>
