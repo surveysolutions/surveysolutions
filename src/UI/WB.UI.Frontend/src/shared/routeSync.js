@@ -55,7 +55,7 @@ export default {
                 }
             });
 
-            this.$router.push({ query });
+            this.$router.push({ query }).catch(err => {});
         },
 
         
