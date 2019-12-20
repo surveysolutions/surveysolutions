@@ -703,6 +703,13 @@
                 markFormAsChanged();
             };
 
+            $scope.$on('updateCategories', function () {
+                if ($scope.activeQuestion.isLinkedToReusableCategories === true && $scope.activeQuestion.categoriesId !== null && $scope.getSelectedCategories() === undefined) {
+                    $scope.activeQuestion.isLinkedToReusableCategories = null;
+                    $scope.activeQuestion.categoriesId = null;
+                }
+            });
+
             $scope.$watch('activeQuestion.isLinked',
                 function(newValue) {
                     if (!$scope.activeQuestion) {

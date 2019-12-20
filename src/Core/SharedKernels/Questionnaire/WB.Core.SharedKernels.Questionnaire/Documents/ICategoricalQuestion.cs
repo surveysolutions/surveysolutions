@@ -5,6 +5,6 @@ namespace WB.Core.SharedKernels.Questionnaire.Documents
 {
     public interface ICategoricalQuestion : IQuestion
     {
-        Guid? CategoriesId { get; }
+        Guid? CategoriesId { get; set; }
     }
 }

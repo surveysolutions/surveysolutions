@@ -484,6 +484,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete categories &quot;{{trimmedTitle}}&quot;? Source of categories for categorical questions depentent on it will be changed to user defined categories.
+        /// </summary>
+        public static string DeleteConfirmCategories {
+            get {
+                return ResourceManager.GetString("DeleteConfirmCategories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete &quot;{{trimmedTitle}}&quot;?.
         /// </summary>
         public static string DeleteConfirmQuestion {

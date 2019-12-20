@@ -20,6 +20,7 @@ using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
@@ -1618,5 +1619,13 @@ namespace WB.Tests.Unit.Designer
 
         public static Categories Categories(Guid? id = null, string name = null) =>
             new Categories {Id = id ?? Guid.NewGuid(), Name = name};
+
+        public static AddOrUpdateCategories AddOrUpdateCategories(Guid questionnaireId, Guid responsibleId,
+            Guid categoriesId, string text = null, Guid? oldCategoriesId = null) =>
+            new AddOrUpdateCategories(questionnaireId, responsibleId, categoriesId, text ?? "new categories",
+                oldCategoriesId);
+
+        public static DeleteCategories DeleteCategories(Guid questionnaireId, Guid responsibleId, Guid categoriesId) =>
+            new DeleteCategories(questionnaireId, responsibleId, categoriesId);
     }
 }
