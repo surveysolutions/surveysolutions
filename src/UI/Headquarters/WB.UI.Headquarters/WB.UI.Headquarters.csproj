@@ -796,6 +796,16 @@
     <Content Include="App_GlobalResources\Reports.zh.resx">
       <DependentUpon>Reports.resx</DependentUpon>
     </Content>
+    <Content Include="App_GlobalResources\Roles.resx">
+      <SubType>Designer</SubType>
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Roles.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Roles.ru.resx">
+      <SubType>Designer</SubType>
+      <LastGenOutput>Roles.ru.designer.cs</LastGenOutput>
+      <DependentUpon>Roles.resx</DependentUpon>
+    </Content>
     <Content Include="App_GlobalResources\Settings.ar.resx">
       <DependentUpon>Settings.resx</DependentUpon>
     </Content>
@@ -2258,6 +2268,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reports.sq.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Roles.Designer.cs">
+      <DependentUpon>Roles.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="App_GlobalResources\Settings.sq.designer.cs">
       <AutoGen>True</AutoGen>
