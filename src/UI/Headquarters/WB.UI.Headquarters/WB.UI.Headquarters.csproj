@@ -2076,7 +2076,6 @@
     <Content Include="Views\Interviewer\Edit.cshtml" />
     <Content Include="Views\Reports\SpeedAndQuantity.cshtml" />
     <Content Include="Views\Reports\SurveysAndStatusesForSv.cshtml" />
-    <Content Include="Views\Reports\TeamMembersAndStatuses.cshtml" />
     <Content Include="Views\TabletReport\PackagesInfo.cshtml" />
     <Content Include="Views\Shared\_alerts.cshtml" />
     <Content Include="Views\Shared\_ControlPanelLayout.cshtml" />
