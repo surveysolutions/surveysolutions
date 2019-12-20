@@ -132,7 +132,8 @@ namespace WB.Tests.Integration.RestService
                 var downloader = new FastBinaryFilesHttpHandler(
                     Mock.Of<IHttpClientFactory>(r =>
                         r.CreateClient(It.IsAny<IHttpStatistician>()) == server.HttpClient),
-                    Mock.Of<IRestServiceSettings>(r => r.BufferSize == 4096 && r.MaxDegreeOfParallelism == 1), null);
+                    Mock.Of<IRestServiceSettings>(r => r.BufferSize == 4096 && r.MaxDegreeOfParallelism == 1), null, 
+                    Mock.Of<ILogger>());
 
                 var content = await downloader.DownloadBinaryDataAsync(http, response, null, CancellationToken.None);
                 var contentHash = hasher.ComputeHash(content);
