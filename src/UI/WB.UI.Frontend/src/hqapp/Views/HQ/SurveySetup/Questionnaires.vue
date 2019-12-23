@@ -3,6 +3,7 @@
         <DataTables
             ref="table"
             :tableOptions="tableOptions"
+            :contextMenuItems="contextMenuItems"
         ></DataTables>
     </HqLayout>
 </template>
@@ -13,13 +14,115 @@ import moment from "moment"
 
 export default {
     methods: {
-        
+         contextMenuItems({ rowData }) {
+            const selectedRow = rowData;
+            let items = [];
+            items.push({
+                name: this.$t("Dashboard.Details"),
+                callback: (_, opt) => {
+                    window.location.href = this.$config.model.questionnaireDetailsUrl + '/' + encodeURI(selectedRow.questionnaireId + '$' + selectedRow.version)
+                }
+            })
+
+            if (!rowData.isDisabled) {
+                if (!this.$config.model.isObserver) {
+                    items.push({
+                        name: this.$t("Dashboard.NewAssignment"),
+                        callback: () => {
+                            window.location.href = this.$config.model.takeNewInterviewUrl + '?questionnaireId=' + encodeURI(selectedRow.questionnaireId + '$' + selectedRow.version);
+                        }
+                    });
+                    items.push({
+                        name: this.$t("Dashboard.UploadAssignments"),
+                        callback: () => {
+                            window.location.href = this.$config.model.batchUploadUrl + '/' + selectedRow.questionnaireId + '?version=' + selectedRow.version;
+                            
+                        }
+                    });
+                    items.push({
+                        name: this.$t("Dashboard.UpgradeAssignments"),
+                        callback: () => {
+                            window.location.href = this.$config.model.migrateAssignmentsUrl + '/' + selectedRow.questionnaireId + '?version=' + selectedRow.version;
+                        }
+                    });
+                }
+                if (this.$config.model.isAdmin)
+                {
+                    items.push("---------");
+                }
+            }
+
+            if (!this.$config.model.isObserver) {
+                if (!rowData.isDisabled) {
+                    items.push({
+                        name: this.$t("Dashboard.WebInterviewSetup"),
+                        callback: (_, opt) => {
+                            const questionnaireId = selectedRow.questionnaireId + '$' + selectedRow.version;
+                            window.location.href = this.$config.model.webInterviewUrl + '/' + encodeURI(questionnaireId);
+                        }
+                    })
+                }
+                if (!rowData.isDisabled) {
+                    items.push({
+                        name: this.$t("Dashboard.DownloadLinks"),
+                        callback: (_, opt) => {
+                            var questionnaireId = selectedRow.questionnaireId + '$' + selectedRow.version;
+                            window.location.href = this.$config.model.downloadLinksUrl + '/' + encodeURI(questionnaireId);
+                        }
+                    })
+                }
+                if (!rowData.isDisabled) {
+                    items.push({
+                        name: this.$t("Dashboard.SendInvitations"),
+                        callback: (_, opt) => {
+                            var questionnaireId = selectedRow.questionnaireId + '$' + selectedRow.version;
+                            window.location.href = this.$config.model.sendInvitationsUrl + '/' + encodeURI(questionnaireId);
+                        }
+                    })
+                }
+            }
+
+            if (this.$config.model.isAdmin) {
+                items.push(
+                {
+                    name: this.$t("Dashboard.CloneQuestionnaire"),
+                    callback: (_, opt) => {
+                        window.location.href = this.$config.model.cloneQuestionnaireUrl + '/' + selectedRow.questionnaireId + '?version=' + selectedRow.version;
+                    },
+                    disabled: rowData.isDisabled
+                });
+                items.push(
+                {
+                    name: this.$t("Dashboard.DeleteQuestionnaire"),
+                    callback: (_, opt) => {
+
+                        notifier.confirm('Confirmation Needed', input.settings.messages.deleteQuestionnaireConfirmationMessage,
+                            // confirm
+                            function () { self.sendDeleteQuestionnaireCommand(selectedRow); },
+                            // cancel
+                            function () { });
+                    } 
+                });
+                items.push({
+                    name: this.$t("Dashboard.ExportQuestionnaire"),
+                    callback: (_, opt) => {
+                        window.location.href = this.$config.model.exportQuestionnaireUrl + '/' + selectedRow.questionnaireId + '?version=' + selectedRow.version;
+                    },
+                    disabled: rowData.isDisabled
+                })
+            }
+
+            return items;
+        }
     },
     computed: {
         tableOptions() {
             var self = this
             return {
                 deferLoading: 0,
+                rowId: (row) => {
+                    return `q${row.id}_${row.version}`
+                },
                 columns: [
                     {
                         data: 'title',

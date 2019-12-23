@@ -86,6 +86,16 @@ namespace WB.UI.Headquarters.Controllers
                 Dashboard.SurveySetupIntroMessage1 + "<br/>" + Dashboard.SurveySetupIntroMessage2;
             surveySetupModel.Title = Dashboard.Questionnaires;
             surveySetupModel.DataUrl = Url.Action("Questionnaires", "QuestionnairesApi");
+            surveySetupModel.IsObserver = this.authorizedUser.IsObserving;
+            surveySetupModel.IsAdmin = this.authorizedUser.IsAdministrator;
+            surveySetupModel.QuestionnaireDetailsUrl = Url.Action("Details", "Questionnaires");
+            surveySetupModel.TakeNewInterviewUrl = Url.Action("TakeNew", "HQ");
+            surveySetupModel.BatchUploadUrl = Url.Action("BatchUpload", "SurveySetup");
+            surveySetupModel.MigrateAssignmentsUrl = Url.Action("UpgradeAssignments", "SurveySetup");
+            surveySetupModel.WebInterviewUrl = Url.Action("Settings", "WebInterviewSetup");
+            surveySetupModel.DownloadLinksUrl = Url.Action("Download", "LinksExport");
+            surveySetupModel.CloneQuestionnaireUrl = Url.Action("CloneQuestionnaire", "HQ");
+            surveySetupModel.ExportQuestionnaireUrl = Url.Action("ExportQuestionnaire", "HQ");
 
             return this.View(surveySetupModel);
         }
