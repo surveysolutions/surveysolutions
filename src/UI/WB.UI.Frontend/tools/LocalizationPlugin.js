@@ -9,7 +9,7 @@ class LocalizationPlugin {
   apply(compiler) {
     compiler.hooks.beforeRun.tapAsync(PluginName, (params, callback) => {
       this.localization.prepareLocalizationFiles();
-      params['localization'] = this.localization;
+      // params['localization'] = this.localization;
       callback()
     });
   }
