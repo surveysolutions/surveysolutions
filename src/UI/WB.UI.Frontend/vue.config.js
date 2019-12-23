@@ -39,41 +39,36 @@ const pages = {
     hq_legacy: {
         entry: "src/pages/hq_legacy.js",
         filename: path.join(hqFolder, "Views", "Shared", "_AdminLayout_Legacy.cshtml"),
-        template: path.join(hqFolder, "Views", "Shared", "_AdminLayout_Legacy.Template.cshtml"),
-        locales: null
+        template: path.join(hqFolder, "Views", "Shared", "_AdminLayout_Legacy.Template.cshtml")
     },
 
     logon: {
         entry: "src/pages/logon.js",
         filename: path.join(hqFolder, "Views", "Shared", "_Logon.cshtml"),
-        template: path.join(hqFolder, "Views", "Shared", "_Logon.Template.cshtml"),
-        locales: null
+        template: path.join(hqFolder, "Views", "Shared", "_Logon.Template.cshtml")
     },
 
     hq_vue: {
         entry: "src/hqapp/main.js",
         filename: path.join(hqFolder, "Views", "Shared", "_AdminLayout.cshtml"),
-        template: path.join(hqFolder, "Views", "Shared", "_AdminLayout.Template.cshtml"),
-        locales: "hq"
+        template: path.join(hqFolder, "Views", "Shared", "_AdminLayout.Template.cshtml")
     },
 
     webinterview: {
         entry: "src/webinterview/main.js",
         filename: path.join(hqFolder, "Views", "Shared", "_WebInterview.cshtml"),
-        template: path.join(hqFolder, "Views", "Shared", "_WebInterview.Template.cshtml"),
-        locales: locales.webinterview
+        template: path.join(hqFolder, "Views", "Shared", "_WebInterview.Template.cshtml")
     },
 
     webtester: {
         entry: "src/webinterview/main.js",
         filename: path.join(webTesterFolder, "Views", "Shared", "_Layout.cshtml"),
-        template: path.join(webTesterFolder, "Views", "Shared", "_Layout.Template.cshtml"),
-        locales: "webtester"
+        template: path.join(webTesterFolder, "Views", "Shared", "_Layout.Template.cshtml")
     }
 };
 
 const fileTargets = [
-    { source: join("locale", ".resources", "**", "*.json"), destination: join("dist") },
+    { source: join(".resources", "locale", "**", "*.json"), destination: join("dist", "locale") },
 
     { source: join("dist", "img", "**" , "*.*"), destination: path.join(hqFolder, "wwwroot", "img") },
     { source: join("dist", "fonts", "**", "*.*"), destination: path.join(hqFolder, "wwwroot", "fonts") },
@@ -125,11 +120,12 @@ module.exports = {
             .use(LocalizationPlugin, [{
                 patterns: [
                     path.join(hqFolder, "**/*.resx"),
-                    path.join(uiFolder, "Headquarters/WB.UI.Headquarters/**/*.resx"),
+                    path.join(uiFolder, "WB.UI.Headquarters.Core/**/*.resx"),
                     path.join(uiFolder, "../Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources/*.resx"),
                     path.join(uiFolder, "../Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources/*.resx")
                 ],
-                destination: "./locale/.resources"
+                destination: "./.resources",
+                locales
             }])
 
         config.plugin('stats')
@@ -177,9 +173,9 @@ module.exports = {
          }]);
 
 
-        config.plugin("runtime").use(RuntimePublicPathPlugin, [{
-            runtimePublicPath: "window.CONFIG == null ? '/' : window.CONFIG.assetsPath || '/'"
-        }]);
+        // config.plugin("runtime").use(RuntimePublicPathPlugin, [{
+        //     runtimePublicPath: "window.CONFIG == null ? '/' : window.CONFIG.assetsPath || '/'"
+        // }]);
 
 
         // if (isHot) {

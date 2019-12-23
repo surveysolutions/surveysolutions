@@ -17,6 +17,15 @@ module.exports = class LocalizationBuilder {
 
     prepareLocalizationFiles() {
         this.parseResxFiles();
+        const locales = this.options.locales;
+        Object.keys(locales).forEach(page => {
+            if(locales.hasOwnProperty(page))
+            this.writeFiles(
+                this.options.destination,
+                path.join("locale", page),
+                locales[page]
+            );
+        })
     }
 
     writeFiles(destination, folder, namespaces) {
@@ -94,37 +103,37 @@ module.exports = class LocalizationBuilder {
                 json
             );
         }
-		
-		this.addDefaultLocaleValues(locale, "en");
+
+        this.addDefaultLocaleValues(locale, "en");
 
         this.localeInfo = locale;
         console.timeEnd("parseResxFiles");
         return this.localeInfo;
     }
-	
-	addDefaultLocaleValues(locales, def) {
-		const defaultMessages = locales[def];
 
-		// translations: en, ru, es
-		Object.keys(locales).forEach((locale) => {
-			if (locale == def) return;
+    addDefaultLocaleValues(locales, def) {
+        const defaultMessages = locales[def];
 
-			// namespaces: Main, DataTables 
-			Object.keys(defaultMessages).forEach((namespace) => {
-				if (!locales[locale][namespace]){
-					locales[locale][namespace] = {};
-				}
-				// key: Version, ModalTitle
-				Object.keys(defaultMessages[namespace]).forEach((key) => {
-					if (!locales[locale][namespace][key]) {
-						locales[locale][namespace][key] = defaultMessages[namespace][key];
-					}
-				});
-			});
-		});
+        // translations: en, ru, es
+        Object.keys(locales).forEach((locale) => {
+            if (locale == def) return;
 
-		return locales;
-	}
+            // namespaces: Main, DataTables 
+            Object.keys(defaultMessages).forEach((namespace) => {
+                if (!locales[locale][namespace]) {
+                    locales[locale][namespace] = {};
+                }
+                // key: Version, ModalTitle
+                Object.keys(defaultMessages[namespace]).forEach((key) => {
+                    if (!locales[locale][namespace][key]) {
+                        locales[locale][namespace][key] = defaultMessages[namespace][key];
+                    }
+                });
+            });
+        });
+
+        return locales;
+    }
 
     getDictionaryDefinition(locales) {
         var result = Object.keys(locales).map(
@@ -140,7 +149,7 @@ module.exports = class LocalizationBuilder {
 
         var resourceObject = {};
         var valueNodes = doc.childrenNamed("data");
-        valueNodes.forEach(function(element) {
+        valueNodes.forEach(function (element) {
             var name = element.attr.name;
             var values = element.childrenNamed("value");
 
@@ -173,7 +182,7 @@ module.exports = class LocalizationBuilder {
             // }
         });
 
-		var result = Object.assign(initial, newone);
+        var result = Object.assign(initial, newone);
         return result;
     }
 
