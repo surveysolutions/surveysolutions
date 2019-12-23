@@ -762,7 +762,6 @@ namespace WB.Tests.Abc.TestFactories
                 importAssignmentsProcessRepository ?? Mock.Of<IPlainStorageAccessor<AssignmentsImportProcess>>(),
                 importAssignmentsRepository ?? Mock.Of<IPlainStorageAccessor<AssignmentToImport>>(),
                 interviewCreatorFromAssignment ?? Mock.Of<IInterviewCreatorFromAssignment>(),
-                assignmentsStorage ?? Mock.Of<IQueryableReadSideRepositoryReader<Assignment, Guid>>(),
                 assignmentsImportFileConverter ?? AssignmentsImportFileConverter(userViewFactory: userViewFactory),
                 Create.Service.AssignmentFactory(),
                 invitationService ?? Mock.Of<IInvitationService>(),

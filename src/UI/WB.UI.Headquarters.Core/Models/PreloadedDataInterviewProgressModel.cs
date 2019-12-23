@@ -1,5 +1,5 @@
 ﻿using System;
-using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
+using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services;
 
 namespace WB.UI.Headquarters.Models
 {

@@ -446,98 +446,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_GlobalResources\BatchUpload.ar.resx">
-      <DependentUpon>BatchUpload.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\BatchUpload.es.resx">
-      <LastGenOutput>BatchUpload.es.designer.cs</LastGenOutput>
-      <DependentUpon>BatchUpload.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\BatchUpload.fr.resx">
-      <DependentUpon>BatchUpload.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\BatchUpload.ka.resx">
-      <DependentUpon>BatchUpload.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\BatchUpload.pt.resx">
-      <DependentUpon>BatchUpload.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\BatchUpload.resx">
-      <SubType>Designer</SubType>
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>BatchUpload.Designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\BatchUpload.ro.resx">
-      <DependentUpon>BatchUpload.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\BatchUpload.ru.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>BatchUpload.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\BatchUpload.zh.resx">
-      <DependentUpon>BatchUpload.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Common.ar.resx">
-      <LastGenOutput>Common.ar.designer.cs</LastGenOutput>
-      <DependentUpon>Common.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Common.es.resx">
-      <DependentUpon>Common.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Common.fr.resx">
-      <DependentUpon>Common.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Common.ka.resx">
-      <DependentUpon>Common.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Common.pt.resx">
-      <DependentUpon>Common.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Common.resx">
-      <SubType>Designer</SubType>
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Common.designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\Common.ro.resx">
-      <DependentUpon>Common.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Common.ru.resx">
-      <DependentUpon>Common.resx</DependentUpon>
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="App_GlobalResources\Common.zh.resx">
-      <DependentUpon>Common.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Dashboard.ar.resx">
-      <DependentUpon>Dashboard.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Dashboard.es.resx">
-      <DependentUpon>Dashboard.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Dashboard.fr.resx">
-      <DependentUpon>Dashboard.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Dashboard.ka.resx">
-      <DependentUpon>Dashboard.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Dashboard.pt.resx">
-      <DependentUpon>Dashboard.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Dashboard.resx">
-      <SubType>Designer</SubType>
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Dashboard.designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\Dashboard.ro.resx">
-      <DependentUpon>Dashboard.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Dashboard.ru.resx">
-      <DependentUpon>Dashboard.resx</DependentUpon>
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="App_GlobalResources\Dashboard.zh.resx">
-      <DependentUpon>Dashboard.resx</DependentUpon>
-    </Content>
     <Content Include="App_GlobalResources\DataExport.ar.resx">
       <DependentUpon>DataExport.resx</DependentUpon>
     </Content>
@@ -624,36 +532,6 @@
     </Content>
     <Content Include="App_GlobalResources\Import.zh.resx">
       <DependentUpon>Import.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\MainMenu.ar.resx">
-      <DependentUpon>MainMenu.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\MainMenu.es.resx">
-      <DependentUpon>MainMenu.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\MainMenu.fr.resx">
-      <DependentUpon>MainMenu.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\MainMenu.ka.resx">
-      <DependentUpon>MainMenu.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\MainMenu.pt.resx">
-      <DependentUpon>MainMenu.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\MainMenu.resx">
-      <SubType>Designer</SubType>
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>MainMenu.Designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\MainMenu.ro.resx">
-      <DependentUpon>MainMenu.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\MainMenu.ru.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>MainMenu.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\MainMenu.zh.resx">
-      <DependentUpon>MainMenu.resx</DependentUpon>
     </Content>
     <Content Include="App_GlobalResources\MapReport.ar.resx">
       <DependentUpon>MapReport.resx</DependentUpon>
@@ -766,36 +644,6 @@
     <Content Include="App_GlobalResources\QuestionnaireImport.zh.resx">
       <DependentUpon>QuestionnaireImport.resx</DependentUpon>
     </Content>
-    <Content Include="App_GlobalResources\Reports.ar.resx">
-      <DependentUpon>Reports.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Reports.es.resx">
-      <DependentUpon>Reports.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Reports.fr.resx">
-      <DependentUpon>Reports.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Reports.ka.resx">
-      <DependentUpon>Reports.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Reports.pt.resx">
-      <DependentUpon>Reports.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Reports.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <SubType>Designer</SubType>
-      <LastGenOutput>Reports.designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\Reports.ro.resx">
-      <DependentUpon>Reports.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Reports.ru.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>Reports.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Reports.zh.resx">
-      <DependentUpon>Reports.resx</DependentUpon>
-    </Content>
     <Content Include="App_GlobalResources\Roles.resx">
       <SubType>Designer</SubType>
       <Generator>GlobalResourceProxyGenerator</Generator>
@@ -867,35 +715,6 @@
     </Content>
     <Content Include="App_GlobalResources\TakeNewInterview.ru.resx">
       <DependentUpon>TakeNewInterview.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Users.ar.resx">
-      <DependentUpon>Users.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Users.es.resx">
-      <DependentUpon>Users.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Users.fr.resx">
-      <DependentUpon>Users.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Users.ka.resx">
-      <DependentUpon>Users.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Users.pt.resx">
-      <DependentUpon>Users.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Users.resx">
-      <SubType>Designer</SubType>
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Users.Designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\Users.ro.resx">
-      <DependentUpon>Users.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Users.ru.resx">
-      <DependentUpon>Users.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\Users.zh.resx">
-      <DependentUpon>Users.resx</DependentUpon>
     </Content>
     <Content Include="Content\app.css" />
     <Content Include="Content\bootstrap-datepicker.css" />
@@ -977,14 +796,6 @@
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>BatchUpload.sq.designer.cs</LastGenOutput>
     </Content>
-    <Content Include="App_GlobalResources\Common.sq.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Common.sq.designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\Dashboard.sq.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Dashboard.sq.designer.cs</LastGenOutput>
-    </Content>
     <Content Include="App_GlobalResources\DataExport.sq.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>DataExport.sq.designer.cs</LastGenOutput>
@@ -996,10 +807,6 @@
     <Content Include="App_GlobalResources\Import.sq.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>Import.sq.designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\MainMenu.sq.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>MainMenu.sq.designer.cs</LastGenOutput>
     </Content>
     <Content Include="App_GlobalResources\MapReport.sq.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
@@ -1017,10 +824,6 @@
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>QuestionnaireImport.sq.designer.cs</LastGenOutput>
     </Content>
-    <Content Include="App_GlobalResources\Reports.sq.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Reports.sq.designer.cs</LastGenOutput>
-    </Content>
     <Content Include="App_GlobalResources\Settings.sq.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>Settings.sq.designer.cs</LastGenOutput>
@@ -1028,10 +831,6 @@
     <Content Include="App_GlobalResources\TakeNewInterview.sq.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>TakeNewInterview.sq.designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\Users.sq.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Users.sq.designer.cs</LastGenOutput>
     </Content>
     <EmbeddedResource Include="Content\img\no_image_found.jpg" />
     <Content Include="Content\img\sort_asc.png" />
@@ -1220,20 +1019,6 @@
       <DependentUpon>Assignments.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Assignments.sq.resx" />
-    <EmbeddedResource Include="Resources\AuditLog.ar.resx">
-      <DependentUpon>AuditLog.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AuditLog.ro.resx">
-      <DependentUpon>AuditLog.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AuditLog.sq.resx" />
-    <EmbeddedResource Include="Resources\DataTables.ar.resx">
-      <DependentUpon>DataTables.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\DataTables.ro.resx">
-      <DependentUpon>DataTables.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\DataTables.sq.resx" />
     <EmbeddedResource Include="Resources\Details.ar.resx">
       <DependentUpon>Details.resx</DependentUpon>
     </EmbeddedResource>
@@ -1255,10 +1040,6 @@
       <DependentUpon>EnumNames.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\EnumNames.sq.resx" />
-    <EmbeddedResource Include="Resources\FieldsAndValidations.ro.resx">
-      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\FieldsAndValidations.sq.resx" />
     <EmbeddedResource Include="Resources\ImportQuestionnaire.ar.resx">
       <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
     </EmbeddedResource>
@@ -1270,21 +1051,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Assignments.es.resx">
       <DependentUpon>Assignments.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AuditLog.es.resx">
-      <DependentUpon>AuditLog.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AuditLog.fr.resx">
-      <DependentUpon>AuditLog.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AuditLog.zh.resx">
-      <DependentUpon>AuditLog.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\DataTables.es.resx">
-      <DependentUpon>DataTables.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\DataTables.fr.resx">
-      <DependentUpon>DataTables.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Details.es.resx">
       <DependentUpon>Details.resx</DependentUpon>
@@ -1303,9 +1069,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\EnumNames.es.resx">
       <DependentUpon>EnumNames.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\FieldsAndValidations.es.resx">
-      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ImportQuestionnaire.es.resx">
       <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
@@ -1357,13 +1120,6 @@
       <DependentUpon>OutdatedBrowser.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\OutdatedBrowser.sq.resx" />
-    <EmbeddedResource Include="Resources\Pages.es.resx">
-      <DependentUpon>Pages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Pages.ro.resx">
-      <DependentUpon>Pages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Pages.sq.resx" />
     <EmbeddedResource Include="Resources\PeriodicStatusReport.ar.resx">
       <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
     </EmbeddedResource>
@@ -1408,21 +1164,6 @@
       <DependentUpon>SyncLogMessages.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\SyncLogMessages.sq.resx" />
-    <EmbeddedResource Include="Resources\TabletLogs.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>TabletLogs.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\TabletLogs.ru.resx" />
-    <EmbeddedResource Include="Resources\TabletSyncMessages.ar.resx">
-      <DependentUpon>TabletSyncMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\TabletSyncMessages.es.resx">
-      <DependentUpon>TabletSyncMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\TabletSyncMessages.ro.resx">
-      <DependentUpon>TabletSyncMessages.resx</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources\TabletSyncMessages.sq.resx" />
     <EmbeddedResource Include="Resources\Troubleshooting.ar.resx">
       <DependentUpon>Troubleshooting.resx</DependentUpon>
@@ -1555,28 +1296,6 @@
     <EmbeddedResource Include="Resources\Assignments.zh.resx">
       <DependentUpon>Assignments.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AuditLog.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>AuditLog.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AuditLog.ru.resx">
-      <DependentUpon>AuditLog.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\DataTables.ka.resx">
-      <DependentUpon>DataTables.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\DataTables.resx">
-      <SubType>Designer</SubType>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>DataTables.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\DataTables.ru.resx">
-      <DependentUpon>DataTables.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\DataTables.zh.resx">
-      <DependentUpon>DataTables.resx</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Details.ka.resx">
       <DependentUpon>Details.resx</DependentUpon>
     </EmbeddedResource>
@@ -1620,30 +1339,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\EnumNames.zh.resx">
       <DependentUpon>EnumNames.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\FieldsAndValidations.ar.resx">
-      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\FieldsAndValidations.fr.resx">
-      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\FieldsAndValidations.ka.resx">
-      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\FieldsAndValidations.pt.resx">
-      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\FieldsAndValidations.resx">
-      <SubType>Designer</SubType>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>FieldsAndValidations.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\FieldsAndValidations.ru.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\FieldsAndValidations.zh.resx">
-      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ImportQuestionnaire.ka.resx">
       <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
@@ -1731,31 +1426,6 @@
     <EmbeddedResource Include="Resources\OutdatedBrowser.zh.resx">
       <DependentUpon>OutdatedBrowser.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Pages.ar.resx">
-      <DependentUpon>Pages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Pages.fr.resx">
-      <DependentUpon>Pages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Pages.ka.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>Pages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Pages.pt.resx">
-      <DependentUpon>Pages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Pages.resx">
-      <SubType>Designer</SubType>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Pages.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Pages.ru.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>Pages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Pages.zh.resx">
-      <DependentUpon>Pages.resx</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources\PeriodicStatusReport.fr.resx">
       <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
       <SubType>Designer</SubType>
@@ -1800,26 +1470,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\SyncLogMessages.zh.resx">
       <DependentUpon>SyncLogMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\TabletSyncMessages.fr.resx">
-      <DependentUpon>TabletSyncMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\TabletSyncMessages.ka.resx">
-      <DependentUpon>TabletSyncMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\TabletSyncMessages.pt.resx">
-      <DependentUpon>TabletSyncMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\TabletSyncMessages.resx">
-      <SubType>Designer</SubType>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>TabletSyncMessages.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\TabletSyncMessages.ru.resx">
-      <DependentUpon>TabletSyncMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\TabletSyncMessages.zh.resx">
-      <DependentUpon>TabletSyncMessages.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Troubleshooting.ka.resx">
       <DependentUpon>Troubleshooting.resx</DependentUpon>
@@ -2212,16 +1862,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>BatchUpload.sq.resx</DependentUpon>
     </Compile>
-    <Compile Include="App_GlobalResources\Common.sq.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Common.sq.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\Dashboard.sq.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Dashboard.sq.resx</DependentUpon>
-    </Compile>
     <Compile Include="App_GlobalResources\DataExport.sq.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -2236,11 +1876,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Import.sq.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\MainMenu.sq.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MainMenu.sq.resx</DependentUpon>
     </Compile>
     <Compile Include="App_GlobalResources\MapReport.sq.designer.cs">
       <AutoGen>True</AutoGen>
@@ -2262,11 +1897,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>QuestionnaireImport.sq.resx</DependentUpon>
     </Compile>
-    <Compile Include="App_GlobalResources\Reports.sq.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reports.sq.resx</DependentUpon>
-    </Compile>
     <Compile Include="App_GlobalResources\Roles.Designer.cs">
       <DependentUpon>Roles.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -2282,11 +1912,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>TakeNewInterview.sq.resx</DependentUpon>
     </Compile>
-    <Compile Include="App_GlobalResources\Users.sq.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Users.sq.resx</DependentUpon>
-    </Compile>
     <Compile Include="API\WebInterview\InterviewCommandsController.cs" />
     <Compile Include="API\WebInterview\InterviewDataController.cs" />
     <Compile Include="API\TabletLogsApiController.cs" />
@@ -2297,11 +1922,6 @@
     <Compile Include="Controllers\QuestionnairesController.cs" />
     <Compile Include="Filters\WebInterviewObserverNotAllowedActionFilter.cs" />
     <Compile Include="Models\QuestionnaireDetailsModel.cs" />
-    <Compile Include="Resources\TabletLogs.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>TabletLogs.resx</DependentUpon>
-    </Compile>
     <Compile Include="Resources\Questionnaire.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -2389,11 +2009,6 @@
     <Compile Include="API\WebInterview\WebInterviewSetupApiController.cs" />
     <Compile Include="API\WebInterview\WebStatefulInterviewExtensions.cs" />
     <Compile Include="API\WebInterview\WebInterviewHub.cs" />
-    <Compile Include="App_GlobalResources\Dashboard.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Dashboard.resx</DependentUpon>
-    </Compile>
     <Compile Include="App_GlobalResources\DataExport.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -2403,11 +2018,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Maps.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\Reports.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reports.resx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\MainModule.cs" />
     <Compile Include="App_Start\AutofacConfig.cs" />
@@ -2447,16 +2057,6 @@
     <Compile Include="API\Resources\DataTableTranslationsController.cs" />
     <Compile Include="API\Resources\WebInterviewResourcesController.cs" />
     <Compile Include="API\PublicApi\UsersController.cs" />
-    <Compile Include="App_GlobalResources\BatchUpload.Designer.cs">
-      <DependentUpon>BatchUpload.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Include="App_GlobalResources\Common.designer.cs">
-      <DependentUpon>Common.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Include="App_GlobalResources\HQ.designer.cs">
       <DependentUpon>HQ.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -2464,11 +2064,6 @@
     </Compile>
     <Compile Include="App_GlobalResources\Import.Designer.cs">
       <DependentUpon>Import.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Include="App_GlobalResources\MainMenu.Designer.cs">
-      <DependentUpon>MainMenu.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
@@ -2494,11 +2089,6 @@
     </Compile>
     <Compile Include="App_GlobalResources\TakeNewInterview.Designer.cs">
       <DependentUpon>TakeNewInterview.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Include="App_GlobalResources\Users.Designer.cs">
-      <DependentUpon>Users.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
@@ -2575,11 +2165,9 @@
     <Compile Include="Models\Reports\StatusDurationModel.cs" />
     <Compile Include="Models\Reports\DevicesInterviewersModel.cs" />
     <Compile Include="Models\Reports\SurveysAndStatusesModel.cs" />
-    <Compile Include="Models\UpgradeAssignmentsModel.cs" />
     <Compile Include="Models\User\ResponsibleComboboxModel.cs" />
     <Compile Include="Models\User\ResponsibleComboboxOptionModel.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
-    <Compile Include="Controllers\SurveySetupController.cs" />
     <Compile Include="Controllers\TabletReportApiController.cs" />
     <Compile Include="Controllers\TabletReportController.cs" />
     <Compile Include="Controllers\Profile\TeamController.cs" />
@@ -2624,7 +2212,6 @@
     <Compile Include="API\PublicApi\Models\UserApiDetails.cs" />
     <Compile Include="API\PublicApi\Models\UserApiItem.cs" />
     <Compile Include="API\PublicApi\Models\UserApiView.cs" />
-    <Compile Include="Models\BatchUploadModel.cs" />
     <Compile Include="Models\ChangeSettingsModel.cs" />
     <Compile Include="Models\ChangeStateHistoryViewModel.cs" />
     <Compile Include="Models\ChartDataModel.cs" />
@@ -2665,8 +2252,6 @@
     <Compile Include="Models\MenuItem.cs" />
     <Compile Include="Models\PagingExtensions.cs" />
     <Compile Include="Models\PagingHelper.cs" />
-    <Compile Include="Models\PreloadedDataConfirmationModel.cs" />
-    <Compile Include="Models\PreloadedDataInterviewProgressModel.cs" />
     <Compile Include="Models\QuantityByInterviewersReportModel.cs" />
     <Compile Include="Models\QuantityBySupervisorsReportModel.cs" />
     <Compile Include="Models\SpeedByInterviewersReportModel.cs" />
@@ -2674,7 +2259,6 @@
     <Compile Include="Models\TeamsAndStatusesFilter.cs" />
     <Compile Include="Models\TabletInfoReportListViewModel.cs" />
     <Compile Include="Models\Template\ImportQuestionnaireList.cs" />
-    <Compile Include="Models\UserBatchUploadModel.cs" />
     <Compile Include="Models\Account\UserEditModel.cs" />
     <Compile Include="Models\Account\UserModel.cs" />
     <Compile Include="Models\UserPreloading\AllUserPreloadingProcessesRequest.cs" />
@@ -2697,16 +2281,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Assignments.resx</DependentUpon>
     </Compile>
-    <Compile Include="Resources\AuditLog.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AuditLog.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources\DataTables.Designer.cs">
-      <DependentUpon>DataTables.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Include="Resources\Details.Designer.cs">
       <DependentUpon>Details.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -2719,11 +2293,6 @@
     </Compile>
     <Compile Include="Resources\EnumNames.Designer.cs">
       <DependentUpon>EnumNames.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Include="Resources\FieldsAndValidations.Designer.cs">
-      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
@@ -2752,11 +2321,6 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="Resources\Pages.Designer.cs">
-      <DependentUpon>Pages.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Include="Resources\PeriodicStatusReport.Designer.cs">
       <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -2769,11 +2333,6 @@
     </Compile>
     <Compile Include="Resources\SyncLogMessages.Designer.cs">
       <DependentUpon>SyncLogMessages.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Include="Resources\TabletSyncMessages.Designer.cs">
-      <DependentUpon>TabletSyncMessages.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
