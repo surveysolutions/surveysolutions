@@ -9,7 +9,7 @@
     "styles:dev": "vue-cli-service build --css --mode development",
     "dev": "vue-cli-service build --mode development",
     "lint": "vue-cli-service lint",
-    "hot": "vue-cli-service watch",
+    "hot": "vue-cli-service build --mode development --watch",
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
