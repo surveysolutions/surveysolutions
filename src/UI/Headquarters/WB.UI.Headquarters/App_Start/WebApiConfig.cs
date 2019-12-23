@@ -29,6 +29,7 @@ namespace WB.UI.Headquarters
             EnumeratorWebApiConfig.Register(config);
 
             config.Filters.Add(new UnhandledExceptionFilter());
+            
             config.MessageHandlers.Add(new CompressionHandler());
 
             config.Routes.MapHttpRoute("DefaultApiWithAction", "api/{controller}/{action}/{id}", new { id = RouteParameter.Optional });
