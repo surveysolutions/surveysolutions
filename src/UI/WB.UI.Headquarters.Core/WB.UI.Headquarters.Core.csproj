@@ -43,7 +43,7 @@
 
 
   <ItemGroup>
-    <None Remove="appsettings.*.magpie.ini" />
+    <None Remove="appsettings.*.ini" />
     <None Remove="appsettings.ini" />
   </ItemGroup>
 

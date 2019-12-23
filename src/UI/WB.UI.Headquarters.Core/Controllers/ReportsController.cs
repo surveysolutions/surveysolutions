@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
@@ -82,6 +83,20 @@ namespace WB.UI.Headquarters.Controllers
             {
                 Questionnaires = questionnaires.GetQuestionnaireComboboxViewItems()
             });
+        }
+
+
+        [ActivePage(MenuItem.DevicesInterviewers)]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        public ActionResult InterviewersAndDevices(Guid? id)
+        {
+            var devicesInterviewersModel = new DevicesInterviewersModel
+            {
+                DataUrl = Url.Action("DeviceInterviewers", "ReportDataApi"),
+                InterviewersBaseUrl = Url.Action("Index", "Interviewers"),
+                InterviewerProfileUrl = Url.Action("Profile", "Interviewer")
+            };
+            return this.View("InterviewersAndDevices", devicesInterviewersModel);
         }
 
     }
