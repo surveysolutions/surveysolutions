@@ -67,7 +67,7 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
 
         protected static LabelItem CreateLabelItem(string caption = "caption", string title = "title")
         {
-            return new LabelItem {Caption = caption, Title = title};
+            return new LabelItem(caption, title);
         }
 
         protected static List<HeaderColumn> GetHeaderColumns(string variableName, string title)
