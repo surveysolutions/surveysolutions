@@ -66,17 +66,6 @@ namespace WB.UI.Headquarters.Controllers
             });
         }
 
-        [AuthorizeOr403(Roles = "Administrator, Headquarter")]
-        public ActionResult InterviewsChart()
-        {
-            this.ViewBag.ActivePage = MenuItem.InterviewsChart;
-
-            var questionnaires = this.chartStatisticsViewFactory.GetQuestionnaireListWithData();
-
-            return this.View("CumulativeInterviewChart", new {
-                Templates = questionnaires
-            });
-        }
 
         [ActivePage(MenuItem.StatusDuration)]
         [AuthorizeOr403(Roles = "Administrator, Headquarter")]

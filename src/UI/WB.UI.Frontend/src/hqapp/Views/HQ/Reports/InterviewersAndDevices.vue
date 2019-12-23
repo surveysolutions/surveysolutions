@@ -8,7 +8,9 @@
 <script>
 export default {
     mounted() {
-        this.$refs.table.reload();
+        if (this.$refs.table){
+            this.$refs.table.reload();
+        }
     },
     methods: {
         renderCell(data, row, facet) {
