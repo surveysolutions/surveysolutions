@@ -43,7 +43,7 @@ namespace WB.UI.Shared.Enumerator.Services
             this.navigationService = navigationService;
         }
 
-        private Activity CurrentActivity => Mvx.Resolve<IMvxAndroidCurrentTopActivity>().Activity;
+        private Activity CurrentActivity => Mvx.IoCProvider.Resolve<IMvxAndroidCurrentTopActivity>().Activity;
 
         public void LaunchShareAction(string title, string info)
         {
@@ -59,6 +59,8 @@ namespace WB.UI.Shared.Enumerator.Services
         {
             await this.permissions.AssureHasPermission(Permission.Storage);
 
+            await this.navigationService.EnsureHasPermissionToInstallFromUnknownSources();
+            
             var pathToRootDirectory = Build.VERSION.SdkInt < BuildVersionCodes.N
                 ? AndroidPathUtils.GetPathToExternalDirectory()
                 : AndroidPathUtils.GetPathToInternalDirectory();
@@ -85,7 +87,7 @@ namespace WB.UI.Shared.Enumerator.Services
             }
             
             byte[] patchOrFullApkBytes = null;
-
+             
             try
             {
                 patchOrFullApkBytes = await this.synchronizationService.GetApplicationPatchAsync(onDownloadProgressChanged, cancellationToken);

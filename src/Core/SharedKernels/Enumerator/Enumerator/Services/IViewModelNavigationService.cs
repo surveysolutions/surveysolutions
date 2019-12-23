@@ -22,5 +22,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         Task Close(IMvxViewModel viewModel);
         void InstallNewApp(string pathToApk);
         void CloseApplication();
+        Task<bool> EnsureHasPermissionToInstallFromUnknownSources();
     }
 }

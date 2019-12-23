@@ -3,12 +3,14 @@ using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.OS;
+using Android.Support.Constraints;
 using Android.Support.V4.App;
 using Android.Support.V4.Content;
 using Java.Lang;
 using MvvmCross.Logging;
 using MvvmCross.Navigation;
 using MvvmCross.Platforms.Android;
+using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -27,7 +29,9 @@ namespace WB.UI.Shared.Enumerator.Services
         private readonly IMvxAndroidCurrentTopActivity topActivity;
         private readonly IMvxNavigationService navigationService;
         private readonly IPrincipal principal;
+        private readonly IMvxMessenger messenger;
         private readonly ILogger logger;
+        private MvxSubscriptionToken token;
 
         protected BaseViewModelNavigationService(ICommandService commandService,
             IUserInteractionService userInteractionService,
@@ -35,7 +39,7 @@ namespace WB.UI.Shared.Enumerator.Services
             IMvxAndroidCurrentTopActivity topActivity,
             IMvxNavigationService navigationService,
             IPrincipal principal, 
-            ILogger logger)
+            ILogger logger, IMvxMessenger messenger)
         {
             this.commandService = commandService;
             this.userInteractionService = userInteractionService;
@@ -44,12 +48,14 @@ namespace WB.UI.Shared.Enumerator.Services
             this.navigationService = navigationService;
             this.principal = principal;
             this.logger = logger;
+            this.messenger = messenger;
         }
 
-        public virtual bool HasPendingOperations => this.commandService.HasPendingCommands ||
-                                                    this.userInteractionService.HasPendingUserInteractions ||
-                                                    this.userInterfaceStateService.IsUserInterfaceLocked ||
-                                                    this.userInterfaceStateService.HasPendingThrottledActions;
+        public virtual bool HasPendingOperations => 
+            this.commandService.HasPendingCommands ||
+            this.userInteractionService.HasPendingUserInteractions ||
+            this.userInterfaceStateService.IsUserInterfaceLocked ||
+            this.userInterfaceStateService.HasPendingThrottledActions;
 
         public Task Close(IMvxViewModel viewModel)
         {
@@ -57,10 +63,52 @@ namespace WB.UI.Shared.Enumerator.Services
             return this.navigationService.Close(viewModel);
         }
 
+        public Task<bool> EnsureHasPermissionToInstallFromUnknownSources()
+        {
+            if (!Application.Context.PackageManager.CanRequestPackageInstalls())
+            {
+                var addFlags = ShareCompat.IntentBuilder.From(this.topActivity.Activity)
+                    .Intent
+                    .SetAction(Android.Provider.Settings.ActionManageUnknownAppSources)
+                    .SetData(Android.Net.Uri.Parse("package:" + Application.Context.PackageName))
+                    .AddFlags(ActivityFlags.NewTask);
+
+                Application.Context.StartActivity(addFlags);
+
+                var tcs = new TaskCompletionSource<bool>();
+                this.token = messenger.Subscribe<AppOnResume>(m =>
+                {
+                    try
+                    {
+                        if (!Application.Context.PackageManager.CanRequestPackageInstalls())
+                        {
+                            tcs.SetException(new System.Exception(
+                                
+                                UIResources.ErrorMessage_PermissionForUnkownSourcesRequired));
+                        }
+                        else
+                        {
+                            tcs.SetResult(true);
+                        }
+                    }
+                    finally
+                    {   
+                        messenger.Unsubscribe<AppOnResume>(token);
+                    }
+                });
+
+                return tcs.Task;
+                //throw new System.Exception("Cannot update application. Please check permission to install from Unknown Sources and try again ");
+            }
+
+            return Task.FromResult(true);
+        }
+
         public void InstallNewApp(string pathToApk)
         {
             this.logger.Info($"Installing new app {pathToApk} android build version code {Build.VERSION.SdkInt}");
             Intent promptInstall;
+
             if (Build.VERSION.SdkInt < BuildVersionCodes.N)
             {
                 promptInstall =
@@ -69,7 +117,7 @@ namespace WB.UI.Shared.Enumerator.Services
                         .AddFlags(ActivityFlags.NewTask)
                         .AddFlags(ActivityFlags.GrantReadUriPermission);
             }
-            else
+            else 
             {
                 var uriForFile = FileProvider.GetUriForFile(this.topActivity.Activity.BaseContext,
                     this.topActivity.Activity.ApplicationContext.PackageName + ".fileprovider",
@@ -159,6 +207,13 @@ namespace WB.UI.Shared.Enumerator.Services
             intent.AddFlags(ActivityFlags.ClearTop | ActivityFlags.NewTask);
             currentActivity.StartActivity(intent);
             currentActivity.Finish();
+        }
+    }
+
+    public class AppOnResume : MvxMessage
+    {
+        public AppOnResume(object sender) : base(sender)
+        {
         }
     }
 }
