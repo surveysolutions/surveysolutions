@@ -44,16 +44,16 @@ namespace WB.UI.Headquarters.Controllers.Api
             this.webInterviewConfigProvider = webInterviewConfigProvider;
         }
 
-        [HttpPost]
+        [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter, Interviewer")]
-        public DataTableResponse<QuestionnaireListItemModel> Questionnaires([FromBody] DataTableRequest request)
+        public DataTableResponse<QuestionnaireListItemModel> Questionnaires([FromQuery] DataTableRequest request)
         {
             var input = new QuestionnaireBrowseInputModel
             {
                 Page = request.PageIndex,
                 PageSize = request.PageSize,
                 Orders = request.GetSortOrderRequestItems(),
-                SearchFor = request.Search.Value,
+                SearchFor = request.Search?.Value,
                 IsAdminMode = true
             };
 

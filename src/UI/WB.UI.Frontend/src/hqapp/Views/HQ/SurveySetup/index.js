@@ -1,5 +1,6 @@
 import UpgradeAssignments from "./UpgradeAssignments"
 import UpgradeProgress from "./UpgradeProgress"
+import Questionnaires from "./Questionnaires"
 
 export default class MapComponent {
     get routes() {
@@ -10,6 +11,11 @@ export default class MapComponent {
         {
             path: '/SurveySetup/UpgradeProgress/:processId',
             component: UpgradeProgress
-        }]
+        },
+        {
+            path: '/SurveySetup',
+            component: Questionnaires
+        }
+        ]
     }
 }

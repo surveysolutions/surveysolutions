@@ -87,6 +87,7 @@ using WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services;
+using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAuditLog;
 using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -292,6 +293,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAuditLogReader, AuditLogReader>();
             registry.Bind<IEncryptionService, RsaEncryptionService>();
             registry.Bind<IMetaInfoBuilder, MetaInfoBuilder>();
+            registry.Bind<IAssignmentsImportReader, AssignmentsImportReader>();
 
             registry.BindAsSingleton<IPauseResumeQueue, PauseResumeQueue>();
             registry.Bind<IAuditLogFactory, AuditLogFactory>();
@@ -338,6 +340,8 @@ namespace WB.Core.BoundedContexts.Headquarters
                 new EventBusSettings()); // todo restore KP-13449
 
             registry.Bind<AssignmentAggregateRoot>();
+            registry.Bind<AssignmentsVerificationTask>();
+            registry.Bind<AssignmentsImportTask>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)

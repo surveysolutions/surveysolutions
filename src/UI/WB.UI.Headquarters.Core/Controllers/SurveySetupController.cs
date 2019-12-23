@@ -82,8 +82,12 @@ namespace WB.UI.Headquarters.Controllers
         public IActionResult Index()
         {
             var surveySetupModel = new SurveySetupModel();
+            surveySetupModel.SubTitle =
+                Dashboard.SurveySetupIntroMessage1 + "<br/>" + Dashboard.SurveySetupIntroMessage2;
+            surveySetupModel.Title = Dashboard.Questionnaires;
+            surveySetupModel.DataUrl = Url.Action("Questionnaires", "QuestionnairesApi");
 
-            return this.View();
+            return this.View(surveySetupModel);
         }
 
         public ActionResult BatchUpload(Guid id, long version)
