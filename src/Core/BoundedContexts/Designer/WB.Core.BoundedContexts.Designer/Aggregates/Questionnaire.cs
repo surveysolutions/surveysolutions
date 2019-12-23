@@ -562,7 +562,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             innerDocument.Categories.RemoveAll(x => x.Id == command.CategoriesId);
 
             if (command.OldCategoriesId.HasValue)
+            {
                 innerDocument.Categories.RemoveAll(x => x.Id == command.OldCategoriesId.Value);
+
+                var categoricalQuestionsWithOldId = innerDocument.Find<ICategoricalQuestion>(c => c.CategoriesId == command.OldCategoriesId);
+                categoricalQuestionsWithOldId.ForEach(c => c.CategoriesId = command.CategoriesId);
+            }
 
             innerDocument.Categories.Add(categories);
         }
