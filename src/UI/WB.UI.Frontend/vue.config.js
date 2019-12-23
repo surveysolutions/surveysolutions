@@ -21,7 +21,7 @@ const CleanupPlugin = require('clean-webpack-plugin').CleanWebpackPlugin;
 const locales = {
     hq: ["Assignments", "Common", "Dashboard", "DataExport", "DataTables",
         "Details", "DevicesInterviewers", "Interviews", "MainMenu", "MapReport",
-        "Pages", "Report", "Settings", "Strings", "TabletLogs", "UploadUsers",
+        "Pages", "Report", "Reports", "Settings", "Strings", "TabletLogs", "UploadUsers",
         "Users", "WebInterview", "WebInterviewSettings", "WebInterviewSetup", "WebInterviewUI"],
     webtester: ["WebInterviewUI", "WebInterview", "Common"],
     webinterview: ["WebInterviewUI", "WebInterview", "Common"]
@@ -104,6 +104,9 @@ module.exports = {
     ],
 
     chainWebpack: config => {
+
+        config.devtool("source-map")
+
         config.plugin("fileManager").use(FileManagerPlugin, [{
             //verbose: true,
             onEnd: { copy: fileTargets }
