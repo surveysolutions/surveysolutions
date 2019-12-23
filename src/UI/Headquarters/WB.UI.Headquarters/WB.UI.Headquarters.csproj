@@ -1781,7 +1781,6 @@
     <Content Include="Views\Shared\InterviewerMainMenu.cshtml" />
     <Content Include="Views\InterviewerHq\Index.cshtml" />
     <Content Include="Views\InterviewerHq\Interviews.cshtml" />
-    <Content Include="Views\Reports\InterviewersAndDevices.cshtml" />
     <Content Include="Views\Shared\Interviews\_InterviewStatusHistoryModal.cshtml" />
     <Content Include="Views\Reports\StatusDuration.cshtml" />
     <Content Include="Views\Shared\_export-buttons.cshtml" />

@@ -439,7 +439,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         {
             var input = new DeviceByInterviewersReportInputModel
             {
-                Filter = request.Search.Value,
+                Filter = request.Search?.Value,
                 Orders = request.GetSortOrderRequestItems(),
                 Page = request.Start,
                 PageSize = request.Length,
