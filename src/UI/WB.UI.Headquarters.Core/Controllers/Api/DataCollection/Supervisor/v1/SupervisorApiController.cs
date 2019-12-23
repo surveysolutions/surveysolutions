@@ -18,6 +18,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Services;
+using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
 {

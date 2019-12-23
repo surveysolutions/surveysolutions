@@ -59,7 +59,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.Providers
                     k.Column("\"UserId\"");
                     k.Update(false); // to prevent extra update afer insert
                 });
-                map.Cascade(Cascade.All | Cascade.DeleteOrphans);
+                map.Cascade(Cascade.None);
             }, rel =>
             {
                 rel.OneToMany();
