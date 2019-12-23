@@ -453,7 +453,7 @@ namespace WB.Services.Export.Questionnaire
             if (@group.IsFixedRoster && headerStructureForLevel.LevelLabels == null)
             {
                 headerStructureForLevel.LevelLabels =
-                    @group.FixedRosterTitles.Select(title => new LabelItem() { Caption = title.Value.ToString(CultureInfo.InvariantCulture), Title = title.Title })
+                    @group.FixedRosterTitles.Select(title => new LabelItem(title.Value.ToString(CultureInfo.InvariantCulture), title.Title))
                         .ToArray();
             }
             else if (@group.IsRoster && headerStructureForLevel.LevelLabels == null)
@@ -462,7 +462,7 @@ namespace WB.Services.Export.Questionnaire
                 if (trigger.QuestionType == QuestionType.MultyOption)
                 {
                     headerStructureForLevel.LevelLabels =
-                        trigger.Answers.Select(title => new LabelItem() { Caption = title.AnswerValue, Title = title.AnswerText})
+                        trigger.Answers.Select(title => new LabelItem(title.AnswerValue, title.AnswerText))
                             .ToArray();
                 }
             }

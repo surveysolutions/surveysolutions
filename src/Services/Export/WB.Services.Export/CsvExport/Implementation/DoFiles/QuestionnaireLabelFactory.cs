@@ -20,13 +20,13 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
                 .Select(o => new DataExportValue(
                     o.Value.Name, 
                     o.Key, 
-                    o.Value.Labels.Select(label => new VariableValueLabel(label.Caption, label.Title?.RemoveHtmlTags() ?? string.Empty)).ToArray()))
+                    o.Value.Labels.Select(label => new VariableValueLabel(label.Value, label.Title?.RemoveHtmlTags() ?? string.Empty)).ToArray()))
                 .ToArray();
 
             var levelVariableValueLabel = Array.Empty<VariableValueLabel>();
             if (level.LevelLabels != null)
             {
-                levelVariableValueLabel = level.LevelLabels.Select(x => new VariableValueLabel(x.Caption, x.Title?.RemoveHtmlTags())).ToArray();
+                levelVariableValueLabel = level.LevelLabels.Select(x => new VariableValueLabel(x.Value, x.Title?.RemoveHtmlTags())).ToArray();
             }
 
             if (levelRosterVector.Count == 0 && level.LevelIdColumnName == ServiceColumns.InterviewId) // main file
@@ -67,7 +67,7 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
                     else if (hasLabels)
                     {
                         var variableValueLabel = ((ExportedQuestionHeaderItem)headerItem).Labels
-                            .Select(label => new VariableValueLabel(label.Caption, label.Title?.RemoveHtmlTags() ?? string.Empty))
+                            .Select(label => new VariableValueLabel(label.Value, label.Title?.RemoveHtmlTags() ?? string.Empty))
                             .ToArray();
                         value = new DataExportValue(headerColumn.Name, headerItem.PublicKey, variableValueLabel);
                     }
