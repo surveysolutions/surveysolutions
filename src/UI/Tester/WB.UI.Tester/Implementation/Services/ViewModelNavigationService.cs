@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Android.Content;
 using MvvmCross.Navigation;
 using MvvmCross.Platforms.Android;
+using MvvmCross.Plugin.Messenger;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -28,8 +29,13 @@ namespace WB.UI.Tester.Implementation.Services
             IMvxAndroidCurrentTopActivity androidCurrentTopActivity,
             IPrincipal principal,
             IMvxNavigationService navigationService,
-            ILogger log)
-            : base(commandService, userInteractionService, userInterfaceStateService, androidCurrentTopActivity, navigationService, principal, log)
+            ILogger log, IMvxMessenger messenger)
+            : base(commandService, 
+                userInteractionService, 
+                userInterfaceStateService, 
+                androidCurrentTopActivity, 
+                navigationService, 
+                principal, log, messenger)
         {
             this.androidCurrentTopActivity = androidCurrentTopActivity;
             this.navigationService = navigationService;

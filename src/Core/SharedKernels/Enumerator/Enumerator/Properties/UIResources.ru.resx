@@ -703,4 +703,7 @@
       <value>Оставьте комментарий для нового ответственного</value>
       <comment>Комментарий:</comment>
   </data>
+  <data name="ErrorMessage_PermissionForUnkownSourcesRequired" xml:space="preserve">
+    <value>У приложения нехватает прав для обновления. Пожалуйста разрешите этому приложению установку неизвестных приложения в настройках</value>
+</data>
 </root>
