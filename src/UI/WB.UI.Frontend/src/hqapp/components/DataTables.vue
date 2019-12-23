@@ -30,6 +30,7 @@
 import 'datatables.net'
 import 'datatables.net-select'
 import 'jquery-contextmenu'
+import 'jquery-contextmenu/dist/jquery.contextMenu.css'
 import 'jquery-highlight'
 import './datatable.plugins'
 import { template, debounce, includes, without }  from 'lodash'
@@ -377,6 +378,8 @@ export default {
 
         initContextMenu() {
             if (this.contextMenuItems == null) return;
+            console.log (this.$refs.table)
+            console.log ( "#" + this.$refs.table.attributes.id.value + " tbody tr td:not(.checkbox-cell)")
             var contextMenuOptions = {
                 selector: "#" + this.$refs.table.attributes.id.value + " tbody tr td:not(.checkbox-cell)",
                 autoHide: false,

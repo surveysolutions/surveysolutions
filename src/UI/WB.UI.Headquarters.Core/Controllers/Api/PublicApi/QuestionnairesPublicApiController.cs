@@ -19,7 +19,7 @@ using WB.UI.Headquarters.Filters;
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 {
     [Route("api/v1/questionnaires")]
-    public class QuestionnairesController : ControllerBase
+    public class QuestionnairesPublicApiController : ControllerBase
     {
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItems;
@@ -27,7 +27,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private readonly ISerializer serializer;
         protected readonly IQuestionnaireStorage questionnaireStorage;
 
-        public QuestionnairesController(IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
+        public QuestionnairesPublicApiController(IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IAllInterviewsFactory allInterviewsViewFactory,
             ISerializer serializer,
             IQuestionnaireStorage questionnaireStorage, 
