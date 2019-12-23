@@ -39,7 +39,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             log.Trace("Resume");
             var messenger = Mvx.IoCProvider.GetSingleton<IMvxMessenger>();
-            messenger.Publish(new AppOnResume(this));
+            messenger.Publish(new ApplicationResumeMessage(this));
             base.OnResume();
         }
 

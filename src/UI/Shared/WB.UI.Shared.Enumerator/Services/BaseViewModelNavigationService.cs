@@ -63,10 +63,12 @@ namespace WB.UI.Shared.Enumerator.Services
             return this.navigationService.Close(viewModel);
         }
 
-        public Task<bool> EnsureHasPermissionToInstallFromUnknownSources()
+        public Task EnsureHasPermissionToInstallFromUnknownSourcesAsync()
         {
+            // Check if application has permission to do package installations
             if (!Application.Context.PackageManager.CanRequestPackageInstalls())
             {
+                // if not - open settings menu for current application
                 var addFlags = ShareCompat.IntentBuilder.From(this.topActivity.Activity)
                     .Intent
                     .SetAction(Android.Provider.Settings.ActionManageUnknownAppSources)
@@ -75,32 +77,37 @@ namespace WB.UI.Shared.Enumerator.Services
 
                 Application.Context.StartActivity(addFlags);
 
+                // prepare async action, there is no <void> version for TaskCompetionSource, using bool
                 var tcs = new TaskCompletionSource<bool>();
-                this.token = messenger.Subscribe<AppOnResume>(m =>
+
+                // subscribing on Application resume event
+                this.token = messenger.Subscribe<ApplicationResumeMessage>(m =>
                 {
                     try
                     {
+                        // double check for permission to do package installations
                         if (!Application.Context.PackageManager.CanRequestPackageInstalls())
                         {
-                            tcs.SetException(new System.Exception(
-                                
-                                UIResources.ErrorMessage_PermissionForUnkownSourcesRequired));
+                            // set update error. This message will be displayed on user UI
+                            tcs.SetException(new System.Exception(UIResources.ErrorMessage_PermissionForUnkownSourcesRequired));
                         }
                         else
                         {
+                            // we have all permissions to install application, proceed with next actions
                             tcs.SetResult(true);
                         }
                     }
                     finally
                     {   
-                        messenger.Unsubscribe<AppOnResume>(token);
+                        // cleaning up subscription token
+                        messenger.Unsubscribe<ApplicationResumeMessage>(token);
                     }
                 });
 
                 return tcs.Task;
-                //throw new System.Exception("Cannot update application. Please check permission to install from Unknown Sources and try again ");
             }
 
+            // we have all permissions to install application, proceed with next actions
             return Task.FromResult(true);
         }
 
@@ -207,13 +214,6 @@ namespace WB.UI.Shared.Enumerator.Services
             intent.AddFlags(ActivityFlags.ClearTop | ActivityFlags.NewTask);
             currentActivity.StartActivity(intent);
             currentActivity.Finish();
-        }
-    }
-
-    public class AppOnResume : MvxMessage
-    {
-        public AppOnResume(object sender) : base(sender)
-        {
         }
     }
 }

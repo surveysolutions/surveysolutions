@@ -59,7 +59,7 @@ namespace WB.UI.Shared.Enumerator.Services
         {
             await this.permissions.AssureHasPermission(Permission.Storage);
 
-            await this.navigationService.EnsureHasPermissionToInstallFromUnknownSources();
+            await this.navigationService.EnsureHasPermissionToInstallFromUnknownSourcesAsync();
             
             var pathToRootDirectory = Build.VERSION.SdkInt < BuildVersionCodes.N
                 ? AndroidPathUtils.GetPathToExternalDirectory()
