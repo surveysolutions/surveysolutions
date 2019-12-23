@@ -32,6 +32,7 @@ import 'datatables.net-select'
 import 'jquery-contextmenu'
 import 'jquery-highlight'
 import './datatable.plugins'
+import { template, debounce, includes, without }  from 'lodash'
 
 $.fn.dataTable.ext.errMode = function(a,b,c,d) {
     // swallow all errors for production
@@ -42,7 +43,7 @@ $.fn.dataTable.ext.errMode = function(a,b,c,d) {
 };
 
 var checkBox =
-    _.template(
+    template(
         '<input class="checkbox-filter" type="checkbox" value="<%= id %>"' +
         ' id="<%= checkboxId %>"><label for="<%= checkboxId %>">' +
         '<span class="tick"></span></label>');
@@ -117,7 +118,7 @@ export default {
     },
 
     methods: {
-        reload: _.debounce(function() {
+        reload: debounce(function() {
             if(this.table != null) {
                 this.table.rows().deselect();
                 this.table.draw();
@@ -348,7 +349,7 @@ export default {
             this.table.on('processing', function(evnt, dt, show) {
                 self.isProcessingFlag = show;
             })
-            this.table.on('processing', _.debounce(function(evnt, dt, show) {
+            this.table.on('processing', debounce(function(evnt, dt, show) {
                 self.isProcessing = show
             }, 250))
         },
@@ -402,7 +403,7 @@ export default {
                     rowId = rowId.substring(delimiterPosition+1);
                                 
                 //var parsedId = parseInt(rowId);
-                if (!_.includes(this.selectedRows, rowId)) {
+                if (!includes(this.selectedRows, rowId)) {
                     this.selectedRows.push(rowId);
                 }
             }
@@ -419,7 +420,7 @@ export default {
                     rowId = rowId.substring(delimiterPosition+1);
 
                 //var parsedId = parseInt(rowId);
-                this.selectedRows = _.without(this.selectedRows, rowId);
+                this.selectedRows = without(this.selectedRows, rowId);
             }
 
             this.$emit("selectedRowsChanged", this.selectedRows)
