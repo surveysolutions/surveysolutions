@@ -1811,7 +1811,6 @@
     <Content Include="Views\Download\Supervisor.cshtml" />
     <Content Include="Views\ControlPanel\AppUpdates.cshtml" />
     <Content Include="Views\ControlPanel\ExportService.cshtml" />
-    <Content Include="Views\Reports\CumulativeInterviewChart.cshtml" />
     <Content Include="Views\ControlPanel\ImportBrokenPackage.cshtml" />
     <Content Include="Views\Settings\EmailProviders.cshtml" />
     <Content Include="Views\WebInterviewSetup\Settings.cshtml" />
