@@ -1958,7 +1958,6 @@
     <Compile Include="API\Export\InterviewsExportBinaryApiController.cs" />
     <Compile Include="API\Export\QuestionnaireApiController.cs" />
     <Compile Include="API\Filters\ServiceApiKeyAuthorizationAttribute.cs" />
-    <Compile Include="API\Helpers.cs" />
     <Compile Include="API\DataCollection\Interviewer\v2\AssignmentsApiV2Controller.cs" />
     <Compile Include="API\DataCollection\Interviewer\v2\AuditLogApiV2Controller.cs" />
     <Compile Include="API\DataCollection\Interviewer\InterviewerV2WebApiConfig.cs" />
@@ -1980,8 +1979,6 @@
     <Compile Include="API\PublicApi\Models\Statistics\QuestionnaireDto.cs" />
     <Compile Include="API\PublicApi\Models\Statistics\QuestionDto.cs" />
     <Compile Include="API\PublicApi\Models\Statistics\SurveyStatisticsQuery.cs" />
-    <Compile Include="API\UsersTypeaheadController.cs" />
-    <Compile Include="API\ReportDataApiController.Dto.cs" />
     <Compile Include="API\DataCollection\Supervisor\v1\SupervisorApiController.cs" />
     <Compile Include="API\DataCollection\Supervisor\v1\DevicesApiV1Controller.cs" />
     <Compile Include="API\DataCollection\Supervisor\v1\UsersApiController.cs" />
@@ -2027,7 +2024,6 @@
     <Compile Include="API\PublicApi\BaseApiServiceController.cs" />
     <Compile Include="API\PublicApi\IncludeOnlyPublicApiDocumentFilter.cs" />
     <Compile Include="API\PublicApi\ExportController.cs" />
-    <Compile Include="API\ClientApkInfo.cs" />
     <Compile Include="API\DataCollection\Interviewer\v2\SettingsV2Controller.cs" />
     <Compile Include="API\DataCollection\Interviewer\v2\TranslationsApiV2Controller.cs" />
     <Compile Include="API\MetricsController.cs" />
@@ -2052,7 +2048,6 @@
     <Compile Include="API\PublicApi\AssignmentsPublicApiMapProfile.cs" />
     <Compile Include="API\PublicApi\Models\InterviewerUserApiDetails.cs" />
     <Compile Include="API\PublicApi\QuestionnairesController.cs" />
-    <Compile Include="API\ReportDataApiController.cs" />
     <Compile Include="API\Resources\CompanyLogoController.cs" />
     <Compile Include="API\Resources\DataTableTranslationsController.cs" />
     <Compile Include="API\Resources\WebInterviewResourcesController.cs" />
