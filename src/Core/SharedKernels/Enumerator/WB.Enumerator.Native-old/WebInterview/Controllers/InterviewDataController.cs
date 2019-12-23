@@ -51,9 +51,9 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             }
         };
 
-        protected IQuestionnaire GetCallerQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
+        protected IQuestionnaire GetCallerQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string translation = null)
         {
-            return questionnaireRepository.GetQuestionnaire(questionnaireIdentity, null);
+            return questionnaireRepository.GetQuestionnaire(questionnaireIdentity, translation);
         }
 
         protected IStatefulInterview GetCallerInterview(Guid interviewId)
@@ -208,7 +208,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
             foreach (var elementId in ids)
             {
-                if (questionnaire.IsTableRoster(elementId.Id))
+                if (questionnaire.IsTableRoster(elementId.Id) || questionnaire.IsMatrixRoster(elementId.Id))
                 {
                     var tableRosterIdentity = new Identity(elementId.Id, sectionIdentity.RosterVector);
                     if (!groupIds.Contains(tableRosterIdentity))
@@ -334,7 +334,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             if (questionnaire == null) return null;
 
             ReadOnlyCollection<Guid> parentIds = questionnaire.GetParentsStartingFromTop(groupId.Id)
-                .Except(id => questionnaire.IsFlatRoster(id) || questionnaire.IsTableRoster(id))
+                .Except(id => questionnaire.IsCustomViewRoster(id))
                 .ToReadOnlyCollection();
 
             var breadCrumbs = new List<Breadcrumb>();
@@ -414,7 +414,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             var callerInterview = this.GetCallerInterview(interviewId);
             if (callerInterview == null) return null;
 
-            var questionnaire = this.GetCallerQuestionnaire(callerInterview.QuestionnaireIdentity);
+            var questionnaire = this.GetCallerQuestionnaire(callerInterview.QuestionnaireIdentity, callerInterview.Language);
             var interviewEntities = new List<InterviewEntity>();
 
             foreach (var id in ids)
@@ -428,7 +428,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 var interviewEntity = this.interviewEntityFactory.GetEntityDetails(id, callerInterview, questionnaire, IsReviewMode());
                 interviewEntities.Add(interviewEntity);
 
-                if (interviewEntity is TableRoster tableRoster)
+                if (interviewEntity is RosterEntity tableRoster)
                 {
                     foreach (var tableRosterInstance in tableRoster.Instances)
                     {
@@ -579,6 +579,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                     return InterviewEntityType.GroupTitle;
                 if (callerQuestionnaire.IsTableRoster(entityId))
                     return InterviewEntityType.TableRoster;
+                if (callerQuestionnaire.IsMatrixRoster(entityId))
+                    return InterviewEntityType.MatrixRoster;
                 return InterviewEntityType.Group;
             }
 

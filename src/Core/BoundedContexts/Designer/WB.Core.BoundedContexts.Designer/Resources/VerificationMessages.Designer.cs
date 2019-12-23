@@ -1943,11 +1943,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Table roster mode works only in web survey, on tablets it will be &apos;sub section&apos; mode..
+        ///   Looks up a localized string similar to Table or Matrix roster mode works only in web survey, on tablets it will be &apos;sub section&apos; mode..
         /// </summary>
-        public static string WB0286_TableRosterWorksOnlyInWebMode {
+        public static string WB0286_TableAndMatixRosterWorksOnlyInWebMode {
             get {
-                return ResourceManager.GetString("WB0286_TableRosterWorksOnlyInWebMode", resourceCulture);
+                return ResourceManager.GetString("WB0286_TableAndMatixRosterWorksOnlyInWebMode", resourceCulture);
             }
         }
         
@@ -2038,6 +2038,33 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string WB0296 {
             get {
                 return ResourceManager.GetString("WB0296", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Matrix roster allows to use only simple categorical questions: combobox, cascading or yes/no modes are not allowed..
+        /// </summary>
+        public static string WB0297_MatrixRosterContainsOnlyAllowedQuestionTypes {
+            get {
+                return ResourceManager.GetString("WB0297_MatrixRosterContainsOnlyAllowedQuestionTypes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Matrix mode allowed only for rosters with no more than {0} question(s)..
+        /// </summary>
+        public static string WB0298_MatrixRosterAllowedOnlyForGroupWithNoMoreThanElements {
+            get {
+                return ResourceManager.GetString("WB0298_MatrixRosterAllowedOnlyForGroupWithNoMoreThanElements", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Matrix roster has to contain no supervisor or identifying questions..
+        /// </summary>
+        public static string WB0299_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions {
+            get {
+                return ResourceManager.GetString("WB0299_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions", resourceCulture);
             }
         }
     }
