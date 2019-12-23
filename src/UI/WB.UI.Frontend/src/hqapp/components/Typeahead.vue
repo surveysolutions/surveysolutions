@@ -56,6 +56,7 @@
 
 <script>
 import Fuse from "fuse.js";
+import { assign, chain, find, escape } from 'lodash'
 
 export default {
     name: "Typeahead",
@@ -186,7 +187,7 @@ export default {
             }
 
             this.isLoading = true;
-            const requestParams = _.assign(
+            const requestParams = assign(
                 { query: filter, cache: false},
                 this.ajaxParams
             );
@@ -214,7 +215,7 @@ export default {
         setOptions(values, wrap = true) {
             if (wrap == false) return values;
 
-            return _.chain(values).filter(v => v != null).map(v => {
+            return chain(values).filter(v => v != null).map(v => {
                 return {
                     item: v,
                     matches: null
@@ -230,7 +231,7 @@ export default {
             this.$emit("selected", value, this.controlId);
         },
         selectByKey(key) {
-            const itemToSelect = _.find(this.options, o => o.item.key == key)
+            const itemToSelect = find(this.options, o => o.item.key == key)
             if(itemToSelect != null) {
                 this.selectOption(itemToSelect.item)
             }
@@ -240,10 +241,10 @@ export default {
         },
         highlight(option, searchTerm) {
             if (option.matches == null) {
-                const encodedTitle = _.escape(option.item.value);
+                const encodedTitle = escape(option.item.value);
 
                 if (searchTerm) {
-                    const safeSearchTerm = _.escape(_.escapeRegExp(searchTerm));
+                    const safeSearchTerm = escape(escapeRegExp(searchTerm));
                     const iQuery = new RegExp(safeSearchTerm, "ig");
 
                     return encodedTitle.replace(iQuery, matchedTxt => {
