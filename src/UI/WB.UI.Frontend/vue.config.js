@@ -86,6 +86,8 @@ const fileTargets = [
     { source: join("dist", "fonts", "*.*"), destination: path.join(webTesterFolder, "wwwroot", "fonts") },
     { source: join("dist", "css", "*.*"), destination: path.join(webTesterFolder, "wwwroot", "css") },
     { source: join("dist", "js", "*.*"), destination: path.join(webTesterFolder, "wwwroot", "js") },
+    { source: join("dist", "locale", "webtester", "*.*"), destination: path.join(hqFolder, "wwwroot", "js", "locale") },
+
 ]
 
 module.exports = {
@@ -180,22 +182,22 @@ module.exports = {
         }]);
 
 
-        if (isHot) {
-            config.plugin("writefile").use(WriteFilePlugin, [
-                {
-                    test: /\.cshtml$/,
-                    useHashIndex: true,
-                    force: true,
-                    log: true
-                }
-            ]);
+        // if (isHot) {
+        //     config.plugin("writefile").use(WriteFilePlugin, [
+        //         {
+        //             test: /\.cshtml$/,
+        //             useHashIndex: true,
+        //             force: true,
+        //             log: true
+        //         }
+        //     ]);
 
-            config.devServer
-                .clientLogLevel("info")
-                .contentBase(join("dist"))
-                .publicPath("/")
-                .headers({ "Access-Control-Allow-Origin": "*" });
-        }
+        //     config.devServer
+        //         .clientLogLevel("info")
+        //         .contentBase(join("dist"))
+        //         .publicPath("/")
+        //         .headers({ "Access-Control-Allow-Origin": "*" });
+        // }
 
         config.module.rules.delete("eslint");
 

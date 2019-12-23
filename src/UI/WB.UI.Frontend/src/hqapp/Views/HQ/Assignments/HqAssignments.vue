@@ -279,6 +279,7 @@
 
 <script>
 import * as toastr from 'toastr'
+import { map, join, assign, findIndex } from "lodash"
 
 export default {
     data() {
@@ -453,10 +454,10 @@ export default {
                     orderable: false,
                     searchable: false,
                     render(data) {
-                        const questionsWithTitles = _.map(data, question => {
+                        const questionsWithTitles = map(data, question => {
                             return question.title + ': ' + question.answer
                         })
-                        return _.join(questionsWithTitles, ', ')
+                        return join(questionsWithTitles, ', ')
                     },
                     responsivePriority: 4,
                 },
@@ -536,7 +537,7 @@ export default {
         tableOptions() {
             const columns = this.tableOptionsraw.filter(x => x.if == null || x.if())
 
-            var defaultSortIndex = _.findIndex(columns, {name: 'UpdatedAtUtc'})
+            var defaultSortIndex = findIndex(columns, {name: 'UpdatedAtUtc'})
             if (this.showSelectors) defaultSortIndex += 1
 
             var tableOptions = {
@@ -680,7 +681,7 @@ export default {
         async close() {
             const self = this
             await Promise.all(
-                _.map(self.selectedRows, row => {
+                map(self.selectedRows, row => {
                     const url = `${self.config.api.assignmentsApi}/${row}/close`
                     return self.$http.post(url).catch(error => {
                         if (error.isAxiosError && error.response.status === 409) {
@@ -773,7 +774,7 @@ export default {
 
         async loadResponsibleIdByName(onDone) {
             if (this.$route.query.responsible != undefined) {
-                const requestParams = _.assign(
+                const requestParams = assign(
                     {
                         query: this.$route.query.responsible,
                         pageSize: 1,
@@ -795,7 +796,7 @@ export default {
             const version = this.$route.query.questionnaireVersion
 
             if (questionnaireId != undefined && version != undefined) {
-                requestParams = _.assign(
+                requestParams = assign(
                     {questionnaireIdentity: questionnaireId + '$' + version, cache: false},
                     this.ajaxParams
                 )

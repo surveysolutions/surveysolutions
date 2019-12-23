@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import { isEqual, isNaN, clone, assign } from 'lodash'
 
 export default {
     data() {
@@ -41,7 +42,7 @@ export default {
             // apply accumulated changes to query
             changes.forEach(change => change(data));
 
-            const state = _.assign(_.clone(this.queryString), data);
+            const state = assign(clone(this.queryString), data);
             this.updateRoute(state);
         },
 
@@ -50,12 +51,14 @@ export default {
 
             // clean up uri from default values
             Object.keys(newQuery).forEach(key => {
-                if (newQuery[key] && !_.isNaN(newQuery[key])) {
+                if (newQuery[key] && !isNaN(newQuery[key])) {
                     query[key] = newQuery[key];
                 }
             });
 
-            this.$router.push({ query }).catch(err => {});
+            if(!isEqual(this.$route.query, query)) {
+                this.$router.push({ query }).catch(err => {});
+            }
         },
 
         
@@ -77,7 +80,7 @@ export default {
 
             if (source.type == "number") {
                 const intValue = parseInt(value);
-                value = _.isNaN(intValue) ? null : intValue;
+                value = isNaN(intValue) ? null : intValue;
             }
 
             return this.onChange(q => {

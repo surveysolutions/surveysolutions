@@ -26,6 +26,7 @@
 import Flatpickr from "flatpickr";
 import { browserLanguage } from "~/shared/helpers";
 import FlatpickrLocale from "flatpickr/dist/l10n";
+import { assign } from 'lodash'
 
 Flatpickr.localize(FlatpickrLocale[browserLanguage]);
 // You have to import css yourself
@@ -96,7 +97,7 @@ export default {
             const self = this;
             let config = this.config;
             if (this.withClear) {
-                config = _.assign(
+                config = assign(
                     {
                         onReady: function(dateObj, dateStr, instance) {
                             $(".flatpickr-calendar").each(function() {
@@ -136,7 +137,7 @@ export default {
          * @param newConfig Object
          */
         config(newConfig) {
-            this.fp.config = _.assign(this.fp.config, newConfig);
+            this.fp.config = assign(this.fp.config, newConfig);
             this.fp.redraw();
             this.fp.setDate(this.value, true);
         },
