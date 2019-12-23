@@ -86,7 +86,7 @@ namespace WB.UI.Shared.Enumerator.Services
             }
         }
 
-        public int MaxDegreeOfParallelism { get; } = 3;
+        public int MaxDegreeOfParallelism { get; } = 4;
 
         public EnumeratorApplicationType ApplicationType =>
             this.GetApplicationVersionName()?.ToLower()?.Contains(@"maps") ?? false
