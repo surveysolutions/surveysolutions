@@ -1,7 +1,8 @@
-﻿@model object
+﻿@using WB.UI.Headquarters.Code
+@model object
 @{
     ViewBag.Title = Reports.InterviewChart;
-    Layout = "~/Views/Shared/_MainLayoutHq.cshtml";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 @section Scripts{
     @Html.RenderHqConfig(Model)

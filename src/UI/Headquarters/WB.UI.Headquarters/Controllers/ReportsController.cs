@@ -27,7 +27,6 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
         private readonly IAuthorizedUser authorizedUser;
         private readonly IUserViewFactory userViewFactory;
-        private readonly IChartStatisticsViewFactory chartStatisticsViewFactory;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses;
         private readonly IMapReport mapReport;
 
@@ -212,24 +211,6 @@ namespace WB.UI.Headquarters.Controllers
             model.ReportTypes = this.speedReportTypesForHeadquarters;
 
             return this.View("SpeedAndQuantity", model);
-        }
-
-        [ActivePage(MenuItem.DevicesInterviewers)]
-        [AuthorizeOr403(Roles = "Administrator, Headquarter")]
-        public ActionResult InterviewersAndDevices(Guid? id)
-        {
-            return this.View("InterviewersAndDevices", new DevicesInterviewersModel
-            {
-                DataUrl = Url.RouteUrl("DefaultApiWithAction",
-                new
-                {
-                    httproute = "",
-                    controller = "ReportDataApi",
-                    action = "DeviceInterviewers"
-                }),
-                InterviewersBaseUrl = Url.Action("Index", "Interviewers"),
-                InterviewerProfileUrl = Url.Action("Profile", "Interviewer")
-            });
         }
 
         private PeriodicStatusReportModel CreatePeriodicStatusReportModel(PeriodicStatusReportWebApiActionName webApiActionName,

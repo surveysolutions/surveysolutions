@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
 ﻿using System;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
@@ -14,10 +15,12 @@ namespace WB.UI.Headquarters.Controllers
     public class ReportsController : Controller
     {
         private readonly IMapReport mapReport;
+        private readonly IChartStatisticsViewFactory chartStatisticsViewFactory;
 
-        public ReportsController(IMapReport mapReport)
+        public ReportsController(IMapReport mapReport, IChartStatisticsViewFactory chartStatisticsViewFactory)
         {
             this.mapReport = mapReport;
+            this.chartStatisticsViewFactory = chartStatisticsViewFactory;
         }
 
         [Authorize(Roles = "Administrator, Headquarter")]
@@ -99,5 +102,17 @@ namespace WB.UI.Headquarters.Controllers
             return this.View("InterviewersAndDevices", devicesInterviewersModel);
         }
 
+        [Authorize(Roles = "Administrator, Headquarter")]
+        public ActionResult InterviewsChart()
+        {
+            this.ViewBag.ActivePage = MenuItem.InterviewsChart;
+
+            var questionnaires = this.chartStatisticsViewFactory.GetQuestionnaireListWithData();
+
+            return this.View("CumulativeInterviewChart", new
+            {
+                Templates = questionnaires
+            });
+        }
     }
 }
