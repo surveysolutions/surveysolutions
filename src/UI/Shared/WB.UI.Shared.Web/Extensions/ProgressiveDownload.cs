@@ -102,7 +102,11 @@ namespace WB.UI.Shared.Web.Extensions
             }
 
             nonPartialResponse.Content.Headers.ContentType = new MediaTypeHeaderValue(mediaType);
-            nonPartialResponse.Headers.AcceptRanges.Add("bytes");
+
+            if (this.request.InterviewerClientSupportProgressiveDownload())
+            {
+                nonPartialResponse.Headers.AcceptRanges.Add("bytes");
+            }
 
             if (!string.IsNullOrEmpty(fileName))
             {
