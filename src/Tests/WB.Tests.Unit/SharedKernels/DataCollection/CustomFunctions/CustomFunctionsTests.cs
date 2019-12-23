@@ -377,14 +377,29 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
             DateTime? d3 = new DateTime(2014, 02, 20);
             DateTime? d4 = new DateTime(2015, 12, 31);
 
-            Assert.AreEqual(13, new AbstractConditionalLevelInstanceFunctions().FullYearsBetween(d1, d2));
-            Assert.AreEqual(1, new AbstractConditionalLevelInstanceFunctions().FullYearsBetween(d3, d2));
-            Assert.AreEqual(0, new AbstractConditionalLevelInstanceFunctions().FullYearsBetween(d2, d4));
+            var d11 = new DateTime(2000, 02, 29);
+            var d12 = new DateTime(2001, 02, 28);
+            var d13 = new DateTime(2001, 03, 01);
+            var d14 = new DateTime(2004, 02, 28);
+            var d15 = new DateTime(2004, 02, 29);
+            var d16 = new DateTime(2004, 03, 01);
 
-            Assert.AreEqual(-9998, new AbstractConditionalLevelInstanceFunctions().FullYearsBetween(d4, d2));
-            Assert.AreEqual(-9999, new AbstractConditionalLevelInstanceFunctions().FullYearsBetween(d4, null));
-            Assert.AreEqual(-9999, new AbstractConditionalLevelInstanceFunctions().FullYearsBetween(null, d4));
-            Assert.AreEqual(-9999, new AbstractConditionalLevelInstanceFunctions().FullYearsBetween(null, null));
+            var level = new AbstractConditionalLevelInstanceFunctions();
+
+            Assert.AreEqual(13, level.FullYearsBetween(d1, d2));
+            Assert.AreEqual(1, level.FullYearsBetween(d3, d2));
+            Assert.AreEqual(0, level.FullYearsBetween(d2, d4));
+
+            Assert.AreEqual(-9998, level.FullYearsBetween(d4, d2));
+            Assert.AreEqual(-9999, level.FullYearsBetween(d4, null));
+            Assert.AreEqual(-9999, level.FullYearsBetween(null, d4));
+            Assert.AreEqual(-9999, level.FullYearsBetween(null, null));
+            
+            Assert.AreEqual(level.FullYearsBetween(d11, d12), 0);
+            Assert.AreEqual(level.FullYearsBetween(d11, d13), 1);
+            Assert.AreEqual(level.FullYearsBetween(d11, d14), 3);
+            Assert.AreEqual(level.FullYearsBetween(d11, d15), 4);
+            Assert.AreEqual(level.FullYearsBetween(d11, d16), 4);
         }
 
         [Test]
