@@ -93,6 +93,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>DataTables.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\EnumNames.Designer.cs">
+      <DependentUpon>EnumNames.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Update="Resources\FieldsAndValidations.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -169,6 +174,35 @@
     <EmbeddedResource Update="Resources\DataTables.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>DataTables.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\EnumNames.ar.resx">
+      <DependentUpon>EnumNames.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\EnumNames.es.resx">
+      <DependentUpon>EnumNames.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\EnumNames.fr.resx">
+      <DependentUpon>EnumNames.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\EnumNames.ka.resx">
+      <DependentUpon>EnumNames.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\EnumNames.pt.resx">
+      <DependentUpon>EnumNames.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\EnumNames.resx">
+      <SubType>Designer</SubType>
+      <LastGenOutput>EnumNames.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\EnumNames.ro.resx">
+      <DependentUpon>EnumNames.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\EnumNames.ru.resx">
+      <DependentUpon>EnumNames.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\EnumNames.zh.resx">
+      <DependentUpon>EnumNames.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\FieldsAndValidations.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
