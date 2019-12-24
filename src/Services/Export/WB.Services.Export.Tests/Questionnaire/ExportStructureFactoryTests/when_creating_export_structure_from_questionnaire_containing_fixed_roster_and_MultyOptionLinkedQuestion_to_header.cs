@@ -44,13 +44,13 @@ namespace WB.Services.Export.Tests.Questionnaire.ExportStructureFactoryTests
             questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { rosterGroupId }].LevelLabels[0].Title.Should().Be("1");
 
         [NUnit.Framework.Test] public void should_create_header_with_first_header_label_caption_equal_1 () =>
-            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { rosterGroupId }].LevelLabels[0].Caption.Should().Be("0");
+            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { rosterGroupId }].LevelLabels[0].Value.Should().Be("0");
 
         [NUnit.Framework.Test] public void should_create_header_with_second_header_label_title_equal_1 () =>
             questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { rosterGroupId }].LevelLabels[1].Title.Should().Be("2");
 
         [NUnit.Framework.Test] public void should_create_header_with_second_header_label_caption_equal_1 () =>
-            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { rosterGroupId }].LevelLabels[1].Caption.Should().Be("1");
+            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { rosterGroupId }].LevelLabels[1].Value.Should().Be("1");
 
         private static QuestionnaireExportStructure questionnaireExportStructure;
         private static QuestionnaireExportStructureFactory QuestionnaireExportStructureFactory;

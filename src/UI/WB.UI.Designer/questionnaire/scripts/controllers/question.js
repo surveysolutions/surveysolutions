@@ -617,24 +617,6 @@
                     : $i18next.t('UserDefinedCategories');
             };
 
-            $scope.changeIsReusableCategories = function(isReusable) {
-                if ($scope.activeQuestion.isLinkedToReusableCategories === isReusable) return;
-
-                $scope.activeQuestion.isLinked = false;
-                $scope.activeQuestion.categoriesId = null;
-                $scope.activeQuestion.isLinkedToReusableCategories = isReusable;
-                
-                markFormAsChanged();
-            };
-
-            $scope.setIsLinkedQuestion = function () {
-                if ($scope.activeQuestion.isLinked === true) return;
-
-                $scope.activeQuestion.isLinked = true;
-
-                markFormAsChanged();
-            };
-
             $scope.getSelectedCategories = function() {
                 return _.find($scope.getCategoriesList(),
                     function(c) { return c.categoriesId === $scope.activeQuestion.categoriesId; });
@@ -661,12 +643,52 @@
                 else return $i18next.t('QuestionRadioButtonList');
             };
 
-            $scope.setQuestionAsCombobox = function(isCombobox) {
-                if ($scope.activeQuestion.isFilteredCombobox === isCombobox) return;
+            $scope.setIsReusableCategories = function() {
+                if ($scope.activeQuestion.isLinkedToReusableCategories === true) return;
+
+                $scope.activeQuestion.isLinked = false;
+                $scope.activeQuestion.isLinkedToReusableCategories = true;
+                
+                markFormAsChanged();
+            };
+
+            $scope.setUserDefinedCategories = function() {
+                if ($scope.activeQuestion.isLinkedToReusableCategories === false) return;
+
+                $scope.activeQuestion.isLinked = false;
+                $scope.activeQuestion.categoriesId = null;
+                $scope.activeQuestion.isLinkedToReusableCategories = false;
+                
+                markFormAsChanged();
+            };
+
+            $scope.setIsLinkedQuestion = function () {
+                if ($scope.activeQuestion.isLinked === true) return;
+
+                $scope.activeQuestion.isLinked = true;
+                $scope.activeQuestion.isCascade = false;
+                $scope.activeQuestion.isFilteredCombobox = false;
+                $scope.activeQuestion.isLinkedToReusableCategories = null;
+                $scope.activeQuestion.categoriesId = null;
+
+                markFormAsChanged();
+            };
+
+            $scope.setQuestionAsRadioButtons = function() {
 
                 $scope.activeQuestion.isCascade = false;
                 $scope.activeQuestion.isLinked = false;
-                $scope.activeQuestion.isFilteredCombobox = isCombobox;
+                $scope.activeQuestion.isFilteredCombobox = false;
+
+                markFormAsChanged();
+            };
+
+            $scope.setQuestionAsCombobox = function() {
+                if ($scope.activeQuestion.isFilteredCombobox === true) return;
+
+                $scope.activeQuestion.isCascade = false;
+                $scope.activeQuestion.isLinked = false;
+                $scope.activeQuestion.isFilteredCombobox = true;
 
                 markFormAsChanged();
             };
@@ -674,32 +696,32 @@
             $scope.setQuestionAsCascading = function () {
                 if ($scope.activeQuestion.isCascade === true) return;
 
-                $scope.activeQuestion.isFilteredCombobox = true;
+                $scope.activeQuestion.isLinked = false;
+                $scope.activeQuestion.isFilteredCombobox = false;
                 $scope.activeQuestion.isCascade = true;
 
                 markFormAsChanged();
             };
 
-            $scope.$watch('activeQuestion.isLinked', function(newValue) {
-                if (!$scope.activeQuestion) {
-                    return;
-                }
-                if (newValue) {
-                    $scope.activeQuestion.yesNoView = false;
-                    $scope.activeQuestion.isFilteredCombobox = false;
-                    $scope.activeQuestion.isCascade = false;
-                    $scope.activeQuestion.optionsFilterExpression = null;
+            $scope.$on('updateCategories', function () {
+                if ($scope.activeQuestion.isLinkedToReusableCategories === true && $scope.activeQuestion.categoriesId !== null && $scope.getSelectedCategories() === undefined) {
                     $scope.activeQuestion.isLinkedToReusableCategories = null;
                     $scope.activeQuestion.categoriesId = null;
-                } else {
-                    $scope.activeQuestion.linkedToEntityId = null;
-                    $scope.activeQuestion.linkedToEntity = null;
-                    if ($scope.initialQuestion) {
-                        $scope.activeQuestion.yesNoView = $scope.initialQuestion.yesNoView;
-                        $scope.activeQuestion.isFilteredCombobox = $scope.initialQuestion.isFilteredCombobox;
-                    }
                 }
             });
+
+            $scope.$watch('activeQuestion.isLinked',
+                function(newValue) {
+                    if (!$scope.activeQuestion) {
+                        return;
+                    }
+                    if (newValue) {
+                        $scope.activeQuestion.optionsFilterExpression = null;
+                    } else {
+                        $scope.activeQuestion.linkedToEntityId = null;
+                        $scope.activeQuestion.linkedToEntity = null;
+                    }
+                });
 
             $scope.$watch('activeQuestion.isCascade', function (newValue) {
                 if ($scope.activeQuestion) {

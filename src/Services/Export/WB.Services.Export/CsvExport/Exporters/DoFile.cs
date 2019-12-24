@@ -25,24 +25,31 @@ namespace WB.Services.Export.CsvExport.Exporters
             doContent.AppendLine($"insheet using \"{fileName}\", tab case names");
         }
 
+        private static string doFileHeader = null;
+
         private void AppendHeaderFromFile()
         {
-            var assembly = Assembly.GetAssembly(typeof(DoFile));
-            var resourceName = "WB.Services.Export.CsvExport.Exporters.DoFileHeader.txt";
-
-            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            if (string.IsNullOrEmpty(doFileHeader))
             {
-                using (StreamReader reader = new StreamReader(stream))
+                var assembly = Assembly.GetAssembly(typeof(DoFile));
+                var resourceName = "WB.Services.Export.CsvExport.Exporters.DoFileHeader.txt";
+
+                using (Stream stream = assembly.GetManifestResourceStream(resourceName))
                 {
-                    var doFileHeader = reader.ReadToEnd();
-                    doContent.Append(doFileHeader);
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        doFileHeader = reader.ReadToEnd();
+                    }
                 }
+
             }
+
+            doContent.Append(doFileHeader);
         }
 
-        public void AssignValuesToVariable(string variableName, string labelName)
+        public void AssignValuesToVariable(string variableName, string valueName)
         {
-            doContent.AppendLine($"label values {variableName} {labelName}");
+            doContent.AppendLine($"label values {variableName} {valueName}");
         }
 
         public void AppendLabelToVariableMatching(string variableName, string labelName)

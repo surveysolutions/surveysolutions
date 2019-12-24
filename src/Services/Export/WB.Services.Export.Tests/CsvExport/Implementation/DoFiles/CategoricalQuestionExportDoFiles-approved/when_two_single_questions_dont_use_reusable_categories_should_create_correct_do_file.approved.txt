@@ -1,0 +1,22 @@
+﻿clear
+insheet using "questionnaire_var.tab", tab case names
+
+label variable interview__id `"Unique 32-character long identifier of the interview"'
+
+label variable interview__key `"Interview key (identifier in XX-XX-XX-XX format)"'
+
+label variable sssys_irnd `"Random number in the range 0..1 associated with interview"'
+
+label variable has__errors `"Errors count in the interview"'
+
+label define interview__status 0 `"Restored"' 20 `"Created"' 40 `"SupervisorAssigned"' 60 `"InterviewerAssigned"' 65 `"RejectedBySupervisor"' 80 `"ReadyForInterview"' 85 `"SentToCapi"' 95 `"Restarted"' 100 `"Completed"' 120 `"ApprovedBySupervisor"' 125 `"RejectedByHeadquarters"' 130 `"ApprovedByHeadquarters"' -1 `"Deleted"' 
+label values interview__status interview__status
+label variable interview__status `"Status of the interview"'
+
+label define singleQuestion1 101 `"title #111"' 102 `"title #112"' 103 `"title #113"' 104 `"title #114"' 105 `"title #115"' 
+label values singleQuestion1 singleQuestion1
+label variable singleQuestion1 `"questionText #1"'
+
+label define singleQuestion2 101 `"title #111"' 102 `"title #112"' 103 `"title #113"' 104 `"title #114"' 105 `"title #115"' 
+label values singleQuestion2 singleQuestion2
+label variable singleQuestion2 `"label #2"'
