@@ -10,6 +10,7 @@ namespace WB.UI.Headquarters.Models
             this.TranslatedPdfVersions = new List<TranslatedPdf>();
         }
 
+        public Guid QuestionnaireId { get; set; }
         public string Title { get; set; }
         public long Version { get; set; }
         public DateTime ImportDateUtc { get; set; }

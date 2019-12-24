@@ -1,5 +1,5 @@
 <template>
-    <HqLayout :hasFilter="false" >
+    <HqLayout :hasFilter="false">
         <div slot="headers">
             <ol class="breadcrumb">
                 <li>
@@ -11,11 +11,19 @@
 
         <div class="row">
             <div class="col-sm-6">
-                 <h3>{{ model.title}} (ver. {{model.version}}) 
-                        <a :href="model.designerUrl" target="_blank" v-if="model.designerUrl != null" >
-                            <span :title="$t('Dashboard.ShowOnDesigner')" class="glyphicon glyphicon-link" />
-                        </a>
-                     </h3>
+                <h3>
+                    {{ model.title}} (ver. {{model.version}})
+                    <a
+                        :href="model.designerUrl"
+                        target="_blank"
+                        v-if="model.designerUrl != null"
+                    >
+                        <span
+                            :title="$t('Dashboard.ShowOnDesigner')"
+                            class="glyphicon glyphicon-link"
+                        />
+                    </a>
+                </h3>
                 <table class="table table-striped table-bordered">
                     <tbody>
                         <tr>
@@ -40,7 +48,22 @@
                         </tr>
                         <tr>
                             <td>{{$t('Dashboard.RecordAudio')}}</td>
-                            <td>{{model.audioAudit ? $t('Common.Yes') : $t('Common.No')}}</td>
+                            <td>
+                                <form v-on:submit.prevent="false">
+                                    <div class="form-group mb-20">
+                                        <input
+                                            class="checkbox-filter"
+                                            id="recordAudio"
+                                            type="checkbox"
+                                            v-model="audioAudit"
+                                            @change="recordAudioChanged"
+                                        />
+                                        <label for="recordAudio">
+                                            <span class="tick"></span>
+                                        </label>
+                                    </div>
+                                </form>
+                            </td>
                         </tr>
                         <tr>
                             <td>{{$t('Assignments.DetailsComments')}}</td>
@@ -50,8 +73,13 @@
                             <td>PDF</td>
                             <td>
                                 <ul class="list-unstyled">
-                                    <li><a :href="model.mainPdfUrl">{{$t('WebInterview.Original_Language')}}</a></li>
-                                    <li v-for="lang in model.translatedPdfVersions" v-bind:key="lang.name">
+                                    <li>
+                                        <a :href="model.mainPdfUrl">{{$t('WebInterview.Original_Language')}}</a>
+                                    </li>
+                                    <li
+                                        v-for="lang in model.translatedPdfVersions"
+                                        v-bind:key="lang.name"
+                                    >
                                         <a :href="lang.pdfUrl">{{lang.name}}</a>
                                     </li>
                                 </ul>
@@ -88,23 +116,61 @@
                 </table>
             </div>
         </div>
+        <ModalFrame ref="audioAuditModal" :title="$t('Pages.ConfirmationNeededTitle')">
+            <p>{{ $t("Pages.GlobalSettings_TurningAudioAuditOn" )}}</p>
+            <div slot="actions">
+                <button
+                    type="button"
+                    class="btn btn-danger"
+                    @click="recordAudioSend"
+                >{{ $t("Common.Ok") }}</button>
+                <button
+                    type="button"
+                    class="btn btn-link"
+                    data-dismiss="modal"
+                >{{ $t("Common.Cancel") }}</button>
+            </div>
+        </ModalFrame>
     </HqLayout>
 </template>
 
 <script>
 import {DateFormats} from '~/shared/helpers'
+import moment from 'moment'
 
 export default {
+    data() {
+        return {
+            audioAudit: false,
+        }
+    },
     computed: {
         model() {
             return this.$config.model
-        },
+        }
+    },
+    mounted() {
+        this.audioAudit = this.$config.model.audioAudit
     },
     methods: {
         formatUtcDate(date) {
             const momentDate = moment.utc(date)
             return momentDate.local().format(DateFormats.dateTime)
         },
-    },
+        recordAudioChanged() {
+            if (this.audioAudit) 
+                this.$refs.audioAuditModal.modal('show')
+            else 
+                return this.recordAudioSend()
+        },
+        async recordAudioSend() {
+            console.info(this.audioAudit)
+            const response = await this.$hq.Questionnaire(this.model.questionnaireId, this.model.version)
+                .AudioAudit(this.audioAudit)
+            if(response.status !== 204) 
+                this.audioAudit = !this.audioAudit
+            this.$refs.audioAuditModal.modal('hide')
+        }
+    }
 }
 </script>

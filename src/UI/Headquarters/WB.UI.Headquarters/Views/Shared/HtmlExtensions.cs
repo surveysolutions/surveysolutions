@@ -20,15 +20,7 @@ namespace ASP
     public static partial class HtmlExtensions
     {
         
-        public static string QuestionnaireName(this HtmlHelper html, string name, long version)
-        {
-            return string.Format(Pages.QuestionnaireNameFormat, name, version);
-        }
-
-        public static string QuestionnaireNameVerstionFirst(this HtmlHelper html, string name, long version)
-        {
-            return string.Format(Pages.QuestionnaireNameVersionFirst, name, version);
-        }
+        
 
         public static IHtmlString SubstituteQuestionnaireName(this HtmlHelper html,
             string template,
