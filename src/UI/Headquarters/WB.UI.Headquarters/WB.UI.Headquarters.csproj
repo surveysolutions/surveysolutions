@@ -1041,16 +1041,6 @@
       <DependentUpon>OutdatedBrowser.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\OutdatedBrowser.sq.resx" />
-    <EmbeddedResource Include="Resources\PeriodicStatusReport.ar.resx">
-      <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\PeriodicStatusReport.es.resx">
-      <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\PeriodicStatusReport.ro.resx">
-      <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\PeriodicStatusReport.sq.resx" />
     <EmbeddedResource Include="Resources\Questionnaire.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Questionnaire.Designer.cs</LastGenOutput>
@@ -1305,27 +1295,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\OutdatedBrowser.zh.resx">
       <DependentUpon>OutdatedBrowser.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\PeriodicStatusReport.fr.resx">
-      <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\PeriodicStatusReport.ka.resx">
-      <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\PeriodicStatusReport.pt.resx">
-      <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\PeriodicStatusReport.resx">
-      <SubType>Designer</SubType>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>PeriodicStatusReport.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\PeriodicStatusReport.ru.resx">
-      <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\PeriodicStatusReport.zh.resx">
-      <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ReviewInterview.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -1604,7 +1573,6 @@
     <Content Include="Views\Error\WebsitePathIsTooLong.cshtml" />
     <Content Include="Views\Interviewer\Create.cshtml" />
     <Content Include="Views\Interviewer\Edit.cshtml" />
-    <Content Include="Views\Reports\SpeedAndQuantity.cshtml" />
     <Content Include="Views\Reports\SurveysAndStatusesForSv.cshtml" />
     <Content Include="Views\TabletReport\PackagesInfo.cshtml" />
     <Content Include="Views\Shared\_alerts.cshtml" />
@@ -2155,11 +2123,6 @@
     </Compile>
     <Compile Include="Resources\OutdatedBrowser.Designer.cs">
       <DependentUpon>OutdatedBrowser.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Include="Resources\PeriodicStatusReport.Designer.cs">
-      <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>

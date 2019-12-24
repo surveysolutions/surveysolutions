@@ -123,6 +123,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Pages.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\PeriodicStatusReport.Designer.cs">
+      <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Update="Resources\QuestionnaireClonning.designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -223,6 +228,36 @@
     <EmbeddedResource Update="Resources\Pages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Pages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\PeriodicStatusReport.ar.resx">
+      <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\PeriodicStatusReport.es.resx">
+      <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\PeriodicStatusReport.fr.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\PeriodicStatusReport.ka.resx">
+      <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\PeriodicStatusReport.pt.resx">
+      <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\PeriodicStatusReport.resx">
+      <SubType>Designer</SubType>
+      <LastGenOutput>PeriodicStatusReport.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\PeriodicStatusReport.ro.resx">
+      <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\PeriodicStatusReport.ru.resx">
+      <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\PeriodicStatusReport.zh.resx">
+      <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\QuestionnaireClonning.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
