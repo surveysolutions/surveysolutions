@@ -2162,7 +2162,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster&apos;s question.
+        ///   Looks up a localized string similar to List question or question from roster group.
         /// </summary>
         public static string RostersQuestion {
             get {
