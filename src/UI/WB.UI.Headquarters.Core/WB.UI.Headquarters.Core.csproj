@@ -23,6 +23,7 @@
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
 
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.0" /> <!--needed for eppplus https://github.com/JanKallman/EPPlus/issues/31 -->
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.0.0">
       <PrivateAssets>all</PrivateAssets>
@@ -48,6 +49,7 @@
           <DependentUpon>appsettings.ini</DependentUpon>
       </Content>
   </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj" />
     <ProjectReference Include="..\..\Core\SharedKernels\Enumerator\WB.Enumerator.Native\WB.Enumerator.Native.Core.csproj" />
@@ -61,6 +63,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Resources\Assignments.Designer.cs">
+      <DependentUpon>Assignments.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Update="Resources\AuditLog.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -91,6 +98,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>FieldsAndValidations.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\HQ.designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>HQ.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\MainMenu.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -105,6 +117,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Pages.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\QuestionnaireClonning.designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>QuestionnaireClonning.resx</DependentUpon>
     </Compile>
     <Compile Update="Resources\Reports.designer.cs">
       <DesignTime>True</DesignTime>
@@ -129,6 +146,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Resources\Assignments.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Assignments.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\AuditLog.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AuditLog.Designer.cs</LastGenOutput>
@@ -153,6 +174,10 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>FieldsAndValidations.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\HQ.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>HQ.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\MainMenu.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MainMenu.Designer.cs</LastGenOutput>
@@ -164,6 +189,10 @@
     <EmbeddedResource Update="Resources\Pages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Pages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\QuestionnaireClonning.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>QuestionnaireClonning.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Reports.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

@@ -96,6 +96,7 @@ namespace WB.UI.Headquarters.Controllers
             surveySetupModel.DownloadLinksUrl = Url.Action("Download", "LinksExport");
             surveySetupModel.CloneQuestionnaireUrl = Url.Action("CloneQuestionnaire", "HQ");
             surveySetupModel.ExportQuestionnaireUrl = Url.Action("ExportQuestionnaire", "HQ");
+            surveySetupModel.SendInvitationsUrl = Url.Action("SendInvitations", "WebInterviewSetup");
 
             return this.View(surveySetupModel);
         }

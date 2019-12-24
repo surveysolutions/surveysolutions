@@ -476,35 +476,6 @@
     <Content Include="App_GlobalResources\DataExport.zh.resx">
       <DependentUpon>DataExport.resx</DependentUpon>
     </Content>
-    <Content Include="App_GlobalResources\HQ.ar.resx">
-      <DependentUpon>HQ.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\HQ.es.resx">
-      <DependentUpon>HQ.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\HQ.fr.resx">
-      <DependentUpon>HQ.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\HQ.ka.resx">
-      <DependentUpon>HQ.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\HQ.pt.resx">
-      <DependentUpon>HQ.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\HQ.resx">
-      <SubType>Designer</SubType>
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>HQ.designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\HQ.ro.resx">
-      <DependentUpon>HQ.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\HQ.ru.resx">
-      <DependentUpon>HQ.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\HQ.zh.resx">
-      <DependentUpon>HQ.resx</DependentUpon>
-    </Content>
     <Content Include="App_GlobalResources\Import.ar.resx">
       <DependentUpon>Import.resx</DependentUpon>
     </Content>
@@ -586,34 +557,6 @@
     <Content Include="App_GlobalResources\Maps.zh.resx">
       <DependentUpon>Maps.resx</DependentUpon>
       <SubType>Designer</SubType>
-    </Content>
-    <Content Include="App_GlobalResources\QuestionnaireClonning.ar.resx">
-      <DependentUpon>QuestionnaireClonning.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\QuestionnaireClonning.es.resx">
-      <DependentUpon>QuestionnaireClonning.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\QuestionnaireClonning.fr.resx">
-      <DependentUpon>QuestionnaireClonning.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\QuestionnaireClonning.ka.resx">
-      <DependentUpon>QuestionnaireClonning.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\QuestionnaireClonning.pt.resx">
-      <DependentUpon>QuestionnaireClonning.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\QuestionnaireClonning.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>QuestionnaireClonning.designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\QuestionnaireClonning.ro.resx">
-      <DependentUpon>QuestionnaireClonning.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\QuestionnaireClonning.ru.resx">
-      <DependentUpon>QuestionnaireClonning.resx</DependentUpon>
-    </Content>
-    <Content Include="App_GlobalResources\QuestionnaireClonning.zh.resx">
-      <DependentUpon>QuestionnaireClonning.resx</DependentUpon>
     </Content>
     <Content Include="App_GlobalResources\QuestionnaireImport.ar.resx">
       <DependentUpon>QuestionnaireImport.resx</DependentUpon>
@@ -799,10 +742,6 @@
     <Content Include="App_GlobalResources\DataExport.sq.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>DataExport.sq.designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\HQ.sq.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>HQ.sq.designer.cs</LastGenOutput>
     </Content>
     <Content Include="App_GlobalResources\Import.sq.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
@@ -1012,12 +951,6 @@
       <DependentUpon>Archived.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Archived.sq.resx" />
-    <EmbeddedResource Include="Resources\Assignments.ar.resx">
-      <DependentUpon>Assignments.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Assignments.ro.resx">
-      <DependentUpon>Assignments.resx</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Assignments.sq.resx" />
     <EmbeddedResource Include="Resources\Details.ar.resx">
       <DependentUpon>Details.resx</DependentUpon>
@@ -1048,9 +981,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Archived.es.resx">
       <DependentUpon>Archived.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Assignments.es.resx">
-      <DependentUpon>Assignments.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Details.es.resx">
       <DependentUpon>Details.resx</DependentUpon>
@@ -1274,27 +1204,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Archived.zh.resx">
       <DependentUpon>Archived.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Assignments.fr.resx">
-      <DependentUpon>Assignments.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Assignments.ka.resx">
-      <DependentUpon>Assignments.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Assignments.pt.resx">
-      <DependentUpon>Assignments.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Assignments.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Assignments.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Assignments.ru.resx">
-      <DependentUpon>Assignments.resx</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Assignments.zh.resx">
-      <DependentUpon>Assignments.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Details.ka.resx">
       <DependentUpon>Details.resx</DependentUpon>
@@ -1865,11 +1774,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DataExport.sq.resx</DependentUpon>
     </Compile>
-    <Compile Include="App_GlobalResources\HQ.sq.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>HQ.sq.resx</DependentUpon>
-    </Compile>
     <Compile Include="App_GlobalResources\Import.sq.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -2050,11 +1954,6 @@
     <Compile Include="API\Resources\DataTableTranslationsController.cs" />
     <Compile Include="API\Resources\WebInterviewResourcesController.cs" />
     <Compile Include="API\PublicApi\UsersController.cs" />
-    <Compile Include="App_GlobalResources\HQ.designer.cs">
-      <DependentUpon>HQ.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Include="App_GlobalResources\Import.Designer.cs">
       <DependentUpon>Import.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -2062,11 +1961,6 @@
     </Compile>
     <Compile Include="App_GlobalResources\MapReport.Designer.cs">
       <DependentUpon>MapReport.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Include="App_GlobalResources\QuestionnaireClonning.designer.cs">
-      <DependentUpon>QuestionnaireClonning.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
@@ -2113,7 +2007,6 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Code\StatusHelper.cs" />
     <Compile Include="Code\ValidateFileAttribute.cs" />
     <Compile Include="Code\WriteToSyncLogAttribute.cs" />
     <Compile Include="Controllers\AssignmentsController.cs" />
@@ -2207,17 +2100,14 @@
     <Compile Include="Models\ChangeSettingsModel.cs" />
     <Compile Include="Models\ChangeStateHistoryViewModel.cs" />
     <Compile Include="Models\ChartDataModel.cs" />
-    <Compile Include="Models\CloneQuestionnaireModel.cs" />
     <Compile Include="Models\CompanyLogo\CompanyLogo.cs" />
     <Compile Include="Models\ComponentModels\ComboboxModel.cs" />
     <Compile Include="Models\ExportSettingsModel.cs" />
-    <Compile Include="Models\DocumentFilter.cs" />
     <Compile Include="Models\DocumentListViewModel.cs" />
     <Compile Include="Models\ExportModel.cs" />
     <Compile Include="Controllers\Profile\ObserverController.cs" />
     <Compile Include="Controllers\InterviewsApiController.cs" />
     <Compile Include="Controllers\DesignerQuestionnairesApiController.cs" />
-    <Compile Include="Controllers\HQController.cs" />
     <Compile Include="Controllers\InstallController.cs" />
     <Compile Include="Controllers\Profile\HeadquartersController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
@@ -2267,11 +2157,6 @@
       <DependentUpon>Archived.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Include="Resources\Assignments.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Assignments.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\Details.Designer.cs">
       <DependentUpon>Details.resx</DependentUpon>
@@ -2364,11 +2249,8 @@
       <DependentUpon>WebInterviewUI.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\DataExportStatusReader.cs" />
-    <Compile Include="Services\IQuestionnaireExporter.cs" />
     <Compile Include="Services\MetricsService.cs" />
-    <Compile Include="Services\IInterviewCreatorFromAssignment.cs" />
     <Compile Include="Services\InterviewImportColumn.cs" />
-    <Compile Include="Services\QuestionnaireExporter.cs" />
     <Compile Include="Services\VersionCheckService.cs" />
     <Compile Include="Services\IVersionCheckService.cs" />
     <Compile Include="Services\WebInterviewEmailRenderer.cs" />
