@@ -10,6 +10,8 @@ using Autofac.Features.ResolveAnything;
 using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.Converters;
 using MvvmCross.IoC;
+using MvvmCross.Plugin;
+using MvvmCross.ViewModels;
 using MvvmCross.Views;
 using WB.Core.BoundedContexts.Supervisor;
 using WB.Core.BoundedContexts.Supervisor.Services;
@@ -43,6 +45,8 @@ namespace WB.UI.Supervisor
 {
     public class Setup : EnumeratorSetup<SupervisorMvxApplication>
     {
+        IModule[] modules;
+
         public Setup()
         {
 #if PRODUCTION
@@ -99,9 +103,25 @@ namespace WB.UI.Supervisor
             return new AutofacMvxIocProvider(this.CreateAndInitializeIoc());
         }
 
-        private IContainer CreateAndInitializeIoc()
+        protected override void InitializeApp(IMvxPluginManager pluginManager, IMvxApplication app)
         {
-            var modules = new IModule[] {
+            base.InitializeApp(pluginManager, app);
+        
+            var status = new UnderConstructionInfo();
+            status.Run();
+
+            foreach (var module in modules)
+            {
+                module.Init(ServiceLocator.Current, status).Wait();
+            }
+
+            status.Finish();
+            base.InitializeFirstChance();
+        }
+
+        private IContainer CreateAndInitializeIoc()
+        {            
+            modules = new IModule[] {
                 new NcqrsModule(),
                 new InfrastructureModuleMobile(),
                 new DataCollectionSharedKernelModule(),
@@ -127,21 +147,9 @@ namespace WB.UI.Supervisor
                 .As<ISupervisorSettings>()
                 .WithParameter("backupFolder", AndroidPathUtils.GetPathToSupervisorSubfolderInExternalDirectory("Backup"))
                 .WithParameter("restoreFolder", AndroidPathUtils.GetPathToSupervisorSubfolderInExternalDirectory("Restore"));
-
             
             var container = builder.Build();
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
-
-            var status = new UnderConstructionInfo();
-            status.Run();
-
-            foreach (var module in modules)
-            {
-                module.Init(container.Resolve<IServiceLocator>(), status).Wait();
-            }
-
-            status.Finish();
-
             return container;
         }
 
