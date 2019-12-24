@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +20,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Models.Api;
+using WB.UI.Headquarters.Models.Api.DataTable;
 using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Controllers.Api  
@@ -434,7 +436,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
-        public async Task<IActionResult> DeviceInterviewers([FromQuery]ReportDataApiController.DeviceInterviewersFilter request, Guid? id = null, 
+        public async Task<IActionResult> DeviceInterviewers([DataTablesRequest]ReportDataApiController.DeviceInterviewersFilter request, Guid? id = null, 
             [FromQuery]string exportType = null)
         {
             var input = new DeviceByInterviewersReportInputModel
