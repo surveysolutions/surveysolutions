@@ -66,7 +66,7 @@ namespace WB.UI.Shared.Enumerator.Services
         public Task EnsureHasPermissionToInstallFromUnknownSourcesAsync()
         {
             // Check if application has permission to do package installations
-            if (!Application.Context.PackageManager.CanRequestPackageInstalls())
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.O && !Application.Context.PackageManager.CanRequestPackageInstalls())
             {
                 // if not - open settings menu for current application
                 var addFlags = ShareCompat.IntentBuilder.From(this.topActivity.Activity)
@@ -77,7 +77,7 @@ namespace WB.UI.Shared.Enumerator.Services
 
                 Application.Context.StartActivity(addFlags);
 
-                // prepare async action, there is no <void> version for TaskCompetionSource, using bool
+                // prepare async action, there is no <void> version for TaskCompletionSource, using bool
                 var tcs = new TaskCompletionSource<bool>();
 
                 // subscribing on Application resume event
