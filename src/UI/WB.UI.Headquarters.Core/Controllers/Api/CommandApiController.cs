@@ -1,43 +1,58 @@
 ﻿using System;
-using System.Web.Mvc;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.CommandTransformation;
 using WB.UI.Headquarters.Filters;
-using WB.UI.Headquarters.Models;
 using WB.UI.Shared.Web.CommandDeserialization;
-using WB.UI.Shared.Web.Filters;
 
-namespace WB.UI.Headquarters.Controllers
+namespace WB.UI.Headquarters.Controllers.Api
 {
-    [AuthorizeOr403(Roles = "Administrator, Headquarter, Supervisor")]
+    [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
     [ApiValidationAntiForgeryToken]
-    public class CommandApiController : BaseApiController
+    [Route("api/[controller]/[action]/{id?}")]
+    public class CommandApiController : ControllerBase
     {
+        public class JsonCommandResponse
+        {
+            public bool IsSuccess = false;
+
+            public string DomainException { get; set; }
+        }
+
+        public class JsonBundleCommandResponse
+        {
+            public List<JsonCommandResponse> CommandStatuses { get; set; }
+            public JsonBundleCommandResponse()
+            {
+                this.CommandStatuses = new List<JsonCommandResponse>();
+            }
+        }
+
+        private readonly ICommandService commandService;
         private readonly ICommandDeserializer commandDeserializer;
-        private readonly IInterviewFactory _interviewFactory;
+        private readonly IInterviewFactory interviewFactory;
         private ICommandTransformator commandTransformator;
 
         public CommandApiController(
-            ICommandService commandService, ICommandDeserializer commandDeserializer, ILogger logger,
+            ICommandService commandService, ICommandDeserializer commandDeserializer,
             IInterviewFactory interviewFactory, ICommandTransformator commandTransformator)
-            : base(commandService, logger)
         {
+            this.commandService = commandService;
             this.commandDeserializer = commandDeserializer;
-            _interviewFactory = interviewFactory;
+            this.interviewFactory = interviewFactory;
             this.commandTransformator = commandTransformator;
         }
 
         [HttpPost]
-        [ObserverNotAllowedApi]
+        [ObserverNotAllowed]
         public JsonBundleCommandResponse ExecuteCommands(JsonBundleCommandRequest request)
         {
             var response = new JsonBundleCommandResponse();
@@ -47,18 +62,18 @@ namespace WB.UI.Headquarters.Controllers
 
             foreach (var command in request.Commands)
             {
-                response.CommandStatuses.Add(this.Execute(new JsonCommandRequest() {Type = request.Type, Command = command}));
+                response.CommandStatuses.Add(this.Execute(new JsonCommandRequest() { Type = request.Type, Command = command }));
             }
 
             return response;
         }
 
         [HttpPost]
-        [ObserverNotAllowedApi]
+        [ObserverNotAllowed]
         public JsonCommandResponse Execute(JsonCommandRequest request)
         {
             var response = new JsonCommandResponse();
-            
+
             if (request != null && !string.IsNullOrEmpty(request.Type) && !string.IsNullOrEmpty(request.Command))
             {
                 try
@@ -69,19 +84,19 @@ namespace WB.UI.Headquarters.Controllers
                     switch (transformedCommand)
                     {
                         case SetFlagToAnswerCommand setFlagCommand:
-                            this._interviewFactory.SetFlagToQuestion(setFlagCommand.InterviewId,
+                            this.interviewFactory.SetFlagToQuestion(setFlagCommand.InterviewId,
                                 Identity.Create(setFlagCommand.QuestionId, setFlagCommand.RosterVector), true);
                             break;
                         case RemoveFlagFromAnswerCommand removeFlagCommand:
-                            this._interviewFactory.SetFlagToQuestion(removeFlagCommand.InterviewId,
+                            this.interviewFactory.SetFlagToQuestion(removeFlagCommand.InterviewId,
                                 Identity.Create(removeFlagCommand.QuestionId, removeFlagCommand.RosterVector), false);
                             break;
                         case HardDeleteInterview deleteInterview:
-                            this.CommandService.Execute(transformedCommand);
-                            this._interviewFactory.RemoveInterview(deleteInterview.InterviewId);
+                            this.commandService.Execute(transformedCommand);
+                            this.interviewFactory.RemoveInterview(deleteInterview.InterviewId);
                             break;
                         default:
-                            this.CommandService.Execute(transformedCommand);
+                            this.commandService.Execute(transformedCommand);
                             break;
                     }
 

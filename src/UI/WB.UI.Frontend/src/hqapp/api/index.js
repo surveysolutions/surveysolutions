@@ -5,6 +5,8 @@ class QuestionnaireApi {
         this.http = http
         this.base = "api/v1/questionnaires/"
         this.details = this.base + `${questionnaireId}/${version}`
+        this.questionnaireId = questionnaireId
+        this.version = version
     }
 
     async List() {
@@ -22,6 +24,13 @@ class QuestionnaireApi {
         }
 
         return result
+    }
+
+    Delete() {
+        var self = this
+        return this.http.post("api/QuestionnairesApi/DeleteQuestionnaire", 
+            { questionnaireId: self.questionnaireId, version: self.version })
+        
     }
 }
 
