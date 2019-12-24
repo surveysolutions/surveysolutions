@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
-using System.Web.Http;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
@@ -10,20 +11,17 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Api;
+using WB.UI.Headquarters.Models.Api.DataTable;
 using WB.UI.Headquarters.Resources;
-using WB.UI.Shared.Web.Attributes;
 
-namespace WB.UI.Headquarters.API
+namespace WB.UI.Headquarters.Controllers.Api
 {
-    [CamelCase]
-    [RoutePrefix("api/Assignments")]
-    public class AssignmentsApiController : ApiController
+    [Route("api/[controller]/[action]")]
+    public class AssignmentsApiController : ControllerBase
     {
         private readonly IAssignmentViewFactory assignmentViewFactory;
         private readonly IAuthorizedUser authorizedUser;
@@ -65,7 +63,7 @@ namespace WB.UI.Headquarters.API
         [Route("")]
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter, Supervisor, Interviewer")]
-        public IHttpActionResult Get([FromUri]AssignmentsDataTableRequest request)
+        public IActionResult Get([DataTablesRequest]AssignmentsDataTableRequest request)
         {
             var isInterviewer = this.authorizedUser.IsInterviewer;
                        
@@ -74,7 +72,7 @@ namespace WB.UI.Headquarters.API
                 Page = request.PageIndex,
                 PageSize = request.PageSize,
                 Order = request.GetSortOrder(),
-                SearchBy = request.Search.Value,
+                SearchBy = request.Search?.Value,
                 QuestionnaireId = request.QuestionnaireId,
                 QuestionnaireVersion = request.QuestionnaireVersion,
                 ResponsibleId = isInterviewer ? this.authorizedUser.Id :request.ResponsibleId,
@@ -116,8 +114,8 @@ namespace WB.UI.Headquarters.API
         [Route("")]
         [HttpDelete]
         [Authorize(Roles = "Administrator, Headquarter")]
-        [ObserverNotAllowedApi]
-        public IHttpActionResult Delete([FromBody]int[] ids)
+        [ObserverNotAllowed]
+        public IActionResult Delete([FromBody]int[] ids)
         {
             if (ids == null) return this.BadRequest();
 
@@ -133,8 +131,8 @@ namespace WB.UI.Headquarters.API
         [Route("Unarchive")]
         [HttpPost]
         [Authorize(Roles = "Administrator, Headquarter")]
-        [ObserverNotAllowedApi]
-        public IHttpActionResult Unarchive([FromBody]int[] ids)
+        [ObserverNotAllowed]
+        public IActionResult Unarchive([FromBody]int[] ids)
         {
             if (ids == null) return this.BadRequest();
             
@@ -149,8 +147,8 @@ namespace WB.UI.Headquarters.API
 
         [HttpPost]
         [Route("Assign")]
-        [ObserverNotAllowedApi]
-        public IHttpActionResult Assign([FromBody] AssignRequest request)
+        [ObserverNotAllowed]
+        public IActionResult Assign([FromBody] AssignRequest request)
         {
             if (request?.Ids == null) return this.BadRequest();
             foreach (var idToAssign in request.Ids)
@@ -168,8 +166,8 @@ namespace WB.UI.Headquarters.API
         [HttpPatch]
         [Route("{id:int}/SetQuantity")]
         [Authorize(Roles = "Administrator, Headquarter")]
-        [ObserverNotAllowedApi]
-        public IHttpActionResult SetQuantity(int id, [FromBody] UpdateAssignmentRequest request)
+        [ObserverNotAllowed]
+        public IActionResult SetQuantity(int id, [FromBody] UpdateAssignmentRequest request)
         {
             var assignment = this.assignmentsStorage.GetAssignment(id);
 
@@ -186,11 +184,11 @@ namespace WB.UI.Headquarters.API
 
         [HttpPost]
         [Route("Create")]
-        [ObserverNotAllowedApi]
-        public IHttpActionResult Create([FromBody] CreateAssignmentRequest request)
+        [ObserverNotAllowed]
+        public IActionResult Create([FromBody] CreateAssignmentRequest request)
         {
             if (!this.authorizedUser.IsAdministrator && !this.authorizedUser.IsHeadquarter)
-                return this.StatusCode(HttpStatusCode.Forbidden);
+                return Forbid();
 
             if (request == null)
                 return this.BadRequest();
