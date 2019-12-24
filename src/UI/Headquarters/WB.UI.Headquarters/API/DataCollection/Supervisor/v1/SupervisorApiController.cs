@@ -20,6 +20,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Services;
 using WB.UI.Headquarters.Utils;
+using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1

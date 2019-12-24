@@ -50,13 +50,60 @@ namespace WB.Tests.Integration.RestService
             }
         }
 
+
+        [Test]
+        public async Task KP_13477__should_not_return_bytes_range_support_for_old_clients()
+        {
+            // test with old client
+            using (var server = TestServer.Create(Configuration))
+            {
+                var client = server.HttpClient;
+
+                client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("org.worldbank.solutions.interviewer",
+                    new Version(1, 2, 26644).ToString()));
+
+                var response = await client.GetAsync("/api/test");
+
+                var content = await response.Content.ReadAsByteArrayAsync();
+                var contentHash = hasher.ComputeHash(content);
+
+                // assert
+                Assert.That(response.Headers.AcceptRanges, Is.Empty);
+
+                Assert.That(AsString(contentHash), Is.EqualTo(AsString(ActualContentHash)));
+                Assert.That(response.Content.Headers.ContentLength, Is.EqualTo(content.Length));
+                Assert.That(response.Content.Headers.ContentLength, Is.EqualTo(ActualContent.Length));
+            }
+
+            // test with newer client
+            using (var server = TestServer.Create(Configuration))
+            {
+                var client = server.HttpClient;
+
+                client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("org.worldbank.solutions.interviewer",
+                    new Version(1, 2, 26644 + 1).ToString()));
+
+                var response = await client.GetAsync("/api/test");
+
+                var content = await response.Content.ReadAsByteArrayAsync();
+                var contentHash = hasher.ComputeHash(content);
+
+                // assert
+                Assert.That(response.Headers.AcceptRanges, Is.Not.Empty);
+
+                Assert.That(AsString(contentHash), Is.EqualTo(AsString(ActualContentHash)));
+                Assert.That(response.Content.Headers.ContentLength, Is.EqualTo(content.Length));
+                Assert.That(response.Content.Headers.ContentLength, Is.EqualTo(ActualContent.Length));
+            }
+        }
+
         [Test]
         public async Task should_respect_range_requests()
         {
             using (var server = TestServer.Create(Configuration))
             {
                 var request = new HttpRequestMessage(HttpMethod.Get, "/api/test");
-                
+
                 request.Headers.Range = new RangeHeaderValue(100, 109);
 
                 var http = server.HttpClient;
@@ -83,13 +130,15 @@ namespace WB.Tests.Integration.RestService
                 var response = await http.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
                 var downloader = new FastBinaryFilesHttpHandler(
-                    Mock.Of<IHttpClientFactory>(f => f.CreateClient(null) == server.HttpClient)
-                    , Mock.Of<IRestServiceSettings>(r => r.BufferSize == 4096 && r.MaxDegreeOfParallelism == 1), null);
+                    Mock.Of<IHttpClientFactory>(r =>
+                        r.CreateClient(It.IsAny<IHttpStatistician>()) == server.HttpClient),
+                    Mock.Of<IRestServiceSettings>(r => r.BufferSize == 4096 && r.MaxDegreeOfParallelism == 1), null, 
+                    Mock.Of<ILogger>());
 
                 var content = await downloader.DownloadBinaryDataAsync(http, response, null, CancellationToken.None);
                 var contentHash = hasher.ComputeHash(content);
 
-                
+
                 Assert.That(AsString(contentHash), Is.EquivalentTo(AsString(ActualContentHash)));
             }
         }
