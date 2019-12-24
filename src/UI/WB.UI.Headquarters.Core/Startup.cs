@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using Anemonis.AspNetCore.RequestDecompression;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
@@ -280,6 +281,8 @@ namespace WB.UI.Headquarters
                 ;
 
             services.AddHqSwaggerGen();
+
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // https://github.com/JanKallman/EPPlus/issues/31
 
             // configuration
             services.Configure<GoogleMapsConfig>(this.Configuration.GetSection("GoogleMap"));
