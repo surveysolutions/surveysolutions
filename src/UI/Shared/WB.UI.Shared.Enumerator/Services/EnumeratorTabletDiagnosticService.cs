@@ -19,20 +19,23 @@ namespace WB.UI.Shared.Enumerator.Services
     public abstract class EnumeratorTabletDiagnosticService: ITabletDiagnosticService
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IPermissions permissions;
+        private readonly IPermissionsService permissions;
         private readonly ISynchronizationService synchronizationService;
         private readonly IDeviceSettings deviceSettings;
         private readonly IArchivePatcherService archivePatcherService;
         private readonly ILogger logger;
         private readonly IViewModelNavigationService navigationService;
-
-        protected EnumeratorTabletDiagnosticService(IFileSystemAccessor fileSystemAccessor,
-            IPermissions permissions,
+        private readonly IMvxAndroidCurrentTopActivity topActivity;
+        
+        protected EnumeratorTabletDiagnosticService(
+            IFileSystemAccessor fileSystemAccessor,
+            IPermissionsService permissions,
             ISynchronizationService synchronizationService,
             IDeviceSettings deviceSettings,
             IArchivePatcherService archivePatcherService,
             ILogger logger,
-            IViewModelNavigationService navigationService)
+            IViewModelNavigationService navigationService,
+            IMvxAndroidCurrentTopActivity topActivity)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.permissions = permissions;
@@ -41,9 +44,10 @@ namespace WB.UI.Shared.Enumerator.Services
             this.archivePatcherService = archivePatcherService;
             this.logger = logger;
             this.navigationService = navigationService;
+            this.topActivity = topActivity;
         }
 
-        private Activity CurrentActivity => Mvx.IoCProvider.Resolve<IMvxAndroidCurrentTopActivity>().Activity;
+        private Activity CurrentActivity => topActivity.Activity;
 
         public void LaunchShareAction(string title, string info)
         {
@@ -58,8 +62,7 @@ namespace WB.UI.Shared.Enumerator.Services
             IProgress<TransferProgress> onDownloadProgressChanged = null)
         {
             await this.permissions.AssureHasPermission(Permission.Storage);
-
-            await this.navigationService.EnsureHasPermissionToInstallFromUnknownSourcesAsync();
+            await this.permissions.EnsureHasPermissionToInstallFromUnknownSourcesAsync();
             
             var pathToRootDirectory = Build.VERSION.SdkInt < BuildVersionCodes.N
                 ? AndroidPathUtils.GetPathToExternalDirectory()
