@@ -46,10 +46,8 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter, Interviewer")]
-        public DataTableResponse<QuestionnaireListItemModel> Questionnaires([FromQuery] DataTableRequest request)
+        public DataTableResponse<QuestionnaireListItemModel> Questionnaires([Models.Api.DataTable.DataTablesRequest] DataTableRequest request)
         {
-            var query = Request.Query["Order"];
-
             var input = new QuestionnaireBrowseInputModel
             {
                 Page = request.PageIndex,
