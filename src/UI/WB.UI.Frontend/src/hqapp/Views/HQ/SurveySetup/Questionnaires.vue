@@ -5,6 +5,22 @@
             :tableOptions="tableOptions"
             :contextMenuItems="contextMenuItems"
         ></DataTables>
+
+        <ModalFrame ref="deleteQuestionnaireModal" :title="$t('Pages.ConfirmationNeededTitle')">
+            <p>{{ $t("Pages.GlobalSettings_DeleteQuestionnareConfirmation" )}}</p>
+            <div slot="actions">
+                <button
+                    type="button"
+                    class="btn btn-danger"
+                    @click="deleteQuestionnaire"
+                >{{ $t("Common.Delete") }}</button>
+                <button
+                    type="button"
+                    class="btn btn-link"
+                    data-dismiss="modal"
+                >{{ $t("Common.Cancel") }}</button>
+            </div>
+        </ModalFrame>
     </HqLayout>
 </template>
 <script>
@@ -94,13 +110,12 @@ export default {
                 items.push(
                 {
                     name: this.$t("Dashboard.DeleteQuestionnaire"),
-                    callback: (_, opt) => {
-
-                        notifier.confirm('Confirmation Needed', input.settings.messages.deleteQuestionnaireConfirmationMessage,
-                            // confirm
-                            function () { self.sendDeleteQuestionnaireCommand(selectedRow); },
-                            // cancel
-                            function () { });
+                    callback: () => {
+                        this.deletedQuestionnaireId = {
+                            questionnaireId: selectedRow.questionnaireId,
+                            version: selectedRow.version
+                        }
+                        this.$refs.deleteQuestionnaireModal.modal('show')
                     } 
                 });
                 items.push({
@@ -113,6 +128,18 @@ export default {
             }
 
             return items;
+        },
+        async deleteQuestionnaire() {
+            if(this.deletedQuestionnaireId) {
+                const response = await this.$hq.Questionnaire(this.deletedQuestionnaireId.questionnaireId, this.deletedQuestionnaireId.version).Delete()
+                if(response.status == 200) {
+                    this.$refs.deleteQuestionnaireModal.modal('hide')
+                }
+                this.reloadTable()
+            }
+        },
+        reloadTable(){
+            this.$refs.table.reload(self.reloadTable)
         }
     },
     computed: {

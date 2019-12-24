@@ -46,6 +46,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         [HttpGet]
         [Route("questionnaires/{id:guid}/{version:int}/assembly")]
         public override IActionResult GetAssembly(Guid id, int version) => base.GetAssembly(id, version);
+
         [HttpPost]
         [Route("questionnaires/{id:guid}/{version:int}/logstate")]
         public override IActionResult LogQuestionnaireAsSuccessfullyHandled(Guid id, int version) => base.LogQuestionnaireAsSuccessfullyHandled(id, version);

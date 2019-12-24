@@ -99,11 +99,11 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         [HttpPost]
         [Authorize(Roles = "Administrator")]
-        public async Task<JsonResult> DeleteQuestionnaire(DeleteQuestionnaireRequestModel request)
+        public async Task<IActionResult> DeleteQuestionnaire([FromBody]DeleteQuestionnaireRequestModel request)
         {
             await deleteQuestionnaireService.DisableQuestionnaire(request.QuestionnaireId, request.Version, this.authorizedUser.Id);
             
-            return new JsonResult(new { IsSuccess = true });
+            return Ok();
         }
 
         [HttpGet]

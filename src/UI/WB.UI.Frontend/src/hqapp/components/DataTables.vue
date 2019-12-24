@@ -172,11 +172,14 @@ export default {
                 searching: !this.noSearch
             }, this.tableOptions);
 
-            if(this.hasTotalRow){
-                options.createdRow = function(row, data, dataIndex){
+            options.createdRow = (row, data, dataIndex) => {
+                if(this.hasTotalRow) {
                     if (dataIndex === 0){
-                          $(row).addClass('total-row');
+                        $(row).addClass('total-row');
                     }
+                }
+                if (data.isDisabled) {
+                    $(row).addClass('disabled');
                 }
             }
 
@@ -378,8 +381,6 @@ export default {
 
         initContextMenu() {
             if (this.contextMenuItems == null) return;
-            console.log (this.$refs.table)
-            console.log ( "#" + this.$refs.table.attributes.id.value + " tbody tr td:not(.checkbox-cell)")
             var contextMenuOptions = {
                 selector: "#" + this.$refs.table.attributes.id.value + " tbody tr td:not(.checkbox-cell)",
                 autoHide: false,
