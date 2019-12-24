@@ -35,7 +35,7 @@ namespace WB.UI.Tester.Implementation.Services
                 userInterfaceStateService, 
                 androidCurrentTopActivity, 
                 navigationService, 
-                principal, log, messenger)
+                principal, log)
         {
             this.androidCurrentTopActivity = androidCurrentTopActivity;
             this.navigationService = navigationService;

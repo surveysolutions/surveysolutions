@@ -3,14 +3,11 @@ using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.OS;
-using Android.Support.Constraints;
 using Android.Support.V4.App;
 using Android.Support.V4.Content;
 using Java.Lang;
-using MvvmCross.Logging;
 using MvvmCross.Navigation;
 using MvvmCross.Platforms.Android;
-using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -29,9 +26,7 @@ namespace WB.UI.Shared.Enumerator.Services
         private readonly IMvxAndroidCurrentTopActivity topActivity;
         private readonly IMvxNavigationService navigationService;
         private readonly IPrincipal principal;
-        private readonly IMvxMessenger messenger;
         private readonly ILogger logger;
-        private MvxSubscriptionToken token;
 
         protected BaseViewModelNavigationService(ICommandService commandService,
             IUserInteractionService userInteractionService,
@@ -39,7 +34,7 @@ namespace WB.UI.Shared.Enumerator.Services
             IMvxAndroidCurrentTopActivity topActivity,
             IMvxNavigationService navigationService,
             IPrincipal principal, 
-            ILogger logger, IMvxMessenger messenger)
+            ILogger logger)
         {
             this.commandService = commandService;
             this.userInteractionService = userInteractionService;
@@ -48,7 +43,6 @@ namespace WB.UI.Shared.Enumerator.Services
             this.navigationService = navigationService;
             this.principal = principal;
             this.logger = logger;
-            this.messenger = messenger;
         }
 
         public virtual bool HasPendingOperations => 
@@ -62,55 +56,7 @@ namespace WB.UI.Shared.Enumerator.Services
             this.logger.Trace($"Closing viewmodel {viewModel.GetType()}");
             return this.navigationService.Close(viewModel);
         }
-
-        public Task EnsureHasPermissionToInstallFromUnknownSourcesAsync()
-        {
-            // Check if application has permission to do package installations
-            if (Build.VERSION.SdkInt >= BuildVersionCodes.O && !Application.Context.PackageManager.CanRequestPackageInstalls())
-            {
-                // if not - open settings menu for current application
-                var addFlags = ShareCompat.IntentBuilder.From(this.topActivity.Activity)
-                    .Intent
-                    .SetAction(Android.Provider.Settings.ActionManageUnknownAppSources)
-                    .SetData(Android.Net.Uri.Parse("package:" + Application.Context.PackageName))
-                    .AddFlags(ActivityFlags.NewTask);
-
-                Application.Context.StartActivity(addFlags);
-
-                // prepare async action, there is no <void> version for TaskCompletionSource, using bool
-                var tcs = new TaskCompletionSource<bool>();
-
-                // subscribing on Application resume event
-                this.token = messenger.Subscribe<ApplicationResumeMessage>(m =>
-                {
-                    try
-                    {
-                        // double check for permission to do package installations
-                        if (!Application.Context.PackageManager.CanRequestPackageInstalls())
-                        {
-                            // set update error. This message will be displayed on user UI
-                            tcs.SetException(new System.Exception(UIResources.ErrorMessage_PermissionForUnkownSourcesRequired));
-                        }
-                        else
-                        {
-                            // we have all permissions to install application, proceed with next actions
-                            tcs.SetResult(true);
-                        }
-                    }
-                    finally
-                    {   
-                        // cleaning up subscription token
-                        messenger.Unsubscribe<ApplicationResumeMessage>(token);
-                    }
-                });
-
-                return tcs.Task;
-            }
-
-            // we have all permissions to install application, proceed with next actions
-            return Task.FromResult(true);
-        }
-
+        
         public void InstallNewApp(string pathToApk)
         {
             this.logger.Info($"Installing new app {pathToApk} android build version code {Build.VERSION.SdkInt}");
