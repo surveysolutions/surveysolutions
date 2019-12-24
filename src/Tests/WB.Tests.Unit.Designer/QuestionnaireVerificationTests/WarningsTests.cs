@@ -5,6 +5,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 {
@@ -798,6 +799,19 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                     isComboBox: true,
                     answers: Enumerable.Repeat(Create.Answer(), 10).ToList())
                 .ExpectNoWarning("WB0225");
+
+        [Test]
+        public void single_option_with_reusable_categories_with_9_options_in_combobox_mode()
+        {
+            var categoriesId = Id.g1;
+            var questionnaire = Create.QuestionnaireDocument(children: new IComposite[]
+            {
+                Create.SingleOptionQuestion(isComboBox: true, categoriesId: categoriesId)
+            });
+            questionnaire.Categories.Add(Create.Categories(categoriesId, "options"));
+
+            questionnaire.ExpectWarning("WB0225");
+        }
 
         [Test]
         public void multi_option_with_options_1_2_4_max_int()
