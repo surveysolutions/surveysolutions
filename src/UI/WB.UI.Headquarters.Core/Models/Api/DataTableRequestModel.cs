@@ -70,6 +70,7 @@ namespace WB.UI.Headquarters.Models.Api
 
         public List<ColumnInfo> ColummnsList => Columns ?? _C;
 
+
         public SearchInfo Search { get; set; }
 
 
@@ -94,7 +95,9 @@ namespace WB.UI.Headquarters.Models.Api
             if (order == null)
                 return Enumerable.Empty<OrderRequestItem>();
 
-            var columnName = this.ColummnsList?[order.Column].Name ?? order.Name;
+            var columnName = this.ColummnsList !=null && this.ColummnsList.Count > order.Column
+                ? this.ColummnsList?[order.Column].Name 
+                : order.Name;
 
             return new[] {new OrderRequestItem {Direction = order.Dir, Field = columnName}};
         }
