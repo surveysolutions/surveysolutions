@@ -42,6 +42,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Templates;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Templates;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
@@ -95,6 +96,7 @@ using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 using WB.Core.Synchronization.MetaInfo;
 
 namespace WB.Core.BoundedContexts.Headquarters
@@ -256,6 +258,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<ISubstitutionTextFactory, SubstitutionTextFactory>();
 
             registry.Bind<ITranslationStorage, TranslationStorage>();
+            registry.Bind<ITranslationsExportService, TranslationsExportService>();
+            registry.Bind<ICategoriesExportService, CategoriesExportService >();
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
             registry.Bind<IQuestionnaireStorage, HqQuestionnaireStorage>(); 
 
