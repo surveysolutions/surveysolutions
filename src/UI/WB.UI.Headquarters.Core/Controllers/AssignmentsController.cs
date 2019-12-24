@@ -2,42 +2,33 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
-using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [AuthorizeOr403(Roles = "Administrator, Headquarter, Supervisor, Observer")]
-    [LimitsFilter]
+    [Authorize(Roles = "Administrator, Headquarter, Supervisor, Observer")]
     [ActivePage(MenuItem.Assignments)]
-    public class AssignmentsController : BaseController
+    public class AssignmentsController : Controller
     {
         private readonly IAuthorizedUser currentUser;
         private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
         private readonly IAssignmentsService assignments;
         private readonly IAssignmentViewFactory assignmentViewFactory;
 
-        public AssignmentsController(ICommandService commandService,
-            ILogger logger,
-            IAuthorizedUser currentUser, 
+        public AssignmentsController(IAuthorizedUser currentUser, 
             IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory, 
             IAssignmentsService assignments, 
             IAssignmentViewFactory assignmentViewFactory)
-            : base(commandService, logger)
         {
             this.currentUser = currentUser;
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
@@ -47,7 +38,7 @@ namespace WB.UI.Headquarters.Controllers
         
         [Localizable(false)]
         [ActivePage(MenuItem.Assignments)]
-        public ActionResult Index(int? id)
+        public IActionResult Index(int? id)
         {
             if (id.HasValue) return GetAssignmentDetails(id.Value);
 
@@ -66,9 +57,9 @@ namespace WB.UI.Headquarters.Controllers
             model.Api = new AssignmentsFilters.ApiEndpoints
             {
                 Responsible = model.IsSupervisor
-                    ? Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "InterviewersCombobox"})
-                    : Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "ResponsiblesCombobox"}),
-                Assignments = Url.Content(@"~/api/Assignments"),
+                    ? Url.Action("InterviewersCombobox", "Teams")
+                    : Url.Action("ResponsiblesCombobox", "Teams"),
+                Assignments = Url.Action("Get", "AssignmentsApi"),
                 Interviews = Url.Action("Index", "Interviews"),
                 AssignmentsPage = Url.Action("Index", "Assignments"),
                 Profile = Url.Action("Profile", "Interviewer"),
@@ -79,10 +70,11 @@ namespace WB.UI.Headquarters.Controllers
             return View(model);
         }
 
-        private ActionResult GetAssignmentDetails(int assignmentId)
+        private IActionResult GetAssignmentDetails(int assignmentId)
         {
             var assignment = this.assignments.GetAssignment(assignmentId);
-            if (assignment == null) return new HttpNotFoundResult();
+            if (assignment == null) 
+                return NotFound();
 
             return View("Details", new AssignmentDto
             {
