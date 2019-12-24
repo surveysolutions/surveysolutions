@@ -23,7 +23,8 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
             call.StartedUtc = DateTime.UtcNow;
             try
             {
-                call.Response = await InnerSendAsync(call, request, cancellationToken, times: 3);
+                call.Response = await InnerSendAsync(call, request, cancellationToken, times: 3)
+                    .ConfigureAwait(false);
                 call.Response.RequestMessage = request;
                 if (call.IsSucceeded)
                     return call.Response;
@@ -47,7 +48,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
         {
             try
             {
-                return await base.SendAsync(request, cancellationToken);
+                return await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
