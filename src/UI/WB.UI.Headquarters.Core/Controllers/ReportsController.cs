@@ -134,10 +134,9 @@ namespace WB.UI.Headquarters.Controllers
             });
         }
 
+        [ActivePage(MenuItem.NumberOfCompletedInterviews)]
         public ActionResult QuantityByInterviewers(Guid? supervisorId, PeriodiceReportType reportType = PeriodiceReportType.NumberOfCompletedInterviews)
         {
-            this.ViewBag.ActivePage = MenuItem.NumberOfCompletedInterviews;
-
             var model = this.CreatePeriodicStatusReportModel(
                 reportType: reportType,
                 webApiActionName: PeriodicStatusReportWebApiActionName.ByInterviewers,
@@ -156,10 +155,9 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [Authorize(Roles = "Administrator, Headquarter")]
+        [ActivePage(MenuItem.NumberOfCompletedInterviews)]
         public ActionResult QuantityBySupervisors(PeriodiceReportType reportType = PeriodiceReportType.NumberOfCompletedInterviews)
         {
-            this.ViewBag.ActivePage = MenuItem.NumberOfCompletedInterviews;
-
             var model = this.CreatePeriodicStatusReportModel(
                 reportType: reportType,
                 webApiActionName: PeriodicStatusReportWebApiActionName.BySupervisors,
@@ -201,10 +199,9 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [Authorize(Roles = "Administrator, Headquarter")]
+        [ActivePage(MenuItem.SpeedOfCompletingInterviews)]
         public ActionResult SpeedBySupervisors(PeriodiceReportType reportType = PeriodiceReportType.AverageInterviewDuration)
         {
-            this.ViewBag.ActivePage = MenuItem.SpeedOfCompletingInterviews;
-
             var periodicStatusReportWebApiActionName =
                 reportTypesWhichShouldBeReroutedToCustomStatusController.Contains(reportType)
                     ? PeriodicStatusReportWebApiActionName.BetweenStatusesBySupervisors
