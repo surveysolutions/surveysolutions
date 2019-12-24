@@ -471,7 +471,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpPost]
-        public ChartStatisticsView ChartStatistics(InterviewsStatisticsInputModel data)
+        public ChartStatisticsView ChartStatistics([FromBody] InterviewsStatisticsInputModel data)
         {
             var input = new ChartStatisticsInputModel
             {

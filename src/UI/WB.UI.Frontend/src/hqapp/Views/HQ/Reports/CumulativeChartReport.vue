@@ -76,6 +76,7 @@
 <script>
 import routeSync from "~/shared/routeSync";
 import Vue from "vue";
+import moment from "moment";
 
 const LineChart = () => import(/* webpackChunkName: "report" */ "./CumulativeChart");
 
