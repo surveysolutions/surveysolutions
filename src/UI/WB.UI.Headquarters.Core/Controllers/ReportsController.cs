@@ -122,11 +122,10 @@ namespace WB.UI.Headquarters.Controllers
             return this.View("InterviewersAndDevices", devicesInterviewersModel);
         }
 
+        [ActivePage(MenuItem.InterviewsChart)]
         [Authorize(Roles = "Administrator, Headquarter")]
         public ActionResult InterviewsChart()
         {
-            this.ViewBag.ActivePage = MenuItem.InterviewsChart;
-
             var questionnaires = this.chartStatisticsViewFactory.GetQuestionnaireListWithData();
 
             return this.View("CumulativeInterviewChart", new
