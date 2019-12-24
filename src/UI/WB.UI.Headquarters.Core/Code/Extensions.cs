@@ -7,6 +7,7 @@ using Microsoft.Net.Http.Headers;
 using Microsoft.Security.Application;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Code
 {
@@ -73,5 +74,15 @@ namespace WB.UI.Headquarters.Code
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
+
+        public static string QuestionnaireName(this IHtmlHelper html, string name, long version)
+        {
+            return string.Format(Pages.QuestionnaireNameFormat, name, version);
+        }
+
+        public static string QuestionnaireNameVerstionFirst(this IHtmlHelper html, string name, long version)
+        {
+            return string.Format(Pages.QuestionnaireNameVersionFirst, name, version);
+        }
     }
 }

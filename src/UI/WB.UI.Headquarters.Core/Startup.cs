@@ -290,6 +290,7 @@ namespace WB.UI.Headquarters
             services.Configure<ApkConfig>(this.Configuration.GetSection("Apks"));
             services.Configure<PasswordPolicyConfig>(this.Configuration.GetSection("PasswordPolicy"));
             services.Configure<SchedulerConfig>(this.Configuration.GetSection("Scheduler"));
+            services.Configure<DesignerConfig>(this.Configuration.GetSection("Designer"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

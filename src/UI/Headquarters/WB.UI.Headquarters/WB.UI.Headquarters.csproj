@@ -1704,7 +1704,6 @@
     <Content Include="Views\Interviews\Index.cshtml" />
     <Content Include="Views\ControlPanel\ReevaluateInterview.cshtml" />
     <Content Include="Views\Assignments\Details.cshtml" />
-    <Content Include="Views\Questionnaires\Details.cshtml" />
     <Content Include="Views\Diagnostics\Logs.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
@@ -1792,9 +1791,7 @@
     <Compile Include="API\WebInterview\Pipeline\WebInterviewDataAuthorizeAttribute.cs" />
     <Compile Include="Controllers\InterviewsController.cs" />
     <Compile Include="API\PublicApi\Models\AuditLogApiView.cs" />
-    <Compile Include="Controllers\QuestionnairesController.cs" />
     <Compile Include="Filters\WebInterviewObserverNotAllowedActionFilter.cs" />
-    <Compile Include="Models\QuestionnaireDetailsModel.cs" />
     <Compile Include="Resources\Questionnaire.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -2225,7 +2222,6 @@
     <Compile Include="Utils\Compression\ZipManager.cs" />
     <Compile Include="Utils\ExceptionExtensoins.cs" />
     <Compile Include="Utils\Extensions.cs" />
-    <Compile Include="Views\DesignerQuestionnaireApiRestServiceSettings.cs" />
     <Compile Include="Views\Shared\HtmlExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
