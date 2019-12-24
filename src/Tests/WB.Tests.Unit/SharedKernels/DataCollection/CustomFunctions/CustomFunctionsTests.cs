@@ -11,7 +11,7 @@ using Extensions = WB.Core.SharedKernels.DataCollection.V2.CustomFunctions.Exten
 namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
 {
     [TestFixture]
-    internal class UnitTest1
+    internal class CustomFunctionsTests
     {
         // For all methods using params[], the indication is that 16383 is the limit:
         // http://stackoverflow.com/questions/12658883/what-is-the-maximum-number-of-parameters-that-a-c-sharp-method-can-be-defined-as
@@ -370,22 +370,34 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         }
 
         [Test]
-        public void Test_FullYearsBetween()
+        [TestCase("2001-09-12", "2015-03-20", ExpectedResult = 13)]
+        [TestCase("2014-02-20", "2015-03-20", ExpectedResult = 1)]
+        [TestCase("2015-03-20", "2015-12-31", ExpectedResult = 0)]
+        [TestCase("2015-12-31", "2015-03-20", ExpectedResult = -9998)]
+        [TestCase("2015-12-31", null, ExpectedResult = -9999)]
+        [TestCase(null, "2015-12-31", ExpectedResult = -9999)]
+        [TestCase(null, null, ExpectedResult = -9999)]
+
+        [TestCase("2000-02-29", "2001-02-28", ExpectedResult = 0)]
+        [TestCase("2000-02-29", "2001-03-01", ExpectedResult = 1)]
+        [TestCase("2000-02-29", "2004-02-28", ExpectedResult = 3)]
+        [TestCase("2000-02-29", "2004-02-29", ExpectedResult = 4)]
+        [TestCase("2000-02-29", "2004-03-01", ExpectedResult = 4)]
+        public int Test_FullYearsBetween(DateTime? first, DateTime? second)
         {
-            DateTime? d1 = new DateTime(2001, 09, 12);
-            DateTime? d2 = new DateTime(2015, 03, 20);
-            DateTime? d3 = new DateTime(2014, 02, 20);
-            DateTime? d4 = new DateTime(2015, 12, 31);
+            return new AbstractConditionalLevelInstanceFunctions().FullYearsBetween(first, second);
 
-            var d11 = new DateTime(2000, 02, 29);
-            var d12 = new DateTime(2001, 02, 28);
-            var d13 = new DateTime(2001, 03, 01);
-            var d14 = new DateTime(2004, 02, 28);
-            var d15 = new DateTime(2004, 02, 29);
-            var d16 = new DateTime(2004, 03, 01);
+            
+            /*Assert.AreEqual(level.FullYearsBetween(d11, d12), 0);
+            Assert.AreEqual(level.FullYearsBetween(d11, d13), 1);
+            Assert.AreEqual(level.FullYearsBetween(d11, d14), 3);
+            Assert.AreEqual(level.FullYearsBetween(d11, d15), 4);
+            Assert.AreEqual(level.FullYearsBetween(d11, d16), 4);
+            */
 
-            var level = new AbstractConditionalLevelInstanceFunctions();
 
+
+            /*
             Assert.AreEqual(13, level.FullYearsBetween(d1, d2));
             Assert.AreEqual(1, level.FullYearsBetween(d3, d2));
             Assert.AreEqual(0, level.FullYearsBetween(d2, d4));
@@ -394,12 +406,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
             Assert.AreEqual(-9999, level.FullYearsBetween(d4, null));
             Assert.AreEqual(-9999, level.FullYearsBetween(null, d4));
             Assert.AreEqual(-9999, level.FullYearsBetween(null, null));
-            
-            Assert.AreEqual(level.FullYearsBetween(d11, d12), 0);
-            Assert.AreEqual(level.FullYearsBetween(d11, d13), 1);
-            Assert.AreEqual(level.FullYearsBetween(d11, d14), 3);
-            Assert.AreEqual(level.FullYearsBetween(d11, d15), 4);
-            Assert.AreEqual(level.FullYearsBetween(d11, d16), 4);
+            */
+
         }
 
         [Test]
