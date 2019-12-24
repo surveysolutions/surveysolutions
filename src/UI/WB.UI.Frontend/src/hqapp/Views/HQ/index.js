@@ -10,6 +10,7 @@ import Admin from "./Admin"
 import Export from "./Export"
 import Interviews from "./Interviews"
 import QuestionnaireDetails from "./Questionnaires"
+import Account from "./Account"
 
 export default [
     Assignments,
@@ -23,5 +24,6 @@ export default [
     Admin,
     Export,
     Interviews,
-    QuestionnaireDetails
+    QuestionnaireDetails,
+    Account
 ]

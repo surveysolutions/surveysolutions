@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IPasswordValidator, HqPasswordValidator>();
             registry.Bind<IIdentityValidator, HqUserValidator>();
 
-            registry.Bind<IUserRepository, HqUserStore>();
+            registry.Bind<HqUserStore, HqUserStore>();
 
             
             registry.Bind<IApiTokenProvider, ApiAuthTokenProvider>();

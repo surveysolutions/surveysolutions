@@ -22,7 +22,8 @@ const locales = {
     hq: ["Assignments", "Common", "Dashboard", "DataExport", "DataTables",
         "Details", "DevicesInterviewers", "Interviews", "MainMenu", "MapReport",
         "Pages", "Report", "Reports", "Settings", "Strings", "TabletLogs", "UploadUsers",
-        "Users", "WebInterview", "WebInterviewSettings", "WebInterviewSetup", "WebInterviewUI"],
+        "Users", "WebInterview", "WebInterviewSettings", "WebInterviewSetup", "WebInterviewUI",
+        "FieldsAndValidations"],
     webtester: ["WebInterviewUI", "WebInterview", "Common"],
     webinterview: ["WebInterviewUI", "WebInterview", "Common"]
 }

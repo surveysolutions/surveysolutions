@@ -233,5 +233,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Users
         {
             throw new NotImplementedException();
         }
+
+        public Task<bool> CheckPasswordAsync(HqUser user, string oldPassword)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Microsoft.AspNetCore.Identity.IdentityResult> ChangePasswordAsync(HqUser user, string password)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

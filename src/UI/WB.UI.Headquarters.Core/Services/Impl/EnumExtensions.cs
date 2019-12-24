@@ -1,7 +1,7 @@
 ﻿using System;
 using WB.UI.Headquarters.Resources;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils
+namespace WB.UI.Headquarters.Services.Impl
 {
     public static class EnumExtensions
     {
