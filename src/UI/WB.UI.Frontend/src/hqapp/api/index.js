@@ -30,7 +30,11 @@ class QuestionnaireApi {
         var self = this
         return this.http.post("api/QuestionnairesApi/DeleteQuestionnaire", 
             { questionnaireId: self.questionnaireId, version: self.version })
-        
+    }
+
+    AudioAudit(enabled) {
+        const url = `${this.base}${this.questionnaireId}/${this.version}/recordAudio`
+        return this.http.post(url, { enabled: enabled })
     }
 }
 

@@ -2,9 +2,9 @@
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Web.Mvc;
-using System.Web.UI;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -14,12 +14,11 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.UI.Headquarters.Models;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [LimitsFilter, Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+    [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
     [Localizable(false)]
     public class QuestionnairesController : Controller
     {
@@ -43,11 +42,10 @@ namespace WB.UI.Headquarters.Controllers
             this.webInterviewConfigProvider = webInterviewConfigProvider ?? throw new ArgumentNullException(nameof(webInterviewConfigProvider));
             this.restServiceSettings = restServiceSettings ?? throw new ArgumentNullException(nameof(restServiceSettings));
             this.pdfStorage = pdfStorage ?? throw new ArgumentNullException(nameof(pdfStorage));
-            this.userViewFactory = userViewFactory;
+            this.userViewFactory = userViewFactory ?? throw new ArgumentNullException(nameof(userViewFactory));
         }
 
-        [OutputCache(Duration = 1200)]
-        public ActionResult Details(string id)
+        public IActionResult Details(string id)
         {
             var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
@@ -55,6 +53,7 @@ namespace WB.UI.Headquarters.Controllers
 
             var model = new QuestionnaireDetailsModel
             {
+                QuestionnaireId = questionnaire.QuestionnaireId,
                 Title = questionnaire.Title,
                 Version = questionnaire.Version,
                 ImportDateUtc = browseItem.ImportDate.GetValueOrDefault(),
@@ -62,8 +61,8 @@ namespace WB.UI.Headquarters.Controllers
                 CreationDateUtc = browseItem.CreationDate,
                 WebMode = this.webInterviewConfigProvider.Get(questionnaireIdentity).Started,
                 AudioAudit = browseItem.IsAudioRecordingEnabled,
-                DesignerUrl = $"{this.restServiceSettings.Endpoint.TrimEnd('/')}/" +
-                              $"questionnaire/details/{questionnaire.QuestionnaireId:N}${questionnaire.Revision}",
+                DesignerUrl = this.restServiceSettings.Endpoint.TrimEnd('/') +
+                              $"/questionnaire/details/{questionnaire.QuestionnaireId:N}${questionnaire.Revision}",
                 Comment = browseItem.Comment
             };
 
@@ -108,8 +107,7 @@ namespace WB.UI.Headquarters.Controllers
             return View(model);
         }
 
-        [OutputCache(Duration = 1200, Location = OutputCacheLocation.Any)]
-        public ActionResult Pdf(string id, Guid? translation = null)
+        public IActionResult Pdf(string id, Guid? translation = null)
         {
             var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
