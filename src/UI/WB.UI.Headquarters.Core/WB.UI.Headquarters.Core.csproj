@@ -43,14 +43,10 @@
 
 
   <ItemGroup>
-    <None Remove="appsettings.*.ini" />
-    <None Remove="appsettings.ini" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="appsettings.*.ini">
-      <DependentUpon>appsettings.ini</DependentUpon>
-    </Content>
+      <Content Include="appsettings.ini" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+      <Content Include="appsettings.*.ini" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true">
+          <DependentUpon>appsettings.ini</DependentUpon>
+      </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj" />
