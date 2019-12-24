@@ -966,12 +966,6 @@
       <DependentUpon>DevicesInterviewers.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\DevicesInterviewers.sq.resx" />
-    <EmbeddedResource Include="Resources\EnumNames.ar.resx">
-      <DependentUpon>EnumNames.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\EnumNames.ro.resx">
-      <DependentUpon>EnumNames.resx</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources\EnumNames.sq.resx" />
     <EmbeddedResource Include="Resources\ImportQuestionnaire.ar.resx">
       <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
@@ -996,9 +990,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\DevicesInterviewers.zh.resx">
       <DependentUpon>DevicesInterviewers.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\EnumNames.es.resx">
-      <DependentUpon>EnumNames.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ImportQuestionnaire.es.resx">
       <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
@@ -1228,26 +1219,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\DevicesInterviewers.ru.resx">
       <DependentUpon>DevicesInterviewers.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\EnumNames.fr.resx">
-      <DependentUpon>EnumNames.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\EnumNames.ka.resx">
-      <DependentUpon>EnumNames.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\EnumNames.pt.resx">
-      <DependentUpon>EnumNames.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\EnumNames.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>EnumNames.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\EnumNames.ru.resx">
-      <DependentUpon>EnumNames.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\EnumNames.zh.resx">
-      <DependentUpon>EnumNames.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ImportQuestionnaire.ka.resx">
       <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
@@ -2064,7 +2035,6 @@
     <Compile Include="Filters\ObserverNotAllowedAttribute.cs" />
     <Compile Include="Implementation\Services\InterviewCreatorFromAssignment.cs" />
     <Compile Include="Models\Account\FinishIntallationModel.cs" />
-    <Compile Include="Models\Account\IPasswordRequired.cs" />
     <Compile Include="Models\Account\UserModelBase.cs" />
     <Compile Include="Models\Api\AssignmentProfile.cs" />
     <Compile Include="Models\Api\TeamsAndStatusesReportResponse.cs" />
@@ -2130,7 +2100,6 @@
     <Compile Include="Models\JsonBundleCommandResponse.cs" />
     <Compile Include="Models\JsonCommandResponse.cs" />
     <Compile Include="Models\LogOnModel.cs" />
-    <Compile Include="Models\Account\ManageAccountModel.cs" />
     <Compile Include="Models\MenuItem.cs" />
     <Compile Include="Models\PagingExtensions.cs" />
     <Compile Include="Models\PagingHelper.cs" />
@@ -2141,7 +2110,6 @@
     <Compile Include="Models\TeamsAndStatusesFilter.cs" />
     <Compile Include="Models\TabletInfoReportListViewModel.cs" />
     <Compile Include="Models\Template\ImportQuestionnaireList.cs" />
-    <Compile Include="Models\Account\UserEditModel.cs" />
     <Compile Include="Models\Account\UserModel.cs" />
     <Compile Include="Models\UserPreloading\AllUserPreloadingProcessesRequest.cs" />
     <Compile Include="Models\UserPreloading\UserPreloadingProcessesView.cs" />
@@ -2167,11 +2135,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DevicesInterviewers.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources\EnumNames.Designer.cs">
-      <DependentUpon>EnumNames.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="Resources\ImportQuestionnaire.Designer.cs">
       <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
@@ -2260,7 +2223,6 @@
     <Compile Include="Utils\Binding\IModelBinder.cs" />
     <Compile Include="Utils\Binding\ModelBinder.cs" />
     <Compile Include="Utils\Compression\ZipManager.cs" />
-    <Compile Include="Utils\EnumExtensions.cs" />
     <Compile Include="Utils\ExceptionExtensoins.cs" />
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Views\DesignerQuestionnaireApiRestServiceSettings.cs" />
