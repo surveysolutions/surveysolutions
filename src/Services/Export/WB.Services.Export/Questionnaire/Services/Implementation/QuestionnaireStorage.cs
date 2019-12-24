@@ -49,9 +49,6 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
                 if (questionnaire == null) return null;
                 questionnaire.QuestionnaireId = questionnaireId;
 
-                if (questionnaire.Categories == null)
-                    questionnaire.Categories = new List<Categories>();
-
                 foreach (var category in questionnaire.Categories)
                 {
                     category.Values = await this.tenantContext.Api.GetCategoriesAsync(questionnaireId, category.Id);
