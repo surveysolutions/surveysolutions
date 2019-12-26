@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Identity;
+using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -57,10 +58,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Users
 
         public override async Task<HqUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken = new CancellationToken())
         {
-            var result = await unitOfWork.Session.QueryOver<HqUser>()
-                .WhereRestrictionOn(x => x.UserName).IsInsensitiveLike(normalizedUserName)
-                .SingleOrDefaultAsync<HqUser>(cancellationToken);
-            return result;
+            var user = await this.Users.Where(x => x.UserName.ToUpper() == normalizedUserName.ToUpper())
+                .SingleOrDefaultAsync(cancellationToken: cancellationToken);
+            return user;
         }
 
         protected override async Task<HqUser> FindUserAsync(Guid userId, CancellationToken cancellationToken)
@@ -161,8 +161,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Users
 
         public override Task<HqUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken = new CancellationToken())
         {
-            return this.unitOfWork.Session.QueryOver<HqUser>().WhereRestrictionOn(x => x.Email)
-                .IsInsensitiveLike(normalizedEmail).SingleOrDefaultAsync(cancellationToken);
+            var user = this.Users.Where(x => x.Email.ToUpper() == normalizedEmail.ToUpper())
+                .SingleOrDefaultAsync(cancellationToken);
+            return user;
         }
 
         public override IQueryable<HqUser> Users => unitOfWork.Session.Query<HqUser>();
@@ -174,15 +175,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Users
                 throw new ArgumentNullException(nameof(user));
             }
             return Task.FromResult(user.Email);
-        }
-
-        public async Task<HqUser> FindByEmailAsync(string email)
-        {
-            var result = await unitOfWork.Session.QueryOver<HqUser>()
-                .WhereRestrictionOn(x => x.Email).IsInsensitiveLike(email)
-                .SingleOrDefaultAsync<HqUser>();
-
-            return result;
         }
 
         public IQueryable<DeviceSyncInfo> DeviceSyncInfos => unitOfWork.Session.Query<DeviceSyncInfo>();
