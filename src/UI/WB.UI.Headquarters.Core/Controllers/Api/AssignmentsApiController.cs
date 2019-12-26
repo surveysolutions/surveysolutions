@@ -60,7 +60,6 @@ namespace WB.UI.Headquarters.Controllers.Api
             this.assignmentFactory = assignmentFactory;
         }
         
-        [Route("")]
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter, Supervisor, Interviewer")]
         public ActionResult<AssignmetsDataTableResponse> Get(AssignmentsDataTableRequest request)
@@ -111,7 +110,6 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         
-        [Route("")]
         [HttpDelete]
         [Authorize(Roles = "Administrator, Headquarter")]
         [ObserverNotAllowed]
@@ -129,7 +127,6 @@ namespace WB.UI.Headquarters.Controllers.Api
             return this.Ok();
         }
 
-        [Route("Unarchive")]
         [HttpPost]
         [Authorize(Roles = "Administrator, Headquarter")]
         [ObserverNotAllowed]
@@ -147,7 +144,6 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpPost]
-        [Route("Assign")]
         [ObserverNotAllowed]
         public IActionResult Assign([FromBody] AssignRequest request)
         {
@@ -165,7 +161,6 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpPost]
-        [Route("Create")]
         [ObserverNotAllowed]
         public IActionResult Create([FromBody] CreateAssignmentRequest request)
         {
