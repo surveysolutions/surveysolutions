@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using reCAPTCHA.AspNetCore;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
@@ -52,7 +53,7 @@ using WB.UI.Headquarters.Configs;
 using WB.UI.Headquarters.Controllers.Api.PublicApi;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Api.DataTable;
-using WB.UI.Shared.Web.Captcha;
+using WB.UI.Headquarters.Services;using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Versions;
 
@@ -214,15 +215,14 @@ namespace WB.UI.Headquarters
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
-            services.AddControllersWithViews()
-                .AddNewtonsoftJson();
-            services.AddDistributedMemoryCache();
+            services.AddControllersWithViews().AddNewtonsoftJson();
+
+            //services.AddDistributedMemoryCache();
             services.AddSession();
             services.AddResponseCaching();
             services.AddResponseCompression();
             services.AddLogging();
-            services.AddSignalR()
-                .AddNewtonsoftJsonProtocol();
+            services.AddSignalR().AddNewtonsoftJsonProtocol();
 
             services.AddHttpContextAccessor();
             services.AddAutoMapper(typeof(Startup));
@@ -238,32 +238,8 @@ namespace WB.UI.Headquarters
             services.AddScoped<UnitOfWorkActionFilter>();
             services.AddScoped<InstallationFilter>();
 
-            services.Configure<GzipCompressionProviderOptions>(options =>
-            {
-                options.Level = CompressionLevel.Optimal;
-            });
-
-            services.AddResponseCompression(options =>
-            {
-                options.EnableForHttps = true;
-                options.Providers.Add<GzipCompressionProvider>();
-            });
-
-            services.Configure<BrotliCompressionProviderOptions>(options =>
-            {
-                options.Level = CompressionLevel.Optimal;
-            });
-
-            services.AddRequestDecompression(o =>
-            {
-                o.Providers.Add<GzipDecompressionProvider>();
-            });
-
-            services.AddResponseCompression(options =>
-            {
-                options.EnableForHttps = true;
-                options.Providers.Add<BrotliCompressionProvider>();
-            });
+            AddCaptcha(services);
+            AddCompression(services);
 
             services.AddMvc(mvc =>
             {
@@ -293,6 +269,44 @@ namespace WB.UI.Headquarters
             services.Configure<PasswordPolicyConfig>(this.Configuration.GetSection("PasswordPolicy"));
             services.Configure<SchedulerConfig>(this.Configuration.GetSection("Scheduler"));
             services.Configure<DesignerConfig>(this.Configuration.GetSection("Designer"));
+        }
+
+        private void AddCaptcha(IServiceCollection services)
+        {
+            var provider = Configuration["CaptchaProvider"];
+            if (provider == "recaptcha")
+            {
+                services.Configure<RecaptchaSettings>(Configuration.GetSection("RecaptchaSettings"));
+                services.AddTransient<IRecaptchaService, RecaptchaService>();
+                services.AddTransient<ICaptchaProvider, RecaptchaProvider>();
+            }
+
+            if (provider == "hosted")
+            {
+                services.UseHostedCaptcha();
+            }
+
+        }
+
+        private static void AddCompression(IServiceCollection services)
+        {
+            services.Configure<GzipCompressionProviderOptions>(options => { options.Level = CompressionLevel.Optimal; });
+
+            services.Configure<BrotliCompressionProviderOptions>(options => { options.Level = CompressionLevel.Optimal; });
+
+            services.AddResponseCompression(options =>
+            {
+                options.EnableForHttps = true;
+                options.Providers.Add<GzipCompressionProvider>();
+            });
+
+            services.AddRequestDecompression(o => { o.Providers.Add<GzipDecompressionProvider>(); });
+
+            services.AddResponseCompression(options =>
+            {
+                options.EnableForHttps = true;
+                options.Providers.Add<BrotliCompressionProvider>();
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -354,6 +368,11 @@ namespace WB.UI.Headquarters
                         controller = "Reports",
                         action = "SurveyAndStatuses"
                     });
+
+
+                //endpoints.MapControllerRoute(
+                //    name: "api",
+                //    pattern: "api/{controller=Reports}/{action=SurveyAndStatuses}/{id?}");
                 endpoints.MapRazorPages();
             });
         }
