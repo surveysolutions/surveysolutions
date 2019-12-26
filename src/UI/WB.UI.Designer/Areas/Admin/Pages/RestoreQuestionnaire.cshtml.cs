@@ -256,16 +256,9 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                 else if (isCollectionsEntry)
                 {
                     var collectionsIdString = Path.GetFileNameWithoutExtension(zipEntryPathChunks[2]);
-                    byte[] excelContent = null;
-
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        zipStream.CopyTo(memoryStream);
-                        excelContent = memoryStream.ToArray();
-                    }
-
                     var collectionsId = Guid.Parse(collectionsIdString);
-                    this.categoriesService.Store(questionnaireId, collectionsId, excelContent);
+
+                    this.categoriesService.Store(questionnaireId, collectionsId, zipStream, CategoriesFileType.Excel);
 
                     this.Success += $"[{zipEntry.FileName}].";
                     this.Success += $"    Restored categories '{collectionsId}' for questionnaire '{questionnaireId.FormatGuid()}'.";

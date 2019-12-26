@@ -74,6 +74,8 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind<IQuestionnaireCompilationVersionService, QuestionnaireCompilationVersionService>();
             registry.Bind<IIpAddressProvider, IpAddressProvider>();
             registry.Bind<ITranslationsService, TranslationsService>();
+            registry.Bind<ICategoriesVerifier, CategoriesVerifier>();
+            registry.Bind<ICategoriesExtractFactory, CategoriesExtractFactory>();
             registry.Bind<ICategoriesService, CategoriesService>();
             registry.Bind<ITranslationsExportService, TranslationsExportService>();
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
