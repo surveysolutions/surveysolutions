@@ -14,7 +14,6 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Verifier;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using MissingFieldException = CsvHelper.MissingFieldException;
 
@@ -32,6 +31,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             this.categoriesService = categoriesService;
         }
 
+        public ImportCategoricalOptionsResult ImportCategories(Stream file, string questionnaireId)
+        {
+            var categories = new List<QuestionnaireCategoricalOption>();
+            var cfg = this.CreateCsvConfiguration();
+
+            cfg.RegisterClassMap(new CascadingOptionMap(new Dictionary<string, (int value, int? parentValue)[]>(), categories));
+
+            return ReadCategories(file, cfg, categories);
+        }
+
         public ImportCategoricalOptionsResult ImportOptions(Stream file, string questionnaireId, Guid categoricalQuestionId)
         {
             var document = this.questionnaireDocumentReader.GetById(questionnaireId);
@@ -41,7 +50,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 return ImportCategoricalOptionsResult.Failed(string.Format(ExceptionMessages.QuestionCannotBeFound, categoricalQuestionId));
 
             var importedOptions = new List<QuestionnaireCategoricalOption>();
-            var importErrors = new List<string>();
+            
             var cfg = this.CreateCsvConfiguration();
 
             var isCascadingQuestion = question.CascadeFromQuestionId.HasValue;
@@ -67,6 +76,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
             else cfg.RegisterClassMap<CategoricalOptionMap>();
 
+            return ReadCategories(file, cfg, importedOptions);
+        }
+
+        private static ImportCategoricalOptionsResult ReadCategories(Stream file, Configuration cfg,
+            List<QuestionnaireCategoricalOption> importedOptions)
+        {
+            var importErrors = new List<string>();
+
             using (var csvReader = new CsvReader(new StreamReader(file), cfg))
             {
                 while (csvReader.Read())
@@ -91,7 +108,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                             importErrors.Add(e.Message);
                     }
                 }
-
             }
 
             return importErrors.Count > 0
@@ -222,6 +238,41 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
 
                     return convertedValue;
+                }
+            }
+        }
+
+        private class CategoriesMap : CategoricalOptionMap
+        {
+            public CategoriesMap(List<QuestionnaireCategoricalOption> allImportedOptions)
+            {
+                Map(m => m.ParentValue).Index(2).Optional().TypeConverter(new ConvertToInt32IfNotEmptyOrThrow());
+                Map(m => m.ValueWithParentValues).Ignore().ConvertUsing(x =>
+                {
+                    if (!x.TryGetField(1, out string title) || !x.TryGetField(2, out int? parentValue) ||
+                        !parentValue.HasValue) return null;
+
+                    if (allImportedOptions.Any(y => y.ParentValue == parentValue && y.Title == title))
+                        throw new CsvReaderException(x.Context.Row, 2,
+                            string.Format(ExceptionMessages.ImportOptions_DuplicateByTitleAndParentIds, title,
+                                parentValue));
+
+                    return null;
+                });
+            }
+
+            protected class ConvertToInt32IfNotEmptyOrThrow : DefaultTypeConverter
+            {
+                public override object ConvertFromString(string text, IReaderRow row, MemberMapData memberMapData)
+                {
+                    if (string.IsNullOrEmpty(text)) return null;
+
+                    var numberStyle = memberMapData.TypeConverterOptions.NumberStyle ?? NumberStyles.Integer;
+
+                    return int.TryParse(text, numberStyle, memberMapData.TypeConverterOptions.CultureInfo, out var i)
+                        ? i
+                        : throw new CsvReaderException(row.Context.Row, memberMapData.Index,
+                            string.Format(ExceptionMessages.ImportOptions_NotNumber, text));
                 }
             }
         }
