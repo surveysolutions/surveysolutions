@@ -86,6 +86,7 @@ export default {
                     data: 'questionnaireTitle',
                     title: this.$t('Reports.SurveyName'),
                     className: 'without-break changed-recently',
+                    name: 'QuestionnaireTitle',
                     render(data, type, row) {
                         if(self.questionnaireId != null) {
                             if (!data) {
@@ -100,6 +101,7 @@ export default {
                 {
                     data: 'supervisorAssignedCount',
                     className: 'type-numeric',
+                    name: 'SupervisorAssignedCount',
                     title: this.$t('Reports.SupervisorAssigned'),
                     render(data, type, row) {
                         return self.getLinkToInterviews(
@@ -111,6 +113,7 @@ export default {
                 {
                     data: 'interviewerAssignedCount',
                     className: 'type-numeric',
+                    name: 'InterviewerAssignedCount',
                     title: this.$t('Reports.InterviewerAssigned'),
                     render(data, type, row) {
                         return self.getLinkToInterviews(
@@ -121,6 +124,7 @@ export default {
                 },
                 {
                     data: 'completedCount',
+                    name: 'CompletedCount',
                     className: 'type-numeric',
                     title: this.$t('Reports.Completed'),
                     render(data, type, row) {
@@ -132,6 +136,7 @@ export default {
                 },
                 {
                     data: 'rejectedBySupervisorCount',
+                    name: 'RejectedBySupervisorCount',
                     className: 'type-numeric',
                     title: this.$t('Reports.RejectedBySupervisor'),
                     render(data, type, row) {
@@ -143,6 +148,7 @@ export default {
                 },
                 {
                     data: 'approvedBySupervisorCount',
+                    name: 'ApprovedBySupervisorCount',
                     className: 'type-numeric',
                     title: this.$t('Reports.ApprovedBySupervisor'),
                     render(data, type, row) {
@@ -154,6 +160,7 @@ export default {
                 },
                 {
                     data: 'rejectedByHeadquartersCount',
+                    name: 'RejectedByHeadquartersCount',
                     className: 'type-numeric',
                     title: this.$t('Reports.RejectedByHQ'),
                     render(data, type, row) {
@@ -165,6 +172,7 @@ export default {
                 },
                 {
                     data: 'approvedByHeadquartersCount',
+                    name: 'ApprovedByHeadquartersCount',
                     className: 'type-numeric',
                     title: this.$t('Reports.ApprovedByHQ'),
                     render(data, type, row) {
@@ -176,6 +184,7 @@ export default {
                 },
                 {
                     data: 'totalCount',
+                    name: 'TotalCount',
                     className: 'type-numeric',
                     title: this.$t('Common.Total'),
                     render(data, type, row) {
