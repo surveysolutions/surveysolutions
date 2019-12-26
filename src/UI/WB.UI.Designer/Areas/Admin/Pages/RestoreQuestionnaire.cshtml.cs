@@ -181,6 +181,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                     this.commandService.Execute(command);
 
                     this.translationsService.DeleteAllByQuestionnaireId(questionnaireDocument.PublicKey);
+                    this.categoriesService.DeleteAllByQuestionnaireId(questionnaireDocument.PublicKey);
 
                     this.Success += $"[{zipEntry.FileName}]";
                     this.Success += $"    Restored questionnaire document '{questionnaireDocument.Title}' with id '{questionnaireDocument.PublicKey.FormatGuid()}'.";
