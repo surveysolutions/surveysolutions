@@ -6,8 +6,8 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Web;
-using System.Web.Http;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
@@ -16,20 +16,19 @@ using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
-using WB.UI.Shared.Web.Attributes;
-using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.API
 {
+    [ApiValidationAntiForgeryToken]
     [Authorize(Roles = "Administrator, Headquarter")]
-    public class DataExportApiController : ApiController
+    [Route("api/[controller]/[action]/{id?}")]
+    [ResponseCache(NoStore = true)]
+    public class DataExportApiController : ControllerBase
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IDataExportStatusReader dataExportStatusReader;
@@ -63,8 +62,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpGet]
-        [ObserverNotAllowedApi]
-        [ApiNoCache]
+        [ObserverNotAllowed]
         public async Task<List<long>> Status()
         {
             try
@@ -79,8 +77,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpGet]
-        [ObserverNotAllowedApi]
-        [ApiNoCache]
+        [ObserverNotAllowed]
         public async Task<List<long>> GetRunningJobs()
         {
             try
@@ -94,52 +91,48 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpGet]
-        [ObserverNotAllowedApi]
-        [ApiNoCache]
-        [CamelCase]
-        public async Task<HttpResponseMessage> Status(long id)
+        [ObserverNotAllowed]
+        public async Task<ActionResult<DataExportProcessView>> Status(long id)
         {
-            var result = await dataExportStatusReader.GetProcessStatus(id);
+            DataExportProcessView result = await dataExportStatusReader.GetProcessStatus(id);
             if (result == null)
             {
-                return Request.CreateResponse(HttpStatusCode.NotFound);
+                return NotFound();
             }
-            return Request.CreateResponse(result);
+
+            return result;
         }
 
         [HttpGet]
-        [ObserverNotAllowedApi]
-        [ApiNoCache]
-        [CamelCase]
-        public async Task<HttpResponseMessage> DataAvailability(Guid id, long version)
+        [ObserverNotAllowed]
+        public async Task<ActionResult<ExportDataAvailabilityView>> DataAvailability(Guid id, long version)
         {
-            var result = await dataExportStatusReader.GetDataAvailabilityAsync(new QuestionnaireIdentity(id, version));
+            ExportDataAvailabilityView result = await dataExportStatusReader.GetDataAvailabilityAsync(new QuestionnaireIdentity(id, version));
             if (result == null)
             {
-                return Request.CreateResponse(HttpStatusCode.NotFound);
+                return NotFound();
             }
-            return Request.CreateResponse(HttpStatusCode.OK, result);
+
+            return result;
         }
 
         [HttpGet]
-        [ObserverNotAllowedApi]
-        [ApiNoCache]
-        [CamelCase]
-        public async Task<HttpResponseMessage> WasExportFileRecreated(long id)
+        [ObserverNotAllowed]
+        public async Task<ActionResult<bool>> WasExportFileRecreated(long id)
         {
-            var result = await dataExportStatusReader.WasExportFileRecreated(id);
-            return Request.CreateResponse(HttpStatusCode.OK, result);
+            bool result = await dataExportStatusReader.WasExportFileRecreated(id);
+            return result;
         }
 
         [HttpGet]
-        [ObserverNotAllowedApi]
-        [ApiNoCache]
-        public async Task<HttpResponseMessage> DownloadData(long id)
+        [ObserverNotAllowed]
+        
+        public async Task<ActionResult> DownloadData(long id)
         {
             var processView = await dataExportStatusReader.GetProcessStatus(id);
             if (processView == null)
             {
-                return Request.CreateResponse(HttpStatusCode.NotFound);
+                return NotFound();
             }
 
             return await this.AllData(
@@ -152,9 +145,9 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpGet]
-        [ObserverNotAllowedApi]
-        [ApiNoCache]
-        public async Task<HttpResponseMessage> AllData(Guid id, long version, DataExportFormat format,
+        [ObserverNotAllowed]
+        
+        public async Task<ActionResult> AllData(Guid id, long version, DataExportFormat format,
             InterviewStatus? status = null,
             DateTime? from = null,
             DateTime? to = null)
@@ -162,74 +155,65 @@ namespace WB.UI.Headquarters.API
             DataExportArchive result = await this.dataExportStatusReader.GetDataArchive(new QuestionnaireIdentity(id, version), format, status, from, to);
             if (result == null)
             {
-                return Request.CreateResponse(HttpStatusCode.NotFound);
+                return NotFound();
             }
             else if (result.Redirect != null)
             {
-                var response = Request.CreateResponse(HttpStatusCode.Redirect);
-                response.Headers.Location = new Uri(result.Redirect);
-                return response;
+                return Redirect(result.Redirect);
             }
             else
             {
-                var response = Request.CreateResponse(HttpStatusCode.OK);
-                response.Content = new StreamContent(result.Data);
-                response.Content.Headers.ContentType = new MediaTypeHeaderValue(@"application/octet-stream");
-                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(@"attachment")
-                {
-                    FileName = WebUtility.UrlDecode(result.FileName)
-                };
-                return response;
+                return File(result.Data, @"applications/octet-stream", WebUtility.UrlDecode(result.FileName));
+
+                //var response = Request.CreateResponse(HttpStatusCode.OK);
+                //response.Content = new StreamContent(result.Data);
+                //response.Content.Headers.ContentType = new MediaTypeHeaderValue(@"application/octet-stream");
+                //response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(@"attachment")
+                //{
+                //    FileName = WebUtility.UrlDecode(result.FileName)
+                //};
+                //return response;
             }
         }
 
         [HttpGet]
-        [ObserverNotAllowedApi]
-        [ApiNoCache]
-        public async Task<HttpResponseMessage> DDIMetadata(Guid id, long version)
+        [ObserverNotAllowed]
+        
+        public async Task<ActionResult> DDIMetadata(Guid id, long version)
         {
             var questionnaireIdentity = new QuestionnaireIdentity(id, version);
 
             var archivePassword = this.exportSettings.EncryptionEnforced() ? this.exportSettings.GetPassword() : null;
-            var result = await exportServiceApi.GetDdiArchive(questionnaireIdentity.ToString(),
-                archivePassword);
+            var result = await exportServiceApi.GetDdiArchive(questionnaireIdentity.ToString(), archivePassword);
 
             var fileName = this.exportFileNameService.GetFileNameForDdiByQuestionnaire(questionnaireIdentity);
 
-            var response = Request.CreateResponse(HttpStatusCode.OK);
-            response.Content = new ByteArrayContent(await result.ReadAsByteArrayAsync());
-            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(@"attachment")
-            {
-                FileNameStar = fileSystemAccessor.GetFileName(fileName)
-            };
-
-            return response;
+            return File(await result.ReadAsStreamAsync(), "text/xml", fileSystemAccessor.GetFileName(fileName));
         }
 
-
         [HttpPost]
-        [ObserverNotAllowedApi]
-        public async Task<HttpResponseMessage> Regenerate(long id, string accessToken = null)
+        [ObserverNotAllowed]
+        public async Task<ActionResult<DataExportUpdateRequestResult>> Regenerate(long id, string accessToken = null)
         {
             var result = await this.exportServiceApi.Regenerate(id, GetPasswordFromSettings(), null);
-            return Request.CreateResponse(HttpStatusCode.OK, result);
+            return result;
         }
 
         [HttpPost]
-        [ObserverNotAllowedApi]
-        public async Task<HttpResponseMessage> RequestUpdate(Guid id, long version,
+        [ObserverNotAllowed]
+        public async Task<ActionResult<long>> RequestUpdate(Guid id, long version,
             DataExportFormat format, InterviewStatus? status = null, DateTime? from = null, DateTime? to = null)
         {
             var questionnaireIdentity = new QuestionnaireIdentity(id, version);
 
             var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
             if (questionnaireBrowseItem == null)
-                throw new HttpException(404, @"Questionnaire not found");
+                return NotFound("Questionnaire not found");
 
             return await RequestExportUpdateAsync(questionnaireBrowseItem, format, status, @from, to);
         }
 
-        private async Task<HttpResponseMessage> RequestExportUpdateAsync(
+        private async Task<ActionResult<long>> RequestExportUpdateAsync(
             QuestionnaireBrowseItem questionnaireBrowseItem,
             DataExportFormat format,
             InterviewStatus? status,
@@ -241,7 +225,7 @@ namespace WB.UI.Headquarters.API
             long jobId = 0;
             try
             {
-                var result = await this.exportServiceApi.RequestUpdate(
+                DataExportUpdateRequestResult result = await this.exportServiceApi.RequestUpdate(
                     questionnaireBrowseItem.Id,
                     format,
                     status,
@@ -259,32 +243,29 @@ namespace WB.UI.Headquarters.API
             }
             catch (Exception e)
             {
-                return this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+                return this.BadRequest(e.Message);
             }
 
-            return Request.CreateResponse(new
-            {
-                JobId = jobId
-            });
+            return jobId;
         }
 
         [HttpPost]
-        [ObserverNotAllowedApi]
-        public async Task<HttpResponseMessage> DeleteDataExportProcess(string id)
+        [ObserverNotAllowed]
+        public async Task<ActionResult<bool>> DeleteDataExportProcess(string id)
         {
             try
             {
                 await this.exportServiceApi.DeleteProcess(id);
-                return Request.CreateResponse(true);
+                return true;
             }
             catch (Exception)
             {
-                return Request.CreateResponse(false);
+                return false;
             }
         }
 
         [HttpPost]
-        [ObserverNotAllowedApi]
+        [ObserverNotAllowed]
         public Task<DataExportStatusView> GetExportStatus(Guid id, long version, InterviewStatus? status, DateTime? from = null, DateTime? to = null)
             => this.dataExportStatusReader.GetDataExportStatusForQuestionnaireAsync(new QuestionnaireIdentity(id, version),
                 status,
@@ -298,29 +279,28 @@ namespace WB.UI.Headquarters.API
         [HttpOptions]
         [AllowAnonymous]
         [Localizable(false)]
-        public HttpResponseMessage ExportToExternalStorage()
+        public ActionResult ExportToExternalStorage()
         {
             var uri = new Uri(externalStoragesSettings.OAuth2.RedirectUri);
-
-            var response = new HttpResponseMessage { StatusCode = HttpStatusCode.OK };
+            
             // Define and add values to variables: origins, headers, methods (can be global)               
-            response.Headers.Add("Access-Control-Allow-Origin", $"{uri.Scheme}://{uri.Host}");
-            response.Headers.Add("Access-Control-Allow-Methods", "POST");
-
-            return response;
+            Response.Headers.Add("Access-Control-Allow-Origin", $"{uri.Scheme}://{uri.Host}");
+            Response.Headers.Add("Access-Control-Allow-Methods", "POST");
+            
+            return Ok();
         }
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<HttpResponseMessage> ExportToExternalStorage(ExportToExternalStorageModel model)
+        public async Task<ActionResult> ExportToExternalStorage(ExportToExternalStorageModel model)
         {
             var state = this.serializer.Deserialize<ExternalStorageStateModel>(model.State);
             if (state == null)
-                throw new HttpException((int)HttpStatusCode.BadRequest, @"Export parameters not found");
+                return BadRequest("Export parameters not found");
 
             var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(state.QuestionnaireIdentity);
             if (questionnaireBrowseItem == null || questionnaireBrowseItem.IsDeleted)
-                throw new HttpException(404, @"Questionnaire not found");
+                return NotFound("@Questionnaire not found");
 
             await RequestExportUpdateAsync(questionnaireBrowseItem,
                 state.Format ?? DataExportFormat.Binary,
