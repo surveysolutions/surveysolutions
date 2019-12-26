@@ -11,7 +11,8 @@
       "pathSegment": {
         "add": {
           ".*": [
-            ".resx"
+            ".resx", 
+            ".ini"
           ]
         }
       },

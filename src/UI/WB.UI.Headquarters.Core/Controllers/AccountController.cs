@@ -66,7 +66,7 @@ namespace WB.UI.Headquarters.Controllers
             this.ViewBag.HasCompanyLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey) != null;
             model.RequireCaptcha = this.captchaService.ShouldShowCaptcha(model.UserName);
 
-            if (model.RequireCaptcha && !this.captchaProvider.IsCaptchaValid(this))
+            if (model.RequireCaptcha && !await this.captchaProvider.IsCaptchaValid(Request))
             {
                 this.ModelState.AddModelError("InvalidCaptcha", ErrorMessages.PleaseFillCaptcha);
                 return this.View(model);

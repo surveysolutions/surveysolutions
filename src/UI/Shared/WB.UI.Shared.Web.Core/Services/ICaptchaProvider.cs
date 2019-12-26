@@ -1,17 +1,19 @@
-using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace WB.UI.Shared.Web.Captcha
 {
     public interface ICaptchaProvider
     {
-        bool IsCaptchaValid(Controller controller);
+        Task<bool> IsCaptchaValid(HttpRequest request);
     }
 
     public class NoCaptchaProvider : ICaptchaProvider
     {
-        public bool IsCaptchaValid(Controller controller)
+        public Task<bool> IsCaptchaValid(HttpRequest request)
         {
-            return true;
+            return Task.FromResult(true);
         }
     }
+
 }
