@@ -10,6 +10,8 @@ using MvvmCross;
 using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.Converters;
 using MvvmCross.IoC;
+using MvvmCross.Plugin;
+using MvvmCross.ViewModels;
 using MvvmCross.Views;
 using WB.Core.BoundedContexts.Interviewer;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -46,6 +48,8 @@ namespace WB.UI.Interviewer
 {
     public class Setup : EnumeratorSetup<InterviewerMvxApplication>
     {
+        private IModule[] modules;
+
         public Setup()
         {
             
@@ -102,9 +106,24 @@ namespace WB.UI.Interviewer
             return new AutofacMvxIocProvider(this.CreateAndInitializeIoc());
         }
 
+        protected override void InitializeApp(IMvxPluginManager pluginManager, IMvxApplication app)
+        {
+            base.InitializeApp(pluginManager, app);
+            
+            var status = new UnderConstructionInfo();
+            status.Run();
+
+            foreach (var module in modules)
+            {
+                module.Init(ServiceLocator.Current, status).Wait();
+            }
+
+            status.Finish();
+        }
+
         private IContainer CreateAndInitializeIoc()
         {
-            var modules = new IModule[] {
+            this.modules = new IModule[] {
                 new NcqrsModule(),
                 new InfrastructureModuleMobile(),
                 new DataCollectionSharedKernelModule(),
@@ -135,15 +154,6 @@ namespace WB.UI.Interviewer
 
             var container = builder.Build();
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
-
-            var status = new UnderConstructionInfo();
-            status.Run();
-
-            foreach (var module in modules)
-            {
-                module.Init(container.Resolve<IServiceLocator>(), status).Wait();
-            }
-            status.Finish();
 
             return container;
         }
