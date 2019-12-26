@@ -16,5 +16,6 @@
         public string SendInvitationsUrl { get; set; }
         public string CloneQuestionnaireUrl { get; set; }
         public string ExportQuestionnaireUrl { get; set; }
+        public string ImportQuestionnaireUrl { get; set; }
     }
 }
