@@ -47,6 +47,7 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
@@ -221,6 +222,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IInterviewDiagnosticsFactory, InterviewDiagnosticsFactory>();
             registry.Bind<IInterviewsToExportViewFactory, InterviewsToExportViewFactory>();
             registry.Bind<IUserArchiveService, UserArchiveService>();
+            registry.Bind<IDataExportStatusReader, DataExportStatusReader>();
 
             registry.Bind<ITeamsAndStatusesReport, TeamsAndStatusesReport>();
             registry.Bind<ISurveysAndStatusesReport, SurveysAndStatusesReport>();
