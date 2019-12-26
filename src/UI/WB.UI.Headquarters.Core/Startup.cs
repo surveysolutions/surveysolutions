@@ -233,8 +233,6 @@ namespace WB.UI.Headquarters
 
             services.AddHqAuthorization();
 
-            services.AddTransient<ICaptchaService, WebCacheBasedCaptchaService>();
-            services.AddTransient<ICaptchaProvider, NoCaptchaProvider>();
             services.AddScoped<UnitOfWorkActionFilter>();
             services.AddScoped<InstallationFilter>();
 
@@ -273,21 +271,26 @@ namespace WB.UI.Headquarters
 
         private void AddCaptcha(IServiceCollection services)
         {
+            services.AddTransient<ICaptchaService, WebCacheBasedCaptchaService>();
+            
             var captchaSection = Configuration.GetSection("Captcha");
             services.Configure<CaptchaConfig>(captchaSection);
             var config = captchaSection.Get<CaptchaConfig>() ?? new CaptchaConfig();
             var provider = config.CaptchaType;
 
-            if (provider == CaptchaProviderType.Recaptcha)
+            switch (provider)
             {
-                services.Configure<RecaptchaSettings>(Configuration.GetSection("Captcha"));
-                services.AddTransient<IRecaptchaService, RecaptchaService>();
-                services.AddTransient<ICaptchaProvider, RecaptchaProvider>();
-            }
-
-            if (provider == CaptchaProviderType.Hosted)
-            {
-                services.UseHostedCaptcha();
+                case CaptchaProviderType.Recaptcha:
+                    services.Configure<RecaptchaSettings>(Configuration.GetSection("Captcha"));
+                    services.AddTransient<IRecaptchaService, RecaptchaService>();
+                    services.AddTransient<ICaptchaProvider, RecaptchaProvider>();
+                    break;
+                case CaptchaProviderType.Hosted:
+                    services.UseHostedCaptcha();
+                    break;
+                default:
+                    services.AddTransient<ICaptchaProvider, NoCaptchaProvider>();
+                    break;
             }
         }
 
