@@ -103,6 +103,10 @@
     <EmbeddedResource Update="Resources\CommandValidatorsMessages.zh.resx">
       <DependentUpon>CommandValidatorsMessages.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\DataExport.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DataExport.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\ErrorMessages.es.resx">
       <DependentUpon>ErrorMessages.resx</DependentUpon>
     </EmbeddedResource>
@@ -340,6 +344,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>CommandValidatorsMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\DataExport.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>DataExport.resx</DependentUpon>
     </Compile>
     <Compile Update="Resources\ErrorMessages.Designer.cs">
       <DesignTime>True</DesignTime>

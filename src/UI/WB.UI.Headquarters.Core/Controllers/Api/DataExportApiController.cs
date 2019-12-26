@@ -26,7 +26,7 @@ namespace WB.UI.Headquarters.API
 {
     [ApiValidationAntiForgeryToken]
     [Authorize(Roles = "Administrator, Headquarter")]
-    [Route("api/[controller]/[action]/{id?}")]
+    [Route("api/[controller]/[action]")]
     [ResponseCache(NoStore = true)]
     public class DataExportApiController : ControllerBase
     {
@@ -63,12 +63,11 @@ namespace WB.UI.Headquarters.API
 
         [HttpGet]
         [ObserverNotAllowed]
-        public async Task<List<long>> Status()
+        public async Task<ActionResult<List<long>>> GetRunningJobs()
         {
             try
             {
-                var jobs = (await this.exportServiceApi.GetAllJobsList()).OrderByDescending(x => x).ToList();
-                return jobs;
+                return (await this.exportServiceApi.GetRunningExportJobs()).OrderByDescending(x => x).ToList();
             }
             catch (Exception)
             {
@@ -78,11 +77,12 @@ namespace WB.UI.Headquarters.API
 
         [HttpGet]
         [ObserverNotAllowed]
-        public async Task<List<long>> GetRunningJobs()
+        public async Task<ActionResult<List<long>>> ExportStatus()
         {
             try
             {
-                return (await this.exportServiceApi.GetRunningExportJobs()).OrderByDescending(x => x).ToList();
+                var jobs = (await this.exportServiceApi.GetAllJobsList()).OrderByDescending(x => x).ToList();
+                return jobs;
             }
             catch (Exception)
             {
