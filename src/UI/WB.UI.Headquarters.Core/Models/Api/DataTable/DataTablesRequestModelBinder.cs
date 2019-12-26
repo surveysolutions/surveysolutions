@@ -129,8 +129,6 @@ namespace WB.UI.Headquarters.Models.Api.DataTable
         /// <summary>
         /// Gets the list of order columns in request
         /// </summary>
-        /// <param name="valueProvider"></param>
-        /// <returns></returns>
         private List<DataTableRequest.SortOrder> TryGetOrders(IValueProvider valueProvider)
         {
             //order[0][column]:0
@@ -143,10 +141,13 @@ namespace WB.UI.Headquarters.Models.Api.DataTable
                 if (valueProvider.GetValue($"order[{index}][column]").FirstValue != null)
                 {
                     int column;
-                    OrderDirection dir;
+                   ;
                     string name;
                     TryParse<int>(valueProvider.GetValue($"order[{index}][column]"), out column);
-                    TryParse<OrderDirection>(valueProvider.GetValue($"order[{index}][dir]"), out dir);
+
+                    string orderDirection = valueProvider.GetValue($"order[{index}][dir]").FirstValue;
+                    Enum.TryParse(orderDirection, true, out OrderDirection dir);
+
                     TryParse<string>(valueProvider.GetValue($"order[{index}][name]"), out name);
 
                     orders.Add(new DataTableRequest.SortOrder() {

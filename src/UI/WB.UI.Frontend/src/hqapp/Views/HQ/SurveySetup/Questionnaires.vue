@@ -1,5 +1,16 @@
 <template>
-    <HqLayout :title="$config.model.title" :subtitle="$config.model.subTitle" :hasFilter="false">
+    <HqLayout :title="$config.model.title" :hasFilter="false" 
+        :topicButton="$t('Dashboard.ImportTemplate')"
+        :topicButtonRef="!$config.model.isObserver ? $config.model.importQuestionnaireUrl: ''">
+        <ol class="list-unstyled" slot="subtitle">
+            <li>
+            {{this.$t('Dashboard.SurveySetupIntroMessage1')}}
+            </li>
+            <li>
+                {{this.$t('Dashboard.SurveySetupIntroMessage2')}}
+            </li>
+        </ol>
+
         <DataTables
             ref="table"
             :tableOptions="tableOptions"

@@ -82,8 +82,6 @@ namespace WB.UI.Headquarters.Controllers
         public IActionResult Index()
         {
             var surveySetupModel = new SurveySetupModel();
-            surveySetupModel.SubTitle =
-                Dashboard.SurveySetupIntroMessage1 + "<br/>" + Dashboard.SurveySetupIntroMessage2;
             surveySetupModel.Title = Dashboard.Questionnaires;
             surveySetupModel.DataUrl = Url.Action("Questionnaires", "QuestionnairesApi");
             surveySetupModel.IsObserver = this.authorizedUser.IsObserving;
@@ -97,6 +95,7 @@ namespace WB.UI.Headquarters.Controllers
             surveySetupModel.CloneQuestionnaireUrl = Url.Action("CloneQuestionnaire", "HQ");
             surveySetupModel.ExportQuestionnaireUrl = Url.Action("ExportQuestionnaire", "HQ");
             surveySetupModel.SendInvitationsUrl = Url.Action("SendInvitations", "WebInterviewSetup");
+            surveySetupModel.ImportQuestionnaireUrl = Url.Action("Import", "Template");
 
             return this.View(surveySetupModel);
         }
