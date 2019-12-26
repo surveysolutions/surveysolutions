@@ -89,6 +89,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Dashboard.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\DataExport.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>DataExport.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\DataTables.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -176,6 +181,10 @@
     <EmbeddedResource Update="Resources\Dashboard.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Dashboard.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\DataExport.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DataExport.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\DataTables.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
