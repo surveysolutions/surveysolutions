@@ -155,6 +155,19 @@ class AssignmentsApi {
 
         return responseData
     }
+    
+    changeQuantity(assignmentId, targetQuantity) {
+        var url = `${this.base}/${assignmentId}/changeQuantity`
+        return this.http({
+            method: 'patch',
+            url: url,
+            data: targetQuantity,
+            headers: {
+                accept: 'text/plain',
+                'content-type': "application/json"
+            }
+        })
+    }
 }
 
 class WebInterviewSettingsApi {

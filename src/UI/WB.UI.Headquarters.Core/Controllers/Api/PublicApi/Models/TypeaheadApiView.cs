@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
+using WB.UI.Headquarters.Models.Api;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Models
 {

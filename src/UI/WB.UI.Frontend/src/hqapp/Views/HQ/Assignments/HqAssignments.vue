@@ -618,7 +618,8 @@ export default {
         reloadTable() {
             this.isLoading = true
             this.selectedRows.splice(0, this.selectedRows.length)
-            this.$refs.table.reload(self.reloadTable)
+            if(this.$refs.table)
+                this.$refs.table.reload()
 
             this.addParamsToQueryString()
         },
@@ -648,7 +649,7 @@ export default {
             await this.$http({
                 method: 'delete',
                 url: this.config.api.assignments,
-                data: this.selectedRows,
+                data: this.selectedRows
             })
 
             this.reloadTable()
@@ -739,8 +740,6 @@ export default {
                 return false
             }
 
-            const patchQuantityUrl = this.config.api.assignments + '/' + this.editedRowId + '/SetQuantity'
-
             let targetQuantity = null
 
             if (this.editedQuantity == null || this.editedQuantity === '') {
@@ -752,10 +751,7 @@ export default {
             }
 
             const self = this
-            this.$http
-                .patch(patchQuantityUrl, {
-                    quantity: targetQuantity,
-                })
+            this.$hq.Assignments.changeQuantity(this.editedRowId, targetQuantity)
                 .then(() => {
                     this.$refs.editQuantityModal.hide()
                     this.editedQuantity = this.editedRowId = null
