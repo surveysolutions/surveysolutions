@@ -2,61 +2,84 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.UI.Headquarters.Models.Api.DataTable
 {
-    class DataTablesRequestModelBinder : IModelBinder
+    public class DataTablesRequestModelBinderProvider : IModelBinderProvider
     {
-        /// <summary>
-        /// Attempts to bind a model.
-        /// </summary>
-        /// <param name="bindingContext"></param>
-        /// <returns></returns>
-        public Task BindModelAsync(ModelBindingContext bindingContext)
+        public IModelBinder GetBinder(ModelBinderProviderContext context)
         {
-            return Task.Factory.StartNew(() =>
+            if (context == null)
             {
-                BindModel(bindingContext);
-            });
-        }
-
-        /// <summary>
-        /// Attempts to bind a model.
-        /// </summary>
-        /// <param name="bindingContext"></param>
-        private void BindModel(ModelBindingContext bindingContext)
-        {
-            var valueProvider = bindingContext.ValueProvider;
-
-            int draw, start, length;
-
-            var valueResultProvider = valueProvider.GetValue("draw");
-            if (valueProvider == null)
-            {
-                bindingContext.Result = ModelBindingResult.Failed();
-                return;
+                throw new ArgumentNullException(nameof(context));
             }
-            TryParse<int>(valueResultProvider, out draw);
-            TryParse<int>(valueProvider.GetValue("start"), out start);
-            TryParse<int>(valueProvider.GetValue("length"), out length);
 
-            var instance = Activator.CreateInstance(bindingContext.ModelType);
-            DataTableRequest result = (DataTableRequest) instance;
-            result.Draw = draw;
-            result.Start = start;
-            result.Length = length;
-            result.Search = TryGetSearch(valueProvider);
-            result.Order = TryGetOrders(valueProvider);
-            result.Columns = TryGetColumns(valueProvider);
-            
-            bindingContext.Result = ModelBindingResult.Success(result);
+            if (typeof(DataTableRequest).IsAssignableFrom(context.Metadata.ModelType))
+            {
+                var propertyBinders = new Dictionary<ModelMetadata, IModelBinder>();
+                for (var i = 0; i < context.Metadata.Properties.Count; i++)
+                {
+                    var property = context.Metadata.Properties[i];
+                    propertyBinders.Add(property, context.CreateBinder(property));
+                }
+
+                var loggerFactory = context.Services.GetRequiredService<ILoggerFactory>();
+                return new DataTablesRequestModelBinder(
+                    propertyBinders,
+                    loggerFactory,
+                    allowValidatingTopLevelNodes: true);
+            }
+
+            return null;
+        }
+    }
+
+    class DataTablesRequestModelBinder : ComplexTypeModelBinder
+    {
+        public DataTablesRequestModelBinder(IDictionary<ModelMetadata, IModelBinder> propertyBinders,
+            ILoggerFactory loggerFactory,
+            bool allowValidatingTopLevelNodes) : base(propertyBinders, loggerFactory, allowValidatingTopLevelNodes)
+        {
         }
 
-        /// <summary>
-        /// Gets the search part of query
-        /// </summary>
-        /// <returns></returns>
+        protected override Task BindProperty(ModelBindingContext bindingContext)
+        {
+            if (bindingContext.FieldName == nameof(DataTableRequest.Search))
+            {
+                var search = TryGetSearch(bindingContext.ValueProvider);
+
+                bindingContext.Result = ModelBindingResult.Success(search);
+                return Task.CompletedTask;
+            }
+
+            if (bindingContext.FieldName == nameof(DataTableRequest.Order))
+            {
+                var order = TryGetOrders(bindingContext.ValueProvider);
+                bindingContext.Result = ModelBindingResult.Success(order);
+                return Task.CompletedTask;
+            }
+
+            if (bindingContext.FieldName == nameof(DataTableRequest._C))
+            {
+                var order = TryGetColumns(bindingContext.ValueProvider);
+                bindingContext.Result = ModelBindingResult.Success(order);
+                return Task.CompletedTask;
+            }
+
+            if (bindingContext.FieldName == nameof(DataTableRequest.Columns))
+            {
+                var columns = TryGetColumns(bindingContext.ValueProvider);
+                bindingContext.Result = ModelBindingResult.Success(columns);
+                return Task.CompletedTask;
+            }
+
+            return base.BindProperty(bindingContext);
+        }
+
         private DataTableRequest.SearchInfo TryGetSearch(IValueProvider valueProvider)
         {
             string searchValue;
@@ -74,11 +97,6 @@ namespace WB.UI.Headquarters.Models.Api.DataTable
             return null;
         }
 
-        /// <summary>
-        /// Gets the list of columns in request
-        /// </summary>
-        /// <param name="valueProvider"></param>
-        /// <returns></returns>
         private List<DataTableRequest.ColumnInfo> TryGetColumns(IValueProvider valueProvider)
         {
             //columns[0][data]:name
@@ -95,14 +113,12 @@ namespace WB.UI.Headquarters.Models.Api.DataTable
             {
                 if (valueProvider.GetValue($"columns[{index}][data]").FirstValue != null)
                 {
-                    string data, name, searchValue;
-                    bool searchable, orderable, searchRegEx;
-                    TryParse<string>(valueProvider.GetValue($"columns[{index}][data]"), out data);
-                    TryParse<string>(valueProvider.GetValue($"columns[{index}][name]"), out name);
-                    TryParse<bool>(valueProvider.GetValue($"columns[{index}][searchable]"), out searchable);
-                    TryParse<bool>(valueProvider.GetValue($"columns[{index}][orderable]"), out orderable);
-                    TryParse<string>(valueProvider.GetValue($"columns[{index}][search][value]"), out searchValue);
-                    TryParse<bool>(valueProvider.GetValue($"columns[{index}][search][regex]"), out searchRegEx);
+                    TryParse<string>(valueProvider.GetValue($"columns[{index}][data]"), out _);
+                    TryParse<string>(valueProvider.GetValue($"columns[{index}][name]"), out var name);
+                    TryParse<bool>(valueProvider.GetValue($"columns[{index}][searchable]"), out var searchable);
+                    TryParse<bool>(valueProvider.GetValue($"columns[{index}][orderable]"), out var orderable);
+                    TryParse<string>(valueProvider.GetValue($"columns[{index}][search][value]"), out var searchValue);
+                    TryParse<bool>(valueProvider.GetValue($"columns[{index}][search][regex]"), out var searchRegEx);
 
                     columns.Add(new DataTableRequest.ColumnInfo()
                     {
@@ -126,9 +142,6 @@ namespace WB.UI.Headquarters.Models.Api.DataTable
             return columns;
         }
 
-        /// <summary>
-        /// Gets the list of order columns in request
-        /// </summary>
         private List<DataTableRequest.SortOrder> TryGetOrders(IValueProvider valueProvider)
         {
             //order[0][column]:0
@@ -140,15 +153,12 @@ namespace WB.UI.Headquarters.Models.Api.DataTable
             {
                 if (valueProvider.GetValue($"order[{index}][column]").FirstValue != null)
                 {
-                    int column;
-                   ;
-                    string name;
-                    TryParse<int>(valueProvider.GetValue($"order[{index}][column]"), out column);
+                    TryParse<int>(valueProvider.GetValue($"order[{index}][column]"), out var column);
 
                     string orderDirection = valueProvider.GetValue($"order[{index}][dir]").FirstValue;
                     Enum.TryParse(orderDirection, true, out OrderDirection dir);
 
-                    TryParse<string>(valueProvider.GetValue($"order[{index}][name]"), out name);
+                    TryParse<string>(valueProvider.GetValue($"order[{index}][name]"), out var name);
 
                     orders.Add(new DataTableRequest.SortOrder() {
                         Column = column,
@@ -166,13 +176,6 @@ namespace WB.UI.Headquarters.Models.Api.DataTable
             return orders;
         }
 
-        /// <summary>
-        /// Try to gets the first value in the request
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="value"></param>
-        /// <param name="result"></param>
-        /// <returns></returns>
         private bool TryParse<T>(ValueProviderResult value, out T result)
         {
             result = default(T);

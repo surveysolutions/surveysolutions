@@ -114,7 +114,9 @@ namespace WB.UI.Headquarters.Models.Api
 
             foreach (var order in this.Order)
             {
-                var columnName = this.ColummnsList?[order.Column].Name ?? order.Name;
+                var columnName = this.ColummnsList !=null && this.ColummnsList.Count > order.Column
+                    ? this.ColummnsList?[order.Column].Name 
+                    : order.Name;
 
                 yield return new OrderRequestItem {Direction = order.Dir, Field = columnName};
             }
