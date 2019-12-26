@@ -1,17 +1,14 @@
-﻿using reCAPTCHA.AspNetCore;
-
-namespace WB.UI.Designer.Models
+﻿namespace WB.UI.Shared.Web.Services
 {
-    public class CaptchaConfig : RecaptchaSettings
+    public class CaptchaConfig
     {
-        public CaptchaConfig()
-        {
-            this.TimespanInMinutesCaptchaWillBeShownAfterFailedLoginAttempt = 5;
-            this.CountOfFailedLoginAttemptsBeforeCaptcha = 5;
-        }
+        public int TimespanInMinutesCaptchaWillBeShownAfterFailedLoginAttempt { get; set; } = 5;
+        public int CountOfFailedLoginAttemptsBeforeCaptcha { get; set; } = 5;
+        public CaptchaProviderType CaptchaType { get; set; } = CaptchaProviderType.None;
+    }
 
-        public int TimespanInMinutesCaptchaWillBeShownAfterFailedLoginAttempt { get; set; }
-        public int CountOfFailedLoginAttemptsBeforeCaptcha { get; set; }
-        public bool IsReCaptchaEnabled { get; set; }
+    public enum CaptchaProviderType
+    {
+        None, Recaptcha, Hosted
     }
 }

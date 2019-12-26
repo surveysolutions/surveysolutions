@@ -9,7 +9,6 @@ using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.UI.Designer.CommonWeb;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.CompanyLogo;
 using WB.UI.Headquarters.Models.Users;
@@ -17,6 +16,7 @@ using WB.UI.Headquarters.Resources;
 using WB.UI.Headquarters.Services.Impl;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Extensions;
+using WB.UI.Shared.Web.Services;
 using IdentityResult = Microsoft.AspNetCore.Identity.IdentityResult;
 
 namespace WB.UI.Headquarters.Controllers

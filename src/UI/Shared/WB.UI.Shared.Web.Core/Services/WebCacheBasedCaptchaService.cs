@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
-using WB.UI.Designer.Models;
 
-namespace WB.UI.Designer.CommonWeb
+namespace WB.UI.Shared.Web.Services
 {
     public interface ICaptchaService
     {
@@ -20,7 +19,8 @@ namespace WB.UI.Designer.CommonWeb
         private readonly IMemoryCache cache;
         private readonly IOptions<CaptchaConfig> captchaConfig;
 
-        public WebCacheBasedCaptchaService(IHttpContextAccessor httpContextAccessor,
+        public WebCacheBasedCaptchaService(
+            IHttpContextAccessor httpContextAccessor,
             IMemoryCache cache,
             IOptions<CaptchaConfig> captchaConfig)
         {
@@ -34,7 +34,7 @@ namespace WB.UI.Designer.CommonWeb
 
         public bool ShouldShowCaptcha(string username)
         {
-            if (!this.captchaConfig.Value.IsReCaptchaEnabled) return false;
+            if (this.captchaConfig.Value.CaptchaType == CaptchaProviderType.Recaptcha) return false;
 
             if (httpContextAccessor.HttpContext != null)
             {
