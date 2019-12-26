@@ -366,4 +366,7 @@
   <data name="Excel_Categories_Text_More_Than_250" xml:space="preserve">
     <value>[{0}] Text of category should be less than 250 characters</value>
   </data>
+  <data name="ImportOptions_Tab_Or_Excel_Only" xml:space="preserve">
+    <value>Only tab-separated values(*.tab, *.txt) or excel(*.xslx) files are accepted</value>
+  </data>
 </root>

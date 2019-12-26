@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -9,7 +8,6 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Translations;
-using WB.Core.BoundedContexts.Designer.Verifier;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Categories;
@@ -22,14 +20,17 @@ namespace WB.Core.BoundedContexts.Designer.Services
         private readonly DesignerDbContext dbContext;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
         private readonly ICategoriesExportService categoriesExportService;
+        private readonly ICategoriesExtractFactory categoriesExtractFactory;
 
         public CategoriesService(DesignerDbContext dbContext, 
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage, 
-            ICategoriesExportService categoriesExportService)
+            ICategoriesExportService categoriesExportService,
+            ICategoriesExtractFactory categoriesExtractFactory)
         {
             this.dbContext = dbContext;
             this.questionnaireStorage = questionnaireStorage;
             this.categoriesExportService = categoriesExportService;
+            this.categoriesExtractFactory = categoriesExtractFactory;
         }
 
         public void CloneCategories(Guid questionnaireId, Guid categoriesId, Guid clonedQuestionnaireId, Guid clonedCategoriesId)
@@ -123,236 +124,33 @@ namespace WB.Core.BoundedContexts.Designer.Services
                     Text = x.Text
                 });
 
-        public void Store(Guid questionnaireId, Guid categoriesId, byte[] excelRepresentation)
+        public void Store(Guid questionnaireId, Guid categoriesId, Stream file, CategoriesFileType fileType)
         {
             if (categoriesId == null) throw new ArgumentNullException(nameof(categoriesId));
-            if (excelRepresentation == null) throw new ArgumentNullException(nameof(excelRepresentation));
+            if (file == null) throw new ArgumentNullException(nameof(file));
 
-            using (MemoryStream stream = new MemoryStream(excelRepresentation))
+            var extractService = this.categoriesExtractFactory.GetExtractService(fileType);
+
+            try
             {
-                try
+                var categoriesRows = extractService.Extract(file);
+
+                this.dbContext.CategoriesInstances.AddRange(categoriesRows.Select((x, i) => new CategoriesInstance
                 {
-                    using (ExcelPackage package = new ExcelPackage(stream))
-                    {
-                        var worksheet = package.Workbook.Worksheets[0];
-                        var headers = GetHeaders(worksheet);
+                    SortIndex = i,
+                    QuestionnaireId = questionnaireId,
+                    CategoriesId = categoriesId,
+                    Value = int.Parse(x.Id),
+                    Text = x.Text,
+                    ParentId = string.IsNullOrEmpty(x.ParentId)
+                        ? (int?) null
+                        : int.Parse(x.ParentId)
+                }));
 
-                        if(worksheet.Dimension.End.Row > AbstractVerifier.MaxOptionsCountInFilteredComboboxQuestion + 1)
-                            throw new InvalidExcelFileException(ExceptionMessages.Excel_Categories_More_Than_Limit.FormatString(AbstractVerifier.MaxOptionsCountInFilteredComboboxQuestion));
-
-                        var errors = this.Verify(worksheet).Take(10).ToList();
-                        if (errors.Any())
-                            throw new InvalidExcelFileException(ExceptionMessages.TranlationExcelFileHasErrors) {FoundErrors = errors};
-
-                        if (worksheet.Dimension.End.Row == 1)
-                            throw new InvalidExcelFileException(ExceptionMessages.Excel_NoCategories);
-
-                        int sortIndex = 0;
-                        var categoriesRows = new SortedList<int, CategoriesRow>();
-
-                        for (int rowNumber = 2; rowNumber <= worksheet.Dimension.End.Row; rowNumber++)
-                        {
-                            var categories = GetRowValues(worksheet, headers, rowNumber);
-                            if(string.IsNullOrEmpty(categories.Id) && string.IsNullOrEmpty(categories.ParentId) && string.IsNullOrEmpty(categories.Text)) continue;
-
-                            categoriesRows.Add(sortIndex++, categories);
-                        }
-
-                        ThrowIfNoCategories(categoriesRows.Values);
-                        ThrowIfLessThan2Categories(categoriesRows.Values);
-                        ThrowIfTextLengthMoreThan250(categoriesRows.Values, headers);
-                        ThrowIfParentIdIsEmpty(categoriesRows.Values);
-                        ThrowIfDuplicatedByIdAndParentId(categoriesRows.Values, headers);
-                        ThrowIfDuplicatedByParentIdAndText(categoriesRows.Values, headers);
-
-                        this.dbContext.CategoriesInstances.AddRange(categoriesRows.Select(x => new CategoriesInstance
-                        {
-                            SortIndex = x.Key,
-                            QuestionnaireId = questionnaireId,
-                            CategoriesId = categoriesId,
-                            Value = int.Parse(x.Value.Id),
-                            Text = x.Value.Text,
-                            ParentId = string.IsNullOrEmpty(x.Value.ParentId)
-                                ? (int?) null
-                                : int.Parse(x.Value.ParentId)
-                        }));
-                    }
-                }
-                catch (Exception e) when(e is NullReferenceException || e is InvalidDataException || e is COMException)
-                {
-                    throw new InvalidExcelFileException(ExceptionMessages.CategoriesCantBeExtracted, e);
-                }
             }
-        }
-
-        private static void ThrowIfNoCategories(IList<CategoriesRow> categoriesRows)
-        {
-            if (!categoriesRows.Any())
-                throw new InvalidExcelFileException(ExceptionMessages.Excel_NoCategories);
-        }
-
-        private static void ThrowIfLessThan2Categories(IList<CategoriesRow> categoriesRows)
-        {
-            if (categoriesRows.Count < 2)
-                throw new InvalidExcelFileException(ExceptionMessages.Excel_Categories_Less_2_Options);
-        }
-
-        private static void ThrowIfParentIdIsEmpty(IList<CategoriesRow> categoriesRows)
-        {
-            var countOfCategoriesWithParentId = categoriesRows.Count(x => !string.IsNullOrEmpty(x.ParentId));
-            if (countOfCategoriesWithParentId > 0 && countOfCategoriesWithParentId < categoriesRows.Count)
-                throw new InvalidExcelFileException(ExceptionMessages.Excel_Categories_Empty_ParentId);
-        }
-
-        private static void ThrowIfDuplicatedByIdAndParentId(IList<CategoriesRow> categoriesRows, CategoriesHeaderMap headers)
-        {
-            List<TranslationValidationError> errors;
-            var duplicatedCategories = categoriesRows.GroupBy(x => new {x.Id, x.ParentId})
-                .Where(x => x.Count() > 1);
-
-            if (duplicatedCategories.Any())
+            catch (Exception e) when (e is NullReferenceException || e is InvalidDataException || e is COMException)
             {
-                errors = duplicatedCategories.Select(x => new TranslationValidationError
-                {
-                    Message = ExceptionMessages.Excel_Categories_Duplicated.FormatString(string.Join(",",
-                        x.Select(y => y.RowId))),
-                    ErrorAddress = $"{headers.IdIndex}{x.FirstOrDefault()?.RowId}"
-                }).ToList();
-
-                throw new InvalidExcelFileException(ExceptionMessages.TranlationExcelFileHasErrors) {FoundErrors = errors};
-            }
-        }
-
-        private static void ThrowIfDuplicatedByParentIdAndText(IList<CategoriesRow> categoriesRows, CategoriesHeaderMap headers)
-        {
-            List<TranslationValidationError> errors;
-            var duplicatedCategories = categoriesRows.GroupBy(x => new {x.ParentId, x.Text})
-                .Where(x => x.Count() > 1);
-
-            if (duplicatedCategories.Any())
-            {
-                errors = duplicatedCategories.Select(x => new TranslationValidationError
-                {
-                    Message = ExceptionMessages.Excel_Categories_Duplicated.FormatString(string.Join(",",
-                        x.Select(y => y.RowId))),
-                    ErrorAddress = $"{headers.IdIndex}{x.FirstOrDefault()?.RowId}"
-                }).ToList();
-
-                throw new InvalidExcelFileException(ExceptionMessages.TranlationExcelFileHasErrors) {FoundErrors = errors};
-            }
-        }
-
-        private static void ThrowIfTextLengthMoreThan250(IList<CategoriesRow> categoriesRows, CategoriesHeaderMap headers)
-        {
-            List<TranslationValidationError> errors;
-            var rows = categoriesRows.Where(x => x.Text?.Length > AbstractVerifier.MaxOptionLength);
-
-            if (rows.Any())
-            {
-                errors = rows.Select(x => new TranslationValidationError
-                {
-                    Message = ExceptionMessages.Excel_Categories_Text_More_Than_250.FormatString($"{headers.TextIndex}{x.RowId}"),
-                    ErrorAddress = $"{headers.TextIndex}{x.RowId}"
-                }).ToList();
-
-                throw new InvalidExcelFileException(ExceptionMessages.TranlationExcelFileHasErrors) {FoundErrors = errors};
-            }
-        }
-
-        private class CategoriesHeaderMap
-        {
-            public string IdIndex { get; set; }
-            public string ParentIdIndex { get; set; }
-            public string TextIndex { get; set; }
-        }
-
-        private CategoriesHeaderMap GetHeaders(ExcelWorksheet worksheet)
-        {
-            var headers = new List<Tuple<string, string>>()
-            {
-                new Tuple<string, string>(worksheet.Cells["A1"].GetValue<string>(), "A"),
-                new Tuple<string, string>(worksheet.Cells["B1"].GetValue<string>(), "B"),
-                new Tuple<string, string>(worksheet.Cells["C1"].GetValue<string>(), "C")
-            }.Where(kv => kv.Item1 != null).ToDictionary(k => k.Item1.Trim(), v => v.Item2);
-
-            return new CategoriesHeaderMap()
-            {
-                IdIndex = headers.GetOrNull("id"),
-                ParentIdIndex = headers.GetOrNull("parentid"),
-                TextIndex = headers.GetOrNull("text"),
-            };
-        }
-
-        private class CategoriesRow
-        {
-            public string Id { get; set; }
-            public string Text { get; set; }
-            public string ParentId { get; set; }
-
-            public int RowId { get; set; }
-        }
-
-        private CategoriesRow GetRowValues(ExcelWorksheet worksheet, CategoriesHeaderMap headers, int rowNumber) => new CategoriesRow
-        {
-            Id = worksheet.Cells[$"{headers.IdIndex}{rowNumber}"].GetValue<string>(),
-            Text = worksheet.Cells[$"{headers.TextIndex}{rowNumber}"].GetValue<string>(),
-            ParentId = worksheet.Cells[$"{headers.ParentIdIndex}{rowNumber}"].GetValue<string>(),
-            RowId = rowNumber
-        };
-
-        private IEnumerable<TranslationValidationError> Verify(ExcelWorksheet worksheet)
-        {
-            var headers = GetHeaders(worksheet);
-
-            if (headers.IdIndex == null)
-                yield return new TranslationValidationError
-                {
-                    Message = string.Format(ExceptionMessages.RequiredHeaderWasNotFound, "id"),
-                };
-            
-            if (headers.TextIndex == null)
-                yield return new TranslationValidationError
-                {
-                    Message = string.Format(ExceptionMessages.RequiredHeaderWasNotFound, "text"),
-                };
-            
-            for (int rowNumber = 2; rowNumber <= worksheet.Dimension.End.Row; rowNumber++)
-            {
-                var categories = GetRowValues(worksheet, headers, rowNumber);
-
-                if(string.IsNullOrEmpty(categories.Id) && string.IsNullOrEmpty(categories.ParentId) && string.IsNullOrEmpty(categories.Text)) continue;
-
-                var idAddress = $"{headers.IdIndex}{rowNumber}";
-                var parentIdAddress = $"{headers.ParentIdIndex}{rowNumber}";
-                var textAddress = $"{headers.TextIndex}{rowNumber}";
-
-                if (string.IsNullOrEmpty(categories.Id))
-                    yield return new TranslationValidationError
-                    {
-                        Message = string.Format(ExceptionMessages.Excel_Categories_Empty_Value, idAddress),
-                        ErrorAddress = idAddress
-                    };
-
-                if (!string.IsNullOrEmpty(categories.Id) && !int.TryParse(categories.Id, out _))
-                    yield return new TranslationValidationError
-                    {
-                        Message = string.Format(ExceptionMessages.Excel_Categories_Int_Invalid, idAddress),
-                        ErrorAddress = idAddress
-                    };
-
-                if (!string.IsNullOrEmpty(categories.ParentId) && !int.TryParse(categories.ParentId, out _))
-                    yield return new TranslationValidationError
-                    {
-                        Message = string.Format(ExceptionMessages.Excel_Categories_Int_Invalid, parentIdAddress),
-                        ErrorAddress = parentIdAddress
-                    };
-
-                if (string.IsNullOrEmpty(categories.Text))
-                    yield return new TranslationValidationError
-                    {
-                        Message = string.Format(ExceptionMessages.Excel_Categories_Empty_Text, textAddress),
-                        ErrorAddress = textAddress
-                    };
+                throw new InvalidExcelFileException(ExceptionMessages.CategoriesCantBeExtracted, e);
             }
         }
     }

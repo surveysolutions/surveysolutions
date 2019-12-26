@@ -2,56 +2,49 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Main.Core.Documents;
+using System.Text;
+using CsvHelper;
+using CsvHelper.Configuration;
 using Moq;
 using NUnit.Framework;
-using OfficeOpenXml;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
-using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 
 namespace WB.Tests.Unit.Designer.Services
 {
-    [TestOf(typeof(CategoriesService))]
-    internal class CategoriesServiceTests
+    internal partial class CategoriesServiceTests
     {
-        private static CategoriesService CreateCategoriesService(DesignerDbContext dbContext = null, 
-            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage = null, 
-            ICategoriesExportService categoriesExportService = null)
+        private Stream CreateTsvWithHeader(string[][] data)
         {
-            return new CategoriesService(
-                dbContext: dbContext ?? Mock.Of<DesignerDbContext>(),
-                questionnaireStorage: questionnaireStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(),
-                categoriesExportService: categoriesExportService ?? Mock.Of<ICategoriesExportService>());
-        }
+            var ms = new MemoryStream();
 
-        private static byte[] CreateExcelWithHeader(string[][] data)
-        {
-            var listOfData = data.ToList();
-            listOfData.Insert(0, new[] {"id", "text", "parentid"});
-
-            return CreateExcel(listOfData.ToArray());
-        }
-
-        private static byte[] CreateExcel(string[][] data)
-        {
-            using (ExcelPackage package = new ExcelPackage())
+            using (var sw = new StreamWriter(ms, Encoding.UTF8, 4096, true))
+            using (var csvWriter = new CsvSerializer(sw, new Configuration
             {
-                var worksheet = package.Workbook.Worksheets.Add("Categories");
+                HasHeaderRecord = false,
+                TrimOptions = TrimOptions.Trim,
+                IgnoreQuotes = false,
+                Delimiter = "\t"
 
-                for (var row = 0; row < data.Length; row++)
-                for (var column = 0; column < data[row].Length; column++)
-                    worksheet.Cells[row + 1, column + 1].Value = data[row][column];
+            }, true))
+            {
+                foreach (var row in data)
+                {
+                    csvWriter.Write(row);
+                    csvWriter.WriteLine();
+                }
 
-                return package.GetAsByteArray();
+                sw.Flush();
+                ms.Position = 0;
             }
+
+            return ms;
         }
 
         [Test]
-        public void when_store_and_excel_file_has_more_than_15000_categories_then_should_throw_excel_exception()
+        public void when_store_and_tsv_file_has_more_than_15000_categories_then_should_throw_excel_exception()
         {
             // arrange
             var questionnaireId = Guid.Parse("11111111111111111111111111111111");
@@ -61,50 +54,14 @@ namespace WB.Tests.Unit.Designer.Services
 
             // act
             var exception = Assert.Throws<InvalidExcelFileException>(() =>
-                service.Store(questionnaireId, categoriesId, CreateExcelWithHeader(data)));
+                service.Store(questionnaireId, categoriesId, CreateTsvWithHeader(data), CategoriesFileType.Tsv));
 
             // assert
             Assert.That(exception.Message, Contains.Substring("more than 15000 categories"));
         }
 
         [Test]
-        public void when_store_and_excel_file_hasnt_id_column_then_should_throw_excel_exception()
-        {
-            // arrange
-            var questionnaireId = Guid.Parse("11111111111111111111111111111111");
-            var categoriesId = Guid.Parse("22222222222222222222222222222222");
-            var data = new string[][] {new[] {"text", "parentid"}};
-            var service = CreateCategoriesService();
-
-            // act
-            var exception = Assert.Throws<InvalidExcelFileException>(() =>
-                service.Store(questionnaireId, categoriesId, CreateExcel(data)));
-
-            // assert
-            Assert.That(exception.FoundErrors, Has.One.Items);
-            Assert.That(exception.FoundErrors[0].Message, Contains.Substring("id was not found"));
-        }
-
-        [Test]
-        public void when_store_and_excel_file_hasnt_text_column_then_should_throw_excel_exception()
-        {
-            // arrange
-            var questionnaireId = Guid.Parse("11111111111111111111111111111111");
-            var categoriesId = Guid.Parse("22222222222222222222222222222222");
-            var data = new string[][] {new[] {"id", "parentid"}};
-            var service = CreateCategoriesService();
-
-            // act
-            var exception = Assert.Throws<InvalidExcelFileException>(() =>
-                service.Store(questionnaireId, categoriesId, CreateExcel(data)));
-
-            // assert
-            Assert.That(exception.FoundErrors, Has.One.Items);
-            Assert.That(exception.FoundErrors[0].Message, Contains.Substring("text was not found"));
-        }
-
-        [Test]
-        public void when_store_excel_file_with_category_with_empty_id_then_should_throw_excel_exception()
+        public void when_store_tsv_file_with_category_with_empty_id_then_should_throw_excel_exception()
         {
             // arrange
             var questionnaireId = Guid.Parse("11111111111111111111111111111111");
@@ -114,15 +71,15 @@ namespace WB.Tests.Unit.Designer.Services
 
             // act
             var exception = Assert.Throws<InvalidExcelFileException>(() =>
-                service.Store(questionnaireId, categoriesId, CreateExcelWithHeader(data)));
+                service.Store(questionnaireId, categoriesId, CreateTsvWithHeader(data), CategoriesFileType.Tsv));
 
             // assert
             Assert.That(exception.FoundErrors, Has.One.Items);
-            Assert.That(exception.FoundErrors[0].Message, Contains.Substring("[A2] Empty value"));
+            Assert.That(exception.FoundErrors[0].Message, Contains.Substring("[column: id, row: 1] Empty value"));
         }
 
         [Test]
-        public void when_store_excel_file_with_category_with_not_numeric_id_then_should_throw_excel_exception()
+        public void when_store_tsv_file_with_category_with_not_numeric_id_then_should_throw_excel_exception()
         {
             // arrange
             var questionnaireId = Guid.Parse("11111111111111111111111111111111");
@@ -132,15 +89,15 @@ namespace WB.Tests.Unit.Designer.Services
 
             // act
             var exception = Assert.Throws<InvalidExcelFileException>(() =>
-                service.Store(questionnaireId, categoriesId, CreateExcelWithHeader(data)));
+                service.Store(questionnaireId, categoriesId, CreateTsvWithHeader(data), CategoriesFileType.Tsv));
 
             // assert
             Assert.That(exception.FoundErrors, Has.One.Items);
-            Assert.That(exception.FoundErrors[0].Message, Contains.Substring("[A2] Invalid numeric value"));
+            Assert.That(exception.FoundErrors[0].Message, Contains.Substring("[column: id, row: 1] Invalid numeric value"));
         }
 
         [Test]
-        public void when_store_excel_file_with_category_with_not_numeric_parent_id_then_should_throw_excel_exception()
+        public void when_store_tsv_file_with_category_with_not_numeric_parent_id_then_should_throw_excel_exception()
         {
             // arrange
             var questionnaireId = Guid.Parse("11111111111111111111111111111111");
@@ -150,15 +107,15 @@ namespace WB.Tests.Unit.Designer.Services
 
             // act
             var exception = Assert.Throws<InvalidExcelFileException>(() =>
-                service.Store(questionnaireId, categoriesId, CreateExcelWithHeader(data)));
+                service.Store(questionnaireId, categoriesId, CreateTsvWithHeader(data), CategoriesFileType.Tsv));
 
             // assert
             Assert.That(exception.FoundErrors, Has.One.Items);
-            Assert.That(exception.FoundErrors[0].Message, Contains.Substring("[C2] Invalid numeric value"));
+            Assert.That(exception.FoundErrors[0].Message, Contains.Substring("[column: parentid, row: 1] Invalid numeric value"));
         }
 
         [Test]
-        public void when_store_excel_file_with_category_with_empty_text_then_should_throw_excel_exception()
+        public void when_store_tsv_file_with_category_with_empty_text_then_should_throw_excel_exception()
         {
             // arrange
             var questionnaireId = Guid.Parse("11111111111111111111111111111111");
@@ -168,15 +125,15 @@ namespace WB.Tests.Unit.Designer.Services
 
             // act
             var exception = Assert.Throws<InvalidExcelFileException>(() =>
-                service.Store(questionnaireId, categoriesId, CreateExcelWithHeader(data)));
+                service.Store(questionnaireId, categoriesId, CreateTsvWithHeader(data), CategoriesFileType.Tsv));
 
             // assert
             Assert.That(exception.FoundErrors, Has.One.Items);
-            Assert.That(exception.FoundErrors[0].Message, Contains.Substring("[B2] Empty text"));
+            Assert.That(exception.FoundErrors[0].Message, Contains.Substring("[column: text, row: 1] Empty text"));
         }
 
         [Test]
-        public void when_store_excel_file_without_categories_then_should_throw_excel_exception()
+        public void when_store_tsv_file_without_categories_then_should_throw_excel_exception()
         {
             // arrange
             var questionnaireId = Guid.Parse("11111111111111111111111111111111");
@@ -186,14 +143,14 @@ namespace WB.Tests.Unit.Designer.Services
 
             // act
             var exception = Assert.Throws<InvalidExcelFileException>(() =>
-                service.Store(questionnaireId, categoriesId, CreateExcelWithHeader(data)));
+                service.Store(questionnaireId, categoriesId, CreateTsvWithHeader(data), CategoriesFileType.Tsv));
 
             // assert
             Assert.That(exception.Message, Contains.Substring("No categories"));
         }
 
         [Test]
-        public void when_store_excel_file_with_1_category_then_should_throw_excel_exception()
+        public void when_store_tsv_file_with_1_category_then_should_throw_excel_exception()
         {
             // arrange
             var questionnaireId = Guid.Parse("11111111111111111111111111111111");
@@ -203,14 +160,14 @@ namespace WB.Tests.Unit.Designer.Services
 
             // act
             var exception = Assert.Throws<InvalidExcelFileException>(() =>
-                service.Store(questionnaireId, categoriesId, CreateExcelWithHeader(data)));
+                service.Store(questionnaireId, categoriesId, CreateTsvWithHeader(data), CategoriesFileType.Tsv));
 
             // assert
             Assert.That(exception.Message, Contains.Substring("at least 2 categories"));
         }
 
         [Test]
-        public void when_store_excel_file_with_empty_category_rows_then_should_throw_excel_exception()
+        public void when_store_tsv_file_with_empty_category_rows_then_should_throw_excel_exception()
         {
             // arrange
             var questionnaireId = Guid.Parse("11111111111111111111111111111111");
@@ -220,14 +177,14 @@ namespace WB.Tests.Unit.Designer.Services
 
             // act
             var exception = Assert.Throws<InvalidExcelFileException>(() =>
-                service.Store(questionnaireId, categoriesId, CreateExcelWithHeader(data)));
+                service.Store(questionnaireId, categoriesId, CreateTsvWithHeader(data), CategoriesFileType.Tsv));
 
             // assert
             Assert.That(exception.Message, Contains.Substring("No categories"));
         }
 
         [Test]
-        public void when_store_excel_file_with_category_text_more_than_250_chars_then_should_throw_excel_exception()
+        public void when_store_tsv_file_with_category_text_more_than_250_chars_then_should_throw_excel_exception()
         {
             // arrange
             var questionnaireId = Guid.Parse("11111111111111111111111111111111");
@@ -241,7 +198,7 @@ namespace WB.Tests.Unit.Designer.Services
 
             // act
             var exception = Assert.Throws<InvalidExcelFileException>(() =>
-                service.Store(questionnaireId, categoriesId, CreateExcelWithHeader(data)));
+                service.Store(questionnaireId, categoriesId, CreateTsvWithHeader(data), CategoriesFileType.Tsv));
 
             // assert
             Assert.That(exception.FoundErrors, Has.Exactly(2).Items);
@@ -249,7 +206,7 @@ namespace WB.Tests.Unit.Designer.Services
         }
 
         [Test]
-        public void when_store_excel_file_with_2_categories_with_parentid_and_without_then_should_throw_excel_exception()
+        public void when_store_tsv_file_with_2_categories_with_parentid_and_without_then_should_throw_excel_exception()
         {
             // arrange
             var questionnaireId = Guid.Parse("11111111111111111111111111111111");
@@ -263,14 +220,14 @@ namespace WB.Tests.Unit.Designer.Services
 
             // act
             var exception = Assert.Throws<InvalidExcelFileException>(() =>
-                service.Store(questionnaireId, categoriesId, CreateExcelWithHeader(data)));
+                service.Store(questionnaireId, categoriesId, CreateTsvWithHeader(data), CategoriesFileType.Tsv));
 
             // assert
             Assert.That(exception.Message, Contains.Substring("don't have a parent id"));
         }
 
         [Test]
-        public void when_store_excel_file_with_2_categories_with_the_same_id_and_parentid_then_should_throw_excel_exception()
+        public void when_store_tsv_file_with_2_categories_with_the_same_id_and_parentid_then_should_throw_excel_exception()
         {
             // arrange
             var questionnaireId = Guid.Parse("11111111111111111111111111111111");
@@ -284,15 +241,15 @@ namespace WB.Tests.Unit.Designer.Services
 
             // act
             var exception = Assert.Throws<InvalidExcelFileException>(() =>
-                service.Store(questionnaireId, categoriesId, CreateExcelWithHeader(data)));
+                service.Store(questionnaireId, categoriesId, CreateTsvWithHeader(data), CategoriesFileType.Tsv));
 
             // assert
             Assert.That(exception.FoundErrors, Has.One.Items);
-            Assert.That(exception.FoundErrors[0].Message, Is.EqualTo("Duplicated categories in rows: 2,3"));
+            Assert.That(exception.FoundErrors[0].Message, Is.EqualTo("Duplicated categories in rows: 1,2"));
         }
 
         [Test]
-        public void when_store_excel_file_with_2_categories_and_1_empty_row_then_empty_row_should_be_ignored()
+        public void when_store_tsv_file_with_2_categories_and_1_empty_row_then_empty_row_should_be_ignored()
         {
             // arrange
             var questionnaireId = Guid.Parse("11111111111111111111111111111111");
@@ -307,7 +264,7 @@ namespace WB.Tests.Unit.Designer.Services
             var service = CreateCategoriesService(dbContext: mockOfDbContext.Object);
 
             // act
-            service.Store(questionnaireId, categoriesId, CreateExcelWithHeader(data));
+            service.Store(questionnaireId, categoriesId, CreateTsvWithHeader(data), CategoriesFileType.Tsv);
 
             // assert
             mockOfDbContext.Verify(x => x.AddRange(Moq.It.Is<IEnumerable<CategoriesInstance>>(y => y.Count() == 2)), Times.Once);
