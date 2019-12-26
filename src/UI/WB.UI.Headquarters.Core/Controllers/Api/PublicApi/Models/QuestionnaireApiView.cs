@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
+using WB.UI.Headquarters.Models.Api;
 
 namespace WB.UI.Headquarters.API.PublicApi.Models
 {

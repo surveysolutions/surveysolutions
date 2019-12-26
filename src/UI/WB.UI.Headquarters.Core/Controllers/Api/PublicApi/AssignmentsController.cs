@@ -8,7 +8,6 @@ using AutoMapper;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
@@ -27,6 +26,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.Code.CommandTransformation;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Headquarters.Resources;
 using WB.UI.Shared.Web.Exceptions;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi
@@ -405,6 +405,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <param name="quantity">New limit on created interviews</param>
         /// <response code="200">Assignment details with updated quantity</response>
         /// <response code="404">Assignment not found</response>
+        /// <response code="406">Size cannot be changed</response>
         [HttpPatch]
         [Route("{id:int}/changeQuantity")]
         [Authorize(Roles = "ApiUser, Administrator")]
@@ -417,7 +418,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             }
 
             if (!string.IsNullOrEmpty(assignment.Email) || !string.IsNullOrEmpty(assignment.Password))
-                return StatusCode(StatusCodes.Status406NotAcceptable);
+                return StatusCode(StatusCodes.Status406NotAcceptable, Assignments.WebMode);
 
             commandService.Execute(new UpdateAssignmentQuantity(assignment.PublicKey, authorizedUser.Id, quantity));
             this.auditLog.AssignmentSizeChanged(id, quantity);

@@ -20,7 +20,7 @@ using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Controllers.Api
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/{controller}/{action=Get}")]
     public class AssignmentsApiController : ControllerBase
     {
         private readonly IAssignmentViewFactory assignmentViewFactory;
@@ -63,7 +63,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         [Route("")]
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter, Supervisor, Interviewer")]
-        public ActionResult<AssignmetsDataTableResponse> Get([DataTablesRequest]AssignmentsDataTableRequest request)
+        public ActionResult<AssignmetsDataTableResponse> Get(AssignmentsDataTableRequest request)
         {
             var isInterviewer = this.authorizedUser.IsInterviewer;
                        
@@ -115,6 +115,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         [HttpDelete]
         [Authorize(Roles = "Administrator, Headquarter")]
         [ObserverNotAllowed]
+        [ActionName("Get")]
         public IActionResult Delete([FromBody]int[] ids)
         {
             if (ids == null) return this.BadRequest();
@@ -160,25 +161,6 @@ namespace WB.UI.Headquarters.Controllers.Api
                     assignment.SetComments(request.Comments);
             }
 
-            return this.Ok();
-        }
-
-        [HttpPatch]
-        [Route("{id:int}/SetQuantity")]
-        [Authorize(Roles = "Administrator, Headquarter")]
-        [ObserverNotAllowed]
-        public IActionResult SetQuantity(int id, [FromBody] UpdateAssignmentRequest request)
-        {
-            var assignment = this.assignmentsStorage.GetAssignment(id);
-
-            if (request.Quantity < -1)
-                return this.BadRequest(WB.UI.Headquarters.Resources.Assignments.InvalidSize);
-
-            if(!string.IsNullOrEmpty(assignment.Email) || !string.IsNullOrEmpty(assignment.Password))
-                return this.BadRequest(WB.UI.Headquarters.Resources.Assignments.WebMode);
-
-            commandService.Execute(new UpdateAssignmentQuantity(assignment.PublicKey, authorizedUser.Id, request.Quantity));
-            this.auditLog.AssignmentSizeChanged(id, request.Quantity);
             return this.Ok();
         }
 

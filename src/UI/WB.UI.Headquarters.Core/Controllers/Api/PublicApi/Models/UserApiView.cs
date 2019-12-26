@@ -2,7 +2,7 @@
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
+using WB.UI.Headquarters.Models.Api;
 
 namespace WB.UI.Headquarters.API.PublicApi.Models
 {
