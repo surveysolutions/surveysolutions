@@ -222,9 +222,14 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 .Where(grouping => grouping.Count() > 1)
                 .Select(grouping => grouping.Select(question => CreateReference(question)).ToArray());
 
-        private static bool ComboBoxWithLessThan10Elements(SingleQuestion question)
-            => (question.IsFilteredCombobox ?? false)
-               && question.Answers.Count < 10;
+        private bool ComboBoxWithLessThan10Elements(SingleQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            if (!question.IsFilteredCombobox ?? false) return false;
+
+            return question.CategoriesId.HasValue
+                ? this.categoriesService.GetCategoriesById(questionnaire.PublicKey, question.CategoriesId.Value).Count() < 10
+                : question.Answers.Count < 10;
+        }
 
 
         private static bool Prefilled(IQuestion question) => question.Featured;
