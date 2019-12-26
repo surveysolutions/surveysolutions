@@ -46,7 +46,6 @@ using WB.Persistence.Headquarters.Migrations.PlainStore;
 using WB.Persistence.Headquarters.Migrations.Quartz;
 using WB.Persistence.Headquarters.Migrations.ReadSide;
 using WB.Persistence.Headquarters.Migrations.Users;
-using WB.UI.Designer.CommonWeb;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.Authentication;
 using WB.UI.Headquarters.Configs;
@@ -55,6 +54,7 @@ using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Api.DataTable;
 using WB.UI.Headquarters.Services;using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Configuration;
+using WB.UI.Shared.Web.Services;
 using WB.UI.Shared.Web.Versions;
 
 namespace WB.UI.Headquarters
@@ -273,19 +273,22 @@ namespace WB.UI.Headquarters
 
         private void AddCaptcha(IServiceCollection services)
         {
-            var provider = Configuration["CaptchaProvider"];
-            if (provider == "recaptcha")
+            var captchaSection = Configuration.GetSection("Captcha");
+            services.Configure<CaptchaConfig>(captchaSection);
+            var config = captchaSection.Get<CaptchaConfig>() ?? new CaptchaConfig();
+            var provider = config.CaptchaType;
+
+            if (provider == CaptchaProviderType.Recaptcha)
             {
-                services.Configure<RecaptchaSettings>(Configuration.GetSection("RecaptchaSettings"));
+                services.Configure<RecaptchaSettings>(Configuration.GetSection("Captcha"));
                 services.AddTransient<IRecaptchaService, RecaptchaService>();
                 services.AddTransient<ICaptchaProvider, RecaptchaProvider>();
             }
 
-            if (provider == "hosted")
+            if (provider == CaptchaProviderType.Hosted)
             {
                 services.UseHostedCaptcha();
             }
-
         }
 
         private static void AddCompression(IServiceCollection services)

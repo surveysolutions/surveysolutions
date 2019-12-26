@@ -38,6 +38,7 @@ using WB.UI.Designer.Models;
 using WB.UI.Designer.Modules;
 using WB.UI.Designer.Services;
 using WB.UI.Shared.Web.Authentication;
+using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Designer
 {
