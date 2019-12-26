@@ -63,7 +63,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         [Route("")]
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter, Supervisor, Interviewer")]
-        public IActionResult Get([DataTablesRequest]AssignmentsDataTableRequest request)
+        public ActionResult<AssignmetsDataTableResponse> Get([DataTablesRequest]AssignmentsDataTableRequest request)
         {
             var isInterviewer = this.authorizedUser.IsInterviewer;
                        
