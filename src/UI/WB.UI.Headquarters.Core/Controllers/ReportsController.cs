@@ -237,7 +237,7 @@ namespace WB.UI.Headquarters.Controllers
 
             return new PeriodicStatusReportModel
             {
-                WebApiActionName = webApiActionName,
+                DataUrl = Url.Action(reportName + webApiActionName, "ReportDataApi"),
                 CanNavigateToQuantityByTeamMember = canNavigateToQuantityByTeamMember,
                 CanNavigateToQuantityBySupervisors = canNavigateToQuantityBySupervisors,
                 Questionnaires = allUsersAndQuestionnaires.Questionnaires.ToArray(),
@@ -246,7 +246,16 @@ namespace WB.UI.Headquarters.Controllers
                 SupervisorId = supervisorId,
                 ReportNameDescription = string.Format(GetReportDescriptionByType(supervisorId, reportType, perTeam), PeriodicStatusReport.Team.ToLower()),
                 TotalRowPresent = totalRowPresent,
-                MinAllowedDate = localDate ?? DateTime.Now
+                MinAllowedDate = localDate ?? DateTime.Now,
+                SupervisorsUrl = Url.Action(reportName + "BySupervisors", "Reports"),
+                InterviewersUrl = Url.Action(reportName + "ByInterviewers", "Reports"),
+                Periods = new[]
+                {
+                    new ComboboxViewItem() { Value = "d", Alias = PeriodicStatusReport.Day },
+                    new ComboboxViewItem() { Value = "w", Alias = PeriodicStatusReport.Week },
+                    new ComboboxViewItem() { Value = "m", Alias = PeriodicStatusReport.Month },
+                },
+                OverTheLasts = Enumerable.Range(1, 12).Select(i => new ComboboxViewItem() { Value = i.ToString(), Alias = i.ToString() }).ToArray()
             };
         }
 

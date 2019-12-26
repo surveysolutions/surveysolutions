@@ -5,6 +5,7 @@ import SurveyStatistics from "./SurveyStatistics";
 import TeamsAndStatuses from "./TeamsAndStatuses";
 import CumulativeChart from "./CumulativeChartReport";
 import SurveysAndStatuses from "./SurveysAndStatuses";
+import SpeedAndQuantity from "./SpeedAndQuantity";
 
 import Vue from 'vue'
 
@@ -50,7 +51,20 @@ export default class ReportComponent {
             {
                 path: "/Reports/MapReport",
                 component: MapReport
-            }, {
+            },
+            {
+                path: '/Reports/QuantityBySupervisors',
+                component: SpeedAndQuantity
+            },
+            {
+                path: '/Reports/SpeedBySupervisors',
+                component: SpeedAndQuantity
+            },
+            {
+                path: '/Reports/QuantityByInterviewers',
+                component: SpeedAndQuantity
+            },
+            {
                 name: "surveyStatistics",
                 path: "/Reports/surveyStatistics",
                 component: SurveyStatistics,

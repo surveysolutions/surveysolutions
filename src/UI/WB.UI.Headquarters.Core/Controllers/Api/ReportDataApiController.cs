@@ -173,7 +173,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpGet]
-        public IActionResult QuantityBySupervisors([FromQuery]QuantityBySupervisorsReportModel data, [FromQuery]string exportType = null)
+        public IActionResult QuantityBySupervisors(QuantityBySupervisorsReportModel data, [FromQuery]string exportType = null)
         {
             var input = new QuantityBySupervisorsReportInputModel
             {
@@ -186,7 +186,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 QuestionnaireId = data.QuestionnaireId,
                 ColumnCount = data.ColumnCount,
                 From = data.From,
-                Orders = data.SortOrder,
+                Orders = data.GetSortOrderRequestItems(),
                 TimezoneOffsetMinutes = data.TimezoneOffsetMinutes
             };
 
