@@ -1,12 +1,15 @@
 using Android.OS;
 using Android.Support.Graphics.Drawable;
 using Android.Views;
+using MvvmCross;
 using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
+using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
 using NLog;
 using Plugin.CurrentActivity;
 using Plugin.Permissions;
+using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Utils;
 
 namespace WB.UI.Shared.Enumerator.Activities
@@ -35,6 +38,8 @@ namespace WB.UI.Shared.Enumerator.Activities
         protected override void OnResume()
         {
             log.Trace("Resume");
+            var messenger = Mvx.IoCProvider.GetSingleton<IMvxMessenger>();
+            messenger.Publish(new ApplicationResumeMessage(this));
             base.OnResume();
         }
 

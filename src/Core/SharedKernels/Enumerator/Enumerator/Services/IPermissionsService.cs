@@ -6,5 +6,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services
     public interface IPermissionsService
     {
         Task AssureHasPermission(Permission permission);
+        Task EnsureHasPermissionToInstallFromUnknownSourcesAsync();
     }
 }
