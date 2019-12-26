@@ -17,7 +17,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Enumerator.v1
         private readonly IReusableCategoriesStorage reusableCategoriesStorage;
         private readonly IQuestionnaireStorage questionnaireStorage;
 
-        protected ReusableCategoriesApiV1Controller(IReusableCategoriesStorage reusableCategoriesStorage, IQuestionnaireStorage questionnaireStorage)
+        public ReusableCategoriesApiV1Controller(IReusableCategoriesStorage reusableCategoriesStorage, IQuestionnaireStorage questionnaireStorage)
         {
             this.reusableCategoriesStorage = reusableCategoriesStorage;
             this.questionnaireStorage = questionnaireStorage;

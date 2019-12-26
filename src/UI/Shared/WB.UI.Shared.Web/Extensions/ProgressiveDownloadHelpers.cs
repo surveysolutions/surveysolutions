@@ -36,7 +36,7 @@ namespace WB.UI.Shared.Web.Extensions
 
             if (clientVersion == null) return true;
 
-            return clientVersion.Build > 26644; // 19.12.3 (build 26644) 
+            return clientVersion > new Version(19, 12, 3); // 19.12.3 (build 26644) 
         }
 
         public static Version GetProductVersionFromUserAgent(this HttpRequestMessage request, string productName)
