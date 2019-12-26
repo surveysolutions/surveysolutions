@@ -51,6 +51,7 @@ using WB.UI.Headquarters.Code.Authentication;
 using WB.UI.Headquarters.Configs;
 using WB.UI.Headquarters.Controllers.Api.PublicApi;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Headquarters.Models.Api.DataTable;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Versions;
@@ -269,6 +270,7 @@ namespace WB.UI.Headquarters
                 mvc.Filters.AddService<UnitOfWorkActionFilter>(1);
                 mvc.Filters.AddService<InstallationFilter>(100);
                 mvc.Conventions.Add(new OnlyPublicApiConvention());
+                mvc.ModelBinderProviders.Insert(0, new DataTablesRequestModelBinderProvider());
                 var noContentFormatter = mvc.OutputFormatters.OfType<HttpNoContentOutputFormatter>().FirstOrDefault();
                 if (noContentFormatter != null)
                 {
