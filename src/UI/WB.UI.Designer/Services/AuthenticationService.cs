@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.UI.Designer.CommonWeb;
 using WB.UI.Designer.Models;
+using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Designer.Implementation.Services
 {
@@ -46,7 +47,7 @@ namespace WB.UI.Designer.Implementation.Services
             return true;
         }
 
-        private bool IsCaptchaEnabled => this.captchaOptions.Value.IsReCaptchaEnabled;
+        private bool IsCaptchaEnabled => this.captchaOptions.Value.CaptchaType == CaptchaProviderType.Recaptcha;
 
         public bool ShouldShowCaptcha()
         {

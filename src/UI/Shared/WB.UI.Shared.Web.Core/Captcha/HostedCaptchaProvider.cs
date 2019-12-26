@@ -55,7 +55,7 @@ namespace WB.UI.Shared.Web.Captcha
             var imageBytes = imageGenerator.Generate(code);
 
             var htmlContent = $@"
-<input id='{TokenName}' name='CaptchaDeText' type='hidden' value='{token}'>
+<input id='{TokenName}' name='{TokenName}' type='hidden' value='{token}'>
 <img src='data:image/jpeg;base64, {Convert.ToBase64String(imageBytes)}' />
 <br />
 <label for='{InputName}'>{Resources.Captcha.EnterText}</label>

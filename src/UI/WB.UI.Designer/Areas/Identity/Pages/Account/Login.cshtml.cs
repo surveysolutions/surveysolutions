@@ -11,6 +11,7 @@ using reCAPTCHA.AspNetCore;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.UI.Designer.CommonWeb;
 using WB.UI.Designer.Resources;
+using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Designer.Areas.Identity.Pages.Account
 {
