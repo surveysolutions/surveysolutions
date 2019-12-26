@@ -1,36 +1,32 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web.Mvc;
-using ASP;
+
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
+using WB.UI.Headquarters.Models.DataExport;
+using WB.UI.Headquarters.Services.Impl;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [LimitsFilter]
-    [AuthorizeOr403(Roles = "Administrator, Headquarter")]
-    public class DataExportController: BaseController
+    //[LimitsFilter]
+    //[AuthorizeOr403(Roles = "Administrator, Headquarter")]
+    public class DataExportController: Controller
     {
         private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly ExternalStoragesSettings externalStoragesSettings;
 
-        public DataExportController(ICommandService commandService, ILogger logger,
-            IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory, 
+        public DataExportController(IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory, 
             InterviewDataExportSettings interviewDataExportSettings,
             ExternalStoragesSettings externalStoragesSettings)
-            : base(commandService, logger)
         {
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
             this.interviewDataExportSettings = interviewDataExportSettings;

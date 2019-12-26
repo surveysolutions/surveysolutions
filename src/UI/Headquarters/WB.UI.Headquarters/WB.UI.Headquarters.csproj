@@ -1596,7 +1596,6 @@
     <Content Include="Views\Template\ImportMode.cshtml" />
     <Content Include="Views\SurveySetup\InterviewImportVerificationErrors.cshtml" />
     <Content Include="Views\SurveySetup\InterviewImportProgress.cshtml" />
-    <Content Include="Views\DataExport\Index.cshtml" />
     <Content Include="Views\SurveySetup\Index.cshtml" />
     <Content Include="Views\Interviewers\Index.cshtml" />
     <Content Include="Views\WebInterviewSetup\Start.cshtml" />
@@ -1667,7 +1666,6 @@
     <Content Include="Views\WebEmails\EmailText.cshtml" />
     <Content Include="Views\Reports\TeamStatusDuration.cshtml" />
     <Content Include="Views\WebInterview\_StartOrResumeForm.cshtml" />
-    <Content Include="Views\DataExport\New.cshtml" />
     <Content Include="Views\Interviews\Index.cshtml" />
     <Content Include="Views\ControlPanel\ReevaluateInterview.cshtml" />
     <Content Include="Views\Diagnostics\Logs.cshtml" />
@@ -1863,7 +1861,6 @@
     <Compile Include="API\DataCollection\Interviewer\v2\TranslationsApiV2Controller.cs" />
     <Compile Include="API\MetricsController.cs" />
     <Compile Include="API\ControlPanelApiController.cs" />
-    <Compile Include="API\DataExportApiController.cs" />
     <Compile Include="API\ExportSettingsApiController.cs" />
     <Compile Include="API\InterviewerSyncController.cs" />
     <Compile Include="API\DataCollection\DevicesControllerBase.cs" />
@@ -1953,7 +1950,6 @@
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
-    <Compile Include="Controllers\DataExportController.cs" />
     <Compile Include="Controllers\Profile\ApiUserController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\InterviewApiController.cs" />
@@ -2032,7 +2028,6 @@
     <Compile Include="Models\ComponentModels\ComboboxModel.cs" />
     <Compile Include="Models\ExportSettingsModel.cs" />
     <Compile Include="Models\DocumentListViewModel.cs" />
-    <Compile Include="Models\ExportModel.cs" />
     <Compile Include="Controllers\Profile\ObserverController.cs" />
     <Compile Include="Controllers\InterviewsApiController.cs" />
     <Compile Include="Controllers\DesignerQuestionnairesApiController.cs" />

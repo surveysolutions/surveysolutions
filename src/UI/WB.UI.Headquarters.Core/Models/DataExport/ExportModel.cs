@@ -3,7 +3,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
-namespace WB.UI.Headquarters.Models
+namespace WB.UI.Headquarters.Models.DataExport
 {
     public class ExportModel
     {
