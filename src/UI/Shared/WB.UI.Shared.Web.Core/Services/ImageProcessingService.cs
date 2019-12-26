@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
+using SixLabors.Memory;
 using SixLabors.Primitives;
 using Image = SixLabors.ImageSharp.Image;
 
@@ -8,6 +9,11 @@ namespace WB.UI.Shared.Web.Services
 {
     public class ImageProcessingService : IImageProcessingService
     {
+        static ImageProcessingService()
+        {
+            SixLabors.ImageSharp.Configuration.Default.MemoryAllocator = ArrayPoolMemoryAllocator.CreateWithMinimalPooling();
+        }
+
         public void Validate(byte[] source)
         {
             using var _ = Image.Load(source, out var format);
