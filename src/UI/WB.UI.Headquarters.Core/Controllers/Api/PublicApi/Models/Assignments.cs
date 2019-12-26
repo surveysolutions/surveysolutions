@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
+using WB.UI.Headquarters.Models.Api;
 
 namespace WB.UI.Headquarters.API.PublicApi.Models
 {
