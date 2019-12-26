@@ -32,7 +32,13 @@ namespace WB.UI.Interviewer.Implementations.Services
             IPrincipal principal,
             IMvxNavigationService navigationService,
             ILogger log)
-            : base(commandService, userInteractionService, userInterfaceStateService, androidCurrentTopActivity, navigationService, principal, log)
+            : base(commandService,
+                userInteractionService,
+                userInterfaceStateService,
+                androidCurrentTopActivity,
+                navigationService,
+                principal,
+                log)
         {
             this.androidCurrentTopActivity = androidCurrentTopActivity;
             this.navigationService = navigationService;
