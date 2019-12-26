@@ -5,7 +5,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts
 {
     public class PeriodicStatusReportModel
     {
-        public PeriodicStatusReportWebApiActionName WebApiActionName { get; set; }
+        public string DataUrl { get; set; }
         public bool CanNavigateToQuantityByTeamMember { get; set; }
         public bool CanNavigateToQuantityBySupervisors { get; set; }
         public TemplateViewItem[] Questionnaires { get; set; }
@@ -19,5 +19,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts
         public DateTime MinAllowedDate { get; set; }
 
         public string ReportGroupName { get; set; }
+        public string SupervisorsUrl { get; set; }
+        public string InterviewersUrl { get; set; }
+        public ComboboxViewItem[] Periods { get; set; }
+        public ComboboxViewItem[] OverTheLasts { get; set; }
     }
 }
