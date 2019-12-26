@@ -31,16 +31,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             this.categoriesService = categoriesService;
         }
 
-        public ImportCategoricalOptionsResult ImportCategories(Stream file, string questionnaireId)
-        {
-            var categories = new List<QuestionnaireCategoricalOption>();
-            var cfg = this.CreateCsvConfiguration();
-
-            cfg.RegisterClassMap(new CascadingOptionMap(new Dictionary<string, (int value, int? parentValue)[]>(), categories));
-
-            return ReadCategories(file, cfg, categories);
-        }
-
         public ImportCategoricalOptionsResult ImportOptions(Stream file, string questionnaireId, Guid categoricalQuestionId)
         {
             var document = this.questionnaireDocumentReader.GetById(questionnaireId);
@@ -241,42 +231,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 }
             }
         }
-
-        private class CategoriesMap : CategoricalOptionMap
-        {
-            public CategoriesMap(List<QuestionnaireCategoricalOption> allImportedOptions)
-            {
-                Map(m => m.ParentValue).Index(2).Optional().TypeConverter(new ConvertToInt32IfNotEmptyOrThrow());
-                Map(m => m.ValueWithParentValues).Ignore().ConvertUsing(x =>
-                {
-                    if (!x.TryGetField(1, out string title) || !x.TryGetField(2, out int? parentValue) ||
-                        !parentValue.HasValue) return null;
-
-                    if (allImportedOptions.Any(y => y.ParentValue == parentValue && y.Title == title))
-                        throw new CsvReaderException(x.Context.Row, 2,
-                            string.Format(ExceptionMessages.ImportOptions_DuplicateByTitleAndParentIds, title,
-                                parentValue));
-
-                    return null;
-                });
-            }
-
-            protected class ConvertToInt32IfNotEmptyOrThrow : DefaultTypeConverter
-            {
-                public override object ConvertFromString(string text, IReaderRow row, MemberMapData memberMapData)
-                {
-                    if (string.IsNullOrEmpty(text)) return null;
-
-                    var numberStyle = memberMapData.TypeConverterOptions.NumberStyle ?? NumberStyles.Integer;
-
-                    return int.TryParse(text, numberStyle, memberMapData.TypeConverterOptions.CultureInfo, out var i)
-                        ? i
-                        : throw new CsvReaderException(row.Context.Row, memberMapData.Index,
-                            string.Format(ExceptionMessages.ImportOptions_NotNumber, text));
-                }
-            }
-        }
-
+        
         private class CategoricalOptionMap : ClassMap<QuestionnaireCategoricalOption>
         {
             public CategoricalOptionMap()
