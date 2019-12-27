@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
 {
     internal class CategoriesVerifier : ICategoriesVerifier
     {
-        public TranslationValidationError Verify(CategoriesRow categories, CategoriesHeaderMap headers)
+        public ImportValidationError Verify(CategoriesRow categories, CategoriesHeaderMap headers)
         {
             if (categories == null) throw new ArgumentNullException(nameof(categories));
 
@@ -24,28 +24,28 @@ namespace WB.Core.BoundedContexts.Designer.Services
             var textAddress = string.Format(messageFormat, headers.TextIndex);
 
             if (string.IsNullOrEmpty(categories.Id))
-                return new TranslationValidationError
+                return new ImportValidationError
                 {
                     Message = string.Format(ExceptionMessages.Excel_Categories_Empty_Value, idAddress),
                     ErrorAddress = idAddress
                 };
 
             if (!string.IsNullOrEmpty(categories.Id) && !int.TryParse(categories.Id, out _))
-                return new TranslationValidationError
+                return new ImportValidationError
                 {
                     Message = string.Format(ExceptionMessages.Excel_Categories_Int_Invalid, idAddress),
                     ErrorAddress = idAddress
                 };
 
             if (!string.IsNullOrEmpty(categories.ParentId) && !int.TryParse(categories.ParentId, out _))
-                return new TranslationValidationError
+                return new ImportValidationError
                 {
                     Message = string.Format(ExceptionMessages.Excel_Categories_Int_Invalid, parentIdAddress),
                     ErrorAddress = parentIdAddress
                 };
 
             if (string.IsNullOrEmpty(categories.Text))
-                return new TranslationValidationError
+                return new ImportValidationError
                 {
                     Message = string.Format(ExceptionMessages.Excel_Categories_Empty_Text, textAddress),
                     ErrorAddress = textAddress
@@ -68,74 +68,74 @@ namespace WB.Core.BoundedContexts.Designer.Services
         private static void ThrowIfNoCategories(IList<CategoriesRow> categoriesRows)
         {
             if (!categoriesRows.Any())
-                throw new InvalidExcelFileException(ExceptionMessages.Excel_NoCategories);
+                throw new InvalidFileException(ExceptionMessages.Excel_NoCategories);
         }
 
         private static void ThrowIfLessThan2Categories(IList<CategoriesRow> categoriesRows)
         {
             if (categoriesRows.Count < 2)
-                throw new InvalidExcelFileException(ExceptionMessages.Excel_Categories_Less_2_Options);
+                throw new InvalidFileException(ExceptionMessages.Excel_Categories_Less_2_Options);
         }
 
         private static void ThrowIfParentIdIsEmpty(IList<CategoriesRow> categoriesRows)
         {
             var countOfCategoriesWithParentId = categoriesRows.Count(x => !string.IsNullOrEmpty(x.ParentId));
             if (countOfCategoriesWithParentId > 0 && countOfCategoriesWithParentId < categoriesRows.Count)
-                throw new InvalidExcelFileException(ExceptionMessages.Excel_Categories_Empty_ParentId);
+                throw new InvalidFileException(ExceptionMessages.Excel_Categories_Empty_ParentId);
         }
 
         private static void ThrowIfDuplicatedByIdAndParentId(IList<CategoriesRow> categoriesRows, CategoriesHeaderMap headers)
         {
-            List<TranslationValidationError> errors;
+            List<ImportValidationError> errors;
             var duplicatedCategories = categoriesRows.GroupBy(x => new {x.Id, x.ParentId})
                 .Where(x => x.Count() > 1);
 
             if (duplicatedCategories.Any())
             {
-                errors = duplicatedCategories.Select(x => new TranslationValidationError
+                errors = duplicatedCategories.Select(x => new ImportValidationError
                 {
                     Message = ExceptionMessages.Excel_Categories_Duplicated.FormatString(string.Join(",",
                         x.Select(y => y.RowId))),
                     ErrorAddress = $"{headers.IdIndex}{x.FirstOrDefault()?.RowId}"
                 }).ToList();
 
-                throw new InvalidExcelFileException(ExceptionMessages.TranlationExcelFileHasErrors) {FoundErrors = errors};
+                throw new InvalidFileException(ExceptionMessages.TranlationExcelFileHasErrors) {FoundErrors = errors};
             }
         }
 
         private static void ThrowIfDuplicatedByParentIdAndText(IList<CategoriesRow> categoriesRows, CategoriesHeaderMap headers)
         {
-            List<TranslationValidationError> errors;
+            List<ImportValidationError> errors;
             var duplicatedCategories = categoriesRows.GroupBy(x => new {x.ParentId, x.Text})
                 .Where(x => x.Count() > 1);
 
             if (duplicatedCategories.Any())
             {
-                errors = duplicatedCategories.Select(x => new TranslationValidationError
+                errors = duplicatedCategories.Select(x => new ImportValidationError
                 {
                     Message = ExceptionMessages.Excel_Categories_Duplicated.FormatString(string.Join(",",
                         x.Select(y => y.RowId))),
                     ErrorAddress = $"{headers.IdIndex}{x.FirstOrDefault()?.RowId}"
                 }).ToList();
 
-                throw new InvalidExcelFileException(ExceptionMessages.TranlationExcelFileHasErrors) {FoundErrors = errors};
+                throw new InvalidFileException(ExceptionMessages.TranlationExcelFileHasErrors) {FoundErrors = errors};
             }
         }
 
         private static void ThrowIfTextLengthMoreThan250(IList<CategoriesRow> categoriesRows, CategoriesHeaderMap headers)
         {
-            List<TranslationValidationError> errors;
+            List<ImportValidationError> errors;
             var rows = categoriesRows.Where(x => x.Text?.Length > AbstractVerifier.MaxOptionLength);
 
             if (rows.Any())
             {
-                errors = rows.Select(x => new TranslationValidationError
+                errors = rows.Select(x => new ImportValidationError
                 {
                     Message = ExceptionMessages.Excel_Categories_Text_More_Than_250.FormatString($"{headers.TextIndex}{x.RowId}"),
                     ErrorAddress = $"{headers.TextIndex}{x.RowId}"
                 }).ToList();
 
-                throw new InvalidExcelFileException(ExceptionMessages.TranlationExcelFileHasErrors) {FoundErrors = errors};
+                throw new InvalidFileException(ExceptionMessages.TranlationExcelFileHasErrors) {FoundErrors = errors};
             }
         }
     }

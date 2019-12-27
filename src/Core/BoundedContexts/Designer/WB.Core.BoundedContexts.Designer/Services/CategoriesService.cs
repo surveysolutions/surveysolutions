@@ -150,7 +150,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
             }
             catch (Exception e) when (e is NullReferenceException || e is InvalidDataException || e is COMException)
             {
-                throw new InvalidExcelFileException(ExceptionMessages.CategoriesCantBeExtracted, e);
+                throw new InvalidFileException(ExceptionMessages.CategoriesCantBeExtracted, e);
             }
         }
     }
