@@ -342,9 +342,11 @@ namespace WB.Services.Export.Questionnaire
 
                     if (question.QuestionType == QuestionType.MultyOption)
                     {
-                        var optionText = asCategorical?.CategoriesId.HasValue ?? false
-                            ? questionnaire.Categories.First(c => c.Id == asCategorical.CategoriesId.Value).Values[i].Text
-                            : question.Answers[i].AnswerText;
+                        var optionText = asCategorical?.IsFilteredCombobox ?? false
+                            ? i.ToString()
+                            : asCategorical?.CategoriesId.HasValue ?? false
+                                ? questionnaire.Categories.First(c => c.Id == asCategorical.CategoriesId.Value).Values[i].Text
+                                : question.Answers[i].AnswerText;
 
                         headerColumn.Title = $"{questionLabel}:{optionText}";
                     }

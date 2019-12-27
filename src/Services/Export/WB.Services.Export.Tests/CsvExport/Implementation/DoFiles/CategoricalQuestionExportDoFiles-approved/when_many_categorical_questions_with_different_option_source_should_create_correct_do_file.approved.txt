@@ -45,31 +45,31 @@ label variable filteredQuestion2__104 `"questionText #4:title #114"'
 label variable filteredQuestion2__105 `"questionText #4:title #115"'
 
 label values multiQuestion1__0 reusableCategory1
-label variable multiQuestion1__0 `"questionText #5:title #211"'
+label variable multiQuestion1__0 `"questionText #5:0"'
 
 label values multiQuestion1__1 reusableCategory1
-label variable multiQuestion1__1 `"questionText #5:title #212"'
+label variable multiQuestion1__1 `"questionText #5:1"'
 
 label values multiQuestion1__2 reusableCategory1
-label variable multiQuestion1__2 `"questionText #5:title #213"'
+label variable multiQuestion1__2 `"questionText #5:2"'
 
 label values multiQuestion1__3 reusableCategory1
-label variable multiQuestion1__3 `"questionText #5:title #214"'
+label variable multiQuestion1__3 `"questionText #5:3"'
 
 label values multiQuestion1__4 reusableCategory1
-label variable multiQuestion1__4 `"questionText #5:title #215"'
+label variable multiQuestion1__4 `"questionText #5:4"'
 
 label values multiQuestion2__0 multiQuestion2
-label variable multiQuestion2__0 `"questionText #6:title #111"'
+label variable multiQuestion2__0 `"questionText #6:0"'
 
 label values multiQuestion2__1 multiQuestion2
-label variable multiQuestion2__1 `"questionText #6:title #112"'
+label variable multiQuestion2__1 `"questionText #6:1"'
 
 label values multiQuestion2__2 multiQuestion2
-label variable multiQuestion2__2 `"questionText #6:title #113"'
+label variable multiQuestion2__2 `"questionText #6:2"'
 
 label values multiQuestion2__3 multiQuestion2
-label variable multiQuestion2__3 `"questionText #6:title #114"'
+label variable multiQuestion2__3 `"questionText #6:3"'
 
 label values multiQuestion2__4 multiQuestion2
-label variable multiQuestion2__4 `"questionText #6:title #115"'
+label variable multiQuestion2__4 `"questionText #6:4"'
