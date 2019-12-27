@@ -252,6 +252,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.RegisterDenormalizer<InterviewSummaryCompositeDenormalizer>();
             registry.RegisterDenormalizer<CumulativeChartDenormalizer>();
             registry.Bind<InterviewCacheWarmupPreProcessor>();
+            registry.Bind<InterviewSummaryErrorsCountPostProcessor>();
+            registry.Bind<InterviewReceivedByInterviewerCommandValidator>();
 
             registry.Bind<IInterviewPackagesService, IInterviewBrokenPackagesService, InterviewPackagesService>();
 

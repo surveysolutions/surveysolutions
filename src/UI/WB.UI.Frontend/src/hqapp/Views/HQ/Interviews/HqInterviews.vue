@@ -333,6 +333,8 @@
 
 <script>
 import {DateFormats} from '~/shared/helpers'
+import moment from 'moment'
+import lowerCase from 'lodash'
 
 export default {
     data() {
@@ -370,7 +372,7 @@ export default {
         responsibleLink() {
             if (this.selectedRowWithMenu == undefined) return ''
 
-            return this.selectedRowWithMenu.responsibleRole.toLowerCase() == 'interviewer'
+            return lowerCase(this.selectedRowWithMenu.responsibleRole) == 'interviewer'
                 ? '<a href="' +
                       this.config.profileUrl +
                       '/' +
@@ -382,7 +384,7 @@ export default {
         },
         getResponsibleClass() {
             return this.selectedRowWithMenu != undefined
-                ? this.selectedRowWithMenu.responsibleRole.toLowerCase()                    
+                ? lowerCase(this.selectedRowWithMenu.responsibleRole)
                 : ''
         },
         tableColumns() {
@@ -932,7 +934,7 @@ export default {
                                 {
                                     data: 'Responsible',
                                     render: function(data, type, row) {
-                                        var resultString = '<span class="' + row.ResponsibleRole.toLowerCase() + '">'
+                                        var resultString = '<span class="' + lowerCase(row.ResponsibleRole) + '">'
                                         resultString += data
                                         resultString += '</span>'
                                         return resultString
@@ -941,7 +943,7 @@ export default {
                                 {
                                     data: 'Assignee',
                                     render: function(data, type, row) {
-                                        var resultString = '<span class="' + row.AssigneeRole.toLowerCase() + '">'
+                                        var resultString = '<span class="' + lowerCase(row.AssigneeRole) + '">'
                                         resultString += data
                                         resultString += '</span>'
                                         return resultString
