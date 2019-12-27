@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Categories;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
@@ -125,7 +126,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 ItemsWithLongValidations = CollectItemsWithLongValidations(allItems, pdfSettings),
                 QuestionsWithLongInstructions = Find<IQuestion>(allItems, x => x.Instructions?.Length > this.pdfSettings.InstructionsExcerptLength).ToList(),
                 QuestionsWithLongOptionsFilterExpression = Find<IQuestion>(allItems, x => x.Properties.OptionsFilterExpression?.Length > this.pdfSettings.VariableExpressionExcerptLength || x.LinkedFilterExpression?.Length > this.pdfSettings.VariableExpressionExcerptLength).ToList(),
-                QuestionsWithLongOptionsList = Find<IQuestion>(allItems, x => x.QuestionType != QuestionType.Numeric && x.Answers?.Count > this.pdfSettings.OptionsExcerptCount).ToList(),
+                QuestionsWithLongOptionsList = Find<ICategoricalQuestion>(allItems, x => !x.CategoriesId.HasValue && x.Answers?.Count > this.pdfSettings.OptionsExcerptCount).ToList(),
                 VariableWithLongExpressions = Find<IVariable>(allItems, x => x.Expression?.Length > this.pdfSettings.VariableExpressionExcerptLength).ToList(),
                 QuestionsWithLongSpecialValuesList = Find<IQuestion>(allItems, x => x.QuestionType == QuestionType.Numeric && x.Answers?.Count > this.pdfSettings.OptionsExcerptCount).ToList(),
                 CategoriesList = questionnaire.Categories.Select(x => new PdfQuestionnaireModel.Categories
