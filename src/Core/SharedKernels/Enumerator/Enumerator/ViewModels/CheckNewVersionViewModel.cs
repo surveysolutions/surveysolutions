@@ -113,6 +113,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             {
                 this.logger.Error("Error when updating", ex);
                 this.CheckNewVersionResult = ex.Message;
+                this.CheckNewVersionDetails = string.Empty;
             }
 
             this.checkNewVersionDetails = string.Empty;
