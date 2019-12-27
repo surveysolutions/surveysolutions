@@ -59,6 +59,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Code\CommandDeserialization\" />
     <Folder Include="Pages\" />
     <Folder Include="wwwroot\apidocs\" />
   </ItemGroup>
@@ -113,6 +114,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>HQ.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Interviews.Designer.cs">
+      <DependentUpon>Interviews.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Update="Resources\MainMenu.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -226,6 +232,10 @@
     <EmbeddedResource Update="Resources\HQ.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>HQ.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Interviews.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Interviews.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\MainMenu.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

@@ -1,9 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Web;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code;
-using WB.UI.Headquarters.Resources;
-
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
+﻿namespace WB.UI.Headquarters.Models
 {
     public class UserBatchUploadModel
     {
