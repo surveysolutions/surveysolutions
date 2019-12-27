@@ -998,16 +998,6 @@
       <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ImportQuestionnaire.sq.resx" />
-    <EmbeddedResource Include="Resources\Interviews.ar.resx">
-      <DependentUpon>Interviews.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Interviews.es.resx">
-      <DependentUpon>Interviews.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Interviews.ro.resx">
-      <DependentUpon>Interviews.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Interviews.sq.resx" />
     <EmbeddedResource Include="Resources\LimitsIndicator.ar.resx">
       <DependentUpon>LimitsIndicator.resx</DependentUpon>
     </EmbeddedResource>
@@ -1223,26 +1213,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ImportQuestionnaire.zh.resx">
       <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Interviews.fr.resx">
-      <DependentUpon>Interviews.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Interviews.ka.resx">
-      <DependentUpon>Interviews.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Interviews.pt.resx">
-      <DependentUpon>Interviews.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Interviews.resx">
-      <SubType>Designer</SubType>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Interviews.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Interviews.ru.resx">
-      <DependentUpon>Interviews.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Interviews.zh.resx">
-      <DependentUpon>Interviews.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\LimitsIndicator.fr.resx">
       <DependentUpon>LimitsIndicator.resx</DependentUpon>
@@ -1666,7 +1636,6 @@
     <Content Include="Views\WebEmails\EmailText.cshtml" />
     <Content Include="Views\Reports\TeamStatusDuration.cshtml" />
     <Content Include="Views\WebInterview\_StartOrResumeForm.cshtml" />
-    <Content Include="Views\Interviews\Index.cshtml" />
     <Content Include="Views\ControlPanel\ReevaluateInterview.cshtml" />
     <Content Include="Views\Diagnostics\Logs.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
@@ -1752,7 +1721,6 @@
     <Compile Include="API\TabletLogsApiController.cs" />
     <Compile Include="Controllers\DiagnosticsController.cs" />
     <Compile Include="API\WebInterview\Pipeline\WebInterviewDataAuthorizeAttribute.cs" />
-    <Compile Include="Controllers\InterviewsController.cs" />
     <Compile Include="API\PublicApi\Models\AuditLogApiView.cs" />
     <Compile Include="Filters\WebInterviewObserverNotAllowedActionFilter.cs" />
     <Compile Include="Resources\Questionnaire.Designer.cs">
@@ -1952,7 +1920,6 @@
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\Profile\ApiUserController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
-    <Compile Include="Controllers\InterviewApiController.cs" />
     <Compile Include="Controllers\InterviewController.cs" />
     <Compile Include="Controllers\Profile\InterviewerController.cs" />
     <Compile Include="Controllers\InterviewersController.cs" />
@@ -1970,7 +1937,6 @@
     <Compile Include="Models\Admin\EmailProviders.cs" />
     <Compile Include="Models\Admin\SettingsModel.cs" />
     <Compile Include="Models\DownloadModel.cs" />
-    <Compile Include="Models\InterviewsDataTableRequest.cs" />
     <Compile Include="Models\Maps\MapsModel.cs" />
     <Compile Include="Models\Maps\UserMapModel.cs" />
     <Compile Include="Models\Maps\UserMapLinkModel.cs" />
@@ -2022,7 +1988,6 @@
     <Compile Include="API\PublicApi\Models\UserApiItem.cs" />
     <Compile Include="API\PublicApi\Models\UserApiView.cs" />
     <Compile Include="Models\ChangeSettingsModel.cs" />
-    <Compile Include="Models\ChangeStateHistoryViewModel.cs" />
     <Compile Include="Models\ChartDataModel.cs" />
     <Compile Include="Models\CompanyLogo\CompanyLogo.cs" />
     <Compile Include="Models\ComponentModels\ComboboxModel.cs" />
@@ -2047,7 +2012,6 @@
     <Compile Include="Models\InterviewersFilter.cs" />
     <Compile Include="Models\InterviewersModel.cs" />
     <Compile Include="Models\InterviewsStatisticsViewModel.cs" />
-    <Compile Include="Models\InterviewSummaryViewModel.cs" />
     <Compile Include="Models\InverviewChangeStateHistoryView.cs" />
     <Compile Include="Models\JsonBaseResponse.cs" />
     <Compile Include="Models\JsonBundleCommandResponse.cs" />
@@ -2090,11 +2054,6 @@
     </Compile>
     <Compile Include="Resources\ImportQuestionnaire.Designer.cs">
       <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Include="Resources\Interviews.Designer.cs">
-      <DependentUpon>Interviews.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
@@ -2188,6 +2147,7 @@
   <ItemGroup>
     <Folder Include="App_Data\Elmah\" />
     <Folder Include="Dependencies\dist\" />
+    <Folder Include="Views\Interviews\" />
     <Folder Include="Views\WebInterviewSetupApi\" />
   </ItemGroup>
   <ItemGroup>

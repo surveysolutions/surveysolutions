@@ -1,26 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Http;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Infrastructure.Native.Sanitizer;
-using WB.UI.Headquarters.Code;
-using WB.UI.Shared.Web.Attributes;
 
-namespace WB.UI.Headquarters.Controllers
+namespace WB.UI.Headquarters.Controllers.Api
 {
     [Authorize]
-    public class InterviewApiController : BaseApiController
+    [Route("api/{controller}/{action}")]
+    public class InterviewApiController : ControllerBase
     {
         private readonly IAuthorizedUser authorizedUser;
         private readonly IAllInterviewsFactory allInterviewsViewFactory;
@@ -28,12 +25,12 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IChangeStatusFactory changeStatusFactory;
         private readonly IInterviewSummaryViewFactory interviewSummaryViewFactory;
 
-        public InterviewApiController(ICommandService commandService, IAuthorizedUser authorizedUser, ILogger logger,
+        public InterviewApiController(
+            IAuthorizedUser authorizedUser, 
             IAllInterviewsFactory allInterviewsViewFactory,
             ITeamInterviewsFactory teamInterviewViewFactory,
             IChangeStatusFactory changeStatusFactory,
             IInterviewSummaryViewFactory interviewSummaryViewFactory)
-            : base(commandService, logger)
         {
             this.authorizedUser = authorizedUser;
             this.allInterviewsViewFactory = allInterviewsViewFactory;
@@ -43,8 +40,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpGet]
-        [CamelCase]
-        public InterviewsDataTableResponse Interviews([FromUri] InterviewsDataTableRequest request)
+        public InterviewsDataTableResponse Interviews([FromQuery] InterviewsDataTableRequest request)
         {
 
             var input = new AllInterviewsInputModel
@@ -56,12 +52,11 @@ namespace WB.UI.Headquarters.Controllers
                 QuestionnaireVersion = request.QuestionnaireVersion,
                 SupervisorOrInterviewerName = request.ResponsibleName,
                 Statuses = request.Status != null ? new[] { request.Status.Value } : null,
-                SearchBy = request.SearchBy ?? request.Search.Value,
+                SearchBy = request.SearchBy ?? request.Search?.Value,
                 TeamId = request.TeamId,
                 UnactiveDateStart = request.UnactiveDateStart?.ToUniversalTime(),
                 UnactiveDateEnd = request.UnactiveDateEnd?.ToUniversalTime(),
-                AssignmentId = request.AssignmentId,
-                //ResponsibleId = request.ResponsibleId
+                AssignmentId = request.AssignmentId
             };
 
             var allInterviews = this.allInterviewsViewFactory.Load(input);
@@ -88,8 +83,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Interviewer")]
-        [CamelCase]
-        public InterviewsDataTableResponse GetInterviews([FromUri] InterviewsDataTableRequest request)
+        public InterviewsDataTableResponse GetInterviews([FromQuery] InterviewsDataTableRequest request)
         {
             
             var input = new AllInterviewsInputModel
@@ -121,8 +115,7 @@ namespace WB.UI.Headquarters.Controllers
         }
         
         [HttpGet]
-        [CamelCase]
-        public TeamInterviewsDataTableResponse GetTeamInterviews([FromUri] InterviewsDataTableRequest request)
+        public TeamInterviewsDataTableResponse GetTeamInterviews([FromQuery] InterviewsDataTableRequest request)
         {
             var input = new TeamInterviewsInputModel
             {
