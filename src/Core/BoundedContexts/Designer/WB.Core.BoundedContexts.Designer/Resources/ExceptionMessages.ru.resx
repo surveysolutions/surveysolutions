@@ -375,6 +375,6 @@
       <comment>[{0}] Текст категории должен быть меньше чем 250 символов</comment>
   </data>
   <data name="ImportOptions_Tab_Or_Excel_Only" xml:space="preserve">
-      <value>Разрешены только файлы разделенные табуляцией(*.tab, *.txt, *.tsv) и эксель файлы(*.xslx, *.xls, *.ods)</value>
+      <value>Разрешены только файлы разделенные табуляцией (*.tab, *.txt, *.tsv) и эксель файлы (*.xslx, *.xls, *.ods)</value>
   </data>
 </root>

@@ -296,7 +296,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
                 return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
             }
-            catch (InvalidExcelFileException e)
+            catch (InvalidFileException e)
             {
                 this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
 
@@ -361,7 +361,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
                 return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
             }
-            catch (InvalidExcelFileException e)
+            catch (InvalidFileException e)
             {
                 this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
 

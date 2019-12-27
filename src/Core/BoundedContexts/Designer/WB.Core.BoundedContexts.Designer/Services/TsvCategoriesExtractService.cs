@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
             };
 
             var categories = new List<CategoriesRow>();
-            var errors = new List<TranslationValidationError>();
+            var errors = new List<ImportValidationError>();
 
             using (var csvReader = new CsvParser(new StreamReader(file), CreateCsvConfiguration()))
             {
@@ -60,12 +60,12 @@ namespace WB.Core.BoundedContexts.Designer.Services
                     if (errors.Count >= 10) break;
 
                     if (categories.Count > AbstractVerifier.MaxOptionsCountInFilteredComboboxQuestion)
-                        throw new InvalidExcelFileException(ExceptionMessages.Excel_Categories_More_Than_Limit.FormatString(AbstractVerifier.MaxOptionsCountInFilteredComboboxQuestion));
+                        throw new InvalidFileException(ExceptionMessages.Excel_Categories_More_Than_Limit.FormatString(AbstractVerifier.MaxOptionsCountInFilteredComboboxQuestion));
                 }
             }
 
             if (errors.Any())
-                throw new InvalidExcelFileException(ExceptionMessages.TranlationExcelFileHasErrors){FoundErrors = errors};
+                throw new InvalidFileException(ExceptionMessages.TranlationExcelFileHasErrors){FoundErrors = errors};
 
             this.verifier.VerifyAll(categories, headers);
 

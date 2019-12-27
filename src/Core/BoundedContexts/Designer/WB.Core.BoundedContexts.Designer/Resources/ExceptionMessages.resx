@@ -367,6 +367,6 @@
     <value>[{0}] Text of category should be less than 250 characters</value>
   </data>
   <data name="ImportOptions_Tab_Or_Excel_Only" xml:space="preserve">
-    <value>Only tab-separated values(*.tab, *.txt, *.tsv) or excel(*.xslx, *.xls, *.ods) files are accepted</value>
+    <value>Only tab-separated values (*.tab, *.txt, *.tsv) or excel (*.xslx, *.xls, *.ods) files are accepted</value>
   </data>
 </root>

@@ -29,16 +29,16 @@ namespace WB.Core.BoundedContexts.Designer.Services
                 var headers = GetHeaders(worksheet);
 
                 if (worksheet.Dimension.End.Row > AbstractVerifier.MaxOptionsCountInFilteredComboboxQuestion + 1)
-                    throw new InvalidExcelFileException(
+                    throw new InvalidFileException(
                         ExceptionMessages.Excel_Categories_More_Than_Limit.FormatString(AbstractVerifier
                             .MaxOptionsCountInFilteredComboboxQuestion));
 
                 if (headers.IdIndex == null)
-                    throw new InvalidExcelFileException(ExceptionMessages.TranlationExcelFileHasErrors)
+                    throw new InvalidFileException(ExceptionMessages.TranlationExcelFileHasErrors)
                     {
-                        FoundErrors = new List<TranslationValidationError>(new[]
+                        FoundErrors = new List<ImportValidationError>(new[]
                         {
-                            new TranslationValidationError
+                            new ImportValidationError
                             {
                                 Message = string.Format(ExceptionMessages.RequiredHeaderWasNotFound, "id")
                             }
@@ -46,11 +46,11 @@ namespace WB.Core.BoundedContexts.Designer.Services
                     };
 
                 if (headers.TextIndex == null)
-                    throw new InvalidExcelFileException(ExceptionMessages.TranlationExcelFileHasErrors)
+                    throw new InvalidFileException(ExceptionMessages.TranlationExcelFileHasErrors)
                     {
-                        FoundErrors = new List<TranslationValidationError>(new[]
+                        FoundErrors = new List<ImportValidationError>(new[]
                         {
-                            new TranslationValidationError
+                            new ImportValidationError
                             {
                                 Message = string.Format(ExceptionMessages.RequiredHeaderWasNotFound, "text")
                             }
@@ -58,9 +58,9 @@ namespace WB.Core.BoundedContexts.Designer.Services
                     };
 
                 if (worksheet.Dimension.End.Row == 1)
-                    throw new InvalidExcelFileException(ExceptionMessages.Excel_NoCategories);
+                    throw new InvalidFileException(ExceptionMessages.Excel_NoCategories);
 
-                var errors = new List<TranslationValidationError>();
+                var errors = new List<ImportValidationError>();
                 for (int rowNumber = 2; rowNumber <= worksheet.Dimension.End.Row; rowNumber++)
                 {
                     var row = GetRowValues(worksheet, headers, rowNumber);
@@ -77,7 +77,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
                 }
 
                 if (errors.Any())
-                    throw new InvalidExcelFileException(ExceptionMessages.TranlationExcelFileHasErrors){FoundErrors = errors};
+                    throw new InvalidFileException(ExceptionMessages.TranlationExcelFileHasErrors){FoundErrors = errors};
 
                 this.verifier.VerifyAll(categories, headers);
 
