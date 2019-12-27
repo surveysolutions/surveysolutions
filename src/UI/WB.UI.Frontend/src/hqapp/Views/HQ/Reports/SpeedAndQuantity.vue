@@ -5,6 +5,7 @@
         <Typeahead
           ref="reportTypeControl"
           control-id="reportTypeId"
+          no-clear
           fuzzy
           data-vv-name="reportTypeId"
           data-vv-as="reportType"
@@ -14,6 +15,7 @@
           v-on:selected="reportTypeSelected"
         />
       </FilterBlock>
+
 
       <FilterBlock :title="$t('Common.Questionnaire')">
         <Typeahead
@@ -45,30 +47,35 @@
       </FilterBlock>
       <FilterBlock :title="$t('PeriodicStatusReport.OverTheLast')">
         <Typeahead
+          ref="overTheLast"
           control-id="overTheLast"
           fuzzy
-          :selectedKey="selectedOverTheLast"
+          no-clear          
           data-vv-name="overTheLast"
           data-vv-as="overTheLast"
           :placeholder="$t('PeriodicStatusReport.OverTheLast')"
           :value="overTheLast"
-          :values="overTheLasts"
-          v-on:selected="statusSelected"
+          :values="this.$config.model.overTheLasts"
+          v-on:selected="overTheLastSelected"
         />
       </FilterBlock>
 
       <FilterBlock :title="$t('PeriodicStatusReport.PeriodUnit')">
         <Typeahead
+          ref="period"
           control-id="period"
+          fuzzy
+          no-clear          
           :placeholder="$t('PeriodicStatusReport.Period')"
-          :value="period"
-          :ajax-params="period"
+          data-vv-name="period"
+          data-vv-as="period"
           v-on:selected="periodSelected"
-          :values="periods"
+          :value="period"
+          :values="this.$config.model.periods"
         ></Typeahead>
       </FilterBlock>
 
-      <FilterBlock :title="$t('PeriodicStatusReport.LastDateToShowLabel')">
+      <!--FilterBlock :title="$t('PeriodicStatusReport.LastDateToShowLabel')">
         <div class="input-group">
             <div class="form-date input-group" id="dates-range">
                 <input type="text" data-bind="flatpickr: FromDate, flatpickrOptions: { minDate: '@Model.MinAllowedDate.ToString("s")', maxDate: 'today', wrap: true, enableTime: false, dateFormat: 'Y-m-d'}" placeholder="Select start date" class="form-control flatpickr-input" readonly="readonly" data-input>
@@ -80,7 +87,7 @@
                 </span>
             </div>
         </div>
-      </FilterBlock>
+      </FilterBlock-->
     </Filters>
 
     <DataTables
@@ -112,11 +119,44 @@ export default {
         }
     },
     mounted() {
+        if (this.reportTypeId == null && this.model.reportTypes.length > 0) {
+            this.reportTypeSelected(this.model.reportTypes[0]);
+        } 
+        if (this.overTheLast == null && this.model.overTheLasts.length > 6) {
+            this.overTheLastSelected(this.model.overTheLasts[6]);
+        }
+        if (this.period == null && this.model.periods.length > 0) {
+            this.periodSelected(this.model.periods[0]);
+        }
         if (this.$refs.table){
             this.$refs.table.reload();
         }
     },
     methods: {
+        title() {
+            return "report title"
+        },
+        reportTypeSelected(option) {
+            this.reportTypeId = option.key
+        },
+        questionnaireSelected(option){
+            this.questionnaireId = option.key
+        },
+        questionnaireVersionSelected(option) {
+            this.questionnaireVersion = option.key
+        },
+        selectedOverTheLast(option) {
+            this.overTheLast = option.key
+        },
+        statusSelected(option) {
+            this.status = option.key
+        },
+        periodSelected(option) {
+            this.period = option.key
+        },
+        overTheLastSelected(option) {
+            this.overTheLast = option.key
+        },
         addParamsToRequest(requestData) {
             requestData.questionnaireId = (this.questionnaireId || {}).key
             requestData.questionnaireVersion = (this.questionnaireVersion || {}).key
@@ -196,26 +236,6 @@ export default {
                             {
                                 return `<span>${data}</span>`
                             }
-                        }
-                    },
-                    {
-                        data: "neverSynchedCount",
-                        name: "NeverSynchedCount",
-                        "class": "type-numeric",
-                        title: this.$t("DevicesInterviewers.NeverSynchronized"),
-                        orderable: true,
-                        render: function (data, type, row) {
-                            return self.renderCell(data, row, 'NeverSynchonized');
-                        }
-                    },
-                    {
-                        data: "noQuestionnairesCount",
-                        name: "NoQuestionnairesCount",
-                        "class": "type-numeric",
-                        orderable: true,
-                        title: this.$t("DevicesInterviewers.NoAssignments"),
-                        render: function(data, type, row) {
-                            return self.renderCell(data, row, 'NoAssignmentsReceived');
                         }
                     },
                     {
