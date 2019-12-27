@@ -50,21 +50,22 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
 
             foreach (IExportedHeaderItem headerItem in level.HeaderItems.Values)
             {
-                var isMultiOptionQuestion = (headerItem as ExportedQuestionHeaderItem)?.QuestionType == QuestionType.MultyOption;
-                var hasLabels = (headerItem as ExportedQuestionHeaderItem)?.Labels?.Count > 0 && !isMultiOptionQuestion;
+                var isMultiOptionQuestionWithOptionsInEntity = (headerItem is ExportedQuestionHeaderItem questionHeaderItem) 
+                                            && questionHeaderItem.QuestionType == QuestionType.MultyOption 
+                                            && questionHeaderItem.QuestionSubType != QuestionSubtype.MultyOption_Combobox;
+                var isNeedSaveLabelsByEntity = (headerItem as ExportedQuestionHeaderItem)?.Labels?.Count > 0 && !isMultiOptionQuestionWithOptionsInEntity;
                 var labelReferenceId = (headerItem as ExportedQuestionHeaderItem)?.LabelReferenceId;
 
                 foreach (var headerColumn in headerItem.ColumnHeaders)
                 {
                     DataExportValue value = null;
 
-
-                    if (labelReferenceId.HasValue && !isMultiOptionQuestion)
+                    if (labelReferenceId.HasValue)
                     {
                         var labels = level.ReusableLabels.First(l => l.Key == labelReferenceId.Value).Value;
                         value = new DataExportValue(labels.Name, labelReferenceId.Value);
                     }
-                    else if (hasLabels)
+                    else if (isNeedSaveLabelsByEntity)
                     {
                         var variableValueLabel = ((ExportedQuestionHeaderItem)headerItem).Labels
                             .Select(label => new VariableValueLabel(label.Value, label.Title?.RemoveHtmlTags() ?? string.Empty))

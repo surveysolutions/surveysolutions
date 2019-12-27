@@ -3,6 +3,8 @@ insheet using "questionnaire_var.tab", tab case names
 
 label define reusableCategory1 201 `"title #211"' 202 `"title #212"' 203 `"title #213"' 204 `"title #214"' 205 `"title #215"' 
 
+label define multiQuestion2 101 `"title #111"' 102 `"title #112"' 103 `"title #113"' 104 `"title #114"' 105 `"title #115"' 
+
 label variable interview__id `"Unique 32-character long identifier of the interview"'
 
 label variable interview__key `"Interview key (identifier in XX-XX-XX-XX format)"'
@@ -30,17 +32,17 @@ label variable multiQuestion1__3 `"questionText #1:title #214"'
 label values multiQuestion1__4 reusableCategory1
 label variable multiQuestion1__4 `"questionText #1:title #215"'
 
-label values multiQuestion2__0 reusableCategory1
-label variable multiQuestion2__0 `"questionText #2:title #211"'
+label values multiQuestion2__0 multiQuestion2
+label variable multiQuestion2__0 `"questionText #2:title #111"'
 
-label values multiQuestion2__1 reusableCategory1
-label variable multiQuestion2__1 `"questionText #2:title #212"'
+label values multiQuestion2__1 multiQuestion2
+label variable multiQuestion2__1 `"questionText #2:title #112"'
 
-label values multiQuestion2__2 reusableCategory1
-label variable multiQuestion2__2 `"questionText #2:title #213"'
+label values multiQuestion2__2 multiQuestion2
+label variable multiQuestion2__2 `"questionText #2:title #113"'
 
-label values multiQuestion2__3 reusableCategory1
-label variable multiQuestion2__3 `"questionText #2:title #214"'
+label values multiQuestion2__3 multiQuestion2
+label variable multiQuestion2__3 `"questionText #2:title #114"'
 
-label values multiQuestion2__4 reusableCategory1
-label variable multiQuestion2__4 `"questionText #2:title #215"'
+label values multiQuestion2__4 multiQuestion2
+label variable multiQuestion2__4 `"questionText #2:title #115"'
