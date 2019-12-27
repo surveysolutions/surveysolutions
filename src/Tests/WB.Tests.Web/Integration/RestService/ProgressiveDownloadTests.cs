@@ -60,7 +60,7 @@ namespace WB.Tests.Integration.RestService
                 var client = server.HttpClient;
 
                 client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("org.worldbank.solutions.interviewer",
-                    new Version(1, 2, 26644).ToString()));
+                    new Version(19, 12, 2).ToString()));
 
                 var response = await client.GetAsync("/api/test");
 
@@ -81,7 +81,7 @@ namespace WB.Tests.Integration.RestService
                 var client = server.HttpClient;
 
                 client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("org.worldbank.solutions.interviewer",
-                    new Version(1, 2, 26644 + 1).ToString()));
+                    new Version(19, 12, 6).ToString()));
 
                 var response = await client.GetAsync("/api/test");
 
