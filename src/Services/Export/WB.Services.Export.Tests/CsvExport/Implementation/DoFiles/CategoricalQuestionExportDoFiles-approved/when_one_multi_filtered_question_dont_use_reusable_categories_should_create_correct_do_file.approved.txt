@@ -16,16 +16,16 @@ label values interview__status interview__status
 label variable interview__status `"Status of the interview"'
 
 label values multiQuestion1__0 multiQuestion1
-label variable multiQuestion1__0 `"questionText #1:title #111"'
+label variable multiQuestion1__0 `"questionText #1:0"'
 
 label values multiQuestion1__1 multiQuestion1
-label variable multiQuestion1__1 `"questionText #1:title #112"'
+label variable multiQuestion1__1 `"questionText #1:1"'
 
 label values multiQuestion1__2 multiQuestion1
-label variable multiQuestion1__2 `"questionText #1:title #113"'
+label variable multiQuestion1__2 `"questionText #1:2"'
 
 label values multiQuestion1__3 multiQuestion1
-label variable multiQuestion1__3 `"questionText #1:title #114"'
+label variable multiQuestion1__3 `"questionText #1:3"'
 
 label values multiQuestion1__4 multiQuestion1
-label variable multiQuestion1__4 `"questionText #1:title #115"'
+label variable multiQuestion1__4 `"questionText #1:4"'

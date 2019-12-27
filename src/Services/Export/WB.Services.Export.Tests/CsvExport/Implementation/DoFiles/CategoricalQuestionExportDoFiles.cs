@@ -221,6 +221,23 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
 
 
         [Test]
+        public void when_two_multi_filtered_questions_with_max_answers_count_should_create_correct_do_file()
+        {
+            string stataGeneratedContent = "";
+
+            var exportStructure = CreateQuestionnaireExportStructure(questionnaireCategories, new IQuestionnaireEntity[]
+            {
+                Create.MultyOptionsQuestion(variable: "multiQuestion1", isFilteredCombobox:true, categoryId: Id.g1, questionText: "questionText #1", maxAnswersCount: 3),
+                Create.MultyOptionsQuestion(variable: "multiQuestion2", isFilteredCombobox:true, options: answers, questionText: "questionText #2", maxAnswersCount: 2),
+            });
+            var exporter = CreateInterviewsDoFilesExporter(s => stataGeneratedContent = s);
+
+            exporter.ExportDoFiles(exportStructure, "", CancellationToken.None);
+
+            Approvals.Verify(stataGeneratedContent);
+        }
+
+        [Test]
         public void when_two_multi_filtered_questions_With_reusable_categories_should_create_correct_do_file()
         {
             string stataGeneratedContent = "";
