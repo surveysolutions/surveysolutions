@@ -21,6 +21,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Infrastructure.Native.Questionnaire;
 
 namespace WB.Tests.Abc.TestFactories
 {
@@ -75,14 +76,16 @@ namespace WB.Tests.Abc.TestFactories
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null,
             IFileSystemAccessor fileSystemAccessor = null,
             IPlainStorageAccessor<Enumerator.Native.Questionnaire.TranslationInstance> translationsStorage = null,
-            IAuthorizedUser authorizedUser = null)
+            IAuthorizedUser authorizedUser = null,
+            IReusableCategoriesStorage categoriesStorage = null)
             => new Questionnaire(
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 Mock.Of<IQuestionnaireAssemblyAccessor>(),
                 questionnaireBrowseItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 translationsStorage ?? new InMemoryPlainStorageAccessor<Enumerator.Native.Questionnaire.TranslationInstance>(),
-                authorizedUser ?? Mock.Of<IAuthorizedUser>());
+                authorizedUser ?? Mock.Of<IAuthorizedUser>(),
+                categoriesStorage ?? Mock.Of<IReusableCategoriesStorage>());
 
         public StatefulInterview StatefulInterview(Guid interviewId, 
             Guid? questionnaireId = null,
