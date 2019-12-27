@@ -44,11 +44,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// Gets list of imported questionnaires 
         /// </summary>
         /// <param name="limit">Limit number of returned rows. Max allowed value is 40</param>
-        /// <param name="offset">Skip rows</param>
+        /// <param name="offset">Page number starting from 1. Actual skipped rows are calculated as `(offset - 1) * limit`</param>
         [HttpGet]
         [Route("")]
         [Authorize(Roles = "ApiUser, Administrator")]
-        public QuestionnaireApiView Questionnaires(int limit = 10, int offset = 1)
+        public QuestionnaireApiView Questionnaires(int limit = 10, int offset = 1 /* in v2 rename to page number or use as real offset */)
         {
             var input = new QuestionnaireBrowseInputModel
             {
