@@ -203,8 +203,7 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
         }
 
         [Test]
-        [Ignore("Change after new export for filtered")]
-        public void when_two_multi_filtered_questions_with_differant_source_should_create_correct_do_file()
+        public void when_two_multi_filtered_questions_with_different_source_should_create_correct_do_file()
         {
             string stataGeneratedContent = "";
 
