@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Filters;
@@ -148,7 +150,7 @@ namespace WB.UI.Headquarters.Controllers
                 perTeam: false,
                 supervisorId: supervisorId);
 
-            model.ReportTypes = this.quantityReportTypesForSupervisor;
+            model.ReportTypes = ToComboboxItems(this.quantityReportTypesForSupervisor);
             model.SupervisorName = GetSupervisorName(supervisorId);
 
             return this.View("SpeedAndQuantity", model);
@@ -168,7 +170,7 @@ namespace WB.UI.Headquarters.Controllers
                 perTeam: true,
                 responsibleColumnName: PeriodicStatusReport.Team);
 
-            model.ReportTypes = this.quantityReportTypesForHeadquarters;
+            model.ReportTypes = ToComboboxItems(this.quantityReportTypesForHeadquarters);
 
             return this.View("SpeedAndQuantity", model);
         }
@@ -192,7 +194,7 @@ namespace WB.UI.Headquarters.Controllers
                 perTeam: false,
                 supervisorId: supervisorId);
 
-            model.ReportTypes = this.speedReportTypesForSupervisor;
+            model.ReportTypes = ToComboboxItems(this.speedReportTypesForSupervisor);
             model.SupervisorName = GetSupervisorName(supervisorId);
 
             return this.View("SpeedAndQuantity", model);
@@ -216,7 +218,7 @@ namespace WB.UI.Headquarters.Controllers
                 perTeam: true,
                 responsibleColumnName: PeriodicStatusReport.Team);
 
-            model.ReportTypes = this.speedReportTypesForHeadquarters;
+            model.ReportTypes = ToComboboxItems(this.speedReportTypesForHeadquarters);
 
             return this.View("SpeedAndQuantity", model);
         }
@@ -240,7 +242,7 @@ namespace WB.UI.Headquarters.Controllers
                 DataUrl = Url.Action(reportName + webApiActionName, "ReportDataApi"),
                 CanNavigateToQuantityByTeamMember = canNavigateToQuantityByTeamMember,
                 CanNavigateToQuantityBySupervisors = canNavigateToQuantityBySupervisors,
-                Questionnaires = allUsersAndQuestionnaires.Questionnaires.ToArray(),
+                Questionnaires = ToComboboxItems(allUsersAndQuestionnaires.Questionnaires),
                 ReportName = reportName,
                 ResponsibleColumnName = responsibleColumnName,
                 SupervisorId = supervisorId,
@@ -251,11 +253,11 @@ namespace WB.UI.Headquarters.Controllers
                 InterviewersUrl = Url.Action(reportName + "ByInterviewers", "Reports"),
                 Periods = new[]
                 {
-                    new ComboboxViewItem() { Value = "d", Alias = PeriodicStatusReport.Day },
-                    new ComboboxViewItem() { Value = "w", Alias = PeriodicStatusReport.Week },
-                    new ComboboxViewItem() { Value = "m", Alias = PeriodicStatusReport.Month },
+                    new ComboboxViewItem() { Key = "d", Value = PeriodicStatusReport.Day   },
+                    new ComboboxViewItem() { Key = "w", Value = PeriodicStatusReport.Week  },
+                    new ComboboxViewItem() { Key = "m", Value = PeriodicStatusReport.Month },
                 },
-                OverTheLasts = Enumerable.Range(1, 12).Select(i => new ComboboxViewItem() { Value = i.ToString(), Alias = i.ToString() }).ToArray()
+                OverTheLasts = Enumerable.Range(1, 12).Select(i => new ComboboxViewItem() { Value = i.ToString(), Key = i.ToString() }).ToArray()
             };
         }
 
@@ -335,6 +337,35 @@ namespace WB.UI.Headquarters.Controllers
             PeriodiceReportType.NumberOfCompletedInterviews,
             PeriodiceReportType.NumberOfInterviewTransactionsBySupervisor
         };
+
+        private ComboboxViewItem[] ToComboboxItems(PeriodiceReportType[] types)
+        {
+            return types
+                .Select(type => new ComboboxViewItem()
+                {
+                    Key = ((int)type).ToString(),
+                    Value = PeriodicStatusReport.ResourceManager.GetString(type.ToString()),
+                })
+                .ToArray();
+        }
+
+        private QuestionnaireVersionsComboboxViewItem[] ToComboboxItems(IEnumerable<TemplateViewItem> questionnaires)
+        {
+            return questionnaires
+                .GroupBy(x => new { x.TemplateId, x.TemplateName })
+                .Select(x => new QuestionnaireVersionsComboboxViewItem()
+                {
+                    Key = x.Key.TemplateId.FormatGuid(),
+                    Value = x.Key.TemplateName,
+                    Versions = x.Select(y => new ComboboxViewItem()
+                    {
+                        Key = y.TemplateVersion.ToString(),
+                        Value = y.TemplateVersion.ToString(),
+                    }).OrderByDescending(y => y.Value).ToList()
+                })
+                .OrderBy(x => x.Value)
+                .ToArray();
+        }
 
         private string GetSupervisorName(Guid? supervisorId)
         {
