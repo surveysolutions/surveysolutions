@@ -224,7 +224,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
         public async Task UploadInterview_should_update_quantity_on_assignment_when_interview_received()
         {
             var assignmentId = 1;
-            var existingInterviews = new InMemoryPlainStorage<InterviewView>();
+            var existingInterviews = Create.Storage.InMemorySqlitePlainStorage<InterviewView>();
             existingInterviews.Store(Create.Entity.InterviewView(assignmentId: assignmentId, interviewId: Id.g1));
             existingInterviews.Store(Create.Entity.InterviewView(assignmentId: assignmentId, interviewId: Id.g2, status: InterviewStatus.RejectedBySupervisor, fromHqSyncDateTime: DateTime.UtcNow.AddHours(-10)));
             existingInterviews.Store(Create.Entity.InterviewView(assignmentId: assignmentId, interviewId: Id.g3, fromHqSyncDateTime: null));
