@@ -5,6 +5,8 @@ using System.Linq;
 using System.Reflection;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
@@ -23,7 +25,7 @@ using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
-    public class InterviewParaDataEventHandler : 
+    public class InterviewParaDataEventHandler :
         IUpdateHandler<InterviewHistoryView, SupervisorAssigned>,
         IUpdateHandler<InterviewHistoryView, InterviewApprovedByHQ>,
         IUpdateHandler<InterviewHistoryView, InterviewerAssigned>,
@@ -74,29 +76,24 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IReadSideRepositoryWriter<InterviewHistoryView> readSideStorage;
-        private readonly ConcurrentDictionary<QuestionnaireIdentity, QuestionnaireExportStructure> cacheQuestionnaireExportStructure = new ConcurrentDictionary<QuestionnaireIdentity, QuestionnaireExportStructure>();
-        private readonly ConcurrentDictionary<Guid, UserView> cacheUserDocument = new ConcurrentDictionary<Guid, UserView>();
-
-        private readonly InterviewDataExportSettings interviewDataExportSettings;
+        private readonly IMemoryCache handlerCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
 
         public InterviewParaDataEventHandler(
             IReadSideRepositoryWriter<InterviewHistoryView> readSideStorage,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader,
             IUserViewFactory userReader,
-            InterviewDataExportSettings interviewDataExportSettings, 
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage,
             IQuestionnaireStorage questionnaireStorage)
         {
             this.readSideStorage = readSideStorage;
             this.interviewSummaryReader = interviewSummaryReader;
             this.userReader = userReader;
-            this.interviewDataExportSettings = interviewDataExportSettings;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
             this.questionnaireStorage = questionnaireStorage;
         }
 
         static readonly ConcurrentDictionary<Type, MethodInfo> methodsCache = new ConcurrentDictionary<Type, MethodInfo>();
-        
+
         public void Handle(IPublishableEvent evt)
         {
             var payloadType = evt.Payload.GetType();
@@ -109,7 +106,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     .GetType()
                     .GetMethod("Update", new[] { typeof(InterviewHistoryView), eventType });
             });
-            
+
             if (updateMethod == null)
                 return;
 
@@ -119,7 +116,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             {
                 var interviewSummary = this.interviewSummaryReader.GetById(evt.EventSourceId);
                 if (interviewSummary != null)
-                    currentState = new InterviewHistoryView(evt.EventSourceId, new List<InterviewHistoricalRecordView>(), 
+                    currentState = new InterviewHistoryView(evt.EventSourceId, new List<InterviewHistoricalRecordView>(),
                         interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
                 else //interview was deleted
                 {
@@ -139,12 +136,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 this.readSideStorage.Remove(evt.EventSourceId);
             }
         }
-        private bool Handles(IUncommittedEvent evt)
-        {
-            Type genericUpgrader = typeof(IUpdateHandler<,>);
-            return genericUpgrader.MakeGenericType(typeof(InterviewHistoryView), evt.Payload.GetType()).IsInstanceOfType(this.GetType());
-        }
-
+        
         private PublishedEvent CreatePublishedEvent(IUncommittedEvent evt)
         {
             var publishedEventClosedType = typeof(PublishedEvent<>).MakeGenericType(evt.Payload.GetType());
@@ -165,13 +157,13 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp,
                 @event.Payload.OriginDate?.Offset,
                 this.CreateCommentParameters(@event.Payload.Comment));
-            
+
             return view;
         }
 
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewerAssigned> @event)
         {
-            this.AddHistoricalRecord(view, InterviewHistoricalAction.InterviewerAssigned, @event.Payload.UserId, 
+            this.AddHistoricalRecord(view, InterviewHistoricalAction.InterviewerAssigned, @event.Payload.UserId,
                 @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.AssignTime ?? @event.EventTimeStamp,
                 @event.Payload.OriginDate?.Offset,
                 new Dictionary<string, string> { { "responsible", @event.Payload.InterviewerId.FormatGuid() } });
@@ -179,10 +171,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             return view;
         }
 
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewCompleted> @event){
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewCompleted> @event)
+        {
 
             this.AddHistoricalRecord(view, InterviewHistoricalAction.Completed, Guid.Empty,
-                @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.CompleteTime??@event.EventTimeStamp,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.CompleteTime ?? @event.EventTimeStamp,
                 @event.Payload.OriginDate?.Offset,
                 this.CreateCommentParameters(@event.Payload.Comment));
 
@@ -281,7 +274,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<NumericRealQuestionAnswered> @event)
         {
-            this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId, 
+            this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId,
                 @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.AnswerTimeUtc,
                 @event.Payload.OriginDate?.Offset,
                 this.CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(@event.Payload.Answer),
@@ -347,10 +340,10 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<AnswersRemoved> @event)
         {
-           @event.Payload.Questions.ForEach(e=>  this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerRemoved, null,
-               @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.RemoveTime ?? @event.EventTimeStamp,
-               @event.Payload.OriginDate?.Offset,
-               this.CreateQuestionParameters(e.Id, e.RosterVector)));
+            @event.Payload.Questions.ForEach(e => this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerRemoved, null,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.RemoveTime ?? @event.EventTimeStamp,
+                @event.Payload.OriginDate?.Offset,
+                this.CreateQuestionParameters(e.Id, e.RosterVector)));
 
             return view;
         }
@@ -390,7 +383,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<QRBarcodeQuestionAnswered> @event)
         {
-            this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId, 
+            this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId,
                 @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.AnswerTimeUtc,
                 @event.Payload.OriginDate?.Offset,
             this.CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(@event.Payload.Answer),
@@ -434,7 +427,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 parameters.Add("roster", string.Join(",", @event.Payload.RosterVector));
             }
 
-            this.AddHistoricalRecord(view, InterviewHistoricalAction.CommentSet, @event.Payload.UserId, 
+            this.AddHistoricalRecord(view, InterviewHistoricalAction.CommentSet, @event.Payload.UserId,
                 @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.CommentTime,
                 @event.Payload.OriginDate?.Offset,
                 parameters);
@@ -455,11 +448,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             return result;
         }
 
-        private InterviewHistoricalRecordView CreateInterviewHistoricalRecordView(InterviewHistoricalAction action, 
+        private InterviewHistoricalRecordView CreateInterviewHistoricalRecordView(InterviewHistoricalAction action,
             Guid? userId,
-            DateTime? timestamp, 
-            TimeSpan? offset, 
-            Dictionary<string, string> parameters, 
+            DateTime? timestamp,
+            TimeSpan? offset,
+            Dictionary<string, string> parameters,
             QuestionnaireExportStructure questionnaire)
         {
             string userName = string.Empty;
@@ -476,10 +469,10 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 case InterviewHistoricalAction.QuestionDisabled:
                 case InterviewHistoricalAction.GroupDisabled:
                 case InterviewHistoricalAction.GroupEnabled:
-                {
+                    {
                         // ignore
                         return null;
-                }
+                    }
 
                 case InterviewHistoricalAction.AnswerRemoved:
                     var argsForRemoved = new Dictionary<string, string>();
@@ -503,24 +496,62 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 case InterviewHistoricalAction.CommentSet:
                 case InterviewHistoricalAction.QuestionDeclaredInvalid:
                 case InterviewHistoricalAction.QuestionDeclaredValid:
-                {
-                    var newParameters = new Dictionary<string, string>();
-                    if (parameters.ContainsKey("questionId"))
                     {
-                        var questionId = Guid.Parse(parameters["questionId"]);
-                        var question = questionnaire.GetExportedQuestionHeaderItemForQuestion(questionId);
-
-                        if (question != null)
+                        var newParameters = new Dictionary<string, string>();
+                        if (parameters.ContainsKey("questionId"))
                         {
-                            newParameters["question"] = question.VariableName;
-                            switch (action)
+                            var questionId = Guid.Parse(parameters["questionId"]);
+                            var question = questionnaire.GetExportedQuestionHeaderItemForQuestion(questionId);
+
+                            if (question != null)
                             {
-                                case InterviewHistoricalAction.CommentSet:
-                                    newParameters["comment"] = parameters["comment"];
-                                    break;
-                                case InterviewHistoricalAction.AnswerSet:
-                                    newParameters["answer"] = parameters["answer"];
-                                    break;
+                                newParameters["question"] = question.VariableName;
+                                switch (action)
+                                {
+                                    case InterviewHistoricalAction.CommentSet:
+                                        newParameters["comment"] = parameters["comment"];
+                                        break;
+                                    case InterviewHistoricalAction.AnswerSet:
+                                        newParameters["answer"] = parameters["answer"];
+                                        break;
+                                }
+
+                                if (parameters.TryGetValue("roster", out var roster))
+                                {
+                                    newParameters["roster"] = roster;
+                                }
+                            }
+                        }
+                        return new InterviewHistoricalRecordView(0, action, userName, userRole, newParameters, timestamp, offset);
+                    }
+                case InterviewHistoricalAction.InterviewerAssigned
+                    when parameters.ContainsKey("responsible") && parameters["responsible"] != null:
+                    {
+                        Guid responsibleId = Guid.Parse(parameters["responsible"]);
+                        return new InterviewHistoricalRecordView(0, action, userName, userRole,
+                            new Dictionary<string, string> {
+                        {
+                            "responsible", this.GetUserName(this.GetUserDocument(responsibleId))
+                        } },
+                            timestamp, offset);
+                    }
+                case InterviewHistoricalAction.VariableSet:
+                case InterviewHistoricalAction.VariableEnabled:
+                case InterviewHistoricalAction.VariableDisabled:
+                    {
+                        var newParameters = new Dictionary<string, string>();
+                        if (parameters.ContainsKey("variableId"))
+                        {
+                            var variableId = Guid.Parse(parameters["variableId"]);
+                            var variable = questionnaire.GetExportedQuestionHeaderItemForQuestion(variableId);
+
+                            if (variable == null)
+                                return null;
+
+                            newParameters["variable"] = variable.VariableName;
+                            if (action == InterviewHistoricalAction.VariableSet)
+                            {
+                                newParameters["value"] = parameters["value"];
                             }
 
                             if (parameters.TryGetValue("roster", out var roster))
@@ -528,91 +559,47 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                                 newParameters["roster"] = roster;
                             }
                         }
+                        return new InterviewHistoricalRecordView(0, action, userName, userRole, newParameters, timestamp, offset);
                     }
-                    return new InterviewHistoricalRecordView(0, action, userName, userRole, newParameters, timestamp, offset);
-                }
-                case InterviewHistoricalAction.InterviewerAssigned 
-                    when parameters.ContainsKey("responsible") && parameters["responsible"] != null:
-                {
-                    Guid responsibleId = Guid.Parse(parameters["responsible"]);
-                    return new InterviewHistoricalRecordView(0, action, userName, userRole,
-                        new Dictionary<string, string> {
-                        {
-                            "responsible", this.GetUserName(this.GetUserDocument(responsibleId))
-                        } },
-                        timestamp, offset);
-                }
-                case InterviewHistoricalAction.VariableSet:
-                case InterviewHistoricalAction.VariableEnabled:
-                case InterviewHistoricalAction.VariableDisabled:
-                {
-                    var newParameters = new Dictionary<string, string>();
-                    if (parameters.ContainsKey("variableId"))
-                    {
-                        var variableId = Guid.Parse(parameters["variableId"]);
-                        var variable = questionnaire.GetExportedQuestionHeaderItemForQuestion(variableId);
-                     
-                        if (variable == null)
-                            return null;
-
-                        newParameters["variable"] = variable.VariableName;
-                        if (action == InterviewHistoricalAction.VariableSet)
-                        {
-                            newParameters["value"] = parameters["value"];
-                        }
-
-                        if (parameters.TryGetValue("roster", out var roster))
-                        {
-                            newParameters["roster"] = roster;
-                        }
-                        }
-                    return new InterviewHistoricalRecordView(0, action, userName, userRole, newParameters, timestamp, offset);
-                }
                 default:
                     return new InterviewHistoricalRecordView(0, action, userName, userRole, parameters, timestamp, offset);
             }
         }
 
-        private void ReduceCacheIfNeeded<TKey, TValue>(ConcurrentDictionary<TKey, TValue> cache)
+        private QuestionnaireExportStructure GetQuestionnaireExportStructure(Guid questionnaireId, long questionnaireVersion)
         {
-            if (cache.Count > this.interviewDataExportSettings.LimitOfCachedItemsByDenormalizer)
-            {
-                var cachedItemKeysToRemove = cache.Keys.Take(cache.Count - this.interviewDataExportSettings.LimitOfCachedItemsByDenormalizer).ToList();
-                foreach (var cachedItemKeyToRemove in cachedItemKeysToRemove)
+            var exportStructure = this.handlerCache.GetOrCreate($"Questionnaire:{questionnaireId}${questionnaireVersion}",
+                entry =>
                 {
-                    TValue removedItem;
-                    cache.TryRemove(cachedItemKeyToRemove, out removedItem);
-                }
-            }
+                    // No need in configurable sliding expiration. There will be very few amount of items
+                    // also there is no reasons to push this per questionnaire cache into Questionnaire,
+                    // as this structure is big enough and only used in this handler
+                    entry.SlidingExpiration = TimeSpan.FromMinutes(10);
+                    return this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(
+                        new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
+                });
+
+            return exportStructure;
         }
 
-        private QuestionnaireExportStructure GetQuestionnaire(Guid questionnaireId, long questionnaireVersion)
+        private UserViewLite GetUserDocument(Guid originatorId)
         {
-            var cachedQuestionnaireExportStructure =
-                this.cacheQuestionnaireExportStructure.GetOrAdd(
-                    new QuestionnaireIdentity(questionnaireId, questionnaireVersion),
-                    (key) => this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaireId, questionnaireVersion)));
-
-            this.ReduceCacheIfNeeded(this.cacheQuestionnaireExportStructure);
-            return cachedQuestionnaireExportStructure;
-        }
-
-        private UserView GetUserDocument(Guid originatorId)
-        {
-            var cachedUserDocument = this.cacheUserDocument.GetOrAdd(originatorId, key => this.userReader.GetUser(new UserViewInputModel(key)));
-
-            this.ReduceCacheIfNeeded(this.cacheUserDocument);
+            var cachedUserDocument = this.handlerCache.GetOrCreate($"Users:{originatorId}", entry =>
+            {
+                entry.SlidingExpiration = TimeSpan.FromMinutes(10);
+                return this.userReader.GetUser(originatorId);
+            });
 
             return cachedUserDocument;
         }
 
-        private string GetUserName(UserView responsible)
+        private string GetUserName(UserViewLite responsible)
         {
             var userName = responsible != null ? responsible.UserName : "";
             return userName;
         }
 
-        private string GetUserRole(UserView user)
+        private string GetUserRole(UserViewLite user)
         {
             const string UnknownUserRole = "";
             if (user == null || !user.Roles.Any())
@@ -630,19 +617,19 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         private void AddHistoricalRecord(InterviewHistoryView view, InterviewHistoricalAction action, Guid? userId, DateTime? timestamp, TimeSpan? offset,
             Dictionary<string, string> parameters = null)
         {
-            if(view ==null)
+            if (view == null)
                 return;
 
-            var questionnaire = this.GetQuestionnaire(view.QuestionnaireId, view.QuestionnaireVersion);
+            var questionnaire = this.GetQuestionnaireExportStructure(view.QuestionnaireId, view.QuestionnaireVersion);
             if (questionnaire == null)
                 return;
 
             var record = this.CreateInterviewHistoricalRecordView(action, userId, timestamp, offset, parameters ?? new Dictionary<string, string>(),
                 questionnaire);
-            
-            if(record==null)
+
+            if (record == null)
                 return;
-            
+
             view.Records.Add(record);
         }
 
@@ -671,29 +658,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             return result;
         }
 
-        private Dictionary<string, string> CreateGroupParameters(Guid groupId, decimal[] propagationVector)
-        {
-            var result = new Dictionary<string, string>()
-            {
-                { "groupId", groupId.FormatGuid() }
-            };
-
-            if (propagationVector.Length > 0)
-            {
-                result.Add("roster", string.Join(",", propagationVector));
-            }
-            else
-            {
-                result.Add("roster", string.Empty);
-            }
-            return result;
-        }
-
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<AnswersDeclaredInvalid> @event)
         {
             foreach (var question in @event.Payload.FailedValidationConditions.Keys)
             {
-                this.AddHistoricalRecord(view, InterviewHistoricalAction.QuestionDeclaredInvalid, null, 
+                this.AddHistoricalRecord(view, InterviewHistoricalAction.QuestionDeclaredInvalid, null,
                     @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp,
                     @event.Payload.OriginDate?.Offset,
                 this.CreateQuestionParameters(question.Id, question.RosterVector));
@@ -706,7 +675,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             foreach (var question in @event.Payload.Questions)
             {
                 this.AddHistoricalRecord(view, InterviewHistoricalAction.QuestionDeclaredValid, null,
-                    @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp, 
+                    @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp,
                     @event.Payload.OriginDate?.Offset,
                 this.CreateQuestionParameters(question.Id, question.RosterVector));
             }
@@ -734,7 +703,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewHistoryView Update(InterviewHistoryView state, IPublishedEvent<InterviewReceivedBySupervisor> @event)
         {
-            this.AddHistoricalRecord(state, InterviewHistoricalAction.ReceivedBySupervisor, null, 
+            this.AddHistoricalRecord(state, InterviewHistoricalAction.ReceivedBySupervisor, null,
                 @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp,
                 @event.Payload.OriginDate?.Offset);
 
@@ -747,7 +716,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.AnswerTimeUtc,
                 @event.Payload.OriginDate?.Offset,
             this.CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(
-                new Area(@event.Payload.Geometry, @event.Payload.MapName,@event.Payload.NumberOfPoints, 
+                new Area(@event.Payload.Geometry, @event.Payload.MapName, @event.Payload.NumberOfPoints,
                     @event.Payload.AreaSize, @event.Payload.Length, @event.Payload.Coordinates, @event.Payload.DistanceToEditor)),
             @event.Payload.RosterVector));
 
