@@ -87,6 +87,7 @@
       ref="table"
       :tableOptions="tableOptions"
       :addParamsToRequest="addParamsToRequest"
+      noPaging
       noSearch
       exportable
     >

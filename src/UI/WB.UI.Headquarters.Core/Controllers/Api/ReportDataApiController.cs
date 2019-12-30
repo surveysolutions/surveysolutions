@@ -178,7 +178,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             var input = new QuantityBySupervisorsReportInputModel
             {
                 Page = data.PageIndex,
-                PageSize = data.PageSize,
+                PageSize = data.PageSize > 0 ? data.PageSize : MaxPageSize,
                 InterviewStatuses = this.GetInterviewExportedActionsAccordingToReportTypeForQuantityReports(data.ReportType),
                 Period = data.Period,
                 ReportType = data.ReportType,
