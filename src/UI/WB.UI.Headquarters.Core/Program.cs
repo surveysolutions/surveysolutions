@@ -12,6 +12,7 @@ namespace WB.UI.Headquarters
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                
                 .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureAppConfiguration((hostingContext, c) =>
                 {
@@ -28,6 +29,7 @@ namespace WB.UI.Headquarters
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    //webBuilder.UseHttpSys();
                     webBuilder.UseStartup<Startup>();
                 });
     }

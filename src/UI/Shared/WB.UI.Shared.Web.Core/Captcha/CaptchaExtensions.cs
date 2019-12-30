@@ -1,13 +1,13 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace WB.UI.Shared.Web.Captcha
 {
     public static class CaptchaExtensions
     {
-        public static void UseHostedCaptcha(this IServiceCollection serviceCollection)
+        public static IConfigurationSection CaptchaOptionsSection(this IConfiguration configuration)
         {
-            serviceCollection.AddTransient<ICaptchaProvider, HostedCaptchaProvider>();
-            serviceCollection.AddTransient<IHostedCaptcha, HostedCaptchaProvider>();
+            return configuration.GetSection("Captcha");
         }
     }
 }

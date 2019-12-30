@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
+using Microsoft.Extensions.Options;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
@@ -20,16 +21,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
         private readonly string storageBasePath;
         private readonly ILogger log;
 
-        public S3FileStorage(AmazonS3Settings s3Settings, 
+        public S3FileStorage(
+            IOptions<AmazonS3Settings> s3Settings, 
+            IOptions<HeadquarterOptions> headquarterOptions,
             IAmazonS3 amazonS3Client, 
             ITransferUtility transferUtility,
             ILoggerProvider loggerProvider)
         {
             log = loggerProvider.GetForType(GetType());
-            this.s3Settings = s3Settings;
+            this.s3Settings = s3Settings.Value;
             client = amazonS3Client;
             this.transferUtility = transferUtility;
-            storageBasePath = $"{s3Settings.BasePath}/";
+            storageBasePath =  $"{s3Settings.Value.BasePath(headquarterOptions.Value.TenantName)}/";
         }
 
         private string GetKey(string key) => storageBasePath + key;
@@ -99,7 +102,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
         {
             log.Error($"{message}. " +
                       $"Bucket: {s3Settings.BucketName}. " +
-                      $"BasePath: {s3Settings.BasePath} " +
+                      $"BasePath: {storageBasePath} " +
                       $"EndPoint: {s3Settings.Endpoint} ", exception);
         }
 
