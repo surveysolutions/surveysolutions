@@ -117,7 +117,7 @@
                                 instruction: question.instruction,
                                 question: question
                             },
-                            width:question.options.length * 222,
+                            width:question.options.length * 220,
                             
                             field: question.id, 
                             cellRendererFramework: 'MatrixRoster_QuestionEditor',
