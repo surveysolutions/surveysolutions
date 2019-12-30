@@ -3,7 +3,7 @@ using System.IO;
 using Ionic.Zlib;
 using WB.Core.Infrastructure.FileSystem;
 
-namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
+namespace WB.Core.BoundedContexts.Headquarters.DataExport
 {
     public interface IDataExportFileAccessor
     {

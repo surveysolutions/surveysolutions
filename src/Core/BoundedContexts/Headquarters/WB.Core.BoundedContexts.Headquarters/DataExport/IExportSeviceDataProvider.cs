@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
+namespace WB.Core.BoundedContexts.Headquarters.DataExport
 {
     public interface IExportServiceDataProvider
     {

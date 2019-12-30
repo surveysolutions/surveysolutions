@@ -1,5 +1,6 @@
 ﻿using Amazon;
 using Amazon.S3;
+using Microsoft.Extensions.Options;
 
 namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
 {
@@ -7,11 +8,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
     {
         public string BucketName { get; set; }
         public string Region { get; set; } = "us-east-1";
-        public string Prefix { get; set; }
         public string Endpoint { get; set; }
         public string Folder { get; set; } = "hq";
-
-        public string BasePath => $"{Folder}/{Prefix}";
+        public bool IsEnabled { get; set; }
+        public string BasePath(string tenantName) => $"{Folder}/{tenantName}";
 
         public AmazonS3Config Config()
         {

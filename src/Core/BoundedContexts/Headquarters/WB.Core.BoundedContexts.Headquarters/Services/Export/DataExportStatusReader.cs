@@ -5,6 +5,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
@@ -13,7 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native;
-using WB.Infrastructure.Native.Logging.Slack;
+// using WB.Infrastructure.Native.Logging.Slack;
 
 namespace WB.Core.BoundedContexts.Headquarters.Services.Export
 {
@@ -23,7 +24,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Export
         private readonly IExportFileNameService exportFileNameService;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IAssignmentsService assignmentsService;
-        private readonly ISlackApiClient slackApiClient;
+        
+        // TODO: Restore SLACK notifications
+        //private readonly ISlackApiClient slackApiClient;
         private readonly ILogger logger;
 
         public DataExportStatusReader(
@@ -31,14 +34,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Export
             IExportFileNameService exportFileNameService,
             IQuestionnaireStorage questionnaireStorage,
             IAssignmentsService assignmentsService,
-            ISlackApiClient slackApiClient,
+            
+            // TODO: Restore SLACK notifications
+            // ISlackApiClient slackApiClient,
             ILoggerProvider loggerProvider)
         {
             this.exportServiceApi = exportServiceApi;
             this.exportFileNameService = exportFileNameService;
             this.questionnaireStorage = questionnaireStorage;
             this.assignmentsService = assignmentsService;
-            this.slackApiClient = slackApiClient;
+            // TODO: Restore SLACK notifications
+            //    this.slackApiClient = slackApiClient;
             this.logger = loggerProvider.GetForType(this.GetType());
         }
 
@@ -135,12 +141,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Export
                     return new DataExportStatusView() { Success = false };
                 }
 
-                await slackApiClient.SendMessageAsync(new SlackFatalMessage
-                {
-                    Color = SlackColor.Good,
-                    Message = @"HQ restored connection to Export Service",
-                    Type = FatalExceptionType.HqExportServiceUnavailable
-                });
+                // TODO: Restore SLACK notifications
+                //await slackApiClient.SendMessageAsync(new SlackFatalMessage
+                //{
+                //    Color = SlackColor.Good,
+                //    Message = @"HQ restored connection to Export Service",
+                //    Type = FatalExceptionType.HqExportServiceUnavailable
+                //});
 
                 return result;
             }

@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
-using WB.Core.BoundedContexts.Headquarters.DataExport;
 
 namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 {
@@ -36,9 +35,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
     {
         private readonly IScheduler scheduler;
 
-        private readonly ExportSettings settings;
+        private readonly AssignmentImportOptions settings;
 
-        public UpgradeAssignmentJobScheduler(IScheduler scheduler, ExportSettings settings)
+        public UpgradeAssignmentJobScheduler(IScheduler scheduler, AssignmentImportOptions settings)
         {
             this.scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
             this.settings = settings ?? throw new ArgumentNullException(nameof(settings));

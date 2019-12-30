@@ -223,8 +223,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
             var document = this.questionnaireStorage.GetQuestionnaireDocument(interview.QuestionnaireIdentity);
 
-            var entityIds = EnumerableExtensions.ToHashSet(document.Find<IComposite>(this.IsSupportFilterOptionCondition)
-                .Select(e => e.PublicKey));
+            var entityIds = document.Find<IComposite>(this.IsSupportFilterOptionCondition)
+                .Select(e => e.PublicKey).ToHashSet();
 
             foreach (var entityId in entityIds)
             {
