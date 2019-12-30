@@ -17,8 +17,8 @@
             </template>
 
         </popover>        
-            <div class="radio cell-bordered" v-for="option in editorParams.question.options" :key="$me.id + '_' + option.value">
-                    <div style="width:221px;" class="field"> 
+            <div class="radio cell-bordered"  v-for="option in editorParams.question.options" :key="$me.id + '_' + option.value">
+                    <div  class="field" style="width:219px;"> 
                         <input v-if="answeredOrAllOptions.some(e => e.value === option.value)" class="wb-radio" type="radio" 
                           :id="`${$me.id}_${option.value}`" 
                           :name="$me.id" 
