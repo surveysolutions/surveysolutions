@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         {
             fixture = Create.Other.AutoFixture();
             fixture.Register(() => CancellationToken.None);
-            var interviewStorage = new InMemoryPlainStorage<InterviewView>();
+            var interviewStorage = Create.Storage.InMemorySqlitePlainStorage<InterviewView>();
             interviewStorage.Store(new InterviewView
             {
                 Id = interviewId.ToString(),
