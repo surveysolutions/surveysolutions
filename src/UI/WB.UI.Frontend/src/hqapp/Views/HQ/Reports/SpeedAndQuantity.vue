@@ -75,26 +75,18 @@
         ></Typeahead>
       </FilterBlock>
 
-      <!--FilterBlock :title="$t('PeriodicStatusReport.LastDateToShowLabel')">
-        <div class="input-group">
-            <div class="form-date input-group" id="dates-range">
-                <input type="text" data-bind="flatpickr: FromDate, flatpickrOptions: { minDate: '@Model.MinAllowedDate.ToString("s")', maxDate: 'today', wrap: true, enableTime: false, dateFormat: 'Y-m-d'}" placeholder="Select start date" class="form-control flatpickr-input" readonly="readonly" data-input>
-                <button type="submit" class="btn btn-link btn-clear">
-                    <span></span>
-                </button>
-                <span class="input-group-addon" data-toggle>
-                    <span class="calendar"></span>
-                </span>
-            </div>
-        </div>
-      </FilterBlock-->
+      <FilterBlock :title="$t('PeriodicStatusReport.LastDateToShowLabel')">
+        <DatePicker 
+          :config="datePickerConfig"
+          :value="from"
+        ></DatePicker>
+      </FilterBlock>
     </Filters>
 
     <DataTables
       ref="table"
       :tableOptions="tableOptions"
       :addParamsToRequest="addParamsToRequest"
-      noPaging
       noSearch
       exportable
     >
@@ -113,15 +105,16 @@ export default {
             reportTypeId: null,
             overTheLast: null,
             period: null,
+            from: null,
             loading : {
-                supervisors: false
+                report: false
             }
         }
     },
     mounted() {
         if (this.reportTypeId == null && this.model.reportTypes.length > 0) {
             this.reportTypeSelected(this.model.reportTypes[0]);
-        } 
+        }
         if (this.overTheLast == null && this.model.overTheLasts.length > 6) {
             this.overTheLastSelected(this.model.overTheLasts[6]);
         }
@@ -133,36 +126,34 @@ export default {
         }
     },
     methods: {
-        title() {
-            return "report title"
-        },
         reportTypeSelected(option) {
-            this.reportTypeId = option.key
+            this.reportTypeId = option
         },
         questionnaireSelected(option){
-            this.questionnaireId = option.key
+            this.questionnaireId = option
         },
         questionnaireVersionSelected(option) {
-            this.questionnaireVersion = option.key
+            this.questionnaireVersion = option
         },
         selectedOverTheLast(option) {
-            this.overTheLast = option.key
+            this.overTheLast = option
         },
         statusSelected(option) {
-            this.status = option.key
+            this.status = option
         },
         periodSelected(option) {
-            this.period = option.key
+            this.period = option
         },
         overTheLastSelected(option) {
-            this.overTheLast = option.key
+            this.overTheLast = option
         },
         addParamsToRequest(requestData) {
             requestData.questionnaireId = (this.questionnaireId || {}).key
             requestData.questionnaireVersion = (this.questionnaireVersion || {}).key
-            requestData.reportTypeId = (this.reportTypeId || {}).key
-            requestData.overTheLast = this.overTheLast
-            requestData.period = this.period
+            requestData.reportTypeId = this.reportTypeId.key
+            requestData.overTheLast = this.overTheLast.key
+            requestData.period = this.period.key
+            requestData.from = this.from
         },
         renderCell(data, row, facet) {
             const formatedNumber = this.formatNumber(data);
@@ -213,9 +204,31 @@ export default {
         model() {
             return this.$config.model;
         },
+        title() {
+            return "report title"
+        },
         supervisorId() {
             return this.$route.params.supervisorId
         },
+        datePickerConfig() {
+            var self = this
+            return {
+                mode: "date",
+                maxDate: "today",
+                wrap: true,
+                minDate: self.model.minAllowedDate, 
+                enableTime: false, 
+                dateFormat: 'Y-m-d',
+                onChange: (selectedDates, dateStr, instance) => {
+                    const start = selectedDates.length > 0 ? selectedDates[0] : null;
+                    const end = selectedDates.length > 1 ? selectedDates[1] : null;
+
+                    if (start != null && end != null) {
+                        this.selectDateRange({ from: start, to: end });
+                    }
+                }
+            };
+        },        
         tableOptions() {
             var self = this;
             return {
