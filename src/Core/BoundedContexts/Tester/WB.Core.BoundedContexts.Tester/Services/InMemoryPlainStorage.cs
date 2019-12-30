@@ -17,43 +17,43 @@ namespace WB.Core.BoundedContexts.Tester.Services
     public class InMemoryPlainStorage<TEntity, TKey> : IPlainStorage<TEntity, TKey>
         where TEntity : class, IPlainStorageEntity<TKey>
     {
-        public readonly Dictionary<TKey, TEntity> inMemroyStorage = new Dictionary<TKey, TEntity>();
+        public readonly List<TEntity> inMemroyStorage = new List<TEntity>();
 
         public TEntity GetById(TKey id)
         {
-            return this.inMemroyStorage.ContainsKey(id) ? this.inMemroyStorage[id] : null;
+            return this.inMemroyStorage.FirstOrDefault(entity => EqualityComparer<TKey>.Default.Equals(entity.Id, id));
         }
 
         public IReadOnlyCollection<TEntity> Where(Expression<Func<TEntity, bool>> predicate)
         {
-            return this.inMemroyStorage.Values.AsQueryable().Where(predicate).ToReadOnlyCollection();
+            return this.inMemroyStorage.AsQueryable().Where(predicate).ToReadOnlyCollection();
         }
 
         public IReadOnlyCollection<TResult> WhereSelect<TResult>(Expression<Func<TEntity, bool>> wherePredicate,
             Expression<Func<TEntity, TResult>> selectPredicate) where TResult : class
-            => this.inMemroyStorage.Values.AsQueryable().Where(wherePredicate).Select(selectPredicate).ToReadOnlyCollection();
+            => this.inMemroyStorage.AsQueryable().Where(wherePredicate).Select(selectPredicate).ToReadOnlyCollection();
 
         public TEntity FirstOrDefault()
         {
-            return this.inMemroyStorage.Values.AsQueryable().FirstOrDefault();
+            return this.inMemroyStorage.AsQueryable().FirstOrDefault();
         }
 
         public TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate)
         {
-            return this.inMemroyStorage.Values.AsQueryable().FirstOrDefault(predicate);
+            return this.inMemroyStorage.AsQueryable().FirstOrDefault(predicate);
         }
 
         public IReadOnlyCollection<TEntity> LoadAll()
         {
-            return this.inMemroyStorage.Values.ToReadOnlyCollection();
+            return this.inMemroyStorage.ToReadOnlyCollection();
         }
 
         public int Count(Expression<Func<TEntity, bool>> predicate)
         {
-            return this.inMemroyStorage.Values.AsQueryable().Count(predicate);
+            return this.inMemroyStorage.AsQueryable().Count(predicate);
         }
 
-        public int Count() => this.inMemroyStorage.Values.Count;
+        public int Count() => this.inMemroyStorage.Count;
 
         public void RemoveAll()
         {
@@ -62,32 +62,31 @@ namespace WB.Core.BoundedContexts.Tester.Services
 
         public IReadOnlyCollection<TEntity> FixedQuery(Expression<Func<TEntity, bool>> wherePredicate, Expression<Func<TEntity, int>> orderPredicate, int takeCount, int skip = 0)
         {
-            return this.inMemroyStorage.Values.AsQueryable().Where(wherePredicate).OrderBy(orderPredicate).Skip(skip).Take(takeCount).ToReadOnlyCollection();
+            return this.inMemroyStorage.AsQueryable().Where(wherePredicate).OrderBy(orderPredicate).Skip(skip).Take(takeCount).ToReadOnlyCollection();
         }
 
         public IReadOnlyCollection<TResult> FixedQueryWithSelection<TResult>(
             Expression<Func<TEntity, bool>> wherePredicate, Expression<Func<TEntity, int>> orderPredicate,
             Expression<Func<TEntity, TResult>> selectPredicate, int takeCount, int skip = 0)
             where TResult : class 
-            => this.inMemroyStorage.Values.AsQueryable().Where(wherePredicate).OrderBy(orderPredicate).Select(selectPredicate).Skip(skip).Take(takeCount).ToReadOnlyCollection();
+            => this.inMemroyStorage.AsQueryable().Where(wherePredicate).OrderBy(orderPredicate).Select(selectPredicate).Skip(skip).Take(takeCount).ToReadOnlyCollection();
 
         public void Remove(IEnumerable<TEntity> entities)
         {
             foreach (var entity in entities.Where(entity => entity != null))
             {
-                if (this.inMemroyStorage.ContainsKey(entity.Id))
-                    this.inMemroyStorage.Remove(entity.Id);
+                this.inMemroyStorage.Remove(entity);
             }
         }
 
         public void Remove(TKey id)
         {
-            if (this.inMemroyStorage.ContainsKey(id)) this.inMemroyStorage.Remove(id);
+            this.inMemroyStorage.RemoveAll(entity => EqualityComparer<TKey>.Default.Equals(entity.Id, id));
         }
 
         public void Store(TEntity entity)
         {
-            this.inMemroyStorage[entity.Id] = entity;
+            this.inMemroyStorage.Add(entity);
         }
 
         public void Store(IEnumerable<TEntity> entities)
