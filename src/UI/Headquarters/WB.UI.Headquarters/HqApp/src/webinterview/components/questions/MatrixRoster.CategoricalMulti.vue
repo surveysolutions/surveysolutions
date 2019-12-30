@@ -21,7 +21,7 @@
           v-for="option in editorParams.question.options"
           :key="$me.id + '_' + option.value"
           v-bind:class="{ 'unavailable-option locked-option': isProtected(option.value) }">
-        <div style="width:221px;" class="field">
+        <div class="field" style="width:219px;">
           <input
             v-if="answeredOrAllOptions.some(e => e.value === option.value)"
             class="wb-checkbox"
