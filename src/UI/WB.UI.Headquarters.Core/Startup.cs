@@ -19,11 +19,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using reCAPTCHA.AspNetCore;
 using WB.Core.BoundedContexts.Headquarters;
+using WB.Core.BoundedContexts.Headquarters.DataExport;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Storage;
+using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
@@ -121,9 +124,11 @@ namespace WB.UI.Headquarters
                 new DataCollectionSharedKernelModule(),
                 new OrmModule(unitOfWorkConnectionSettings),
                 new OwinSecurityModule(),
-                new FileStorageModule(Configuration["DataStorePath"], false, "bucket", "region", "prefix", "endpoint"),
+                new FileStorageModule(Configuration),
                 new FileInfrastructureModule(),
+                new DataExportModule(),
                 GetHqBoundedContextModule(),
+                new HeadquartersUiModule(Configuration),
                 GetQuartzModule(),
                 //new CaptchaModule("recaptcha"),
                 new ProductVersionModule(typeof(Startup).Assembly)
@@ -196,18 +201,14 @@ namespace WB.UI.Headquarters
                 };
             }
 
-            var exportServiceConfig = Configuration.GetSection("Export").Get<ExportServiceConfig>();
-
-            InterviewDataExportSettings exportSettings = new InterviewDataExportSettings(exportServiceConfig.ExportServiceUrl, exportServiceConfig.LimitOfCachedItemsByDenormalizer);
-
             return new HeadquartersBoundedContextModule(appDataDirectory,
                 userPreloadingSettings,
                 sampleImportSettings,
-                exportSettings,
                 synchronizationSettings,
                 new TrackingSettings(trackingSection.WebInterviewPauseResumeGraceTimespan),
                 externalStoragesSettings: externalStoragesSettings,
-                fileSystemEmailServiceSettings: new FileSystemEmailServiceSettings(false, null, null, null, null, null)
+                fileSystemEmailServiceSettings: 
+                    new FileSystemEmailServiceSettings(false, null, null, null, null, null)
             );
         }
 
@@ -236,7 +237,6 @@ namespace WB.UI.Headquarters
             services.AddScoped<UnitOfWorkActionFilter>();
             services.AddScoped<InstallationFilter>();
 
-            AddCaptcha(services);
             AddCompression(services);
 
             services.AddMvc(mvc =>
@@ -267,31 +267,11 @@ namespace WB.UI.Headquarters
             services.Configure<PasswordPolicyConfig>(this.Configuration.GetSection("PasswordPolicy"));
             services.Configure<SchedulerConfig>(this.Configuration.GetSection("Scheduler"));
             services.Configure<DesignerConfig>(this.Configuration.GetSection("Designer"));
-        }
-
-        private void AddCaptcha(IServiceCollection services)
-        {
-            services.AddTransient<ICaptchaService, WebCacheBasedCaptchaService>();
-            
-            var captchaSection = Configuration.GetSection("Captcha");
-            services.Configure<CaptchaConfig>(captchaSection);
-            var config = captchaSection.Get<CaptchaConfig>() ?? new CaptchaConfig();
-            var provider = config.CaptchaType;
-
-            switch (provider)
-            {
-                case CaptchaProviderType.Recaptcha:
-                    services.Configure<RecaptchaSettings>(Configuration.GetSection("Captcha"));
-                    services.AddTransient<IRecaptchaService, RecaptchaService>();
-                    services.AddTransient<ICaptchaProvider, RecaptchaProvider>();
-                    break;
-                case CaptchaProviderType.Hosted:
-                    services.UseHostedCaptcha();
-                    break;
-                default:
-                    services.AddTransient<ICaptchaProvider, NoCaptchaProvider>();
-                    break;
-            }
+            services.Configure<AmazonS3Settings>(this.Configuration.AmazonOptions());
+            services.Configure<DataExportOptions>(this.Configuration.GetSection("DataExport"));
+            services.Configure<HeadquarterOptions>(this.Configuration.HeadquarterOptions());
+            services.Configure<CaptchaConfig>(this.Configuration.CaptchaOptionsSection());
+            services.Configure<RecaptchaSettings>(this.Configuration.CaptchaOptionsSection());
         }
 
         private static void AddCompression(IServiceCollection services)
@@ -329,6 +309,7 @@ namespace WB.UI.Headquarters
                 app.UseHsts();
             }
 
+           
             InitModules(app, env);
 
             app.UseStaticFiles();
@@ -386,6 +367,7 @@ namespace WB.UI.Headquarters
         private void InitModules(IApplicationBuilder app, IWebHostEnvironment env)
         {
             var lifetimeScope = app.ApplicationServices.GetAutofacRoot();
+            
             var initTask = autofacKernel.InitCoreAsync(lifetimeScope, false);
 
             InScopeExecutor.Init(new UnitOfWorkInScopeExecutor(lifetimeScope));

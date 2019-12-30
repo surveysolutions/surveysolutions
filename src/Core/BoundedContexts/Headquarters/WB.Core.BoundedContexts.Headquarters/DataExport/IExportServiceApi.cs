@@ -7,7 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
-namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
+namespace WB.Core.BoundedContexts.Headquarters.DataExport
 {
     public interface IExportServiceApi
     {
