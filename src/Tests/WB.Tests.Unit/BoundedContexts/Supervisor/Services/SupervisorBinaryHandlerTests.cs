@@ -29,11 +29,12 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             {
                 var storage = new InMemoryPlainStorage<CompanyLogo>();
 
-                storage.inMemroyStorage[CompanyLogo.StorageKey] = new CompanyLogo
+                storage.Store(new CompanyLogo
                 {
+                    Id = CompanyLogo.StorageKey,
                     ETag = "Sd",
                     File = new byte[200]
-                };
+                });
 
                 return storage;
             });
@@ -55,11 +56,12 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             {
                 var storage = new InMemoryPlainStorage<CompanyLogo>();
 
-                storage.inMemroyStorage[CompanyLogo.StorageKey] = new CompanyLogo
+                storage.Store(new CompanyLogo
                 {
+                    Id = CompanyLogo.StorageKey,
                     ETag = "match",
                     File = new byte[200]
-                };
+                });
 
                 return storage;
             });

@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Tester.Services
     public class InMemoryPlainStorage<TEntity, TKey> : IPlainStorage<TEntity, TKey>
         where TEntity : class, IPlainStorageEntity<TKey>
     {
-        public readonly List<TEntity> inMemroyStorage = new List<TEntity>();
+        private readonly List<TEntity> inMemroyStorage = new List<TEntity>();
 
         public TEntity GetById(TKey id)
         {
