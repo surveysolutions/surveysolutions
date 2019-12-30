@@ -86,6 +86,8 @@ namespace WB.Core.BoundedContexts.Tester.Services
 
         public void Store(TEntity entity)
         {
+            if (entity.Id != null)
+                Remove(entity.Id);
             this.inMemroyStorage.Add(entity);
         }
 
