@@ -2527,7 +2527,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name.
+        ///   Looks up a localized string similar to Interviewer Name.
         /// </summary>
         public static string MapList_Name {
             get {
@@ -2545,7 +2545,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Maps.
+        ///   Looks up a localized string similar to Map files.
         /// </summary>
         public static string MapList_Title {
             get {
