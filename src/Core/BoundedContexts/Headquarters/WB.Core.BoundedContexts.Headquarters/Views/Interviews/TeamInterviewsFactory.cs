@@ -1,5 +1,5 @@
 using System.Linq;
-using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;

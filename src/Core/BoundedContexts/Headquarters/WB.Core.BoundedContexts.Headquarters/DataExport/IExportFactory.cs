@@ -1,6 +1,6 @@
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 
-namespace WB.Core.BoundedContexts.Headquarters.Services
+namespace WB.Core.BoundedContexts.Headquarters.DataExport
 {
     public interface IExportFactory
     {

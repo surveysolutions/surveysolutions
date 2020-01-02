@@ -21,6 +21,7 @@ using reCAPTCHA.AspNetCore;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
@@ -28,7 +29,6 @@ using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading;
-using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
@@ -130,7 +130,6 @@ namespace WB.UI.Headquarters
                 GetHqBoundedContextModule(),
                 new HeadquartersUiModule(Configuration),
                 GetQuartzModule(),
-                //new CaptchaModule("recaptcha"),
                 new ProductVersionModule(typeof(Startup).Assembly)
                 );
         }
@@ -260,18 +259,7 @@ namespace WB.UI.Headquarters
 
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // https://github.com/JanKallman/EPPlus/issues/31
 
-            // configuration
-            services.Configure<GoogleMapsConfig>(this.Configuration.GetSection("GoogleMap"));
-            services.Configure<PreloadingConfig>(this.Configuration.GetSection("PreLoading"));
-            services.Configure<ApkConfig>(this.Configuration.GetSection("Apks"));
-            services.Configure<PasswordPolicyConfig>(this.Configuration.GetSection("PasswordPolicy"));
-            services.Configure<SchedulerConfig>(this.Configuration.GetSection("Scheduler"));
-            services.Configure<DesignerConfig>(this.Configuration.GetSection("Designer"));
-            services.Configure<AmazonS3Settings>(this.Configuration.AmazonOptions());
-            services.Configure<DataExportOptions>(this.Configuration.GetSection("DataExport"));
-            services.Configure<HeadquarterOptions>(this.Configuration.HeadquarterOptions());
-            services.Configure<CaptchaConfig>(this.Configuration.CaptchaOptionsSection());
-            services.Configure<RecaptchaSettings>(this.Configuration.CaptchaOptionsSection());
+            services.AddOptionsConfiguration(this.Configuration);
         }
 
         private static void AddCompression(IServiceCollection services)

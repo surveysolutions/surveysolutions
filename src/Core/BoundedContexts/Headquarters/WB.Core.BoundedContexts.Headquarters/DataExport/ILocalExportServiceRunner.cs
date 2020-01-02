@@ -1,4 +1,4 @@
-namespace WB.Core.BoundedContexts.Headquarters.Services
+namespace WB.Core.BoundedContexts.Headquarters.DataExport
 {
     public interface ILocalExportServiceRunner
     {

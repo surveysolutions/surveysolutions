@@ -6,10 +6,10 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
@@ -53,7 +53,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             return CreateQuestionnaireExportStructure(questionnaire, id);
         }
 
-        public QuestionnaireExportStructure CreateQuestionnaireExportStructure(QuestionnaireDocument questionnaire, QuestionnaireIdentity id)
+        private QuestionnaireExportStructure CreateQuestionnaireExportStructure(QuestionnaireDocument questionnaire, QuestionnaireIdentity id)
         {
             var result = new QuestionnaireExportStructure
             {

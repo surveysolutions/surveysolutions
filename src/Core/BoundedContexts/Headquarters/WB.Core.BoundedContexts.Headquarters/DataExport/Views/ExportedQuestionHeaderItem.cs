@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Main.Core.Entities.SubEntities;
 
-namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
+namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
 {
     [DebuggerDisplay("{VariableName}")]
     public class ExportedQuestionHeaderItem : IExportedHeaderItem

@@ -1,10 +1,9 @@
 using System;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveySolutions;
 
-namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
+namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
 {
     public class InterviewComment : IReadSideRepositoryEntity
     {

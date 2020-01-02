@@ -8,8 +8,8 @@ using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
-using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -92,13 +92,13 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             this.questionnaireStorage = questionnaireStorage;
         }
 
-        static readonly ConcurrentDictionary<Type, MethodInfo> methodsCache = new ConcurrentDictionary<Type, MethodInfo>();
+        static readonly ConcurrentDictionary<Type, MethodInfo> MethodsCache = new ConcurrentDictionary<Type, MethodInfo>();
 
         public void Handle(IPublishableEvent evt)
         {
             var payloadType = evt.Payload.GetType();
 
-            var updateMethod = methodsCache.GetOrAdd(payloadType, t =>
+            var updateMethod = MethodsCache.GetOrAdd(payloadType, t =>
             {
                 var eventType = typeof(IPublishedEvent<>).MakeGenericType(evt.Payload.GetType());
 
@@ -136,7 +136,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 this.readSideStorage.Remove(evt.EventSourceId);
             }
         }
-        
+
         private PublishedEvent CreatePublishedEvent(IUncommittedEvent evt)
         {
             var publishedEventClosedType = typeof(PublishedEvent<>).MakeGenericType(evt.Payload.GetType());
@@ -568,18 +568,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         private QuestionnaireExportStructure GetQuestionnaireExportStructure(Guid questionnaireId, long questionnaireVersion)
         {
-            var exportStructure = this.handlerCache.GetOrCreate($"Questionnaire:{questionnaireId}${questionnaireVersion}",
-                entry =>
-                {
-                    // No need in configurable sliding expiration. There will be very few amount of items
-                    // also there is no reasons to push this per questionnaire cache into Questionnaire,
-                    // as this structure is big enough and only used in this handler
-                    entry.SlidingExpiration = TimeSpan.FromMinutes(10);
-                    return this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(
+            return this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(
                         new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
-                });
 
-            return exportStructure;
         }
 
         private UserViewLite GetUserDocument(Guid originatorId)
@@ -601,9 +592,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         private string GetUserRole(UserViewLite user)
         {
-            const string UnknownUserRole = "";
+            const string unknownUserRole = "";
             if (user == null || !user.Roles.Any())
-                return UnknownUserRole;
+                return unknownUserRole;
             var firstRole = user.Roles.First();
             switch (firstRole)
             {
@@ -611,7 +602,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 case UserRoles.Supervisor: return "Supervisor";
                 case UserRoles.Headquarter: return "Headquarter";
             }
-            return UnknownUserRole;
+            return unknownUserRole;
         }
 
         private void AddHistoricalRecord(InterviewHistoryView view, InterviewHistoricalAction action, Guid? userId, DateTime? timestamp, TimeSpan? offset,

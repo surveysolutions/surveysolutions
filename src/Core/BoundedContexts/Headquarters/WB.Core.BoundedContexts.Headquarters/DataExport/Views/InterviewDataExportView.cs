@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WB.Core.SharedKernels.SurveySolutions;
 
-namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
+namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
 {
     public class InterviewDataExportView : IReadSideRepositoryEntity
     {

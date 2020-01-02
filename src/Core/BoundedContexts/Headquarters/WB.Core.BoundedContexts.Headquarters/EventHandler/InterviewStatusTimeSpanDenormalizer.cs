@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;

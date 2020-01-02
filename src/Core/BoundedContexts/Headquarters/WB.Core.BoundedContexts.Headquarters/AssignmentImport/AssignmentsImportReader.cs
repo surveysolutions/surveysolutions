@@ -5,8 +5,8 @@ using System.IO;
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
-using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.Infrastructure.FileSystem;
 
