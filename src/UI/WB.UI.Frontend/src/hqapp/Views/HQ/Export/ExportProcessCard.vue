@@ -80,6 +80,7 @@ import Vue from "vue"
 import { DateFormats } from "~/shared/helpers";
 import modal from "~/webinterview/components/modal"
 import {mixin as VueTimers} from 'vue-timers'
+import moment from 'moment';
 
 const ProcessStatus = {
     Compressing: "Compressing",
@@ -156,7 +157,7 @@ export default {
                 });
         },
         updateStatus(){
-            this.$http.get(this.$config.model.api.statusUrl, {  params: { id: this.processId }  })
+            this.$http.get(this.$config.model.api.exportStatusUrl, {  params: { id: this.processId }  })
                 .then((response) => {
                     var info = response.data || {};
                     this.initialized = true;
