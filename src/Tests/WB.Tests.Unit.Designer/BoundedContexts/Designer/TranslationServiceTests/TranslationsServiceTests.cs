@@ -241,7 +241,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
 
             //act
-            var exception = Assert.Throws<InvalidExcelFileException>(() => service.Store(questionnaireId, translationId, fileStream));
+            var exception = Assert.Throws<InvalidFileException>(() => service.Store(questionnaireId, translationId, fileStream));
 
             //assert
             Assert.That(exception, Is.Not.Null);
@@ -284,7 +284,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
 
             //act
-            var exception = Assert.Throws<InvalidExcelFileException>(() => service.Store(questionnaireId, translationId, fileStream));
+            var exception = Assert.Throws<InvalidFileException>(() => service.Store(questionnaireId, translationId, fileStream));
 
             //assert
             Assert.That(exception, Is.Not.Null);
@@ -327,7 +327,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
 
             //act
-            var exception = Assert.Throws<InvalidExcelFileException>(() => service.Store(questionnaireId, translationId, fileStream));
+            var exception = Assert.Throws<InvalidFileException>(() => service.Store(questionnaireId, translationId, fileStream));
 
             //assert
             Assert.That(exception, Is.Not.Null);
@@ -370,7 +370,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
 
             //act
-            var exception = Assert.Throws<InvalidExcelFileException>(() => service.Store(questionnaireId, translationId, fileStream));
+            var exception = Assert.Throws<InvalidFileException>(() => service.Store(questionnaireId, translationId, fileStream));
 
             //assert
             Assert.That(exception, Is.Not.Null);
