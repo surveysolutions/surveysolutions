@@ -98,6 +98,9 @@
 </template>
 
 <script>
+
+import moment from "moment";
+
 export default {
     data() {
         return {
@@ -107,6 +110,7 @@ export default {
             overTheLast: null,
             period: null,
             from: null,
+            dateFormat: "YYYY-MM-DD",
             loading : {
                 report: false
             }
@@ -114,47 +118,65 @@ export default {
     },
     mounted() {
         if (this.reportTypeId == null && this.model.reportTypes.length > 0) {
-            this.reportTypeSelected(this.model.reportTypes[0]);
+            this.reportTypeId = this.model.reportTypes[0]
         }
         if (this.overTheLast == null && this.model.overTheLasts.length > 6) {
-            this.overTheLastSelected(this.model.overTheLasts[6]);
+            this.overTheLast = this.model.overTheLasts[6]
         }
         if (this.period == null && this.model.periods.length > 0) {
-            this.periodSelected(this.model.periods[0]);
+            this.period = this.model.periods[0]
         }
-        if (this.$refs.table){
-            this.$refs.table.reload();
+        if (this.from == null) {
+            this.from = moment().format(this.dateFormat)
         }
+        this.loadReportData()
     },
     methods: {
+        loadReportData() {
+            if (this.$refs.table){
+                this.$refs.table.reload();
+            }
+        },
         reportTypeSelected(option) {
             this.reportTypeId = option
+            this.loadReportData()
         },
         questionnaireSelected(option){
             this.questionnaireId = option
+            this.loadReportData()
         },
         questionnaireVersionSelected(option) {
             this.questionnaireVersion = option
-        },
-        selectedOverTheLast(option) {
-            this.overTheLast = option
+            this.loadReportData()
         },
         statusSelected(option) {
             this.status = option
+            this.loadReportData()
         },
         periodSelected(option) {
             this.period = option
+            var newVal = this.period.key
+            if (newVal === "d") {
+                this.overTheLast = this.model.overTheLasts[6]
+            } else if (newVal === "w") {
+                this.overTheLast = this.model.overTheLasts[3]
+            } else if (newVal === "m") {
+                this.overTheLast = this.model.overTheLasts[2]
+            }
+            this.loadReportData()
         },
         overTheLastSelected(option) {
             this.overTheLast = option
+            this.loadReportData()
         },
         addParamsToRequest(requestData) {
             requestData.questionnaireId = (this.questionnaireId || {}).key
             requestData.questionnaireVersion = (this.questionnaireVersion || {}).key
             requestData.reportTypeId = this.reportTypeId.key
-            requestData.overTheLast = this.overTheLast.key
+            requestData.columnCount = this.overTheLast.key
             requestData.period = this.period.key
             requestData.from = this.from
+            requestData.timezoneOffsetMinutes = new Date().getTimezoneOffset()
         },
         renderCell(data, row, facet) {
             const formatedNumber = this.formatNumber(data);
@@ -207,6 +229,15 @@ export default {
         },
         title() {
             return "report title"
+/*          <span>@(String.Compare(Model.ReportName,"speed", CultureInfo.InvariantCulture,CompareOptions.IgnoreCase) == 0? MainMenu.Speed : MainMenu.Quantity ): </span><span data-bind="text: ReportTypeName"></span>
+            @(Model.SupervisorId.HasValue ? string.Format(PeriodicStatusReport.InTheSupervisorTeamFormat, @Model.SupervisorName) : "")
+*/
+        },
+        reportDescription() {
+            return this.model.reportNameDescription
+        },
+        columnsCount() {
+            return (this.overTheLast || {}).key || 7
         },
         supervisorId() {
             return this.$route.params.supervisorId
@@ -219,77 +250,56 @@ export default {
                 wrap: true,
                 minDate: self.model.minAllowedDate, 
                 enableTime: false, 
-                dateFormat: 'Y-m-d',
-                onChange: (selectedDates, dateStr, instance) => {
-                    const start = selectedDates.length > 0 ? selectedDates[0] : null;
-                    const end = selectedDates.length > 1 ? selectedDates[1] : null;
-
-                    if (start != null && end != null) {
-                        this.selectDateRange({ from: start, to: end });
-                    }
-                }
+                dateFormat: 'Y-m-d'
             };
         },        
         tableOptions() {
             var self = this;
+
+            var columns = []
+            columns.push({
+                data: "responsibleId",
+                name: "Responsible",
+                title: this.$t('Model.ResponsibleColumnName'),
+                orderable: true,
+                render: function(data, type, row) {
+                    if (self.model.canNavigateToQuantityByTeamMember)
+                    {
+                        const interviewersUrl = this.getInterviewersUrl(ResponsibleId())
+                        return `<a href='${interviewersUrl}'">${data}</a>`
+                    }
+                    else
+                    {
+                        return `<span>${data}</span>`
+                    }
+                }
+            })
+
+            const columnsCount = this.columnsCount
+            return columnsCount == null ? [] : columnsCount.map(a => ({
+                class: "type-numeric",
+                title: moment(a.to).format(this.dateFormat),
+                data: a.from,
+                name: a.from,
+                orderable: false
+            }))
+
+            columns.push({
+                data: "average",
+                name: "Average",
+                title: this.$t('PeriodicStatusReport.Average'),
+                orderable: true
+            })
+            columns.push({
+                data: "total",
+                name: "Total",
+                title: this.$t('PeriodicStatusReport.Total'),
+                orderable: true
+            })
+
             return {
                 deferLoading: 0,
-                columns: [
-                    {
-                        data: "responsible",
-                        name: "Responsible",
-                        title: this.$t('Model.ResponsibleColumnName'),
-                        orderable: true,
-                        render: function(data, type, row) {
-                            if (self.model.canNavigateToQuantityByTeamMember)
-                            {
-                                const interviewersUrl = this.getInterviewersUrl(ResponsibleId())
-                                return `<a href='${interviewersUrl}'">${data}</a>`
-                            }
-                            else
-                            {
-                                return `<span>${data}</span>`
-                            }
-                        }
-                    },
-                    {
-                        data: "neverUploadedCount",
-                        name: "NeverUploadedCount",
-                        "class": "type-numeric",
-                        orderable: true,
-                        title: this.$t("DevicesInterviewers.NeverUploaded"),
-                        render: function(data, type, row) {
-                             return self.renderCell(data, row, 'NeverUploaded');
-                        }
-                    },
-                    {
-                        data: "reassignedCount",
-                        name: "ReassignedCount",
-                        "class": "type-numeric",
-                        orderable: true,
-                        title: this.$t("DevicesInterviewers.TabletReassigned"),
-                        render: function(data, type, row) {
-                            return self.renderCell(data, row, 'TabletReassigned');
-                        }
-                    },
-                    {
-                        data: "outdatedCount",
-                        name: "OutdatedCount",
-                        "class": "type-numeric",
-                        orderable: true,
-                        title: this.$t("DevicesInterviewers.OldInterviewerVersion"),
-                        render: function (data, type, row) {
-                            return self.renderCell(data, row, 'OutdatedApp');
-                        }
-                    },
-                    {
-                        data: "teamSize",
-                        name: "TeamSize",
-                        "class": "type-numeric",
-                        orderable: true,
-                        title: this.$t("DevicesInterviewers.TeamSize")
-                    }
-                ],
+                columns: columns,
                 ajax: {
                     url: this.$config.model.dataUrl,
                     type: "GET",
