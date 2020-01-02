@@ -153,7 +153,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 {
                     Id = y.Id,
                     ParentId = y.ParentId,
-                    Text = translationData.GetCategoriesText(x.Id, y.Id, y.ParentId) ?? y.Text
+                    Text = translationData != null 
+                        ? translationData.GetCategoriesText(x.Id, y.Id, y.ParentId) ?? y.Text
+                        : y.Text
                 }).ToList()
             }).ToList();
         }
