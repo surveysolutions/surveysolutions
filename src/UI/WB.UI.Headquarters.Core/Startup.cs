@@ -14,9 +14,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.AspNetCore.WebSockets;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json.Converters;
 using reCAPTCHA.AspNetCore;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
@@ -212,7 +214,11 @@ namespace WB.UI.Headquarters
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
-            services.AddControllersWithViews().AddNewtonsoftJson();
+            services.AddControllersWithViews().AddNewtonsoftJson(j =>
+            {
+                j.SerializerSettings.Converters.Add(new StringEnumConverter());
+            });
+
 
             //services.AddDistributedMemoryCache();
             services.AddSession();
@@ -296,7 +302,7 @@ namespace WB.UI.Headquarters
 
            
             InitModules(app, env);
-
+            
             app.UseStaticFiles();
 
             app.UseRouting();
@@ -341,10 +347,7 @@ namespace WB.UI.Headquarters
                         action = "SurveyAndStatuses"
                     });
 
-
-                //endpoints.MapControllerRoute(
-                //    name: "api",
-                //    pattern: "api/{controller=Reports}/{action=SurveyAndStatuses}/{id?}");
+                
                 endpoints.MapRazorPages();
             });
         }
