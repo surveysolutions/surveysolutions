@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
                     })));
 
             var answerToStringConverter = Create.Service.AnswerToStringConverter();
-            prefilledQuestions = new InMemoryPlainStorage<PrefilledQuestionView>();
+            prefilledQuestions = Create.Storage.InMemorySqlitePlainStorage<PrefilledQuestionView>();
             denormalizer = Create.Service.DashboardDenormalizer(interviewViewRepository: interviewViewStorage, 
                 questionnaireStorage: plainQuestionnaireRepository,
                 prefilledQuestions: prefilledQuestions,

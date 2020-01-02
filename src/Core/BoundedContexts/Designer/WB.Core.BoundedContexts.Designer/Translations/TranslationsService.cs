@@ -102,7 +102,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                     {
                         if (package.Workbook.Worksheets.Count == 0)
                         {
-                            throw new InvalidExcelFileException(ExceptionMessages.TranslationFileIsEmpty);
+                            throw new InvalidFileException(ExceptionMessages.TranslationFileIsEmpty);
                         }
 
                         var sheetsWithTranslation = package.Workbook.Worksheets
@@ -112,7 +112,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                             .ToList();
 
                         if (!sheetsWithTranslation.Any())
-                            throw new InvalidExcelFileException(ExceptionMessages.TranslationWorksheetIsMissing);
+                            throw new InvalidFileException(ExceptionMessages.TranslationWorksheetIsMissing);
 
                         var translationsWithHeaderMap = sheetsWithTranslation.Select(CreateHeaderMap).ToList();
 
@@ -123,7 +123,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
                         var translationErrors = this.Verify(translationsWithHeaderMap, categories).Take(10).ToList();
                         if (translationErrors.Any())
-                            throw new InvalidExcelFileException(ExceptionMessages.TranlationExcelFileHasErrors) { FoundErrors = translationErrors };
+                            throw new InvalidFileException(ExceptionMessages.TranlationExcelFileHasErrors) { FoundErrors = translationErrors };
 
                         Dictionary<Guid, bool> idsOfAllQuestionnaireEntities =
                             questionnaire.Children.TreeToEnumerable(x => x.Children).ToDictionary(composite => composite.PublicKey, x=>x is Group);
@@ -167,15 +167,15 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 }
                 catch (NullReferenceException e)
                 {
-                    throw new InvalidExcelFileException(ExceptionMessages.TranslationsCantBeExtracted, e);
+                    throw new InvalidFileException(ExceptionMessages.TranslationsCantBeExtracted, e);
                 }
                 catch (InvalidDataException e)
                 {
-                    throw new InvalidExcelFileException(ExceptionMessages.TranslationsCantBeExtracted, e);
+                    throw new InvalidFileException(ExceptionMessages.TranslationsCantBeExtracted, e);
                 }
                 catch (COMException e)
                 {
-                    throw new InvalidExcelFileException(ExceptionMessages.TranslationsCantBeExtracted, e);
+                    throw new InvalidFileException(ExceptionMessages.TranslationsCantBeExtracted, e);
                 }
             }
         }
@@ -251,10 +251,10 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             }
         }
 
-        private IEnumerable<TranslationValidationError> Verify(
+        private IEnumerable<ImportValidationError> Verify(
             IEnumerable<TranslationsWithHeaderMap> sheetsWithTranslation, Dictionary<string, Guid> categories)
         {
-            var errors = new List<TranslationValidationError>();
+            var errors = new List<ImportValidationError>();
             foreach (var worksheet in sheetsWithTranslation)
             {
                 var validationErrors = (categories.ContainsKey(worksheet.Worksheet.Name.ToLower())
@@ -303,28 +303,28 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             Translation = worksheetWithHeadersMap.Worksheet.Cells[$"{worksheetWithHeadersMap.TranslationIndex}{rowNumber}"].GetValue<string>()
         };
 
-        private IEnumerable<TranslationValidationError> Verify(TranslationsWithHeaderMap worksheetWithHeadersMap)
+        private IEnumerable<ImportValidationError> Verify(TranslationsWithHeaderMap worksheetWithHeadersMap)
         {
             var worksheet = worksheetWithHeadersMap.Worksheet;
             var end = worksheet.Dimension.End.Row;
 
             if (worksheetWithHeadersMap.EntityIdIndex == null)
-                yield return new TranslationValidationError
+                yield return new ImportValidationError
                 {
                     Message = string.Format(ExceptionMessages.RequiredHeaderWasNotFound, TranslationExcelOptions.EntityIdColumnName),
                 };
             if (worksheetWithHeadersMap.TypeIndex == null)
-                yield return new TranslationValidationError
+                yield return new ImportValidationError
                 {
                     Message = string.Format(ExceptionMessages.RequiredHeaderWasNotFound, TranslationExcelOptions.TranslationTypeColumnName),
                 };
             if (worksheetWithHeadersMap.OptionValueOrValidationIndexOrFixedRosterIdIndex == null)
-                yield return new TranslationValidationError
+                yield return new ImportValidationError
                 {
                     Message = string.Format(ExceptionMessages.RequiredHeaderWasNotFound, TranslationExcelOptions.OptionValueOrValidationIndexOrFixedRosterIdIndexColumnName),
                 };
             if (worksheetWithHeadersMap.TranslationIndex == null)
-                yield return new TranslationValidationError
+                yield return new ImportValidationError
                 {
                     Message = string.Format(ExceptionMessages.RequiredHeaderWasNotFound, TranslationExcelOptions.TranslationTextColumnName),
                 };
@@ -346,7 +346,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 {
                     var cellAddress = $"{worksheetWithHeadersMap.EntityIdIndex}{rowNumber}";
 
-                    yield return new TranslationValidationError
+                    yield return new ImportValidationError
                     {
                         Message = string.Format(ExceptionMessages.TranslationCel_A_lIsInvalid, TranslationExcelOptions.EntityIdColumnName, cellAddress),
                         ErrorAddress = cellAddress
@@ -357,7 +357,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 {
                     var cellAddress = $"{worksheetWithHeadersMap.TypeIndex}{rowNumber}";
 
-                    yield return new TranslationValidationError
+                    yield return new ImportValidationError
                     {
                         Message = string.Format(ExceptionMessages.TranslationCellTypeIsInvalid, TranslationExcelOptions.TranslationTypeColumnName, cellAddress),
                         ErrorAddress = cellAddress
@@ -368,7 +368,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 {
                     var cellAddress = $"{worksheetWithHeadersMap.OptionValueOrValidationIndexOrFixedRosterIdIndex}{rowNumber}";
 
-                    yield return new TranslationValidationError
+                    yield return new ImportValidationError
                     {
                         Message = string.Format(ExceptionMessages.TranslationCellIndexIsInvalid, TranslationExcelOptions.TranslationTypeColumnName, cellAddress),
                         ErrorAddress = cellAddress
@@ -377,18 +377,18 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             }
         }
 
-        private IEnumerable<TranslationValidationError> VerifyCategories(TranslationsWithHeaderMap worksheetWithHeadersMap)
+        private IEnumerable<ImportValidationError> VerifyCategories(TranslationsWithHeaderMap worksheetWithHeadersMap)
         {
             var worksheet = worksheetWithHeadersMap.Worksheet;
             var end = worksheet.Dimension.End.Row;
             
             if (worksheetWithHeadersMap.OptionValueOrValidationIndexOrFixedRosterIdIndex == null)
-                yield return new TranslationValidationError
+                yield return new ImportValidationError
                 {
                     Message = string.Format(ExceptionMessages.RequiredHeaderWasNotFound, TranslationExcelOptions.OptionValueOrValidationIndexOrFixedRosterIdIndexColumnName),
                 };
             if (worksheetWithHeadersMap.TranslationIndex == null)
-                yield return new TranslationValidationError
+                yield return new ImportValidationError
                 {
                     Message = string.Format(ExceptionMessages.RequiredHeaderWasNotFound, TranslationExcelOptions.TranslationTextColumnName),
                 };
@@ -408,7 +408,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 {
                     var cellAddress = $"{worksheetWithHeadersMap.OptionValueOrValidationIndexOrFixedRosterIdIndex}{rowNumber}";
 
-                    yield return new TranslationValidationError
+                    yield return new ImportValidationError
                     {
                         Message = string.Format(ExceptionMessages.TranslationCellIndexIsInvalid, TranslationExcelOptions.TranslationTypeColumnName, cellAddress),
                         ErrorAddress = cellAddress

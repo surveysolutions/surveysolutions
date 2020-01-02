@@ -65,7 +65,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             };
             
             var accessor = fixture.Freeze<Mock<IInterviewerQuestionnaireAccessor>>();
-            var deleted = new InMemoryPlainStorage<DeletedQuestionnaire>();
+            var deleted = Create.Storage.InMemorySqlitePlainStorage<DeletedQuestionnaire>();
 
             deleted.Store(knownBySupervisorDeletedQuestionnaires.Select(o => new DeletedQuestionnaire {Id = o.Id}));
 
@@ -92,7 +92,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
         {
             var questionnaireId = Create.Entity.QuestionnaireIdentity(Id.g1, 42);
             var otherQuestionnaireid = Create.Entity.QuestionnaireIdentity(Id.g2);
-            var translations = new InMemoryPlainStorage<TranslationInstance>();
+            var translations = Create.Storage.InMemorySqlitePlainStorage<TranslationInstance>();
 
             translations.Store(new List<TranslationInstance>
             {

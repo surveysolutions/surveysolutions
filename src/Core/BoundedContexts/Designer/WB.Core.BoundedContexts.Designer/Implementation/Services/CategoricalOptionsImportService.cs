@@ -14,7 +14,6 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Verifier;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using MissingFieldException = CsvHelper.MissingFieldException;
 
@@ -41,7 +40,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 return ImportCategoricalOptionsResult.Failed(string.Format(ExceptionMessages.QuestionCannotBeFound, categoricalQuestionId));
 
             var importedOptions = new List<QuestionnaireCategoricalOption>();
-            var importErrors = new List<string>();
+            
             var cfg = this.CreateCsvConfiguration();
 
             var isCascadingQuestion = question.CascadeFromQuestionId.HasValue;
@@ -67,6 +66,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
             else cfg.RegisterClassMap<CategoricalOptionMap>();
 
+            return ReadCategories(file, cfg, importedOptions);
+        }
+
+        private static ImportCategoricalOptionsResult ReadCategories(Stream file, Configuration cfg,
+            List<QuestionnaireCategoricalOption> importedOptions)
+        {
+            var importErrors = new List<string>();
+
             using (var csvReader = new CsvReader(new StreamReader(file), cfg))
             {
                 while (csvReader.Read())
@@ -91,7 +98,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                             importErrors.Add(e.Message);
                     }
                 }
-
             }
 
             return importErrors.Count > 0
@@ -225,7 +231,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 }
             }
         }
-
+        
         private class CategoricalOptionMap : ClassMap<QuestionnaireCategoricalOption>
         {
             public CategoricalOptionMap()
