@@ -4,6 +4,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
@@ -59,7 +60,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
         ICommandPostProcessor<Questionnaire, AddVariable>,
         ICommandPostProcessor<Questionnaire, UpdateVariable>,
-        ICommandPostProcessor<Questionnaire, DeleteVariable>
+        ICommandPostProcessor<Questionnaire, DeleteVariable>,
+
+        ICommandPostProcessor<Questionnaire, AddOrUpdateCategories>,
+        ICommandPostProcessor<Questionnaire, DeleteCategories>
     {
         private readonly IQuestionnaireSearchStorage searchStorage;
 
@@ -285,5 +289,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                ?? (entity as IStaticText)?.Text
                ?? (entity as IGroup)?.Title
                ?? (entity as IVariable)?.Label;
+
+        public void Process(Questionnaire aggregate, AddOrUpdateCategories command) =>
+            RewriteQuestionnaireEntities(aggregate.QuestionnaireDocument);
+        public void Process(Questionnaire aggregate, DeleteCategories command) =>
+            RewriteQuestionnaireEntities(aggregate.QuestionnaireDocument);
     }
 }

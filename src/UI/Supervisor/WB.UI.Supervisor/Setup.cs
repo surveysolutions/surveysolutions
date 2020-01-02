@@ -7,11 +7,11 @@ using Android.Widget;
 using Autofac;
 using Autofac.Extras.MvvmCross;
 using Autofac.Features.ResolveAnything;
-using MvvmCross;
 using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.Converters;
 using MvvmCross.IoC;
-using MvvmCross.Platforms.Android.Presenters;
+using MvvmCross.Plugin;
+using MvvmCross.ViewModels;
 using MvvmCross.Views;
 using WB.Core.BoundedContexts.Supervisor;
 using WB.Core.BoundedContexts.Supervisor.Services;
@@ -25,7 +25,6 @@ using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator;
-using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -34,9 +33,7 @@ using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Converters;
 using WB.UI.Shared.Enumerator.CustomBindings;
-using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Shared.Enumerator.Services;
-using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Shared.Enumerator.Services.Logging;
 using WB.UI.Shared.Enumerator.Utils;
 using WB.UI.Supervisor.Activities;
@@ -48,9 +45,15 @@ namespace WB.UI.Supervisor
 {
     public class Setup : EnumeratorSetup<SupervisorMvxApplication>
     {
+        IModule[] modules;
+
         public Setup()
         {
+#if PRODUCTION
+            CrashReporting.Init("6986daa4-3eb1-44df-a9b5-3bb2b5c264dc");
+#else
             CrashReporting.Init("80bf6bc0-7188-4591-9213-0d4895a5e041");
+#endif
         }
 
         protected override IMvxViewsContainer InitializeViewLookup(IDictionary<Type, Type> viewModelViewLookup)
@@ -100,9 +103,25 @@ namespace WB.UI.Supervisor
             return new AutofacMvxIocProvider(this.CreateAndInitializeIoc());
         }
 
-        private IContainer CreateAndInitializeIoc()
+        protected override void InitializeApp(IMvxPluginManager pluginManager, IMvxApplication app)
         {
-            var modules = new IModule[] {
+            base.InitializeApp(pluginManager, app);
+        
+            var status = new UnderConstructionInfo();
+            status.Run();
+
+            foreach (var module in modules)
+            {
+                module.Init(ServiceLocator.Current, status).Wait();
+            }
+
+            status.Finish();
+            base.InitializeFirstChance();
+        }
+
+        private IContainer CreateAndInitializeIoc()
+        {            
+            modules = new IModule[] {
                 new NcqrsModule(),
                 new InfrastructureModuleMobile(),
                 new DataCollectionSharedKernelModule(),
@@ -128,21 +147,9 @@ namespace WB.UI.Supervisor
                 .As<ISupervisorSettings>()
                 .WithParameter("backupFolder", AndroidPathUtils.GetPathToSupervisorSubfolderInExternalDirectory("Backup"))
                 .WithParameter("restoreFolder", AndroidPathUtils.GetPathToSupervisorSubfolderInExternalDirectory("Restore"));
-
             
             var container = builder.Build();
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
-
-            var status = new UnderConstructionInfo();
-            status.Run();
-
-            foreach (var module in modules)
-            {
-                module.Init(container.Resolve<IServiceLocator>(), status).Wait();
-            }
-
-            status.Finish();
-
             return container;
         }
 

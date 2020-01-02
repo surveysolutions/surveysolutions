@@ -796,6 +796,16 @@
     <Content Include="App_GlobalResources\Reports.zh.resx">
       <DependentUpon>Reports.resx</DependentUpon>
     </Content>
+    <Content Include="App_GlobalResources\Roles.resx">
+      <SubType>Designer</SubType>
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Roles.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Roles.ru.resx">
+      <SubType>Designer</SubType>
+      <LastGenOutput>Roles.ru.designer.cs</LastGenOutput>
+      <DependentUpon>Roles.resx</DependentUpon>
+    </Content>
     <Content Include="App_GlobalResources\Settings.ar.resx">
       <DependentUpon>Settings.resx</DependentUpon>
     </Content>
@@ -2164,7 +2174,6 @@
     <Content Include="Views\WebEmails\EmailText.cshtml" />
     <Content Include="Views\Reports\TeamStatusDuration.cshtml" />
     <Content Include="Views\WebInterview\_StartOrResumeForm.cshtml" />
-    <Content Include="Views\Shared\_PoweredBy.cshtml" />
     <Content Include="Views\DataExport\New.cshtml" />
     <Content Include="Views\Interviews\Index.cshtml" />
     <Content Include="Views\ControlPanel\ReevaluateInterview.cshtml" />
@@ -2197,6 +2206,7 @@
     <Compile Include="API\DataCollection\AppApiControllerBase.cs" />
     <Compile Include="API\DataCollection\Enumerator\EnumeratorWebApiConfig.cs" />
     <Compile Include="API\DataCollection\Enumerator\LogsApiController.cs" />
+    <Compile Include="API\DataCollection\Enumerator\v1\ReusableCategoriesApiV1Controller.cs" />
     <Compile Include="API\Export\UserExportApiController.cs" />
     <Compile Include="API\PublicApi\AssignmentsHistoryController.cs" />
     <Compile Include="App_GlobalResources\BatchUpload.sq.designer.cs">
@@ -2259,6 +2269,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reports.sq.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_GlobalResources\Roles.Designer.cs">
+      <DependentUpon>Roles.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Include="App_GlobalResources\Settings.sq.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -2282,6 +2297,7 @@
     <Compile Include="Controllers\InterviewsController.cs" />
     <Compile Include="API\PublicApi\Models\AuditLogApiView.cs" />
     <Compile Include="Controllers\QuestionnairesController.cs" />
+    <Compile Include="Filters\WebInterviewObserverNotAllowedActionFilter.cs" />
     <Compile Include="Models\QuestionnaireDetailsModel.cs" />
     <Compile Include="Resources\TabletLogs.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -2939,8 +2955,7 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.2.1\build\net452\Esri.ArcGISRuntime.WPF.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.2.1\build\net452\Esri.ArcGISRuntime.WPF.targets'))" />
     <Error Condition="!Exists('..\..\..\..\packages\RazorGenerator.MsBuild.2.5.0\build\RazorGenerator.MsBuild.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\RazorGenerator.MsBuild.2.5.0\build\RazorGenerator.MsBuild.targets'))" />
-    <Error Condition="'$(Configuration)' == 'Debug' and !Exists('..\..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" 
-        Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="'$(Configuration)' == 'Debug' and !Exists('..\..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
     <Error Condition="!Exists('..\..\..\..\packages\Refit.4.7.51\build\net461\refit.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Refit.4.7.51\build\net461\refit.targets'))" />
   </Target>
   <Import Project="..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.2.1\build\net452\Esri.ArcGISRuntime.WPF.targets" Condition="Exists('..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.2.1\build\net452\Esri.ArcGISRuntime.WPF.targets')" />

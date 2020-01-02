@@ -37,5 +37,6 @@ namespace Main.Core.Entities.SubEntities.Question
         public bool AreAnswersOrdered { get; set; }
         public int? MaxAllowedAnswers { get; set; }
         public bool YesNoView { get; set; }
+        public Guid? CategoriesId { get; set; }
     }
 }

@@ -15,6 +15,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using Group = Main.Core.Entities.SubEntities.Group;
 
@@ -39,7 +40,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IAttachmentService>(),
                 Mock.Of<ITranslationsService>(),
-                Mock.Of<IQuestionnaireHistoryVersionsService>());
+                Mock.Of<IQuestionnaireHistoryVersionsService>(), Mock.Of<ICategoriesService>());
             var persons = sharedPersons?.Select(id => new SharedPerson() {UserId = id}) ?? new List<SharedPerson>();
             questAr.Initialize(questionnaire.PublicKey, questionnaire, persons);
             return questAr;

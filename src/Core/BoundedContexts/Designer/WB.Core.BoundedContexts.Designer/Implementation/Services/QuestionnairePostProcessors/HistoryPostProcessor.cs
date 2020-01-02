@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
@@ -77,7 +78,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, UpdateAudioQuestion>,
         ICommandPostProcessor<Questionnaire, UpdateMetadata>,
         ICommandPostProcessor<Questionnaire, PassOwnershipFromQuestionnaire>,
-        ICommandPostProcessor<Questionnaire, ImportQuestionnaireToHq>
+        ICommandPostProcessor<Questionnaire, ImportQuestionnaireToHq>,
+        ICommandPostProcessor<Questionnaire, AddOrUpdateCategories>,
+        ICommandPostProcessor<Questionnaire, DeleteCategories>
     {
         private readonly DesignerDbContext dbContext;
         private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
@@ -346,6 +349,23 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         public void Process(Questionnaire aggregate, DeleteAttachment command)
             => this.DeleteItemFromStateAndUpdateHistory(command.QuestionnaireId, q => q.AttachmentState, command.AttachmentId,
                 QuestionnaireItemType.Attachment, command.ResponsibleId, aggregate.QuestionnaireDocument);
+
+        #endregion
+
+        #region Categories
+
+        public void Process(Questionnaire aggregate, AddOrUpdateCategories command)
+        {
+            this.AddOrUpdateQuestionnaireStateItem(command.QuestionnaireId, command.CategoriesId, command.Name,
+                parentId: null, setAction: (s, id, title) => s.CategoriesState[id] = title);
+
+            this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Update,
+                QuestionnaireItemType.Categories, command.CategoriesId, command.Name, aggregate.QuestionnaireDocument);
+        }
+
+        public void Process(Questionnaire aggregate, DeleteCategories command)
+            => this.DeleteItemFromStateAndUpdateHistory(command.QuestionnaireId, q => q.CategoriesState, command.CategoriesId,
+                QuestionnaireItemType.Categories, command.ResponsibleId, aggregate.QuestionnaireDocument);
 
         #endregion
 

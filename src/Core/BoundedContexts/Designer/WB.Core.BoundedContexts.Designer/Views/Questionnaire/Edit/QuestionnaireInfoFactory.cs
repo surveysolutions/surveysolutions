@@ -504,6 +504,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     questionView.LinkedFilterExpression = multyOptionsQuestion.LinkedFilterExpression;
                     questionView.Options = CreateCategoricalOptions(multyOptionsQuestion.Answers);
                     questionView.OptionsFilterExpression = multyOptionsQuestion.Properties.OptionsFilterExpression;
+                    questionView.CategoriesId = multyOptionsQuestion.CategoriesId.FormatGuid();
                     return questionView;
                 case QuestionType.TextList:
                     var textListQuestion = (ITextListQuestion) question;
@@ -527,6 +528,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     questionView.OptionsFilterExpression = singleoptionQuestion.Properties.OptionsFilterExpression;
                     questionView.ShowAsList = singleoptionQuestion.ShowAsList;
                     questionView.ShowAsListThreshold = singleoptionQuestion.ShowAsListThreshold;
+                    questionView.CategoriesId = singleoptionQuestion.CategoriesId.FormatGuid();
                     return questionView;
                 case QuestionType.Text:
                     var textQuestion = (TextQuestion)question;
@@ -667,14 +669,22 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             {
                 var rosterScope = document.GetRosterScope(roster);
                 filteredQuestions = document.Find<IQuestion>()
-                    .Where(x => x.QuestionType != QuestionType.Multimedia && x.QuestionType != QuestionType.GpsCoordinates)
+                    .Where(x => x.QuestionType == QuestionType.SingleOption 
+                                || x.QuestionType == QuestionType.Numeric
+                                || x.QuestionType == QuestionType.Text
+                                || x.QuestionType == QuestionType.DateTime
+                                || x.QuestionType == QuestionType.QRBarcode)
                     .Where(x => document.GetRosterScope(x).Equals(rosterScope))
                     .ToList();
             }
             else
             {
                 filteredQuestions = document.Find<IQuestion>()
-                    .Where(x => x.QuestionType != QuestionType.Multimedia && x.QuestionType != QuestionType.GpsCoordinates)
+                    .Where(x => x.QuestionType == QuestionType.SingleOption
+                                || x.QuestionType == QuestionType.Numeric
+                                || x.QuestionType == QuestionType.Text
+                                || x.QuestionType == QuestionType.DateTime
+                                || x.QuestionType == QuestionType.QRBarcode)
                     .Where(x => x.GetParent()?.PublicKey == roster.PublicKey)
                     .ToList();
             }

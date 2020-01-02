@@ -72,7 +72,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 
         [NUnit.Framework.Test]
         public void should_throw_exception_with_message() =>
-            results.ErrorMessage.Should().Be("selected value do not correspond to the parent answer selected value");
+            results.ErrorMessage.Should().Be("provided answer is not in the list part of predefined answers");
 
         [OneTimeTearDown]
         public void TearDown()

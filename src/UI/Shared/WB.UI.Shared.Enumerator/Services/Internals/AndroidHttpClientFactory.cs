@@ -32,7 +32,7 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             {
                 Timeout = restServiceSettings.Timeout,
                 DisableCaching = true,
-                EnableUntrustedCertificates = restServiceSettings.AcceptUnsignedSslCertificate,
+                TLSConfig = { DangerousAcceptAnyServerCertificateValidator = restServiceSettings.AcceptUnsignedSslCertificate },
                 AutomaticDecompression = DecompressionMethods.None,
                 AllowAutoRedirect = true,
                 Proxy = WebRequest.GetSystemWebProxy()

@@ -294,6 +294,9 @@
   <data name="TranslationsCantBeExtracted" xml:space="preserve">
     <value>Failed to extract translations from uploaded file</value>
   </data>
+  <data name="CategoriesCantBeExtracted" xml:space="preserve">
+    <value>Failed to extract categories from uploaded file</value>
+  </data>
   <data name="TranslationWorksheetIsMissing" xml:space="preserve">
     <value>Worksheet with translations not found</value>
   </data>
@@ -335,5 +338,35 @@
   </data>
   <data name="ImportOptions_ValueIsNotUnique" xml:space="preserve">
     <value>Duplicated category '{0}' with value '{1}'</value>
+  </data>
+  <data name="Excel_Categories_Int_Invalid" xml:space="preserve">
+    <value>[{0}] Invalid numeric value</value>
+  </data>
+  <data name="Excel_Categories_Empty_Text" xml:space="preserve">
+    <value>[{0}] Empty text</value>
+  </data>
+  <data name="Excel_Categories_Empty_Value" xml:space="preserve">
+    <value>[{0}] Empty value</value>
+  </data>
+  <data name="Excel_Categories_Duplicated" xml:space="preserve">
+    <value>Duplicated categories in rows: {0}</value>
+  </data>
+  <data name="Excel_Categories_Empty_ParentId" xml:space="preserve">
+    <value>Some categories don't have a parent id</value>
+  </data>
+  <data name="Excel_Categories_More_Than_Limit" xml:space="preserve">
+    <value>Categories set has more than {0} categories</value>
+  </data>
+  <data name="Excel_NoCategories" xml:space="preserve">
+    <value>No categories in file</value>
+  </data>
+  <data name="Excel_Categories_Less_2_Options" xml:space="preserve">
+    <value>Categories set should have at least 2 categories</value>
+  </data>
+  <data name="Excel_Categories_Text_More_Than_250" xml:space="preserve">
+    <value>[{0}] Text of category should be less than 250 characters</value>
+  </data>
+  <data name="ImportOptions_Tab_Or_Excel_Only" xml:space="preserve">
+    <value>Only tab-separated values (*.tab, *.txt, *.tsv) or excel (*.xslx, *.xls, *.ods) files are accepted</value>
   </data>
 </root>
