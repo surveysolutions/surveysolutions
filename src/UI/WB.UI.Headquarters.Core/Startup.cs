@@ -146,8 +146,6 @@ namespace WB.UI.Headquarters
 
         private HeadquartersBoundedContextModule GetHqBoundedContextModule()
         {
-            string appDataDirectory = Configuration["DataStorePath"];
-
             var configurationSection = Configuration.GetSection("PreLoading").Get<PreloadingConfig>();
             var sampleImportSettings = new SampleImportSettings(
                  configurationSection.InterviewsImportParallelTasksLimit);
@@ -200,8 +198,7 @@ namespace WB.UI.Headquarters
                 };
             }
 
-            return new HeadquartersBoundedContextModule(appDataDirectory,
-                userPreloadingSettings,
+            return new HeadquartersBoundedContextModule(userPreloadingSettings,
                 sampleImportSettings,
                 synchronizationSettings,
                 new TrackingSettings(trackingSection.WebInterviewPauseResumeGraceTimespan),

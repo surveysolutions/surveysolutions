@@ -98,7 +98,6 @@ namespace WB.Core.BoundedContexts.Headquarters
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class HeadquartersBoundedContextModule : IModule
     {
-        private readonly string currentFolderPath;
         private readonly ExternalStoragesSettings externalStoragesSettings;
         private readonly FileSystemEmailServiceSettings fileSystemEmailServiceSettings;
         private readonly UserPreloadingSettings userPreloadingSettings;
@@ -106,7 +105,7 @@ namespace WB.Core.BoundedContexts.Headquarters
         private readonly SyncSettings syncSettings;
         private readonly TrackingSettings trackingSettings;
 
-        public HeadquartersBoundedContextModule(string currentFolderPath,
+        public HeadquartersBoundedContextModule(
             UserPreloadingSettings userPreloadingSettings,
             SampleImportSettings sampleImportSettings,
             SyncSettings syncSettings,
@@ -116,7 +115,6 @@ namespace WB.Core.BoundedContexts.Headquarters
         {
             this.userPreloadingSettings = userPreloadingSettings;
             this.sampleImportSettings = sampleImportSettings;
-            this.currentFolderPath = currentFolderPath;
             this.syncSettings = syncSettings;
             this.externalStoragesSettings = externalStoragesSettings;
             this.fileSystemEmailServiceSettings = fileSystemEmailServiceSettings;
@@ -144,7 +142,7 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.Bind<IAndroidPackageReader, AndroidPackageReader>();
            
-            registry.BindWithConstructorArgument<IPreloadingTemplateService, AssignmentImportTemplateGenerator>("folderPath", this.currentFolderPath);
+            registry.Bind<IPreloadingTemplateService, AssignmentImportTemplateGenerator>();
             registry.Bind<IPreloadedDataVerifier, ImportDataVerifier>();
 
             registry.Bind<IExportFileNameService, ExportExportFileNameService>();
@@ -158,7 +156,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IJsonAllTypesSerializer, JsonAllTypesSerializer>();
             registry.Bind<IAttachmentContentService, AttachmentContentService>();
 
-            registry.BindWithConstructorArgument<IMapStorageService, MapFileStorageService>("folderPath", this.currentFolderPath);
+            registry.Bind<IMapStorageService, MapFileStorageService>();
 
             //commented because auto registered somewhere 
             //registry.Bind<IMetaDescriptionFactory>().To<MetaDescriptionFactory>();
@@ -225,7 +223,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IEnumeratorGroupStateCalculationStrategy, EnumeratorGroupGroupStateCalculationStrategy>();
             registry.Bind<ISupervisorGroupStateCalculationStrategy, SupervisorGroupStateCalculationStrategy>();
 
-            registry.BindWithConstructorArgument<ITabletInformationService, FileBasedTabletInformationService>("parentFolder", this.currentFolderPath);
+            registry.Bind<ITabletInformationService, FileBasedTabletInformationService>();
 
             registry.BindAsSingleton<IPasswordHasher, PasswordHasher>(); 
 

@@ -4,8 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
+using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
@@ -13,6 +15,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
@@ -23,12 +26,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly IPlainStorageAccessor<UserMap> userMapsStorage;
         private readonly IMapService mapPropertiesProvider;
         private readonly IUserRepository userStorage;
-
-        
         private readonly IExternalFileStorage externalFileStorage;
-
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IArchiveUtils archiveUtils;
+
         private const string TempFolderName = "TempMapsData";
         private const string MapsFolderName = "MapsData";
         private readonly string path;
@@ -37,7 +38,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
         private readonly string mapsFolderPath;
 
-        public MapFileStorageService(IFileSystemAccessor fileSystemAccessor, string folderPath, IArchiveUtils archiveUtils,
+        public MapFileStorageService(
+            IFileSystemAccessor fileSystemAccessor, 
+            IOptions<FileStorageConfig> fileStorageConfig,
+            IArchiveUtils archiveUtils,
             IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor,
             IPlainStorageAccessor<UserMap> userMapsStorage,
             IMapService mapPropertiesProvider,
@@ -55,11 +59,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
             this.externalFileStorage = externalFileStorage;
 
-            this.path = fileSystemAccessor.CombinePath(folderPath, TempFolderName);
+            this.path = fileSystemAccessor.CombinePath(fileStorageConfig.Value.AppData, TempFolderName);
             if (!fileSystemAccessor.IsDirectoryExists(this.path))
                 fileSystemAccessor.CreateDirectory(this.path);
 
-            this.mapsFolderPath = fileSystemAccessor.CombinePath(folderPath, MapsFolderName);
+            this.mapsFolderPath = fileSystemAccessor.CombinePath(fileStorageConfig.Value.AppData, MapsFolderName);
             if (!fileSystemAccessor.IsDirectoryExists(this.mapsFolderPath))
                 fileSystemAccessor.CreateDirectory(this.mapsFolderPath);
         }
